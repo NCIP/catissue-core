@@ -823,34 +823,40 @@ public class AppUtility
 			obj = toNewGridFormat(obj);
 
 			QueryResultObjectData queryResultObjectData = hyperlinkColumnMap.get(index);
-
-			if (queryResultObjectData != null)// This column is to be shown as
-			// hyperlink.
+			/** 
+			 * row contains '##' means the user is not authorized to see the page in edit mode 
+			 * thus column is not shown as hyperlink.  
+			 */			
+			if(!row.contains("##"))//bug 12280
 			{
-				if (obj == null || obj.equals(""))
-					obj = "NA";
-
-				/**
-				 * Name : Prafull Bug ID: 4223 Patch ID: 4223_1 Description:
-				 * Edit User: password fields empty & error on submitting new
-				 * password Added PageOf Attribute as request parameter in the
-				 * link.
-				 */
-				String aliasName = queryResultObjectData.getAliasName();
-				String link = "SimpleSearchEdit.do?"
-						+ edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "=" + aliasName
-						+ "&" + edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER + "="
-						+ row.get(queryResultObjectData.getIdentifierColumnId()) + "&"
-						+ Constants.PAGE_OF + "=" + Variables.aliasAndPageOfMap.get(aliasName);
-				/**
-				 * bug ID: 4225 Patch id: 4225_1 Description : Passing a
-				 * different name to the popup window
-				 */
-				String onclickStr = " onclick=javascript:NewWindow('" + link
-						+ "','simpleSearch','800','600','yes') ";
-				String hrefTag = "<a class='normalLink' href='#'" + onclickStr + ">" + obj + "</a>";
-				// String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
-				obj = hrefTag;
+				if (queryResultObjectData != null)// This column is to be shown as
+				// hyperlink.
+				{
+					if (obj == null || obj.equals(""))
+						obj = "NA";
+	
+					/**
+					 * Name : Prafull Bug ID: 4223 Patch ID: 4223_1 Description:
+					 * Edit User: password fields empty & error on submitting new
+					 * password Added PageOf Attribute as request parameter in the
+					 * link.
+					 */
+					String aliasName = queryResultObjectData.getAliasName();
+					String link = "SimpleSearchEdit.do?"
+							+ edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "=" + aliasName
+							+ "&" + edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER + "="
+							+ row.get(queryResultObjectData.getIdentifierColumnId()) + "&"
+							+ Constants.PAGE_OF + "=" + Variables.aliasAndPageOfMap.get(aliasName);
+					/**
+					 * bug ID: 4225 Patch id: 4225_1 Description : Passing a
+					 * different name to the popup window
+					 */
+					String onclickStr = " onclick=javascript:NewWindow('" + link
+							+ "','simpleSearch','800','600','yes') ";
+					String hrefTag = "<a class='normalLink' href='#'" + onclickStr + ">" + obj + "</a>";
+					// String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
+					obj = hrefTag;
+				}
 			}
 		}
 		return obj;
