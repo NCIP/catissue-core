@@ -1,836 +1,617 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.util.List;
-
+import edu.wustl.catissuecore.bizlogic.test.CaTissueBaseTestCase;
+import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
-public class ScientistRoleTestCases extends CaTissueBaseTestCase {
-		 static ApplicationService appService = null;
-		  public void setUp(){
-			appService = ApplicationServiceProvider.getApplicationService();
-			System.out.println("appService !!!!"+appService);
-			ClientSession cs = ClientSession.getInstance();
-			System.out.println("cs !!!!"+cs);
-			//System.setProperty("javax.net.ssl.trustStore", "E://jboss//server//default//conf//chap8.keystore");
-			try
-			{ 
-				cs.startSession("scientist@admin.com", "Test123");
-				System.out.println("Session started!!!!");
-			} 	
-						
-			catch (Exception ex) 
-			{ 
-				System.out.println(ex.getMessage()); 
-				ex.printStackTrace();
-				fail("Fail to create connection");
-				System.exit(1);
-			}		
-		}
-		 /**
-		  * Search all particpant and check if PHI data is visible
-		  *
-		  */ 
-		  public void testSearchParticipantWithScientistLogin()
-		  {
-			try{
-				Participant p = new Participant();
-				List l = appService.search(Participant.class.getName(), p);
-				System.out.println("Size : "+l.size());
-				for(int i=0;i<l.size();i++)
-				{
-					Participant retutnParticpant = (Participant)l.get(i);
-					if(retutnParticpant.getFirstName()!=null||retutnParticpant.getLastName()!=null||
-							retutnParticpant.getMiddleName()!=null||retutnParticpant.getBirthDate()!=null||
-							retutnParticpant.getSocialSecurityNumber()!=null)
-					{
-						fail("Participant PHI data is visible to scientist");
-					}
-						
-				}
-				
-			 }
-			 catch(Exception e){
-				 System.out
-						.println("ScientistRoleTestCases.testAddDepartmentWithScientistLogin() "+e.getMessage());
-			     Logger.out.error(e.getMessage(),e);
-				 e.printStackTrace();
-				 assertFalse("Test failed. to search Particpant", true);
-			 }
-		  }
-		  /**
-			  * Search all scg and check if PHI data is visible
-			  *
-			  */ 
-			  public void testSearchProtocolRegistrationWithScientistLogin()
-			  {
-				try{
-					CollectionProtocolRegistration reg = new CollectionProtocolRegistration();
-					List l = appService.search(CollectionProtocolRegistration.class.getName(), reg);
-					System.out.println("Size : "+l.size());
-					for(int i=0;i<l.size();i++)
-					{
-						CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)l.get(i);
-						if(returnedReg.getBarcode()!=null||returnedReg.getRegistrationDate()!=null||
-								returnedReg.getSignedConsentDocumentURL()!=null||returnedReg.getConsentSignatureDate()!=null||
-								returnedReg.getConsentWitness()!=null)
-						{
-							fail("CollectionProtocolRegistration PHI data is visible to scientist");
-						}
-					}
-				 }
-				 catch(Exception e){
-					 System.out
-							.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
-				     Logger.out.error(e.getMessage(),e);
-					 e.printStackTrace();
-					 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
-				 }
-			  }
-		  /**
-			  * Search all scg and check if PHI data is visible
-			  *
-			  */ 
-			  public void testSearchSpecimenCollectionGroupWithScientistLogin()
-			  {
-				try{
-					SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-					List l = appService.search(SpecimenCollectionGroup.class.getName(), scg);
-					System.out.println("Size : "+l.size());
-					for(int i=0;i<l.size();i++)
-					{
-						SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup)l.get(i);
-						if(returnedSCG.getSurgicalPathologyNumber()!=null)
-						{
-							fail("SpecimenCollectionGroup PHI data is visible to scientist");
-						}
-					}
-				 }
-				 catch(Exception e){
-					 System.out
-							.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
-				     Logger.out.error(e.getMessage(),e);
-					 e.printStackTrace();
-					 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
-				 }
-			  }
-	  
-		  
-/*
-	  public void testAddDepartmentWithScientistLogin()
-		  {
-			try{
-				Department dept =(Department) BaseTestCaseUtility.initDepartment();			
-				dept = (Department) appService.createObject(dept);
-				System.out.println("Object created successfully");
-				assertFalse("Test failed.Dept successfully added", true);
-			 }
-			 catch(Exception e){
-				 System.out
-						.println("ScientistRoleTestCases.testAddDepartmentWithScientistLogin() "+e.getMessage());
-			     Logger.out.error(e.getMessage(),e);
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		  }
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-	  public void testUpdateDepartmentWithScientistLogin()
-		{ 	
-		    try 
+public class ScientistRoleTestCases extends CaTissueBaseTestCase 
+{
+ static ApplicationService appService = null;
+ public void setUp()
+ {
+	appService = ApplicationServiceProvider.getApplicationService();
+	ClientSession cs = ClientSession.getInstance();
+	//System.setProperty("javax.net.ssl.trustStore", "E://jboss//server//default//conf//chap8.keystore");
+	try
+	{ 
+		cs.startSession("scientist@admin.com", "Test123");
+	} 	
+				
+	catch (Exception ex) 
+	{ 
+		System.out.println(ex.getMessage()); 
+		ex.printStackTrace();
+		fail("Fail to create connection");
+		System.exit(1);
+	}
+}
+ 
+ /**
+  * Search all participant and check if PHI data is visible
+  */ 
+  public void testSearchParticipantWithScientistLogin()
+  {
+	try
+	{
+		Participant participant = new Participant();
+		List parList = appService.search(Participant.class.getName(), participant);
+		System.out.println("Size : "+parList.size());
+		for(int i=0;i<parList.size();i++)
+		{
+			Participant retutnParticpant = (Participant)parList.get(i);
+			if(retutnParticpant.getFirstName()!=null||retutnParticpant.getLastName()!=null||
+					retutnParticpant.getMiddleName()!=null||retutnParticpant.getBirthDate()!=null||
+					retutnParticpant.getSocialSecurityNumber()!=null)
 			{
-		    	Department department = (Department) TestCaseUtility.getObjectMap(Department.class);
-		    	BaseTestCaseUtility.updateDepartment(department);	    
-		      	Logger.out.info("updating domain object------->"+department);
-		    	Department updatedDepartment = (Department) appService.updateObject(department);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedDepartment);
-		        assertFalse("Test failed.Dept successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+				fail("Participant PHI data is visible to scientist");
+			}
+			System.out.println("Participant First name :"+retutnParticpant.getFirstName());
+			System.out.println("Participant Last name :"+retutnParticpant.getLastName());
+			System.out.println("Participant Middle Name:"+retutnParticpant.getMiddleName());
+			System.out.println("Participant SSN no:"+retutnParticpant.getSocialSecurityNumber());
+			
+			Collection<ParticipantMedicalIdentifier> pmiCollection 
+				= retutnParticpant.getParticipantMedicalIdentifierCollection();
+			for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
+		    {
+		        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
+		        if(participantMedId.getMedicalRecordNumber()!=null)
+		        {
+		        	fail("Participant PHI data is visible to scientist");
+		        }
+		        System.out.println("Participant->PMI MedicalRecordNumber:"+participantMedId.getMedicalRecordNumber());
+		    }
+			
+		    Collection<CollectionProtocolRegistration> cpCollection 
+		    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
+		    for (Iterator<CollectionProtocolRegistration> iterator=cpCollection.iterator();iterator.hasNext();)
+		    {
+		        CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) iterator.next();
+		        if(cpr.getRegistrationDate()!=null || cpr.getConsentSignatureDate()!=null ||
+		        		cpr.getSignedConsentDocumentURL()!=null)
+		        {
+		        	fail("Participant PHI data is visible to scientist");
+		        }
+		        System.out.println("Participant->CPR->RegistrationDate :"+ cpr.getRegistrationDate());
+		        System.out.println("Participant->CPR->ConsentSignatureDate :"+ cpr.getConsentSignatureDate());
+		        System.out.println("Participant->CPR->SignedConsentDocumentURL:"+ cpr.getSignedConsentDocumentURL());
 		    }
 		}
-	   
-	  public void testAddInstitutionWithScientistLogin()
-		{
-			try{
-				Institution institution = BaseTestCaseUtility.initInstitution();
-				System.out.println(institution);
-				institution = (Institution) appService.createObject(institution); 
-				System.out.println("Object created successfully");
-				assertFalse("Test failed.Inst successfully added", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		}
-	   
-	 public void testUpdateInstitutionWithScientistLogin()
-		{		
-	   	
-		    try 
+	 }
+	 catch(Exception e){
+		 
+	     System.out
+				.println("ScientistRoleTestCases.testSearchParticipantWithScientistLogin()"+e.getMessage());
+		 e.printStackTrace();
+		 assertFalse("Test failed. to search Particpant", true);
+	 }
+  }
+  /**
+   * Search all PMI and check if PHI data is visible
+   */
+  public void testSearchPMIWithScientistLogin()
+  {
+	  try{
+			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+			List pmiList = appService.search(ParticipantMedicalIdentifier.class.getName(), pmi);
+			for(int i=0;i<pmiList.size();i++)
 			{
-		    	Institution institution = (Institution) TestCaseUtility.getObjectMap(Institution.class);
-		    	BaseTestCaseUtility.updateInstitution(institution);	  
-		    	Logger.out.info("updating domain object------->"+institution);
-		    	Institution updatedInst = (Institution) appService.updateObject(institution);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedInst);
-		        assertFalse("Test failed.Inst successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}
-	 public void testAddCancerResearchGrpWithScientistLogin()
+				 ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) pmiList.get(i);
+			     if(participantMedId.getMedicalRecordNumber()!=null)
+			     {
+			        	fail("ParticipantMedicalIdentifier PHI data is visible to scientist");
+			     }
+			     System.out.println("PMI->MedicalRecordNumber:"+participantMedId.getMedicalRecordNumber());
+			}
+		 }
+		 catch(Exception e)
+		 {
+			 System.out
+				.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
+			 e.printStackTrace();
+			 assertFalse("Test failed. to search PMI", true);
+		 }
+  }
+  /**
+	  * Search all CPR and check if PHI data is visible
+	  *
+	  */ 
+	  public void testSearchProtocolRegistrationWithScientistLogin()
+	  {
+		try
 		{
-			try{
-				CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
-				crg = (CancerResearchGroup) appService.createObject(crg); 
-				System.out.println("Object created successfully");
-				assertFalse("Test failed.CRG successfully added", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		}
-	   
-	 public void testUpdateCancerResearchGrpWithScientistLogin()
-		{
-	 
-		    try 
+			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+			List cprList = appService.search(CollectionProtocolRegistration.class.getName(), cpr);
+			System.out.println("Size : "+cprList.size());
+			for(int i=0;i<cprList.size();i++)
 			{
-		    	CancerResearchGroup crg = (CancerResearchGroup) TestCaseUtility.getObjectMap(CancerResearchGroup.class);
-		    	BaseTestCaseUtility.updateCancerResearchGrp(crg);	    	
-		    	Logger.out.info("updating domain object------->"+crg);
-		    	CancerResearchGroup updatedCRG = (CancerResearchGroup) appService.updateObject(crg);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedCRG);
-		        assertFalse("Test failed.CRG successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		} 
-	   
-	 
-	   
-	 public void testAddSiteWithScientistLogin()
-		{
-			try{
-				Site site= BaseTestCaseUtility.initSite();			
-				System.out.println(site);
-				site = (Site) appService.createObject(site); 
-				System.out.println("Object created successfully");
-				assertFalse("Test failed.Site successfully added", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-			     assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		}
-	  public void testUpdateSiteWithScientistLogin()
-		{
-			try 
+				CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)cprList.get(i);
+				if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+						returnedReg.getConsentSignatureDate()!=null)
+				{
+					fail("CollectionProtocolRegistration PHI data is visible to scientist");
+				}
+				 System.out.println("CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+			     System.out.println("CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+			     System.out.println("CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+			}
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
+		     Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+		 }
+	  }
+  /**
+	  * Search all SCG and check if PHI data is visible
+	  *
+	  */ 
+	  public void testSearchSpecimenCollectionGroupWithScientistLogin()
+	  {
+		try{
+			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			List scgList = appService.search(SpecimenCollectionGroup.class.getName(), scg);
+			System.out.println("Size : "+scgList.size());
+			for(int i=0;i<scgList.size();i++)
 			{
-		    	Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
-		    	BaseTestCaseUtility.updateSite(site);
-		    	Logger.out.info("updating domain object------->"+site);
-		    	Site updatedSite = (Site) appService.updateObject(site);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedSite);
-		        assertFalse("Test failed.Site successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}
-	  
-	   public void testAddBioHazardWithScientistLogin()
-		{
-			try{
-				Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
-				System.out.println(biohazard);
-				biohazard = (Biohazard) appService.createObject(biohazard); 
-				System.out.println("Object created successfully");
-				Logger.out.info(" Domain Object added successfully");
-				assertFalse("Test failed.Biohazard successfully added", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		}
-	  public void testUpdateBioHazardWithScientistLogin()
-		{		  
-		    try 
-			{
-		    	Biohazard biohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
-		    	BaseTestCaseUtility.updateBiohazard(biohazard);	
-		    	Logger.out.info("updating domain object------->"+biohazard);
-		    	Biohazard updatedBiohazard = (Biohazard) appService.updateObject(biohazard);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedBiohazard);
-		       	assertFalse("Test failed.Biohazard successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}
-	  
-	   public void testAddCollectionProtocolWithScientistLogin()
-		{
+				SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup)scgList.get(i);
+				if(returnedSCG.getSurgicalPathologyNumber()!=null)
+				{
+					fail("SpecimenCollectionGroup PHI data is visible to scientist");
+				}
+				System.out.println("SCG->SurgicalPathologyNumber : "+returnedSCG.getSurgicalPathologyNumber());
+				CollectionProtocolRegistration returnedReg = returnedSCG.getCollectionProtocolRegistration();
+				if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+						returnedReg.getConsentSignatureDate()!=null)
+				{
+					fail("SpecimenCollectionGroup PHI data is visible to scientist");
+				}
+				System.out.println("SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+			    System.out.println("SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+			    System.out.println("SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+			     
+				Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
+			    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+			    while(eveItr.hasNext())
+			    {
+			    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+			    	if(spEventParam.getTimestamp()!=null)
+			    	{
+			    		fail("SpecimenCollectionGroup PHI data is visible to scientist");
+			    	}
+			    }
+			}
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
+		     Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+		 }
+	  }
+	  /**
+	   * Test search Tissue specimen and check for PHI data
+	   */
+	  public void testSearchTissueSpecimenWithScientistLogin()
+	  {
 			try
-			 {
-				CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
-				collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
-				TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
-				assertFalse("Test failed.Collection Protocol successfully added", true);
+			{
+				TissueSpecimen tissueSp = new TissueSpecimen();
+				List<TissueSpecimen> spCollection = appService.search(TissueSpecimen.class, tissueSp);
+				Iterator<TissueSpecimen> itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					TissueSpecimen spe = (TissueSpecimen)itr.next();
+					if(spe.getCreatedOn()!=null)
+					{
+						fail("TissueSpecimen PHI data is visible to scientist");
+					}
+					System.out.println("TissueSpecimen->CreatedOn:"+spe.getCreatedOn());
+				
+					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
+				    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+				    while(eveItr.hasNext())
+				    {
+				    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+				    	if(spEventParam.getTimestamp()!=null)
+				    	{
+							fail("TissueSpecimen PHI data is visible to scientist");
+				    	}
+				    	System.out.println("TissueSpecimen TimeStamp :"+spEventParam.getTimestamp());
+				    }
+				    
+				    if(spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber()!=null)
+					{
+						fail("TissueSpecimen->SCG PHI data is visible to scientist");
+					}
+				    System.out.println("TissueSpecimen->SCG->SPN:"+spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+					CollectionProtocolRegistration returnedReg = spe.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+					if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+							returnedReg.getConsentSignatureDate()!=null)
+					{
+						fail("TissueSpecimen->SCG->CPR PHI data is visible to scientist");
+					}
+					 System.out.println("TissueSpecimen->SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+				     System.out.println("TissueSpecimen->SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+				     System.out.println("TissueSpecimen->SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+				}
 			 }
 			 catch(Exception e)
 			 {
-				 Logger.out.error(e.getMessage(),e);
+				 System.out
+						.println("ScientistRoleTestCases.testSearchTissueSpecimenWithScientistLogin() "+e.getMessage());
+			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+				 assertFalse("Test failed. to search TissueSpecimen", true);
 			 }
 		}
-	  
-	  public void testUpdateCollectionProtocolWithScientistLogin()
-		{
-		    try 
+		/**
+		 * Test Search Molecular Specimen and test for PHI data 
+		 */
+	  public void testSearchMolecularSpecimenWithScientistLogin()
+	  {
+			try
 			{
-		    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
-			   	Logger.out.info("updating domain object------->"+collectionProtocol);
-		    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
-		    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
-		    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
-		    	assertFalse("Test failed.Collection Protocol successfully added", true);
-		    } 
-		    catch (Exception e)
-		    {
-		    	Logger.out.error(e.getMessage(),e);
-		    	e.printStackTrace();
-		    	assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}
-	  
-	  public void testAddDistributionProtocolWithScientistLogin()
-		{
-			try{
-				DistributionProtocol distributionprotocol = BaseTestCaseUtility.initDistributionProtocol();			
-				System.out.println(distributionprotocol);
-				distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
-				System.out.println("Object created successfully");			
-				assertFalse("Test failed.Distribution Protocol successfully added", true);
+				MolecularSpecimen moleSp = new MolecularSpecimen();
+				List<MolecularSpecimen> spCollection = appService.search(MolecularSpecimen.class, moleSp);
+				Iterator<MolecularSpecimen> itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					MolecularSpecimen spe = (MolecularSpecimen)itr.next();
+					if(spe.getCreatedOn()!=null)
+					{
+						fail("MolecularSpecimen PHI data is visible to scientist");
+					}
+					System.out.println("MolecularSpecimen Created on :"+spe.getCreatedOn());
+					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
+				    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+				    while(eveItr.hasNext())
+				    {
+				    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+				    	if(spEventParam.getTimestamp()!=null)
+				    	{
+							fail("MolecularSpecimen PHI data is visible to scientist");
+				    	}
+				    	System.out.println("TissueSpecimen TimeStamp :"+spEventParam.getTimestamp());
+				    }
+				    if(spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber()!=null)
+					{
+						fail("MolecularSpecimen->SCG PHI data is visible to scientist");
+					}
+				    System.out.println("MolecularSpecimen->SCG->SPN:"+spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+					CollectionProtocolRegistration returnedReg = spe.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+					if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+							returnedReg.getConsentSignatureDate()!=null)
+					{
+						fail("MolecularSpecimen->SCG->CPR PHI data is visible to scientist");
+					}
+					System.out.println("MolecularSpecimen->SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+				    System.out.println("MolecularSpecimen->SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+				    System.out.println("MolecularSpecimen->SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+				}
 			 }
-			 catch(Exception e){
+			 catch(Exception e)
+			 {
+				 System.out
+						.println("ScientistRoleTestCases.testSearchMolecularSpecimenWithScientistLogin() "+e.getMessage());
+			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+				 assertFalse("Test failed. to search MolecularSpecimen", true);
 			 }
 		}
-	  
-	  public void testUpdateDistributionProtocolWithScientistLogin()
-		{
-		    try 
-		  	{
-		    	DistributionProtocol distributionProtocol = (DistributionProtocol) TestCaseUtility.getObjectMap(DistributionProtocol.class);
-		    	Logger.out.info("updating domain object------->"+distributionProtocol);
-		    	BaseTestCaseUtility.updateDistributionProtocol(distributionProtocol);	    	
-		    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedDistributionProtocol);
-		       	assertFalse("Test failed.Distribution Protocol successfully updated", true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		} 
-	  public void testSearchDepartmetWithScientistLogin()
-		{
-			Department dept = new Department();
-	    	Logger.out.info(" searching domain object");
-	    	dept.setId(new Long(1));
-	        try {
-	      	 List resultList = appService.search(Department.class,dept);
-	      	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
-	      	 {
-	      		 Department returnedDepartment = (Department) resultsIterator.next();
-	      		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
-	      	 }
-	        } 
-	        catch (Exception e) {
-	         	Logger.out.error(e.getMessage(),e);
-	         	e.printStackTrace();
-	         	assertFalse("Does not find Domain Object", true);	 		
-	        }
-		}
-	  public void testSearchCancerResearchGrpWithScientistLogin()
-		{
-				CancerResearchGroup crg = new CancerResearchGroup();
-		     	Logger.out.info(" searching domain object");
-		    	crg.setId(new Long(1));
-		   
-		         try {
-		        	 List resultList = appService.search(CancerResearchGroup.class,crg);
-		        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-		        		 CancerResearchGroup returnedInst = (CancerResearchGroup) resultsIterator.next();
-		        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedInst.getName());
-		        		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
-		             }
-		          } 
-		          catch (Exception e) {
-		           	Logger.out.error(e.getMessage(),e);
-		           	e.printStackTrace();
-		           	assertFalse("Does not find Domain Object", true);
-			 		
-		          }
-		}
-	public void testSearchInstitutionWithScientistLogin()
-		{
-			Institution institution = new Institution();
-		  	Logger.out.info(" searching domain object");
-		  	institution.setId(new Long(1));
-	 
-	       try {
-		      	List resultList = appService.search(Institution.class,institution);
-		      	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-		      	Institution returnedInst = (Institution) resultsIterator.next();
-		      	Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedInst.getName());
-		      	System.out.println(" Domain Object is successfully Found ---->  :: " + returnedInst.getName());
-	           }
-	        } 
-	        catch (Exception e) {
-	         	Logger.out.error(e.getMessage(),e);
-	         	e.printStackTrace();
-	         	assertFalse("Does not find Domain Object", true);
-		 		
-	        }
-		}
-	public void testSearchSiteWithScientistLogin()
-		{
-			Site site = new Site();
-		  	Logger.out.info(" searching domain object");
-		  	site.setId(new Long(1));
-	       try {
-		      	List resultList = appService.search(Site.class,site);
-		      	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-		      	Site returnedSite = (Site) resultsIterator.next();
-		      	Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedSite.getName());
-		      	System.out.println(" Domain Object is successfully Found ---->  :: " + returnedSite.getName());
-	           }
-	        } 
-	        catch (Exception e) {
-	         	Logger.out.error(e.getMessage(),e);
-	         	e.printStackTrace();
-	         	assertFalse("Does not find Domain Object", true);
-		 		
-	        }
-		} 
-	
-	 public void testAddStorageTypeWithScientistLogin()
-		{
-			try{
-				StorageType storagetype = BaseTestCaseUtility.initStorageType();			
-				System.out.println(storagetype);
-				storagetype = (StorageType) appService.createObject(storagetype);
-				TestCaseUtility.setObjectMap(storagetype, StorageType.class);
-				System.out.println("Object created successfully");	
-				assertFalse("Test failed.StorageType successfully created", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-			 }
-		}
-		
-		public void testSearchStorageTypeScientistLogin()
-		{
-			StorageType getStoragetype = (StorageType)TestCaseUtility.getObjectMap(StorageType.class);
-			StorageType storagetype = new StorageType();
-			storagetype.setId(getStoragetype.getId());
-	    	Logger.out.info(" searching domain object");
-	    	try {
-	        	 List resultList = appService.search(StorageType.class,storagetype);
-	        	 StorageType returnedStorageType = (StorageType) resultList.get(0);
-	        	 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
-	        	 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedStorageType.getName());
-	          } 
-	          catch (Exception e) {
-	           	Logger.out.error(e.getMessage(),e);
-	           	e.printStackTrace();
-	        	assertFalse("Does not find Storage Type ", true);	
-	        }
-		}
-		
-		public void testUpdateStorageTypeScientistLogin()
-		{
-			StorageType getStorageType = (StorageType) TestCaseUtility.getObjectMap(StorageType.class);
-			StorageType storagetype =  new  StorageType();
-			storagetype.setId(getStorageType.getId());
-	    	Logger.out.info("updating domain object------->"+storagetype);
-		    try 
+	  /**
+		* Test Search Cell Specimen and test for PHI data 
+		*/
+	  public void testSearchCellSpecimenWithScientistLogin()
+	  {
+			try
 			{
-		    	List resultList = appService.search(StorageType.class,storagetype);
-	        	StorageType returnedStorageType = (StorageType) resultList.get(0);
-		    	BaseTestCaseUtility.updateStorageType(returnedStorageType);	
-		    	StorageType updatedStorageType = (StorageType) appService.updateObject(returnedStorageType);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageType);
-		       	assertFalse("Storage Type object successfully updated with supervisor login ---->"+updatedStorageType, true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}
-		
-		public void testAddStorageContainerScientistLogin()
-		{
-			try{
-				StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
-				System.out.println(storageContainer);
-				storageContainer = (StorageContainer) appService.createObject(storageContainer); 
-				TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
-				System.out.println("Object created successfully");
-				assertFalse("Storage Container added successfully with supervisor login", true);
+				CellSpecimen cellSp = new CellSpecimen();
+				List<CellSpecimen> spCollection = appService.search(CellSpecimen.class, cellSp);
+				Iterator<CellSpecimen> itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					CellSpecimen spe = (CellSpecimen)itr.next();
+					if(spe.getCreatedOn()!=null)
+					{
+						fail("CellSpecimen PHI data is visible to scientist");
+					}
+					System.out.println("CellSpecimen Created on :"+spe.getCreatedOn());
+					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
+				    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+				    while(eveItr.hasNext())
+				    {
+				    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+				    	if(spEventParam.getTimestamp()!=null)
+				    	{
+							fail("CellSpecimen PHI data is visible to scientist");
+				    	}
+				    	System.out.println("CellSpecimen TimeStamp :"+spEventParam.getTimestamp());
+				    }
+				    if(spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber()!=null)
+					{
+						fail("CellSpecimen->SCG PHI data is visible to scientist");
+					}
+				    System.out.println("CellSpecimen->SCG->SPN:"+spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+					CollectionProtocolRegistration returnedReg = spe.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+					if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+							returnedReg.getConsentSignatureDate()!=null)
+					{
+						fail("CellSpecimen->SCG->CPR PHI data is visible to scientist");
+					}
+					System.out.println("CellSpecimen->SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+				    System.out.println("CellSpecimen->SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+				    System.out.println("CellSpecimen->SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+				}
 			 }
-			 catch(Exception e){
+			 catch(Exception e)
+			 {
+				 System.out
+						.println("ScientistRoleTestCases.testSearchCellSpecimenWithScientistLogin() "+e.getMessage());
+			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertTrue("Access denied: You are not authorized to perform this operation. ", true);
+				 assertFalse("Test failed. to search CellSpecimen", true);
 			 }
 		}
-		
-		public void testSearchStorageContainerScientistLogin()
-		{
-			StorageContainer getStorageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
-			StorageContainer storageContainer = new StorageContainer();
-	    	Logger.out.info(" searching domain object");
-	    	storageContainer.setId(getStorageContainer.getId());
-	   
-	         try {
-	        	 List resultList = appService.search(StorageContainer.class,storageContainer);        	
-	    		 StorageContainer returnedStorageContainer = (StorageContainer) resultList.get(0);
-	    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " 
-	        				 + returnedStorageContainer.getName());
-	            } 
-	          catch (Exception e) {
-	           	Logger.out.error(e.getMessage(),e);
-	           	e.printStackTrace();
-	           	assertFalse("Does not find Storage Container with Supervisor Login", true);
-		 		
-	          }
-		}
-		
-		/*public void testUpdateStorageContainerScientistLogin()
-		{
-			StorageContainer getStorageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
-			StorageContainer storageContainer = new StorageContainer();
-			storageContainer.setId(getStorageContainer.getId());
-			System.out.println("Before Update");
-	    	Logger.out.info("updating domain object------->"+storageContainer);
-		    try 
+	  /**
+		 * Test Search Fluid Specimen and test for PHI data 
+		 */
+	  public void testSearchFluidSpecimenWithScientistLogin()
+	  {
+			try
 			{
-		    	List resultList = appService.search(StorageContainer.class ,storageContainer);
-		    	getStorageContainer =(StorageContainer) resultList.get(0);
-		    	BaseTestCaseUtility.updateStorageContainer(getStorageContainer);
-		    	System.out.println("After Update");
-		    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(getStorageContainer);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
-		       	assertFalse("Storage Container successfully updated with with Supervisor Login  ---->"+updatedStorageContainer, true);
-		    } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Access denied: You are not authorized to perform this operation. ", true);
-		    }
-		}*/
-	    
-	
-/*	public void testSearchBioHazardWithScientistLogin()
-		{
-	      try {
-	        Biohazard cachedBiohazard = (Biohazard) TestCaseUtility.getObjectMap(Biohazard.class);
-	   		Biohazard biohazard =  new Biohazard();
-	  	   	Logger.out.info("searching domain object");
-	      	biohazard.setId(cachedBiohazard.getId());
-	      	List resultList = appService.search(Biohazard.class,biohazard);
-	      	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
-	      	 {
-		    		 Biohazard returnedBiohazard = (Biohazard) resultsIterator.next();
-		    		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-		    		 System.out.println(" Domain Object is successfully Found ---->  :: " + returnedBiohazard.getName());
-		    		 assertTrue("Object added successfully", true);
-	           }
-	        } 
-	        catch (Exception e) {
-	         	Logger.out.error(e.getMessage(),e);
-	          System.out.println(e.getMessage());
-	         	e.printStackTrace();
-	         	assertFalse("Does not find Domain Object", true);
-		 		
-	        }
-		}*/
-/*		  
-	public void testSearchCollectionProtocolWithScientistLogin()
-		{
-	  	CollectionProtocol collectionProtocol = new CollectionProtocol();
-	  	CollectionProtocol cachedCollectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
-	  	cachedCollectionProtocol.setId((Long) cachedCollectionProtocol.getId());
-	    Logger.out.info(" searching domain object");
-	  	try {
-	       	 List resultList = appService.search(CollectionProtocol.class,collectionProtocol);
-	      	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
-	      	 {
-	      		 CollectionProtocol returnedcollectionprotocol = (CollectionProtocol) resultsIterator.next();
-	      		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocol.getTitle());
-	           }
-	        } 
-	        catch (Exception e) {
-	        	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		//assertFalse("Doesnot found collection protocol", true);
-		 		fail("Doesnot found collection protocol");
-	        }
+				FluidSpecimen fluidSp = new FluidSpecimen();
+				List<FluidSpecimen> spCollection = appService.search(FluidSpecimen.class, fluidSp);
+				Iterator<FluidSpecimen> itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					FluidSpecimen spe = (FluidSpecimen)itr.next();
+					if(spe.getCreatedOn()!=null)
+					{
+						fail("FluidSpecimen PHI data is visible to scientist");
+					}
+					System.out.println("FluidSpecimen Created on :"+spe.getCreatedOn());
+					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
+				    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+				    while(eveItr.hasNext())
+				    {
+				    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+				    	if(spEventParam.getTimestamp()!=null)
+				    	{
+							fail("FluidSpecimen PHI data is visible to scientist");
+				    	}
+				    	System.out.println("FluidSpecimen TimeStamp :"+spEventParam.getTimestamp());
+				    }
+				    if(spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber()!=null)
+					{
+						fail("FluidSpecimen->SCG PHI data is visible to scientist");
+					}
+				    System.out.println("FluidSpecimen->SCG->SPN:"+spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+					CollectionProtocolRegistration returnedReg = spe.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+					if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+							returnedReg.getConsentSignatureDate()!=null)
+					{
+						fail("FluidSpecimen->SCG->CPR PHI data is visible to scientist");
+					}
+					System.out.println("FluidSpecimen->SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+				    System.out.println("FluidSpecimen->SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+				    System.out.println("FluidSpecimen->SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+				}
+			 }
+			 catch(Exception e)
+			 {
+				 System.out
+						.println("ScientistRoleTestCases.testSearchFluidSpecimenWithScientistLogin() "+e.getMessage());
+			     Logger.out.error(e.getMessage(),e);
+				 e.printStackTrace();
+				 assertFalse("Test failed. to search FluidSpecimen", true);
+			 }
 		}
 	
-	public void testSearchDistributionProtocolWithScientistLogin()
-		{
-			try {		
-			    DistributionProtocol distributionProtocol = new DistributionProtocol();
-				DistributionProtocol cachedDistributionProtocol = new DistributionProtocol();
-				Logger.out.info(" searching domain object");
-		    	distributionProtocol.setId((Long) cachedDistributionProtocol.getId());
-		        List resultList = appService.search(DistributionProtocol.class,distributionProtocol);
-		         for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-		        		 DistributionProtocol returnedDP = (DistributionProtocol) resultsIterator.next();
-		        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedDP.getTitle());
-		        		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
-		             }
-		          } 
-		          catch (Exception e) {
-		           	Logger.out.error(e.getMessage(),e);
-		           	e.printStackTrace();
-		           	assertFalse("Does not find Domain Object", true);
-			 		
-		          }
-		}
 	  
-	  public void testAddParticipantWithScientistLogin()
+		/**
+		 * Test search SpecimenArrayContent and test for PHI data
+		 */
+		public void testSpecimenArrayContentWithScientistLogin()
 		{
-			try{
-				Participant participant= BaseTestCaseUtility.initParticipant();			
-				System.out.println(participant);
-				participant = (Participant) appService.createObject(participant); 
-				TestCaseUtility.setObjectMap(participant, Participant.class);
-				System.out.println("Object created successfully");
-				assertFalse("Participant created successfully", true);			
-			 }
-			 catch(Exception e){
+			try
+			{
+				SpecimenArrayContent sac = new SpecimenArrayContent();
+				List sacCollection = appService.search(SpecimenArrayContent.class,sac);
+				System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
+				Iterator itr = sacCollection.iterator();
+				while(itr.hasNext())
+				{
+					SpecimenArrayContent spe = (SpecimenArrayContent)itr.next();
+					if(spe.getSpecimen().getCreatedOn()!=null)
+					{
+						fail("SpecimenArrayContent ->Specimen PHI data is visible to scientist");
+					}
+					System.out.println("SpecimenArrayContent->Specimen Created on :"+spe.getSpecimen().getCreatedOn());
+				}
+			}
+			 catch(Exception e)
+			 {
+				 System.out
+						.println("ScientistRoleTestCases.testSpecimenArrayContentWithScientistLogin()"+e.getMessage());
 				 e.printStackTrace();
-				 assertTrue("Failed to add participant", true);
-				 
+				 assertFalse("Test failed. to search SpecimenArrayContent", true);
+			 }
+			
+		}
+		
+		/**
+		 * Test search for ReceivedEventParameters and test for PHI data
+		 */
+		public void testSearchReceivedEventParameters()
+		{
+			try
+			{
+				ReceivedEventParameters recEvParam = new ReceivedEventParameters();
+				List recColl = appService.search(ReceivedEventParameters.class, recEvParam);
+				Iterator itr = recColl.iterator();
+				while(itr.hasNext())
+				{
+					ReceivedEventParameters rec = (ReceivedEventParameters)itr.next();
+					if(rec.getTimestamp()!=null)
+					{
+						fail("ReceivedEventParameters PHI data is visible to scientist");
+					}
+					System.out.println("ReceivedEventParameters:TimeStamp:"+rec.getTimestamp());
+				}
+			} 
+			catch(Exception e)
+			{
+				System.out
+						.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
+				e.printStackTrace();
+				assertFalse("Test failed. to search SpecimenArrayContent", true);
+			}
+		}
+		/**
+		 * Test search for CollectionEventParameters and test for PHI data
+		 */
+		public void testSearchCollectionEventParameters()
+		{
+			try
+			{
+				CollectionEventParameters colEvParam = new CollectionEventParameters();
+				List collEveColl = appService.search(CollectionEventParameters.class, colEvParam);
+				Iterator itr = collEveColl.iterator();
+				while(itr.hasNext())
+				{
+					CollectionEventParameters cep = (CollectionEventParameters)itr.next();
+					if(cep.getTimestamp()!=null)
+					{
+						fail("CollectionEventParameters PHI data is visible to scientist");
+					}
+					System.out.println("CollectionEventParameters:Timestamp:"+cep.getTimestamp());
+				}
+			} 
+			catch(Exception e)
+			{
+				System.out
+						.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
+				e.printStackTrace();
+				assertFalse("Test failed. to search CollectionEventParameters", true);
+			}
+		}
+		/**
+		 * Test search for PathologyReportReviewParameter and test for PHI data
+		 */
+		public void testsearchMoleEventparam()
+		{
+			try
+			{
+				MolecularSpecimenReviewParameters molSpRev = new MolecularSpecimenReviewParameters();
+				List recColl = appService.search(MolecularSpecimenReviewParameters.class, molSpRev);
+				Iterator itr = recColl.iterator();
+				while(itr.hasNext())
+				{
+					MolecularSpecimenReviewParameters mol = (MolecularSpecimenReviewParameters)itr.next();
+					if(mol.getTimestamp()!=null)
+					{
+						fail("MolecularSpecimenReviewParameters PHI data is visible to scientist");
+					}
+					System.out.println("MolecularSpecimenReviewParameters :Timestamp : " + mol.getTimestamp());
+				}
+			} 
+			catch(Exception e)
+			{
+				System.out
+						.println("ScientistRoleTestCases.testsearchMoleEventparam()"+e.getMessage());
+				e.printStackTrace();
+				assertFalse("could not add object", true);
+			}
+		}
+		
+		/**
+		 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
+		 */
+		public void testSearchDeidentifiedSurgicalPathologyReport()
+		{
+			try
+			{
+				DeidentifiedSurgicalPathologyReport spr = new DeidentifiedSurgicalPathologyReport();
+				List spCollection = appService.search(DeidentifiedSurgicalPathologyReport.class, spr);
+				Iterator itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					DeidentifiedSurgicalPathologyReport deid = (DeidentifiedSurgicalPathologyReport)itr.next();
+					if(deid.getCollectionDateTime()!=null || deid.getId()!=null
+							|| deid.getActivityStatus()!=null||deid.getIsFlagForReview()!=null)
+					{
+						fail("DeIdentifiedSurgicalPathologyReport PHI data is visible to scientist");
+					}
+					System.out.println("DeidentifiedSurgicalPathologyReport->TimeStamp = "+deid.getCollectionDateTime());
+					System.out.println("DeidentifiedSurgicalPathologyReport->Identifier = "+deid.getId());
+					System.out.println("DeidentifiedSurgicalPathologyReport->ActivityStatus = "+deid.getActivityStatus());
+					System.out.println("DeidentifiedSurgicalPathologyReport->IsFlagForReview = "+deid.getIsFlagForReview());
+				}
+			 }
+			 catch(Exception e)
+			 {
+				 System.out
+						.println("ScientistRoleTestCases.testSearchDeidentifiedSurgicalPathologyReport()"+e.getMessage());
+				 e.printStackTrace();
+				 assertFalse("Test failed. to search deIfiedSurgicalPathologyReport", true);
 			 }
 		}
-	  
-	  public void testAddParticipantWithCPRWithScientistLogin()
+		/**
+		 * Test search for IdentifiedSurgicalPathologyReport and test for PHI data
+		 */
+		public void testSearchIdentifiedSurgicalPathologyReport()
 		{
-			try{
-				Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
-				System.out.println(participant);
-				participant = (Participant) appService.createObject(participant); 
-				Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
-				Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
-				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
+			try
+			{
+				IdentifiedSurgicalPathologyReport spr = new IdentifiedSurgicalPathologyReport();
+				List spCollection = appService.search(IdentifiedSurgicalPathologyReport.class, spr);
+				Iterator itr = spCollection.iterator();
+				while(itr.hasNext())
+				{
+					IdentifiedSurgicalPathologyReport ispr = (IdentifiedSurgicalPathologyReport)itr.next();
+					if(ispr.getCollectionDateTime()!=null || ispr.getTextContent().getData()!= null||
+							ispr.getId()!=null || ispr.getActivityStatus()!=null)
+					{
+						fail("IdentifiedSurgicalPathologyReport PHI data is visible to scientist");
+					}
+					System.out.println("IdentifiedSurgicalPathologyReport->TimeStamp ="+ispr.getCollectionDateTime());
+					System.out.println("IdentifiedSurgicalPathologyReport->Data = "+ispr.getTextContent().getData());
+					System.out.println("IdentifiedSurgicalPathologyReport->Identifier = "+ispr.getId());
+					System.out.println("IdentifiedSurgicalPathologyReport->ActivityStatus = "+ispr.getActivityStatus());
+				}
+			 }
+			 catch(Exception e)
+			 {
+				System.out
+						.println("ScientistRoleTestCases.testSearchIdentifiedSurgicalPathologyReport()"+e.getMessage());
+				 e.printStackTrace();
+				 assertFalse("Test failed. to search IdentifiedSurgicalPathologyReport", true);
+			 }
+		}
 				
-				TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
-				TestCaseUtility.setObjectMap(participant, Participant.class);
-				System.out.println("Object created successfully");
-				assertFalse("Participant registration created successfully", true);
-			 }
-			 catch(Exception e){
-				 e.printStackTrace();
-				 assertTrue("Failed to create Participant registration", true);
-				 
-			 }
-		}
-	  
-	  public void testUpdateParticipantWithScientistLogin()
-		{
-			Participant participant =  BaseTestCaseUtility.initParticipant();
-			Logger.out.info("updating domain object------->"+participant);
-		    try 
-			{
-		    	participant = (Participant) appService.createObject(participant);
-		    	BaseTestCaseUtility.updateParticipant(participant);
-		    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
-		       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
-		       	assertFalse("Participant successfully updated ---->"+updatedParticipant, true);
-		     } 
-		    catch (Exception e) {
-		       	Logger.out.error(e.getMessage(),e);
-		 		e.printStackTrace();
-		 		assertTrue("Failed to update Participant", true);
-		 		
-		    }
-		}
-	  public void testSearchParticipantWithScientistLogin()
-		{
-			Participant participant = new Participant();
-			Logger.out.info(" searching domain object");
-			participant.setId(new Long(1));
-	 
-	       try {
-	      	 List resultList = appService.search(Participant.class,participant);
-	      	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-	      		 Participant returnedParticipant = (Participant) resultsIterator.next();
-	      		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedParticipant.getFirstName() +" "+returnedParticipant.getLastName());
-	      		 }
-	        } 
-	        catch (Exception e) {
-	         	Logger.out.error(e.getMessage(),e);
-	         	e.printStackTrace();
-	         	assertFalse("Does not find Domain Object", true);
-		 		
-	        }
-		}
-	 
-		 
-	  
-	  public void testAddTissueSpecimenWithTechnicianWithScientist()
-		{
-		   try {
-			  
-			   SpecimenCollectionGroup scg =(SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-				TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();				
-				specimenObj.setSpecimenCollectionGroup(scg);
-				Logger.out.info("Inserting domain object------->"+specimenObj);
-				System.out.println("Before Creating Tissue Specimen");
-				specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
-				TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
-				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				assertFalse("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
-			}
-			catch(Exception e)
-			{
-				System.out.println("Exception thrown");
-				System.out.println(e);
-				Logger.out.error(e.getMessage(),e);
-				e.printStackTrace();
-				assertTrue("Failed to create Domain Object", true);
-			}
-		}
-	  
-	  public void testAddMolecularSpecimenWithScientist()
-		{
-		   try {
-			    MolecularSpecimen specimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
-			    SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			    specimenObj.setSpecimenCollectionGroup(scg);
-				Logger.out.info("Inserting domain object------->"+specimenObj);
-				System.out.println("Before Creating Tissue Specimen");
-				specimenObj =  (MolecularSpecimen) appService.createObject(specimenObj);
-				TestCaseUtility.setObjectMap(specimenObj, MolecularSpecimen.class);
-				System.out.println("Afer Creating Tissue Specimen");
-				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				assertFalse("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);		
-		   
-		   }
-			catch(Exception e)
-			{
-				System.out.println("Exception thrown");
-				System.out.println(e);
-				Logger.out.error(e.getMessage(),e);
-				e.printStackTrace();
-				assertTrue("Failed to create Domain Object", true);
-			}
-		}
-		
-		public void testAddCellSpecimenWithScientist()
-		{
-		   try {
-			    CellSpecimen specimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
-			    SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			    specimenObj.setSpecimenCollectionGroup(scg);
-				Logger.out.info("Inserting domain object------->"+specimenObj);
-				System.out.println("Before Creating Tissue Specimen");
-				specimenObj =  (CellSpecimen) appService.createObject(specimenObj);
-				TestCaseUtility.setObjectMap(specimenObj, CellSpecimen.class);
-				System.out.println("Afer Creating Tissue Specimen");
-				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				assertFalse("Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);		
-		   
-		   }
-			catch(Exception e)
-			{
-				System.out.println("Exception thrown");
-				System.out.println(e);
-				Logger.out.error(e.getMessage(),e);
-				e.printStackTrace();
-				assertTrue("Failed to create Domain Object", true);
-			}
-		}
-		public void testAddFluidSpecimenWithScientist()
-		{
-		   try {
-			    FluidSpecimen specimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
-			    SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			    specimenObj.setSpecimenCollectionGroup(scg);
-				Logger.out.info("Inserting domain object------->"+specimenObj);
-				System.out.println("Before Creating Tissue Specimen");
-				specimenObj =  (FluidSpecimen) appService.createObject(specimenObj);
-				TestCaseUtility.setObjectMap(specimenObj, FluidSpecimen.class);
-				System.out.println("Afer Creating Tissue Specimen");
-				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				assertFalse("Domain Object is successfully added", true);	   
-		   }
-			catch(Exception e)
-			{
-				System.out.println("Exception thrown");
-				System.out.println(e);
-				Logger.out.error(e.getMessage(),e);
-				e.printStackTrace();
-				assertTrue("Failed to create Domain Object, true", true);	
-			}
-		}
-		
-		public void testSearchSpecimenWithScientistLogin()
-		  {
-			Specimen specimen = new TissueSpecimen();
-			Specimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
-			specimen.setId(cachedSpecimen.getId());
-		   	Logger.out.info(" searching domain object");
-		   	try {
-		      	 List resultList = appService.search(Specimen.class,specimen);
-		      	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
-		      		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
-		      		 System.out.println("here-->" + returnedspecimen.getLabel() +"Id:"+returnedspecimen.getId());
-		      		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
-		           }
-		      	 assertTrue("Specimen found", true);
-		        } 
-		        catch (Exception e) {
-		      	Logger.out.error(e.getMessage(),e);
-			 		e.printStackTrace();
-			 		assertFalse("Couldnot found Specimen", true);  
-		        }
-	
-		  }
-*/		
 	}
