@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -25,9 +26,14 @@ import oracle.sql.CLOB;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.ReviewEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
@@ -57,8 +63,6 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
-import edu.wustl.security.privilege.PrivilegeCache;
-import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -246,6 +250,18 @@ public class CaCoreAppServicesDelegator
 		List filteredObjects = null;//new ArrayList();
 		User validUser = AppUtility.getUser(userName);
 		String reviewerRole = null;
+		
+		List<Class> classList = new ArrayList<Class>();
+	    classList.add(Participant.class);
+	    classList.add(SpecimenCollectionGroup.class);
+	    classList.add(Specimen.class);
+	    classList.add(CollectionProtocolRegistration.class);
+	    classList.add(IdentifiedSurgicalPathologyReport.class);
+	    classList.add(DeidentifiedSurgicalPathologyReport.class);
+	    classList.add(ParticipantMedicalIdentifier.class);
+	    classList.add(SpecimenEventParameters.class);
+	    classList.add(SpecimenArrayContent.class);
+	    
 		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 		try
 		{
@@ -268,7 +284,7 @@ public class CaCoreAppServicesDelegator
 		{
 			try
 			{
-				filteredObjects = filterObjects(userName, nonDisbaledObjectList);
+				filteredObjects = filterObjects(userName, nonDisbaledObjectList,classList);
 			}
 			catch (Exception exp)
 			{
@@ -338,81 +354,100 @@ public class CaCoreAppServicesDelegator
 	 * @return The filtered list of objects according to the privilege of the user.
 	 * @throws Exception 
 	 */
-	private List filterObjects(String userName, List objectList) throws Exception
+	private List filterObjects(String userName, List objectList, List classList) throws Exception
 	{
-		logger.debug("In Filter Objects ......");
-
-		SessionDataBean sessionDataBean = getSessionDataBean(userName);
-		// boolean that indicates whether user has READ_DENIED privilege on the main object.
+	    Logger.out.debug("In Filter Objects ......" );
+	    
+	    SessionDataBean sessionDataBean = getSessionDataBean(userName);
+	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean hasReadDeniedForMain = false;
-
+		
 		// boolean that indicates whether user has privilege on identified data.
 		boolean hasPrivilegeOnIdentifiedData = false;
 		List filteredObjects = new ArrayList();
-
-		// To get privilegeCache through 
-		// Singleton instance of PrivilegeManager, requires User LoginName		
-		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
-
-		logger.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>" + objectList.size());
+		
+		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
-		while (iterator.hasNext())
+		while(iterator.hasNext())
 		{
-
-			Object abstractDomainObject = (Object) iterator.next();//objectList.get(i);
-			Class classObject = abstractDomainObject.getClass();
-			String objectName = classObject.getName();
-			Long identifier = (Long) getFieldObject(abstractDomainObject, "id");;
-
-			String aliasName = getAliasName(abstractDomainObject);
-
-			/** Check the permission of the user on the main object.
-			 *  Call to SecurityManager.checkPermission bypassed &
-			 *  instead, call redirected to privilegeCache.hasPrivilege
-			 *  Check readDenied permission on particpant,SCG,CPR,Specimen,IdentifiedSPR 
-			 *  If the user has READ_DENIED privilege on the object, remove that object from the list. 
-			 */
-
-			hasReadDeniedForMain = true;
-
-			if (classObject.equals(Participant.class)
-					|| classObject.equals(SpecimenCollectionGroup.class)
-					|| classObject.getSuperclass().equals(Specimen.class)
-					|| classObject.equals(CollectionProtocolRegistration.class)
-					|| classObject.equals(IdentifiedSurgicalPathologyReport.class))
+		    Object abstractDomainObject = (Object) iterator.next();
+		    Class classObject = abstractDomainObject.getClass();
+		    String objectName = classObject.getName();
+		    Long identifier = (Long)getFieldObject(abstractDomainObject, "id");
+		    
+		    if(classObject.getSuperclass().equals(SpecimenEventParameters.class)||
+		       classObject.getSuperclass().equals(ReviewEventParameters.class))
 			{
-
-				if (classObject.getSuperclass().equals(Specimen.class))
-				{
-					objectName = Specimen.class.getName();
-				}
-				hasReadDeniedForMain = AppUtility.hasPrivilegeToView(objectName, identifier,
-						sessionDataBean, Permissions.READ_DENIED);
+		    	classObject = SpecimenEventParameters.class;
+			}
+		    else if(classObject.getSuperclass().equals(Specimen.class))
+			{
+		    	classObject = Specimen.class;
 			}
 
-			logger.debug("Main object:" + aliasName + " Has READ_DENIED privilege:"
-					+ hasReadDeniedForMain);
-
-			/**
-			 *  In case of no READ_DENIED privilege, check for privilege on identified data.
-			 */
-			if (hasReadDeniedForMain)
-			{
-				/**Check the permission of the user on the identified data of the object.
-				 * Call to SecurityManager.checkPermission bypassed &
-				 * instead, call redirected to privilegeCache.hasPrivilege
-				 * call remove identified data
-				 * If has no read privilege on identified data, set the identified attributes as NULL.
-				**/
-
-				removeIdentifiedDataFromObject(abstractDomainObject, objectName, identifier,
-						sessionDataBean);
-
-				filteredObjects.add(abstractDomainObject);
-				logger.debug("Intermediate Size of filteredObjects .............."
-						+ filteredObjects.size());
+		    String aliasName = getAliasName(abstractDomainObject);
+            
+            /** Check the permission of the user on the main object.
+             *  Call to SecurityManager.checkPermission bypassed &
+             *  instead, call redirected to privilegeCache.hasPrivilege
+             *  Check readDenied permission on particpant,SCG,CPR,Specimen,IdentifiedSPR 
+             *  If the user has READ_DENIED privilege on the object, remove that object from the list. 
+             */
+			 
+            hasReadDeniedForMain = true;
+            if(classList.contains(classObject))
+            {
+    			if(classObject.equals(Specimen.class))
+    			{
+    				objectName = Specimen.class.getName();
+    			}
+    			else if(classObject.equals(SpecimenEventParameters.class))
+    			{
+    				SpecimenEventParameters spe = (SpecimenEventParameters)abstractDomainObject;
+    				if(spe.getSpecimenCollectionGroup()!=null)
+    				{
+    					objectName = SpecimenCollectionGroup.class.getName();
+    					identifier = spe.getSpecimenCollectionGroup().getId();
+    				}
+    				else
+    				{
+    					objectName = Specimen.class.getName();
+    					identifier = spe.getSpecimen().getId();
+    				}
+    			}
+    			else if(classObject.equals(ParticipantMedicalIdentifier.class))
+    			{
+    				objectName = Participant.class.getName();
+    				ParticipantMedicalIdentifier pmi = (ParticipantMedicalIdentifier)abstractDomainObject;
+    				identifier = pmi.getParticipant().getId();
+    			}
+    			else if (classObject.equals(SpecimenArrayContent.class))
+    			{
+    				objectName = Specimen.class.getName();
+    				SpecimenArrayContent sac =(SpecimenArrayContent)abstractDomainObject;
+    				identifier = sac.getSpecimen().getId();
+    			}
+    			hasReadDeniedForMain = AppUtility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.READ_DENIED);
+    			
+    		}
+		    Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:" + hasReadDeniedForMain);
+		    
+		    /**
+		     *  In case of no READ_DENIED privilege, check for privilege on identified data.
+		     */
+		    if (hasReadDeniedForMain) 
+		    {
+		        /**Check the permission of the user on the identified data of the object.
+		         * Call to SecurityManager.checkPermission bypassed &
+		         * instead, call redirected to privilegeCache.hasPrivilege
+		         * call remove identified data
+		         * If has no read privilege on identified data, set the identified attributes as NULL.
+		    	**/
+		    	removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean,classList);
+		    	filteredObjects.add(abstractDomainObject);
+			    Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
 			}
+	    	
 		}
 		/**
 		 * Bug 5938
@@ -422,66 +457,71 @@ public class CaCoreAppServicesDelegator
 		 * This is a fix for scientis querying on phi data such as Give particpant where lastName is something
 		 * COMMENTED AS THIS IS NOT RIGTH SOLUTION
 		 */
-
-		//		String objectLimit = XMLPropertyHandler.getValue(Constants.API_FILTERED_OBJECT_LIMIT);
-		//		if(objectLimit!=null)
-		//		{
-		//			int removeFilteredObjectLimit = Integer.parseInt(objectLimit);  
-		//			if(filteredObjects.size()<=removeFilteredObjectLimit&&filteredObjects.size()==noPHIAccessDataCounter)
-		//			{
-		//				filteredObjects = new ArrayList();
-		//			}
-		//		}
-		logger.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>" + filteredObjects.size());
-		//		boolean status = objectList.removeAll(toBeRemoved);
-		//		logger.debug("Remove Status>>>>>>>>>>>>>>>>>>>>>>>>"+status);
-		//		SDKListProxy finalFilteredObjects = new SDKListProxy();
-		//		finalFilteredObjects.setHasAllRecords(true);
-		//		finalFilteredObjects.addAll(filteredObjects);
-
-		//		logger.debug("Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+finalFilteredObjects.size());
-
+		
+		Logger.out.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+filteredObjects.size());
 		return filteredObjects;
 	}
 
 	private void removeIdentifiedDataFromObject(Object abstractDomainObject, String objectName,
-			Long identifier, SessionDataBean sessionDataBean) throws BizLogicException
+			Long identifier, SessionDataBean sessionDataBean,List classList) throws BizLogicException
 	{
 		Class classObject = abstractDomainObject.getClass();
-
+		if(classObject.getSuperclass().equals(SpecimenEventParameters.class)||
+			       classObject.getSuperclass().equals(ReviewEventParameters.class))
+		{
+	    	classObject = SpecimenEventParameters.class;
+		}
+	    else if(classObject.getSuperclass().equals(Specimen.class))
+		{
+	    	classObject = Specimen.class;
+		}
 		/**
 		 * Check if user is having PHI access of this object 
 		 * else set PHI values to null of respective object
 		 */
-		boolean hasPHIAccess = AppUtility.hasPrivilegeToView(objectName, identifier,
-				sessionDataBean, Permissions.REGISTRATION);
-		if (!hasPHIAccess)
+		boolean hasPHIAccess =true;
+	    if(classList.contains(classObject))
+		{
+			hasPHIAccess = AppUtility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.REGISTRATION);
+		}
+		if(!hasPHIAccess)
 		{
 			if (classObject.equals(Participant.class))
+		    {
+	        	removeParticipantIdentifiedData(abstractDomainObject);
+	        }
+			else if(classObject.equals(ParticipantMedicalIdentifier.class))
 			{
-				removeParticipantIdentifiedData(abstractDomainObject);
-				//noPHIAccessDataCounter++;
+				removePMIIdentifiedData(abstractDomainObject);
 			}
-			else if (classObject.equals(SpecimenCollectionGroup.class))
-			{
-				removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
-				//noPHIAccessDataCounter++;
-			}
-			else if (classObject.getSuperclass().equals(Specimen.class))
-			{
-				removeSpecimenIdentifiedData(abstractDomainObject);
-				//noPHIAccessDataCounter++;
-			}
-			else if (classObject.equals(CollectionProtocolRegistration.class))
-			{
-				removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
-				//noPHIAccessDataCounter++;
-			}
-			else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
-			{
-				removeIdentifiedReportIdentifiedData(abstractDomainObject);
-				//noPHIAccessDataCounter++;
-			}
+		    else if (classObject.equals(SpecimenCollectionGroup.class))
+		    {
+	        	removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
+	        }
+		    else if (classObject.equals(Specimen.class))
+		    {
+		    	removeSpecimenIdentifiedData(abstractDomainObject);
+		    }
+		    else if (classObject.equals(CollectionProtocolRegistration.class))
+		    {
+	        	removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
+	        }
+		    else if (classObject.equals(DeidentifiedSurgicalPathologyReport.class))
+		    {
+		    	removeDeIdentifiedReportIdentifiedData(abstractDomainObject);
+	       	}
+		    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
+		    {
+		    	removeIdentifiedReportIdentifiedData(abstractDomainObject);
+	       	}
+		    else if(classObject.equals(SpecimenEventParameters.class))
+		    {
+		    	removeSpecimenEventParameters(abstractDomainObject);
+		    }
+		    else if(classObject.equals(SpecimenArrayContent.class))
+		    {
+		    	removeSpecimenArrayContentIdentifiedData(abstractDomainObject);
+		    }
 		}
 	}
 
@@ -525,123 +565,84 @@ public class CaCoreAppServicesDelegator
 	}
 
 	/**
-	 * Removes the identified data from Participant object.
-	 * @param object The Particpant object.
-	 */
-	private void removeParticipantIdentifiedData(Object object)
+     * Removes the identified data from Participant object.
+     * @param object The Particpant object.
+     */
+    private void removeParticipantIdentifiedData(Object object)
 	{
-		Participant participant = (Participant) object;
-		participant.setFirstName(null);
-		participant.setLastName(null);
-		participant.setMiddleName(null);
-		participant.setBirthDate(null);
-		participant.setSocialSecurityNumber(null);
-
-		//	    Collection participantMedicalIdentifierCollection 
-		//	    				= participant.getParticipantMedicalIdentifierCollection();
-		//	    for (Iterator iterator = participantMedicalIdentifierCollection.iterator();iterator.hasNext();)
-		//	    {
-		//	        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
-		//	        participantMedId.setMedicalRecordNumber(null);
-		//	    }
-		//	    
-		//	    Collection collectionProtocolRegistrationCollection 
-		//	    				= participant.getCollectionProtocolRegistrationCollection();
-		//	    for (Iterator iterator=collectionProtocolRegistrationCollection.iterator();iterator.hasNext();)
-		//	    {
-		//	        CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) iterator.next();
-		//	        collectionProtReg.setRegistrationDate(null); 
-		//	    }
+	    Participant participant = (Participant) object;
+	    participant.setFirstName(null);
+	    participant.setLastName(null);
+	    participant.setMiddleName(null);
+	    participant.setBirthDate(null);
+	    participant.setDeathDate(null);
+	    participant.setSocialSecurityNumber(null);
+	    
+	    Collection<ParticipantMedicalIdentifier> pmiCollection 
+	    				= participant.getParticipantMedicalIdentifierCollection();
+	    for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
+	    {
+	        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
+	        removePMIIdentifiedData(participantMedId);
+	    }
+	    
+	    Collection<CollectionProtocolRegistration> cpCollection 
+	    				= participant.getCollectionProtocolRegistrationCollection();
+	    for (Iterator<CollectionProtocolRegistration> iterator=cpCollection.iterator();iterator.hasNext();)
+	    {
+	        CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) iterator.next();
+	        removeCollectionProtocolRegistrationIdentifiedData(collectionProtReg);
+	    }
+	}
+    /**
+     * Removes the identified data from SpecimenCollectionGroup object.
+     * @param object The SpecimenCollectionGroup object.
+     * @throws DAOException 
+     */
+	private void removeSpecimenCollectionGroupIdentifiedData(Object object)
+	{
+	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
+	    specimenCollGrp.setSurgicalPathologyNumber(null);
+		removeCollectionProtocolRegistrationIdentifiedData(specimenCollGrp.getCollectionProtocolRegistration());
+		Collection<SpecimenEventParameters> spEvent = specimenCollGrp.getSpecimenEventParametersCollection();
+	    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+	    while(eveItr.hasNext())
+	    {
+	    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+	    	removeSpecimenEventParameters(spEventParam);
+	    }
+	}
+	/**
+     * Removes the identified data from Specimen object.
+     * @param object The Specimen object.
+	 * @throws DAOException 
+     */
+	private void removeSpecimenIdentifiedData(Object object)
+	{
+	    Specimen specimen = (Specimen) object;
+	    specimen.setCreatedOn(null);    
+	    removeSpecimenCollectionGroupIdentifiedData(specimen.getSpecimenCollectionGroup());
+	    Collection<SpecimenEventParameters> spEvent = specimen.getSpecimenEventCollection();
+	    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+	    while(eveItr.hasNext())
+	    {
+	    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+	    	removeSpecimenEventParameters(spEventParam);
+	    }
 	}
 
 	/**
-	 * Removes the identified data from SpecimenCollectionGroup object.
-	 * @param object The SpecimenCollectionGroup object.
+     * Removes the identified data from CollectionProtocolRegistration object.
+     * @param object The CollectionProtocolRegistration object.
 	 * @throws DAOException 
-	 * @throws BizLogicException 
-	 */
-	private void removeSpecimenCollectionGroupIdentifiedData(Object object) throws BizLogicException
-	{
-		/**
-		 * Kalpana 
-		 * Bug #6076
-		 * Reviewer : 
-		 * Description : Because of lazy initialization problem retrieved the object.
-		 */
-		SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
-		CollectionProtocolRegistration cpr = specimenCollGrp.getCollectionProtocolRegistration();
-		if (cpr != null)
-		{
-			removeCollectionProtocolRegistrationIdentifiedData(cpr);
-		}
-		specimenCollGrp.setSurgicalPathologyNumber(null);
-		IBizLogic bizLogic = getBizLogic(SpecimenCollectionGroup.class.getName());
-		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) bizLogic
-				.retrieveAttribute(SpecimenCollectionGroup.class.getName(),
-						specimenCollGrp.getId(), Constants.IDENTIFIED_SURGICAL_PATHOLOGY_REPORT);
-		if (identifiedSurgicalPathologyReport != null)
-		{
-			removeIdentifiedReportIdentifiedData(identifiedSurgicalPathologyReport);
-			specimenCollGrp.setIdentifiedSurgicalPathologyReport(identifiedSurgicalPathologyReport);
-		}
-	}
-
-	/**
-	 * Removes the identified data from Specimen object.
-	 * @param object The Specimen object.
-	 * @throws DAOException 
-	 * @throws BizLogicException 
-	 */
-	private void removeSpecimenIdentifiedData(Object object) throws BizLogicException
-	{
-
-		/**
-		 * Kalpana 
-		 * Bug #6076
-		 * Reviewer : 
-		 * Description : Because of lazy initialization problem retrieved the object.
-		 */
-
-		Specimen specimen = (Specimen) object;
-		// call Biz logic for change in our objects
-		SpecimenCollectionGroup specimenCollectionGroup = null;
-		IBizLogic bizLogic = getBizLogic(SpecimenCollectionGroup.class.getName());
-		Object SCGobject = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), specimen
-				.getSpecimenCollectionGroup().getId());
-		if (SCGobject != null)
-		{
-			specimenCollectionGroup = (SpecimenCollectionGroup) SCGobject;
-		}
-
-		removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
-		specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-
-	}
-
-	/**
-	 * Removes the identified data from CollectionProtocolRegistration object.
-	 * @param object The CollectionProtocolRegistration object.
-	 * @throws DAOException 
-	 * @throws BizLogicException 
-	 */
+     */
 	private void removeCollectionProtocolRegistrationIdentifiedData(Object object)
-			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizlogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
-		collectionProtocolRegistration.setBarcode(null);
-		collectionProtocolRegistration.setRegistrationDate(null);
-		collectionProtocolRegistration.setSignedConsentDocumentURL(null);
-		collectionProtocolRegistration.setConsentSignatureDate(null);
-		collectionProtocolRegistration.setConsentWitness(null);
-		Participant participant = (Participant) bizlogic.retrieveAttribute(
-				CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
-						.getId(), "participant");
-		if (participant != null)
-		{
-			removeParticipantIdentifiedData(participant);
-		}
+		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) object;
+		cpr.setRegistrationDate(null);
+	    cpr.setConsentSignatureDate(null);
+	    cpr.setSignedConsentDocumentURL(null);
+	   	cpr.setParticipant(null);
 	}
 
 	/**
@@ -798,26 +799,71 @@ public class CaCoreAppServicesDelegator
 		return ((String) DefaultValueManager.getDefaultValue((String) obj));
 	}
 
+	 /**
+     * Removes the identified data from identified Report object
+     * @param object object of IdentifiedSurgicalPathologyReport
+     */
+    private void  removeIdentifiedReportIdentifiedData(Object object)
+    {
+    	IdentifiedSurgicalPathologyReport identiPathologyReport=(IdentifiedSurgicalPathologyReport)object;
+    	identiPathologyReport.setCollectionDateTime(null);
+    	identiPathologyReport.setId(null);
+    	identiPathologyReport.setActivityStatus(null);
+    	identiPathologyReport.setIsFlagForReview(null);
+    	if(identiPathologyReport.getTextContent()!=null)
+    	{
+    		identiPathologyReport.getTextContent().setData(null);
+    	}
+    }
 	/**
-	 * Removes the identified data from identified Report object
-	 * @param object object of IdentifiedSurgicalPathologyReport
-	 */
-	private void removeIdentifiedReportIdentifiedData(Object object)
-	{
-		IdentifiedSurgicalPathologyReport identiPathologyReport = (IdentifiedSurgicalPathologyReport) object;
-		//    	identiPathologyReport.setActivityStatus(null);
-		//    	identiPathologyReport.setCollectionDateTime(null);
-		//    	identiPathologyReport.setId(null);
-		//    	identiPathologyReport.setReportSource(null);
-		//    	identiPathologyReport.setReportStatus(null);
-		//    	identiPathologyReport.setIsFlagForReview(null);
-		//    	identiPathologyReport.setSpecimenCollectionGroup(null);
-		if (identiPathologyReport.getTextContent() != null)
-		{
-			identiPathologyReport.getTextContent().setData(null);
-		}
-	}
+     * Removes the identified data from de-identified Report object
+     * @param object object of DeIdentifiedSurgicalPathologyReport
+     */
+    private void  removeDeIdentifiedReportIdentifiedData(Object object)
+    {
+    	DeidentifiedSurgicalPathologyReport deIdentiPathologyReport=(DeidentifiedSurgicalPathologyReport)object;
+    	deIdentiPathologyReport.setCollectionDateTime(null);
+    	deIdentiPathologyReport.setId(null);
+    	deIdentiPathologyReport.setActivityStatus(null);
+    	deIdentiPathologyReport.setIsFlagForReview(null);
+    }
+    
+    /**
+     * Removes the identified data from SpecimenEvent parameters object
+     * @param object object of child classes of SpecimenEventParameters
+     */
+    private void  removeSpecimenEventParameters(Object object)
+    {
+    	SpecimenEventParameters specimenEventParameters=(SpecimenEventParameters)object;
+    	specimenEventParameters.setTimestamp(null);
+    }
 
+    /**
+     * Removes the identified data from PMI object
+     * @param object PMI Object
+     */
+    private void  removePMIIdentifiedData(Object object)
+    {
+    	ParticipantMedicalIdentifier pmi = (ParticipantMedicalIdentifier) object;
+		pmi.setMedicalRecordNumber(null);
+    }
+    
+    /**
+     * Removes the identified data from SpecimenArrayContent object
+     * @param object SpecimenArrayContent object to filter
+     * @throws DAOException 
+     */
+    private void removeSpecimenArrayContentIdentifiedData(Object object)
+    {
+    	SpecimenArrayContent specimenArrayContent=(SpecimenArrayContent)object;
+    	removeSpecimenIdentifiedData(specimenArrayContent.getSpecimen());
+    }
+    
+    /**
+     * @param queryObject Query object to audit 
+     * @param userName User Name
+     * @throws Exception Exception 
+     */
 	public void auditAPIQuery(String queryObject, String userName) throws Exception
 	{
 		SessionDataBean sessionDataBean = getSessionDataBean(userName);
