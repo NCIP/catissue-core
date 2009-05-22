@@ -15,25 +15,43 @@ import edu.wustl.common.beans.SessionDataBean;
  */
 public class LoginTestCase extends CaTissueSuiteBaseTest
 {
-
 /**
- * Test successful Login.
+ * Negative test case
+ * bug 10997
  */
 	@Test
-	public void testSuccessfulLogin()
+	public void testInvalidLogin()
 	  {
 		   	addRequestParameter("loginName","admin@admin.com");
-	        addRequestParameter("password","Test123");
+	        addRequestParameter("password","Test");
 	        setRequestPathInfo("/Login.do");
 	        actionPerform();
 	        //verifyForward("/Home.do");
-	        verifyForward("success");
-
-	        SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	        assertEquals("user name should be equal to loggedinusername","admin@admin.com",bean.getUserName());
-	        CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
-	        verifyNoActionErrors();
+	         verifyForward("failure");
+			
+			//verify action errors
+			String errormsg[] = new String[] {"errors.incorrectLoginNamePassword"};
+			verifyActionErrors(errormsg);
 	  }
+	/**
+	 * Test successful Login.
+	 */
+		@Test
+		public void testSuccessfulLogin()
+		  {
+			   	addRequestParameter("loginName","admin@admin.com");
+		        addRequestParameter("password","Test123");
+		        setRequestPathInfo("/Login.do");
+		        actionPerform();
+		        //verifyForward("/Home.do");
+		        verifyForward("success");
+
+		        SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		        assertEquals("user name should be equal to loggedinusername","admin@admin.com",bean.getUserName());
+		        CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
+		        verifyNoActionErrors();
+		  }
+	
 /**
  * Test CLick Administrative->Site menu.
  */
