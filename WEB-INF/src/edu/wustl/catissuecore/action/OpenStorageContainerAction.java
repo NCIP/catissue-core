@@ -69,6 +69,10 @@ public class OpenStorageContainerAction extends BaseAction{
 			storageContainerBean.setSiteName(storageContainerForm.getSiteName());
 			storageContainerBean.setSiteForParentContainer(storageContainerForm.getSiteForParentContainer());
 			storageContainerBean.setParentContainerSelected(storageContainerForm.getParentContainerSelected());
+			//12064 S
+			storageContainerBean.setActivityStatus(storageContainerForm.getActivityStatus());
+			storageContainerBean.setIsFull(storageContainerForm.getIsFull());
+			//12064 E
 		}
 		if("pageOfStorageType".equals(pageOf))
 		{
