@@ -680,6 +680,10 @@ public class StorageContainerAction extends SecureAction
 		storageContainerForm.setSiteName(storageContainerBean.getSiteName());
 		storageContainerForm.setSiteForParentContainer(storageContainerBean.getSiteForParentContainer());
 		storageContainerForm.setParentContainerSelected(storageContainerBean.getParentContainerSelected());
+		//12064 S
+		storageContainerForm.setActivityStatus(storageContainerBean.getActivityStatus());
+		storageContainerForm.setIsFull(storageContainerBean.getIsFull());
+		//12064 E
 	}	
 	
 }
