@@ -2,12 +2,16 @@ package edu.wustl.catissuecore.testcase;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+
 import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 
 
 /**
@@ -46,6 +50,10 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		holdsSpecimenClassCollection[3]="Cell";
 		addRequestParameter("specimenOrArrayType", "Specimen");
 		addRequestParameter("holdsSpecimenClassTypes", holdsSpecimenClassCollection);
+		
+		addRequestParameter("activityStatus","Active");
+		addRequestParameter("isFull","False");
+		
 		addRequestParameter("containerName","container_Janu_parent_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		addRequestParameter("operation", "add");
 		setRequestPathInfo("/StorageContainerAdd");
@@ -73,7 +81,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);	    
 	}
 	//bug 11546
-	@Test
+	/*@Test
 	public void testAddChildContainer()
 	{
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
@@ -109,74 +117,82 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();	
 	
-	}
+	}*/
 	
 	/**
 	 * Test Storage Container Edit.
 	 */
-//	@Test
-//	public void testStorageContainerEdit()
-//	{
-//		/*Simple Search Action*/
-//		setRequestPathInfo("/SimpleSearch");
-//		addRequestParameter("aliasName", "StorageContainer");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "StorageContainer");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Container.NAME.varchar");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","s");
-//		addRequestParameter("pageOf","pageOfStorageContainer");
-//		addRequestParameter("operation","search");
-//		actionPerform();
-//
-//		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
-//		DefaultBizLogic bizLogic = new DefaultBizLogic();
-//		List<StorageContainer> storageContainerList = null;
-//		try 
-//		{
-//			storageContainerList = bizLogic.retrieve("StorageContainer");
-//		}
-//		catch (BizLogicException e) 
-//		{
-//			e.printStackTrace();
-//			System.out.println("StorageContainerTestCases.testStorageContainerEdit(): "+e.getMessage());
-//			fail(e.getMessage());
-//		}
-//		
-//		if(storageContainerList.size() > 1)
-//		{
-//		    verifyForward("success");
-//		    verifyNoActionErrors();
-//		}
-//		else if(storageContainerList.size() == 1)
-//		{
-//			verifyForwardPath("/SearchObject.do?pageOf=pageOfStorageContainer&operation=search&id=" + storageContainer.getId());
-//			verifyNoActionErrors();
-//		}
-//		else
-//		{
-//			verifyForward("failure");
-//			//verify action errors
-//			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-//			verifyActionErrors(errorNames);
-//		}
-//				
-//		/*common search action.Generates StorageContainerForm*/
-//		setRequestPathInfo("/StorageContainerSearch");
-//		addRequestParameter("id","" + storageContainer.getId());
-//		actionPerform();
-//		verifyForward("pageOfStorageContainer");
-//		verifyNoActionErrors();
-//
-//		/*edit operation*/
-//		storageContainer.setName("container1_" + UniqueKeyGeneratorUtil.getUniqueKey());
-//		addRequestParameter("name",storageContainer.getName());
-//		setRequestPathInfo("/StorageContainerEdit");
-//		addRequestParameter("specimenOrArrayType", "SpecimenArray");
-//		addRequestParameter("operation", "edit");
-//		actionPerform();
-//		verifyForward("success");
-//		verifyNoActionErrors();
-//		
-//		TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);
-//	}
+	@Test
+	public void testStorageContainerEdit()
+	{
+		/*Simple Search Action*/
+		setRequestPathInfo("/SimpleSearch");
+		addRequestParameter("aliasName", "StorageContainer");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "StorageContainer");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Container.NAME.varchar");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
+		addRequestParameter("value(SimpleConditionsNode:1_Condition_value)","s");
+		addRequestParameter("pageOf","pageOfStorageContainer");
+		addRequestParameter("operation","search");
+		actionPerform();
+
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+		List<StorageContainer> storageContainerList = null;
+		try 
+		{
+			storageContainerList = bizLogic.retrieve("StorageContainer");
+		}
+		catch (BizLogicException e) 
+		{
+			e.printStackTrace();
+			System.out.println("StorageContainerTestCases.testStorageContainerEdit(): "+e.getMessage());
+			fail(e.getMessage());
+		}
+		
+		if(storageContainerList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		else if(storageContainerList.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfStorageContainer&operation=search&id=" + storageContainer.getId());
+			verifyNoActionErrors();
+		}
+		else
+		{
+			verifyForward("failure");
+			//verify action errors
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
+			verifyActionErrors(errorNames);
+		}
+				
+		/*common search action.Generates StorageContainerForm*/
+		setRequestPathInfo("/StorageContainerSearch");
+		addRequestParameter("id","" + storageContainer.getId());
+		actionPerform();
+		verifyForward("pageOfStorageContainer");
+		verifyNoActionErrors();
+
+		/*edit operation*/
+		storageContainer.setName("container1_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("name",storageContainer.getName());
+		
+		addRequestParameter("activityStatus","Closed");
+		addRequestParameter("isFull","True");
+		
+		setRequestPathInfo("/StorageContainerEdit");
+		addRequestParameter("specimenOrArrayType", "SpecimenArray");
+		addRequestParameter("operation", "edit");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		StorageContainerForm form = (StorageContainerForm) getActionForm();
+		assertEquals(form.getActivityStatus(), "Closed");
+		assertEquals(form.getIsFull(), "True");
+		
+		TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);
+	}
 }
