@@ -983,15 +983,8 @@ function addNewTypeAction(action)
 						<td align="left" class="black_ar">&nbsp;</td>                      
 
 <!-- Mandar : 434 : for tooltip -->
-							<%--<html:select property="isFull" styleClass="grey_ar" styleId="isFull" size="1" 
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
-							</html:select>--%>
-							<% boolean disabledChkBox = false;%>
-							<logic:equal property="isFull" name="storageContainerForm" value="true">
-							<% disabledChkBox = true;%>
-							</logic:equal>
-						<td width="1%"align="left" class="black_ar" colspan="2"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></span><html:checkbox property="isFull" value="true" disabled="<%=disabledChkBox%>"/><bean:message key="storageContainer.isContainerFull" />?</td>
+
+						<td width="1%"align="left" class="black_ar" colspan="2"><span class="blue_ar_b"></span><html:checkbox property="isFull" value="true"/><bean:message key="storageContainer.isContainerFull" />?</td>
 						  <td align="center" class="black_ar">&nbsp;</td>
 						</td>
 					</tr>
