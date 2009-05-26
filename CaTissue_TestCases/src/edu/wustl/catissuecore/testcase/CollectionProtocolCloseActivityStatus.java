@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.testcase;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +16,12 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * Description : This class will contain following function 
@@ -306,7 +304,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 		
 		@Test
 
-	      public void testSpecimenEdit() throws DAOException
+	      public void testSpecimenEdit() throws BizLogicException
 	      {
 			Participant participant = (Participant) TestCaseUtility.getNameObjectMap("ParticipantCloseActivityStatus");
 			//participant.getCollectionProtocolRegistrationCollection();
@@ -337,7 +335,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 			
 	      }
 		
-		public static SpecimenCollectionGroup getSCGFromCpr(CollectionProtocolRegistration collectionProtocolRegistrationNew) throws DAOException
+		public static SpecimenCollectionGroup getSCGFromCpr(CollectionProtocolRegistration collectionProtocolRegistrationNew) throws BizLogicException
 		{ 
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
             DefaultBizLogic bizLogic = new DefaultBizLogic();
