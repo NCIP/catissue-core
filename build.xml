@@ -22,7 +22,7 @@
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
-	<property name="junit.jar" value="${lib.dir}/junit-3.8.1.jar" />
+	<property name="junit.jar" value="${lib.dir}/junit-4.1.jar" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
@@ -36,7 +36,7 @@
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
 
 	<!-- flex related properties -->
-<property name="FLEX_HOME" value="F:/flex-builder/Flex SDK 2"/>
+<property name="FLEX_HOME" value="D:/flex_sdk_3"/>
     <property name="FLEX_APP_ROOT" value="flexclient"/>
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
@@ -340,7 +340,7 @@
 				<exclude name="**/CVS*" />
 				<exclude name="**/WEB-INF/lib/jta.jar" />
 				<!--exclude name="**/*build*"/>
-				<exclude name="**/*log4j-1.2.9.jar*" />
+				<exclude name="**/*log4j.jar*" />
 				<exclude name="**/*WEB-INF*"/>
 				<exclude name="**/.*"/>
 				<exclude name="**/*.sql"/>
@@ -389,8 +389,7 @@
 			<include name="commons-lang-2.1.jar" /> 
 			<include name="commons-logging-1.0.4.jar" /> 
 			<include name="dom4*.jar" /> 
-			<include name="ehcache-1.1.jar" />
-			<include name="ehcache-1.2.2.jar" /> 
+			<include name="ehcache-1.2.3.jar" />
 			<include name="freemarker.jar" /> 
 			<include name="jakarta-oro.jar" /> 
 			<include name="uml-1.3.jar" /> 
@@ -424,7 +423,7 @@
 			<include name="catissuecore-client.jar" /> 
 			<include name="experiment-client.jar" /> 
 			<!--<include name="jboss-client.jar" />--> 
-			<include name="junit-3.8.1.jar" /> 
+			<include name="junit-4.1.jar" /> 
 			<include name="mockobjects-core-0.09.jar" /> 
 			<!--include name="mysql-connector-java-5.0.8-bin.jar" / --> 
 			<include name="openide-util.jar" /> 
@@ -577,7 +576,7 @@
 			<fileset file="${base.dir}/WEB-INF/lib/ojdbc14.jar" />
 			<fileset file="${base.dir}/lib/dom4j-1.6.jar" />
 			<fileset file="${base.dir}/lib/j2ee.jar" />
-			<fileset file="${base.dir}/lib/log4j-1.2.9.jar" />
+			<fileset file="${base.dir}/lib/log4j.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/sqljdbc.jar" />
 		</copy>
 
@@ -1060,7 +1059,7 @@
 					<include name="**/struts.jar" />								
 					<include name="**/hibernate2.1.7c.jar" />								
 					<include name="**/odmg.jar"/>
-					<include name="**/log4j-1.2.9.jar"/>
+					<include name="**/log4j.jar"/>
 				</fileset>
 			</copy>
 			<copy todir="${dagviewapplet.dir}/images">	
