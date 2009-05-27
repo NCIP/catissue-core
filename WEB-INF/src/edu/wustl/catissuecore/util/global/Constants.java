@@ -2747,7 +2747,7 @@ public class Constants
 	public static final String TABLE_ALIAS_NAME_COLUMN = "ALIAS_NAME";
 	public static final String TABLE_DATA_TABLE_NAME = "CATISSUE_QUERY_TABLE_DATA";
 	public static final String TABLE_DISPLAY_NAME_COLUMN = "DISPLAY_NAME";
-	
+	public static final String TABLE_TABLE_NAME_COLUMN = "TABLE_NAME";
 	public static final String TABLE_FOR_SQI_COLUMN = "FOR_SQI";
 	
 	public static final String TABLE_ID_COLUMN = "TABLE_ID";

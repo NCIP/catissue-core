@@ -313,7 +313,7 @@ public class TitliFetchAction extends Action
 		
 		//String query=null;
 		
-		String query = "select "+Constants.TABLE_ALIAS_NAME_COLUMN+" from "+Constants.TABLE_DATA_TABLE_NAME+" where "+Constants.TABLE_DATA_TABLE_NAME+"='"+tableName+"'";
+		String query = "select "+Constants.TABLE_ALIAS_NAME_COLUMN+" from "+Constants.TABLE_DATA_TABLE_NAME+" where "+Constants.TABLE_TABLE_NAME_COLUMN+"='"+tableName+"'";
 		JDBCDAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
 		getJDBCDAO();
 		dao.openSession(getSessionData(request));
