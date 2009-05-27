@@ -4782,9 +4782,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		DAO dao = null;
 		try 
 		{
+			dao = openDAOSession(null);
 			if(containerName!=null&&!("").equals(containerName))
 			{
-				dao = openDAOSession(null);
+				
 				StorageContainer storageContainer = null;
 				String[] strArray = {containerName};
 				List contList = null;
