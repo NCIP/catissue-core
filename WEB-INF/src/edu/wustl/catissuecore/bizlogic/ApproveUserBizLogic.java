@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
@@ -36,7 +37,6 @@ import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -102,10 +102,11 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 
 			//Audit of User Update during approving user.
 			User oldUser = (User) oldObj;
-			((HibernateDAO)dao).audit(user.getAddress(), oldUser.getAddress());
-			((HibernateDAO)dao).audit(obj, oldObj);
-
-
+			
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,user.getAddress(), oldUser.getAddress());
+			auditManager.updateAudit(dao,obj, oldObj);
+			
 			EmailHandler emailHandler = new EmailHandler(); 
 
 			//If user is approved send approval and login details emails to the user and administrator.
@@ -126,7 +127,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 			
 			logger.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
 			throw new BizLogicException(errorKey,exp ,"ApproveUserBizLogic.java :"); 
 		}
 	}

@@ -453,6 +453,7 @@ public final class MultipleSpecimenValidationUtil
 	public static void setMultipleSpecimensInSession(HttpServletRequest request, Long scgId)
 			throws ApplicationException
 	{
+		System.out.println("");
 		Map specimenMap = new SpecimenCollectionGroupBizLogic().getSpecimenList(scgId);
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.SPECIMEN_LIST_SESSION_MAP, specimenMap);

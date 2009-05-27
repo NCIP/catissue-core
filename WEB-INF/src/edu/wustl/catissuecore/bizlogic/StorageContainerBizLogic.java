@@ -45,10 +45,12 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
@@ -249,12 +251,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						throw getBizLogicException(e, "dao.error", "");
 					}
 				}
-				dao.insert(cont.getCapacity(), true);
+				AuditManager auditManager = getAuditManager(sessionDataBean);
+				dao.insert(cont.getCapacity());
+				auditManager.insertAudit(dao,cont.getCapacity());
 				if(cont.isFull()==null)
 				{
 					cont.setFull(false);
 				}
-				dao.insert(cont,true);
+				dao.insert(cont);
+				auditManager.insertAudit(dao,cont);
 
 				// Used for showing the success message after insert and using it
 				// for edit.
@@ -288,10 +293,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -692,10 +697,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			dao.update(persistentOldContainerForChange);
 			dao.update(persistentOldContainerForChange.getCapacity());
+			
 			// Audit of update of storage container.
-			((HibernateDAO)dao)	.audit(obj, oldObj);
-			((HibernateDAO)dao)	.audit(container.getCapacity(), oldContainer.getCapacity());
-
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
+			auditManager.updateAudit(dao,container.getCapacity(), oldContainer.getCapacity());
+			
 			logger.debug("container.getActivityStatus() "
 					+ container.getActivityStatus());
 			// lazy change
@@ -762,7 +769,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 
 
@@ -838,7 +848,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "utility.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(),exp.getMsgValues());
 		}
 	}
 
@@ -978,9 +988,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			}
 
-		} catch (Exception e) {
+		} catch (ApplicationException e) {
 			logger.error(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -1244,16 +1254,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				// If the parent is a Site.
 				if (permission == true && row[0] == null) {
 
-					throw getBizLogicException(null, "dao.error", 
-							"Error : First de-assign privilege of the Parent Site with system identifier "
-							+ row[1].toString());
+					throw getBizLogicException(null, "de.assgn.priv.site",row[1].toString());
 				} else if (permission == true && row[0] != null)// If the parent is
 					// a storage
 					// container.
 				{
-					throw getBizLogicException(null, "dao.error", 
-							"Error : First de-assign privilege of the Parent Container with system identifier "
-							+ row[0].toString());
+					throw getBizLogicException(null, "de.assgn.priv.container", row[0].toString());
 				}
 			}
 		}
@@ -1358,7 +1364,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1380,7 +1386,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1414,7 +1420,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "utility.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}
@@ -1452,7 +1458,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "utility.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 
@@ -1496,7 +1502,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "utility.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}
@@ -1529,7 +1535,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -1640,7 +1646,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1714,7 +1720,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -2064,9 +2070,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				siteNode.getChildNodes().add(containerNode);
 			}
 
-		} catch (Exception daoExp) {
+		} catch (DAOException daoExp) {
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -2161,10 +2167,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 			}
 
-		} catch (Exception daoExp)
+		} catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return containerNodeVector;
 	}
@@ -2248,7 +2254,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -2391,10 +2397,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 			
 		}
-		catch (Exception daoExp)
+		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -2465,7 +2471,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} 
 		catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		} 
 		finally {
 			closeDAOSession(dao);
@@ -2510,7 +2516,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -2564,7 +2570,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -2592,24 +2598,25 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		Long userId = sessionDataBean.getUserId();
 		Site site = null;
 		Set loggedInUserSiteIdSet = null;
-		try {
-			site = getSite(dao, container.getId());
-			loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
-			if(dao instanceof HibernateDAO)
-				{
-					((HibernateDAO)dao).openSession(null);
-				}
-		} catch (DAOException e) {
-			logger.debug(e.getMessage(), e);
-			return false;
-		} finally {
-			// try {
-			// //dao.closeSession();
-			// } catch (DAOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-		}
+		site = getSite(dao, container.getId());
+		loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
+		//try {
+		//site = getSite(dao, container.getId());
+		//loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
+			/*if(dao instanceof HibernateDAO)
+			{
+				((HibernateDAO)dao).openSession(null);
+			}*/
+		//} catch (DAOException e) {
+		//	logger.debug(e.getMessage(), e);
+		//	return false;
+		//} finally {
+			/*try {
+				((HibernateDAO)dao).closeSession();
+			} catch (DAOException e) {
+				logger.debug(e.getMessage(), e);
+			}*/
+		//}
 		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(new Long(site.getId()))) {
 			return true;
 		} else {
@@ -2748,7 +2755,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -3181,7 +3188,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -3448,7 +3455,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -3719,7 +3726,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -3829,9 +3836,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			return containerMap;
 
-		} catch (Exception ex) {
+		} catch (DAOException ex) {
 			logger.debug(ex.getMessage(), ex);
-			throw getBizLogicException(ex, "dao.error", "");
+			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		finally
 		{
@@ -3856,10 +3863,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				siteId = site.getId();
 			}
 		}
-		catch (Exception e1) 
+		catch (DAOException e1) 
 		{
 			logger.debug(e1.getMessage(), e1);
-			throw getBizLogicException(e1, "dao.error", "");
+			throw getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
 		finally
 		{
@@ -4094,7 +4101,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -4121,7 +4128,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			list = dao.executeQuery(query);
 		} catch (DAOException daoExp) {
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 			
 		}
 
@@ -4237,7 +4244,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	catch(DAOException daoExp)
 	{
 		logger.debug(daoExp.getMessage(), daoExp);
-		throw getBizLogicException(daoExp, "dao.error", "");
+		throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 	}
 	finally
 	{
@@ -4319,9 +4326,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			dao = openJDBCSession();
 			resultList = dao.executeQuery(sql);
 			
-		} catch (Exception daoExp) {
+		} catch (DAOException daoExp) {
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -4457,7 +4464,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -4671,7 +4678,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return null;
 	}
@@ -4802,7 +4809,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		catch (DAOException e) 
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{

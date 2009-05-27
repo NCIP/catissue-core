@@ -11,6 +11,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * Represents the review report parameters 
@@ -179,8 +180,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject impleme
 	{
 		ViewSurgicalPathologyReportForm form=(ViewSurgicalPathologyReportForm)abstractForm;
     	
-		try
-		{
+		
 			this.setComment(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
@@ -198,13 +198,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject impleme
 				deidReport.setId(new Long(form.getDeIdentifiedReportId()));
 				this.setSurgicalPathologyReport(deidReport);
 			}
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error(ex.getMessage(),ex);
-			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"PathologyReportReviewParameter.java :");
-		}
+		
 	}
 	
 	/**

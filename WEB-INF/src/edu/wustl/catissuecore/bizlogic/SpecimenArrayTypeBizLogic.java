@@ -14,7 +14,9 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
@@ -41,6 +43,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			SpecimenArrayType arrayType = (SpecimenArrayType) obj;
 
 			/**
@@ -55,13 +58,18 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 			ApiSearchUtil.setContainerTypeDefault(arrayType);
 			//End:-  Change for API Search 
 
-			dao.insert(arrayType.getCapacity(),true);
-			dao.insert(arrayType, true);
+			dao.insert(arrayType.getCapacity());
+			auditManager.insertAudit(dao,arrayType.getCapacity());
+			dao.insert(arrayType);
+			auditManager.insertAudit(dao,arrayType);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp, daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 
 	}
@@ -78,7 +86,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			SpecimenArrayType arrayType = (SpecimenArrayType) obj;
-
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -96,13 +104,17 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 
 			//Audit of update.
 			SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;
-			((HibernateDAO)dao).audit(arrayType.getCapacity(), oldArrayType.getCapacity());
-			((HibernateDAO)dao).audit(obj, oldObj);
+			auditManager.updateAudit(dao,arrayType.getCapacity(), oldArrayType.getCapacity());
+			auditManager.updateAudit(dao,obj, oldObj);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp, daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 
 	}	

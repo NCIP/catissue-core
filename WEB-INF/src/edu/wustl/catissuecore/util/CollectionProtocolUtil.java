@@ -646,7 +646,7 @@ public class CollectionProtocolUtil
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		if (cpEventMap == null)
 		{
-			throw AppUtility.getApplicationException(null, "utility.error", "At least one event is required to create Collection Protocol");
+			throw AppUtility.getApplicationException(null, "event.req", "");
 		}
 		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
 		Collection collectionProtocolEventList = new LinkedHashSet();

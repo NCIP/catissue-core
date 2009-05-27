@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -220,7 +221,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 					ErrorKey errorKey = ErrorKey.getErrorKey("user.not.auth");
 					UserNotAuthorizedException exc = new UserNotAuthorizedException(errorKey, null,
 							"");
-					throw getBizLogicException(exc, "user.not.auth", "User not authorized");
+					throw getBizLogicException(exc, exc.getErrorKeyName(), exc.getMsgValues());
 				}
 				//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 
@@ -244,7 +245,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 					ErrorKey errorKey = ErrorKey.getErrorKey("user.not.auth");
 					UserNotAuthorizedException exc = new UserNotAuthorizedException(errorKey, null,
 							"");
-					throw getBizLogicException(exc, "user.not.auth", "User not authorized");
+					throw getBizLogicException(exc, exc.getErrorKeyName(), exc.getMsgValues());
 				}
 			}
 
@@ -252,10 +253,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray, dao);
 
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -314,10 +315,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 
 			specimenArray.setAliqoutMap(aliquotMap);
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -392,10 +393,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			}
 			return specimenArrayContentCollection;
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -424,10 +425,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			}
 			return 1;
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{

@@ -1726,12 +1726,12 @@ public class Constants
 	
 	public static final String SPECIMEN_LABEL_COLUMN_NAME = "label";
 	public static final String SPECIMEN_BARCODE_COLUMN_NAME = "barcode";
-	public static final String ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Please enter valid specimen for specimen array!!specimen does not exist  ";
+	/*public static final String ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Please enter valid specimen for specimen array!!specimen does not exist  ";
 	public static final String ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE = "Please enter valid specimen for specimen array!! Specimen is closed/disabled  ";
 	public static final String ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE = "Specimen Array should contain at least one specimen";
 	public static final String ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE = "Please add compatible specimens to specimen array (belong to same specimen class & specimen types of Array)";
 	public static final String ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE = "Please enter quantity for Molecular Specimen ---->";
-	/**
+	*//**
 	 * Specify the SPECIMEN_ARRAY_LIST as key for specimen array type list 
 	 */
 	public static final String SPECIMEN_ARRAY_TYPE_LIST = "specimenArrayList";

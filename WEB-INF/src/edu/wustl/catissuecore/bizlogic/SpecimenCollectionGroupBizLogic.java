@@ -57,6 +57,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
@@ -64,6 +65,7 @@ import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -153,7 +155,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			//This check is added if empty values added by UI tnen shud add default values in parameters
 			checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),sessionDataBean);
-			dao.insert(specimenCollectionGroup,  true);
+			dao.insert(specimenCollectionGroup);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,specimenCollectionGroup);
 			if (specimenCollection != null && reportLoaderFlag == false)
 			{
 				new NewSpecimenBizLogic().insertMultiple(specimenCollection, (DAO)dao, sessionDataBean);
@@ -162,12 +166,17 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "DB related issues");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		}
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getLogMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(),exp.getMsgValues());
 		}
 	}
 
@@ -346,7 +355,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (object == null)
 			{
-				throw getBizLogicException(null, "dao.error", "Cannot find CP. Failed to find " + "SCG for id " + scgId);
+				throw getBizLogicException(null, "failed.find.scg", scgId.toString());
 			}
 			SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) object;
 			if (retrieveAssociates)
@@ -358,7 +367,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException exception)
 		{
 			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, "dao.error", "");
+			throw getBizLogicException(exception, exception.getErrorKeyName(),exception.getMsgValues());
 		}
 		finally
 		{
@@ -378,12 +387,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 		if (collProtReg == null)
 		{
-			throw getBizLogicException(null, "dao.error", "Cannot find CP. CPR for " + "SCG id " + scgId + " is unexpectedly null.");
+			throw getBizLogicException(null, "scg.id.null", scgId.toString());
 		}
 		CollectionProtocol collProt = collProtReg.getCollectionProtocol();
 		if (collProt == null)
 		{
-			throw getBizLogicException(null, "dao.error", "Cannot find CP. for SCG id " + scgId);
+			throw getBizLogicException(null, "failed.find.scg", scgId.toString());
 		}
 		Long id = collProt.getId();
 
@@ -437,12 +446,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (SMException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "Error in getting rpotection group by name");
+			throw getBizLogicException(e, "sm.err.prot.grp", "");
 		}
 		catch (ApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "Error in getting csm group locator instance");
+			throw getBizLogicException(e, "sm.err.csm.loc", "");
 		}
 		
 		return dynamicGroups;
@@ -610,7 +619,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, dao, sessionDataBean);
 			}
 			// Audit.
-			((HibernateDAO)dao).audit(obj, oldObj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
+			
 			SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 
 			// Disable the related specimens to this specimen group
@@ -628,10 +639,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -997,7 +1008,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		if (cpr == null)
 		{
-			throw getBizLogicException(null, "dao.error", "CPR cannot be null for SCG");
+			throw getBizLogicException(null, "cpr.nt.null", "");
 		}
 		Long id = null;
 
@@ -1416,7 +1427,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				while (specimenEventCollectionIterator.hasNext())
 				{
 					Object eventObject = specimenEventCollectionIterator.next();
-					EventsUtil.validateEventsObject(eventObject, validator);
+					try
+					{
+						EventsUtil.validateEventsObject(eventObject, validator);
+					}
+					catch (ApplicationException e) {
+						logger.debug(e.getMessage(), e);
+						throw getBizLogicException(null, e.getErrorKeyName(), e.getMsgValues());
+					}
 				}
 			}
 			else
@@ -1430,11 +1448,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
-		} catch (ApplicationException e) {
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} /*catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
-		}
+			throw getBizLogicException(null, e.getErrorKeyName(), "");
+		}*/
 	}
 
 	public String getPageToShow()
@@ -1458,7 +1476,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp,exp.getErrorKeyName(),exp.getMsgValues());
 		}
 	}
 
@@ -2216,7 +2234,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 		} catch (DAOException daoExp) {
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -2249,7 +2267,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -2335,8 +2353,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, scg.getGroupName());
 				if (scgList == null || scgList.isEmpty())
 				{
-					throw getBizLogicException(null, "dao.error", 
-					"Failed to retrieve SCG, either Name or Identifier is required");
+					throw getBizLogicException(null, "failed.ret.scg", 
+					"");
 				}
 				absScg = ((SpecimenCollectionGroup) (scgList.get(0)));
 			}
@@ -2345,7 +2363,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -2452,7 +2470,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp,exp.getErrorKeyName(),exp.getMsgValues());
 		}
 	}
 

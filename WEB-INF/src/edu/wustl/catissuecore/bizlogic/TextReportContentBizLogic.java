@@ -6,8 +6,10 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -34,13 +36,19 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 		{
 			try
 			{
+				AuditManager auditManager = getAuditManager(sessionDataBean);
 				TextContent textContent = (TextContent) obj;
-				dao.insert(textContent, true);
+				dao.insert(textContent);
+				auditManager.insertAudit(dao,textContent);
 			}
 			catch(DAOException daoExp)
 			{
 				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
+				throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			} catch (AuditException e) 
+			{
+				logger.debug(e.getMessage(), e);
+				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 	 	}
 
@@ -60,7 +68,7 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 			catch(DAOException daoExp)
 			{
 				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
+				throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 			}
 		}
 

@@ -239,7 +239,7 @@ public final class StorageContainerUtil
 	 * @return Returns a list of disabled.
 	 * @throws DAOException
 	 */
-	public static List getListOfDisabledContainersFromCache() throws Exception
+	public static List getListOfDisabledContainersFromCache() throws ApplicationException
 	{
 		// TODO if map is null
 		// TODO move all code to common utility
@@ -306,8 +306,8 @@ public final class StorageContainerUtil
 		String containerName = storageContainer.getName();
 		if (storageContainerMap == null || storageContainerMap.isEmpty())
 		{
-			throw AppUtility.getApplicationException(null,"utility.error", 
-					"StorageContainerUtil.java :" + "Storagecontainer information not found!");
+			throw AppUtility.getApplicationException(null,"storage.info.nt.found", 
+					"");
 		}
 
 		Iterator containerPosIterator = storageContainerMap.keySet().iterator();
@@ -345,8 +345,8 @@ public final class StorageContainerUtil
 				}
 			}
 		}
-		throw AppUtility.getApplicationException( null,"utility.error",
-				"Either Storagecontainer is full! or it cannot accomodate all the specimens.");
+		throw AppUtility.getApplicationException( null,"storage.full",
+				"");
 	}
 
 	public static synchronized void updateStoragePositions(Map containerMap,
@@ -1174,11 +1174,7 @@ public final class StorageContainerUtil
 
 		throw AppUtility
 				.getApplicationException(null,
-						"utility.error",
-						
-						"StorageContainerUtil.java :"
-								+ "The container you specified does not have enough space to allocate storage position for Container Number "
-								+ specimenNumber);
+						"storage.container.has.nt.enough.space",Long.valueOf(specimenNumber).toString());
 	}
 
 	/**

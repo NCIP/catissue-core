@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
@@ -201,13 +202,17 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 */
 			user.setFirstTimeLogin(new Boolean(true));
 
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			// Create address and the user in catissue tables.
-			dao.insert(user.getAddress(), true);
+			dao.insert(user.getAddress());
+			auditManager.insertAudit(dao,user.getAddress());
+			
 			if(userRowIdMap != null && !userRowIdMap.isEmpty())
 			{
 				updateUserDetails(user,userRowIdMap);
 			}
-			dao.insert(user, true);
+			dao.insert(user);
+			auditManager.insertAudit(dao,user);
 
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(user);
@@ -238,8 +243,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			logger.debug(e.getMessage(), e);
 			// added to format constrainviolation message
 			deleteCSMUser(csmUser);
-			throw getBizLogicException(e, "sm.operation.error",
-			"Error in checking has privilege");
+			throw getBizLogicException(e, "sm.check.priv",
+			"");
 		}
 		catch (Exception e)
 		{
@@ -247,7 +252,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			deleteCSMUser(csmUser);
 			
 			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,e ,"UserBizLogic.java :");
+			throw new BizLogicException(errorKey,e ,"");
 		
 		}
 	}
@@ -946,7 +951,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				dao.update(user.getAddress());
 
 				// Audit of user address.
-				((HibernateDAO)dao).audit(user.getAddress(), oldUser.getAddress());
+				AuditManager auditManager = getAuditManager(sessionDataBean);
+				auditManager.updateAudit(dao,user.getAddress(), oldUser.getAddress());
+				
 			}
 			
 			if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf())) 
@@ -964,7 +971,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 
 			//Audit of user.
-			((HibernateDAO)dao).audit(obj, oldObj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
 
 			/* pratha commented for bug# 7304 
 			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
@@ -1125,8 +1133,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		catch (SMException smExp)
 		{
 			logger.debug(smExp.getMessage(), smExp);
-			throw getBizLogicException(smExp, "sm.operation.error",
-			"Error in checking has privilege");
+			throw getBizLogicException(smExp, "sm.check.priv",
+			"");
 		}
 
 		return userList;
@@ -1199,10 +1207,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
@@ -1345,7 +1353,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
 				String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
 				logger.debug("Unique Constraint Violated: " + errMsg);
-				throw getBizLogicException(null,"dao.error",errMsg);
+				throw getBizLogicException(null,"Err.ConstraintViolation","User :"+ApplicationProperties.getValue("user.emailAddress"));
 			}
 			/** -- patch ends here -- */
 		}

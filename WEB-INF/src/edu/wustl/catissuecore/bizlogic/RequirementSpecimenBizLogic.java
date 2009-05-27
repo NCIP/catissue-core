@@ -6,11 +6,12 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -36,12 +37,12 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			SpecimenRequirement reqSpecimen  = (SpecimenRequirement) obj;
-			dao.insert(reqSpecimen, false);
+			dao.insert(reqSpecimen);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 	
@@ -106,7 +107,10 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 						{
 							SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
 									oldReqspecimenCollection, specimenRequirement.getId());
-							((HibernateDAO)dao).audit(specimenRequirement, oldRequirementSpecimen);
+						
+							AuditManager auditManager = getAuditManager(sessionDataBean);
+							auditManager.updateAudit(dao,specimenRequirement, oldRequirementSpecimen);
+							
 						}
 					}
 				}
@@ -122,7 +126,11 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		}
+		catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 
 	}
@@ -208,7 +216,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 
 	}

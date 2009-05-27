@@ -40,10 +40,12 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -78,6 +80,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			SpecimenArray specimenArray = (SpecimenArray) obj;
 
 			checkStorageContainerAvailablePos(specimenArray, dao, sessionDataBean);
@@ -85,21 +88,28 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			doUpdateSpecimenArrayContents(specimenArray, null, dao, sessionDataBean, true);
 
-			dao.insert(specimenArray.getCapacity(),  true);
-			dao.insert(specimenArray, true);
+			dao.insert(specimenArray.getCapacity());
+			auditManager.insertAudit(dao,specimenArray.getCapacity());
+			dao.insert(specimenArray);
+			auditManager.insertAudit(dao,specimenArray);
 			SpecimenArrayContent specimenArrayContent = null;
 			// TODO move this method to HibernateDAOImpl for common use (for collection insertion)
 			for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
 				specimenArrayContent.setSpecimenArray(specimenArray);
-				dao.insert(specimenArrayContent,true);
+				dao.insert(specimenArrayContent);
+				auditManager.insertAudit(dao,specimenArrayContent);
 			}
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -193,6 +203,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			SpecimenArray specimenArray = (SpecimenArray) obj;
 			SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
 
@@ -263,7 +274,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 				if (checkExistSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
 				{
-					dao.insert(specimenArrayContent, true);
+					dao.insert(specimenArrayContent);
+					auditManager.insertAudit(dao,specimenArrayContent);
 				}
 				else
 				{
@@ -319,7 +331,10 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	catch(DAOException daoExp)
 	{
 		logger.debug(daoExp.getMessage(), daoExp);
-		throw getBizLogicException(daoExp, "dao.error", "");
+		throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+	} catch (AuditException e) {
+		logger.debug(e.getMessage(), e);
+		throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 	}
 		
 		
@@ -424,7 +439,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						// check whether array & specimen are compatible on the basis of class
 						if (!isArrayAndSpecimenCompatibile(arrayType, specimen))
 						{
-							throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
+							throw getBizLogicException(null, "spec.not.compatible", "");
 						}
 
 						// set quantity object to null when there is no value.. [due to Hibernate exception]
@@ -460,14 +475,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 									if (!isAvailableQty(specimen, quantity))
 									{
-										throw getBizLogicException(null, "dao.error", " Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
-												+ specimen.getAvailableQuantity().doubleValue() + "' of specimen :: " + specimen.getLabel());
+										throw getBizLogicException(null, "quantity.more.then.distri.quantity", tempQuantity + ":"
+												+ specimen.getAvailableQuantity().doubleValue() + ":" + specimen.getLabel());
 									}
 								}
 							}
 							else
 							{
-								throw getBizLogicException(null, "dao.error", Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE + specimen.getLabel());
+								throw getBizLogicException(null, "enter.quantity.mol.spec", specimen.getLabel());
 							}
 						}
 						specimenArrayContent.setSpecimen(specimen);
@@ -484,7 +499,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// There should be at least one valid specimen in array
 			if (updatedSpecArrayContentCollection.isEmpty())
 			{
-				throw getBizLogicException(null, "dao.error", Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
+				throw getBizLogicException(null, "spec.array.should.contain.atleast.one.spec", "");
 			}
 
 			//In case of update, if specimen is removed from specimen array, then specimen array content's quantity 
@@ -518,7 +533,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -579,7 +594,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -656,13 +671,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
 					if (!activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 					{
-						throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE + columnValue);
+						throw getBizLogicException(null, "spec.array.spec.invalid", columnValue);
 					}
 					//return specimenCollectionGroup;
 				}
 				else
 				{
-					throw getBizLogicException(null, "dao.error", Constants.ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE + columnValue);
+					throw getBizLogicException(null, "spec.array.spec.does.nt.exists", columnValue);
 				}
 			}
 			return specimen;
@@ -671,7 +686,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -826,7 +841,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (isContainerFull)
 			{
-				throw getBizLogicException(null, "dao.error","The Storage Container you specified is full");
+				throw getBizLogicException(null, "storage.specified.full","");
 			}
 			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
@@ -906,14 +921,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "dao.error", "Specimen Array for uploading is null");
+				throw getBizLogicException(null, "spec.array.null", "");
 			}
 			return true;
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -995,7 +1010,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1025,7 +1040,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -1251,11 +1266,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		catch (SMException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "Error in checking has privilege");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,e ,"SpecimenArrayBizLogic.java :");	
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(e.getErrorKey(),e ,e.getMsgValues());	
 		}
 		return isAuthorized;
 	}

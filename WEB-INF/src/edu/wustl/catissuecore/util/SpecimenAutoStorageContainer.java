@@ -136,10 +136,11 @@ public class SpecimenAutoStorageContainer {
 			populateStorageLocations(specimenDataBeanList,
 					collectionProtocolId.longValue(), containerMap, bean, className);
 
-		} catch (Exception exception) 
+		} catch (ApplicationException exception) 
 		{
 			logger.debug(exception.getMessage(), exception);
-			throw AppUtility.getApplicationException( exception,"utility.error", "");
+			throw AppUtility.getApplicationException( exception,exception.getErrorKeyName(),
+					exception.getMsgValues());
 		}
 		
 	}

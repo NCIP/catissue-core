@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ClinicalStudyRegistrationForm;
@@ -213,9 +214,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
     public void setAllValues(IValueObject abstractForm) throws AssignDataException
     {
         ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
-        try
-        {
-            this.activityStatus = form.getActivityStatus();
+          this.activityStatus = form.getActivityStatus();
 
             if (SearchUtil.isNullobject(clinicalStudy))
             {
@@ -243,15 +242,14 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
             {
                 this.clinicalStudyParticipantIdentifier = null;
             }
-            this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
-            		Utility.datePattern(form.getRegistrationDate()));
-        }
-        catch (Exception e)
-        {
-        	Logger.out.error(e.getMessage());
-            ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"ClinicalStudyRegistration.java :");
-        }
+            try {
+				this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
+						Utility.datePattern(form.getRegistrationDate()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+       
     }
 
     /**

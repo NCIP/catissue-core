@@ -41,10 +41,12 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -311,12 +313,17 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			}
 			
 			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
-			dao.insert(specimenEventParametersObject, true);
+			dao.insert(specimenEventParametersObject);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,specimenEventParametersObject);
 		}
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -511,12 +518,16 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			//Update registration
 			dao.update(specimenEventParameters);
 			//Audit.
-			((HibernateDAO)dao).audit(obj, oldObj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 
 	}
@@ -712,8 +723,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				
 				if((fromContainerId == null && parameter.getFromStorageContainer() != null) || (fromContainerId != null && parameter.getFromStorageContainer() == null))
 				{
-					throw getBizLogicException(null,"dao.error", "Specimen "+specimen.getLabel()+" " +
-							"had been moved to another location! Updated the locations. Please redo the transfers.");
+					throw getBizLogicException(null,"spec.moved.diff.loc", specimen.getLabel());
 				}
 				else if((fromContainerId != null && parameter.getFromStorageContainer() != null) && 
 						!((fromContainerId.equals(parameter.getFromStorageContainer().getId()) && 
@@ -721,8 +731,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 										&& pos2.equals(parameter.getFromPositionDimensionTwo()))))
 				{
 					
-					throw getBizLogicException(null,"dao.error", "Specimen "+specimen.getLabel()+" " +
-							"had been moved to another location! Updated the locations. Please redo the transfers.");
+					throw getBizLogicException(null,"spec.moved.diff.loc", specimen.getLabel());
 				}
 				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
 				{
@@ -761,7 +770,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					if(isContainerFull)
 					{
 						
-						throw getBizLogicException(null, "dao.error","The Storage Container you specified is full");
+						throw getBizLogicException(null, "storage.con.full","");
 					}
 					else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 					{
@@ -799,7 +808,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -814,7 +823,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -950,7 +959,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			list = edu.wustl.common.util.Utility.removeNull(list);
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "SpecimenEventParametersBizLogic.java :");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		return list;
 	}
@@ -1130,7 +1139,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		if (!isAuthorized)
         {
@@ -1178,7 +1187,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException appExp)
 		{
 			logger.debug(appExp.getMessage(), appExp);
-			throw getBizLogicException(appExp, "dao.error", "");
+			throw getBizLogicException(appExp, appExp.getErrorKeyName(),appExp.getMsgValues());
 		}
 	}
 
@@ -1220,7 +1229,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException e) 
 		{
 			
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		finally
 		{

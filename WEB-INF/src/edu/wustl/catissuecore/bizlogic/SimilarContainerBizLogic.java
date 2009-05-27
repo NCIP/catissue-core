@@ -25,8 +25,10 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -191,8 +193,12 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				logger.debug("cont.getCollectionProtocol().size() " + cont.getCollectionProtocolCollection().size());
 				cont.setActivityStatus("Active");
-				dao.insert(cont.getCapacity(),  true);
-				dao.insert(cont, true);
+				AuditManager auditManager = getAuditManager(sessionDataBean);
+				dao.insert(cont.getCapacity());
+				auditManager.insertAudit(dao,cont.getCapacity());
+
+				dao.insert(cont);
+				auditManager.insertAudit(dao,cont);
 
 				contList.add(cont);
 				container.setId(cont.getId());
@@ -203,11 +209,14 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		} catch (NameGeneratorException e) 
 		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "utility.error", "");
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -319,7 +328,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		catch(ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "utility.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(),exp.getMsgValues());
 		}
 		return true;
 	}

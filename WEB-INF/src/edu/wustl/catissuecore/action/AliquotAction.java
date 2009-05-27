@@ -139,7 +139,7 @@ public class AliquotAction extends SecureAction
 			aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 		}
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
+		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
 				aliquotCount, exceedingMaxLimit, sessionData, true);
 
 		populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
@@ -381,12 +381,12 @@ public class AliquotAction extends SecureAction
 				if (aliquotForm.isAliqoutInSameContainer())
 				{
 
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
 							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 				}
 				else
 				{
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getClassName(),
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
 							0, exceedingMaxLimit, sessionData, true);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -471,12 +471,12 @@ public class AliquotAction extends SecureAction
 					TreeMap containerMap = null;
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
 								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
 								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
 					}
 
@@ -573,12 +573,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
 								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
 								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
@@ -806,13 +806,20 @@ public class AliquotAction extends SecureAction
 		 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(),
 		 * fired hql.
 		 */
-		String hql = "select scg.id "+
+	/*	String hql = "select scg.id "+
 		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
 		" edu.wustl.catissuecore.domain.Specimen as spec " +
-		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();
+		" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();*/
 
-		List scgIdList = AppUtility.executeQuery(hql);
-		Object scgId = (Object) scgIdList.get(0);
+		String hql1 = "select specimen.specimenCollectionGroup.id," +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id "+
+		" from edu.wustl.catissuecore.domain.Specimen specimen" +
+		" where specimen.id="+specimen.getId();
+
+		List scgIdList = AppUtility.executeQuery(hql1);
+		Object[] obj = (Object[]) scgIdList.get(0);
+		Object scgId = obj[0];
+		Object  cpID = obj[1];
 		/*if(obj!=null)
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
@@ -820,6 +827,7 @@ public class AliquotAction extends SecureAction
 		}*/
 		//cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
 		form.setSpCollectionGroupId(Long.valueOf(scgId.toString()));
+		form.setColProtId(Long.valueOf(cpID.toString()));
 		if (specimen instanceof MolecularSpecimen)
 		{
 			String concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());

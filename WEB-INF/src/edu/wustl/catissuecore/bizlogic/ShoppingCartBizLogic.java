@@ -48,7 +48,7 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 		catch(ApplicationException appExp)
 		{
 			logger.debug(appExp.getMessage(), appExp);
-			throw getBizLogicException(appExp, "dao.error", "");
+			throw getBizLogicException(appExp, appExp.getErrorKeyName(),appExp.getMsgValues());
 		}
 
 	}

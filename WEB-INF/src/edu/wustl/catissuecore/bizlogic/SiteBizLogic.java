@@ -23,8 +23,11 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
@@ -66,9 +69,11 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			Set protectionObjects = new HashSet();
 
 			setCordinator(dao, site);
-
-			dao.insert(site.getAddress(), true);
-			dao.insert(site,  true);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			dao.insert(site.getAddress());
+			auditManager.insertAudit(dao,site.getAddress());
+			dao.insert(site);
+			auditManager.insertAudit(dao,site);
 			protectionObjects.add(site);
 
 			// SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
@@ -79,10 +84,10 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			privilegeManager.insertAuthorizationData(null, protectionObjects, null,
 					site.getObjectId());
 		}
-		catch(Exception daoExp)
+		catch(ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 
 	}
@@ -112,8 +117,8 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			// Mandar : 21Aug08 ----start
 			if (Status.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus())) {
 				if (isSiteOccupied(dao, site)) {
-					throw getBizLogicException(null, "dao.error",
-					"Site contains specimens in the associated containers. Cannot close a site containing specimens.");
+					throw getBizLogicException(null, "cnnot.close.site.with.spec",
+					"");
 
 				}
 				// else
@@ -124,16 +129,20 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			// Mandar : 21Aug08 ----end
 			dao.update(site.getAddress());
 			dao.update(site);
-
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			// Audit of update.
 			Site oldSite = (Site) oldObj;
-			((HibernateDAO)dao).audit(site.getAddress(), oldSite.getAddress());
-			((HibernateDAO)dao).audit(obj, oldObj);
+			auditManager.updateAudit(dao,site.getAddress(), oldSite.getAddress());
+			auditManager.updateAudit(dao,obj, oldObj);
+			
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -154,7 +163,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 			}
 		} catch (Exception excp) {
 			logger.debug(excp.getMessage(), excp);
-			throw getBizLogicException(null, "dao.error", "Error while checking site for presence of specimens");
+			throw getBizLogicException(null, "error.check.site.fr.spec", "");
 		}
 
 		return result;
@@ -188,7 +197,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 
 		
@@ -408,9 +417,9 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		{
 			dao = openDAOSession(null);
 			site = (Site) dao.retrieveById(Site.class.getName(), siteId);
-		} catch (Exception e) {
+		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		} finally {
 			closeDAOSession(dao);
 		}

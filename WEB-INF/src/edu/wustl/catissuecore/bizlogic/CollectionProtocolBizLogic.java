@@ -44,10 +44,13 @@ import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
+import edu.wustl.common.audit.Auditable;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
@@ -112,7 +115,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			setPrincipalInvestigator(dao, collectionProtocol);
 			setCoordinatorCollection(dao, collectionProtocol);
-			dao.insert(collectionProtocol, true);
+			dao.insert(collectionProtocol);
+			
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,collectionProtocol);
+			
 			insertCPEvents(dao, sessionDataBean, collectionProtocol);
 			insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol, rowIdMap);
 			HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
@@ -334,7 +341,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			catch (ApplicationException e)
 			{
 				logger.debug(e.getLogMessage(), e);
-				throw getBizLogicException(e, "utility.error", "");
+				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 		}
 	}
@@ -381,7 +388,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (BizLogicException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "CollectionProtocolBizLogic.java :");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
@@ -462,14 +469,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			checkForChangedStatus(collectionProtocol, collectionProtocolOld);
 			dao.update(collectionProtocol);
 			//Audit of Collection Protocol
-			((HibernateDAO) dao).audit(collectionProtocol, collectionProtocolOld);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,collectionProtocol, collectionProtocolOld);
+			
 			disableRelatedObjects(dao, collectionProtocol);
 			updatePIAndCoordinatorGroup(dao, collectionProtocol, collectionProtocolOld);
 		}
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -511,7 +523,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -559,10 +571,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						collectionProtocol, false);
 			}
 		}
-		catch (Exception smExp)
+		catch (ApplicationException smExp)
 		{
 			logger.debug(smExp.getMessage(), smExp);
-			throw getBizLogicException(smExp, "dao.error", "CollectionProtocolBizLogic.java :");
+			throw getBizLogicException(smExp, smExp.getErrorKeyName(), smExp.getMsgValues());
 
 		}
 	}
@@ -581,10 +593,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			collectionProtocolOld = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class
 					.getName(), identifier);
 		}
-		catch (Exception e)
+		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		return collectionProtocolOld;
 	}
@@ -672,7 +684,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					dao.update(collectionProtocolEvent);
 					oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 							oldCPEventCollection, collectionProtocolEvent.getId());
-					((HibernateDAO) dao).audit(collectionProtocolEvent, oldCollectionProtocolEvent);
+					AuditManager auditManager = getAuditManager(sessionDataBean);
+					auditManager.updateAudit(dao,collectionProtocolEvent, oldCollectionProtocolEvent );
+					
 				}
 				//Audit of collectionProtocolEvent
 				reqSpBiz.updateSpecimens(dao, sessionDataBean, oldCollectionProtocolEvent,
@@ -685,7 +699,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			
+		}
+		catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -744,7 +763,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -761,12 +780,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		try
 		{
-			dao.insert(collectionProtocolEvent, true);
+			dao.insert(collectionProtocolEvent);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,collectionProtocolEvent);
 		}
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -791,7 +817,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -839,7 +865,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1212,7 +1238,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException e1)
 		{
 			logger.debug(e1.getMessage(), e1);
-			throw getBizLogicException(e1, "dao.error", "");
+			throw getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
 		finally
 		{
@@ -1339,8 +1365,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (object == null)
 			{
 
-				throw getBizLogicException(null, "dao.error",
-						"Cannot retrieve Collection protocol, incorrect id " + id);
+				throw getBizLogicException(null, "cp.retrive.err",id.toString());
 			}
 			CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 			CollectionProtocolBean collectionProtocolBean = CollectionProtocolUtil
@@ -1360,7 +1385,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -1379,9 +1404,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			cpList = dao.retrieve(className, colName, colValue);
 			if (cpList == null || cpList.isEmpty())
 			{
-				throw getBizLogicException(null, "dao.error",
-						"Cannot retrieve Collection protocol incorrect parameter " + colName
-								+ " = " + colValue);
+				throw getBizLogicException(null, "cp.incorrect.param",colName+ ":" + colValue);
 			}
 
 			Iterator<CollectionProtocol> iterator = cpList.iterator();
@@ -1394,7 +1417,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -1406,7 +1429,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			catch (DAOException daoExp)
 			{
 				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
+				throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 			}
 
 		}
@@ -1422,8 +1445,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			Object object = dao.retrieveById(className, id);
 			if (object == null)
 			{
-				throw getBizLogicException(null, "dao.error",
-						"Cannot retrieve Collection protocol incorrect id " + id);
+				throw getBizLogicException(null, "cp.retrive.err",id.toString());
 			}
 
 			collectionProtocol = (CollectionProtocol) object;
@@ -1433,7 +1455,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -1445,7 +1467,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			catch (DAOException daoExp)
 			{
 				logger.debug(daoExp.getMessage(), daoExp);
-				throw getBizLogicException(daoExp, "dao.error", "");
+				throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 			}
 
 		}
@@ -1561,8 +1583,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		if (object == null)
 		{
-			throw getBizLogicException(null, "dao.error",
-					"Cannot retrieve Short Title incorrect id " + cpId);
+			throw getBizLogicException(null, "cp.shr.title.incorrect",cpId.toString());
 		}
 
 		shortTitle = (String) object;
@@ -1664,7 +1685,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{

@@ -107,8 +107,8 @@ public class AnnotationUtil
 		{
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
 		}
 		finally
 		{
@@ -120,8 +120,8 @@ public class AnnotationUtil
 			{
 				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+				//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+				throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
 			}
 		}
 		
@@ -239,19 +239,13 @@ public class AnnotationUtil
 		addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 
 		}
-		catch (HibernateException exp)
-		{
-			logger.debug(exp.getMessage(), exp);
-			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-		}
+		
 		catch (DAOException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
 
 		}
 		finally
@@ -260,20 +254,13 @@ public class AnnotationUtil
 			{
 				dao.closeSession();
 			}
-			catch (HibernateException exp)
-			{
-				logger.debug(exp.getMessage(), exp);
-				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
-
-			}
+			
 			catch (DAOException exp)
 			{
 				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+				//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+				throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
 
 			}
 		}
@@ -617,7 +604,7 @@ public class AnnotationUtil
 		catch (DynamicExtensionsSystemException exp) {
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
 			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
 		}
 		return association;

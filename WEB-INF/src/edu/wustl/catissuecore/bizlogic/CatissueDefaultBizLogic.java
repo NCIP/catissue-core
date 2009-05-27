@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
@@ -167,7 +168,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return jdbcDAO;
 	}
@@ -181,7 +182,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -198,7 +199,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return dao;
 	}
@@ -212,7 +213,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -287,9 +288,13 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (SMException e)
 		{
-			throw getBizLogicException(e, "sm.operation.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return true;
 	}
+	
+	
+	
+	
 
 }

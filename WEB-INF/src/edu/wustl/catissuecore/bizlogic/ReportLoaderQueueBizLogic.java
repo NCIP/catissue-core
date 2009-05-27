@@ -32,12 +32,12 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
-			dao.insert(reportLoaderQueue, false);
+			dao.insert(reportLoaderQueue);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
  	}
 
@@ -56,7 +56,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}	
 	}
 	
@@ -244,7 +244,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{

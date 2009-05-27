@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -410,8 +411,6 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
-		try
-		{
 			this.activityStatus		 = form.getActivityStatus();
 	        // Change for API Search   --- Ashwin 04/10/2006
 	    	if (SearchUtil.isNullobject(collectionProtocol))
@@ -439,12 +438,22 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			if(protocolParticipantIdentifier.equals(""))
 				this.protocolParticipantIdentifier = null;
 			
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
+			try {
+				this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.barcode = Utility.toString(form.getBarcode());
 			
 			//For Consent Tracking ----Ashish 1/12/06
 			//Setting the consent sign date.
-			this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
+			try {
+				this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//Setting the signed doc url
 			this.signedConsentDocumentURL = form.getSignedConsentUrl();
 			if(signedConsentDocumentURL.equals(""))
@@ -464,13 +473,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			// offset changes 27th 2007
 			this.setOffset(new Integer(form.getOffset()));
-		}
-		catch (Exception e)
-		{
-			Logger.out.error(e.getMessage());
-			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"CollectionProtocolRegistration.java :");
-		}
+		
 	}
 
 	/**

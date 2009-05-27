@@ -39,14 +39,14 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 		try
 		{
 			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
-			dao.insert(report, false);
+			dao.insert(report);
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(report);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		
 	}
@@ -83,7 +83,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends CatissueDefaultB
 			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
 			if(report.getTextContent().getId()==null)
 			{
-				dao.insert(report.getTextContent(), false);	
+				dao.insert(report.getTextContent());	
 			}
 			dao.update(report);
 			

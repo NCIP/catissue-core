@@ -35,10 +35,12 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -52,7 +54,6 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
@@ -81,7 +82,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 		Participant participant = (Participant) obj;
-		dao.insert(participant, true);
+		dao.insert(participant);
+		AuditManager auditManager = getAuditManager(sessionDataBean);
+		auditManager.insertAudit(dao,participant);
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
 
@@ -104,7 +107,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
 			pmIdentifier.setParticipant(participant);
-			dao.insert(pmIdentifier, true);
+			dao.insert(pmIdentifier);
+			auditManager.insertAudit(dao,pmIdentifier);
 		}
 		
 		//Inserting collection Protocol Registration info in the database after setting the participant associated.
@@ -123,7 +127,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		
 	}
@@ -349,15 +356,16 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			Participant oldParticipant = (Participant) oldObj;
 
 			/*Collection raceCollection = participant.getRaceCollection();
-		participant.setRaceCollection(null);*/
+			participant.setRaceCollection(null);*/
 
 			//deleteOldParticipantRaceColl(oldParticipant.getRaceCollection(),dao);
 
 			dao.update(participant);
 			//insertNewParticipantRaceColl(raceCollection,participant,sessionDataBean,dao);
 			//Audit of Participant.
-			((HibernateDAO)dao).audit(obj, oldObj);
-
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
+			
 			Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant.getParticipantMedicalIdentifierCollection();
 			Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 			Iterator it = participantMedicalIdentifierCollection.iterator();
@@ -386,14 +394,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 				else if(pmIdentifier.getId()==null||pmIdentifier.getId().equals(""))
 				{
-					dao.insert(pmIdentifier,true);
+					dao.insert(pmIdentifier);
+					auditManager.insertAudit(dao, pmIdentifier);
 				}
 
 				//Audit of ParticipantMedicalIdentifier.
 				ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
 						oldParticipantMedicalIdentifierCollection, pmIdentifier.getId());
-
-				((HibernateDAO)dao).audit(pmIdentifier, oldPmIdentifier);
+			
+				auditManager.updateAudit(dao,pmIdentifier, oldPmIdentifier);
 			}
 
 			//Updating the Collection Protocol Registration of the participant
@@ -445,7 +454,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) 
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -471,7 +484,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				Race race = (Race) itr.next();
 				race.setParticipant(participant);
-				dao.insert(race,false);
+				dao.insert(race);
 			}
 		}
 	}
@@ -1055,7 +1068,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException e) 
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "Couldn't get participant");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		finally
 		{
@@ -1123,10 +1136,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			jdbcDao.closeSession();
 		}
-		catch (Exception exp)
+		catch (DAOException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(),exp.getMsgValues());
 		}
 		finally
 		{
@@ -1169,10 +1182,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			list = dao.executeQuery(scgHql);
 			return list;
 		}
-		catch(Exception exp)
+		catch(DAOException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(),exp.getMsgValues());
 		}
 		finally
 		{
@@ -1196,7 +1209,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		
 	}
@@ -1264,7 +1277,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "Couldn't get CP for user");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		catch (SMException e) {
 			logger.debug(e.getMessage(), e);

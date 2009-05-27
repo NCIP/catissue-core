@@ -492,7 +492,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("action.error");
 			
-			throw AppUtility.getApplicationException(null, "action.error", "UpdateSpecimenStatusAction.java :"+"Container name is missing for specimen :" + specimenVO.getDisplayName());
+			throw AppUtility.getApplicationException(null, "spec.storage.missing", specimenVO.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
 		//	specimen.setStorageContainer(storageContainer);

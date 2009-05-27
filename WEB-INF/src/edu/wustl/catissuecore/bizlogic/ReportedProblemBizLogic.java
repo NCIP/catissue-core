@@ -10,7 +10,9 @@ package edu.wustl.catissuecore.bizlogic;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -48,7 +50,9 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			ApiSearchUtil.setReportedProblemDefault(reportedProblem);
 			//End:-  Change for API Search 
 
-			dao.insert(obj,true);
+			dao.insert(obj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,obj);
 
 			// Send the reported problem to the administrator and the user who reported it.
 			EmailHandler emailHandler = new EmailHandler();
@@ -57,7 +61,10 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
     }
     
@@ -86,12 +93,17 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			dao.update(obj);
 
 			//Audit.
-			((HibernateDAO)dao).audit(obj, oldObj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+		}catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
     }
 }

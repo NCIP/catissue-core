@@ -61,7 +61,30 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
      * An identifier of Specimen Collection Group.
      */
     private long spCollectionGroupId;
+    
     /**
+     * An identifier of collection protocol.
+     */
+    private long colProtId;
+    
+    /**
+     * @return the collection protocol id.
+     */
+    public long getColProtId()
+    {
+		return colProtId;
+	}
+
+    /**
+     * Set the collection protocol id.
+     * @param colProtId
+     */
+	public void setColProtId(long colProtId)
+	{
+		this.colProtId = colProtId;
+	}
+
+	/**
      * Specimen Collection Group Name
      */
     private String scgName;

@@ -32,9 +32,11 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -85,13 +87,20 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				dist.setToSite(site);
 			}
 
-			dao.insert(dist,  Constants.IS_AUDITABLE_TRUE);
+			dao.insert(dist);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,dist);
 
 		} 
 		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
+		} 
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		
 	}
@@ -114,10 +123,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 			dao.closeSession();
 		}
-		catch (Exception ex)
+		catch (DAOException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
-			throw getBizLogicException(ex, "dao.error", "");
+			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		return distributed;
 	}
@@ -178,8 +187,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		dao.update(obj);
 
 		//Audit of Distribution.
-		((HibernateDAO)dao).audit(obj, oldObj);
+		AuditManager auditManager = getAuditManager(sessionDataBean);
+		auditManager.updateAudit(dao,obj, oldObj);
 
+		
 		Distribution oldDistribution = (Distribution) oldObj;
 		Collection oldDistributedItemCollection = oldDistribution.getDistributedItemCollection();
 
@@ -228,18 +239,20 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				if (oldItem == null)
 				{
 					Object specimenObjPrev = dao.retrieveById(Specimen.class.getName(), item.getSpecimen().getId());
-					((HibernateDAO)dao).audit(specimenObj, specimenObjPrev);
+					auditManager.updateAudit(dao,specimenObj, specimenObjPrev);
 				}
 				//if a distributed specimen is updated  
 				else
-					((HibernateDAO)dao).audit(specimenObj, oldItem.getSpecimen());
+				{
+					auditManager.updateAudit(dao,specimenObj, oldItem.getSpecimen());
+				}
 			}
 			item.setDistribution(distribution);
 
 			dao.update(item);
 
 			//Audit of Distributed Item.
-			((HibernateDAO)dao).audit(item, oldItem);
+			auditManager.updateAudit(dao,item, oldItem);
 		}
 		//Mandar : 04-Apr-06 for updating the removed specimens start
 		updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection, dao, sessionDataBean);
@@ -249,7 +262,12 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -471,7 +489,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	catch(DAOException daoExp)
 	{
 		logger.debug(daoExp.getMessage(), daoExp);
-		throw getBizLogicException(daoExp, "dao.error", "");
+		throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 	}
 		return true;
 	}
@@ -561,7 +579,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -593,7 +611,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			logger.debug("Update Successful ...04-Apr-06");
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 

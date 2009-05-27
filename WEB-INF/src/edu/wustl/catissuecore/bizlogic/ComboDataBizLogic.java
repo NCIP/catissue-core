@@ -100,7 +100,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException exp)
 		{
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
 		{

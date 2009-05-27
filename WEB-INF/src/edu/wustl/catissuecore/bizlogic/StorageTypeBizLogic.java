@@ -18,7 +18,9 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -59,14 +61,20 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			 */
 			ApiSearchUtil.setContainerTypeDefault(type);
 			//End:-  Change for API Search 
-
-			dao.insert(type.getCapacity(), true);
-			dao.insert(type, true);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			dao.insert(type.getCapacity());
+			auditManager.insertAudit(dao,type.getCapacity());
+			
+			dao.insert(type);
+			auditManager.insertAudit(dao,type);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -99,14 +107,20 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			dao.update(type);
 
 			//Audit of update.
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			StorageType oldStorageType = (StorageType) oldObj;
-			((HibernateDAO)dao).audit(type.getCapacity(), oldStorageType.getCapacity());
-			((HibernateDAO)dao).audit(obj, oldObj);
+			
+			auditManager.updateAudit(dao,type.getCapacity(), oldStorageType.getCapacity());
+			auditManager.updateAudit(dao,obj, oldObj);
+
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 

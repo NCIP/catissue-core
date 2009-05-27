@@ -219,20 +219,12 @@ implements Serializable, IActivityStatus
 	{
 		final AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		final SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
-		try
-		{
-			this.setClinicalDiagnosis(form.getClinicalDiagnosis());
-	        this.setClinicalStatus(form.getClinicalStatus());
+		this.setClinicalDiagnosis(form.getClinicalDiagnosis());
+	      this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
 			specimenCollectionSite = new Site();
 			specimenCollectionSite.setId(Long.valueOf(form.getSiteId()));
 
-		}
-		catch(Exception e)
-		{
-			Logger.out.error(e.getMessage(),e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"AbstractSpecimenCollectionGroup.java :");
-		}
+		
 	}
 }

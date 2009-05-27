@@ -173,8 +173,6 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		ViewSurgicalPathologyReportForm form=(ViewSurgicalPathologyReportForm)abstractForm;
     	
-		try
-		{
 			this.setComment(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
@@ -194,13 +192,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 				this.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				this.setQuarantineStatus(false);
 			}
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error(ex.getMessage(),ex);
-			 ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			 throw new AssignDataException(errorKey,null ,"QuarantineEventParameter.java :");
-		}
+		
 	}
 	
 	/**

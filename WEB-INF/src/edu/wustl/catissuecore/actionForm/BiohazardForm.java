@@ -137,7 +137,7 @@ public class BiohazardForm extends AbstractActionForm
      * Getting Activity Status
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
      * @return null
-     */
+     *//*
     public String getActivityStatus()
     {
         // TODO Auto-generated method stub
@@ -145,17 +145,17 @@ public class BiohazardForm extends AbstractActionForm
     }
     
     
-    /**
+    *//**
      * Setting Activity Status 
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
      * @param activityStatus Setting Activity Status
-     */
+     *//*
     public void setActivityStatus(final String activityStatus)
     {
         // TODO Auto-generated method stub
 
     }
-    
+    */
     /**
      * Checks the operation to be performed is add or not.
      * @return Returns true if operation is equal to "add", else it returns false

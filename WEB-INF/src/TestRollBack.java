@@ -34,7 +34,7 @@ public class TestRollBack
         
         HibernateDAO dao = new HibernateDAOImpl();
         dao.openSession(null);
-        dao.insert(dept,false);
+        dao.insert(dept);
         dao.rollback();
         dao.closeSession();
     }

@@ -69,7 +69,7 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(DAOException daoexp)
 		{
-			throw getBizLogicException(daoexp, "dao.error", "");
+			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
 	

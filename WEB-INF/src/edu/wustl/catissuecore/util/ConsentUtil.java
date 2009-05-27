@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -251,7 +252,9 @@ public final class ConsentUtil
 			{
 				ReturnEventParameters returnEvent = new ReturnEventParameters();
 				returnEvent.setSpecimen(specimen );
-				dao.insert(returnEvent,true) ;
+				dao.insert(returnEvent) ;
+				AuditManager auditManager = getAuditManager(sessionDataBean);
+				auditManager.insertAudit(dao,returnEvent);
 				
 				eventCollection.add(returnEvent);
 				specimen.setSpecimenEventCollection(eventCollection);
@@ -263,6 +266,28 @@ public final class ConsentUtil
 		}
 	}
 
+	/**
+	 * This method will be called to return the Audit manager.
+	 * @param sessionDataBean
+	 * @return
+	 */
+	private static AuditManager getAuditManager(SessionDataBean sessionDataBean)
+	{
+
+		logger.debug("Initialize audit manager");
+		AuditManager auditManager = new AuditManager();
+		if (sessionDataBean == null)
+		{
+			auditManager.setUserId(null);
+		}
+		else
+		{
+			auditManager.setUserId(sessionDataBean.getUserId());
+			auditManager.setIpAddress(sessionDataBean.getIpAddress());
+		}
+		return auditManager;
+	
+	}
 	/*
 	 * This method adds a disposal event to the specimen.
 	 */

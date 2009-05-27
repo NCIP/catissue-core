@@ -3,7 +3,9 @@ package edu.wustl.catissuecore.bizlogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -47,12 +49,15 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 			reviewParam.setReviewerRole(reviewerRole);
 
 
-			dao.insert(reviewParam, true);
+			dao.insert(reviewParam);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,reviewParam);
+			
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		catch(SMException ex)
 		{
@@ -68,7 +73,10 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		catch (SMException e)
 		{
 			throw handleSMException(e);
-		}*/
+		}*/ catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
+		}
 	}
 
 	/**
@@ -86,7 +94,7 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 			oldreviewParam.setStatus(Constants.COMMENT_STATUS_REVIEWED);
 			dao.update(oldreviewParam);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
-			dao.insert(newreviewParam, false);
+			dao.insert(newreviewParam);
 		}
 		catch(Exception ex)
 		{

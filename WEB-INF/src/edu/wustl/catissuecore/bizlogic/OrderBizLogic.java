@@ -46,8 +46,11 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -94,14 +97,20 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			OrderDetails order = (OrderDetails) obj;
-			dao.insert(order, true);
+			dao.insert(order);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,order);
 		}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		//	mailOnSuccessfulSave(sessionDataBean, order, dao);
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
 	}
 
 	/**
@@ -141,7 +150,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -174,7 +183,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	
@@ -511,7 +520,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -812,7 +821,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException exp )
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
 		{
@@ -928,10 +937,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (SMException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "error in checking privilge on"+objectId);
+			throw getBizLogicException(e, "sm.priv.error", objectId);
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "Retrive error ");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		return (List)siteCollWithDistriPri;
 	} 
@@ -985,7 +994,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (SMException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "error in checking privilge on"+objectId);
+			throw getBizLogicException(e, "sm.priv.error", objectId);
 		}
 					
 		
@@ -1042,7 +1051,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (SMException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "sm.operation.error", "error in checking privilge on"+objectId);
+			throw getBizLogicException(e, "sm.priv.error", objectId);
 		}
 		
 	
@@ -1121,7 +1130,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "Issue while retrieving object");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 	
@@ -1231,10 +1240,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 
 		}
-		catch(Exception e)
+		catch(DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			getBizLogicException(e, "dao.error", "");
+			getBizLogicException(e,  e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
@@ -1282,10 +1291,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			System.out.println("EXECUTE TIME FOR RETRIEVE IN EDIT FOR DB -  : "+ (endTime - startTime));
 
 		}
-		catch(Exception e)
+		catch(DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			getBizLogicException(e, "dao.error", "");
+			getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 		finally
 		{
@@ -1404,10 +1413,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 			}
 		}
-		catch (Exception e) 
+		catch (ApplicationException e) 
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -1486,9 +1495,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			
 			dao = openDAOSession(null);
 			scg = (SpecimenCollectionGroup)dao.retrieveById(SpecimenCollectionGroup.class.getName(),	scgId);
-		} catch (Exception e) {
+		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e,e.getErrorKeyName(),e.getMsgValues());
 		}finally
 		{
 			closeDAOSession(dao);
@@ -1512,9 +1521,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			newSpecimenArrayOrderItem.setSpecimenArray((SpecimenArray)getSpecimenArray(newSpecimenArrayOrderItem.getId(), dao));
 		
 		
-		} catch (Exception e) {
+		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}finally
 		{
 			closeDAOSession(dao);
@@ -1538,9 +1547,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)specimenOrderItem.getNewSpecimenArrayOrderItem();
 			specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
 			
-		} catch (Exception e) {
+		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}finally
 		{
 			closeDAOSession(dao);
@@ -1578,7 +1587,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		return specimenArray;
 	}
@@ -1610,7 +1619,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		
 	}

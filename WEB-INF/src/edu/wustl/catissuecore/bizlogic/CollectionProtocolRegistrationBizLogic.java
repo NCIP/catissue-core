@@ -40,9 +40,11 @@ import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
@@ -137,7 +139,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -162,7 +167,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(NameGeneratorException nameGeneratorException)
 		{
 			logger.debug(nameGeneratorException.getMessage(),nameGeneratorException);
-			throw getBizLogicException(nameGeneratorException, "dao.error", "");
+			throw getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
 	}
 	
@@ -467,7 +472,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -572,7 +577,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -660,7 +665,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return regDate;
 	}
@@ -698,8 +703,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 
-			dao.insert(collectionProtocolRegistration,true);
+			dao.insert(collectionProtocolRegistration);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,collectionProtocolRegistration);
 
+			
 			if (armFound == false)
 			{
 				if(reportLoaderFlag==false)
@@ -711,8 +719,13 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}	
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
 	}
 
 	/** In this method if parent CP has any child which can be automatically registered,then these child are registered
@@ -806,7 +819,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				ConsentTierResponse consentTierResponse = (ConsentTierResponse) itr.next();
 				if (consentTierResponse.getConsentTier() != null)
 				{
-					dao.insert(consentTierResponse.getConsentTier(), false);
+					dao.insert(consentTierResponse.getConsentTier());
 				}
 
 			}
@@ -1033,7 +1046,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 
 
 			// Audit.
-			((HibernateDAO)dao).audit(obj, oldObj);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.updateAudit(dao,obj, oldObj );
+
 
 			// Disable all specimen Collection group under this registration.
 			logger.debug("collectionProtocolRegistration.getActivityStatus() " + collectionProtocolRegistration.getActivityStatus());
@@ -1052,7 +1067,12 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -1130,10 +1150,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			return dynamicGroups;
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		} catch (ClassNotFoundException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, "class.notFound.exp", "");
 		}
 		
 	}
@@ -1158,16 +1178,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException exp)
 		{
 			logger.debug(exp.getMessage(),exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
 	/**
 	 * Add a dummy participant when participant is registed to a protocol using
 	 * participant protocol id
+	 * @throws AuditException 
 	 */
 	private Participant addDummyParticipant(DAO dao, SessionDataBean sessionDataBean) 
-	throws BizLogicException,DAOException
+	throws BizLogicException,DAOException, AuditException
 	{
 		Participant participant = new Participant();
 
@@ -1184,11 +1205,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		partMedIdentifier.setSite(null);
 		partMedIdentifierColl.add(partMedIdentifier);
 
-		dao.insert(participant, true);
+		dao.insert(participant);
+		AuditManager auditManager = getAuditManager(sessionDataBean);
+		auditManager.insertAudit(dao,participant);
 
+		
 		partMedIdentifier.setParticipant(participant);
-		dao.insert(partMedIdentifier, true);
-
+		dao.insert(partMedIdentifier);
+		auditManager.insertAudit(dao,partMedIdentifier);
+		
 		/* inserting dummy participant in participant cache */
 		ParticipantRegistrationCacheManager participantRegCache = new ParticipantRegistrationCacheManager();
 		participantRegCache.addParticipant(participant);
@@ -1536,7 +1561,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -1625,7 +1650,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		finally
 		{
@@ -1687,7 +1712,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
 		} catch (ApplicationException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "utility.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -1769,7 +1794,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 
 		} catch (DAOException e) {
 			logger.debug(e.getMessage(),e);
-			throw getBizLogicException(e, "dao.error", "");
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 
@@ -1856,7 +1881,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(),daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
 		}
 		return collectionProtocolRegistrationretrieve;
 
