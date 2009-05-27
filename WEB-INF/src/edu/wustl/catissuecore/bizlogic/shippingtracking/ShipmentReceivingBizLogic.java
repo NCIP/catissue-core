@@ -86,7 +86,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		catch(DAOException ex)
 		{
 			logger.debug("DAO related problem occurred", ex);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
+			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
 		}
 		boolean mailStatus = sendNotification(shipment,sessionDataBean);
 		if (!mailStatus)
@@ -271,6 +272,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			{
 				logger.debug("specimen or specimen's activity_status found null.");
 				throw new DAOException(ErrorKey.getErrorKey("specimen.or.activitystatus.null"),null,"");
+				
 			}
 		}
 		// disable shipment container.
@@ -417,7 +419,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				catch (DAOException e)
 				{
 					logger.debug(e.getMessage(), e);
-					e.printStackTrace();
+					//e.printStackTrace();
+					throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 				}
 			}
 		}

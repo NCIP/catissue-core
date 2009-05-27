@@ -952,29 +952,25 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 										{
 											if (belongsTo)
 											{
-												errorMsg.append("<li>Specimen "+label+" is currently stored in "+specimen.getSpecimenPosition().getStorageContainer().getSite().getName()+ ". You cannot include a specimen or container in a shipment stored in some other site as the requester's site.</li>");
+												throw getBizLogicException(null, "shipment.specimenContainerValidation", label+":"+specimen.getSpecimenPosition().getStorageContainer().getSite().getName());
 											}
 											else
 											{
-												errorMsg.append("<li>Specimen "+label+" is currently stored in "+specimen.getSpecimenPosition().getStorageContainer().getSite().getName()+ ". You cannot request for a specimen or container stored in the same site as requester's site.</li>");
+												throw getBizLogicException(null, "shipmentRequest.specimenContainerValidation", label+":"+specimen.getSpecimenPosition().getStorageContainer().getSite().getName());
 											}
 										}
 									}
 									else
 									{
 										// Specimen is virtually located
-										containerBelongsTo = false;
-										errorMsg.append("<li>Specimen with name "
-											+ label
-											+ " is virtually located and cannot be a part of the shipment</li>");
+										throw getBizLogicException(null, "shipment.virtual.specimen", label);
 									}
 								}
 								else
 								{
 // 								No specimen with such name or barcode exists
 									containerBelongsTo = false;
-									errorMsg.append("<li>No specimen with name "
-										+ label + " exists</li>");
+									throw getBizLogicException(null, "shipment.NoSpecimenExists", label);
 								}
 							}
 						}
@@ -995,14 +991,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,e.toString());
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,errorMsg.toString());
 		}
-		if (errorMsg != null && errorMsg.length() > 0)
+		/*if (errorMsg != null && errorMsg.length() > 0)
 		{
 			logger.debug(errorMsg.toString());
 			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,errorMsg.toString());
 			//throw new DAOException(errorMsg.toString());
-		}
+		}*/
 		return containerBelongsTo;
 	}
 	/**
@@ -1218,7 +1215,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
+			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
 			//throw new DAOException(bizLogicException.getMessage());
 		}
 	}

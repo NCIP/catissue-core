@@ -18,6 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -116,11 +119,14 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 								{
 									errorMsg.append("<li>Container "+containerName+
 									" belongs to the Requesting Site.</li>");
+									//throw getBizLogicException(null, "shipment.container.RequestingSite", containerName);//janu
+									
 								}
 								else if(container.getName().contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 								{
 									errorMsg.append("<li>"+containerName+
 									" is currently included in a Shipment. You cannot request for a specimen or container that has been included in a shipment.</li>");
+									//throw getBizLogicException(null, "shipment.containerInShipment", containerName);//janu
 								}
 							}
 							else
@@ -128,6 +134,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 								//No container with such name or barcode exists
 								errorMsg.append("<li>No Container with name "+
 										containerName+" exists.</li>");
+								//throw getBizLogicException(null, "shipment.NoContainerExists", containerName);//janu
 							}
 						}
 					}
@@ -170,21 +177,25 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 								if(isValid && !isBelongsToInTransit)
 								{
 									errorMsg.append("<li>Specimen "+specimenName+" belongs to the Requesting Site.</li>");
+									//throw getBizLogicException(null, "shipment.specimenInRequestingSite", specimenName);//janu
 								}
 								else if(isBelongsToInTransit)
 								{
 									errorMsg.append("<li>"+specimenName+" is currently included in a Shipment. You cannot request for a specimen or container that has been included in a shipment.</li>");
+									//throw getBizLogicException(null, "shipment.specimenInShipment", specimenName);//janu
 								}
 								else if(isSpecimenLocatedVirtual)
 								{
 									errorMsg.append("<li>Specimen with name "+specimenName+
 										" is virtually located and cannot be a part of the shipment</li>");
+									//throw getBizLogicException(null, "shipment.virtual.specimen", specimenName);//janu
 								}
 							}
 							else
 							{
 								//No container with such name or barcode exists
 								errorMsg.append("<li>No Specimen with name "+specimenName+" exists</li>");
+								//throw getBizLogicException(null, "shipment.NoSpecimenExists", specimenName);//janu
 							}
 						}
 					}
@@ -196,6 +207,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				if(isEmptyContainerCollection && isEmptySpecimenCollection)
 				{
 					errorMsg.append("<li>Request doesnot contain any specimens of containers.</li>");
+					//throw getBizLogicException(null, "shipment.noSpecimenInRequest", null);//janu
 				}
 				if(errorMsg!=null && errorMsg.length()>0)
 				{
@@ -207,7 +219,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		catch(DAOException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,errorMsg.toString());
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,errorMsg.toString());
+			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
 		}
 		return true;
 	}
@@ -352,7 +365,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		{
 			logger.debug(daoException.getMessage(),daoException);
 //			throw new DAOException(bizLogicException.getMessage());
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
+			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
 		}
 		catch (AuditException e)
 		{
@@ -766,7 +780,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		{
 			logger.debug(daoException.getMessage(),daoException);
 			//throw new DAOException(bizLogicException.getMessage());
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
+			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
 		}
 	}
 

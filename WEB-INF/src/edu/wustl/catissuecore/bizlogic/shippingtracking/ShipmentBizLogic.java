@@ -154,7 +154,8 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		catch(BizLogicException bizLogicException)
 		{
 			logger.debug(bizLogicException.getMessage(), bizLogicException);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),bizLogicException,"error occurred in retreive : ShipmentBizLogic");
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),bizLogicException,"error occurred in retreive : ShipmentBizLogic");
+			throw getBizLogicException(bizLogicException, bizLogicException.getErrorKeyName(), bizLogicException.getMsgValues());//janu
 		}
 		return shipment;
 	}
@@ -309,7 +310,8 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		catch(DAOException e)
 		{
 			logger.debug("Database operation failed." , e);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,"Database operation failed.");
+			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,"Database operation failed.");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 	/**
