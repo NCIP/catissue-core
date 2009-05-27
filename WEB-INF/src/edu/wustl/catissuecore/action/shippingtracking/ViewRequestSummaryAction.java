@@ -182,7 +182,7 @@ public class ViewRequestSummaryAction extends SecureAction
 		catch(BizLogicException ex)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",ex.getLogMessage()));
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",ex.toMsgValuesArray()));
 			logger.debug(ex.getMessage(), ex);
 		}
 		catch (AssignDataException assignDataException)

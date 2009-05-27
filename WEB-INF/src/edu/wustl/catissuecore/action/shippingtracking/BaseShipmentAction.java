@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -145,7 +147,8 @@ public class BaseShipmentAction extends SecureAction
         final String sourceObjectName = Site.class.getName();
         final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
         final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
-        Collection<NameValueBean> siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
+        //Collection<NameValueBean> siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
+        Collection<NameValueBean> siteList = this.getNVBRepositorySites();//bug 12247
         siteList=removeInTransitSite(siteList);
         receiverSiteList=getReceiverSiteList(siteList);
         if(isAdmin)
@@ -270,8 +273,40 @@ public class BaseShipmentAction extends SecureAction
 			while(siteIterator.hasNext())
 			{
 				Site site=siteIterator.next();
+				if(site.getType().equalsIgnoreCase("Repository"))//bug 12247
+				{
+					NameValueBean valueBean=new NameValueBean(site.getName(),site.getId());
+					siteNVBList.add(valueBean);
+				}
+			}
+		}
+		return siteNVBList;
+	}
+	/**
+	 * bug 12247
+	 * Added to set only Repository sites in receiver combobox in shipment and shipment request.
+	 * This method will return list of NameValueBean objects of all Repository sites.
+	 * @return
+	 * @throws BizLogicException
+	 */
+	private List<NameValueBean> getNVBRepositorySites() throws BizLogicException
+	{
+
+		List<NameValueBean> siteNVBList=new ArrayList<NameValueBean>();
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
+
+		List list = bizLogic.retrieve(Site.class.getName(), new String[]{"id","name"}, new String[]{"type"}, new String[]{"="}, new String[]{"Repository"}, null);
+		if (list!=null && !list.isEmpty())
+		{
+			for(int i=0;i<list.size();i++)
+			{
+				Object[] returnedOject = (Object[])list.get(i);
+				Site site = new Site();
+				site.setId((Long)returnedOject[0]);
+				site.setName((String)returnedOject[1]);
 				NameValueBean valueBean=new NameValueBean(site.getName(),site.getId());
-				siteNVBList.add(valueBean);
+				siteNVBList.add(valueBean);	
 			}
 		}
 		return siteNVBList;
@@ -371,24 +406,53 @@ public class BaseShipmentAction extends SecureAction
 	private void getSpecimens(BaseShipmentForm shipmentForm) throws BizLogicException
 	{
 		List list =null;
+		String fieldValue="";
+		String optionForQuery="";
+		List<String> lblOrBarcodes = new ArrayList<String>();		
 		List<Specimen> specimenL = new ArrayList<Specimen>();
 		String option = shipmentForm.getSpecimenLabelChoice();
 		if("SpecimenLabel".equals(option))
 		{
-			option = Constants.SPECIMEN_PROPERTY_LABEL;
+			optionForQuery = Constants.SPECIMEN_PROPERTY_LABEL;
 		}
 		else if("SpecimenBarcode".equals(option))
 		{
-			option = Constants.SPECIMEN_PROPERTY_BARCODE;
+			optionForQuery = Constants.SPECIMEN_PROPERTY_BARCODE;
 		}
-		List<String> lblOrBarcodes = shipmentForm.getLblOrBarcodeSpecimenL();
+		//bug 12220 start
+		if(shipmentForm instanceof ShipmentRequestForm)
+		{
+			Map<String, String> specimenMap = shipmentForm.getSpecimenDetailsMap();
+			Set keySet = specimenMap.keySet();
+			Iterator it = keySet.iterator();
+			while(it.hasNext())
+			{
+				String specimenLblKey = (String) it.next();
+				String[] specimenLabelChoice = specimenLblKey.split("_");
+				if(specimenLabelChoice.length>1)
+				{
+					if(option.equalsIgnoreCase(specimenLabelChoice[0]))
+					{
+						fieldValue=(String)shipmentForm.getSpecimenDetails(specimenLblKey);
+						lblOrBarcodes.add(fieldValue);
+					}
+				}
+			}			
+		}
+		//bug 12220 end
+		else
+		{
+			lblOrBarcodes = shipmentForm.getLblOrBarcodeSpecimenL();
+		}
+		
+		
 		if(lblOrBarcodes!=null && !lblOrBarcodes.isEmpty())
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
 			for(String lbl : lblOrBarcodes)
 			{
-				list = bizLogic.retrieve(Specimen.class.getName(), new String[]{"id","label","barcode"}, new String[]{option}, new String[]{"="}, new String[]{lbl}, null);
+				list = bizLogic.retrieve(Specimen.class.getName(), new String[]{"id","label","barcode"}, new String[]{optionForQuery}, new String[]{"="}, new String[]{lbl}, null);
 				//list = bizLogic.retrieve(Specimen.class.getName(),option,lbl);
 				if (list!=null && !list.isEmpty())
 				{
@@ -419,24 +483,51 @@ public class BaseShipmentAction extends SecureAction
 	private void getContainers(BaseShipmentForm shipmentForm) throws BizLogicException
 	{
 		List list =null;
+		String fieldValue="";
+		String optionForQuery="";
 		List<StorageContainer> containerL = new ArrayList<StorageContainer>();
+		List<String> lblOrBarcodes = new ArrayList<String>();	
 		String option = shipmentForm.getContainerLabelChoice();
 		if("ContainerLabel".equals(option))
 		{
-			option = Constants.CONTAINER_PROPERTY_NAME;
+			optionForQuery = Constants.CONTAINER_PROPERTY_NAME;
 		}
 		else if("ContainerBarcode".equals(option))
 		{
-			option = Constants.CONTAINER_PROPERTY_BARCODE;
+			optionForQuery = Constants.CONTAINER_PROPERTY_BARCODE;
 		}
-		List<String> lblOrBarcodes = shipmentForm.getLblOrBarcodeContainerL();
+		//bug 12220 start
+		if(shipmentForm instanceof ShipmentRequestForm)
+		{
+			Map<String, String> conatinerMap = shipmentForm.getContainerDetailsMap();
+			Set keySet = conatinerMap.keySet();
+			Iterator it = keySet.iterator();
+			while(it.hasNext())
+			{
+				String containerLblKey = (String) it.next();
+				String[] containerLabelChoice = containerLblKey.split("_");
+				if(containerLabelChoice.length>1)
+				{
+					if(option.equalsIgnoreCase(containerLabelChoice[0]))
+					{
+						 fieldValue=(String)shipmentForm.getContainerDetails(containerLblKey);
+						 lblOrBarcodes.add(fieldValue);
+					}
+				}				
+			}			
+		}
+		//bug 12220 end
+		else
+		{
+		  lblOrBarcodes = shipmentForm.getLblOrBarcodeContainerL();
+		}
 		if(lblOrBarcodes!=null && !lblOrBarcodes.isEmpty())
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
 			for(String lbl : lblOrBarcodes)
 			{
-				list = bizLogic.retrieve(StorageContainer.class.getName(), new String[]{"id","name","barcode"}, new String[]{option}, new String[]{"="}, new String[]{lbl}, null);
+				list = bizLogic.retrieve(StorageContainer.class.getName(), new String[]{"id","name","barcode"}, new String[]{optionForQuery}, new String[]{"="}, new String[]{lbl}, null);
 				//list = bizLogic.retrieve(Specimen.class.getName(),option,lbl);
 				if (list!=null && !list.isEmpty())
 				{
@@ -451,7 +542,6 @@ public class BaseShipmentAction extends SecureAction
 			if(containerL!=null && !containerL.isEmpty())
 			{
 				shipmentForm.setShipmentContentsUsingContainer(containerL);
-
 			}
 		}
 		else
