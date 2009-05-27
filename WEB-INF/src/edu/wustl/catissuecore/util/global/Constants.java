@@ -2794,5 +2794,6 @@ public class Constants
 	// Frame names in Query Results page.
 	public static final String DATA_VIEW_FRAME = "myframe1";
 	public static final String APPLET_VIEW_FRAME = "appletViewFrame";
-
+	public static final String TREE_APPLET_NAME = "treeApplet";
+	
 }
