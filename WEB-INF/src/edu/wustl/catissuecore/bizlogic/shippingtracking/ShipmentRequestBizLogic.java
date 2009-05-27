@@ -27,8 +27,10 @@ import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
@@ -331,7 +333,9 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getSpecimenCollection().clear();
 			shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
-			dao.insert(shipmentRequest, true);
+			dao.insert(shipmentRequest);
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao,shipmentRequest);
 			// Check if Saving Draft, In saving draft case, mail notification not required.
 			if (!shipmentRequest.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DRAFTED))
 			{
@@ -349,6 +353,11 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			logger.debug(daoException.getMessage(),daoException);
 //			throw new DAOException(bizLogicException.getMessage());
 			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
+		}
+		catch (AuditException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 	/**

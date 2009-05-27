@@ -39,8 +39,10 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
@@ -70,6 +72,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
+			AuditManager auditManager = getAuditManager(sessionDataBean);
 			if (!(obj instanceof BaseShipment))
 			{
 				logger.debug("Invalid object passed");
@@ -95,7 +98,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			}
 			baseShipment.getContainerCollection().clear();
 			baseShipment.getContainerCollection().addAll(containerCollection);
-			dao.insert(baseShipment, true);
+			dao.insert(baseShipment);
+			auditManager.insertAudit(dao,baseShipment);
 			boolean mailStatus = sendNotification(baseShipment, sessionDataBean);
 			if (!mailStatus)
 			{
@@ -131,7 +135,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"exception occurred in baseshipmentbizlogic");   //DAOException(bizLogicException.getMessage());
+			throw new BizLogicException(daoException.getErrorKey(),daoException,daoException.getMsgValues());   //DAOException(bizLogicException.getMessage());
+		} catch (AuditException e) {
+			logger.debug(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
 		}
 	}
 	/**
@@ -516,6 +523,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			List<SpecimenPosition> specimenPositionList)
 			throws DAOException, BizLogicException
 	{
+		AuditManager auditManager = getAuditManager(sessionDataBean);
 		StorageContainer storageContainer = null;
 		Site site = null;
 		StorageType storageTypeInTransit = null;
@@ -573,8 +581,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 
 					if (operation.trim().equals(edu.wustl.common.util.global.Constants.ADD))
 					{
-						dao.insert(container.getCapacity(),true);
-						dao.insert(container,true);
+						dao.insert(container.getCapacity());
+						dao.insert(container);
+						auditManager.insertAudit(dao,container.getCapacity());
+						auditManager.insertAudit(dao,container);
 					}
 					else if (operation.trim()
 							.equals(edu.wustl.common.util.global.Constants.EDIT))
@@ -591,8 +601,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						}
 						if (containerInTransit == null)
 						{
-							dao.insert(container.getCapacity(), true);
-							dao.insert(container, true);
+							dao.insert(container.getCapacity());
+							dao.insert(container);
+							
+							auditManager.insertAudit(dao,container.getCapacity());
+							auditManager.insertAudit(dao,container);
 						}
 						// bug 11410 end
 						int newOneDimCapacity = container.getCapacity()
@@ -622,10 +635,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 								operation,specimenPositionList);
 					}
 				}
-				catch (Exception exception)
+				catch (ApplicationException exception)
 				{
 					logger.debug(exception.getMessage(),exception);
-					throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),exception,"Error creating a new container for Shipping the specimens"); 
+					throw getBizLogicException(exception, exception.getErrorKeyName(), exception.getMsgValues());
+					//throw new BizLogicException(exception.getErrorKey(),exception,exception.getMsgValues()); 
 				}
 			}
 		}
@@ -746,7 +760,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,e.toString());
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			
 		}
 		return isValid;
 	}
