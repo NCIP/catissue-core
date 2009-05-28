@@ -37,7 +37,7 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 		catch (ParseException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, "db.date.parse.error", "");
 		}
 
 	}

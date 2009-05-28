@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
@@ -580,7 +581,7 @@ public class CollectionProtocolUtil
 
 		if (sessionCpList == null || sessionCpList.size()<2){
 			
-			throw AppUtility.getApplicationException(null,"app.error","Fail to retrieve Collection protocol..");
+			throw new ApplicationException(ErrorKey.getErrorKey("errors.item"),null,"Fail to retrieve Collection protocol..");
 		}
 		
 		HttpSession session = request.getSession();

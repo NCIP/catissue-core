@@ -37,7 +37,6 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;

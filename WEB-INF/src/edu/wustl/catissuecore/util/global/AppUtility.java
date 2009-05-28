@@ -100,7 +100,6 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.global.Status;
@@ -114,7 +113,6 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.util.DAOConstants;
 import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
@@ -3024,7 +3022,7 @@ public class AppUtility
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, "dao.error", "");
+			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getErrorKeyName());
 		}
 		return jdbcDAO;
 	}
@@ -3038,7 +3036,7 @@ public class AppUtility
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, "dao.error", "");
+			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		
 	}
@@ -3055,7 +3053,7 @@ public class AppUtility
 			catch(DAOException daoExp)
 			{
 				logger.debug(daoExp.getMessage(), daoExp);
-				throw getApplicationException(daoExp, "dao.error", "");
+				throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 			}
 			return dao;
 	}
@@ -3069,7 +3067,7 @@ public class AppUtility
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getApplicationException(daoExp, "dao.error", "");
+			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		
 	}

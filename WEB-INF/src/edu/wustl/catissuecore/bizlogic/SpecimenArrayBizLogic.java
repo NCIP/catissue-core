@@ -324,7 +324,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				catch (CacheException e)
 				{
 					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "dao.error", "Problem while chaching");
+					throw getBizLogicException(e, "cache.exp", "");
 				}
 			}
 		}

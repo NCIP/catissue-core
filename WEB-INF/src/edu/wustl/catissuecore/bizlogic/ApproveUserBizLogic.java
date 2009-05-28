@@ -128,7 +128,7 @@ public class ApproveUserBizLogic  extends CatissueDefaultBizLogic
 			logger.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
 			ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
-			throw new BizLogicException(errorKey,exp ,"ApproveUserBizLogic.java :"); 
+			throw new BizLogicException(errorKey,exp ,""); 
 		}
 	}
 

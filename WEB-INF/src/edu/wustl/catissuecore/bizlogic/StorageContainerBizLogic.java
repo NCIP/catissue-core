@@ -174,8 +174,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 								container, parentContainer);
 
 						if (!parentContainerValidToUSe) {
-							throw getBizLogicException(null, "dao.error", 
-							"Parent Container is not valid for this container type");
+							throw getBizLogicException(null, "parent.container.not.valid", "");
 						}
 						ContainerPosition cntPos = container.getLocatedAtPosition();
 
@@ -236,7 +235,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						container.setName(cont.getName());
 					} catch (NameGeneratorException e) {
 						logger.debug(e.getMessage(), e);
-						throw getBizLogicException(e, "dao.error", "");
+						throw getBizLogicException(e, "name.generator.exp", "");
 
 					}
 				}
@@ -248,7 +247,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						// storagecontBarcodeGenerator.setBarcode(cont);
 					} catch (NameGeneratorException e) {
 						logger.debug(e.getMessage(), e);
-						throw getBizLogicException(e, "dao.error", "");
+						throw getBizLogicException(e, "name.generator.exp", "");
 					}
 				}
 				AuditManager auditManager = getAuditManager(sessionDataBean);
@@ -3387,7 +3386,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					}
 
 					if (isContainerFull) {
-						throw getBizLogicException(null, "dao.error", "The Storage Container you specified is full");
+						throw getBizLogicException(null, "storage.specified.full", "");
 					}
 				}
 

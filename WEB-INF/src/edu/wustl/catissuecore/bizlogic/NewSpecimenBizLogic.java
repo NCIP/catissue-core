@@ -9,7 +9,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -82,7 +81,6 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -1079,7 +1077,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "dao.error", "");
+				throw getBizLogicException(null, "obj.not.instanceof.specimen", "");
 			}
 		}
 		catch (DAOException doexp)
@@ -1676,10 +1674,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				//		specimen.setStorageContainer(storageContainerObj);
 			}
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException exp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			logger.debug(exp.getMessage(), exp);
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -2102,10 +2100,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				result = validateSingleSpecimen((Specimen) obj, dao, operation, false);
 			}
 		}
-		catch (Exception exp)
+		catch (ApplicationException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, "dao.error", "");
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return result;
 	}
@@ -2589,10 +2587,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			 **/
 			StorageContainerUtil.validateStorageLocationForSpecimen(specimen, storageContainerIds);
 		}
-		catch (Exception daoExp)
+		catch (ApplicationException exp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			logger.debug(exp.getMessage(), exp);
+			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}

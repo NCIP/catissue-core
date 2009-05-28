@@ -154,7 +154,7 @@ public final class ConsentUtil
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw AppUtility.getApplicationException(daoExp, "dao.error", "");
+			throw AppUtility.getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	
@@ -326,9 +326,9 @@ public final class ConsentUtil
 					consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
 				}
 			}
-		} catch (DAOException e) {
-			logger.debug(e.getMessage(), e);
-			throw AppUtility.getApplicationException(e, "dao.error", "");
+		} catch (DAOException daoExp) {
+			logger.debug(daoExp.getMessage(), daoExp);
+			throw AppUtility.getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	

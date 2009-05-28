@@ -246,15 +246,20 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			throw getBizLogicException(e, "sm.check.priv",
 			"");
 		}
-		catch (Exception e)
+		catch (PasswordEncryptionException exception) 
+		{
+			logger.debug(exception.getMessage(), exception);
+			deleteCSMUser(csmUser);
+			throw getBizLogicException(exception, "pwd.encrytion.error", "");
+		}
+		catch (ApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
 			deleteCSMUser(csmUser);
-			
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,e ,"");
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		
-		}
+		} 
 	}
 
 	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdMap(User user, Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws BizLogicException 
@@ -865,10 +870,16 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 					if (result != SUCCESS)
 					{
 						// get error message of validation failure 
-						String errorMessage = getPasswordErrorMsg(result);
-
-						logger.debug("Error Message from method" + errorMessage);
-						throw getBizLogicException(null, "dao.error", errorMessage);
+						List<String> parameters = new ArrayList<String>();
+						String errorKey = getPasswordErrorMsg(result,parameters);
+						StringBuffer strBuf = new StringBuffer("");
+						for(String msgValue : parameters)
+						{
+							strBuf.append(msgValue).append(":");
+						}
+						
+						logger.debug("errorKey" + errorKey);
+						throw getBizLogicException(null, errorKey, strBuf.toString());
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -892,11 +903,15 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 					//if validatePassword method returns value greater than zero then validation fails
 					if (result != SUCCESS)
 					{
-						// get error message of validation failure 
-						String errorMessage = getPasswordErrorMsg(result);
-
-						logger.debug("Error Message from method" + errorMessage);
-						throw getBizLogicException(null, "dao.error", errorMessage);
+						List<String> parameters = new ArrayList<String>();
+						String errorKey = getPasswordErrorMsg(result,parameters);
+						StringBuffer strBuf = new StringBuffer("");
+						for(String msgValue : parameters)
+						{
+							strBuf.append(msgValue).append(":");
+						}
+						logger.debug("errorKey" + errorKey);
+						throw getBizLogicException(null, errorKey, strBuf.toString());
 					}
 				}
 				csmUser.setPassword(user.getNewPassword());
@@ -995,12 +1010,17 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			throw getBizLogicException(smExp, "sm.operation.error",
 			"Error in checking has privilege");
 		}
-		catch (Exception e)
+		catch (PasswordEncryptionException e) 
 		{
 			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,e,"UserBizLogic.java :");
+			throw getBizLogicException(e, "pwd.encrytion.error", "");
 		}
+		catch (ApplicationException e)
+		{
+			logger.debug(e.getMessage(), e);
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		} 
 	}
 
 	/**
@@ -1635,39 +1655,41 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 * @param errorCode int value return by validatePassword() method
 	 * @return String error message with respect to error code 
 	 */
-	private String getPasswordErrorMsg(int errorCode)
+	private String getPasswordErrorMsg(int errorCode, List<String> parameters)
 	{
 		String errMsg = "";
 		switch (errorCode)
 		{
 			case FAIL_SAME_AS_LAST_N :
-				List<String> parameters = new ArrayList<String>();
 				String dayCount = "" + Integer.parseInt(XMLPropertyHandler.getValue("password.not_same_as_last_n"));
 				parameters.add(dayCount);				
-				errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn",parameters);
+				//errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn",parameters);
+				errMsg = "errors.newPassword.sameAsLastn";
 				break;
 			case FAIL_FIRST_LOGIN :
-				errMsg = ApplicationProperties.getValue("errors.changePassword.changeFirstLogin");
+				//errMsg = ApplicationProperties.getValue("errors.changePassword.changeFirstLogin");
+				errMsg = "errors.changePassword.changeFirstLogin";
 				break;
 			case FAIL_EXPIRE :
-				errMsg = ApplicationProperties.getValue("errors.changePassword.expire");
+				errMsg = "errors.changePassword.expire";
 				break;
 			case FAIL_CHANGED_WITHIN_SOME_DAY :
-				parameters = new ArrayList<String>();
 				Integer daysCount = Integer.parseInt(XMLPropertyHandler.getValue("daysCount"));
 				parameters.add(daysCount.toString());
 				if(daysCount.intValue() == 1)
-					errMsg = ApplicationProperties.getValue("errors.changePassword.sameDay");
+					//errMsg = ApplicationProperties.getValue("errors.changePassword.sameDay");
+					errMsg = "errors.changePassword.sameDay";
 				else
-					errMsg = ApplicationProperties.getValue("errors.changePassword.afterSomeDays",parameters);
+					//errMsg = ApplicationProperties.getValue("errors.changePassword.afterSomeDays",parameters);
+					errMsg = "errors.changePassword.afterSomeDays";
 				break;
 			case FAIL_SAME_NAME_SURNAME_EMAIL :
-				errMsg = ApplicationProperties.getValue("errors.changePassword.sameAsNameSurnameEmail");
+				errMsg = "errors.changePassword.sameAsNameSurnameEmail";
 				break;	
 			case FAIL_PASSWORD_EXPIRED :
-				errMsg = ApplicationProperties.getValue("errors.changePassword.expire");
+				errMsg = "errors.changePassword.expire";
 			default :
-				errMsg = PasswordManager.getErrorMessage(errorCode);
+				errMsg = "errors.newPassword.genericmessage";
 				break;
 		}
 		return errMsg;
@@ -1712,7 +1734,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return isUnique;
 	}
@@ -1886,7 +1908,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		catch (ApplicationException e1) 
 		{
 			logger.debug(e1.getMessage(), e1);
-			throw getBizLogicException(e1, "dao.error", "");
+			throw getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
 		finally
 		{

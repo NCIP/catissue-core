@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -213,11 +212,10 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				}
 				while (dynamicEntity != null);
 			}
-			catch (DynamicExtensionsSystemException e)
+			catch (DynamicExtensionsSystemException exception)
 			{
-				logger.debug(e.getMessage(), e);
-				ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(errorKey,e ,"AnnotationBizLogic.java :");     
+				logger.debug(exception.getMessage(), exception);
+				throw new BizLogicException(null,null ,exception.getMessage()); 
 			}
 		}
 	}

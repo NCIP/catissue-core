@@ -451,8 +451,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 									distribution.setOrderDetails(orderOld);
 									//Setting the user for distribution.
 									User user = new User();
-									try
-									{
+									/*try
+									{*/
 										if(sessionDataBean.getUserId()!=null)
 										{
 											user.setId(sessionDataBean.getUserId());
@@ -461,12 +461,12 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 										{
 											user.setId(distribution.getDistributedBy().getId());
 										}
-									}
+									/*}
 									catch(NullPointerException npe)
 									{
 										logger.debug(npe.getMessage(), npe);
 										throw getBizLogicException(null, "dao.error", "Please mention distributedBy attribute");
-									}
+									}*/
 									distribution.setDistributedBy(user);
 									//Setting activity status
 									distribution.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
@@ -1125,7 +1125,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (NumberFormatException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "dao.error", "Issue while parsing number");
+			throw getBizLogicException(e, "number.format.exp", "");
 		}
 		catch (DAOException e)
 		{

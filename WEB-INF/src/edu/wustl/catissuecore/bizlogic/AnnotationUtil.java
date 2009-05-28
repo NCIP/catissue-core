@@ -185,14 +185,14 @@ public class AnnotationUtil
 		catch (DynamicExtensionsSystemException e)
 		{
 			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(errorKey,e ,"AnnotationUtil.java :");   
+			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null,null ,e.getMessage());   
 			
 		} catch (DynamicExtensionsApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(errorKey,e ,"AnnotationUtil.java :");   
+			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null,null ,e.getMessage());   
 			
 		}
 		return association.getId();
@@ -604,8 +604,8 @@ public class AnnotationUtil
 		catch (DynamicExtensionsSystemException exp) {
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(errorKey,exp ,"AnnotationUtil.java :");   
+			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null,null ,exp.getMessage());    
 		}
 		return association;
 	}

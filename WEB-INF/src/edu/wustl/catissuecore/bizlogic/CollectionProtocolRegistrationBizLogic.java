@@ -57,7 +57,6 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -2001,7 +2000,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			catch (NameGeneratorException e)
 			{
 				logger.debug(e.getMessage(),e);
-				throw getBizLogicException(e, "dao.error", "");
+				throw getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
 		else

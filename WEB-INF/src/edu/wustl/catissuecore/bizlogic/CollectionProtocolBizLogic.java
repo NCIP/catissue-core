@@ -45,14 +45,12 @@ import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
-import edu.wustl.common.audit.Auditable;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -61,7 +59,6 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.beans.SecurityDataBean;
@@ -129,11 +126,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			collectionProtocolAuthorization.authenticate(collectionProtocol, protectionObjects,
 					rowIdMap);
 		}
-		catch (ApplicationException e)
+		catch (ApplicationException exception)
 		{
-			logger.debug(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey, e, "CollectionProtocolBizLogic.java :");
+			logger.debug(exception.getMessage(), exception);
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw getBizLogicException(exception, exception.getErrorKeyName(), exception.getMsgValues());
 		}
 	}
 
@@ -336,7 +333,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			catch (SMException e)
 			{
 				logger.debug(e.getMessage(), e);
-				getBizLogicException(e, "sm.operation.error", "Error in checking has privilege");
+				throw new BizLogicException(null, null, "Error in checking has privilege");
 			}
 			catch (ApplicationException e)
 			{

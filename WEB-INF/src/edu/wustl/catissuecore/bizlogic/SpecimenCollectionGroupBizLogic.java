@@ -308,7 +308,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (NameGeneratorException nameGeneratorException)
 		{
 			logger.debug(nameGeneratorException.getMessage(), nameGeneratorException);
-			throw getBizLogicException(nameGeneratorException, "dao.error", "");
+			throw getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
 	}
 
@@ -331,7 +331,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (NameGeneratorException nameGeneratorException)
 		{
 			logger.debug(nameGeneratorException.getMessage(), nameGeneratorException);
-			throw getBizLogicException(nameGeneratorException, "dao.error", "");
+			throw getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
 	}
 
@@ -1096,8 +1096,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch(DAOException daoexp)
 		{
 			logger.debug(daoexp.getMessage(), daoexp);
-			ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(errorKey,daoexp ,"SpecimenCollectionGroup.java :");
+			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(daoexp.getErrorKey(),daoexp ,daoexp.getMsgValues());
 		}
 		return list;
 	}

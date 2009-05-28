@@ -309,7 +309,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					{
 						logger.debug(excep.getMessage(), excep);
 						excep.printStackTrace();
-						throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
+						throw new ApplicationException(ErrorKey.getErrorKey("hibernate.exception"), excep,
 								"LoadAnnotationDefinitionAction.java");
 					}
 
@@ -348,22 +348,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					{
 						logger.debug(excep.getMessage(), excep);
 						excep.printStackTrace();
-						throw AppUtility.getApplicationException(excep, "action.error",
-								"LoadAnnotationDefinitionAction.java");
+						throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(),
+								excep.getMsgValues());
 					}
 					finally
 					{
-						try
-						{
-							dao.closeSession();
-						}
-						catch (HibernateException excep)
-						{
-							logger.debug(excep.getMessage(), excep);
-							excep.printStackTrace();
-							throw AppUtility.getApplicationException(excep, "action.error",
-									"LoadAnnotationDefinitionAction.java");
-						}
+						dao.closeSession();
 					}
 				}
 			}
@@ -371,15 +361,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			{
 				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
-				throw AppUtility.getApplicationException(excep, "action.error",
+				throw AppUtility.getApplicationException(excep, "number.format.exp",
 				"LoadAnnotationDefinitionAction.java");
 			}
 			catch (DAOException excep)
 			{
 				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
-				throw AppUtility.getApplicationException(excep, "action.error",
-				"LoadAnnotationDefinitionAction.java");
+				throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(),excep.getMsgValues());
 			}
 			finally
 			{
@@ -417,7 +406,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			catch (SQLException excep)
 			{
 				logger.debug(excep.getMessage(), excep);
-				throw new ApplicationException(ErrorKey.getErrorKey("action.error"), excep,
+				throw new ApplicationException(ErrorKey.getErrorKey("SQL.exp"), excep,
 				"LoadAnnotationDefinitionAction.java");
 			}
 			finally

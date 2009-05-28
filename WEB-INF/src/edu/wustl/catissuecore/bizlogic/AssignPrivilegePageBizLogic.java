@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
@@ -692,7 +691,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			   catch (SMException e)
 				{
 				   logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "sm.operation.error", "Error while getting privileges from given role"+roleId);
+					throw getBizLogicException(e, "error.privileges.from.given.role", roleId);
 				}
 			}
 		}
@@ -1816,7 +1815,7 @@ public List<NameValueBean> getPrivilegesNameValueBeanList(List<String> actionIds
 	catch (SMException e)
 	{
 		logger.debug(e.getMessage(), e);
-		throw getBizLogicException(e, "sm.operation.error", "Error while getting privilege by id"+actionId);
+		throw getBizLogicException(e, "error.privileges.from.given.role", actionId);
 	}
 	return actionBeanList;
 }
