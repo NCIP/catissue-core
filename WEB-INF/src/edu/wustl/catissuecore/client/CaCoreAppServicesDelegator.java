@@ -19,8 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import oracle.sql.CLOB;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -58,12 +60,11 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.query.security.QueryCsmCache;
+import edu.wustl.query.security.QueryCsmCacheManager;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.global.Permissions;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
-import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
@@ -264,7 +265,7 @@ public class CaCoreAppServicesDelegator
 	    
 		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 		try
-		{
+		{ 
 			Role role = securityManager.getUserRole(validUser.getCsmUserId());
 			if (validUser.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
@@ -282,15 +283,21 @@ public class CaCoreAppServicesDelegator
 		}
 		else
 		{
+			JDBCDAO jdbcDAO = null;
 			try
 			{
-				filteredObjects = filterObjects(userName, nonDisbaledObjectList,classList);
+				jdbcDAO = AppUtility.openJDBCSession();
+				filteredObjects = filterObjects(userName, nonDisbaledObjectList,classList,jdbcDAO);
 			}
 			catch (Exception exp)
 			{
 				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
 				throw exp;
+			}
+			finally
+			{
+				AppUtility.closeJDBCSession(jdbcDAO);
 			}
 		}
 
@@ -354,18 +361,21 @@ public class CaCoreAppServicesDelegator
 	 * @return The filtered list of objects according to the privilege of the user.
 	 * @throws Exception 
 	 */
-	private List filterObjects(String userName, List objectList, List classList) throws Exception
+	private List filterObjects(String userName, List objectList, List classList,JDBCDAO jdbcDao) throws Exception
 	{
 	    Logger.out.debug("In Filter Objects ......" );
 	    
 	    SessionDataBean sessionDataBean = getSessionDataBean(userName);
 	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
-		boolean hasReadDeniedForMain = false;
-		
+		boolean isReadDenied = false;
+
 		// boolean that indicates whether user has privilege on identified data.
-		boolean hasPrivilegeOnIdentifiedData = false;
+		boolean hasPHIAccess = false;
 		List filteredObjects = new ArrayList();
-		
+		QueryCsmCacheManager cacheManager = new QueryCsmCacheManager(jdbcDao);
+		QueryCsmCache cache = cacheManager.getNewCsmCacheObject();
+		Map<String,Boolean> accessPrivilegeMap = new HashMap<String, Boolean>();
+		boolean isCheckPermissionCalled = false;
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
 		while(iterator.hasNext())
@@ -385,16 +395,12 @@ public class CaCoreAppServicesDelegator
 		    	classObject = Specimen.class;
 			}
 
-		    String aliasName = getAliasName(abstractDomainObject);
-            
             /** Check the permission of the user on the main object.
              *  Call to SecurityManager.checkPermission bypassed &
              *  instead, call redirected to privilegeCache.hasPrivilege
              *  Check readDenied permission on particpant,SCG,CPR,Specimen,IdentifiedSPR 
              *  If the user has READ_DENIED privilege on the object, remove that object from the list. 
              */
-			 
-            hasReadDeniedForMain = true;
             if(classList.contains(classObject))
             {
     			if(classObject.equals(Specimen.class))
@@ -427,15 +433,23 @@ public class CaCoreAppServicesDelegator
     				SpecimenArrayContent sac =(SpecimenArrayContent)abstractDomainObject;
     				identifier = sac.getSpecimen().getId();
     			}
-    			hasReadDeniedForMain = AppUtility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.READ_DENIED);
-    			
+    			accessPrivilegeMap = cacheManager.getAccessPrivilegeMap(objectName,identifier, sessionDataBean, cache);
+    			isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.IS_READ_DENIED);
+    			isCheckPermissionCalled = true;
     		}
-		    Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:" + hasReadDeniedForMain);
 		    
 		    /**
+		     * for the objects not in classList we need to call cachemanger.
+		     */
+            if(!isCheckPermissionCalled)
+            {
+            	accessPrivilegeMap = cacheManager.getAccessPrivilegeMap(objectName,identifier, sessionDataBean, cache);
+            	isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.IS_READ_DENIED);
+            }
+            /**
 		     *  In case of no READ_DENIED privilege, check for privilege on identified data.
 		     */
-		    if (hasReadDeniedForMain) 
+			if (!isReadDenied)
 		    {
 		        /**Check the permission of the user on the identified data of the object.
 		         * Call to SecurityManager.checkPermission bypassed &
@@ -443,87 +457,71 @@ public class CaCoreAppServicesDelegator
 		         * call remove identified data
 		         * If has no read privilege on identified data, set the identified attributes as NULL.
 		    	**/
-		    	removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean,classList);
+				hasPHIAccess = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.HAS_PHI_ACCESS);
+				if(!hasPHIAccess)
+				{
+					removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean,classList);
+				}
 		    	filteredObjects.add(abstractDomainObject);
 			    Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
 			}
 	    	
 		}
-		/**
-		 * Bug 5938
-		 * Get the limit list from caTisscore_properties.xml
-		 * if the number of filtered objects is less than the configured limit and all objects 
-		 * are filter for no PHI access then return empty result
-		 * This is a fix for scientis querying on phi data such as Give particpant where lastName is something
-		 * COMMENTED AS THIS IS NOT RIGTH SOLUTION
-		 */
-		
 		Logger.out.debug("Before Final Objects >>>>>>>>>>>>>>>>>>>>>>>>>"+filteredObjects.size());
+		
 		return filteredObjects;
 	}
 
 	private void removeIdentifiedDataFromObject(Object abstractDomainObject, String objectName,
 			Long identifier, SessionDataBean sessionDataBean,List classList) throws BizLogicException
-	{
+			{
 		Class classObject = abstractDomainObject.getClass();
 		if(classObject.getSuperclass().equals(SpecimenEventParameters.class)||
-			       classObject.getSuperclass().equals(ReviewEventParameters.class))
+				classObject.getSuperclass().equals(ReviewEventParameters.class))
 		{
-	    	classObject = SpecimenEventParameters.class;
+			classObject = SpecimenEventParameters.class;
 		}
-	    else if(classObject.getSuperclass().equals(Specimen.class))
+		else if(classObject.getSuperclass().equals(Specimen.class))
 		{
-	    	classObject = Specimen.class;
+			classObject = Specimen.class;
 		}
-		/**
-		 * Check if user is having PHI access of this object 
-		 * else set PHI values to null of respective object
-		 */
-		boolean hasPHIAccess =true;
-	    if(classList.contains(classObject))
+		if (classObject.equals(Participant.class))
 		{
-			hasPHIAccess = AppUtility.hasPrivilegeToView(objectName, identifier, sessionDataBean, Permissions.REGISTRATION);
+			removeParticipantIdentifiedData(abstractDomainObject);
 		}
-		if(!hasPHIAccess)
+		else if(classObject.equals(ParticipantMedicalIdentifier.class))
 		{
-			if (classObject.equals(Participant.class))
-		    {
-	        	removeParticipantIdentifiedData(abstractDomainObject);
-	        }
-			else if(classObject.equals(ParticipantMedicalIdentifier.class))
-			{
-				removePMIIdentifiedData(abstractDomainObject);
+			removePMIIdentifiedData(abstractDomainObject);
+		}
+		else if (classObject.equals(SpecimenCollectionGroup.class))
+		{
+			removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
+		}
+		else if (classObject.equals(Specimen.class))
+		{
+			removeSpecimenIdentifiedData(abstractDomainObject);
+		}
+		else if (classObject.equals(CollectionProtocolRegistration.class))
+		{
+			removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
+		}
+		else if (classObject.equals(DeidentifiedSurgicalPathologyReport.class))
+		{
+			removeDeIdentifiedReportIdentifiedData(abstractDomainObject);
+		}
+		else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
+		{
+			removeIdentifiedReportIdentifiedData(abstractDomainObject);
+		}
+		else if(classObject.equals(SpecimenEventParameters.class))
+		{
+			removeSpecimenEventParameters(abstractDomainObject);
+		}
+		else if(classObject.equals(SpecimenArrayContent.class))
+		{
+			removeSpecimenArrayContentIdentifiedData(abstractDomainObject);
+		}
 			}
-		    else if (classObject.equals(SpecimenCollectionGroup.class))
-		    {
-	        	removeSpecimenCollectionGroupIdentifiedData(abstractDomainObject);
-	        }
-		    else if (classObject.equals(Specimen.class))
-		    {
-		    	removeSpecimenIdentifiedData(abstractDomainObject);
-		    }
-		    else if (classObject.equals(CollectionProtocolRegistration.class))
-		    {
-	        	removeCollectionProtocolRegistrationIdentifiedData(abstractDomainObject);
-	        }
-		    else if (classObject.equals(DeidentifiedSurgicalPathologyReport.class))
-		    {
-		    	removeDeIdentifiedReportIdentifiedData(abstractDomainObject);
-	       	}
-		    else if (classObject.equals(IdentifiedSurgicalPathologyReport.class))
-		    {
-		    	removeIdentifiedReportIdentifiedData(abstractDomainObject);
-	       	}
-		    else if(classObject.equals(SpecimenEventParameters.class))
-		    {
-		    	removeSpecimenEventParameters(abstractDomainObject);
-		    }
-		    else if(classObject.equals(SpecimenArrayContent.class))
-		    {
-		    	removeSpecimenArrayContentIdentifiedData(abstractDomainObject);
-		    }
-		}
-	}
 
 	/**
 	 * Returns the alias name of the domain object passed.   
@@ -534,7 +532,7 @@ public class CaCoreAppServicesDelegator
 	 * @throws DAOException 
 	 * @throws DAOException
 	 */
-	private String getAliasName(Object object) throws ClassNotFoundException, BizLogicException,
+	/*private String getAliasName(Object object) throws ClassNotFoundException, BizLogicException,
 			DAOException
 	{
 		Class className = object.getClass();
@@ -543,8 +541,6 @@ public class CaCoreAppServicesDelegator
 		String domainClassName = domainObjectClassName;
 		//String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
 		logger.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
-		System.out.println("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
-		logger.info("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
 		try
 		{
 			className = Class.forName("edu.wustl.catissuecore.domain." + domainClassName);
@@ -563,7 +559,7 @@ public class CaCoreAppServicesDelegator
 		String aliasName = bizLogic.getAliasName(Constants.TABLE_NAME_COLUMN, tableName);
 		return aliasName;
 	}
-
+*/
 	/**
      * Removes the identified data from Participant object.
      * @param object The Particpant object.
