@@ -764,7 +764,11 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getSpecimenCollection().clear();
 			shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
-			updateShipmentSystemProperties(shipmentRequest, (ShipmentRequest)oldObj);
+			//bug 12557
+			if(oldObj != null)
+			{
+				updateShipmentSystemProperties(shipmentRequest, (ShipmentRequest)oldObj);
+			}
 			setShipmentContactPersons(dao,shipmentRequest,sessionDataBean.getUserId());
 			setShipmentSites(dao, shipmentRequest);
 			dao.update(shipmentRequest);

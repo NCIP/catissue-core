@@ -259,7 +259,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 						.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
 				shipmentRequest.setRequestProcessed(Boolean.TRUE);
 				ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();
-				shipmentRequestBizLogic.update(shipmentRequest,	0);
+				shipmentRequestBizLogic.update(dao, shipmentRequest, null,sessionDataBean);//bug 12557
 			}
 		}
 	}
