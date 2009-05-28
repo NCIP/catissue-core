@@ -59,7 +59,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 			Iterator iterator = map.keySet().iterator();
 			
 			//Retrieve the size of the condition list to set size of array of tables.
-			MapDataParser parser = new MapDataParser("edu.wustl.common.query");
+			MapDataParser parser = new MapDataParser("edu.wustl.simplequery.query");
 			
 			Collection simpleConditionNodeCollection = parser.generateData(map, true);
 			int counter = simpleConditionNodeCollection.size();
