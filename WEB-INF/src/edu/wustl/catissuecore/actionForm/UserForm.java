@@ -647,8 +647,6 @@ public class UserForm extends AbstractActionForm
 			setUserData(user);
 			if (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))
 			{
-				//Bug-1516: Jitendra
-				String pwd = PasswordManager.decode(user.getLatestPassword());	
 				this.setCsmUserId(user.getCsmUserId());
 				try
 				{
