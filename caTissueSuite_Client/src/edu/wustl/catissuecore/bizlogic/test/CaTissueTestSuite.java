@@ -5,10 +5,10 @@ import junit.framework.TestSuite;
 public class CaTissueTestSuite
 {
 	
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		junit.swingui.TestRunner.run(CaTissueTestSuite.class);
-	}
+	}*/
 	
 	public static junit.framework.Test suite() 
 	{

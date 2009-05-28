@@ -4,10 +4,10 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import junit.framework.TestSuite;
 
 public class CsmTestSuite {
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		junit.swingui.TestRunner.run(CsmTestSuite.class);
-	}
+	}*/
 	
 	public static junit.framework.Test suite() 
 	{
