@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
-<%@ page import="edu.wustl.common.actionForm.SimpleQueryInterfaceForm"%>
+<%@ page import="edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm"%>
 <%@ page import="java.util.*"%>
 
 <head>
