@@ -1476,12 +1476,12 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 							|| !(collectionProtocolRegistration.getProtocolParticipantIdentifier().equals(oldcollectionProtocolRegistration
 									.getProtocolParticipantIdentifier())))
 					{
-						// if list is not empty the Constraint Violation occurs
+						/*// if list is not empty the Constraint Violation occurs
 						logger.debug("Unique Constraint Violated: " + l.get(0));
-						errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
+						errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);*/
 						logger.debug("Unique Constraint Violated: " + errMsg);
 						ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
-						throw new BizLogicException(errorKey,null ,"Collection Protocol Registration:COLLECTION_PROTOCOL_ID:PROTOCOL_PARTICIPANT_ID");
+						throw new BizLogicException(errorKey,null ,"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
 					}
 					else
 					{
@@ -1542,9 +1542,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				List l = dao.retrieve(sourceObjectName, selectColumns, queryWhereClause);
 				if (l.size() > 0)
 				{
-					// if list is not empty the Constraint Violation occurs
+				/*	// if list is not empty the Constraint Violation occurs
 					logger.debug("Unique Constraint Violated: " + l.get(0));
-					errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
+					errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);*/
 					logger.debug("Unique Constraint Violated: " + errMsg);
 					ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
 					throw new BizLogicException(errorKey,null ,"Collection Protocol Registration : " +
