@@ -214,7 +214,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				//Inserting an aliquot in the database
 				if (isAuthorized((DAO) dao, obj, sessionDataBean))
 				{
-					specimenArrayBizLogic.insert(aliquotSpecimenArray, sessionDataBean);
+					specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);
 				}
 				else
 				{
@@ -237,7 +237,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				updateParentSpecimenArray(parentSpecimenArray);
 				if (isAuthorized((DAO) dao, obj, sessionDataBean))
 				{
-					specimenArrayBizLogic.update(parentSpecimenArray, oldSpecimenArray,
+					specimenArrayBizLogic.update(dao,parentSpecimenArray, oldSpecimenArray,
 							sessionDataBean);
 				}
 				else
