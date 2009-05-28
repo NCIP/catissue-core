@@ -112,13 +112,12 @@ public class BulkOperationSubmitAction extends BaseAction
 		}*/
 		catch (BizLogicException excp)
 		{
-			logger.debug(excp.getMessage(), excp);
+			logger.debug(excp.getCustomizedMsg());
 			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("errors.item", excp.getMessage());
+			ActionError error = new ActionError("errors.item", excp.getCustomizedMsg());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			saveErrors(request, errors);
-			
-			logger.error(excp.getMessage(), excp);
+			logger.error(excp.getCustomizedMsg());
 		}
 
 		return mapping.findForward(target);

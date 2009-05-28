@@ -56,7 +56,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.NotEqualClause;
@@ -978,23 +978,38 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	public List getSpecimenDataForBulkOperations(List specimenIds, SessionDataBean sessionDataBean, String queryString) throws BizLogicException
 	{
 		List specimenDataList = null;
-		StringBuffer specimenIdsString = new StringBuffer();
-		specimenIdsString.append("(");
-		for (int i=0; i< specimenIds.size(); i++)
+		JDBCDAO jdbcDao = openJDBCSession();
+		try
 		{
-			if(i == (specimenIds.size()-1))
+			StringBuffer specimenIdsString = new StringBuffer();
+			specimenIdsString.append("(");
+			for (int i=0; i< specimenIds.size(); i++)
 			{
-				specimenIdsString.append(specimenIds.get(i));
+				if(i == (specimenIds.size()-1))
+				{
+					specimenIdsString.append(specimenIds.get(i));
+				}
+				else
+				{
+					specimenIdsString.append(specimenIds.get(i)+", ");
+				}
 			}
-			else
-			{
-				specimenIdsString.append(specimenIds.get(i)+", ");
-			}
+			specimenIdsString.append(")");
+
+			String sql =queryString+specimenIdsString;
+
+			
+			specimenDataList = jdbcDao.executeQuery(sql);
+			
 		}
-		specimenIdsString.append(")");
-		
-		String sql =queryString+specimenIdsString;
-		specimenDataList = executeQuery(sql);
+		catch(DAOException daoExp)
+		{
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		finally
+		{
+			closeJDBCSession(jdbcDao);
+		}
 		return specimenDataList;
 	}
 	
@@ -1013,7 +1028,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	public List getSpecimenDataForBulkTransfers(List specimenIds, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		
-		String sql ="Select specimen.IDENTIFIER, specimen.LABEL, abstractSpecimen.SPECIMEN_CLASS, Container.NAME , abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
+		String sql ="Select specimen.IDENTIFIER, specimen.LABEL, abstractSpecimen.SPECIMEN_CLASS, Container.NAME ," +
+				" abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER " 
 			+" from catissue_specimen specimen left join catissue_abstract_specimen abstractSpecimen on (abstractSpecimen.identifier=specimen.identifier )  "
 			+ "left join catissue_specimen_position specimenPosition on (specimen.identifier = specimenPosition.specimen_id) "
 			+" left join catissue_container Container on (specimenPosition.Container_id=Container.IDENTIFIER) "
