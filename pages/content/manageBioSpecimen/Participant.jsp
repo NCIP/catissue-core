@@ -518,7 +518,7 @@ tr#hiddenCombo
 	</script>
 </head>
 
-<html:form action="<%=formName%>">
+<html:form action="<%=formName%>" style="height:100%">
 <html:hidden property="cpId" />
 	<%
 		if(pageView.equals("add"))
@@ -540,29 +540,29 @@ tr#hiddenCombo
 	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
 	%>
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-		  
-		  <tr>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable" style="height:100%">
+		<tr height="100%">
 			<td class="tablepadding">
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tr>				
-			
-				<td class="td_tab_bg"><img src="images/spacer.gif" vspace="0" hspace="0" alt="spacer" width="50" border="0" height="1"></td>
-		        <td valign="bottom" align="left" ><a href="#" onClick="editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" vspace="0" hspace="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
-		        <td valign="bottom" align="left"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22" vspace="0" hspace="0"></td>
-		        <td valign="bottom" align="left"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22" vspace="0" hspace="0"></a></td>
-		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" style="height:1%">
+					<tr height="100%">				
+						<td class="td_tab_bg"><img src="images/spacer.gif" vspace="0" hspace="0" alt="spacer" width="50" border="0" height="1"></td>
+				        <td valign="bottom" align="left" ><a href="#" onClick="editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" vspace="0" hspace="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
+				        <td valign="bottom" align="left"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22" vspace="0" hspace="0"></td>
+				        <td valign="bottom" align="left"><a href="#" onClick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="View Annotation" width="116" height="22" vspace="0" hspace="0"></a></td>
+				        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+					</tr>
+				</table>
+	
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" style="height:99%">
+					<tr height="100%">
+						<td>
+							<%@include file="ViewSurgicalPathologyReport.jsp" %>
+						</td>
+					</tr>
+				</table>
+			</td>
 		</tr>
-		</table>
-
-			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-			<tr>
-				<td>
-				<%@include file="ViewSurgicalPathologyReport.jsp" %>
-				</td>
-			</tr>
-		</table>
-		</td></tr></table>
+	</table>
 	<%
 	}
 	%>
@@ -570,11 +570,11 @@ tr#hiddenCombo
 	if(pageView.equals("viewAnnotations"))
 	{
 		%><!-- Mandar : 24Nov08 -->
-		<table width="100%" border="0" cellpadding="0" cellspacing="0"  height="100%" class="maintable">
-		  <tr>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"  style="height:100%" class="maintable">
+		  <tr height="1%">
 		    <td class="td_color_bfdcf3"></td>
 		  </tr>
-		  <tr>
+		  <tr height="99%">
 			<td class="tablepadding">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 				<tr>				
