@@ -681,9 +681,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if ((value == null) || (value != null && value.equals("")))
 			{
 				column = "barcode";
-				value = parentSpecimen.getBarcode();
+				value = parentSpecimen.getBarcode();	
+				//label and barcode r coming null
+				//bug 12586 start
+				if((value == null) || (value != null && value.equals("")))
+				{
+					value = parentSpecimen.getId().toString();
+					column = Constants.SYSTEM_IDENTIFIER;
+				}
+				//bug 12586 end
 			}
-
 			parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
 
 			if (parentSpecimenList == null || parentSpecimenList.isEmpty())
