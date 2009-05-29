@@ -1,6 +1,8 @@
 package edu.wustl.catissuecore.querysuite.metadata;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,7 +21,6 @@ import edu.common.dynamicextensions.entitymanager.EntityGroupManagerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.querysuite.metadata.AddAssociations;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -96,7 +97,8 @@ public class UpdateMetadataTagPath
 		SAXReader saxReader = new SAXReader();
 		try
 		{
-			FileInputStream inputStream = new FileInputStream(fileName);
+			InputStream inputStream = Thread.currentThread().
+			getContextClassLoader().getResourceAsStream(fileName);
 			Document document = saxReader.read(inputStream);
 			Element rootElement = document.getRootElement();
 			Iterator<Element> rootIterator = rootElement.elementIterator(ELEMENT_ENTITY_GROUP);
