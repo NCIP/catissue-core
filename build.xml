@@ -994,9 +994,13 @@
 	
 		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
-            	<include name="commonpackage.jar"/>
-            	<!-- <include name="shippingtracking.jar"/> -->
+               	<include name="commonpackage.jar"/>
             	<include name="washu-commons.jar"/>
+            	<include name="AdvanceQuery.jar"/>
+            	<include name="DAO.jar"/>
+            	<include name="SimpleQuery.jar"/>
+            	<include name="securityManager.jar"/>
+            	
             </fileset>
 			<fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -1007,6 +1011,10 @@
 	            <fileset dir="${lib.dir}">
 	            	<include name="commonpackage.jar"/>
 	            	<include name="washu-commons.jar"/>
+	            	<include name="AdvanceQuery.jar"/>
+	            	<include name="DAO.jar"/>
+	            	<include name="SimpleQuery.jar"/>
+	            	<include name="securityManager.jar"/>
 	            </fileset>
 				<fileset dir="${temp.dir}">
 		            	<include name="catissuecore.jar"/>
@@ -1017,6 +1025,10 @@
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
             	<include name="washu-commons.jar"/>
+            	<include name="AdvanceQuery.jar"/>
+            	<include name="DAO.jar"/>
+            	<include name="SimpleQuery.jar"/>
+            	<include name="securityManager.jar"/>
             </fileset>
 			 <fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -1028,8 +1040,12 @@
             	<include name="catissuecore.jar"/>
             </fileset>
 			<fileset dir="${lib.dir}">
-            	<include name="commonpackage.jar"/>
+				<include name="commonpackage.jar"/>
 				<include name="washu-commons.jar"/>
+				<include name="AdvanceQuery.jar"/>
+				<include name="DAO.jar"/>
+				<include name="SimpleQuery.jar"/>
+				<include name="securityManager.jar"/>
             </fileset>
         </copy>
 		
