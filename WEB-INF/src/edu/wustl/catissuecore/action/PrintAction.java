@@ -358,7 +358,7 @@ public class PrintAction extends Action
 	private User getUserObject(HttpServletRequest request, SessionDataBean objBean)
 			throws SMException
 	{
-		String strUserId = objBean.getUserId().toString();
+		String strUserId = objBean.getCsmUserId().toString();
 		User objUser = SecurityManagerFactory.getSecurityManager().getUserById(strUserId);
 		return objUser;
 	}
