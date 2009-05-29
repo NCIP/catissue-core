@@ -10,7 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
-<%@ page import="edu.wustl.common.query.Operator"%>
+<%@ page import="edu.wustl.simplequery.query.Operator"%>
 
 <%
 	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
