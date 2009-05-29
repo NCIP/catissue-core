@@ -1763,6 +1763,7 @@
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<antcall target="replacecfgfiles"></antcall>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -1854,6 +1855,11 @@
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
@@ -1872,7 +1878,11 @@
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
-
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
 			<arg value="${database.type}"/>
@@ -3232,7 +3242,11 @@ Thanking You,
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
-
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
 			<arg value="${database.host}"/>
 			<arg value="${database.port}"/>
 			<arg value="${database.type}"/>
@@ -3861,4 +3875,36 @@ Thanking You,
 			</fileset>
 		</delete>
 	</target>
+	
+	<target name="replacecfgfiles">
+		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
+		</replace>
+	</target>	
 </project>
