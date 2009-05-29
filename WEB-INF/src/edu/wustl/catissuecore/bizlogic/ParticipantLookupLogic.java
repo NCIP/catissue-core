@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.language.Metaphone;
+
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
@@ -528,11 +530,11 @@ public class ParticipantLookupLogic implements LookupLogic
 			return pointsForLastNameExact;
 		}
 		// partial match --> Checks whether first 5 digits or metaphones of two last names are equal
-		else if (userLastName.regionMatches(true, 0, existingLastName, 0, matchCharactersForLastName))
+		else if (userLastName.regionMatches(true, 0, existingLastName, 0, matchCharactersForLastName)
+				|| (new Metaphone()).isMetaphoneEqual(userLastName, existingLastName))
 		{
 			return pointsForLastNamePartial;
 		}
-
 		return 0;
 	}
 
