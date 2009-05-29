@@ -598,7 +598,7 @@
 			<include name="commons-fileupload.jar" />
 			<include name="commons-lang-2.1.jar" />
 			<include name="commons-logging-1.0.4.jar" />
-			<include name="dom4*.jar" />
+			<!--<include name="dom4*.jar" />-->
 			<include name="ehcache-1.2.3.jar" />
 			<include name="freemarker.jar" />
 			<include name="jakarta-oro.jar" />
