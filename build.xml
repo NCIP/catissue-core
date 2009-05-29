@@ -332,7 +332,7 @@
 				<exclude name="**/WEB-INF/lib/*.zip" />
 				<exclude name="**/WEB-INF/lib/ant*.jar" />
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
-				<exclude name="**/WEB-INF/lib/dom4*.jar" />
+				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
 				<exclude name="**/*servlet.jar*" />
 				
 				<exclude name="**/*hibernate2.jar*" />
