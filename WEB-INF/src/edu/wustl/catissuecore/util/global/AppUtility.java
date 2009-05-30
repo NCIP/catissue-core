@@ -3031,7 +3031,10 @@ public class AppUtility
 	{
 		try
 		{
-			jdbcDAO.closeSession();
+			if(jdbcDAO != null)
+			{
+				jdbcDAO.closeSession();
+			}
 		}
 		catch(DAOException daoExp)
 		{
@@ -3062,7 +3065,10 @@ public class AppUtility
 	{
 		try
 		{
-			dao.closeSession();
+			if(dao != null)
+			{
+				dao.closeSession();
+			}
 		}
 		catch(DAOException daoExp)
 		{

@@ -174,7 +174,10 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			jdbcDAO.closeSession();
+			if(jdbcDAO != null)
+			{
+				jdbcDAO.closeSession();
+			}
 		}
 		catch (DAOException daoExp)
 		{
@@ -205,7 +208,10 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			dao.closeSession();
+			if(dao != null)
+			{
+				dao.closeSession();
+			}
 		}
 		catch (DAOException daoExp)
 		{
