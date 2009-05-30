@@ -2714,8 +2714,8 @@ Thanking You,
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
-		</replace>	
-		
+		</replace>
+		<antcall target="replace_app_dao_prop_file"></antcall>
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 
@@ -3875,7 +3875,9 @@ Thanking You,
 			</fileset>
 		</delete>
 	</target>
-	
+
+	<!-- This target replaces databases properties properties in hibernate cfg file
+		based on database configuration in catissueInstall.properties file.-->
 	<target name="replacecfgfiles">
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
@@ -3906,5 +3908,26 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 			<replacefilter token="${token.database.password}" value="${database.password}" />
 		</replace>
-	</target>	
+	</target>
+
+	<!-- This target replaces proper application dao properties file in ApplicationDAOProperties.xml
+		based on database configuration in catissueInstall.properties file.-->
+	<target name="replace_app_dao_prop_file">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
+					<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
+				</replace>	
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
+						<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>		
+	</target>
 </project>
