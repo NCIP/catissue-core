@@ -35,6 +35,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.common.dynamicextensions.xmi.XMIConfiguration;
 import edu.common.dynamicextensions.xmi.XMIUtilities;
 import edu.common.dynamicextensions.xmi.importer.XMIImportProcessor;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -178,6 +179,7 @@ public class ImportXmi
 			
 			List<String> containerNames = readFile(pathCsvFileName);
 			XMIImportProcessor xmiImportProcessor = new XMIImportProcessor();
+			xmiImportProcessor.setXmiConfigurationObject(getXMIConfiguration(isEntityGroupSystemGenerated));
 			List<ContainerInterface> mainContainerList = xmiImportProcessor.processXmi(uml, domainModelName,packageName, containerNames);
 			
 			boolean isEditedXmi = xmiImportProcessor.isEditedXmi;
@@ -207,7 +209,7 @@ public class ImportXmi
 		{
 			logger.info("Fatal error reading XMI.");
 			logger.info("------------------------ERROR:--------------------------------\n");
-			logger.info(e.getMessage());		
+			logger.info(e.getMessage(),e);		
 			logger.info("\n--------------------------------------------------------------");
 		}
 		finally
@@ -226,6 +228,21 @@ public class ImportXmi
 			XMIUtilities.cleanUpRepository();
 		
 		}
+	}
+	/**
+	 * 
+	 * @param isEntityGroupSystemGenerated true if entity group is system generated
+	 * @return XMIConfiguration object.
+	 */
+	private static XMIConfiguration getXMIConfiguration(boolean isEntityGroupSystemGenerated)
+	{
+		XMIConfiguration xmiConfiguration = XMIConfiguration.getInstance();
+		xmiConfiguration.setCreateTable(true);
+		xmiConfiguration.setAddIdAttr(true);
+		xmiConfiguration.setAddColumnForInherianceInChild(false);
+		xmiConfiguration.setAddInheritedAttribute(false);
+		xmiConfiguration.setEntityGroupSystemGenerated(isEntityGroupSystemGenerated);
+		return xmiConfiguration;
 	}
 	/**
 	 * @param args
