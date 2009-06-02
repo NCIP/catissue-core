@@ -84,7 +84,7 @@ public class JniDeID
 		try 
 		{
 			JniDeID dummy = new JniDeID();
-			String appHome = CommonServiceLocator.getInstance().getAppHome();
+			String appHome = System.getProperty("user.dir");
 			String dllPath = appHome+File.separator+"JniDeId.dll";
 			dllPath = dllPath.replaceAll("%20", " ");
 		    File dllFile = new File(dllPath) ;
