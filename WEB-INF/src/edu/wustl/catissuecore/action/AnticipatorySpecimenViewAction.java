@@ -338,7 +338,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 
 		specimenDataBean.setCheckedSpecimen(true);
-		specimenDataBean.setPrintSpecimen(true);//bug 11169
+		specimenDataBean.setPrintSpecimen(specimenDataBean.getPrintSpecimen());//Bug 12631
 		if (Constants.SPECIMEN_COLLECTED.equals(specimen.getCollectionStatus()))
 		{
 			specimenDataBean.setReadOnly(true);

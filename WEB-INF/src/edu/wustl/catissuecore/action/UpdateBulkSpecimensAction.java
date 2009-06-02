@@ -228,7 +228,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		specimenVO = (SpecimenDataBean) specimenVO;
 		specimenVO.setCheckedSpecimen(true);
-		specimenVO.setPrintSpecimen(true);//bug 11169
+		specimenVO.setPrintSpecimen(specimenVO.getPrintSpecimen());//Bug 12631
 		Specimen specimen = super.createSpecimenDomainObject(specimenVO);
 		setValuesForSpecimen(specimen,specimenVO);
 		if (ViewSpecimenSummaryForm.ADD_USER_ACTION
@@ -251,7 +251,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 		genericSpecimen.setCheckedSpecimen(true);
-		genericSpecimen.setPrintSpecimen(true);//bug 11169
+		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());//Bug 12631
 		specimenDataBean.setCorresSpecimen(specimen);
 
 		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
