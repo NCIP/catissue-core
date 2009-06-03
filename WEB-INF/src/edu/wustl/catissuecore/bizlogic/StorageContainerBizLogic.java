@@ -3738,6 +3738,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		long end = 0;
 		TreeMap containerMap = new TreeMap();
 		JDBCDAO jdbcdao= null;
+		DAO dao = null;
 		try 
 		{
 
@@ -3787,11 +3788,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			if (containerMapFromCache != null) {
 				int i = 1;
 				Iterator itr = list.iterator();
+				dao = openDAOSession(null);
 				while (itr.hasNext()) {
 					List list1 = (List) itr.next();
 					String Id = (String) list1.get(0);
 
-					Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id));
+					Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id),dao);
 					if(!sessionDataBean.isAdmin())
 					{
 						if(!siteIds.contains(siteId))
@@ -3842,51 +3844,39 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		finally
 		{
 			closeJDBCSession(jdbcdao);
+			closeDAOSession(dao);
 		}
 
 	}
 	/* temp function end */
 
 	
-	private Long getSiteIdForStorageContainerId(Long scId) throws BizLogicException
+	private Long getSiteIdForStorageContainerId(Long scId,DAO dao) throws DAOException
 	{
-		DAO dao = null;
+		
 		Long siteId = null;
-		try 
-		{
-			dao = openDAOSession(null);
+		
 			StorageContainer sc = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(), scId);
 			if(sc != null)
 			{
 				Site site = sc.getSite();
 				siteId = site.getId();
 			}
-		}
-		catch (DAOException e1) 
-		{
-			logger.debug(e1.getMessage(), e1);
-			throw getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
-		}
-		finally
-		{
-			closeDAOSession(dao);
-		}
+		
 		return siteId;
 	}
 
 
 	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId,
 			String specimenClass, int aliquotCount, String exceedingMaxLimit,
-			SessionDataBean sessionData, boolean closeSession)
-			throws BizLogicException {
+			SessionDataBean sessionData, JDBCDAO jdbcDAO)
+			throws BizLogicException,DAOException {
 
 		NameValueBeanRelevanceComparator comparator = new NameValueBeanRelevanceComparator();
-		logger
-				.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
+		logger.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
 		TreeMap containerMap = new TreeMap(comparator);
-		List list = getRelevantContainerList(cpId, specimenClass, closeSession);
-		logger
-				.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:"
+		List list = getRelevantContainerList(cpId, specimenClass, jdbcDAO);
+		logger.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:"
 						+ list.size());
 		Map containerMapFromCache = null;
 		try {
@@ -3896,8 +3886,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
-
+		
 		if (containerMapFromCache != null) {
+			DAO dao = openDAOSession(null);
 			int i = 1;
 			int relevenceCounter = 1;
 			Iterator itr = list.iterator();
@@ -3905,6 +3896,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(1);
 				String Name = (String) list1.get(2);
+				logger.debug("Id :"+Id+"name:"+Name);
 				NameValueBean nvb = new NameValueBean(Name, Id, new Long(
 						relevenceCounter));
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
@@ -3913,15 +3905,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					sc.setId(new Long(Id));
 					boolean hasAccess = true;
 				
-					DAO dao = openDAOSession(null);
+					
 					hasAccess = validateContainerAccess(dao,sc, sessionData,cpId);
-					closeDAOSession(dao);
+					
 					
 					if (!hasAccess)
 						continue;
 
 					if (i > containersMaxLimit) {
-						logger.debug("CONTAINERS_MAX_LIMIT reached");
+						logger.info("CONTAINERS_MAX_LIMIT reached");
 						exceedingMaxLimit = new String("true");
 						break;
 					} else {
@@ -3938,17 +3930,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 				relevenceCounter++;
 			}
-			logger
-					.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:"
+			closeDAOSession(dao);
+			logger.info("getAllocatedContaienrMapForSpecimen()----Size of containerMap:"
 							+ containerMap.size());
 		}
-		logger.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
+		logger.info("exceedingMaxLimit----------" + exceedingMaxLimit);
 
 		return containerMap;
 
 	}
 
-	private boolean validateContainerAccess(DAO dao, StorageContainer sc, SessionDataBean sessionData, long cpId) throws BizLogicException
+	private boolean validateContainerAccess(DAO dao, StorageContainer sc, SessionDataBean sessionData, long cpId) throws DAOException,BizLogicException
     {
         boolean isValidContainer = validateContainerAccess(dao,sc,sessionData);
         
@@ -3963,7 +3955,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
         {
         	
 			site = getSite(dao, sc.getId());
-			siteCollection = new CollectionProtocolBizLogic().getRelatedSites(cpId);
+			siteCollection = new CollectionProtocolBizLogic().getRelatedSites(dao,cpId);
             
             	if (siteCollection != null)  
             	{
@@ -3993,14 +3985,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @author Vaishali
 	 */
 	public List getRelevantContainerList(long cpId, String specimenClass,
-			boolean closeSession) throws BizLogicException
+			JDBCDAO jdbcDAO) throws BizLogicException
 			{
 		List list = new ArrayList();
-		JDBCDAO dao = null;
-		try
-		{
+		//JDBCDAO dao = null;
+		/*try
+		{*/
 
-			dao =openJDBCSession();
+			//dao =openJDBCSession();
 
 			String[] queryArray = new String[6];
 			// category # 1
@@ -4087,25 +4079,25 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						+ queryArray[i]);
 				System.out.println("Storage Container query......................"
 						+ queryArray[i]);
-				List queryResultList = executeStorageContQuery(queryArray[i], dao);
+				List queryResultList = executeStorageContQuery(queryArray[i], jdbcDAO);
 				list.addAll(queryResultList);
 			}
 
-			if (closeSession) {
+			/*if (closeSession) {
 				dao.closeSession();
-			}
+			}*/
 			return list;
 
-		}
+		/*}
 		catch(DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		finally
+		}*/
+		/*finally
 		{
 			closeJDBCSession(dao);
-		}
+		}*/
 	}
 
 	/**
@@ -4155,10 +4147,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		NameValueBeanValueComparator contComp = new NameValueBeanValueComparator();
 		TreeMap containerMap = new TreeMap(contComp);
 
-		JDBCDAO dao = null;	
+		JDBCDAO jdbcDAO = null;	
+		DAO dao = null;
 		try
 		{
-		 dao = openJDBCSession();
+			jdbcDAO = openJDBCSession();
 		
 		String includeAllIdQueryStr = " OR t4.SPECIMEN_ARRAY_TYPE_ID = '"
 				+ Constants.ARRAY_TYPE_ALL_ID + "'";
@@ -4180,7 +4173,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		List list = new ArrayList();
 		
 		Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionData.getUserId());
-		list = dao.executeQuery(queryStr);
+		list = jdbcDAO.executeQuery(queryStr);
 		
 		
 		logger.info("Size of list:" + list.size());
@@ -4197,11 +4190,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			int i = 1;
 			Iterator itr = list.iterator();
 
+			dao = openDAOSession(null);
 			while (itr.hasNext()) {
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 
-				Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id));
+				Long siteId = getSiteIdForStorageContainerId(Long.valueOf(Id),dao);
 				if(!sessionData.isAdmin())
 				{
 					if(!siteIds.contains(siteId))
@@ -4247,7 +4241,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	}
 	finally
 	{
-		closeJDBCSession(dao);
+		closeJDBCSession(jdbcDAO);
+		closeDAOSession(dao);
 	}
 	}
 
@@ -4482,7 +4477,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			if (Status.ACTIVITY_STATUS_CLOSED.equals(site
 					.getActivityStatus())) {
 				
-				throw getBizLogicException(null, "error.object.closed", "");
+				throw getBizLogicException(null, "error.object.closed", errMessage);
 			}
 		}
 

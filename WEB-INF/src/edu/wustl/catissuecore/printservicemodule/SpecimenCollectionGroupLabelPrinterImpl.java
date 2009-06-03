@@ -8,10 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
-import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -36,7 +36,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			logger.info(exp.getMessage(), exp);
 			return false;
 
 		}

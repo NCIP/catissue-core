@@ -37,6 +37,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -108,60 +109,72 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 			if (object != null)
 			{
-				Specimen specimen = (Specimen) object;
-
-				String positionOne = null;
-				String positionTwo = null;
-				String storageContainerID = null;
-				String fromPositionData = "virtual Location";
-				
-				//Ashish - 7/6/06 - Retriving Storage container for performance improvement.
-				String sourceObjectName = Specimen.class.getName();
-				Long id = specimen.getId();
-				String attributeName = "specimenPosition.storageContainer";//Constants.COLUMN_NAME_STORAGE_CONTAINER;
-				StorageContainer stContainer = (StorageContainer)bizLogic.retrieveAttribute(sourceObjectName, id, attributeName);
-				
-				if (stContainer != null)
+				JDBCDAO jdbcDAO = null;
+				try
 				{
-					if(specimen != null && specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getPositionDimensionOne() != null && specimen.getSpecimenPosition().getPositionDimensionTwo() != null)
+					jdbcDAO = AppUtility.openJDBCSession();
+					Specimen specimen = (Specimen) object;
+
+					String positionOne = null;
+					String positionTwo = null;
+					String storageContainerID = null;
+					String fromPositionData = "virtual Location";
+
+					//Ashish - 7/6/06 - Retriving Storage container for performance improvement.
+					String sourceObjectName = Specimen.class.getName();
+					Long id = specimen.getId();
+					String attributeName = "specimenPosition.storageContainer";//Constants.COLUMN_NAME_STORAGE_CONTAINER;
+					StorageContainer stContainer = (StorageContainer)bizLogic.retrieveAttribute(sourceObjectName, id, attributeName);
+
+					if (stContainer != null)
 					{
-						positionOne = specimen.getSpecimenPosition().getPositionDimensionOne().toString();
-						positionTwo = specimen.getSpecimenPosition().getPositionDimensionTwo().toString();
-						//StorageContainer container = specimen.getStorageContainer();
-						storageContainerID = stContainer.getId().toString();
-						fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
+						if(specimen != null && specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getPositionDimensionOne() != null && specimen.getSpecimenPosition().getPositionDimensionTwo() != null)
+						{
+							positionOne = specimen.getSpecimenPosition().getPositionDimensionOne().toString();
+							positionTwo = specimen.getSpecimenPosition().getPositionDimensionTwo().toString();
+							//StorageContainer container = specimen.getStorageContainer();
+							storageContainerID = stContainer.getId().toString();
+							fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
+						}
 					}
+					//The fromPositionData(storageContainer Info) of specimen of this event.
+					transferEventParametersForm.setFromPositionData(fromPositionData);
+
+					//POSITION 1
+					request.setAttribute(Constants.POS_ONE, positionOne);
+
+					//POSITION 2
+					request.setAttribute(Constants.POS_TWO, positionTwo);
+
+					//storagecontainer info
+					request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
+
+					//Ashish ---  5th June 07 --- retriving cp object when lazy = true.	for performance improvement			
+					Long collectionProtocolId = getCollectionProtocolId(specimen.getId(),bizLogic);				
+					long cpId = collectionProtocolId.longValue();				
+					//				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					//				.getCollectionProtocol().getId().longValue();
+
+					String className = specimen.getClassName();
+
+					logger.info("COllection Protocol Id :"+ cpId);
+					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
+					request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
+					logger.info("Spcimen Class:" + className);
+
+					SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,sessionData,jdbcDAO);
+					initialValues = setInitialValue(request, transferEventParametersForm, containerMap);
 				}
-				//The fromPositionData(storageContainer Info) of specimen of this event.
-				transferEventParametersForm.setFromPositionData(fromPositionData);
-
-				//POSITION 1
-				request.setAttribute(Constants.POS_ONE, positionOne);
-
-				//POSITION 2
-				request.setAttribute(Constants.POS_TWO, positionTwo);
-
-				//storagecontainer info
-				request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
-				
-				//Ashish ---  5th June 07 --- retriving cp object when lazy = true.	for performance improvement			
-				Long collectionProtocolId = getCollectionProtocolId(specimen.getId(),bizLogic);				
-				long cpId = collectionProtocolId.longValue();				
-//				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-//				.getCollectionProtocol().getId().longValue();
-				
-				String className = specimen.getClassName();
-				
-				logger.info("COllection Protocol Id :"+ cpId);
-				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
-				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
-				logger.info("Spcimen Class:" + className);
-				
-				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-				
-				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,sessionData,true);
-				initialValues = setInitialValue(request, transferEventParametersForm, containerMap);
-				
+				catch(DAOException daoException)
+				{
+					throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+				}
+				finally
+				{
+					AppUtility.closeJDBCSession(jdbcDAO);
+				}
 			}
 		} // operation=add
 		else

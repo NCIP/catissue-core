@@ -34,7 +34,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch(Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			logger.info(exp.getMessage(), exp);
 			return false;
 			
 		}
@@ -60,7 +60,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch(Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			logger.info(exp.getMessage(), exp);
 			exp.printStackTrace();
 			return false;	
 		}

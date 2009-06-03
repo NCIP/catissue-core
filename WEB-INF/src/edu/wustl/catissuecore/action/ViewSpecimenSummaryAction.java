@@ -44,6 +44,8 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
 
 public class ViewSpecimenSummaryAction extends Action {
 	
@@ -760,29 +762,33 @@ public class ViewSpecimenSummaryAction extends Action {
 	}
 
 
-	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, BizLogicException
+	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response) throws IOException, ApplicationException
 	{
-		response.setContentType("text/html");
-		response.setHeader("Cache-Control", "no-cache");
-		HttpSession session = request.getSession();
-		Set asignedPositonSet = (HashSet)session.getAttribute("asignedPositonSet");
-		if(asignedPositonSet == null)
-		{	asignedPositonSet = new HashSet();	}
-		//TODO 
-		//to get available position from SC for the specimen.
-		String sid = (String)request.getParameter("sid");
-		String className = (String)request.getParameter("cName");
-		String cpid = (String)request.getParameter("cpid");
-		List initialValues = null;
-		TreeMap containerMap = new TreeMap();
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(
-				Constants.STORAGE_CONTAINER_FORM_ID);
-		String exceedingMaxLimit = new String();
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		JDBCDAO jdbcDAO = null;
+		try
+		{
+			jdbcDAO = AppUtility.openJDBCSession();
+			response.setContentType("text/html");
+			response.setHeader("Cache-Control", "no-cache");
+			HttpSession session = request.getSession();
+			Set asignedPositonSet = (HashSet)session.getAttribute("asignedPositonSet");
+			if(asignedPositonSet == null)
+			{	asignedPositonSet = new HashSet();	}
+			//TODO 
+			//to get available position from SC for the specimen.
+			String sid = (String)request.getParameter("sid");
+			String className = (String)request.getParameter("cName");
+			String cpid = (String)request.getParameter("cpid");
+			List initialValues = null;
+			TreeMap containerMap = new TreeMap();
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
+			String exceedingMaxLimit = new String();
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0, exceedingMaxLimit, sessionData, true);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0, exceedingMaxLimit, sessionData, jdbcDAO);
 			String containerName = ((NameValueBean)(containerMap.keySet().iterator().next())).getName();
 			StringBuffer sb = new StringBuffer();
 			if (containerMap.isEmpty()) 
@@ -796,7 +802,17 @@ public class ViewSpecimenSummaryAction extends Action {
 				session.setAttribute("asignedPositonSet",asignedPositonSet);
 			}
 			String msg = sb.toString();
-		response.getWriter().write(msg);
+			response.getWriter().write(msg);
+		}
+
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
 		
 	}
 

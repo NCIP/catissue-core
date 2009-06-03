@@ -19,6 +19,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 
@@ -104,44 +105,59 @@ public class SpecimenAutoStorageContainer {
 	private void setAutoStoragePositions(
 			LinkedHashMap<String, LinkedList<GenericSpecimen>> autoSpecimenMap, 
 			SessionDataBean sessionDataBean, Long collectionProtocolId)
-			throws ApplicationException {
-		
-		Set<String> keySet = autoSpecimenMap.keySet();
-		if (!keySet.isEmpty())
-		{
-			Iterator<String> keySetIterator = keySet.iterator();
+			throws ApplicationException 
+{
 
-			while(keySetIterator.hasNext())
+		JDBCDAO jdbcDAO = null;
+		try
+		{
+			jdbcDAO = AppUtility.openJDBCSession();
+
+			Set<String> keySet = autoSpecimenMap.keySet();
+			if (!keySet.isEmpty())
 			{
-				String key = keySetIterator.next();
-				LinkedList<GenericSpecimen> specimenList =
-					autoSpecimenMap.get(key);
-				setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId);
+				Iterator<String> keySetIterator = keySet.iterator();
+
+				while(keySetIterator.hasNext())
+				{
+					String key = keySetIterator.next();
+					LinkedList<GenericSpecimen> specimenList =
+						autoSpecimenMap.get(key);
+					setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId,jdbcDAO);
+				}
 			}
+		}
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
 		}
 	}
 	
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
-			String className, SessionDataBean bean, Long collectionProtocolId ) throws ApplicationException
+			String className, SessionDataBean bean, Long collectionProtocolId ,JDBCDAO jdbcDAO) throws ApplicationException
 	{
- 
-		Map containerMap;
-		try {
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		
+			Map containerMap;
+			try {
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
+				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-			containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
-					collectionProtocolId.longValue(), className, 0, "false", bean, true);
-			populateStorageLocations(specimenDataBeanList,
-					collectionProtocolId.longValue(), containerMap, bean, className);
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
+						collectionProtocolId.longValue(), className, 0, "false", bean, jdbcDAO);
+				populateStorageLocations(specimenDataBeanList,
+						collectionProtocolId.longValue(), containerMap, bean, className);
 
-		} catch (ApplicationException exception) 
-		{
-			logger.debug(exception.getMessage(), exception);
-			throw AppUtility.getApplicationException( exception,exception.getErrorKeyName(),
-					exception.getMsgValues());
-		}
+			} catch (ApplicationException exception) 
+			{
+				logger.debug(exception.getMessage(), exception);
+				throw AppUtility.getApplicationException( exception,exception.getErrorKeyName(),
+						exception.getMsgValues());
+			}
 		
 	}
 	

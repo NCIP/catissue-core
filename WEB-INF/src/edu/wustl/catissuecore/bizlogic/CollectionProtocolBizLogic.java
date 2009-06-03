@@ -1659,15 +1659,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		return false;
 	}
 
-	public Collection<Site> getRelatedSites(Long cpId) throws BizLogicException
+	public Collection<Site> getRelatedSites(DAO dao,Long cpId) throws DAOException
 	{
 		CollectionProtocol cp = null;
 		Collection<Site> siteCollection = null;
-		DAO dao = openDAOSession(null);
-		try
-		{
-
-			if (cpId == null || cpId == 0)
+		if (cpId == null || cpId == 0)
 			{
 				return null;
 			}
@@ -1678,16 +1674,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				return null;
 			}
 			siteCollection = cp.getSiteCollection();
-		}
-		catch (DAOException daoExp)
-		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
-		}
-		finally
-		{
-			closeDAOSession(dao);
-		}
+		
 		return siteCollection;
 	}
 

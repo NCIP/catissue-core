@@ -35,7 +35,6 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -61,6 +60,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -120,36 +120,49 @@ public class AliquotAction extends SecureAction
 	public ActionForward executeContainerChange(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		AliquotForm aliquotForm = (AliquotForm) form;
-		//boolean to indicate whether the suitable containers to be shown in dropdown 
-		//is exceeding the max limit.
-		String exceedingMaxLimit = "false";
-
-		//Getting the value pageOf parameter.
-
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
-		//Map containerMap = bizLogic.getAllocatedContainerMap();
-		TreeMap containerMap = new TreeMap();
-		int aliquotCount = 0;
-		if (aliquotForm.isAliqoutInSameContainer())
+		JDBCDAO jdbcDAO = null;
+		try
 		{
-			aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+			jdbcDAO = AppUtility.openJDBCSession();
+			AliquotForm aliquotForm = (AliquotForm) form;
+			//boolean to indicate whether the suitable containers to be shown in dropdown 
+			//is exceeding the max limit.
+			String exceedingMaxLimit = "false";
+
+			//Getting the value pageOf parameter.
+
+			String pageOf = request.getParameter(Constants.PAGE_OF);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+
+			//Map containerMap = bizLogic.getAllocatedContainerMap();
+			TreeMap containerMap = new TreeMap();
+			int aliquotCount = 0;
+			if (aliquotForm.isAliqoutInSameContainer())
+			{
+				aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+			}
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
+					aliquotCount, exceedingMaxLimit, sessionData, jdbcDAO);
+
+			populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
+
+			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+			request.setAttribute(Constants.PAGE_OF, pageOf);
+			setParentSpecimenInRequest(request);
+			setPageData(request, pageOf,aliquotForm);
+			return mapping.findForward(pageOf);
 		}
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
-				aliquotCount, exceedingMaxLimit, sessionData, true);
-
-		populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
-
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		request.setAttribute(Constants.PAGE_OF, pageOf);
-		setParentSpecimenInRequest(request);
-		setPageData(request, pageOf,aliquotForm);
-		return mapping.findForward(pageOf);
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
 	}
 
 	/**
@@ -217,7 +230,11 @@ public class AliquotAction extends SecureAction
 	public ActionForward executeAliquotAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		AliquotForm aliquotForm = (AliquotForm) form;
+		JDBCDAO jdbcDAO = null;
+		try
+		{
+			jdbcDAO = AppUtility.openJDBCSession();
+			AliquotForm aliquotForm = (AliquotForm) form;
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
@@ -382,12 +399,12 @@ public class AliquotAction extends SecureAction
 				{
 
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
-							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
+							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, jdbcDAO);
 				}
 				else
 				{
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm.getClassName(),
-							0, exceedingMaxLimit, sessionData, true);
+							0, exceedingMaxLimit, sessionData, jdbcDAO);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -472,12 +489,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
-								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
+								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, jdbcDAO);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
-								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
+								.getClassName(), 0, exceedingMaxLimit, sessionData, jdbcDAO);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -574,12 +591,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
-								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
+								.getClassName(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, jdbcDAO);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(), aliquotForm
-								.getClassName(), 0, exceedingMaxLimit, sessionData, true);
+								.getClassName(), 0, exceedingMaxLimit, sessionData, jdbcDAO);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
@@ -603,6 +620,15 @@ public class AliquotAction extends SecureAction
 		setParentSpecimenInRequest(request);
 		setPageData(request, pageOf,aliquotForm);
 		return mapping.findForward(pageOf);
+		}
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
 	}
 	/**
 	 * This method checks whether the specimen with given label exists or not.

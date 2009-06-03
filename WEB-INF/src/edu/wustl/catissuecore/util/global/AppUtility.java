@@ -1887,7 +1887,7 @@ public class AppUtility
 			Collection<Site> siteCollection = null;
 			if (cpId != null && cpId.trim().length() != 0)
 			{
-				siteCollection = new CollectionProtocolBizLogic().getRelatedSites(Long.valueOf(cpId));
+				siteCollection = new CollectionProtocolBizLogic().getRelatedSites(dao,Long.valueOf(cpId));
 			}
 			else
 			{

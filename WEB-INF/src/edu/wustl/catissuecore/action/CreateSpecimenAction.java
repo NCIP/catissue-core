@@ -45,6 +45,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -53,6 +54,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * CreateSpecimenAction initializes the fields in the Create Specimen page.
@@ -132,8 +135,15 @@ public class CreateSpecimenAction extends SecureAction
 		DefaultBizLogic dao = new DefaultBizLogic(); 
 		TreeMap containerMap = new TreeMap();
 		List initialValues = null;
+		
+		
+		
 		if (operation.equals(Constants.ADD))
 		{
+			JDBCDAO jdbcDAO = null;
+			try
+			{
+				jdbcDAO = AppUtility.openJDBCSession();
 			//if this action bcos of delete external identifier then validation should not happen.
 			if (request.getParameter("button") == null)
 			{
@@ -219,7 +229,7 @@ public class CreateSpecimenAction extends SecureAction
 							IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 							StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-									spClass, 0,exceedingMaxLimit,sessionData,true);
+									spClass, 0,exceedingMaxLimit,sessionData,jdbcDAO);
 							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 							if (containerMap.isEmpty())
 							{
@@ -282,6 +292,15 @@ public class CreateSpecimenAction extends SecureAction
 					}
 
 				}
+			}
+			}
+			catch(DAOException daoException)
+			{
+				throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+			}
+			finally
+			{
+				AppUtility.closeJDBCSession(jdbcDAO);
 			}
 		}
 		else
@@ -411,24 +430,37 @@ public class CreateSpecimenAction extends SecureAction
 	}
 
 	TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
-			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws BizLogicException
+			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws ApplicationException
 	{
-		TreeMap containerMap = new TreeMap();
-
-		Object object = dao.retrieve(Specimen.class.getName(), new Long(
-				specimenId));
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		if (object != null)
+		JDBCDAO jdbcDAO = null;
+		try
 		{
-			Specimen sp = (Specimen) object;
-			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-					.getCollectionProtocol().getId().longValue();
-			String spClass = className;
-			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit,sessionData,true);
-		}
+			jdbcDAO = AppUtility.openJDBCSession();
+			TreeMap containerMap = new TreeMap();
 
-		return containerMap;
+			Object object = dao.retrieve(Specimen.class.getName(), new Long(
+					specimenId));
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			if (object != null)
+			{
+				Specimen sp = (Specimen) object;
+				long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getId().longValue();
+				String spClass = className;
+				Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit,sessionData,jdbcDAO);
+			}
+
+			return containerMap;
+		}
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
 	}
 	
 	private long getCpId(DefaultBizLogic dao, Long scgId) throws BizLogicException

@@ -11,6 +11,7 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.util.IdComparator;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -25,7 +26,9 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.printserviceclient.LabelPrinter#printLabel(edu.wustl.common.domain.AbstractDomainObject, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
 	 */
-	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj,String printerType,String printerLocation) {
+	public boolean printLabel(AbstractDomainObject abstractDomainObject, String ipAddress, User userObj,
+			String printerType,String printerLocation)   
+	{
 		
 		ArrayList listMap = new ArrayList ();
 		//createObjectMap(abstractDomainObject,listMap);
@@ -38,7 +41,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			logger.info(exp.getMessage(), exp);
 			return false;
 			
 		}
@@ -66,8 +69,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 		}
 		catch(Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			exp.printStackTrace();
+			logger.info(exp.getMessage(), exp);
 			return false;	
 		}
 	}

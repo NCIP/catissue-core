@@ -75,6 +75,7 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -95,28 +96,28 @@ public class NewSpecimenAction extends SecureAction
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
-	{
+    {
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
 		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		String forwardPage=specimenForm.getForwardTo();
-		
-        if(forwardPage.equals(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
-	    {
-        	pageOf=forwardPage;
-        	request.setAttribute(Constants.STATUS_MESSAGE_KEY, "errors.specimencollectionrequirementgroupedit");
-        	return mapping.findForward(pageOf);
-	    }
-        IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+
+		if(forwardPage.equals(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP))
+		{
+			pageOf=forwardPage;
+			request.setAttribute(Constants.STATUS_MESSAGE_KEY, "errors.specimencollectionrequirementgroupedit");
+			return mapping.findForward(pageOf);
+		}
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		
+
 		String treeRefresh = request.getParameter("refresh");
 		request.setAttribute("refresh",treeRefresh);
-		
-        //Gets the value of the operation parameter.
+
+		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
@@ -162,15 +163,15 @@ public class NewSpecimenAction extends SecureAction
 				MapDataParser.deleteRow(key, map, request.getParameter("status"));
 			}
 		}
-		
-//		*************  ForwardTo implementation *************
+
+		//		*************  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		String specimenCollectionGroupName = "";
 		if (forwardToHashMap != null)
 		{
 			String specimenCollectionGroupId = (String) forwardToHashMap.get("specimenCollectionGroupId");
 			/**For Migration Start**/
-			
+
 			specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
 			logger.debug("specimenCollectionGroupName found in forwardToHashMap========>>>>>>" + specimenCollectionGroupName);
 			specimenForm.setSpecimenCollectionGroupName(specimenCollectionGroupName);
@@ -187,171 +188,171 @@ public class NewSpecimenAction extends SecureAction
 				setFormValues(specimenForm, specimenCollectionGroupId,specimenCollectionGroupName);
 			}
 		}
-		
+
 		//*************  ForwardTo implementation *************
 
 		//Consent Tracking (Virender Mehta)     - Start
 		//Adding name,value pair in NameValueBean
-			String tabSelected = request.getParameter(Constants.SELECTED_TAB);
-			if(tabSelected!=null)
+		String tabSelected = request.getParameter(Constants.SELECTED_TAB);
+		if(tabSelected!=null)
+		{
+			request.setAttribute(Constants.SELECTED_TAB,tabSelected);
+		}
+		String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
+		SpecimenCollectionGroup specimenCollectionGroup= AppUtility.getSCGObj(scg_id);
+		//PHI Data
+		String initialURLValue="";
+		String initialWitnessValue="";
+		String initialSignedConsentDateValue="";
+		//Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
+		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
+		if(collectionProtocolRegistration ==null  || collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
+		{
+			initialURLValue=Constants.NULL;
+		}
+		User consentWitness=null;
+		if(collectionProtocolRegistration.getId()!= null)
+		{
+			consentWitness = (User)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "consentWitness");
+		}
+		//User consentWitness= collectionProtocolRegistration.getConsentWitness();
+		//Resolved lazy
+		if(consentWitness==null)
+		{
+			initialWitnessValue=Constants.NULL;
+		}
+		if(collectionProtocolRegistration.getConsentSignatureDate()==null)
+		{
+			initialSignedConsentDateValue=Constants.NULL;
+		}
+		List cprObjectList=new ArrayList();
+		cprObjectList.add(collectionProtocolRegistration);
+		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		String userName = Utility.toString(sessionDataBean.getUserName());	
+		List collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
+		CollectionProtocolRegistration cprObject =null;
+		cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
+
+		String witnessName="";
+		String getConsentDate="";
+		String getSignedConsentURL="";
+		User witness = cprObject.getConsentWitness();
+		if(witness==null)
+		{
+			if(initialWitnessValue.equals(Constants.NULL))
 			{
-				request.setAttribute(Constants.SELECTED_TAB,tabSelected);
-			}
-			String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
-			SpecimenCollectionGroup specimenCollectionGroup= AppUtility.getSCGObj(scg_id);
-			//PHI Data
-			String initialURLValue="";
-			String initialWitnessValue="";
-			String initialSignedConsentDateValue="";
-			//Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
-			CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
-			if(collectionProtocolRegistration ==null  || collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
-			{
-				initialURLValue=Constants.NULL;
-			}
-			User consentWitness=null;
-			if(collectionProtocolRegistration.getId()!= null)
-			{
-				consentWitness = (User)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "consentWitness");
-			}
-			//User consentWitness= collectionProtocolRegistration.getConsentWitness();
-			//Resolved lazy
-			if(consentWitness==null)
-			{
-				initialWitnessValue=Constants.NULL;
-			}
-			if(collectionProtocolRegistration.getConsentSignatureDate()==null)
-			{
-				initialSignedConsentDateValue=Constants.NULL;
-			}
-			List cprObjectList=new ArrayList();
-			cprObjectList.add(collectionProtocolRegistration);
-			SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
-			CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
-			String userName = Utility.toString(sessionDataBean.getUserName());	
-			List collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
-			CollectionProtocolRegistration cprObject =null;
-			cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
-			
-			String witnessName="";
-			String getConsentDate="";
-			String getSignedConsentURL="";
-			User witness = cprObject.getConsentWitness();
-			if(witness==null)
-			{
-				if(initialWitnessValue.equals(Constants.NULL))
-				{
-					witnessName="";
-				}
-				else
-				{
-					witnessName=Constants.HASHED_OUT;
-				}
-				specimenForm.setWitnessName(witnessName);
+				witnessName="";
 			}
 			else
 			{
-				witness = (User)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "consentWitness");
-				String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
-				specimenForm.setWitnessName(witnessFullName);
+				witnessName=Constants.HASHED_OUT;
 			}
-			if(cprObject.getConsentSignatureDate()==null)
+			specimenForm.setWitnessName(witnessName);
+		}
+		else
+		{
+			witness = (User)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "consentWitness");
+			String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+			specimenForm.setWitnessName(witnessFullName);
+		}
+		if(cprObject.getConsentSignatureDate()==null)
+		{
+			if(initialSignedConsentDateValue.equals(Constants.NULL))
 			{
-				if(initialSignedConsentDateValue.equals(Constants.NULL))
-				{
-					getConsentDate="";
-				}
-				else
-				{
-					getConsentDate=Constants.HASHED_OUT;
-				}
-			}
-			else
-			{
-				getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
-			}
-			
-			if(cprObject.getSignedConsentDocumentURL()==null)
-			{
-				if(initialURLValue.equals(Constants.NULL))
-				{
-					getSignedConsentURL="";
-				}
-				else
-				{
-					getSignedConsentURL=Constants.HASHED_OUT;
-				}
+				getConsentDate="";
 			}
 			else
 			{
-				getSignedConsentURL=Utility.toString(cprObject.getSignedConsentDocumentURL());
+				getConsentDate=Constants.HASHED_OUT;
 			}
-			specimenForm.setConsentDate(getConsentDate);
-			specimenForm.setSignedConsentUrl(getSignedConsentURL);
-			Collection consentTierRespCollection = (Collection)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "elements(consentTierResponseCollection)" );
-			//Lazy Resolved --- cprObject.getConsentTierResponseCollection() 
-			Set participantResponseSet =(Set)consentTierRespCollection;
-			
-			List participantResponseList;
-			
-			if (participantResponseSet != null)
+		}
+		else
+		{
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
+		}
+
+		if(cprObject.getSignedConsentDocumentURL()==null)
+		{
+			if(initialURLValue.equals(Constants.NULL))
 			{
-				participantResponseList = new ArrayList(participantResponseSet);
+				getSignedConsentURL="";
 			}
 			else
 			{
-				participantResponseList = new ArrayList();
-			}				
-			
-			if(operation.equalsIgnoreCase(Constants.ADD))
-			{
-				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-				if(errors == null)
-				{ 
-					String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
-					if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
-					{
-						Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(), "elements(consentTierStatusCollection)");
-						Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
-						specimenForm.setConsentResponseForSpecimenValues(tempMap);
-					}
+				getSignedConsentURL=Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			getSignedConsentURL=Utility.toString(cprObject.getSignedConsentDocumentURL());
+		}
+		specimenForm.setConsentDate(getConsentDate);
+		specimenForm.setSignedConsentUrl(getSignedConsentURL);
+		Collection consentTierRespCollection = (Collection)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "elements(consentTierResponseCollection)" );
+		//Lazy Resolved --- cprObject.getConsentTierResponseCollection() 
+		Set participantResponseSet =(Set)consentTierRespCollection;
+
+		List participantResponseList;
+
+		if (participantResponseSet != null)
+		{
+			participantResponseList = new ArrayList(participantResponseSet);
+		}
+		else
+		{
+			participantResponseList = new ArrayList();
+		}				
+
+		if(operation.equalsIgnoreCase(Constants.ADD))
+		{
+			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+			if(errors == null)
+			{ 
+				String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
+				if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
+				{
+					Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(), "elements(consentTierStatusCollection)");
+					Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
+					specimenForm.setConsentResponseForSpecimenValues(tempMap);
 				}
-				specimenForm.setConsentTierCounter(participantResponseList.size());
 			}
-			else
-			{
-				String specimenID = null;
-				specimenID = String.valueOf(specimenForm.getId());
-								//List added for grid
-				List specimenDetails= new ArrayList();
-				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-				Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
-				//Added by Falguni=To set Specimen label in Form.
-				/*Bug id = 11480 
-				 *Resolved by : Himanshu Aseeja
-			     */
-				List columnList=columnNames();
-				String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
-				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
-				" edu.wustl.catissuecore.domain.Specimen as spec " +
-				" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimen.getId();
-				Collection consentResponse = AppUtility.executeQuery(consentResponseHql);
-				Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimen.getId(), "elements(consentTierStatusCollection)");
-				String specimenResponse = "_specimenLevelResponse";
-				String specimenResponseId = "_specimenLevelResponseID";
-				Map tempMap=ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel, consentResponse,specimenResponse,specimenResponseId);
-				specimenForm.setConsentResponseForSpecimenValues(tempMap);
-				specimenForm.setConsentTierCounter(participantResponseList.size()) ;
-				HttpSession session =request.getSession();
-				request.setAttribute("showContainer", specimen.getCollectionStatus());
-				session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
-				session.setAttribute(Constants.COLUMNLIST,columnList);
-			}
-			List specimenResponseList = new ArrayList();
-			specimenResponseList=AppUtility.responceList(operation);
-			request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
+			specimenForm.setConsentTierCounter(participantResponseList.size());
+		}
+		else
+		{
+			String specimenID = null;
+			specimenID = String.valueOf(specimenForm.getId());
+			//List added for grid
+			List specimenDetails= new ArrayList();
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			Specimen specimen = bizLogic.getSpecimen(specimenID,specimenDetails, sessionData);
+			//Added by Falguni=To set Specimen label in Form.
+			/*Bug id = 11480 
+			 *Resolved by : Himanshu Aseeja
+			 */
+			List columnList=columnNames();
+			String consentResponseHql ="select elements(scg.collectionProtocolRegistration.consentTierResponseCollection)"+ 
+			" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
+			" edu.wustl.catissuecore.domain.Specimen as spec " +
+			" where spec.specimenCollectionGroup.id=scg.id and spec.id="+ specimen.getId();
+			Collection consentResponse = AppUtility.executeQuery(consentResponseHql);
+			Collection consentResponseStatuslevel=(Collection)bizLogicObj.retrieveAttribute(Specimen.class.getName(),specimen.getId(), "elements(consentTierStatusCollection)");
+			String specimenResponse = "_specimenLevelResponse";
+			String specimenResponseId = "_specimenLevelResponseID";
+			Map tempMap=ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel, consentResponse,specimenResponse,specimenResponseId);
+			specimenForm.setConsentResponseForSpecimenValues(tempMap);
+			specimenForm.setConsentTierCounter(participantResponseList.size()) ;
+			HttpSession session =request.getSession();
+			request.setAttribute("showContainer", specimen.getCollectionStatus());
+			session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+			session.setAttribute(Constants.COLUMNLIST,columnList);
+		}
+		List specimenResponseList = new ArrayList();
+		specimenResponseList=AppUtility.responceList(operation);
+		request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
 		//Consent Tracking (Virender Mehta)		- Stop 		
-     		
+
 		pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
@@ -364,9 +365,9 @@ public class NewSpecimenAction extends SecureAction
 
 		if (specimenForm.isParentPresent())//If parent specimen is present then
 		{
-//			String[] fields = {Constants.SYSTEM_LABEL};
-//			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true);
-//			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
+			//			String[] fields = {Constants.SYSTEM_LABEL};
+			//			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true);
+			//			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
 		}
 
 		String[] bhIdArray = {"-1"};
@@ -403,7 +404,7 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
 		request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
 		request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
-		
+
 		/**
 		 * Name: Chetan Patil
 		 * Reviewer: Sachin Lale
@@ -417,7 +418,7 @@ public class NewSpecimenAction extends SecureAction
 		 */
 		//Setting Secimen Collection Group
 		/**For Migration Start**/
-//		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
+		//		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
 		/**For Migration Start**/
 		/**
 		 * Patch ID: Bug#4245_2
@@ -429,45 +430,45 @@ public class NewSpecimenAction extends SecureAction
 		List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
 		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
-		
-		
+
+
 		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
 		if (specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) 
 		{	// If specimen is being added form specimen collection group page or a specimen is being edited.
-			
+
 			if (Constants.ALIQUOT.equals(specimenForm.getLineage()))
 			{
 				populateListBoxes(specimenForm, request);
 			}
-			
+
 			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
-						pathologicalStatusList, subTypeMap);
-			
+					pathologicalStatusList, subTypeMap);
+
 		}
 		else
 		{	// On adding a new specimen independently.
 			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
 					pathologicalStatusList, subTypeMap);
 		}
-		
-		
+
+
 		/**
-         * Name : Virender Mehta
-         * Reviewer: Sachin Lale
-         * Bug ID: defaultValueConfiguration_BugID
-         * Patch ID:defaultValueConfiguration_BugID_10
-         * See also:defaultValueConfiguration_BugID_9,11
-         * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
-         * 
-         * Note by Chetan: Value setting for TissueSite and PathologicalStatus has been moved into the
-         * method populateAllLists().
-         */
+		 * Name : Virender Mehta
+		 * Reviewer: Sachin Lale
+		 * Bug ID: defaultValueConfiguration_BugID
+		 * Patch ID:defaultValueConfiguration_BugID_10
+		 * See also:defaultValueConfiguration_BugID_9,11
+		 * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
+		 * 
+		 * Note by Chetan: Value setting for TissueSite and PathologicalStatus has been moved into the
+		 * method populateAllLists().
+		 */
 		// Setting the default values
 		if (specimenForm.getTissueSide() == null || specimenForm.getTissueSide().equals("-1")) 
 		{
 			specimenForm.setTissueSide((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE));
 		}
-				
+
 		// sets the Specimen Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 		// sets the Specimen Type list
@@ -484,30 +485,30 @@ public class NewSpecimenAction extends SecureAction
 		//Setting biohazard list
 		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-		
+
 		/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: 2741
-	 * Patch ID: 2741_12	 
-	 * Description: Propagating events from scg to multiple specimens
-	*/
+		 * Name : Ashish Gupta
+		 * Reviewer Name : Sachin Lale 
+		 * Bug ID: 2741
+		 * Patch ID: 2741_12	 
+		 * Description: Propagating events from scg to multiple specimens
+		 */
 		if(operation.equals(Constants.ADD))
 			populateEventsFromScg(specimenCollectionGroup,specimenForm);
 		Object scgForm = request.getAttribute("scgForm");
 		if(scgForm != null)
 		{
 			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
-			
+
 		}
 		else
 		{
 			//Mandar : 10-July-06 AutoEvents : CollectionEvent
 			setCollectionEventRequestParameters(request, specimenForm);
-	
+
 			//Mandar : 11-July-06 AutoEvents : ReceivedEvent
 			setReceivedEventRequestParameters(request, specimenForm);
-	
+
 			//Mandar : set default date and time too event fields
 			setDateParameters(specimenForm);
 		}
@@ -516,168 +517,175 @@ public class NewSpecimenAction extends SecureAction
 				Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
 		List initialValues = null;
-		if (operation.equals(Constants.ADD))
+
+		JDBCDAO jdbcDAO = null;
+		try
 		{
-			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
-			if(specimenForm.getLabel()==null || specimenForm.getLabel().equals(""))
+			jdbcDAO = AppUtility.openJDBCSession();
+
+
+			if (operation.equals(Constants.ADD))
 			{
-				//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
-				/**
-	        	 * Name : Virender Mehta
-	             * Reviewer: Sachin Lale
-	             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
-	        	 */
-//				SpecimenLabelGenerator spLblGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-//				Map inputMap = new HashMap();
-//				inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
-//				String specimenLabel= spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
-//				specimenForm.setLabel(specimenLabel);
-			}
-			
-			if (specimenForm.getSpecimenCollectionGroupName() != null && !specimenForm.getSpecimenCollectionGroupName().equals("")
-					&& specimenForm.getClassName() != null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
-			{
-				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-				String[] whereColumnName = {"name"};
-				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
-						whereColumnCondition, whereColumnValue, null);
-				//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				if (spCollGroupList!=null && !spCollGroupList.isEmpty())
+				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
+				if(specimenForm.getLabel()==null || specimenForm.getLabel().equals(""))
 				{
-					//					Object []spCollGroup = (Object[]) spCollGroupList
-					//							.get(0);
-					long cpId = ((Long) spCollGroupList.get(0)).longValue();
-					String spClass = specimenForm.getClassName();
-					logger.info("cpId :" + cpId + "spClass:" + spClass);
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
-					{
-						specimenForm.setVirtuallyLocated(false);
-					}
-					
-					if(specimenForm.getStContSelection() == 2)
-					{
-						//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-						sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
-						//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
-						logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-						if (containerMap.isEmpty()) 
-						{
-						
-							if (errors == null || errors.size() == 0)
-							{
-								errors = new ActionErrors();
-							}
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
-							saveErrors(request, errors);
-						}
-						logger.debug("calling checkForInitialValues() function from NewSpecimenAction---");
-						if (errors == null || errors.size() == 0)
-						{
-							initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
-						}
-						else
-						{
-								String[] startingPoints = new String[3];
-								startingPoints[0] = specimenForm.getStorageContainer();
-							startingPoints[1] = specimenForm.getPositionDimensionOne();
-							startingPoints[2] = specimenForm.getPositionDimensionTwo() ;
-							initialValues = new Vector();
-							initialValues.add(startingPoints);
-						}
-						logger.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
-					}
+					//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
+					/**
+					 * Name : Virender Mehta
+					 * Reviewer: Sachin Lale
+					 * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
+					 */
+					//				SpecimenLabelGenerator spLblGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+					//				Map inputMap = new HashMap();
+					//				inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
+					//				String specimenLabel= spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
+					//				specimenForm.setLabel(specimenLabel);
 				}
-			}
-		}
-		else
-		{
-			containerMap = new TreeMap();
-			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
-			logger.info("--------------container:" + specimenForm.getStorageContainer());
-			logger.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
-			logger.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
-			
-			if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals(""))
-			{
-				Integer id = new Integer(specimenForm.getStorageContainer());
-				String parentContainerName = "";
-		
-				Object object=null ;
-				if(id>0)
+				if (specimenForm.getSpecimenCollectionGroupName() != null && !specimenForm.getSpecimenCollectionGroupName().equals("")
+						&& specimenForm.getClassName() != null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 				{
-					object=bizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenForm.getStorageContainer()));
-				}
-				if (object != null)
-				{
-					StorageContainer container = (StorageContainer) object;
-					parentContainerName = container.getName();
-
-				}
-				Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());
-				Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
-
-				List pos2List = new ArrayList();
-				pos2List.add(new NameValueBean(pos2, pos2));
-
-				Map pos1Map = new TreeMap();
-				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
-				containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
-
-				if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals("-1"))
-				{
-					startingPoints[0] = specimenForm.getStorageContainer();
-
-				}
-				if (specimenForm.getPositionDimensionOne() != null && !specimenForm.getPositionDimensionOne().equals("-1"))
-				{
-					startingPoints[1] = specimenForm.getPositionDimensionOne();
-				}
-				if (specimenForm.getPositionDimensionTwo() != null && !specimenForm.getPositionDimensionTwo().equals("-1"))
-				{
-					startingPoints[2] = specimenForm.getPositionDimensionTwo();
-				}
-			}
-			initialValues = new Vector();
-			logger.info("Starting points[0]" + startingPoints[0]);
-			logger.info("Starting points[1]" + startingPoints[1]);
-			logger.info("Starting points[2]" + startingPoints[2]);
-			initialValues.add(startingPoints);
-			
-			String showContainer = (String)request.getAttribute("showContainer");
-			if(showContainer == null || showContainer.equals("Pending")) 
-			{
-				if((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP ||specimenForm.getStContSelection()==2))
-				{
+					//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
 					String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
 					String[] whereColumnName = {"name"};
 					String[] whereColumnCondition = {"="};
 					String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
 					List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
 							whereColumnCondition, whereColumnValue, null);
-					
+					//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
 					if (spCollGroupList!=null && !spCollGroupList.isEmpty())
 					{
-						
+						//					Object []spCollGroup = (Object[]) spCollGroupList
+						//							.get(0);
 						long cpId = ((Long) spCollGroupList.get(0)).longValue();
 						String spClass = specimenForm.getClassName();
-						Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+						logger.info("cpId :" + cpId + "spClass:" + spClass);
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 						{
 							specimenForm.setVirtuallyLocated(false);
 						}
-							SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
-						
+
+						if(specimenForm.getStContSelection() == 2)
+						{
+							//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
-							
+							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, jdbcDAO);
+							//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
+							logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+							if (containerMap.isEmpty()) 
+							{
+
+								if (errors == null || errors.size() == 0)
+								{
+									errors = new ActionErrors();
+								}
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+								saveErrors(request, errors);
+							}
+							logger.debug("calling checkForInitialValues() function from NewSpecimenAction---");
+							if (errors == null || errors.size() == 0)
+							{
+								initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+							}
+							else
+							{
+								String[] startingPoints = new String[3];
+								startingPoints[0] = specimenForm.getStorageContainer();
+								startingPoints[1] = specimenForm.getPositionDimensionOne();
+								startingPoints[2] = specimenForm.getPositionDimensionTwo() ;
+								initialValues = new Vector();
+								initialValues.add(startingPoints);
+							}
+							logger.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
+						}
+					}
+				}
+			}
+			else
+			{
+				containerMap = new TreeMap();
+				String[] startingPoints = new String[]{"-1", "-1", "-1"};
+
+				logger.info("--------------container:" + specimenForm.getStorageContainer());
+				logger.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
+				logger.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
+
+				if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals(""))
+				{
+					Integer id = new Integer(specimenForm.getStorageContainer());
+					String parentContainerName = "";
+
+					Object object=null ;
+					if(id>0)
+					{
+						object=bizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenForm.getStorageContainer()));
+					}
+					if (object != null)
+					{
+						StorageContainer container = (StorageContainer) object;
+						parentContainerName = container.getName();
+
+					}
+					Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());
+					Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
+
+					List pos2List = new ArrayList();
+					pos2List.add(new NameValueBean(pos2, pos2));
+
+					Map pos1Map = new TreeMap();
+					pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
+					containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
+
+					if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals("-1"))
+					{
+						startingPoints[0] = specimenForm.getStorageContainer();
+
+					}
+					if (specimenForm.getPositionDimensionOne() != null && !specimenForm.getPositionDimensionOne().equals("-1"))
+					{
+						startingPoints[1] = specimenForm.getPositionDimensionOne();
+					}
+					if (specimenForm.getPositionDimensionTwo() != null && !specimenForm.getPositionDimensionTwo().equals("-1"))
+					{
+						startingPoints[2] = specimenForm.getPositionDimensionTwo();
+					}
+				}
+				initialValues = new Vector();
+				logger.info("Starting points[0]" + startingPoints[0]);
+				logger.info("Starting points[1]" + startingPoints[1]);
+				logger.info("Starting points[2]" + startingPoints[2]);
+				initialValues.add(startingPoints);
+
+				String showContainer = (String)request.getAttribute("showContainer");
+				if(showContainer == null || showContainer.equals("Pending")) 
+				{
+					if((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP ||specimenForm.getStContSelection()==2))
+					{
+						String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
+						String[] whereColumnName = {"name"};
+						String[] whereColumnCondition = {"="};
+						String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
+						List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+								whereColumnCondition, whereColumnValue, null);
+
+						if (spCollGroupList!=null && !spCollGroupList.isEmpty())
+						{
+
+							long cpId = ((Long) spCollGroupList.get(0)).longValue();
+							String spClass = specimenForm.getClassName();
+							Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
+							{
+								specimenForm.setVirtuallyLocated(false);
+							}
+							SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
+
+							sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, jdbcDAO);
+
 							Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 							if (containerMap.isEmpty()) 
@@ -692,76 +700,86 @@ public class NewSpecimenAction extends SecureAction
 									saveErrors(request, errors);
 								}
 							}
-								Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
-								if (errors == null || errors.size() == 0)
-								{
-									initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
-								}
-								else
-								{
-									String[] startingPoints1 = new String[3];
-									startingPoints1[0] = specimenForm.getStorageContainer();
-									startingPoints1[1] = specimenForm.getPositionDimensionOne();
-									startingPoints1[2] = specimenForm.getPositionDimensionTwo() ;
-									initialValues = new Vector();
-									initialValues.add(startingPoints1);
-									
-								}
-						
-								if(spClass!=null && specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
-								{
-									String[] startingPoints2 = new String[]{"-1", "-1", "-1"};
-									initialValues = new ArrayList();
-									initialValues.add(startingPoints2);
-									request.setAttribute("initValues", initialValues);
-								}
+							Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
+							if (errors == null || errors.size() == 0)
+							{
+								initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+							}
+							else
+							{
+								String[] startingPoints1 = new String[3];
+								startingPoints1[0] = specimenForm.getStorageContainer();
+								startingPoints1[1] = specimenForm.getPositionDimensionOne();
+								startingPoints1[2] = specimenForm.getPositionDimensionTwo() ;
+								initialValues = new Vector();
+								initialValues.add(startingPoints1);
+
+							}
+
+							if(spClass!=null && specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
+							{
+								String[] startingPoints2 = new String[]{"-1", "-1", "-1"};
+								initialValues = new ArrayList();
+								initialValues.add(startingPoints2);
+								request.setAttribute("initValues", initialValues);
+							}
 						}
+					}
 				}
 			}
-		}
-		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-		// -------------------------
-		//Falguni:Performance Enhancement.
-		Long specimenEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
-		{
-			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
-		}
-		else
-		{
-			specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-			CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
-		}	
-		
-		request.setAttribute("specimenEntityId",specimenEntityId);
-		
-		if (specimenForm.isVirtuallyLocated())
-		{
-			request.setAttribute("disabled", "true");
-		}
-		
-		// set associated identified report id
-		Long reportId=getAssociatedIdentifiedReportId(specimenForm.getId());
-		if(reportId==null)
-		{
-			reportId=new Long(-1);
-		}
-		else if(AppUtility.isQuarantined(reportId))
-		{
-			reportId=new Long(-2);
-		}
-		HttpSession session =request.getSession();
-		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
-		//Logger.out.debug("End of specimen action");
+			request.setAttribute("initValues", initialValues);
+			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+			// -------------------------
+			//Falguni:Performance Enhancement.
+			Long specimenEntityId = null;
+			if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+			{
+				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
+			}
+			else
+			{
+				specimenEntityId = AnnotationUtil.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+				CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
+			}	
 
-		
-		request.setAttribute("createdDate", specimenForm.getCreatedDate());
-		request.setAttribute("specimenActivityStatus",
-				Constants.SPECIMEN_ACTIVITY_STATUS_VALUES);
-		return mapping.findForward(pageOf);
-	}
+			request.setAttribute("specimenEntityId",specimenEntityId);
+
+			if (specimenForm.isVirtuallyLocated())
+			{
+				request.setAttribute("disabled", "true");
+			}
+
+			// set associated identified report id
+			Long reportId=getAssociatedIdentifiedReportId(specimenForm.getId());
+			if(reportId==null)
+			{
+				reportId=new Long(-1);
+			}
+			else if(AppUtility.isQuarantined(reportId))
+			{
+				reportId=new Long(-2);
+			}
+			HttpSession session =request.getSession();
+			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
+			//Logger.out.debug("End of specimen action");
+
+
+			request.setAttribute("createdDate", specimenForm.getCreatedDate());
+			request.setAttribute("specimenActivityStatus",
+					Constants.SPECIMEN_ACTIVITY_STATUS_VALUES);
+			return mapping.findForward(pageOf);
+
+		}
+		catch(DAOException daoException)
+		{
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
+}
 	
 	/**
 	 * This method populates the list boxes for type, tissue site, tissue side
