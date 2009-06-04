@@ -284,26 +284,40 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 	public void insertCoordinatorPrivileges(CollectionProtocol collectionProtocol,
 			Vector<SecurityDataBean> authorizationData) throws ApplicationException
 	{
-		Collection<User> coordinators = collectionProtocol.getCoordinatorCollection();
-		HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
-		String userId = "";
-		for (Iterator<User> it = coordinators.iterator(); it.hasNext();)
+		DAO dao = null;
+		try
 		{
-			User aUser = it.next();
-			userId = String.valueOf(aUser.getCsmUserId());
-			gov.nih.nci.security.authorization.domainobjects.User user = getUserByID(userId);
-			group.add(user);
-		}
+			Collection<User> coordinators = collectionProtocol.getCoordinatorCollection();
+			HashSet<gov.nih.nci.security.authorization.domainobjects.User> group = new HashSet<gov.nih.nci.security.authorization.domainobjects.User>();
+			String userId = "";
 
-		String protectionGroupName = new String(CSMGroupLocator.getInstance().getPGName(collectionProtocol.getId(), CollectionProtocol.class));
-		SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
-		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(COORDINATOR);
-		userGroupRoleProtectionGroupBean.setGroupName(CSMGroupLocator.getInstance().
-				getCoordinatorGroupName(collectionProtocol.getId(), CollectionProtocol.class));
-		userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
-		userGroupRoleProtectionGroupBean.setGroup(group);
-		authorizationData.add(userGroupRoleProtectionGroupBean);
+			dao = AppUtility.openDAOSession(null);
+			for (Iterator<User> it = coordinators.iterator(); it.hasNext();)
+			{
+
+				User aUser = it.next();
+				User exactUser = (User)dao.retrieveById(User.class.getName(), aUser.getId());
+				userId = String.valueOf(exactUser.getCsmUserId());
+
+				gov.nih.nci.security.authorization.domainobjects.User user = getUserByID(userId);
+				group.add(user);
+			}
+
+
+			String protectionGroupName = new String(CSMGroupLocator.getInstance().getPGName(collectionProtocol.getId(), CollectionProtocol.class));
+			SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
+			userGroupRoleProtectionGroupBean.setUser(userId);
+			userGroupRoleProtectionGroupBean.setRoleName(COORDINATOR);
+			userGroupRoleProtectionGroupBean.setGroupName(CSMGroupLocator.getInstance().
+					getCoordinatorGroupName(collectionProtocol.getId(), CollectionProtocol.class));
+			userGroupRoleProtectionGroupBean.setProtGrpName(protectionGroupName);
+			userGroupRoleProtectionGroupBean.setGroup(group);
+			authorizationData.add(userGroupRoleProtectionGroupBean);
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
 	}
 
 	public void inserPIPrivileges(CollectionProtocol collectionProtocol,
