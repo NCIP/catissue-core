@@ -23,18 +23,20 @@ import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
-import edu.wustl.catissuecore.util.global.AppUtility;;
 /**
  * @author sandeep_chinta
  *
@@ -166,7 +168,9 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	private void associateRecords(Long entityMapId, Long staticEntityRecordId,
 			Long dynamicEntityRecordId) throws BizLogicException
 	{
-		Object object = new CatissueDefaultBizLogic().retrieve(EntityMap.class.getName(), entityMapId);
+		DefaultBizLogic bizLogic=new CatissueDefaultBizLogic();
+		bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
+		Object object = bizLogic.retrieve(EntityMap.class.getName(), entityMapId);
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		if (object != null)
 		{
