@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -513,8 +514,28 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			{
 				order.setComment(orderOld.getComment() + " " + order.getComment());
 			}
+			//Bug #12262
+			Collection updatedOrderItemSet = new HashSet();
+			Iterator itr = newOrderItemSet.iterator();
+			
+			while(itr.hasNext())
+			{
+				OrderItem newOrderItem = (OrderItem) itr.next();
+				if(newOrderItem instanceof SpecimenArrayOrderItem)
+				{
+					updatedOrderItemSet.add(newOrderItem);
+				}
+				else
+				{
+					if(((SpecimenOrderItem)newOrderItem).getNewSpecimenArrayOrderItem() == null)
+					{
+						updatedOrderItemSet.add(newOrderItem);
+					}
+				}
+			}
+			
 			//For order status.
-			order = updateOrderStatus(order, newOrderItemSet);
+			order = updateOrderStatus(order, updatedOrderItemSet);
 			return order;
 		}
 		catch(DAOException daoExp)
@@ -622,15 +643,19 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		if (oldOrderItem.getOrderDetails() != null)
 		{
 			//			For order status
-			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
+			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW)
+					&& ((SpecimenOrderItem)oldOrderItem).getNewSpecimenArrayOrderItem() == null)
 			{
 				orderStatusNew++;
 			}//kalpana bug #5839 If the specimens inside the specimen Array and if it's status is ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it complete.
-			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
+			else if ((oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
 					||oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)
-					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) )
 			{
-				orderStatusCompleted++;
+				if((oldOrderItem instanceof SpecimenArrayOrderItem) || ((SpecimenOrderItem)oldOrderItem).getNewSpecimenArrayOrderItem() == null)
+				{
+					orderStatusCompleted++;
+				}
 			}
 			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION)
 					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW)
@@ -642,7 +667,10 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)
 					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
 			{
-				orderStatusRejected++;
+				if((oldOrderItem instanceof SpecimenArrayOrderItem) || ((SpecimenOrderItem)oldOrderItem).getNewSpecimenArrayOrderItem() == null)
+				{
+					orderStatusRejected++;
+				}
 			}
 		}
 	}
