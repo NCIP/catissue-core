@@ -605,7 +605,12 @@ public class SpecimenForm extends AbstractActionForm
 					+ "," + this.positionDimensionTwo + ")";
 			this.setStContSelection(2);
 		}
-
+		//Bug 12374 and 12662
+		//if the condition is true means specimen is virtually located.
+		else if(specimen.getSpecimenPosition()==null && specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
+		{
+			this.setStContSelection(Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE);
+		}
 		else
 		{
 			// bug #11177

@@ -1108,11 +1108,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					specimenOld.getId());
 			//Calculate Quantity
 			calculateAvailableQunatity(specimen, persistentSpecimen);
-            //update storage type of specimen
-			//in case of virtual storage location, Storage Type of a specimen was not updated.
-			//bug 12662
-			persistentSpecimen.getSpecimenRequirement().setStorageType(specimen.getSpecimenRequirement().getStorageType());
-			//To assign storage locations to anticipated specimen
+           	//To assign storage locations to anticipated specimen
 			if (specimenOld.getCollectionStatus().equals("Pending")
 					&& specimen.getCollectionStatus().equals("Collected")
 					&& specimen.getSpecimenPosition() != null)

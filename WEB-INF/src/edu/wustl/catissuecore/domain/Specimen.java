@@ -713,7 +713,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						{
 							//	this.storageContainer = null;
 							this.specimenPosition = null;
-							this.getSpecimenRequirement().setStorageType(Constants.STORAGE_TYPE_POSITION_VIRTUAL);//bug 12662
 						}
 						if (form.getStContSelection() == 2)
 						{
@@ -761,11 +760,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 							if (form.getStContSelection() == 1)
 							{
 								this.specimenPosition = null;
-								this.getSpecimenRequirement().setStorageType(Constants.STORAGE_TYPE_POSITION_VIRTUAL);//bug 12662
 							}
 							if (form.getStContSelection() == 2)
 							{
 								long stContainerId = Long.parseLong(form.getStorageContainer());
+								
 								/*	if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
 								{
 									this.specimenPosition = new SpecimenPosition();
