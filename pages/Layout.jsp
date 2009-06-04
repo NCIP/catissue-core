@@ -31,6 +31,8 @@
 		var advanceTime;
 		var lastRefreshTime;//timestamp in millisecond of last accessed through child page
 		var pageLoadTime;
+		var warnTimeout;
+		var defTimeout;
 		<%
 			int timeOut = -1;
 			int advanceTime = Integer.parseInt(XMLPropertyHandler.getValue(Constants.SESSION_EXPIRY_WARNING_ADVANCE_TIME));
@@ -68,7 +70,7 @@
 			}
 			else
 			{
-				var defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
+				defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
 				var choice = confirm("<%= advanceTimeoutMesg %>");
 			
 				if(choice == 0) //cancel pressed, extend session
@@ -86,7 +88,7 @@
 			if(ptimeOut > 0)
 			{
 				var time = (ptimeOut - (advanceTime*60)) * 1000;
-				setTimeout('warnBeforeSessionExpiry()', time); //if session timeout, then redirect to Home page
+				warnTimeout = setTimeout('warnBeforeSessionExpiry()', time); //if session timeout, then redirect to Home page
 			}
 		}
 		
@@ -109,12 +111,24 @@
 
 		function detectApplicationUsageActivity()
 		{
-			if (lastRefreshTime <= pageLoadTime)
-			{
+			var currentTime = new Date().getTime();
+			var activationTime = currentTime - pageLoadTime;
+			var advTime = (advanceTime * 1) + 1;
+			
+			if(((timeOut*1000) - activationTime) <= (advTime*60*1000)) {
 				lastRefreshTime = new Date().getTime();
-				clearTimeout(advanceTime*60*1000);
 				sendBlankRequest();
+				clearTimeout(warnTimeout);
+				clearTimeout(defTimeout);
+				setAdvanceSessionTimeout(timeOut);
 			}
+			
+//			if (lastRefreshTime <= pageLoadTime)
+//			{
+//				lastRefreshTime = new Date().getTime();
+//				clearTimeout(advanceTime*60*1000);
+//				sendBlankRequest();
+//			}
 		}
 		
 		function getUmlModelLink()
@@ -144,7 +158,7 @@
 	type="image/vnd.microsoft.icon" />
 
 </head>
-<body onclick="detectApplicationUsageActivity()">
+<body onclick="detectApplicationUsageActivity()" onkeydown="detectApplicationUsageActivity()">
 <table width="100%" height="99%" border="0" cellspacing="0" cellpadding="0">
 	<tr height="10%">
 		<td>
