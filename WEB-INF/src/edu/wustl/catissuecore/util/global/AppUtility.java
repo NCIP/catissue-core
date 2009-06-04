@@ -948,12 +948,12 @@ public class AppUtility
 		if (specimenClass == null || !Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.class.errMsg");
-			throw new DAOException(errorKey, new Exception(), "AppUtility.java");
+			throw new DAOException(errorKey, null, "");
 		}
 		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimenType))
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.type.errMsg");
-			throw new DAOException(errorKey, new Exception(), "AppUtility.java");
+			throw new DAOException(errorKey, null, "");
 		}
 		/* Patch ends here */
 		return true;

@@ -167,7 +167,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 								.getPositionDimensionTwo().intValue());
 			}
 		
-			if (Status.ACTIVITY_STATUS_DISABLED.equals(specimenArrayCurrentObject.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimenArrayCurrentObject.getActivityStatus()))
 			{
 				Map disabledConts = getContForDisabledSpecimenArrayFromCache();
 
@@ -283,7 +283,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 
-			if (Status.ACTIVITY_STATUS_DISABLED.equals(specimenArray.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimenArray.getActivityStatus()))
 			{
 				Map disabledCont = null;
 			

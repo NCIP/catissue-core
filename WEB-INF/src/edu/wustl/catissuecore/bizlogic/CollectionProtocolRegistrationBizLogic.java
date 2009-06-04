@@ -1411,7 +1411,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		// End
 		if (operation.equals(Constants.ADD))
 		{
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(registration.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}

@@ -713,7 +713,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			 * container.getParent().getId()); container.setParent(pc); }
 			 */
 			if (container.getActivityStatus().equals(
-					Status.ACTIVITY_STATUS_DISABLED)) {
+					Status.ACTIVITY_STATUS_DISABLED.toString())) {
 				Long containerIDArr[] = { container.getId() };
 				if (isContainerAvailableForDisabled(dao, containerIDArr)) {
 					List disabledConts = new ArrayList();
@@ -937,7 +937,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 
 			if (currentContainer.getActivityStatus().equals(
-					Status.ACTIVITY_STATUS_DISABLED)) {
+					Status.ACTIVITY_STATUS_DISABLED.toString())) {
 				List disabledConts = StorageContainerUtil
 						.getListOfDisabledContainersFromCache();
 				List disabledContsAfterReverse = new ArrayList();
@@ -1874,7 +1874,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				// Bug-2630: Added by jitendra
 				if ((String) rowList.get(8) != null
 						&& !((String) rowList.get(8))
-								.equals(Status.ACTIVITY_STATUS_DISABLED)) {
+								.equals(Status.ACTIVITY_STATUS_DISABLED.toString())) {
 					// Mandar : code for tooltip for the container
 					String toolTip = getToolTipData((String) rowList.get(0));
 
@@ -3431,7 +3431,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			}
 			if (operation.equals(Constants.ADD)) {
-				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(container
+				if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(container
 						.getActivityStatus())) {
 
 					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
@@ -4474,7 +4474,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		// check for closed Site
 		if (site != null) {
-			if (Status.ACTIVITY_STATUS_CLOSED.equals(site
+			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(site
 					.getActivityStatus())) {
 				
 				throw getBizLogicException(null, "error.object.closed", errMessage);

@@ -88,7 +88,7 @@ public class AddSpecimenAction extends SecureAction
 		{
 			Specimen objSpecimen = (Specimen) list.get(0);
 			
-			if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				/**
 	 			* Name : Falguni Sachde

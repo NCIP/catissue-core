@@ -487,11 +487,11 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				{
 					activityStatus = getActivityStatus(dao, className, identifier);
 				}
-				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED))
+				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 				{
 					throw getBizLogicException(null, "error.object.closed", errorName);
 				}
-				if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED))
+				if (activityStatus.equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 				{
 					throw getBizLogicException(null, "error.object.disabled", errorName);
 				}

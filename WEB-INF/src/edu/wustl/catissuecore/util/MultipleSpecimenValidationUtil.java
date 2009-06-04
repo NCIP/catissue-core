@@ -370,7 +370,7 @@ public final class MultipleSpecimenValidationUtil
 				throw AppUtility.getApplicationException( null,"specimen.available.errMsg",  "");
 			}
 
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(specimen.getActivityStatus()))
 			{
 				throw AppUtility.getApplicationException( null,"activityStatus.active.errMsg", "");
 			}

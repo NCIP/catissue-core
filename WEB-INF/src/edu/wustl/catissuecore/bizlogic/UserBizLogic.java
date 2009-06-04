@@ -803,13 +803,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		
 		//If the user is rejected, its record cannot be updated.
-		if (Status.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
+		if (Status.ACTIVITY_STATUS_REJECT.toString().equals(oldUser.getActivityStatus()))
 		{
 			
 			throw getBizLogicException(null, "errors.editRejectedUser", "");
 		}
-		else if (Status.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
-				|| Status.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
+		else if (Status.ACTIVITY_STATUS_NEW.toString().equals(oldUser.getActivityStatus())
+				|| Status.ACTIVITY_STATUS_PENDING.toString().equals(oldUser.getActivityStatus()))
 		{
 			//If the user is not approved yet, its record cannot be updated.
 			throw getBizLogicException(null, "errors.editNewPendingUser", "");
@@ -1305,7 +1305,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 				if (operation.equals(Constants.ADD))
 				{
-					if (!Status.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
+					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
 					{
 						throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 					}

@@ -133,7 +133,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			}
 
 			logger.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
-			if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			if(distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				logger.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
 				Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
@@ -383,7 +383,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		
 		if(operation.equals(Constants.ADD))
 		{
-			if(!Status.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			if(!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(protocol.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}

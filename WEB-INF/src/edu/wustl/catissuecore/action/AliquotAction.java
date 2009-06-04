@@ -699,7 +699,7 @@ public class AliquotAction extends SecureAction
 					return Constants.PAGE_OF_SPECIMEN;
 				}
 			}
-			else if(specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			else if(specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				/**
 	 			* Name : Falguni Sachde

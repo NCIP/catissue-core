@@ -626,7 +626,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			// Disable the related specimens to this specimen group
 			logger.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
-			if (specimenCollectionGroup.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			if (specimenCollectionGroup.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				logger.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
 				Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
@@ -1384,7 +1384,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (operation.equals(Constants.ADD))
 			{
-				if (!Status.ACTIVITY_STATUS_ACTIVE.equals(group.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(group.getActivityStatus()))
 				{
 					throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 				}
@@ -2048,7 +2048,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			Collections.sort(childrenSpecimen, comparator);
 			for (Specimen childSpecimen : childrenSpecimen)
 			{
-				if (!Status.ACTIVITY_STATUS_DISABLED.equals(childSpecimen.getActivityStatus()))
+				if (!Status.ACTIVITY_STATUS_DISABLED.toString().equals(childSpecimen.getActivityStatus()))
 					createSpecimenXML(xmlString, childSpecimen, specimenChildrenMap);
 			}
 

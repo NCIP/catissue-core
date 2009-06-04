@@ -1181,7 +1181,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (specimen.getConsentWithdrawalOption().equalsIgnoreCase(
 				Constants.WITHDRAW_RESPONSE_NOACTION))
 		{
-			if (specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			if (specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				boolean disposalEventPresent = false;
 				Collection<SpecimenEventParameters> eventCollection = persistentSpecimen
@@ -1615,7 +1615,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					{
 						storageContainerObj = setStorageContainerId(dao, specimen);
 					}
-					if (!Status.ACTIVITY_STATUS_ACTIVE.equals(storageContainerObj
+					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(storageContainerObj
 							.getActivityStatus()))
 					{
 						throw getBizLogicException(null, "st.colosed",
@@ -2262,7 +2262,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw getBizLogicException(null, "specimen.available.errMsg", "");
 			}
 
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(specimen.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
@@ -4078,7 +4078,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException,
 			BizLogicException
 	{
-		if (!Status.ACTIVITY_STATUS_CLOSED.equals(specimen.getActivityStatus()))
+		if (!Status.ACTIVITY_STATUS_CLOSED.toString().equals(specimen.getActivityStatus()))
 		{
 			disposeSpecimen(sessionDataBean, specimen, dao, disposalReason);
 		}

@@ -244,7 +244,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
 				{
 					DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
-					if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+					if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 					{
 						disableSubSpecimens(dao, specimen.getId().toString(),specimenIds);
 
@@ -349,7 +349,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					activityStatus = getActivityStatus(dao, className, identifier);
 				}
 				
-				if (Status.ACTIVITY_STATUS_CLOSED.equals(activityStatus) &&
+				if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(activityStatus) &&
 						(!Constants.DISPOSAL_EVENT_PARAMETERS.equals(objectType)))
 				{
 					throw getBizLogicException(null, "error.object.closed", objectType);
@@ -505,7 +505,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				specimen.setIsAvailable(new Boolean(false));
 				specimen.setActivityStatus(((DisposalEventParameters)specimenEventParameters).getActivityStatus());
 				//Update Specimen
-				if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+				if (disposalEventParameters.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 				{
 					disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
 				}
@@ -931,8 +931,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					return;
 				}
 			
-				ErrorKey errorKey = ErrorKey.getErrorKey("errors.specimen.contains.subspecimen");
-				throw new BizLogicException(errorKey,new Exception() ,"SpecimenEventParametersBizLogic.java :");
+				ErrorKey errorKey = ErrorKey.getErrorKey("errors.specimen.contains.subspecimen");//errors.specimen.contains.subspecimen
+				throw new BizLogicException(errorKey,null ,"");
 			}
 			else
 			{

@@ -360,8 +360,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			cleanDAO = openDAOSession(sessionDataBean);
 			collectionProtocolOld = getOldCollectionProtocol(cleanDAO, collectionProtocol.getId());
 
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(collectionProtocol.getActivityStatus())
-					& !Status.ACTIVITY_STATUS_CLOSED.equals(collectionProtocol.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(collectionProtocol.getActivityStatus())
+					& !Status.ACTIVITY_STATUS_CLOSED.toString().equals(collectionProtocol.getActivityStatus()))
 			{
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
@@ -1180,7 +1180,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 
 			validateCPTitle(protocol);
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(protocol.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(protocol.getActivityStatus()))
 			{
 
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");

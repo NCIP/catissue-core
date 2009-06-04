@@ -115,7 +115,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 
 			setCordinator(dao, site);
 			// Mandar : 21Aug08 ----start
-			if (Status.ACTIVITY_STATUS_CLOSED.equals(site.getActivityStatus())) {
+			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(site.getActivityStatus())) {
 				if (isSiteOccupied(dao, site)) {
 					throw getBizLogicException(null, "cnnot.close.site.with.spec",
 					"");
@@ -368,7 +368,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic {
 		}
 
 		if (operation.equals(Constants.ADD)) {
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(site
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(site
 					.getActivityStatus())) {
 				
 				throw getBizLogicException(null,"activityStatus.active.errMsg","");

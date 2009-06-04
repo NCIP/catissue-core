@@ -158,7 +158,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		while (itr.hasNext())
 		{
 			Specimen specimen = (Specimen) itr.next();
-			if(!Status.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+			if(!Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimen.getActivityStatus()))
 			{
 				specimenList.add(specimen);
 			}
@@ -477,7 +477,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (itr.hasNext())
 			{
 				Specimen specimen = (Specimen) itr.next();
-				if(!Status.ACTIVITY_STATUS_DISABLED.equals(specimen.getActivityStatus()))
+				if(!Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimen.getActivityStatus()))
 				{
 					if (specimen.getId().equals(specimenId)
 							|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId().equals(specimenId)))

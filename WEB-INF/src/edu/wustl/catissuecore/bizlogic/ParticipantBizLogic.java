@@ -241,7 +241,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						protocolParticipantId = Constants.DOUBLE_QUOTES;
 					}
 
-					if (collectionProtocolRegistration.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+					if (collectionProtocolRegistration.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 					{
 						participantRegCacheManager.deRegisterParticipant(cpId, participantId, protocolParticipantId);
 					}
@@ -440,7 +440,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			//Disable the associate collection protocol registration
 			logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
-			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED))
+			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 				Long participantIDArr[] = {participant.getId()};
@@ -869,7 +869,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		if (operation.equals(Constants.ADD))
 		{
-			if (!Status.ACTIVITY_STATUS_ACTIVE.equals(participant.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(participant.getActivityStatus()))
 			{
 				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
