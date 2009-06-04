@@ -2902,7 +2902,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			dao.commit();
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
-		catch (Exception exception)
+		catch (ApplicationException exception)
 		{
 			logger.debug(exception.getMessage(), exception);
 			try
@@ -2914,19 +2914,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				logger.debug(e.getMessage(), e);
 				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
-			String errorMsg = "Failed to save. ";
+			
+			
+			
+			/*String errorMsg = "Failed to save. ";
 			if (specimenCtr != 0)
 			{
 				errorMsg = "specimen number " + specimenCtr + " cannot be saved. ";
 				if (childSpecimenCtr != 0)
 				{
-					/*errorMsg = "Cannot insert child specimen " + childSpecimenCtr
-							+ ", of specimen " + specimenCtr + ". ";*/
+					errorMsg = "Cannot insert child specimen " + childSpecimenCtr
+							+ ", of specimen " + specimenCtr + ". ";
 					throw getBizLogicException(exception, "child.nt.saved", childSpecimenCtr+":"+specimenCtr);
 				}
-				throw getBizLogicException(exception, "spec.nt.saved", ""+specimenCtr);
-			}
-			throw getBizLogicException(exception, "failed.saved", "");
+				throw getBizLogicException(exception, exception., ""+specimenCtr);
+			}*/
+			// bug#12703
+			throw getBizLogicException(exception, exception.getErrorKeyName(),exception.getMsgValues() );
 		}
 		finally
 		{
