@@ -27,6 +27,7 @@ import org.omg.uml.UmlPackage;
 import org.openide.util.Lookup;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -47,6 +48,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -150,7 +152,8 @@ public class ImportXmi
 				for(String conditionObjName :conditionObjectNames)
 				{
 					logger.info("conditionObjName = " + conditionObjName);
-					Long cpId =(Long) getObjectIdentifier(conditionObjName,CollectionProtocol.class.getName(),Constants.TITLE);
+					Long cpId =(Long) getObjectIdentifier(conditionObjName,CollectionProtocol.class.getName(),Constants.TITLE,
+								CommonServiceLocator.getInstance().getAppName());
 					if(cpId == null)
 					{
 						throw new DynamicExtensionsSystemException("Specified Collection Protocol does not exist.");
@@ -354,7 +357,6 @@ public class ImportXmi
 	private static MofPackage getUmlPackage(ModelPackage umlMM)
 	{
 		// iterate through all instances of package
-		logger.info("Here");
 		for (Iterator it = umlMM.getMofPackage().refAllOfClass().iterator(); it.hasNext();)
 		{
 			MofPackage pkg = (MofPackage) it.next();
@@ -380,7 +382,7 @@ public class ImportXmi
 	 */
 	private static void associateHookEntity(List<ContainerInterface> mainContainerList,List<Long> conditionObjectIds,EntityInterface staticEntity,boolean isEditedXmi) throws DAOException, DynamicExtensionsSystemException, BizLogicException, DynamicExtensionsApplicationException
 	{		
-		Object typeId = getObjectIdentifier("edu.wustl.catissuecore.domain.CollectionProtocol",AbstractMetadata.class.getName(),Constants.NAME);
+		Object typeId = getObjectIdentifier("edu.wustl.catissuecore.domain.CollectionProtocol",AbstractMetadata.class.getName(),Constants.NAME,DynamicExtensionDAO.getInstance().getAppName());
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();		
 		//Set<String> keySet = entityNameVsContainers.keySet();
 //		for(String key : keySet)
@@ -554,9 +556,10 @@ public class ImportXmi
 	 * @return
 	 * @throws BizLogicException 
 	 */
-	private static Object getObjectIdentifier(String whereColumnValue,String selectObjName,String whereColumnName) throws BizLogicException
+	private static Object getObjectIdentifier(String whereColumnValue,String selectObjName,String whereColumnName,String appName) throws BizLogicException
 	{
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		defaultBizLogic.setAppName(appName);
 		String[] selectColName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColName = {whereColumnName};
 		Object[] whereColValue = {whereColumnValue};
