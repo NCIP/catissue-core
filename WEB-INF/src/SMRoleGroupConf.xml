@@ -23,10 +23,10 @@
 		<GroupType>SUPERVISOR_GROUP_ID</GroupType>
 		<GroupName>SUPERVISOR_GROUP</GroupName>
 	</Role>
-	<!-- Role>
+	<Role>
 		<RoleType>SUPER_ADMINISTRATOR_ROLE</RoleType>
 		<RoleName>SUPERADMINISTRATOR</RoleName>
 		<GroupType>SUPER_ADMINISTRATOR_GROUP_ID</GroupType>
 		<GroupName>SUPER_ADMINISTRATOR_GROUP</GroupName>
-	</Role -->
+	</Role>
 </Roles>
