@@ -72,6 +72,7 @@ public class UpdateMetadata
 					List<String> insertPathSQL = pathObject.getInsertPathStatementsSpecimen(connection);
 					UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
 					//bug 11336 end
+					updateContainerMetadata();
 				}
 				else
 				{
@@ -120,7 +121,41 @@ public class UpdateMetadata
 			}
 		}
 	}
-	
+	/**
+	 * This method updates columnName full to cont_full for Container entity.
+	 * @throws SQLException exc
+	 * @throws IOException excs
+	 */
+	private static void updateContainerMetadata() throws SQLException, IOException {
+		
+		List<String> dbUpdateSQL = new ArrayList<String>();
+		dbUpdateSQL.add("update dyextn_database_properties set NAME = 'CONT_FULL' where IDENTIFIER in " +
+				"(Select IDENTIFIER from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID in " +
+				"(Select IDENTIFIER from dyextn_primitive_attribute where IDENTIFIER in " +
+				"(Select IDENTIFIER from dyextn_abstract_metadata  where IDENTIFIER in " +
+				"(Select IDENTIFIER from dyextn_attribute where ENTIY_ID in " +
+				"(Select IDENTIFIER from dyextn_abstract_metadata where name "+
+				DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Container')) " +
+						"and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'full')))");
+		UpdateMetadataUtil.executeSQLs(dbUpdateSQL, connection.createStatement(), false);		
+		// Deepti
+		//Commenting following part as the label should be displayed as Full and not cont_full.
+		/*ResultSet rs;
+
+		stmt = connection.createStatement();
+		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata where IDENTIFIER in (" +
+				"Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata " +
+				"where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Container')) " +
+						"and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'full'");
+		if(rs.next())
+		{
+			Long identifier = rs.getLong(1);
+			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME = 'cont_full' where IDENTIFIER ="+identifier);
+		}
+		stmt.close();
+		 */		
+		}
+
 	private static void cleanUpMetadata() throws SQLException, IOException
 	{
 		CleanUpMetadata cleanUpMetadata = new CleanUpMetadata(connection);
@@ -206,7 +241,7 @@ public class UpdateMetadata
 		/**  update statements  start **/
 		List<String> updateSQL = getUpdateSQL();
 		UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
-		
+		updateContainerMetadata();
 		AddPath pathObject = new AddPath();
 		List<String> insertPathSQL = pathObject.getInsertPathStatements(stmt, connection,false);
 		UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
@@ -391,6 +426,7 @@ public class UpdateMetadata
 			Long identifier = rs.getLong(1);
 			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME = 'specimenType' where IDENTIFIER ="+identifier);
 		}
+		stmt.close();
 		
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER from dyextn_abstract_metadata where name "+DB_SPECIFIC_COMPARE_OPERATOR+"'edu.wustl.catissuecore.domain.Specimen')) and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'available'");
