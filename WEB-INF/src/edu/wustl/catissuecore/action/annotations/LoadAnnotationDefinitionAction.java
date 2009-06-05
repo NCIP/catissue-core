@@ -448,11 +448,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			if (dynamicEntity.getId() != null)
 			{
 				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery(staticEntity
-						.getId(), dynamicEntity.getId(), staticEntityId, associationId);
+						.getId(), dynamicEntity, staticEntityId, associationId);
 			}
 		}
 		Collection<AssociationInterface> associationCollection = dynamicEntity
-				.getAssociationCollection();
+				.getAllAssociations();
 		for (AssociationInterface association : associationCollection)
 		{
 			System.out.println("PERSISTING PATH");

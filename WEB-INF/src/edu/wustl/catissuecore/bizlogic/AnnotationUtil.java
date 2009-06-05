@@ -14,8 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.naming.InitialContext;
@@ -45,7 +47,6 @@ import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -314,12 +315,35 @@ public class AnnotationUtil
 		}
 
 		Long start = new Long(System.currentTimeMillis());
-		boolean ispathAdded = isPathAdded(staticEntity.getId(),dynamicEntity.getId());
+		JDBCDAO jdbcDAO = null;
+		boolean ispathAdded = false;
+		try
+		{
+			jdbcDAO = openSession();
+			ispathAdded = isPathAdded(staticEntity.getId(),dynamicEntity.getId(), jdbcDAO);
+		}
+		catch (DAOException daoExp)
+		{
+			logger.debug(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				closeSession(jdbcDAO);
+			}
+			catch (DAOException e)
+			{
+				logger.debug(e.getMessage(), e);
+				e.printStackTrace();
+			}
+		}
 		if(!ispathAdded)
 		{
 			if(dynamicEntity.getId() != null)
 			{
-				addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(), staticEntityId, associationId);
+				addPathsForQuery(staticEntity.getId(), dynamicEntity, staticEntityId, associationId);
 			}
 		}
 		Collection<AssociationInterface> associationCollection = dynamicEntity
@@ -340,14 +364,11 @@ public class AnnotationUtil
 	 * @param dynamicEntityId
 	 * @return
 	 */
-	private static boolean isPathAdded(Long staticEntityId, Long dynamicEntityId/*, Long deAssociationId*/)
+	private static boolean isPathAdded(Long staticEntityId, Long dynamicEntityId, JDBCDAO jdbcDAO)
 	{
 		boolean ispathAdded = false;
-		JDBCDAO jdbcDAO = null;
 		try
 		{
-	
-			jdbcDAO = openSession();
 			PreparedStatement preparedStatement = null;
 			ResultSet resultSet = null;
 		
@@ -379,20 +400,7 @@ public class AnnotationUtil
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		finally
-		{
-
-			try
-			{
-				closeSession(jdbcDAO);
-			}
-			catch (DAOException e)
-			{
-				logger.debug(e.getMessage(), e);
-				e.printStackTrace();
-			}
-
-		}
+		
 		return ispathAdded;
 	}
 
@@ -466,7 +474,7 @@ public class AnnotationUtil
 				processedPathList.add(pathObject);
 			}
 
-			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity.getId(),staticEntityId, associationId);
+			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity,staticEntityId, associationId);
 		}
 
 		Collection<AssociationInterface> associationCollection = dynamicEntity
@@ -633,16 +641,16 @@ public class AnnotationUtil
 	 * @param dynamicEntityId
 	 * @param deAssociationID
 	 */
-	public static void addPathsForQuery(Long staticEntityId, Long dynamicEntityId,
+	public static void addPathsForQuery(Long staticEntityId, EntityInterface dynamicEntity,
 			Long hookEntityId,Long deAssociationID)
 	{
 		Long maxPathId = getMaxId("path_id", "path");
 		maxPathId += 1;
-		insertNewPaths(maxPathId, staticEntityId, dynamicEntityId, deAssociationID);
+		insertNewPaths(maxPathId, staticEntityId, dynamicEntity, deAssociationID);
 		if (hookEntityId != null && staticEntityId != hookEntityId)
 		{
 			maxPathId += 1;
-			addPathFromStaticEntity(maxPathId, hookEntityId, staticEntityId, dynamicEntityId,
+			addPathFromStaticEntity(maxPathId, hookEntityId, staticEntityId, dynamicEntity.getId(),
 					deAssociationID);
 		}
 	}
@@ -726,7 +734,7 @@ public class AnnotationUtil
 	 * @param dynamicEntityId
 	 * @param deAssociationID
 	 */
-	private static void insertNewPaths(Long maxPathId, Long staticEntityId, Long dynamicEntityId,
+	private static void insertNewPaths(Long maxPathId, Long staticEntityId,  EntityInterface dynamicEntity,
 			Long deAssociationID)
 	{
 		// StringBuffer query = new StringBuffer();
@@ -750,7 +758,7 @@ public class AnnotationUtil
 					+ ","
 					+ intraModelAssociationId
 					+ ","
-					+ dynamicEntityId + ")";
+					+ dynamicEntity.getId() + ")";
 
 			List<String> list = new ArrayList<String>();
 			list.add(associationQuery);
@@ -758,7 +766,9 @@ public class AnnotationUtil
 			list.add(directPathQuery);
 
 			executeQuery(jdbcDAO, list);
-
+			
+			maxPathId += 1;
+			addInheritancePaths(maxPathId, dynamicEntity, staticEntityId, jdbcDAO);
 			//addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
 					//conn);
 			jdbcDAO.commit();
@@ -783,6 +793,131 @@ public class AnnotationUtil
 	}
 	
 	
+	/**
+	 * This method replicates paths of parent entity for derived entity
+	 * @param maxPathId
+	 * @param connection 
+	 * @param dynamicEntityId
+	 * @param conn
+	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException 
+	 */
+	private static void addInheritancePaths(Long maxPathId, EntityInterface entity, Long staticEntityId, JDBCDAO jdbcDAO)
+			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	{
+		ResultSet resultSet = null; // NOPMD - DD anomaly
+
+		try
+		{
+			//This map is added because the following algo creates multiple paths between same entities
+			//The map will contains only single unique path between entities
+			Map<String, Object> mapQuery = new HashMap<String, Object>();
+			List<String> query = new ArrayList<String>();
+			String sql = "";
+			String intermediatePath = "";
+			Long last_entity_id = null;
+			Long first_entity_id = null;
+			boolean ispathAdded = false;
+
+			while (entity.getParentEntity() != null)
+			{
+				//replicate outgoing paths of parent entity (outgoing associations)
+				Collection<AssociationInterface> allAssociations = entity.getParentEntity()
+						.getAllAssociations();
+				for (AssociationInterface association : allAssociations)
+				{
+					intermediatePath = "";
+					sql = "select INTERMEDIATE_PATH,LAST_ENTITY_ID from path where FIRST_ENTITY_ID="
+							+ association.getEntity().getId();
+					resultSet = jdbcDAO.getQueryResultSet(sql);
+					List<ArrayList<String>> idlist = new ArrayList<ArrayList<String>>();
+					while (resultSet.next())
+					{
+						ArrayList<String> temp = new ArrayList<String>();
+						temp.add(0, resultSet.getString(1));
+						temp.add(1, Long.toString(resultSet.getLong(2)));
+						idlist.add(temp);
+					}
+					jdbcDAO.closeStatement(resultSet);
+					for (int cnt = 0; cnt < idlist.size(); cnt++)
+					{
+						ArrayList<String> temp = idlist.get(cnt);
+						intermediatePath = temp.get(0);
+						last_entity_id = Long.valueOf(temp.get(1));
+						ispathAdded = isPathAdded(entity.getId(), last_entity_id, jdbcDAO);
+						if (!ispathAdded)
+						{
+							sql = "INSERT INTO path values(" + maxPathId + "," + entity.getId()
+									+ ",'" + intermediatePath + "'," + last_entity_id + ")";
+							String uniquepathStr = entity.getId() + "_" + intermediatePath
+									+ "_" + last_entity_id;
+							if (!mapQuery.containsKey(uniquepathStr))
+							{
+								mapQuery.put(uniquepathStr, null);
+								query.add(sql);
+								maxPathId++;
+							}
+						}
+					}
+
+				}
+
+				// replicate incoming paths of parent entity (incoming associations)
+				intermediatePath = "";
+				sql = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+						+ entity.getParentEntity().getId();
+				resultSet = jdbcDAO.getQueryResultSet(sql);
+				List<ArrayList<String>> idlist = new ArrayList<ArrayList<String>>();
+				while (resultSet.next())
+				{
+					ArrayList<String> temp = new ArrayList<String>();
+					temp.add(0, Long.toString(resultSet.getLong(1)));
+					temp.add(1, resultSet.getString(2));
+				}
+				jdbcDAO.closeStatement(resultSet);
+				for (int cnt = 0; cnt < idlist.size(); cnt++)
+				{
+					ArrayList<String> temp = idlist.get(cnt);
+					first_entity_id = Long.valueOf(temp.get(0));
+					intermediatePath = temp.get(1);
+					if (first_entity_id.compareTo(staticEntityId) != 0)
+					{
+
+						ispathAdded = isPathAdded(first_entity_id, entity.getId(), jdbcDAO);
+						if (!ispathAdded)
+						{
+							sql = "INSERT INTO path values(" + maxPathId + ","
+									+ first_entity_id + ",'" + intermediatePath + "',"
+									+ entity.getId() + ")";
+							String uniquepathStr = first_entity_id + "_" + intermediatePath
+									+ "_" + entity.getId();
+
+							if (!mapQuery.containsKey(uniquepathStr))
+							{
+								mapQuery.put(uniquepathStr, null);
+								query.add(sql);
+								maxPathId++;
+							}
+						}
+					}
+				}
+				
+				entity = entity.getParentEntity();
+			}
+			
+			executeQuery(jdbcDAO, query);
+
+		}//while
+		catch (SQLException e)
+		{
+			throw new DynamicExtensionsSystemException("SQL Exception while adding paths for derived entity.", e);
+		}
+		catch (DAOException e)
+		{
+			throw new DynamicExtensionsSystemException("SQL Exception while adding paths for derived entity.", e);
+		}
+	}
+
 	private static JDBCDAO openSession() throws DAOException
 	{
 		String applicationName = CommonServiceLocator.getInstance().getAppName();
