@@ -1662,6 +1662,7 @@ public class Constants
 	};
 	
 	public static final String PAGE_OF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
+	public static final String PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU = "pageOfMultipleSpWithoutMenu";	
 	public static final String PAGE_OF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
 	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
 	public static final String INIT_MULTIPLE_SPECIMEN_ACTION = "InitMultipleSpecimen.do";
@@ -2515,6 +2516,7 @@ public class Constants
 	public static final String CART_ATTRIBUTE_LIST = "cartAttributeList";
 	public static final String ADD_SPECIMEN_TO_CART="addSpecimenToCart";
     public static final String ADD_MULTIPLE_SPECIMEN_TO_CART="addMltipleSpecimenToCart";
+    public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_WITHOUT_MENU="addMltipleSpecimenToCartWithoutMenu";
     public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT="addMltipleSpecimenToCartAndPrint";
     public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close"; 				

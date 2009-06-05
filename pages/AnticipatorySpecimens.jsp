@@ -243,6 +243,12 @@ function updateField(type,i,isDis,valueToSet)
 	function pageSubmit() {
 		checkPrintStatusOfAllSpecimens();
 		var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+		//bug 12656 
+		<% if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
+		{%>
+              url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
+		<%}%>
+			
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
 			<%}%>

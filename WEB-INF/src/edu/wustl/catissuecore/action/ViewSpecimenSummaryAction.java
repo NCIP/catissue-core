@@ -95,6 +95,9 @@ public class ViewSpecimenSummaryAction extends Action {
 			{
 				summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
 			}
+			//bug 12656 
+			if(request.getParameter("pageOf") != null)
+				request.setAttribute("pageOf",request.getParameter("pageOf"));
 				
 			if (eventId == null) {
 				eventId = (String) request

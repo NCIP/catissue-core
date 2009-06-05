@@ -115,7 +115,13 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				request.setAttribute("printMultiple","1");
 				if(request.getParameter("pageOf") != null)
 					request.setAttribute("pageOf",request.getParameter("pageOf"));
-				return mapping.findForward("printMultiple");
+				//bug 12656 start
+				if(specimenSummaryForm.getForwardTo() != null && !specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
+				{
+					return mapping.findForward("printMultiple");
+				}
+				//bug 12656 end
+				
 			}
 			if(specimenSummaryForm.getForwardTo()!=null&&specimenSummaryForm.getForwardTo().equals(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 			{
@@ -126,8 +132,29 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 					specimenIdList.add(((Specimen)iter.next()).getId());
 				}
 				request.setAttribute("specimenIdList", specimenIdList);
-				request.setAttribute("pageOf", Constants.SUCCESS);
-				return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+				if(request.getAttribute("pageOf")== null)
+				{
+				   request.setAttribute("pageOf", Constants.SUCCESS);
+				}
+				//bug 12656 start
+				if (request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
+				{
+				   request.setAttribute("pageOf", Constants.SUCCESS);
+				   return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);//"printAnticipatorySpecimens";
+				}
+				else
+				{
+					if(request.getAttribute("pageOf")!=null && request.getAttribute("pageOf").equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
+					{
+						return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_WITHOUT_MENU);//
+					}
+					else
+					{
+					    return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+					}
+				}
+				//bug 12656 end
+				
 			}
 			if(request.getParameter("pageOf") != null)
 				return mapping.findForward(request.getParameter("pageOf"));

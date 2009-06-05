@@ -887,6 +887,8 @@ PUBLIC
 			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar -->
 			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
+			<!-- bug 12656 -->
+			<forward name="multipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />	
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="printMultiple" path="/printMultiple.do" />
@@ -5381,7 +5383,8 @@ PUBLIC
 					<forward name="success" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
 					<forward name="cpQuery" path="/pages/SpecimenSummary.jsp" />
 					<forward name="pageOfMultipleSpWithMenu" path="/GenericSpecimenSummary.do?target=pageOfMultipleSpWithMenu&amp;submitAction=pageOfbulkUpdateSpecimens" />
-					<forward name="pageOfMultipleSpWithoutMenu" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens" />
+					<!-- bug 12656 -->
+					<forward name="pageOfMultipleSpWithoutMenu" path="/GenericSpecimenSummary.do?target=anticipatory&amp;submitAction=bulkUpdateSpecimens&amp;pageOf=pageOfMultipleSpWithoutMenu" />
 	                <forward name="failure" path="/Home.do" />
        </action>    
        <action path="/bulkUpdateSpecimens"
@@ -5394,7 +5397,10 @@ PUBLIC
 					<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />
 					<forward name="multipleSpWithMenuFaliure" path=".catissuecore.viewSpecimenSummary" />
 					<forward name="printMultiple" path="/printMultiple.do" />
-					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />	
+					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />
+					<!-- bug 12656 -->
+					<forward name="addMltipleSpecimenToCartWithoutMenu" path="/AddMltipleSpecimenToCart.do?pageOf=multipleSpWithoutMenu" />
+					<forward name="addMltipleSpecimenToCartAndPrint" path="/AddScgToCart.do?pageOf=printMultiple" />	
        </action>    
 	   <action path="/printMultiple"
 			type="edu.wustl.catissuecore.action.PrintAction"
