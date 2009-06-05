@@ -329,9 +329,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		//Populating the Collection Protocol Events
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
 				bizLogic, request, specimenCollectionGroupForm);
-
-		Object CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
+		Object CPEObject = null;
+		if (!operation.equalsIgnoreCase(Constants.ADD) && !(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
+		{
+		CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 				specimenCollectionGroupForm.getCollectionProtocolEventId()));
+		}
 
 		// The values of restrict checkbox and the number of specimen must alos populate in edit mode.
 		if ((isOnChange || operation.equalsIgnoreCase(Constants.EDIT)))
@@ -1060,7 +1063,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
-				separatorBetweenFields, false);
+				separatorBetweenFields);		
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 		//Bug #8533
