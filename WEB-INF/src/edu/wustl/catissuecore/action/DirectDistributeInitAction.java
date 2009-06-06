@@ -75,7 +75,12 @@ public class DirectDistributeInitAction extends BaseAction
 		{
     		OrderSpecimenForm orderSpecForm =(OrderSpecimenForm)form;
     		List specimenCollection = (List)orderBizLogic.getSpecimenDataFromDatabase(request);
-    		isValidTodistribute = isValidToDistributeSpecimen(specimenCollection,siteIdsList);
+    		isValidTodistribute = isValidToDistributeSpecimenCheckPviOnSite(specimenCollection,siteIdsList);
+    		if(!isValidTodistribute)
+    		{
+    			isValidTodistribute = isValidToDistributeSpecimenCheckPviOnCP(specimenCollection,privilegeCache,
+    					sessionData);
+    		}
     		Collections.sort(specimenCollection, new SpecimenComparator());
     		orderSpecForm.setValues(putValueInSpecimenMap(specimenCollection));
     		OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
@@ -140,7 +145,7 @@ public class DirectDistributeInitAction extends BaseAction
 		
 	}
 	
-	private boolean isValidToDistributeSpecimen(List specimenCollection,List siteIdsList)
+	private boolean isValidToDistributeSpecimenCheckPviOnSite(List specimenCollection,List siteIdsList)
 	{
 		boolean isValidToDistribute = true;
 		
@@ -149,6 +154,7 @@ public class DirectDistributeInitAction extends BaseAction
 		while(specItr.hasNext())
 		{
 			Specimen specimen = specItr.next();
+			//specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId()
 			SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
 			if(specimenPosition != null)
 			{	
@@ -158,6 +164,38 @@ public class DirectDistributeInitAction extends BaseAction
 					break;
 				}
 			}
+		}
+		
+		
+		return isValidToDistribute;
+	}
+	
+	
+	private boolean isValidToDistributeSpecimenCheckPviOnCP(List specimenCollection,PrivilegeCache privilegeCache,
+			SessionDataBean sessionDataBean)throws SMException
+	{
+		boolean isValidToDistribute = true;
+		
+		Iterator<Specimen> specItr = specimenCollection.iterator();
+		
+		while(specItr.hasNext())
+		{
+			Specimen specimen = specItr.next();
+			Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+			.getCollectionProtocol().getId();
+			String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME+"_"+cpId;
+			boolean isAuthorized = privilegeCache.hasPrivilege(objectId, Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
+			if(!isAuthorized)
+			{
+				isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
+			}
+
+			if(!isAuthorized)
+			{
+				isValidToDistribute = false;
+				break;
+			}
+
 		}
 		
 		
