@@ -1599,6 +1599,31 @@
 			<antcall target="upgrade_category_entity_names">
 			</antcall>
 	</target>
+	
+	<target name="upgrade_from_Suitep2_to_p3">
+			        <if>
+					<equals arg1="mysql" arg2="${database.type}" />
+					<then>
+						<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
+							
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" />
+						<then>
+							<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p3" />
+						</then>
+					</elseif>
+					<else>
+						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+					</else>
+				</if>
+				<antcall target="add_default_conditions">
+				</antcall>
+				<antcall target="upgrade_category_entity_names">
+				</antcall>
+		</target>
+		
+	
 
 	<!-- Removing unnecessary PE Mysql-->
 	<target name="upgrade_mysql_from_Suite1.1_to_1.1p">
