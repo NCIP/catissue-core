@@ -69,7 +69,7 @@ public class ConfigureResultViewAction extends BaseAction
 	        Object [] whereColumnValues = {tables};
 	        //List of objects containing TableNames and aliasName
 	        List tableList = bizlogic.getList(sourceObjectName, displayNameField, valueField, 
-    				whereColumnNames, whereCondition, whereColumnValues,null,null,false);
+    				whereColumnNames, whereCondition, whereColumnValues,null,null);
      
 	        //List of Column data corresponding to table names.
 	        /*sourceObjectName = QueryColumnData.class.getName();
