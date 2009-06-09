@@ -65,7 +65,11 @@ function hideMenu()
 	var td = getObj('sideMenuTd');
 
 	splitterOpenStatus = false;
-	td.style.display = 'none';   	
+	//setting the display style as 'none' for Internet explorer and Safari browsers.
+	if((navigator.appCodeName=="Mozilla" && navigator.appName=="Netscape" && (navigator.userAgent.search(/Safari/)!=-1)) || (document.all))
+	{
+		td.style.display='none';
+	}
 	(document.getElementById("contentTd")).style.width="100%";
 	arrow.innerHTML = '<img src="images/leftPane_expandButton.gif"/>';  
 }
@@ -84,7 +88,6 @@ function showMenu()
 	td.style.height = '100%';
 	(document.getElementById("cpAndParticipantView")).style.width="100%";
 	(document.getElementById("contentTd")).style.width="72%";
-	document.getElementById("cpAndParticipantView").style.display='block';
 	td.style.display = 'block';
 
 	arrow.innerHTML = '<img src="images/leftPane_collapseButton.gif"/>';  

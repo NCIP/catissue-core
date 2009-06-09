@@ -82,7 +82,7 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
 		dannotationsGrid.setImagePath("dhtml_comp/imgs/");
 		dannotationsGrid.setHeader("Group,Form,Completed Forms,Action");
-		dannotationsGrid.setInitWidthsP("24,38,15,20");
+		dannotationsGrid.setInitWidthsP("*,*,17,20");
 		dannotationsGrid.enableAlterCss("even","uneven");
 		dannotationsGrid.setSkin("light");
 		dannotationsGrid.enableRowsHover(true,'grid_hover');
