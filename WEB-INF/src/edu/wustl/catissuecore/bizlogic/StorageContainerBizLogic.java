@@ -2212,25 +2212,26 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			Long nodeIdentifier;
 			Long parentContainerId;
 			Long childCount;
-
+			String activityStatus = null;
 			
 			Iterator iterator = resultList.iterator();
 			while (iterator.hasNext()) {
 				List rowList = (List) iterator.next();
 				nodeIdentifier = Long.valueOf((String) rowList.get(0));
 				containerName = (String) rowList.get(1);
-				parentContainerId = Long.valueOf((String) rowList.get(2));
-				childCount = Long.valueOf((String) rowList.get(3));
+				activityStatus = (String)rowList.get(2);
+				parentContainerId = Long.valueOf((String) rowList.get(3));
+				childCount = Long.valueOf((String) rowList.get(4));
 
 				StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
-						nodeIdentifier, containerName, containerName);
+						nodeIdentifier, containerName, containerName,activityStatus);
 				StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(
-						parentContainerId, nodeName, nodeName);
+						parentContainerId, nodeName, nodeName, activityStatus);
 
 				if (childCount != null && childCount > 0) {
 					StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(
 							Long.valueOf((String) rowList.get(0)), dummyNodeName,
-							dummyNodeName);
+							dummyNodeName, activityStatus);
 					dummyContainerNode.setParentNode(containerNode);
 					containerNode.getChildNodes().add(dummyContainerNode);
 				}
@@ -2246,7 +2247,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 			if (containerNodeVector.isEmpty()) {
 				StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
-						identifier, nodeName, nodeName);
+						identifier, nodeName, nodeName, activityStatus);
 				containerNodeVector.add(containerNode);
 			}
 		}
@@ -2279,14 +2280,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	private String createSql(Long identifier, String parentId) 
 	{
 		String sql;
-		sql = "SELECT cn.IDENTIFIER, cn.name, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
+		sql = "SELECT cn.IDENTIFIER, cn.name, cn.activity_status, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
 			+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
 			+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
 			+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
 			+ "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "
 			+ "WHERE pos.PARENT_CONTAINER_ID= "
 			+ identifier
-			+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME,pos.PARENT_CONTAINER_ID"
+			+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME, cn.activity_status, pos.PARENT_CONTAINER_ID"
 			+ " ORDER BY cn.IDENTIFIER ";		
 		return sql;
 	}	
@@ -2308,7 +2309,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		/**
 		 *  This query will return list of all storage containers within the specified site.
 		 */
-		String query = "SELECT cn.IDENTIFIER,cn.NAME FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
+		String query = "SELECT cn.IDENTIFIER,cn.NAME,cn.ACTIVITY_STATUS FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc " +
 				"ON sc.IDENTIFIER=cn.IDENTIFIER join CATISSUE_SITE site "+
 				"ON sc.site_id = site.identifier WHERE " +
 				"cn.ACTIVITY_STATUS!='Disabled' AND site_id="+identifier;
