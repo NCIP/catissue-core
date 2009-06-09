@@ -1600,7 +1600,11 @@
 			</antcall>
 	</target>
 	
-	<target name="upgrade_from_Suitep2_to_p3">
+	<!--Target for Application and Database Upgrade from caTissue p2 to p3-->
+	<target name="upgrade_all_from_p2_to_p3" depends="upgrade_app, upgrade_db_from_p2_to_p3">
+	</target>
+	
+	<target name="upgrade_db_from_p2_to_p3">
 			        <if>
 					<equals arg1="mysql" arg2="${database.type}" />
 					<then>
