@@ -146,10 +146,7 @@
             inverse="false"
             cascade="none"
             sort="unsorted"
-        >
-        
-        <cache usage="read-write" />
-
+        >      
               <key
                   column="COLLECTION_PROTOCOL_ID"
               />
