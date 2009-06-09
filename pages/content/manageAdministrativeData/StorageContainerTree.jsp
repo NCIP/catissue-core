@@ -137,7 +137,11 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 				flag=flag+1;
 				tree.deleteChildItems(childList[2]);
 			}
-			tree.insertNewChild(childList[2],childList[4],childList[4],0,"bluebox.gif","bluebox.gif","bluebox.gif","");
+			if(childList[3] == "Closed") {
+				tree.insertNewChild(childList[2],childList[4],childList[4],0,"redbox.gif","redbox.gif","redbox.gif","");
+			} else {
+				tree.insertNewChild(childList[2],childList[4],childList[4],0,"bluebox.gif","bluebox.gif","bluebox.gif","");
+			}
 			tree.setUserData(childList[4],'nodeId',childList[0]);	
 			tree.setUserData(childList[4],'activityStatus',childList[3]);
 			tree.setUserData(childList[4],'parentId',childList[2]);
