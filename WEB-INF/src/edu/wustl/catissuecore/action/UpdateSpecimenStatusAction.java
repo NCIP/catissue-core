@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,9 +30,12 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -43,6 +47,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -65,7 +70,11 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
 
 			LinkedHashSet specimenDomainCollection = getSpecimensToSave(eventId, session);
-
+			
+			Iterator<Specimen> spcItr = specimenDomainCollection.iterator();
+			Date timeStamp = getTimeStamp(spcItr.next());
+			setCreatedOnDate(specimenDomainCollection, timeStamp);
+			
 			SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
@@ -425,7 +434,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		{
 			setStorageContainer(specimenVO, specimen);
 		}
-
+		
 		return specimen;
 	}
 
@@ -529,5 +538,43 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		return specimenCollection;
 
 	}
+	
+	private void setCreatedOnDate(Collection<AbstractSpecimen> specimenColl, Date timeStamp) 
+	{
+		try{
+			Iterator<AbstractSpecimen> spcItr = specimenColl.iterator();
+			while(spcItr.hasNext()){
+				Specimen specimen = (Specimen)spcItr.next();
+				specimen.setCreatedOn(timeStamp);
+				if(specimen.getChildSpecimenCollection()!= null) {
+					setCreatedOnDate(specimen.getChildSpecimenCollection(), timeStamp);
+				}
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private Date getTimeStamp (Specimen specimen) 
+	{
+		Date timeStamp = null;
+		try {
+			String query ="select collectionEventParameters.timestamp from edu.wustl.catissuecore.domain.CollectionEventParameters as collectionEventParameters where "+
+	   		" collectionEventParameters.specimenCollectionGroup.id = (select specimen.specimenCollectionGroup.id from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+		   		"specimen.id = "+specimen.getId()+")";
+				
+			List<Date> list = new DefaultBizLogic().executeQuery(query);
+			Iterator<Date> itr = list.iterator();
+			while(itr.hasNext()){
+			  timeStamp =  (Date)itr.next();
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return timeStamp;	
+	}
+	
+	
+	
 
 }
