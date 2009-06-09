@@ -34,8 +34,8 @@ public class ComplexCollectionProtocolUtility
 	    collectionProtocol.setSequenceNumber(new Integer(0));
 	    collectionProtocol.setStudyCalendarEventPoint(new Double(0));
 		
-		String title = "Osteosarcoma-2";
-		String shortTitle = "Osteosarcoma-2";
+		String title = "Osteosarcoma-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+		String shortTitle = "Osteosarcoma-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 		collectionProtocol = setAttributesOfCP(collectionProtocol,title,shortTitle,"Parent",null);
 		
 		List specimenEventList = new ArrayList();
@@ -57,8 +57,8 @@ public class ComplexCollectionProtocolUtility
 		//Phase 1
 		CollectionProtocol phaseCP1 = new CollectionProtocol();
 		phaseCP1.setSequenceNumber(new Integer(0));
-		title = "Osteo Pre-Surgery-2";
-		shortTitle = "Osteo Pre-Surgery-2";
+		title = "Osteo Pre-Surgery-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Osteo Pre-Surgery-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP1 = setAttributesOfCP(phaseCP1,title,shortTitle,"Phase","1");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -81,8 +81,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP2 = new CollectionProtocol();
 		phaseCP2.setSequenceNumber(new Integer(1));
-		title = "Osteo Pose Surgery-2";
-		shortTitle = "Osteo Post Surgery-2";
+		title = "Osteo Pose Surgery-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Osteo Post Surgery-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP2 = setAttributesOfCP(phaseCP2,title,shortTitle,"Phase","80");
 		specimenEventList = new ArrayList();
 		studyCalEvtPointList = new ArrayList();
@@ -94,8 +94,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm1 = new CollectionProtocol();
 			arm1.setSequenceNumber(new Integer(0));
-			title = "Post GR MAP-2";
-			shortTitle = "Post GR MAP-2";
+			title = "Post GR MAP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "Post GR MAP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm1 = setAttributesOfCP(arm1,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -133,8 +133,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm2 = new CollectionProtocol();
 			arm2.setSequenceNumber(new Integer(0));
-			title = "Post GR MAPfin-2";
-			shortTitle = "Post GR MAPfin-2";
+			title = "Post GR MAPfin-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "Post GR MAPfin-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm2 = setAttributesOfCP(arm2,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -177,8 +177,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm3 = new CollectionProtocol();
 			arm3.setSequenceNumber(new Integer(0));
-			title = "POST PR MAP-2";
-			shortTitle = "POST PR MAP-2";
+			title = "POST PR MAP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "POST PR MAP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm3 = setAttributesOfCP(arm3,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 12");
@@ -215,8 +215,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm4 = new CollectionProtocol();
 			arm4.setSequenceNumber(new Integer(0));
-			title = "POST PR MAPIE-2";
-			shortTitle = "POST PR MAPIE-2";
+			title = "POST PR MAPIE-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "POST PR MAPIE-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm4 = setAttributesOfCP(arm4,title,shortTitle,"Arm","0");
 			specimenEventList = new ArrayList();
 			studyCalEvtPointList = new ArrayList();
@@ -231,8 +231,8 @@ public class ComplexCollectionProtocolUtility
 			
 				CollectionProtocol cycle1 = new CollectionProtocol();
 				cycle1.setSequenceNumber(new Integer(0));
-				title = "Cycle1-2";
-				shortTitle = "Cycle1-2";
+				title = "Cycle1-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+				shortTitle = "Cycle1-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 				cycle1 = setAttributesOfCP(cycle1,title,shortTitle,"Cycle","0");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 12");
@@ -251,8 +251,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle2 = new CollectionProtocol();
 				cycle2.setSequenceNumber(new Integer(1));
-				title = "Cycle2-2";
-				shortTitle = "Cycle2-2";
+				title = "Cycle2-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+				shortTitle = "Cycle2-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 				cycle2 = setAttributesOfCP(cycle2,title,shortTitle,"Cycle","52");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 20");
@@ -271,8 +271,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle3 = new CollectionProtocol();
 				cycle3.setSequenceNumber(new Integer(2));
-				title = "Cycle3-2";
-				shortTitle = "Cycle3-2";
+				title = "Cycle3-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+				shortTitle = "Cycle3-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 				cycle3 = setAttributesOfCP(cycle3,title,shortTitle,"Cycle","92");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 28");
@@ -292,8 +292,8 @@ public class ComplexCollectionProtocolUtility
 				
 				CollectionProtocol cycle4 = new CollectionProtocol();
 				cycle4.setSequenceNumber(new Integer(3));
-				title = "Cycle4-2";
-				shortTitle = "Cycle4-2";
+				title = "Cycle4-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+				shortTitle = "Cycle4-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 				cycle4 = setAttributesOfCP(cycle4,title,shortTitle,"Cycle","215");
 				specimenEventList = new ArrayList();
 				specimenEventList.add("Wk 36");
@@ -309,8 +309,8 @@ public class ComplexCollectionProtocolUtility
 
 		CollectionProtocol phaseCP3 = new CollectionProtocol();
 		phaseCP3.setSequenceNumber(new Integer(2));
-		title = "Osteo Post ttm Follow UP-2";
-		shortTitle = "Osteo Post ttm Follow UP-2";
+		title = "Osteo Post ttm Follow UP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Osteo Post ttm Follow UP-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP3 = setAttributesOfCP(phaseCP3,title,shortTitle,"Phase",null);
 		specimenEventList = new ArrayList();
 		specimenEventList.add("0 months");
@@ -337,8 +337,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP4 = new CollectionProtocol();
 		phaseCP4.setSequenceNumber(null);
-		title = "Osteo Relapse-2";
-		shortTitle = "Osteo Relapse-2";
+		title = "Osteo Relapse-2"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Osteo Relapse-2"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP4 = setAttributesOfCP(phaseCP4,title,shortTitle,"Phase","0");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -574,8 +574,8 @@ public class ComplexCollectionProtocolUtility
 	    collectionProtocol.setSequenceNumber(new Integer(0));
 	    collectionProtocol.setStudyCalendarEventPoint(new Double(0));
 		
-		String title = "ALL-1";
-		String shortTitle = "ALL-1";
+		String title = "ALL-1"+UniqueKeyGeneratorUtil.getUniqueKey();
+		String shortTitle = "ALL-1"+UniqueKeyGeneratorUtil.getUniqueKey();
 		collectionProtocol = setAttributesOfCP(collectionProtocol,title,shortTitle,"Parent",null);
 		
 		List specimenEventList = new ArrayList();
@@ -597,8 +597,8 @@ public class ComplexCollectionProtocolUtility
 		//Phase 1
 		CollectionProtocol phaseCP1 = new CollectionProtocol();
 		phaseCP1.setSequenceNumber(new Integer(0));
-		title = "Study Entry";
-		shortTitle = "Study Entry";
+		title = "Study Entry"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Study Entry"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP1 = setAttributesOfCP(phaseCP1,title,shortTitle,"Phase","0");
 		specimenEventList = new ArrayList();
 		studyCalEvtPointList = new ArrayList();
@@ -611,8 +611,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm1 = new CollectionProtocol();
 		arm1.setSequenceNumber(new Integer(0));
-		title = "DC Induction";
-		shortTitle = "DC Induction";
+		title = "DC Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "DC Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm1 = setAttributesOfCP(arm1,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -628,8 +628,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm2 = new CollectionProtocol();
 		arm2.setSequenceNumber(new Integer(0));
-		title = "DH Induction";
-		shortTitle = "DH Induction";
+		title = "DH Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "DH Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm2 = setAttributesOfCP(arm2,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -644,8 +644,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm3 = new CollectionProtocol();
 		arm3.setSequenceNumber(new Integer(0));
-		title = "PC Induction";
-		shortTitle = "PC Induction";
+		title = "PC Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "PC Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm3 = setAttributesOfCP(arm3,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -661,8 +661,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm4 = new CollectionProtocol();
 		arm4.setSequenceNumber(new Integer(0));
-		title = "PH Induction";
-		shortTitle = "PH Induction";
+		title = "PH Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "PH Induction"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm4 = setAttributesOfCP(arm4,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -677,8 +677,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP2 = new CollectionProtocol();
 		phaseCP2.setSequenceNumber(new Integer(1));
-		title = "Evaluation";
-		shortTitle = "Evaluation";
+		title = "Evaluation"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Evaluation"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP2 = setAttributesOfCP(phaseCP2,title,shortTitle,"Phase","7");
 		specimenEventList = new ArrayList();
 		studyCalEvtPointList = new ArrayList();
@@ -690,8 +690,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm21 = new CollectionProtocol();
 			arm21.setSequenceNumber(new Integer(0));
-			title = "Negative D29 NO MLL RER";
-			shortTitle = "Negative D29 NO MLL RER";
+			title = "Negative D29 NO MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "Negative D29 NO MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm21 = setAttributesOfCP(arm21,title,shortTitle,"Arm","7");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 1");
@@ -707,8 +707,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm22 = new CollectionProtocol();
 			arm22.setSequenceNumber(new Integer(0));
-			title = "Negative D29 YES MLL RER";
-			shortTitle = "Negative D29 YES MLL RER";
+			title = "Negative D29 YES MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "Negative D29 YES MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm22 = setAttributesOfCP(arm22,title,shortTitle,"Arm","7");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 1");
@@ -724,8 +724,8 @@ public class ComplexCollectionProtocolUtility
 			
 			CollectionProtocol arm23 = new CollectionProtocol();
 			arm23.setSequenceNumber(new Integer(0));
-			title = "Positive D29 NO MLL RER";
-			shortTitle = "Positive D29 NO MLL RER";
+			title = "Positive D29 NO MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
+			shortTitle = "Positive D29 NO MLL RER"+UniqueKeyGeneratorUtil.getUniqueKey();
 			arm23 = setAttributesOfCP(arm23,title,shortTitle,"Arm","7");
 			specimenEventList = new ArrayList();
 			specimenEventList.add("Wk 1");
@@ -743,8 +743,8 @@ public class ComplexCollectionProtocolUtility
 			
 		CollectionProtocol phaseCP3 = new CollectionProtocol();
 		phaseCP3.setSequenceNumber(new Integer(2));
-		title = "Consolidation";
-		shortTitle = "Consolidation";
+		title = "Consolidation"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Consolidation"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP3 = setAttributesOfCP(phaseCP3,title,shortTitle,"Phase","27");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -762,8 +762,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP4 = new CollectionProtocol();
 		phaseCP4.setSequenceNumber(new Integer(3));
-		title = "Interim Maintainance";
-		shortTitle = "Interim Maintainance";
+		title = "Interim Maintainance"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Interim Maintainance"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP4 = setAttributesOfCP(phaseCP4,title,shortTitle,"Phase","30");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 11");
@@ -785,8 +785,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP5 = new CollectionProtocol();
 		phaseCP5.setSequenceNumber(new Integer(4));
-		title = "Treatment";
-		shortTitle = "Treatment";
+		title = "Treatment"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Treatment"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP5 = setAttributesOfCP(phaseCP5,title,shortTitle,"Phase","30");
 		specimenEventList = new ArrayList();
 		studyCalEvtPointList = new ArrayList();
@@ -798,8 +798,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm51 = new CollectionProtocol();
 		arm51.setSequenceNumber(new Integer(0));
-		title = "Capizzi";
-		shortTitle = "Capizzi";
+		title = "Capizzi"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Capizzi"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm51 = setAttributesOfCP(arm51,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -817,8 +817,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol arm52 = new CollectionProtocol();
 		arm52.setSequenceNumber(new Integer(0));
-		title = "HD";
-		shortTitle = "HD";
+		title = "HD"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "HD"+UniqueKeyGeneratorUtil.getUniqueKey();
 		arm52 = setAttributesOfCP(arm52,title,shortTitle,"Arm","7");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -838,8 +838,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP6 = new CollectionProtocol();
 		phaseCP6.setSequenceNumber(new Integer(5));
-		title = "Delayed Intensification";
-		shortTitle = "Delayed Intensification";
+		title = "Delayed Intensification"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "Delayed Intensification"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP6 = setAttributesOfCP(phaseCP6,title,shortTitle,"Phase","30");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");
@@ -860,8 +860,8 @@ public class ComplexCollectionProtocolUtility
 		
 		CollectionProtocol phaseCP7 = new CollectionProtocol();
 		phaseCP7.setSequenceNumber(null);
-		title = "POST";
-		shortTitle = "POST";
+		title = "POST"+UniqueKeyGeneratorUtil.getUniqueKey();
+		shortTitle = "POST"+UniqueKeyGeneratorUtil.getUniqueKey();
 		phaseCP7 = setAttributesOfCP(phaseCP7,title,shortTitle,"Phase","30");
 		specimenEventList = new ArrayList();
 		specimenEventList.add("Wk 1");

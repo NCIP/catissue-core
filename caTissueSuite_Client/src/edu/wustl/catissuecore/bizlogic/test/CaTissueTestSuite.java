@@ -22,7 +22,6 @@ public class CaTissueTestSuite
 		suite.addTestSuite(SiteTestCases.class);
 		suite.addTestSuite(BioHazardTestCases.class);
 		suite.addTestSuite(CollectionProtocolTestCases.class);
-		//suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 		suite.addTestSuite(ParticipantTestCases.class);
 		suite.addTestSuite(SpecimenCollectGroupTestCases.class);
 		suite.addTestSuite(DistributionProtocolTestCases.class);
@@ -36,6 +35,7 @@ public class CaTissueTestSuite
 		suite.addTestSuite(DisableFunctionalityTestCases.class);
 		suite.addTestSuite(MSRSuperAdminTestCases.class);
 		suite.addTestSuite(ScientistRoleTestCases.class);
+		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 	/*	suite.addTestSuite(SupervisorRoleTestCases.class);
 		suite.addTestSuite(TechnicianRoleTestCases.class);	
 		suite.addTestSuite(ScientistRoleTestCases.class);*/

@@ -219,7 +219,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 			System.out
 					.println("SpecimenCollectGroupTestCases.testAddSCGWithDuplicateName()"+e.getMessage());
 			e.printStackTrace();
-			fail("Test Failed. Duplicate SCG name should not throw exception");
+			fail("Test Failed. Duplicate SCG name should not throw exception"+e.getMessage());
 			
 			 
 		 }
@@ -275,7 +275,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 			System.out
 					.println("SpecimenCollectGroupTestCases.testUpdateSCGWithClosedActivityStatus()"+e.getMessage());
 			e.printStackTrace();			
-			assertFalse("While adding SCG Activity status should be Active" , true);
+			assertFalse("While adding SCG Activity status should be Active"+e.getMessage() , true);
 		 }
     	
 	}

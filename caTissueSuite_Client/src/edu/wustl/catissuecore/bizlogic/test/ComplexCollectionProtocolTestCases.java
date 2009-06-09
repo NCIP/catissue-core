@@ -27,7 +27,7 @@ public class ComplexCollectionProtocolTestCases extends CaTissueBaseTestCase
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 //assertFalse("could not add object", true);
-			 fail("could not add object");
+			 fail("could not add object"+e.getMessage());
 		 }
 	}
 

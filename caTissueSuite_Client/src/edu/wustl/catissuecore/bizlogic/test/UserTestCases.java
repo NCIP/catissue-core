@@ -218,7 +218,7 @@ public class UserTestCases extends CaTissueBaseTestCase {
 		 catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Could not add a User with a Scientist Role", true);
+			 assertFalse("Could not add a User with a Scientist Role "+e.getMessage(), true);
 		 }
 	 } 
 	/**
