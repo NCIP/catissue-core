@@ -76,8 +76,7 @@
 	<target name="runJunitTestCases" depends="compile_junit_TestCases">
         <mkdir dir="${report.dir}/Nightly_Build_Report" />
 		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
-		<copyfile dest="${target.dir}/ApplicationResources.properties" src="${base.dir}/ApplicationResources.properties"/>
-		
+			
 		<junit printsummary="yes" fork="yes" haltonfailure="no">
 			<formatter type="xml" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
