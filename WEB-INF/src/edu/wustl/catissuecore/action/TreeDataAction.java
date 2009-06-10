@@ -12,9 +12,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.ObjectOutputStream;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -54,8 +52,8 @@ public class TreeDataAction extends BaseAction
         {
             String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
-            List dataList =  new Vector();
-            List disableSpecimenIdsList = new ArrayList();
+            Vector dataList =  new Vector();
+            
             Map containerMap = new HashMap(), containerRelationMap = new HashMap();
             if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
             {
@@ -67,13 +65,13 @@ public class TreeDataAction extends BaseAction
             else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||
             		pageOf.equals(Constants.PAGE_OF_ALIQUOT))
             {
-                dataList = bizLogic.getTreeViewData();
+                dataList = (Vector)bizLogic.getTreeViewData();
             }
-            
+
             String contentType = "application/x-java-serialized-object";
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
-            
+
             if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_SPECIMEN)
                     || pageOf.equals(Constants.PAGE_OF_TISSUE_SITE) || pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
                     || pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE) || pageOf.equals(Constants.PAGE_OF_ALIQUOT))
@@ -83,7 +81,6 @@ public class TreeDataAction extends BaseAction
             else
             {
                 out.writeObject(dataList);
-                out.writeObject(disableSpecimenIdsList);
             }
         }
         catch (Exception exp)

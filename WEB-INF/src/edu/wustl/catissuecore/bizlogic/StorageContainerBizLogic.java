@@ -1976,7 +1976,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				parentTreeNodeImpl.getChildNodes().add(childTreeNodeImpl);
 			}
 			// for sorting
-			List tempChildNodeList = parentTreeNodeImpl.getChildNodes();
+			Vector tempChildNodeList = parentTreeNodeImpl.getChildNodes();
 			parentTreeNodeImpl.setChildNodes(tempChildNodeList);
 		}
 
@@ -2006,7 +2006,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				siteNode.getChildNodes().add(treeNodeImpl);
 
 				// for sorting
-				List tempChildNodeList = siteNode.getChildNodes();
+				Vector tempChildNodeList = siteNode.getChildNodes();
 				siteNode.setChildNodes(tempChildNodeList);
 			}
 		}
