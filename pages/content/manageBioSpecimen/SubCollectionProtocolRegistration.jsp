@@ -15,10 +15,6 @@
 
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<script language="javascript">
-		
-	refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');					
-		</script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
@@ -99,7 +95,7 @@
 
 			
 			//Changes made by Baljeet for Flexxxx related
-		    top.frames["cpAndParticipantView"].refreshCpParticipants();
+		     refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','1');
 		    function showhide()
 			{
 				toggleLayer('wait'); 
