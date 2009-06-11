@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
@@ -24,7 +25,12 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class UpdateSchemaForConstraintProperties
 {
-
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(UpdateSchemaForConstraintProperties.class);
+	
 	private static Map<Long, Long> entityIdVsPrimaryAttrId = new HashMap<Long, Long>();
 
 	/**

@@ -7,6 +7,7 @@ package edu.wustl.catissuecore.annotations.xmi;
 
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  * @author preeti_lodha
@@ -16,6 +17,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class XMIExporter
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger = Logger.getCommonLogger(XMIExporter.class);
 	public static final String XMI_VERSION_1_1 = "1.1";
 	public static final String XMI_VERSION_1_2 = "1.2";

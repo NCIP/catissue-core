@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -34,7 +35,10 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class DECategoryIntegration
 {
-
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger = Logger.getCommonLogger(DECategoryIntegration.class);
 	/**
 	 * @param rootCategoryList

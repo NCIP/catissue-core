@@ -25,6 +25,8 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -34,6 +36,11 @@ import edu.wustl.dao.exception.DAOException;
  */
 public final class AssociatesCps
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(AssociatesCps.class);
 
 	/*
 	 * create singleton object

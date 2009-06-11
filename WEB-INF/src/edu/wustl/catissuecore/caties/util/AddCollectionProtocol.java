@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 
 /**
@@ -24,6 +25,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AddCollectionProtocol
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger =Logger.getCommonLogger(AddCollectionProtocol.class);
 	
 	/**

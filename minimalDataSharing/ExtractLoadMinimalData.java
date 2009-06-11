@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 /**
  * Description: This method with Automate date function and update the REPORTING_PERIOD of MDS DB. 
  * @author virender_mehta
@@ -13,6 +15,11 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class ExtractLoadMinimalData
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger =Logger.getCommonLogger(ExtractLoadMinimalData.class);
 	/**
 	 * The Name of the server for the database. For example : localhost
 	 */

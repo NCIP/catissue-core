@@ -18,6 +18,8 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  * @author suhas_khot
@@ -25,7 +27,11 @@ import edu.wustl.common.exception.ApplicationException;
  */
 public final class AddEntityMapConditions
 {
-	
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(AddEntityMapConditions.class);
 	/*
 	 * create singleton object
 	 */

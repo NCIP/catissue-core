@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  * This class is responsible to fetch identified reports and to spawn a separate thread to convert identified reports into deidentiied reports.
@@ -33,6 +34,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeIDPipelineManager
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private transient Logger logger = Logger.getCommonLogger(DeIDPipelineManager.class);
 	protected static HashMap<String,String> abbrToHeader;
 	

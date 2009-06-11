@@ -34,6 +34,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -46,8 +47,14 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 public class AnnotationBizLogic extends CatissueDefaultBizLogic
 {
-
-	private transient Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
 	
 	public AnnotationBizLogic()
 	{

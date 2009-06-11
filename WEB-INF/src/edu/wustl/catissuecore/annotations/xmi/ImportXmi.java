@@ -50,6 +50,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -59,6 +60,10 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class ImportXmi
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger = Logger.getCommonLogger(ImportXmi.class);
 //	 name of a UML extent (instance of UML metamodel) that the UML models will be loaded into
 	private static final String UML_INSTANCE = "UMLInstance";

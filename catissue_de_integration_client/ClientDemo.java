@@ -6,6 +6,9 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManagerUtil;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.catissuecore.caties.util.AddCollectionProtocol;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
@@ -66,6 +69,12 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class ClientDemo
 {
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger =Logger.getCommonLogger(ClientDemo.class);
+	
 	private final static String STATIC_ENTITY_CLASS_NAME = "edu.wustl.catissuecore.domain.Participant";
 	private final static String DE_CLASS_NAME = "SmokingHistory";
 	static ApplicationService appServiceDeIntegration = null;

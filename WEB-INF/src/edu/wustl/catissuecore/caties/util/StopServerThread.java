@@ -19,6 +19,14 @@ import edu.wustl.common.util.logger.LoggerConfig;
 public class StopServerThread 
 {
 	/**
+	 * logger Logger - Generic logger.
+	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(StopServerThread.class);
+	/**
 	 * Main method to stop caTIES servers
 	 * pass command line arguments to stop respective server
 	 * @param args Comman line arguments
@@ -28,11 +36,7 @@ public class StopServerThread
 	 {	
 	    try 
 	    {    
-	    	// initialization 
-	    	//Variables.applicationHome = System.getProperty("user.dir");
-			Logger.out = org.apache.log4j.Logger.getLogger("");
-			LoggerConfig.configureLogger(CaTIESConstants.LOGGER_GENERAL);
-			// Configuring logger properties
+	    	// Configuring logger properties
 			PropertyConfigurator.configure(CommonServiceLocator.getInstance().getAppHome() + File.separator+"logger.properties");
 			System.setProperty("gov.nih.nci.security.configFile",
 					"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");	
@@ -45,19 +49,19 @@ public class StopServerThread
 	        // send stop command to stop the server
 	        out.write("stop");
 	        s.close();
-	        Logger.out.info("Message sent to stop server");	        
+	        logger.info("Message sent to stop server");	        
 	    } 
 	    catch (UnknownHostException ex1) 
 	    {
-	    	Logger.out.error("Host not found"+ex1);
+	    	logger.error("Host not found"+ex1);
 	    }
 	    catch (SocketTimeoutException ex2) 
 	    {
-	    	Logger.out.error("Socket timed out"+ex2);
+	    	logger.error("Socket timed out"+ex2);
 	    } 
 	    catch (IOException ex3) 
 	    {
-	    	Logger.out.error("IO exception"+ex3);
+	    	logger.error("IO exception"+ex3);
 	    }
 	 }
 }

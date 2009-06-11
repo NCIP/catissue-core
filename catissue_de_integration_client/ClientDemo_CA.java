@@ -5,6 +5,8 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
@@ -68,6 +70,11 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class ClientDemo_CA
 {	
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger =Logger.getCommonLogger(ClientDemo_CA.class);
 	//TODO 2
 	private final static String STATIC_ENTITY_CLASS_NAME = "edu.wustl.catissuecore.domain.Participant";
 	//Make sure that there is only one class in the db by this name.

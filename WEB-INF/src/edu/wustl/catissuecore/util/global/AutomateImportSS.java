@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  * This class is for import/export data to database.
@@ -29,7 +30,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AutomateImportSS 
 {
-	private transient Logger logger = Logger.getCommonLogger(AutomateImportSS.class);
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(AutomateImportSS.class);
 	// The Name of the server for the database. For example : localhost
 	static String DATABASE_SERVER_NAME;
 	// The Port number of the server for the database.

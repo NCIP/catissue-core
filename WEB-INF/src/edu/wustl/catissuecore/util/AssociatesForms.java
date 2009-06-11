@@ -17,6 +17,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -27,6 +29,14 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public final class AssociatesForms
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(AssociatesForms.class);
 	/*
 	 * create singleton object
 	 */

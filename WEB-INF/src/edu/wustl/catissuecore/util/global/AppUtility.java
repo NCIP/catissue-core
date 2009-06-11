@@ -106,6 +106,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.TextConstants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -142,6 +143,10 @@ public class AppUtility
 	/**
 	 * Class Logger.
 	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger = Logger.getCommonLogger(AppUtility.class);
 
 	public static Set getSpecimenClassCDE()

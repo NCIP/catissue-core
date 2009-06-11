@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import gate.Gate;
 
 /**
@@ -23,7 +24,11 @@ import gate.Gate;
  */
 public class ConceptCodeManager
 {	
-	private transient Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
 	/**
 	 * Field coderVersion.
 	 */

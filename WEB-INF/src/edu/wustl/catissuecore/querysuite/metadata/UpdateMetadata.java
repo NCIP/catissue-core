@@ -13,6 +13,8 @@ import java.util.List;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 
 
@@ -28,6 +30,15 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class UpdateMetadata
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(UpdateMetadata.class);
+	
 	private static Connection connection = null;
 	private static Statement stmt = null;
 	// The Name of the server for the database. For example : localhost

@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.reportloader;
 
 import java.io.File;
 import java.io.IOException;
+
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -11,6 +12,7 @@ import edu.wustl.catissuecore.caties.util.StopServer;
 import edu.wustl.catissuecore.caties.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  * Represents a poller which picks up the report files
@@ -23,6 +25,10 @@ public class FilePoller implements Observable
 	/**
 	 * logger Logger - Generic logger.
 	 */
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
 	private static Logger logger = Logger.getCommonLogger(FilePoller.class);
 
 	/**
