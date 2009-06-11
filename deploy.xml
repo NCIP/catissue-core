@@ -1574,14 +1574,12 @@
 	
 	<target name="upgrade_db" depends="upgrade_from_Suite1.1_to_1.1p">
 	</target>
-	
 	<target name="upgrade_from_Suite1.1_to_1.1p">
 		        <if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
 					<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
-						
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
@@ -1598,6 +1596,11 @@
 			</antcall>
 			<antcall target="upgrade_category_entity_names">
 			</antcall>
+			<antcall target="update_metadata_for_model_changes">
+					<param name="isUpgrade" value="true"/>
+					<param name="buildVersion" value="1.1top3"/>
+			</antcall>
+
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p3-->
@@ -1605,6 +1608,7 @@
 	</target>
 	
 	<target name="upgrade_db_from_p2_to_p3">
+		
 			        <if>
 					<equals arg1="mysql" arg2="${database.type}" />
 					<then>
@@ -1624,6 +1628,10 @@
 				<antcall target="add_default_conditions">
 				</antcall>
 				<antcall target="upgrade_category_entity_names">
+				</antcall>
+				<antcall target="update_metadata_for_model_changes">
+					<param name="isUpgrade" value="true"/>
+					<param name="buildVersion" value="p2top3"/>
 				</antcall>
 		</target>
 		
@@ -1663,10 +1671,6 @@
 
 	<!-- Upgrading from Suite1.1 p2 to p3 - MySQL -->
 	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p3">
-		<antcall target="update_metadata_for_model_changes">
-						<param name="isUpgrade" value="true"/>
-						<param name="buildVersion" value="p2"/>
-		</antcall>
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading MySQL Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
@@ -1683,10 +1687,6 @@
 	
 	<!-- Upgrading from Suite1.1 p2 to p3 - Oracle -->
 	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p3">
-		<antcall target="update_metadata_for_model_changes">
-						<param name="isUpgrade" value="true"/>
-						<param name="buildVersion" value="p2"/>
-		</antcall>
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading Oracle Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">

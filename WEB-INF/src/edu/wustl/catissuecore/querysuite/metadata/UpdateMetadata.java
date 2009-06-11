@@ -65,16 +65,15 @@ public class UpdateMetadata
 			DB_SPECIFIC_COMPARE_OPERATOR = UpdateMetadataUtil.getDBCompareModifier();
 			if(IS_UPGRADE.equals("true"))
 			{
-				if(BUILD_VERSION!=null && BUILD_VERSION.equals("p2"))
+				if(BUILD_VERSION.equalsIgnoreCase("1.1top3"))
 				{
-					//bug 11336 start
-					AddPath pathObject = new AddPath();
-					List<String> insertPathSQL = pathObject.getInsertPathStatementsSpecimen(connection);
-					UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
-					//bug 11336 end
-					updateContainerMetadata();
+					updateFromRC4toP3();
 				}
-				else
+				else if(BUILD_VERSION!=null && BUILD_VERSION.equals("p2top3"))
+				{
+					updateFromP2toP3();
+				}
+				else//if 1.1 to p2 
 				{
 					AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
 					addAttribute.addAttribute();
@@ -93,6 +92,7 @@ public class UpdateMetadata
 				addPermissibleValue();
 				cleanUpMetadata();
 				UpdateMetadataTagPath.readTaggedValues("taggedvalues.xml");
+				updateFromRC4toP3();
 			}
 		}
 		catch (DynamicExtensionsApplicationException e)
@@ -120,6 +120,36 @@ public class UpdateMetadata
 				connection.close();
 			}
 		}
+	}
+	/**
+	 * Updating metadata changes from P2 to P3.
+	 * Following changes done:
+	 * -Rename FULL to CONT_FULL for container
+	 * -Specimen Interlinking
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	private static void updateFromP2toP3() throws SQLException, IOException {
+		//bug 11336 start
+		AddPath pathObject = new AddPath();
+		List<String> insertPathSQL = pathObject.getInsertPathStatementsSpecimen(connection);
+		UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
+		//bug 11336 end
+		updateContainerMetadata();
+	}
+	/**
+	 * Updating metadata changes from Rc4 to P3.
+	 * Following changes done:
+	 * -Adding Barcode to CPR and SCG
+	 * -Rename FULL to CONT_FULL for container
+	 * -Specimen Interlinking
+	 * @throws SQLException
+	 * @throws IOException
+	 */
+	private static void updateFromRC4toP3() throws SQLException, IOException {
+		updateFromP2toP3();
+		AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
+		addAttribute.addAttribute();
 	}
 	/**
 	 * This method updates columnName full to cont_full for Container entity.
