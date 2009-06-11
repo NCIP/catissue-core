@@ -31,11 +31,9 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -71,15 +69,15 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			LinkedHashSet specimenDomainCollection = getSpecimensToSave(eventId, session);
 			
-			Iterator<Specimen> spcItr = specimenDomainCollection.iterator();
-			Date timeStamp = getTimeStamp(spcItr.next());
-			setCreatedOnDate(specimenDomainCollection, timeStamp);
-			
 			SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
 
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
-			if (specimenDomainCollection != null && specimenDomainCollection.size() > 0)
+			if (specimenDomainCollection != null && specimenDomainCollection.size() > 0) {
+				Iterator<Specimen> spcItr = specimenDomainCollection.iterator();
+				Date timeStamp = getTimeStamp(spcItr.next());
+				setCreatedOnDate(specimenDomainCollection, timeStamp);
 				bizLogic.update(specimenDomainCollection, specimenDomainCollection, 0, sessionDataBean);
+			}
 			Object obj = session.getAttribute("SCGFORM");
 
 			//11July08 : Mandar : For GenericSpecimen
@@ -545,16 +543,19 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			Iterator<AbstractSpecimen> spcItr = specimenColl.iterator();
 			while(spcItr.hasNext()){
 				Specimen specimen = (Specimen)spcItr.next();
-				specimen.setCreatedOn(timeStamp);
-				if(specimen.getChildSpecimenCollection()!= null) {
-					setCreatedOnDate(specimen.getChildSpecimenCollection(), timeStamp);
+				if((specimen != null) && (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))) {
+					specimen.setCreatedOn(timeStamp);
+					Collection<AbstractSpecimen> childSpecColl =  specimen.getChildSpecimenCollection();
+					if(childSpecColl!= null && childSpecColl.size() > 0) {
+						setCreatedOnDate(childSpecColl, timeStamp);
+					}
 				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Date getTimeStamp (Specimen specimen) 
 	{
 		Date timeStamp = null;
