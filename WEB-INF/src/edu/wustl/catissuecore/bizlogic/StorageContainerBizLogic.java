@@ -310,7 +310,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			throws BizLogicException {
 		String[] whereColumnName = null;
 		String[] whereColumnCondition = null;
-		String joinCondition = null;
+		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ", ";
 
 		whereColumnName = new String[] { "activityStatus","type"};

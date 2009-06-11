@@ -1090,8 +1090,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		String whereColumnName[] = {"participant." + Constants.SYSTEM_IDENTIFIER,
 				"medicalRecordNumber"};
-		String whereColumnCondition[] = {"=", "!="};
-		Object[] whereColumnValue = {new Long(participantID), "null"};
+		String whereColumnCondition[] = {"=", "is not null"};
+		Object[] whereColumnValue = {new Long(participantID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
 

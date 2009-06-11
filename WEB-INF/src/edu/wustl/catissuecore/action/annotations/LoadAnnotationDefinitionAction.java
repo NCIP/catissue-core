@@ -412,6 +412,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			finally
 			{
 				AppUtility.closeJDBCSession(jdbcDAO);
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -513,6 +519,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			try
 			{
 				AppUtility.closeJDBCSession(jdbcDAO);
+				jdbcDAO.closeStatement(resultSet);
+				
 			}
 			catch (ApplicationException e)
 			{
