@@ -5400,7 +5400,9 @@ PUBLIC
 					<forward name="addMltipleSpecimenToCart" path="/AddMltipleSpecimenToCart.do?pageOf=success" />
 					<!-- bug 12656 -->
 					<forward name="addMltipleSpecimenToCartWithoutMenu" path="/AddMltipleSpecimenToCart.do?pageOf=multipleSpWithoutMenu" />
-					<forward name="addMltipleSpecimenToCartAndPrint" path="/AddScgToCart.do?pageOf=printMultiple" />	
+					<forward name="addMltipleSpecimenToCartAndPrint" path="/AddScgToCart.do?pageOf=printMultiple" />
+					<!-- Bug 12784 -->
+			        <forward name="pageOfMultipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />	
        </action>    
 	   <action path="/printMultiple"
 			type="edu.wustl.catissuecore.action.PrintAction"
@@ -5408,7 +5410,9 @@ PUBLIC
 			<forward name="success" path="/pages/AnticipatorySpecimens.jsp" />
 			<forward name="failure" path="/pages/AnticipatorySpecimens.jsp" />	
 			<forward name="printAntiSuccess" path="/redirecttoSCG.do" />	
-			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />					
+			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />	
+			<!-- Bug 12784 -->
+			<forward name="pageOfMultipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />						
 	   </action>
        <action path="/updateSpecimenStatus"
                 type="edu.wustl.catissuecore.action.UpdateSpecimenStatusAction"
@@ -5590,7 +5594,8 @@ PUBLIC
 			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="failure" path=".catissuecore.viewSpecimenSummary" />	
 			<forward name="printAntiSuccess" path=".catissuecore.viewSpecimenSummary" />	
-			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />			
+			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
+			<forward name="pageOfMultipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />			
 	   </action>
 	   
 	   
