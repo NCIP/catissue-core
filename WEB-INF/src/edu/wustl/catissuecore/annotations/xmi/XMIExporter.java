@@ -6,6 +6,7 @@
 package edu.wustl.catissuecore.annotations.xmi;
 
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 
@@ -63,7 +64,10 @@ public class XMIExporter
 				}
 				edu.common.dynamicextensions.xmi.exporter.XMIExporter xmiExporter = new edu.common.dynamicextensions.xmi.exporter.XMIExporter();
 				EntityGroupInterface entityGroup = XMIUtility.getEntityGroup(groupName);
-				XMIUtility.addHookEntitiesToGroup(entityGroup);
+				if (entityGroup!=null && XMI_VERSION_1_1.equals(xmiVersion))
+				{
+					XMIUtility.addHookEntitiesToGroup(entityGroup);
+				}
 				if(entityGroup==null)
 				{
 					logger.info("Specified group does not exist. Could not export to XMI");
