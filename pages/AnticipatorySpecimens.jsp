@@ -668,10 +668,7 @@ String lbl = "Apply first to all";
 		<html:hidden property="showParentStorage" />
 		<html:hidden property="forwardTo" />
 		<html:hidden property="multipleSpEditMode" />
-		<logic:equal name="viewSpecimenSummaryForm" property="readOnly"
-			value="false">
-
-			<tr>
+		<tr>
 				<!-- <td class="formFieldNoBorders" colspan="5"  height="20" nowrap width="16%"> -->
 				<html:hidden property="printCheckbox" style="printCheckbox"
 					styleId="printCheckbox" />
@@ -694,8 +691,7 @@ String lbl = "Apply first to all";
 					</tr>
 				</table>
 			</tr>
-		</logic:equal>
-	</table>
+		</table>
 	<div id="divForHiddenChild"></div>
 </html:form>
 </body>
