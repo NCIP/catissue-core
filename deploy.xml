@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTissue Suite-->
 
-<project name="caTissue Suite v1.1P2. Installation" default="deploy_app">
+<project name="caTissue Suite v1.1P3. Installation" default="deploy_app">
 
 	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -1158,7 +1158,7 @@
 
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql">
-		<echo message="Initializing MySQL Database for caTissue Suite v1.1P2. Application..." />
+		<echo message="Initializing MySQL Database for caTissue Suite v1.1P3. Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />
@@ -1324,7 +1324,7 @@
 </target>
 
 	<target name="deploy_db_oracle">
-		<echo message="Initializing Oracle Database for caTissue Suite v1.1P2. Application..." />
+		<echo message="Initializing Oracle Database for caTissue Suite v1.1P3. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
@@ -3159,7 +3159,7 @@ Thanking You,
 	<!--MsSQLServer Database Creation -->
 	<target name="deploy_db_mssqlserver">
 
-		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P2. Application..." />
+		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P3. Application..." />
 
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="@@schema@@" value="${database.schemaname}" />
