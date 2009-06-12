@@ -82,6 +82,17 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, false);
+			//added this to disable collected checkboxes  
+			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
+			{
+				ActionMessages actionMessages = new ActionMessages();
+				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object.add.successOnly", "Specimens"));
+				specimenSummaryForm.setShowbarCode(true);
+				specimenSummaryForm.setShowLabel(true);
+				saveMessages(request, actionMessages);
+				specimenSummaryForm.setReadOnly(true);
+
+			}
 			if (specimenSummaryForm.getPrintCheckbox() != null && specimenSummaryForm.getPrintCheckbox().equals("true"))
 			{
 				//By Falguni Sachde
@@ -135,16 +146,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				}
 				//bug 12141 end
 			}
-			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
-			{
-				ActionMessages actionMessages = new ActionMessages();
-				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object.add.successOnly", "Specimens"));
-				specimenSummaryForm.setShowbarCode(true);
-				specimenSummaryForm.setShowLabel(true);
-				saveMessages(request, actionMessages);
-				specimenSummaryForm.setReadOnly(true);
-
-			}
+			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		catch (Exception exception)
