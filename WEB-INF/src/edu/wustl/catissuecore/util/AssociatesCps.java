@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
+import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -96,7 +97,7 @@ public final class AssociatesCps
 		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
 		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
-				AbstractMetadata.class.getName(), Constants.NAME);
+				AbstractMetadata.class.getName(), Constants.NAME, DynamicExtensionDAO.getInstance().getAppName());
 		entityIdsVsContId = AppUtility.getAllContainers();
 		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, typeId);
 		for (Long cpId : cpIdsVsEntityIds.keySet())
@@ -153,6 +154,7 @@ public final class AssociatesCps
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
+		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		if (cpId != 0)
 		{
@@ -167,14 +169,35 @@ public final class AssociatesCps
 		}
 		else
 		{
-			Long cpObjectId = Long.valueOf(-1);
-			Collection<EntityMapCondition> entMapCondColl = entityManager
-					.getAllConditionsByStaticRecordId(cpObjectId);
-			for (EntityMapCondition entityMapCond : entMapCondColl)
+			for (Long containerId : entityIdsVsContId.values())
 			{
-				entityMapCond.setTypeId(typeId);
-				entityMapCond.setStaticRecordId(Long.valueOf(0));
-				annotation.update(entityMapCond);
+				if (containerId != null)
+				{
+					List< EntityMap > entityMapList = defaultBizLogic.retrieve(EntityMap.class
+							.getName(), Constants.CONTAINERID, containerId);
+					if (entityMapList != null && !entityMapList.isEmpty())
+					{
+						EntityMap entityMap = entityMapList.get(0);
+						Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
+						if (formContextColl != null)
+						{
+							for (FormContext formContext : formContextColl)
+							{
+								Collection<EntityMapCondition> entityMapCondColl = AppUtility.getEntityMapConditions(formContext
+										.getId());
+								if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
+								{
+									EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
+											formContext, Long.valueOf(0), typeId);
+									entityMapCondColl.add(entityMapCond);
+								}
+								formContext.setEntityMapConditionCollection(entityMapCondColl);
+							}
+							entityMap.setFormContextCollection(formContextColl);
+						}
+						annotation.updateEntityMap(entityMap);
+					}
+				}
 			}
 		}
 	}
@@ -185,9 +208,10 @@ public final class AssociatesCps
 	 * @param entityIds entityIds collection
 	 * @throws DynamicExtensionsSystemException 
 	 * @throws ApplicationException Application Exception
+	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void associateEntitiesToCps(Long cpId, Long typeId, List<Long> entityIds)
-			throws ApplicationException
+			throws ApplicationException, DynamicExtensionsSystemException
 	{
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -212,9 +236,10 @@ public final class AssociatesCps
 	 * @param entityMapList
 	 * @throws DynamicExtensionsSystemException 
 	 * @throws ApplicationException Application Exception
+	 * @throws DynamicExtensionsSystemException 
 	 */
 	private static void updateEntityMap(Long cpId, Long typeId, AnnotationBizLogic annotation,
-			List<EntityMap> entityMapList) throws ApplicationException
+			List<EntityMap> entityMapList) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		if (entityMapList != null && !entityMapList.isEmpty())
 		{
@@ -222,13 +247,12 @@ public final class AssociatesCps
 			if (cpId != 0)
 			{
 				editConditions(entityMap, cpId, typeId);
+				annotation.updateEntityMap(entityMap);
 			}
 			if (cpId == 0)
 			{
-				Long conditionObject = Long.valueOf(-1);
-				editConditions(entityMap, conditionObject, typeId);
+				AppUtility.editConditions(entityMap, typeId);
 			}
-			annotation.updateEntityMap(entityMap);
 		}
 	}
 

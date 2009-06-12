@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -323,7 +324,7 @@ public class XMLParser extends DefaultHandler
 			else if ((cpName != null) && !(Constants.ALL.equalsIgnoreCase(cpName)))
 			{
 				cpId = (Long) AppUtility.getObjectIdentifier(cpName, CollectionProtocol.class.getName(),
-						Constants.TITLE);
+						Constants.TITLE, CommonServiceLocator.getInstance().getAppName());
 				if (cpId == null)
 				{
 					throw new DynamicExtensionsSystemException(

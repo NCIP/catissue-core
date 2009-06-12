@@ -214,7 +214,7 @@ public class AnnotationUtil
 			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
 			BizLogicException
 	{
-		String appName = CommonServiceLocator.getInstance().getAppName();
+		String appName = DynamicExtensionDAO.getInstance().getAppName();
 		DAO dao = null;
 		AssociationInterface association = null;
 		

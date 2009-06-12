@@ -221,6 +221,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 							}
 						}
 				}
+				if (whereColumnValue == null || whereColumnValue.length == 0)
+				{
+					whereColumnValue = new String[]{Constants.ALL};
+				}
 				annotationForm.setConditionVal(whereColumnValue);
 			}
 		}
@@ -931,7 +935,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 			List conditionalInstancesList = populateConditionalInstanceList();
 			annotationForm.setConditionalInstancesList(conditionalInstancesList);
-			annotationForm.setConditionVal(new String[]{"-1"});
+			annotationForm.setConditionVal(new String[]{Constants.ALL});
 
 		}
 	}
@@ -953,7 +957,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			conditionalInstancesList = modifyName(conditionalInstancesList);
 			conditionalInstancesList.remove(0);
 			conditionalInstancesList.add(0, new NameValueBean(
-					edu.wustl.catissuecore.util.global.Constants.HOLDS_ANY, "-1"));
+					edu.wustl.catissuecore.util.global.Constants.HOLDS_ANY, Constants.ALL));
 		}
 		catch (BizLogicException e)
 		{

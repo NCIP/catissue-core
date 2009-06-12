@@ -80,7 +80,7 @@ public final class AssociatesForms
 		csvFileParser.processCSV();
 
 		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
-				AbstractMetadata.class.getName(), Constants.NAME);
+				AbstractMetadata.class.getName(), Constants.NAME, DynamicExtensionDAO.getInstance().getAppName());
 
 		entityIdsVsContainersId = AppUtility.getAllContainers(csvFileParser.getEntityGroupIds());
 
@@ -139,7 +139,6 @@ public final class AssociatesForms
 		AnnotationBizLogic annotation = new AnnotationBizLogic();
 		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		Long conditionObject = Long.valueOf(-1);
 		for (Long entityId : entityIds)
 		{
 			Long containerId = getContainerId(entityId);
@@ -155,8 +154,7 @@ public final class AssociatesForms
 				if (entityMapList != null && !entityMapList.isEmpty())
 				{
 					EntityMap entityMap = entityMapList.get(0);
-					AppUtility.editConditions(entityMap, conditionObject, typeId, true);
-					annotation.updateEntityMap(entityMap);
+					AppUtility.editConditions(entityMap, typeId);
 				}
 			}
 		}

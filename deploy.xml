@@ -1148,8 +1148,6 @@
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
 		</antcall> 
-		<antcall target="add_default_conditions">
-		</antcall>
 		<antcall target="show_hide_forms">
 		</antcall>
 		<antcall target="show_hide_forms_based_on_CPs">
@@ -1460,8 +1458,6 @@
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
 		</antcall>
-		<antcall target="add_default_conditions">
-		</antcall>
 		<antcall target="show_hide_forms">
 		</antcall>
 		<antcall target="show_hide_forms_based_on_CPs">
@@ -1592,8 +1588,6 @@
 					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 				</else>
 			</if>
-			<antcall target="add_default_conditions">
-			</antcall>
 			<antcall target="upgrade_category_entity_names">
 			</antcall>
 			<antcall target="update_metadata_for_model_changes">
@@ -1625,8 +1619,6 @@
 						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 					</else>
 				</if>
-				<antcall target="add_default_conditions">
-				</antcall>
 				<antcall target="upgrade_category_entity_names">
 				</antcall>
 				<antcall target="update_metadata_for_model_changes">
@@ -3543,80 +3535,6 @@ Thanking You,
 	</target>
 
 	<!-- Indexing tables for TiTLi - end-->
-	
-	<!-- Add default conditions to forms start-->
-	<target name="add_default_conditions">
-		<delete quiet="true" includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
-			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
-		</replace>
-		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}"/>
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-					</replace>
-				</then>
-			</elseif>
-		</if>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-			<include name="*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="${token.database.password}" value="${database.password}" />
-		</replace>
-		<java classname="edu.wustl.catissuecore.util.AddEntityMapConditions" fork="true" maxmemory="512m">
-			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</java>	
-		<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-	</target>
-	<!-- Add default conditions to forms ends -->
 		
 	<!--Target for validation of database schema name for MsSqlServer-->
 	<target name="validate_schema_name">

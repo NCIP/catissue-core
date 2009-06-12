@@ -10,7 +10,6 @@ import java.util.Set;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
-import edu.common.dynamicextensions.domain.AbstractMetadata;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
@@ -21,7 +20,6 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.logger.Logger;
@@ -86,27 +84,8 @@ public class DECategoryIntegration
 							newFormContext.setEntityMap(entityMap);
 							Collection<EntityMapCondition> existingEntityMapConditions = AppUtility.getEntityMapConditions(existingFormContext.getId());
 							Collection<EntityMapCondition> newEntityMapConditions = AppUtility.getEntityMapConditions(newFormContext.getId());
+							if(!existingEntityMapConditions.isEmpty())
 
-
-							for (EntityMapCondition existingEntityMapCondition : existingEntityMapConditions)
-							{
-							if(existingEntityMapConditions.isEmpty())
-
-							{
-								EntityMapCondition newEntityMapCondition = new EntityMapCondition();
-								newEntityMapCondition.setStaticRecordId(existingEntityMapCondition.getStaticRecordId());
-								newEntityMapCondition.setTypeId(existingEntityMapCondition.getTypeId());
-								newEntityMapConditions.add(newEntityMapCondition);
-
-								EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
-								Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
-										AbstractMetadata.class.getName(), Constants.NAME);
-								objNewEntityMapCondition.setStaticRecordId(Long.valueOf(Constants.DEFAULT_CONDITION));
-								objNewEntityMapCondition.setTypeId(typeId);
-								objNewEntityMapCondition.setFormContext(newFormContext);
-								newEntityMapConditions.add(objNewEntityMapCondition);
-							}
-							else
 							{
 								for (EntityMapCondition objEntityMapCondition : existingEntityMapConditions)
 								{
@@ -116,7 +95,6 @@ public class DECategoryIntegration
 									objNewEntityMapCondition.setFormContext(newFormContext);
 									newEntityMapConditions.add(objNewEntityMapCondition);
 								}
-							}
 							}
 							newFormContext.setEntityMapConditionCollection(newEntityMapConditions);
 							newFormContexts.add(newFormContext);

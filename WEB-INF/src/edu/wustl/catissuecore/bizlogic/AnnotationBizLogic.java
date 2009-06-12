@@ -453,11 +453,9 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * @return
 	 * @throws DynamicExtensionsApplicationException
 	 */
-	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList,boolean showForAll) throws BizLogicException
+	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList) throws BizLogicException
 	{
 		List dynEntitiesIdList = new ArrayList();
-		List cpIdListForAll = new ArrayList();
-		cpIdListForAll.add(Long.valueOf(-1));
 		if (dynEntitiesList != null && !dynEntitiesList.isEmpty())
 		{
 			Iterator dynEntitiesIterator = dynEntitiesList.iterator();
@@ -478,7 +476,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 									.getStudyFormLabel().equals("")))
 					{
 						if (entityMapConditions != null
-								&& !entityMapConditions.isEmpty() && showForAll==false)
+								&& !entityMapConditions.isEmpty())
 						{
 							boolean check = checkStaticRecId(entityMapConditions, cpIdList);
 							if (check)
@@ -486,14 +484,9 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 								dynEntitiesIdList.add(entityMap.getContainerId());
 							}
 						}
-						if (entityMapConditions != null
-								&& !entityMapConditions.isEmpty() && showForAll==true)
+						else
 						{
-							boolean check = checkStaticRecId(entityMapConditions, cpIdListForAll);
-							if (check)
-							{
-								dynEntitiesIdList.add(entityMap.getContainerId());
-							}						
+							dynEntitiesIdList.add(entityMap.getContainerId());
 						}
 					}
 				}

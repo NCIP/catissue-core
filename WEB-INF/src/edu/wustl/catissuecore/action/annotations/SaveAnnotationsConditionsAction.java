@@ -30,6 +30,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
@@ -80,7 +81,8 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 
 			Collection<FormContext> currFormColl= new HashSet<FormContext>();
             int conditionValindex = 0;            
-
+            AnnotationUtil util = new AnnotationUtil();
+            Boolean check = util.checkForAll(annotationForm.getConditionVal());
             if (formCollPrev != null && !formCollPrev.isEmpty())
             {
                 Iterator<FormContext> formCollIt = formCollPrev.iterator();
@@ -101,7 +103,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	                        Iterator<EntityMapCondition> entityMapCondIter = entityMapConditions.iterator();
 	                        while (entityMapCondIter.hasNext())
 	                        {
-	                            if (conditionValindex < annotationForm.getConditionVal().length)
+	                            if (conditionValindex < annotationForm.getConditionVal().length && !check)
 	                            {
 	                                //Use existing condition objects in edit operation
 	                                if (conditionValindex <  entityMapConditions.size() )
@@ -128,7 +130,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	                        }
 	                    }
 	                    //previously no condition exists but now conditions are added
-	                    if(annotationForm.getConditionVal()!= null && annotationForm.getConditionVal().length > conditionValindex)
+	                    if(annotationForm.getConditionVal()!= null && annotationForm.getConditionVal().length > conditionValindex && !check)
 	                    {
 	                        while (annotationForm.getConditionVal().length > conditionValindex)
 	                        {

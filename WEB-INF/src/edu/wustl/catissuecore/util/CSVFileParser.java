@@ -270,7 +270,7 @@ public class CSVFileParser extends FileReader
 					{
 						throw new DynamicExtensionsSystemException(
 								"Please enter valid category name. Error at line number "
-										+ getLineNumber());
+										+ getLineNumber()+" for Category:"+formName);
 					}
 					formIds.add(rootCategoryEntityId);
 				}
@@ -320,7 +320,7 @@ public class CSVFileParser extends FileReader
 				{
 					throw new DynamicExtensionsSystemException(
 							"Please enter valid Entity name. Error at line number "
-									+ getLineNumber());
+									+ getLineNumber()+" for Entity:"+entityName);
 				}
 				entityIds.add(entityId);
 			}

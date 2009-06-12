@@ -2706,10 +2706,11 @@ public class AppUtility
 	 * @throws DAOException fails to do database operation
 	 */
 	public static Object getObjectIdentifier(String whereColumnValue, String selectObjName,
-			String whereColumnName) throws ApplicationException
+			String whereColumnName, String appName) throws ApplicationException
 	{
 		Object identifier = null;
 		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+		defaultBizLogic.setAppName(appName);
 		String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
 		String[] whereColName = {whereColumnName};
 		Object[] whereColValue = {whereColumnValue};
@@ -2851,6 +2852,50 @@ public class AppUtility
 		}
 	}
 
+	/**
+	 * This method is used edit the previously added entityMapCondition
+	 * @param entityMap to get formContext
+	 * @param conditionObjectId condition on forms
+	 * @param typeId collection protocol id
+	 * @throws DynamicExtensionsSystemException 
+	 */
+	public static void editConditions(EntityMap entityMap,Long typeId) throws DynamicExtensionsSystemException,
+			ApplicationException
+	{
+		Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
+		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(DynamicExtensionDAO.getInstance().getAppName()).getDAO();
+		try
+		{
+			dao.openSession(null);
+			if (formContextColl != null)
+			{
+				for (FormContext formContext : formContextColl)
+				{
+					Collection<EntityMapCondition> entityMapCondColl = AppUtility.getEntityMapConditions(formContext
+							.getId());
+	
+					if (!entityMapCondColl.isEmpty() || entityMapCondColl.size() > 0)
+					{
+						for(EntityMapCondition entityMapCond : entityMapCondColl)
+						{
+							dao.delete(entityMapCond);
+						}
+					} 
+				}
+			}
+		}
+		catch (DAOException exception)
+		{
+			exception.printStackTrace();
+			throw exception; 
+		}
+		finally
+		{
+			dao.commit();
+			dao.closeSession();
+		}
+	}
+	
 	/**
 	 * @param entityMapId
 	 * @return
