@@ -178,24 +178,11 @@ public class ViewRequestSummaryAction extends SecureAction
 	        List siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
 	        request.setAttribute(Constants.REQUESTERS_SITE_LIST, siteList);
 	        request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,""+shipmentRequestForm.getSenderSiteId()));
-		}
-		catch(BizLogicException ex)
-		{
-			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",ex.toMsgValuesArray()));
-			logger.debug(ex.getMessage(), ex);
-		}
-		catch (AssignDataException assignDataException)
-		{
-			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",assignDataException.getLogMessage()));
-			logger.debug(assignDataException.getMessage(), assignDataException);
-		}
-
+		}		
 		catch(ApplicationException appException)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",appException.getLogMessage()));
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",appException.getMessage()));//bug 12568
 			logger.debug(appException.getMessage(), appException);
 		}
 //		catch (UserNotAuthorizedException excp)

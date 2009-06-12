@@ -60,7 +60,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	{
 		boolean isValid=true;
 		boolean isSpecimenLocatedVirtual = false;
-		StringBuffer errorMsg=new StringBuffer();
+		//StringBuffer errorMsg=new StringBuffer();
 		if (obj instanceof ShipmentRequest == false)
 		{
 			//throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
@@ -117,24 +117,18 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 								isValid=containerBelongsToSite(container,shipmentRequest.getSenderSite().getId());
 								if(isValid)
 								{
-									errorMsg.append("<li>Container "+containerName+
-									" belongs to the Requesting Site.</li>");
-									//throw getBizLogicException(null, "shipment.container.RequestingSite", containerName);//janu
+									throw getBizLogicException(null, "shipment.container.RequestingSite", containerName);
 									
 								}
 								else if(container.getName().contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 								{
-									errorMsg.append("<li>"+containerName+
-									" is currently included in a Shipment. You cannot request for a specimen or container that has been included in a shipment.</li>");
-									//throw getBizLogicException(null, "shipment.containerInShipment", containerName);//janu
+									throw getBizLogicException(null, "shipment.containerInShipment", containerName);
 								}
 							}
 							else
 							{
 								//No container with such name or barcode exists
-								errorMsg.append("<li>No Container with name "+
-										containerName+" exists.</li>");
-								//throw getBizLogicException(null, "shipment.NoContainerExists", containerName);//janu
+								throw getBizLogicException(null, "shipment.NoContainerExists", containerName);
 							}
 						}
 					}
@@ -176,26 +170,21 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 								isSpecimenLocatedVirtual=specimenBelongsToVirtualSite(specimen);
 								if(isValid && !isBelongsToInTransit)
 								{
-									errorMsg.append("<li>Specimen "+specimenName+" belongs to the Requesting Site.</li>");
-									//throw getBizLogicException(null, "shipment.specimenInRequestingSite", specimenName);//janu
+									throw getBizLogicException(null, "shipment.specimenInRequestingSite", specimenName);
 								}
 								else if(isBelongsToInTransit)
 								{
-									errorMsg.append("<li>"+specimenName+" is currently included in a Shipment. You cannot request for a specimen or container that has been included in a shipment.</li>");
-									//throw getBizLogicException(null, "shipment.specimenInShipment", specimenName);//janu
+									throw getBizLogicException(null, "shipment.specimenInShipment", specimenName);
 								}
 								else if(isSpecimenLocatedVirtual)
 								{
-									errorMsg.append("<li>Specimen with name "+specimenName+
-										" is virtually located and cannot be a part of the shipment</li>");
-									//throw getBizLogicException(null, "shipment.virtual.specimen", specimenName);//janu
+									throw getBizLogicException(null, "shipment.virtual.specimen", specimenName);
 								}
 							}
 							else
 							{
 								//No container with such name or barcode exists
-								errorMsg.append("<li>No Specimen with name "+specimenName+" exists</li>");
-								//throw getBizLogicException(null, "shipment.NoSpecimenExists", specimenName);//janu
+								throw getBizLogicException(null, "shipment.NoSpecimenExists", specimenName);
 							}
 						}
 					}
@@ -206,21 +195,20 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				}
 				if(isEmptyContainerCollection && isEmptySpecimenCollection)
 				{
-					errorMsg.append("<li>Request doesnot contain any specimens of containers.</li>");
-					//throw getBizLogicException(null, "shipment.noSpecimenInRequest", null);//janu
+					throw getBizLogicException(null, "shipment.noSpecimenInRequest", null);
 				}
-				if(errorMsg!=null && errorMsg.length()>0)
+				/*if(errorMsg!=null && errorMsg.length()>0)
 				{
 					//throw new DAOException(errorMsg.toString());
 					throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,errorMsg.toString());
-				}
+				}*/
 			}
 		}
 		catch(DAOException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,errorMsg.toString());
-			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
+			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		return true;
 	}

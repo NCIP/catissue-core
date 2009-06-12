@@ -658,7 +658,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation)throws BizLogicException
 	{
 		boolean isValid = true;
-		StringBuffer errorMsg = new StringBuffer();
+		//StringBuffer errorMsg = new StringBuffer();
 		if (!(obj instanceof BaseShipment))
 		{
 			logger.debug("Invalid object passed");
@@ -730,8 +730,9 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 							else
 							{
 								// No container with such name or barcode exists
-								errorMsg.append("<li>No Container with name or barcode "
-										+ containerName + " exists\n</li>") ;
+								/*errorMsg.append("<li>No Container with name or barcode "
+										+ containerName + " exists\n</li>") ;*/
+								throw getBizLogicException(null, "shipment.NoContainerExists",containerName);
 							}
 						}
 					}
@@ -748,14 +749,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			errorMsg.append("<li>Shipment is empty.</li>") ;
+			//errorMsg.append("<li>Shipment is empty.</li>") ;//shipment.emptyShipment
+			throw getBizLogicException(null, "shipment.emptyShipment",null);
 		}
-		if (errorMsg != null && errorMsg.length() > 0)
+		/*if (errorMsg != null && errorMsg.length() > 0)
 		{
 			logger.debug(errorMsg.toString());
-			throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,errorMsg.toString());
+			throw new BizLogicException(null,null,errorMsg.toString());
 			//throw new DAOException(errorMsg.toString());
-		}
+		}*/
 		}
 		catch(DAOException e)
 		{
@@ -770,10 +772,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param oldShipment the object of BaseShipment class.
 	 * @param updatedShipment the object of BaseShipment class,updated object.
 	 * @throws DAOException if database operation fails.
+	 * @throws BizLogicException 
 	 */
 	// bug 11410
 	private void validateContainerInShipment(BaseShipment oldShipment,
-			BaseShipment updatedShipment) throws DAOException
+			BaseShipment updatedShipment) throws DAOException, BizLogicException
 	{
 		boolean isBelongsToShipment = false;
 		Collection containerCollection = new HashSet();
@@ -811,33 +814,24 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param container container to be validated.
 	 * @return errorMsg containing the error string if validation fails.
 	 * @throws DAOException if database operation fails.
+	 * @throws BizLogicException 
 	 */
-	private String validateShipmentContainer(BaseShipment baseShipment,
-			StorageContainer container) throws DAOException
+	private void validateShipmentContainer(BaseShipment baseShipment,
+			StorageContainer container) throws DAOException, BizLogicException
 	{
-		StringBuffer errorMsg = new StringBuffer();
 		boolean isValid = true;
 		isValid = containerBelongsToSite(container, baseShipment
 				.getSenderSite().getId());
+		//bug 12568
 		if (!isValid)
 		{
-			errorMsg.append("<li>"
-					+ container.getName()
-					+ " is currently stored in "
-					+ container.getSite().getName()
-					+ ". You cannot include a specimen or container in a shipment " +
-					"stored in some other site as the requester's site.</li>");
+			throw getBizLogicException(null, "shipment.containerValidation", container.getName()+":"+container.getSite().getName());
 		}
 		else if (container.getName().contains(
 				Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 		{
-			errorMsg.append("<li>"
-					+ container.getName()
-					+ " is currently included in another Shipment. " +
-					"You cannot include a specimen or container " +
-					"in more than one shipment.</li>");
-		}
-		return errorMsg.toString();
+			throw getBizLogicException(null, "shipment.containerValidation", container.getName());
+		}		
 	}
 	/**
 	 * this function validates the site of the user.
