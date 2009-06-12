@@ -998,9 +998,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				String entityName = entityBean.getName();
 				Long entityId = Long.parseLong(entityBean.getValue());
 
-				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName);
-//				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName, Long
-//						.valueOf(entityId));
+//				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName);
+				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName, Long
+						.valueOf(entityId));
 				addURL = "<a href='#' name='"
 						+ entityId
 						+ "' onClick='loadDynExtDataEntryPage(event);' style='cursor:pointer;' id='selectedAnnotation'>Add</a>";

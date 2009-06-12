@@ -6,7 +6,6 @@
 package edu.wustl.catissuecore.annotations.xmi;
 
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 
