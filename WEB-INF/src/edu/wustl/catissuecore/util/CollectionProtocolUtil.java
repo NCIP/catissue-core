@@ -106,7 +106,11 @@ public class CollectionProtocolUtil
 		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
-		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());   
+		if(collectionProtocol.getConsentsWaived()==null)
+		{
+			collectionProtocol.setConsentsWaived(false);
+		}
+		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());
 		collectionProtocolBean.setIrbID(collectionProtocol.getIrbIdentifier());
 		collectionProtocolBean.setTitle(collectionProtocol.getTitle());
 		collectionProtocolBean.setShortTitle(collectionProtocol.getShortTitle());
