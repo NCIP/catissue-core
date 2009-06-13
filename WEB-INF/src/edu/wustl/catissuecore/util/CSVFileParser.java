@@ -236,9 +236,52 @@ public class CSVFileParser extends FileReader
 				entityGroupIds.add(entityGroupId);
 				while (readNext())
 				{
-					addEntityId(entityManager, entityGroupId);
-					addEntityGrpId(entityManager);
-					addrootCategoryEntityId(entityManager);
+					if (readLine() != null && !isCategory() && !isEntityGroup()
+							&& readLine()[0].trim().length() != 0)
+					{
+						for (String entityName : getEntitiesName())
+						{
+
+							Long entityId = entityManager.getEntityId(entityName, entityGroupId);
+							if (entityId == null)
+							{
+								throw new DynamicExtensionsSystemException(
+										"Please enter valid Entity name. Error at line number "
+												+ getLineNumber()+" for Entity:"+entityName);
+							}
+							entityIds.add(entityId);
+						}
+					}
+					if (isEntityGroup())
+					{
+						entityGroupId = entityManager.getEntityGroupId(getEntityGroupName());
+						if (entityGroupId == null)
+						{
+							throw new DynamicExtensionsSystemException(
+									"Please enter valid EntityGroup name. Error at line number "
+											+ getLineNumber());
+						}
+						entityGroupIds.add(entityGroupId);
+					}
+					if (isCategory())
+					{
+						String[] formNames=getFormNames();
+						if(formNames!= null && formNames.length>0)
+						{
+							for (String formName : formNames)
+							{
+								Long rootCategoryEntityId = entityManager
+										.getRootCategoryEntityIdByCategoryName(formName);
+								if (rootCategoryEntityId == null)
+								{
+									throw new DynamicExtensionsSystemException(
+											"Please enter valid category name. Error at line number "
+													+ getLineNumber()+" for Category:"+formName);
+								}
+								formIds.add(rootCategoryEntityId);
+							}
+						}
+					}
 				}
 			}
 			break;
@@ -247,86 +290,4 @@ public class CSVFileParser extends FileReader
 		setFormIds(formIds);
 		setEntityGroupIds(entityGroupIds);
 	}
-
-	
-	/**
-	 * method adds rootCategoryEntityId to formIds.
-	 * @param entityManager
-	 * @throws DynamicExtensionsSystemException
-	 */
-	private void addrootCategoryEntityId(EntityManagerInterface entityManager)
-			throws DynamicExtensionsSystemException 
-	{
-		if (isCategory())
-		{
-			String[] formNames=getFormNames();
-			if(formNames!= null && formNames.length>0)
-			{
-				for (String formName : formNames)
-				{
-					Long rootCategoryEntityId = entityManager
-							.getRootCategoryEntityIdByCategoryName(formName);
-					if (rootCategoryEntityId == null)
-					{
-						throw new DynamicExtensionsSystemException(
-								"Please enter valid category name. Error at line number "
-										+ getLineNumber()+" for Category:"+formName);
-					}
-					formIds.add(rootCategoryEntityId);
-				}
-			}
-		}
-	}
-
-	/**
-	 * method adds addEntityGrpId.
-	 * @param entityManager
-	 * @throws DynamicExtensionsSystemException
-	 */
-	private void addEntityGrpId(EntityManagerInterface entityManager)
-			throws DynamicExtensionsSystemException
-	{
-		Long entityGroupId;
-		if (isEntityGroup())
-		{
-			entityGroupId = entityManager.getEntityGroupId(getEntityGroupName());
-			if (entityGroupId == null)
-			{
-				throw new DynamicExtensionsSystemException(
-						"Please enter valid EntityGroup name. Error at line number "
-								+ getLineNumber());
-			}
-			entityGroupIds.add(entityGroupId);
-		}
-	}
-
-	/**
-	 * method adds addEntityIds.
-	 * @param entityManager
-	 * @param entityGroupId
-	 * @throws DynamicExtensionsSystemException
-	 */
-	private void addEntityId(EntityManagerInterface entityManager,
-			Long entityGroupId) throws DynamicExtensionsSystemException 
-	{
-		if (readLine() != null && !isCategory() && !isEntityGroup()
-				&& readLine()[0].trim().length() != 0)
-		{
-			for (String entityName : getEntitiesName())
-			{
-
-				Long entityId = entityManager.getEntityId(entityName, entityGroupId);
-				if (entityId == null)
-				{
-					throw new DynamicExtensionsSystemException(
-							"Please enter valid Entity name. Error at line number "
-									+ getLineNumber()+" for Entity:"+entityName);
-				}
-				entityIds.add(entityId);
-			}
-		}
-	}
-
-	
-	
 }
