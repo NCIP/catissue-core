@@ -18,6 +18,7 @@
 		<user-name>@@username@@</user-name>
 		<password>@@pasword@@</password>
 		<driver-class>@@databasedriver@@</driver-class>
+		<check-valid-connection-sql>select count(*) from DYEXTN_ABSTRACT_METADATA</check-valid-connection-sql>
 		<min-pool-size>10</min-pool-size>
     	<max-pool-size>25</max-pool-size>
 	</local-tx-datasource>
@@ -27,5 +28,8 @@
 		<user-name>@@username@@</user-name>
 		<password>@@pasword@@</password>
 		<driver-class>@@databasedriver@@</driver-class>
+		<check-valid-connection-sql>select count(*) from QUERY</check-valid-connection-sql>
+		<min-pool-size>10</min-pool-size>
+    	<max-pool-size>25</max-pool-size>
 	</local-tx-datasource>
 </datasources>
