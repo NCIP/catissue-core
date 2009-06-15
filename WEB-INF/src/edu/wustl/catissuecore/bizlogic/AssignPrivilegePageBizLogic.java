@@ -151,10 +151,10 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		String valueField = "id";
 		
 		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),Status.ACTIVITY_STATUS_CLOSED.toString()};
-		String joinCondition = null;
+		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ", ";
 
-		String[] whereColumnName = new String[]{Status.ACTIVITY_STATUS_ACTIVE.toString()};
+		String[] whereColumnName = new String[]{Status.ACTIVITY_STATUS.toString()};
 		String[] whereColumnCondition = new String[]{"not in"};
 		Object[] whereColumnValue = {activityStatusArray};
 
@@ -181,7 +181,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		String valueField = "id";
 		
 		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),Status.ACTIVITY_STATUS_CLOSED.toString()};
-		String joinCondition = null;
+		String joinCondition =  Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ", ";
 
 		String[] whereColumnName = new String[]{Status.ACTIVITY_STATUS.toString()};
