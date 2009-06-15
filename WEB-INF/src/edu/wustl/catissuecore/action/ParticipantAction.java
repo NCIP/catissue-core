@@ -407,10 +407,10 @@ public class ParticipantAction extends SecureAction
 		}
 		//while switching form view annotation tab to view path report tab report id is reset to -1 in session 
 		//to omit this report is  retrieved from session and then compared with the new value.
-		if(reportId== -1 && reportIdFormSession!=null)
+	/*	if(reportId== -1 && reportIdFormSession!=null)
 		{
 			reportId = reportIdFormSession;
-		}
+		}*/
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		//Falguni:Performance Enhancement.
 		Long participantEntityId = null;
