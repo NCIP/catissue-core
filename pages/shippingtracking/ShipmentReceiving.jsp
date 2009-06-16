@@ -324,7 +324,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 														</tr>
 														<tr class="subtd">
 																<td width="5%">
-																	<input type="checkbox" name="chkSelectAllSpecimens" value="chkSelectAllSpecimens" onClick ="selectAllCheckBox('chkSelectAllSpecimens','chkSpecimenId')">
+																	<input type="checkbox" name="chkSelectAllSpecimens" id="chkSelectAllSpecimens" value="chkSelectAllSpecimens" onClick ="selectAllCheckBox('chkSelectAllSpecimens','chkSpecimenId')">
 																</td>
 																<td width="15%">
 																	<bean:message key="shipment.label" bundle="msg.shippingtracking"/>
@@ -345,7 +345,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 														<logic:iterate id="specimenItem" name="shipmentReceivingForm" property="specimenCollection">
 									                  	<tr>
 																<td class="black_ar" width="2%">
-																	<input type="checkbox" name="chkSpecimenId" value="<c:out value="${specimenItem.id}"/>"/>
+																	<input type="checkbox" name="chkSpecimenId" id="chkSpecimenId" value="<c:out value="${specimenItem.id}"/>"/>
 										                    		<html:hidden name="specimenItem" property="id" indexed="true" />
 																</td>
 																<td class="grey_ar" width="15%">
@@ -580,7 +580,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 														</tr>
 														<tr class="subtd">
 															<td width="5%" height="25"><span class="black_ar">
-																<input type="checkbox" name="chkSelectAllContainers" value="checkbox" onClick ="selectAllCheckBox('chkSelectAllContainers','chkStorgaeContainerId')"></span>
+																<input type="checkbox" name="chkSelectAllContainers" id="chkSelectAllContainers" value="checkbox" onClick ="selectAllCheckBox('chkSelectAllContainers','chkStorgaeContainerId')"></span>
 															</td>
 
 											                <td width="130"><b><bean:message key="shipment.label" bundle="msg.shippingtracking"/></b></td>
@@ -594,7 +594,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 														<logic:iterate id="containerItem" name="shipmentReceivingForm" property="containerCollection" >
 															<tr>
 																<td height="25" class="black_ar" width="2%">
-																	<input type="checkbox" name="chkStorgaeContainerId" value="<c:out value="${containerItem.id}"/>"/>
+																	<input type="checkbox" name="chkStorgaeContainerId" id="chkStorgaeContainerId" value="<c:out value="${containerItem.id}"/>"/>
 																	<html:hidden name="containerItem" property="id" indexed="true" />
 																</td>
 																<td class="grey_ar" width="15%"><b><c:out value="${containerItem.name}"/></b>

@@ -9,6 +9,7 @@ var REJECT_AND_DESTROY = "Reject & Destroy";
 var REJECT_AND_RESEND = "Reject & Return";
 
 // Set activityStatus to "Reject & Resend" for selected items.
+//changes added to work with Mozilla - bug 12265
 function setRejectAndResend(choiceSpecimenContainer) {
 	var chkBoxArr;
 	if  (choiceSpecimenContainer == 'specimen') {
@@ -25,26 +26,26 @@ function setRejectAndResend(choiceSpecimenContainer) {
 				if(chkBoxArr[i].checked) {
 					// change item's activity status = "Reject & Return"
 					if  (choiceSpecimenContainer == 'specimen') {
-						document.getElementById('specimenItem[' + i + '].activityStatus').value = REJECT_AND_RESEND
+						document.getElementsByName('specimenItem[' + i + '].activityStatus')[0].value = REJECT_AND_RESEND
 						
 						// Modify storage location to 'Auto', as content should be stored in receiving site.
-						modifyStorageLocationAsPerStatus(document.getElementById('specimenItem[' + i + '].activityStatus'), 
-							document.getElementById('specimenItem[' + i + '].id').value, 'specimen')
+						modifyStorageLocationAsPerStatus(document.getElementsByName('specimenItem[' + i + '].activityStatus')[0], 
+							document.getElementsByName('specimenItem[' + i + '].id')[0].value, 'specimen')
 						
 					} else {
-						document.getElementById('containerItem[' + i + '].activityStatus').value = REJECT_AND_RESEND
+						document.getElementsByName('containerItem[' + i + '].activityStatus')[0].value = REJECT_AND_RESEND
 						
 						// Modify storage location to 'Auto', as content should be stored in receiving site.
-						modifyStorageLocationAsPerStatus(document.getElementById('containerItem[' + i + '].activityStatus'), 
-							document.getElementById('containerItem[' + i + '].id').value, 'container')
+						modifyStorageLocationAsPerStatus(document.getElementsByName('containerItem[' + i + '].activityStatus')[0], 
+							document.getElementsByName('containerItem[' + i + '].id')[0].value, 'container')
 					}
 				}
 			}
 		}
 	} 
 }
-
-// Set activityStatus to "Reject & Destroy" for selected items.
+//Set activityStatus to "Reject & Destroy" for selected items.
+//changes added to work with Mozilla - bug 12265
 function setRejectAndDestroy(choiceSpecimenContainer) {
 	var chkBoxArr;
 	if  (choiceSpecimenContainer == 'specimen') {
@@ -61,18 +62,18 @@ function setRejectAndDestroy(choiceSpecimenContainer) {
 				if(chkBoxArr[i].checked) {
 					// change item's activity status = "Reject & Destroy"
 					if  (choiceSpecimenContainer == 'specimen') {
-						document.getElementById('specimenItem[' + i + '].activityStatus').value = REJECT_AND_DESTROY
+						document.getElementsByName('specimenItem[' + i + '].activityStatus')[0].value = REJECT_AND_DESTROY
 						
 						// Modify storage location to 'Virtual'.
-						modifyStorageLocationAsPerStatus(document.getElementById('specimenItem[' + i + '].activityStatus'), 
-							document.getElementById('specimenItem[' + i + '].id').value, 'specimen')
+						modifyStorageLocationAsPerStatus(document.getElementsByName('specimenItem[' + i + '].activityStatus')[0], 
+							document.getElementsByName('specimenItem[' + i + '].id')[0].value, 'specimen')
 						
 					} else {
-						document.getElementById('containerItem[' + i + '].activityStatus').value = REJECT_AND_DESTROY
+						document.getElementsByName('containerItem[' + i + '].activityStatus')[0].value = REJECT_AND_DESTROY
 						
 						// Modify storage location to 'Site'.
-						modifyStorageLocationAsPerStatus(document.getElementById('containerItem[' + i + '].activityStatus'), 
-							document.getElementById('containerItem[' + i + '].id').value, 'container')
+						modifyStorageLocationAsPerStatus(document.getElementsByName('containerItem[' + i + '].activityStatus')[0], 
+							document.getElementsByName('containerItem[' + i + '].id')[0].value, 'container')
 					}
 				}
 			}
