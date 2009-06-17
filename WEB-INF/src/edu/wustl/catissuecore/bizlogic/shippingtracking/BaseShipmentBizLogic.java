@@ -1064,6 +1064,21 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		baseShipment.setSenderContactPerson(sender);
+		//set receiver contact person
+		//bug 12255
+		List receiverSiteList =null;
+		Site receiverSite = null;
+		long siteId = baseShipment.getReceiverSite().getId();
+		if(siteId!=0l)
+		{
+			receiverSiteList = dao.retrieve(Site.class.getName(), edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,siteId);
+			if (receiverSiteList!=null && !receiverSiteList.isEmpty())
+			{
+				receiverSite = (Site) receiverSiteList.get(0);
+			}
+			User receiverSiteCoordinator = receiverSite.getCoordinator();
+			baseShipment.setReceiverContactPerson(receiverSiteCoordinator);			
+		}
 	}
 
 	/**
