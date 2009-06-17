@@ -18,9 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -583,8 +580,18 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	@Override
 	protected String getNotificationMailSubject(BaseShipment baseShipment)
 	{
-		return ShipmentMailFormatterUtility.getCreateShipmentRequestMailSubject(
-				(ShipmentRequest) baseShipment);
+		//bug 12816 start
+		//to add rejected message if request gets rejected
+		if(baseShipment.getActivityStatus().equals("Rejected"))
+		{
+			return ShipmentMailFormatterUtility.getRejectShipmentRequestMailSubject(
+					(ShipmentRequest) baseShipment);
+		}
+		else//bug 12816 end
+		{
+		  return ShipmentMailFormatterUtility.getCreateShipmentRequestMailSubject(
+						(ShipmentRequest) baseShipment);
+		}
 	}
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.shippingtracking.BaseShipmentBizLogic#getNotificationMailBody
@@ -598,8 +605,17 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	@Override
 	protected String getNotificationMailBody(BaseShipment baseShipment)
 	{
-		return ShipmentMailFormatterUtility.formatCreateShipmentRequestMailBody(
+		//bug 12816 start
+		if(baseShipment.getActivityStatus().equals("Rejected"))
+		{
+			return ShipmentMailFormatterUtility.formatRejectShipmentRequestMailBody(
+					(ShipmentRequest) baseShipment);
+		}
+		else//bug 12816 end
+		{
+	    	return ShipmentMailFormatterUtility.formatCreateShipmentRequestMailBody(
 				(ShipmentRequest) baseShipment);
+		}
 	}
 
 	/* (non-Javadoc)

@@ -75,4 +75,26 @@ public class ShipmentMailFormatterUtility
 	{
 		return "Shipment request created";
 	}
+	//bug 12816 start
+	/**
+	 * Gets the shipment request rejected mail body.
+	 * @param shipmentRequest object of ShipmentRequest class.
+	 * @return shipment request mail body
+	 */
+	public static String formatRejectShipmentRequestMailBody(ShipmentRequest shipmentRequest)
+	{
+		//TODO - exact contents required
+		return "Shipment request rejected";
+	}
+
+	/**
+	 * Gets the shipment request rejected mail subject.
+	 * @param shipmentRequest object of ShipmentRequest class.
+	 * @return shipment request mail subject.
+	 */
+	public static String getRejectShipmentRequestMailSubject(ShipmentRequest shipmentRequest)
+	{
+		return "Shipment request rejected";
+	}
+	//bug 12816 end
 }
