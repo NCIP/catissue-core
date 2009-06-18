@@ -272,7 +272,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 */
 	private Map<String, Set<String>> getEntityMap()
 	{
-		Map <String,Set<String>> entityIdsMap = new HashMap<String, Set<String>>();
+		Map <String,Set<String>> entityIdsMap = new LinkedHashMap<String, Set<String>>();
 		entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, new HashSet<String>());
 		entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
 		entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());

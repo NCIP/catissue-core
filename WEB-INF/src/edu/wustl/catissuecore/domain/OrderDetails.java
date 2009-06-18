@@ -434,7 +434,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 										.getSpecimenOrderItemCollection();
 								if (orderItemCollection == null)
 								{
-									orderItemCollection = new HashSet();
+									orderItemCollection = new LinkedHashSet();
 								}
 								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
 								orderItem = specimenOrderItem;

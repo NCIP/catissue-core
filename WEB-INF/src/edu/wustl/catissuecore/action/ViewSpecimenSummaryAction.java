@@ -651,7 +651,7 @@ public class ViewSpecimenSummaryAction extends Action {
 			specimenList.addAll(specimenColl);
 			
 			IdComparator speciemnIdComp = new IdComparator();
-			Collections.sort(specimenList,speciemnIdComp);
+			//Collections.sort(specimenList,speciemnIdComp);
 
 		}
 		return specimenList;
@@ -720,7 +720,7 @@ public class ViewSpecimenSummaryAction extends Action {
 	//bug 11169 start
 	private void verifyPrintStatus(ViewSpecimenSummaryForm summaryForm, HttpSession session)
 	{
-		Set printSpecimenSet = new HashSet();
+		Set printSpecimenSet = new LinkedHashSet();
 		List<GenericSpecimen> specimenList = new ArrayList<GenericSpecimen>();
 		specimenList.addAll(summaryForm.getAliquotList());
 		specimenList.addAll(summaryForm.getDerivedList());

@@ -81,7 +81,7 @@ public class DirectDistributeInitAction extends BaseAction
     			isValidTodistribute = isValidToDistributeSpecimenCheckPviOnCP(specimenCollection,privilegeCache,
     					sessionData);
     		}
-    		Collections.sort(specimenCollection, new SpecimenComparator());
+    		//Collections.sort(specimenCollection, new SpecimenComparator());
     		orderSpecForm.setValues(putValueInSpecimenMap(specimenCollection));
     		OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
     		orderSpecForm.setOrderForm(orderFrom);

@@ -5,6 +5,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -97,6 +98,8 @@ abstract public class QueryShoppingCartAction extends BaseAction
 		{
 			chkBoxValues.add(getIndex(checkedValue));
 		}
+		// Sorting indices so that the order is retained
+		Collections.sort(chkBoxValues);
 		return chkBoxValues;
 	}
 

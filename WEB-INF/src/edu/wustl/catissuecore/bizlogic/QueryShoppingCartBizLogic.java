@@ -6,17 +6,18 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 
 /**
  * @author supriya_dankh
@@ -120,7 +121,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	
 	public Set<String> getEntityIdsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues)
 	{
-		Set<String> entityIdsList = new HashSet<String>();
+		Set<String> entityIdsList = new LinkedHashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),entityName);
         List<List<String>> dataList = cart.getCart();
         if(chkBoxValues!=null)
@@ -156,7 +157,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	
 	public Set<String> getEntityLabelsList(QueryShoppingCart cart,List entityName,List<Integer>chkBoxValues,String attributeName)
 	{
-		Set<String> entityIdsList = new HashSet<String>();
+		Set<String> entityIdsList = new LinkedHashSet<String>();
 	    List<Integer> entityIdsColumnIndexList = getLabelsColumnIndexList(cart.getCartAttributeList(),entityName,attributeName);
         List<List<String>> dataList = cart.getCart();
         if(chkBoxValues!=null)
@@ -196,7 +197,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Set getListOfOrderItem(Set<String> entityIdsList)throws BizLogicException
 	{
-		 Set<String> orderIdsList = new HashSet<String>();
+		 Set<String> orderIdsList = new LinkedHashSet<String>();
 		 DAO dao = openDAOSession(null);	
 		 try
 		   {
