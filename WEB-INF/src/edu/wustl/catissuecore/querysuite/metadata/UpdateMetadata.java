@@ -147,6 +147,7 @@ public class UpdateMetadata
 		UpdateMetadataUtil.executeSQLs(insertPathSQL, connection.createStatement(), false);
 		//bug 11336 end
 		updateContainerMetadata();
+		updateMetadataForShipment();
 	}
 	/**
 	 * Updating metadata changes from Rc4 to P3.
@@ -545,6 +546,22 @@ public class UpdateMetadata
 		dbUpdateSQL.add("insert into dyextn_tagged_value select Max(IDENTIFIER)+1, 'IS_BIRTH_DATE','true',847 from dyextn_tagged_value");
 		
 		return dbUpdateSQL;
+	}
+	
+	/**
+	 * Updating the identifier attribute related to Shipment to make it as identified
+	 * @param dbUpdateSQL
+	 * @throws SQLException 
+	 * @throws IOException 
+	 */
+	private static void updateMetadataForShipment() throws IOException, SQLException
+	{
+		List<String> updateSQLForShipment = new ArrayList<String>();
+		updateSQLForShipment.add("Update dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (select identifier from dyextn_attribute where entiy_id in (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.shippingtracking.BaseShipment') and identifier in (select identifier from dyextn_abstract_metadata where name = 'id'))");
+		updateSQLForShipment.add("Update dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (select identifier from dyextn_attribute where entiy_id in (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.shippingtracking.Shipment') and identifier in (select identifier from dyextn_abstract_metadata where name = 'id'))");
+		updateSQLForShipment.add("Update dyextn_primitive_attribute SET IS_IDENTIFIED =1 where IDENTIFIER in (select identifier from dyextn_attribute where entiy_id in (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest') and identifier in (select identifier from dyextn_abstract_metadata where name = 'id'))");
+		
+		UpdateMetadataUtil.executeSQLs(updateSQLForShipment, connection.createStatement(), false);
 	}
 	
 	private static List<String> updateSQLForDistributionProtocol() throws SQLException
