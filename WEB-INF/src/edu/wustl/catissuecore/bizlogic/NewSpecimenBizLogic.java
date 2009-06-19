@@ -2304,7 +2304,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 			throw getBizLogicException(null, "errors.item.required", message);
 		}
-		if (!Variables.isSpecimenLabelGeneratorAvl)
+		/*if (!Variables.isSpecimenLabelGeneratorAvl)
 		{
 			if (specimen.getParentSpecimen() != null
 					&& ((Specimen) specimen.getParentSpecimen()).getLabel() == null
@@ -2313,7 +2313,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				String message = ApplicationProperties.getValue("createSpecimen.parent");
 				throw getBizLogicException(null, "errors.item.required", message);
 			}
-		}
+		}*/
 		if (validator.isEmpty(specimen.getSpecimenClass()))
 		{
 			String message = ApplicationProperties.getValue("specimen.type");
