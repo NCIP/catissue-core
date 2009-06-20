@@ -13,6 +13,8 @@
 	
 	<property name="base.dir" value="."/>	
 	<property name="classes.dir" value="./classes" />
+	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
+	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
 	<tstamp>
 		<format property="TODAY" pattern="ddMMyyyy_hhmmss" />
 	</tstamp>
@@ -128,6 +130,9 @@
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
 				</replace>
+				<replace file="${basedir}/ApplicationDAOProperties.xml">
+					<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
+				</replace>
 				<copy file="./conf/drop_staging_db_mysql.sql" todir="${basedir}/sql" overwrite="true" />
 				<copy file="./conf/drop_public_db_mysql.sql" todir="${basedir}/sql" overwrite="true" />
 			</then>
@@ -144,6 +149,9 @@
 						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${privateDBHost}:${privateDBPort}:${stagingDBName}" />
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
+				</replace>
+				<replace file="${basedir}/ApplicationDAOProperties.xml">
+					<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
 				</replace>
 				<copy file="./conf/drop_staging_db_oracle.sql" todir="${basedir}/sql" overwrite="true" />
 				<copy file="./conf/drop_public_db_oracle.sql" todir="${basedir}/sql" overwrite="true" />
