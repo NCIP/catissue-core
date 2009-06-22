@@ -195,7 +195,7 @@ public class LoginAction extends Action
 	{
 		String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
 				validUser.getCsmUserId());
-        if (userRole!=null && (userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR)))
+        if (userRole!=null && (userRole.equalsIgnoreCase(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR)))
 		{
 			sessionData.setSecurityRequired(false);
 		}
