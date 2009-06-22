@@ -46,14 +46,22 @@
 	{
 		var colid ='${requestScope.identifierFieldIndex}';
 		var cl = mygrid.cells(id,colid);
+		var c2 = mygrid.cells(id,6).getValue();
 		var searchId = cl.getValue();
-		var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
+		//var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
+		//alert(url)
 		var pageOf="${requestScope.pageOf}";
-		if(pageOf=="pageOfCollectionProtocol")
+		if(pageOf=="pageOfCollectionProtocol" && mygrid.cells(id,6).getValue()!="##")
 		{
-			url = "RetrieveCollectionProtocol.do?&id="+searchId;
+		  var url = "RetrieveCollectionProtocol.do?&id="+searchId;
+		  window.location.href = url;
 		}
-		window.location.href = url;
+		else if(pageOf=="pageOfNewSpecimenProtocol" && mygrid.cells(id,15).getValue()!="##")
+		{
+		  var url = "RetrieveCollectionProtocol.do?&id="+searchId;
+		  window.location.href = url;
+		}
+		else;
 	}
 	
 function init_grid()
