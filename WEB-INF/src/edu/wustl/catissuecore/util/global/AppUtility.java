@@ -898,11 +898,11 @@ public class AppUtility
 		}
 		else if ("".equals(columnName.trim()))
 		{
-			columnWidth = "20";
+			columnWidth = "80";
 		}
 		else
 		{
-			columnWidth = "80";
+			columnWidth = "150";
 		}
 		return columnWidth;
 	}
@@ -1752,7 +1752,7 @@ public class AppUtility
 			String fixedColWidth = null;
 			if (isWidthInPercent)
 			{
-				fixedColWidth = String.valueOf(100 / columnList.size());
+				fixedColWidth = String.valueOf(120 / columnList.size());
 			}
 			else
 			{
