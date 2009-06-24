@@ -63,7 +63,7 @@ table#browserDetailsContainer
 							<tr>
 							<td>
 								<a href="Aboutv11p.do" class="view"><span class="wh_ar_b"></span>
-								<bean:message key="pspl.catissue.about" />
+								<bean:message key="pspl.catissue.about" arg0="<%=ApplicationProperties.getValue("app.version")%>"/>
 								</a>
 							</td>
 							</tr>
@@ -332,7 +332,7 @@ table#browserDetailsContainer
 	<!-- Mandar : 7Dec09 For PSPL Info -->
 	<tr>
 		<td colspan="5" align="center" valign="top" class="bgblue_white">
-		<bean:message key="pspl.catissue.footNote" />
+		<bean:message key="pspl.catissue.footNote" arg0="<%=ApplicationProperties.getValue("app.version")%>"/>
 		</td>
 	</tr>
 </table>
