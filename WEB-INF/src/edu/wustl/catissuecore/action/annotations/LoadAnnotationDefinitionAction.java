@@ -522,9 +522,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		{
 			try
 			{
-				AppUtility.closeJDBCSession(jdbcDAO);
 				jdbcDAO.closeStatement(resultSet);
-				
+				AppUtility.closeJDBCSession(jdbcDAO);				
 			}
 			catch (ApplicationException e)
 			{
