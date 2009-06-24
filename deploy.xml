@@ -281,7 +281,12 @@
 		</catch>
 	</trycatch>
 	</target>
-
+	<target name="configure_contactus">
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
+			<include name ="ContactUs.txt"/>
+			<replacefilter token="@@SUPPORTEMAIL@@" value="${email.administrative.emailAddress}"/>
+		</replace>
+	</target>
 	<!--Extrct WAR and copy Configuration files to temp directory-->
 	<target name="init">
 		<echo message="Initializing installation..." />
@@ -297,11 +302,11 @@
 
 		<antcall target="configure_log4j" />
 
-
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
+		<antcall target="configure_contactus" />
 		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
