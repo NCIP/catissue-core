@@ -42,26 +42,46 @@
 <script>
 	// function modified to display distribution array.
 	// problem in query data.
+	function getIDColumn()
+	{
+		var hiddenColumnNumbers = new Array();
+		${requestScope.hiddenColumnNumbers}
+		return hiddenColumnNumbers;
+	}
+	
+	function checkHashed(id,hiddenColumnNumbers)
+	{
+		for(i=0;i<hiddenColumnNumbers;i++)
+		{
+			if(mygrid.cells(id,i).getValue()=="##")
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+	
 	function rowClick(id)
 	{
 		var colid ='${requestScope.identifierFieldIndex}';
 		var cl = mygrid.cells(id,colid);
-		var c2 = mygrid.cells(id,6).getValue();
 		var searchId = cl.getValue();
-		//var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
-		//alert(url)
+		var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
+		var hiddenColumnNumbers= getIDColumn();
 		var pageOf="${requestScope.pageOf}";
-		if(pageOf=="pageOfCollectionProtocol" && mygrid.cells(id,6).getValue()!="##")
+		if(pageOf=="pageOfNewSpecimen")
 		{
-		  var url = "RetrieveCollectionProtocol.do?&id="+searchId;
-		  window.location.href = url;
+			hiddenColumnNumbers=17;
 		}
-		else if(pageOf=="pageOfNewSpecimenProtocol" && mygrid.cells(id,15).getValue()!="##")
+		if(pageOf=="pageOfCollectionProtocol")
 		{
-		  var url = "RetrieveCollectionProtocol.do?&id="+searchId;
-		  window.location.href = url;
+			url = "RetrieveCollectionProtocol.do?&id="+searchId;
 		}
-		else;
+		var flag=checkHashed(id,hiddenColumnNumbers);
+		if(flag==1)
+		{
+			window.location.href = url;
+		}	
 	}
 	
 function init_grid()
