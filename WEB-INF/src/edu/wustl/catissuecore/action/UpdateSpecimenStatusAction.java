@@ -83,6 +83,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			//11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm, false);
 			//added this to disable collected checkboxes  
+			
 			if (request.getParameter("target") != null && request.getParameter("target").equals("viewSummary"))
 			{
 				ActionMessages actionMessages = new ActionMessages();
@@ -91,6 +92,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				specimenSummaryForm.setShowLabel(true);
 				saveMessages(request, actionMessages);
 				specimenSummaryForm.setReadOnly(true);
+				//bug 12959
+				request.setAttribute("readOnly",true);//to disable collected checkbox in specimen summary page
 
 			}
 			if (specimenSummaryForm.getPrintCheckbox() != null && specimenSummaryForm.getPrintCheckbox().equals("true"))

@@ -59,6 +59,21 @@ public class NewShopingCartAction extends BaseAction {
 		List<AttributeInterface> cartAttributeList=new ArrayList<AttributeInterface>();
 		List<String> columnList=new ArrayList<String>();
 		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
+		/** value of readOnly attribute is specified in UpdateBulkSpecimensAction and UpdateSpecimenStatusAction
+		 *  This value will only true in case of addition of multiple specimen.
+		 *  This is done to disable collected checkbox in specimen summary page.
+            bug 12959
+		 */
+		Boolean readOnly = (Boolean) request.getAttribute("readOnly");
+		if(readOnly!=null)
+		{
+			if(form instanceof ViewSpecimenSummaryForm)
+			{
+				ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
+				summaryForm.setReadOnly(readOnly);
+			}
+		}
+		
 		
 		//int[] searchTarget = prepareSearchTarget();
 		//int basedOn = 0;

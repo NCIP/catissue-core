@@ -57,16 +57,6 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 	private String printerType;
 	private String printerLocation;
 	
-	private boolean isPrintSpcimen = false;
-    
-	public boolean isPrintSpcimen() {
-		return isPrintSpcimen;
-	}
-
-	public void setPrintSpcimen(boolean isPrintSpcimen) {
-		this.isPrintSpcimen = isPrintSpcimen;
-	}
-
 	private boolean multipleSpEditMode = false;
 	
 	private Set specimenPrintList = null;//janhavi
@@ -351,7 +341,10 @@ public class ViewSpecimenSummaryForm extends ActionForm implements SpecimenDetai
 		while(specIterator.hasNext())
 		{
 			GenericSpecimen genericSpecimen = specIterator.next();
-			genericSpecimen.setReadOnly(this.readOnly);
+			if(genericSpecimen.getCheckedSpecimen())
+			{
+			  genericSpecimen.setReadOnly(this.readOnly);
+			}
 		}
 	}
 	

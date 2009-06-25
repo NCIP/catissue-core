@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,6 +102,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			specimenSummaryForm.setShowLabel(true);
 			saveMessages(request, actionMessages);
 			specimenSummaryForm.setReadOnly(true);
+			//bug 12959
+			request.setAttribute("readOnly",true);//to disable collected checkbox in specimen summary page.
 				
 			//if(request.getParameter("pageOf") != null)
 			//	return mapping.findForward(request.getParameter("pageOf"));
@@ -110,7 +113,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			if(request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
 			{
 				HashMap forwardToPrintMap = new HashMap();
-				forwardToPrintMap.put("printMultipleSpecimen",specimenDomainCollection );
+				forwardToPrintMap.put("printMultipleSpecimen",getSpecimensToPrint(specimenSummaryForm,specimenDomainCollection));
 				request.setAttribute("forwardToPrintMap",forwardToPrintMap);
 				request.setAttribute("printMultiple","1");
 				if(request.getParameter("pageOf") != null)
@@ -139,7 +142,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				//bug 12656 start
 				if (request.getAttribute("printflag")!=null && request.getAttribute("printflag").equals("1"))
 				{
-				   request.setAttribute("pageOf", Constants.SUCCESS);
+				   //request.setAttribute("pageOf", Constants.SUCCESS);//commented as add to my list + print - menubar disappers
 				   return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);//"printAnticipatorySpecimens";
 				}
 				else
@@ -205,6 +208,30 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}
+	private Set<Specimen> getSpecimensToPrint(ViewSpecimenSummaryForm specimenSummaryForm,LinkedHashSet specimenDomainCollection)
+	{
+		Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
+		Iterator it = specimenprintCollection.iterator();
+		Set<Specimen> specimensToPrint = new LinkedHashSet<Specimen>();
+		while(it.hasNext())
+		{
+			Object obj = it.next();
+			if(obj instanceof GenericSpecimen)
+			{
+				GenericSpecimen gSpecimen = (GenericSpecimen)obj;
+				Iterator itr = specimenDomainCollection.iterator();
+				while(itr.hasNext())
+				{
+					Specimen specimen = (Specimen) itr.next();
+					if(specimen.getLabel().equals(gSpecimen.getDisplayName()))
+					{
+					  specimensToPrint.add(specimen);
+					}							
+				}						
+			}
+		}
+		return specimensToPrint;
+	}
 	private void updateWithNewStorageLocation(HttpSession session,
 			SessionDataBean sessionDataBean, String eventId,
 			LinkedHashSet specimenDomainCollection) throws DAOException{
@@ -254,7 +281,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO) throws ApplicationException{
 
 		specimenVO = (SpecimenDataBean) specimenVO;
-		specimenVO.setCheckedSpecimen(true);
+		specimenVO.setCheckedSpecimen(specimenVO.getCheckedSpecimen());
 		specimenVO.setPrintSpecimen(specimenVO.getPrintSpecimen());//Bug 12631
 		Specimen specimen = super.createSpecimenDomainObject(specimenVO);
 		setValuesForSpecimen(specimen,specimenVO);
@@ -272,12 +299,22 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		specimen.setComment(specimenDataBean.getComment());
+		//bug 12936 start
+		if (specimenDataBean.getCheckedSpecimen())
+		{
+			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		}
+		else
+		{
+			specimen.setCollectionStatus("Pending");		
+		}
+		//bug 12936 end
 		if(specimen.getCreatedOn()==null)
 		{
 			specimen.setCreatedOn(new Date());
 		}
-		specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-		genericSpecimen.setCheckedSpecimen(true);
+		//specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		genericSpecimen.setCheckedSpecimen(specimenDataBean.getCheckedSpecimen());
 		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());//Bug 12631
 		specimenDataBean.setCorresSpecimen(specimen);
 
