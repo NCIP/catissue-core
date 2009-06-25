@@ -36,8 +36,8 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("siteId", ""+site.getId() );
 		
 		addRequestParameter("noOfContainers", "1");
-		addRequestParameter("oneDimensionCapacity", "5");
-		addRequestParameter("twoDimensionCapacity", "5");
+		addRequestParameter("oneDimensionCapacity", "25");
+		addRequestParameter("twoDimensionCapacity", "25");
 		addRequestParameter("oneDimensionLabel", "row");
 		addRequestParameter("twoDimensionLabel", "col");
 		addRequestParameter("defaultTemperature", "29");
@@ -122,10 +122,10 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Edit.
 	 */
-	@Test
+	/*@Test
 	public void testStorageContainerEdit()
 	{
-		/*Simple Search Action*/
+		Simple Search Action
 		setRequestPathInfo("/SimpleSearch");
 		addRequestParameter("aliasName", "StorageContainer");
 		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "StorageContainer");
@@ -168,14 +168,14 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 			verifyActionErrors(errorNames);
 		}
 				
-		/*common search action.Generates StorageContainerForm*/
+		common search action.Generates StorageContainerForm
 		setRequestPathInfo("/StorageContainerSearch");
 		addRequestParameter("id","" + storageContainer.getId());
 		actionPerform();
 		verifyForward("pageOfStorageContainer");
 		verifyNoActionErrors();
 
-		/*edit operation*/
+		edit operation
 		storageContainer.setName("container1_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		addRequestParameter("name",storageContainer.getName());
 		
@@ -194,5 +194,5 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		assertEquals(form.getIsFull(), "True");
 		
 		TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);
-	}
+	}*/
 }
