@@ -4,7 +4,10 @@
  */
 package edu.wustl.catissuecore.bizlogic.shippingtracking;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,6 +38,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 {
 	Logger logger = Logger.getCommonLogger(ShipmentReceivingBizLogic.class);
+	
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
@@ -179,6 +183,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 					}
 					storageContainer.setLocatedAtPosition(null);
 				}
+				storageContainer.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());//bug 12820
 				dao.update(storageContainer);
 				//** Sachin Write same logic as SpecimenPostion
 				// Ravi : changes : start
@@ -200,6 +205,15 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 						StorageContainer.class.getName(),
 						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,storageContainer.getId()).get(0);
 				container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
+				dao.update(container);
+			}
+			//bug 12820
+			else if (Constants.REJECT_AND_RESEND.equals(storageContainer.getActivityStatus()))
+			{
+				StorageContainer container=(StorageContainer)dao.retrieve(
+						StorageContainer.class.getName(),
+						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,storageContainer.getId()).get(0);
+				container.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
 				dao.update(container);
 			}
 		}

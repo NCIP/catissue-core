@@ -699,8 +699,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				{
 					if (container.getName() != null
 							&& !container.getName().equals("")
-							&& !container.getName()
-							.contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
+							&& !Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX
+							.contains(container.getName()))
 					{
 						if (container.getId() == null)
 						{
@@ -722,9 +722,22 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 							if (container != null)
 							{
 								// bug 11410
-								if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD))
+								if (edu.wustl.catissuecore.util.global.Constants.ADD.equals(operation))
 								{
-									validateShipmentContainer(baseShipment,container);
+									//bug 12820
+									/**
+									 * used in container Reject and Return case
+									 * in this case In transit check is removed.thus the container will remain in In transit site
+									 * and when receiver site accepts it then it will shifted from In transit site to receiver site.
+									 */
+									if(Status.ACTIVITY_STATUS_REJECT.toString().equalsIgnoreCase(container.getActivityStatus()))
+									{
+										container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());									  
+									}
+									else
+									{
+										validateShipmentContainer(baseShipment,container);
+									}
 								}
 							}
 							else
@@ -737,8 +750,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						}
 					}
 					else if (container.getStorageType() != null
-							&& container.getStorageType().getName().equals(
-									Constants.SHIPMENT_CONTAINER_TYPE_NAME))
+							&& Constants.SHIPMENT_CONTAINER_TYPE_NAME.equals(container.getStorageType().getName()))
 					{
 						isValid = specimenBelongsToSite(container
 								.getSpecimenPositionCollection(), dao,
