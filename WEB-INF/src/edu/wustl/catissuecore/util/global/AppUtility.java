@@ -3127,4 +3127,27 @@ public class AppUtility
 		}
 		
 	}
+	/**
+	 * @param sText String containing the text to be checked 
+	 * @return boolean isNumber -true if given String is in proper number
+	 *         format or else returns false
+	 */
+	public static boolean isNumeric(String sText)
+	{
+		String validChars = "0123456789.E";
+		System.out.println(validChars);
+		boolean isNumber = true;
+		Character charTemp;
+
+		for (int i = 0; i < sText.length() && isNumber; i++)
+		{
+			charTemp = sText.charAt(i);
+			if (validChars.indexOf(charTemp) == -1)
+			{
+				isNumber = false;
+				break;
+			}
+		}
+		return isNumber;
+	}
 }

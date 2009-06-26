@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -229,7 +230,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 
 						else 
 						{
-							isNumber = isNumeric(values.get(key).toString());
+							isNumber = AppUtility.isNumeric(values.get(key).toString());
 							if (!(isNumber))
 							{
 								reqQntyError = 2;
@@ -265,27 +266,6 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 		return errors;
 	}
 
-	/**
-	 * @param sText String containing the text to be checked 
-	 * @return boolean isNumber-returns true if given String is in proper number
-	 *         format or else returns false
-	 */
-	private boolean isNumeric(String sText)
-	{
-		String validChars = "0123456789";
-		boolean isNumber = true;
-		Character charTemp;
-
-		for (int i = 0; i < sText.length() && isNumber; i++)
-		{
-			charTemp = sText.charAt(i);
-			if (validChars.indexOf(charTemp) == -1) 
-			{
-				isNumber = false;
-			}
-		}
-		return isNumber;
-	}
 	private boolean isSameSite()
 	{
 		boolean isSameSite = true;

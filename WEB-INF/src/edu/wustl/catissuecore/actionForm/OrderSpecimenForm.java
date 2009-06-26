@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -421,7 +422,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 
 					else
 					{
-						isNumber = isNumeric(values.get(reqQuantKey).toString());
+						isNumber = AppUtility.isNumeric(values.get(reqQuantKey).toString());
 						if (!(isNumber))
 						{
 							errors.add("values", new ActionError(
@@ -486,28 +487,6 @@ public class OrderSpecimenForm extends AbstractActionForm
 		}
 				
 		return isSameSite;
-	}
-
-	/**
-	 * @param sText String containing the text to be checked 
-	 * @return boolean isNumber -true if given String is in proper number
-	 *         format or else returns false
-	 */
-	private boolean isNumeric(String sText)
-	{
-		String validChars = "0123456789.";
-		boolean isNumber = true;
-		Character charTemp;
-
-		for (int i = 0; i < sText.length() && isNumber; i++)
-		{
-			charTemp = sText.charAt(i);
-			if (validChars.indexOf(charTemp) == -1)
-			{
-				isNumber = false;
-			}
-		}
-		return isNumber;
 	}
 
 	/**

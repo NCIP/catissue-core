@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -493,7 +494,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 					} 
 					else
 					{
-						isNumber = isNumeric(values.get(
+						isNumber = AppUtility.isNumeric(values.get(
 								key).toString());
 						if (!(isNumber))
 						{
@@ -539,28 +540,6 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			}
 		}
 		return defineArrayFormObj;
-	}
-
-	/**
-	 * @param sText String containing the text to be checked 
-	 * @return boolean isNumber-returns true if given String is in proper number
-	 *         format or else returns false
-	 */
-	private boolean isNumeric(String sText)
-	{
-		String validChars = "0123456789.";
-		boolean isNumber = true;
-		Character charTemp;
-
-		for (int i = 0; i < sText.length() && isNumber; i++) 
-		{
-			charTemp = sText.charAt(i);
-			if (validChars.indexOf(charTemp) == -1)
-			{
-				isNumber = false;
-			}
-		}
-		return isNumber;
 	}
 
 	/**
