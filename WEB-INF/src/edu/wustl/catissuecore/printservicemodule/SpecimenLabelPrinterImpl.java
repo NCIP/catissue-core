@@ -7,11 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.util.IdComparator;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -55,13 +53,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	{
 		//Iterate through all objects in List ,crate map of each object.
 		ArrayList listMap = new ArrayList ();
-
-		for(int cnt=0;cnt < abstractDomainObjectList.size();cnt++)
-		{
-			AbstractDomainObject abstractDomainObject = abstractDomainObjectList.get(cnt); 
-			//createObjectMap(abstractDomainObject,listMap);
-			createObjectMap(abstractDomainObject,listMap,printerType,printerLocation,ipAddress);
-		}
+		createObjectMap(abstractDomainObjectList,listMap,printerType,printerLocation,ipAddress);
 		try
 		{
 			PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
@@ -72,6 +64,33 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			logger.info(exp.getMessage(), exp);
 			return false;	
 		}
+	}
+	void createObjectMap(List<AbstractDomainObject> abstractDomainObjectList,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
+	{
+		//Bug 11509
+		Collections.sort(abstractDomainObjectList,new IdComparator());
+		for(AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
+		{
+			if(abstractDomainObject instanceof Specimen)
+			{
+				Specimen obj = (Specimen)abstractDomainObject;	
+				addDataToPrint(obj,listMap,printerType,printerLocation);			
+			}
+		}
+	}
+	private void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation)
+	{
+		LinkedHashMap dataMap = new LinkedHashMap();
+		String label= specimen.getLabel();
+		String barcode = specimen.getBarcode();
+		dataMap.put("class",specimen.getClassName());
+		dataMap.put("id",specimen.getId().toString());
+		dataMap.put("label",label);
+		dataMap.put("barcode",barcode);
+		dataMap.put("printerType",printerType);
+		dataMap.put("printerLocation",printerLocation);
+		listMap.add(dataMap);
+		
 	}
 	/**
 	 * @param abstractDomainObject Specimen Object
@@ -87,30 +106,12 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			ArrayList specimenList = new ArrayList();
 			specimenList.add(objSpecimen);
 			getAllSpecimenList(objSpecimen,specimenList);
-			//Bug 11509 
-			Collections.sort(specimenList, new IdComparator());
+			//Bug 11509
+			Collections.sort(specimenList,new IdComparator());
 			for(int cnt=0;cnt < specimenList.size();cnt++)
 			{
 				Specimen obj = (Specimen)specimenList.get(cnt);
-				LinkedHashMap dataMap = new LinkedHashMap();
-				String label= obj.getLabel();
-				String barcode = obj.getBarcode();
-		
-				dataMap.put("class",obj.getClassName());
-				dataMap.put("id",obj.getId().toString());
-				dataMap.put("label",label);
-				dataMap.put("barcode",barcode);
-				if(printerType==null || printerType.trim().equals(""))
-				{
-					printerType = " ";
-				}
-				dataMap.put("printerType",printerType);
-				if(printerLocation==null || printerLocation.trim().equals(""))
-				{
-					printerLocation = " ";
-				}
-				dataMap.put("printerLocation",printerLocation);
-				listMap.add(dataMap);
+				addDataToPrint(obj,listMap,printerType,printerLocation);	
 			}
 		}
 	

@@ -108,13 +108,13 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				}
 				else
 				{
-					//HashSet specimenprintCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
+					HashSet specimenCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
 					//bug 11169
-				    Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
-					Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
+				   // Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
+					//Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
 					
 					HashMap forwardToPrintMap = new HashMap();					
-					forwardToPrintMap.put("printAntiSpecimen", domainObjSet);
+					forwardToPrintMap.put("printAntiSpecimen", getSpecimensToPrint(specimenSummaryForm,specimenCollection));
 					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 					request.setAttribute("AntiSpecimen", "1");
 					//bug 12141 start
@@ -179,24 +179,29 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 
 	}
-	
-	private Set getSpecimensFromGenericSpecimens(Set specimenprintCollection) throws ApplicationException
+	private Set<Specimen> getSpecimensToPrint(ViewSpecimenSummaryForm specimenSummaryForm,HashSet specimenDomainCollection)
 	{
-		Set<Specimen> specimens = new LinkedHashSet<Specimen>();
-		Iterator<GenericSpecimen> it = specimenprintCollection.iterator();
+		Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
+		Iterator it = specimenprintCollection.iterator();
+		Set<Specimen> specimensToPrint = new LinkedHashSet<Specimen>();
 		while(it.hasNext())
 		{
-			Specimen specimen = this.createSpecimenDomainObject(it.next());
-			specimens.add(specimen);
+			Object obj = it.next();
+			if(obj instanceof GenericSpecimen)
+			{
+				GenericSpecimen gSpecimen = (GenericSpecimen)obj;
+				Iterator itr = specimenDomainCollection.iterator();
+				while(itr.hasNext())
+				{
+					Specimen specimen = (Specimen) itr.next();
+					if(specimen.getLabel().equals(gSpecimen.getDisplayName()))
+					{
+					  specimensToPrint.add(specimen);
+					}							
+				}						
+			}
 		}
-		//Bug 11509 start
-		List<Specimen> listToSort = new ArrayList<Specimen>();
-		listToSort.addAll(specimens);
-		Collections.sort(listToSort,new IdComparator());
-		//Bug 11509 end
-		specimens.removeAll(specimens);
-		specimens.addAll(listToSort);
-		return specimens;
+		return specimensToPrint;
 	}
 	// bug 8228 -suman
 	// this method checks for free locations of a container and clears the ones
