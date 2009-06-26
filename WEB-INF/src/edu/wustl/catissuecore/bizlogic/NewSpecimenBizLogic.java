@@ -67,6 +67,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -3775,67 +3776,77 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(DAO dao, Object domainObject)
+	 public String getObjectId(DAO dao, Object domainObject)
 	{
 		String objectId = "";
 		Specimen specimen = null;
-		try
+		Long cpId = null;
+		List<Long> list = null;
+        try
+		{ 
+		if (domainObject instanceof LinkedHashSet)
 		{
+			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+			specimen = (Specimen) linkedHashSet.iterator().next();
+		}
+		else if (domainObject instanceof Specimen)
+		{
+			specimen = (Specimen) domainObject;
+		}
 
-			if (domainObject instanceof LinkedHashSet)
-			{
-				LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
-				specimen = (Specimen) linkedHashSet.iterator().next();
-			}
-			else if (domainObject instanceof Specimen)
-			{
-				specimen = (Specimen) domainObject;
-			}
+		SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
-			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
-
-			if (specimen.getParentSpecimen() != null)
+		
+			String query = null;
+		    if (specimen.getParentSpecimen() != null)
 			{
-				specimen = getParentSpecimenByLabel(dao, (Specimen) specimen.getParentSpecimen());
-				scg = specimen.getSpecimenCollectionGroup();
+		       query ="select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+					   		"specimen.label = '"+ specimen.getParentSpecimen().getLabel() +"'" ;
+		       list = new DefaultBizLogic().executeQuery(query);
+				Iterator<Long> itr = list.iterator();
+				while(itr.hasNext()){
+					cpId =  (Long)itr.next();
+				}
+		    }
+			else if (cpId == null && specimen.getId() != null)
+			{
+				query ="select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+		   		"specimen.id = '"+ specimen.getId() +"'" ;
+				list = new DefaultBizLogic().executeQuery(query);
+				Iterator<Long> itr = list.iterator();
+				while(itr.hasNext()){
+					cpId =  (Long)itr.next();
+				}
 			}
-			else if (scg == null)
+			if (cpId == null && scg.getId() != null) 
 			{
-				specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
-				scg = specimen.getSpecimenCollectionGroup();
-			}
-			if ((specimen != null) && (scg != null)
-					&& (scg.getCollectionProtocolRegistration() == null))
-			{
-				scg = (SpecimenCollectionGroup) dao.retrieveById(SpecimenCollectionGroup.class
-						.getName(), scg.getId());
-			}
-
-			if (scg != null)
-			{
-				CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-				CollectionProtocol cp = cpr.getCollectionProtocol();
-				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
-			}
-			else
-			{
-				objectId = Constants.ADMIN_PROTECTION_ELEMENT;
+				query ="select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "+
+		   		"specimenCollectionGroup.id = '"+ scg.getId() +"'" ;
+				list = new DefaultBizLogic().executeQuery(query);
+				Iterator<Long> itr = list.iterator();
+				while(itr.hasNext()){
+					cpId =  (Long)itr.next();
+				}
 			}
 		}
-		catch (BizLogicException e)
+		catch (Exception e)
 		{
-			logger.debug(e.getMessage(), e);
-		//	throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			Logger.out.debug(e.getMessage(), e);
 		}
-		catch (DAOException e)
+
+		if (cpId != null)
 		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-			//throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
+			
 		}
+		else
+		{
+			objectId = Constants.ADMIN_PROTECTION_ELEMENT;
+		}
+
 		return objectId;
 	}
-
+	
 	/**
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
 	 * (non-Javadoc)
@@ -3877,174 +3888,165 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 * 
 	 */
-	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
-			throws BizLogicException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
-
+		String query = null;
 		try
 		{
-
 			if (sessionDataBean != null && sessionDataBean.isAdmin())
 			{
 				return true;
 			}
-
 			//	Get the base object id against which authorization will take place 
-			if (domainObject instanceof List)
+			if(domainObject != null)
 			{
-				List list = (List) domainObject;
-				for (Object domainObject2 : list)
+				if (domainObject instanceof List)
 				{
-					protectionElementName = getObjectId(dao, domainObject2);
-				}
-			}
-			else
-			{
-				protectionElementName = getObjectId(dao, domainObject);
-				Site site = null;
-				StorageContainer sc = null;
-				//	Handle for SERIAL CHECKS, whether user has access to source site or not
-				
-				if (domainObject instanceof Specimen)
-				{
-					SpecimenPosition specimenPosition = null;
-					Specimen specimen = (Specimen) domainObject;
-					Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
-					if (specimen.getLineage() != null
-							&& (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN) || specimen
-									.getLineage().equals(Constants.ALIQUOT)))
+					List list = (List) domainObject;
+					for (Object domainObject2 : list)
 					{
-						List<Specimen> list = null;
-						if (specimen.getParentSpecimen().getLabel() != null
-								&& !specimen.getParentSpecimen().getLabel().equals(""))
+						protectionElementName = getObjectId(dao, domainObject2);
+					}
+				}
+				else
+				{
+					protectionElementName = getObjectId(dao, domainObject);
+					Site site = null;
+					StorageContainer sc = null;
+					//	Handle for SERIAL CHECKS, whether user has access to source site or not
+					
+					if (domainObject instanceof Specimen)
+					{
+						SpecimenPosition specimenPosition = null;
+						Specimen specimen = (Specimen) domainObject;
+						Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+						List<Site> list = null;
+						if (specimen.getLineage() != null
+								&& ((Constants.DERIVED_SPECIMEN).equals(specimen.getLineage()) || 
+										(Constants.ALIQUOT).equals(specimen.getLineage())))
 						{
-							list = dao.retrieve(Specimen.class.getName(), "label", specimen
-									.getParentSpecimen().getLabel());
-						}
-						else if (parentSpecimen.getBarcode() != null
-								&& !parentSpecimen.getBarcode().equals(""))
-						{
-							list = dao.retrieve(Specimen.class.getName(), "barcode", parentSpecimen
-									.getBarcode());
+							if (specimen.getParentSpecimen().getLabel() != null && !specimen.getParentSpecimen().getLabel().equals(""))
+							{
+								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+								"specimen.label = '"+ specimen.getParentSpecimen().getLabel() +"'" ;
+							}
+							else if (parentSpecimen.getBarcode() != null && !parentSpecimen.getBarcode().equals(""))
+								{
+								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+								"specimen.barcode = '"+ parentSpecimen.getBarcode() +"'" ;
+								}
+							else
+								{
+								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
+								" specimen.id = "+ specimen.getParentSpecimen().getId() ;
+								}
+						
+							if(query != null ) {
+								list = executeQuery(query);
+								if(list != null) {
+									Iterator<Site> itr = list.iterator();
+									while(itr.hasNext()){
+										site =  (Site)itr.next();
+									}
+								}
+							} 
 						}
 						else
 						{
-							list = dao.retrieve(Specimen.class.getName(), Constants.ID, specimen
-									.getParentSpecimen().getId());
-						}
-						if (list != null && !list.isEmpty())
-							specimen = (Specimen) list.get(0);
-
-						if (specimen != null && specimen.getSpecimenPosition() != null)
-						{
-							sc = specimen.getSpecimenPosition().getStorageContainer();
-						}
-					}
-					else
-					{
-						if (specimen.getSpecimenPosition() != null)
-						{
-							sc = specimen.getSpecimenPosition().getStorageContainer();
-						}
-						if (specimen.getSpecimenPosition() != null
-								&& specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
-						{
-							if (sc.getId() != null)
+							if (specimen.getSpecimenPosition() != null)
 							{
-								sc = (StorageContainer) dao.retrieveById(StorageContainer.class
-										.getName(), specimen.getSpecimenPosition()
-										.getStorageContainer().getId());
+								sc = specimen.getSpecimenPosition().getStorageContainer();
 							}
-							else
+							if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
 							{
-								List scList = dao.retrieve(StorageContainer.class.getName(),
-										Constants.NAME, sc.getName());
-								if (scList.isEmpty())
+								if (sc.getId() != null)
 								{
-									throw getBizLogicException(null, "sc.unableToFindContainer", "");
+									query ="select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "+
+							   		" storageContainer.id = "+ sc.getId() ;
 								}
-								sc = (StorageContainer) scList.get(0);
+								else
+								{
+									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "+
+							   		" storageContainer.name = "+ sc.getName() ;
+								}
+								if(query != null )
+								{
+									list = executeQuery(query);
+									if(list != null) {
+										Iterator<Site> itr = list.iterator();
+										while(itr.hasNext()){
+											site =  (Site)itr.next();
+										}
+									}
+									if (list.isEmpty())
+									{
+										throw getBizLogicException(null, "sc.unableToFindContainer", "");
+									}
+								}
 							}
 						}
-					}
-
-					specimenPosition = specimen.getSpecimenPosition();
-
-					if (specimenPosition != null) // Specimen is NOT Virtually Located
-					{
-						// sc = specimenPosition.getStorageContainer();
-						site = sc.getSite();
-						Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-								.getUserId());
-
-						if (!siteIdSet.contains(site.getId()))
+	
+						if (site != null) // Specimen is NOT Virtually Located
 						{
-
 							BizLogicException e = AppUtility
-									.getUserNotAuthorizedException(Constants.Association, site
-											.getObjectId(), domainObject.getClass().getSimpleName());
+							.getUserNotAuthorizedException(Constants.Association, site
+									.getObjectId(), domainObject.getClass().getSimpleName());
 							throw getBizLogicException(e,  e.getErrorKeyName(), e.getMsgValues());
 						}
-
 					}
 				}
 				
-			}
-
-			if (protectionElementName.equals(Constants.allowOperation))
-			{
-				return true;
-			}
-			//Get the required privilege name which we would like to check for the logged in user.
-			String privilegeName = getPrivilegeName(domainObject);
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-					sessionDataBean.getUserName());
-
-			String[] privilegeNames = privilegeName.split(",");
-			// Checking whether the logged in user has the required privilege on the given protection element
-			if (privilegeNames.length > 1)
-			{
-				if ((privilegeCache.hasPrivilege(protectionElementName, privilegeNames[0]))
-						|| (privilegeCache.hasPrivilege(protectionElementName, privilegeNames[1])))
+				if (protectionElementName.equals(Constants.allowOperation))
 				{
-					isAuthorized = true;
+					return true;
+				}
+				//Get the required privilege name which we would like to check for the logged in user.
+				String privilegeName = getPrivilegeName(domainObject);
+				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+						sessionDataBean.getUserName());
+	
+				String[] privilegeNames = privilegeName.split(",");
+				// Checking whether the logged in user has the required privilege on the given protection element
+				if (privilegeNames.length > 1)
+				{
+					if ((privilegeCache.hasPrivilege(protectionElementName, privilegeNames[0]))
+							|| (privilegeCache.hasPrivilege(protectionElementName, privilegeNames[1])))
+					{
+						isAuthorized = true;
+					}
+				}
+				else
+				{
+					isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
+				}
+				if (isAuthorized)
+				{
+					return isAuthorized;
+				}
+				else
+				// Check for ALL CURRENT & FUTURE CASE
+				{
+					isAuthorized = AppUtility.checkOnCurrentAndFuture(sessionDataBean,
+							protectionElementName, privilegeName);
+				}
+				if (!isAuthorized)
+				{
+					throw AppUtility.getUserNotAuthorizedException(privilegeName,
+							protectionElementName, domainObject.getClass().getSimpleName());
 				}
 			}
-			else
-			{
-				isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
-			}
-
-			if (isAuthorized)
-			{
-				return isAuthorized;
-			}
-			else
-			// Check for ALL CURRENT & FUTURE CASE
-			{
-				isAuthorized = AppUtility.checkOnCurrentAndFuture(sessionDataBean,
-						protectionElementName, privilegeName);
-			}
-			if (!isAuthorized)
-			{
-				throw AppUtility.getUserNotAuthorizedException(privilegeName,
-						protectionElementName, domainObject.getClass().getSimpleName());
-			}
 		}
-		catch (SMException e)
-		{
-			logger.debug(e.getMessage(), e);
-			throw AppUtility.handleSMException(e);
-		}
-		catch(DAOException e)
-		{
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+			catch (SMException e)
+			{
+				logger.debug(e.getMessage(), e);
+				throw AppUtility.handleSMException(e);
+			}
 		return isAuthorized;
 	}
 
+	
 	@Override
 	public boolean isReadDeniedTobeChecked()
 	{
