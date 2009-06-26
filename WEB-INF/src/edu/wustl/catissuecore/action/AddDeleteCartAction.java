@@ -69,7 +69,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		List<AttributeInterface> attributeList = null;
 		if (selectedColumnMetaData != null)
 			attributeList = selectedColumnMetaData.getAttributeList();
-
+		
 		// Check if user wants to add in Shopping Cart.
 		if (Constants.ADD.equals(operation))
 		{
@@ -241,7 +241,6 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 					attributeList);
 			if (indexArray != null)
 			{
-
 				List<List<String>> tempdataList = getManipulatedDataList(dataList, indexArray);
 				addDataToCart(cart, tempdataList, chkBoxValues, request, columnList);
 			}
@@ -277,25 +276,33 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		int duplicateRecordCount = 0;
 
 		if (chkBoxValues != null)
-			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
+			duplicateRecordCount = chkBoxValues.size() - addRecordCount ;
 		else
 			duplicateRecordCount = dataList.size() - addRecordCount;
 		//ActionErrors changed to ActionMessages
 		ActionMessages messages = new ActionMessages();
 		// Check if no. of duplicate records is not zero then set a error message.
-		if (duplicateRecordCount != 0)
+		
+		if(addRecordCount == 0 && duplicateRecordCount != 0)
+		{
+			messages.add(ActionMessages.GLOBAL_MESSAGE,
+					new ActionMessage("shoppingcart.HashedOutError", addRecordCount));	
+		}
+		else if (addRecordCount != 0 && duplicateRecordCount != 0)
+		{
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("shoppingCart.addMessage", addRecordCount));
+		}
+		else if (addRecordCount != 0 && duplicateRecordCount == 0)
 		{
 			messages.add(ActionMessages.GLOBAL_MESSAGE,
 					new ActionMessage("shoppingcart.duplicateObjError", addRecordCount,
-					duplicateRecordCount));		
+					duplicateRecordCount));
 		}
-		else
-		{
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("shoppingCart.addMessage", addRecordCount));
-			
+		else;
+		
 			session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-		}
+		
 		saveMessages(request, messages);
 	}
 	

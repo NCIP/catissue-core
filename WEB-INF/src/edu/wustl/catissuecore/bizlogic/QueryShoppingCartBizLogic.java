@@ -34,6 +34,17 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 * @param keySet Set of checkboxs of selected records.
 	 * @return int  no of records added in the cart .
 	 */
+	
+	public boolean checkIfHashed(List<String> datafromSelectedList)
+	{	
+		boolean dataIsHashed = false;
+		for(String listItem : datafromSelectedList)
+		{
+			if(listItem!=Constants.HASHED_OUT)
+				return true;
+		}
+		return false;
+	}
 		
 	public int add(QueryShoppingCart cart , List<List<String>> dataList ,List<Integer> keySet)
 	{   
@@ -48,25 +59,23 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 					cart.getCart().add(dataList.get(i));
 					addCount++;
 				}
-				
 			 }
 		}
-			
 		else 
 		{
+			boolean  dataIsHashed = false;
 			for(Integer index:keySet)
 			{
-				if(!(cart.getCart().contains(dataList.get(index))))
+				dataIsHashed = checkIfHashed(dataList.get(index));
+				if((!(cart.getCart().contains(dataList.get(index))))&& dataIsHashed)
 				{
 					cart.getCart().add(dataList.get(index));
 					addCount++;
-				}
-						    			
+				}	
+				 dataIsHashed = false;
 			}
 		}
-					
-		return addCount;
-		
+		return addCount;	
 	} 
 	
 	/**
