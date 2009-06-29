@@ -153,12 +153,15 @@ public class TitliFetchAction extends Action
 		MatchListInterface matchList = resultGroup.getNativeGroup().getMatchList();
 		try
 		{ 
-		
+			String maxNoOfRecords = XMLPropertyHandler.getValue(Constants.MAXIMUM_RECORDS_FOR_TITLI_RESULTS);
+			int maxLimit = Integer.parseInt(maxNoOfRecords);
+			
 			Name dbName = Titli.getInstance().getDatabases().keySet().toArray(new Name[0])[0];
 			Name tableName = matchList.get(0).getTableName();
 			setAliasFor(tableName.toString(), request);
 			TableInterface table = Titli.getInstance().getDatabase(dbName).getTable(tableName);
 			
+			int count = 1;
 			
 			//for each match form a SimpleConditionsNode and add it to the collection
 			for(MatchInterface match : matchList)
@@ -166,11 +169,17 @@ public class TitliFetchAction extends Action
 				Name identifier = new Name(Constants.IDENTIFIER);
 				ColumnInterface column = table.getColumn(identifier);
 				String value = match.getUniqueKeys().get(identifier);
-			    DataElement dataElement = new DataElement(alias, Constants.IDENTIFIER, column.getType());
+				DataElement dataElement = new DataElement(alias, Constants.IDENTIFIER, column.getType());
 				Condition condition = new Condition(dataElement, new Operator(Operator.EQUAL), value);
 				SimpleConditionsNode simpleConditionsNode  = new SimpleConditionsNode(condition, new Operator(Operator.OR));
-				
+					
 				simpleConditionsNodeCollection.add(simpleConditionsNode);
+				
+				if(count>=maxLimit)
+				{
+					break;
+				}
+				count++;
 			}
 		}
 		catch(TitliException e)
@@ -184,10 +193,8 @@ public class TitliFetchAction extends Action
 		catch(ClassNotFoundException e)
 		{
 			logger.error("ClassNotFoundException in TitliFetchAction : "	+ e.getMessage(), e);
-		}
-		
-		return simpleConditionsNodeCollection;
-			
+		}		
+		return simpleConditionsNodeCollection;		
 	}
 	
 	

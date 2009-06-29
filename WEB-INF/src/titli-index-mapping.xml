@@ -3,7 +3,7 @@
 <titli>
 		
 	<tablejoinmapping>
-		<table name="CATISSUE_SPECIMEN" alias="s" keyColumn="IDENTIFIER" selectColumns="LABEL,BARCODE,COLLECTION_STATUS">
+		<table name="CATISSUE_SPECIMEN" alias="s" keyColumn="IDENTIFIER" selectColumns="LABEL,BARCODE,COLLECTION_STATUS" activityStatus="ACTIVITY_STATUS">
 			<join tableName="CATISSUE_ABSTRACT_SPECIMEN" alias="a" keyColumn="IDENTIFIER" joinColumn="IDENTIFIER" selectColumns="SPECIMEN_CLASS,SPECIMEN_TYPE,LINEAGE,PATHOLOGICAL_STATUS">
 					<leftjoin tableName="CATISSUE_SPECIMEN_CHAR" alias="sc" keyColumn="IDENTIFIER" joinColumn="SPECIMEN_CHARACTERISTICS_ID" selectColumns="TISSUE_SITE,TISSUE_SIDE">
 					</leftjoin>	

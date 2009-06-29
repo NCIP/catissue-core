@@ -543,4 +543,8 @@
 		<name>TitliConfigured</name>
 		<value>false</value>
 	</property>
+	<property>
+		<name>titli.result.maximumRecords</name>
+		<value>1000</value>
+	</property>
 </properties>

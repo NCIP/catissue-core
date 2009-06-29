@@ -128,6 +128,11 @@
 				<input type = "hidden" id = "selectedLabel" name = "selectedLabel" />					
 			</td>	
 		</tr>
+	
+		<td align="left" class="tr_bg_blue1"><span class="blue_ar_b"><img src="images/uIEnhancementImages/alert-icon.gif"> &nbsp;
+				<bold>Records corresponding to 1000 identifiers will be shown in the entity result view in case of large no. of records</bold>&nbsp;
+			</span>
+			</td>
 		
 		<tr>
 			<td>
