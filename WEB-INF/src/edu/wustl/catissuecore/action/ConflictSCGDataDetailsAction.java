@@ -8,7 +8,6 @@
  * @author kalpana Thakur
  */
 
-
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,26 +24,32 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 
-public class ConflictSCGDataDetailsAction extends BaseAction{
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class ConflictSCGDataDetailsAction extends BaseAction
+{
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
+
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		String SCGId = (String)request.getParameter(Constants.ID);
-		
+		String SCGId = (String) request.getParameter(Constants.ID);
+
 		HttpSession session = request.getSession();
-			session.setAttribute(Constants.SCG_ID_TO_ASSOCIATE, SCGId);
-		
-	
+		session.setAttribute(Constants.SCG_ID_TO_ASSOCIATE, SCGId);
+
 		//Retrieved the SCG and populated the bean 	
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(SCGId));
-	
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(
+				SCGId));
+
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
-		defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(),(Long)specimenCollectionGroup.getId(), specimenCollectionGroupForm);
-					
+		defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(),
+				(Long) specimenCollectionGroup.getId(), specimenCollectionGroupForm);
+
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }

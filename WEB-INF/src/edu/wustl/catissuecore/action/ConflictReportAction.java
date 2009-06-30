@@ -1,5 +1,4 @@
 
-
 /**
  * <p>Title: ConflictReportAction Class>
  * <p>Description:	Initialization action for conflict Report view
@@ -9,6 +8,7 @@
  *@author kalpana Thakur
  * Created on sep 18,2007
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -30,32 +30,38 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 
-public class ConflictReportAction extends BaseAction{
+
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class ConflictReportAction extends BaseAction
+{
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictSCGForm conflictSCGForm = (ConflictSCGForm)form;
-		
+		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-	    	
-		List reportQueueDataList =  new ArrayList();
-		ReportLoaderQueue reportLoaderQueue =null;
+
+		List reportQueueDataList = new ArrayList();
+		ReportLoaderQueue reportLoaderQueue = null;
 		reportQueueDataList = getReportQueueDataList(reportQueueId);
-		if((reportQueueDataList!=null) && (reportQueueDataList).size()>0)
+		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
 		{
-			reportLoaderQueue = (ReportLoaderQueue)reportQueueDataList.get(0);
+			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
 		}
-		
+
 		String newConfictedReport = reportLoaderQueue.getReportText();
-		
+
 		//retrieved the identified report
-		newConfictedReport=ViewSPRUtil.getSynthesizedText(newConfictedReport);
+		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
 	}
-	
+
 	/**To retrieve the list of report loader Queue
 	 * @param reportQueueId
 	 * @return
@@ -63,11 +69,13 @@ public class ConflictReportAction extends BaseAction{
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
-		
+
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
-		return reportQueueList;		
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+				.getName(), Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
+		return reportQueueList;
 	}
 
 }

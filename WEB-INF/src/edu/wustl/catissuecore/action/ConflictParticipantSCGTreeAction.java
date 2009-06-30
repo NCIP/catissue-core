@@ -29,36 +29,44 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 
-public class ConflictParticipantSCGTreeAction extends BaseAction{
+
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class ConflictParticipantSCGTreeAction extends BaseAction
+{
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String reportQueueId = (String)request.getParameter(Constants.REPORT_ID);	
-		ReportLoaderQueue reportLoaderQueue =null;
+		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		ReportLoaderQueue reportLoaderQueue = null;
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-		
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+
 		Vector treeData = new Vector();
 		List reportQueueData = new ArrayList();
-		Iterator iter=null;
+		Iterator iter = null;
 		reportQueueData = getReportQueueDataList(reportQueueId);
 		iter = reportQueueData.iterator();
-		if(iter.hasNext())
+		if (iter.hasNext())
 		{
-			reportLoaderQueue = (ReportLoaderQueue)iter.next();
+			reportLoaderQueue = (ReportLoaderQueue) iter.next();
 		}
-		String siteName = (String)reportLoaderQueue.getSiteName();
-		Long reportId = (Long)reportLoaderQueue.getId();
-		
+		String siteName = (String) reportLoaderQueue.getSiteName();
+		Long reportId = (Long) reportLoaderQueue.getId();
+
 		//To retrieve the tree data  
-		treeData=reportLoaderQueueBizLogic.getTreeViewData(reportId,siteName,treeData); 
+		treeData = reportLoaderQueueBizLogic.getTreeViewData(reportId, siteName, treeData);
 		request.setAttribute("treeData", treeData);
-	
+
 		return mapping.findForward(Constants.SUCCESS);
-		
+
 	}
+
 	/**
 	 * To retieve the Report Queue List
 	 * @param reportQueueId
@@ -68,9 +76,10 @@ public class ConflictParticipantSCGTreeAction extends BaseAction{
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
-		return reportQueueList;		
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+				.getName(), Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
+		return reportQueueList;
 	}
-	
 }

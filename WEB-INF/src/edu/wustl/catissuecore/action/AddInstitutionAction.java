@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 //import edu.wustl.catissuecore.actionForm.DepartmentForm;
@@ -22,23 +23,25 @@ import edu.wustl.common.util.logger.Logger;
 
 public class AddInstitutionAction extends CommonAddEditAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(AddInstitutionAction.class);
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	throws IOException, ServletException
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
 	{
-		String institutionName =(String)request.getParameter(Constants.INSTITUTION_NAME);
+		String institutionName = (String) request.getParameter(Constants.INSTITUTION_NAME);
 		InstitutionBizLogic bizlogic = new InstitutionBizLogic();
 		String institutionId = null;
 		String responseString = "";
-		InstitutionForm institutionForm = (InstitutionForm)form;
-		
+		InstitutionForm institutionForm = (InstitutionForm) form;
+
 		institutionForm.setOperation(Constants.ADD);
 		institutionForm.setName(institutionName);
-		
-		ActionForward forward = super.execute(mapping,institutionForm,request,response);
-		
-		
-		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
+
+		ActionForward forward = super.execute(mapping, institutionForm, request, response);
+
+		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
 		}
@@ -49,7 +52,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 				institutionId = bizlogic.getLatestInstitution(institutionName);
 				responseString = institutionId + Constants.RESPONSE_SEPARATOR + institutionName;
 			}
-			catch(BizLogicException e)
+			catch (BizLogicException e)
 			{
 				logger.error("Exception occurred in retrieving Institution");
 				e.printStackTrace();
@@ -57,13 +60,13 @@ public class AddInstitutionAction extends CommonAddEditAction
 		}
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		
+
 		/**
 		 * Sending the response
 		 */
 		out.write(responseString);
-		
+
 		return null;
 	}
-	
+
 }

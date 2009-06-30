@@ -7,6 +7,7 @@
  *@author kalpana Thakur
  * Created on sep 18,2007
   */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -28,11 +29,14 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ConflictSCGAction extends BaseAction
 {
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in ConflictView.jsp Page.
@@ -46,28 +50,27 @@ public class ConflictSCGAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictSCGForm conflictSCGForm = (ConflictSCGForm)form;
-		
+		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-		
-		List reportQueueDataList =  new ArrayList();
-		ReportLoaderQueue reportLoaderQueue =null;
+
+		List reportQueueDataList = new ArrayList();
+		ReportLoaderQueue reportLoaderQueue = null;
 		reportQueueDataList = getReportQueueDataList(reportQueueId);
-		if((reportQueueDataList!=null) && (reportQueueDataList).size()>0)
+		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
 		{
-			reportLoaderQueue = (ReportLoaderQueue)reportQueueDataList.get(0);
+			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
 		}
-		
+
 		String newConfictedReport = reportLoaderQueue.getReportText();
-		newConfictedReport=ViewSPRUtil.getSynthesizedText(newConfictedReport);
-		
+		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
+
 		String existingConflictedReport = retrieveExistingReport(reportQueueId);
 		conflictSCGForm.setExistingConflictedReport(existingConflictedReport);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
 	}
-	
-	
+
 	/**
 	 * To retrieve the reportQueue list
 	 * @param reportQueueId
@@ -76,49 +79,53 @@ public class ConflictSCGAction extends BaseAction
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
-		
+
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-	    List reportQueueList = (List)reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),Constants.SYSTEM_IDENTIFIER, Long.valueOf(reportQueueId));
-		return reportQueueList;		
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+				.getName(), Constants.SYSTEM_IDENTIFIER, Long.valueOf(reportQueueId));
+		return reportQueueList;
 	}
-	/**To retrieve the existing report
+
+	/**
+	 * To retrieve the existing report
 	 * @param reportQueueId
 	 * @return
-	 * @throws DAOException
+	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
 	 */
-	private String retrieveExistingReport(String reportQueueId) throws BizLogicException, ClassNotFoundException
+	private String retrieveExistingReport(String reportQueueId) throws BizLogicException,
+			ClassNotFoundException
 	{
-		String existingConflictedReport="";
+		String existingConflictedReport = "";
 		Long reportId = Long.parseLong(reportQueueId);
-		Long scgId=null;
-			
-		String scgHql = "select rlq.specimenCollectionGroup.id "+
-		" from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue as rlq " +
-		" where rlq.id= "+ reportId;
-		
-			
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();	
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-		List scgList=(List)reportLoaderQueueBizLogic.executeQuery(scgHql);
-		if((scgList!=null) && (scgList).size()>0)
+		Long scgId = null;
+
+		String scgHql = "select rlq.specimenCollectionGroup.id "
+				+ " from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue as rlq "
+				+ " where rlq.id= " + reportId;
+
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+		List scgList = (List) reportLoaderQueueBizLogic.executeQuery(scgHql);
+		if ((scgList != null) && (scgList).size() > 0)
 		{
-			scgId  = (Long) scgList.get(0);
-		}	
-		
-		String ispReportHql = "select scg.identifiedSurgicalPathologyReport.textContent.data"+
-		" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg " +
-		" where scg.id =" + scgId + "";
-		
-		List ispReportList=(List)reportLoaderQueueBizLogic.executeQuery(ispReportHql);
-		if((ispReportList!=null) && (ispReportList).size()>0)
+			scgId = (Long) scgList.get(0);
+		}
+
+		String ispReportHql = "select scg.identifiedSurgicalPathologyReport.textContent.data"
+				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
+				+ " where scg.id =" + scgId + "";
+
+		List ispReportList = (List) reportLoaderQueueBizLogic.executeQuery(ispReportHql);
+		if ((ispReportList != null) && (ispReportList).size() > 0)
 		{
 			existingConflictedReport = (String) ispReportList.get(0);
 		}
-					
+
 		return existingConflictedReport;
 	}
-	
-	
+
 }

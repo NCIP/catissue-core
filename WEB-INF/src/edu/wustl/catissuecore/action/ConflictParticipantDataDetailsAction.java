@@ -1,4 +1,3 @@
-
 /**
  * <p>Title: ConflictParticipantDataDetailsAction Class>
  * <p>Description: To retrieve the participant details
@@ -25,29 +24,36 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 
-public class ConflictParticipantDataDetailsAction extends BaseAction{
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class ConflictParticipantDataDetailsAction extends BaseAction
+{
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConflictParticipantDataDetailsForm conflictParticipantDataDetailsForm = (ConflictParticipantDataDetailsForm) form;
-		String participantId = (String)request.getParameter(Constants.ID);
+		String participantId = (String) request.getParameter(Constants.ID);
 
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE, participantId);
 		session.removeAttribute(Constants.SCG_ID_TO_ASSOCIATE);
-			
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		
+
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+
 		//retrieved the participant object and populated the bean
-		Object object = defaultBizLogic.retrieve(Participant.class.getName(), new Long(participantId));
+		Object object = defaultBizLogic.retrieve(Participant.class.getName(), new Long(
+				participantId));
 		Participant participant = null;
-		if(object != null)
+		if (object != null)
 		{
-			participant = (Participant)object;
-			defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(), conflictParticipantDataDetailsForm);
+			participant = (Participant) object;
+			defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
+					conflictParticipantDataDetailsForm);
 		}
-			
+
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }

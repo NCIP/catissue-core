@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -12,17 +13,21 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+
 /**
  *Common tab action class defined for forwarding the action to the corresponding Add action from the simpleQueryInterface.jsp file 
  * @author nitesh_marwaha
  *
  */
-public class CommonTabAction extends Action{
+public class CommonTabAction extends Action
+{
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
 	{
-		String page=(String)request.getParameter(Constants.PAGE_OF);
-		if(page== null)
+		String page = (String) request.getParameter(Constants.PAGE_OF);
+		if (page == null)
 		{
 			return mapping.findForward(Constants.SUCCESS);
 		}

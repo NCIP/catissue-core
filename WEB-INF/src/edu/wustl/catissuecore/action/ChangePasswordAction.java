@@ -4,6 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-
 
 /**
  * @author gautam_shetty
@@ -26,6 +25,7 @@ import edu.wustl.common.action.BaseAction;
  */
 public class ChangePasswordAction extends BaseAction
 {
+
 	/**
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
@@ -33,14 +33,13 @@ public class ChangePasswordAction extends BaseAction
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 */
-    public ActionForward executeAction(ActionMapping mapping,
-            ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception
-    {
-        UserForm userForm = (UserForm) form;
-    	String pageOf = request.getParameter(Constants.PAGE_OF);
-        request.setAttribute(Constants.PAGE_OF, pageOf);
-        return mapping.findForward(pageOf);
-    }
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		//UserForm userForm = (UserForm) form;
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
+		return mapping.findForward(pageOf);
+	}
 
 }

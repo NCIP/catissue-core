@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.text.DateFormat;
@@ -54,22 +55,24 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class CreateAliquotAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(CreateAliquotAction.class);
+
 	/**
-     * @param mapping object of ActionMapping
+	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 * @return mapping.findforword
-     * */
+	 * */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AliquotForm aliquotForm = (AliquotForm)form;
-		boolean insertAliquotSpecimen= true;
-		Collection<AbstractDomainObject> specimenCollection =null;
-		List<AbstractDomainObject> specimenList = null;
+		AliquotForm aliquotForm = (AliquotForm) form;
+		boolean insertAliquotSpecimen = true;
+		Collection < AbstractDomainObject > specimenCollection = null;
+		List < AbstractDomainObject > specimenList = null;
 		String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
 		SessionDataBean sessionDataBean = getSessionData(request);
 		//Create SpecimenCollectionGroup Object
@@ -84,29 +87,30 @@ public class CreateAliquotAction extends BaseAction
 		catch (BizLogicException e)
 		{
 			logger.info(e.getMessage(), e);
-		    ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
+			ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", e
+					.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			return mapping.findForward(Constants.FAILURE);
 		}
-		
+
 		//Insert Specimen Map
 		insertAliquotSpecimen = insertAliquotSpecimen(request, sessionDataBean, specimenCollection);
 		//Convert Specimen HashSet to List
-		specimenList= new LinkedList<AbstractDomainObject>();
+		specimenList = new LinkedList < AbstractDomainObject >();
 		specimenList.addAll(specimenCollection);
-		
-		Specimen specimen = (Specimen)specimenList.get(0);
-		
+
+		Specimen specimen = (Specimen) specimenList.get(0);
+
 		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
-		
-		if(specimen!=null)
+
+		if (specimen != null)
 		{
 			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
 			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
 		}
-		calculateAvailableQuantityForParent(specimenList,aliquotForm);
+		calculateAvailableQuantityForParent(specimenList, aliquotForm);
 		aliquotForm.setSpecimenList(specimenList);
 		//mapping.findforward
 		return getFindForward(mapping, request, aliquotForm, fromPrintAction,
@@ -125,39 +129,42 @@ public class CreateAliquotAction extends BaseAction
 	 */
 	private ActionForward getFindForward(ActionMapping mapping, HttpServletRequest request,
 			AliquotForm aliquotForm, String fromPrintAction, boolean insertAliquotSpecimen,
-			List<AbstractDomainObject> specimenList) throws Exception
+			List < AbstractDomainObject > specimenList) throws Exception
 	{
-		if(aliquotForm.getPrintCheckbox()!=null)
+		if (aliquotForm.getPrintCheckbox() != null)
 		{
 			request.setAttribute(Constants.LIST_SPECIMEN, specimenList);
 			PrintAction printActionObj = new PrintAction();
-			SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute("sessionData");
-			printActionObj.printAliquotLabel(aliquotForm, request,null,objBean);
+			SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute(
+					"sessionData");
+			printActionObj.printAliquotLabel(aliquotForm, request, null, objBean);
 		}
-		if(Constants.ADD_SPECIMEN_TO_CART .equals(aliquotForm.getForwardTo())&&insertAliquotSpecimen)
+		if (Constants.ADD_SPECIMEN_TO_CART.equals(aliquotForm.getForwardTo())
+				&& insertAliquotSpecimen)
 		{
 			return mapping.findForward(Constants.ADD_SPECIMEN_TO_CART);
 		}
-		 else if(insertAliquotSpecimen)
+		else if (insertAliquotSpecimen)
 		{
-			 if(aliquotForm.getForwardTo().equals(Constants.ORDER_DETAILS))
-			 {
-				 Specimen specimen = (Specimen)specimenList.get(0);
-				 String parentSpecimenLable= specimen.getParentSpecimen().getLabel();
-				 ActionMessages actionMessages = new ActionMessages();
-				 actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-							"errors.distribution.aliquots.created",parentSpecimenLable));
-				 saveMessages(request, actionMessages);
-				 return mapping.findForward(aliquotForm.getForwardTo());
-			 }	 
-			 else
-				 return mapping.findForward(Constants.SUCCESS);
+			if (aliquotForm.getForwardTo().equals(Constants.ORDER_DETAILS))
+			{
+				Specimen specimen = (Specimen) specimenList.get(0);
+				String parentSpecimenLable = specimen.getParentSpecimen().getLabel();
+				ActionMessages actionMessages = new ActionMessages();
+				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"errors.distribution.aliquots.created", parentSpecimenLable));
+				saveMessages(request, actionMessages);
+				return mapping.findForward(aliquotForm.getForwardTo());
+			}
+			else
+				return mapping.findForward(Constants.SUCCESS);
 		}
 		else
 		{
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}
+
 	/**
 	 * @param request
 	 * @param sessionDataBean
@@ -169,64 +176,72 @@ public class CreateAliquotAction extends BaseAction
 	 * @throws DAOException 
 	 * @throws DAOException 
 	 */
-	private boolean insertAliquotSpecimen(HttpServletRequest request, SessionDataBean sessionDataBean,
-			Collection<AbstractDomainObject> specimenCollection) throws UserNotAuthorizedException
+	private boolean insertAliquotSpecimen(HttpServletRequest request,
+			SessionDataBean sessionDataBean, Collection < AbstractDomainObject > specimenCollection)
+			throws UserNotAuthorizedException
 	{
 		try
 		{
-			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean,0 , false);
-			disposeParentSpecimen(sessionDataBean, specimenCollection,Constants.SPECIMEN_DISPOSAL_REASON);
+			new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean, 0, false);
+			disposeParentSpecimen(sessionDataBean, specimenCollection,
+					Constants.SPECIMEN_DISPOSAL_REASON);
 		}
 		catch (BizLogicException e)
 		{
 			logger.info(e.getMessage(), e);
-		    ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
+			ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", e
+					.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			return false;
 		}
-		catch(DAOException e)
+		catch (DAOException e)
 		{
 			logger.info(e.getMessage(), e);
 			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item",e.getMessage()));
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", e
+					.getMessage()));
 			saveErrors(request, actionErrors);
 			saveToken(request);
-			return false;	
+			return false;
 		}
-		catch(UserNotAuthorizedException e)
+		catch (UserNotAuthorizedException e)
 		{
-            String userName = "";
-            if(sessionDataBean != null)
-        	{
-        	    userName = sessionDataBean.getUserName();
-        	}
+			String userName = "";
+			if (sessionDataBean != null)
+			{
+				userName = sessionDataBean.getUserName();
+			}
 			UserNotAuthorizedException excp = (UserNotAuthorizedException) e;
 			ActionErrors actionErrors = new ActionErrors();
-			
-            String className = Utility.getActualClassName(Specimen.class.getName());
-            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(((UserNotAuthorizedException)e).getPrivilegeName());
-            String baseObject = "";
-            if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
-            {
-                baseObject = excp.getBaseObject();
-            } else 
-            {
-                baseObject = className;
-            }
-			ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
-        	actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-			
+
+			String className = Utility.getActualClassName(Specimen.class.getName());
+			String decoratedPrivilegeName = AppUtility
+					.getDisplayLabelForUnderscore(((UserNotAuthorizedException) e)
+							.getPrivilegeName());
+			String baseObject = "";
+			if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
+			{
+				baseObject = excp.getBaseObject();
+			}
+			else
+			{
+				baseObject = className;
+			}
+			ActionError error = new ActionError("access.addedit.object.denied", userName,
+					className, decoratedPrivilegeName, baseObject);
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+
 			// ActionErrors actionErrors = new ActionErrors();
 			// ActionError error = new ActionError("access.addedit.object.denied", sessionDataBean.getUserName(), Specimen.class.getName());
-        	// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-        	saveErrors(request, actionErrors);
-        	return false;
+			// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+			saveErrors(request, actionErrors);
+			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param sessionDataBean
 	 * @param specimenCollection
@@ -236,14 +251,15 @@ public class CreateAliquotAction extends BaseAction
 	 * @throws BizLogicException 
 	 */
 	private void disposeParentSpecimen(SessionDataBean sessionDataBean,
-			Collection<AbstractDomainObject> specimenCollection, String specimenDisposeReason)
+			Collection < AbstractDomainObject > specimenCollection, String specimenDisposeReason)
 			throws DAOException, UserNotAuthorizedException, BizLogicException
 	{
-		Iterator<AbstractDomainObject> spItr = specimenCollection.iterator();
-		Specimen specimen =(Specimen)spItr.next();
-		if(specimen!=null && specimen.getDisposeParentSpecimen())
+		Iterator < AbstractDomainObject > spItr = specimenCollection.iterator();
+		Specimen specimen = (Specimen) spItr.next();
+		if (specimen != null && specimen.getDisposeParentSpecimen())
 		{
-			new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean, specimen.getParentSpecimen(), specimenDisposeReason);
+			new NewSpecimenBizLogic().disposeSpecimen(sessionDataBean,
+					specimen.getParentSpecimen(), specimenDisposeReason);
 		}
 	}
 
@@ -254,12 +270,13 @@ public class CreateAliquotAction extends BaseAction
 	 */
 	private Specimen createParentSpecimen(AliquotForm aliquotForm) throws AssignDataException
 	{
-		Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory().getDomainObject(aliquotForm.getClassName());
+		Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory()
+				.getDomainObject(aliquotForm.getClassName());
 		parentSpecimen.setId(new Long(aliquotForm.getSpecimenID()));
 		String label = aliquotForm.getSpecimenLabel();
-		if(label!=null&&label.equals(""))
+		if (label != null && label.equals(""))
 		{
-			label=null;
+			label = null;
 		}
 		parentSpecimen.setLabel(label);
 		parentSpecimen.setBarcode(aliquotForm.getBarcode());
@@ -283,10 +300,10 @@ public class CreateAliquotAction extends BaseAction
 	 * @param parentSpecimen
 	 * @return
 	 */
-	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm, SpecimenCollectionGroup scg,
-			Specimen parentSpecimen) throws ApplicationException
+	private Collection < AbstractDomainObject > createAliquotDomainObject(AliquotForm aliquotForm,
+			SpecimenCollectionGroup scg, Specimen parentSpecimen) throws ApplicationException
 	{
-		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
+		Collection < AbstractDomainObject > specimenCollection = new LinkedHashSet < AbstractDomainObject >();
 		boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
 		Map aliquotMap = aliquotForm.getAliquotMap();
 		String specimenKey = "Specimen:";
@@ -296,82 +313,86 @@ public class CreateAliquotAction extends BaseAction
 			Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
 			StorageContainer sc = new StorageContainer();
 			String fromMapsuffixKey = "_fromMap";
-			boolean booleanfromMap = false;
-			
+			//boolean booleanfromMap = false;
+
 			String quantityKey = null;
 			String containerIdKey = null;
 			String containerNameKey = null;
 			String posDim1Key = null;
 			String posDim2Key = null;
-			String radioButton = (String)aliquotMap.get("radio_"+i);
+			String radioButton = (String) aliquotMap.get("radio_" + i);
 			// if radio button =2 else conatiner selected from Combo box
 			quantityKey = specimenKey + i + "_quantity";
-			if(radioButton!=null&&radioButton.equals("2"))
+			if (radioButton != null && radioButton.equals("2"))
 			{
 				containerIdKey = specimenKey + i + "_StorageContainer_id";
 				posDim1Key = specimenKey + i + "_positionDimensionOne";
 				posDim2Key = specimenKey + i + "_positionDimensionTwo";
 			}
-			else if(radioButton!=null&&radioButton.equals("3"))
+			else if (radioButton != null && radioButton.equals("3"))
 			{
 				// Container selected from Map button
-				containerIdKey = specimenKey + i + "_StorageContainer_id"+fromMapsuffixKey;
-				containerNameKey = specimenKey + i + "_StorageContainer_name"+fromMapsuffixKey;
-				posDim1Key = specimenKey + i + "_positionDimensionOne"+fromMapsuffixKey;
-				posDim2Key = specimenKey + i + "_positionDimensionTwo"+fromMapsuffixKey;
+				containerIdKey = specimenKey + i + "_StorageContainer_id" + fromMapsuffixKey;
+				containerNameKey = specimenKey + i + "_StorageContainer_name" + fromMapsuffixKey;
+				posDim1Key = specimenKey + i + "_positionDimensionOne" + fromMapsuffixKey;
+				posDim2Key = specimenKey + i + "_positionDimensionTwo" + fromMapsuffixKey;
 			}
 			Validator validator = new Validator();
 			String quantity = (String) aliquotMap.get(quantityKey);
-			String containerId  = (String) aliquotMap.get(containerIdKey);
+			String containerId = (String) aliquotMap.get(containerIdKey);
 			Long storageContainerId = null;
-			if(validator.isEmpty(containerId))
+			if (validator.isEmpty(containerId))
 			{
-				containerId=null;
+				containerId = null;
 			}
-			else if(containerId != null)
+			else if (containerId != null)
 			{
 				storageContainerId = new Long(containerId);
-			}		
+			}
 			String containername = (String) aliquotMap.get(containerNameKey);
-			String posDim1  = (String) aliquotMap.get(posDim1Key);
-			String posDim2  = (String) aliquotMap.get(posDim2Key);
-			
+			String posDim1 = (String) aliquotMap.get(posDim1Key);
+			String posDim2 = (String) aliquotMap.get(posDim2Key);
+
 			/**
 			 * validate the the container name,id,pos1 and pos2 is not empty 
 			 * dependeing on Auto,virtual,manula selection
 			 */
-			if(radioButton!=null)
+			if (radioButton != null)
 			{
-				if(radioButton.equals("2"))
+				if (radioButton.equals("2"))
 				{
-					if(validator.isEmpty(containerId))
+					if (validator.isEmpty(containerId))
 					{
-						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.storageContainer"));
+						throw AppUtility.getApplicationException(null, "errors.item.format",
+								ApplicationProperties.getValue("specimen.storageContainer"));
 					}
 				}
-				if(radioButton.equals("3"))
+				if (radioButton.equals("3"))
 				{
-					if(validator.isEmpty(containername))
+					if (validator.isEmpty(containername))
 					{
-						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.storageContainer"));
+						throw AppUtility.getApplicationException(null, "errors.item.format",
+								ApplicationProperties.getValue("specimen.storageContainer"));
 					}
 				}
 				//bug 11479 S bug				
-				if(radioButton.equals("2"))
-				
+				if (radioButton.equals("2"))
+
 				{
-					if(validator.isEmpty(posDim1)||validator.isEmpty(posDim2))
+					if (validator.isEmpty(posDim1) || validator.isEmpty(posDim2))
 					{
-						throw AppUtility.getApplicationException(null, "errors.item.format", ApplicationProperties.getValue("specimen.positionInStorageContainer"));
+						throw AppUtility.getApplicationException(null, "errors.item.format",
+								ApplicationProperties
+										.getValue("specimen.positionInStorageContainer"));
 					}
 				}
-			}	
+			}
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
 			aliquotSpecimen.setInitialQuantity(new Double(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
-								
+
 			//bug 11479			
 			if ((containerId != null || containername != null) && posDim1 != null
 					&& posDim2 != null)
@@ -389,32 +410,38 @@ public class CreateAliquotAction extends BaseAction
 				specPos.setSpecimen(aliquotSpecimen);
 				aliquotSpecimen.setSpecimenPosition(specPos);
 			}
-			
+
 			if (aliquotSpecimen instanceof MolecularSpecimen)
 			{
-				if(aliquotForm.getConcentration().equals(""))
+				if (aliquotForm.getConcentration().equals(""))
 				{
-					((MolecularSpecimen) aliquotSpecimen).setConcentrationInMicrogramPerMicroliter(0.0);
+					((MolecularSpecimen) aliquotSpecimen)
+							.setConcentrationInMicrogramPerMicroliter(0.0);
 				}
 				else
 				{
 					Double concentration = new Double(aliquotForm.getConcentration());
 					if (concentration != null)
 					{
-						((MolecularSpecimen) aliquotSpecimen).setConcentrationInMicrogramPerMicroliter(concentration);
+						((MolecularSpecimen) aliquotSpecimen)
+								.setConcentrationInMicrogramPerMicroliter(concentration);
 					}
 				}
 			}
-			Date currentDate = new Date();
-			DateFormat myDateFormat = new SimpleDateFormat(CommonServiceLocator.getInstance().getDatePattern());
+			//Date currentDate = new Date();
+			DateFormat myDateFormat = new SimpleDateFormat(CommonServiceLocator.getInstance()
+					.getDatePattern());
 			Date myDate = null;
-			try {
-			     myDate = myDateFormat.parse(aliquotForm.getCreatedDate());
-			     
-			} catch (ParseException e) {
-				logger.debug("Invalid Date Parser Exception: "+ e.getMessage(), e);
-			    // System.out.println("Invalid Date Parser Exception ");
-			     e.printStackTrace();
+			try
+			{
+				myDate = myDateFormat.parse(aliquotForm.getCreatedDate());
+
+			}
+			catch (ParseException e)
+			{
+				logger.debug("Invalid Date Parser Exception: " + e.getMessage(), e);
+				// System.out.println("Invalid Date Parser Exception ");
+				e.printStackTrace();
 			}
 			aliquotSpecimen.setCreatedOn(myDate);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
@@ -429,39 +456,42 @@ public class CreateAliquotAction extends BaseAction
 			specimenCharacteristics.setTissueSite(aliquotForm.getTissueSite());
 			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 			//bug no. 8081 and 8083
-			if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 			{
-			 aliquotSpecimen.setLabel((String) aliquotMap.get(specimenKey + i + "_label"));
+				aliquotSpecimen.setLabel((String) aliquotMap.get(specimenKey + i + "_label"));
 			}
 			specimenCollection.add(aliquotSpecimen);
 		}
 
 		return specimenCollection;
 	}
+
 	/**
 	 * This function calculates the avialble qty of parent after creating aliquots.
 	 * @param specimenList - list of aliquots
 	 * @param aliquotForm
 	 */
-	private void calculateAvailableQuantityForParent(List specimenList,AliquotForm aliquotForm)
+	private void calculateAvailableQuantityForParent(List specimenList, AliquotForm aliquotForm)
 	{
 		Double totalAliquotQty = 0.0;
-		
-		if(specimenList != null && specimenList.size()>0)
+
+		if (specimenList != null && specimenList.size() > 0)
 		{
 			Iterator itr = specimenList.iterator();
-			while(itr.hasNext())
+			while (itr.hasNext())
 			{
-				Specimen specimen =  (Specimen) itr.next();
-				if(specimen.getInitialQuantity() != null)
+				Specimen specimen = (Specimen) itr.next();
+				if (specimen.getInitialQuantity() != null)
 				{
 					totalAliquotQty = totalAliquotQty + specimen.getInitialQuantity();
 				}
-				
+
 			}
-			if(aliquotForm.getInitialAvailableQuantity() != null)
+			if (aliquotForm.getInitialAvailableQuantity() != null)
 			{
-				Double availableQuantity = Double.parseDouble(aliquotForm.getInitialAvailableQuantity()) - totalAliquotQty;
+				Double availableQuantity = Double.parseDouble(aliquotForm
+						.getInitialAvailableQuantity())
+						- totalAliquotQty;
 				aliquotForm.setAvailableQuantity(availableQuantity.toString());
 			}
 		}

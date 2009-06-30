@@ -7,10 +7,10 @@
  * @version 1.00
  * Created on Sept 5, 2007
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,34 +23,36 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
-import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 public class ConsentResponseSubmitAction extends BaseAction
 {
-	private static org.apache.log4j.Logger logger =Logger.getLogger(ConsentResponseSubmitAction.class);
+
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ConsentResponseSubmitAction.class);
+
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
+
 		logger.debug("Inside  consent response submit ");
-		ConsentResponseForm consentForm = (ConsentResponseForm)form;
-		HttpSession session =request.getSession();
-		if(consentForm != null)
+		ConsentResponseForm consentForm = (ConsentResponseForm) form;
+		HttpSession session = request.getSession();
+		if (consentForm != null)
 		{
 			long collectionProtocolID = consentForm.getCollectionProtocolID();
-			String signedConsentUrl=consentForm.getSignedConsentUrl();
+			String signedConsentUrl = consentForm.getSignedConsentUrl();
 			long witnessId = consentForm.getWitnessId();
-			String consentSignatureDate= consentForm.getConsentDate();
+			String consentSignatureDate = consentForm.getConsentDate();
 			Map consentResponseValues = consentForm.getConsentResponseValues();
 			MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-			Collection consentResponseCollection = mapdataParser.generateData(consentResponseValues);
-			
+			Collection consentResponseCollection = mapdataParser
+					.generateData(consentResponseValues);
+
 			/*Iterator itr = consentResponseCollection.iterator();
 			
 			while(itr.hasNext())
@@ -59,15 +61,19 @@ public class ConsentResponseSubmitAction extends BaseAction
 				logger.debug(":::submit  participant response ::"+consentBean.getParticipantResponse());
 				logger.debug(":::submit  participant response id ::"+consentBean.getParticipantResponseID());
 			}*/
-			
-			String withdrawlButtonStatus= consentForm.getWithdrawlButtonStatus();
-			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID, signedConsentUrl ,witnessId , consentSignatureDate , consentResponseCollection, withdrawlButtonStatus );			
-			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY+collectionProtocolID;
-			Map consentResponseHashTable = (Map)session.getAttribute(Constants.CONSENT_RESPONSE);
-			if(consentResponseHashTable == null){
+
+			String withdrawlButtonStatus = consentForm.getWithdrawlButtonStatus();
+			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID,
+					signedConsentUrl, witnessId, consentSignatureDate, consentResponseCollection,
+					withdrawlButtonStatus);
+			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
+			Map consentResponseHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);
+			if (consentResponseHashTable == null)
+			{
 				consentResponseHashTable = new LinkedHashMap();
 			}
-			if(consentResponseHashTable.containsKey(consentResponseKey)){
+			if (consentResponseHashTable.containsKey(consentResponseKey))
+			{
 				consentResponseHashTable.remove(consentResponseKey);
 			}
 			consentResponseHashTable.put(consentResponseKey, consentResponseBean);

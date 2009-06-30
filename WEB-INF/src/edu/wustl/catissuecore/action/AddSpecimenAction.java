@@ -44,22 +44,24 @@ import edu.wustl.common.util.global.Status;
  */
 public class AddSpecimenAction extends SecureAction
 {
+
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, BizLogicException
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException, BizLogicException
 	{
 
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		
+
 		String sourceObjectName = Specimen.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+		//String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
 		String[] whereColumnName = new String[1];
 		Object[] whereColumnValue = new Object[1];
-	
+
 		// checks whether label or barcode is selected
 		if (createForm.getRadioButton().equals("1"))
 		{
@@ -72,13 +74,11 @@ public class AddSpecimenAction extends SecureAction
 			whereColumnValue[0] = createForm.getParentSpecimenBarcode().trim();
 		}
 
-		String[] whereColumnCondition = {"="};
+		//String[] whereColumnCondition = {"="};
 
-		
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		List list  = bizLogic.retrieve(sourceObjectName, whereColumnName[0], whereColumnValue[0]);
-		
+		List list = bizLogic.retrieve(sourceObjectName, whereColumnName[0], whereColumnValue[0]);
 
 		/**
 		 *  If list is not empty, set the Parent specimen Id and forward to success. 
@@ -87,42 +87,47 @@ public class AddSpecimenAction extends SecureAction
 		if (list != null && !list.isEmpty())
 		{
 			Specimen objSpecimen = (Specimen) list.get(0);
-			
-			if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
+
+			if (objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				/**
-	 			* Name : Falguni Sachde
-	 			* Reviewer Name : Sachin Lale 
-	 			* Bug ID: 4919
-	 			* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
-	 			* 			   link and specimen status is disabled 	
+				* Name : Falguni Sachde
+				* Reviewer Name : Sachin Lale 
+				* Bug ID: 4919
+				* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
+				* 			   link and specimen status is disabled 	
 				*/
 				ActionErrors errors = getActionErrors(request);
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.disabled" , "Specimen"));
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived" , "Derived Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"error.parentobject.disabled", "Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived",
+						"Derived Specimen"));
 				saveErrors(request, errors);
 				return mapping.findForward(Constants.FAILURE);
 			}
-			else if(objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString() ))
+			else if (objSpecimen.getActivityStatus().equals(
+					Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
 				/**
-	 			* Name : Falguni Sachde
-	 			* Reviewer Name : Sachin Lale 
-	 			* Bug ID: 4919
-	 			* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
-	 			* 			   link and specimen status is disabled 	
+				* Name : Falguni Sachde
+				* Reviewer Name : Sachin Lale 
+				* Bug ID: 4919
+				* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
+				* 			   link and specimen status is disabled 	
 				*/
 				ActionErrors errors = getActionErrors(request);
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived" , "Derived Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed",
+						"Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived",
+						"Derived Specimen"));
 				saveErrors(request, errors);
 				return mapping.findForward(Constants.FAILURE);
 			}
-			
+
 			Long specimen = (Long) objSpecimen.getId();
 			createForm.setParentSpecimenId("" + specimen.longValue());
-			createForm.setReset(false);   // Will not reset the parameters   
-			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+			createForm.setReset(false); // Will not reset the parameters   
+			if (pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
 			{
 				return mapping.findForward(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY);
 			}
@@ -134,6 +139,7 @@ public class AddSpecimenAction extends SecureAction
 		}
 
 	}
+
 	/**
 	 * This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
@@ -151,27 +157,31 @@ public class AddSpecimenAction extends SecureAction
 
 		return errors;
 	}
-	
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+
+	/**
+	 * 
+	 * @param form
+	 * @return
 	 */
 	protected String getObjectId(AbstractActionForm form)
-	{ 
+	{
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
-		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
+		if (createSpecimenForm.getParentSpecimenId() != null
+				&& createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
-				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
-				if (cpr!= null)
-				{
-					CollectionProtocol cp = cpr.getCollectionProtocol();
-					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
-				}
+			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+			CollectionProtocolRegistration cpr = specimenCollectionGroup
+					.getCollectionProtocolRegistration();
+			if (cpr != null)
+			{
+				CollectionProtocol cp = cpr.getCollectionProtocol();
+				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+			}
 		}
 		return null;
-		 
+
 	}
 
 }

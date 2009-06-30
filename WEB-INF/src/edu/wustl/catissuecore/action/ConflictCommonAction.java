@@ -25,27 +25,38 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
-public class ConflictCommonAction extends BaseAction{
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class ConflictCommonAction extends BaseAction
+{
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-	
+
 	HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
-		ConflictCommonForm conflictCommonForm = (ConflictCommonForm)form;
+
+		ConflictCommonForm conflictCommonForm = (ConflictCommonForm) form;
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-		
-		conflictCommonForm.setSurgicalPathologyNumber((String)request.getParameter(Constants.SURGICAL_PATHOLOGY_NUMBER));
-		conflictCommonForm.setReportDate((String)request.getParameter(Constants.REPORT_DATE));
-		conflictCommonForm.setSiteName((String)request.getParameter(Constants.SITE_NAME));
-		conflictCommonForm.setReportCollectionDate((String)request.getParameter(Constants.REPORT_COLLECTION_DATE));
-	
-		Participant participant = (Participant) edu.wustl.catissuecore.caties.util.Utility.getParticipantFromReportLoaderQueue(reportQueueId);
-		String participantName = (String)participant.getLastName()+","+ (String)participant.getFirstName();
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern());
+
+		conflictCommonForm.setSurgicalPathologyNumber((String) request
+				.getParameter(Constants.SURGICAL_PATHOLOGY_NUMBER));
+		conflictCommonForm.setReportDate((String) request.getParameter(Constants.REPORT_DATE));
+		conflictCommonForm.setSiteName((String) request.getParameter(Constants.SITE_NAME));
+		conflictCommonForm.setReportCollectionDate((String) request
+				.getParameter(Constants.REPORT_COLLECTION_DATE));
+
+		Participant participant = (Participant) edu.wustl.catissuecore.caties.util.Utility
+				.getParticipantFromReportLoaderQueue(reportQueueId);
+		String participantName = (String) participant.getLastName() + ","
+				+ (String) participant.getFirstName();
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(),
+				CommonServiceLocator.getInstance().getDatePattern());
 		conflictCommonForm.setParticipantName(participantName);
 		conflictCommonForm.setBirthDate(birthDate);
 		conflictCommonForm.setSocialSecurityNumber(participant.getSocialSecurityNumber());
-		
+
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }

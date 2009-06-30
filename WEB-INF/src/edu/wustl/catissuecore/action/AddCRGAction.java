@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -19,25 +20,27 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
-
 public class AddCRGAction extends CommonAddEditAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(AddCRGAction.class);
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	throws IOException, ServletException
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
 	{
-		String crgName =(String)request.getParameter(Constants.CRG_NAME);
+		String crgName = (String) request.getParameter(Constants.CRG_NAME);
 		CancerResearchBizLogic bizlogic = new CancerResearchBizLogic();
 		String crgId = null;
 		String responseString = null;
-		
-		CancerResearchGroupForm crgForm = (CancerResearchGroupForm)form;
+
+		CancerResearchGroupForm crgForm = (CancerResearchGroupForm) form;
 		crgForm.setOperation(Constants.ADD);
 		crgForm.setName(crgName);
-		
-		ActionForward forward = super.execute(mapping,crgForm,request,response);
-		
-		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
+
+		ActionForward forward = super.execute(mapping, crgForm, request, response);
+
+		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
 		}
@@ -48,16 +51,16 @@ public class AddCRGAction extends CommonAddEditAction
 				crgId = bizlogic.getLatestCRG(crgName);
 				responseString = crgId + Constants.RESPONSE_SEPARATOR + crgName;
 			}
-			catch(BizLogicException e)
+			catch (BizLogicException e)
 			{
 				logger.error("Exception occurred in retrieving Cancer Research Group");
 				e.printStackTrace();
 			}
 		}
-		
+
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		
+
 		/**
 		 * Sending the response as crgId @ crgName
 		 */

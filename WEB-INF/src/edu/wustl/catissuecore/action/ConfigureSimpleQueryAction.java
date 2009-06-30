@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
-
 public class ConfigureSimpleQueryAction extends BaseAction
 {
+
 	/**
 	 * This is the initialization action class for configuring Simple Search
 	 * @author Poornima Govindrao
@@ -38,97 +39,101 @@ public class ConfigureSimpleQueryAction extends BaseAction
 	 * @return value for ActionForward object
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-	throws Exception
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Set the tables for the configuration 
-		String pageOf=request.getParameter(Constants.PAGE_OF);
-		if(pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		if (pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 		{
-			SimpleQueryInterfaceForm simpleQueryInterfaceForm =  (SimpleQueryInterfaceForm)form;
-			HttpSession session =request.getSession();
+			SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
+			HttpSession session = request.getSession();
 			Map map = simpleQueryInterfaceForm.getValuesMap();
-			Logger.out.debug("Form map size"+map.size());
-			Logger.out.debug("Form map"+map); 
-			if(map.size()==0)
+			Logger.out.debug("Form map size" + map.size());
+			Logger.out.debug("Form map" + map);
+			if (map.size() == 0)
 			{
-				map=(Map)session.getAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP);
-				Logger.out.debug("Session map size"+map.size());
-				Logger.out.debug("Session map"+map);
+				map = (Map) session
+						.getAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP);
+				Logger.out.debug("Session map size" + map.size());
+				Logger.out.debug("Session map" + map);
 			}
 			Iterator iterator = map.keySet().iterator();
-			
+
 			//Retrieve the size of the condition list to set size of array of tables.
 			MapDataParser parser = new MapDataParser("edu.wustl.simplequery.query");
-			
+
 			Collection simpleConditionNodeCollection = parser.generateData(map, true);
 			int counter = simpleConditionNodeCollection.size();
-			String[] selectedTables = new String[counter]; 
-			int tableCount=0;
+			String[] selectedTables = new String[counter];
+			int tableCount = 0;
 			while (iterator.hasNext())
 			{
-				String key = (String)iterator.next();
-				Logger.out.debug("map key"+key);
-				if(key.endsWith("_table"))
+				String key = (String) iterator.next();
+				Logger.out.debug("map key" + key);
+				if (key.endsWith("_table"))
 				{
-					String table = (String)map.get(key);
+					String table = (String) map.get(key);
 					boolean exists = false;
-					for(int arrayCount=0;arrayCount<selectedTables.length;arrayCount++)
+					for (int arrayCount = 0; arrayCount < selectedTables.length; arrayCount++)
 					{
-						if(selectedTables[arrayCount]!=null)
+						if (selectedTables[arrayCount] != null)
 						{
-							if(selectedTables[arrayCount].equals(table))
+							if (selectedTables[arrayCount].equals(table))
 							{
 								exists = true;
 							}
 						}
 					}
-					if(!exists)
+					if (!exists)
 					{
-						selectedTables[tableCount]= table;
+						selectedTables[tableCount] = table;
 						tableCount++;
 					}
 				}
 			}
 			//Set the selected columns for population in the list of ConfigureResultView.jsp
 			String[] selectedColumns = simpleQueryInterfaceForm.getSelectedColumnNames();
-			if(selectedColumns==null)
+			if (selectedColumns == null)
 			{
-				selectedColumns = (String[])session.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
-				if(selectedColumns==null)
+				selectedColumns = (String[]) session
+						.getAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST);
+				if (selectedColumns == null)
 				{
-					
+
 					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					QueryBizLogic bizLogic = (QueryBizLogic) factory.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
+					QueryBizLogic bizLogic = (QueryBizLogic) factory
+							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					List columnNameValueBeans = new ArrayList();
 					int i;
-					for(i=0;i<selectedTables.length;i++)
+					for (i = 0; i < selectedTables.length; i++)
 					{
-						columnNameValueBeans.addAll(bizLogic.getColumnNames(selectedTables[i],true));
-//						columnNameValueBeans.addAll(bizLogic.setColumnNames(selectedTables[i]));
+						columnNameValueBeans.addAll(bizLogic
+								.getColumnNames(selectedTables[i], true));
+						//						columnNameValueBeans.addAll(bizLogic.setColumnNames(selectedTables[i]));
 					}
 					selectedColumns = new String[columnNameValueBeans.size()];
 					Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();
-					i=0;
-					while(columnNameValueBeansItr.hasNext())
+					i = 0;
+					while (columnNameValueBeansItr.hasNext())
 					{
-						selectedColumns[i]=((NameValueBean)columnNameValueBeansItr.next()).getValue();
+						selectedColumns[i] = ((NameValueBean) columnNameValueBeansItr.next())
+								.getValue();
 						i++;
 					}
 				}
 				simpleQueryInterfaceForm.setSelectedColumnNames(selectedColumns);
 			}
-			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
+			session.setAttribute(Constants.TABLE_ALIAS_NAME, selectedTables);
 			//session.setAttribute(Constants.SIMPLE_QUERY_COUNTER,new String(""+counter));
 			//Logger.out.debug("counter in configure"+(String)session.getAttribute(Constants.SIMPLE_QUERY_COUNTER));
 			//Counter required for redefining the query
-			map.put("counter",new String(""+counter));
-			session.setAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP,map);
+			map.put("counter", new String("" + counter));
+			session.setAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP, map);
 		}
-		
-		request.setAttribute(Constants.PAGE_OF,pageOf);
-		
+
+		request.setAttribute(Constants.PAGE_OF, pageOf);
+
 		return (mapping.findForward(pageOf));
 	}
-	
+
 }

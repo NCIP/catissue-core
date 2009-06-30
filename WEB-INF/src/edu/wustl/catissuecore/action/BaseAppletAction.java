@@ -29,6 +29,7 @@ public abstract class BaseAppletAction extends SecureAction
 {
 
 	private transient Logger logger = Logger.getCommonLogger(BaseAppletAction.class);
+
 	/**
 	 * This method write input map to the response in the form of BaseAppletModel.
 	 * 
@@ -45,7 +46,6 @@ public abstract class BaseAppletAction extends SecureAction
 		outputStream.close();
 	}
 
-	
 	/**
 	 * This method reads  AppletModelInterface from request 
 	 * and return the map inside it.
@@ -54,14 +54,15 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @return map inside AppletModelInterface
 	 * @throws Exception
 	 */
-	protected Map readMapFromRequest(HttpServletRequest request) throws IOException,ClassNotFoundException
+	protected Map readMapFromRequest(HttpServletRequest request) throws IOException,
+			ClassNotFoundException
 	{
 		ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
 		AppletModelInterface model = (AppletModelInterface) inputStream.readObject();
-		inputStream.close(); 
+		inputStream.close();
 		return model.getData();
 	}
-	
+
 	/*
 	 * Overriden from BaseAction.
 	 * @param mapping
@@ -69,103 +70,99 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @param request
 	 * @param response
 	 */
-	protected void preExecute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	protected void preExecute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response)
 	{
-		try {
+		try
+		{
 			Map inputMap = readMapFromRequest(request);
 			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
 		}
 	}
-	
-	
 
 	/**
 	 * This method is overided do save input map before reading anything from request.
 	 * 
 	 * @see org.apache.struts.actions.DispatchAction#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-//	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
-//			HttpServletRequest request, HttpServletResponse response) throws Exception
-//	{
-//		try {
-//			Map inputMap = readMapFromRequest(request);
-//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
-//		} catch (Exception e) {
-//			
-//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
-//		}
-//
-//		return super.execute(actionMapping, actionForm, request, response);
-//	}
-	
+	//	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+	//			HttpServletRequest request, HttpServletResponse response) throws Exception
+	//	{
+	//		try {
+	//			Map inputMap = readMapFromRequest(request);
+	//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+	//		} catch (Exception e) {
+	//			
+	//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+	//		}
+	//
+	//		return super.execute(actionMapping, actionForm, request, response);
+	//	}
 	// --------- Changes By  Mandar : 05Dec06 for Bug 2866 
 	// --------- Extending SecureAction.
-	
 	/**
-     * Overrides the executeSecureAction method of SecureAction class.
-     * */
-    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {
-    	//---- Code from execute 
-//		try {
-//			Map inputMap = readMapFromRequest(request);
-//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
-//		} catch (Exception e) {
-//			
-//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
-//		}
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * */
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		//---- Code from execute 
+		//		try {
+		//			Map inputMap = readMapFromRequest(request);
+		//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+		//		} catch (Exception e) {
+		//			
+		//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+		//		}
 		//		---- Code from execute
-		
+
 		//-- code for handling method calls
 		String methodName = request.getParameter(Constants.METHOD_NAME);
-		if(methodName!= null)
+		if (methodName != null)
 		{
 			return invokeMethod(methodName, mapping, form, request, response);
 		}
 		return null;
-    }
-/*
- * This method calls the specified method passed as parameter.
- * 
- */
-    protected abstract ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception ;
+	}
 
-    /*
-     * This method returns the method with the specified name if the method exists. Return null other wise.
-     */
-	   protected Method getMethod(String name,Class className)
-	   {
-	   	//argument types
-		    Class[] types =
-	        {
-	            ActionMapping.class,
-	            ActionForm.class,
-	            HttpServletRequest.class,
-	            HttpServletResponse.class
-		   };
-	   		try
-			{
-	   			Method method = className.getDeclaredMethod(name,types );
-	   			return method;
-			}
-	   		catch(NoSuchMethodException excp1)
-			{
-	   			logger.error(excp1.getMessage(),excp1 );
-			}
-	   		catch(NullPointerException excp2)
-			{
-	   			logger.error(excp2.getMessage(),excp2 );
-			}
-	   		catch(SecurityException excp3)
-			{
-	   			logger.error(excp3.getMessage(),excp3 );
-			}
-		    return null;
-	   }
+	/*
+	 * This method calls the specified method passed as parameter.
+	 * 
+	 */
+	protected abstract ActionForward invokeMethod(String methodName, ActionMapping mapping,
+			ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception;
+
+	/*
+	 * This method returns the method with the specified name if the method exists. Return null other wise.
+	 */
+	protected Method getMethod(String name, Class className)
+	{
+		//argument types
+		Class[] types = {ActionMapping.class, ActionForm.class, HttpServletRequest.class,
+				HttpServletResponse.class};
+		try
+		{
+			Method method = className.getDeclaredMethod(name, types);
+			return method;
+		}
+		catch (NoSuchMethodException excp1)
+		{
+			logger.error(excp1.getMessage(), excp1);
+		}
+		catch (NullPointerException excp2)
+		{
+			logger.error(excp2.getMessage(), excp2);
+		}
+		catch (SecurityException excp3)
+		{
+			logger.error(excp3.getMessage(), excp3);
+		}
+		return null;
+	}
 
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -19,28 +20,30 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
-
 public class AddDepartmentAction extends CommonAddEditAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(AddDepartmentAction.class);
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	throws IOException, ServletException
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
 	{
-		String departmentName =(String)request.getParameter(Constants.DEPARTMENT_NAME);
+		String departmentName = (String) request.getParameter(Constants.DEPARTMENT_NAME);
 		DepartmentBizLogic bizlogic = new DepartmentBizLogic();
-		String departmentId =  null;
+		String departmentId = null;
 		String responseString = null;
-		
+
 		/**
 		 * Setting the department name to form
 		 */
-		DepartmentForm departmentForm = (DepartmentForm)form;
+		DepartmentForm departmentForm = (DepartmentForm) form;
 		departmentForm.setOperation(Constants.ADD);
 		departmentForm.setName(departmentName);
-		
+
 		//Saving the department to the Database using COmmonAddEditAction
-		ActionForward forward = super.execute(mapping,departmentForm,request,response);
-		if((forward != null) && (forward.getName().equals(Constants.FAILURE)))
+		ActionForward forward = super.execute(mapping, departmentForm, request, response);
+		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
 		}
@@ -51,21 +54,21 @@ public class AddDepartmentAction extends CommonAddEditAction
 				departmentId = bizlogic.getLatestDepartment(departmentName);
 				responseString = departmentId + Constants.RESPONSE_SEPARATOR + departmentName;
 			}
-			catch(BizLogicException e)
+			catch (BizLogicException e)
 			{
 				logger.error("Exception occurred in retrieving Department");
 				e.printStackTrace();
 			}
 		}
-		
-	    PrintWriter out = response.getWriter();
+
+		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		
-	    /**
+
+		/**
 		 * sending the response as  departmentId @ departmentName
 		 */
-	    out.write(responseString);
-		
-		return null; 
+		out.write(responseString);
+
+		return null;
 	}
 }

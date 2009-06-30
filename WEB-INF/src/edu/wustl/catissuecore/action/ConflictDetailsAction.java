@@ -7,6 +7,7 @@
   * @author kalpana_thakur
   * @date 9/18/2007
  */
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,18 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-
+/**
+ * 
+ * @author renuka_bajpai
+ *
+ */
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ConflictDetailsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * Initializes the various fields in ConflictView.jsp Page.
@@ -36,14 +46,13 @@ public class ConflictDetailsAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String reportQueueId = request.getParameter(Constants.REPORT_ID);
-		
-		ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm)form;
+
+		ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm) form;
 		conflictDetailsForm.setReportQueueId(reportQueueId);
-			
-		request.setAttribute(Constants.REPORT_ID,reportQueueId );
+
+		request.setAttribute(Constants.REPORT_ID, reportQueueId);
 		return mapping.findForward(Constants.SUCCESS);
-		
-	
+
 	}
-	
+
 }

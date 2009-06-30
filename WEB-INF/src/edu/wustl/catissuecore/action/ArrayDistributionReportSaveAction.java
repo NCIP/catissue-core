@@ -1,4 +1,6 @@
+
 package edu.wustl.catissuecore.action;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,47 +32,54 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 
 public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAction
 {
+
 	/**
 	 * @see edu.wustl.catissuecore.action.ArrayDistributionReportAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,HttpServletRequest request,
-									HttpServletResponse response)throws Exception 
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConfigureResultViewForm configForm = (ConfigureResultViewForm)form;
+		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 		//Retrieve the distribution ID
-		Long distributionId =configForm.getDistributionId();;
-		
-		Distribution dist =  getDistribution(distributionId, getSessionData(request), edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
-    	SessionDataBean sessionData = getSessionData(request);
-    	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
-    	distributionReportForm.setDistributionType(new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
-    	
-    	//Set the columns for Distribution report
-    	String action = configForm.getNextAction();
-		String selectedColumns[] = getSelectedColumns(action,configForm,true);
-		String []columnNames = getColumnNames(selectedColumns);
-		
+		Long distributionId = configForm.getDistributionId();;
+
+		Distribution dist = getDistribution(distributionId, getSessionData(request),
+				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
+		SessionDataBean sessionData = getSessionData(request);
+		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
+		distributionReportForm.setDistributionType(new Integer(
+				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
+
+		//Set the columns for Distribution report
+		String action = configForm.getNextAction();
+		String selectedColumns[] = getSelectedColumns(action, configForm, true);
+		String[] columnNames = getColumnNames(selectedColumns);
+
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
-		String []specimenColumnNames = getColumnNames(specimenColumns);
-		
-    	List listOfData = getListOfArrayDataForSave(dist,configForm,sessionData,selectedColumns,specimenColumns) ;
-		
+		String[] specimenColumnNames = getColumnNames(specimenColumns);
+
+		List listOfData = getListOfArrayDataForSave(dist, configForm, sessionData, selectedColumns,
+				specimenColumns);
+
 		setSelectedMenuRequestAttribute(request);
 		//Save the report as a CSV file at the client side
-		HttpSession session=request.getSession();
-		if(session!=null)
+		HttpSession session = request.getSession();
+		if (session != null)
 		{
-			String filePath = CommonServiceLocator.getInstance().getAppHome()+System.getProperty("file.separator")+"DistributionReport_"+session.getId()+".csv";
+			String filePath = CommonServiceLocator.getInstance().getAppHome()
+					+ System.getProperty("file.separator") + "DistributionReport_"
+					+ session.getId() + ".csv";
 
-			saveReport(distributionReportForm,listOfData,filePath,columnNames,specimenColumnNames);
-			
+			saveReport(distributionReportForm, listOfData, filePath, columnNames,
+					specimenColumnNames);
+
 			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
-			String contentType= "application/download";
-			SendFile.sendFileToClient(response,filePath,fileName,contentType);
+			String contentType = "application/download";
+			SendFile.sendFileToClient(response, filePath, fileName, contentType);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * saves report for list of ArrayDistributionReportEntry
 	 * @param distributionReportForm
@@ -80,27 +89,30 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	 * @param specimenColumnNames
 	 * @throws IOException
 	 */
-	protected void saveReport(DistributionReportForm distributionReportForm,List listOfData,String fileName,
-			String []arrayColumnNames,String[] specimenColumnNames) throws IOException {
+	protected void saveReport(DistributionReportForm distributionReportForm, List listOfData,
+			String fileName, String[] arrayColumnNames, String[] specimenColumnNames)
+			throws IOException
+	{
 		ExportReport report = new ExportReport(fileName);
 		String[] gridInfoLabel = {"Array Grid"};
 		String delimiter = Constants.DELIMETER;
 		List distributionData = new ArrayList();
-		addDistributionHeader(distributionData,distributionReportForm,report);
+		addDistributionHeader(distributionData, distributionReportForm, report);
 		report.writeData(distributionData, delimiter);
 		Iterator itr = listOfData.iterator();
-		while(itr.hasNext())
+		while (itr.hasNext())
 		{
 			ArrayDistributionReportEntry arrayEntry = (ArrayDistributionReportEntry) itr.next();
-			
+
 			List arrayInfo = new ArrayList();
 			arrayInfo.add(arrayEntry.getArrayInfo());
-			addSection(report,arrayColumnNames,arrayInfo,2,0);
-			addSection(report,gridInfoLabel,arrayEntry.getGridInfo(),1,2);
-			addSection(report,specimenColumnNames,arrayEntry.getSpecimenEntries(),1,2);
+			addSection(report, arrayColumnNames, arrayInfo, 2, 0);
+			addSection(report, gridInfoLabel, arrayEntry.getGridInfo(), 1, 2);
+			addSection(report, specimenColumnNames, arrayEntry.getSpecimenEntries(), 1, 2);
 		}
 		report.closeFile();
 	}
+
 	/**
 	 * Adds a section to report
 	 * @param report
@@ -110,18 +122,21 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	 * @param columnIndent
 	 * @throws IOException
 	 */
-	protected void addSection(ExportReport report,String[] columnNames,List listOfData,int noblankLines,int columnIndent)
-			throws IOException {
-		if (columnNames != null) {
+	protected void addSection(ExportReport report, String[] columnNames, List listOfData,
+			int noblankLines, int columnIndent) throws IOException
+	{
+		if (columnNames != null)
+		{
 			List headerColumns = new ArrayList();
 			List columns = new ArrayList();
-			for (int k = 0; k < columnNames.length; k++) {
+			for (int k = 0; k < columnNames.length; k++)
+			{
 				columns.add(columnNames[k]);
 			}
 			headerColumns.add(columns);
-			report.writeData(headerColumns, Constants.DELIMETER,noblankLines,columnIndent);
+			report.writeData(headerColumns, Constants.DELIMETER, noblankLines, columnIndent);
 		}
-		report.writeData(listOfData, Constants.DELIMETER,0,columnIndent);
+		report.writeData(listOfData, Constants.DELIMETER, 0, columnIndent);
 	}
 
 }

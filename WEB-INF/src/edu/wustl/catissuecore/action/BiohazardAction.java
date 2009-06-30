@@ -24,54 +24,52 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
 
-public class BiohazardAction  extends SecureAction
+public class BiohazardAction extends SecureAction
 {
-    /**
-     * Overrides the execute method of Action class.
-     * Initializes the various fields in Biohazard.jsp Page.
-     * @param mapping object of ActionMapping
+
+	/**
+	 * Overrides the execute method of Action class.
+	 * Initializes the various fields in Biohazard.jsp Page.
+	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
-     * */
+	 * */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-        BiohazardForm biohazardForm=(BiohazardForm)form;
-        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-        biohazardForm.setOperation(operation);
-        biohazardForm.setSubmittedFor(submittedFor);
-        
-        
-    	String biohazard_Type_List=Constants.BIOHAZARD_TYPE_LIST;
-    	String formName;
-    	
-        request.setAttribute("operationAdd", Constants.ADD);
-    	request.setAttribute("operationEdit", Constants.EDIT);
-        request.setAttribute("biohazard_Type_List", biohazard_Type_List);
-        request.setAttribute("search", Constants.SEARCH);
-        
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		//Gets the value of the operation parameter.
+		String operation = request.getParameter(Constants.OPERATION);
+		BiohazardForm biohazardForm = (BiohazardForm) form;
+		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		biohazardForm.setOperation(operation);
+		biohazardForm.setSubmittedFor(submittedFor);
 
-        
-        if (operation.equals(Constants.EDIT))
-        {
-        	formName = Constants.BIOHAZARD_EDIT_ACTION;
-        }
-        else
-        {
-            formName = Constants.BIOHAZARD_ADD_ACTION;
-        }
-        
-        request.setAttribute("formName",formName);
-                      
-        //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-        List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
-    	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-    	
-        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
-    }
+		String biohazard_Type_List = Constants.BIOHAZARD_TYPE_LIST;
+		String formName;
+
+		request.setAttribute("operationAdd", Constants.ADD);
+		request.setAttribute("operationEdit", Constants.EDIT);
+		request.setAttribute("biohazard_Type_List", biohazard_Type_List);
+		request.setAttribute("search", Constants.SEARCH);
+
+		if (operation.equals(Constants.EDIT))
+		{
+			formName = Constants.BIOHAZARD_EDIT_ACTION;
+		}
+		else
+		{
+			formName = Constants.BIOHAZARD_ADD_ACTION;
+		}
+
+		request.setAttribute("formName", formName);
+
+		//Sets the operation attribute to be used in the Add/Edit Institute Page. 
+		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_BIOHAZARD, null);
+		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+
+		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+	}
 }
