@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.querysuite.metadata;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -11,7 +9,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
-import edu.common.dynamicextensions.domaininterface.AbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -22,6 +19,7 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
@@ -32,7 +30,14 @@ import edu.wustl.dao.daofactory.IDAOFactory;
  */
 public class UpdateMetadataTagPath
 {
-
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	//Logger
+	private static final org.apache.log4j.Logger LOGGER = LoggerConfig
+			.getConfiguredLogger(UpdateMetadataTagPath.class);
+	
 	public static final String ELEMENT_ENTITY_GROUP = "entity-group";
 
 	public static final String ELEMENT_ENTITY = "entity";
@@ -59,31 +64,26 @@ public class UpdateMetadataTagPath
 	 * Adds tag values for entities and attributes.
 	 * @param args filename
 	 */
-	/*public static void main(String[] args)
+	public static void main(String[] args)
 	{
 		try
 		{
-			System.out.println("UpdateMetadataTagPath start");
+			LOGGER.info("UpdateMetadataTagPath start");
 			if (args.length < 1)
 			{
-				throw new Exception(ApplicationProperties.getValue("filename.required"));
+				throw new Exception("Please Specify the xml filename");
 			}
-			//This will add path between Participant and Evententry
-			AddAssociations addAssociations = new AddAssociations();
-			addAssociations.addCuratedPath("edu.wustl.catissuecore.domain.Participant",
-					"edu.wustl.catissuecore.domain.EventEntry",
-					"edu.wustl.catissuecore.domain.ClinicalStudyRegistration");
 
 			//This will add Tagged values to Participant Object
 			String fileName = args[0];
 			readTaggedValues(fileName);
-			System.out.println("UpdateMetadataTagPath finishes");
+			LOGGER.info("UpdateMetadataTagPath finishes");
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			LOGGER.info("error in UpdateMetadataTagPath" + e.getMessage());
 		}
-	}*/
+	}
 
 	/**
 	 * This method reads tagged values from xml file.
@@ -91,14 +91,13 @@ public class UpdateMetadataTagPath
 	 * @throws DynamicExtensionsApplicationException if entity group does not exist
 	 * @throws DynamicExtensionsSystemException from EntityGroupManager
 	 */
-	public static void readTaggedValues(String fileName)
+	private static void readTaggedValues(String fileName)
 			throws DynamicExtensionsApplicationException, DynamicExtensionsSystemException
 	{
 		SAXReader saxReader = new SAXReader();
 		try
 		{
-			InputStream inputStream = Thread.currentThread().
-			getContextClassLoader().getResourceAsStream(fileName);
+			FileInputStream inputStream = new FileInputStream(fileName);
 			Document document = saxReader.read(inputStream);
 			Element rootElement = document.getRootElement();
 			Iterator<Element> rootIterator = rootElement.elementIterator(ELEMENT_ENTITY_GROUP);
@@ -117,44 +116,18 @@ public class UpdateMetadataTagPath
 						.getEntityGroupByName(entityGroupName);
 				if (entityGroup == null)
 				{
-					//System.out.println("entitygroup.doesNotExist" + entityGroupName);
+					LOGGER.info("entitygroup.doesNotExist" + entityGroupName);
 				}
 				else
 				{
 					readEntities(entityGrpEle, entitygroupId);
 				}
 			}
-			System.out.println("=TAGGED VALUES ADDED SUCCESSFULLY!!!");
+			LOGGER.info("=TAGGED VALUES ADDED SUCCESSFULLY!!!");
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Deletes tagged values of attributes.
-	 * @param entity that contains attributes,
-	 * of which tagged values are to be deleted.
-	 */
-	private static void deleteAttributeTagValues(EntityInterface entity)
-	{
-		Collection<AbstractAttributeInterface> allAbstractAttributes = entity
-				.getAllAbstractAttributes();
-		for (AbstractAttributeInterface attribute : allAbstractAttributes)
-		{
-			Collection<TaggedValueInterface> taggedValueCollection = attribute
-					.getTaggedValueCollection();
-			Iterator<TaggedValueInterface> iterator = taggedValueCollection.iterator();
-			while (iterator.hasNext())
-			{
-				TaggedValueInterface tagValue = iterator.next();
-				String key = tagValue.getKey();
-				if (checkValidTag(key))
-				{
-					iterator.remove();
-				}
-			}
+			LOGGER.info("=error in readTaggedValues !" + e.getMessage());
 		}
 	}
 
@@ -246,7 +219,7 @@ public class UpdateMetadataTagPath
 			while (tagItr.hasNext())
 			{
 				AttributeInterface attribute = entity.getAttributeByName(attrName);
-				System.out.println("==" + attrName);
+				LOGGER.info("==" + attrName);
 				if (attribute == null)
 				{
 					throw new DynamicExtensionsApplicationException(ApplicationProperties.getValue(
@@ -317,7 +290,7 @@ public class UpdateMetadataTagPath
 			{
 				String entityTagName = entityTag.element(ELEMENT_TAG_NAME).getText();
 				String entityTagValue = entityTag.element(ELEMENT_TAG_VALUE).getText();
-				System.out.println(entityTagName + "===" + entityTagValue);
+				LOGGER.info(entityTagName + "===" + entityTagValue);
 				TaggedValueInterface taggedValue = createTagValue(entityTagName, entityTagValue);
 				entity.addTaggedValue(taggedValue);
 			}

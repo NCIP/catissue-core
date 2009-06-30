@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml>
 <entity-group>
-<name>caTissueCore</name>
+<name>Catissue Suite</name>
 <entity>
 	<name>edu.wustl.catissuecore.domain.Participant</name>
 	<attribute>

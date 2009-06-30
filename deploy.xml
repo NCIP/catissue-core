@@ -1138,6 +1138,8 @@
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
+		<antcall target="update_metadata_for_tagged_values">
+		</antcall>
 		<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
 		</antcall>
@@ -1599,7 +1601,7 @@
 					<param name="isUpgrade" value="true"/>
 					<param name="buildVersion" value="1.1top3"/>
 			</antcall>
-
+			<antcall target="update_metadata_for_tagged_values"/>
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p3-->
@@ -1630,6 +1632,7 @@
 					<param name="isUpgrade" value="true"/>
 					<param name="buildVersion" value="p2top3"/>
 				</antcall>
+				<antcall target="update_metadata_for_tagged_values"/>
 		</target>
 		
 	
@@ -3621,9 +3624,8 @@ Thanking You,
 			</target>
 	<!-- Query Integration targets End -->
 	
-	<!-- call this task in Feb End release while upgrading Db -->
-	<target name="upgrade_metadata_for_constraintproperties">
-		<delete quiet="true" includeemptydirs="true">
+	<target name="commondbconfig">
+	<delete quiet="true" includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
 			</fileset>
@@ -3672,6 +3674,11 @@ Thanking You,
 			<replacefilter token="${token.database.password}" value="${database.password}" />
 
 		</replace>
+	</target>
+	
+	<!-- call this task in Feb End release while upgrading Db -->
+	<target name="upgrade_metadata_for_constraintproperties" depends="commondbconfig">
+	
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -3881,5 +3888,24 @@ Thanking You,
 				</then>
 			</elseif>
 		</if>		
+	</target>
+	
+	
+	<target name="update_metadata_for_tagged_values" depends="commondbconfig">
+		<echo message="Updating Tagged Values....." />
+			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadataTagPath" fork="true" maxmemory="1024M">
+				<arg value="${base.dir}/WEB-INF/src/taggedvalues.xml" />
+				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<classpath refid="temp.classpath" />
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+						<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+							<include name="*.jar" />
+						</fileset>
+				</classpath>
+			</java>
+		<delete dir="${temp.dir}" />
 	</target>
 </project>
