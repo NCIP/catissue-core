@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
@@ -21,149 +22,175 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.cde.CDEManager;
 
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ProtocolEventDetailsAction extends BaseAction
 {
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ProtocolEventDetailsForm protocolEventDetailsForm =(ProtocolEventDetailsForm)form;
-		String operation = (String)request.getParameter(Constants.OPERATION);
+		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
+		String operation = (String) request.getParameter(Constants.OPERATION);
 		HttpSession session = request.getSession();
 
 		//Event Key when flow is form Specimen Requirement Page
-		String key = (String)request.getParameter(Constants.EVENT_KEY);
-		String eventKey=null;
-		if(key==null)
-			eventKey=(String)session.getAttribute(Constants.NEW_EVENT_KEY);
+		String key = (String) request.getParameter(Constants.EVENT_KEY);
+		String eventKey = null;
+		if (key == null)
+			eventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
 		else
-			eventKey=key;
-		String selectedNode=(String)session.getAttribute(Constants.TREE_NODE_ID);
+			eventKey = key;
+		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		String checkForSpecimen = null;
-		if(selectedNode!=null)
+		if (selectedNode != null)
 		{
-			checkForSpecimen = selectedNode.substring(0,3);
+			checkForSpecimen = selectedNode.substring(0, 3);
 		}
-		if(key!=null && selectedNode!=null && !selectedNode.contains(eventKey))
+		if (key != null && selectedNode != null && !selectedNode.contains(eventKey))
 		{
-			String nodeId = (String)request.getParameter(Constants.TREE_NODE_ID);
-			session.setAttribute(Constants.TREE_NODE_ID,nodeId);
+			String nodeId = (String) request.getParameter(Constants.TREE_NODE_ID);
+			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		}
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		long collectionEventUserId = 0;
-		collectionEventUserId = AppUtility.setUserInForm(request,operation);
-		selectedNode = protocolEventDetailsForm.getCollectionPointLabel()+"class_"+eventKey;
-		if(key == null || "New".equals(checkForSpecimen))
+		collectionEventUserId = AppUtility.setUserInForm(request, operation);
+		selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + eventKey;
+		if (key == null || "New".equals(checkForSpecimen))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
 		}
-		if(protocolEventDetailsForm.getCollectionEventUserId() == 0)
+		if (protocolEventDetailsForm.getCollectionEventUserId() == 0)
 		{
 			protocolEventDetailsForm.setCollectionEventUserId(collectionEventUserId);
 		}
-		if(protocolEventDetailsForm.getReceivedEventUserId() == 0)
+		if (protocolEventDetailsForm.getReceivedEventUserId() == 0)
 		{
 			protocolEventDetailsForm.setReceivedEventUserId(collectionEventUserId);
 		}
-		if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_DEFINE_EVENTS))
+		if (pageOf != null && pageOf.equals(Constants.PAGE_OF_DEFINE_EVENTS))
 		{
 			initSpecimenrequirementForm(mapping, protocolEventDetailsForm, request);
 		}
-		else if(operation.equals(Constants.ADD)&&pageOf.equals(Constants.PAGE_OF_ADD_NEW_EVENT))
+		else if (operation.equals(Constants.ADD) && pageOf.equals(Constants.PAGE_OF_ADD_NEW_EVENT))
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
 			protocolEventDetailsForm.setStudyCalendarEventPoint(1D);
 			protocolEventDetailsForm.setCollectionPointLabel("");
-			protocolEventDetailsForm.setClinicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
+			protocolEventDetailsForm.setClinicalStatus((String) DefaultValueManager
+					.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
 			//removed as value not in cache  and chnaged default to empty
-			protocolEventDetailsForm.setClinicalDiagnosis((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
+			protocolEventDetailsForm.setClinicalDiagnosis((String) DefaultValueManager
+					.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
 			//request.setAttribute("clinicalDiagnosis","");
-			protocolEventDetailsForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
-			protocolEventDetailsForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
-			protocolEventDetailsForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-			CollectionProtocolBean collectionProtocolBean =(CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			String treeNode="cpName_"+collectionProtocolBean.getTitle();
+			protocolEventDetailsForm
+					.setCollectionEventCollectionProcedure((String) DefaultValueManager
+							.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+			protocolEventDetailsForm.setCollectionEventContainer((String) DefaultValueManager
+					.getDefaultValue(Constants.DEFAULT_CONTAINER));
+			protocolEventDetailsForm.setReceivedEventReceivedQuality((String) DefaultValueManager
+					.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+					.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			String treeNode = "cpName_" + collectionProtocolBean.getTitle();
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		}
-		else if(pageOf!=null&&pageOf.equals(Constants.PAGE_OF_SPECIMEN_REQUIREMENT))
+		else if (pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_REQUIREMENT))
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(key);
 		}
 		request.setAttribute("clinicalDiagnosis", protocolEventDetailsForm.getClinicalDiagnosis());
-		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
+		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CLINICAL_STATUS, null);
 		//removed as value not in cache 
 		//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
-    	request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-    	//removed as value not in cache  and chnaged default to empty
-    	//request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
+		//removed as value not in cache  and chnaged default to empty
+		//request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
 
-    	//setting the procedure
-		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		//setting the procedure
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
 		//set the container lists
-		List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
-		request.setAttribute(Constants.CONTAINER_LIST, containerList);	
+		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CONTAINER, null);
+		request.setAttribute(Constants.CONTAINER_LIST, containerList);
 
 		//setting the quality for received events
-		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 		request.setAttribute(Constants.OPERATION, operation);
-    	request.setAttribute("protocolEventDetailsForm", protocolEventDetailsForm);
-    	
-    	
-    	CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean)session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-    	request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
-    	request.setAttribute("opr", collectionProtocolBean.getOperation());
+		request.setAttribute("protocolEventDetailsForm", protocolEventDetailsForm);
+
+		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
+		request.setAttribute("opr", collectionProtocolBean.getOperation());
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-	
+
 	/**
 	 * 
 	 * @param mapping ActionMapping
 	 * @param protocolEventDetailsForm protocolEventDetails Form
 	 * @param request HttpServletRequest
 	 */
-	private void initSpecimenrequirementForm(ActionMapping mapping, 
+	private void initSpecimenrequirementForm(ActionMapping mapping,
 			ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
 	{
-		HttpSession session = request.getSession(); 
-		Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		
+		HttpSession session = request.getSession();
+		Map collectionProtocolEventMap = (Map) session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
 		//If flow is from Specimen Requirement page save button.
-		String collectionProtocolEventKey = (String)request.getAttribute(Constants.EVENT_KEY);
-		
-		if(collectionProtocolEventKey==null)
+		String collectionProtocolEventKey = (String) request.getAttribute(Constants.EVENT_KEY);
+
+		if (collectionProtocolEventKey == null)
 		{
 			//If flow is from Specimen Tree View if Event Node is clicked to open Event page in Edit mode.
-			collectionProtocolEventKey = (String)request.getParameter(Constants.EVENT_KEY);
+			collectionProtocolEventKey = (String) request.getParameter(Constants.EVENT_KEY);
 		}
-		if(collectionProtocolEventKey==null)
+		if (collectionProtocolEventKey == null)
 		{
 			//If flow is when user Clicks Define Event button.
-			collectionProtocolEventKey = (String)session.getAttribute(Constants.NEW_EVENT_KEY);
+			collectionProtocolEventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
 		}
-		StringTokenizer st = new StringTokenizer(collectionProtocolEventKey,"_");
-		if(st.hasMoreTokens())
+		StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
+		if (st.hasMoreTokens())
 		{
 			collectionProtocolEventKey = st.nextToken();
 		}
-		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(collectionProtocolEventKey);
-		if(new Long(collectionProtocolEventBean.getId())!=null && collectionProtocolEventBean.getId() > 0)
+		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+				.get(collectionProtocolEventKey);
+		if (new Long(collectionProtocolEventBean.getId()) != null
+				&& collectionProtocolEventBean.getId() > 0)
 		{
 			request.setAttribute("isPersistent", true);
 		}
-		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean.getClinicalDiagnosis());
+		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean
+				.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
-		protocolEventDetailsForm.setCollectionPointLabel(collectionProtocolEventBean.getCollectionPointLabel());
-		protocolEventDetailsForm.setStudyCalendarEventPoint(collectionProtocolEventBean.getStudyCalenderEventPoint());
-		
-		protocolEventDetailsForm.setCollectionEventComments(collectionProtocolEventBean.getCollectedEventComments());
-		protocolEventDetailsForm.setCollectionEventContainer(collectionProtocolEventBean.getCollectionContainer());
-		protocolEventDetailsForm.setReceivedEventComments(collectionProtocolEventBean.getReceivedEventComments());
-		protocolEventDetailsForm.setReceivedEventReceivedQuality(collectionProtocolEventBean.getReceivedQuality());
-		protocolEventDetailsForm.setCollectionEventCollectionProcedure(collectionProtocolEventBean.getCollectionProcedure());
+		protocolEventDetailsForm.setCollectionPointLabel(collectionProtocolEventBean
+				.getCollectionPointLabel());
+		protocolEventDetailsForm.setStudyCalendarEventPoint(collectionProtocolEventBean
+				.getStudyCalenderEventPoint());
+
+		protocolEventDetailsForm.setCollectionEventComments(collectionProtocolEventBean
+				.getCollectedEventComments());
+		protocolEventDetailsForm.setCollectionEventContainer(collectionProtocolEventBean
+				.getCollectionContainer());
+		protocolEventDetailsForm.setReceivedEventComments(collectionProtocolEventBean
+				.getReceivedEventComments());
+		protocolEventDetailsForm.setReceivedEventReceivedQuality(collectionProtocolEventBean
+				.getReceivedQuality());
+		protocolEventDetailsForm.setCollectionEventCollectionProcedure(collectionProtocolEventBean
+				.getCollectionProcedure());
 		protocolEventDetailsForm.setCollectionProtocolEventkey(collectionProtocolEventKey);
-	
+
 	}
-	
+
 }

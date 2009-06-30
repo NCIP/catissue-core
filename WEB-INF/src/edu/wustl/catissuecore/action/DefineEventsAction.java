@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.Map;
@@ -16,31 +17,35 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class DefineEventsAction extends BaseAction
 {
+
 	/** (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		CollectionProtocolForm cpForm = (CollectionProtocolForm)form;
+		CollectionProtocolForm cpForm = (CollectionProtocolForm) form;
 
-		String pageOf=request.getParameter(Constants.PAGE_OF);
-		String operation=request.getParameter("operation");
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		String operation = request.getParameter("operation");
 		request.setAttribute("operation", operation);
-		String invokeFunction=request.getParameter("invokeFunction");
+		String invokeFunction = request.getParameter("invokeFunction");
 		request.setAttribute("invokeFunction", invokeFunction);
 		HttpSession session = request.getSession();
-		
-		CollectionProtocolBean cpBean = (CollectionProtocolBean)
-				session.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-		if(cpBean == null)
+
+		CollectionProtocolBean cpBean = (CollectionProtocolBean) session
+				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		if (cpBean == null)
 		{
 			cpBean = new CollectionProtocolBean();
 		}
-		if(cpForm.getShortTitle()!=null)
+		if (cpForm.getShortTitle() != null)
 		{
 			populateCollectionProtocolBean(cpForm, cpBean);
 		}
@@ -76,6 +81,5 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setConsentValues(consentMap);//bug 8905
 		cpBean.setUnsignedConsentURLName(cpForm.getUnsignedConsentURLName());
 	}
-	
-	
+
 }

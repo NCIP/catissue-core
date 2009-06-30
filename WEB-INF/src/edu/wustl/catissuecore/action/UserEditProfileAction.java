@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on Aug 02, 2008
  */
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,24 +26,29 @@ import edu.wustl.common.action.CommonSearchAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.Constants;
 
+/**
+ * This class set id in request from session and call CommonSearchAction
+ */
+public class UserEditProfileAction extends BaseAction
+{
+
 	/**
-	 * This class set id in request from session and call CommonSearchAction
+	 * Overrides the execute method in Action class.
+	 * @param mapping ActionMapping object
+	 * @param form ActionForm object
+	 * @param request HttpServletRequest object
+	 * @param response HttpServletResponse object
+	 * @return ActionForward object
+	 * @throws Exception object
 	 */
-public class UserEditProfileAction extends BaseAction{
-	/**
-     * Overrides the execute method in Action class.
-     * @param mapping ActionMapping object
-     * @param form ActionForm object
-     * @param request HttpServletRequest object
-     * @param response HttpServletResponse object
-     * @return ActionForward object
-     * @throws Exception object
-     */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
-		
-		ActionForward actionForward=mapping.findForward("homePage");
-		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);		
-		if(sessionDataBean==null)
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+
+		ActionForward actionForward = mapping.findForward("homePage");
+		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
+		if (sessionDataBean == null)
 		{
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if (errors == null)
@@ -52,11 +58,11 @@ public class UserEditProfileAction extends BaseAction{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("app.session.timeout"));
 			saveErrors(request, errors);
 		}
-		else	
+		else
 		{
-			CommonSearchAction commonSearchAction = new CommonSearchAction(); 
+			CommonSearchAction commonSearchAction = new CommonSearchAction();
 			request.setAttribute(Constants.SYSTEM_IDENTIFIER, sessionDataBean.getUserId());
-			actionForward=commonSearchAction.execute(mapping,form,request,response);
+			actionForward = commonSearchAction.execute(mapping, form, request, response);
 		}
 		return actionForward;
 	}

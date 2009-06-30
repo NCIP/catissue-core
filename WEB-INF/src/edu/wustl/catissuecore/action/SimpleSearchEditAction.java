@@ -24,6 +24,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SimpleSearchEditAction extends BaseAction
 {
+
 	/**
 	 * This method sets the pageOf attribute based on value of the aliasName parameter passed through request & redirect to the corresponding Action.
 	 * @param mapping Action Mappings
@@ -39,7 +40,7 @@ public class SimpleSearchEditAction extends BaseAction
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
 
 		String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
-//		request.setAttribute(Constants.TABLE_ALIAS_NAME, aliasName);
+		//		request.setAttribute(Constants.TABLE_ALIAS_NAME, aliasName);
 
 		String pageOf = Variables.aliasAndPageOfMap.get(aliasName);
 		request.setAttribute(Constants.PAGE_OF, pageOf);

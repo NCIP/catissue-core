@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
@@ -25,83 +26,96 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class DefineArrayAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(DefineArrayAction.class);
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
-    	DefineArrayForm defineArray=(DefineArrayForm) form;
-    	HttpSession session = request.getSession();
-        if(session.getAttribute("OrderForm")!=null)
-        {
-	    	try
-	    	{
-	    		String[] arrayTypeLabelProperty = {"name"};
-	            String  arrayTypeProperty = "id";
-	            IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		DefineArrayForm defineArray = (DefineArrayForm) form;
+		HttpSession session = request.getSession();
+		if (session.getAttribute("OrderForm") != null)
+		{
+			try
+			{
+				String[] arrayTypeLabelProperty = {"name"};
+				String arrayTypeProperty = "id";
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 						.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
-	            List specimenArrayTypeList = new ArrayList();
-	
-	   	        specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class.getName(),arrayTypeLabelProperty, arrayTypeProperty, true);
-		        for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();) 
-		        {
+				List specimenArrayTypeList = new ArrayList();
+
+				specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class
+						.getName(), arrayTypeLabelProperty, arrayTypeProperty, true);
+				for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
+				{
 					NameValueBean nameValueBean = (NameValueBean) iter.next();
 					// remove ANY entry from array type list
-					if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE) && nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+					if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE)
+							&& nameValueBean.getName().equalsIgnoreCase(
+									Constants.ARRAY_TYPE_ANY_NAME))
 					{
 						iter.remove();
 						break;
 					}
 				}
-		        request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
-	    	}
-	    	catch(Exception e)
-	    	{
-	    		logger.error(e.getMessage(), e);
-	    		return null;
-	    	}
-	    	
-	
-	    	if(request.getParameter("arrayType")!=null)
-	    	{
-	    		
-	    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
+			}
+			catch (Exception e)
+			{
+				logger.error(e.getMessage(), e);
+				return null;
+			}
+
+			if (request.getParameter("arrayType") != null)
+			{
+
+				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-	
-	        		String sourceObjectName = SpecimenArrayType.class.getName();
-	    	    	
-	    			Object object = bizLogic.retrieve(sourceObjectName, new Long(request.getParameter("arrayType")));
-	    			SpecimenArrayType containerTyperow=(SpecimenArrayType)object;
-	    			//SpecimenArrayType spec=(SpecimenArrayType)containerType.get(0);
-	    			
-	    			Capacity capacityobj=(Capacity)containerTyperow.getCapacity();
-	    			
-	    			defineArray.setDimenmsionX(new Integer(capacityobj.getOneDimensionCapacity()).toString());
-	    			defineArray.setDimenmsionY(new Integer(capacityobj.getTwoDimensionCapacity()).toString());
-	    			defineArray.setArrayClass(containerTyperow.getSpecimenClass());
-	
-	    			String dimen=new Integer(capacityobj.getOneDimensionCapacity()).toString()+":"+new Integer(capacityobj.getTwoDimensionCapacity()).toString()+":"+defineArray.getArrayClass();
-	    			
-	    			PrintWriter out = response.getWriter();
-	    			response.setContentType("text/html");
-	    			out.write(dimen);
-	    			return null;
-	        
-	    	}
-	    	String typeOf=null;
-	    	typeOf=request.getParameter("typeOf");
-	    	
-	    	if(typeOf==null)
-	    		typeOf=request.getAttribute("typeOf").toString();
-	    	
-	    	request.setAttribute("typeOf",typeOf);
-	    	
-	    	request.setAttribute("DefineArrayForm", defineArray);
-	    	return mapping.findForward("success");
-        }
-        else
-        	return mapping.findForward("failure");
-    }
+
+				String sourceObjectName = SpecimenArrayType.class.getName();
+
+				Object object = bizLogic.retrieve(sourceObjectName, new Long(request
+						.getParameter("arrayType")));
+				SpecimenArrayType containerTyperow = (SpecimenArrayType) object;
+				//SpecimenArrayType spec=(SpecimenArrayType)containerType.get(0);
+
+				Capacity capacityobj = (Capacity) containerTyperow.getCapacity();
+
+				defineArray.setDimenmsionX(new Integer(capacityobj.getOneDimensionCapacity())
+						.toString());
+				defineArray.setDimenmsionY(new Integer(capacityobj.getTwoDimensionCapacity())
+						.toString());
+				defineArray.setArrayClass(containerTyperow.getSpecimenClass());
+
+				String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString() + ":"
+						+ new Integer(capacityobj.getTwoDimensionCapacity()).toString() + ":"
+						+ defineArray.getArrayClass();
+
+				PrintWriter out = response.getWriter();
+				response.setContentType("text/html");
+				out.write(dimen);
+				return null;
+
+			}
+			String typeOf = null;
+			typeOf = request.getParameter("typeOf");
+
+			if (typeOf == null)
+				typeOf = request.getAttribute("typeOf").toString();
+
+			request.setAttribute("typeOf", typeOf);
+
+			request.setAttribute("DefineArrayForm", defineArray);
+			return mapping.findForward("success");
+		}
+		else
+			return mapping.findForward("failure");
+	}
 }

@@ -29,25 +29,24 @@ import edu.wustl.common.beans.NameValueBean;
 public class ShowCPAndParticipantsAction extends BaseAction
 {
 
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		CPSearchForm cpsearchForm = (CPSearchForm) form;
-		
+
 		//Getting the instance of participantRegistrationCacheManager
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-	
-		
+
 		//Getting the CP list 
-		Map<Long, String> cpIDTitleMap = participantRegCacheManager.getCPIDTitleMap();
+		Map < Long , String > cpIDTitleMap = participantRegCacheManager.getCPIDTitleMap();
 		//Collections.sort(cpColl); Commented out by baljeet.....see the changes
 		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
 		//Smita changes end
-		
+
 		List participantColl = new ArrayList();
 
 		Long cpId = null;
-		if (cpsearchForm.getCpId() != null && cpsearchForm.getCpId().longValue() != -1 )
+		if (cpsearchForm.getCpId() != null && cpsearchForm.getCpId().longValue() != -1)
 		{
 			cpId = cpsearchForm.getCpId();
 		}
@@ -71,33 +70,32 @@ public class ShowCPAndParticipantsAction extends BaseAction
 				String participantIdAndName = (String) itr.next();
 				int index = participantIdAndName.indexOf(":");
 				Long Id = null;
-				String name="";
+				String name = "";
 				Id = new Long(participantIdAndName.substring(0, index));
 				name = participantIdAndName.substring(index + 1);
 				participantColl.add(new NameValueBean(name, Id));
 			}
-		   
-			
+
 			Collections.sort(participantColl);
-			
+
 			//Commented out by Baljeet for flex related changes 
 			//request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
-            
-	    }
-	  
-		if (request.getParameter("participantId") != null && !request.getParameter("participantId").equals(""))
+
+		}
+
+		if (request.getParameter("participantId") != null
+				&& !request.getParameter("participantId").equals(""))
 		{
 			Long participantId = new Long(request.getParameter("participantId"));
 			cpsearchForm.setParticipantId(participantId);
 		}
-        //when collection protocol gets changes then don't shown any participant seelcted...
+		//when collection protocol gets changes then don't shown any participant seelcted...
 		String cpChange = request.getParameter("cpChange");
-		if(cpChange != null)
+		if (cpChange != null)
 		{
 			cpsearchForm.setParticipantId(null);
 		}
-		
+
 		return mapping.findForward("success");
 	}
 }
-

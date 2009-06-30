@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,84 +26,94 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
+
 ;
 
-public class UpdateCollectionProtocolAction extends BaseAction {
-
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class UpdateCollectionProtocolAction extends BaseAction
+{
 
 	private transient Logger logger = Logger.getCommonLogger(UpdateCollectionProtocolAction.class);
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 
 		String target = Constants.SUCCESS;
 
-		try{ 
+		try
+		{
 			CollectionProtocol collectionProtocol = CollectionProtocolUtil
-			.populateCollectionProtocolObjects(request);
+					.populateCollectionProtocolObjects(request);
 
-			CollectionProtocolBean collectionProtocolBean = 
-				(CollectionProtocolBean)(request.getSession())
-				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) (request
+					.getSession()).getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic =factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 			HttpSession session = request.getSession();
-			SessionDataBean sessionDataBean = (SessionDataBean)
-							session.getAttribute(Constants.SESSION_DATA);
-			CollectionProtocolDTO collectionProtocolDTO = AppUtility.getCoolectionProtocolDTO(collectionProtocol,session);
-			bizLogic.update(collectionProtocolDTO, null, 
-					0, sessionDataBean);
+			SessionDataBean sessionDataBean = (SessionDataBean) session
+					.getAttribute(Constants.SESSION_DATA);
+			CollectionProtocolDTO collectionProtocolDTO = AppUtility.getCoolectionProtocolDTO(
+					collectionProtocol, session);
+			bizLogic.update(collectionProtocolDTO, null, 0, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
-			if(Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
+			if (Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
 			{
 				target = "disabled";
 			}
 			else
-			{	
+			{
 				target = Constants.SUCCESS;
 			}
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-					"object.edit.successOnly","Collection Protocol"));
+					"object.edit.successOnly", "Collection Protocol"));
 			saveMessages(request, actionMessages);
-			
+
 		}
 		catch (Exception exception)
 		{
 			logger.debug(exception.getMessage(), exception);
 			ActionErrors actionErrors = new ActionErrors();
-			
-			if(exception instanceof UserNotAuthorizedException)
+
+			if (exception instanceof UserNotAuthorizedException)
 			{
-	            UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
-				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-	            String userName = "";
-	        	
-	            if(sessionDataBean != null)
-	        	{
-	        	    userName = sessionDataBean.getUserName();
-	        	}
-	            String className = Constants.COLLECTION_PROTOCOL;
-	            String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex.getPrivilegeName());
-	            String baseObject = "";
-	            if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
-	            {
-	                baseObject = ex.getBaseObject();
-	            } else 
-	            {
-	                baseObject = className;
-	            }
-	                
-	            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
-	            actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-	        	saveErrors(request, actionErrors);
-	        	target = Constants.FAILURE;
-	        	return (mapping.findForward(target));
+				UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
+				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+						.getAttribute(Constants.SESSION_DATA);
+				String userName = "";
+
+				if (sessionDataBean != null)
+				{
+					userName = sessionDataBean.getUserName();
+				}
+				String className = Constants.COLLECTION_PROTOCOL;
+				String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex
+						.getPrivilegeName());
+				String baseObject = "";
+				if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
+				{
+					baseObject = ex.getBaseObject();
+				}
+				else
+				{
+					baseObject = className;
+				}
+
+				ActionError error = new ActionError("access.addedit.object.denied", userName,
+						className, decoratedPrivilegeName, baseObject);
+				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+				saveErrors(request, actionErrors);
+				target = Constants.FAILURE;
+				return (mapping.findForward(target));
 			}
-			
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
-					"errors.item",exception.getMessage()));
-			saveErrors(request, actionErrors);						
+
+			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", exception
+					.getMessage()));
+			saveErrors(request, actionErrors);
 			target = Constants.FAILURE;
 		}
 		return mapping.findForward(target);

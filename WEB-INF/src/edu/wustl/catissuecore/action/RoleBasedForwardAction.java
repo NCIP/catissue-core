@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +28,15 @@ import edu.wustl.security.manager.SecurityManagerFactory;
  */
 public class RoleBasedForwardAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeACtion method of BaseAction class.Checks if the logged user is a technician then access is denied for cp based view.
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String roleName = getRoleNameForUser(request);
-		if(roleName.equalsIgnoreCase(Roles.TECHNICIAN))
+		if (roleName.equalsIgnoreCase(Roles.TECHNICIAN))
 		{
 			return mapping.findForward(Constants.ACCESS_DENIED);
 		}
@@ -46,7 +49,9 @@ public class RoleBasedForwardAction extends BaseAction
 	 * @throws NumberFormatException NumberFormatException
 	 * @throws SMException SMException
 	 */
-	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException, SMException {
+	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException,
+			SMException
+	{
 		SessionDataBean sessionData = getSessionData(request);
 		Long userId = new Long(sessionData.getCsmUserId());
 		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();

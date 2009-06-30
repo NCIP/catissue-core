@@ -28,37 +28,40 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
-	protected void setRequestParameters(HttpServletRequest request, EventParametersForm eventParametersForm) throws Exception
+	protected void setRequestParameters(HttpServletRequest request,
+			EventParametersForm eventParametersForm) throws Exception
 	{
-		String formName=null;
-	    boolean readOnlyValue;
-	    DisposalEventParametersForm disposalEventParametersForm=(DisposalEventParametersForm)eventParametersForm;
-	    if (disposalEventParametersForm.getOperation().equals(Constants.EDIT))
-	    {
-	        formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
-	        readOnlyValue = true;
-	    }
-	    else
-	    {
-	        formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION;
-	        readOnlyValue = false;
-	    }
-	   // String changeAction = "setFormAction('" + formName + "');";
-	    String deleteAction="deleteObject('" + formName+"?disposal=true" +"','" + Constants.BIO_SPECIMEN + "')";
+		String formName = null;
+		boolean readOnlyValue;
+		DisposalEventParametersForm disposalEventParametersForm = (DisposalEventParametersForm) eventParametersForm;
+		if (disposalEventParametersForm.getOperation().equals(Constants.EDIT))
+		{
+			formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
+			readOnlyValue = true;
+		}
+		else
+		{
+			formName = Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION;
+			readOnlyValue = false;
+		}
+		// String changeAction = "setFormAction('" + formName + "');";
+		String deleteAction = "deleteObject('" + formName + "?disposal=true" + "','"
+				+ Constants.BIO_SPECIMEN + "')";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		//request.setAttribute("changeAction", changeAction);
 		request.setAttribute("deleteAction", deleteAction);
 		/*DisposalEventParametersForm form = (DisposalEventParametersForm) request
 				.getAttribute("disposalEventParametersForm");*/
-		
-//		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-//				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
-		request.setAttribute("activityStatusDisabled",Status.ACTIVITY_STATUS_DISABLED.toString());
-		request.setAttribute("activityStatusClosed",Status.ACTIVITY_STATUS_CLOSED.toString());
-		request.setAttribute("activityStatusList",Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
-		request.setAttribute("disposalEventParametersAddAction",Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION);
+
+		//		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
+		//				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
+		request.setAttribute("activityStatusDisabled", Status.ACTIVITY_STATUS_DISABLED.toString());
+		request.setAttribute("activityStatusClosed", Status.ACTIVITY_STATUS_CLOSED.toString());
+		request.setAttribute("activityStatusList", Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
+		request.setAttribute("disposalEventParametersAddAction",
+				Constants.DISPOSAL_EVENT_PARAMETERS_ADD_ACTION);
 
 	}
-	
+
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,43 +21,59 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class SPRCommentAddEditAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(SPRCommentAddEditAction.class);
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-        ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm=(ViewSurgicalPathologyReportForm)form;
-        try 
-        {
-			AbstractDomainObject abstractDomain=(AbstractDomainObject)(new DomainObjectFactory().getDomainObject(viewSurgicalPathologyReportForm.getFormId(), viewSurgicalPathologyReportForm));
-	    	abstractDomain = defaultBizLogic.populateDomainObject(abstractDomain.getClass().getName(), new Long(viewSurgicalPathologyReportForm.getId()), viewSurgicalPathologyReportForm);
-	    	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-	    	IBizLogic bizLogic= factory.getBizLogic(viewSurgicalPathologyReportForm.getFormId());
-			if(abstractDomain!=null)
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm = (ViewSurgicalPathologyReportForm) form;
+		try
+		{
+			AbstractDomainObject abstractDomain = (AbstractDomainObject) (new DomainObjectFactory()
+					.getDomainObject(viewSurgicalPathologyReportForm.getFormId(),
+							viewSurgicalPathologyReportForm));
+			abstractDomain = defaultBizLogic.populateDomainObject(abstractDomain.getClass()
+					.getName(), new Long(viewSurgicalPathologyReportForm.getId()),
+					viewSurgicalPathologyReportForm);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(viewSurgicalPathologyReportForm.getFormId());
+			if (abstractDomain != null)
 			{
-				Object object = bizLogic.retrieve(abstractDomain.getClass().getName(), new Long(viewSurgicalPathologyReportForm.getId()));
+				Object object = bizLogic.retrieve(abstractDomain.getClass().getName(), new Long(
+						viewSurgicalPathologyReportForm.getId()));
 				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
-				if(abstractDomainOld instanceof QuarantineEventParameter)
+				if (abstractDomainOld instanceof QuarantineEventParameter)
 				{
-					QuarantineEventParameter quarantineEventParamanter=(QuarantineEventParameter)abstractDomainOld;
-					DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)bizLogic.retrieveAttribute(QuarantineEventParameter.class.getName(), quarantineEventParamanter.getId(), Constants.COLUMN_NAME_DEID_REPORT);
+					QuarantineEventParameter quarantineEventParamanter = (QuarantineEventParameter) abstractDomainOld;
+					DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) bizLogic
+							.retrieveAttribute(QuarantineEventParameter.class.getName(),
+									quarantineEventParamanter.getId(),
+									Constants.COLUMN_NAME_DEID_REPORT);
 					quarantineEventParamanter.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				}
-	            bizLogic.update(abstractDomain, abstractDomainOld, 0, getSessionData(request));
+				bizLogic.update(abstractDomain, abstractDomainOld, 0, getSessionData(request));
 			}
-        }
-        catch (Exception ex) 
-        {
-        	logger.error("Error occured in SPRCommentAddEditAction "+ex);
+		}
+		catch (Exception ex)
+		{
+			logger.error("Error occured in SPRCommentAddEditAction " + ex);
 			return (mapping.findForward(Constants.FAILURE));
 		}
-        // OnSubmit
-        if(viewSurgicalPathologyReportForm.getOnSubmit()!= null && viewSurgicalPathologyReportForm.getOnSubmit().trim().length()>0  )
-        {
-        	String forwardTo = viewSurgicalPathologyReportForm.getOnSubmit();
-            return (mapping.findForward(forwardTo));
-        }
+		// OnSubmit
+		if (viewSurgicalPathologyReportForm.getOnSubmit() != null
+				&& viewSurgicalPathologyReportForm.getOnSubmit().trim().length() > 0)
+		{
+			String forwardTo = viewSurgicalPathologyReportForm.getOnSubmit();
+			return (mapping.findForward(forwardTo));
+		}
 		return (mapping.findForward(Constants.SUCCESS));
 	}
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -21,23 +22,25 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class RedirectToHelpAction extends Action
 {
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	throws IOException, ServletException, DAOException
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException, DAOException
 	{
 		//Retrives link values from caTissueCore_Properties.xml file
-		request.setAttribute(Constants.USER_GUIDE_LINK_PROPERTY,
-				XMLPropertyHandler.getValue(Constants.USER_GUIDE_LINK_PROPERTY));
-		request.setAttribute(Constants.TECHNICAL_GUIDE_LINK_PROPERTY, 
-				XMLPropertyHandler.getValue(Constants.TECHNICAL_GUIDE_LINK_PROPERTY));
-		request.setAttribute(Constants.TRAINING_GUIDE_LINK_PROPERTY, 
-				XMLPropertyHandler.getValue(Constants.TRAINING_GUIDE_LINK_PROPERTY));
-		request.setAttribute(Constants.UML_MODEL_LINK_PROPERTY, 
-				XMLPropertyHandler.getValue(Constants.UML_MODEL_LINK_PROPERTY));
-		request.setAttribute(Constants.KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY, 
-				XMLPropertyHandler.getValue(Constants.KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY));
-		request.setAttribute(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY, 
-				XMLPropertyHandler.getValue(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY));
-		
+		request.setAttribute(Constants.USER_GUIDE_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.USER_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.TECHNICAL_GUIDE_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.TECHNICAL_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.TRAINING_GUIDE_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.TRAINING_GUIDE_LINK_PROPERTY));
+		request.setAttribute(Constants.UML_MODEL_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.UML_MODEL_LINK_PROPERTY));
+		request.setAttribute(Constants.KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.KNOWLEDGE_CENTER_FORUM_LINK_PROPERTY));
+		request.setAttribute(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY, XMLPropertyHandler
+				.getValue(Constants.KNOWLEDGE_CENTER_LINK_PROPERTY));
+
 		return mapping.findForward(Constants.SUCCESS);
-      }
+	}
 }

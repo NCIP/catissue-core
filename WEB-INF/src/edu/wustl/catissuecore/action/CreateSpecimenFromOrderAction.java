@@ -28,8 +28,13 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class CreateSpecimenFromOrderAction extends BaseAction
 {
+
 	/**
 	 * @param mapping object
 	 * @param form object
@@ -38,11 +43,12 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		HttpSession session = request.getSession();
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session.getAttribute("REQUEST_DETAILS_FORM");
+		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session
+				.getAttribute("REQUEST_DETAILS_FORM");
 		String rowNumber = request.getParameter("rowNumber");
 
 		String beanName = request.getParameter("bean");

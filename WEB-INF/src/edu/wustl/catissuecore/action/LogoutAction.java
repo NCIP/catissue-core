@@ -1,5 +1,5 @@
-package edu.wustl.catissuecore.action;
 
+package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOFactory;
 
 /**
  * 
@@ -25,7 +24,7 @@ import edu.wustl.dao.daofactory.DAOFactory;
  *@author Aarti Sharma
  *@version 1.0
  */
-public class LogoutAction  extends BaseAction  
+public class LogoutAction extends BaseAction
 {
 
 	/**
@@ -38,17 +37,17 @@ public class LogoutAction  extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
+
 		HttpSession session = request.getSession();
-		
+
 		//Delete Advance Query table if exists
-	 	SessionDataBean sessionData = getSessionData(request);
-	 	//Advance Query table name with userID attached
-		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-		
+		SessionDataBean sessionData = getSessionData(request);
+		//Advance Query table name with userID attached
+		String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
+
 		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
-       	jdbcDao.deleteTable(tempTableName);
-       	AppUtility.closeJDBCSession(jdbcDao);
+		jdbcDao.deleteTable(tempTableName);
+		AppUtility.closeJDBCSession(jdbcDao);
 
 		session.invalidate();
 

@@ -28,66 +28,66 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * This class initializes the fields in the DistributionProtocol Add/Edit webpage.
  * @author Mandar Deshmukh
  */
-public class DistributionProtocolAction extends SpecimenProtocolAction 
-{ 
+public class DistributionProtocolAction extends SpecimenProtocolAction
+{
 
 	private transient Logger logger = Logger.getCommonLogger(DistributionProtocolAction.class);
-    /**
-     * Overrides the execute method of Action class.
-     * Sets the various fields in DistributionProtocol Add/Edit webpage.
-     * @param mapping object of ActionMapping
+
+	/**
+	 * Overrides the execute method of Action class.
+	 * Sets the various fields in DistributionProtocol Add/Edit webpage.
+	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
-     * */
-    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {     
-    	DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
-    	
-    	
-    	if(distributionProtocolForm.getStartDate() == null)
-    	{
-    		distributionProtocolForm.setStartDate(edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
-    	}
-    	//List of keys used in map of ActionForm
+	 * */
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
+
+		if (distributionProtocolForm.getStartDate() == null)
+		{
+			distributionProtocolForm.setStartDate(edu.wustl.common.util.Utility.parseDateToString(
+					Calendar.getInstance().getTime(), CommonServiceLocator.getInstance()
+							.getDatePattern()));
+		}
+		//List of keys used in map of ActionForm
 		List key = new ArrayList();
-    	key.add("DistributionSpecimenRequirement:i_specimenClass");
-    	key.add("DistributionSpecimenRequirement:i_specimenType");
-    	key.add("DistributionSpecimenRequirement:i_tissueSite");
-    	key.add("DistributionSpecimenRequirement:i_pathologyStatus");
-    	key.add("DistributionSpecimenRequirement:i_quantity");
-    	
-    	//Gets the map from ActionForm
-    	Map map = distributionProtocolForm.getValues();
-    	
-    	//Calling DeleteRow of BaseAction class
-    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
-    	
-    	// ----------For Add new
+		key.add("DistributionSpecimenRequirement:i_specimenClass");
+		key.add("DistributionSpecimenRequirement:i_specimenType");
+		key.add("DistributionSpecimenRequirement:i_tissueSite");
+		key.add("DistributionSpecimenRequirement:i_pathologyStatus");
+		key.add("DistributionSpecimenRequirement:i_quantity");
+
+		//Gets the map from ActionForm
+		Map map = distributionProtocolForm.getValues();
+
+		//Calling DeleteRow of BaseAction class
+		MapDataParser.deleteRow(key, map, request.getParameter("status"));
+
+		// ----------For Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
-		if(reqPath != null)
+		if (reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		logger.debug("DP Action reqPath : ---- " + reqPath);
-		
+
 		// Mandar : code for Addnew Coordinator data 24-Jan-06
-		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID); 
-		if(coordinatorID != null && coordinatorID.trim().length() > 0)
+		String coordinatorID = (String) request.getAttribute(Constants.ADD_NEW_USER_ID);
+		if (coordinatorID != null && coordinatorID.trim().length() > 0)
 		{
-			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID);
-			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID)) ;
+			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "
+					+ coordinatorID);
+			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID));
 		}
 		// -- 24-Jan-06 end
 
-		
-    	return super.executeSecureAction(mapping, form, request, response);
-    }
+		return super.executeSecureAction(mapping, form, request, response);
+	}
 }

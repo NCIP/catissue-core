@@ -23,9 +23,15 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 
 //import edu.wustl.common.action.SecureAction;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class MultipleSpecimenFlexInitAction extends SecureAction
 {
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
@@ -56,7 +62,9 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			showBarcode = "false";
 		}
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens, showParentSelection, showLabel, showBarcode,CommonServiceLocator.getInstance().getDatePattern());
+		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,
+				showParentSelection, showLabel, showBarcode, CommonServiceLocator.getInstance()
+						.getDatePattern());
 
 		String pageOf = (String) request.getParameter("pageOf");
 		if (pageOf != null)
@@ -64,16 +72,17 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			request.setAttribute(Constants.PAGE_OF, pageOf);
 			return mapping.findForward(pageOf);
 		}
-		else if(Constants.EDIT.equalsIgnoreCase(mode))
+		else if (Constants.EDIT.equalsIgnoreCase(mode))
 		{
-			request.setAttribute(Constants.PAGE_OF,"pageOfMultipleSpWithMenu");
+			request.setAttribute(Constants.PAGE_OF, "pageOfMultipleSpWithMenu");
 		}
-			
+
 		return mapping.findForward("success");
 	}
 
-	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType, String parentName, String numberOfSpecimens,
-			String showParentSelection, String showLabel, String showBarcode,String  dateFormat)
+	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType,
+			String parentName, String numberOfSpecimens, String showParentSelection,
+			String showLabel, String showBarcode, String dateFormat)
 	{
 
 		request.setAttribute("MODE", mode);
@@ -84,7 +93,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("SHOW_LABEL", showLabel);
 		request.setAttribute("SHOW_BARCODE", showBarcode);
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
-		
+
 	}
 
 	private String getParentName(HttpServletRequest request, String parentType)
@@ -128,27 +137,29 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		return numberOfSpecimens;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
 
 	protected String getObjectId(AbstractActionForm form)
-	{ 
+	{
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
-		if(createSpecimenForm.getParentSpecimenId() != null && createSpecimenForm.getParentSpecimenId() != "")
+		if (createSpecimenForm.getParentSpecimenId() != null
+				&& createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
-				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
-				if (cpr!= null)
-				{
-					CollectionProtocol cp = cpr.getCollectionProtocol();
-					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
-				}
+			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+			CollectionProtocolRegistration cpr = specimenCollectionGroup
+					.getCollectionProtocolRegistration();
+			if (cpr != null)
+			{
+				CollectionProtocol cp = cpr.getCollectionProtocol();
+				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+			}
 		}
 		return null;
-		 
+
 	}
 }

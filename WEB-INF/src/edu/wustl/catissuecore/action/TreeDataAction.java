@@ -12,8 +12,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.ObjectOutputStream;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,65 +35,71 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeDataAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(TreeDataAction.class);
-    /**
-     * Overrides the execute method of the Action class.
-     */
-    public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {
-        ObjectOutputStream out = null;
-        Map columnIdsMap = new HashMap();
-        
-        try
-        {
-            String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
-            TreeDataInterface bizLogic = new StorageContainerBizLogic();
-            Vector dataList =  new Vector();
-            
-            Map containerMap = new HashMap(), containerRelationMap = new HashMap();
-            if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
-            {
-                	bizLogic = new CDEBizLogic();
-                	CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
-                	String cdeName = request.getParameter(Constants.CDE_NAME);
-                	dataList= cdeBizLogic.getTreeViewData(cdeName);
-            }
-            else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_SPECIMEN) ||
-            		pageOf.equals(Constants.PAGE_OF_ALIQUOT))
-            {
-                dataList = (Vector)bizLogic.getTreeViewData();
-            }
 
-            String contentType = "application/x-java-serialized-object";
-            response.setContentType(contentType);
-            out = new ObjectOutputStream(response.getOutputStream());
+	/**
+	 * Overrides the execute method of the Action class.
+	 */
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		ObjectOutputStream out = null;
+		//Map columnIdsMap = new HashMap();
 
-            if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGE_OF_SPECIMEN)
-                    || pageOf.equals(Constants.PAGE_OF_TISSUE_SITE) || pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
-                    || pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE) || pageOf.equals(Constants.PAGE_OF_ALIQUOT))
-            {
-                out.writeObject(dataList);
-            }
-            else
-            {
-                out.writeObject(dataList);
-            }
-        }
-        catch (Exception exp)
-        {
-        	logger.error(exp.getMessage(), exp);
-        }
-        finally
-        {
-            if (out != null)
-            {
-                out.flush();
-                out.close();
-            }
-        }
-        
-        return mapping.findForward(Constants.SUCCESS);
-    }
+		try
+		{
+			String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
+			TreeDataInterface bizLogic = new StorageContainerBizLogic();
+			Vector dataList = new Vector();
+
+			//Map containerMap = new HashMap(), containerRelationMap = new HashMap();
+			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
+			{
+				bizLogic = new CDEBizLogic();
+				CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
+				String cdeName = request.getParameter(Constants.CDE_NAME);
+				dataList = cdeBizLogic.getTreeViewData(cdeName);
+			}
+			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
+					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
+					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
+			{
+				dataList = (Vector) bizLogic.getTreeViewData();
+			}
+
+			String contentType = "application/x-java-serialized-object";
+			response.setContentType(contentType);
+			out = new ObjectOutputStream(response.getOutputStream());
+
+			if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
+					|| pageOf.equals(Constants.PAGE_OF_TISSUE_SITE)
+					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
+					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE)
+					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
+			{
+				out.writeObject(dataList);
+			}
+			else
+			{
+				out.writeObject(dataList);
+			}
+		}
+		catch (Exception exp)
+		{
+			logger.error(exp.getMessage(), exp);
+		}
+		finally
+		{
+			if (out != null)
+			{
+				out.flush();
+				out.close();
+			}
+		}
+
+		return mapping.findForward(Constants.SUCCESS);
+	}
 }

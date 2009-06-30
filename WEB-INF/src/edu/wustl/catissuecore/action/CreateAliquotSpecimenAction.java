@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,20 +16,26 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-public class CreateAliquotSpecimenAction extends BaseAction 
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class CreateAliquotSpecimenAction extends BaseAction
 {
 
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String specimenId = request.getParameter("specimenId");
 		Specimen specimen = null;
-		if(specimenId!=null)
+		if (specimenId != null)
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			specimen = (Specimen)orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
-			
-		}	
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			specimen = (Specimen) orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
+
+		}
 		System.out.println("");
 		AliquotForm aliquotForm = (AliquotForm) form;
 		aliquotForm.setSpecimenLabel(specimen.getLabel());

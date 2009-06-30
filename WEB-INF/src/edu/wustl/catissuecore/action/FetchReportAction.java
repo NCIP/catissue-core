@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
@@ -26,7 +27,6 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 
 
 /**
@@ -35,82 +35,97 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class FetchReportAction extends BaseAction
 {
+
 	/**
-     * Overrides the execute method of Action class.
-     * Sets the various Collection and Received events based on SCG id.
-     */
-	protected ActionForward  executeAction(ActionMapping mapping, ActionForm form,
+	 * Overrides the execute method of Action class.
+	 * Sets the various Collection and Received events based on SCG id.
+	 */
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
+	{
 		String reportId = request.getParameter("reportId");
-    	
-    	StringBuffer xmlData = new StringBuffer();
-    	if(reportId != null && !reportId.equals(""))
-    	{
-    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-    		IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic)factory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-    		
-    		Object object = identifiedReportBizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
-    		if(object != null)
-    		{
-    			IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) object;
-    			if(identifiedReport.getSpecimenCollectionGroup() != null) 
-    			{
-    				xmlData = makeXMLData(xmlData, identifiedReport);
-    			}
-    		}
-    	}
-//    	Writing to response
-		PrintWriter out = response.getWriter();	
+
+		StringBuffer xmlData = new StringBuffer();
+		if (reportId != null && !reportId.equals(""))
+		{
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
+					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
+
+			Object object = identifiedReportBizLogic.retrieve(
+					IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
+			if (object != null)
+			{
+				IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) object;
+				if (identifiedReport.getSpecimenCollectionGroup() != null)
+				{
+					xmlData = makeXMLData(xmlData, identifiedReport);
+				}
+			}
+		}
+		//    	Writing to response
+		PrintWriter out = response.getWriter();
 		response.setContentType("text/xml");
 		out.write(xmlData.toString());
-		
-    	return null;
-    }
+
+		return null;
+	}
+
 	/**
 	 * @return
 	 * @throws DAOException 
 	 */
-	private StringBuffer makeXMLData(StringBuffer xmlData, IdentifiedSurgicalPathologyReport identifiedReport) throws BizLogicException
-	{	
+	private StringBuffer makeXMLData(StringBuffer xmlData,
+			IdentifiedSurgicalPathologyReport identifiedReport) throws BizLogicException
+	{
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		SpecimenCollectionGroup scg=(SpecimenCollectionGroup)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_SCG);
-		DeidentifiedSurgicalPathologyReport deidReport=(DeidentifiedSurgicalPathologyReport)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
-		Site source=(Site)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_REPORT_SOURCE);
-		TextContent identifiedReportText=(TextContent)defaultBizLogic.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
-		TextContent deidReportText=null;
-		if(deidReport!=null)
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic.retrieveAttribute(
+				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
+				Constants.COLUMN_NAME_SCG);
+		DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) defaultBizLogic
+				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
+						identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
+		Site source = (Site) defaultBizLogic.retrieveAttribute(
+				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
+				Constants.COLUMN_NAME_REPORT_SOURCE);
+		TextContent identifiedReportText = (TextContent) defaultBizLogic.retrieveAttribute(
+				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
+				Constants.COLUMN_NAME_TEXT_CONTENT);
+		TextContent deidReportText = null;
+		if (deidReport != null)
 		{
-			deidReportText=(TextContent)defaultBizLogic.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(), Constants.COLUMN_NAME_TEXT_CONTENT);
+			deidReportText = (TextContent) defaultBizLogic.retrieveAttribute(
+					DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(),
+					Constants.COLUMN_NAME_TEXT_CONTENT);
 		}
-		List conceptBeanList=ViewSPRUtil.getConceptBeanList(deidReport);
-		String conceptBeans=getConceptBeans(conceptBeanList);
-		
+		List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
+		String conceptBeans = getConceptBeans(conceptBeanList);
+
 		xmlData.append("<ReportInfo>");
-		
+
 		xmlData.append("<SurgicalPathologyNumber>");
-		if(scg!=null && scg.getSurgicalPathologyNumber()!=null)
+		if (scg != null && scg.getSurgicalPathologyNumber() != null)
 		{
 			xmlData.append(scg.getSurgicalPathologyNumber());
 		}
 		xmlData.append("</SurgicalPathologyNumber>");
-		
+
 		xmlData.append("<IdentifiedReportSite>");
-		if(source!=null)
+		if (source != null)
 		{
 			xmlData.append(source.getName());
 		}
 		xmlData.append("</IdentifiedReportSite>");
-		
+
 		xmlData.append("<IdentifiedReportTextContent>");
-		if(identifiedReport.getTextContent()!=null)
+		if (identifiedReport.getTextContent() != null)
 		{
 			xmlData.append(identifiedReportText.getData());
 		}
 		xmlData.append("</IdentifiedReportTextContent>");
-		
+
 		xmlData.append("<DeIdentifiedReportTextContent>");
-		if(deidReportText!=null) 
+		if (deidReportText != null)
 		{
 			xmlData.append(deidReportText.getData());
 		}
@@ -120,58 +135,60 @@ public class FetchReportAction extends BaseAction
 		}
 		xmlData.append("</DeIdentifiedReportTextContent>");
 		xmlData.append("<JavaScriptFunction>");
-		if(conceptBeans!=null) 
+		if (conceptBeans != null)
 		{
 			xmlData.append(conceptBeans);
 		}
 		xmlData.append("</JavaScriptFunction>");
-		
+
 		xmlData.append("</ReportInfo>");
 		return xmlData;
-		
+
 	}
-	
+
 	private String getConceptBeans(List conceptBeanList)
 	{
-		String[] onClickMethod=null;
+		String[] onClickMethod = null;
 		String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
-		StringBuffer script=new StringBuffer();
-		if(conceptBeanList!=null)
+		StringBuffer script = new StringBuffer();
+		if (conceptBeanList != null)
 		{
 			ConceptHighLightingBean referentClassificationObj;
 			String classificationName;
 			String conceptName;
 			String startOff;
-			String endOff;	
+			String endOff;
 			Pattern pattern = Pattern.compile("['\"]");
 			Matcher matcher;
-			
-			onClickMethod=new String[conceptBeanList.size()];
-			for(int i=0;i<conceptBeanList.size();i++)
+
+			onClickMethod = new String[conceptBeanList.size()];
+			for (int i = 0; i < conceptBeanList.size(); i++)
 			{
-				referentClassificationObj=(ConceptHighLightingBean) conceptBeanList.get(i);
-				classificationName=referentClassificationObj.getClassificationName();
+				referentClassificationObj = (ConceptHighLightingBean) conceptBeanList.get(i);
+				classificationName = referentClassificationObj.getClassificationName();
 				conceptName = referentClassificationObj.getConceptName();
 				startOff = referentClassificationObj.getStartOffsets();
-				endOff = referentClassificationObj.getEndOffsets();	
-				matcher=pattern.matcher(conceptName);
-				conceptName=matcher.replaceAll("");
+				endOff = referentClassificationObj.getEndOffsets();
+				matcher = pattern.matcher(conceptName);
+				conceptName = matcher.replaceAll("");
 
-				String chkBoxId = "select"+i; 
-				onClickMethod[i] = "selectByOffset(document.getElementById('"+chkBoxId+"'),'"+startOff+"','"+endOff+"','"+colours[i]+"','"+conceptName+"')";
+				String chkBoxId = "select" + i;
+				onClickMethod[i] = "selectByOffset(document.getElementById('" + chkBoxId + "'),'"
+						+ startOff + "','" + endOff + "','" + colours[i] + "','" + conceptName
+						+ "')";
 				script.append("<ConceptBean>");
-					script.append("<ConceptName>");
-						script.append(conceptName);
-					script.append("</ConceptName>");
-					script.append("<StartOff>");
-						script.append(startOff);
-					script.append("</StartOff>");
-					script.append("<EndOff>");
-						script.append(endOff);
-					script.append("</EndOff>");
-					script.append("<ClassificationName>");
-						script.append(classificationName);
-					script.append("</ClassificationName>");	
+				script.append("<ConceptName>");
+				script.append(conceptName);
+				script.append("</ConceptName>");
+				script.append("<StartOff>");
+				script.append(startOff);
+				script.append("</StartOff>");
+				script.append("<EndOff>");
+				script.append(endOff);
+				script.append("</EndOff>");
+				script.append("<ClassificationName>");
+				script.append(classificationName);
+				script.append("</ClassificationName>");
 				script.append("</ConceptBean>");
 			}
 		}

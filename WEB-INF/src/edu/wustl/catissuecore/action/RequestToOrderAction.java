@@ -51,6 +51,7 @@ public class RequestToOrderAction extends BaseAction
 {
 
 	private transient Logger logger = Logger.getCommonLogger(RequestToOrderAction.class);
+
 	/**
 	 * Method to initialize the fields required on the UI pages.
 	 * @param mapping Struts's ActionMapping
@@ -126,8 +127,8 @@ public class RequestToOrderAction extends BaseAction
 		// Check for Distribution privilege & if privilege present, show all DP's in DP list
 		if (!roleName.equals(Constants.ADMINISTRATOR) && sessionDataBean != null)
 		{
-			HashSet<Long> siteIds = new HashSet<Long>();
-			HashSet<Long> cpIds = new HashSet<Long>();
+			HashSet < Long > siteIds = new HashSet < Long >();
+			HashSet < Long > cpIds = new HashSet < Long >();
 			boolean hasDistributionPrivilege = false;
 
 			try
@@ -137,8 +138,9 @@ public class RequestToOrderAction extends BaseAction
 				dao.openSession(null);
 				User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
 						.getUserId());
-				Collection<Site> siteCollection = user.getSiteCollection();
-				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
+				Collection < Site > siteCollection = user.getSiteCollection();
+				Collection < CollectionProtocol > cpCollection = user
+						.getAssignedProtocolCollection();
 
 				// Scientist
 				if (siteCollection == null || siteCollection.isEmpty())
@@ -179,7 +181,7 @@ public class RequestToOrderAction extends BaseAction
 	}
 
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
-			HashSet<Long> siteIds, HashSet<Long> cpIds)
+			HashSet < Long > siteIds, HashSet < Long > cpIds)
 	{
 		boolean hasDistributionPrivilege = false;
 		try

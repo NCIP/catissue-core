@@ -25,14 +25,16 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class UpdateSpillterStatusAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(UpdateSpillterStatusAction.class);
-	protected ActionForward executeAction(ActionMapping actionMap, ActionForm actionForm, HttpServletRequest req, HttpServletResponse res)
-			throws Exception
+
+	protected ActionForward executeAction(ActionMapping actionMap, ActionForm actionForm,
+			HttpServletRequest req, HttpServletResponse res) throws Exception
 	{
 		//Reads the menu splitter status from request	
 		String menuStatus = req.getParameter(Constants.SPLITTER_STATUS_REQ_PARAM);
 		logger.debug("Menu Status " + menuStatus);
-		
+
 		//updates the splitter status in session scope of user
 		HttpSession session = req.getSession();
 		if (session != null)

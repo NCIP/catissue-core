@@ -1,6 +1,7 @@
 /*
  * Created on Sep 21, 2006
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 
-
 /**
  * SpecimenArrayAliquotAction initializes all the fields of the page SpecimenArrayAliquots.jsp.
  * @author jitendra_agrawal
@@ -54,15 +54,19 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{	
+	{
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
+				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
 		//Bean List for the dropdown for the storage location
-		List<NameValueBean> storagePositionListForSpecimenArrayAliquot = AppUtility.getStoragePositionTypeListForTransferEvent();
-		request.setAttribute("storagePositionListForSpecimenArrayAliquot", storagePositionListForSpecimenArrayAliquot);
+		List < NameValueBean > storagePositionListForSpecimenArrayAliquot = AppUtility
+				.getStoragePositionTypeListForTransferEvent();
+		request.setAttribute("storagePositionListForSpecimenArrayAliquot",
+				storagePositionListForSpecimenArrayAliquot);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
@@ -77,7 +81,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			{
 				tempAliquotMap.put("barcode", specimenArrayAliquotForm.getBarcode());
 			}
-			tempAliquotMap.put("aliquotcount", specimenArrayAliquotForm.getAliquotCount());					
+			tempAliquotMap.put("aliquotcount", specimenArrayAliquotForm.getAliquotCount());
 			request.getSession().setAttribute("tempAliquotMap", tempAliquotMap);
 		}
 		else if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("create"))
@@ -89,36 +93,40 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			String barcode = (String) tempAliquotMap.get("barcode");
 			if (specimenArrayAliquotForm.getCheckedButton().equals("1"))
 			{
-				if (label == null || !label.trim().equalsIgnoreCase(specimenArrayAliquotForm.getParentSpecimenArrayLabel().trim()))
+				if (label == null
+						|| !label.trim().equalsIgnoreCase(
+								specimenArrayAliquotForm.getParentSpecimenArrayLabel().trim()))
 				{
 					arePropertiesChanged = true;
 				}
 			}
 			else
 			{
-				if (barcode == null || !barcode.trim().equalsIgnoreCase(specimenArrayAliquotForm.getBarcode().trim()))
+				if (barcode == null
+						|| !barcode.trim().equalsIgnoreCase(
+								specimenArrayAliquotForm.getBarcode().trim()))
 				{
 					arePropertiesChanged = true;
 				}
 
 			}
 			String aliquotcount = (String) tempAliquotMap.get("aliquotcount");
-			if (!aliquotcount.trim().equalsIgnoreCase(specimenArrayAliquotForm.getAliquotCount().trim()))
+			if (!aliquotcount.trim().equalsIgnoreCase(
+					specimenArrayAliquotForm.getAliquotCount().trim()))
 			{
 				arePropertiesChanged = true;
 			}
-			
+
 			/**
 			 * Repopulate the form with storage container locations in case user has changed 
 			 * any of label/barcode, aliquot count, quantity per aliquot.
 			 */
-			if (arePropertiesChanged == true) 
+			if (arePropertiesChanged == true)
 			{
 				specimenArrayAliquotForm.setParentSpecimenArrayLabel(label);
 				specimenArrayAliquotForm.setAliquotCount(aliquotcount);
 				specimenArrayAliquotForm.setBarcode(barcode);
-				
-				
+
 				ActionErrors errors = getActionErrors(request);
 
 				if (errors == null)
@@ -127,17 +135,20 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				}
 				if (arePropertiesChanged == true)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.reSubmit"));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.specimenArrayAliquots.reSubmit"));
 				}
-				
+
 				TreeMap containerMap = new TreeMap();
 				checkForSpecimenArray(request, specimenArrayAliquotForm);
-				int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
-				Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);				
-				populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);				
+				//int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
+				Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,
+						sessionData, exceedingMaxLimit);
+				populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-				request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
+				request.setAttribute(Constants.PAGE_OF,
+						Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
 				saveErrors(request, errors);
 				return mapping.findForward(Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
 
@@ -149,21 +160,26 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				return mapping.findForward(Constants.COMMON_ADD_EDIT);
 			}
 
-		}	
-		
+		}
+
 		if (Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY.equals(pageOf))
-		{	
+		{
 			Map map = (Map) request.getAttribute("forwardToHashMap");
-		
+
 			if (map != null)
 			{
 				//TODO
-				specimenArrayAliquotForm.setSpecimenClass(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_CLASS)));				
-				specimenArrayAliquotForm.setSpecimenArrayType(Utility.toString(map.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
-				specimenArrayAliquotForm.setAliquotCount(Utility.toString(map.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));								
-				Collection specimenTypesCollection = (Collection) map.get(Constants.ALIQUOT_SPECIMEN_TYPES);
-				List specimenTypeList = setSpecimenTypes(specimenTypesCollection, specimenArrayAliquotForm);				
-				request.setAttribute(Constants.SPECIMEN_TYPE_LIST,specimenTypeList);				
+				specimenArrayAliquotForm.setSpecimenClass(Utility.toString(map
+						.get(Constants.ALIQUOT_SPECIMEN_CLASS)));
+				specimenArrayAliquotForm.setSpecimenArrayType(Utility.toString(map
+						.get(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE)));
+				specimenArrayAliquotForm.setAliquotCount(Utility.toString(map
+						.get(Constants.ALIQUOT_ALIQUOT_COUNTS)));
+				Collection specimenTypesCollection = (Collection) map
+						.get(Constants.ALIQUOT_SPECIMEN_TYPES);
+				List specimenTypeList = setSpecimenTypes(specimenTypesCollection,
+						specimenArrayAliquotForm);
+				request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 				specimenArrayAliquotForm.setSpecimenArrayAliquotMap(map);
 			}
 
@@ -177,11 +193,11 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			}
 			return mapping.findForward(pageOf);
 		}
-		
-		
-		Map containerMap = new HashMap();		
-		if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
-		{			
+
+		Map containerMap = new HashMap();
+		if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(request
+				.getParameter(Constants.PAGE_OF)))
+		{
 			pageOf = validate(request, specimenArrayAliquotForm);
 
 			if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
@@ -191,34 +207,36 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 				{
 					int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
-					Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);					
-					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
+					Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(
+							id.longValue(), 0, sessionData, exceedingMaxLimit);
+					pageOf = checkForSufficientAvailablePositions(request, containerMap,
+							aliquotCount);
 
 					if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 					{
-						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						ActionErrors errors = (ActionErrors) request
+								.getAttribute(Globals.ERROR_KEY);
 						if (errors == null || errors.size() == 0)
 						{
-						   populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
+							populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 						}
-					}					
+					}
 				}
 			}
 		}
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}
-	
-	
+
 	private String validate(HttpServletRequest request, SpecimenArrayAliquotForm form)
-	{		
-		
-		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
+	{
+
+		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT;
 	}
-	
+
 	/**
 	 * 
 	 * @param request HttpServletRequest
@@ -226,34 +244,38 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 * @return String
 	 * @throws Exception
 	 */
-	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form) throws BizLogicException,Exception
-	{	
-		 IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);		
+	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form)
+			throws BizLogicException, Exception
+	{
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List specimenArrayList = new ArrayList();
 		String errorString = "";
 		String specimenArrayLabel = form.getParentSpecimenArrayLabel();
 		int aliquotCount = Integer.parseInt(form.getAliquotCount());
 		if (form.getCheckedButton().equals("1"))
-		{ 
-			
-			specimenArrayList = bizLogic.retrieve(SpecimenArray.class.getName(), Constants.SYSTEM_NAME, specimenArrayLabel);
+		{
+
+			specimenArrayList = bizLogic.retrieve(SpecimenArray.class.getName(),
+					Constants.SYSTEM_NAME, specimenArrayLabel);
 			errorString = Constants.SYSTEM_LABEL;
-		} 
+		}
 		else
 		{
 			String barcode = form.getBarcode().trim();
-			specimenArrayList = bizLogic.retrieve(SpecimenArray.class.getName(), Constants.SYSTEM_BARCODE, barcode);
+			specimenArrayList = bizLogic.retrieve(SpecimenArray.class.getName(),
+					Constants.SYSTEM_BARCODE, barcode);
 			errorString = Constants.SYSTEM_BARCODE;
 		}
-		
+
 		if (specimenArrayList.isEmpty())
 		{
 			ActionErrors errors = getActionErrors(request);
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.notExists", errorString));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"errors.specimenArrayAliquots.notExists", errorString));
 			saveErrors(request, errors);
 			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
-		} 
+		}
 		else
 		{
 			SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);
@@ -263,55 +285,62 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			 * Retriving specimenArrayTypeObject
 			 * replaced SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType();
 			 */
-			if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(specimenArray.getActivityStatus()))
+			if (Status.ACTIVITY_STATUS_DISABLED.toString()
+					.equals(specimenArray.getActivityStatus()))
 			{
 				ActionErrors errors = getActionErrors(request);
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.disabled","Parent Specimen Array"));
-				saveErrors(request,errors);
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"errors.specimenArrayAliquots.disabled", "Parent Specimen Array"));
+				saveErrors(request, errors);
 				return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 				//throw BizLogicException("Fail to create Aliquots, Parent SpecimenArray" + " " + ApplicationProperties.getValue("error.object.disabled"));
 			}
-			SpecimenArrayType arrayType = (SpecimenArrayType)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),specimenArray.getId(),"specimenArrayType");
-			form.setSpecimenArrayType(arrayType.getName());	
+			SpecimenArrayType arrayType = (SpecimenArrayType) bizLogic.retrieveAttribute(
+					SpecimenArray.class.getName(), specimenArray.getId(), "specimenArrayType");
+			form.setSpecimenArrayType(arrayType.getName());
 			form.setSpecimenClass(arrayType.getSpecimenClass());
-			
+
 			/**
 			 * Name: Virender Mehta
 			 * Reviewer: Prafull
 			 * Retrive Child Specimen Collection from parent Specimen
 			 * String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()]; 
 			 */
-			Collection specimenTypeCollection = (Collection)bizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),arrayType.getId(),"elements(specimenTypeCollection)");
-			String[] specimenTypeArr = new String[specimenTypeCollection.size()];
-			
+			Collection specimenTypeCollection = (Collection) bizLogic.retrieveAttribute(
+					SpecimenArrayType.class.getName(), arrayType.getId(),
+					"elements(specimenTypeCollection)");
+			//String[] specimenTypeArr = new String[specimenTypeCollection.size()];
+
 			List specimenTypeList = setSpecimenTypes(specimenTypeCollection, form);
-			request.setAttribute(Constants.SPECIMEN_TYPE_LIST,specimenTypeList);
-			
+			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+
 			request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
-			
+
 			Map aliquotMap = form.getSpecimenArrayAliquotMap();
-			SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) factory.getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
-			long nextAvailablenumber = aliquotBizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
-			
+			SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) factory
+					.getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
+			long nextAvailablenumber = aliquotBizLogic
+					.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
+
 			/**
 			 *  Putting the default label values in the AliquotMap 
 			 */
 			for (int i = 1; i <= aliquotCount; i++)
-			{				
-				
+			{
+
 				String labelKey = "SpecimenArray:" + i + "_label";
 				String aliquotLabel = specimenArrayLabel + "_" + (nextAvailablenumber + i - 1);
 				aliquotMap.put(labelKey, aliquotLabel);
 			}
 
 			form.setSpecimenArrayAliquotMap(aliquotMap);
-			form.setSpecimenArrayId(""+ specimenArray.getId());		
-			
+			form.setSpecimenArrayId("" + specimenArray.getId());
+
 		}
-		
-		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT; 
+
+		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT;
 	}
-	
+
 	/**
 	 * This method checks whether there are sufficient storage locations are available or not.
 	 * @param request HttpServletRequest
@@ -319,13 +348,15 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 * @param aliquotCount int
 	 * @return String
 	 */
-	private String checkForSufficientAvailablePositions(HttpServletRequest request, Map containerMap, int aliquotCount)
-	{	
+	private String checkForSufficientAvailablePositions(HttpServletRequest request,
+			Map containerMap, int aliquotCount)
+	{
 		int counter = 0;
 		if (containerMap.isEmpty())
 		{
 			ActionErrors errors = getActionErrors(request);
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.locationsNotSufficient"));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"errors.specimenArrayAliquots.locationsNotSufficient"));
 			saveErrors(request, errors);
 			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 		}
@@ -340,10 +371,11 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		else
 		{
 			ActionErrors errors = getActionErrors(request);
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.locationsNotSufficient"));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"errors.specimenArrayAliquots.locationsNotSufficient"));
 			saveErrors(request, errors);
 			return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
-		}		 
+		}
 	}
 
 	/**
@@ -355,11 +387,12 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	{
 		Map aliquotMap = form.getSpecimenArrayAliquotMap();
 		String noOfAliquots = form.getAliquotCount();
-		StorageContainerUtil.populateAliquotMap("SpecimenArray",containerMap, aliquotMap,noOfAliquots);
+		StorageContainerUtil.populateAliquotMap("SpecimenArray", containerMap, aliquotMap,
+				noOfAliquots);
 		form.setSpecimenArrayAliquotMap(aliquotMap);
 
 	}
-		
+
 	/**
 	 * This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
@@ -375,7 +408,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		return errors;
 	}
-	
+
 	/**
 	 * 
 	 * @param specimenTypeCollection Collection
@@ -389,15 +422,15 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		int i = 0;
 		String specimenType = null;
 		NameValueBean nameValueBean = null;
-		for (Iterator iter = specimenTypeCollection.iterator(); iter
-				.hasNext();i++) {
+		for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext(); i++)
+		{
 			specimenType = (String) iter.next();
 			specimenTypeArr[i] = specimenType;
-			nameValueBean = new NameValueBean(specimenType,specimenType);
+			nameValueBean = new NameValueBean(specimenType, specimenType);
 			specimenTypeList.add(nameValueBean);
 		}
-		form.setSpecimenTypes(specimenTypeArr);		
+		form.setSpecimenTypes(specimenTypeArr);
 		return specimenTypeList;
 	}
-	
+
 }

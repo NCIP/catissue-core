@@ -61,6 +61,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class DistributionAction extends SecureAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(DistributionAction.class);
 	//This counter will keep track of the no of consentTiers 
 	int consentTierCounter;
@@ -616,7 +617,8 @@ public class DistributionAction extends SecureAction
 			throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName = null;
 		if (barcodeLabelBasedDistribution == Constants.BARCODE_BASED_DISTRIBUTION)
 		{
@@ -657,11 +659,10 @@ public class DistributionAction extends SecureAction
 		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 		logger.debug("\t\t SpecimenEventParametersAction************************************ : "
-						+ specimenId);
+				+ specimenId);
 
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(
-				Constants.USER_FORM_ID);
+		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
 		Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);

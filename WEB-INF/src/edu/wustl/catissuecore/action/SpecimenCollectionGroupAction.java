@@ -54,7 +54,6 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -79,6 +78,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 {
 
 	private transient Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupAction.class);
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
@@ -142,7 +142,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 		//If radioButtonSelected = 1 then selected radio button is for Participant
 		//If radioButtonSelected = 2 then selected radio button is for Protocol Participant Identifier
-		int radioButtonSelected = 1;
+		//int radioButtonSelected = 1;
 		//Id of Selected Participant or Protocol Participant Identifier
 		String selectedParticipantOrPPIdentifier_id = null;
 		// Radio button for Protocol Participant Identifier or Participant
@@ -330,10 +330,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
 				bizLogic, request, specimenCollectionGroupForm);
 		Object CPEObject = null;
-		if (!operation.equalsIgnoreCase(Constants.ADD) && !(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
+		if (!operation.equalsIgnoreCase(Constants.ADD)
+				&& !(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
 		{
-		CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
-				specimenCollectionGroupForm.getCollectionProtocolEventId()));
+			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
+					specimenCollectionGroupForm.getCollectionProtocolEventId()));
 		}
 
 		// The values of restrict checkbox and the number of specimen must alos populate in edit mode.
@@ -402,8 +403,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					long pID = cpr.getParticipant().getId().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
 
-					logger.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : "
-							+ ppID);
+					logger
+							.debug("cpID : " + cpID + "   ||  pID : " + pID + "    || ppID : "
+									+ ppID);
 
 					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
 
@@ -609,8 +611,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			logger.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
 					+ collectionProtocolId);
-			logger.debug("ParticipantID found in forwardToHashMap========>>>>>>"
-					+ participantId);
+			logger.debug("ParticipantID found in forwardToHashMap========>>>>>>" + participantId);
 			logger.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"
 					+ participantProtocolId);
 		}
@@ -787,12 +788,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			throws ApplicationException
 	{
 		setDateParameters(specimenCollectionGroupForm, request);
-		String collProcedure = (String) DefaultValueManager
-				.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-		String collEventContainer = (String) DefaultValueManager
-				.getDefaultValue(Constants.DEFAULT_CONTAINER);
-		String recQuantity = (String) DefaultValueManager
-				.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+//		String collProcedure = (String) DefaultValueManager
+//				.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+		/*String collEventContainer = (String) DefaultValueManager
+				.getDefaultValue(Constants.DEFAULT_CONTAINER);*/
+		/*String recQuantity = (String) DefaultValueManager
+				.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);*/
 
 		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
 		{
@@ -1063,7 +1064,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField,
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition,
-				separatorBetweenFields);		
+				separatorBetweenFields);
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 		//Bug #8533
@@ -1175,7 +1176,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	{
 		//		Patch ID: Bug#3184_27
 		//By Abhishek Mehta 
-		int numberOfSpecimen = 1;
+		//int numberOfSpecimen = 1;
 		if (object != null)
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) object;
@@ -1236,7 +1237,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		val[1] = Long.valueOf(cp_id);
 		String[] colCondition = {"=", "="};
 		List collProtRegObj = collectionProtocolRegistrationBizLogic.retrieve(
-				CollectionProtocolRegistration.class.getName(), colName, colCondition, val, Constants.AND_JOIN_CONDITION);
+				CollectionProtocolRegistration.class.getName(), colName, colCondition, val,
+				Constants.AND_JOIN_CONDITION);
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) collProtRegObj
 				.get(0);
 		return collectionProtocolRegistration;
@@ -1318,8 +1320,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList)
 			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		//IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		//IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List specimenDetailList = new ArrayList();
 
 		if (specimenObj.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))

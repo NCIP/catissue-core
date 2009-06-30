@@ -39,8 +39,6 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.global.Permissions;
-import edu.wustl.security.manager.ISecurityManager;
-import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
@@ -51,7 +49,9 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class ViewSurgicalPathologyReportAction extends BaseAction
 {
 
-	private transient Logger logger = Logger.getCommonLogger(ViewSurgicalPathologyReportAction.class);
+	private transient Logger logger = Logger
+			.getCommonLogger(ViewSurgicalPathologyReportAction.class);
+
 	/**
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -202,7 +202,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private List getReportIdList(List scgList)
 	{
-		List<NameValueBean> reportIDList = new ArrayList<NameValueBean>();
+		List < NameValueBean > reportIDList = new ArrayList < NameValueBean >();
 		Object[] obj = null;
 		for (int i = 0; i < scgList.size(); i++)
 		{
@@ -351,7 +351,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		boolean isAuthorized = true;
 		if (sessionBean.isSecurityRequired())
 		{
-			ISecurityManager sm = SecurityManagerFactory.getSecurityManager();
+			//ISecurityManager sm = SecurityManagerFactory.getSecurityManager();
 			aliasName = CollectionProtocol.class.getName();
 
 			//			String userName = sessionBean.getUserName();

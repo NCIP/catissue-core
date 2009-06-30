@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Nov 17,2006
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
@@ -25,7 +26,6 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-
 /**
  * @author ashish_gupta
  *
@@ -33,38 +33,39 @@ import edu.wustl.common.factory.IFactory;
 public class UpdateAvailableQuantity extends BaseAction
 {
 
-	 /**
-     * Overrides the execute method in Action class.
-     * @param mapping ActionMapping object
-     * @param form ActionForm object
-     * @param request HttpServletRequest object
-     * @param response HttpServletResponse object
-     * @return ActionForward object
-     * @throws Exception object
-     */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	/**
+	* Overrides the execute method in Action class.
+	* @param mapping ActionMapping object
+	* @param form ActionForm object
+	* @param request HttpServletRequest object
+	* @param response HttpServletResponse object
+	* @return ActionForward object
+	* @throws Exception object
+	*/
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//The selected specimen Id.
-		String specimenId = (String)request.getParameter("selectedSpecimen");
+		String specimenId = (String) request.getParameter("selectedSpecimen");
 		//The row number.
-		String finalSpecimenListId = (String)request.getParameter("finalSpecimenListId");
+		//String finalSpecimenListId = (String) request.getParameter("finalSpecimenListId");
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		
-	
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+
 		String quantity = "";
 		Specimen specimen = null;
-		if(specimenId != null && !specimenId.equals("") && !specimenId.equals("#"))
+		if (specimenId != null && !specimenId.equals("") && !specimenId.equals("#"))
 		{
-			Long specId =  Long.parseLong(specimenId);
+			Long specId = Long.parseLong(specimenId);
 			specimen = orderBizLogic.getSpecimenObject(specId);
 			quantity = specimen.getAvailableQuantity().toString();
-						
+
 		}
 		//Writing to response
-		PrintWriter out = response.getWriter();		
+		PrintWriter out = response.getWriter();
 		out.print(quantity);
-		
+
 		return null;
 	}
 

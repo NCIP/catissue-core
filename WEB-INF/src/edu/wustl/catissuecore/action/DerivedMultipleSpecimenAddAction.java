@@ -24,8 +24,8 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.dao.exception.DAOException;
@@ -40,35 +40,38 @@ public class DerivedMultipleSpecimenAddAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, DAOException
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException, DAOException
 	{
-            CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;	
-            request.setAttribute(Constants.DERIVED_FORM,createSpecimenForm);
-			return mapping.findForward(Constants.SUCCESS);
+		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		request.setAttribute(Constants.DERIVED_FORM, createSpecimenForm);
+		return mapping.findForward(Constants.SUCCESS);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	
+
 	protected String getObjectId(AbstractActionForm form)
-	{ 
+	{
 		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
-		if(createSpecimenForm.getParentSpecimenId() != null || createSpecimenForm.getParentSpecimenId() != "")
+		if (createSpecimenForm.getParentSpecimenId() != null
+				|| createSpecimenForm.getParentSpecimenId() != "")
 		{
-				Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
-				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-				CollectionProtocolRegistration cpr = specimenCollectionGroup.getCollectionProtocolRegistration();
-				if (cpr!= null)
-				{
-					CollectionProtocol cp = cpr.getCollectionProtocol();
-					return Constants.COLLECTION_PROTOCOL_CLASS_NAME +"_"+cp.getId();
-				}
+			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+			CollectionProtocolRegistration cpr = specimenCollectionGroup
+					.getCollectionProtocolRegistration();
+			if (cpr != null)
+			{
+				CollectionProtocol cp = cpr.getCollectionProtocol();
+				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+			}
 		}
 		return null;
-		 
-	}
 
 	}
+
+}

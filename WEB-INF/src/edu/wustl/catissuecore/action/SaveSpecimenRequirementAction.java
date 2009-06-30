@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.Collection;
@@ -28,63 +29,78 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class SaveSpecimenRequirementAction extends BaseAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(SaveSpecimenRequirementAction.class);
+
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		
-		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm)form;
+
+		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm) form;
 		HttpSession session = request.getSession();
-		String operation = (String)request.getParameter(Constants.OPERATION);
-		String eventKey = (String)request.getParameter(Constants.EVENT_KEY);
-		String nodeId="New_"+eventKey;
-		session.setAttribute(Constants.TREE_NODE_ID,nodeId);
-		if(operation.equals(Constants.ADD))
+		String operation = (String) request.getParameter(Constants.OPERATION);
+		String eventKey = (String) request.getParameter(Constants.EVENT_KEY);
+		String nodeId = "New_" + eventKey;
+		session.setAttribute(Constants.TREE_NODE_ID, nodeId);
+		if (operation.equals(Constants.ADD))
 		{
-			Map collectionProtocolEventMap = (Map)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(eventKey);
-			Integer totalNoOfSpecimen = collectionProtocolEventBean.getSpecimenRequirementbeanMap().size();
-			SpecimenRequirementBean specimenRequirementBean = createSpecimenBean(createSpecimenTemplateForm,collectionProtocolEventBean.getUniqueIdentifier(),totalNoOfSpecimen);
-			if(specimenRequirementBean!=null)
+			Map collectionProtocolEventMap = (Map) session
+					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+					.get(eventKey);
+			Integer totalNoOfSpecimen = collectionProtocolEventBean.getSpecimenRequirementbeanMap()
+					.size();
+			SpecimenRequirementBean specimenRequirementBean = createSpecimenBean(
+					createSpecimenTemplateForm, collectionProtocolEventBean.getUniqueIdentifier(),
+					totalNoOfSpecimen);
+			if (specimenRequirementBean != null)
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
 			}
 		}
-		if(operation.equals(Constants.EDIT))
+		if (operation.equals(Constants.EDIT))
 		{
 			try
 			{
 				initCreateSpecimenTemplateForm(createSpecimenTemplateForm, request);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				logger.debug(e.getMessage(), e);
 				ActionErrors actionErrors = new ActionErrors();
-				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError(
-						"errors.item",e.getMessage()));
-				saveErrors(request, actionErrors);						
+				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", e
+						.getMessage()));
+				saveErrors(request, actionErrors);
 				return (mapping.findForward(Constants.FAILURE));
 			}
 		}
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-	
-	private SpecimenRequirementBean createSpecimenBean(CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier, Integer totalNoOfSpecimen)
+
+	private SpecimenRequirementBean createSpecimenBean(
+			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier,
+			Integer totalNoOfSpecimen)
 	{
-		SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,totalNoOfSpecimen);
+		SpecimenRequirementBean specimenRequirementBean = createSpecimen(
+				createSpecimenTemplateForm, uniqueIdentifier, totalNoOfSpecimen);
 		Map aliquotSpecimenMap = null;
 		Collection deriveSpecimenCollection = null;
-		if(createSpecimenTemplateForm.getNoOfAliquots()!=null && !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
+		if (createSpecimenTemplateForm.getNoOfAliquots() != null
+				&& !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
 		{
-			aliquotSpecimenMap = (Map)getAliquots(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
+			aliquotSpecimenMap = (Map) getAliquots(createSpecimenTemplateForm,
+					specimenRequirementBean.getUniqueIdentifier());
 		}
-		
+
 		Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
-		
-		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
+
+		if (createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
 		{
 			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 			deriveSpecimenMap = null;
@@ -92,10 +108,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
-			if(deriveSpecimenMap!=null&&deriveSpecimenMap.size()!=0)
+			if (deriveSpecimenMap != null && deriveSpecimenMap.size() != 0)
 			{
 				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
-				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,createSpecimenTemplateForm,specimenRequirementBean.getUniqueIdentifier());
+				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,
+						createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
 			}
 		}
 		catch (Exception e)
@@ -103,31 +120,39 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		
-		specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap)aliquotSpecimenMap);
-		specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
+
+		specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap) aliquotSpecimenMap);
+		specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap) deriveSpecimenMap);
 		return specimenRequirementBean;
 	}
-	private SpecimenRequirementBean createSpecimen(CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier, Integer totalNoOfSpecimen)
+
+	private SpecimenRequirementBean createSpecimen(
+			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier,
+			Integer totalNoOfSpecimen)
 	{
 		SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
-		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier);
-		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
-		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN+totalNoOfSpecimen);
+		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
+		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+				+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + totalNoOfSpecimen);
+		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
+				+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + totalNoOfSpecimen);
 		specimenRequirementBean.setLineage(Constants.NEW_SPECIMEN);
 		setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
-		
+
 		//Aliquot
 		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
-		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
-		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
-		
+		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm
+				.getQuantityPerAliquot());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
+				.getStorageLocationForAliquotSpecimen());
+
 		//Derive
-		if(createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
+		if (createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
 		{
 			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 		}
-		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
+		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
+				.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
 		return specimenRequirementBean;
 	}
@@ -143,30 +168,39 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setType(createSpecimenTemplateForm.getType());
 		specimenRequirementBean.setTissueSide(createSpecimenTemplateForm.getTissueSide());
 		specimenRequirementBean.setTissueSite(createSpecimenTemplateForm.getTissueSite());
-		specimenRequirementBean.setPathologicalStatus(createSpecimenTemplateForm.getPathologicalStatus());
+		specimenRequirementBean.setPathologicalStatus(createSpecimenTemplateForm
+				.getPathologicalStatus());
 		specimenRequirementBean.setConcentration(createSpecimenTemplateForm.getConcentration());
 		specimenRequirementBean.setQuantity(createSpecimenTemplateForm.getQuantity());
-		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForSpecimen());
-	
+		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm
+				.getStorageLocationForSpecimen());
+
 		//Collected and received events
-		specimenRequirementBean.setCollectionEventUserId(createSpecimenTemplateForm.getCollectionEventUserId());
-		specimenRequirementBean.setReceivedEventUserId(createSpecimenTemplateForm.getReceivedEventUserId());
-		specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm.getCollectionEventContainer());
-		specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm.getReceivedEventReceivedQuality());
-		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm.getCollectionEventCollectionProcedure());
+		specimenRequirementBean.setCollectionEventUserId(createSpecimenTemplateForm
+				.getCollectionEventUserId());
+		specimenRequirementBean.setReceivedEventUserId(createSpecimenTemplateForm
+				.getReceivedEventUserId());
+		specimenRequirementBean.setCollectionEventContainer(createSpecimenTemplateForm
+				.getCollectionEventContainer());
+		specimenRequirementBean.setReceivedEventReceivedQuality(createSpecimenTemplateForm
+				.getReceivedEventReceivedQuality());
+		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm
+				.getCollectionEventCollectionProcedure());
 	}
-	
-	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,String uniqueIdentifier)
+
+	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			String uniqueIdentifier)
 	{
 		Map aliquotMap = new LinkedHashMap();
 		String noOfAliquotes = createSpecimenTemplateForm.getNoOfAliquots();
 		Double aliquotCount = Double.parseDouble(noOfAliquotes);
 		Double aliquotQuantity = calculateQuantity(createSpecimenTemplateForm);
-		for(int iCount = 1; iCount<= aliquotCount; iCount++)
+		for (int iCount = 1; iCount <= aliquotCount; iCount++)
 		{
-			SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,iCount);
-			createAliquot(createSpecimenTemplateForm, uniqueIdentifier,
-					aliquotQuantity.toString(), iCount, specimenRequirementBean);
+			SpecimenRequirementBean specimenRequirementBean = createSpecimen(
+					createSpecimenTemplateForm, uniqueIdentifier, iCount);
+			createAliquot(createSpecimenTemplateForm, uniqueIdentifier, aliquotQuantity.toString(),
+					iCount, specimenRequirementBean);
 			aliquotMap.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
 		}
 		return aliquotMap;
@@ -176,149 +210,173 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			String uniqueIdentifier, String quantityPerAliquot, int iCount,
 			SpecimenRequirementBean specimenRequirementBean)
 	{
-		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
-		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT+iCount);
+		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+				+ Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + iCount);
+		specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
+				+ Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + iCount);
 		specimenRequirementBean.setLineage(Constants.ALIQUOT);
-		if(quantityPerAliquot==null || quantityPerAliquot.equals(""))
+		if (quantityPerAliquot == null || quantityPerAliquot.equals(""))
 		{
-			quantityPerAliquot="0";
+			quantityPerAliquot = "0";
 		}
 		specimenRequirementBean.setQuantity(quantityPerAliquot);
 		specimenRequirementBean.setNoOfAliquots(null);
 		specimenRequirementBean.setQuantityPerAliquot(null);
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
-		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
+		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm
+				.getStorageLocationForAliquotSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(null);
 		specimenRequirementBean.setNoOfDeriveSpecimen(0);
 		return quantityPerAliquot;
 	}
-	
-	 private Map getderiveSpecimen(Collection deriveSpecimenCollection, CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier)
-	 {
-		 Map deriveSpecimenMap = new LinkedHashMap();
-		 Iterator deriveSpecimenCollectionItr = deriveSpecimenCollection.iterator();
-		 Integer deriveSpecimenCount = 1;
-		 while(deriveSpecimenCollectionItr.hasNext())
-		 {
-			 DeriveSpecimenBean deriveSpecimenBean =(DeriveSpecimenBean)deriveSpecimenCollectionItr.next();
-			 SpecimenRequirementBean specimenRequirementBean = createSpecimen(createSpecimenTemplateForm,uniqueIdentifier,deriveSpecimenCount);
-			 specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
-			 specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
-			 specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN+"_"+uniqueIdentifier+Constants.UNIQUE_IDENTIFIER_FOR_DERIVE+deriveSpecimenCount);
-			
-			 specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
-			 specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
-			 specimenRequirementBean.setClassName(deriveSpecimenBean.getSpecimenClass());
-			 specimenRequirementBean.setType(deriveSpecimenBean.getSpecimenType());
-			 specimenRequirementBean.setStorageContainerForSpecimen(deriveSpecimenBean.getStorageLocation());
-			//Aliquot
-			 specimenRequirementBean.setNoOfAliquots(null);
-			 specimenRequirementBean.setQuantityPerAliquot(null);
-			 specimenRequirementBean.setStorageContainerForAliquotSpecimem("");
-			 //Derive
-			 specimenRequirementBean.setDeriveSpecimen(null);
-			 specimenRequirementBean.setNoOfDeriveSpecimen(0);
-			 deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),specimenRequirementBean);
-			 deriveSpecimenCount = deriveSpecimenCount + 1;
-		 }
-		 
-		 return deriveSpecimenMap;
-	 }
 
-	 private void initCreateSpecimenTemplateForm(CreateSpecimenTemplateForm createSpecimenTemplateForm, HttpServletRequest request) throws Exception
-	 {
-		 	HttpSession session = request.getSession();
-		 	SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean)session.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
-		 	setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
-			
-			int noOfAliquots = 0;
-			if(createSpecimenTemplateForm.getNoOfAliquots()!=null&&!createSpecimenTemplateForm.getNoOfAliquots().equals(""))
-			{
-				noOfAliquots = new Integer(createSpecimenTemplateForm.getNoOfAliquots());
-			}
-			int noOfBeanAliquots = 0;
-			if(specimenRequirementBean.getNoOfAliquots()!=null&&!specimenRequirementBean.getNoOfAliquots().equals(""))
-			{
-				noOfBeanAliquots = new Integer(specimenRequirementBean.getNoOfAliquots());	
-			}
-			int totalNewAliquots = noOfAliquots - noOfBeanAliquots;
-			if(totalNewAliquots<0)
-			{
-				logger.debug("Cannot delete aliquot(s)");
-				throw new Exception("Cannot delete aliquot(s)");
-			}
-			LinkedHashMap newAliquotSpecimenMap =
-				specimenRequirementBean.getAliquotSpecimenCollection();
-			if(newAliquotSpecimenMap==null)
-			{
-				newAliquotSpecimenMap = new LinkedHashMap();
-			}
-			for (int i=0;i<totalNewAliquots; i++)
-			{
-				int iCount = ++noOfBeanAliquots;
-				SpecimenRequirementBean aliquotBean = 					
-				createSpecimen(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), iCount);
-				Double aliquotQuantity = calculateQuantity(createSpecimenTemplateForm);
-				createAliquot(createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier(), aliquotQuantity.toString(), iCount, aliquotBean);
-				newAliquotSpecimenMap.put(aliquotBean.getUniqueIdentifier(), aliquotBean);
-			}
-			specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
-			specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm.getQuantityPerAliquot());
-			specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm.getStorageLocationForAliquotSpecimen());
-			specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
-	
+	private Map getderiveSpecimen(Collection deriveSpecimenCollection,
+			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier)
+	{
+		Map deriveSpecimenMap = new LinkedHashMap();
+		Iterator deriveSpecimenCollectionItr = deriveSpecimenCollection.iterator();
+		Integer deriveSpecimenCount = 1;
+		while (deriveSpecimenCollectionItr.hasNext())
+		{
+			DeriveSpecimenBean deriveSpecimenBean = (DeriveSpecimenBean) deriveSpecimenCollectionItr
+					.next();
+			SpecimenRequirementBean specimenRequirementBean = createSpecimen(
+					createSpecimenTemplateForm, uniqueIdentifier, deriveSpecimenCount);
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + deriveSpecimenCount);
+			specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
+					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE
+					+ deriveSpecimenCount);
+
+			specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
+			specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
+			specimenRequirementBean.setClassName(deriveSpecimenBean.getSpecimenClass());
+			specimenRequirementBean.setType(deriveSpecimenBean.getSpecimenType());
+			specimenRequirementBean.setStorageContainerForSpecimen(deriveSpecimenBean
+					.getStorageLocation());
+			//Aliquot
+			specimenRequirementBean.setNoOfAliquots(null);
+			specimenRequirementBean.setQuantityPerAliquot(null);
+			specimenRequirementBean.setStorageContainerForAliquotSpecimem("");
 			//Derive
-			int noOfDeriveSpecimen = new Integer(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
-			int noOfBeanDerive = new Integer(specimenRequirementBean.getNoOfDeriveSpecimen());
-			int totalNewDeriveSpecimen = noOfDeriveSpecimen - noOfBeanDerive;
-			Collection deriveSpecimenCollection = null;
-			Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
-			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
-			if(deriveSpecimenMap!=null&&deriveSpecimenMap.size()!=0)
+			specimenRequirementBean.setDeriveSpecimen(null);
+			specimenRequirementBean.setNoOfDeriveSpecimen(0);
+			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
+					specimenRequirementBean);
+			deriveSpecimenCount = deriveSpecimenCount + 1;
+		}
+
+		return deriveSpecimenMap;
+	}
+
+	private void initCreateSpecimenTemplateForm(
+			CreateSpecimenTemplateForm createSpecimenTemplateForm, HttpServletRequest request)
+			throws Exception
+	{
+		HttpSession session = request.getSession();
+		SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) session
+				.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
+		setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
+
+		int noOfAliquots = 0;
+		if (createSpecimenTemplateForm.getNoOfAliquots() != null
+				&& !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
+		{
+			noOfAliquots = new Integer(createSpecimenTemplateForm.getNoOfAliquots());
+		}
+		int noOfBeanAliquots = 0;
+		if (specimenRequirementBean.getNoOfAliquots() != null
+				&& !specimenRequirementBean.getNoOfAliquots().equals(""))
+		{
+			noOfBeanAliquots = new Integer(specimenRequirementBean.getNoOfAliquots());
+		}
+		int totalNewAliquots = noOfAliquots - noOfBeanAliquots;
+		if (totalNewAliquots < 0)
+		{
+			logger.debug("Cannot delete aliquot(s)");
+			throw new Exception("Cannot delete aliquot(s)");
+		}
+		LinkedHashMap newAliquotSpecimenMap = specimenRequirementBean
+				.getAliquotSpecimenCollection();
+		if (newAliquotSpecimenMap == null)
+		{
+			newAliquotSpecimenMap = new LinkedHashMap();
+		}
+		for (int i = 0; i < totalNewAliquots; i++)
+		{
+			int iCount = ++noOfBeanAliquots;
+			SpecimenRequirementBean aliquotBean = createSpecimen(createSpecimenTemplateForm,
+					specimenRequirementBean.getUniqueIdentifier(), iCount);
+			Double aliquotQuantity = calculateQuantity(createSpecimenTemplateForm);
+			createAliquot(createSpecimenTemplateForm,
+					specimenRequirementBean.getUniqueIdentifier(), aliquotQuantity.toString(),
+					iCount, aliquotBean);
+			newAliquotSpecimenMap.put(aliquotBean.getUniqueIdentifier(), aliquotBean);
+		}
+		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
+		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm
+				.getQuantityPerAliquot());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
+				.getStorageLocationForAliquotSpecimen());
+		specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
+
+		//Derive
+		int noOfDeriveSpecimen = new Integer(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
+		int noOfBeanDerive = new Integer(specimenRequirementBean.getNoOfDeriveSpecimen());
+		int totalNewDeriveSpecimen = noOfDeriveSpecimen - noOfBeanDerive;
+		Collection deriveSpecimenCollection = null;
+		Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
+		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
+		if (deriveSpecimenMap != null && deriveSpecimenMap.size() != 0)
+		{
+			deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
+			// for ordering 
+			IdComparator deriveSpBeanComp = new IdComparator();
+			List deriveSpecimenList = new LinkedList(deriveSpecimenCollection);
+			Collections.sort(deriveSpecimenList, deriveSpBeanComp);
+			deriveSpecimenMap = getderiveSpecimen(deriveSpecimenList, createSpecimenTemplateForm,
+					specimenRequirementBean.getUniqueIdentifier());
+		}
+
+		LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
+		Object keyArr[] = deriveSpecimenMap.keySet().toArray();
+
+		if (totalNewDeriveSpecimen > 0)
+		{
+			for (int iCount = 0; iCount < noOfBeanDerive; iCount++)
 			{
-				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
-				// for ordering 
-				IdComparator deriveSpBeanComp = new IdComparator();
-				List deriveSpecimenList = new LinkedList(deriveSpecimenCollection); 
-				Collections.sort(deriveSpecimenList,deriveSpBeanComp);
-				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenList,createSpecimenTemplateForm,specimenRequirementBean.getUniqueIdentifier());
+				deriveSpecimenMap.remove(keyArr[iCount]);
 			}
-			
-			LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
-			Object keyArr[] = deriveSpecimenMap.keySet().toArray();
-			
-			if(totalNewDeriveSpecimen>0)
+			if (oldDeriveSpecimenMap == null)
 			{
-				for (int iCount = 0; iCount<noOfBeanDerive;iCount++)				
-				{				
-					deriveSpecimenMap.remove(keyArr[iCount]);				
-				}
-				if(oldDeriveSpecimenMap==null)
-				{
-					oldDeriveSpecimenMap = new LinkedHashMap();
-				}
-				oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
-				specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
+				oldDeriveSpecimenMap = new LinkedHashMap();
 			}
-			else
+			oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
+			specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
+		}
+		else
+		{
+			LinkedHashMap deriveMap = new LinkedHashMap();
+			for (int iCount = 0; iCount < keyArr.length; iCount++)
 			{
-				LinkedHashMap deriveMap = new LinkedHashMap();
-				for (int iCount = 0; iCount<keyArr.length;iCount++)				
-				{				
-					SpecimenRequirementBean newBean = (SpecimenRequirementBean)deriveSpecimenMap.get(keyArr[iCount]);
-					SpecimenRequirementBean oldBean = (SpecimenRequirementBean)oldDeriveSpecimenMap.get(keyArr[iCount]);
-					deriveMap.put(keyArr[iCount], deriveSpecimenMap.get(keyArr[iCount]));
-					newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
-					newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
-				}
-				specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveMap);
-				if(oldDeriveSpecimenMap!=null)
-				{
-					oldDeriveSpecimenMap.clear();
-				}
+				SpecimenRequirementBean newBean = (SpecimenRequirementBean) deriveSpecimenMap
+						.get(keyArr[iCount]);
+				SpecimenRequirementBean oldBean = (SpecimenRequirementBean) oldDeriveSpecimenMap
+						.get(keyArr[iCount]);
+				deriveMap.put(keyArr[iCount], deriveSpecimenMap.get(keyArr[iCount]));
+				newBean.setAliquotSpecimenCollection(oldBean.getAliquotSpecimenCollection());
+				newBean.setDeriveSpecimenCollection(oldBean.getDeriveSpecimenCollection());
 			}
-			specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
-	 }
+			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap) deriveMap);
+			if (oldDeriveSpecimenMap != null)
+			{
+				oldDeriveSpecimenMap.clear();
+			}
+		}
+		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
+				.getNoOfDeriveSpecimen());
+	}
 
 	private Double calculateQuantity(CreateSpecimenTemplateForm createSpecimenTemplateForm)
 	{
@@ -326,16 +384,16 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		String quantityPerAliquot = createSpecimenTemplateForm.getQuantityPerAliquot();
 		Double aliquotCount = Double.parseDouble(noOfAliquotes);
 		Double parentQuantity = Double.parseDouble(createSpecimenTemplateForm.getQuantity());
-		Double aliquotQuantity=0D;
-		if(quantityPerAliquot==null||quantityPerAliquot.equals(""))
+		Double aliquotQuantity = 0D;
+		if (quantityPerAliquot == null || quantityPerAliquot.equals(""))
 		{
-			aliquotQuantity = parentQuantity/aliquotCount;
+			aliquotQuantity = parentQuantity / aliquotCount;
 			parentQuantity = parentQuantity - (aliquotQuantity * aliquotCount);
 		}
 		else
 		{
-			aliquotQuantity=Double.parseDouble(quantityPerAliquot);
-			parentQuantity = parentQuantity - (aliquotQuantity*aliquotCount);
+			aliquotQuantity = Double.parseDouble(quantityPerAliquot);
+			parentQuantity = parentQuantity - (aliquotQuantity * aliquotCount);
 		}
 		return aliquotQuantity;
 	}

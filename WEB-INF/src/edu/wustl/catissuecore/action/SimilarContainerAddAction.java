@@ -23,10 +23,15 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class SimilarContainerAddAction extends CommonAddEditAction
 {
 
 	private transient Logger logger = Logger.getCommonLogger(SimilarContainerAddAction.class);
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException

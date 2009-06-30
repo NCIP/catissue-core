@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.LinkedHashMap;
@@ -29,34 +30,38 @@ public class DeleteNodeFromCPAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm)form;
+		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
 		HttpSession session = request.getSession();
 		Map collectionProtocolEventMap = null;
-		if(session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP)!=null)
+		if (session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
 		{
-			collectionProtocolEventMap = (LinkedHashMap)session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+			collectionProtocolEventMap = (LinkedHashMap) session
+					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		}
-		
-		if("specimenRequirement".equals(request.getParameter("pageOf")))
+
+		if ("specimenRequirement".equals(request.getParameter("pageOf")))
 		{
-			String collectionProtocolEventKey = (String)request.getParameter(Constants.EVENT_KEY);
+			String collectionProtocolEventKey = (String) request.getParameter(Constants.EVENT_KEY);
 			String eventMapKey = null;
-			StringTokenizer st = new StringTokenizer(collectionProtocolEventKey,"_");
-			if(st.hasMoreTokens())
+			StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
+			if (st.hasMoreTokens())
 			{
 				eventMapKey = st.nextToken();
 			}
-			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean)collectionProtocolEventMap.get(eventMapKey);
-			Map specimenReqMap = (LinkedHashMap)collectionProtocolEventBean.getSpecimenRequirementbeanMap();
-			if(specimenReqMap.containsKey(collectionProtocolEventKey))
+			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+					.get(eventMapKey);
+			Map specimenReqMap = (LinkedHashMap) collectionProtocolEventBean
+					.getSpecimenRequirementbeanMap();
+			if (specimenReqMap.containsKey(collectionProtocolEventKey))
 			{
 				specimenReqMap.remove(collectionProtocolEventKey);
 			}
 			else
 			{
-				String parentReqMapKey =  eventMapKey + "_"+st.nextToken();
+				String parentReqMapKey = eventMapKey + "_" + st.nextToken();
 				char specimenType = getSpecimenType(collectionProtocolEventKey);
-				removeChildSpecimen(specimenReqMap, parentReqMapKey, collectionProtocolEventKey, st,specimenType);
+				removeChildSpecimen(specimenReqMap, parentReqMapKey, collectionProtocolEventKey,
+						st, specimenType);
 			}
 		}
 		else
@@ -66,7 +71,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 		}
 		return mapping.findForward(Constants.SUCCESS);
 	}
-	
+
 	/**
 	 * This method is for removing child specimen
 	 * @param specimenReqMap Requirement Specimen map
@@ -75,11 +80,12 @@ public class DeleteNodeFromCPAction extends BaseAction
 	 * @param st String toknizer
 	 * @param specimenType type of specimen
 	 */
-	private void removeChildSpecimen(Map specimenReqMap,String parentReqMapKey, String collectionProtocolEventKey, 
-			StringTokenizer st, char specimenType)
+	private void removeChildSpecimen(Map specimenReqMap, String parentReqMapKey,
+			String collectionProtocolEventKey, StringTokenizer st, char specimenType)
 	{
-		SpecimenRequirementBean spReqBean = (SpecimenRequirementBean)specimenReqMap.get(parentReqMapKey);
-		Map childMap= null;
+		SpecimenRequirementBean spReqBean = (SpecimenRequirementBean) specimenReqMap
+				.get(parentReqMapKey);
+		Map childMap = null;
 		if (specimenType == 'A')
 		{
 			childMap = removeAliquot(collectionProtocolEventKey, spReqBean);
@@ -90,10 +96,12 @@ public class DeleteNodeFromCPAction extends BaseAction
 		}
 		if (childMap != null)
 		{
-			parentReqMapKey = parentReqMapKey+"_"+ st.nextToken();			
-			removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st, specimenType);
+			parentReqMapKey = parentReqMapKey + "_" + st.nextToken();
+			removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st,
+					specimenType);
 		}
 	}
+
 	/**
 	 * 
 	 * @param specimenKey Specimen key
@@ -102,8 +110,8 @@ public class DeleteNodeFromCPAction extends BaseAction
 	private char getSpecimenType(String specimenKey)
 	{
 		String specimenType = null;
-		StringTokenizer st = new StringTokenizer(specimenKey,"_");
-		while(st.hasMoreTokens())
+		StringTokenizer st = new StringTokenizer(specimenKey, "_");
+		while (st.hasMoreTokens())
 		{
 			specimenType = st.nextToken();
 		}
@@ -120,14 +128,14 @@ public class DeleteNodeFromCPAction extends BaseAction
 	{
 
 		Map aliquotMap = spReqBean.getAliquotSpecimenCollection();
-		if(aliquotMap.containsKey(collectionProtocolEventKey))
+		if (aliquotMap.containsKey(collectionProtocolEventKey))
 		{
 			aliquotMap.remove(collectionProtocolEventKey);
 			aliquotMap = null;
 		}
 		return aliquotMap;
 	}
-	
+
 	/**
 	 * Remove derive specimen
 	 * @param collectionProtocolEventKey
@@ -138,7 +146,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 	{
 
 		Map driveMap = spReqBean.getDeriveSpecimenCollection();
-		if(driveMap.containsKey(collectionProtocolEventKey))
+		if (driveMap.containsKey(collectionProtocolEventKey))
 		{
 			driveMap.remove(collectionProtocolEventKey);
 			driveMap = null;

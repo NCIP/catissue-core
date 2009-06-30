@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 /**
@@ -24,35 +25,43 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class DeleteSpecimenArrayAction extends CommonAddEditAction
+{
 
-public class DeleteSpecimenArrayAction extends CommonAddEditAction {
-	
 	private transient Logger logger = Logger.getCommonLogger(DeleteSpecimenArrayAction.class);
+
 	/**
 	 * This method sets the activity status to 'Disabled' and then calls execute method of CommonAddEditAction. 
 	 * @author nitesh_marwaha
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
+	{
 
 		Map arrayContentMap = (Map) request.getSession().getAttribute(
 				Constants.SPECIMEN_ARRAY_CONTENT_KEY);
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		abstractForm.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-		try {
-			if (arrayContentMap != null) {
-				MapDataParser mapDataParser = new MapDataParser(
-						"edu.wustl.catissuecore.domain");
-				Collection specimenArrayContentList = mapDataParser
-						.generateData(arrayContentMap);
-				if (abstractForm instanceof SpecimenArrayForm) {
+		try
+		{
+			if (arrayContentMap != null)
+			{
+				MapDataParser mapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
+				Collection specimenArrayContentList = mapDataParser.generateData(arrayContentMap);
+				if (abstractForm instanceof SpecimenArrayForm)
+				{
 					SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
-					specimenArrayForm
-							.setSpecArrayContentCollection(specimenArrayContentList);
+					specimenArrayForm.setSpecArrayContentCollection(specimenArrayContentList);
 				}
 			}
-		} catch (Exception exception) {
+		}
+		catch (Exception exception)
+		{
 			logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}

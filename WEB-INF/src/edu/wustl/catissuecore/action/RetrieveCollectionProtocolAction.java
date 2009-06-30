@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +12,15 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
-public class RetrieveCollectionProtocolAction extends BaseAction 
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class RetrieveCollectionProtocolAction extends BaseAction
 {
 
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception 
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String cpId = request.getParameter("id");
 		Long id = new Long(cpId);

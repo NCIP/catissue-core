@@ -28,44 +28,45 @@ import edu.wustl.common.action.SecureAction;
 
 public class DepartmentAction extends SecureAction
 {
-    /**
-     * Overrides the execute method of Action class.
-     * Sets the various fields in Department Add/Edit webpage.
+
+	/**
+	 * Overrides the execute method of Action class.
+	 * Sets the various fields in Department Add/Edit webpage.
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
-     * */
-    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
-        //Gets the value of the operation parameter.
-        String operation = request.getParameter(Constants.OPERATION);
-        DepartmentForm departmentForm=(DepartmentForm)form;
-        String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-        departmentForm.setOperation(operation);
-        departmentForm.setSubmittedFor(submittedFor);
+	 * */
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		//Gets the value of the operation parameter.
+		String operation = request.getParameter(Constants.OPERATION);
+		DepartmentForm departmentForm = (DepartmentForm) form;
+		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		departmentForm.setOperation(operation);
+		departmentForm.setSubmittedFor(submittedFor);
 
-        String formName;
-        boolean readOnlyValue;
-        if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.DEPARTMENT_EDIT_ACTION;
-            readOnlyValue = false;
-        }
-        else
-        {
-            formName = Constants.DEPARTMENT_ADD_ACTION;
-            readOnlyValue = false;
-        }
-        request.setAttribute("operationAdd", Constants.ADD);
-    	request.setAttribute("operationEdit", Constants.EDIT);
-        
-        request.setAttribute("formName",formName);
-        request.setAttribute("readOnlyValue",readOnlyValue );
-               
-        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
-    }
+		String formName;
+		boolean readOnlyValue;
+		if (operation.equals(Constants.EDIT))
+		{
+			formName = Constants.DEPARTMENT_EDIT_ACTION;
+			readOnlyValue = false;
+		}
+		else
+		{
+			formName = Constants.DEPARTMENT_ADD_ACTION;
+			readOnlyValue = false;
+		}
+		request.setAttribute("operationAdd", Constants.ADD);
+		request.setAttribute("operationEdit", Constants.EDIT);
+
+		request.setAttribute("formName", formName);
+		request.setAttribute("readOnlyValue", readOnlyValue);
+
+		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+	}
 }

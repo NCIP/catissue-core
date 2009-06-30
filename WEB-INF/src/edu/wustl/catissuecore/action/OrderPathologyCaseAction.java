@@ -30,7 +30,6 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-
 /**
  * Action for ordering specimen
  * 
@@ -48,8 +47,8 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @return ActionForward object 
 	 * @throws Exception object
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		OrderPathologyCaseForm pathology = (OrderPathologyCaseForm) form;
 		HttpSession session = request.getSession();
@@ -65,9 +64,10 @@ public class OrderPathologyCaseAction extends BaseAction
 				getProtocolName(request, pathology, orderForm);
 			}
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			Collection pathologyCase  = (List)orderBizLogic.getPathologyDataFromDatabase(request);
-			
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+			Collection pathologyCase = (List) orderBizLogic.getPathologyDataFromDatabase(request);
+
 			request.setAttribute("pathologyCase", pathologyCase);
 			setClassAndTypeInList(request);
 			setSiteAndStatus(request, pathology);
@@ -82,7 +82,8 @@ public class OrderPathologyCaseAction extends BaseAction
 				while (arrayListItr.hasNext())
 				{
 					DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr.next();
-					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj.getArrayName(), defineArrayFormObj.getArrayName()));
+					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj
+							.getArrayName(), defineArrayFormObj.getArrayName()));
 				}
 			}
 			// Add the collection in request scope to be used in the
@@ -107,12 +108,14 @@ public class OrderPathologyCaseAction extends BaseAction
 	private void setClassAndTypeInList(HttpServletRequest request)
 	{
 		// Setting specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		// Setting the specimen type list
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		// Get the Specimen class and type from the cde
@@ -163,13 +166,15 @@ public class OrderPathologyCaseAction extends BaseAction
 	private void setSiteAndStatus(HttpServletRequest request, OrderPathologyCaseForm pathology)
 	{
 
-		NameValueBean bean = null;
+		//NameValueBean bean = null;
 		// Setting tissue site list
-		List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+		List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_TISSUE_SITE, null);
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
 		// Setting pathological status list
-		List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+		List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
 	}
@@ -180,13 +185,15 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @param orderForm OrderForm object
 	 * @throws Exception object
 	 */
-	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology, OrderForm orderForm) throws Exception
+	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology,
+			OrderForm orderForm) throws Exception
 	{
 		// to get the distribution protocol name
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		List protocolList = orderBizLogic.getDistributionProtocol(request);
-		
+
 		for (int i = 0; i < protocolList.size(); i++)
 		{
 			NameValueBean obj = (NameValueBean) protocolList.get(i);

@@ -38,13 +38,15 @@ public class ForgotPasswordSearchAction extends Action
 {
 
 	private transient Logger logger = Logger.getCommonLogger(ForgotPasswordSearchAction.class);
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * Adds the user information in the database.
 	 *
 	 * */
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
 	{
 		String target = null;
 
@@ -52,13 +54,15 @@ public class ForgotPasswordSearchAction extends Action
 		{
 			ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm.getFormId());
+			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm
+					.getFormId());
 
 			//Retrieves and sends the password to the user whose email address is passed 
 			//else returns the error key in case of an error.
 			SessionDataBean sessionData = new SessionDataBean();
 			sessionData.setUserName(forgotPasswordForm.getEmailAddress());
-			String message = userBizLogic.sendForgotPassword(forgotPasswordForm.getEmailAddress(), sessionData);
+			String message = userBizLogic.sendForgotPassword(forgotPasswordForm.getEmailAddress(),
+					sessionData);
 
 			request.setAttribute(Constants.STATUS_MESSAGE_KEY, message);
 
@@ -69,7 +73,7 @@ public class ForgotPasswordSearchAction extends Action
 			target = new String(Constants.FAILURE);
 			logger.error(excp.getMessage());
 		}
-		
+
 		return (mapping.findForward(target));
 	}
 }

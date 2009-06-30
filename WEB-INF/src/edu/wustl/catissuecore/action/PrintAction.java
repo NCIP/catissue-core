@@ -47,6 +47,7 @@ public class PrintAction extends Action
 {
 
 	private transient Logger logger = Logger.getCommonLogger(PrintAction.class);
+
 	/**
 	 * Overrides the execute method of Action class.
 	 * 
@@ -164,7 +165,7 @@ public class PrintAction extends Action
 				LinkedHashSet specimenDomainCollection = (LinkedHashSet) forwardToPrintMap
 						.get("printMultipleSpecimen");
 				Iterator iterator = specimenDomainCollection.iterator();
-				List<AbstractDomainObject> specimenList = new ArrayList();
+				List < AbstractDomainObject > specimenList = new ArrayList();
 				while (iterator.hasNext())
 				{
 					Specimen objSpecimen = (Specimen) iterator.next();
@@ -189,7 +190,7 @@ public class PrintAction extends Action
 				HashSet specimenDomainCollection = (HashSet) forwardToPrintMap
 						.get("printAntiSpecimen");
 				Iterator iterator = specimenDomainCollection.iterator();
-				List<AbstractDomainObject> specimenList = new ArrayList();
+				List < AbstractDomainObject > specimenList = new ArrayList();
 				while (iterator.hasNext())
 				{
 					Specimen objSpecimen = (Specimen) iterator.next();
@@ -224,7 +225,7 @@ public class PrintAction extends Action
 				try
 				{
 					dao.openSession(null);
-					List<AbstractDomainObject> containerList = new ArrayList<AbstractDomainObject>();
+					List < AbstractDomainObject > containerList = new ArrayList < AbstractDomainObject >();
 					for (int i = 0; i < similarContainerList.size(); i++)
 					{
 						NameValueBean bean = (NameValueBean) similarContainerList.get(i);
@@ -294,7 +295,7 @@ public class PrintAction extends Action
 			throw AppUtility.handleSMException(e);
 		}
 
-		List<AbstractDomainObject> listofAliquot = (List<AbstractDomainObject>) request
+		List < AbstractDomainObject > listofAliquot = (List < AbstractDomainObject >) request
 				.getAttribute("specimenList");
 		boolean printStauts = false;
 		LabelPrinter labelPrinter = null;

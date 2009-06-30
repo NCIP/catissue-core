@@ -31,6 +31,7 @@ import edu.wustl.common.action.BaseAction;
  */
 public class GetSpecimenForArrayAction extends BaseAction
 {
+
 	/**
 	 * This function gets the specimens which are to be populated in array grid 
 	 * @param mapping object
@@ -40,8 +41,8 @@ public class GetSpecimenForArrayAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		String arrayRowCounter = request.getParameter("arrayRowCounter");
@@ -53,7 +54,7 @@ public class GetSpecimenForArrayAction extends BaseAction
 		Map values = requestDetailsForm.getValues();
 		String arrayNameKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_arrayName";
 		String arrayNameInMap = (String) values.get(arrayNameKey);
-		List<Long> specimenIdList = new ArrayList<Long>();
+		List < Long > specimenIdList = new ArrayList < Long >();
 		if (arrayName.equals(arrayNameInMap))
 		{
 			String noOfItemsKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_noOfItems";
@@ -61,7 +62,12 @@ public class GetSpecimenForArrayAction extends BaseAction
 			for (int i = rowCounter; i < rowCounter + noOfItems; i++)
 			{
 				String statusKey = "DefinedArrayDetailsBean:" + i + "_assignedStatus";
-				if (!(values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE) || values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || values.get(statusKey).equals(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)))
+				if (!(values.get(statusKey).equals(
+						Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE)
+						|| values.get(statusKey).equals(
+								Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || values
+						.get(statusKey).equals(
+								Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)))
 				{
 					String instanceOfKey = "DefinedArrayDetailsBean:" + i + "_instanceOf";
 
@@ -69,24 +75,24 @@ public class GetSpecimenForArrayAction extends BaseAction
 					if (values.get(instanceOfKey).equals("Derived"))
 					{
 						String requestedForKey = "DefinedArrayDetailsBean:" + i + "_requestFor";
-						
-						if(values.get(requestedForKey)!=null)
-						{	
+
+						if (values.get(requestedForKey) != null)
+						{
 							Long specimenId = new Long((String) values.get(requestedForKey));
 							specimenIdList.add(specimenId);
-						}	
+						}
 					}
 					else
 					{
 						String specimenIdKey = "DefinedArrayDetailsBean:" + i + "_specimenId";
-						if(values.get(specimenIdKey)!=null)
-						{	
+						if (values.get(specimenIdKey) != null)
+						{
 							Long specimenId = new Long((String) values.get(specimenIdKey));
 							specimenIdList.add(specimenId);
-						}	
+						}
 					}
 				}
-				
+
 			}
 
 		}

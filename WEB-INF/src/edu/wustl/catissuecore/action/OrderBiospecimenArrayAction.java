@@ -20,8 +20,13 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class OrderBiospecimenArrayAction extends BaseAction
 {
+
 	/**
 	 * @param mapping ActionMapping object
 	 * @param form ActionForm object
@@ -30,14 +35,13 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		OrderBiospecimenArrayForm arrayObject = (OrderBiospecimenArrayForm) form;
 		HttpSession session = request.getSession();
 		String target = null;
 
-		
 		if (session.getAttribute("OrderForm") != null)
 		{
 			OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
@@ -49,9 +53,10 @@ public class OrderBiospecimenArrayAction extends BaseAction
 			}
 
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			
-			List specimenArrayList =(List) orderBizLogic.getSpecimenArrayDataFromDatabase(request);
+			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+
+			List specimenArrayList = (List) orderBizLogic.getSpecimenArrayDataFromDatabase(request);
 			request.setAttribute("SpecimenNameList", specimenArrayList);
 
 			request.setAttribute("typeOf", "specimenArray");
@@ -63,7 +68,7 @@ public class OrderBiospecimenArrayAction extends BaseAction
 			target = Constants.FAILURE;
 		}
 		return mapping.findForward(target);
-		
+
 	}
 
 	/**
@@ -72,12 +77,14 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 * @param orderForm OrderForm object
 	 * @throws Exception object
 	 */
-	private void getProtocolName(HttpServletRequest request, OrderBiospecimenArrayForm arrayObject, OrderForm orderForm) throws Exception
+	private void getProtocolName(HttpServletRequest request, OrderBiospecimenArrayForm arrayObject,
+			OrderForm orderForm) throws Exception
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		List protocolList = orderBizLogic.getDistributionProtocol(request);
-	
+
 		for (int i = 0; i < protocolList.size(); i++)
 		{
 			NameValueBean obj = (NameValueBean) protocolList.get(i);
@@ -88,5 +95,5 @@ public class OrderBiospecimenArrayAction extends BaseAction
 			}
 		}
 	}
-	
+
 }

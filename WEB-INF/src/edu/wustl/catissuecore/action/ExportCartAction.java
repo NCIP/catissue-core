@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -15,13 +16,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.query.actionForm.QueryAdvanceSearchForm;
-import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 
 /**
  * @author santhoshkumar_c
@@ -29,7 +29,9 @@ import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
  */
 public class ExportCartAction extends QueryShoppingCartAction
 {
+
 	private transient Logger logger = Logger.getCommonLogger(ExportCartAction.class);
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -42,11 +44,11 @@ public class ExportCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;	
+		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		export(getCheckboxValues(searchForm), request, response);
-		return null;								
+		return null;
 	}
-	
+
 	/**
 	 * Export Cart data.
 	 * 
@@ -55,14 +57,14 @@ public class ExportCartAction extends QueryShoppingCartAction
 	 * @param response HttpServletResponse.
 	 * @param chkBoxValues
 	*/
-	public void export(List<Integer> chkBoxValues, HttpServletRequest request, 
+	public void export(List < Integer > chkBoxValues, HttpServletRequest request,
 			HttpServletResponse response)
-	{		
+	{
 		HttpSession session = request.getSession();
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		QueryShoppingCart cart = (QueryShoppingCart) session
-		.getAttribute(Constants.QUERY_SHOPPING_CART);
-		List<List<String>> exportList = bizLogic.export(cart, chkBoxValues);		
+				.getAttribute(Constants.QUERY_SHOPPING_CART);
+		List < List < String >> exportList = bizLogic.export(cart, chkBoxValues);
 
 		// Exporting the data to the given file & sending it to user
 		try
@@ -80,8 +82,8 @@ public class ExportCartAction extends QueryShoppingCartAction
 			saveErrors(request, errors);
 		}
 
-		SendFile.sendFileToClient(response, getFileName(session), Constants.SHOPPING_CART_FILE_NAME,
-				Constants.APPLICATION_DOWNLOAD);
+		SendFile.sendFileToClient(response, getFileName(session),
+				Constants.SHOPPING_CART_FILE_NAME, Constants.APPLICATION_DOWNLOAD);
 
 	}
 
@@ -89,9 +91,10 @@ public class ExportCartAction extends QueryShoppingCartAction
 	 * @param session HttpSession object.
 	 * @return file name.
 	 */
-	private String getFileName(HttpSession session) {
-		String fileName = CommonServiceLocator.getInstance().getAppHome() + System.getProperty("file.separator")
-				+ session.getId() + Constants.DOT_CSV;
+	private String getFileName(HttpSession session)
+	{
+		String fileName = CommonServiceLocator.getInstance().getAppHome()
+				+ System.getProperty("file.separator") + session.getId() + Constants.DOT_CSV;
 		return fileName;
 	}
 

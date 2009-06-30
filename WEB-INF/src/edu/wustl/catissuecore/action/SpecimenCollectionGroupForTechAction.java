@@ -23,8 +23,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
 /**
@@ -32,12 +32,12 @@ import edu.wustl.common.action.BaseAction;
  */
 public class SpecimenCollectionGroupForTechAction extends BaseAction
 {
-	
+
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		/**
 		 * Name: Chetan patil
@@ -49,56 +49,61 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 		//Accessing specimen collection group id and name 
 		String specimenCollectionGroupId = request.getParameter("id");
 		String specimenCollectionGroupName = request.getParameter("name");
-		
+
 		ActionForward actionForward = null;
 
-		if(specimenCollectionGroupId != null )
+		if (specimenCollectionGroupId != null)
 		{
 			//setting id in request to show SCG selected in specimen page
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID, specimenCollectionGroupId);
-			
+
 			//setting name in session to show SCG selected in multiple specimen page
-			request.getSession().setAttribute(Constants.SPECIMEN_COLL_GP_NAME, specimenCollectionGroupName);
-			request.getSession().setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID , specimenCollectionGroupId);
-			
+			request.getSession().setAttribute(Constants.SPECIMEN_COLL_GP_NAME,
+					specimenCollectionGroupName);
+			request.getSession().setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,
+					specimenCollectionGroupId);
+
 			int numberOfSpecimen = 1;
 			CollectionProtocolEvent collectionProtocolEvent = null;
 			Collection specimenRequirementCollection = null;
-			if(specimenCollectionGroupId.equals("0"))
+			if (specimenCollectionGroupId.equals("0"))
 			{
 				ActionErrors actionErrors = new ActionErrors();
 				ActionError error = new ActionError("access.execute.action.denied");
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request,actionErrors);
+				saveErrors(request, actionErrors);
 
 				actionForward = mapping.findForward(Constants.ACCESS_DENIED);
 			}
 			else
 			{
-				SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSpecimenCollectionGroup(specimenCollectionGroupId);
+				SpecimenCollectionGroup specimenCollectionGroup = AppUtility
+						.getSpecimenCollectionGroup(specimenCollectionGroupId);
 				collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
 				//SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
-				
-				specimenRequirementCollection =collectionProtocolEvent.getSpecimenRequirementCollection();
-					//collectionRequirementGroup.getSpecimenCollection(); 
 
-				
+				specimenRequirementCollection = collectionProtocolEvent
+						.getSpecimenRequirementCollection();
+				//collectionRequirementGroup.getSpecimenCollection(); 
+
 				//Populate the number of Specimen Requirements.
 				numberOfSpecimen = specimenRequirementCollection.size();
 			}
 			//Sets the value for number of specimen field on the specimen collection group page. 
 			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
-			
-			if(actionForward == null)
+
+			if (actionForward == null)
 			{
-				if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+				if ((specimenRequirementCollection != null)
+						&& (!specimenRequirementCollection.isEmpty()))
 				{
 					//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
 					//checkbox, otherwise set the restrict checkbox
-					if(collectionProtocolEvent != null)
+					if (collectionProtocolEvent != null)
 					{
-						Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
-						if(studyCalendarEventPoint.doubleValue() == 0)
+						Double studyCalendarEventPoint = collectionProtocolEvent
+								.getStudyCalendarEventPoint();
+						if (studyCalendarEventPoint.doubleValue() == 0)
 						{
 							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 						}
@@ -112,11 +117,11 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 						request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 					}
 				}
-												
+
 				actionForward = mapping.findForward(Constants.SUCCESS);
 			}
 		}
-		else if(actionForward == null)
+		else if (actionForward == null)
 		{
 			actionForward = mapping.findForward(Constants.FAILURE);
 		}

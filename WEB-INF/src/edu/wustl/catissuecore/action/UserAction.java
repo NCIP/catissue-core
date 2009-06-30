@@ -51,55 +51,58 @@ import edu.wustl.security.privilege.PrivilegeManager;
  * 
  * @author gautam_shetty
  */
-public class UserAction extends SecureAction {
+public class UserAction extends SecureAction
+{
 
 	private transient Logger logger = Logger.getCommonLogger(UserAction.class);
+
 	/**
 	 * Overrides the execute method of Action class. Sets the various fields in
 	 * User Add/Edit webpage.
 	 */
-	protected ActionForward executeSecureAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		String reqPath = (String) request.getParameter(Constants.REQ_PATH);
-		String submittedFor = (String) request
-				.getAttribute(Constants.SUBMITTED_FOR);
-		String openInCPFrame = (String) request
-				.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
+		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		String openInCPFrame = (String) request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
 		UserForm userForm = (UserForm) form;
 
 		// method to get myProfile-Add Privilege
-		SessionDataBean sessionDataBean=getSessionData(request);
-	//	String readOnlyForPrivOnEdit = "";
-	//	String disablePrivButton = "false";
+		SessionDataBean sessionDataBean = getSessionData(request);
+		//	String readOnlyForPrivOnEdit = "";
+		//	String disablePrivButton = "false";
 		long loggedInUserId = 0;
-		if((Constants.PAGE_OF_USER).equals(pageOf)&& sessionDataBean.getUserId()!=null)
+		if ((Constants.PAGE_OF_USER).equals(pageOf) && sessionDataBean.getUserId() != null)
 		{
-			loggedInUserId =sessionDataBean.getUserId();
+			loggedInUserId = sessionDataBean.getUserId();
 		}
-		
-		if((Constants.PAGE_OF_USER).equals(pageOf)&& sessionDataBean!=null && loggedInUserId == userForm.getId())
+
+		if ((Constants.PAGE_OF_USER).equals(pageOf) && sessionDataBean != null
+				&& loggedInUserId == userForm.getId())
 		{
 			pageOf = Constants.PAGE_OF_USER_PROFILE;
-//			readOnlyForPrivOnEdit = "disabled='true'";
-//			disablePrivButton ="true";
-//			request.setAttribute("readOnlyForPrivOnEdit", readOnlyForPrivOnEdit);
-//			request.setAttribute("disablePrivButton", disablePrivButton);
-			
+			//			readOnlyForPrivOnEdit = "disabled='true'";
+			//			disablePrivButton ="true";
+			//			request.setAttribute("readOnlyForPrivOnEdit", readOnlyForPrivOnEdit);
+			//			request.setAttribute("disablePrivButton", disablePrivButton);
+
 		}
 		// method to get myProfile end here
-		
+
 		//method to preserve data on validation
 		MSRUtil msrUtil = new MSRUtil();
-		if (operation.equalsIgnoreCase(Constants.ADD)) {
+		if (operation.equalsIgnoreCase(Constants.ADD))
+		{
 			HttpSession session = request.getSession();
 			boolean dirtyVar = false;
 			dirtyVar = new Boolean(request.getParameter("dirtyVar"));
-			if (!dirtyVar) {
+			if (!dirtyVar)
+			{
 				session.removeAttribute(Constants.USER_ROW_ID_BEAN_MAP);
 			}
 		}
@@ -107,34 +110,37 @@ public class UserAction extends SecureAction {
 
 		String formName, prevPage = null, nextPage = null;
 		boolean roleStatus = false;
-		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
-			Long identifier = (Long) request
-					.getAttribute(Constants.PREVIOUS_PAGE);
+		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+		{
+			Long identifier = (Long) request.getAttribute(Constants.PREVIOUS_PAGE);
 			request.setAttribute("prevPageId", identifier);
-			prevPage = Constants.USER_DETAILS_SHOW_ACTION + "?"
-					+ Constants.SYSTEM_IDENTIFIER + "=" + identifier;
+			prevPage = Constants.USER_DETAILS_SHOW_ACTION + "?" + Constants.SYSTEM_IDENTIFIER + "="
+					+ identifier;
 			identifier = (Long) request.getAttribute(Constants.NEXT_PAGE);
-			nextPage = Constants.USER_DETAILS_SHOW_ACTION + "?"
-					+ Constants.SYSTEM_IDENTIFIER + "=" + identifier;
+			nextPage = Constants.USER_DETAILS_SHOW_ACTION + "?" + Constants.SYSTEM_IDENTIFIER + "="
+					+ identifier;
 			request.setAttribute("nextPageId", identifier);
 
 		}
-		if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
-			if (operation.equals(Constants.EDIT)
-					&& (userForm.getCsmUserId() != null)) {
-				if (userForm.getCsmUserId().longValue() == 0) {
+		if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+		{
+			if (operation.equals(Constants.EDIT) && (userForm.getCsmUserId() != null))
+			{
+				if (userForm.getCsmUserId().longValue() == 0)
+				{
 					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					UserBizLogic bizLogic = (UserBizLogic)factory.getBizLogic(Constants.USER_FORM_ID);
+					UserBizLogic bizLogic = (UserBizLogic) factory
+							.getBizLogic(Constants.USER_FORM_ID);
 					String sourceObjName = User.class.getName();
-					String[] selectColName = { "csmUserId" };
-					String[] whereColName = { "id" };
-					String[] whereColCond = { "=" };
-					Object[] whereColVal = { userForm.getId() };
+					String[] selectColName = {"csmUserId"};
+					String[] whereColName = {"id"};
+					String[] whereColCond = {"="};
+					Object[] whereColVal = {userForm.getId()};
 
-					List regList = bizLogic.retrieve(sourceObjName,
-							selectColName, whereColName, whereColCond,
-							whereColVal, Constants.AND_JOIN_CONDITION);
-					if (regList != null && !regList.isEmpty()) {
+					List regList = bizLogic.retrieve(sourceObjName, selectColName, whereColName,
+							whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+					if (regList != null && !regList.isEmpty())
+					{
 						Object obj = (Object) regList.get(0);
 						Long id = (Long) obj;
 						userForm.setCsmUserId(id);
@@ -142,55 +148,71 @@ public class UserAction extends SecureAction {
 				}
 			}
 		}
-		if (operation.equals(Constants.EDIT)) {
-			if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
+		if (operation.equals(Constants.EDIT))
+		{
+			if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+			{
 				setUserPrivileges(request.getSession(), userForm.getId());
 			}
 
-			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
+			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+			{
 				formName = Constants.APPROVE_USER_EDIT_ACTION;
-			} else if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
+			}
+			else if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+			{
 				formName = Constants.USER_EDIT_PROFILE_ACTION;
-			} else {
+			}
+			else
+			{
 				formName = Constants.USER_EDIT_ACTION;
 			}
-		} else {
-			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
+		}
+		else
+		{
+			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+			{
 				formName = Constants.APPROVE_USER_ADD_ACTION;
-			} else {
+			}
+			else
+			{
 				formName = Constants.USER_ADD_ACTION;
-				if (pageOf.equals(Constants.PAGE_OF_SIGNUP)) {
+				if (pageOf.equals(Constants.PAGE_OF_SIGNUP))
+				{
 					formName = Constants.SIGNUP_USER_ADD_ACTION;
 				}
 			}
 		}
 		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
-				&& (userForm.getStatus().equals(
-						Status.APPROVE_USER_PENDING_STATUS.toString())
-						|| userForm.getStatus().equals(
-								Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
-						.getStatus().equals(Constants.SELECT_OPTION))) {
+				&& (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString())
+						|| userForm.getStatus()
+								.equals(Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
+						.getStatus().equals(Constants.SELECT_OPTION)))
+		{
 			roleStatus = true;
-			if (userForm.getStatus().equals(
-					Status.APPROVE_USER_PENDING_STATUS.toString())) {
+			if (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString()))
+			{
 				operation = Constants.EDIT;
 			}
 		}
-		if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
+		if (pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+		{
 			roleStatus = true;
 		}
-		if (operation.equalsIgnoreCase(Constants.ADD)) {
+		if (operation.equalsIgnoreCase(Constants.ADD))
+		{
 			// request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP,
 			// null);
 
-			if (userForm.getCountry() == null) {
+			if (userForm.getCountry() == null)
+			{
 				userForm.setCountry((String) DefaultValueManager
 						.getDefaultValue(Constants.DEFAULT_COUNTRY));
 			}
-			
-			
+
 		}
-		if (pageOf.equals(Constants.PAGE_OF_SIGNUP)) {
+		if (pageOf.equals(Constants.PAGE_OF_SIGNUP))
+		{
 			userForm.setStatus(Status.ACTIVITY_STATUS_NEW.toString());
 			userForm.setActivityStatus(Status.ACTIVITY_STATUS_NEW.toString());
 		}
@@ -219,42 +241,38 @@ public class UserAction extends SecureAction {
 		// Sets the pageOf attribute (for Add,Edit or Query Interface).
 		String target = pageOf;
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(
-				Constants.USER_FORM_ID);
+		IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
 
 		// Sets the instituteList attribute to be used in the Add/Edit User
 		// Page.
 		String sourceObjectName = Institution.class.getName();
-		String[] displayNameFields = { Constants.NAME };
+		String[] displayNameFields = {Constants.NAME};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		List instituteList = bizLogic.getList(sourceObjectName,
-				displayNameFields, valueField, false);
+		List instituteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
+				false);
 		request.setAttribute("instituteList", instituteList);
 
 		// Sets the departmentList attribute to be used in the Add/Edit User
 		// Page.
 		sourceObjectName = Department.class.getName();
-		List departmentList = bizLogic.getList(sourceObjectName,
-				displayNameFields, valueField, false);
+		List departmentList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
+				false);
 		request.setAttribute("departmentList", departmentList);
 
 		// Sets the cancerResearchGroupList attribute to be used in the Add/Edit
 		// User Page.
 		sourceObjectName = CancerResearchGroup.class.getName();
-		List cancerResearchGroupList = bizLogic.getList(sourceObjectName,
-				displayNameFields, valueField, false);
-		request
-				.setAttribute("cancerResearchGroupList",
-						cancerResearchGroupList);
+		List cancerResearchGroupList = bizLogic.getList(sourceObjectName, displayNameFields,
+				valueField, false);
+		request.setAttribute("cancerResearchGroupList", cancerResearchGroupList);
 
 		// Populate the activity status dropdown if the operation is edit
 		// and the user page is of administrative tab.
-		if (operation.equals(Constants.EDIT)
-				&& pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
-			String activityStatusList = Constants.ACTIVITYSTATUSLIST;
-			request.setAttribute("activityStatusList",
-					Constants.USER_ACTIVITY_STATUS_VALUES);
+		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
+		{
+			//String activityStatusList = Constants.ACTIVITYSTATUSLIST;
+			request.setAttribute("activityStatusList", Constants.USER_ACTIVITY_STATUS_VALUES);
 		}
 
 		// Populate the role dropdown if the page is of approve user or
@@ -269,25 +287,25 @@ public class UserAction extends SecureAction {
 
 		// Populate the status dropdown for approve user
 		// page.(Approve,Reject,Pending)
-		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)) {
-			request.setAttribute("statusList",
-					Constants.APPROVE_USER_STATUS_VALUES);
+		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
+		{
+			request.setAttribute("statusList", Constants.APPROVE_USER_STATUS_VALUES);
 		}
 
 		logger.debug("pageOf :---------- " + pageOf);
-		
+
 		// To show Role as Scientist
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).
-		getDAO();
+		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
 		dao.openSession(sessionDataBean);
-		List<User> userList = dao.retrieve(User.class.getName(), "emailAddress" , userForm.getEmailAddress());
-		if(!userList.isEmpty())
+		List < User > userList = dao.retrieve(User.class.getName(), "emailAddress", userForm
+				.getEmailAddress());
+		if (!userList.isEmpty())
 		{
 			User user = userList.get(0);
-			
-			if(!user.getRoleId().equals(Constants.ADMIN_USER))
+
+			if (!user.getRoleId().equals(Constants.ADMIN_USER))
 			{
-				if(user.getSiteCollection().isEmpty())
+				if (user.getSiteCollection().isEmpty())
 				{
 					userForm.setRole(Constants.NON_ADMIN_USER);
 				}
@@ -298,81 +316,79 @@ public class UserAction extends SecureAction {
 		// For Privilege
 		String roleId = userForm.getRole();
 		boolean flagForSARole = false;
-		if((Constants.SUPER_ADMIN_USER).equals(roleId))
+		if ((Constants.SUPER_ADMIN_USER).equals(roleId))
 		{
 			flagForSARole = true;
 			// To show empty summary in case User is Super Administrator
-	        request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
+			request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
 		}
 		request.setAttribute("flagForSARole", flagForSARole);
 
 		msrUtil.onFirstTimeLoad(mapping, request);
 
 		final String cpOperation = (String) request.getParameter("cpOperation");
-		if (cpOperation != null) {
+		if (cpOperation != null)
+		{
 			return msrUtil.setAJAXResponse(request, response, cpOperation);
 		}
 		// Parameters for JSP
 
 		int SELECT_OPTION_VALUE = Constants.SELECT_OPTION_VALUE;
 		boolean readOnlyEmail = false;
-		if (operation.equals(Constants.EDIT)
-				&& pageOf.equals(Constants.PAGE_OF_USER_PROFILE)) {
+		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+		{
 			readOnlyEmail = true;
 		}
 		request.setAttribute("SELECT_OPTION_VALUE", SELECT_OPTION_VALUE);
 		request.setAttribute("Approve", Status.APPROVE_USER_APPROVE_STATUS.toString());
-		request
-				.setAttribute("pageOfApproveUser",
-						Constants.PAGE_OF_APPROVE_USER);
-		request.setAttribute("backPage", Constants.APPROVE_USER_SHOW_ACTION
-				+ "?" + Constants.PAGE_NUMBER + "=" + Constants.START_PAGE);
+		request.setAttribute("pageOfApproveUser", Constants.PAGE_OF_APPROVE_USER);
+		request.setAttribute("backPage", Constants.APPROVE_USER_SHOW_ACTION + "?"
+				+ Constants.PAGE_NUMBER + "=" + Constants.START_PAGE);
 		request.setAttribute("redirectTo", Constants.REQ_PATH);
 		request.setAttribute("addforJSP", Constants.ADD);
 		request.setAttribute("editforJSP", Constants.EDIT);
 		request.setAttribute("searchforJSP", Constants.SEARCH);
 		request.setAttribute("readOnlyEmail", readOnlyEmail);
-		request
-				.setAttribute("pageOfUserProfile",
-						Constants.PAGE_OF_USER_PROFILE);
+		request.setAttribute("pageOfUserProfile", Constants.PAGE_OF_USER_PROFILE);
 		request.setAttribute("pageOfUserAdmin", Constants.PAGE_OF_USER_ADMIN);
 		request.setAttribute("pageOfSignUp", Constants.PAGE_OF_SIGNUP);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("openInCPFrame", openInCPFrame);
 		// ------------- add new
-		logger.debug("USerAction redirect :---------- "+ reqPath  );
-        if(openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
-        	target=Constants.OPEN_PAGE_IN_CPFRAME;
-        return mapping.findForward(target);
-    }
-    
-  
-    private void setUserPrivileges(HttpSession session, long id)
+		logger.debug("USerAction redirect :---------- " + reqPath);
+		if (openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
+			target = Constants.OPEN_PAGE_IN_CPFRAME;
+		return mapping.findForward(target);
+	}
+
+	private void setUserPrivileges(HttpSession session, long id)
 	{
-    	if (id == 0)
-    	{
-    		return;
-    	}
-    	try
-    	{
-    		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-	    	IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
-	    	User user = (User)bizLogic.retrieve(User.class.getName(), id);
-            String role = user.getRoleId();
-            if (role != null && !role.equalsIgnoreCase(Constants.ADMIN_USER))
-            {
-                PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-                // privilegeManager.removePrivilegeCache(user.getLoginName());
-                PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
-                privilegeCache.refresh();
-                Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility.getAllPrivileges(privilegeCache);
-                session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
-            }
-    	}
-    	catch (ApplicationException e) 
-    	{
-    		logger.debug(e.getLogMessage(), e);
+		if (id == 0)
+		{
+			return;
+		}
+		try
+		{
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
+			User user = (User) bizLogic.retrieve(User.class.getName(), id);
+			String role = user.getRoleId();
+			if (role != null && !role.equalsIgnoreCase(Constants.ADMIN_USER))
+			{
+				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+				// privilegeManager.removePrivilegeCache(user.getLoginName());
+				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
+						.getLoginName());
+				privilegeCache.refresh();
+				Map < String , SiteUserRolePrivilegeBean > privilegeMap = CaTissuePrivilegeUtility
+						.getAllPrivileges(privilegeCache);
+				session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
+			}
+		}
+		catch (ApplicationException e)
+		{
+			logger.debug(e.getLogMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -396,9 +412,11 @@ public class UserAction extends SecureAction {
 	 * 
 	 * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)
 	 */
-	protected SessionDataBean getSessionData(HttpServletRequest request) {
+	protected SessionDataBean getSessionData(HttpServletRequest request)
+	{
 		String pageOf = request.getParameter(Constants.PAGE_OF);
-		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
+		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
+		{
 			return super.getSessionData(request);
 		}
 		return new SessionDataBean();

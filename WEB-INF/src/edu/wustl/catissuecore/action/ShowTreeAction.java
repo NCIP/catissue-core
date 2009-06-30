@@ -11,11 +11,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 
 /**
  * This action is for getting the collection protocol and 
@@ -26,11 +23,11 @@ import edu.wustl.common.factory.IFactory;
 public class ShowTreeAction extends BaseAction
 {
 
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//CPSearchForm cpsearchForm = (CPSearchForm) form;
-		String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);		
+		String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 		String participantId = request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID);
 		/**
 		 * Name : Deepti Shelar
@@ -40,27 +37,27 @@ public class ShowTreeAction extends BaseAction
 		 * Description : getting parameters from request and keeping them in seesion to keep the node in tree selected. 
 		 */
 		String isParticipantChanged = request.getParameter("particiantChnaged");
-		if(isParticipantChanged != null && isParticipantChanged.equalsIgnoreCase("true"))
+		if (isParticipantChanged != null && isParticipantChanged.equalsIgnoreCase("true"))
 		{
-			request.getSession().setAttribute("nodeId",null);
+			request.getSession().setAttribute("nodeId", null);
 		}
-		if(request.getParameter("nodeId") != null)
+		if (request.getParameter("nodeId") != null)
 		{
 			String nodeId = request.getParameter("nodeId");
-			if(!nodeId.equalsIgnoreCase("SpecimenCollectionGroup_0"))
-				request.getSession().setAttribute("nodeId",nodeId);
+			if (!nodeId.equalsIgnoreCase("SpecimenCollectionGroup_0"))
+				request.getSession().setAttribute("nodeId", nodeId);
 		}
 		Vector treeData = null;
 		if (cpId != null && participantId != null && !cpId.equals("") && !participantId.equals(""))
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory.getBizLogic(
-					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+			//IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			/*SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory
+					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);*/
 			/**
 			 * Patch Id : FutureSCG_2
 			 * Description : Calling method to create tree for future scgs
 			 */
-			
+
 			//Commented out by Baljeet as not required after Flex realted changes
 			//treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId)); 
 		}
@@ -75,16 +72,15 @@ public class ShowTreeAction extends BaseAction
 		 * Description : getting parameters Name of Collection Protocol Name from request and setting it as attribute
 		 *  
 		 */
-		
+
 		String cpTitle = request.getParameter("cpTitle");
-		
-		if(cpTitle!=null)
+
+		if (cpTitle != null)
 		{
 			HttpSession session = request.getSession();
-			session.setAttribute("cpTitle",cpTitle);
+			session.setAttribute("cpTitle", cpTitle);
 		}
-		
-		
+
 		return mapping.findForward("success");
 	}
 }

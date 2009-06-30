@@ -36,83 +36,94 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
-public class NewSpecimenEventParametersAction  extends SecureAction
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class NewSpecimenEventParametersAction extends SecureAction
 {
-	private transient Logger logger = Logger.getCommonLogger(NewSpecimenEventParametersAction.class);
-    /**
-     * Overrides the execute method of Action class.
-     * Initializes the various fields in Biohazard.jsp Page.
-     * @param mapping object of ActionMapping
+
+	private transient Logger logger = Logger
+			.getCommonLogger(NewSpecimenEventParametersAction.class);
+
+	/**
+	 * Overrides the execute method of Action class.
+	 * Initializes the various fields in Biohazard.jsp Page.
+	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws IOException I/O exception
 	 * @throws ServletException servlet exception
 	 * @return value for ActionForward object
-     */
-    public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
-    {
-//        //Gets the value of the operation parameter.
-//        String operation = request.getParameter(Constants.OPERATION);
-//        
-//        //Sets the operation attribute to be used in the Add/Edit Institute Page. 
-//        request.setAttribute(Constants.OPERATION, operation);
-        try
+	 */
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws IOException,
+			ServletException
+	{
+		//        //Gets the value of the operation parameter.
+		//        String operation = request.getParameter(Constants.OPERATION);
+		//        
+		//        //Sets the operation attribute to be used in the Add/Edit Institute Page. 
+		//        request.setAttribute(Constants.OPERATION, operation);
+		try
 		{
-        	IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-        	IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-	    	
-	    	String identifier = (String)request.getAttribute("specimenIdentifier");
-	    	if(identifier == null)
-	    		identifier = (String)request.getParameter("specimenIdentifier");
-	    	
-	    	Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
-	    	
-	    	if(object !=null)
-	    	{
-	    		Specimen specimen = (Specimen) object;
-	    		
-	    		//Setting Specimen Event Parameters' Grid            
-	            Collection specimenEventCollection = specimen.getSpecimenEventCollection();
-	            
-	            if(specimenEventCollection != null)
-	            {
-	            	List gridData = new ArrayList();
-	            	Iterator it = specimenEventCollection.iterator();
-	            	//int i=1;
-	            	
-	            	while(it.hasNext())
-	            	{
-	            		List rowData = new ArrayList();
-	            		SpecimenEventParameters eventParameters = (SpecimenEventParameters)it.next();
-	            		            		
-	            		if(eventParameters != null)
-	            		{
-	            			String [] events = EventsUtil.getEvent(eventParameters);
-	            			rowData.add(String.valueOf(eventParameters.getId()));
-	            			rowData.add(events[0]);//Event Name
-	            			            			
-	            			User user = eventParameters.getUser();
-	            			rowData.add(user.getLastName() + ", " + user.getFirstName());
-	            			rowData.add(edu.wustl.common.util.Utility.parseDateToString(eventParameters.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern()));
-	            			rowData.add(events[1]);//pageOf
-	            			gridData.add(rowData);
-	            		}
-	            	}
-	            	
-	            	request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST,gridData);
-	            }
-	    	}
-	    	
-	    	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+
+			String identifier = (String) request.getAttribute("specimenIdentifier");
+			if (identifier == null)
+				identifier = (String) request.getParameter("specimenIdentifier");
+
+			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
+
+			if (object != null)
+			{
+				Specimen specimen = (Specimen) object;
+
+				//Setting Specimen Event Parameters' Grid            
+				Collection specimenEventCollection = specimen.getSpecimenEventCollection();
+
+				if (specimenEventCollection != null)
+				{
+					List gridData = new ArrayList();
+					Iterator it = specimenEventCollection.iterator();
+					//int i=1;
+
+					while (it.hasNext())
+					{
+						List rowData = new ArrayList();
+						SpecimenEventParameters eventParameters = (SpecimenEventParameters) it
+								.next();
+
+						if (eventParameters != null)
+						{
+							String[] events = EventsUtil.getEvent(eventParameters);
+							rowData.add(String.valueOf(eventParameters.getId()));
+							rowData.add(events[0]);//Event Name
+
+							User user = eventParameters.getUser();
+							rowData.add(user.getLastName() + ", " + user.getFirstName());
+							rowData.add(edu.wustl.common.util.Utility.parseDateToString(
+									eventParameters.getTimestamp(), CommonServiceLocator
+											.getInstance().getDatePattern()));
+							rowData.add(events[1]);//pageOf
+							gridData.add(rowData);
+						}
+					}
+
+					request.setAttribute(
+							edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST, gridData);
+				}
+			}
+
+			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		}
-        catch(Exception e)
+		catch (Exception e)
 		{
-        	logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 		}
-    	
-        return mapping.findForward((String)request.getParameter(Constants.PAGE_OF));
-    }
+
+		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+	}
 }
