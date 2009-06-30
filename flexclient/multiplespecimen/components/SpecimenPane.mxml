@@ -363,7 +363,7 @@
 	
 		<components:MyCanvas>
 			<mx:HBox>
-				<mx:TextInput id="spQuantity" width="50" restrict="[0-9]."/>
+				<mx:TextInput id="spQuantity" width="50" restrict="[0-9].e"/>
 				<mx:Label text="{spData.unit}"/>
 			</mx:HBox>
 		</components:MyCanvas>
