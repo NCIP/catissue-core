@@ -23,6 +23,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 public class ExternalIdentifier extends AbstractDomainObject
 {
+
 	/**
 	 * Serial Version ID.
 	 */

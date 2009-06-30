@@ -14,7 +14,6 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-
 /**
  * A department to which a User belongs to.
  *  * @hibernate.class table="CATISSUE_DEPARTMENT"
@@ -22,6 +21,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 
 public class Department extends AbstractDomainObject implements java.io.Serializable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

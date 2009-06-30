@@ -27,13 +27,13 @@ import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.simplequery.query.ShoppingCart;
 
-
 /**
  * DomainObjectFactory is a factory for instances of various domain objects.
  * @author gautam_shetty
  */
 public class DomainObjectFactory implements IDomainObjectFactory
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -209,7 +209,7 @@ public class DomainObjectFactory implements IDomainObjectFactory
 			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID :
 				className = ShipmentRequest.class.getName();
 				break;
-			default:
+			default :
 
 		}
 		return className;
@@ -222,8 +222,8 @@ public class DomainObjectFactory implements IDomainObjectFactory
 	 * @return an AbstractDomain object copy of the form bean object.
 	 * @throws AssignDataException AssignDataException.
 	 */
-	public AbstractDomainObject getDomainObject(int FORM_TYPE, AbstractActionForm
-			form) throws AssignDataException
+	public AbstractDomainObject getDomainObject(int FORM_TYPE, AbstractActionForm form)
+			throws AssignDataException
 	{
 		AbstractDomainObject abstractDomain = null;
 		switch (FORM_TYPE)

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.container.cache;
 
 /**
@@ -10,17 +11,18 @@ package edu.wustl.catissuecore.container.cache;
  */
 public class ContainerNameIdKey implements IContainerCacheKey
 {
+
 	Long containerId;
 	String containerName;
-	private static ContainerNameIdKeyVsContCacheMap containerNameIdKeyVsContCacheMap = (ContainerNameIdKeyVsContCacheMap)ContainerNameIdKeyVsContCacheMap.getInstance(); 
-	
-	
-	public ContainerNameIdKey(Long containerId,	String containerName)
+	private static ContainerNameIdKeyVsContCacheMap containerNameIdKeyVsContCacheMap = (ContainerNameIdKeyVsContCacheMap) ContainerNameIdKeyVsContCacheMap
+			.getInstance();
+
+	public ContainerNameIdKey(Long containerId, String containerName)
 	{
 		this.containerId = containerId;
 		this.containerName = containerName;
 	}
-	
+
 	/**
 	 * @return the containerId
 	 */
@@ -28,7 +30,7 @@ public class ContainerNameIdKey implements IContainerCacheKey
 	{
 		return containerId;
 	}
-	
+
 	/**
 	 * @param containerId the containerId to set
 	 */
@@ -36,7 +38,7 @@ public class ContainerNameIdKey implements IContainerCacheKey
 	{
 		this.containerId = containerId;
 	}
-	
+
 	/**
 	 * @return the containerName
 	 */
@@ -44,7 +46,7 @@ public class ContainerNameIdKey implements IContainerCacheKey
 	{
 		return containerName;
 	}
-	
+
 	/**
 	 * @param containerName the containerName to set
 	 */
@@ -69,22 +71,24 @@ public class ContainerNameIdKey implements IContainerCacheKey
 	public boolean equals(Object obj)
 	{
 		boolean returnValue = false;
-		if(obj instanceof ContainerNameIdKey)
+		if (obj instanceof ContainerNameIdKey)
 		{
-			ContainerNameIdKey key = (ContainerNameIdKey)obj;
-			if((key.getContainerId() != null && (key.getContainerId().intValue() == containerId.intValue() || (key.getContainerName() != null && key.getContainerName().equalsIgnoreCase(containerName)))) 
-					|| (key.getContainerName() != null && key.getContainerName().equalsIgnoreCase(containerName)))
+			ContainerNameIdKey key = (ContainerNameIdKey) obj;
+			if ((key.getContainerId() != null && (key.getContainerId().intValue() == containerId
+					.intValue() || (key.getContainerName() != null && key.getContainerName()
+					.equalsIgnoreCase(containerName))))
+					|| (key.getContainerName() != null && key.getContainerName().equalsIgnoreCase(
+							containerName)))
 			{
-				returnValue=true;
+				returnValue = true;
 			}
-		}	
+		}
 		return returnValue;
 	}
 
-	
-	public IContainerMap getCorrespondingContainerMap() 
+	public IContainerMap getCorrespondingContainerMap()
 	{
 		return containerNameIdKeyVsContCacheMap;
 	}
-	
+
 }

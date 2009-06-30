@@ -25,8 +25,11 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
-public class EmbeddedEventParameters extends SpecimenEventParameters implements java.io.Serializable
+public class EmbeddedEventParameters extends SpecimenEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */

@@ -23,56 +23,57 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CellSpecimen extends Specimen implements Serializable
 {
+
 	/**
 	 * Serial Version ID of the class.
 	 */
-    private static final long serialVersionUID = 1234567890L;
+	private static final long serialVersionUID = 1234567890L;
 
-    /**
-     * logger Logger - Generic logger.
-     */
-    private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimen.class);
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimen.class);
 
-    /**
-     * Default Constructor.
-     */
-    public CellSpecimen()
-    {
-    	super();
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public CellSpecimen()
+	{
+		super();
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param form AbstractActionForm.
-     */
-    public CellSpecimen(AbstractActionForm form)
-    {
-    	super();
-    	setAllValues(form);
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param form AbstractActionForm.
+	 */
+	public CellSpecimen(AbstractActionForm form)
+	{
+		super();
+		setAllValues(form);
+	}
 
-    /**
-     * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
-     * @param abstractForm - siteForm An SiteForm object containing the information about the site.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	super.setAllValues(abstractForm);
-        }
-        catch (Exception excp)
-        {
-        	logger.error(excp.getMessage(),excp);
-        }
-    }
+	/**
+	 * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
+	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			super.setAllValues(abstractForm);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage(), excp);
+		}
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param cellReqSpecimen of type SpecimenRequirement.
-     */
-    public CellSpecimen(SpecimenRequirement cellReqSpecimen)
-    {
-    	super(cellReqSpecimen);
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param cellReqSpecimen of type SpecimenRequirement.
+	 */
+	public CellSpecimen(SpecimenRequirement cellReqSpecimen)
+	{
+		super(cellReqSpecimen);
+	}
 }

@@ -30,8 +30,11 @@ import edu.wustl.common.util.logger.Logger;
  * @author aniruddha_phadnis
  */
 public abstract class SpecimenEventParameters extends AbstractDomainObject
-	implements java.io.Serializable, Cloneable
+		implements
+			java.io.Serializable,
+			Cloneable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -219,10 +222,9 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		{
 			specimen = new Specimen();
 		}
-		SpecimenEventParametersForm specimenEventParametersForm =
-			(SpecimenEventParametersForm) abstractForm;
-		logger.debug("specimenEventParametersForm.getSpecimenId()" +
-			"............................." + specimenEventParametersForm.getSpecimenId());
+		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
+		logger.debug("specimenEventParametersForm.getSpecimenId()"
+				+ "............................." + specimenEventParametersForm.getSpecimenId());
 		if (specimen != null)
 		{
 			specimen.setId(Long.valueOf(specimenEventParametersForm.getSpecimenId()));
@@ -239,8 +241,8 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		Date date;
 		try
 		{
-			date = Utility.parseDate(form.getDateOfEvent(),
-					Utility.datePattern(form.getDateOfEvent()));
+			date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form
+					.getDateOfEvent()));
 			calendar.setTime(date);
 			this.timestamp = calendar.getTime();
 			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
@@ -251,7 +253,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		{
 			Logger.out.error(excp.getMessage(), excp);
 			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"SpecimenEventParameters.java :");
+			throw new AssignDataException(errorKey, null, "SpecimenEventParameters.java :");
 		}
 	}
 

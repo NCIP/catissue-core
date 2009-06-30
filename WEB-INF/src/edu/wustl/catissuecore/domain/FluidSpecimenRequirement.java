@@ -21,10 +21,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FluidSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FluidSpecimenRequirement.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(FluidSpecimenRequirement.class);
 
 	/**
 	 * Serial Version ID.

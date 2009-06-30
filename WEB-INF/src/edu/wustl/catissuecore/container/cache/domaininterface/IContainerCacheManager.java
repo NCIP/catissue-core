@@ -6,14 +6,15 @@
  * @author ashish_gupta
  * @version 1.00
  */
+
 package edu.wustl.catissuecore.container.cache.domaininterface;
+
 import java.io.Serializable;
 import java.util.List;
 
 import edu.wustl.catissuecore.container.cache.ContainerCache;
 import edu.wustl.catissuecore.container.cache.ContainerNameIdKey;
 import edu.wustl.catissuecore.container.cache.ContainerPositionDetails;
-
 
 public interface IContainerCacheManager extends Serializable
 {
@@ -23,8 +24,7 @@ public interface IContainerCacheManager extends Serializable
 	 * @param xPosition - The x- position to be added
 	 * @param yPosition - The y - position to be added
 	 */
-	
-	
+
 	public void addPosition(Long containerId, int xPosition, int yPosition);
 
 	/**
@@ -41,8 +41,8 @@ public interface IContainerCacheManager extends Serializable
 	 * @param count
 	 * @return
 	 */
-	public List<ContainerPositionDetails> getContainerFreePositions(Long cpId, String specimenClass, Long userId,
-			int count);
+	public List<ContainerPositionDetails> getContainerFreePositions(Long cpId,
+			String specimenClass, Long userId, int count);
 
 	/**
 	 * @return
@@ -91,17 +91,20 @@ public interface IContainerCacheManager extends Serializable
 	 * 
 	 */
 	public void loadCache();
+
 	/**
 	 * 
 	 */
 	public void initialize();
-	
-//	public void addContainerToCache(Long cpId, Long userId, String spClass, List<ContainerPositionDetails> containerPositionDetailsList);		
-//	public void addStorageContainerInMaps(StorageContainer storageCont, boolean isNew);
-//	public void updateStoragePositions();	
-// 	public void addStorageContainerInMaps(IContainerCacheKey key, ContainerCache value) throws Exception;
+
+	//	public void addContainerToCache(Long cpId, Long userId, String spClass, List<ContainerPositionDetails> containerPositionDetailsList);		
+	//	public void addStorageContainerInMaps(StorageContainer storageCont, boolean isNew);
+	//	public void updateStoragePositions();	
+	// 	public void addStorageContainerInMaps(IContainerCacheKey key, ContainerCache value) throws Exception;
 
 	public void removeStorageContainer(ContainerNameIdKey nameIdKey);
+
 	public void removeStorageContainer(Long containerId);
+
 	public void removeStorageContainer(String containerName);
 }

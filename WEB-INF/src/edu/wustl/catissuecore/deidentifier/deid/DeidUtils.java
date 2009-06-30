@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.deidentifier.deid;
 
 import java.text.DateFormat;
@@ -12,7 +13,6 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * This class provides various utility methods which helps for the deidentification process
  * @author vijay_pande
@@ -21,6 +21,7 @@ public class DeidUtils
 {
 
 	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
+
 	/**
 	 * This mathod takes the identified report, its participant and converts 
 	 * all the information into an appropriate xml document
@@ -29,11 +30,12 @@ public class DeidUtils
 	 * @param sprText sysnthesized text
 	 * @return Elelment which contains other all the report element as childnodes
 	 */
-	protected static Element buildReportElement(final Participant participant, final IdentifiedSurgicalPathologyReport ispr, String sprText) 
+	protected static Element buildReportElement(final Participant participant,
+			final IdentifiedSurgicalPathologyReport ispr, String sprText)
 	{
 		Element reportElement = null;
-		String mrn="";
-		try 
+		String mrn = "";
+		try
 		{
 			// create element as REPORT
 			reportElement = new Element(CaTIESConstants.REPORT);
@@ -47,23 +49,28 @@ public class DeidUtils
 
 			// create report header
 			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
-			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_NAME, participant.getLastName()+","+participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
+			reportHeaderElement.addContent(buildHeaderPersonElement(
+					CaTIESConstants.PARTICIPANT_NAME, participant.getLastName() + ","
+							+ participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
-			
-			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection=participant.getParticipantMedicalIdentifierCollection();
+
+			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
+					.getParticipantMedicalIdentifierCollection();
 			//iterate over participant medical identifier collection
-			for(ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
+			for (ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
 			{
-				mrn+=" ";
-				mrn+=participantMedicalIdentifier.getMedicalRecordNumber();
+				mrn += " ";
+				mrn += participantMedicalIdentifier.getMedicalRecordNumber();
 			}
 			// add above processed collection string to header element
-			reportHeaderElement.addContent(buildHeaderPersonElement(CaTIESConstants.PARTICIPANT_MRN, mrn, CaTIESConstants.PARTICIPANT_ROLE));
-			
+			reportHeaderElement.addContent(buildHeaderPersonElement(
+					CaTIESConstants.PARTICIPANT_MRN, mrn, CaTIESConstants.PARTICIPANT_ROLE));
+
 			// create and report text to textElement
 			Element reportTextElement = new Element(CaTIESConstants.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);
-			sprText += "\n||-"+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
+			sprText += "\n||-"
+					+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
 			CDATA reportCDATA = new CDATA(sprText);
 			reportTextElement.addContent(reportCDATA);
 
@@ -76,13 +83,12 @@ public class DeidUtils
 			// add report text element to root element
 			reportElement.addContent(reportTextElement);
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
-			logger.error("Error in buildReportElement method for DeID",ex);
+			logger.error("Error in buildReportElement method for DeID", ex);
 		}
 		return reportElement;
 	}
-
 
 	/**
 	 * This method converts the raw input information about participant into XML format
@@ -92,8 +98,9 @@ public class DeidUtils
 	 * @return Elelment which contains input information 
 	 * @throws Exception a generic exception occured while creating person element
 	 */
-	
-	protected static Element buildHeaderPersonElement(final String variable, final String value, final String role) throws Exception
+
+	protected static Element buildHeaderPersonElement(final String variable, final String value,
+			final String role) throws Exception
 	{
 		Element headerPersonElement = null;
 		// create element person
@@ -112,7 +119,7 @@ public class DeidUtils
 		headerPersonElement.addContent(variableElement);
 		// add value element to person element
 		headerPersonElement.addContent(valueElement);
-		
+
 		return headerPersonElement;
 	}
 
@@ -123,8 +130,9 @@ public class DeidUtils
 	 * @return Elelemnt that contains header data element
 	 * @throws Exception a generic exception occured while creating data element
 	 */
-	
-	protected static Element buildHeaderDataElement(final String variable, final String value) throws Exception
+
+	protected static Element buildHeaderDataElement(final String variable, final String value)
+			throws Exception
 	{
 		Element headerDataElement = null;
 		// create element data
@@ -141,7 +149,7 @@ public class DeidUtils
 		headerDataElement.addContent(variableElement);
 		// add value element to data element
 		headerDataElement.addContent(valueElement);
-		
+
 		return headerDataElement;
 
 	}
@@ -151,19 +159,19 @@ public class DeidUtils
 	 * @param sprText synthesized text
 	 * @return text without ellegal XML characters
 	 */
-	public static String removeIllegalXmlCharacters(String sprText) 
+	public static String removeIllegalXmlCharacters(String sprText)
 	{
 		// illegal XML character
-		char illegalChar=0x1d;
+		char illegalChar = 0x1d;
 		String result = sprText;
-		try 
+		try
 		{
 			StringBuffer sb = new StringBuffer(sprText);
 			// loop to check each character
-			for (int idx = 0; idx < sb.length(); idx++) 
+			for (int idx = 0; idx < sb.length(); idx++)
 			{
 				// check for illegal character
-				if (sb.charAt(idx) == illegalChar) 
+				if (sb.charAt(idx) == illegalChar)
 				{
 					logger.error("Found bad character.");
 					sb.setCharAt(idx, ' ');
@@ -171,9 +179,9 @@ public class DeidUtils
 			}
 			result = sb.toString();
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
-			logger.error("Error in removeIllegalXmlCharacters method",ex);
+			logger.error("Error in removeIllegalXmlCharacters method", ex);
 		}
 
 		return result;

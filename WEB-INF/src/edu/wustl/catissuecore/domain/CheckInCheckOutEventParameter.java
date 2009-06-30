@@ -22,12 +22,15 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class CheckInCheckOutEventParameter extends SpecimenEventParameters
-		implements java.io.Serializable
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CheckInCheckOutEventParameter.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(CheckInCheckOutEventParameter.class);
 	/**
 	 * Serial Version Id of the class.
 	 */
@@ -72,28 +75,28 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject)abstractForm);
+		setAllValues((IValueObject) abstractForm);
 	}
 
 	/**
-     * This function Copies the data from an CheckInCheckOutEventParameterForm object to a
-     * CheckInCheckOutEventParameter object.
-     * @param abstractForm - checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object
-     * containing the information about the CheckInCheckOutEventParameter.
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-//        	//call to event parameters setallvalue method
-//        	super.setAllValues(abstractForm);
-        	CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
-            this.storageStatus = form.getStorageStatus();
-           	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage());
-        }
-    }
+	 * This function Copies the data from an CheckInCheckOutEventParameterForm object to a
+	 * CheckInCheckOutEventParameter object.
+	 * @param abstractForm - checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object
+	 * containing the information about the CheckInCheckOutEventParameter.
+	 */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			//        	//call to event parameters setallvalue method
+			//        	super.setAllValues(abstractForm);
+			CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
+			this.storageStatus = form.getStorageStatus();
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 }

@@ -22,12 +22,16 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
-public class MolecularSpecimenReviewParameters extends ReviewEventParameters implements java.io.Serializable
+public class MolecularSpecimenReviewParameters extends ReviewEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(MolecularSpecimenReviewParameters.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(MolecularSpecimenReviewParameters.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -255,8 +259,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters imp
 	{
 		try
 		{
-			MolecularSpecimenReviewParametersForm form =
-				(MolecularSpecimenReviewParametersForm) abstractForm;
+			MolecularSpecimenReviewParametersForm form = (MolecularSpecimenReviewParametersForm) abstractForm;
 			this.gelImageURL = Utility.toString(form.getGelImageURL());
 			this.qualityIndex = Utility.toString(form.getQualityIndex());
 			this.laneNumber = Utility.toString(form.getLaneNumber());

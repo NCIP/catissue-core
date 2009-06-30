@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.common.actionForm.IValueObject;
@@ -11,6 +12,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ClinicalStudyEventEntry extends AbstractDomainObject
 {
+
 	/**
 	 * Serial Version Id of the class.
 	 */
@@ -29,10 +31,10 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	protected Long id;
 
 	/**
-     * @return the entryNumber
-     * @hibernate.property name="entryNumber" column="ENTRY_NUMBER" type="int"
-     * length="10"
-     */
+	 * @return the entryNumber
+	 * @hibernate.property name="entryNumber" column="ENTRY_NUMBER" type="int"
+	 * length="10"
+	 */
 	public Integer getEntryNumber()
 	{
 		return entryNumber;
@@ -47,11 +49,11 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	}
 
 	/**
-     * @return the clinicalStudyEvent
-     * @hibernate.many-to-one column="CLINICAL_STUDY_EVENT_ID"
-     * class="edu.wustl.catissuecore.domain.ClinicalStudyEvent"
-     * constrained="true"
-     */
+	 * @return the clinicalStudyEvent
+	 * @hibernate.many-to-one column="CLINICAL_STUDY_EVENT_ID"
+	 * class="edu.wustl.catissuecore.domain.ClinicalStudyEvent"
+	 * constrained="true"
+	 */
 	public ClinicalStudyEvent getClinicalStudyEvent()
 	{
 		return clinicalStudyEvent;
@@ -66,11 +68,11 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	}
 
 	/**
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_STUDY_EVENT_ENTRY_SEQ"
-     * @return identifier.
-     */
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_STUDY_EVENT_ENTRY_SEQ"
+	 * @return identifier.
+	 */
 	public Long getId()
 	{
 		return id;
@@ -91,8 +93,8 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	 * @param ivalueObject of type IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
-    public void setAllValues(IValueObject ivalueObject) throws AssignDataException
-    {
-    	//
-    }
+	public void setAllValues(IValueObject ivalueObject) throws AssignDataException
+	{
+		//
+	}
 }

@@ -22,13 +22,16 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
-public class TissueSpecimenReviewEventParameters extends ReviewEventParameters implements java.io.Serializable
+public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger
-		(TissueSpecimenReviewEventParameters.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(TissueSpecimenReviewEventParameters.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -202,27 +205,26 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters i
 		String nullString = null;
 		try
 		{
-			TissueSpecimenReviewEventParametersForm form =
-				(TissueSpecimenReviewEventParametersForm)abstractForm;
+			TissueSpecimenReviewEventParametersForm form = (TissueSpecimenReviewEventParametersForm) abstractForm;
 
-			if (form.getNeoplasticCellularityPercentage() != null &&
-					form.getNeoplasticCellularityPercentage().trim().length() > 0)
+			if (form.getNeoplasticCellularityPercentage() != null
+					&& form.getNeoplasticCellularityPercentage().trim().length() > 0)
 			{
-				this.neoplasticCellularityPercentage = new Double(
-						form.getNeoplasticCellularityPercentage());
+				this.neoplasticCellularityPercentage = new Double(form
+						.getNeoplasticCellularityPercentage());
 			}
-			if (form.getNecrosisPercentage() != null &&
-					form.getNecrosisPercentage().trim().length() > 0)
+			if (form.getNecrosisPercentage() != null
+					&& form.getNecrosisPercentage().trim().length() > 0)
 			{
 				this.necrosisPercentage = new Double(form.getNecrosisPercentage());
 			}
-			if (form.getTotalCellularityPercentage() != null &&
-					form.getTotalCellularityPercentage().trim().length() > 0)
+			if (form.getTotalCellularityPercentage() != null
+					&& form.getTotalCellularityPercentage().trim().length() > 0)
 			{
 				this.totalCellularityPercentage = new Double(form.getTotalCellularityPercentage());
 			}
-			if (form.getLymphocyticPercentage() != null &&
-					form.getLymphocyticPercentage().trim().length() > 0)
+			if (form.getLymphocyticPercentage() != null
+					&& form.getLymphocyticPercentage().trim().length() > 0)
 			{
 				this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
 			}

@@ -26,6 +26,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Site extends AbstractDomainObject implements java.io.Serializable, IActivityStatus
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -106,7 +107,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 		this.id = Long.valueOf(site.getId().longValue());
 		this.name = site.getName();
 		this.assignedSiteUserCollection = null;
-		this.collectionProtocolCollection=null;
+		this.collectionProtocolCollection = null;
 		this.abstractSpecimenCollectionGroupCollection = null;
 		this.coordinator = null;
 		this.address = null;
@@ -342,8 +343,8 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * Set AbstractSpecimenCollectionGroupCollection.
 	 * @param abstractSpecimenCollectionGroupCollection Collection.
 	 */
-	public void setAbstractSpecimenCollectionGroupCollection(Collection<AbstractSpecimenCollectionGroup>
-		abstractSpecimenCollectionGroupCollection)
+	public void setAbstractSpecimenCollectionGroupCollection(
+			Collection<AbstractSpecimenCollectionGroup> abstractSpecimenCollectionGroupCollection)
 	{
 		this.abstractSpecimenCollectionGroupCollection = abstractSpecimenCollectionGroupCollection;
 	}
@@ -365,7 +366,8 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * Set CollectionProtocolCollection.
 	 * @param collectionProtocolCollection Collection of CollectionProtocol.
 	 */
-	public void setCollectionProtocolCollection(Collection<CollectionProtocol> collectionProtocolCollection)
+	public void setCollectionProtocolCollection(
+			Collection<CollectionProtocol> collectionProtocolCollection)
 	{
 		this.collectionProtocolCollection = collectionProtocolCollection;
 	}

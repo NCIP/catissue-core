@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 /**
@@ -7,7 +8,7 @@ package edu.wustl.catissuecore.domain.pathology;
  * @hibernate.joined-subclass-key
  * column="IDENTIFIER"
  */
- 
+
 public class XMLContent extends ReportContent
 {
 
@@ -23,6 +24,7 @@ public class XMLContent extends ReportContent
 	{
 
 	}
+
 	/**		
 	 *  @return surgical pathology report of current binary data.
 	 * 	@hibernate.many-to-one name="surgicalPathologyReport"
@@ -33,12 +35,12 @@ public class XMLContent extends ReportContent
 	{
 		return surgicalPathologyReport;
 	}
+
 	/**
 	 * @param surgicalPathologyReport sets the surgical pathology report of current binary content.  
 	 * 
 	 */
-	public void setSurgicalPathologyReport(
-			SurgicalPathologyReport surgicalPathologyReport)
+	public void setSurgicalPathologyReport(SurgicalPathologyReport surgicalPathologyReport)
 	{
 		this.surgicalPathologyReport = surgicalPathologyReport;
 	}

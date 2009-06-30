@@ -23,6 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FrozenEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */

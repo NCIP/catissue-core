@@ -20,6 +20,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class Capacity extends AbstractDomainObject
 {
+
 	/**
 	 * Serial Version Id of the class.
 	 */
@@ -57,72 +58,71 @@ public class Capacity extends AbstractDomainObject
 	}
 
 	/**
-     * @see edu.wustl.common.domain.AbstractDomainObject#getId()
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_CAPACITY_SEQ"
-     * @return Long identifier;
-     */
-    public Long getId()
-    {
-        return this.id;
-    }
+	 * @see edu.wustl.common.domain.AbstractDomainObject#getId()
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CAPACITY_SEQ"
+	 * @return Long identifier;
+	 */
+	public Long getId()
+	{
+		return this.id;
+	}
 
 	/**
-     * (non-Javadoc).
-     * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
-     * @param identifier Identifier.
-     */
-    public void setId(Long identifier)
-    {
-        this.id = identifier;
-    }
+	 * (non-Javadoc).
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
+	 * @param identifier Identifier.
+	 */
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
+	}
 
-    /**
-     * @return Returns the oneDimensionCapacity.
-     * @hibernate.property name="oneDimensionCapacity" type="int"
-     * column="ONE_DIMENSION_CAPACITY" length="30"
-     */
-    public Integer getOneDimensionCapacity()
-    {
-        return oneDimensionCapacity;
-    }
+	/**
+	 * @return Returns the oneDimensionCapacity.
+	 * @hibernate.property name="oneDimensionCapacity" type="int"
+	 * column="ONE_DIMENSION_CAPACITY" length="30"
+	 */
+	public Integer getOneDimensionCapacity()
+	{
+		return oneDimensionCapacity;
+	}
 
-    /**
-     * @param oneDimensionCapacity The oneDimensionCapacity to set.
-     */
-    public void setOneDimensionCapacity(Integer oneDimensionCapacity)
-    {
-        this.oneDimensionCapacity = oneDimensionCapacity;
-    }
+	/**
+	 * @param oneDimensionCapacity The oneDimensionCapacity to set.
+	 */
+	public void setOneDimensionCapacity(Integer oneDimensionCapacity)
+	{
+		this.oneDimensionCapacity = oneDimensionCapacity;
+	}
 
-    /**
-     * @return Returns the twoDimensionCapacity.
-     * @hibernate.property name="twoDimensionCapacity" type="int"
-     * column="TWO_DIMENSION_CAPACITY" length="30"
-     */
-    public Integer getTwoDimensionCapacity()
-    {
-        return twoDimensionCapacity;
-    }
+	/**
+	 * @return Returns the twoDimensionCapacity.
+	 * @hibernate.property name="twoDimensionCapacity" type="int"
+	 * column="TWO_DIMENSION_CAPACITY" length="30"
+	 */
+	public Integer getTwoDimensionCapacity()
+	{
+		return twoDimensionCapacity;
+	}
 
-    /**
-     * @param twoDimensionCapacity The twoDimensionCapacity to set.
-     */
-    public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
-    {
-        this.twoDimensionCapacity = twoDimensionCapacity;
-    }
+	/**
+	 * @param twoDimensionCapacity The twoDimensionCapacity to set.
+	 */
+	public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
+	{
+		this.twoDimensionCapacity = twoDimensionCapacity;
+	}
 
-    /** (non-Javadoc).
-     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues
-     * (edu.wustl.common.actionForm.AbstractActionForm)
-     * @param ivalueObject IValueObject.
-     * @throws AssignDataException assignDataException.
-     */
-    public void setAllValues(IValueObject ivalueObject)
-            throws AssignDataException
-    {
-    	//
-    }
+	/** (non-Javadoc).
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues
+	 * (edu.wustl.common.actionForm.AbstractActionForm)
+	 * @param ivalueObject IValueObject.
+	 * @throws AssignDataException assignDataException.
+	 */
+	public void setAllValues(IValueObject ivalueObject) throws AssignDataException
+	{
+		//
+	}
 }

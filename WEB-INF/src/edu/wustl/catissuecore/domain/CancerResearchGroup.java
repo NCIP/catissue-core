@@ -24,6 +24,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class CancerResearchGroup extends AbstractDomainObject implements Serializable
 {
+
 	/**
 	 * Serial Id for class.
 	 */
@@ -99,24 +100,24 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 		this.name = name;
 	}
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
-     * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
+	 * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
 	/**
 	 * Set all values on the form object.
 	 * @param abstractForm IValueObject.
 	 */
-    public void setAllValues(IValueObject abstractForm)
-    {
-    	final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
+	public void setAllValues(IValueObject abstractForm)
+	{
+		final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) abstractForm;
 		this.name = cancerResearchGroupForm.getName().trim();
-    }
+	}
 
-    /**
-     * Returns message label to display on success add or edit.
-     * @return String type label.
-     */
+	/**
+	 * Returns message label to display on success add or edit.
+	 * @return String type label.
+	 */
 	public String getMessageLabel()
 	{
 		return this.name;

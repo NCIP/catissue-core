@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on March 07,2007
  */
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.IValueObject;
@@ -25,37 +26,37 @@ public class ConceptReferent extends AbstractDomainObject
 	 * End offset of the concept in the report.
 	 */
 	protected Long endOffset;
-	
+
 	/**
 	 * system generated unique id.
 	 */
 	protected Long id;
-	
+
 	/**
 	 * modifier flag. 
 	 */
 	protected Boolean isModifier;
-	
+
 	/**
 	 * The concept is negated one or not. 
 	 */
 	protected Boolean isNegated;
-	
+
 	/**
 	 * start offset of the concept in the report.
 	 */
 	protected Long startOffset;
-	
+
 	/**
 	 * concept associated with the report.
 	 */
 	protected Concept concept;
-	
+
 	/**
 	 * Concept referent classification associated with the current concept referent.
 	 */
 	protected ConceptReferentClassification conceptReferentClassification;
-	
+
 	/**
 	 * Deidentified report of the current concept referent.
 	 */
@@ -104,7 +105,6 @@ public class ConceptReferent extends AbstractDomainObject
 		this.conceptReferentClassification = conceptReferentClassification;
 	}
 
-	
 	/**	
 	 * @return deidentified report associated with the concept referent. 
 	 * @hibernate.many-to-one  name="deidentifiedSurgicalPathologyReport"
@@ -143,11 +143,11 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-    * @return system generated id for concept referent
-    * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-    * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_REFERENT_SEQ"
-    */
+	* @return system generated id for concept referent
+	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	* unsaved-value="null" generator-class="native" 
+	* @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_REFERENT_SEQ"
+	*/
 	public Long getId()
 	{
 		return id;
@@ -212,11 +212,10 @@ public class ConceptReferent extends AbstractDomainObject
 		this.startOffset = startOffset;
 	}
 
-
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

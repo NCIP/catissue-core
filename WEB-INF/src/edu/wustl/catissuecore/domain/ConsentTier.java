@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on November 21,2006
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ConsentTier extends AbstractDomainObject implements Serializable
 {
+
 	/**
 	 * Serial Version ID of the class.
 	 */
@@ -30,9 +32,10 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 	protected String statement;
 
 	/**
-     * System generated unique id.
-     */
-    protected Long id;
+	 * System generated unique id.
+	 */
+	protected Long id;
+
 	/**
 	 * @return the statement
 	 * @hibernate.property name="statement" type="string" length="500" column="STATEMENT"
@@ -95,7 +98,7 @@ public class ConsentTier extends AbstractDomainObject implements Serializable
 	public ConsentTier(ConsentTier consentTier)
 	{
 		super();
-		if(consentTier.getId() != null && consentTier.getId().toString().trim().length() > 0)
+		if (consentTier.getId() != null && consentTier.getId().toString().trim().length() > 0)
 		{
 			this.id = consentTier.getId();
 		}

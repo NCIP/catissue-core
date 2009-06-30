@@ -14,6 +14,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ContainerType extends AbstractDomainObject
 {
+
 	/**
 	 * Serial Version ID.
 	 */

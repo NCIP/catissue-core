@@ -7,10 +7,8 @@
  * @version 1.00
  * Created on October 16,2006
  */
+
 package edu.wustl.catissuecore.domain;
-
-
-
 
 /**
  * This is abstract class indicating biospecimen order items(both existing and new specimens).
@@ -18,6 +16,7 @@ package edu.wustl.catissuecore.domain;
  */
 public class SpecimenOrderItem extends OrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

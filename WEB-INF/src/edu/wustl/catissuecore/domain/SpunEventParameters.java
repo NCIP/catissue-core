@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Apr 7, 2005
  */
+
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
@@ -22,6 +23,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpunEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -32,54 +34,54 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * Rotational force applied to specimen.
-     */
+	 * Rotational force applied to specimen.
+	 */
 	protected Double gravityForce;
 
 	/**
-     * Duration for which specimen is spun.
-     */
+	 * Duration for which specimen is spun.
+	 */
 	protected Integer durationInMinutes;
 
 	/**
-     * Returns the rotational force applied to specimen.
-     * @return The rotational force applied to specimen.
-     * @see #setGravityForce(Double)
-     * @hibernate.property name="gravityForce" type="double"
-     * column="GFORCE" length="30"
-     */
+	 * Returns the rotational force applied to specimen.
+	 * @return The rotational force applied to specimen.
+	 * @see #setGravityForce(Double)
+	 * @hibernate.property name="gravityForce" type="double"
+	 * column="GFORCE" length="30"
+	 */
 	public Double getGravityForce()
 	{
 		return gravityForce;
 	}
 
 	/**
-     * Sets the rotational force applied to specimen.
-     * @param gravityForce - gForce the rotational force applied to specimen.
-     * @see #getGravityForce()
-     */
+	 * Sets the rotational force applied to specimen.
+	 * @param gravityForce - gForce the rotational force applied to specimen.
+	 * @see #getGravityForce()
+	 */
 	public void setGravityForce(Double gravityForce)
 	{
 		this.gravityForce = gravityForce;
 	}
 
 	/**
-     * Returns duration for which specimen is spun.
-     * @return Duration for which specimen is spun.
-     * @see #setDurationInMinutes(Integer)
-     * @hibernate.property name="durationInMinutes" type="int"
-     * column="DURATION_IN_MINUTES" length="30"
-     */
+	 * Returns duration for which specimen is spun.
+	 * @return Duration for which specimen is spun.
+	 * @see #setDurationInMinutes(Integer)
+	 * @hibernate.property name="durationInMinutes" type="int"
+	 * column="DURATION_IN_MINUTES" length="30"
+	 */
 	public Integer getDurationInMinutes()
 	{
 		return durationInMinutes;
 	}
 
 	/**
-     * Sets the duration for which specimen is spun.
-     * @param durationInMinutes duration for which specimen is spun.
-     * @see #getDurationInMinutes()
-     */
+	 * Sets the duration for which specimen is spun.
+	 * @param durationInMinutes duration for which specimen is spun.
+	 * @see #getDurationInMinutes()
+	 */
 	public void setDurationInMinutes(Integer durationInMinutes)
 	{
 		this.durationInMinutes = durationInMinutes;
@@ -101,34 +103,35 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	public SpunEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject)abstractForm);
+		setAllValues((IValueObject) abstractForm);
 	}
 
 	/**
-     * This function Copies the data from an SpunEventParametersForm object to a SpunEventParameters object.
-     * @param abstractForm - SpunEventParametersForm An SpunEventParametersForm object
-     * containing the information about the SpunEventParameters.
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
+	 * This function Copies the data from an SpunEventParametersForm object to a SpunEventParameters object.
+	 * @param abstractForm - SpunEventParametersForm An SpunEventParametersForm object
+	 * containing the information about the SpunEventParameters.
+	 */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
 
-        	if(form.getGravityForce() != null && form.getGravityForce().trim().length()>0)
-        	{
-        		this.gravityForce = Double.parseDouble(form.getGravityForce() );
-        	}
-        	if(form.getDurationInMinutes() != null && form.getDurationInMinutes().trim().length()>0)
-        	{
-        		this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes() );
-        	}
+			if (form.getGravityForce() != null && form.getGravityForce().trim().length() > 0)
+			{
+				this.gravityForce = Double.parseDouble(form.getGravityForce());
+			}
+			if (form.getDurationInMinutes() != null
+					&& form.getDurationInMinutes().trim().length() > 0)
+			{
+				this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes());
+			}
 
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage());
-        }
-    }
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 }

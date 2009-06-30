@@ -35,9 +35,13 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Mandar Deshmukh
  */
-public class CollectionProtocol extends SpecimenProtocol implements
-	java.io.Serializable, Comparable, IActivityStatus
+public class CollectionProtocol extends SpecimenProtocol
+		implements
+			java.io.Serializable,
+			Comparable,
+			IActivityStatus
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -72,8 +76,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 * Collection of CollectionProtocol associated with the Parent
 	 * CollectionProtocol.
 	 */
-	protected Collection<CollectionProtocol> childCollectionProtocolCollection =
-		new LinkedHashSet<CollectionProtocol>();
+	protected Collection<CollectionProtocol> childCollectionProtocolCollection = new LinkedHashSet<CollectionProtocol>();
 
 	/**
 	 * Parent Collection Protocol.
@@ -294,8 +297,8 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 *            participant.
 	 * @see #getCollectionProtocolRegistrationCollection()
 	 */
-	public void setCollectionProtocolRegistrationCollection(Collection
-			collectionProtocolRegistrationCollection)
+	public void setCollectionProtocolRegistrationCollection(
+			Collection collectionProtocolRegistrationCollection)
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
@@ -330,80 +333,81 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 * about the CollectionProtocol.
 	 */
 	public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	super.setAllValues(abstractForm);
-        	
-        	final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
-        	
-        	coordinatorCollection.clear();
-        	siteCollection.clear();
-        	this.collectionProtocolEventCollection.clear();
-        	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
-        	if(coordinatorsArr!=null)
-        	{
-	        	for (int i = 0; i < coordinatorsArr.length; i++)
+	{
+		try
+		{
+			super.setAllValues(abstractForm);
+
+			final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
+
+			coordinatorCollection.clear();
+			siteCollection.clear();
+			this.collectionProtocolEventCollection.clear();
+			long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
+			if (coordinatorsArr != null)
+			{
+				for (int i = 0; i < coordinatorsArr.length; i++)
 				{
-	        		if(coordinatorsArr[i]!=-1)
-	        		{
-		        		User coordinator = new User();
-		        		coordinator.setId(new Long(coordinatorsArr[i]));
-		        		coordinatorCollection.add(coordinator);
-	        		}
+					if (coordinatorsArr[i] != -1)
+					{
+						User coordinator = new User();
+						coordinator.setId(new Long(coordinatorsArr[i]));
+						coordinatorCollection.add(coordinator);
+					}
 				}
-        	}
-        	
-        	long [] siteArr = cpForm.getSiteIds();
-        	if(siteArr!=null)
-        	{
-	        	for (int i = 0; i < siteArr.length; i++)
+			}
+
+			long[] siteArr = cpForm.getSiteIds();
+			if (siteArr != null)
+			{
+				for (int i = 0; i < siteArr.length; i++)
 				{
-	        		if(siteArr[i]!=-1)
-	        		{
-		        		Site site = new Site();
-		        		site.setId(new Long(siteArr[i]));
-		        		siteCollection.add(site);
-	        		}
+					if (siteArr[i] != -1)
+					{
+						Site site = new Site();
+						site.setId(new Long(siteArr[i]));
+						siteCollection.add(site);
+					}
 				}
-        	}
-        	aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
-	        final Map map = cpForm.getValues();
-	        
-	        /**
-	         * Name : Abhishek Mehta
-	         * Reviewer Name : Poornima
-	         * Bug ID: Collection_Event_Protocol_Order
-	         * Patch ID: Collection_Event_Protocol_Order_1 
-	         * See also: 1-8
-	         * Description: To get the collection event protocols in their insertion order. 
-	         */
-	        logger.debug("PRE FIX MAP "+map);
-	        final Map sortedMap = sortMapOnKey(map);
-	        logger.debug("POST FIX MAP "+map);
-	        
-	        final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        
-	        final ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
-	        for(int i = 0 ; i < cpecList.size() ; i++)
-	        {
-	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
-	        }
-	        logger.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
-	        
-	        //Setting the unsigned doc url.
-	        this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
-	        //Setting the consent tier collection.
-	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
-	        
-	        consentsWaived = new Boolean(cpForm.isConsentWaived());
-        }
-        catch (Exception excp)
-        {
-	    	// use of logger as per bug 79
-        	logger.error(excp.getMessage(),excp); 
-        }
-    }
+			}
+			aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
+			final Map map = cpForm.getValues();
+
+			/**
+			 * Name : Abhishek Mehta
+			 * Reviewer Name : Poornima
+			 * Bug ID: Collection_Event_Protocol_Order
+			 * Patch ID: Collection_Event_Protocol_Order_1 
+			 * See also: 1-8
+			 * Description: To get the collection event protocols in their insertion order. 
+			 */
+			logger.debug("PRE FIX MAP " + map);
+			final Map sortedMap = sortMapOnKey(map);
+			logger.debug("POST FIX MAP " + map);
+
+			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+
+			final ArrayList cpecList = (ArrayList) parser.generateData(sortedMap, true);
+			for (int i = 0; i < cpecList.size(); i++)
+			{
+				this.collectionProtocolEventCollection.add(cpecList.get(i));
+			}
+			logger.debug("collectionProtocolEventCollection "
+					+ this.collectionProtocolEventCollection);
+
+			//Setting the unsigned doc url.
+			this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
+			//Setting the consent tier collection.
+			this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
+
+			consentsWaived = new Boolean(cpForm.isConsentWaived());
+		}
+		catch (Exception excp)
+		{
+			// use of logger as per bug 79
+			logger.error(excp.getMessage(), excp);
+		}
+	}
 
 	/**
 	 * Patch ID: Collection_Event_Protocol_Order_2 Description: To get the
@@ -420,7 +424,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 		final Object[] mapKeySet = map.keySet().toArray();
 		final int size = mapKeySet.length;
 		ArrayList<String> mList = new ArrayList<String>();
-		for(int i = 0; i < size; i++)
+		for (int i = 0; i < size; i++)
 		{
 			String key = (String) mapKeySet[i];
 			mList.add(key);
@@ -430,7 +434,7 @@ public class CollectionProtocol extends SpecimenProtocol implements
 		Collections.sort(mList, keyComparator);
 
 		LinkedHashMap<String, String> sortedMap = new LinkedHashMap<String, String>();
-		for(int i = 0; i < size; i++)
+		for (int i = 0; i < size; i++)
 		{
 			String key = (String) mList.get(i);
 			String value = (String) map.get(key);
@@ -444,33 +448,35 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	 *            Consent Tier Map
 	 * @return consentStatementColl
 	 */
-	public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
-    {
-    	final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-    	Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
-    	final Collection beanObjColl = mapdataParser.generateData(consentMap);//consentTierMap
-    	
-    	//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
-    	Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
-    	Iterator iter = beanObjColl.iterator();        
-    	while(iter.hasNext())
-    	{
-    		ConsentBean consentBean = (ConsentBean)iter.next();
-    		ConsentTier consentTier = new ConsentTier();
-    		consentTier.setStatement(consentBean.getStatement());
-    		//To set ID for Edit case
-    		if(consentBean.getConsentTierID()!=null&&consentBean.getConsentTierID().trim().length()>0)
-    		{
-    			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
-    		}
-    		//Check for empty consents
-    		if(consentBean.getStatement()!=null && consentBean.getStatement().trim().length()>0)
-    		{
-    			consentStatementColl.add(consentTier);
-    		}
-    	}	
-    	return consentStatementColl;
-    }
+	public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception
+	{
+		final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+		Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
+		final Collection beanObjColl = mapdataParser.generateData(consentMap);//consentTierMap
+
+		//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
+		Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
+		Iterator iter = beanObjColl.iterator();
+		while (iter.hasNext())
+		{
+			ConsentBean consentBean = (ConsentBean) iter.next();
+			ConsentTier consentTier = new ConsentTier();
+			consentTier.setStatement(consentBean.getStatement());
+			//To set ID for Edit case
+			if (consentBean.getConsentTierID() != null
+					&& consentBean.getConsentTierID().trim().length() > 0)
+			{
+				consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
+			}
+			//Check for empty consents
+			if (consentBean.getStatement() != null
+					&& consentBean.getStatement().trim().length() > 0)
+			{
+				consentStatementColl.add(consentTier);
+			}
+		}
+		return consentStatementColl;
+	}
 
 	/**
 	 * Returns message label to display on success add or edit.
@@ -489,10 +495,10 @@ public class CollectionProtocol extends SpecimenProtocol implements
 	public boolean equals(Object object)
 	{
 		boolean equals = false;
-		if(this.getClass().getName().equals(object.getClass().getName()))
+		if (this.getClass().getName().equals(object.getClass().getName()))
 		{
 			final CollectionProtocol collectionProtocol = (CollectionProtocol) object;
-			if(this.getId().longValue() == collectionProtocol.getId().longValue())
+			if (this.getId().longValue() == collectionProtocol.getId().longValue())
 			{
 				equals = true;
 			}

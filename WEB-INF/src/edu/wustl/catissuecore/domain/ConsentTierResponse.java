@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on November 21,2006
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ConsentTierResponse extends AbstractDomainObject implements Serializable
 {
+
 	/**
 	 * Serial Version ID of the class.
 	 */

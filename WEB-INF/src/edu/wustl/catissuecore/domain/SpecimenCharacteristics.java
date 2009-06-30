@@ -22,6 +22,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class SpecimenCharacteristics extends AbstractDomainObject implements java.io.Serializable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

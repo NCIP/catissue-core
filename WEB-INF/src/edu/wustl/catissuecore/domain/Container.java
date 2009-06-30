@@ -28,6 +28,7 @@ import edu.wustl.common.util.global.Validator;
  */
 public class Container extends AbstractDomainObject implements Serializable, IActivityStatus
 {
+
 	/**
 	 * locatedAtPosition.
 	 */
@@ -325,10 +326,10 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 			//this.positionDimensionOne = new Integer(containerForm.getPositionDimensionOne());
 			//this.positionDimensionTwo = new Integer(containerForm.getPositionDimensionTwo());
 			this.comment = containerForm.getComment();
-			this.capacity.setOneDimensionCapacity(Integer.valueOf(
-					containerForm.getOneDimensionCapacity()));
-			this.capacity.setTwoDimensionCapacity(Integer.valueOf(
-					containerForm.getTwoDimensionCapacity()));
+			this.capacity.setOneDimensionCapacity(Integer.valueOf(containerForm
+					.getOneDimensionCapacity()));
+			this.capacity.setTwoDimensionCapacity(Integer.valueOf(containerForm
+					.getTwoDimensionCapacity()));
 			//Remaining:put code about parent children container relationship
 		}
 	}

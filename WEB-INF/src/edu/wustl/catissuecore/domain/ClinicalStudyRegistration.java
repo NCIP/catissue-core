@@ -30,280 +30,285 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ClinicalStudyRegistration extends AbstractDomainObject implements Serializable
 {
+
 	/**
 	 * Serial Version ID of the class.
 	 */
 	private static final long serialVersionUID = 1234567890L;
-	
+
 	/**
-     * logger Logger - Generic logger.
-     */
-    private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistration.class);
-    
-    /**
-     * identifier - System generated unique id.
-     */
-    protected Long id;
-    /**
-     * clinicalStudyParticipantIdentifier - A unique number given by a User to a
-     * Participant registered to a Clinical Study.
-     */
-    protected String clinicalStudyParticipantIdentifier;
-    /**
-     * registrationDate on which the Participant is registered to the Collection Protocol.
-     */
-    protected Date registrationDate;
-    /**
-     * An individual from whom a specimen is to be collected.
-     */
-    protected Participant participant = null;
-    /**
-     * A set of written procedures that describe how a
-     * biospecimen is prospectively collected.
-     */
-    private ClinicalStudy clinicalStudy;
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ClinicalStudyRegistration.class);
 
-    /**
-     * Defines whether this ClinicalStudyRegistration record can be queried
-     * (Active) or not queried (Inactive) by any actor.
-     * */
-    protected String activityStatus;
+	/**
+	 * identifier - System generated unique id.
+	 */
+	protected Long id;
+	/**
+	 * clinicalStudyParticipantIdentifier - A unique number given by a User to a
+	 * Participant registered to a Clinical Study.
+	 */
+	protected String clinicalStudyParticipantIdentifier;
+	/**
+	 * registrationDate on which the Participant is registered to the Collection Protocol.
+	 */
+	protected Date registrationDate;
+	/**
+	 * An individual from whom a specimen is to be collected.
+	 */
+	protected Participant participant = null;
+	/**
+	 * A set of written procedures that describe how a
+	 * biospecimen is prospectively collected.
+	 */
+	private ClinicalStudy clinicalStudy;
 
-    /**
-     * Default Constructor.
-     */
-    public ClinicalStudyRegistration()
-    {
-    	super();
-    }
+	/**
+	 * Defines whether this ClinicalStudyRegistration record can be queried
+	 * (Active) or not queried (Inactive) by any actor.
+	 * */
+	protected String activityStatus;
 
-    /**
-     * One argument constructor.
-     * @param form - AbstractActionForm object.
-     * @throws AssignDataException assignDataException.
-     */
-    public ClinicalStudyRegistration(AbstractActionForm form) throws AssignDataException
-    {
-    	super();
-        setAllValues(form);
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public ClinicalStudyRegistration()
+	{
+		super();
+	}
 
-    /**
-     * Returns the system generated unique id.
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_CLINICAL_STUDY_REG_SEQ"
-     * @return the system generated unique id.
-     * @see #setId(Long)
-     * */
-    public Long getId()
-    {
-        return id;
-    }
+	/**
+	 * One argument constructor.
+	 * @param form - AbstractActionForm object.
+	 * @throws AssignDataException assignDataException.
+	 */
+	public ClinicalStudyRegistration(AbstractActionForm form) throws AssignDataException
+	{
+		super();
+		setAllValues(form);
+	}
 
-    /**
-     * Sets the system generated unique id.
-     * @param identifier the system generated unique id.
-     * @see #getId()
-     * */
-    public void setId(Long identifier)
-    {
-        this.id = identifier;
-    }
+	/**
+	 * Returns the system generated unique id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CLINICAL_STUDY_REG_SEQ"
+	 * @return the system generated unique id.
+	 * @see #setId(Long)
+	 * */
+	public Long getId()
+	{
+		return id;
+	}
 
-    /**
-     * Returns the unique number given by a User to a Participant
-     * registered to a Clinical Study.
-     * @hibernate.property name="clinicalStudyParticipantIdentifier" type="string"
-     * column="CLINICAL_STUDY_PARTICIPANT_ID" length="255"
-     * @return the unique number given by a User to a Participant
-     * registered to a Clinical Study.
-     * @see #setClinicalStudyParticipantIdentifier(Long)
-     */
-    public String getClinicalStudyParticipantIdentifier()
-    {
-        return clinicalStudyParticipantIdentifier;
-    }
+	/**
+	 * Sets the system generated unique id.
+	 * @param identifier the system generated unique id.
+	 * @see #getId()
+	 * */
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
+	}
 
-    /**
-     * Sets the unique number given by a User to a Participant
-     * registered to a Collection Protocol.
-     * @param clinicalStudyParticipantIdentifier the unique number given by a User to a Participant
-     * registered to a Collection Protocol.
-     * @see #getClinicalStudyParticipantIdentifier()
-     */
-    public void setClinicalStudyParticipantIdentifier(String clinicalStudyParticipantIdentifier)
-    {
-        this.clinicalStudyParticipantIdentifier = clinicalStudyParticipantIdentifier;
-    }
+	/**
+	 * Returns the unique number given by a User to a Participant
+	 * registered to a Clinical Study.
+	 * @hibernate.property name="clinicalStudyParticipantIdentifier" type="string"
+	 * column="CLINICAL_STUDY_PARTICIPANT_ID" length="255"
+	 * @return the unique number given by a User to a Participant
+	 * registered to a Clinical Study.
+	 * @see #setClinicalStudyParticipantIdentifier(Long)
+	 */
+	public String getClinicalStudyParticipantIdentifier()
+	{
+		return clinicalStudyParticipantIdentifier;
+	}
 
-    /**
-     * Returns the date on which the Participant is
-     * registered to the clinicalStudy.
-     * @hibernate.property name="registrationDate" column="REGISTRATION_DATE" type="date"
-     * @return the date on which the Participant is
-     * registered to the clinicalStudy.
-     * @see #setRegistrationDate(Date)
-     */
-    public Date getRegistrationDate()
-    {
-        return registrationDate;
-    }
+	/**
+	 * Sets the unique number given by a User to a Participant
+	 * registered to a Collection Protocol.
+	 * @param clinicalStudyParticipantIdentifier the unique number given by a User to a Participant
+	 * registered to a Collection Protocol.
+	 * @see #getClinicalStudyParticipantIdentifier()
+	 */
+	public void setClinicalStudyParticipantIdentifier(String clinicalStudyParticipantIdentifier)
+	{
+		this.clinicalStudyParticipantIdentifier = clinicalStudyParticipantIdentifier;
+	}
 
-    /**
-     * Sets the date on which the Participant is
-     * registered to the Collection Protocol.
-     * @param registrationDate the date on which the Participant is
-     * registered to the Collection Protocol.
-     * @see #getRegistrationDate()
-     */
-    public void setRegistrationDate(Date registrationDate)
-    {
-        this.registrationDate = registrationDate;
-    }
+	/**
+	 * Returns the date on which the Participant is
+	 * registered to the clinicalStudy.
+	 * @hibernate.property name="registrationDate" column="REGISTRATION_DATE" type="date"
+	 * @return the date on which the Participant is
+	 * registered to the clinicalStudy.
+	 * @see #setRegistrationDate(Date)
+	 */
+	public Date getRegistrationDate()
+	{
+		return registrationDate;
+	}
 
-    /**
-     * Returns the individual from whom a specimen is to be collected.
-     * @hibernate.many-to-one column="PARTICIPANT_ID"
-     * class="edu.wustl.catissuecore.domain.Participant" constrained="true"
-     * @return the individual from whom a specimen is to be collected.
-     * @see #setParticipant(Participant)
-     */
-    public Participant getParticipant()
-    {
-        return participant;
-    }
+	/**
+	 * Sets the date on which the Participant is
+	 * registered to the Collection Protocol.
+	 * @param registrationDate the date on which the Participant is
+	 * registered to the Collection Protocol.
+	 * @see #getRegistrationDate()
+	 */
+	public void setRegistrationDate(Date registrationDate)
+	{
+		this.registrationDate = registrationDate;
+	}
 
-    /**
-     * Sets the individual from whom a specimen is to be collected.
-     * @param participant the individual from whom a specimen is to be collected.
-     * @see #getParticipant()
-     */
-    public void setParticipant(Participant participant)
-    {
-        this.participant = participant;
-    }
+	/**
+	 * Returns the individual from whom a specimen is to be collected.
+	 * @hibernate.many-to-one column="PARTICIPANT_ID"
+	 * class="edu.wustl.catissuecore.domain.Participant" constrained="true"
+	 * @return the individual from whom a specimen is to be collected.
+	 * @see #setParticipant(Participant)
+	 */
+	public Participant getParticipant()
+	{
+		return participant;
+	}
 
-    /**
-     * Returns the activity status of the participant.
-     * @hibernate.property name="activityStatus" type="string"
-     * column="ACTIVITY_STATUS" length="50"
-     * @return Returns the activity status of the participant.
-     * @see #setActivityStatus(String)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
+	/**
+	 * Sets the individual from whom a specimen is to be collected.
+	 * @param participant the individual from whom a specimen is to be collected.
+	 * @see #getParticipant()
+	 */
+	public void setParticipant(Participant participant)
+	{
+		this.participant = participant;
+	}
 
-    /**
-     * Sets the activity status of the participant.
-     * @param activityStatus activity status of the participant.
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
+	/**
+	 * Returns the activity status of the participant.
+	 * @hibernate.property name="activityStatus" type="string"
+	 * column="ACTIVITY_STATUS" length="50"
+	 * @return Returns the activity status of the participant.
+	 * @see #setActivityStatus(String)
+	 */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
 
-    /**
-     * Set all values from clinicalStudyRegistrationForm to the member variables of class.
-     * @param abstractForm - clinicalStudyRegistrationForm object.
-     * @throws AssignDataException assignDataException.
-     */
-    public void setAllValues(IValueObject abstractForm) throws AssignDataException
-    {
-        ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
-          this.activityStatus = form.getActivityStatus();
+	/**
+	 * Sets the activity status of the participant.
+	 * @param activityStatus activity status of the participant.
+	 * @see #getActivityStatus()
+	 */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
 
-            if (SearchUtil.isNullobject(clinicalStudy))
-            {
-                clinicalStudy = new ClinicalStudy();
-            }
-            if (SearchUtil.isNullobject(this.registrationDate))
-            {
-                registrationDate  = new Date();
-            }
+	/**
+	 * Set all values from clinicalStudyRegistrationForm to the member variables of class.
+	 * @param abstractForm - clinicalStudyRegistrationForm object.
+	 * @throws AssignDataException assignDataException.
+	 */
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
+	{
+		ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
+		this.activityStatus = form.getActivityStatus();
 
-            this.clinicalStudy.setId(Long.valueOf(form.getClinicalStudyId()));
+		if (SearchUtil.isNullobject(clinicalStudy))
+		{
+			clinicalStudy = new ClinicalStudy();
+		}
+		if (SearchUtil.isNullobject(this.registrationDate))
+		{
+			registrationDate = new Date();
+		}
 
-            if(form.getParticipantID() != -1 && form.getParticipantID() != 0)
-            {
-                this.participant = new Participant();
-                this.participant.setId(Long.valueOf(form.getParticipantID()));
-            }
-            else
-            {
-                this.participant = null;
-            }
-            
-            this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
-            if(clinicalStudyParticipantIdentifier.equals(""))
-            {
-                this.clinicalStudyParticipantIdentifier = null;
-            }
-            try {
-				this.registrationDate = Utility.parseDate(form.getRegistrationDate(),
-						Utility.datePattern(form.getRegistrationDate()));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		this.clinicalStudy.setId(Long.valueOf(form.getClinicalStudyId()));
+
+		if (form.getParticipantID() != -1 && form.getParticipantID() != 0)
+		{
+			this.participant = new Participant();
+			this.participant.setId(Long.valueOf(form.getParticipantID()));
+		}
+		else
+		{
+			this.participant = null;
+		}
+
+		this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
+		if (clinicalStudyParticipantIdentifier.equals(""))
+		{
+			this.clinicalStudyParticipantIdentifier = null;
+		}
+		try
+		{
+			this.registrationDate = Utility.parseDate(form.getRegistrationDate(), Utility
+					.datePattern(form.getRegistrationDate()));
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * @hibernate.many-to-one column="CLINICAL_STUDY_ID" class="edu.wustl.catissuecore.domain.ClinicalStudy"
+	 * constrained="true"
+	 * @return ClinicalStudy object.
+	 */
+	public ClinicalStudy getClinicalStudy()
+	{
+		return clinicalStudy;
+	}
+
+	/**
+	 * Set the clinicalStudy.
+	 * @param clinicalStudy of type ClinicalStudy.
+	 */
+	public void setClinicalStudy(ClinicalStudy clinicalStudy)
+	{
+		this.clinicalStudy = clinicalStudy;
+	}
+
+	/**
+	 * Returns message label to display on success add or edit.
+	 * @return String with message label.
+	 */
+	public String getMessageLabel()
+	{
+		if (SearchUtil.isNullobject(clinicalStudy))
+		{
+			clinicalStudy = new ClinicalStudy();
+		}
+		StringBuffer message = new StringBuffer();
+		message.append(this.clinicalStudy.title + " ");
+
+		if (this.participant != null)
+		{
+			if (this.participant.lastName != null && !this.participant.lastName.equals("")
+					&& this.participant.firstName != null && !this.participant.firstName.equals(""))
+			{
+				message.append(this.participant.lastName + "," + this.participant.firstName);
 			}
-       
-    }
-
-    /**
-     * @hibernate.many-to-one column="CLINICAL_STUDY_ID" class="edu.wustl.catissuecore.domain.ClinicalStudy"
-     * constrained="true"
-     * @return ClinicalStudy object.
-     */
-    public ClinicalStudy getClinicalStudy()
-    {
-        return clinicalStudy;
-    }
-
-    /**
-     * Set the clinicalStudy.
-     * @param clinicalStudy of type ClinicalStudy.
-     */
-    public void setClinicalStudy(ClinicalStudy clinicalStudy)
-    {
-        this.clinicalStudy = clinicalStudy;
-    }
-
-    /**
-     * Returns message label to display on success add or edit.
-     * @return String with message label.
-     */
-    public String getMessageLabel()
-    {
-        if (SearchUtil.isNullobject(clinicalStudy))
-        {
-            clinicalStudy = new ClinicalStudy();
-        }
-        StringBuffer message = new StringBuffer();
-        message.append(this.clinicalStudy.title + " ");
-
-        if (this.participant != null)
-        {
-            if (this.participant.lastName!= null && !this.participant.lastName.equals("") &&
-            		this.participant.firstName != null && !this.participant.firstName.equals(""))
-            {
-                message.append(this.participant.lastName + "," + this.participant.firstName);
-            }
-            else if(this.participant.lastName!= null && !this.participant.lastName.equals(""))
-            {
-                message.append(this.participant.lastName);
-            }
-            else if(this.participant.firstName!= null && !this.participant.firstName.equals(""))
-            {
-                message.append(this.participant.firstName);
-            }
-        }
-        else if (this.clinicalStudyParticipantIdentifier != null)
-        {
-            message.append(this.clinicalStudyParticipantIdentifier);
-        }
-        return message.toString();
-    }
+			else if (this.participant.lastName != null && !this.participant.lastName.equals(""))
+			{
+				message.append(this.participant.lastName);
+			}
+			else if (this.participant.firstName != null && !this.participant.firstName.equals(""))
+			{
+				message.append(this.participant.firstName);
+			}
+		}
+		else if (this.clinicalStudyParticipantIdentifier != null)
+		{
+			message.append(this.clinicalStudyParticipantIdentifier);
+		}
+		return message.toString();
+	}
 }

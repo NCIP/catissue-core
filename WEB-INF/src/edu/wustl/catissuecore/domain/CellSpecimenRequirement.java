@@ -7,6 +7,7 @@
  * @author virender_mehta
  * @version catissueSuite V1.1
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
@@ -21,10 +22,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CellSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	 private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimenRequirement.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimenRequirement.class);
 
 	/**
 	 * Serial Version Id of the class.
@@ -44,42 +46,43 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 	 * @param form AbstractActionForm.
 	 */
 	public CellSpecimenRequirement(AbstractActionForm form)
-    {
+	{
 		super();
-    	setAllValues(form);
-    }
+		setAllValues(form);
+	}
+
 	/**
-     * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
-     * @param abstractForm - siteForm An SiteForm object containing the information about the site.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	super.setAllValues(abstractForm);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage(),excp);
-        }
-    }
+	 * This function Copies the data from an NewSpecimenForm object to a CellSpecimen object.
+	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			super.setAllValues(abstractForm);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage(), excp);
+		}
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param cellRequirementSpecimen of type CellSpecimenRequirement class.
-     */
-    public CellSpecimenRequirement(CellSpecimenRequirement cellRequirementSpecimen)
-    {
-    	super();
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param cellRequirementSpecimen of type CellSpecimenRequirement class.
+	 */
+	public CellSpecimenRequirement(CellSpecimenRequirement cellRequirementSpecimen)
+	{
+		super();
+	}
 
-    /**
-     * Method to create a clone object of CellSpecimenRequirement type.
-     * @return CellSpecimenRequirement object.
-     */
-    public CellSpecimenRequirement createClone()
-    {
-    	CellSpecimenRequirement cloneCellRequirementSpecimen = new CellSpecimenRequirement(this);
-    	return cloneCellRequirementSpecimen;
-    }
+	/**
+	 * Method to create a clone object of CellSpecimenRequirement type.
+	 * @return CellSpecimenRequirement object.
+	 */
+	public CellSpecimenRequirement createClone()
+	{
+		CellSpecimenRequirement cloneCellRequirementSpecimen = new CellSpecimenRequirement(this);
+		return cloneCellRequirementSpecimen;
+	}
 }

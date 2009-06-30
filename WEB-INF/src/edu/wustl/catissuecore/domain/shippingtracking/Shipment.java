@@ -32,6 +32,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class Shipment extends BaseShipment
 {
+
 	/**
 	 * returns the message label.
 	 * @return message label.
@@ -40,6 +41,7 @@ public class Shipment extends BaseShipment
 	{
 		return this.getLabel();
 	}
+
 	/**
 	 * Reference of ShipmentRequest for which the Shipment has been creted.
 	 * Can be null in case Shipmentis created independent of a request
@@ -49,6 +51,7 @@ public class Shipment extends BaseShipment
 	 * Shipment barcode.
 	 */
 	protected String barcode;
+
 	/**
 	 * @return Returns the shipment barcode.
 	 * @hibernate.property name="barcode" type="string" column="BARCODE" length="255"
@@ -58,6 +61,7 @@ public class Shipment extends BaseShipment
 	{
 		return barcode;
 	}
+
 	/**
 	 * Sets the shipment barcode.
 	 * @param barcode shipment barcode
@@ -67,6 +71,7 @@ public class Shipment extends BaseShipment
 	{
 		this.barcode = barcode;
 	}
+
 	/*
 	 * Used by hibernate for reflection
 	 */
@@ -77,6 +82,7 @@ public class Shipment extends BaseShipment
 	{
 
 	}
+
 	/**
 	 * constructor.assigns all values to the object shipment.
 	 * @param form ShipmentForm.
@@ -87,6 +93,7 @@ public class Shipment extends BaseShipment
 		this();
 		this.setAllValues(form);
 	}
+
 	/**
 	 * sets all values to the shipment object.
 	 * @param arg0 containing the form values.
@@ -105,18 +112,19 @@ public class Shipment extends BaseShipment
 		else
 		{
 			super.setAllValues(arg0);
-			if(arg0 instanceof ShipmentForm)
+			if (arg0 instanceof ShipmentForm)
 			{
-				this.barcode=((ShipmentForm)arg0).getBarcode();
-				if(((ShipmentForm)arg0).getShipmentRequestId()!=0)
+				this.barcode = ((ShipmentForm) arg0).getBarcode();
+				if (((ShipmentForm) arg0).getShipmentRequestId() != 0)
 				{
-					ShipmentRequest request=new ShipmentRequest();
-					request.setId(((ShipmentForm)arg0).getShipmentRequestId());
-					this.shipmentRequest=request;
+					ShipmentRequest request = new ShipmentRequest();
+					request.setId(((ShipmentForm) arg0).getShipmentRequestId());
+					this.shipmentRequest = request;
 				}
 			}
 		}
 	}
+
 	/**
 	 * Set the basic shipment properties e.g. receiverComments, activityStatus etc.
 	 * @param shipmentReceivingForm form containing all values.
@@ -126,6 +134,7 @@ public class Shipment extends BaseShipment
 		this.receiverComments = shipmentReceivingForm.getReceiverComments();
 		this.activityStatus = Constants.ACTIVITY_STATUS_RECEIVED;
 	}
+
 	/**
 	 * Set the specimens and containers.
 	 * @param shipmentReceivingForm form containing all values.
@@ -136,78 +145,69 @@ public class Shipment extends BaseShipment
 		populateContainerContents(shipmentReceivingForm);
 		populateSpecimenContents(shipmentReceivingForm);
 	}
+
 	/**
 	 * Set the specimen(s).
 	 * @param shipmentReceivingForm form containing all values.
 	 */
 	private void populateSpecimenContents(ShipmentReceivingForm shipmentReceivingForm)
 	{
-		StorageContainer container=null;
-		container=ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
-		if(container!=null)
+		StorageContainer container = null;
+		container = ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
+		if (container != null)
 		{
-			if(container.getSpecimenPositionCollection()!=null)
+			if (container.getSpecimenPositionCollection() != null)
 			{
 				List<Specimen> specimenCollectionInForm = shipmentReceivingForm
-					.getSpecimenCollection();
+						.getSpecimenCollection();
 				for (SpecimenPosition spPosition : container.getSpecimenPositionCollection())
 				{
-					if(spPosition!=null && spPosition.getSpecimen()!=null
-							&& spPosition.getSpecimen().getId()!=null)
+					if (spPosition != null && spPosition.getSpecimen() != null
+							&& spPosition.getSpecimen().getId() != null)
 					{
-						String containerId="";
-						String containerName="";
-						String pos1="";
-						String pos2="";
-						Specimen specimen=spPosition.getSpecimen();
-						String storageLocationSelection=(String)shipmentReceivingForm
-							.getSpecimenDetails("specimenStorageLocation_"
-									+specimen.getId());
-						if(storageLocationSelection!=null
+						String containerId = "";
+						String containerName = "";
+						String pos1 = "";
+						String pos2 = "";
+						Specimen specimen = spPosition.getSpecimen();
+						String storageLocationSelection = (String) shipmentReceivingForm
+								.getSpecimenDetails("specimenStorageLocation_" + specimen.getId());
+						if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("1"))
 						{
 							specimen.setSpecimenPosition(null);
 						}
-						else if(storageLocationSelection!=null
+						else if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("2"))
 						{
-							containerId=(String)shipmentReceivingForm
-								.getSpecimenDetails("containerId_"
-										+specimen.getId());
-							pos1=(String)shipmentReceivingForm
-								.getSpecimenDetails("pos1_"
-										+specimen.getId());
-							pos2=(String)shipmentReceivingForm
-								.getSpecimenDetails("pos2_"
-										+specimen.getId());
+							containerId = (String) shipmentReceivingForm
+									.getSpecimenDetails("containerId_" + specimen.getId());
+							pos1 = (String) shipmentReceivingForm.getSpecimenDetails("pos1_"
+									+ specimen.getId());
+							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("pos2_"
+									+ specimen.getId());
 						}
-						else if(storageLocationSelection!=null
+						else if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("3"))
 						{
-							containerName=(String)shipmentReceivingForm
-								.getSpecimenDetails("selectedContainerName_"
-										+specimen.getId());
-							pos1=(String)shipmentReceivingForm
-								.getSpecimenDetails("position1_"
-										+specimen.getId());
-							pos2=(String)shipmentReceivingForm
-								.getSpecimenDetails("position2_"
-										+specimen.getId());
+							containerName = (String) shipmentReceivingForm
+									.getSpecimenDetails("selectedContainerName_" + specimen.getId());
+							pos1 = (String) shipmentReceivingForm.getSpecimenDetails("position1_"
+									+ specimen.getId());
+							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("position2_"
+									+ specimen.getId());
 						}
-						if((containerId!=null || containerName!=null)&&
-								pos1!=null && pos2!=null &&
-									!pos2.trim().equals(""))
+						if ((containerId != null || containerName != null) && pos1 != null
+								&& pos2 != null && !pos2.trim().equals(""))
 						{
-							StorageContainer spPosContainer=new StorageContainer();
-							if(storageLocationSelection!=null
-									&& storageLocationSelection
-										.trim().equals("3"))
+							StorageContainer spPosContainer = new StorageContainer();
+							if (storageLocationSelection != null
+									&& storageLocationSelection.trim().equals("3"))
 							{
 								spPosContainer.setName(containerName);
 							}
-							else if(storageLocationSelection!=null
-									&& storageLocationSelection
-										.trim().equals("2"))
+							else if (storageLocationSelection != null
+									&& storageLocationSelection.trim().equals("2"))
 							{
 								spPosContainer.setId(Long.parseLong(containerId));
 							}
@@ -216,12 +216,11 @@ public class Shipment extends BaseShipment
 							spPosition.setStorageContainer(spPosContainer);
 						}
 						// Set the user selected activity status for specimen.
-						for(Specimen specimenInForm : specimenCollectionInForm)
+						for (Specimen specimenInForm : specimenCollectionInForm)
 						{
 							if (specimen.getId().equals(specimenInForm.getId()))
 							{
-								specimen.setActivityStatus
-									(specimenInForm.getActivityStatus());
+								specimen.setActivityStatus(specimenInForm.getActivityStatus());
 								break;
 							}
 						}
@@ -230,38 +229,38 @@ public class Shipment extends BaseShipment
 			}
 		}
 	}
+
 	/**
 	 * Sets the container(s).
 	 * @param shipmentReceivingForm form containing all values.
 	 */
 	private void populateContainerContents(ShipmentReceivingForm shipmentReceivingForm)
 	{
-		String siteFromUser="";
-		String parentContainerSelected="";
-		String containerId="";
-		String containerName="";
-		String positionDim1="";
-		String positionDim2="";
+		String siteFromUser = "";
+		String parentContainerSelected = "";
+		String containerId = "";
+		String containerName = "";
+		String positionDim1 = "";
+		String positionDim2 = "";
 		List<StorageContainer> containerCollection = shipmentReceivingForm.getContainerCollection();
 		if (containerCollection != null && containerCollection.size() > 0)
 		{
-			for(StorageContainer storageContainer : containerCollection)
+			for (StorageContainer storageContainer : containerCollection)
 			{
-				StorageContainer containerObject=getContainerObject(storageContainer.getId());
-				if(containerObject!=null)
+				StorageContainer containerObject = getContainerObject(storageContainer.getId());
+				if (containerObject != null)
 				{
-					parentContainerSelected=(String)shipmentReceivingForm
-						.getContainerDetails("containerStorageLocation_"
-								+storageContainer.getId());
-					if(parentContainerSelected!=null
+					parentContainerSelected = (String) shipmentReceivingForm
+							.getContainerDetails("containerStorageLocation_"
+									+ storageContainer.getId());
+					if (parentContainerSelected != null
 							&& parentContainerSelected.trim().equals("Site"))
 					{
-						siteFromUser=(String)shipmentReceivingForm
-							.getContainerDetails("siteId_"
-									+storageContainer.getId());
-						if(siteFromUser!=null && !siteFromUser.trim().equals(""))
+						siteFromUser = (String) shipmentReceivingForm.getContainerDetails("siteId_"
+								+ storageContainer.getId());
+						if (siteFromUser != null && !siteFromUser.trim().equals(""))
 						{
-							Site site=new Site();
+							Site site = new Site();
 							site.setId(Long.parseLong(siteFromUser));
 							containerObject.setSite(site);
 						}
@@ -270,85 +269,73 @@ public class Shipment extends BaseShipment
 							containerObject.setSite(this.receiverSite);
 						}
 					}
-					else if(parentContainerSelected!=null
+					else if (parentContainerSelected != null
 							&& parentContainerSelected.trim().equals("Auto"))
 					{
-						containerId=(String)shipmentReceivingForm
-							.getContainerDetails("parentContainerId_"
-									+storageContainer.getId());
-						positionDim1=(String)shipmentReceivingForm
-							.getContainerDetails("positionDimensionOne_"
-									+storageContainer.getId());
-						positionDim2=(String)shipmentReceivingForm
-							.getContainerDetails("positionDimensionTwo_"
-									+storageContainer.getId());
-						if(containerId!=null && positionDim1!=null && positionDim2!=null)
+						containerId = (String) shipmentReceivingForm
+								.getContainerDetails("parentContainerId_"
+										+ storageContainer.getId());
+						positionDim1 = (String) shipmentReceivingForm
+								.getContainerDetails("positionDimensionOne_"
+										+ storageContainer.getId());
+						positionDim2 = (String) shipmentReceivingForm
+								.getContainerDetails("positionDimensionTwo_"
+										+ storageContainer.getId());
+						if (containerId != null && positionDim1 != null && positionDim2 != null)
 						{
-							ContainerPosition position=containerObject
-								.getLocatedAtPosition();
-							StorageContainer container=new StorageContainer();
+							ContainerPosition position = containerObject.getLocatedAtPosition();
+							StorageContainer container = new StorageContainer();
 							container.setId(Long.parseLong(containerId));
-							if(position!=null)
+							if (position != null)
 							{
 								position.setParentContainer(container);
-								position.setPositionDimensionOne
-									(Integer.parseInt(positionDim1));
-								position.setPositionDimensionTwo
-									(Integer.parseInt(positionDim2));
+								position.setPositionDimensionOne(Integer.parseInt(positionDim1));
+								position.setPositionDimensionTwo(Integer.parseInt(positionDim2));
 							}
 							else
 							{
-								ContainerPosition containerPosition=new ContainerPosition();
-								containerPosition.setOccupiedContainer
-									(containerObject);
+								ContainerPosition containerPosition = new ContainerPosition();
+								containerPosition.setOccupiedContainer(containerObject);
 								containerPosition.setParentContainer(container);
-								containerPosition.setPositionDimensionOne
-									(Integer.parseInt(positionDim1));
-								containerPosition.setPositionDimensionTwo
-									(Integer.parseInt(positionDim2));
-								containerObject.setLocatedAtPosition
-									(containerPosition);
+								containerPosition.setPositionDimensionOne(Integer
+										.parseInt(positionDim1));
+								containerPosition.setPositionDimensionTwo(Integer
+										.parseInt(positionDim2));
+								containerObject.setLocatedAtPosition(containerPosition);
 							}
 						}
 					}
-					else if(parentContainerSelected!=null
+					else if (parentContainerSelected != null
 							&& parentContainerSelected.trim().equals("Manual"))
 					{
-						containerName=(String)shipmentReceivingForm
-							.getContainerDetails("selectedContainerNameCont_"
-									+storageContainer.getId());
-						positionDim1=(String)shipmentReceivingForm
-							.getContainerDetails("contPosition1_"
-									+storageContainer.getId());
-						positionDim2=(String)shipmentReceivingForm
-							.getContainerDetails("contPosition2_"
-									+storageContainer.getId());
-						if(containerName!=null && positionDim1!=null && positionDim2!=null)
+						containerName = (String) shipmentReceivingForm
+								.getContainerDetails("selectedContainerNameCont_"
+										+ storageContainer.getId());
+						positionDim1 = (String) shipmentReceivingForm
+								.getContainerDetails("contPosition1_" + storageContainer.getId());
+						positionDim2 = (String) shipmentReceivingForm
+								.getContainerDetails("contPosition2_" + storageContainer.getId());
+						if (containerName != null && positionDim1 != null && positionDim2 != null)
 						{
-							ContainerPosition position=containerObject
-								.getLocatedAtPosition();
-							StorageContainer container=new StorageContainer();
+							ContainerPosition position = containerObject.getLocatedAtPosition();
+							StorageContainer container = new StorageContainer();
 							container.setName(containerName);
-							if(position!=null)
+							if (position != null)
 							{
 								position.setParentContainer(container);
-								position.setPositionDimensionOne
-									(Integer.parseInt(positionDim1));
-								position.setPositionDimensionTwo
-									(Integer.parseInt(positionDim2));
+								position.setPositionDimensionOne(Integer.parseInt(positionDim1));
+								position.setPositionDimensionTwo(Integer.parseInt(positionDim2));
 							}
 							else
 							{
-								ContainerPosition containerPosition=new ContainerPosition();
-								containerPosition.setOccupiedContainer
-									(containerObject);
+								ContainerPosition containerPosition = new ContainerPosition();
+								containerPosition.setOccupiedContainer(containerObject);
 								containerPosition.setParentContainer(container);
-								containerPosition.setPositionDimensionOne
-									(Integer.parseInt(positionDim1));
-								containerPosition.setPositionDimensionTwo
-									(Integer.parseInt(positionDim2));
-								containerObject.setLocatedAtPosition
-									(containerPosition);
+								containerPosition.setPositionDimensionOne(Integer
+										.parseInt(positionDim1));
+								containerPosition.setPositionDimensionTwo(Integer
+										.parseInt(positionDim2));
+								containerObject.setLocatedAtPosition(containerPosition);
 							}
 						}
 					}
@@ -357,6 +344,7 @@ public class Shipment extends BaseShipment
 			} //for
 		} // if
 	} // method
+
 	/**
 	 * gets the container object.
 	 * @param identifier id of the container to get.
@@ -364,22 +352,23 @@ public class Shipment extends BaseShipment
 	 */
 	private StorageContainer getContainerObject(Long identifier)
 	{
-		StorageContainer storageContainer=null;
-		if(this.containerCollection!=null)
+		StorageContainer storageContainer = null;
+		if (this.containerCollection != null)
 		{
 			for (Object container : this.containerCollection)
 			{
-				if(container instanceof StorageContainer)
+				if (container instanceof StorageContainer)
 				{
-					if(((StorageContainer)container).getId().equals(identifier))
+					if (((StorageContainer) container).getId().equals(identifier))
 					{
-						storageContainer=(StorageContainer)container;
+						storageContainer = (StorageContainer) container;
 					}
 				}
 			}
 		}
 		return storageContainer;
 	}
+
 	/**
 	 * gets the shipment request.
 	 * @return shipmentRequest.
@@ -388,6 +377,7 @@ public class Shipment extends BaseShipment
 	{
 		return shipmentRequest;
 	}
+
 	/**
 	 * sets the shipment request.
 	 * @param shipmentRequest the request to set.

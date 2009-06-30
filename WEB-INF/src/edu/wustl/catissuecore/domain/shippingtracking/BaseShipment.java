@@ -38,8 +38,7 @@ import edu.wustl.common.util.logger.Logger;
  * shipped to sites. Shipment has status.
  * @hibernate.class table="CATISSUE_BASE_SHIPMENT"
  */
-public class BaseShipment extends AbstractDomainObject implements Serializable,
-		IActivityStatus
+public class BaseShipment extends AbstractDomainObject implements Serializable, IActivityStatus
 {
 
 	/**
@@ -401,6 +400,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 			setShipmentContents(shipmentForm);
 		}
 	}
+
 	/**
 	 * sets the shipment comments.
 	 * @param shipmentForm form containing all values.
@@ -433,6 +433,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 			}
 		}
 	}
+
 	/**
 	 * this method populates the container contents.
 	 * @param shipmentForm form contraining all values.
@@ -453,27 +454,24 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 			{
 				if (shipmentForm.isAddOperation())
 				{
-					fieldValue = (String) shipmentForm
-							.getContainerDetails("containerLabel_"
-									+ containerCounter);
+					fieldValue = (String) shipmentForm.getContainerDetails("containerLabel_"
+							+ containerCounter);
 				}
 				else
 				{
 					if (shipmentForm.getContainerLabelChoice() != null
-							&& shipmentForm.getContainerLabelChoice().trim()
-									.equals("ContainerLabel"))
+							&& shipmentForm.getContainerLabelChoice().trim().equals(
+									"ContainerLabel"))
 					{
-						fieldValue = (String) shipmentForm
-								.getContainerDetails("containerLabel_"
-										+ containerCounter);
+						fieldValue = (String) shipmentForm.getContainerDetails("containerLabel_"
+								+ containerCounter);
 					}
 					else if (shipmentForm.getContainerLabelChoice() != null
-							&& shipmentForm.getContainerLabelChoice().trim()
-									.equals("ContainerBarcode"))
+							&& shipmentForm.getContainerLabelChoice().trim().equals(
+									"ContainerBarcode"))
 					{
-						fieldValue = (String) shipmentForm
-								.getSpecimenDetails("containerBarcode_"
-										+ containerCounter);
+						fieldValue = (String) shipmentForm.getSpecimenDetails("containerBarcode_"
+								+ containerCounter);
 					}
 				}
 
@@ -482,13 +480,11 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 					containerNum++;
 					lblOrBarcodeList.add(fieldValue);// bug 11026
 					container = new StorageContainer();
-					if (shipmentForm.getContainerLabelChoice().equals(
-							"ContainerLabel"))
+					if (shipmentForm.getContainerLabelChoice().equals("ContainerLabel"))
 					{
 						container.setName(fieldValue);
 					}
-					else if (shipmentForm.getContainerLabelChoice().equals(
-							"ContainerBarcode"))
+					else if (shipmentForm.getContainerLabelChoice().equals("ContainerBarcode"))
 					{
 						container.setBarcode(fieldValue);
 					}
@@ -497,8 +493,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 					if (!shipmentForm.isAddOperation())
 					{
 						StorageContainer containerFromCollection = ShippingTrackingUtility
-								.getContainerFromCollection(
-										this.containerCollection, fieldValue);
+								.getContainerFromCollection(this.containerCollection, fieldValue);
 						if (containerFromCollection == null)
 						{
 							containerFromCollection = container;
@@ -509,8 +504,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 			}
 			if (!shipmentForm.isAddOperation() && containerNum > 0)
 			{
-				if (updatedContainerCollection != null
-						&& !updatedContainerCollection.isEmpty())// bug 11410
+				if (updatedContainerCollection != null && !updatedContainerCollection.isEmpty())// bug 11410
 				{
 					this.containerCollection.clear();
 					this.containerCollection.addAll(updatedContainerCollection);
@@ -522,13 +516,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 		}
 
 	}
+
 	/**
 	 * this method populates specimen contents.
 	 * @param shipmentForm form containing all values.
 	 * @return object of StorageContainer class.
 	 */
-	private StorageContainer populateSpecimenContents(
-			BaseShipmentForm shipmentForm)
+	private StorageContainer populateSpecimenContents(BaseShipmentForm shipmentForm)
 	{
 		StorageContainer container = null;
 		int specimenCount = shipmentForm.getSpecimenCounter();
@@ -543,17 +537,14 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 		{
 			if (shipmentForm.isAddOperation())
 			{
-				container = ShippingTrackingUtility
-						.createInTransitContainer(shipmentForm);
+				container = ShippingTrackingUtility.createInTransitContainer(shipmentForm);
 			}
 			else
 			{
-				container = ShippingTrackingUtility
-						.getInTransitContainer(this.containerCollection);
+				container = ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
 				if (container == null)// bug 11410
 				{
-					container = ShippingTrackingUtility
-							.createInTransitContainer(shipmentForm);
+					container = ShippingTrackingUtility.createInTransitContainer(shipmentForm);
 				}
 			}
 
@@ -562,27 +553,23 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 				// Get specimen label or barcode
 				if (shipmentForm.isAddOperation())
 				{
-					fieldValue = (String) shipmentForm
-							.getSpecimenDetails("specimenLabel_"
-									+ specimenCounter);
+					fieldValue = (String) shipmentForm.getSpecimenDetails("specimenLabel_"
+							+ specimenCounter);
 				}
 				else
 				{
 					if (shipmentForm.getSpecimenLabelChoice() != null
-							&& shipmentForm.getSpecimenLabelChoice().trim()
-									.equals("SpecimenLabel"))
+							&& shipmentForm.getSpecimenLabelChoice().trim().equals("SpecimenLabel"))
 					{
-						fieldValue = (String) shipmentForm
-								.getSpecimenDetails("specimenLabel_"
-										+ specimenCounter);
+						fieldValue = (String) shipmentForm.getSpecimenDetails("specimenLabel_"
+								+ specimenCounter);
 					}
 					else if (shipmentForm.getSpecimenLabelChoice() != null
-							&& shipmentForm.getSpecimenLabelChoice().trim()
-									.equals("SpecimenBarcode"))
+							&& shipmentForm.getSpecimenLabelChoice().trim().equals(
+									"SpecimenBarcode"))
 					{
-						fieldValue = (String) shipmentForm
-								.getSpecimenDetails("specimenBarcode_"
-										+ specimenCounter);
+						fieldValue = (String) shipmentForm.getSpecimenDetails("specimenBarcode_"
+								+ specimenCounter);
 					}
 				}
 
@@ -591,13 +578,11 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 					containsSpecimens = true;
 					lblOrBarcodeList.add(fieldValue); // bug 11026
 					specimen = new Specimen();
-					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase(
-							"SpecimenLabel"))
+					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}
-					else if (shipmentForm.getSpecimenLabelChoice().equals(
-							"SpecimenBarcode"))
+					else if (shipmentForm.getSpecimenLabelChoice().equals("SpecimenBarcode"))
 					{
 						specimen.setBarcode(fieldValue);
 					}
@@ -607,57 +592,50 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 						numOfSpecimens++;
 
 						// Get SpecimenPosition object and set it to specimen
-						SpecimenPosition specimenPosition = createSpecimenPosition(
-								specimen, container, specimenCounter);
+						SpecimenPosition specimenPosition = createSpecimenPosition(specimen,
+								container, specimenCounter);
 						specimen.setSpecimenPosition(specimenPosition);
 
 						// Add the SpecimenPostion object to container
-						container.getSpecimenPositionCollection().add(
-								specimenPosition);
+						container.getSpecimenPositionCollection().add(specimenPosition);
 					}
 					else
 					{
 						SpecimenPosition specimenPosFromCollection = ShippingTrackingUtility
 								.getSpecimenPositionFromCollection(container
-										.getSpecimenPositionCollection(),
-										fieldValue);
+										.getSpecimenPositionCollection(), fieldValue);
 						numOfSpecimens++;
 						if (specimenPosFromCollection == null)
 						{
 							// A new specimen is being added
 							// Get SpecimenPosition object and set it to
 							// specimen
-							SpecimenPosition specimenPosition = createSpecimenPosition(
-									specimen, container, specimenCounter);
+							SpecimenPosition specimenPosition = createSpecimenPosition(specimen,
+									container, specimenCounter);
 							specimen.setSpecimenPosition(specimenPosition);
 
 							// Add the SpecimenPostion object to container
-							container.getSpecimenPositionCollection().add(
-									specimenPosition);
+							container.getSpecimenPositionCollection().add(specimenPosition);
 							updatedSpecimenPosCollection.add(specimenPosition);
 						}
 						else
 						{
 							// This specimen was already present in the shipment
-							specimenPosFromCollection
-									.setPositionDimensionOne(specimenCounter);
+							specimenPosFromCollection.setPositionDimensionOne(specimenCounter);
 							specimen = specimenPosFromCollection.getSpecimen();
-							updatedSpecimenPosCollection
-									.add(specimenPosFromCollection);
+							updatedSpecimenPosCollection.add(specimenPosFromCollection);
 						}
 					}
 				}
 			}
 			container.getCapacity().setOneDimensionCapacity(numOfSpecimens);
 			// Process the specimens which have been deleted from the shipment
-			updateSpecimenPositionToVirtual(container
-					.getSpecimenPositionCollection(),
+			updateSpecimenPositionToVirtual(container.getSpecimenPositionCollection(),
 					updatedSpecimenPosCollection);
 			if (!shipmentForm.isAddOperation())
 			{
 				container.getSpecimenPositionCollection().clear();
-				container.getSpecimenPositionCollection().addAll(
-						updatedSpecimenPosCollection);
+				container.getSpecimenPositionCollection().addAll(updatedSpecimenPosCollection);
 			}
 			shipmentForm.setLblOrBarcodeSpecimenL(lblOrBarcodeList);// bug 11026
 
@@ -669,6 +647,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 		return container;
 
 	}
+
 	/**
 	 * this method updates the specimen position setting it to virtual.
 	 * @param specimenPositionCollection collection of specimens.
@@ -678,8 +657,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 			Collection<SpecimenPosition> specimenPositionCollection,
 			Collection<SpecimenPosition> updatedSpecimenPosCollection)
 	{
-		Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection
-				.iterator();
+		Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection.iterator();
 		while (specimenPosIterator.hasNext())
 		{
 			SpecimenPosition position = specimenPosIterator.next();
@@ -687,9 +665,8 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 					&& position.getSpecimen().getLabel() != null)
 			{
 				SpecimenPosition specimenPosFromCollection = ShippingTrackingUtility
-						.getSpecimenPositionFromCollection(
-								updatedSpecimenPosCollection, position
-										.getSpecimen().getLabel());
+						.getSpecimenPositionFromCollection(updatedSpecimenPosCollection, position
+								.getSpecimen().getLabel());
 				if (specimenPosFromCollection == null)
 				{
 					position.getSpecimen().setSpecimenPosition(null);
@@ -698,6 +675,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 
 		}
 	}
+
 	/**
 	 * creates specimen position.
 	 * @param specimen whose position is to be created.
@@ -718,6 +696,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 
 		return position;
 	}
+
 	/**
 	 * sets the basic shipment properties like label,site,comments,etc.
 	 * @param shipmentForm form containing all values.
@@ -747,8 +726,8 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 				if (shipmentForm.getSendTimeHour() != null
 						&& !shipmentForm.getSendTimeHour().trim().equals(""))
 				{
-					calendar.set(Calendar.HOUR_OF_DAY, Integer
-							.parseInt(shipmentForm.getSendTimeHour()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shipmentForm
+							.getSendTimeHour()));
 				}
 				if (shipmentForm.getSendTimeMinutes() != null
 						&& !shipmentForm.getSendTimeMinutes().trim().equals(""))
@@ -763,10 +742,11 @@ public class BaseShipment extends AbstractDomainObject implements Serializable,
 		catch (Exception e)
 		{
 			Logger.out.error(e.getMessage());
-			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"),e,"item missing");
+			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");
 		}
 
 	}
+
 	/**
 	 * creates the object of Site class.
 	 * @param siteId whose object is to be created.

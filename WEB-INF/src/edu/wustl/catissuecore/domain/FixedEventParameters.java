@@ -21,6 +21,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FixedEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -111,7 +112,8 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 			FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
 
 			this.fixationType = form.getFixationType();
-			if (form.getDurationInMinutes() != null && form.getDurationInMinutes().trim().length() > 0)
+			if (form.getDurationInMinutes() != null
+					&& form.getDurationInMinutes().trim().length() > 0)
 			{
 				this.durationInMinutes = Integer.parseInt(form.getDurationInMinutes());
 			}

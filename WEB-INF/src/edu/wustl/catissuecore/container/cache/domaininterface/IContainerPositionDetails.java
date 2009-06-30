@@ -1,5 +1,5 @@
-package edu.wustl.catissuecore.container.cache.domaininterface;
 
+package edu.wustl.catissuecore.container.cache.domaininterface;
 
 /**
  * 
@@ -11,8 +11,12 @@ package edu.wustl.catissuecore.container.cache.domaininterface;
  */
 public interface IContainerPositionDetails
 {
+
 	long getContainerId();
+
 	String getContainerName();
+
 	int getXPosition();
+
 	int getYPosition();
 }

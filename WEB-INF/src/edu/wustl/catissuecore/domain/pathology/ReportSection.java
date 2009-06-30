@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.IValueObject;
@@ -21,34 +22,34 @@ public class ReportSection extends AbstractDomainObject
 	 * End off set of the report section.
 	 */
 	protected Integer endOffSet;
-	
+
 	/**
 	 * Name of the reporting section.
 	 */
 	protected String name;
-	
+
 	/**
 	 * Start off set of reporting section. 
 	 * 
 	 */
 	protected Integer startOffSet;
-	
+
 	/**
 	 * Text content of the report.
 	 */
 	protected TextContent textContent;
-	
+
 	/**
 	 * System generated unique ID.
 	 */
 	protected Long id;
 
 	/**
-    * @return system generated id
-    * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-    * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_SECTION_SEQ"
-    */
+	* @return system generated id
+	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	* unsaved-value="null" generator-class="native" 
+	* @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_SECTION_SEQ"
+	*/
 	public Long getId()
 	{
 		return id;
@@ -70,17 +71,17 @@ public class ReportSection extends AbstractDomainObject
 
 	}
 
-	
 	/**
 	 * @return text information of the report section.
-     * @hibernate.property name="documentFragment"
-     * type="string" column="DOCUMENT_FRAGMENT" 
-     * length="1000"
-     */
+	 * @hibernate.property name="documentFragment"
+	 * type="string" column="DOCUMENT_FRAGMENT" 
+	 * length="1000"
+	 */
 	public String getDocumentFragment()
 	{
 		return documentFragment;
 	}
+
 	/**
 	 * @param documentFragment Sets the text information of the report section.
 	 */
@@ -91,10 +92,10 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the end off set of the report section.
-     * @hibernate.property name="endOffSet"
-     * type="integer" column="END_OFFSET" 
-     * length="10"
-     */
+	 * @hibernate.property name="endOffSet"
+	 * type="integer" column="END_OFFSET" 
+	 * length="10"
+	 */
 	public Integer getEndOffSet()
 	{
 		return endOffSet;
@@ -110,15 +111,15 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the name of the report section.
-     * @hibernate.property  name="name"
-     * type="string" column="NAME" 
-     * length="100"
-     */
+	 * @hibernate.property  name="name"
+	 * type="string" column="NAME" 
+	 * length="100"
+	 */
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	/**
 	 * @param name sets the name of the report section.
 	 */
@@ -129,10 +130,10 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the start offset of the report section.
-     * @hibernate.property name="startOffSet"
-     * type="integer" column="START_OFFSET" 
-     * length="10"
-     */
+	 * @hibernate.property name="startOffSet"
+	 * type="integer" column="START_OFFSET" 
+	 * length="10"
+	 */
 	public Integer getStartOffSet()
 	{
 		return startOffSet;
@@ -145,6 +146,7 @@ public class ReportSection extends AbstractDomainObject
 	{
 		this.startOffSet = startOffSet;
 	}
+
 	/** 
 	 * @return the text content.
 	 * 	@hibernate.many-to-one 	name="textContent"
@@ -164,11 +166,10 @@ public class ReportSection extends AbstractDomainObject
 		this.textContent = textContent;
 	}
 
-	
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

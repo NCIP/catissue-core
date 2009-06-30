@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.container.cache.ContainerCacheManager;
 import edu.wustl.catissuecore.container.cache.ContainerPositionDetails;
 import edu.wustl.catissuecore.container.cache.domaininterface.IContainerCacheManager;
 
-
 /**
  * @author ashish_gupta
  *
@@ -105,8 +104,8 @@ public class TestContainerCacheManager extends TestCase
 	@Test
 	public void testIsPositionFree()
 	{
-		int  xPos = 11;
-		int  yPos = 23;
+		int xPos = 11;
+		int yPos = 23;
 		Long containerId = 18L;
 
 		containerCacheManager.addPosition(containerId, xPos, yPos);

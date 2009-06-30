@@ -38,10 +38,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ShipmentRequest extends BaseShipment
 {
+
 	/**
 	 * represents the collection ofspecimens.
 	 */
-	public Collection<Specimen> specimenCollection=new HashSet<Specimen>();
+	public Collection<Specimen> specimenCollection = new HashSet<Specimen>();
+
 	/**
 	 * gets the specimen collection.
 	 * @return specimenCollection collection of specimens.
@@ -50,6 +52,7 @@ public class ShipmentRequest extends BaseShipment
 	{
 		return specimenCollection;
 	}
+
 	/**
 	 * sets the specimen collection.
 	 * @param specimenCollection specimen collection to set.
@@ -58,20 +61,21 @@ public class ShipmentRequest extends BaseShipment
 	{
 		this.specimenCollection = specimenCollection;
 	}
+
 	/**
 	 * gets the message label.
 	 * @return msgLabel the message label.
 	 */
 	public String getMessageLabel()
 	{
-		String msgLabel="";
-		if(this.receiverSite!=null && this.receiverSite.getName()!=null)
+		String msgLabel = "";
+		if (this.receiverSite != null && this.receiverSite.getName() != null)
 		{
-			msgLabel="site "+this.receiverSite.getName();
+			msgLabel = "site " + this.receiverSite.getName();
 		}
 		else
 		{
-			msgLabel="required sites.";
+			msgLabel = "required sites.";
 		}
 		return msgLabel;
 	}
@@ -84,6 +88,7 @@ public class ShipmentRequest extends BaseShipment
 	 * Used to check whether the shipment created for the request.
 	 */
 	private boolean requestProcessed = false;
+
 	/**
 	 * Get whether the shipment created for the request (i.e. Request processed or not).
 	 * @return requestProcessed true if shipment created for the request otherwise false.
@@ -92,6 +97,7 @@ public class ShipmentRequest extends BaseShipment
 	{
 		return requestProcessed;
 	}
+
 	/**
 	 * Set the request processed or not.
 	 * @param requestProcessed true if shipment created for the request otherwise false
@@ -100,6 +106,7 @@ public class ShipmentRequest extends BaseShipment
 	{
 		this.requestProcessed = requestProcessed;
 	}
+
 	/**
 	 * default constructor.
 	 */
@@ -107,6 +114,7 @@ public class ShipmentRequest extends BaseShipment
 	{
 
 	}
+
 	/**
 	 * constructor.
 	 * @param form to set all values.
@@ -117,6 +125,7 @@ public class ShipmentRequest extends BaseShipment
 		this();
 		this.setAllValues(form);
 	}
+
 	/**
 	 * sets all values to the object.
 	 * @param arg0 the object representing the form.
@@ -124,23 +133,24 @@ public class ShipmentRequest extends BaseShipment
 	 */
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
-		if(arg0 instanceof ShipmentRequestForm)
+		if (arg0 instanceof ShipmentRequestForm)
 		{
-			BaseShipmentForm shipmentForm=(ShipmentRequestForm)arg0;
+			BaseShipmentForm shipmentForm = (ShipmentRequestForm) arg0;
 			setBasicShipmentRequestProperties(shipmentForm);
 			setShipmentContents(shipmentForm);
 		}
 	}
+
 	/**
 	 * sets the shipment contents.
 	 * @param shipmentForm object of BaseShipmentForm class.
 	 */
 	protected void setShipmentContents(BaseShipmentForm shipmentForm)
 	{
-		Collection<StorageContainer> updatedContainerCollection=new HashSet<StorageContainer>();
+		Collection<StorageContainer> updatedContainerCollection = new HashSet<StorageContainer>();
 		//Call to super class's method to set information related to populate container info
-		populateContainerContents(shipmentForm,updatedContainerCollection);
-		if(!shipmentForm.isAddOperation())
+		populateContainerContents(shipmentForm, updatedContainerCollection);
+		if (!shipmentForm.isAddOperation())
 		{
 			this.containerCollection.clear();
 			this.containerCollection.addAll(updatedContainerCollection);
@@ -148,32 +158,33 @@ public class ShipmentRequest extends BaseShipment
 		// Populate the specimenCollection
 		populateSpecimenCollection(shipmentForm);
 	}
+
 	/**
 	 * populates specimen collection.
 	 * @param shipmentForm form containing all values.
 	 */
 	private void populateSpecimenCollection(BaseShipmentForm shipmentForm)
 	{
-		int specimenCount=shipmentForm.getSpecimenCounter();
-		String fieldValue="";
-		boolean containsSpecimens=false;
-		Specimen specimen=null;
-		int numOfSpecimens=0;
+		int specimenCount = shipmentForm.getSpecimenCounter();
+		String fieldValue = "";
+		boolean containsSpecimens = false;
+		Specimen specimen = null;
+		int numOfSpecimens = 0;
 		this.specimenCollection.clear();
-		if(specimenCount>0)
+		if (specimenCount > 0)
 		{
-			for(int specimenCounter=1;specimenCounter<=specimenCount;specimenCounter++)
+			for (int specimenCounter = 1; specimenCounter <= specimenCount; specimenCounter++)
 			{
-				fieldValue=(String)shipmentForm.getSpecimenDetails
-					("specimenLabel_"+specimenCounter);
-				if(fieldValue!=null && !fieldValue.trim().equals(""))
+				fieldValue = (String) shipmentForm.getSpecimenDetails("specimenLabel_"
+						+ specimenCounter);
+				if (fieldValue != null && !fieldValue.trim().equals(""))
 				{
-					specimen=new Specimen();
-					if(shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
+					specimen = new Specimen();
+					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}
-					else if(shipmentForm.getSpecimenLabelChoice().equals("SpecimenBarcode"))
+					else if (shipmentForm.getSpecimenLabelChoice().equals("SpecimenBarcode"))
 					{
 						specimen.setBarcode(fieldValue);
 					}
@@ -182,52 +193,56 @@ public class ShipmentRequest extends BaseShipment
 			}
 		}
 	}
+
 	/**
 	 * sets the basic shipment request properties.
 	 * @param shipmentForm form object containing all values.
 	 * @throws AssignDataException if some assignment operation fails.
 	 */
-	protected void setBasicShipmentRequestProperties(BaseShipmentForm shipmentForm) throws AssignDataException
+	protected void setBasicShipmentRequestProperties(BaseShipmentForm shipmentForm)
+			throws AssignDataException
 	{
-		if(shipmentForm.getId()!=0l)
+		if (shipmentForm.getId() != 0l)
 		{
-			this.id=shipmentForm.getId();
+			this.id = shipmentForm.getId();
 		}
-		this.senderComments=shipmentForm.getSenderComments();
-		this.senderSite=createSitObject(shipmentForm.getSenderSiteId());
-		this.label=shipmentForm.getLabel();
-		if(shipmentForm.getActivityStatus()!=null && !shipmentForm.getActivityStatus().trim().equals(""))
+		this.senderComments = shipmentForm.getSenderComments();
+		this.senderSite = createSitObject(shipmentForm.getSenderSiteId());
+		this.label = shipmentForm.getLabel();
+		if (shipmentForm.getActivityStatus() != null
+				&& !shipmentForm.getActivityStatus().trim().equals(""))
 		{
-			this.activityStatus=shipmentForm.getActivityStatus();
+			this.activityStatus = shipmentForm.getActivityStatus();
 		}
 		try
 		{
-			if (shipmentForm.getSendDate()!= null && shipmentForm.getSendDate().trim().length()!=0  )
+			if (shipmentForm.getSendDate() != null
+					&& shipmentForm.getSendDate().trim().length() != 0)
 			{
 				Calendar calendar = Calendar.getInstance();
 				Date date;
-				date = Utility.parseDate(shipmentForm.getSendDate(),
-						Utility.datePattern(shipmentForm.getSendDate()));
+				date = Utility.parseDate(shipmentForm.getSendDate(), Utility
+						.datePattern(shipmentForm.getSendDate()));
 				calendar.setTime(date);
-				if(shipmentForm.getSendTimeHour()!=null
+				if (shipmentForm.getSendTimeHour() != null
 						&& !shipmentForm.getSendTimeHour().trim().equals(""))
 				{
-					calendar.set(Calendar.HOUR_OF_DAY,
-							Integer.parseInt(shipmentForm.getSendTimeHour()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shipmentForm
+							.getSendTimeHour()));
 				}
-				if(shipmentForm.getSendTimeMinutes()!=null
+				if (shipmentForm.getSendTimeMinutes() != null
 						&& !shipmentForm.getSendTimeMinutes().trim().equals(""))
 				{
-					calendar.set(Calendar.MINUTE,
-							Integer.parseInt(shipmentForm.getSendTimeMinutes()));
+					calendar.set(Calendar.MINUTE, Integer.parseInt(shipmentForm
+							.getSendTimeMinutes()));
 				}
 				this.sendDate = calendar.getTime();
 			}
 		}
-		catch(ParseException e)
+		catch (ParseException e)
 		{
 			Logger.out.error(e.getMessage());
-			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"),e,"item missing");
+			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");
 		}
 	}
 }

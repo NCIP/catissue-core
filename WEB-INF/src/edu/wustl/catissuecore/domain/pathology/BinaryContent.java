@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 /**
@@ -14,8 +15,7 @@ public class BinaryContent extends ReportContent
 	 * Surgical Pathology report of the current binary data. 
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
-	
-	
+
 	/**
 	 * Constructor
 	 */
@@ -34,14 +34,14 @@ public class BinaryContent extends ReportContent
 	{
 		return surgicalPathologyReport;
 	}
+
 	/**
 	 * @param surgicalPathologyReport sets the surgical pathology report of current binary content.  
 	 * 
 	 */
-	public void setSurgicalPathologyReport(
-		SurgicalPathologyReport surgicalPathologyReport)
+	public void setSurgicalPathologyReport(SurgicalPathologyReport surgicalPathologyReport)
 	{
 		this.surgicalPathologyReport = surgicalPathologyReport;
 	}
-	
+
 }

@@ -5,6 +5,7 @@
  * @version 1.00
  * Created on Jan 18, 2007
  */
+
 package edu.wustl.catissuecore.domain;
 
 /**
@@ -15,6 +16,7 @@ package edu.wustl.catissuecore.domain;
  */
 public class ReturnEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

@@ -20,8 +20,10 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class DisposalEventParameters extends SpecimenEventParameters
-		implements java.io.Serializable
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -41,6 +43,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 * activityStatus.
 	 */
 	protected String activityStatus;
+
 	/**
 	 * Returns the reason of disposal.
 	 * @hibernate.property name="reason" type="string" column="REASON" length="255"
@@ -75,34 +78,34 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	public DisposalEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject)abstractForm);
+		setAllValues((IValueObject) abstractForm);
 	}
 
 	/**
-     * This function Copies the data from an DisposalEventParametersForm object to
-     * a DisposalEventParameters object.
-     * @param abstractForm An DisposalEventParametersForm object containing the
-     * information about the DisposalEventParameters.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
-        	this.reason = form.getReason();
-        	this.activityStatus = form.getActivityStatus();
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage());
-        }
-    }
+	 * This function Copies the data from an DisposalEventParametersForm object to
+	 * a DisposalEventParameters object.
+	 * @param abstractForm An DisposalEventParametersForm object containing the
+	 * information about the DisposalEventParameters.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
+			this.reason = form.getReason();
+			this.activityStatus = form.getActivityStatus();
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 
-    /**
-     * Get Activity Status.
-     * @return String.
-     */
+	/**
+	 * Get Activity Status.
+	 * @return String.
+	 */
 	public String getActivityStatus()
 	{
 		return activityStatus;

@@ -21,6 +21,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class FluidSpecimen extends Specimen implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -31,46 +32,46 @@ public class FluidSpecimen extends Specimen implements Serializable
 	 */
 	private static final long serialVersionUID = 1234567890L;
 
-    /**
-     * Default Constructor.
-     */
+	/**
+	 * Default Constructor.
+	 */
 	public FluidSpecimen()
-    {
-    	super();
-    }
+	{
+		super();
+	}
 
 	/**
 	 * Parameterized Constructor.
 	 * @param form AbstractActionForm.
 	 */
-    public FluidSpecimen(AbstractActionForm form)
-    {
-    	super();
-    	setAllValues(form);
-    }
+	public FluidSpecimen(AbstractActionForm form)
+	{
+		super();
+		setAllValues(form);
+	}
 
-    /**
-     * This function Copies the data from an NewSpecimenForm object to a FluidSpecimen object.
-     * @param abstractForm An SiteForm object containing the information about the site.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	super.setAllValues(abstractForm);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage());
-        }
-    }
+	/**
+	 * This function Copies the data from an NewSpecimenForm object to a FluidSpecimen object.
+	 * @param abstractForm An SiteForm object containing the information about the site.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			super.setAllValues(abstractForm);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param fluidReqSpecimen SpecimenRequirement.
-     */
-    public FluidSpecimen(SpecimenRequirement fluidReqSpecimen)
-    {
-    	super(fluidReqSpecimen);
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param fluidReqSpecimen SpecimenRequirement.
+	 */
+	public FluidSpecimen(SpecimenRequirement fluidReqSpecimen)
+	{
+		super(fluidReqSpecimen);
+	}
 }

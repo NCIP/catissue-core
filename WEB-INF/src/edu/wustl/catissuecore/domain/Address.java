@@ -20,6 +20,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class Address extends AbstractDomainObject implements java.io.Serializable
 {
+
 	/**
 	 * Serial Version Id for the class.
 	 */
@@ -68,8 +69,8 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	/**
 	 * Returns the identifier assigned to Address.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ"
 	 * @return a unique id assigned to the address.
 	 */
 	public Long getId()
@@ -218,16 +219,16 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 		this.faxNumber = faxNumber;
 	}
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
-     * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues
+	 * (edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
 	/**
 	 * Set all values.
 	 * @param abstractForm IValueObject.
 	 */
-    public void setAllValues(IValueObject abstractForm)
-    {
-    	//
-    }
+	public void setAllValues(IValueObject abstractForm)
+	{
+		//
+	}
 }

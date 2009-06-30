@@ -25,6 +25,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class ReportedProblem extends AbstractDomainObject implements Serializable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

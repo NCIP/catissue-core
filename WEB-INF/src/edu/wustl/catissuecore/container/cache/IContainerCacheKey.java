@@ -1,7 +1,8 @@
+
 package edu.wustl.catissuecore.container.cache;
 
-
-public interface IContainerCacheKey 
+public interface IContainerCacheKey
 {
-	public abstract IContainerMap getCorrespondingContainerMap();	
+
+	public abstract IContainerMap getCorrespondingContainerMap();
 }

@@ -1,4 +1,6 @@
+
 package edu.wustl.catissuecore.domain.pathology;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -11,25 +13,25 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
  * @hibernate.joined-subclass-key
  *  column="IDENTIFIER"
  */
- 
-public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport 
+
+public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 {
 
 	/**
 	 * Quarantine report flag. 
 	 */
 	protected String isQuarantined;
-	
+
 	/**
 	 * Collection of the quarantine event parameters of the current report.
 	 */
 	protected Set quarantineEventParameterCollection;
-	
+
 	/**
 	 * collection of concept referents.
 	 */
 	protected Collection conceptReferentCollection;
-	
+
 	/**
 	 * Specimen collection group of the current report.
 	 */
@@ -43,7 +45,6 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 
 	}
 
-	
 	/**
 	* @return collection of concept referent. 
 	* @hibernate.set inverse="false"
@@ -60,19 +61,17 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * @param conceptReferentCollection sets concept referent collection.
 	 */
-	public void setConceptReferentCollection(
-			Collection conceptReferentCollection)
+	public void setConceptReferentCollection(Collection conceptReferentCollection)
 	{
 		this.conceptReferentCollection = conceptReferentCollection;
 	}
 
-	
 	/**
 	 * @return quarantine status of the report.
 	 * @hibernate.property  name="isQuanrantined"
 	 * type="string" column="STATUS"
 	 */
-	public String getIsQuarantined() 
+	public String getIsQuarantined()
 	{
 		return isQuarantined;
 	}
@@ -84,7 +83,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	{
 		this.isQuarantined = isQuarantined;
 	}
-	
+
 	/**
 	* @return quarantine event parameter set collection.
 	* @hibernate.set inverse="false" table="CATISSUE_QUARANTINE_PARAMS"
@@ -102,12 +101,11 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * @param quarantineEventParameterCollection sets quarantine event parameter set.
 	 */
-	public void setQuarantineEventParameterCollection(
-			Set quarantineEventParameterCollection)
+	public void setQuarantineEventParameterCollection(Set quarantineEventParameterCollection)
 	{
 		this.quarantineEventParameterCollection = quarantineEventParameterCollection;
 	}
-	
+
 	/**		
 	 * @return specimen collection group of the report.
 	 * @hibernate.many-to-one  name="specimenCollectionGroup"
@@ -122,8 +120,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * @param specimenCollectionGroup sets specimen collection group of the report.
 	 */
-	public void setSpecimenCollectionGroup(
-			SpecimenCollectionGroup specimenCollectionGroup)
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}

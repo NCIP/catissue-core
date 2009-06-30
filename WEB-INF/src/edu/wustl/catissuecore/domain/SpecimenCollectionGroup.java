@@ -36,8 +36,11 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN_COLL_GROUP"
  * @author gautam_shetty
  */
-public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup implements Serializable
+public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
+		implements
+			Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -365,8 +368,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * to a Collection Protocol.
 	 * @see #getCollectionProtocolRegistration()
 	 */
-	public void setCollectionProtocolRegistration(CollectionProtocolRegistration
-			collectionProtocolRegistration)
+	public void setCollectionProtocolRegistration(
+			CollectionProtocolRegistration collectionProtocolRegistration)
 	{
 		this.collectionProtocolRegistration = collectionProtocolRegistration;
 	}
@@ -419,8 +422,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * Sets the deidentified surgical pathology report associated with the specimen collection group.
 	 * @param deIdentifiedSurgicalPathologyReport deidentified report object.
 	 */
-	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport
-			deIdentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedSurgicalPathologyReport(
+			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
 	{
 		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
@@ -441,8 +444,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * Sets the identified surgical pathology report associated with the specimen collection group.
 	 * @param identifiedSurgicalPathologyReport identified report object.
 	 */
-	public void setIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport
-			identifiedSurgicalPathologyReport)
+	public void setIdentifiedSurgicalPathologyReport(
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport)
 	{
 		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
 	}
@@ -498,8 +501,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			collectionProtocolEvent = new CollectionProtocolEvent();
 			collectionProtocolEvent.setId(Long.valueOf(form.getCollectionProtocolEventId()));
 
-			logger.debug("form.getParticipantsMedicalIdentifierId() " +
-					form.getParticipantsMedicalIdentifierId());
+			logger.debug("form.getParticipantsMedicalIdentifierId() "
+					+ form.getParticipantsMedicalIdentifierId());
 
 			this.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
@@ -522,15 +525,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 				collectionProtocolRegistration.setParticipant(participant);
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 
-				ParticipantMedicalIdentifier participantMedicalIdentifier =
-					new ParticipantMedicalIdentifier();
-				participantMedicalIdentifier.setId(Long.valueOf(
-						form.getParticipantsMedicalIdentifierId()));
+				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+				participantMedicalIdentifier.setId(Long.valueOf(form
+						.getParticipantsMedicalIdentifierId()));
 			}
 			else
 			{
-				collectionProtocolRegistration.setProtocolParticipantIdentifier(
-						form.getProtocolParticipantIdentifier());
+				collectionProtocolRegistration.setProtocolParticipantIdentifier(form
+						.getProtocolParticipantIdentifier());
 				collectionProtocolRegistration.setParticipant(null);
 			}
 
@@ -568,7 +570,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		{
 			Logger.out.error(e.getMessage(), e);
 			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey,null ,"SpecimenCollectionGroup.java :");
+			throw new AssignDataException(errorKey, null, "SpecimenCollectionGroup.java :");
 		}
 	}
 
@@ -644,11 +646,12 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	private void setEventParameters(CollectionEventParameters collectionEventParameters,
 			ReceivedEventParameters receivedEventParameters, SpecimenCollectionGroupForm form)
 	{
-		collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
+		collectionEventParameters.setCollectionProcedure(form
+				.getCollectionEventCollectionProcedure());
 		collectionEventParameters.setComment(form.getCollectionEventComments());
 		collectionEventParameters.setContainer(form.getCollectionEventContainer());
-		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(),
-				form.getCollectionEventTimeInHours(), form.getCollectionEventTimeInMinutes());
+		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(), form
+				.getCollectionEventTimeInHours(), form.getCollectionEventTimeInMinutes());
 		collectionEventParameters.setTimestamp(timestamp);
 		User user = null;
 		if (form.getCollectionEventUserId() != 0)
@@ -669,8 +672,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		}
 		receivedEventParameters.setUser(receivedUser);
 		receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());
-		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(),
-				form.getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
+		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(), form
+				.getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
 		receivedEventParameters.setTimestamp(receivedTimestamp);
 		receivedEventParameters.setSpecimenCollectionGroup(this);
 	}
@@ -703,10 +706,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 			//Setting response
 			consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
 			if (consentBean.getSpecimenCollectionGroupLevelResponseID() != null
-				&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
+					&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
 			{
-				consentTierstatus.setId(Long.parseLong(consentBean.
-						getSpecimenCollectionGroupLevelResponseID()));
+				consentTierstatus.setId(Long.parseLong(consentBean
+						.getSpecimenCollectionGroupLevelResponseID()));
 			}
 			//Setting consent tier
 			ConsentTier consentTier = new ConsentTier();
@@ -761,8 +764,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 		if (gpName == null)
 		{
 			ErrorKey errorKey = ErrorKey.getErrorKey("scg.name.null.error");
-			throw new BizLogicException(errorKey,null ,"SpecimenArrayTypeBizLogic.java :"+
-					"group name can't be null for " + "SpecimenCollectionGroup Object");	
+			throw new BizLogicException(errorKey, null, "SpecimenArrayTypeBizLogic.java :"
+					+ "group name can't be null for " + "SpecimenCollectionGroup Object");
 		}
 		this.setName(gpName);
 	}
@@ -803,16 +806,16 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup imp
 	 * Set ConsentTier Status Collection From CPR.
 	 * @param collectionProtocolRegistration of CollectionProtocolRegistration type.
 	 */
-	public void setConsentTierStatusCollectionFromCPR(CollectionProtocolRegistration
-			collectionProtocolRegistration)
+	public void setConsentTierStatusCollectionFromCPR(
+			CollectionProtocolRegistration collectionProtocolRegistration)
 	{
 		Collection consentTierStatusCollectionN = this.getConsentTierStatusCollection();
 		if (consentTierStatusCollectionN == null)
 		{
 			consentTierStatusCollectionN = new HashSet();
 		}
-		Collection consentTierResponseCollection = collectionProtocolRegistration.
-			getConsentTierResponseCollection();
+		Collection consentTierResponseCollection = collectionProtocolRegistration
+				.getConsentTierResponseCollection();
 		Collection scgConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 

@@ -20,12 +20,16 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_PROCEDURE_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class ProcedureEventParameters extends SpecimenEventParameters implements java.io.Serializable
+public class ProcedureEventParameters extends SpecimenEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ProcedureEventParameters.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ProcedureEventParameters.class);
 
 	/**
 	 * Serial Version ID.

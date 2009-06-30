@@ -20,6 +20,7 @@ package edu.wustl.catissuecore.domain;
  */
 public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

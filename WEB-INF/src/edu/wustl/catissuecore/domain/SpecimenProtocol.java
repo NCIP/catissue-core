@@ -25,6 +25,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class SpecimenProtocol extends AbstractDomainObject implements java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -289,38 +290,39 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	public void setAllValues(IValueObject abstractForm)
 	{
 		logger.debug("SpecimenProtocol: setAllValues ");
-        try
-        {
-        	//Change for API Search   --- Ashwin 04/10/2006
-        	if (SearchUtil.isNullobject(principalInvestigator))
-        	{
-        		principalInvestigator = new User();
-        	}
+		try
+		{
+			//Change for API Search   --- Ashwin 04/10/2006
+			if (SearchUtil.isNullobject(principalInvestigator))
+			{
+				principalInvestigator = new User();
+			}
 
-        	final SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
+			final SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
 
-        	this.title = spForm.getTitle();
-        	this.shortTitle = spForm.getShortTitle();
-        	this.irbIdentifier = spForm.getIrbID();
+			this.title = spForm.getTitle();
+			this.shortTitle = spForm.getShortTitle();
+			this.irbIdentifier = spForm.getIrbID();
 
-        	this.startDate = Utility.parseDate(spForm.getStartDate(),
-        			Utility.datePattern(spForm.getStartDate()));
-        	this.endDate = Utility.parseDate(spForm.getEndDate(),Utility.datePattern(spForm.getEndDate()));
+			this.startDate = Utility.parseDate(spForm.getStartDate(), Utility.datePattern(spForm
+					.getStartDate()));
+			this.endDate = Utility.parseDate(spForm.getEndDate(), Utility.datePattern(spForm
+					.getEndDate()));
 
-        	if(spForm.getEnrollment() != null && spForm.getEnrollment().trim().length()>0 )
-        	{
-        		this.enrollment = Integer.valueOf(spForm.getEnrollment());
-        	}
+			if (spForm.getEnrollment() != null && spForm.getEnrollment().trim().length() > 0)
+			{
+				this.enrollment = Integer.valueOf(spForm.getEnrollment());
+			}
 
-        	this.descriptionURL = spForm.getDescriptionURL();
-        	this.activityStatus = spForm.getActivityStatus();
+			this.descriptionURL = spForm.getDescriptionURL();
+			this.activityStatus = spForm.getActivityStatus();
 
-        	principalInvestigator  = new User();
-        	this.principalInvestigator.setId(Long.valueOf(spForm.getPrincipalInvestigatorId()));
-        }
-        catch (Exception excp)
-        {
-	    	logger.error(excp.getMessage(),excp);
-        }
+			principalInvestigator = new User();
+			this.principalInvestigator.setId(Long.valueOf(spForm.getPrincipalInvestigatorId()));
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage(), excp);
+		}
 	}
 }

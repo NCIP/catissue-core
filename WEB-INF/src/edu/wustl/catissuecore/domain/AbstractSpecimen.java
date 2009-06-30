@@ -5,6 +5,7 @@
  * Company: Washington University, School of Medicine, St. Louis.
  * @version caTissueSuite V1.1
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
@@ -23,8 +24,12 @@ import edu.wustl.common.exception.AssignDataException;
  * @author virender_mehta
  */
 
-public abstract class AbstractSpecimen extends AbstractDomainObject implements Serializable, IActivityStatus
+public abstract class AbstractSpecimen extends AbstractDomainObject
+		implements
+			Serializable,
+			IActivityStatus
 {
+
 	/**
 	 * This is the serial version ID generated for the class.
 	 */
@@ -50,8 +55,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen.
 	 */
-	protected Collection<SpecimenEventParameters> specimenEventCollection =
-		new HashSet<SpecimenEventParameters>();
+	protected Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
 	/**
 	 * pathologicalStatus - Histoathological character of specimen.
 	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
@@ -78,6 +82,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	 * specimenType - Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
 	 */
 	protected String specimenType;
+
 	/**
 	 * Overidden from AbstractDomainObject class.
 	 * @param valueObject IValueObject.
@@ -87,6 +92,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		//
 	}
+
 	/**
 	 * It would return the Activity Status.
 	 * @return activity status of String type.
@@ -95,6 +101,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		return null;
 	}
+
 	/**
 	 * Abstract method which would set the Activity Status.
 	 * @param activityStatus of String type
@@ -103,6 +110,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		//
 	}
+
 	/**
 	 * It returns the identifier.
 	 * @return identifier of type Long.
@@ -111,6 +119,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		return id;
 	}
+
 	/**
 	 * Set the identifier.
 	 * @param identifier which is of Long type.
@@ -271,6 +280,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 	{
 		this.childSpecimenCollection = childrenSpecimen;
 	}
+
 	/**
 	 * Returns the collection of Specimen Event Parameters associated with this specimen.
 	 * @hibernate.set name="specimenEventCollection" table="CATISSUE_SPECIMEN_EVENT"
@@ -312,7 +322,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject implements S
 		{
 			className = Constants.MOLECULAR;
 		}
-		else if (this instanceof FluidSpecimen|| this instanceof FluidSpecimenRequirement)
+		else if (this instanceof FluidSpecimen || this instanceof FluidSpecimenRequirement)
 		{
 			className = Constants.FLUID;
 		}

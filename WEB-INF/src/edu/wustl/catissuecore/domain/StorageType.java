@@ -27,6 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageType extends ContainerType
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -176,11 +177,11 @@ public class StorageType extends ContainerType
 			this.id = Long.valueOf(storageTypeForm.getId());
 			this.name = storageTypeForm.getType().trim();
 
-			if (storageTypeForm.getDefaultTemperature() != null &&
-					storageTypeForm.getDefaultTemperature().trim().length() > 0)
+			if (storageTypeForm.getDefaultTemperature() != null
+					&& storageTypeForm.getDefaultTemperature().trim().length() > 0)
 			{
-				this.defaultTempratureInCentigrade = new Double(
-						storageTypeForm.getDefaultTemperature());
+				this.defaultTempratureInCentigrade = new Double(storageTypeForm
+						.getDefaultTemperature());
 			}
 
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
@@ -191,10 +192,10 @@ public class StorageType extends ContainerType
 				capacity = new Capacity();
 			}
 
-			capacity.setOneDimensionCapacity(Integer.valueOf(
-					storageTypeForm.getOneDimensionCapacity()));
-			capacity.setTwoDimensionCapacity(Integer.valueOf(
-					storageTypeForm.getTwoDimensionCapacity()));
+			capacity.setOneDimensionCapacity(Integer.valueOf(storageTypeForm
+					.getOneDimensionCapacity()));
+			capacity.setTwoDimensionCapacity(Integer.valueOf(storageTypeForm
+					.getTwoDimensionCapacity()));
 
 			//holdsStorageTypeCollection.clear();
 			holdsStorageTypeCollection = new HashSet();
@@ -226,8 +227,7 @@ public class StorageType extends ContainerType
 						logger.debug("type Id :" + specimenClassTypeArr[i]);
 						if (specimenClassTypeArr[i].equals("-1"))
 						{
-							holdsSpecimenClassCollection.addAll(
-									AppUtility.getSpecimenClassTypes());
+							holdsSpecimenClassCollection.addAll(AppUtility.getSpecimenClassTypes());
 							break;
 						}
 						else

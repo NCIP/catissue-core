@@ -40,6 +40,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  */
 public class User extends AbstractDomainObject implements Serializable, IActivityStatus
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -545,11 +546,12 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 		try
 		{
-			if (roleId.equals(Constants.DOUBLE_QUOTES) && id != null && id != 0 && csmUserId != null)
+			if (roleId.equals(Constants.DOUBLE_QUOTES) && id != null && id != 0
+					&& csmUserId != null)
 			{
 				Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
-        		if(role!=null && role.getId()!=null)
-        			roleId = role.getId().toString();
+				if (role != null && role.getId() != null)
+					roleId = role.getId().toString();
 			}
 		}
 		catch (SMException e)
@@ -559,7 +561,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 		return roleId;
 	}
-	
+
 	/**
 	 * @param roleId The roleId to set.
 	 */
@@ -700,22 +702,22 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 					this.setStartDate(Calendar.getInstance().getTime());
 				}
 
-				if (!pageOf.equals(Constants.PAGE_OF_SIGNUP) &&
-						!pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+				if (!pageOf.equals(Constants.PAGE_OF_SIGNUP)
+						&& !pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
 				{
 					this.comments = uform.getComments();
 				}
 
-				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) &&
-						uform.getOperation().equals(Constants.ADD))
+				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN)
+						&& uform.getOperation().equals(Constants.ADD))
 				{
 					this.activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 					this.setStartDate(Calendar.getInstance().getTime());
 				}
 
 				//Bug-1516: Jitendra
-				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) &&
-						uform.getOperation().equals(Constants.EDIT))
+				if (uform.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN)
+						&& uform.getOperation().equals(Constants.EDIT))
 				{
 					this.newPassword = uform.getNewPassword();
 				}
@@ -763,7 +765,8 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getMessageLabel()
 	{
-		return edu.wustl.catissuecore.util.global.AppUtility.getlLabel(this.lastName, this.firstName);
+		return edu.wustl.catissuecore.util.global.AppUtility.getlLabel(this.lastName,
+				this.firstName);
 	}
 
 	/**
@@ -841,7 +844,8 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	/**
 	 * @param userCollectionProtocolCollection Collection of CollectionProtocol.
 	 */
-	public void setAssignedProtocolCollection(Collection<CollectionProtocol> userCollectionProtocolCollection)
+	public void setAssignedProtocolCollection(
+			Collection<CollectionProtocol> userCollectionProtocolCollection)
 	{
 		this.assignedProtocolCollection = userCollectionProtocolCollection;
 	}

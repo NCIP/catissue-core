@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -16,29 +17,28 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 * Deidentified surgical pathology report.
 	 */
 	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
-	
+
 	/**
 	 * Specimen collection group of the report 
 	 */
 	protected SpecimenCollectionGroup specimenCollectionGroup;
-	
+
 	/**
 	 * Constructor
 	 */
 	public IdentifiedSurgicalPathologyReport()
 	{
-	
+
 	}
 
-	
 	/**
 	 * @return deidentified report.	
 	 * @hibernate.many-to-one  name="deidentifiedSurgicalPathologyReport"
 	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
 	 * column="DEID_REPORT"  not-null="false"
 	 */
-	
-	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
+
+	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
 		return deIdentifiedSurgicalPathologyReport;
 	}
@@ -66,8 +66,7 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * @param specimenCollectionGroup sets specimen collection group of the identified report.
 	 */
-	public void setSpecimenCollectionGroup(
-			SpecimenCollectionGroup specimenCollectionGroup)
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}

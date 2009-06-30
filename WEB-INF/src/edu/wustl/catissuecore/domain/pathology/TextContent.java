@@ -1,15 +1,16 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import java.util.Set;
 
- /**
- * Represents the text data of surgical pathology report.
- * @hibernate.joined-subclass
- * table="CATISSUE_REPORT_TEXTCONTENT" 
- * @hibernate.joined-subclass-key
- *  column="IDENTIFIER"
- */
- 
+/**
+* Represents the text data of surgical pathology report.
+* @hibernate.joined-subclass
+* table="CATISSUE_REPORT_TEXTCONTENT" 
+* @hibernate.joined-subclass-key
+*  column="IDENTIFIER"
+*/
+
 public class TextContent extends ReportContent
 {
 
@@ -17,12 +18,12 @@ public class TextContent extends ReportContent
 	 * Collection of surgical pathology report sections.  
 	 */
 	protected Set reportSectionCollection;
-	
+
 	/**
 	 * Surgical Pathology report of the current text data. 
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -42,6 +43,7 @@ public class TextContent extends ReportContent
 	{
 		return reportSectionCollection;
 	}
+
 	/**
 	 * @param reportSectionCollection sets the collection of report section.  
 	 * 
@@ -50,7 +52,7 @@ public class TextContent extends ReportContent
 	{
 		this.reportSectionCollection = reportSectionCollection;
 	}
-	
+
 	/**		
 	 * @return surgical pathology report of current text data.
 	 * 	@hibernate.many-to-one name="surgicalPathologyReport"
@@ -61,12 +63,12 @@ public class TextContent extends ReportContent
 	{
 		return surgicalPathologyReport;
 	}
+
 	/**
 	 * @param surgicalPathologyReport sets the surgical pathology report of current text content.  
 	 * 
 	 */
-	public void setSurgicalPathologyReport(
-			SurgicalPathologyReport surgicalPathologyReport)
+	public void setSurgicalPathologyReport(SurgicalPathologyReport surgicalPathologyReport)
 	{
 		this.surgicalPathologyReport = surgicalPathologyReport;
 	}

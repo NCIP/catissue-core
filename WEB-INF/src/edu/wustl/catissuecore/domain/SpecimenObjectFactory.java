@@ -20,6 +20,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class SpecimenObjectFactory
 {
+
 	/**
 	 * Get the domain object.
 	 * @param specimenType of String type.
@@ -55,8 +56,8 @@ public class SpecimenObjectFactory
 	 * @return AbstractDomainObject object.
 	 * @throws AssignDataException AssignDataException.
 	 */
-	public AbstractDomainObject getDomainObject(String specimenType,
-			SpecimenRequirement reqSpecimen) throws AssignDataException
+	public AbstractDomainObject getDomainObject(String specimenType, SpecimenRequirement reqSpecimen)
+			throws AssignDataException
 	{
 		AbstractDomainObject abstractDomain = null;
 		if (Constants.TISSUE.equals(specimenType))

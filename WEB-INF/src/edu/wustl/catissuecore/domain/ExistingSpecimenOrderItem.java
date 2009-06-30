@@ -22,6 +22,7 @@ import java.util.Collection;
  */
 public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

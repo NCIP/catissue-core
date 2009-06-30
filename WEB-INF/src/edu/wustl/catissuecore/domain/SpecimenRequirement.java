@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.Collection;
  */
 public class SpecimenRequirement extends AbstractSpecimen
 {
+
 	/**
 	 * Serial Version ID.
 	 */

@@ -22,8 +22,11 @@ import edu.wustl.common.exception.BizLogicException;
  * @author Mandar Deshmukh
  */
 public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
-	implements java.io.Serializable, Comparable
+		implements
+			java.io.Serializable,
+			Comparable
 {
+
 	/**
 	 * Serial Version id of the class.
 	 */
@@ -50,7 +53,6 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	protected Double studyCalendarEventPoint;
 
-
 	/**
 	 * CollectionProtocol associated with the CollectionProtocolEvent.
 	 */
@@ -59,8 +61,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	/**
 	 * specimenRequirementCollection.
 	 */
-	protected Collection<SpecimenRequirement> specimenRequirementCollection  =
-		new LinkedHashSet<SpecimenRequirement>();
+	protected Collection<SpecimenRequirement> specimenRequirementCollection = new LinkedHashSet<SpecimenRequirement>();
 
 	/**
 	 * specimenCollectionGroupCollection.
@@ -138,7 +139,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public String toString()
 	{
-		return "CPE: "+clinicalStatus+" | "+ studyCalendarEventPoint +" | "+ this.getId();
+		return "CPE: " + clinicalStatus + " | " + studyCalendarEventPoint + " | " + this.getId();
 	}
 
 	/* (non-Javadoc)
@@ -163,16 +164,16 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	public int compareTo(Object obj)
 	{
 		int returnValue = 0;
-		if(obj instanceof CollectionProtocolEvent)
+		if (obj instanceof CollectionProtocolEvent)
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)obj;
-			if(studyCalendarEventPoint.doubleValue() <
-					collectionProtocolEvent.getStudyCalendarEventPoint().doubleValue())
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) obj;
+			if (studyCalendarEventPoint.doubleValue() < collectionProtocolEvent
+					.getStudyCalendarEventPoint().doubleValue())
 			{
 				returnValue = -1;
 			}
-			else if(studyCalendarEventPoint.doubleValue() >
-			collectionProtocolEvent.getStudyCalendarEventPoint().doubleValue())
+			else if (studyCalendarEventPoint.doubleValue() > collectionProtocolEvent
+					.getStudyCalendarEventPoint().doubleValue())
 			{
 				returnValue = 1;
 			}
@@ -183,6 +184,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 		}
 		return returnValue;
 	}
+
 	/**
 	 * Patch Id : FutureSCG_14
 	 * Description : collectionPointLabel attribute added
@@ -198,6 +200,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	{
 		return collectionPointLabel;
 	}
+
 	/**
 	 * Sets collectionPointLabel.
 	 * @param collectionPointLabel of String type.
@@ -240,7 +243,8 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 * @param requirementSpecimenCollection which is Collection of
 	 * SpecimenRequirement objects.
 	 */
-	public void setSpecimenRequirementCollection(Collection<SpecimenRequirement> requirementSpecimenCollection)
+	public void setSpecimenRequirementCollection(
+			Collection<SpecimenRequirement> requirementSpecimenCollection)
 	{
 		this.specimenRequirementCollection = requirementSpecimenCollection;
 	}

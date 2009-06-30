@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on March 07,2007
  */
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import java.util.Collection;
@@ -15,7 +16,6 @@ import java.util.HashSet;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-
 
 /**
  * @hibernate.class table="CATISSUE_CONCEPT"
@@ -28,22 +28,22 @@ public class Concept extends AbstractDomainObject
 	 * 
 	 */
 	protected String conceptUniqueIdentifier;
-	
+
 	/**
 	 * System generated unique ID
 	 */
 	protected Long id;
-	
+
 	/**
 	 * Name of the concept
 	 */
 	protected String name;
-	
+
 	/**
 	 * semantic type of the concept
 	 */
 	protected SemanticType semanticType;
-	
+
 	/**
 	 * Concept referent collection
 	 */
@@ -150,7 +150,7 @@ public class Concept extends AbstractDomainObject
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

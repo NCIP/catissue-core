@@ -35,6 +35,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Distribution extends AbstractDomainObject implements java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -338,12 +339,11 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 				{
 					final Calendar calendar = Calendar.getInstance();
 
-					final Date date = Utility.parseDate(form.getDateOfEvent(),
-							Utility.datePattern(form.getDateOfEvent()));
+					final Date date = Utility.parseDate(form.getDateOfEvent(), Utility
+							.datePattern(form.getDateOfEvent()));
 					calendar.setTime(date);
 					this.timestamp = calendar.getTime();
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(
-							form.getTimeInHours()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
 					calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 					this.timestamp = calendar.getTime();
 					//this.timestamp is added twice, if there is some exception in
@@ -356,7 +356,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			{
 				Logger.out.error(excp.getMessage(), excp);
 				ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-				throw new AssignDataException(errorKey,null ,"Distribution.java :");
+				throw new AssignDataException(errorKey, null, "Distribution.java :");
 			}
 
 			if (SearchUtil.isNullobject(toSite))
@@ -439,10 +439,9 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 		message.append(this.distributionProtocol.title + " ");
 		if (this.distributedBy != null)
 		{
-			if (this.distributedBy.lastName != null &&
-				!this.distributedBy.lastName.equals("") &&
-				this.distributedBy.firstName != null &&
-				!this.distributedBy.firstName.equals(""))
+			if (this.distributedBy.lastName != null && !this.distributedBy.lastName.equals("")
+					&& this.distributedBy.firstName != null
+					&& !this.distributedBy.firstName.equals(""))
 			{
 				message.append(this.distributedBy.lastName + "," + this.distributedBy.firstName);
 			}

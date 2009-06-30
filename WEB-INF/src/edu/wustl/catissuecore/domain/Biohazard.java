@@ -27,178 +27,179 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Biohazard extends AbstractDomainObject
 {
+
 	/**
 	 * Serial Version Id.
 	 */
-    private static final long serialVersionUID = 1234567890L;
-    /**
-     * logger Logger - Generic logger.
-     */
-    private static org.apache.log4j.Logger logger = Logger.getLogger(Biohazard.class);
+	private static final long serialVersionUID = 1234567890L;
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(Biohazard.class);
 
-    /**
-     * System generated unique id.
-     */
-    protected Long id;
+	/**
+	 * System generated unique id.
+	 */
+	protected Long id;
 
-    /**
-     * Name of the biohazardous agent.
-     */
-    protected String name;
+	/**
+	 * Name of the biohazardous agent.
+	 */
+	protected String name;
 
-    /**
-     * Comment about the biohazard.
-     */
-    protected String comment;
+	/**
+	 * Comment about the biohazard.
+	 */
+	protected String comment;
 
-    /**
-     * Type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
-     */
-    protected String type;
+	/**
+	 * Type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
+	 */
+	protected String type;
 
-    /**
-     * boolean for checking persisted Biohazard persisted value.
-     */
+	/**
+	 * boolean for checking persisted Biohazard persisted value.
+	 */
 
-    protected transient Boolean persisted;
+	protected transient Boolean persisted;
 
-    /**
-     * Specimen Collection.
-     */
-    protected Collection specimenCollection = new HashSet();
+	/**
+	 * Specimen Collection.
+	 */
+	protected Collection specimenCollection = new HashSet();
 
-    /**
-     * Default Constructor.
-     */
-    public Biohazard()
-    {
-    	super();
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public Biohazard()
+	{
+		super();
+	}
 
-    /**
-     * Parameterized constructor.
-     * @param form AbstractActionForm.
-     */
-    public Biohazard(AbstractActionForm form)
-    {
-    	super();
-    	setAllValues(form);
-    }
+	/**
+	 * Parameterized constructor.
+	 * @param form AbstractActionForm.
+	 */
+	public Biohazard(AbstractActionForm form)
+	{
+		super();
+		setAllValues(form);
+	}
 
-    /**
-     * Parameterized constructor.
-     * @param bioHazard Biohazard.
-     */
-    public Biohazard(Biohazard bioHazard)
-    {
-    	super();
-    	this.comment = bioHazard.getComment();
-    	this.name = bioHazard.getName();
-    	this.persisted = bioHazard.getPersisted();
-    	this.type = bioHazard.getType();
-    }
+	/**
+	 * Parameterized constructor.
+	 * @param bioHazard Biohazard.
+	 */
+	public Biohazard(Biohazard bioHazard)
+	{
+		super();
+		this.comment = bioHazard.getComment();
+		this.name = bioHazard.getName();
+		this.persisted = bioHazard.getPersisted();
+		this.type = bioHazard.getType();
+	}
 
-    /**
-     * Returns the system generated unique id.
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_BIOHAZARD_SEQ"
-     * @return the system generated unique id.
-     * @see #setId(Long)
-     * */
-    public Long getId()
-    {
-        return id;
-    }
+	/**
+	 * Returns the system generated unique id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_BIOHAZARD_SEQ"
+	 * @return the system generated unique id.
+	 * @see #setId(Long)
+	 * */
+	public Long getId()
+	{
+		return id;
+	}
 
-    /**
-     * Sets the system generated unique id.
-     * @param identifier the system generated unique id.
-     * @see #getId()
-     * */
-    public void setId(Long identifier)
-    {
-        this.id = identifier;
-    }
+	/**
+	 * Sets the system generated unique id.
+	 * @param identifier the system generated unique id.
+	 * @see #getId()
+	 * */
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
+	}
 
-    /**
-     * Returns the name of the biohazardous agent.
-     * @hibernate.property name="name" type="string"
-     * column="NAME" length="255" not-null="true" unique="true"
-     * @return the name of the biohazardous agent.
-     * @see #setName(String)
-     */
-    public String getName()
-    {
-        return name;
-    }
+	/**
+	 * Returns the name of the biohazardous agent.
+	 * @hibernate.property name="name" type="string"
+	 * column="NAME" length="255" not-null="true" unique="true"
+	 * @return the name of the biohazardous agent.
+	 * @see #setName(String)
+	 */
+	public String getName()
+	{
+		return name;
+	}
 
-    /**
-     * Sets the name of the biohazardous agent.
-     * @param name the name of the biohazardous agent.
-     * @see #getName()
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	/**
+	 * Sets the name of the biohazardous agent.
+	 * @param name the name of the biohazardous agent.
+	 * @see #getName()
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    /**
-     * Returns the comments about the biohazard.
-     * @hibernate.property name="comment" type="string"
-     * column="COMMENTS" length="500"
-     * @return the comments about the biohazard.
-     * @see #setComments(String)
-     */
-    public String getComment()
-    {
-        return comment;
-    }
+	/**
+	 * Returns the comments about the biohazard.
+	 * @hibernate.property name="comment" type="string"
+	 * column="COMMENTS" length="500"
+	 * @return the comments about the biohazard.
+	 * @see #setComments(String)
+	 */
+	public String getComment()
+	{
+		return comment;
+	}
 
-    /**
-     * Sets the comment about the biohazard.
-     * @param comment the comments about the biohazard.
-     * @see #getComment()
-     */
-    public void setComment(String comment)
-    {
-        this.comment = comment;
-    }
+	/**
+	 * Sets the comment about the biohazard.
+	 * @param comment the comments about the biohazard.
+	 * @see #getComment()
+	 */
+	public void setComment(String comment)
+	{
+		this.comment = comment;
+	}
 
-    /**
-     * Returns the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
-     * @hibernate.property name="type" type="string"
-     * column="TYPE" length="50"
-     * @return the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
-     * @see #setType(String)
-     */
-    public String getType()
-    {
-        return type;
-    }
+	/**
+	 * Returns the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
+	 * @hibernate.property name="type" type="string"
+	 * column="TYPE" length="50"
+	 * @return the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
+	 * @see #setType(String)
+	 */
+	public String getType()
+	{
+		return type;
+	}
 
-    /**
-     * Sets the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
-     * @param type the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
-     * @see #getType()
-     */
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+	/**
+	 * Sets the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
+	 * @param type the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
+	 * @see #getType()
+	 */
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
 	/*
-     * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen"
-     * constrained="true"
+	 * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen"
+	 * constrained="true"
 	 * @see #setParticipant(Site)
-     */
-    /**
-     * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
-     * cascade="save-update" inverse="true" lazy="false"
-     * @hibernate.collection-key column="BIOHAZARD_ID"
-     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"
-     * @return Collection of specimen.
-     */
+	 */
+	/**
+	 * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="BIOHAZARD_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"
+	 * @return Collection of specimen.
+	 */
 	public Collection getSpecimenCollection()
 	{
 		return specimenCollection;
@@ -213,29 +214,29 @@ public class Biohazard extends AbstractDomainObject
 	}
 
 	/**
-     * This function Copies the data from an BiohazardForm object to a Biohazard object.
-     * @param abstractForm - siteForm An SiteForm object containing the information about the site.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-            final BiohazardForm form 	= (BiohazardForm) abstractForm;
-            this.comment = form.getComments();
-            this.name = form.getName().trim() ;
-            this.type = form.getType();
-        }
-        catch (Exception excp)
-        {
-        	logger.error(excp);
-        }
-    }
+	 * This function Copies the data from an BiohazardForm object to a Biohazard object.
+	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			final BiohazardForm form = (BiohazardForm) abstractForm;
+			this.comment = form.getComments();
+			this.name = form.getName().trim();
+			this.type = form.getType();
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp);
+		}
+	}
 
 	/**
 	 * Get status, if persisted.
 	 * @return Boolean.
 	 */
-    public Boolean getPersisted()
+	public Boolean getPersisted()
 	{
 		return persisted;
 	}
@@ -244,15 +245,15 @@ public class Biohazard extends AbstractDomainObject
 	 * Set if persisted.
 	 * @param persisted boolean value.
 	 */
-    public void setPersisted(Boolean persisted)
-    {
+	public void setPersisted(Boolean persisted)
+	{
 		this.persisted = persisted;
 	}
 
-	 /**
-     * Returns message label to display on success add or edit.
-     * @return String
-     */
+	/**
+	* Returns message label to display on success add or edit.
+	* @return String
+	*/
 	public String getMessageLabel()
 	{
 		return this.name;
@@ -264,10 +265,6 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public String toString()
 	{
-		return "EI{"+
-				"id "+id+"\t"+
-				"Type "+type+"\t"+
-				"Name "+name+
-				"}";
+		return "EI{" + "id " + id + "\t" + "Type " + type + "\t" + "Name " + name + "}";
 	}
 }

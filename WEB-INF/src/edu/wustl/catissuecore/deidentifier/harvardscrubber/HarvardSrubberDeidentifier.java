@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.deidentifier.harvardscrubber;
 
 import java.io.BufferedWriter;
@@ -29,149 +30,165 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class HarvardSrubberDeidentifier extends AbstractDeidentifier 
+public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 {
+
 	private static Scrubber scrubber;
+
 	public DeidentifiedSurgicalPathologyReport deidentify(
-			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception 
+			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
 		String scrubbed;
-		synchronized (scrubber) 
+		synchronized (scrubber)
 		{
-			File fileTosScrub=getFileToScrub(identifiedReport);
-			scrubbed=scrubber.scrub(fileTosScrub);
+			File fileTosScrub = getFileToScrub(identifiedReport);
+			scrubbed = scrubber.scrub(fileTosScrub);
 			fileTosScrub.delete();
 		}
-		
-		
-		String deidReportText=Utility.extractReport(scrubbed, CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME), CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
-		
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport=new DeidentifiedSurgicalPathologyReport();
-		TextContent textContent=new TextContent();
+
+		String deidReportText = Utility.extractReport(scrubbed, CaTIESProperties
+				.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME),
+				CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
+
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
+		TextContent textContent = new TextContent();
 		textContent.setData(deidReportText);
 		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
-		
+
 		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
 		return deidentifiedSurgicalPathologyReport;
 	}
 
-	private File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
+	private File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport)
+			throws Exception
 	{
-		org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(CaTIESConstants.TAG_ENVELOPE));
-		Element reportHeader=buildReportHeader(identifiedReport);
+		org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(
+				CaTIESConstants.TAG_ENVELOPE));
+		Element reportHeader = buildReportHeader(identifiedReport);
 		currentRequestDocument.getRootElement().addContent(reportHeader);
-		
-		DocType docType=new DocType("HarvardScrubber","file:///"+CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME));
-		
+
+		DocType docType = new DocType("HarvardScrubber", "file:///"
+				+ CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME));
+
 		currentRequestDocument.setDocType(docType);
-		
-		Element reportBody=buildReportBody(identifiedReport);
+
+		Element reportBody = buildReportBody(identifiedReport);
 		currentRequestDocument.getRootElement().addContent(reportBody);
-		
-		File fileTosScrub=new File("fileTosScrub.xml");
-		BufferedWriter bufferedWriter=new BufferedWriter(new FileWriter(fileTosScrub));
-		bufferedWriter.write(Utility.convertDocumentToString(currentRequestDocument, Format.getPrettyFormat()));
+
+		File fileTosScrub = new File("fileTosScrub.xml");
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileTosScrub));
+		bufferedWriter.write(Utility.convertDocumentToString(currentRequestDocument, Format
+				.getPrettyFormat()));
 		bufferedWriter.close();
-		
+
 		return fileTosScrub;
 	}
-	public void initialize() throws Exception 
+
+	public void initialize() throws Exception
 	{
 		JDOMTools jdom = new JDOMTools();
-		File configurationFile=new File(CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_CONFIG_FILENAME));
+		File configurationFile = new File(CaTIESProperties
+				.getValue(CaTIESConstants.HARVARD_SCRUBBER_CONFIG_FILENAME));
 		jdom.buildDoc(configurationFile);
 		Document document = jdom.getDocument();
-		scrubber=ScrubberBuilder.makeScrubber(document);
+		scrubber = ScrubberBuilder.makeScrubber(document);
 		scrubber.init();
 	}
 
-	public void shutdown() throws Exception 
+	public void shutdown() throws Exception
 	{
 		scrubber.shutdown();
 	}
-	
-	private Element buildReportBody(final IdentifiedSurgicalPathologyReport identifiedReport) 
+
+	private Element buildReportBody(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
-		Participant participant=identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
+		Participant participant = identifiedReport.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getParticipant();
 
 		Element body = new Element(CaTIESConstants.TAG_BODY);
 		Element pathologyCase = new Element(CaTIESConstants.TAG_PATHOLOGY_CASE);
-		pathologyCase.setAttribute(CaTIESConstants.TAG_TISSUE_ACQUISITION_DATE, identifiedReport.getCollectionDateTime().toString());
-		
-		Element codes=getElement(CaTIESConstants.TAG_CODES, null);
-		Element clinical=new Element(CaTIESConstants.TAG_CLINICAL);
-		Element patient=new Element(CaTIESConstants.TAG_PATIENT);
-		Element age=new Element(CaTIESConstants.TAG_AGE);
-		
-		Date birthDate=participant.getBirthDate();
-		int ageOfParticipant=0;
-		if(birthDate!=null)
+		pathologyCase.setAttribute(CaTIESConstants.TAG_TISSUE_ACQUISITION_DATE, identifiedReport
+				.getCollectionDateTime().toString());
+
+		Element codes = getElement(CaTIESConstants.TAG_CODES, null);
+		Element clinical = new Element(CaTIESConstants.TAG_CLINICAL);
+		Element patient = new Element(CaTIESConstants.TAG_PATIENT);
+		Element age = new Element(CaTIESConstants.TAG_AGE);
+
+		Date birthDate = participant.getBirthDate();
+		int ageOfParticipant = 0;
+		if (birthDate != null)
 		{
-			ageOfParticipant=new GregorianCalendar().getTime().getYear()-birthDate.getYear();
+			ageOfParticipant = new GregorianCalendar().getTime().getYear() - birthDate.getYear();
 		}
 		age.setAttribute("Units", "years");
 		age.setText(String.valueOf(ageOfParticipant));
-		String genderOfParticipant="";
-		if(participant.getGender().equalsIgnoreCase(CaTIESConstants.MALE_GENDER))
+		String genderOfParticipant = "";
+		if (participant.getGender().equalsIgnoreCase(CaTIESConstants.MALE_GENDER))
 		{
-			genderOfParticipant="M";
+			genderOfParticipant = "M";
 		}
-		else if(participant.getGender().equalsIgnoreCase(CaTIESConstants.FEMALE_GENDER))
+		else if (participant.getGender().equalsIgnoreCase(CaTIESConstants.FEMALE_GENDER))
 		{
-			genderOfParticipant="F";
+			genderOfParticipant = "F";
 		}
-		else if(participant.getGender().equalsIgnoreCase(Constants.UNKNOWN))
+		else if (participant.getGender().equalsIgnoreCase(Constants.UNKNOWN))
 		{
-			genderOfParticipant="U";
+			genderOfParticipant = "U";
 		}
-		Element gender=getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
-		List<Element> patientChild=new ArrayList<Element>();
+		Element gender = getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
+		List<Element> patientChild = new ArrayList<Element>();
 		patientChild.add(age);
 		patientChild.add(gender);
-		
+
 		patient.setContent(patientChild);
 		clinical.setContent(patient);
-		
-		
-		Element fullReportText=new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
-		CDATA reportText=new CDATA("");
-		if(identifiedReport.getTextContent()!=null)
+
+		Element fullReportText = new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
+		CDATA reportText = new CDATA("");
+		if (identifiedReport.getTextContent() != null)
 		{
-			reportText=new CDATA(identifiedReport.getTextContent().getData());
+			reportText = new CDATA(identifiedReport.getTextContent().getData());
 		}
 		fullReportText.setContent(reportText);
-		
-		List<Element> pathologyCaseChild=new ArrayList<Element>();
+
+		List<Element> pathologyCaseChild = new ArrayList<Element>();
 		pathologyCaseChild.add(codes);
 		pathologyCaseChild.add(clinical);
 		pathologyCaseChild.add(fullReportText);
-		
+
 		pathologyCase.addContent(pathologyCaseChild);
 		body.addContent(pathologyCase);
 		return body;
 	}
 
-	private Element buildReportHeader(final IdentifiedSurgicalPathologyReport identifiedReport) 
+	private Element buildReportHeader(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
-		Participant participant=identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
-		
+		Participant participant = identifiedReport.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getParticipant();
+
 		Element header = new Element(CaTIESConstants.TAG_HEADER);
 		Element identifier = new Element(CaTIESConstants.TAG_IDENTIFIERS);
-		
-		Element firstName=getElement(CaTIESConstants.TAG_FIRST_NAME, participant.getFirstName());
-		Element lastName=getElement(CaTIESConstants.TAG_LAST_NAME, participant.getLastName());
-		Element dateOfBirth=getElement(CaTIESConstants.TAG_DATE_OF_BIRTH, edu.wustl.common.util.Utility.toString(participant.getBirthDate()));
-		Element ssn=getElement(CaTIESConstants.TAG_SSN, participant.getSocialSecurityNumber());
-		Element accessionNumber=getElement(CaTIESConstants.TAG_ACCESSION_NUMBER, identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
-		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection=participant.getParticipantMedicalIdentifierCollection();
-		List<Element> localMRNList=new ArrayList<Element>();
-		for(ParticipantMedicalIdentifier pmi: participantMedicalIdentifierCollection)
+
+		Element firstName = getElement(CaTIESConstants.TAG_FIRST_NAME, participant.getFirstName());
+		Element lastName = getElement(CaTIESConstants.TAG_LAST_NAME, participant.getLastName());
+		Element dateOfBirth = getElement(CaTIESConstants.TAG_DATE_OF_BIRTH,
+				edu.wustl.common.util.Utility.toString(participant.getBirthDate()));
+		Element ssn = getElement(CaTIESConstants.TAG_SSN, participant.getSocialSecurityNumber());
+		Element accessionNumber = getElement(CaTIESConstants.TAG_ACCESSION_NUMBER, identifiedReport
+				.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
+				.getParticipantMedicalIdentifierCollection();
+		List<Element> localMRNList = new ArrayList<Element>();
+		for (ParticipantMedicalIdentifier pmi : participantMedicalIdentifierCollection)
 		{
-			Element localMRN=getElement(CaTIESConstants.TAG_LOCALMRN, pmi.getMedicalRecordNumber());
+			Element localMRN = getElement(CaTIESConstants.TAG_LOCALMRN, pmi
+					.getMedicalRecordNumber());
 			localMRNList.add(localMRN);
 		}
-		Element source=getElement(CaTIESConstants.TAG_SOURCE, identifiedReport.getReportSource().getName());
-		
+		Element source = getElement(CaTIESConstants.TAG_SOURCE, identifiedReport.getReportSource()
+				.getName());
+
 		identifier.addContent(firstName);
 		identifier.addContent(lastName);
 		identifier.addContent(dateOfBirth);
@@ -180,13 +197,13 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		identifier.addContent(localMRNList);
 		identifier.addContent(source);
 		header.addContent(identifier);
-		
+
 		return header;
 	}
 
-	private Element getElement(String elementName, String value) 
+	private Element getElement(String elementName, String value)
 	{
-		Element element=new Element(elementName);
+		Element element = new Element(elementName);
 		element.setText(value);
 		return element;
 	}

@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on November 09,2006
  */
+
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.Collection;
  */
 public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

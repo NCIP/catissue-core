@@ -20,8 +20,10 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class ReceivedEventParameters extends SpecimenEventParameters
-		implements java.io.Serializable
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -63,6 +65,7 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	{
 		super();
 	}
+
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
@@ -70,41 +73,41 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	public ReceivedEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject)abstractForm);
+		setAllValues((IValueObject) abstractForm);
 	}
 
 	/**
-     * This function Copies the data from an ReceivedEventParametersForm object to a
-     * ReceivedEventParameters object.
-     * @param abstractForm - receivedEventParametersForm An ReceivedEventParametersForm
-     * object containing the information about the ReceivedEventParameters.
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-            ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
-            this.receivedQuality = form.getReceivedQuality();
-            super.setAllValues(form);
-        	//call to event parameters setallvalue method
-//        	super.setAllValues(abstractForm);
+	 * This function Copies the data from an ReceivedEventParametersForm object to a
+	 * ReceivedEventParameters object.
+	 * @param abstractForm - receivedEventParametersForm An ReceivedEventParametersForm
+	 * object containing the information about the ReceivedEventParameters.
+	 */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
+			this.receivedQuality = form.getReceivedQuality();
+			super.setAllValues(form);
+			//call to event parameters setallvalue method
+			//        	super.setAllValues(abstractForm);
 
-            logger.debug("receivedQuality: "+receivedQuality);
-        }
-        catch (Exception excp)
-        {
-        	logger.error(excp.getMessage());
-        }
-    }
+			logger.debug("receivedQuality: " + receivedQuality);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param obj of ReceivedEventParameters type.
-     */
-    public ReceivedEventParameters(ReceivedEventParameters obj)
-    {
-    	super();
-    	this.receivedQuality = obj.receivedQuality;
-    	this.comment = obj.comment;
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param obj of ReceivedEventParameters type.
+	 */
+	public ReceivedEventParameters(ReceivedEventParameters obj)
+	{
+		super();
+		this.receivedQuality = obj.receivedQuality;
+		this.comment = obj.comment;
+	}
 }

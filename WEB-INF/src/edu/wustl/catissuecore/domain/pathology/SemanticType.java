@@ -7,29 +7,30 @@
  * @version 1.00
  * Created on March 07,2007
  */
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
-
 /**
  * @hibernate.class table="CATISSUE_SEMANTIC_TYPE"
  * Represents sematic type
  */
-public class SemanticType extends AbstractDomainObject 
+public class SemanticType extends AbstractDomainObject
 {
+
 	/**
 	 * identifier
 	 */
 	protected Long id;
-	
+
 	/**
 	 * label
 	 */
 	protected String label;
-	
+
 	/**
 	 * @return identifier
 	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
@@ -76,8 +77,6 @@ public class SemanticType extends AbstractDomainObject
 
 	}
 
-
-	
 	/**
 	 * Method to populate abstractForm from domain Object
 	 *  (non-Javadoc)
@@ -85,8 +84,8 @@ public class SemanticType extends AbstractDomainObject
 	 * @param abstractForm abstract form
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
-	{		
-		
+	{
+
 	}
 
 }

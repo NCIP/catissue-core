@@ -21,12 +21,16 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Aniruddha Phadnis
  */
-public class FluidSpecimenReviewEventParameters extends ReviewEventParameters implements java.io.Serializable
+public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FluidSpecimenReviewEventParameters.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(FluidSpecimenReviewEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -89,8 +93,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters im
 	{
 		try
 		{
-			FluidSpecimenReviewEventParametersForm form =
-				(FluidSpecimenReviewEventParametersForm) abstractForm;
+			FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
 			logger.debug("############DomainObject################## : ");
 			logger.debug(form.getCellCount());
 			logger.debug("############################## ");

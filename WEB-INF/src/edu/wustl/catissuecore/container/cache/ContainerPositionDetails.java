@@ -1,7 +1,7 @@
+
 package edu.wustl.catissuecore.container.cache;
+
 import edu.wustl.catissuecore.container.cache.domaininterface.IContainerPositionDetails;
-
-
 
 /**
  * @author ashish_gupta
@@ -9,13 +9,14 @@ import edu.wustl.catissuecore.container.cache.domaininterface.IContainerPosition
  */
 public class ContainerPositionDetails implements IContainerPositionDetails
 {
+
 	String containerName;
-	long containerId; 
-		
+	long containerId;
+
 	//We are keeping x and y positions instead of List<Position> so as to avoid iteration in bizlogic calling the cache.
 	int xPosition;
 	int yPosition;
-	
+
 	/**
 	 * @return the containerId
 	 */
@@ -23,7 +24,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		return containerId;
 	}
-	
+
 	/**
 	 * @param containerId the containerId to set
 	 */
@@ -31,7 +32,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		this.containerId = containerId;
 	}
-	
+
 	/**
 	 * @return the containerName
 	 */
@@ -39,7 +40,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		return containerName;
 	}
-	
+
 	/**
 	 * @param containerName the containerName to set
 	 */
@@ -47,7 +48,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		this.containerName = containerName;
 	}
-	
+
 	/**
 	 * @return the xPosition
 	 */
@@ -55,7 +56,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		return xPosition;
 	}
-	
+
 	/**
 	 * @param position the xPosition to set
 	 */
@@ -63,7 +64,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		xPosition = position;
 	}
-	
+
 	/**
 	 * @return the yPosition
 	 */
@@ -71,7 +72,7 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		return yPosition;
 	}
-	
+
 	/**
 	 * @param position the yPosition to set
 	 */
@@ -79,9 +80,5 @@ public class ContainerPositionDetails implements IContainerPositionDetails
 	{
 		yPosition = position;
 	}
-	
-	
-	
-	
-	
+
 }

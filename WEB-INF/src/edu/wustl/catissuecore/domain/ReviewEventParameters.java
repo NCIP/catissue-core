@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Apr 7, 2005
  */
+
 package edu.wustl.catissuecore.domain;
 
 /**
@@ -16,8 +17,10 @@ package edu.wustl.catissuecore.domain;
  * @author Aniruddha Phadnis
  */
 public abstract class ReviewEventParameters extends SpecimenEventParameters
-		implements java.io.Serializable
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

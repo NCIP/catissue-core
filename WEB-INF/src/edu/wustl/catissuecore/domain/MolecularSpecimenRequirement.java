@@ -23,98 +23,101 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class MolecularSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(MolecularSpecimenRequirement.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(MolecularSpecimenRequirement.class);
 
 	/**
 	 * Serial Version ID.
 	 */
-    private static final long serialVersionUID = 123456789000L;
+	private static final long serialVersionUID = 123456789000L;
 
-    /**
-     * Concentration of liquid molecular specimen measured in microgram per microlitter.
-     */
-    protected Double concentrationInMicrogramPerMicroliter;
+	/**
+	 * Concentration of liquid molecular specimen measured in microgram per microlitter.
+	 */
+	protected Double concentrationInMicrogramPerMicroliter;
 
-    /**
-     * Default Constructor.
-     */
-    public MolecularSpecimenRequirement()
-    {
-    	super();
-    }
-    /**
-     * Initial amount of specimen created from another specimen.
-     * @param form AbstractActionForm.
-     */
-    public MolecularSpecimenRequirement(AbstractActionForm form)
-    {
-    	super();
-    	setAllValues(form);
-    }
+	/**
+	 * Default Constructor.
+	 */
+	public MolecularSpecimenRequirement()
+	{
+		super();
+	}
 
-    /**
-     * Returns the concentration of liquid molecular specimen measured
-     * in microgram per microlitre.
-     * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double"
-     * column="CONCENTRATION" length="50"
-     * @return the concentration of liquid molecular specimen measured
-     * in microgram per microlitre.
-     * directly collected from participant or created from another specimen.
-     * @see #setConcentrationInMicrogramPerMicroLiter(Double)
-     */
-    public Double getConcentrationInMicrogramPerMicroliter()
-    {
-        return concentrationInMicrogramPerMicroliter;
-    }
+	/**
+	 * Initial amount of specimen created from another specimen.
+	 * @param form AbstractActionForm.
+	 */
+	public MolecularSpecimenRequirement(AbstractActionForm form)
+	{
+		super();
+		setAllValues(form);
+	}
 
-    /**
-     * Sets the concentration of liquid molecular specimen measured
-     * in microgram per microlitter.
-     * @param concentrationInMicrogramPerMicroliter the concentration of
-     * liquid molecular specimen measuredin microgram per microlitter.
-     * @see #getConcentrationInMicrogramPerMicroLiter()
-     */
-    public void setConcentrationInMicrogramPerMicroliter(Double concentrationInMicrogramPerMicroliter)
-    {
-        this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
-    }
+	/**
+	 * Returns the concentration of liquid molecular specimen measured
+	 * in microgram per microlitre.
+	 * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double"
+	 * column="CONCENTRATION" length="50"
+	 * @return the concentration of liquid molecular specimen measured
+	 * in microgram per microlitre.
+	 * directly collected from participant or created from another specimen.
+	 * @see #setConcentrationInMicrogramPerMicroLiter(Double)
+	 */
+	public Double getConcentrationInMicrogramPerMicroliter()
+	{
+		return concentrationInMicrogramPerMicroliter;
+	}
 
-    /**
-     * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
-     * @param abstractForm An SiteForm object containing the information about the site.
-     * */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	super.setAllValues(abstractForm);
-        	SpecimenForm form = (SpecimenForm) abstractForm;
-        	if(Constants.DOUBLE_QUOTES.equals(form.getConcentration()))
-        	{
-        		logger.debug("Concentration is "+form.getConcentration());
-        	}
-        	else
-        	{
-        		this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
-        	}
-       }
-        catch (Exception excp)
-        {
-        	logger.error(excp.getMessage());
-        }
-    }
+	/**
+	 * Sets the concentration of liquid molecular specimen measured
+	 * in microgram per microlitter.
+	 * @param concentrationInMicrogramPerMicroliter the concentration of
+	 * liquid molecular specimen measuredin microgram per microlitter.
+	 * @see #getConcentrationInMicrogramPerMicroLiter()
+	 */
+	public void setConcentrationInMicrogramPerMicroliter(
+			Double concentrationInMicrogramPerMicroliter)
+	{
+		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param molecularRequirementSpecimen MolecularSpecimenRequirement.
-     */
-    public MolecularSpecimenRequirement(MolecularSpecimenRequirement molecularRequirementSpecimen)
-    {
-    	super();
-    	this.concentrationInMicrogramPerMicroliter =
-    		molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
-    }
+	/**
+	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
+	 * @param abstractForm An SiteForm object containing the information about the site.
+	 * */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			super.setAllValues(abstractForm);
+			SpecimenForm form = (SpecimenForm) abstractForm;
+			if (Constants.DOUBLE_QUOTES.equals(form.getConcentration()))
+			{
+				logger.debug("Concentration is " + form.getConcentration());
+			}
+			else
+			{
+				this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
+
+	/**
+	 * Parameterized Constructor.
+	 * @param molecularRequirementSpecimen MolecularSpecimenRequirement.
+	 */
+	public MolecularSpecimenRequirement(MolecularSpecimenRequirement molecularRequirementSpecimen)
+	{
+		super();
+		this.concentrationInMicrogramPerMicroliter = molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
+	}
 }

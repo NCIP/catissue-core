@@ -31,8 +31,12 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  * @author Mandar Deshmukh
  */
-public class DistributionProtocol extends SpecimenProtocol implements java.io.Serializable, IActivityStatus
+public class DistributionProtocol extends SpecimenProtocol
+		implements
+			java.io.Serializable,
+			IActivityStatus
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -46,8 +50,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	/**
 	 * Collection of specimenRequirements associated with the DistributionProtocol.
 	 */
-	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection =
-		new HashSet<DistributionSpecimenRequirement>();
+	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
 
 	/**
 	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
@@ -139,8 +142,8 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 			logger.debug("MAP " + map);
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			this.distributionSpecimenRequirementCollection = new HashSet(parser.generateData(map));
-			logger.debug("specimenRequirementCollection " +
-					this.distributionSpecimenRequirementCollection);
+			logger.debug("specimenRequirementCollection "
+					+ this.distributionSpecimenRequirementCollection);
 		}
 		catch (Exception excp)
 		{

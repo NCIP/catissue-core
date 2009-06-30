@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -12,23 +13,23 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ReportContent extends AbstractDomainObject
 {
-  
+
 	/**
 	* Data content of surgical pathology report.
 	*/
- 	protected String data;
-
- 	/**
-     * System generated unique id.
-     */
- 	protected Long id;
+	protected String data;
 
 	/**
-    * @return system generated id
-    * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-    * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_CONTENT_SEQ"
-    */
+	* System generated unique id.
+	*/
+	protected Long id;
+
+	/**
+	* @return system generated id
+	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	* unsaved-value="null" generator-class="native" 
+	* @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_CONTENT_SEQ"
+	*/
 	public Long getId()
 	{
 		return id;
@@ -44,9 +45,9 @@ public class ReportContent extends AbstractDomainObject
 
 	/**
 	 * @return report content data.
-     * @hibernate.property name="data" type="String"
-     * column="REPORT_DATA" length="4000"
-     */
+	 * @hibernate.property name="data" type="String"
+	 * column="REPORT_DATA" length="4000"
+	 */
 	public String getData()
 	{
 		return data;
@@ -68,11 +69,10 @@ public class ReportContent extends AbstractDomainObject
 
 	}
 
-
 	public void setAllValues(AbstractActionForm arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -82,7 +82,7 @@ public class ReportContent extends AbstractDomainObject
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

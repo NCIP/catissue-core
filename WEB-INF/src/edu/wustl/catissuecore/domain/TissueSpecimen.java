@@ -22,6 +22,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TissueSpecimen extends Specimen implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */

@@ -17,6 +17,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class SpecimenArrayType extends ContainerType
 {
+
 	/**
 	 * specimenClass.
 	 */
@@ -84,24 +85,23 @@ public class SpecimenArrayType extends ContainerType
 	//        this.holdsSpecimenClassCollection = holdsSpecimenClassCollection;
 	//    }
 
-	    /**
-	     * @return Returns the specimenClass.
-	     * @hibernate.many-to-one column="SPECIMEN_CLASS_ID" class="edu.wustl.
-	     * catissuecore.domain.SpecimenClass" constrained="true"
-	     */
+	/**
+	 * @return Returns the specimenClass.
+	 * @hibernate.many-to-one column="SPECIMEN_CLASS_ID" class="edu.wustl.
+	 * catissuecore.domain.SpecimenClass" constrained="true"
+	 */
 	//    public SpecimenClass getSpecimenClass()
 	//    {
 	//        return specimenClass;
 	//    }
 	//
-	    /**
-	     * @param specimenClass The specimenClass to set.
-	     */
+	/**
+	 * @param specimenClass The specimenClass to set.
+	 */
 	//    public void setSpecimenClass(SpecimenClass specimenClass)
 	//    {
 	//        this.specimenClass = specimenClass;
 	//    }
-
 	/**
 	 * @return Returns the specimenTypeCollection.
 	 * @hibernate.set name="specimenTypeCollection" table="CATISSUE_SPECIMEN_TYPE"
@@ -151,8 +151,10 @@ public class SpecimenArrayType extends ContainerType
 			capacity = new Capacity();
 		}
 
-		capacity.setOneDimensionCapacity(Integer.valueOf(specimenArrayTypeForm.getOneDimensionCapacity()));
-		capacity.setTwoDimensionCapacity(Integer.valueOf(specimenArrayTypeForm.getTwoDimensionCapacity()));
+		capacity.setOneDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
+				.getOneDimensionCapacity()));
+		capacity.setTwoDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
+				.getTwoDimensionCapacity()));
 		this.comment = specimenArrayTypeForm.getComment();
 		this.specimenClass = specimenArrayTypeForm.getSpecimenClass();
 		String[] specimenTypes = specimenArrayTypeForm.getSpecimenTypes();

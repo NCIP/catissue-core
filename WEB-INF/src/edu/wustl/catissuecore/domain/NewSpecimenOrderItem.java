@@ -17,6 +17,7 @@ package edu.wustl.catissuecore.domain;
 
 public class NewSpecimenOrderItem extends SpecimenOrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

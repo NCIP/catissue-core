@@ -300,20 +300,21 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		{
 
 			final AbstractActionForm abstractActionForm = (AbstractActionForm) abstractForm;
-			if(abstractActionForm.isAddOperation()) //insert
+			if (abstractActionForm.isAddOperation()) //insert
 			{
 				operationAdd = true;
 				insertOrderDetails(abstractActionForm);
 			}
-			else //update 
+			else
+			//update 
 			{
 				updateOrderDetails(abstractActionForm);
 			}
 		}
-		catch(BizLogicException exp)
+		catch (BizLogicException exp)
 		{
 			exp.printStackTrace();
-		}	
+		}
 	}
 
 	/**
@@ -950,7 +951,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean,
 			OrderDetails order, Collection distributedItemCollection, Distribution distribution,
-			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection) throws BizLogicException
+			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection)
+			throws BizLogicException
 	{
 
 		OrderItem orderItem = new OrderItem();
@@ -959,8 +961,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		ExistingSpecimenOrderItem existingOrderItem = null;
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(
-				Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
 		Specimen specimen = new Specimen();
 		if (requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
@@ -1087,8 +1089,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			DefinedArrayDetailsBean definedArrayDetailsBean) throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(
-				Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
 		SpecimenOrderItem specOrderItem = null;
 		OrderItem orderItem = null;
@@ -1180,11 +1182,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private OrderItem populateOrderItemForArrayHeader(
 			DefinedArrayRequestBean definedArrayRequestBean, OrderDetails order,
 			Collection distributedItemCollection, Distribution distribution,
-			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection) throws BizLogicException
+			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection)
+			throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory.getBizLogic(
-				Constants.REQUEST_LIST_FILTERATION_FORM_ID);
+		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		NewSpecimenArrayOrderItem orderItem = null;
 		try
 		{

@@ -44,8 +44,12 @@ import edu.wustl.dao.exception.DAOException;
  * @author aniruddha_phadnis
  * @author gautam_shetty
  */
-public class Participant extends AbstractDomainObject implements java.io.Serializable, IActivityStatus
+public class Participant extends AbstractDomainObject
+		implements
+			java.io.Serializable,
+			IActivityStatus
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -158,7 +162,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Set ClinicalStudyRegistration Collection.
 	 * @param clinicalStudyRegistrationCollection Collection.
 	 */
-	public void setClinicalStudyRegistrationCollection(Collection clinicalStudyRegistrationCollection)
+	public void setClinicalStudyRegistrationCollection(
+			Collection clinicalStudyRegistrationCollection)
 	{
 		this.clinicalStudyRegistrationCollection = clinicalStudyRegistrationCollection;
 	}
@@ -201,9 +206,9 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.deathDate = participant.getDeathDate();
 		this.vitalStatus = participant.getVitalStatus();
 		this.collectionProtocolRegistrationCollection = null;
-		this.clinicalStudyRegistrationCollection =null;
+		this.clinicalStudyRegistrationCollection = null;
 		this.collectionProtocolRegistrationCollection = null;
-		this.clinicalStudyRegistrationCollection =null;
+		this.clinicalStudyRegistrationCollection = null;
 		Collection<Race> raceCollection = new ArrayList<Race>();
 		Iterator<Race> raceItr = participant.getRaceCollection().iterator();
 		while (raceItr.hasNext())
@@ -214,12 +219,11 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		}
 		this.raceCollection = raceCollection;
 
-		Collection<ParticipantMedicalIdentifier> pmiCollection =
-			new ArrayList<ParticipantMedicalIdentifier>();
+		Collection<ParticipantMedicalIdentifier> pmiCollection = new ArrayList<ParticipantMedicalIdentifier>();
 		if (participant.getParticipantMedicalIdentifierCollection() != null)
 		{
-			Iterator<ParticipantMedicalIdentifier> pmiItr =
-				participant.getParticipantMedicalIdentifierCollection().iterator();
+			Iterator<ParticipantMedicalIdentifier> pmiItr = participant
+					.getParticipantMedicalIdentifierCollection().iterator();
 			while (pmiItr.hasNext())
 			{
 				ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
@@ -554,7 +558,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @param participantMedicalIdentifierCollection collection of medical identifiers of this participant.
 	 * @see #getParticipantMedicalIdentifierCollection()
 	 */
-	public void setParticipantMedicalIdentifierCollection(Collection participantMedicalIdentifierCollection)
+	public void setParticipantMedicalIdentifierCollection(
+			Collection participantMedicalIdentifierCollection)
 	{
 		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection;
 	}
@@ -578,8 +583,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * protocol registrations of this participant.
 	 * @see #getCollectionProtocolRegistrationCollection()
 	 */
-	public void setCollectionProtocolRegistrationCollection(Collection
-			collectionProtocolRegistrationCollection)
+	public void setCollectionProtocolRegistrationCollection(
+			Collection collectionProtocolRegistrationCollection)
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
@@ -650,11 +655,12 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 				}
 			}
 
-			String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() +
-			"-" + form.getSocialSecurityNumberPartB() + "-"	+ form.getSocialSecurityNumberPartC();
+			String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() + "-"
+					+ form.getSocialSecurityNumberPartB() + "-"
+					+ form.getSocialSecurityNumberPartC();
 
-			if (!validator.isEmpty(socialSecurityNumberTemp) &&
-					validator.isValidSSN(socialSecurityNumberTemp))
+			if (!validator.isEmpty(socialSecurityNumberTemp)
+					&& validator.isValidSSN(socialSecurityNumberTemp))
 			{
 				this.socialSecurityNumber = socialSecurityNumberTemp;
 			}
@@ -663,11 +669,11 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 				this.socialSecurityNumber = nullString;
 			}
 
-			this.birthDate = Utility.parseDate(form.getBirthDate(),
-					Utility.datePattern(form.getBirthDate()));
+			this.birthDate = Utility.parseDate(form.getBirthDate(), Utility.datePattern(form
+					.getBirthDate()));
 
-			this.deathDate = Utility.parseDate(form.getDeathDate(),
-					Utility.datePattern(form.getDeathDate()));
+			this.deathDate = Utility.parseDate(form.getDeathDate(), Utility.datePattern(form
+					.getDeathDate()));
 
 			if (validator.isValidOption(form.getVitalStatus()))
 			{
@@ -687,16 +693,15 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			//Collection Protocol Registration of the participant
 			//(Abhishek Mehta)
 			this.collectionProtocolRegistrationCollection.clear();
-			Map mapCollectionProtocolRegistrationCollection =
-				form.getCollectionProtocolRegistrationValues();
+			Map mapCollectionProtocolRegistrationCollection = form
+					.getCollectionProtocolRegistrationValues();
 			logger.debug("Map " + map);
-			MapDataParser parserCollectionProtocolRegistrationCollection =
-				new MapDataParser("edu.wustl.catissuecore.domain");
-			this.collectionProtocolRegistrationCollection =
-				parserCollectionProtocolRegistrationCollection
+			MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
+					"edu.wustl.catissuecore.domain");
+			this.collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
 					.generateData(mapCollectionProtocolRegistrationCollection);
-			logger.debug("ParticipantMedicalIdentifierCollection " +
-					participantMedicalIdentifierCollection);
+			logger.debug("ParticipantMedicalIdentifierCollection "
+					+ participantMedicalIdentifierCollection);
 
 			setConsentsResponseToCollectionProtocolRegistration(form);
 		}
@@ -711,18 +716,19 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Setting Consent Response for the collection protocol.
 	 * @param form ParticipantForm.
 	 */
-	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form) throws Exception
+	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form)
+			throws Exception
 	{
-			logger.debug(":: participant id  :"+form.getId());
-			Collection<ConsentResponseBean> consentResponseBeanCollection =
-				form.getConsentResponseBeanCollection();
-			Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
-			while (itr.hasNext())
-			{
-				CollectionProtocolRegistration collectionProtocolRegistration =
-					(CollectionProtocolRegistration) itr.next();
-				setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
-			}
+		logger.debug(":: participant id  :" + form.getId());
+		Collection<ConsentResponseBean> consentResponseBeanCollection = form
+				.getConsentResponseBeanCollection();
+		Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
+		while (itr.hasNext())
+		{
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itr
+					.next();
+			setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
+		}
 	}
 
 	/**
@@ -730,50 +736,64 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @param collectionProtocolRegistration CollectionProtocolRegistration.
 	 * @param consentResponseBeanCollection Collection.
 	 */
-	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration, Collection consentResponseBeanCollection) throws Exception
+	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration,
+			Collection consentResponseBeanCollection) throws Exception
 	{
-		if(consentResponseBeanCollection!= null && !consentResponseBeanCollection.isEmpty())
+		if (consentResponseBeanCollection != null && !consentResponseBeanCollection.isEmpty())
 		{
 			Iterator itr = consentResponseBeanCollection.iterator();
-			while(itr.hasNext())
-	        {
-				ConsentResponseBean consentResponseBean = (ConsentResponseBean)itr.next();
-				long cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
-				long cpIDconsentRegistrationBean =  consentResponseBean.getCollectionProtocolID();
-				if(cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean){
-					
-					logger.debug(":: collection protocol id :"+cpIDcollectionProtocolRegistration);
-					logger.debug(":: collection protocol Registration id  :"+collectionProtocolRegistration.getId());
-					
+			while (itr.hasNext())
+			{
+				ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
+				long cpIDcollectionProtocolRegistration = collectionProtocolRegistration
+						.getCollectionProtocol().getId().longValue();
+				long cpIDconsentRegistrationBean = consentResponseBean.getCollectionProtocolID();
+				if (cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean)
+				{
+
+					logger
+							.debug(":: collection protocol id :"
+									+ cpIDcollectionProtocolRegistration);
+					logger.debug(":: collection protocol Registration id  :"
+							+ collectionProtocolRegistration.getId());
+
 					String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
 					long witnessId = consentResponseBean.getWitnessId();
 					String consentDate = consentResponseBean.getConsentDate();
-					Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentResponseBean.getConsentResponse(), true);
-					 
+					Collection consentTierResponseCollection = prepareConsentTierResponseCollection(
+							consentResponseBean.getConsentResponse(), true);
+
 					collectionProtocolRegistration.setSignedConsentDocumentURL(signedConsentUrl);
-					if(witnessId>0)
+					if (witnessId > 0)
 					{
 						User consentWitness = new User();
 						consentWitness.setId(new Long(witnessId));
 						collectionProtocolRegistration.setConsentWitness(consentWitness);
 					}
-					
-					collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate(consentDate));
-					collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-					collectionProtocolRegistration.setConsentWithdrawalOption(consentResponseBean.getConsentWithdrawalOption());
+
+					collectionProtocolRegistration.setConsentSignatureDate(Utility
+							.parseDate(consentDate));
+					collectionProtocolRegistration
+							.setConsentTierResponseCollection(consentTierResponseCollection);
+					collectionProtocolRegistration.setConsentWithdrawalOption(consentResponseBean
+							.getConsentWithdrawalOption());
 					break;
 				}
-	        }
+			}
 		}
-		else // Setting default response to collection protocol
+		else
+		// Setting default response to collection protocol
 		{
-			if(collectionProtocolRegistration.getCollectionProtocol()!=null)
+			if (collectionProtocolRegistration.getCollectionProtocol() != null)
 			{
-			String cpIDcollectionProtocolRegistration = collectionProtocolRegistration.getCollectionProtocol().getId().toString();
-			Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
-			
-			Collection consentTierResponseCollection = prepareConsentTierResponseCollection(consentTierCollection,false);
-			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
+				String cpIDcollectionProtocolRegistration = collectionProtocolRegistration
+						.getCollectionProtocol().getId().toString();
+				Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
+
+				Collection consentTierResponseCollection = prepareConsentTierResponseCollection(
+						consentTierCollection, false);
+				collectionProtocolRegistration
+						.setConsentTierResponseCollection(consentTierResponseCollection);
 			}
 		}
 
@@ -785,7 +805,8 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @param isResponse boolean.
 	 * @return Collection.
 	 */
-	private Collection prepareConsentTierResponseCollection(Collection consentResponse, boolean isResponse)
+	private Collection prepareConsentTierResponseCollection(Collection consentResponse,
+			boolean isResponse)
 	{
 		Collection consentTierResponseCollection = new HashSet();
 		if (consentResponse != null && !consentResponse.isEmpty())
@@ -819,15 +840,15 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * @throws NumberFormatException 
 	 * @throws DAOException DAOException.
 	 */
-	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException, BizLogicException
+	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException,
+			BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		CollectionProtocolBizLogic collectionProtocolBizLogic =
-			(CollectionProtocolBizLogic) factory.getBizLogic(
-				Constants.COLLECTION_PROTOCOL_FORM_ID);
-		Collection consentTierCollection = (Collection) collectionProtocolBizLogic.
-			retrieveAttribute(CollectionProtocol.class.getName(), Long
-				.valueOf(collectionProtocolID), "elements(consentTierCollection)");
+		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
+				.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		Collection consentTierCollection = (Collection) collectionProtocolBizLogic
+				.retrieveAttribute(CollectionProtocol.class.getName(), Long
+						.valueOf(collectionProtocolID), "elements(consentTierCollection)");
 		return consentTierCollection;
 	}
 

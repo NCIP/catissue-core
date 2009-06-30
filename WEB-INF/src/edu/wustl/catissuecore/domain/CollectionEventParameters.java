@@ -21,12 +21,15 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 public class CollectionEventParameters extends SpecimenEventParameters
-		implements java.io.Serializable
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionEventParameters.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(CollectionEventParameters.class);
 
 	/**
 	 * Serial Version Id of the class.
@@ -97,49 +100,49 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	public CollectionEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject)abstractForm);
+		setAllValues((IValueObject) abstractForm);
 	}
 
 	/**
-     * This function Copies the data from an CollectionEventParameters object.
-     * @param abstractForm CollectionEventParametersForm An CollectionEventParametersForm
-     * object containing the information about the CollectionEventParameters.
-     */
-    public void setAllValues(IValueObject abstractForm)
-    {
-        try
-        {
-        	CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
-        	Validator validator = new Validator();
+	 * This function Copies the data from an CollectionEventParameters object.
+	 * @param abstractForm CollectionEventParametersForm An CollectionEventParametersForm
+	 * object containing the information about the CollectionEventParameters.
+	 */
+	public void setAllValues(IValueObject abstractForm)
+	{
+		try
+		{
+			CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
+			Validator validator = new Validator();
 
-        	if(validator.isValidOption(form.getContainer()))
-        	{
-        		this.container = form.getContainer();
-        	}
-        	else
-        	{
-        		this.container = null; //Purposefully set null for Edit Mode
-        	}
+			if (validator.isValidOption(form.getContainer()))
+			{
+				this.container = form.getContainer();
+			}
+			else
+			{
+				this.container = null; //Purposefully set null for Edit Mode
+			}
 
-        	this.collectionProcedure = form.getCollectionProcedure() ;
+			this.collectionProcedure = form.getCollectionProcedure();
 
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            logger.error(excp.getMessage());
-        }
-    }
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+	}
 
-    /**
-     * Parameterized Constructor.
-     * @param obj of type CollectionEventParameters.
-     */
-    public CollectionEventParameters(CollectionEventParameters obj)
-    {
-    	super();
-    	this.collectionProcedure = obj.collectionProcedure;
-    	this.container = obj.container;
-    	this.comment = obj.comment;
-    }
+	/**
+	 * Parameterized Constructor.
+	 * @param obj of type CollectionEventParameters.
+	 */
+	public CollectionEventParameters(CollectionEventParameters obj)
+	{
+		super();
+		this.collectionProcedure = obj.collectionProcedure;
+		this.container = obj.container;
+		this.comment = obj.comment;
+	}
 }

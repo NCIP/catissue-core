@@ -22,10 +22,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TissueSpecimenRequirement extends SpecimenRequirement implements Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(TissueSpecimenRequirement.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(TissueSpecimenRequirement.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -81,7 +83,8 @@ public class TissueSpecimenRequirement extends SpecimenRequirement implements Se
 	 */
 	public TissueSpecimenRequirement createClone()
 	{
-		TissueSpecimenRequirement cloneTissueRequirementSpecimen = new TissueSpecimenRequirement(this);
+		TissueSpecimenRequirement cloneTissueRequirementSpecimen = new TissueSpecimenRequirement(
+				this);
 		return cloneTissueRequirementSpecimen;
 	}
 }

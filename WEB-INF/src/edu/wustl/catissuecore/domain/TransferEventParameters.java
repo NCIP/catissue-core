@@ -20,8 +20,11 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_TRANSFER_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class TransferEventParameters extends SpecimenEventParameters implements java.io.Serializable
+public class TransferEventParameters extends SpecimenEventParameters
+		implements
+			java.io.Serializable
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -187,7 +190,8 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 	 * @param fromStorageContainer
 	 *            The fromStorageContainer to set.
 	 */
-	public void setFromStorageContainer(edu.wustl.catissuecore.domain.StorageContainer fromStorageContainer)
+	public void setFromStorageContainer(
+			edu.wustl.catissuecore.domain.StorageContainer fromStorageContainer)
 	{
 		this.fromStorageContainer = fromStorageContainer;
 	}
@@ -230,9 +234,10 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 			}
 			else
 			{
-				if (form.getPos1() != null && !form.getPos1().trim().
-					equals(Constants.DOUBLE_QUOTES) && form.getPos2() != null &&
-						!form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
+				if (form.getPos1() != null
+						&& !form.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
+						&& form.getPos2() != null
+						&& !form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
 				{
 					this.toPositionDimensionOne = Integer.valueOf(form.getPos1());
 					this.toPositionDimensionTwo = Integer.valueOf(form.getPos2());
@@ -254,10 +259,8 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 				fromObj.setId(Long.valueOf(form.getFromStorageContainerId()));
 				this.fromStorageContainer = fromObj;
 
-				this.fromPositionDimensionOne = Integer.valueOf(
-						form.getFromPositionDimensionOne());
-				this.fromPositionDimensionTwo = Integer.valueOf(
-						form.getFromPositionDimensionTwo());
+				this.fromPositionDimensionOne = Integer.valueOf(form.getFromPositionDimensionOne());
+				this.fromPositionDimensionTwo = Integer.valueOf(form.getFromPositionDimensionTwo());
 			}
 			super.setAllValues(form);
 		}

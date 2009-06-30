@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class Password extends AbstractDomainObject implements Serializable, Comparable
 {
+
 	/**
 	 * Serial Version ID.
 	 */

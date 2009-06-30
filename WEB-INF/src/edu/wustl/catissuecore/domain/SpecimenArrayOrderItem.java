@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on November 09,2006
  */
+
 package edu.wustl.catissuecore.domain;
 
 /**
@@ -14,6 +15,7 @@ package edu.wustl.catissuecore.domain;
  */
 public abstract class SpecimenArrayOrderItem extends OrderItem
 {
+
 	/**
 	 * Serial Version ID.
 	 */

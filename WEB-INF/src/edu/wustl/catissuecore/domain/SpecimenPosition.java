@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.common.actionForm.IValueObject;
@@ -9,6 +10,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class SpecimenPosition extends AbstractPosition
 {
+
 	/**
 	 * Serial Version ID.
 	 */
