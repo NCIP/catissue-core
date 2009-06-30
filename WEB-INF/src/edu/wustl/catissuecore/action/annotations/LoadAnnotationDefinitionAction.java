@@ -84,6 +84,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 {
 
 	private transient Logger logger = Logger.getCommonLogger(LoadAnnotationDefinitionAction.class);
+
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -175,7 +176,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException 
 	 */
 	private void getCPConditions(AnnotationForm annotationForm, String containerId,
-			HttpServletRequest request) throws IllegalStateException, CacheException, DynamicExtensionsSystemException
+			HttpServletRequest request) throws IllegalStateException, CacheException,
+			DynamicExtensionsSystemException
 	{
 		if (containerId != null)
 		{
@@ -188,21 +190,22 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				int i = 0;
 				EntityMap entityMap = new EntityMap();
 				entityMap = (EntityMap) entitymapList.get(0);
-				
-				Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap.getId());
-				Iterator<FormContext> formContextIter = formContexts.iterator();
+
+				Collection < FormContext > formContexts = AppUtility.getFormContexts(entityMap
+						.getId());
+				Iterator < FormContext > formContextIter = formContexts.iterator();
 				while (formContextIter.hasNext())
 				{
 					FormContext formContext = formContextIter.next();
-					
-					Collection<EntityMapCondition> entityMapConditions = AppUtility.getEntityMapConditions(formContext.getId());					
-					
+
+					Collection < EntityMapCondition > entityMapConditions = AppUtility
+							.getEntityMapConditions(formContext.getId());
+
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
 							&& (formContext.getStudyFormLabel() == null || formContext
 									.getStudyFormLabel().equals("")))
-						if (entityMapConditions != null
-								&& !entityMapConditions.isEmpty())
+						if (entityMapConditions != null && !entityMapConditions.isEmpty())
 						{
 
 							Collection entityMapConditionColl = entityMapConditions;
@@ -239,7 +242,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws ApplicationException 
 	 */
 	private void processResponseFromDynamicExtensions(HttpServletRequest request)
-			throws CacheException, DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
+			throws CacheException, DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException, ApplicationException
 	{
 		String operationStatus = request.getParameter(WebUIManager
 				.getOperationStatusParameterName());
@@ -269,7 +273,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws ApplicationException 
 	 */
 	private void linkEntities(HttpServletRequest request, String staticEntityId,
-			String dynExtContainerId, String[] staticRecordIds) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
+			String dynExtContainerId, String[] staticRecordIds)
+			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
+			ApplicationException
 	{
 		if (dynExtContainerId != null)
 		{
@@ -282,7 +288,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				deletedAssociationIdArray = deletedAssociationIds.split("_");
 			}
 			DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-			List<EntityMap> entityMapList = null;
+			List < EntityMap > entityMapList = null;
 			try
 			{
 				entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(), "containerId",
@@ -304,7 +310,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					//Retrieving the container
 					try
 					{
-						String appName= DynamicExtensionDAO.getInstance().getAppName(); 
+						String appName = DynamicExtensionDAO.getInstance().getAppName();
 						dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 						dao.openSession(null);
 
@@ -313,8 +319,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					{
 						logger.debug(excep.getMessage(), excep);
 						excep.printStackTrace();
-						throw new ApplicationException(ErrorKey.getErrorKey("hibernate.exception"), excep,
-								"LoadAnnotationDefinitionAction.java");
+						throw new ApplicationException(ErrorKey.getErrorKey("hibernate.exception"),
+								excep, "LoadAnnotationDefinitionAction.java");
 					}
 
 					ContainerInterface dynamicContainer = null;
@@ -338,7 +344,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						//				staticEntity = EntityManager.getInstance().persistEntityMetadataForAnnotation(
 						//						staticEntity, true, false, association);
 
-						Set<PathObject> processedPathList = new HashSet<PathObject>();
+						Set < PathObject > processedPathList = new HashSet < PathObject >();
 						//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
 						addQueryPathsForEntityHierarchy((EntityInterface) dynamicContainer
 								.getAbstractEntity(), staticEntity, association.getId(),
@@ -366,13 +372,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
 				throw AppUtility.getApplicationException(excep, "number.format.exp",
-				"LoadAnnotationDefinitionAction.java");
+						"LoadAnnotationDefinitionAction.java");
 			}
 			catch (DAOException excep)
 			{
 				logger.debug(excep.getMessage(), excep);
 				excep.printStackTrace();
-				throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(),excep.getMsgValues());
+				throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(), excep
+						.getMsgValues());
 			}
 			finally
 			{
@@ -393,7 +400,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		{
 			JDBCDAO jdbcDAO = null;
 			jdbcDAO = AppUtility.openJDBCSession();
-			
+
 			PreparedStatement statement = null;
 			try
 			{
@@ -411,14 +418,17 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			{
 				logger.debug(excep.getMessage(), excep);
 				throw new ApplicationException(ErrorKey.getErrorKey("SQL.exp"), excep,
-				"LoadAnnotationDefinitionAction.java");
+						"LoadAnnotationDefinitionAction.java");
 			}
 			finally
 			{
 				AppUtility.closeJDBCSession(jdbcDAO);
-				try {
+				try
+				{
 					statement.close();
-				} catch (SQLException e) {
+				}
+				catch (SQLException e)
+				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -435,7 +445,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 */
 	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity,
 			EntityInterface staticEntity, Long associationId, Long staticEntityId,
-			Set<PathObject> processedPathList) throws DynamicExtensionsSystemException,
+			Set < PathObject > processedPathList) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, BizLogicException
 	{
 		PathObject pathObject = new PathObject();
@@ -461,7 +471,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						.getId(), dynamicEntity, staticEntityId, associationId);
 			}
 		}
-		Collection<AssociationInterface> associationCollection = dynamicEntity
+		Collection < AssociationInterface > associationCollection = dynamicEntity
 				.getAllAssociations();
 		for (AssociationInterface association : associationCollection)
 		{
@@ -483,7 +493,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	{
 		boolean ispathAdded = false;
 		JDBCDAO jdbcDAO = null;
-		
 
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -523,7 +532,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			try
 			{
 				jdbcDAO.closeStatement(resultSet);
-				AppUtility.closeJDBCSession(jdbcDAO);				
+				AppUtility.closeJDBCSession(jdbcDAO);
 			}
 			catch (ApplicationException e)
 			{
@@ -535,9 +544,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	}
 
 	/**
+	 * 
 	 * @param request
 	 * @param staticEntityId
 	 * @param dynExtContainerId
+	 * @param conditions
 	 * @return
 	 * @throws CacheException
 	 */
@@ -612,9 +623,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		if ((operation != null)
 				&& (operation.equalsIgnoreCase(AnnotationConstants.AJAX_OPERATION_SELECT_GROUP)))
 		{
-			String groupId = request
-					.getParameter(AnnotationConstants.AJAX_OPERATION_SELECTED_GROUPID);
-			String entitiesXML = getEntitiesForGroupAsXML(groupId, request);
+			/*String groupId = request
+					.getParameter(AnnotationConstants.AJAX_OPERATION_SELECTED_GROUPID);*/
+			//String entitiesXML = getEntitiesForGroupAsXML(groupId, request);
 			getResponseString(request, response);
 
 			// sendResponse(entitiesXML, response);
@@ -680,41 +691,42 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DAOException
 	 * @throws CacheException
 	 */
-	private String getEntitiesForGroupAsXML(String groupId, HttpServletRequest request)
-			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
-			DAOException, CacheException
-	{
-		List dataList = new ArrayList();
-
-		StringBuffer entitiesXML = new StringBuffer();
-		entitiesXML.append("<?xml version='1.0' encoding='UTF-8'?>");
-		if (groupId != null)
+	/*	private String getEntitiesForGroupAsXML(String groupId, HttpServletRequest request)
+				throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
+				DAOException, CacheException
 		{
-			Long lGroupId = new Long(groupId);
-			Collection<NameValueBean> entityContainerCollection = EntityManager.getInstance()
-					.getMainContainer(lGroupId);
+			List dataList = new ArrayList();
 
-			if (entityContainerCollection != null)
+			StringBuffer entitiesXML = new StringBuffer();
+			entitiesXML.append("<?xml version='1.0' encoding='UTF-8'?>");
+			if (groupId != null)
 			{
-				entitiesXML.append("<rows>");
-				Iterator<NameValueBean> containerCollnIter = entityContainerCollection.iterator();
-				int entityIndex = 1;
-				while (containerCollnIter.hasNext())
-				{
-					List innerList = new ArrayList();
-					NameValueBean container = containerCollnIter.next();
-					entitiesXML.append(getEntityXMLString(container, entityIndex, innerList,
-							request));
-					entityIndex++;
-					dataList.add(innerList);
-				}
-				entitiesXML.append("</rows>");
-			}
-			request.getSession().setAttribute(Constants.SPREADSHEET_DATA_ENTITY, dataList);
+				Long lGroupId = new Long(groupId);
+				Collection < NameValueBean > entityContainerCollection = EntityManager.getInstance()
+						.getMainContainer(lGroupId);
 
-		}
-		return entitiesXML.toString();
-	}
+				if (entityContainerCollection != null)
+				{
+					entitiesXML.append("<rows>");
+					Iterator < NameValueBean > containerCollnIter = entityContainerCollection
+							.iterator();
+					int entityIndex = 1;
+					while (containerCollnIter.hasNext())
+					{
+						List innerList = new ArrayList();
+						NameValueBean container = containerCollnIter.next();
+						entitiesXML.append(getEntityXMLString(container, entityIndex, innerList,
+								request));
+						entityIndex++;
+						dataList.add(innerList);
+					}
+					entitiesXML.append("</rows>");
+				}
+				request.getSession().setAttribute(Constants.SPREADSHEET_DATA_ENTITY, dataList);
+
+			}
+			return entitiesXML.toString();
+		}*/
 
 	/**
 	 * @param container
@@ -735,10 +747,10 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			int index = 1;
 			String editDynExtEntityURL = getDynamicExtentionsEditURL(new Long(container.getValue()));
 
-			List<EntityMap> entityMapList = getEntityMapsForDE(new Long(container.getValue()));
+			List < EntityMap > entityMapList = getEntityMapsForDE(new Long(container.getValue()));
 			if (entityMapList != null)
 			{
-				Iterator<EntityMap> entityMapIterator = entityMapList.iterator();
+				Iterator < EntityMap > entityMapIterator = entityMapList.iterator();
 				while (entityMapIterator.hasNext())
 				{
 					EntityMap entityMapObj = entityMapIterator.next();
@@ -785,9 +797,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			entityMapXML.append("<cell>" + staticEntityName + "</cell>");
 			innerList.add(staticEntityName);
 			entityMapXML.append("<cell>"
-					+ Utility
-							.parseDateToString(entityMapObj.getCreatedDate(), CommonServiceLocator.getInstance().getDatePattern())
-					+ "</cell>");
+					+ Utility.parseDateToString(entityMapObj.getCreatedDate(), CommonServiceLocator
+							.getInstance().getDatePattern()) + "</cell>");
 			innerList.add(Utility.parseDateToString(entityMapObj.getCreatedDate(),
 					CommonServiceLocator.getInstance().getDatePattern()));
 			entityMapXML.append("<cell>" + entityMapObj.getCreatedBy() + "</cell>");
@@ -823,9 +834,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param id
 	 * @return
 	 */
-	private List<EntityMap> getEntityMapsForDE(Long dynEntityContainerId)
+	private List < EntityMap > getEntityMapsForDE(Long dynEntityContainerId)
 	{
-		List<EntityMap> entityMapList = null;
+		List < EntityMap > entityMapList = null;
 		if (dynEntityContainerId != null)
 		{
 			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
@@ -1001,7 +1012,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		//List of groups
-		Collection<NameValueBean> annotationGroupsList = getAnnotationGroups();
+		Collection < NameValueBean > annotationGroupsList = getAnnotationGroups();
 		String groupsXML = getGroupsXML(annotationGroupsList, request);
 		annotationForm.setAnnotationGroupsXML(groupsXML);
 	}
@@ -1010,7 +1021,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param annotationGroupsList
 	 * @return
 	 */
-	private String getGroupsXML(Collection<NameValueBean> annotationGroupsList,
+	private String getGroupsXML(Collection < NameValueBean > annotationGroupsList,
 			HttpServletRequest request)
 	{
 		StringBuffer groupsXML = new StringBuffer();
@@ -1020,7 +1031,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			groupsXML.append("<?xml version='1.0' encoding='UTF-8'?>");
 			groupsXML.append("<rows>");
 			NameValueBean groupBean = null;
-			Iterator<NameValueBean> iterator = annotationGroupsList.iterator();
+			Iterator < NameValueBean > iterator = annotationGroupsList.iterator();
 			while (iterator.hasNext())
 			{
 				groupBean = iterator.next();
@@ -1047,11 +1058,11 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException
 	 */
-	private Collection<NameValueBean> getAnnotationGroups()
+	private Collection < NameValueBean > getAnnotationGroups()
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		EntityManagerInterface entityManager = EntityManager.getInstance();
-		Collection<NameValueBean> entityGroups = entityManager.getAllEntityGroupBeans();
+		Collection < NameValueBean > entityGroups = entityManager.getAllEntityGroupBeans();
 		return entityGroups;
 	}
 

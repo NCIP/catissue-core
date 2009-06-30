@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +8,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
@@ -16,11 +16,13 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+
 /**
  * this class implements the action for processing the shipment requests.
  */
 public abstract class ProcessShipmentRequestsAction extends SecureAction
 {
+
 	/**
 	 * this method populates the UI bean.
 	 * @param request HttpServletRequest object.
@@ -28,11 +30,12 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 	 */
 	protected void populateUIBean(HttpServletRequest request, ShipmentRequest shipmentRequest)
 	{
-		ShipmentRequestForm shipmentRequestForm=new ShipmentRequestForm();
+		ShipmentRequestForm shipmentRequestForm = new ShipmentRequestForm();
 		shipmentRequestForm.setAllValues(shipmentRequest);
 		shipmentRequestForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
-		request.setAttribute("shipmentRequestForm",shipmentRequestForm);
+		request.setAttribute("shipmentRequestForm", shipmentRequestForm);
 	}
+
 	/**
 	 * implements the action.
 	 * @param mapping object of ActionMapping class.
@@ -45,36 +48,43 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String forwardTo="";
+		String forwardTo = "";
 		//Getting the ShipmentId parameter from the form
-		String requestIdString=request.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
-		if(requestIdString==null || requestIdString.trim().equals("") || requestIdString.equals("0"))
+		String requestIdString = request
+				.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
+		if (requestIdString == null || requestIdString.trim().equals("")
+				|| requestIdString.equals("0"))
 		{
-			requestIdString=((Long)request.getAttribute(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER)).toString();
+			requestIdString = ((Long) request
+					.getAttribute(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER))
+					.toString();
 		}
-		String operation=request.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
-		if(requestIdString!=null)
+		String operation = request
+				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
+		if (requestIdString != null)
 		{
-			Long requestId=Long.parseLong(requestIdString);
+			Long requestId = Long.parseLong(requestIdString);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
-			ShipmentRequest shipmentRequest=((ShipmentRequestBizLogic)bizLogic).getShipmentRequestObject(requestId);
-			if(shipmentRequest!=null)
+			ShipmentRequest shipmentRequest = ((ShipmentRequestBizLogic) bizLogic)
+					.getShipmentRequestObject(requestId);
+			if (shipmentRequest != null)
 			{
-				populateUIBean(request,shipmentRequest);
-				forwardTo=getForwardTo(shipmentRequest.getActivityStatus(),operation);
+				populateUIBean(request, shipmentRequest);
+				forwardTo = getForwardTo(shipmentRequest.getActivityStatus(), operation);
 			}
 		}
 		return mapping.findForward(forwardTo);
 	}
+
 	/**
 	 * creates the shipment form.
 	 * @param shipmentForm the ShipmentRequestForm.
 	 * @return Shipment form.
 	 */
-	private ShipmentForm createShipmentForm(ShipmentRequestForm shipmentForm)
+	/*private ShipmentForm createShipmentForm(ShipmentRequestForm shipmentForm)
 	{
-		ShipmentForm form=new ShipmentForm();
+		ShipmentForm form = new ShipmentForm();
 		form.setReceiverSiteId(shipmentForm.getSenderSiteId());
 		form.setSenderSiteId(shipmentForm.getReceiverSiteId());
 		form.setReceiverContactId(shipmentForm.getSenderContactId());
@@ -86,7 +96,8 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 		form.setContainerDetailsMap(shipmentForm.getContainerDetailsMap());
 		form.setContainerCounter(shipmentForm.getContainerCounter());
 		return form;
-	}
+	}*/
+
 	/**
 	 * abstract method to find the forward mapping.
 	 * @param activityStatus status to be checked for.

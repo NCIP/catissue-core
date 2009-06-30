@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.bulkOperations;
 
 import java.util.List;
@@ -11,12 +12,12 @@ public class BulkDisposalEventsAction extends BulkOperationAction
 {
 
 	@Override
-	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow, String specimenId, HttpServletRequest request)
+	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
+			String specimenId, HttpServletRequest request)
 	{
-		eventParametersForm.setFieldValue("ID_"+specimenId+"_LABEL", specimenRow.get(1).toString());
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_LABEL", specimenRow.get(1)
+				.toString());
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
 				Constants.DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES);
-		
 	}
-
 }

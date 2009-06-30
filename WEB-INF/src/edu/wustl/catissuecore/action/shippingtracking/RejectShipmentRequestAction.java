@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,11 +10,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
 import edu.wustl.common.util.global.Status;
+
 /**
  * This class implements the action for shipment reject request action.
  */
 public class RejectShipmentRequestAction extends IncomingShipmentRequestAction
 {
+
 	/**
 	 * action method for shipment reject request.
 	 * @param mapping object of ActionMapping class.
@@ -26,13 +29,13 @@ public class RejectShipmentRequestAction extends IncomingShipmentRequestAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionForward actionForward=super.executeSecureAction(mapping, form, request, response);
-		if(request.getAttribute("shipmentRequestForm")!=null)
+		//ActionForward actionForward = super.executeSecureAction(mapping, form, request, response);
+		if (request.getAttribute("shipmentRequestForm") != null)
 		{
-			ShipmentRequestForm shipmentRequestForm=(ShipmentRequestForm)request.getAttribute("shipmentRequestForm");
-			shipmentRequestForm
-					.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
-			if(form instanceof ShipmentRequestForm)
+			ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) request
+					.getAttribute("shipmentRequestForm");
+			shipmentRequestForm.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
+			if (form instanceof ShipmentRequestForm)
 			{
 				form = shipmentRequestForm;
 			}

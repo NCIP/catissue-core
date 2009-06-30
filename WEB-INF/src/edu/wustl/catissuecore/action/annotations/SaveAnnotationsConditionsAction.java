@@ -152,6 +152,5 @@ public class SaveAnnotationsConditionsAction extends BaseAction
                 bizLogic.updateEntityMap(entityMap);
             }               
         }
-    }
-    
+    }    
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +13,13 @@ import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
+
 /**
  * this class implements the shipment form request action.
  */
 public class ShipmentFromRequestAction extends SecureAction
 {
+
 	/**
 	 * action method for shipment form request.
 	 * @param mapping object of ActionMapping class.
@@ -29,26 +32,28 @@ public class ShipmentFromRequestAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-			Object obj=request.getAttribute("shipmentRequestForm");
-			if(obj!=null && obj instanceof ShipmentRequestForm)
+		Object obj = request.getAttribute("shipmentRequestForm");
+		if (obj != null && obj instanceof ShipmentRequestForm)
+		{
+			ShipmentRequestForm requestForm = (ShipmentRequestForm) obj;
+			ShipmentForm shipmentForm = createShipmentForm(requestForm);
+			Long loggedInUserId = 0l;
+			if (request.getSession().getAttribute(
+					edu.wustl.catissuecore.util.global.Constants.SESSION_DATA) != null)
 			{
-				ShipmentRequestForm requestForm=(ShipmentRequestForm)obj;
-				ShipmentForm shipmentForm=createShipmentForm(requestForm);
-				Long loggedInUserId=0l;
-				if(request.getSession().getAttribute(edu.wustl.catissuecore.util.global.Constants.SESSION_DATA)!=null)
-				{
-					loggedInUserId=((SessionDataBean)request.getSession().getAttribute(
-							edu.wustl.catissuecore.util.global.Constants.SESSION_DATA)).getUserId();
-				}
-				shipmentForm.setSenderContactId(loggedInUserId);
-				shipmentForm.setShipmentRequestId(requestForm.getId());
-				request.setAttribute("shipmentForm", shipmentForm);
-				requestForm.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
-				requestForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
-				request.setAttribute("shipmentRequestForm", requestForm);
+				loggedInUserId = ((SessionDataBean) request.getSession().getAttribute(
+						edu.wustl.catissuecore.util.global.Constants.SESSION_DATA)).getUserId();
 			}
+			shipmentForm.setSenderContactId(loggedInUserId);
+			shipmentForm.setShipmentRequestId(requestForm.getId());
+			request.setAttribute("shipmentForm", shipmentForm);
+			requestForm.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
+			requestForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
+			request.setAttribute("shipmentRequestForm", requestForm);
+		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
+
 	/**
 	 * this method creates the shipment for by processing the requestForm.
 	 * @param requestForm the imput form to be processed.
@@ -56,7 +61,7 @@ public class ShipmentFromRequestAction extends SecureAction
 	 */
 	private ShipmentForm createShipmentForm(ShipmentRequestForm requestForm)
 	{
-		ShipmentForm shipmentForm=new ShipmentForm();
+		ShipmentForm shipmentForm = new ShipmentForm();
 		shipmentForm.setSpecimenCounter(requestForm.getSpecimenCounter());
 		shipmentForm.setSpecimenDetailsMap(requestForm.getSpecimenDetailsMap());
 		shipmentForm.setSpecimenLabelChoice("SpecimenLabel");

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +16,13 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+
 /**
  * this class implements the action for shipment processing.
  */
 public abstract class ProcessShipmentAction extends SecureAction
 {
+
 	/**
 	 * this method opens the shipment object for edit.
 	 * @param request object of HttpServletRequest class.
@@ -27,11 +30,12 @@ public abstract class ProcessShipmentAction extends SecureAction
 	 */
 	protected void openInEdit(HttpServletRequest request, Shipment shipment)
 	{
-		ShipmentForm shipmentForm=new ShipmentForm();
+		ShipmentForm shipmentForm = new ShipmentForm();
 		shipmentForm.setAllValues(shipment);
 		shipmentForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
-		request.setAttribute("shipmentForm",shipmentForm);
+		request.setAttribute("shipmentForm", shipmentForm);
 	}
+
 	/**
 	 * implements the action.
 	 * @param mapping object of ActionMapping class.
@@ -41,27 +45,28 @@ public abstract class ProcessShipmentAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
-	protected ActionForward executeSecureAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String forwardTo="";
+		String forwardTo = "";
 		//Getting the ShipmentId parameter from the form
-		String outgoingShipmentId=request.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
-		if(outgoingShipmentId!=null)
+		String outgoingShipmentId = request
+				.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
+		if (outgoingShipmentId != null)
 		{
-			Long shipmentId=Long.parseLong(outgoingShipmentId);
+			Long shipmentId = Long.parseLong(outgoingShipmentId);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_FORM_ID);
-			Shipment shipment=((ShipmentBizLogic)bizLogic).getShipmentObject(shipmentId);
-			if(shipment!=null)
+			Shipment shipment = ((ShipmentBizLogic) bizLogic).getShipmentObject(shipmentId);
+			if (shipment != null)
 			{
-				openInEdit(request,shipment);
-				forwardTo=getForwardTo(shipment.getActivityStatus());
+				openInEdit(request, shipment);
+				forwardTo = getForwardTo(shipment.getActivityStatus());
 			}
 		}
 		return mapping.findForward(forwardTo);
 	}
+
 	/**
 	 * abstract method to implement request forward finding.
 	 * @param activityStatus to be checked for.

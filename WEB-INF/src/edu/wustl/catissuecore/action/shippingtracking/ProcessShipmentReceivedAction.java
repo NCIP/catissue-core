@@ -201,7 +201,7 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 	 * @param name name containing classname.
 	 * @return string containing actual class name.
 	 */
-	private String getActualClassName(String name)
+	/*private String getActualClassName(String name)
 	{
 		if(name != null && name.trim().length() != 0)
 	    {
@@ -213,7 +213,5 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 	        }
 	    }
 	    return name;
-	}
-
-
+	}*/
 }

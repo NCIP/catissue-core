@@ -382,7 +382,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			if (dynEntContainerId != null && !dynEntContainerId.equals(""))
 			{
 				AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-				Collection<EntityMap> entityMapColl = new HashSet<EntityMap>();
+				Collection < EntityMap > entityMapColl = new HashSet < EntityMap >();
 				try
 				{
 					entityMapColl = bizLogic.getEntityMapsForContainer(Long
@@ -399,7 +399,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				for (EntityMap entityMap : entityMapColl)
 				{
 					FormContext formContext = getFormContext(entityMap.getId());
-					Collection<EntityMapRecord> recordColl = AppUtility
+					Collection < EntityMapRecord > recordColl = AppUtility
 							.getEntityMapRecords(formContext.getId());
 					for (EntityMapRecord eMR : recordColl)
 					{
@@ -439,10 +439,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		if (object != null)
 		{
 			EntityMap entityMap = (EntityMap) object;
-			Collection<FormContext> formContextMetadata = AppUtility.getFormContexts(entityMap
+			Collection < FormContext > formContextMetadata = AppUtility.getFormContexts(entityMap
 					.getId());
 
-			Iterator<FormContext> formContextIter = formContextMetadata.iterator();
+			Iterator < FormContext > formContextIter = formContextMetadata.iterator();
 			while (formContextIter.hasNext())
 			{
 				FormContext formContext = formContextIter.next();
@@ -514,12 +514,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		List dataList = new ArrayList();
 		if (staticEntityId != null)
 		{
-			List<EntityMapRecord> entityMapRecords = getEntityMapRecords(staticEntityId,
+			List < EntityMapRecord > entityMapRecords = getEntityMapRecords(staticEntityId,
 					staticEntityRecordId);
 			if (entityMapRecords != null)
 			{
 				definedAnnotationsXML.append("<rows>");
-				Iterator<EntityMapRecord> iterator = entityMapRecords.iterator();
+				Iterator < EntityMapRecord > iterator = entityMapRecords.iterator();
 				EntityMapRecord entityMapRecord = null;
 				while (iterator.hasNext())
 				{
@@ -663,10 +663,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @throws BizLogicException BizLogic Exception
 	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<EntityMapRecord> getEntityMapRecords(Long staticEntityId, Long staticEntityRecordId)
-			throws DynamicExtensionsSystemException, BizLogicException
+	private List < EntityMapRecord > getEntityMapRecords(Long staticEntityId,
+			Long staticEntityRecordId) throws DynamicExtensionsSystemException, BizLogicException
 	{
-		List<EntityMapRecord> entityMapRecords = null;
+		List < EntityMapRecord > entityMapRecords = null;
 		if (staticEntityId != null)
 		{
 			List entityMapIds = getListOfEntityMapIdsForSE(staticEntityId);
@@ -683,17 +683,17 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @throws BizLogicException 
 	 * @throws DynamicExtensionsApplicationException 
 	 */
-	private List<Long> getListOfEntityMapIdsForSE(Long staticEntityId)
+	private List < Long > getListOfEntityMapIdsForSE(Long staticEntityId)
 			throws DynamicExtensionsSystemException, BizLogicException
 	{
-		List<Long> entityMapIds = new ArrayList<Long>();
+		List < Long > entityMapIds = new ArrayList < Long >();
 		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-		List<EntityMap> entityMapsForStaticEntity = annotationBizLogic
+		List < EntityMap > entityMapsForStaticEntity = annotationBizLogic
 				.getListOfDynamicEntities(staticEntityId);
 		if (entityMapsForStaticEntity != null)
 		{
 			EntityMap entityMap = null;
-			Iterator<EntityMap> iter = entityMapsForStaticEntity.iterator();
+			Iterator < EntityMap > iter = entityMapsForStaticEntity.iterator();
 			while (iter.hasNext())
 			{
 				entityMap = iter.next();
@@ -719,10 +719,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			String staticEntityRecordId) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, BizLogicException
 	{
-		List<NameValueBean> annotationsList = new ArrayList<NameValueBean>();
+		List < NameValueBean > annotationsList = new ArrayList < NameValueBean >();
 		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 		List dynEntitiesList = new ArrayList();
-		List dynamicEntitiesList = new ArrayList();
+		//List dynamicEntitiesList = new ArrayList();
 		List allEntitiesList = new ArrayList();
 		List cpIdList = new ArrayList();
 		List allCategoryEntityList = new ArrayList();
@@ -742,7 +742,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 
 		if (allEntitiesList != null)
 		{
-			Iterator<Long> dynEntitiesIterator = allEntitiesList.iterator();
+			Iterator < Long > dynEntitiesIterator = allEntitiesList.iterator();
 			NameValueBean annotationBean = null;
 			while (dynEntitiesIterator.hasNext())
 			{
@@ -755,7 +755,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		if (allCategoryEntityList != null)
 		{
-			Iterator<Long> dynEntitiesIterator = allCategoryEntityList.iterator();
+			Iterator < Long > dynEntitiesIterator = allCategoryEntityList.iterator();
 			NameValueBean annotationBean = null;
 			while (dynEntitiesIterator.hasNext())
 			{
@@ -782,7 +782,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		List entitesList = new ArrayList();
 		if (dynEntitiesList != null)
 		{
-			Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
+			Iterator < Long > dynEntitiesIterator = dynEntitiesList.iterator();
 			EntityManagerInterface entityManager = EntityManager.getInstance();
 			while (dynEntitiesIterator.hasNext())
 			{
@@ -809,7 +809,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		List entitesList = new ArrayList();
 		if (dynEntitiesList != null)
 		{
-			Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
+			Iterator < Long > dynEntitiesIterator = dynEntitiesList.iterator();
 			EntityManagerInterface entityManager = EntityManager.getInstance();
 			while (dynEntitiesIterator.hasNext())
 			{
@@ -972,15 +972,15 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			BizLogicException
 	{
 		EntityManagerInterface entityManager = EntityManager.getInstance();
-		List<Long> annotationIds = new ArrayList<Long>();
+		List < Long > annotationIds = new ArrayList < Long >();
 		StringBuffer definedAnnotationsXML = new StringBuffer();
 		definedAnnotationsXML.append("<?xml version='1.0' encoding='UTF-8'?>");
 		definedAnnotationsXML.append("<rows>");
-		Iterator<NameValueBean> iterator = annotationsList.iterator();
+		Iterator < NameValueBean > iterator = annotationsList.iterator();
 		List dataList = new ArrayList();
 		String addURL = null;
 		NameValueBean entityBean = null;
-		List<EntityMapRecord> entityMapRecords = null;
+		List < EntityMapRecord > entityMapRecords = null;
 
 		if (staticEntityId != null)
 		{
@@ -992,13 +992,13 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			String entityGroupName = null;
 			int numRecord = 0;
 			entityBean = iterator.next();
-			List<Long> recordIds = null;
+			List < Long > recordIds = null;
 			if (entityBean != null)
 			{
 				String entityName = entityBean.getName();
 				Long entityId = Long.parseLong(entityBean.getValue());
 
-//				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName);
+				//				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName);
 				entityGroupName = entityManager.getEntityGroupNameByEntityName(entityName, Long
 						.valueOf(entityId));
 				addURL = "<a href='#' name='"
@@ -1077,14 +1077,14 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	 * @throws DynamicExtensionsSystemException fails to get DynamicEntity based on entityMapRecords
 	 * @throws DynamicExtensionsApplicationException fails to get DynamicEntity based on entityMapRecords
 	 */
-	public List<Long> getRecordCountForEntity(String entityId,
-			List<EntityMapRecord> entityMapRecords) throws DynamicExtensionsSystemException,
+	public List < Long > getRecordCountForEntity(String entityId,
+			List < EntityMapRecord > entityMapRecords) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException
 	{
-		List<Long> recordIds = new ArrayList<Long>();
+		List < Long > recordIds = new ArrayList < Long >();
 		if (entityMapRecords != null)
 		{
-			Iterator<EntityMapRecord> iter = entityMapRecords.iterator();
+			Iterator < EntityMapRecord > iter = entityMapRecords.iterator();
 			EntityMapRecord entityMapRecord = null;
 			while (iter.hasNext())
 			{
@@ -1119,13 +1119,13 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			BizLogicException
 	{
 		String datePattern = CommonServiceLocator.getInstance().getDatePattern();
-		List<EntityMapRecord> entityMapRecords = null;
+		List < EntityMapRecord > entityMapRecords = null;
 		String editURL = null;
 		if (staticEntityId != null)
 		{
 			entityMapRecords = getEntityMapRecords(staticEntityId, staticEntityRecordId);
 		}
-		List<Long> recordIds = getRecordCountForEntity(selectedFormId, entityMapRecords);
+		List < Long > recordIds = getRecordCountForEntity(selectedFormId, entityMapRecords);
 
 		StringBuffer definedAnnotationDataXML = new StringBuffer();
 		definedAnnotationDataXML.append("<?xml version='1.0' encoding='UTF-8'?>");
