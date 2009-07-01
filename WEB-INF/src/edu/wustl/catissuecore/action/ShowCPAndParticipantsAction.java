@@ -3,9 +3,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +13,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
-import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
+import edu.wustl.catissuecore.bizlogic.CpBasedViewBizLogic;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.NameValueBean;
 
 /**
  * This action is for getting the collection protocol and 
@@ -33,18 +30,9 @@ public class ShowCPAndParticipantsAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		CPSearchForm cpsearchForm = (CPSearchForm) form;
-
-		//Getting the instance of participantRegistrationCacheManager
-		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-
-		//Getting the CP list 
-		Map < Long , String > cpIDTitleMap = participantRegCacheManager.getCPIDTitleMap();
-		//Collections.sort(cpColl); Commented out by baljeet.....see the changes
-		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
-		//Smita changes end
-
+		// Removed the cache manager related code : Geeta
+		CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 		List participantColl = new ArrayList();
-
 		Long cpId = null;
 		if (cpsearchForm.getCpId() != null && cpsearchForm.getCpId().longValue() != -1)
 		{
@@ -58,31 +46,9 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		//participants registered for that CP.
 		if (cpId != null)
 		{
-			//getting the list of participants from cache for particular CP.
-			List participantNamesWithId = participantRegCacheManager.getParticipantNames(cpId);
-
-			//Values in participantNamesWithID will be in format (ID:lastName firstName) 
-			//tokenize the value and create nameValueBean with name as (lastName firstName) and value as participantId 
-			//and store in the list
-			Iterator itr = participantNamesWithId.iterator();
-			while (itr.hasNext())
-			{
-				String participantIdAndName = (String) itr.next();
-				int index = participantIdAndName.indexOf(":");
-				Long Id = null;
-				String name = "";
-				Id = new Long(participantIdAndName.substring(0, index));
-				name = participantIdAndName.substring(index + 1);
-				participantColl.add(new NameValueBean(name, Id));
-			}
-
+			participantColl = cpBizLogic.getRegisteredParticipantInfoCollection(cpId);
 			Collections.sort(participantColl);
-
-			//Commented out by Baljeet for flex related changes 
-			//request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
-
 		}
-
 		if (request.getParameter("participantId") != null
 				&& !request.getParameter("participantId").equals(""))
 		{
@@ -95,7 +61,6 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		{
 			cpsearchForm.setParticipantId(null);
 		}
-
 		return mapping.findForward("success");
 	}
 }
