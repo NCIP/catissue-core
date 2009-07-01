@@ -699,8 +699,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				{
 					if (container.getName() != null
 							&& !container.getName().equals("")
-							&& !Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX
-							.contains(container.getName()))
+							&& !container.getName()
+							.contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 					{
 						if (container.getId() == null)
 						{
