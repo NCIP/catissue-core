@@ -1,19 +1,13 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -26,16 +20,15 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 {
 
-	private transient Logger logger = Logger.getCommonLogger(DefaultSpecimenBarcodeGenerator.class);
+	/**
+	 * logger object
+	 */
+	private static final transient Logger logger = Logger.getCommonLogger(DefaultSpecimenBarcodeGenerator.class);
 	/**
 	 * Current Barcode.
 	 */
 	protected Long currentBarcode;
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-
+	
 	/**
 	 * Default Constructor.
 	 */
@@ -53,82 +46,39 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected void init()
 	{
+		String databaseConstant = null;
 		try
 		{
-			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
+			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+					Constants.APPLICATION_NAME).getDataBaseType()))
 			{
-				currentBarcode = getLastAvailableSpecimenBarcode(Constants.ORACLE_MAX_BARCODE_COL);
+				databaseConstant = Constants.ORACLE_MAX_BARCODE_COL;
 			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
+			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance()
+					.getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
 			{
-				currentBarcode = getLastAvailableSpecimenBarcode(Constants.MSSQLSERVER_MAX_BARCODE_COL);
+				databaseConstant = Constants.MSSQLSERVER_MAX_BARCODE_COL;
 			}
 			else
 			{
-				currentBarcode = getLastAvailableSpecimenBarcode(Constants.MYSQL_MAX_BARCODE_COL);
+				databaseConstant = Constants.MYSQL_MAX_BARCODE_COL;
 			}
+
+			StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant
+					+ ") from CATISSUE_SPECIMEN");
+			// Modify query for mssqlserver DB.
+			if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+					Constants.APPLICATION_NAME).getDataBaseType()))
+			{
+				sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
+			}
+			currentBarcode = AppUtility.getLastAvailableValue(sql.toString());
 		}
 		catch (Exception ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
-
-	}
-
-	/**
-	 * This method will retrieve unique specimen Barcode.
-	 * @param databaseConstant databaseConstant
-	 * @return noOfRecords
-	 */
-	private Long getLastAvailableSpecimenBarcode(String databaseConstant)
-	{
-		StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN");
-		
-		// Modify query for mssqlserver DB.
-		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType())) {
-			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
-		}
-		Connection conn = null;
-		Long noOfRecords = new Long("0");
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-			conn = ds.getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql.toString());
-
-			if (resultSet.next())
-			{
-				return new Long(resultSet.getLong(1));
-			}
-		}
-		catch (NamingException e)
-		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}
-		catch (SQLException ex)
-		{
-			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-		return noOfRecords;
 	}
 
 	/**
@@ -190,7 +140,6 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			currentBarcode = currentBarcode + 1;
 			objSpecimen.setBarcode(currentBarcode.toString());
 		}
-
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
 			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(), objSpecimen);
@@ -222,7 +171,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	public synchronized void setBarcode(List objSpecimenList)
 	{
 
-		List specimenList = objSpecimenList;
+		List<Specimen> specimenList = objSpecimenList;
 		for (int index = 0; index < specimenList.size(); index++)
 		{
 			Specimen objSpecimen = (Specimen) specimenList.get(index);

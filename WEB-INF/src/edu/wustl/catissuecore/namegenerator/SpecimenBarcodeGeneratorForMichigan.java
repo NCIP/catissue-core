@@ -1,46 +1,33 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Barcode Generator for Michigan University.
  * @author falguni_sachde
- *
  */
 public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeGenerator
 {
-
+	/**
+	 * Logger object.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
 	/**
 	 * Default Constructor.
 	 */
 	public SpecimenBarcodeGeneratorForMichigan()
 	{
-		//init();//TODO :Commented by Falguni because we are not
-		//using separate table for Michigan ,as not able to persist barcode count.
 		super();
 	}
-
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-
 	/**
 	 * This is a init() function it is called from the default constructor of
 	 * Base class. When getInstance of base class called then this init function
@@ -49,61 +36,11 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 */
 	protected void init()
 	{
+		currentBarcode = Long.valueOf(0);
 		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-		Connection conn = null;
-		currentBarcode = new Long(0);
-		try
-		{
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-
-			if (resultSet.next())
-			{
-				currentBarcode = new Long(resultSet.getLong(1));
-			}
-		}
-		catch (NamingException e)
-		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}
-		catch (SQLException ex)
-		{
-			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-
+		currentBarcode=AppUtility.getLastAvailableValue(sql);
 	}
-
-	/**
-	 * @return conn
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
-	}
-
+	
 	/**
 	 * @param input input type
 	 * @param pattern pattern
@@ -127,11 +64,6 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentBarcode = currentBarcode + 1;
 			String nextNumber = format(currentBarcode, "0000");
-			//TODO :Commented by Falguni because hibernate
-			//session is getting closed by calling this method.
-			//persistLabelCount();
-			//String label = siteName + "-" + year + "-" + day + "-" + nextNumber;
-			//Modification suggested for Michigan only -as per catissuecore 1.2.0.1
 			String barcode = siteName + "_" + nextNumber;
 			objSpecimen.setBarcode(barcode);
 		}
@@ -155,7 +87,6 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 				Specimen objChildSpecimen = (Specimen) it.next();
 				setBarcode(objChildSpecimen);
 			}
-
 		}
 
 	}

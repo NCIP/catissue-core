@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -23,7 +24,7 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Creating Logger instance.
 	 */
-	private static Logger logger =Logger.getCommonLogger(DefaultCPRBarcodeGenerator.class);
+	private static final  Logger logger =Logger.getCommonLogger(DefaultCPRBarcodeGenerator.class);
 
 	/**
 	 * Current barcode.
@@ -33,7 +34,7 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Datasource Name.
 	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+	//String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor.
 	 */
@@ -51,53 +52,20 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected void init()
 	{
-		Connection conn = null;
 		try
 		{
-			currentBarcode = new Long(0);
+			currentBarcode = Long.valueOf(0);
 			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_COLL_PROT_REG";
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			if(resultSet.next())
-			{
-				currentBarcode = new Long (resultSet.getLong(1));
-			}
+			currentBarcode=AppUtility.getLastAvailableValue(sql);
 		}
 		catch (Exception daoException)
 		{
 			logger.error(daoException.getMessage(), daoException);
 		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.error(exception.getMessage(), exception);
-				}
-			}
-		}
 	}
 
 
-	/**
-	 * @return connection
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
-	}
-
+	
 	/**
 	 * Setting Barcode.
 	 * @param obj CPR object
@@ -114,7 +82,7 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	 * Setting barcode.
 	 * @param cprList CPR obj list.
 	 */
-	public void setBarcode(List cprList)
+	public void setBarcode(List<Object> cprList)
 	{
 		for(int i=0; i< cprList.size(); i++)
 		{

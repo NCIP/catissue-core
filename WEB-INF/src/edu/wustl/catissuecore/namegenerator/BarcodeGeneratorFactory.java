@@ -5,12 +5,14 @@ import java.util.HashMap;
 import edu.wustl.common.util.logger.Logger;
 /**
  * This is the factory Class to retrieve singleton instance of BarcodeGenerator.
- *
  * @author Falguni_Sachde
  */
 public class BarcodeGeneratorFactory
 {
-	private static Logger logger = Logger.getCommonLogger(BarcodeGeneratorFactory.class);
+	/**
+	 * Logger Object.
+	 */
+	private static final Logger logger = Logger.getCommonLogger(BarcodeGeneratorFactory.class);
 	/**
 	 * Singleton instance of BarcodeGenerator.
      */

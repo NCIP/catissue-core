@@ -1,17 +1,11 @@
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -25,7 +19,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/**
 	 * logger Generic logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DefaultSCGLabelGenerator.class);
+	private static final transient Logger logger = Logger.getCommonLogger(DefaultSCGLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -33,7 +27,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/**
 	 * Datasource Name.
 	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+	//String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor.
 	 */
@@ -61,45 +55,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	{
 		Long noOfRecords = new Long("0");
 		String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_ABS_SPECI_COLL_GROUP";
- 		Connection conn = null;
-		try
-		{
-        	InitialContext ctx = new InitialContext();
-        	DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-        	conn = ds.getConnection();
-        	ResultSet resultSet= conn.createStatement().executeQuery(sql);
-        	if(resultSet.next())
-        	{
-        		return new Long (resultSet.getLong(1));
-        	}
-
-		}
-        catch(NamingException e)
-        {
-        	logger.debug(e.getMessage(), e);
-        	e.printStackTrace();
-        }
-        catch(SQLException ex)
-        {
-        	logger.debug(ex.getMessage(), ex);
-        	ex.printStackTrace();
-        }
-        finally
-        {
-        	if (conn!=null)
-        	{
-        		try
-        		{
-					conn.close();
-				}
-        		catch (SQLException exception)
-        		{
-        			logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-        	}
-        }
-
+		noOfRecords=AppUtility.getLastAvailableValue(sql);
 		return noOfRecords;
 	}
 	/**

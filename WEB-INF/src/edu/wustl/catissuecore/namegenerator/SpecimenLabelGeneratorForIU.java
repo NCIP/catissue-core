@@ -19,7 +19,6 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 	public SpecimenLabelGeneratorForIU()
 	{
 		super();
-
 	}
 
 	/**

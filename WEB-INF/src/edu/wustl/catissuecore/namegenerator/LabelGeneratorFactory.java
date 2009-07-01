@@ -12,7 +12,10 @@ import edu.wustl.common.util.logger.Logger;
 public class LabelGeneratorFactory
 {
 
-	private static Logger logger = Logger.getCommonLogger(LabelGeneratorFactory.class);
+	/**
+	 * Logger object.
+	 */
+	private static final Logger logger = Logger.getCommonLogger(LabelGeneratorFactory.class);
 	/**
 	 * Singleton instance of SpecimenLabelGenerator.
 	 */
@@ -30,10 +33,8 @@ public class LabelGeneratorFactory
 	{
 		try
 		{
-
 			if (labelgeneratorMap.get(generatorType) == null)
 			{
-
 				String className = PropertyHandler.getValue(generatorType);
 				if (className != null)
 				{
@@ -45,7 +46,6 @@ public class LabelGeneratorFactory
 					return null;
 				}
 			}
-
 			return (LabelGenerator) labelgeneratorMap.get(generatorType);
 		}
 		catch (IllegalAccessException e)

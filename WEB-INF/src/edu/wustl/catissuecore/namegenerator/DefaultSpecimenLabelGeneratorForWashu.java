@@ -1,34 +1,30 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * This  class which contains the default  implementation for Specimen label generation.
  * @author falguni_sachde
  *
  */
-public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
+public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelGenerator
 {
 
-	private transient Logger logger = Logger.getCommonLogger(DefaultSpecimenLabelGeneratorForWashu.class);
+	/**
+	 * Logger object 
+	 */
+	private static final transient Logger logger = Logger.getCommonLogger(DefaultSpecimenLabelGeneratorForWashu.class);
 	/**
 	 * Current label.
 	 */
@@ -43,110 +39,23 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	 */
 	protected long count = 0;
 
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-
+	
 	/**
 	 * Default Constructor.
 	 */
 	public DefaultSpecimenLabelGeneratorForWashu()
 	{
-		init();
-	}
-
-	/**
-	 * This is a init() function it is called from the default constructor
-	 * of Base class.When getInstance of base class
-	 * called then this init function will be called.
-	 * This method will first check the Datatbase Name and then set function name that will convert
-	 * lable from int to String
-	 */
-	protected void init()
-	{
 		try
 		{
-			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				currentLabel = getLastAvailableSpecimenLabel
-				(Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
-				tmpLabel = getLastAvailableSpecimenLabel("identifier");
-			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				currentLabel = getLastAvailableSpecimenLabel(Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
-				tmpLabel= getLastAvailableSpecimenLabel("identifier");
-			}
-			else
-			{
-				currentLabel = getLastAvailableSpecimenLabel
-				(Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION);
-				tmpLabel = getLastAvailableSpecimenLabel("identifier");
-			}
-
+			init();
+			String sql = "select MAX(identifier) from CATISSUE_SPECIMEN";
+			tmpLabel=AppUtility.getLastAvailableValue(sql);
 		}
 		catch (Exception ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
-	}
-
-	/**
-	 * This method will retrive unique specimen Lable.
-	 * @param databaseConstant constant
-	 * @return noOfRecords
-	 */
-	private Long getLastAvailableSpecimenLabel(String databaseConstant)
-	{
-		StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant + ") from CATISSUE_SPECIMEN");
-		// Modify query for mssqlserver DB.
-		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()) && 
-				databaseConstant.equals(Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION)) {
-			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_LABEL_APPEND_STR);
-		}
-		
-		Connection conn = null;
-		Long noOfRecords = new Long("0");
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-			conn = ds.getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql.toString());
-
-			if (resultSet.next())
-			{
-				return new Long(resultSet.getLong(1));
-			}
-		}
-		catch (NamingException e)
-		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}
-		catch (SQLException ex)
-		{
-			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-		return noOfRecords;
 	}
 
 	/**
@@ -219,19 +128,19 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	synchronized Long setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject, Long labelCtr, String prefix)
 	{
-
-		labelCtr = labelCtr + 1;
+		Long labelControl=labelCtr + 1;
+	
 		if ((Constants.COLLECTION_STATUS_COLLECTED).equals(specimenObject.getCollectionStatus()))
 		{
-			specimenObject.setLabel(labelCtr.toString());
+			specimenObject.setLabel(labelControl.toString());
 		}
 		else
 		{
-			specimenObject.setLabel(prefix + "_" + labelCtr.toString());
+			specimenObject.setLabel(prefix + "_" + labelControl.toString());
 		}
 
 		labelCountTreeMap.put(specimenObject, 0L);
-		return labelCtr;
+		return labelControl;
 	}
 
 	/**
@@ -241,14 +150,8 @@ public class DefaultSpecimenLabelGeneratorForWashu implements LabelGenerator
 	public synchronized void setLabel(Object obj)
 	{
 		Specimen objSpecimen = (Specimen) obj;
-
-		/*if (objSpecimen.getIsCollectionProtocolRequirement())
-		{
-			return;
-		}*/
 		if ((Constants.COLLECTION_STATUS_COLLECTED).equals(objSpecimen.getCollectionStatus()))
 		{
-			//	currentLabel = generateLabel(objSpecimen,currentLabel,"");
 			tmpLabel = generateLabel(objSpecimen, tmpLabel, "");
 		}
 		else

@@ -1,16 +1,10 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -21,15 +15,15 @@ import edu.wustl.common.util.logger.Logger;
 public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
 
-	private transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerLabelGenerator.class);
+	/**
+	 * Logger Object.
+	 */
+	private static final transient Logger logger = Logger
+			.getCommonLogger(DefaultStorageContainerLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
 	protected Long currentLabel;
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 
 	/**
 	 * Default Constructor.
@@ -49,56 +43,9 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 */
 	protected void init()
 	{
-		Connection conn = null;
-		try
-		{
-
-			currentLabel = new Long(0);
-			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-
-			if (resultSet.next())
-			{
-				currentLabel = new Long(resultSet.getLong(1));
-			}
-		}
-		catch (Exception daoException)
-		{
-			logger.debug(daoException.getMessage(), daoException);
-			daoException.printStackTrace();
-
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * @return connection
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
+		currentLabel = new Long(0);
+		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+		currentLabel = AppUtility.getLastAvailableValue(sql);
 	}
 
 	/**
@@ -120,9 +67,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		{
 			maxTypeName = maxTypeName.substring(0, 39);
 		}
-
 		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(currentLabel);
-
 		objStorageContainer.setName(containerName);
 	}
 
@@ -132,14 +77,11 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 */
 	public void setLabel(List storageContainerList)
 	{
-
 		for (int i = 0; i < storageContainerList.size(); i++)
 		{
 			StorageContainer objStorageContainer = (StorageContainer) storageContainerList.get(i);
 			setLabel(objStorageContainer);
-
 		}
-
 	}
 
 	/**
@@ -151,7 +93,6 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	{
 		StorageContainer objStorageContainer = (StorageContainer) obj;
 		setLabel(objStorageContainer);
-
 		return (objStorageContainer.getName());
 	}
 }

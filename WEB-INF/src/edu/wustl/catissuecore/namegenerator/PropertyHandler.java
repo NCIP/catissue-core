@@ -10,7 +10,6 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 /**
  * This class has functions to read LabelGenerator Properties file.
  * @author abhijit_naik
- *
  */
 public class PropertyHandler
 {

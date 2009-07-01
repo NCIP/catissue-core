@@ -1,46 +1,33 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Label Generator for Michigan University.
- *
- *
  */
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator
 {
-	private transient Logger logger = Logger.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
+	/**
+	 * Logger Object.
+	 */
+	private static final transient  Logger logger = Logger.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
 	/**
 	 * Default Constructor.
 	 */
 	public SpecimenLabelGeneratorForMichigan()
 	{
-		//init();
-		//TODO :Commented by Falguni because we are not using separate table for Michigan
-		//,as not able to persist label count.
 		super();
 	}
-
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-
+	
 	/**
 	 * This is a init() function it is called from the default constructor of
 	 * Base class. When getInstance of base class called then this init function
@@ -49,61 +36,12 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 */
 	protected void init()
 	{
-		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-		Connection conn = null;
 		currentLabel = new Long("0");
-		try
-		{
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-
-			if (resultSet.next())
-			{
-				currentLabel = new Long(resultSet.getLong(1));
-			}
-		}
-		catch (NamingException e)
-		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}
-		catch (SQLException ex)
-		{
-			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-
+		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
+		currentLabel=AppUtility.getLastAvailableValue(sql);
 	}
 
-	/**
-	 * @return conn
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
-	}
-
+	
 	/**
 	 * @param input format input type
 	 * @param pattern label pattern
@@ -130,11 +68,6 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 			currentLabel = currentLabel + 1;
 			String nextNumber = format(currentLabel, "0000");
-			//TODO :Commented by Falguni because hibernate
-			//session is getting closed by calling this method.
-			//persistLabelCount();
-			//String label = siteName + "-" + year + "-" + day + "-" + nextNumber;
-			//Modification suggested for Michigan only -as per catissuecore 1.2.0.1
 			String label = siteName + "_" + nextNumber;
 			objSpecimen.setLabel(label);
 		}

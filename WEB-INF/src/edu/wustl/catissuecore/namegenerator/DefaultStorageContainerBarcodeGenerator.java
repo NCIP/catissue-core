@@ -1,16 +1,10 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -21,16 +15,15 @@ import edu.wustl.common.util.logger.Logger;
 public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
 
-	private transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
+	/**
+	 * Logger object 
+	 */
+	private static final transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
 	/**
 	 * Current label.
 	 */
 	protected Long currentBarcode;
-	/**
-	 * Datasource Name.
-	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-
+	
 	/**
 	 * Default Constructor.
 	 */
@@ -49,56 +42,9 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected void init()
 	{
-		Connection conn = null;
-		try
-		{
-
-			currentBarcode = new Long(0);
-			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-
-			if (resultSet.next())
-			{
-				currentBarcode = new Long(resultSet.getLong(1));
-			}
-		}
-		catch (Exception daoException)
-		{
-			logger.debug(daoException.getMessage(), daoException);
-			daoException.printStackTrace();
-
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * @return connection
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
+		currentBarcode = new Long(0);
+		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+		currentBarcode=AppUtility.getLastAvailableValue(sql);
 	}
 
 	/**

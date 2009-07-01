@@ -1,15 +1,9 @@
 package edu.wustl.catissuecore.namegenerator;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -20,7 +14,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 {
-	private transient Logger logger = Logger.getCommonLogger(DefaultSCGBarcodeGenerator.class);
 	/**
 	 * Current barcode.
 	 */
@@ -28,7 +21,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Datasource Name.
 	 */
-	String DATASOURCE_JNDI_NAME = "java:/catissuecore";
+	//String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor.
 	 */
@@ -47,55 +40,11 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected void init()
 	{
-		Connection conn = null;
-		try
-		{
-			currentBarcode = new Long(0);
-			String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";
-			conn = getConnection();
-			ResultSet resultSet = conn.createStatement().executeQuery(sql);
-			if(resultSet.next())
-			{
-				currentBarcode = new Long (resultSet.getLong(1));
-			}
-		}
-		catch (Exception daoException)
-		{
-			logger.debug(daoException.getMessage(), daoException);
-			daoException.printStackTrace();
-		}
-		finally
-		{
-			if (conn != null)
-			{
-				try
-				{
-					conn.close();
-				}
-				catch (SQLException exception)
-				{
-					logger.debug(exception.getMessage(), exception);
-					exception.printStackTrace();
-				}
-			}
-		}
+		currentBarcode = new Long(0);
+		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";
+		currentBarcode=AppUtility.getLastAvailableValue(sql);
 	}
-
-
-	/**
-	 * @return connection connection
-	 * @throws NamingException NamingException
-	 * @throws SQLException SQLException
-	 */
-	private Connection getConnection() throws NamingException, SQLException
-	{
-		Connection conn;
-		InitialContext ctx = new InitialContext();
-		DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-		conn = ds.getConnection();
-		return conn;
-	}
-
+	
 	/**
 	 * Setting barcode.
 	 * @param obj SCG object
@@ -112,7 +61,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	 * Setting barcode.
 	 * @param scgList SCG object list
 	 */
-	public void setBarcode(List scgList)
+	public void setBarcode(List<Object> scgList)
 	{
 		for(int i=0; i< scgList.size(); i++)
 		{
