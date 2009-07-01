@@ -40,7 +40,6 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolAuthorization;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
-import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -74,7 +73,11 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic implements Roles
 {
 
-	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolBizLogic.class);
+	/**
+	 *  Logger object.
+	 */
+	private static final transient Logger logger = Logger
+			.getCommonLogger(CollectionProtocolBizLogic.class);
 
 	/**
 	 * Saves the CollectionProtocol object in the database.
@@ -104,6 +107,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		insertCollectionProtocol(dao, sessionDataBean, collectionProtocol, rowIdMap);
 	}
 
+	/**
+	 * Saves the CollectionProtocol object in the database.
+	 * @param dao.
+	 * @param sessionDataBean
+	 * @param collectionProtocol
+	 * @param rowIdMap
+	 * @throws BizLogicException
+	 */
 	private void insertCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol, Map<String, SiteUserRolePrivilegeBean> rowIdMap)
 			throws BizLogicException
@@ -113,10 +124,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			setPrincipalInvestigator(dao, collectionProtocol);
 			setCoordinatorCollection(dao, collectionProtocol);
 			dao.insert(collectionProtocol);
-			
+
 			AuditManager auditManager = getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao,collectionProtocol);
-			
+			auditManager.insertAudit(dao, collectionProtocol);
+
 			insertCPEvents(dao, sessionDataBean, collectionProtocol);
 			insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol, rowIdMap);
 			HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
@@ -130,10 +141,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			logger.debug(exception.getMessage(), exception);
 			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw getBizLogicException(exception, exception.getErrorKeyName(), exception.getMsgValues());
+			throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+					.getMsgValues());
 		}
 	}
 
+	/**
+	 * validate the collection protocol object.
+	 * @param dao
+	 * @param collectionProtocol
+	 * @param errorName
+	 * @throws BizLogicException
+	 */
 	private void validateCollectionProtocol(DAO dao, CollectionProtocol collectionProtocol,
 			String errorName) throws BizLogicException
 	{
@@ -147,15 +166,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * This function used to insert collection protocol events and specimens 
+	 * This function used to insert collection protocol events and specimens.
 	 * for the collectionProtocol object. 
 	 * @param dao used to insert events and specimens into database.
 	 * @param sessionDataBean Contains session information
-	 * @param collectionProtocol collection protocol for which events & specimens 
+	 * @param collectionProtocol collection protocol for which events & specimens
 	 * to be added
 	 * 
-	 * @throws BizLogicException If fails to insert events or its specimens 
-	 * @throws UserNotAuthorizedException If user is not authorized or session information 
+	 * @throws BizLogicException If fails to insert events or its specimens
+	 * @throws UserNotAuthorizedException If user is not authorized or session information
 	 * is incorrect.
 	 */
 	private void insertCPEvents(DAO dao, SessionDataBean sessionDataBean,
@@ -184,7 +203,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * This function will insert child Collection Protocol. 
+	 * This function will insert child Collection Protocol.
 	 * @param dao
 	 * @param sessionDataBean
 	 * @param collectionProtocol
@@ -208,12 +227,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * 
 	 * @param bizLogic used to call business logic of Specimen.
 	 * @param dao Data access object to insert Specimen Collection groups
 	 * and specimens.
 	 * @param collectionRequirementGroup 
-	 * @param sessionDataBean object containing session information which 
+	 * @param sessionDataBean object containing session information which
 	 * is required for authorization.
 	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
@@ -265,10 +283,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#postInsert(java.lang.Object, edu.wustl.dao.DAO, edu.wustl.common.beans.SessionDataBean)
+	 */
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		System.out.println("PostInsert called");
 		CollectionProtocol collectionProtocol = null;
 		if (obj instanceof CollectionProtocolDTO)
 		{
@@ -279,9 +299,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			collectionProtocol = (CollectionProtocol) obj;
 		}
-		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
-		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(), collectionProtocol
-				.getTitle(), collectionProtocol.getShortTitle());
+		// Commented by Geeta for removing teh CP 
+		//ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
+		//participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(), collectionProtocol.getTitle(), collectionProtocol.getShortTitle());
 
 	}
 
@@ -360,8 +380,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			cleanDAO = openDAOSession(sessionDataBean);
 			collectionProtocolOld = getOldCollectionProtocol(cleanDAO, collectionProtocol.getId());
 
-			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(collectionProtocol.getActivityStatus())
-					& !Status.ACTIVITY_STATUS_CLOSED.toString().equals(collectionProtocol.getActivityStatus()))
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(
+					collectionProtocol.getActivityStatus())
+					& !Status.ACTIVITY_STATUS_CLOSED.toString().equals(
+							collectionProtocol.getActivityStatus()))
 			{
 				setCPEventCollection(collectionProtocol);
 				editCPObj(dao, sessionDataBean, collectionProtocol, collectionProtocolOld);
@@ -467,8 +489,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			dao.update(collectionProtocol);
 			//Audit of Collection Protocol
 			AuditManager auditManager = getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao,collectionProtocol, collectionProtocolOld);
-			
+			auditManager.updateAudit(dao, collectionProtocol, collectionProtocolOld);
+
 			disableRelatedObjects(dao, collectionProtocol);
 			updatePIAndCoordinatorGroup(dao, collectionProtocol, collectionProtocolOld);
 		}
@@ -476,7 +498,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		} catch (AuditException e) {
+		}
+		catch (AuditException e)
+		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
@@ -593,7 +617,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return collectionProtocolOld;
 	}
@@ -682,8 +706,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					oldCollectionProtocolEvent = (CollectionProtocolEvent) getCorrespondingOldObject(
 							oldCPEventCollection, collectionProtocolEvent.getId());
 					AuditManager auditManager = getAuditManager(sessionDataBean);
-					auditManager.updateAudit(dao,collectionProtocolEvent, oldCollectionProtocolEvent );
-					
+					auditManager.updateAudit(dao, collectionProtocolEvent,
+							oldCollectionProtocolEvent);
+
 				}
 				//Audit of collectionProtocolEvent
 				reqSpBiz.updateSpecimens(dao, sessionDataBean, oldCollectionProtocolEvent,
@@ -697,9 +722,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-			
+
 		}
-		catch (AuditException e) {
+		catch (AuditException e)
+		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
@@ -779,7 +805,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			dao.insert(collectionProtocolEvent);
 			AuditManager auditManager = getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao,collectionProtocolEvent);
+			auditManager.insertAudit(dao, collectionProtocolEvent);
 		}
 		catch (DAOException daoExp)
 		{
@@ -807,8 +833,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			{
 				User pi = (User) obj;//list.get(0);
 				collectionProtocol.setPrincipalInvestigator(pi);
-				// collectionProtocol.getAssignedProtocolUserCollection().add(pi);
-				System.out.println();
 			}
 		}
 		catch (DAOException daoExp)
@@ -970,7 +994,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
-		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization
 		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
 		 * So we removed default class level initialization on domain object and are initializing in method
 		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
@@ -1141,31 +1165,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							{
 								throw getBizLogicException(null, "protocol.type.errMsg", "");
 							}
-							//							TODO:Abhijit Checkout valid values for tisse site and Pathalogy status.
-							//							if (!Validator.isEnumeratedValue(tissueSiteList, specimen
-							//							.getTissueSite()))
-							//							{
-							//							throw new DAOException(ApplicationProperties
-							//							.getValue("protocol.tissueSite.errMsg"));
-							//							}
-
-							//							if (!Validator.isEnumeratedValue(pathologicalStatusList,
-							//							specimen.getActivityStatus()))
-							//							{
-							//							throw new DAOException(ApplicationProperties
-							//							.getValue("protocol.pathologyStatus.errMsg"));
-							//							}
-
 						}
 
 					}
-					//check removed for Bug #8533
-					//Patch: 8533_3
-					//					else
-					//					{
-					//						throw new DAOException(ApplicationProperties
-					//								.getValue("protocol.spReqEmpty.errMsg"));
-					//					}
 				}
 			}
 		}
@@ -1194,10 +1196,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				throw getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
-		System.out.println("=========================================================");
-		System.out.println("=================VALIDATING COLLECTION COMPLETE==========");
-
-		//		check the activity status of all the specimens associated to the Collection Protocol
 		if (protocol.getActivityStatus() != null
 				&& protocol.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 		{
@@ -1229,7 +1227,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (!titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
-				throw getBizLogicException(null, "collprot.title.exists","");
+				throw getBizLogicException(null, "collprot.title.exists", "");
 			}
 		}
 		catch (DAOException e1)
@@ -1243,6 +1241,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#postUpdate(edu.wustl.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 */
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -1256,29 +1257,33 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			collectionProtocol = (CollectionProtocol) currentObj;
 		}
+		// Commented by Geeta for removing teh CP 
+		/*
+			ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
+			participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),collectionProtocol.getTitle());
 
-		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
-		participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),
-				collectionProtocol.getTitle());
+			participantRegistrationCacheManager.updateCPShortTitle(collectionProtocol.getId(),
+					collectionProtocol.getShortTitle());
 
-		participantRegistrationCacheManager.updateCPShortTitle(collectionProtocol.getId(),
-				collectionProtocol.getShortTitle());
-
-		if (collectionProtocol.getActivityStatus().equals(
-				Status.ACTIVITY_STATUS_DISABLED.toString()))
-		{
-			participantRegistrationCacheManager.removeCP(collectionProtocol.getId());
-		}
+			if (collectionProtocol.getActivityStatus().equals(
+					Status.ACTIVITY_STATUS_DISABLED.toString()))
+			{
+				participantRegistrationCacheManager.removeCP(collectionProtocol.getId());
+			}
+		 */
 
 	}
 
 	//	mandar : 31-Jan-07 ----------- consents tracking
+	/**
+	 * @param collectionProtocol
+	 */
 	private void verifyConsentsWaived(CollectionProtocol collectionProtocol)
 	{
 		//check for consentswaived
 		if (collectionProtocol.getConsentsWaived() == null)
 		{
-			collectionProtocol.setConsentsWaived(new Boolean(false));
+			collectionProtocol.setConsentsWaived(Boolean.valueOf(false));
 		}
 	}
 
@@ -1286,18 +1291,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Patch Id : FutureSCG_7
 	 * Description : method to validate the CPE against uniqueness
 	 */
-	/**
-	 * Method to check whether CollectionProtocolLabel is unique for the given collection protocol 
-	 * @param CollectionProtocol CollectionProtocol
-	 * @throws BizLogicException daoException with proper message 
-	 */
 	protected void isCollectionProtocolLabelUnique(CollectionProtocol collectionProtocol)
 			throws BizLogicException
 	{
 		if (collectionProtocol != null)
 		{
-			HashSet cpLabelsSet = new HashSet();
-			Collection collectionProtocolEventCollection = collectionProtocol
+			HashSet<String> cpLabelsSet = new HashSet<String>();
+			Collection<CollectionProtocolEvent> collectionProtocolEventCollection = collectionProtocol
 					.getCollectionProtocolEventCollection();
 			if (!collectionProtocolEventCollection.isEmpty())
 			{
@@ -1338,14 +1338,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * this function retrieves collection protocol and all nested child objects and 
+	 * this function retrieves collection protocol and all nested child objects and
 	 * populates bean objects.
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
 	 * @throws BizLogicException 
 	 */
 	/**
-	 * this function retrieves collection protocol and all nested child objects and 
+	 * this function retrieves collection protocol and all nested child objects and
 	 * populates bean objects.
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
@@ -1362,19 +1362,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			if (object == null)
 			{
 
-				throw getBizLogicException(null, "cp.retrive.err",id.toString());
+				throw getBizLogicException(null, "cp.retrive.err", id.toString());
 			}
 			CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 			CollectionProtocolBean collectionProtocolBean = CollectionProtocolUtil
 					.getCollectionProtocolBean(collectionProtocol);
-			Collection collectionProtocolEventColl = collectionProtocol
+			Collection<CollectionProtocolEvent> collectionProtocolEventColl = collectionProtocol
 					.getCollectionProtocolEventCollection();
-			List cpEventList = new LinkedList(collectionProtocolEventColl);
+			List<CollectionProtocolEvent> cpEventList = new LinkedList<CollectionProtocolEvent>(collectionProtocolEventColl);
 			CollectionProtocolUtil.getSortedCPEventList(cpEventList);
 			LinkedHashMap<String, CollectionProtocolEventBean> eventMap = CollectionProtocolUtil
 					.getCollectionProtocolEventMap(cpEventList, dao);
 
-			List cpList = new ArrayList<Object>();
+			List<Object> cpList = new ArrayList<Object>();
 			cpList.add(collectionProtocolBean);
 			cpList.add(eventMap);
 			return cpList;
@@ -1401,7 +1401,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			cpList = dao.retrieve(className, colName, colValue);
 			if (cpList == null || cpList.isEmpty())
 			{
-				throw getBizLogicException(null, "cp.incorrect.param",colName+ ":" + colValue);
+				throw getBizLogicException(null, "cp.incorrect.param", colName + ":" + colValue);
 			}
 
 			Iterator<CollectionProtocol> iterator = cpList.iterator();
@@ -1442,7 +1442,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			Object object = dao.retrieveById(className, id);
 			if (object == null)
 			{
-				throw getBizLogicException(null, "cp.retrive.err",id.toString());
+				throw getBizLogicException(null, "cp.retrive.err", id.toString());
 			}
 
 			collectionProtocol = (CollectionProtocol) object;
@@ -1479,17 +1479,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 */
 	private void loadCP(CollectionProtocol collectionProtocol)
 	{
-		User user = collectionProtocol.getPrincipalInvestigator();
-		Long id = user.getCsmUserId();
 		Collection<CollectionProtocolEvent> collectionEventCollection = collectionProtocol
 				.getCollectionProtocolEventCollection();
 		Iterator<CollectionProtocolEvent> cpIterator = collectionEventCollection.iterator();
-		Collection collectinProtocolRegistration = collectionProtocol
-				.getCollectionProtocolRegistrationCollection();
 		while (cpIterator.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = cpIterator.next();
-			Collection specimenCollection = collectionProtocolEvent
+			Collection<SpecimenRequirement> specimenCollection = collectionProtocolEvent
 					.getSpecimenRequirementCollection();
 			Iterator<SpecimenRequirement> specimenIterator = specimenCollection.iterator();
 			while (specimenIterator.hasNext())
@@ -1580,7 +1576,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		if (object == null)
 		{
-			throw getBizLogicException(null, "cp.shr.title.incorrect",cpId.toString());
+			throw getBizLogicException(null, "cp.shr.title.incorrect", cpId.toString());
 		}
 
 		shortTitle = (String) object;
@@ -1616,6 +1612,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		return isAuthorized;
 	}
 
+	/**
+	 * @param domainObject.
+	 * @param sessionDataBean
+	 * @return
+	 * @throws BizLogicException
+	 */
 	private boolean checkCP(Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -1659,22 +1661,28 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		return false;
 	}
 
-	public Collection<Site> getRelatedSites(DAO dao,Long cpId) throws DAOException
+	/**
+	 * @param dao.
+	 * @param cpId
+	 * @return
+	 * @throws DAOException
+	 */
+	public Collection<Site> getRelatedSites(DAO dao, Long cpId) throws DAOException
 	{
 		CollectionProtocol cp = null;
 		Collection<Site> siteCollection = null;
 		if (cpId == null || cpId == 0)
-			{
-				return null;
-			}
-			cp = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class.getName(), cpId);
+		{
+			return null;
+		}
+		cp = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class.getName(), cpId);
 
-			if (cp == null)
-			{
-				return null;
-			}
-			siteCollection = cp.getSiteCollection();
-		
+		if (cp == null)
+		{
+			return null;
+		}
+		siteCollection = cp.getSiteCollection();
+
 		return siteCollection;
 	}
 
