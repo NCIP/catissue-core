@@ -4,6 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.common.domain.AbstractDomainObject;
-
 
 /**
  * @author mandar_deshmukh
@@ -28,14 +28,12 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
-//	public int getFormId()
-//	{
-//		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
-//	}
-
+	//	public int getFormId()
+	//	{
+	//		return Constants.SPECIMEN_EVENT_PARAMETERS_FORM_ID;
+	//	}
 	private long specimenId;
-	
-	
+
 	/**
 	 * @return Returns the specimenId.
 	 */
@@ -43,6 +41,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	{
 		return specimenId;
 	}
+
 	/**
 	 * @param specimenId The specimenId to set.
 	 */
@@ -50,46 +49,48 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	{
 		this.specimenId = specimenId;
 	}
+
 	/**
-     * Resets the values of all the fields.
-     */
-	 protected void reset()
-	 {
-//	 	super.reset();
-//	 	this.specimenId = -1;
-	 }
-	
-	 /**
-	   * Populates all the fields from the domain object to the form bean.
-	   * @param abstractDomain An AbstractDomain Object  
-	   */
-	 public void setAllValues(AbstractDomainObject abstractDomain)
- 	 {
-	     super.setAllValues(abstractDomain);
-		 
-	     SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
-		 
-		 if(specimenEventParameters.getSpecimen()!=null)
-		 {
-		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
-		 }
- 	 }
-	 
-	 /**
-	 * Overrides the validate method of ActionForm.
-	 * @return error ActionErrors instance
-	 * @param mapping Actionmapping instance
-	 * @param request HttpServletRequest instance
+	 * Resets the values of all the fields.
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	ActionErrors errors = super.validate(mapping, request);
-     	
-     	if(specimenId == -1L)
-     	{
-     		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Specimen Id"));
-     	}
-     	
-     	return errors;
-     }
+	protected void reset()
+	{
+		//	 	super.reset();
+		//	 	this.specimenId = -1;
+	}
+
+	/**
+	  * Populates all the fields from the domain object to the form bean.
+	  * @param abstractDomain An AbstractDomain Object  
+	  */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		super.setAllValues(abstractDomain);
+
+		SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) abstractDomain;
+
+		if (specimenEventParameters.getSpecimen() != null)
+		{
+			specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+		}
+	}
+
+	/**
+	* Overrides the validate method of ActionForm.
+	* @return error ActionErrors instance
+	* @param mapping Actionmapping instance
+	* @param request HttpServletRequest instance
+	*/
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
+
+		if (specimenId == -1L)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					"Specimen Id"));
+		}
+
+		return errors;
+	}
 }

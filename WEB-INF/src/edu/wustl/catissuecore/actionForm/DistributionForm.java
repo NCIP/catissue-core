@@ -47,13 +47,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionForm extends AbstractActionForm implements ConsentTierData
 {
+
 	private static final long serialVersionUID = 1L;
 
-/**
- * logger Logger - Generic logger.
- */
-private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionForm.class);
-
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionForm.class);
 
 	private long specimenId;
 	/**
@@ -117,7 +117,7 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	private boolean idChange = false;
 	private int rowNo = 0;
 
-	private Integer distributionType =  Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+	private Integer distributionType = Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 
 	private Integer distributionBasedOn = Integer.valueOf(Constants.LABEL_BASED_DISTRIBUTION);
 
@@ -152,9 +152,11 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 		if (distObj.getTimestamp() != null)
 		{
 			calender.setTime(distObj.getTimestamp());
-			this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+			this.timeInHours = Utility.toString(Integer
+					.toString(calender.get(Calendar.HOUR_OF_DAY)));
 			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = Utility.parseDateToString(distObj.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern());
+			this.dateOfEvent = Utility.parseDateToString(distObj.getTimestamp(),
+					CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.userId = distObj.getDistributedBy().getId().longValue();
 
@@ -167,7 +169,7 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 		this.toSite = String.valueOf(distObj.getToSite().getId());
 		this.setActivityStatus(Utility.toString(distObj.getActivityStatus()));
 		logger.debug("this.activityStatus " + this.getActivityStatus());
- 
+
 		if (distObj.getDistributedItemCollection().size() != 0)
 		{
 			final Iterator itr = distObj.getDistributedItemCollection().iterator();
@@ -176,7 +178,8 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 				final DistributedItem distributedItem = (DistributedItem) itr.next();
 				if (distributedItem.getSpecimen() == null)
 				{
-					this.distributionType = Integer.valueOf(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
+					this.distributionType = Integer
+							.valueOf(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
 					//populateMapForArray(distributionObject.getSpecimenArrayCollection());
 				}
 				else
@@ -200,33 +203,32 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	 * Populates map for Array
 	 * @param specimenArrayCollection Collection of Specimen Array 
 	 */
-//	private void populateMapForArray(Collection specimenArrayCollection)
-//	{
-//		if (specimenArrayCollection != null)
-//		{
-//			values = new HashMap();
-//			Iterator it = specimenArrayCollection.iterator();
-//			int i = 1;
-//			while (it.hasNext())
-//			{
-//
-//				String key1 = "SpecimenArray:" + i + "_id";
-//				String key2 = "DistributedItem:" + i + "_Specimen_barcode";
-//				String key3 = "DistributedItem:" + i + "_Specimen_label";
-//
-//				String key4 = "DistributedItem:" + i + "_quantity";
-//
-//				SpecimenArray array = (SpecimenArray) it.next();
-//				values.put(key1, array.getId().toString());
-//				values.put(key2, array.getBarcode());
-//				values.put(key3, array.getName());
-//				values.put(key4, "1");
-//				i++;
-//			}
-//			counter = specimenArrayCollection.size();
-//		}
-//	}
-
+	//	private void populateMapForArray(Collection specimenArrayCollection)
+	//	{
+	//		if (specimenArrayCollection != null)
+	//		{
+	//			values = new HashMap();
+	//			Iterator it = specimenArrayCollection.iterator();
+	//			int i = 1;
+	//			while (it.hasNext())
+	//			{
+	//
+	//				String key1 = "SpecimenArray:" + i + "_id";
+	//				String key2 = "DistributedItem:" + i + "_Specimen_barcode";
+	//				String key3 = "DistributedItem:" + i + "_Specimen_label";
+	//
+	//				String key4 = "DistributedItem:" + i + "_quantity";
+	//
+	//				SpecimenArray array = (SpecimenArray) it.next();
+	//				values.put(key1, array.getId().toString());
+	//				values.put(key2, array.getBarcode());
+	//				values.put(key3, array.getName());
+	//				values.put(key4, "1");
+	//				i++;
+	//			}
+	//			counter = specimenArrayCollection.size();
+	//		}
+	//	}
 	/**
 	 * Populates Map for specimen
 	 * @param distItemCol Collection of distributed items
@@ -240,7 +242,7 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 			final Iterator itr = distItemCol.iterator();
 			int cnt = 1;
 
-			final String  DIST_ITEM = "DistributedItem:";
+			final String DIST_ITEM = "DistributedItem:";
 			while (itr.hasNext())
 			{
 				final String key1 = DIST_ITEM + cnt + "_id";
@@ -285,43 +287,46 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 		logger.debug("Inside validate function");
 		try
 		{
-			MultipleSpecimenValidationUtil.validateDate(errors, validator,
-     				this.userId, this.dateOfEvent, this.timeInHours,this.timeInMinutes);
-						if (specimenId == -1L)
+			MultipleSpecimenValidationUtil.validateDate(errors, validator, this.userId,
+					this.dateOfEvent, this.timeInHours, this.timeInMinutes);
+			if (specimenId == -1L)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", "Specimen Id"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						"Specimen Id"));
 			}
 			// Mandar 10-apr-06 : bugid :353 
 			// Error messages should be in the same sequence as the sequence of fields on the page.
 			if (!validator.isValidOption(distributionProtocolId))
 			{
 				logger.debug("dist prot");
-				errors.add(ActionErrors.GLOBAL_ERROR,
-						new ActionError("errors.item.required", ApplicationProperties.getValue("distribution.protocol")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("distribution.protocol")));
 			}
 			if (!validator.isValidOption("" + userId))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-						.getValue("distribution.distributedBy")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("distribution.distributedBy")));
 			}
 
 			//  date validation according to bug id  722 and 730
 			final String errorKey = validator.validateDate(dateOfEvent, true);
 			if (errorKey.trim().length() > 0)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey, ApplicationProperties.getValue("eventparameters.dateofevent")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
+						ApplicationProperties.getValue("eventparameters.dateofevent")));
 			}
 			if (validator.isEmpty(toSite) || toSite.equalsIgnoreCase("undefined"))
 			{
 				logger.debug("to site");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid", ApplicationProperties.getValue("distribution.toSite")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+						ApplicationProperties.getValue("distribution.toSite")));
 			}
 
 			//Validations for Add-More Block
 			if (this.values.keySet().isEmpty())
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required", ApplicationProperties
-						.getValue("distribution.distributedItem")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",
+						ApplicationProperties.getValue("distribution.distributedItem")));
 			}
 
 			final Iterator itr = this.values.keySet().iterator();
@@ -332,8 +337,8 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 
 				if (key.indexOf("Specimen_id") != -1 && !validator.isValidOption(value))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-							.getValue("itemrecord.specimenId")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("itemrecord.specimenId")));
 				}
 
 				if (key.indexOf("_quantity") != -1)
@@ -341,13 +346,14 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 					if ((validator.isEmpty(value)))
 					{
 						logger.debug("Quantity empty**************");
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("itemrecord.quantity")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.item.required", ApplicationProperties
+										.getValue("itemrecord.quantity")));
 					}
 					else if (!validator.isDouble(value))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("itemrecord.quantity")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("itemrecord.quantity")));
 					}
 				}
 
@@ -528,7 +534,9 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	public void setValue(final String key, final Object value)
 	{
 		if (isMutable())
-			{values.put(key, value);}
+		{
+			values.put(key, value);
+		}
 	}
 
 	/**
@@ -695,7 +703,6 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 		 }*/
 
 		//Aniruddha : NEEDS TO TAKE CARE OFF CALLING METHOD
-		
 		return specimen.getAvailableQuantity();
 
 		//return null;
@@ -744,7 +751,7 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjId - Identifier of the Object inserted 
 	 */
-	public void setAddNewObjectIdentifier(final String addNewFor,final  Long addObjId)
+	public void setAddNewObjectIdentifier(final String addNewFor, final Long addObjId)
 	{
 		if ("distributionProtocolId".equals(addNewFor))
 		{
@@ -899,7 +906,9 @@ private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionFor
 	public void setConsentResponseForDistributionValue(final String key, final Object value)
 	{
 		if (isMutable())
-			{consentResponseForDistributionValues.put(key, value);}
+		{
+			consentResponseForDistributionValues.put(key, value);
+		}
 	}
 
 	/**

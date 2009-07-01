@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.HashMap;
@@ -18,8 +19,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-public class OrderPathologyCaseForm extends AbstractActionForm 
+public class OrderPathologyCaseForm extends AbstractActionForm
 {
+
 	/**
 	 * Map containing the key-value pairs
 	 */
@@ -93,7 +95,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return itemsToRemove
 	 */
-	public String[] getItemsToRemove() 
+	public String[] getItemsToRemove()
 	{
 		return itemsToRemove;
 	}
@@ -101,7 +103,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @param itemsToRemove String array containing the items to be removed
 	 */
-	public void setItemsToRemove(String[] itemsToRemove) 
+	public void setItemsToRemove(String[] itemsToRemove)
 	{
 		this.itemsToRemove = itemsToRemove;
 	}
@@ -109,7 +111,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return concentration
 	 */
-	public String getConcentration() 
+	public String getConcentration()
 	{
 		return concentration;
 	}
@@ -125,7 +127,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return String array containing the selected items
 	 */
-	public String[] getSelectedItems() 
+	public String[] getSelectedItems()
 	{
 		return selectedItems;
 	}
@@ -141,7 +143,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return name of array in which to add the specimen
 	 */
-	public String getAddToArray() 
+	public String getAddToArray()
 	{
 		return addToArray;
 	}
@@ -165,7 +167,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @param defineArrayObj List containing DefineArray objects
 	 */
-	public void setDefineArrayObj(List defineArrayObj) 
+	public void setDefineArrayObj(List defineArrayObj)
 	{
 		this.defineArrayObj = defineArrayObj;
 	}
@@ -173,7 +175,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return OrderForm object
 	 */
-	public OrderForm getOrderForm() 
+	public OrderForm getOrderForm()
 	{
 		return orderForm;
 	}
@@ -189,7 +191,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return pathological status of the specimen
 	 */
-	public String getPathologicalStatus() 
+	public String getPathologicalStatus()
 	{
 		return pathologicalStatus;
 	}
@@ -202,7 +204,6 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 		this.pathologicalStatus = pathologicalStatus;
 	}
 
-	
 	/**
 	 * @return Returns the className.
 	 */
@@ -222,7 +223,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return type of specimen
 	 */
-	public String getType() 
+	public String getType()
 	{
 		return type;
 	}
@@ -230,7 +231,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @param type String containing the type of specimen
 	 */
-	public void setType(String type) 
+	public void setType(String type)
 	{
 		this.type = type;
 	}
@@ -238,7 +239,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return tissue site of specimen
 	 */
-	public String getTissueSite() 
+	public String getTissueSite()
 	{
 		return tissueSite;
 	}
@@ -246,7 +247,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @param tissueSite String containing the tissue site
 	 */
-	public void setTissueSite(String tissueSite) 
+	public void setTissueSite(String tissueSite)
 	{
 		this.tissueSite = tissueSite;
 	}
@@ -254,7 +255,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return map values
 	 */
-	public Map getValues() 
+	public Map getValues()
 	{
 		return values;
 	}
@@ -270,7 +271,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * reset function
 	 */
-	protected void reset() 
+	protected void reset()
 	{
 	}
 
@@ -278,7 +279,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 * @param key String
 	 * @param value Object
 	 */
-	public void setValue(String key, Object value) 
+	public void setValue(String key, Object value)
 	{
 		if (isMutable())
 		{
@@ -290,7 +291,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 * @param key String
 	 * @return value in map corresponding to the key
 	 */
-	public Object getValue(String key) 
+	public Object getValue(String key)
 	{
 		return values.get(key);
 	}
@@ -306,7 +307,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return Constants.ORDER_PATHOLOGY_FORM_ID
 	 */
-	public int getFormId() 
+	public int getFormId()
 	{
 		return Constants.ORDER_PATHOLOGY_FORM_ID;
 	}
@@ -322,7 +323,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @param typeOfCase String containing the type of pathological case
 	 */
-	public void setTypeOfCase(String typeOfCase) 
+	public void setTypeOfCase(String typeOfCase)
 	{
 		this.typeOfCase = typeOfCase;
 	}
@@ -330,7 +331,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return name of distribution protocol
 	 */
-	public String getDistrbutionProtocol() 
+	public String getDistrbutionProtocol()
 	{
 		return distrbutionProtocol;
 	}
@@ -346,7 +347,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return unit
 	 */
-	public String getUnit() 
+	public String getUnit()
 	{
 		return unit;
 	}
@@ -364,34 +365,32 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) 
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
 		ActionErrors errors = new ActionErrors();
-		
 
-		if (selectedItems != null) 
+		if (selectedItems != null)
 		{
 			HttpSession session = request.getSession();
 			List defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
-			Map dataMap=(Map)session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
+			Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 			DefineArrayForm defineArrayFormObj = null;
 			int capacity = 0;
-			
-		    if (defineArrayFormList != null)
+
+			if (defineArrayFormList != null)
 			{
 				defineArrayFormObj = (DefineArrayForm) searchDefineArrayList(defineArrayFormList,
 						addToArray);
 				capacity = Integer.parseInt(defineArrayFormObj.getDimenmsionX())
 						* Integer.parseInt(defineArrayFormObj.getDimenmsionY());
 			}
-			if(!addToArray.equalsIgnoreCase("None"))
-			{ 
-				if(dataMap != null && dataMap.containsKey(addToArray))
+			if (!addToArray.equalsIgnoreCase("None"))
+			{
+				if (dataMap != null && dataMap.containsKey(addToArray))
 				{
-					List orderItems=(List)dataMap.get(addToArray);
-					if(orderItems.size()+selectedItems.length>capacity)
+					List orderItems = (List) dataMap.get(addToArray);
+					if (orderItems.size() + selectedItems.length > capacity)
 					{
 						errors.add("addToArray", new ActionError("errors.order.capacityless"));
 						values.clear();
@@ -399,28 +398,26 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 				}
 				else
 				{
-					if(selectedItems.length>capacity)
+					if (selectedItems.length > capacity)
 					{
 						errors.add("addToArray", new ActionError("errors.order.capacityless"));
 						values.clear();
 					}
 				}
 			}
-			
-			if (typeOfCase.equals("false")) 
+
+			if (typeOfCase.equals("false"))
 			{
-				if (className.equals("-1")
-						|| className.equals("-- Select --") || className.equals("") ) 
+				if (className.equals("-1") || className.equals("-- Select --")
+						|| className.equals(""))
 				{
-					errors.add("specimenClass", new ActionError(
-							"errors.specimenClass.required"));
+					errors.add("specimenClass", new ActionError("errors.specimenClass.required"));
 					values.clear();
 
 				}
-				if (type.equals("-1") || type.equals("-- Select --") || type.equals("") )
+				if (type.equals("-1") || type.equals("-- Select --") || type.equals(""))
 				{
-					errors.add("type", new ActionError(
-							"errors.specimenType.required"));
+					errors.add("type", new ActionError("errors.specimenType.required"));
 					values.clear();
 				}
 				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
@@ -432,16 +429,15 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			}
 			else
 			{
-				if(!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
+				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
 						&& !defineArrayFormObj.getArrayClass().equals("Tissue"))
 				{
 					errors.add("addToArray", new ActionError("errors.order.properclass"));
 					values.clear();
 				}
 			}
-			
-			if (pathologicalStatus.equals("-1")
-					|| pathologicalStatus.equals("-- Select --")) 
+
+			if (pathologicalStatus.equals("-1") || pathologicalStatus.equals("-- Select --"))
 			{
 				errors.add("pathologicalStatus", new ActionError(
 						"errors.pathologicalStatus.required"));
@@ -449,68 +445,64 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			}
 			if (tissueSite.equals("-1") || tissueSite.equals("-- Select --"))
 			{
-				errors.add("tissueSite", new ActionError(
-						"errors.tissueSite.required"));
+				errors.add("tissueSite", new ActionError("errors.tissueSite.required"));
 				values.clear();
 			}
 
 			boolean isNumber = true;
-			if (values != null && values.size() != 0) 
+			if (values != null && values.size() != 0)
 			{
 				String cnt = null;
-				int reqQntyError = 0;
+				//int reqQntyError = 0;
 				for (int i = 0; i < selectedItems.length; i++)
 				{
 					cnt = selectedItems[i];
-					String key="OrderSpecimenBean:" + cnt
-					+ "_requestedQuantity";
+					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
 					String colprotKey = "OrderSpecimenBean:" + cnt + "_collectionProtocol";
-					
-//					to check for Same CP:Only those SPR can be ordered which belongs to same CP
-					if (dataMap!=null && dataMap.containsKey("None"))
+
+					//					to check for Same CP:Only those SPR can be ordered which belongs to same CP
+					if (dataMap != null && dataMap.containsKey("None"))
 					{
 						List orderItems = (List) dataMap.get("None");
-						if(!orderItems.isEmpty() && orderItems.size()>0)
-						{	
-							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
-							if(!orderSpecimenBean.getCollectionProtocol().equals(values.get(colprotKey)))
+						if (!orderItems.isEmpty() && orderItems.size() > 0)
+						{
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
+									.get(0);
+							if (!orderSpecimenBean.getCollectionProtocol().equals(
+									values.get(colprotKey)))
 							{
-								errors.add("values", new ActionError("errors.same.collectionProtocol"));
+								errors.add("values", new ActionError(
+										"errors.same.collectionProtocol"));
 								values.clear();
 								break;
 							}
 						}
-						
+
 					}
-					
-					
-					if ((values.get(key)) == null
-							|| (values.get(key)).equals("")) 
+
+					if ((values.get(key)) == null || (values.get(key)).equals(""))
 					{
-						errors.add("values", new ActionError(
-						"errors.requestedQuantity.required"));
+						errors.add("values", new ActionError("errors.requestedQuantity.required"));
 						values.clear();
 						break;
-					} 
+					}
 					else
 					{
-						isNumber = AppUtility.isNumeric(values.get(
-								key).toString());
+						isNumber = AppUtility.isNumeric(values.get(key).toString());
 						if (!(isNumber))
 						{
 							errors.add("values", new ActionError(
-							"errors.requestedQuantityBeNumeric.required"));
+									"errors.requestedQuantityBeNumeric.required"));
 							values.clear();
 							break;
 						}
-						else 
+						else
 						{
-							Double reqQnty = new Double(values.get(
-									key).toString());
+							Double reqQnty = new Double(values.get(key).toString());
 							if (reqQnty < 0.0 || reqQnty == 0.0)
 							{
 								errors.add("values", new ActionError(
-								"errors.requestedQuantity.required"));
+										"errors.requestedQuantity.required"));
 								values.clear();
 								break;
 							}
@@ -545,15 +537,16 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return boolean true
 	 */
-	public boolean isAddOperation() 
+	public boolean isAddOperation()
 	{
 		return true;
 	}
 
 	@Override
-	public void setAddNewObjectIdentifier(String arg0, Long arg1) {
+	public void setAddNewObjectIdentifier(String arg0, Long arg1)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

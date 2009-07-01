@@ -7,15 +7,19 @@
  * @version 1.00
  * Created on sep 18,2007
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ConflictDetailsForm extends AbstractActionForm
 {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -25,28 +29,26 @@ public class ConflictDetailsForm extends AbstractActionForm
 	/**
 	 * 
 	 */
-	protected String scgId;	
+	protected String scgId;
 	/**
 	 * The report queue Id whose details we have to display
 	 */
 	protected String reportQueueId;
-	
-	
+
 	public int getFormId()
-	{		
+	{
 		return 0; //Constants.CONFLICT_DETAILS_FORM_ID;
 	}
 
 	protected void reset()
-	{		
+	{
 	}
 
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		
+
 	}
 
-	
 	/**
 	 * @return the reportQueueId
 	 */
@@ -55,7 +57,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 		return reportQueueId;
 	}
 
-	
 	/**
 	 * @param reportQueueId the reportQueueId to set
 	 */
@@ -64,7 +65,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 		this.reportQueueId = reportQueueId;
 	}
 
-	
 	/**
 	 * @return the participantId
 	 */
@@ -73,7 +73,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 		return participantId;
 	}
 
-	
 	/**
 	 * @param participantId the participantId to set
 	 */
@@ -82,7 +81,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 		this.participantId = participantId;
 	}
 
-	
 	/**
 	 * @return the scgId
 	 */
@@ -91,7 +89,6 @@ public class ConflictDetailsForm extends AbstractActionForm
 		return scgId;
 	}
 
-	
 	/**
 	 * @param scgId the scgId to set
 	 */
@@ -104,8 +101,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 }

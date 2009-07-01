@@ -31,10 +31,9 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
@@ -51,7 +50,6 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenForm extends AbstractActionForm
 {
 
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -62,17 +60,20 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
 	 */
-	protected String className = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN);
+	protected String className = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_SPECIMEN);
 
 	/**
 	 * Sub Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
 	 */
-	protected String type = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
+	protected String type = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
 
 	/**
 	 * Specifies if the barcode is editable or not
 	 */
-	private String isBarcodeEditable = (String) DefaultValueManager.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
+	private String isBarcodeEditable = (String) DefaultValueManager
+			.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
 
 	/**
 	 * Concentration of specimen.
@@ -586,7 +587,8 @@ public class SpecimenForm extends AbstractActionForm
 		 * See also: 1_1 to 1_5
 		 * Description : set createdOn date from database object
 		 */
-		this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(), CommonServiceLocator.getInstance().getDatePattern());
+		this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(), CommonServiceLocator
+				.getInstance().getDatePattern());
 
 		if (specimen.getIsAvailable() != null)
 		{
@@ -599,15 +601,19 @@ public class SpecimenForm extends AbstractActionForm
 			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
-			this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne());
-			this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo());
-			this.positionInStorageContainer = container.getStorageType().getName() + " : " + container.getId() + " Pos(" + this.positionDimensionOne
-					+ "," + this.positionDimensionTwo + ")";
+			this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition()
+					.getPositionDimensionOne());
+			this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition()
+					.getPositionDimensionTwo());
+			this.positionInStorageContainer = container.getStorageType().getName() + " : "
+					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
+					+ this.positionDimensionTwo + ")";
 			this.setStContSelection(2);
 		}
 		//Bug 12374 and 12662
 		//if the condition is true means specimen is virtually located.
-		else if(specimen.getSpecimenPosition()==null && specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
+		else if (specimen.getSpecimenPosition() == null
+				&& specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
 		{
 			this.setStContSelection(Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE);
 		}
@@ -681,7 +687,8 @@ public class SpecimenForm extends AbstractActionForm
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			this.className = Constants.MOLECULAR;
-			this.concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
+			this.concentration = Utility.toString(((MolecularSpecimen) specimen)
+					.getConcentrationInMicrogramPerMicroliter());
 		}
 		else if (specimen instanceof TissueSpecimen)
 		{
@@ -775,7 +782,8 @@ public class SpecimenForm extends AbstractActionForm
 
 		try
 		{
-			if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
+			if (this.getOperation().equals(Constants.ADD)
+					|| this.getOperation().equals(Constants.EDIT))
 			{
 				/**
 				     * Patch ID: 3835_1_31
@@ -788,26 +796,29 @@ public class SpecimenForm extends AbstractActionForm
 					String errorKeyForCreatedDate = validator.validateDate(createdDate, true);
 					if (errorKeyForCreatedDate.trim().length() > 0)
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate, ApplicationProperties
-								.getValue("specimen.createdDate")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								errorKeyForCreatedDate, ApplicationProperties
+										.getValue("specimen.createdDate")));
 					}
 				}
 
 				//Changed by falguni
-				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && validator.isEmpty(label))
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+						&& validator.isEmpty(label))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimen.label")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("specimen.label")));
 				}
 
 				if (validator.isEmpty(className))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimen.type")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("specimen.type")));
 				}
 				if (validator.isEmpty(type))
 				{
-					errors
-							.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("specimen.subType")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("specimen.subType")));
 				}
 
 				boolean isQuantityValid = true;
@@ -820,22 +831,26 @@ public class SpecimenForm extends AbstractActionForm
 						{
 							if (!validator.isDouble(quantity, true))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-										.getValue("specimen.quantity")));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.format", ApplicationProperties
+												.getValue("specimen.quantity")));
 							}
 						}
 						else
 						{
 							if (!validator.isNumeric(quantity, 0))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-										.getValue("specimen.quantity")));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.format", ApplicationProperties
+												.getValue("specimen.quantity")));
 							}
 						}
 
 						//bug#7788
-						if (Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.FIXED_TISSUE_SLIDE.equals(type)
-								|| Constants.FROZEN_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+						if (Constants.FIXED_TISSUE_BLOCK.equals(type)
+								|| Constants.FIXED_TISSUE_SLIDE.equals(type)
+								|| Constants.FROZEN_TISSUE_BLOCK.equals(type)
+								|| Constants.FROZEN_TISSUE_SLIDE.equals(type)
 								|| Constants.NOT_SPECIFIED.equals(type))
 						{
 							Double initialFloorQty = Math.floor(Double.parseDouble(quantity));
@@ -843,8 +858,9 @@ public class SpecimenForm extends AbstractActionForm
 							int initialQtyDiff = initialQty.compareTo(initialFloorQty);
 							if (initialQtyDiff != 0)
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.quantity", ApplicationProperties
-										.getValue("specimen.quantity"), type));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.specimen.quantity", ApplicationProperties
+												.getValue("specimen.quantity"), type));
 							}
 						}
 						//#7788 ends
@@ -852,8 +868,8 @@ public class SpecimenForm extends AbstractActionForm
 					catch (NumberFormatException exp)
 					{
 						isQuantityValid = false;
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("specimen.quantity")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("specimen.quantity")));
 					}
 
 				}
@@ -861,61 +877,73 @@ public class SpecimenForm extends AbstractActionForm
 				{
 					quantity = "0";
 				}
-				if (this instanceof NewSpecimenForm && this.getOperation().equalsIgnoreCase(Constants.EDIT))
+				if (this instanceof NewSpecimenForm
+						&& this.getOperation().equalsIgnoreCase(Constants.EDIT))
 				{
 					if (!validator.isEmpty(availableQuantity))
 					{
 						try
 						{
 							availableQuantity = new BigDecimal(availableQuantity).toPlainString();
-							if (isQuantityValid && 1 == new BigDecimal(availableQuantity).compareTo(new BigDecimal(quantity)))
+							if (isQuantityValid
+									&& 1 == new BigDecimal(availableQuantity)
+											.compareTo(new BigDecimal(quantity)))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.availablequantity", ApplicationProperties
-										.getValue("specimen.availableQuantity")));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.availablequantity", ApplicationProperties
+												.getValue("specimen.availableQuantity")));
 							}
 							if (AppUtility.isQuantityDouble(className, type))
 							{
 								if (!validator.isDouble(availableQuantity, true))
 								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-											.getValue("specimen.availableQuantity")));
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+											"errors.item.format", ApplicationProperties
+													.getValue("specimen.availableQuantity")));
 								}
 							}
 							else
 							{
 								if (!validator.isNumeric(quantity, 0))
 								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-											.getValue("specimen.availableQuantity")));
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+											"errors.item.format", ApplicationProperties
+													.getValue("specimen.availableQuantity")));
 								}
 							}
 
 							//bug#7788
-							if (Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.FIXED_TISSUE_SLIDE.equals(type)
-									|| Constants.FROZEN_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+							if (Constants.FIXED_TISSUE_BLOCK.equals(type)
+									|| Constants.FIXED_TISSUE_SLIDE.equals(type)
+									|| Constants.FROZEN_TISSUE_BLOCK.equals(type)
+									|| Constants.FROZEN_TISSUE_SLIDE.equals(type)
 									|| Constants.NOT_SPECIFIED.equals(type))
 							{
-								Double availableFloorQty = Math.floor(Double.parseDouble(availableQuantity));
+								Double availableFloorQty = Math.floor(Double
+										.parseDouble(availableQuantity));
 								Double availableQty = Double.parseDouble(availableQuantity);
 								int availableQtyDiff = availableQty.compareTo(availableFloorQty);
 								if (availableQtyDiff != 0)
 								{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.quantity", ApplicationProperties
-											.getValue("specimen.availableQuantity"), type));
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+											"errors.specimen.quantity", ApplicationProperties
+													.getValue("specimen.availableQuantity"), type));
 								}
 							}
 							//#7788 ends
 						}
 						catch (NumberFormatException exp)
 						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-									.getValue("specimen.availableQuantity")));
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.format", ApplicationProperties
+											.getValue("specimen.availableQuantity")));
 						}
 					}
 					else
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("specimen.availableQuantity")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.item.required", ApplicationProperties
+										.getValue("specimen.availableQuantity")));
 					}
 				}
 
@@ -980,10 +1008,12 @@ public class SpecimenForm extends AbstractActionForm
 						externalIdentifier.remove(keyTwo);
 						externalIdentifier.remove(keyThree);
 					}
-					else if ((!value1.trim().equals("") && value2.trim().equals("")) || (value1.trim().equals("") && !value2.trim().equals("")))
+					else if ((!value1.trim().equals("") && value2.trim().equals(""))
+							|| (value1.trim().equals("") && !value2.trim().equals("")))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.externalIdentifier.missing", ApplicationProperties
-								.getValue("specimen.msg")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.specimen.externalIdentifier.missing", ApplicationProperties
+										.getValue("specimen.msg")));
 						break;
 					}
 					index++;
@@ -991,8 +1021,8 @@ public class SpecimenForm extends AbstractActionForm
 				boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 				if (flag)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("specimen.positionInStorageContainer")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("specimen.positionInStorageContainer")));
 				}
 			}
 		}
@@ -1204,6 +1234,6 @@ public class SpecimenForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

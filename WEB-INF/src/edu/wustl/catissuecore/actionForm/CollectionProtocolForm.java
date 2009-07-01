@@ -1,14 +1,14 @@
-							   /**
- * <p>Title: CollectionProtocolForm Class>
- * <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed 
- * from User Add/Edit webpage. </p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
- 
- * @author Gautam Shetty
- * @version 1.00
- * Created on Mar 3, 2005
- */
+/**
+* <p>Title: CollectionProtocolForm Class>
+* <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed 
+* from User Add/Edit webpage. </p>
+* Copyright:    Copyright (c) year
+* Company: Washington University, School of Medicine, St. Louis.
+
+* @author Gautam Shetty
+* @version 1.00
+* Created on Mar 3, 2005
+*/
 
 package edu.wustl.catissuecore.actionForm;
 
@@ -37,6 +37,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
 {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -49,7 +50,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. outer block
 	 */
-	private int outerCounter=1;
+	private int outerCounter = 1;
 
 	/**
 	 * Patch Id : Collection_Event_Protocol_Order_4
@@ -59,12 +60,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Counter that contains number of rows in the 'Add More' functionality. inner block
 	 */
 	protected Map innerLoopValues = new LinkedHashMap();
-		
+
 	/**
 	 * whether Aliquote in same container
 	 */
 	protected boolean aliqoutInSameContainer = false;
-	
+
 	//Consent tracking(Virender Mehta)
 	/**
 	 * Unsigned Form Url for the Consents
@@ -75,18 +76,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Map for Storing Values of Consent Tiers.
 	 */
 	protected Map consentValues = new HashMap();
-	
+
 	/**
 	 * No of Consent Tier
 	 */
-	private int consentTierCounter=0;
+	private int consentTierCounter = 0;
 	/**
 	 * CheckBox for consent is checked or not
 	 */
 	private boolean consentWaived = false;
 	//Consent tracking(Virender Mehta)
-	
+
 	protected long[] siteIds;
+
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
 	 */
@@ -96,49 +98,50 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-     * @param key  Value of Key 
-     * @param value Value corrosponding to the Key
-     */
-    public void setValue(final String key, final Object value) 
-    {
-    	if (isMutable())
-   	 	{
-    		values.put(key, value);
-   	 	}
-    }
-    
-    /**
-     * @return This is used to get corresponding Value from the Map
-     * @param key This is used to get corresponding Value from the Map   
-     */
-    public Object getValue(final String key) 
-    {
-        return values.get(key);
-    }
-    
+	 * @param key  Value of Key 
+	 * @param value Value corrosponding to the Key
+	 */
+	public void setValue(final String key, final Object value)
+	{
+		if (isMutable())
+		{
+			values.put(key, value);
+		}
+	}
+
+	/**
+	 * @return This is used to get corresponding Value from the Map
+	 * @param key This is used to get corresponding Value from the Map   
+	 */
+	public Object getValue(final String key)
+	{
+		return values.get(key);
+	}
+
 	/**
 	 * @return values in map
 	 */
-	public Collection getAllValues() 
+	public Collection getAllValues()
 	{
 		return values.values();
 	}
-	
+
 	/**
 	 * @return values
 	 */
-	public Map getValues() 
+	public Map getValues()
 	{
 		return values;
 	}
-	
+
 	/**
 	 * @param values Set the values
 	 */
-	public void setValues(final Map values) 
+	public void setValues(final Map values)
 	{
 		this.values = values;
-	}	
+	}
+
 	/**
 	 * @return innerLoopValues
 	 */
@@ -146,7 +149,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return innerLoopValues;
 	}
-	
+
 	/**
 	 * @param innerLoopValues The innerLoopValues to set.
 	 */
@@ -162,10 +165,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setIvl(final String key, final Object value)///changes here
 	{
-	    if (isMutable())
-	    {
-	       innerLoopValues.put(key, value);
-	    }
+		if (isMutable())
+		{
+			innerLoopValues.put(key, value);
+		}
 	}
 
 	/**
@@ -186,6 +189,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return outerCounter;
 	}
+
 	/**
 	 * @param outerCounter The outerCounter to set.
 	 */
@@ -193,18 +197,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.outerCounter = outerCounter;
 	}
-		
+
 	/**
 	 * Method to set class attributes
 	 */
 	protected void reset()
 	{
-//		super.reset();
-//		protocolCoordinatorIds = null;
-//		this.outerCounter = 1;
-//		this.values  = new HashMap();
+		//		super.reset();
+		//		protocolCoordinatorIds = null;
+		//		this.outerCounter = 1;
+		//		this.values  = new HashMap();
 	}
-	
+
 	/**
 	 * @return Returns the protocolcoordinator ids.
 	 */
@@ -220,7 +224,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.protocolCoordinatorIds = protocolCoordinatorIds;
 	}
-	
+
 	/**
 	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
 	 * @param abstractDomain An AbstractDomain object.
@@ -228,12 +232,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		final CollectionProtocol cProtocol = (CollectionProtocol)abstractDomain;
-		if(cProtocol.getAliquotInSameContainer()!= null) 
+		final CollectionProtocol cProtocol = (CollectionProtocol) abstractDomain;
+		if (cProtocol.getAliquotInSameContainer() != null)
 		{
 			aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
 		}
-		
+
 		//For Consent Tracking 
 		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();
 
@@ -247,35 +251,35 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
+
 	/**
 	 * For Consent Tracking
 	 * Setting the consentValuesMap 
 	 * @param consentTierColl This Containes the collection of ConsentTier
 	 * @return tempMap
 	 */
-//	private Map prepareConsentTierMap(Collection consentTierColl)
-//	{
-//		Map tempMap = new HashMap();
-//		if(consentTierColl!=null)
-//		{
-//			Iterator consentTierCollIter = consentTierColl.iterator();			
-//			int i = 0;
-//			while(consentTierCollIter.hasNext())
-//			{
-//				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
-//				String statement = "ConsentBean:"+i+"_statement";
-//				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
-//				String statementkey = "ConsentBean:"+i+"_consentTierID";
-//				tempMap.put(statement, consent.getStatement());
-//				tempMap.put(preDefinedStatementkey, consent.getStatement());
-//				tempMap.put(statementkey, consent.getId());
-//				i++;
-//			}
-//			consentTierCounter = consentTierColl.size();
-//		}
-//		return tempMap;
-//	}
-
+	//	private Map prepareConsentTierMap(Collection consentTierColl)
+	//	{
+	//		Map tempMap = new HashMap();
+	//		if(consentTierColl!=null)
+	//		{
+	//			Iterator consentTierCollIter = consentTierColl.iterator();			
+	//			int i = 0;
+	//			while(consentTierCollIter.hasNext())
+	//			{
+	//				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+	//				String statement = "ConsentBean:"+i+"_statement";
+	//				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
+	//				String statementkey = "ConsentBean:"+i+"_consentTierID";
+	//				tempMap.put(statement, consent.getStatement());
+	//				tempMap.put(preDefinedStatementkey, consent.getStatement());
+	//				tempMap.put(statementkey, consent.getId());
+	//				i++;
+	//			}
+	//			consentTierCounter = consentTierColl.size();
+	//		}
+	//		return tempMap;
+	//	}
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
@@ -286,37 +290,36 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		logger.debug("OPERATION : ----- : " + this.getOperation());
 		ActionErrors errors = super.validate(mapping, request);
-//		Validator validator = new Validator();
+		//		Validator validator = new Validator();
 		try
 		{
-				
+
 			//Check for PI can not be coordinator of the protocol.
-			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
+			if (this.protocolCoordinatorIds != null && this.principalInvestigatorId != -1)
 			{
-				for(int ind=0; ind < protocolCoordinatorIds.length;ind++)
+				for (int ind = 0; ind < protocolCoordinatorIds.length; ind++)
 				{
-				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId)
-				 	{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.pi.coordinator.same"));
+					if (protocolCoordinatorIds[ind] == this.principalInvestigatorId)
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.pi.coordinator.same"));
 						break;
-				 	}
+					}
 				}
 			}
-				
-			logger.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
+
+			logger.debug("Protocol Coordinators : " + protocolCoordinatorIds);
 		}
 		catch (Exception excp)
 		{
-	    	// use of logger as per bug 79
-			logger.error(excp.getMessage(),excp); 
+			// use of logger as per bug 79
+			logger.error(excp.getMessage(), excp);
 			logger.debug(excp);
 			errors = new ActionErrors();
 		}
 		return errors;
 	}
-	
-	
-	
+
 	/**
 	 * Returns the id assigned to form bean
 	 * @return COLLECTION_PROTOCOL_FORM_ID
@@ -325,61 +328,61 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return Constants.COLLECTION_PROTOCOL_FORM_ID;
 	}
-	
+
 	/**
 	 * This is the main method, main( ) is the method called when a Java application begins
 	 * @param args array of instances of the class String.
 	 * args receives any command-line arguments present when the program is executed.
 	 */
-//	public static void main(String[] args)
-//	{
-//		int maxCount=1;
-////		int maxIntCount=1;
-//		
-//		CollectionProtocolForm collectionProtocolForm = null;
-//		
-//		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
-//		
-//		if(obj != null && obj instanceof CollectionProtocolForm)
-//		{
-//			collectionProtocolForm = (CollectionProtocolForm)obj;
-//			maxCount = collectionProtocolForm.getOuterCounter();
-//		}
-//	
-//		for(int counter=1;counter<=maxCount;counter++)
-//		{
-//			String commonLabel = "value(CollectionProtocolEvent:" + counter;
-//			
-//			String cid = "ivl(" + counter + ")";
-//			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
-//			
-//			if(collectionProtocolForm!=null)
-//			{
-//				Object o = collectionProtocolForm.getIvl(cid);
-//				maxIntCount = Integer.parseInt(o.toString());
-//			}
-//		}
-//	}
-//	
+	//	public static void main(String[] args)
+	//	{
+	//		int maxCount=1;
+	////		int maxIntCount=1;
+	//		
+	//		CollectionProtocolForm collectionProtocolForm = null;
+	//		
+	//		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
+	//		
+	//		if(obj != null && obj instanceof CollectionProtocolForm)
+	//		{
+	//			collectionProtocolForm = (CollectionProtocolForm)obj;
+	//			maxCount = collectionProtocolForm.getOuterCounter();
+	//		}
+	//	
+	//		for(int counter=1;counter<=maxCount;counter++)
+	//		{
+	//			String commonLabel = "value(CollectionProtocolEvent:" + counter;
+	//			
+	//			String cid = "ivl(" + counter + ")";
+	//			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
+	//			
+	//			if(collectionProtocolForm!=null)
+	//			{
+	//				Object o = collectionProtocolForm.getIvl(cid);
+	//				maxIntCount = Integer.parseInt(o.toString());
+	//			}
+	//		}
+	//	}
+	//	
 	/**
-     * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param addNewFor - FormBean ID of the object inserted
-     *  @param addObjectIdentifier - Identifier of the Object inserted 
-     */
-    public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
-    {
-        if("principalInvestigator".equals(addNewFor))
-        {
-            setPrincipalInvestigatorId(addObjectIdentifier.longValue());
-        }
-        else if("protocolCoordinator".equals(addNewFor))
-        {
-        	final long[] pcoordIDs = { Long.parseLong(addObjectIdentifier.toString()) };
-           
-			setProtocolCoordinatorIds(pcoordIDs); 
-        } 
-    }
-	
+	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+	 * @param addNewFor - FormBean ID of the object inserted
+	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 */
+	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+	{
+		if ("principalInvestigator".equals(addNewFor))
+		{
+			setPrincipalInvestigatorId(addObjectIdentifier.longValue());
+		}
+		else if ("protocolCoordinator".equals(addNewFor))
+		{
+			final long[] pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};
+
+			setProtocolCoordinatorIds(pcoordIDs);
+		}
+	}
+
 	/**
 	 * @return Returns the aliqoutInSameContainer.
 	 */
@@ -387,6 +390,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return aliqoutInSameContainer;
 	}
+
 	/**
 	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
 	 */
@@ -394,10 +398,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
-	
-	
+
 	//	For Consent Tracking Start
-	
+
 	/**
 	 * @return unsignedConsentURLName  Get Unsigned Signed URL name  
 	 */
@@ -405,49 +408,49 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return unsignedConsentURLName;
 	}
-	
+
 	/**
 	 * @param unsignedConsentURLName  Set Unsigned Signed URL name
 	 */
 	public void setUnsignedConsentURLName(String unsignedConsentURLName)
 	{
 		this.unsignedConsentURLName = unsignedConsentURLName;
-	}	
-	
+	}
+
 	/**
-     * @param key Key
-     * @param value Value
-     */
-    public void setConsentValue(final String key, final Object value) 
-    {
-   	 	if (isMutable())
-   	 	{
-   	 		consentValues.put(key, value);
-   	 	}
-    }
+	 * @param key Key
+	 * @param value Value
+	 */
+	public void setConsentValue(final String key, final Object value)
+	{
+		if (isMutable())
+		{
+			consentValues.put(key, value);
+		}
+	}
 
-    /**
-     * @param key Key
-     * @return Statements
-     */
-    public Object getConsentValue(final String key) 
-    {
-        return consentValues.get(key);
-    }
+	/**
+	 * @param key Key
+	 * @return Statements
+	 */
+	public Object getConsentValue(final String key)
+	{
+		return consentValues.get(key);
+	}
 
-    /**
-     * 
-     * @return consentValues   Set Consents into the Map
-     */
-    public Map getConsentValues() 
+	/**
+	 * 
+	 * @return consentValues   Set Consents into the Map
+	 */
+	public Map getConsentValues()
 	{
 		return consentValues;
 	}
-	
-    /**
-     * @param consentValues Set Consents into the Map
-     */
-	public void setConsentValues(final Map consentValues) 
+
+	/**
+	 * @param consentValues Set Consents into the Map
+	 */
+	public void setConsentValues(final Map consentValues)
 	{
 		this.consentValues = consentValues;
 	}
@@ -459,7 +462,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return consentTierCounter;
 	}
-	
+
 	/**
 	 * 
 	 * @param consentTierCounter  This will keep track of count of Consent Tier
@@ -468,7 +471,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.consentTierCounter = consentTierCounter;
 	}
-	
+
 	/**
 	 * If consent waived is true then no need to check consents prior to distribution
 	 * @return consentWaived
@@ -486,21 +489,17 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.consentWaived = consentWaived;
 	}
+
 	//	For Consent Tracking End
 
-	
 	public long[] getSiteIds()
 	{
 		return siteIds;
 	}
 
-	
 	public void setSiteIds(final long[] siteIds)
 	{
 		this.siteIds = siteIds;
 	}
 
-	
-	
-	
 }

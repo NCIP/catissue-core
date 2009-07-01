@@ -31,22 +31,25 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DisposalEventParametersForm extends SpecimenEventParametersForm
 {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DisposalEventParametersForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(DisposalEventParametersForm.class);
 
 	/**
-     * reason for disposal of specimen it.
-     */
+	 * reason for disposal of specimen it.
+	 */
 	private String reason;
-	
+
 	/**
 	 * Activity Status of the Specimen
 	 */
 	private String activityStatus;
+
 	/**
 	 * Getting Activity status
 	 * @return activityStatus 
@@ -71,7 +74,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	{
 		return reason;
 	}
-	
+
 	/**
 	 * @param reason The reason to set.
 	 */
@@ -96,57 +99,59 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		final DisposalEventParameters disEvtPar = (DisposalEventParameters)abstractDomain ;
+		final DisposalEventParameters disEvtPar = (DisposalEventParameters) abstractDomain;
 		this.reason = Utility.toString(disEvtPar.getReason());
-		this.activityStatus = disEvtPar.getSpecimen().getActivityStatus(); 
+		this.activityStatus = disEvtPar.getSpecimen().getActivityStatus();
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	final ActionErrors errors = super.validate(mapping, request);
-                
-         try
-         {
-        	 //resolved bug# 4058	
-        	 if(!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])&&!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
-         	 {
-         	    	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
-         	 }
-         	//Commented due to Bug:- 3106: No need to have Disposal Reason a required field
-         	// checks the reason
-//           	if (validator.isEmpty(reason ) )
-//            {
-//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.reason")));
-//            }
-         }
-         catch(Exception excp)
-         {
-             logger.error(excp.getMessage());
-         }
-         return errors;
-      }
-	
-     /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
-    protected void reset()
-    {
-//        super.reset();
-//        this.reason = null;
-    }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		final ActionErrors errors = super.validate(mapping, request);
+
+		try
+		{
+			//resolved bug# 4058	
+			if (!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])
+					&& !activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+						ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
+			}
+			//Commented due to Bug:- 3106: No need to have Disposal Reason a required field
+			// checks the reason
+			//           	if (validator.isEmpty(reason ) )
+			//            {
+			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.reason")));
+			//            }
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+	protected void reset()
+	{
+		//        super.reset();
+		//        this.reason = null;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

@@ -39,12 +39,13 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FrozenEventParametersForm.class);
-	
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(FrozenEventParametersForm.class);
+
 	/**
-     * Method applied on specimen to freeze it.
-     */
-	private String method = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_METHOD);
+	 * Method applied on specimen to freeze it.
+	 */
+	private String method = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_METHOD);
 
 	/**
 	 * @return Returns the method applied on specimen to freeze it.
@@ -53,7 +54,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	{
 		return method;
 	}
-	
+
 	/**
 	 * @param method The method to set.
 	 */
@@ -79,54 +80,53 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters)abstractDomain ;
+		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters) abstractDomain;
 		this.method = Utility.toString(frozenEventParametersObject.getMethod());
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-         
-         try
-         {
-//         	// checks the method
-           	if (!validator.isValidOption(method))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("frozeneventparameters.method")));
-            }
-         }
-         catch(Exception excp)
-         {
-             logger.error(excp.getMessage());
-         }
-         return errors;
-      }
-	
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
+		Validator validator = new Validator();
 
-     /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
- 
-     protected void reset()
-     {
-//         super.reset();
-//         this.method = null;
-     }
+		try
+		{
+			//         	// checks the method
+			if (!validator.isValidOption(method))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+						ApplicationProperties.getValue("frozeneventparameters.method")));
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+
+	protected void reset()
+	{
+		//         super.reset();
+		//         this.method = null;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-       
-   
+
 }

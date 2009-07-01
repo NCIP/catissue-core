@@ -2,7 +2,6 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.Validator;
 
 /**
  * orderSpecimenForm for placing an order
@@ -254,7 +252,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		//Validator validator = new Validator();
 		HttpSession session = request.getSession();
 		Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 		if (selectedItems != null)
@@ -330,74 +328,84 @@ public class OrderSpecimenForm extends AbstractActionForm
 				String cnt = null;
 				String reqQuantKey = null;
 				String keyClass = null;
-				
-				
-				
+
 				for (int i = 0; i < selectedItems.length; i++)
 				{
 					cnt = selectedItems[i];
 					reqQuantKey = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
 					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
 					String availQuantKey = "OrderSpecimenBean:" + cnt + "_availableQuantity";
-					String specimenName =(String) values.get("OrderSpecimenBean:" + cnt + "_specimenName");
-					String collectionStatuskey =(String) values.get("OrderSpecimenBean:" + cnt + "_collectionStatus");
-					String isAvailablekey =(String) values.get("OrderSpecimenBean:" + cnt + "_isAvailable");
-					if (dataMap!=null && dataMap.containsKey(addToArray))
+					String specimenName = (String) values.get("OrderSpecimenBean:" + cnt
+							+ "_specimenName");
+					String collectionStatuskey = (String) values.get("OrderSpecimenBean:" + cnt
+							+ "_collectionStatus");
+					String isAvailablekey = (String) values.get("OrderSpecimenBean:" + cnt
+							+ "_isAvailable");
+					if (dataMap != null && dataMap.containsKey(addToArray))
 					{
 						List orderItems = (List) dataMap.get(addToArray);
-						if(!orderItems.isEmpty() && orderItems.size()>0)
-						{	
-							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
-							if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
+						if (!orderItems.isEmpty() && orderItems.size() > 0)
+						{
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
+									.get(0);
+							if (!orderSpecimenBean.getDistributionSite().equals(
+									values.get(disSiteKey)))
 							{
-								errors.add("values", new ActionError("errors.same.distributionSite"));
+								errors.add("values",
+										new ActionError("errors.same.distributionSite"));
 								values.clear();
 								break;
 							}
 						}
-						
+
 					}
-					
-					if((values.get(disSiteKey)) == null || (values.get(disSiteKey)).equals("N/A"))
+
+					if ((values.get(disSiteKey)) == null || (values.get(disSiteKey)).equals("N/A"))
 					{
-						errors.add("values", new ActionError("errors.specimenPosition.required", specimenName));
+						errors.add("values", new ActionError("errors.specimenPosition.required",
+								specimenName));
 						values.clear();
 						break;
 					}
-					
-					if((values.get(disSiteKey)) == null || !isSameSite())
+
+					if ((values.get(disSiteKey)) == null || !isSameSite())
 					{
 						errors.add("values", new ActionError("errors.same.distributionSite"));
 						values.clear();
 						break;
 					}
-					
-					if(!Constants.COLLECTION_STATUS_COLLECTED.equals(collectionStatuskey))
+
+					if (!Constants.COLLECTION_STATUS_COLLECTED.equals(collectionStatuskey))
 					{
-						errors.add("values", new ActionError("errors.collectionStatus", specimenName));
+						errors.add("values", new ActionError("errors.collectionStatus",
+								specimenName));
 						values.clear();
 						break;
 					}
-					
-					if((isAvailablekey) == null || (isAvailablekey).equals(""))
+
+					if ((isAvailablekey) == null || (isAvailablekey).equals(""))
 					{
 						errors.add("values", new ActionError("errors.isAvailable", specimenName));
 						values.clear();
 						break;
-					}else
+					}
+					else
 					{
-//						Boolean isAvailable = Boolean.valueOf(isAvailablekey.toString());
-						if(!(Boolean.valueOf(isAvailablekey.toString())))
+						//						Boolean isAvailable = Boolean.valueOf(isAvailablekey.toString());
+						if (!(Boolean.valueOf(isAvailablekey.toString())))
 						{
-							errors.add("values", new ActionError("errors.isAvailable", specimenName));
+							errors.add("values",
+									new ActionError("errors.isAvailable", specimenName));
 							values.clear();
 							break;
 						}
 					}
-					
-					if((values.get(availQuantKey)) == null || (values.get(availQuantKey)).equals(""))
+
+					if ((values.get(availQuantKey)) == null
+							|| (values.get(availQuantKey)).equals(""))
 					{
-						errors.add("values", new ActionError("errors.availableQuantity.required",specimenName));
+						errors.add("values", new ActionError("errors.availableQuantity.required",
+								specimenName));
 						values.clear();
 						break;
 					}
@@ -407,12 +415,12 @@ public class OrderSpecimenForm extends AbstractActionForm
 						if (reqQnty < 0.0 || reqQnty == 0.0)
 						{
 							errors.add("values", new ActionError(
-									"errors.availableQuantity.required",specimenName));
+									"errors.availableQuantity.required", specimenName));
 							values.clear();
 							break;
 						}
 					}
-						
+
 					if ((values.get(reqQuantKey)) == null || (values.get(reqQuantKey)).equals(""))
 					{
 						errors.add("values", new ActionError("errors.requestedQuantity.required"));
@@ -460,7 +468,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 		}
 		return errors;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -472,20 +480,22 @@ public class OrderSpecimenForm extends AbstractActionForm
 			for (int i = 0; i < selectedItems.length; i++)
 			{
 				String cnt = selectedItems[i];
-				String disSite = (String)values.get("OrderSpecimenBean:" + cnt + "_distributionSite");
+				String disSite = (String) values.get("OrderSpecimenBean:" + cnt
+						+ "_distributionSite");
 				for (int j = 0; j < selectedItems.length; j++)
 				{
 					String count = selectedItems[j];
-					String disSiteInner = (String)values.get("OrderSpecimenBean:" + count + "_distributionSite");
-					if(!disSiteInner.equals(disSite))
+					String disSiteInner = (String) values.get("OrderSpecimenBean:" + count
+							+ "_distributionSite");
+					if (!disSiteInner.equals(disSite))
 					{
 						return false;
 					}
 				}
 			}
-			
+
 		}
-				
+
 		return isSameSite;
 	}
 
@@ -626,8 +636,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }

@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on July 16, 2008
  */
+
 package edu.wustl.catissuecore.actionForm.shippingtracking;
 
 import java.util.ArrayList;
@@ -35,16 +36,18 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
+
 /**
  * BaseShipmentForm class  contains all the common fields
  * of ShipmentForm and ShipmentRequestForm.
  **/
 public class BaseShipmentForm extends AbstractActionForm
 {
+
 	/**
 	 * Serializable class requires Serial version id.
 	 */
-	private static long serialVersionUID = 1L;
+	//private static long serialVersionUID = 1L;
 	/**
 	 * ShipmentLabel.
 	 */
@@ -55,7 +58,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	protected String createdDate;
 	/**
 	 * Shipment/request send date.
- 	 */
+	 */
 	protected String sendDate;
 	/**
 	 * shipment send time hours.
@@ -104,11 +107,11 @@ public class BaseShipmentForm extends AbstractActionForm
 	/**
 	 *  Map for holding values related to specimens included in the shipment.
 	 */
-	protected Map specimenDetailsMap=new HashMap();
+	protected Map specimenDetailsMap = new HashMap();
 	/**
 	 * Counter to keep track of number of specimens included in the shipment.
 	 */
-	protected int specimenCounter=0;
+	protected int specimenCounter = 0;
 	//bug 11026
 	/**
 	 * Contact person at the sender site.
@@ -141,63 +144,70 @@ public class BaseShipmentForm extends AbstractActionForm
 	/**
 	 * List to hold list of all specimen.
 	 */
-    private List<Specimen> specimenList;
+	private List < Specimen > specimenList;
 	/**
 	 * list to hold label or barcode of specimen.
 	 */
-	private List<String> lblOrBarcodeSpecimenL = new ArrayList<String>();
+	private List < String > lblOrBarcodeSpecimenL = new ArrayList < String >();
 	/**
 	 * list to hold label or barcode of containers.
 	 */
-	private List<String> lblOrBarcodeContainerL = new ArrayList<String>();
+	private List < String > lblOrBarcodeContainerL = new ArrayList < String >();
+
 	/**
 	 * gets the list of label or barcode of containers.
 	 * @return lblOrBarcodeContainerL.
 	 */
-	public List<String> getLblOrBarcodeContainerL()
+	public List < String > getLblOrBarcodeContainerL()
 	{
 		return lblOrBarcodeContainerL;
 	}
+
 	/**
 	 * sets the list of label or barcode of container for the shipment.
 	 * @param lblOrBarcodeContainerL label or barcode of container to set.
 	 */
-	public void setLblOrBarcodeContainerL(List<String> lblOrBarcodeContainerL)
+	public void setLblOrBarcodeContainerL(List < String > lblOrBarcodeContainerL)
 	{
 		this.lblOrBarcodeContainerL = lblOrBarcodeContainerL;
 	}
+
 	/**
 	 * gets the list of label or barcode of specimen for the shipment.
 	 * @return lblOrBarcodeSpecimenL
 	 */
-	public List<String> getLblOrBarcodeSpecimenL()
+	public List < String > getLblOrBarcodeSpecimenL()
 	{
 		return lblOrBarcodeSpecimenL;
 	}
+
 	/**
 	 * sets the list of label or barcode of specimen for the shipment.
 	 * @param lblOrBarcodeSpecimenL label or barcode list of specimen to set.
 	 */
-	public void setLblOrBarcodeSpecimenL(List<String> lblOrBarcodeSpecimenL)
+	public void setLblOrBarcodeSpecimenL(List < String > lblOrBarcodeSpecimenL)
 	{
 		this.lblOrBarcodeSpecimenL = lblOrBarcodeSpecimenL;
 	}
+
 	/**
 	 * gets the specimen list.
 	 * @return specimenList
 	 */
-	public List<Specimen> getSpecimenList()
+	public List < Specimen > getSpecimenList()
 	{
 		return specimenList;
 	}
+
 	/**
 	 * sets the specimen list for the shipment.
 	 * @param specimenList list of specimen.
 	 */
-	public void setSpecimenList(List<Specimen> specimenList)
+	public void setSpecimenList(List < Specimen > specimenList)
 	{
 		this.specimenList = specimenList;
 	}
+
 	/**
 	 * gets the site name of the sender.
 	 * @return senderSiteName
@@ -206,6 +216,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderSiteName;
 	}
+
 	/**
 	 * sets the site name of the sender.
 	 * @param senderSiteName name of site of sender.
@@ -214,6 +225,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderSiteName = senderSiteName;
 	}
+
 	/**
 	 * gets the site name of the receiver.
 	 * @return receiverSiteName
@@ -222,6 +234,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverSiteName;
 	}
+
 	/**
 	 * sets the receiver site name.
 	 * @param receiverSiteName site name of the receiver.
@@ -230,6 +243,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverSiteName = receiverSiteName;
 	}
+
 	/**
 	 * gets the coordinator of receiver site.
 	 * @return receiverSiteCoordinator
@@ -238,6 +252,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverSiteCoordinator;
 	}
+
 	/**
 	 * sets the coordinator of receiver site.
 	 * @param receiverSiteCoordinator coordinator of receiver site to set.
@@ -246,6 +261,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverSiteCoordinator = receiverSiteCoordinator;
 	}
+
 	/**
 	 * gets the phone no. of receiver site coordinator.
 	 * @return receiverSiteCoordinatorPhone
@@ -254,6 +270,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverSiteCoordinatorPhone;
 	}
+
 	/**
 	 * sets the phone no. of receiver site coordinator.
 	 * @param receiverSiteCoordinatorPhone receiver site coordinator phone number to set.
@@ -262,6 +279,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverSiteCoordinatorPhone = receiverSiteCoordinatorPhone;
 	}
+
 	/**
 	 * gets the sender name.
 	 * @return senderName
@@ -270,6 +288,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderName;
 	}
+
 	/**
 	 * sets the sender name.
 	 * @param senderName name of sender to set.
@@ -278,6 +297,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderName = senderName;
 	}
+
 	/**
 	 * sets the sender email.
 	 * @return senderEmail
@@ -286,6 +306,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderEmail;
 	}
+
 	/**
 	 * sets the sender email.
 	 * @param senderEmail sender email to set.
@@ -294,6 +315,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderEmail = senderEmail;
 	}
+
 	/**
 	 * gets the sender phone no.
 	 * @return senderPhone
@@ -302,6 +324,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderPhone;
 	}
+
 	/**
 	 * sets the sender phone no.
 	 * @param senderPhone phone of sender to set.
@@ -310,6 +333,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderPhone = senderPhone;
 	}
+
 	/**
 	 * This method gets the value stored in the  specimenDetailsMap with key as the key.
 	 * @return Object
@@ -319,6 +343,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return specimenDetailsMap.get(key);
 	}
+
 	/**
 	 * This method stores the value 'value' in the  specimenDetailsMap with 'key' as the key.
 	 * @param key the key of the obect.
@@ -328,14 +353,16 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		specimenDetailsMap.put(key, value);
 	}
+
 	/**
 	 * Map for holding values related to containers included in the shipment.
 	 */
-	protected Map containerDetailsMap=new HashMap();
+	protected Map containerDetailsMap = new HashMap();
 	/**
 	 * Counter to keep track of number of containers included in the shipment.
 	 */
-	protected int containerCounter=0;
+	protected int containerCounter = 0;
+
 	/**
 	 * This method gets the value stored in the  containerDetailsMap with key as the key.
 	 * @return Object
@@ -345,6 +372,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return containerDetailsMap.get(key);
 	}
+
 	/**
 	 * This method stores the value 'value' in the  containerDetailsMap with 'key' as the key.
 	 * @param key the key of the object.
@@ -352,11 +380,12 @@ public class BaseShipmentForm extends AbstractActionForm
 	 */
 	public void setContainerDetails(String key, Object value)
 	{
-		if(value!=null)
+		if (value != null)
 		{
 			containerDetailsMap.put(key, value);
 		}
 	}
+
 	/**
 	 * Gets the SpecimenLabel.
 	 * @return the label
@@ -366,7 +395,8 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return label;
 	}
-    /**
+
+	/**
 	 * Sets the SpecimenLabel.
 	 * @param label the label to set.
 	 * @see #getLabel()
@@ -375,6 +405,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.label = label;
 	}
+
 	/**
 	 * @return the senderComments.
 	 * @see #setSenderComments(String)
@@ -383,6 +414,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderComments;
 	}
+
 	/**
 	 * Sets Shipment sender's Comments.
 	 * @param senderComments the senderComments to set
@@ -392,6 +424,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderComments = senderComments;
 	}
+
 	/**
 	 * Gets Shipment  receiver's Comments.
 	 * @return the receiverComments
@@ -401,6 +434,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverComments;
 	}
+
 	/**
 	 * Sets Shipment receiver's Comments.
 	 * @param receiverComments the receiverComments to set
@@ -410,6 +444,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverComments = receiverComments;
 	}
+
 	/**
 	 * Gets Specimen/container status.
 	 * @return the status
@@ -419,6 +454,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return status;
 	}
+
 	/**
 	 * Sets Specimen/container status.
 	 * @param status the status to set
@@ -428,6 +464,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.status = status;
 	}
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
@@ -436,12 +473,12 @@ public class BaseShipmentForm extends AbstractActionForm
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors=super.validate(mapping, request);
-		if(errors==null)
+		ActionErrors errors = super.validate(mapping, request);
+		if (errors == null)
 		{
-			errors=new ActionErrors();
+			errors = new ActionErrors();
 		}
-		else if(errors!=null && errors.size()>0)
+		else if (errors != null && errors.size() > 0)
 		{
 			return errors;
 		}
@@ -449,214 +486,233 @@ public class BaseShipmentForm extends AbstractActionForm
 		validateShipmentContentDetails(errors);
 		return errors;
 	}
+
 	/**
 	 * This method deals with the validation of shipment content details.
 	 * @param errors action errors.
 	 */
 	protected void validateShipmentContentDetails(ActionErrors errors)
 	{
-		String keyLabel="";
-		String keyBarcode="";
-		String valueLabel="";
-		String valueBarcode="";
-		int counter=0;
-		boolean isSpecimenPresent=false,isContainerPresent=false;
-		Validator validator=new Validator();
-		if(this.specimenCounter>0)
+		String keyLabel = "";
+		String keyBarcode = "";
+		String valueLabel = "";
+		String valueBarcode = "";
+		int counter = 0;
+		boolean isSpecimenPresent = false, isContainerPresent = false;
+		Validator validator = new Validator();
+		if (this.specimenCounter > 0)
 		{
-			for(counter=1;counter<=this.specimenCounter;counter++)
+			for (counter = 1; counter <= this.specimenCounter; counter++)
 			{
-				keyLabel="specimenLabel_"+counter;
-				keyBarcode="specimenBarcode_"+counter;
-				valueLabel=(String)this.getSpecimenDetails(keyLabel);
-				valueBarcode=(String)this.getSpecimenDetails(keyBarcode);
-				if(!validator.isEmpty(valueBarcode) || !validator.isEmpty(valueLabel))
+				keyLabel = "specimenLabel_" + counter;
+				keyBarcode = "specimenBarcode_" + counter;
+				valueLabel = (String) this.getSpecimenDetails(keyLabel);
+				valueBarcode = (String) this.getSpecimenDetails(keyBarcode);
+				if (!validator.isEmpty(valueBarcode) || !validator.isEmpty(valueLabel))
 				{
-					isSpecimenPresent=true;
+					isSpecimenPresent = true;
 				}
 			}
-			if(isSpecimenPresent && validator.isEmpty(this.specimenLabelChoice))
+			if (isSpecimenPresent && validator.isEmpty(this.specimenLabelChoice))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required","Choice of Label Or Barcode For Sepcimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						"Choice of Label Or Barcode For Sepcimen"));
 			}
-			else if(isSpecimenPresent
+			else if (isSpecimenPresent
 					&& !(this.specimenLabelChoice.trim().equals("SpecimenLabel"))
 					&& !(this.specimenLabelChoice.trim().equals("SpecimenBarcode")))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.invalid","Choice of Label Or Barcode For Sepcimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+						"Choice of Label Or Barcode For Sepcimen"));
 			}
 		}
-		if(this.containerCounter>0)
+		if (this.containerCounter > 0)
 		{
-			for(counter=1;counter<=this.containerCounter;counter++)
+			for (counter = 1; counter <= this.containerCounter; counter++)
 			{
-				keyLabel="containerLabel_"+counter;
-				keyBarcode="containerBarcode_"+counter;
-				valueLabel=(String)this.getContainerDetails(keyLabel);
-				valueBarcode=(String)this.getContainerDetails(keyBarcode);
-				if(!validator.isEmpty(valueBarcode) || !validator.isEmpty(valueLabel))
+				keyLabel = "containerLabel_" + counter;
+				keyBarcode = "containerBarcode_" + counter;
+				valueLabel = (String) this.getContainerDetails(keyLabel);
+				valueBarcode = (String) this.getContainerDetails(keyBarcode);
+				if (!validator.isEmpty(valueBarcode) || !validator.isEmpty(valueLabel))
 				{
-					isContainerPresent=true;
+					isContainerPresent = true;
 				}
 			}
-			if(isContainerPresent && validator.isEmpty(this.containerLabelChoice))
+			if (isContainerPresent && validator.isEmpty(this.containerLabelChoice))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required","Choice of Label Or Barcode For Container"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						"Choice of Label Or Barcode For Container"));
 			}
-			else if(isContainerPresent
+			else if (isContainerPresent
 					&& !(this.containerLabelChoice.trim().equals("ContainerLabel"))
 					&& !(this.containerLabelChoice.trim().equals("ContainerBarcode")))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.invalid","Choice of Label Or Barcode For Container"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+						"Choice of Label Or Barcode For Container"));
 			}
 		}
-		if(!isSpecimenPresent && !isContainerPresent)
+		if (!isSpecimenPresent && !isContainerPresent)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.specimenContainerRequired")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.specimenContainerRequired")));
 		}
 	}
+
 	/**
 	 * This method validates basic shipment information.
 	 * @param errors returning action errors.
 	 */
 	protected void validateBasicShipmentInformation(ActionErrors errors)
 	{
-		Validator validator=new Validator();
-		String dateErrorString=validator.validateDate(this.sendDate,false);
+		Validator validator = new Validator();
+		String dateErrorString = validator.validateDate(this.sendDate, false);
 		//checking for empty label
-		if(validator.isEmpty(this.label))
+		if (validator.isEmpty(this.label))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.label")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.label")));
 		}
 		//checking for empty senderSiteId (default = 0 is empty)
-		if(this.senderSiteId == 0)
+		if (this.senderSiteId == 0)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.senderSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.senderSite")));
 		}
 		//checking for empty receiverSiteId (default = 0 is empty)
-		if(this.receiverSiteId == 0)
+		if (this.receiverSiteId == 0)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.receiverSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.receiverSite")));
 		}
-		if (!validator.isValidOption(""+(this.senderSiteId)))
+		if (!validator.isValidOption("" + (this.senderSiteId)))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.senderSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.senderSite")));
 		}
-		if (!validator.isValidOption(""+(this.receiverSiteId)))
+		if (!validator.isValidOption("" + (this.receiverSiteId)))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.receiverSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.receiverSite")));
 		}
 		//checking for empty date
-		if(dateErrorString!=null && !dateErrorString.trim().equals(""))
+		if (dateErrorString != null && !dateErrorString.trim().equals(""))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("shipment.sendDate")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.sendDate")));
 		}
 		//checking same sender and receiver site
-		if(this.senderSiteId == this.receiverSiteId)
+		if (this.senderSiteId == this.receiverSiteId)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item",ApplicationProperties.getValue("shipment.specimenSiteValidation")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
+					ApplicationProperties.getValue("shipment.specimenSiteValidation")));
 		}
 	}
+
 	/**
-     * Copies the data from an AbstractDomain object to a BaseShipmentForm object.
-     * @param abstractDomainObject the domain object to set.
-     */
+	 * Copies the data from an AbstractDomain object to a BaseShipmentForm object.
+	 * @param abstractDomainObject the domain object to set.
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
-		if(abstractDomainObject instanceof BaseShipment)
+		if (abstractDomainObject instanceof BaseShipment)
 		{
-			BaseShipment shipment=(BaseShipment)abstractDomainObject;
+			BaseShipment shipment = (BaseShipment) abstractDomainObject;
 			populateBasicShipmentProperties(shipment);
 			populateShipmentContentsDetails(shipment);
 		}
 	}
+
 	/**
 	 * Iterates through specimens list and sets the contents of shipment.
 	 * @param specimens list of specimens.
 	 */
-	public void setShipmentContentsUsingSpecimen(List<Specimen> specimens)
+	public void setShipmentContentsUsingSpecimen(List < Specimen > specimens)
 	{
-		if(specimens!=null && specimens.size()>0)
+		if (specimens != null && specimens.size() > 0)
 		{
-			this.specimenCounter=0;
-			for(Specimen s : specimens)
+			this.specimenCounter = 0;
+			for (Specimen s : specimens)
 			{
 				this.specimenCounter++;
 				String label = s.getLabel();
-				if(label==null)
+				if (label == null)
 				{
-					label=" ";
+					label = " ";
 				}
-				this.specimenDetailsMap.put("specimenLabel_"+specimenCounter,label);
+				this.specimenDetailsMap.put("specimenLabel_" + specimenCounter, label);
 				String barcode = s.getBarcode();
-				if(barcode==null)
+				if (barcode == null)
 				{
 					barcode = " ";
 				}
-				this.specimenDetailsMap.put("specimenBarcode_"+specimenCounter,barcode);
+				this.specimenDetailsMap.put("specimenBarcode_" + specimenCounter, barcode);
 			}
 		}
 	}
+
 	/**
 	 * This method sets the shipment details using container details.
 	 * @param storageContainers list of storage containers.
 	 */
-	public void setShipmentContentsUsingContainer(List<StorageContainer> storageContainers)
+	public void setShipmentContentsUsingContainer(List < StorageContainer > storageContainers)
 	{
-		if(storageContainers!=null && storageContainers.size()>0)
+		if (storageContainers != null && storageContainers.size() > 0)
 		{
-			this.containerCounter=0;
-			for(StorageContainer s : storageContainers)
+			this.containerCounter = 0;
+			for (StorageContainer s : storageContainers)
 			{
 				this.containerCounter++;
 				String label = s.getName();
-				if(label==null)
+				if (label == null)
 				{
-					label=" ";
+					label = " ";
 				}
-				this.containerDetailsMap.put("containerLabel_"+containerCounter,label);
+				this.containerDetailsMap.put("containerLabel_" + containerCounter, label);
 				String barcode = s.getBarcode();
-				if(barcode==null)
+				if (barcode == null)
 				{
 					barcode = " ";
 				}
-				this.containerDetailsMap.put("containerBarcode_"+containerCounter,barcode);
+				this.containerDetailsMap.put("containerBarcode_" + containerCounter, barcode);
 			}
 		}
 	}
+
 	/**
 	 * This method iterates through container collection and populates shipment content details.
 	 * @param shipment shipment object.
 	 */
 	protected void populateShipmentContentsDetails(BaseShipment shipment)
 	{
-		this.specimenLabelChoice="SpecimenLabel";
-		this.containerLabelChoice="ContainerLabel";
-		this.containerCounter=0;
-		this.specimenCounter=0;
-		if(shipment.getContainerCollection()!=null)
+		this.specimenLabelChoice = "SpecimenLabel";
+		this.containerLabelChoice = "ContainerLabel";
+		this.containerCounter = 0;
+		this.specimenCounter = 0;
+		if (shipment.getContainerCollection() != null)
 		{
-			Iterator<StorageContainer> containerIterator=shipment.getContainerCollection().iterator();
-			while(containerIterator.hasNext())
+			Iterator < StorageContainer > containerIterator = shipment.getContainerCollection()
+					.iterator();
+			while (containerIterator.hasNext())
 			{
-				StorageContainer container=containerIterator.next();
-				if(container.getStorageType()!=null
+				StorageContainer container = containerIterator.next();
+				if (container.getStorageType() != null
 						&& !container.getStorageType().getName().equals(
 								Constants.SHIPMENT_CONTAINER_TYPE_NAME))
 				{
 					this.containerCounter++;
-				    String name = container.getName();
-				    if(name==null)
-				    {
-				    	name = " ";
-				    }
-					this.containerDetailsMap.put("containerLabel_"+containerCounter,name);
+					String name = container.getName();
+					if (name == null)
+					{
+						name = " ";
+					}
+					this.containerDetailsMap.put("containerLabel_" + containerCounter, name);
 					String barcode = container.getBarcode();
-					if(barcode==null)
+					if (barcode == null)
 					{
 						barcode = " ";
 					}
-					this.containerDetailsMap.put("containerBarcode_"+containerCounter,barcode);
+					this.containerDetailsMap.put("containerBarcode_" + containerCounter, barcode);
 				}
 				else
 				{
@@ -665,66 +721,72 @@ public class BaseShipmentForm extends AbstractActionForm
 			}
 		}
 	}
+
 	/**
 	 * This method sets the specimen details map.
 	 * @param specimenPositionCollection collection of specimen position.
 	 */
-	private void populateSpecimenDetails(Collection<SpecimenPosition> specimenPositionCollection)
+	private void populateSpecimenDetails(Collection < SpecimenPosition > specimenPositionCollection)
 	{
-		Iterator<SpecimenPosition> spPosIterator = specimenPositionCollection.iterator();
-		while(spPosIterator.hasNext())
+		Iterator < SpecimenPosition > spPosIterator = specimenPositionCollection.iterator();
+		while (spPosIterator.hasNext())
 		{
-			SpecimenPosition position=spPosIterator.next();
+			SpecimenPosition position = spPosIterator.next();
 			this.specimenCounter++;
 			String label = position.getSpecimen().getLabel();
-			if(label==null)
+			if (label == null)
 			{
-				label=" ";
+				label = " ";
 			}
-			this.specimenDetailsMap.put("specimenLabel_"+specimenCounter,label);
+			this.specimenDetailsMap.put("specimenLabel_" + specimenCounter, label);
 			String barcode = position.getSpecimen().getBarcode();
-			if(barcode==null)
+			if (barcode == null)
 			{
 				barcode = " ";
 			}
-			this.specimenDetailsMap.put("specimenBarcode_"+specimenCounter,barcode);
+			this.specimenDetailsMap.put("specimenBarcode_" + specimenCounter, barcode);
 		}
 	}
+
 	private Long getShipmentId(BaseShipment shipment)
 	{
 		Long shipmentId = Long.valueOf(0);
-		if(shipment.getId()!=null)
+		if (shipment.getId() != null)
 		{
 			shipmentId = shipment.getId();
 		}
 		return shipmentId;
 	}
+
 	private Long getSenderContactId(BaseShipment shipment)
 	{
 		Long senderId = Long.valueOf(0);
-		if(shipment.getSenderContactPerson()==null || shipment.getSenderContactPerson().getId()==null)
+		if (shipment.getSenderContactPerson() == null
+				|| shipment.getSenderContactPerson().getId() == null)
 		{
-			senderId=Long.valueOf(0);
+			senderId = Long.valueOf(0);
 		}
 		else
 		{
-			senderId=shipment.getSenderContactPerson().getId();
+			senderId = shipment.getSenderContactPerson().getId();
 		}
 		return senderId;
 	}
+
 	private Long getSendetSiteId(BaseShipment shipment)
 	{
 		Long senderSiteId = Long.valueOf(0);
-		if(shipment.getSenderSite()==null || shipment.getSenderSite().getId()==null)
+		if (shipment.getSenderSite() == null || shipment.getSenderSite().getId() == null)
 		{
-			senderSiteId=Long.valueOf(0);
+			senderSiteId = Long.valueOf(0);
 		}
 		else
 		{
-			senderSiteId=shipment.getSenderSite().getId();
+			senderSiteId = shipment.getSenderSite().getId();
 		}
 		return senderSiteId;
 	}
+
 	/**
 	 * This method sets the basic properties of shipment.
 	 * @param shipment the shipment object.
@@ -732,65 +794,72 @@ public class BaseShipmentForm extends AbstractActionForm
 	protected void populateBasicShipmentProperties(BaseShipment shipment)
 	{
 		this.setId(getShipmentId(shipment));
-//		this.id = getShipmentId(shipment);
-//		if(shipment.getSenderContactPerson()==null || shipment.getSenderContactPerson().getId()==null)
-//		{
-//			this.senderContactId=0;
-//		}
-//		else
-//		{
-//			this.senderContactId=shipment.getSenderContactPerson().getId();
-//		}
+		//		this.id = getShipmentId(shipment);
+		//		if(shipment.getSenderContactPerson()==null || shipment.getSenderContactPerson().getId()==null)
+		//		{
+		//			this.senderContactId=0;
+		//		}
+		//		else
+		//		{
+		//			this.senderContactId=shipment.getSenderContactPerson().getId();
+		//		}
 		this.senderContactId = getSenderContactId(shipment);
-//		if(shipment.getSenderSite()==null || shipment.getSenderSite().getId()==null)
-//		{
-//			this.senderSiteId=0;
-//		}
-//		else
-//		{
-//			this.senderSiteId=shipment.getSenderSite().getId();
-//		}
+		//		if(shipment.getSenderSite()==null || shipment.getSenderSite().getId()==null)
+		//		{
+		//			this.senderSiteId=0;
+		//		}
+		//		else
+		//		{
+		//			this.senderSiteId=shipment.getSenderSite().getId();
+		//		}
 		this.senderSiteId = getSendetSiteId(shipment);
-		if(shipment.getReceiverSite()==null || shipment.getReceiverSite().getId()==null)
+		if (shipment.getReceiverSite() == null || shipment.getReceiverSite().getId() == null)
 		{
-			this.receiverSiteId=0;
+			this.receiverSiteId = 0;
 		}
 		else
 		{
-			this.receiverSiteId=shipment.getReceiverSite().getId();
+			this.receiverSiteId = shipment.getReceiverSite().getId();
 		}
-		if(shipment.getReceiverContactPerson()==null || shipment.getReceiverContactPerson().getId()==null)
+		if (shipment.getReceiverContactPerson() == null
+				|| shipment.getReceiverContactPerson().getId() == null)
 		{
-			this.receiverContactId=0;
+			this.receiverContactId = 0;
 		}
 		else
 		{
-			this.receiverContactId=shipment.getReceiverContactPerson().getId();
+			this.receiverContactId = shipment.getReceiverContactPerson().getId();
 		}
-		if(shipment.getCreatedDate()==null)
+		if (shipment.getCreatedDate() == null)
 		{
-			this.createdDate=Utility.parseDateToString(new Date(),CommonServiceLocator.getInstance().getDatePattern());
+			this.createdDate = Utility.parseDateToString(new Date(), CommonServiceLocator
+					.getInstance().getDatePattern());
 			//this.createdDate=Utility.parseDateToString(shipment.getCreatedDate(),Variables.dateFormat);
 		}
 		else
 		{
-			this.createdDate=Utility.parseDateToString(shipment.getCreatedDate(),CommonServiceLocator.getInstance().getDatePattern());
+			this.createdDate = Utility.parseDateToString(shipment.getCreatedDate(),
+					CommonServiceLocator.getInstance().getDatePattern());
 		}
-		this.label=shipment.getLabel();
+		this.label = shipment.getLabel();
 		Calendar calender = Calendar.getInstance();
-		if(shipment.getSendDate()!=null)
+		if (shipment.getSendDate() != null)
 		{
 			calender.setTime(shipment.getSendDate());
-			this.sendTimeHour = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-	 	   	this.sendTimeMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-	 		// date foramt change by geeta
-	 	   	this.sendDate = Utility.parseDateToString(shipment.getSendDate(),CommonServiceLocator.getInstance().getDatePattern());
+			this.sendTimeHour = Utility.toString(Integer.toString(calender
+					.get(Calendar.HOUR_OF_DAY)));
+			this.sendTimeMinutes = Utility
+					.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+			// date foramt change by geeta
+			this.sendDate = Utility.parseDateToString(shipment.getSendDate(), CommonServiceLocator
+					.getInstance().getDatePattern());
 		}
-		this.senderComments=shipment.getSenderComments();
+		this.senderComments = shipment.getSenderComments();
 		this.setActivityStatus(shipment.getActivityStatus());
-//		this.activityStatus=shipment.getActivityStatus();
+		//		this.activityStatus=shipment.getActivityStatus();
 		this.receiverComments = shipment.getReceiverComments();
 	}
+
 	/**
 	 * Returns the id assigned to form bean.
 	 * @return base shipment form id
@@ -800,10 +869,11 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return Constants.BASESHIPMENT_FORM_ID;
 	}
+
 	/**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.
-     */
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.
+	 */
 	protected void clearAllValues()
 	{
 		this.label = null;
@@ -816,11 +886,12 @@ public class BaseShipmentForm extends AbstractActionForm
 		this.senderComments = null;
 		this.receiverComments = null;
 		this.status = null;
-		this.specimenDetailsMap = new HashMap<String, String>();
-		this.specimenCounter=0;
-		this.containerDetailsMap=new HashMap<String, String>();
-		this.containerCounter=0;
+		this.specimenDetailsMap = new HashMap < String , String >();
+		this.specimenCounter = 0;
+		this.containerDetailsMap = new HashMap < String , String >();
+		this.containerCounter = 0;
 	}
+
 	/**
 	 * Gets the number of containers included in the shipment.
 	 * @return containerCounter
@@ -829,6 +900,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return containerCounter;
 	}
+
 	/**
 	 * Sets the number of containers included in the shipment.
 	 * @param containerCounter the counter of container to set.
@@ -837,22 +909,25 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.containerCounter = containerCounter;
 	}
+
 	/**
 	 * Gets the container details map of the shipment.
 	 * @return containerDetailsMap
 	 */
-	public Map<String, String> getContainerDetailsMap()
+	public Map < String , String > getContainerDetailsMap()
 	{
 		return containerDetailsMap;
 	}
+
 	/**
 	 * Sets the container details map of the shipment.
 	 * @param containerDetailsMap map containing the details of the container.
 	 */
-	public void setContainerDetailsMap(Map<String, String> containerDetailsMap)
+	public void setContainerDetailsMap(Map < String , String > containerDetailsMap)
 	{
 		this.containerDetailsMap = containerDetailsMap;
 	}
+
 	/**
 	 * Gets the date of shipment creation.
 	 * @return createdDate
@@ -861,6 +936,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return createdDate;
 	}
+
 	/**
 	 * Sets the date of shipment creation.
 	 * @param createdDate the date to set.
@@ -869,6 +945,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.createdDate = createdDate;
 	}
+
 	/**
 	 * Gets the userId of the contact at the recieving site.
 	 * @return receiverContactId
@@ -877,6 +954,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverContactId;
 	}
+
 	/**
 	 * Sets the userId of the contact at the recieving site.
 	 * @param receiverContactId the contact id of the receiver.
@@ -885,6 +963,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverContactId = receiverContactId;
 	}
+
 	/**
 	 * Gets the id the recieving site.
 	 * @return receiverSiteId
@@ -893,6 +972,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return receiverSiteId;
 	}
+
 	/**
 	 * Sets the id the recieving site.
 	 * @param receiverSiteId the site id of the receiver
@@ -901,6 +981,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.receiverSiteId = receiverSiteId;
 	}
+
 	/**
 	 * Gets the date when the shipment is to be sent.
 	 * @return sendDate
@@ -909,6 +990,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return sendDate;
 	}
+
 	/**
 	 * Sets the date when the shipment is to be sent.
 	 * @param sendDate the sending date to set.
@@ -917,6 +999,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.sendDate = sendDate;
 	}
+
 	/**
 	 * Gets the userId of the contact at the sending site.
 	 * @return senderContactId
@@ -925,6 +1008,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderContactId;
 	}
+
 	/**
 	 * Sets the userId of the contact at the sending site.
 	 * @param senderContactId the contact id of the sender.
@@ -933,6 +1017,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderContactId = senderContactId;
 	}
+
 	/**
 	 * Gets the id the sending site.
 	 * @return senderSiteId
@@ -941,6 +1026,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return senderSiteId;
 	}
+
 	/**
 	 * Sets the id the sending site.
 	 * @param senderSiteId the site id of the sender.
@@ -949,6 +1035,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.senderSiteId = senderSiteId;
 	}
+
 	/**
 	 * Gets the specimen counter.
 	 * @return specimenCounter
@@ -957,6 +1044,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return specimenCounter;
 	}
+
 	/**
 	 * Sets the specimen counter.
 	 * @param specimenCounter count of specimen.
@@ -965,22 +1053,25 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.specimenCounter = specimenCounter;
 	}
+
 	/**
 	 * Gets the specimen details map.
 	 * @return specimenDetailsMap
 	 */
-	public Map<String, String> getSpecimenDetailsMap()
+	public Map < String , String > getSpecimenDetailsMap()
 	{
 		return specimenDetailsMap;
 	}
+
 	/**
 	 * Sets the specimen details map.
 	 * @param specimenDetailsMap map containing specimen details.
 	 */
-	public void setSpecimenDetailsMap(Map<String, String> specimenDetailsMap)
+	public void setSpecimenDetailsMap(Map < String , String > specimenDetailsMap)
 	{
 		this.specimenDetailsMap = specimenDetailsMap;
 	}
+
 	/**
 	 * Gets the container label choice.
 	 * @return containerLabelChoice
@@ -989,6 +1080,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return containerLabelChoice;
 	}
+
 	/**
 	 * Sets the container label choice.
 	 * @param containerLabelChoice choice of container label to set.
@@ -997,6 +1089,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.containerLabelChoice = containerLabelChoice;
 	}
+
 	/**
 	 * Gets the specimen label choice.
 	 * @return specimenLabelChoice
@@ -1005,6 +1098,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return specimenLabelChoice;
 	}
+
 	/**
 	 * Sets the specimen label choice.
 	 * @param specimenLabelChoice string containing specimen label.
@@ -1013,6 +1107,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.specimenLabelChoice = specimenLabelChoice;
 	}
+
 	/**
 	 * Gets the send time hour.
 	 * @return sendTimeHour
@@ -1021,6 +1116,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return sendTimeHour;
 	}
+
 	/**
 	 * Sets the send time in hours.
 	 * @param sendTimeHour time in hours.
@@ -1029,6 +1125,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.sendTimeHour = sendTimeHour;
 	}
+
 	/**
 	 * Gets the send time in minutes.
 	 * @return sendTimeMinutes
@@ -1037,6 +1134,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		return sendTimeMinutes;
 	}
+
 	/**
 	 * Sets the send time in minutes.
 	 * @param sendTimeMinutes time in minutes to set.
@@ -1045,6 +1143,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	{
 		this.sendTimeMinutes = sendTimeMinutes;
 	}
+
 	/**
 	 * this method overrides the reset method of parent class.
 	 */
@@ -1052,6 +1151,7 @@ public class BaseShipmentForm extends AbstractActionForm
 	protected void reset()
 	{
 	}
+
 	@Override
 	public void setAddNewObjectIdentifier(String paramString, Long paramLong)
 	{

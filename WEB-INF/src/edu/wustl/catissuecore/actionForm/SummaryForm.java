@@ -1,5 +1,6 @@
 
 package edu.wustl.catissuecore.actionForm;
+
 import org.apache.struts.action.ActionForm;
 
 import edu.wustl.catissuecore.bean.SummaryAdminDetails;
@@ -12,30 +13,31 @@ import edu.wustl.catissuecore.bean.SummarySpDetails;
  */
 public class SummaryForm extends ActionForm
 {
-	private static final long serialVersionUID = 12345; 
-	
-	private String totalSpCount="0";
-	
+
+	private static final long serialVersionUID = 12345;
+
+	private String totalSpCount = "0";
+
 	//Mandar : for new summary page ---------------
 	private SummarySpDetails specDetails;
-	private SummaryAdminDetails adminDetails ;
+	private SummaryAdminDetails adminDetails;
 	private SummaryPartDetails partDetails;
-	
-	
+
 	/**
 	 * Default Constructor
 	 *
 	 */
-//	ConstructorDeclaration
-	 public SummaryForm()
-	{}
-
+	//	ConstructorDeclaration
+	public SummaryForm()
+	{
+	}
 
 	/**
 	 * Returns the Total Specimen Count of caTissue
 	 * @return String
 	 */
-	public String getTotalSpCount() {
+	public String getTotalSpCount()
+	{
 		return totalSpCount;
 	}
 
@@ -44,38 +46,39 @@ public class SummaryForm extends ActionForm
 	 * @param String
 	 * @return void
 	 */
-	public void setTotalSpCount(final String totSpCnt) {
+	public void setTotalSpCount(final String totSpCnt)
+	{
 		this.totalSpCount = totSpCnt;
 	}
-	
+
 	public SummaryAdminDetails getAdminDetails()
 	{
 		return adminDetails;
 	}
-	
+
 	public void setAdminDetails(final SummaryAdminDetails adminDetails)
 	{
 		this.adminDetails = adminDetails;
 	}
-	
+
 	public SummaryPartDetails getPartDetails()
 	{
 		return partDetails;
 	}
-	
+
 	public void setPartDetails(final SummaryPartDetails partDetails)
 	{
 		this.partDetails = partDetails;
 	}
-	
+
 	public SummarySpDetails getSpecDetails()
 	{
 		return specDetails;
 	}
-	
+
 	public void setSpecDetails(final SummarySpDetails specDetails)
 	{
 		this.specDetails = specDetails;
 	}
-	
+
 }

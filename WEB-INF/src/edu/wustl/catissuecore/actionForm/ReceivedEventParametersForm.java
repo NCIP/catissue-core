@@ -4,6 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * @author mandar_deshmukh
  *
@@ -36,11 +36,13 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ReceivedEventParametersForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ReceivedEventParametersForm.class);
 	/**
 	 * Grossly evaluated quality of the received specimen.
 	 */
-	protected String receivedQuality=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+	protected String receivedQuality = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
 
 	/**
 	 * Returns the receivedQuality of the specimen.
@@ -60,8 +62,8 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	{
 		this.receivedQuality = receivedQuality;
 	}
-	
-//	 ---- super class methods
+
+	//	 ---- super class methods
 	// ----- SUPERCLASS METHODS
 	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
@@ -79,56 +81,55 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters)abstractDomain ;
-		this.receivedQuality =  Utility.toString(receivedEventParameterObject.getReceivedQuality()); 
+		ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters) abstractDomain;
+		this.receivedQuality = Utility.toString(receivedEventParameterObject.getReceivedQuality());
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	 
-         ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-         
-         try
-         {
-         	// checks the receivedQuality
-           	if (!validator.isValidOption(receivedQuality))
-            {
-           	    logger.debug(" not a valid option");
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
-            }
-           	logger.debug(receivedQuality+" is a valid option");
-         }
-         catch(Exception excp)
-         {
-             logger.error(excp.getMessage());
-         }
-         return errors;
-      }
-	
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
 
-     /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
-      protected void reset()
-     {
-//         super.reset();
-//         this.receivedQuality = null;
-     }
+		ActionErrors errors = super.validate(mapping, request);
+		Validator validator = new Validator();
+
+		try
+		{
+			// checks the receivedQuality
+			if (!validator.isValidOption(receivedQuality))
+			{
+				logger.debug(" not a valid option");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
+			}
+			logger.debug(receivedQuality + " is a valid option");
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+	protected void reset()
+	{
+		//         super.reset();
+		//         this.receivedQuality = null;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-    		
-	
+
 }

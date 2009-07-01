@@ -8,31 +8,31 @@
  * @version 1.1
  * Created on August 29,2006
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-
 /**
  * <p>This class initializes the fields of ContainerForm</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class ContainerForm extends AbstractActionForm 
+public class ContainerForm extends AbstractActionForm
 {
 
 	/**
 	 * serial version id
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Specify the name field 
 	 */
 	protected String name;
-	
+
 	/**
 	 * Specify the barcode field 
 	 */
@@ -42,17 +42,17 @@ public class ContainerForm extends AbstractActionForm
 	 * Specify the activityStatus field 
 	 */
 	protected String activityStatus = "Active";
-	
+
 	/**
 	 * Specify the positionDimensionOne field 
 	 */
 	protected int positionDimensionOne;
-	
+
 	/**
 	 * Specify the positionDimensionTwo field 
 	 */
 	protected int positionDimensionTwo;
-	
+
 	/**
 	 * Specify the positionInStorageContainer field 
 	 */
@@ -62,7 +62,7 @@ public class ContainerForm extends AbstractActionForm
 	 * Specify the isFull field 
 	 */
 	protected String isFull = "False";
-	
+
 	/**
 	 * Specify the oneDimensionCapacity field 
 	 */
@@ -72,17 +72,17 @@ public class ContainerForm extends AbstractActionForm
 	 * Specify the twoDimensionCapacity field 
 	 */
 	protected int twoDimensionCapacity;
-	
+
 	/**
 	 * Specify the comment field 
 	 */
 	private String comment;
-	
+
 	/** 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return 0
 	 */
-	public int getFormId() 
+	public int getFormId()
 	{
 		return 0;
 	}
@@ -91,49 +91,53 @@ public class ContainerForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
 	 * @param domainObject An object of Container
 	 */
-	public void setAllValues(AbstractDomainObject domainObject) 
+	public void setAllValues(AbstractDomainObject domainObject)
 	{
-		if (domainObject instanceof Container) 
+		if (domainObject instanceof Container)
 		{
 			Container container = (Container) domainObject;
 			this.setId(container.getId().longValue());
 			this.barcode = container.getBarcode();
 			this.activityStatus = container.getActivityStatus();
-			if(container.isFull() != null)
+			if (container.isFull() != null)
 			{
 				this.isFull = String.valueOf(container.isFull().booleanValue());
 			}
-			if(container != null && container.getLocatedAtPosition()!= null)
+			if (container != null && container.getLocatedAtPosition() != null)
 			{
-				this.positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOne().intValue();
-				this.positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwo().intValue();
+				this.positionDimensionOne = container.getLocatedAtPosition()
+						.getPositionDimensionOne().intValue();
+				this.positionDimensionTwo = container.getLocatedAtPosition()
+						.getPositionDimensionTwo().intValue();
 			}
 			this.comment = container.getComment();
 			this.name = container.getName();
-			
-		  if (container.getCapacity().getOneDimensionCapacity() != null) 
-		  {	
-	    	this.oneDimensionCapacity =  container.getCapacity().getOneDimensionCapacity().intValue();
-		  }
-		  if (container.getCapacity().getTwoDimensionCapacity() != null) 
-		  {
-	    	this.twoDimensionCapacity =  container.getCapacity().getTwoDimensionCapacity().intValue();
-		  }	
-		  
+
+			if (container.getCapacity().getOneDimensionCapacity() != null)
+			{
+				this.oneDimensionCapacity = container.getCapacity().getOneDimensionCapacity()
+						.intValue();
+			}
+			if (container.getCapacity().getTwoDimensionCapacity() != null)
+			{
+				this.twoDimensionCapacity = container.getCapacity().getTwoDimensionCapacity()
+						.intValue();
+			}
+
 		}
 	}
-	
+
 	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 */
-	protected void reset() 
+	protected void reset()
 	{
 	}
 
 	/**
 	 * @return Returns the activityStatus.
 	 */
-	public String getActivityStatus() 
+	public String getActivityStatus()
 	{
 		return activityStatus;
 	}
@@ -141,7 +145,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @param activityStatus The activityStatus to set.
 	 */
-	public void setActivityStatus(String activityStatus) 
+	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
 	}
@@ -157,7 +161,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @param barcode The barcode to set.
 	 */
-	public void setBarcode(String barcode) 
+	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
 	}
@@ -181,7 +185,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @return Returns the isFull.
 	 */
-	public String getIsFull() 
+	public String getIsFull()
 	{
 		return isFull;
 	}
@@ -197,7 +201,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() 
+	public String getName()
 	{
 		return name;
 	}
@@ -213,7 +217,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @return Returns the positionDimensionOne.
 	 */
-	public int getPositionDimensionOne() 
+	public int getPositionDimensionOne()
 	{
 		return positionDimensionOne;
 	}
@@ -221,7 +225,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
-	public void setPositionDimensionOne(int positionDimensionOne) 
+	public void setPositionDimensionOne(int positionDimensionOne)
 	{
 		this.positionDimensionOne = positionDimensionOne;
 	}
@@ -237,47 +241,47 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo) 
+	public void setPositionDimensionTwo(int positionDimensionTwo)
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
-	
-    /**
-     * @return Returns the oneDimensionCapacity.
-     */
-    public int getOneDimensionCapacity()
-    {
-        return oneDimensionCapacity;
-    }
 
-    /**
-     * @param oneDimensionCapacity The oneDimensionCapacity to set.
-     */
-    public void setOneDimensionCapacity(int oneDimensionCapacity)
-    {
-        this.oneDimensionCapacity = oneDimensionCapacity;
-    }
-	
-    /**
-     * @return Returns the twoDimensionCapacity.
-     */
-    public int getTwoDimensionCapacity()
-    {
-        return twoDimensionCapacity;
-    }
+	/**
+	 * @return Returns the oneDimensionCapacity.
+	 */
+	public int getOneDimensionCapacity()
+	{
+		return oneDimensionCapacity;
+	}
 
-    /**
-     * @param twoDimensionCapacity The twoDimensionCapacity to set.
-     */
-    public void setTwoDimensionCapacity(int twoDimensionCapacity)
-    {
-        this.twoDimensionCapacity = twoDimensionCapacity;
-    }
+	/**
+	 * @param oneDimensionCapacity The oneDimensionCapacity to set.
+	 */
+	public void setOneDimensionCapacity(int oneDimensionCapacity)
+	{
+		this.oneDimensionCapacity = oneDimensionCapacity;
+	}
+
+	/**
+	 * @return Returns the twoDimensionCapacity.
+	 */
+	public int getTwoDimensionCapacity()
+	{
+		return twoDimensionCapacity;
+	}
+
+	/**
+	 * @param twoDimensionCapacity The twoDimensionCapacity to set.
+	 */
+	public void setTwoDimensionCapacity(int twoDimensionCapacity)
+	{
+		this.twoDimensionCapacity = twoDimensionCapacity;
+	}
 
 	/**
 	 * @return Returns the positionInStorageContainer.
 	 */
-	public String getPositionInStorageContainer() 
+	public String getPositionInStorageContainer()
 	{
 		return positionInStorageContainer;
 	}
@@ -285,7 +289,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @param positionInStorageContainer The positionInStorageContainer to set.
 	 */
-	public void setPositionInStorageContainer(String positionInStorageContainer) 
+	public void setPositionInStorageContainer(String positionInStorageContainer)
 	{
 		this.positionInStorageContainer = positionInStorageContainer;
 	}
@@ -294,7 +298,7 @@ public class ContainerForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

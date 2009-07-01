@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on July 28th, 2005
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * @author mandar_deshmukh
  *
@@ -39,12 +39,14 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FixedEventParametersForm.class);
-	
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(FixedEventParametersForm.class);
+
 	/**
 	 * Type of the fixation.
 	 */
-	protected String fixationType = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_FIXATION_TYPE);
+	protected String fixationType = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_FIXATION_TYPE);
 
 	/**
 	 * Duration, measured in minutes, for which fixation is performed on specimen.
@@ -86,8 +88,8 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	{
 		this.durationInMinutes = durationInMinutes;
 	}
-	
-//	 ----- SUPERCLASS METHODS
+
+	//	 ----- SUPERCLASS METHODS
 	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return FIXED_EVENT_PARAMETERS_FORM_ID
@@ -96,75 +98,78 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	{
 		return Constants.FIXED_EVENT_PARAMETERS_FORM_ID;
 	}
+
 	/**
 	 * @param abstractDomain An AbstractDomainObject obj
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-	    try
-        {
+		try
+		{
 			super.setAllValues(abstractDomain);
-			FixedEventParameters fixedEventParametersObject = (FixedEventParameters)abstractDomain ;
+			FixedEventParameters fixedEventParametersObject = (FixedEventParameters) abstractDomain;
 			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
-			this.durationInMinutes = Utility.toString(fixedEventParametersObject.getDurationInMinutes());  
-	    }
-	    catch(Exception excp)
-	    {
-	        logger.error(excp.getMessage());
-	    }
+			this.durationInMinutes = Utility.toString(fixedEventParametersObject
+					.getDurationInMinutes());
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	ActionErrors errors = super.validate(mapping, request);
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
 
-		try 
+		try
 		{
 			if (!durationInMinutes.equals(""))
 			{
-				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes)) 
+				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.durationinminutes",
-							ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.invalid.durationinminutes", ApplicationProperties
+									.getValue("fixedeventparameters.durationinminutes")));
 				}
-				
-				if(Integer.parseInt(durationInMinutes) <= 0)
+
+				if (Integer.parseInt(durationInMinutes) <= 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.capacity.greaterThan0",
-							ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.capacity.greaterThan0", ApplicationProperties
+									.getValue("fixedeventparameters.durationinminutes")));
 				}
 			}
 		}
-		catch (Exception excp) 
+		catch (Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
-        return errors;
-     }
-	
+		return errors;
+	}
 
-     /**
-	  * Resets the values of all the fields. This method defined in
-	  * ActionForm is overridden in this class.
-	  */
-     protected void reset()
-     {
-//         super.reset();
-//         this.fixationType = null;
-//         this.durationInMinutes = 0;
-     }
+	/**
+	 * Resets the values of all the fields. This method defined in
+	 * ActionForm is overridden in this class.
+	 */
+	protected void reset()
+	{
+		//         super.reset();
+		//         this.fixationType = null;
+		//         this.durationInMinutes = 0;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on Aug 05, 2005
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +20,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-
 
 /**
  * @author mandar_deshmukh
@@ -34,31 +33,34 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionEventParametersForm extends SpecimenEventParametersForm
 {
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionEventParametersForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(CollectionEventParametersForm.class);
 
 	/**
-     * Name : Virender Mehta
-     * Reviewer: Sachin Lale
-     * Bug ID: defaultValueConfiguration_BugID
-     * Patch ID:defaultValueConfiguration_BugID_12
-     * Description: Configuration for default value for CollectionProcedure
-     */
-	
+	 * Name : Virender Mehta
+	 * Reviewer: Sachin Lale
+	 * Bug ID: defaultValueConfiguration_BugID
+	 * Patch ID:defaultValueConfiguration_BugID_12
+	 * Description: Configuration for default value for CollectionProcedure
+	 */
+
 	/**	
 	 *	Method of specimen collection from participant (e.g. needle biopsy, central venous line, bone marrow aspiration)
 	 */
-	protected String collectionProcedure=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-	
+	protected String collectionProcedure = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+
 	/**
 	 * Container type in which specimen is collected (e.g. clot tube, KEDTA, ACD, sterile specimen cup)
 	 */
-	protected String container=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
+	protected String container = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_CONTAINER);
 
 	/**
 	 * Returns the procedure of collection.
@@ -95,10 +97,8 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	{
 		this.container = container;
 	}
-	
-	
-	
-//	 ---- super class methods
+
+	//	 ---- super class methods
 	// ----- SUPERCLASS METHODS
 	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
@@ -116,57 +116,58 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters)abstractDomain ;
-		this.collectionProcedure =  Utility.toString(collectionEventParameterObject.getCollectionProcedure()) ;
+		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters) abstractDomain;
+		this.collectionProcedure = Utility.toString(collectionEventParameterObject
+				.getCollectionProcedure());
 		this.container = Utility.toString(collectionEventParameterObject.getContainer());
 	}
-	
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	 
-    	 final ActionErrors errors = super.validate(mapping, request);
-    	 final Validator validator = new Validator();
-         
-         try
-         {
-         	
-         	// checks the collectionProcedure
-          	if (!validator.isValidOption(collectionProcedure))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
-            }
-           	
-         }
-         catch(Exception excp)
-         {
-             logger.error(excp.getMessage());
-         }
-         return errors;
-      }
-	
-     /**
-      * Method to set class Attributes
-      */
-     protected void reset()
-     {
-//     	super.reset();
-//        this.collectionProcedure = null;
-//        this.container = null;     	
-     }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
+
+		try
+		{
+
+			// checks the collectionProcedure
+			if (!validator.isValidOption(collectionProcedure))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties
+								.getValue("collectioneventparameters.collectionprocedure")));
+			}
+
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Method to set class Attributes
+	 */
+	protected void reset()
+	{
+		//     	super.reset();
+		//        this.collectionProcedure = null;
+		//        this.container = null;     	
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }

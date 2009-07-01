@@ -11,7 +11,6 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 
@@ -21,6 +20,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class ThawEventParametersForm extends SpecimenEventParametersForm
 {
+
 	/**
 	 * @return THAW_EVENT_PARAMETERS_FORM_ID
 	 */
@@ -30,29 +30,28 @@ public class ThawEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-     * Populates all the fields from the domain object to the form bean.
-     * @param abstractDomain An AbstractDomain Object  
-     */
+	 * Populates all the fields from the domain object to the form bean.
+	 * @param abstractDomain An AbstractDomain Object  
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		ThawEventParameters ThawEventParametersObject = (ThawEventParameters)abstractDomain ;
+		//ThawEventParameters ThawEventParametersObject = (ThawEventParameters) abstractDomain;
 	}
 
 	/**
-     * Resets the values of all the fields.
-     */
-	 protected void reset()
-	 {
-//	 	super.reset();
- 	 }
+	 * Resets the values of all the fields.
+	 */
+	protected void reset()
+	{
+		//	 	super.reset();
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-   
 }

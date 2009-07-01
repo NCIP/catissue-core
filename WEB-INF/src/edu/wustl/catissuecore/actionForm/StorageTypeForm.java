@@ -102,8 +102,9 @@ public class StorageTypeForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		StorageType storageType = (StorageType) abstractDomain;
-		logger.info("in storege type form :"
-				+ storageType.getHoldsSpecimenClassCollection().size());
+		logger
+				.info("in storege type form :"
+						+ storageType.getHoldsSpecimenClassCollection().size());
 		this.setId(storageType.getId().longValue());
 		this.type = storageType.getName();
 		this.defaultTemperature = Utility.toString(storageType.getDefaultTempratureInCentigrade());
@@ -150,7 +151,7 @@ public class StorageTypeForm extends AbstractActionForm
 					holdsSpecimenClassTypes[i] = specimenClass;
 					i++;
 					this.specimenOrArrayType = "Specimen";
-					
+
 				}
 			}
 		}
@@ -171,7 +172,7 @@ public class StorageTypeForm extends AbstractActionForm
 				this.specimenOrArrayType = "SpecimenArray";
 			}
 		}
-		logger.info("in form bean:----------------"+this.specimenOrArrayType);
+		logger.info("in form bean:----------------" + this.specimenOrArrayType);
 	}
 
 	/**
@@ -372,7 +373,7 @@ public class StorageTypeForm extends AbstractActionForm
 		this.twoDimensionLabel = null;
 		this.type = null;
 		this.defaultTemperature = null;*/
-		
+
 	}
 
 	/**
@@ -427,9 +428,10 @@ public class StorageTypeForm extends AbstractActionForm
 						ApplicationProperties.getValue("storageType.oneDimensionLabel")));
 			}
 
-			if(holdsStorageTypeIds != null) 
+			if (holdsStorageTypeIds != null)
 			{
-			checkValidSelectionForAny(holdsStorageTypeIds, "storageType.holdsStorageType", errors);
+				checkValidSelectionForAny(holdsStorageTypeIds, "storageType.holdsStorageType",
+						errors);
 			}
 			//checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
 			if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
@@ -466,7 +468,7 @@ public class StorageTypeForm extends AbstractActionForm
 		}
 		return errors;
 	}
-	
+
 	/**
 	 * @param Ids Array of long ids
 	 * @param message message for  ApplicationProperties
@@ -487,7 +489,7 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 		}
 	}
-	
+
 	/**
 	 * @return specimenOrArrayType
 	 */
@@ -495,7 +497,7 @@ public class StorageTypeForm extends AbstractActionForm
 	{
 		return specimenOrArrayType;
 	}
-	
+
 	/**
 	 * @param specimenOrArrayType Setting specimenOrArrayType
 	 */
@@ -508,7 +510,7 @@ public class StorageTypeForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

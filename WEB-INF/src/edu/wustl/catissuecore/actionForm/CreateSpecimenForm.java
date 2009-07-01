@@ -28,8 +28,9 @@ import edu.wustl.common.util.logger.Logger;
  * from Create Specimen webpage.
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrinterTypeLocation
-{  
+public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrinterTypeLocation
+{
+
 	/**
 	 * serial version id
 	 */
@@ -38,26 +39,26 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(CreateSpecimenForm.class);
-    /**
-     * Identifier of the Parent Speciemen.
-     * */
-    private String parentSpecimenId;
-    
-    /**
+	/**
+	 * Identifier of the Parent Speciemen.
+	 * */
+	private String parentSpecimenId;
+
+	/**
 	 * label of Parent Specimen
 	 */
 	private String parentSpecimenLabel = "";
-	
-	 /**
-	 * barcode of Parent Specimen
-	 */
+
+	/**
+	* barcode of Parent Specimen
+	*/
 	private String parentSpecimenBarcode = "";
-	
-	 /**
-	 * Radio button to choose barcode/specimen identifier
-	 */
+
+	/**
+	* Radio button to choose barcode/specimen identifier
+	*/
 	private String radioButton = "1";
-	
+
 	/**
 	 *  Decides the calling of reset
 	 */
@@ -69,8 +70,8 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	/**
 	 * print checkbox
 	 */
-	private String printCheckbox; 
-	
+	private String printCheckbox;
+
 	private String printerType;
 
 	private String printerLocation;
@@ -79,101 +80,110 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	 * indicates that the parent specimen is set for disposal or not
 	 */
 	private boolean disposeParentSpecimen = false;
-       
-    /**
-     * Returns an identifier of the Parent Speciemen.
-     * @return String an identifier of the Parent Speciemen.
-     * @see #setParentSpecimenId(String)
-     * */
-    public String getParentSpecimenId()
-    {
-        return (this.parentSpecimenId);
-    }
 
-    /**
-     * Sets an identifier of the Parent Speciemen.
-     * @param parentSpecimenId an identifier of the Parent Speciemen.
-     * @see #getParentSpecimenId()
-     * */
-    public void setParentSpecimenId(String parentSpecimenId)
-    {
-        this.parentSpecimenId = parentSpecimenId;
-    }
-        
-    /**
-     * This method is to reset Class attributes
-     */
-    protected void reset()
-    {
-    	if (reset == true) 
-	    {
-    		super.reset();
-    		this.parentSpecimenId=null;
-	    }
-    }
-    
-    /**
-     * @return CREATE_SPECIMEN_FORM_ID Returns the id assigned to form bean.
-     */
-    public int getFormId()
-    {
-        return Constants.CREATE_SPECIMEN_FORM_ID;
-    }
-    
-    /**
-     * This function Copies the data from an site object to a SiteForm object.
-     * @param abstractDomain An object containing the information about site.  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        Specimen specimen = (Specimen) abstractDomain;
-        super.setAllValues(specimen);
-    }
-    
-    /**
+	/**
+	 * Returns an identifier of the Parent Speciemen.
+	 * @return String an identifier of the Parent Speciemen.
+	 * @see #setParentSpecimenId(String)
+	 * */
+	public String getParentSpecimenId()
+	{
+		return (this.parentSpecimenId);
+	}
+
+	/**
+	 * Sets an identifier of the Parent Speciemen.
+	 * @param parentSpecimenId an identifier of the Parent Speciemen.
+	 * @see #getParentSpecimenId()
+	 * */
+	public void setParentSpecimenId(String parentSpecimenId)
+	{
+		this.parentSpecimenId = parentSpecimenId;
+	}
+
+	/**
+	 * This method is to reset Class attributes
+	 */
+	protected void reset()
+	{
+		if (reset == true)
+		{
+			super.reset();
+			this.parentSpecimenId = null;
+		}
+	}
+
+	/**
+	 * @return CREATE_SPECIMEN_FORM_ID Returns the id assigned to form bean.
+	 */
+	public int getFormId()
+	{
+		return Constants.CREATE_SPECIMEN_FORM_ID;
+	}
+
+	/**
+	 * This function Copies the data from an site object to a SiteForm object.
+	 * @param abstractDomain An object containing the information about site.  
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		Specimen specimen = (Specimen) abstractDomain;
+		super.setAllValues(specimen);
+	}
+
+	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-         ActionErrors errors = super.validate(mapping,request);
-         Validator validator = new Validator();
-         
-         try
-         {
-             if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
-             {
-             	if(request.getParameter("retainForm")==null)
-             	{
-             	if(this.getRadioButton().equals("1")) 
-             	{
-             	 	if (validator.isEmpty(parentSpecimenLabel))
-                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parentLabel")));
-                 }
-             	} else
-             	{
-             		if (validator.isEmpty(parentSpecimenBarcode))
-                    {
-                       errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parentBarcode")));
-                    }
-             	}
-             	}
-             	if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl && validator.isEmpty(label) && this.label.trim().equals(""))
-             	{
-             		  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
-             		
-             	}
-             }
-         }
-         catch(Exception excp)
-         {
-        	 logger.error(excp.getMessage());
-         }
-         return errors;
-      }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
+		Validator validator = new Validator();
+
+		try
+		{
+			if (this.getOperation().equals(Constants.ADD)
+					|| this.getOperation().equals(Constants.EDIT))
+			{
+				if (request.getParameter("retainForm") == null)
+				{
+					if (this.getRadioButton().equals("1"))
+					{
+						if (validator.isEmpty(parentSpecimenLabel))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.required", ApplicationProperties
+											.getValue("createSpecimen.parentLabel")));
+						}
+					}
+					else
+					{
+						if (validator.isEmpty(parentSpecimenBarcode))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.required", ApplicationProperties
+											.getValue("createSpecimen.parentBarcode")));
+						}
+					}
+				}
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+						&& validator.isEmpty(label) && this.label.trim().equals(""))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("specimen.label")));
+
+				}
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
 	/**
 	 * @return Returns the checkedButton.
 	 */
@@ -181,6 +191,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		return radioButton;
 	}
+
 	/**
 	 * @param checkedButton The checkedButton to set.
 	 */
@@ -188,6 +199,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		this.radioButton = radioButton;
 	}
+
 	/**
 	 * @return Returns the parentSpecimenBarcode.
 	 */
@@ -195,6 +207,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		return parentSpecimenBarcode;
 	}
+
 	/**
 	 * @param parentSpecimenBarcode The parentSpecimenBarcode to set.
 	 */
@@ -202,6 +215,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		this.parentSpecimenBarcode = parentSpecimenBarcode;
 	}
+
 	/**
 	 * @return Returns the parentSpecimenLabel.
 	 */
@@ -209,6 +223,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		return parentSpecimenLabel;
 	}
+
 	/**
 	 * @param parentSpecimenLabel The parentSpecimenLabel to set.
 	 */
@@ -216,6 +231,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		this.parentSpecimenLabel = parentSpecimenLabel;
 	}
+
 	/**
 	 * @return Returns the reset.
 	 */
@@ -223,6 +239,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		return reset;
 	}
+
 	/**
 	 * @param reset The reset to set.
 	 */
@@ -230,6 +247,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 	{
 		this.reset = reset;
 	}
+
 	/**
 	 * @see java.lang.Object#clone()
 	 */
@@ -241,47 +259,58 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable,IPrint
 		}
 		catch (CloneNotSupportedException e)
 		{
-			logger.error("Error in Clone method of CreateSpecimenForm:"+e);	
+			logger.error("Error in Clone method of CreateSpecimenForm:" + e);
 		}
 		return null;
 	}
 
-	public String getNextForwardTo() {
+	public String getNextForwardTo()
+	{
 		return nextForwardTo;
 	}
 
-	public void setNextForwardTo(String nextForwardTo) {
+	public void setNextForwardTo(String nextForwardTo)
+	{
 		this.nextForwardTo = nextForwardTo;
 	}
 
-	public String getPrintCheckbox() {
+	public String getPrintCheckbox()
+	{
 		return printCheckbox;
 	}
 
-	public void setPrintCheckbox(String printCheckbox) {
+	public void setPrintCheckbox(String printCheckbox)
+	{
 		this.printCheckbox = printCheckbox;
 	}
 
-	public boolean getDisposeParentSpecimen() {
+	public boolean getDisposeParentSpecimen()
+	{
 		return disposeParentSpecimen;
 	}
 
-	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen)
+	{
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
-	public String getPrinterLocation() {
+
+	public String getPrinterLocation()
+	{
 		return printerLocation;
 	}
 
-	public void setPrinterLocation(String printerLocation) {
+	public void setPrinterLocation(String printerLocation)
+	{
 		this.printerLocation = printerLocation;
 	}
 
-	public String getPrinterType() {
+	public String getPrinterType()
+	{
 		return printerType;
 	}
 
-	public void setPrinterType(String printerType) {
+	public void setPrinterType(String printerType)
+	{
 		this.printerType = printerType;
 	}
 }

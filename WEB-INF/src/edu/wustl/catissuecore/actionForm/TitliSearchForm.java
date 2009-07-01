@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.LinkedHashMap;
@@ -36,16 +37,16 @@ public class TitliSearchForm extends ActionForm
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(TitliSearchForm.class);
-	
+
 	private String searchString;
-	
+
 	private String displaySearchString;
-	
+
 	private String displayStats;
-	
+
 	private SortedResultMapInterface sortedResultMap;
 
-	private Map<Name, TitliResultGroup> titliResultMap;
+	private Map < Name , TitliResultGroup > titliResultMap;
 
 	private String selectedLabel;
 
@@ -99,7 +100,7 @@ public class TitliSearchForm extends ActionForm
 	{
 		this.sortedResultMap = sortedResultMap;
 
-		titliResultMap = new LinkedHashMap<Name, TitliResultGroup>();
+		titliResultMap = new LinkedHashMap < Name , TitliResultGroup >();
 
 		for (ResultGroupInterface i : sortedResultMap.values())
 		{
@@ -114,18 +115,18 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public TitliResultGroup getSelectedGroup()
 	{
-		ResultGroupInterface i=null;
+		ResultGroupInterface i = null;
 		try
 		{
 			i = sortedResultMap.get(TitliTableMapper.getInstance().getTable(selectedLabel));
-			
+
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
-			logger.error("Exception in TitliSearchForm : "+ e.getMessage(), e);
-			
+			logger.error("Exception in TitliSearchForm : " + e.getMessage(), e);
+
 		}
-		
+
 		return new TitliResultGroup(i);
 
 	}
@@ -133,33 +134,32 @@ public class TitliSearchForm extends ActionForm
 	/**
 	 * @return the titliResultMap
 	 */
-	public Map<Name, TitliResultGroup> getTitliResultMap()
+	public Map < Name , TitliResultGroup > getTitliResultMap()
 	{
 		return titliResultMap;
 	}
 
-	
 	/**
 	 * validate the input
 	 * @param mapping the cation mapping
 	 * @param request the request
 	 * @return acttion errors
 	 */
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request)
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
 
 		String requestSearchString = request.getParameter("searchString");
 
 		// searchString is null or empty
-		if (requestSearchString == null|| requestSearchString.trim().equals(""))
+		if (requestSearchString == null || requestSearchString.trim().equals(""))
 		{
 			errors.add("empty search string", new ActionError("  "));
 		}
 
-		if (requestSearchString.startsWith("*")|| requestSearchString.startsWith("?"))
+		if (requestSearchString.startsWith("*") || requestSearchString.startsWith("?"))
 		{
-			errors.add("search string starts with * or ? ", new ActionError(	"  "));
+			errors.add("search string starts with * or ? ", new ActionError("  "));
 		}
 
 		return errors;
@@ -181,6 +181,7 @@ public class TitliSearchForm extends ActionForm
 	{
 		this.displaySearchString = displaySearchString;
 	}
+
 	/**
 	 * @return the displayStats
 	 */

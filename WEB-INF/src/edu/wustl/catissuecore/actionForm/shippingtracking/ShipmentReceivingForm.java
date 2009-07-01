@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.actionForm.shippingtracking;
 
 import java.util.ArrayList;
@@ -12,23 +13,25 @@ import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
+
 /**
  * this class holds the fields for shipment receiving form.
  */
 public class ShipmentReceivingForm extends ShipmentForm
 {
+
 	/**
 	 * Serializable class requires Serial version id.
 	 */
-	private static long serialVersionUID = 1L;
+	//private static long serialVersionUID = 1L;
 	/**
 	 * specimens in shipment.
 	 */
-	protected List<Specimen> specimenCollection = new ArrayList<Specimen>();
+	protected List < Specimen > specimenCollection = new ArrayList < Specimen >();
 	/**
 	 * container in shipment.
 	 */
-	protected List<StorageContainer> containerCollection = new ArrayList<StorageContainer>();
+	protected List < StorageContainer > containerCollection = new ArrayList < StorageContainer >();
 	/**
 	 * Sender site.
 	 */
@@ -49,10 +52,11 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * Indicates control comes from the page to display shipment receiving page.
 	 */
 	private String fromPage;
+
 	/**
 	 * @return specimens contained in shipment.
 	 */
-	public List<Specimen> getSpecimenCollection()
+	public List < Specimen > getSpecimenCollection()
 	{
 		return specimenCollection;
 	}
@@ -61,24 +65,27 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * @param specimenCollection specimens in shipment.
 	 */
 
-	public void setSpecimenCollection(List<Specimen> specimenCollection)
+	public void setSpecimenCollection(List < Specimen > specimenCollection)
 	{
 		this.specimenCollection = specimenCollection;
 	}
+
 	/**
 	 * @return containers contained in shipment.
 	 */
-	public List<StorageContainer> getContainerCollection()
+	public List < StorageContainer > getContainerCollection()
 	{
 		return containerCollection;
 	}
+
 	/**
 	 * @param containerCollection containers in shipment.
 	 */
-	public void setContainerCollection(List<StorageContainer> containerCollection)
+	public void setContainerCollection(List < StorageContainer > containerCollection)
 	{
 		this.containerCollection = containerCollection;
 	}
+
 	/**
 	 * Get shipment sender site name.
 	 * @return senderSiteName Shipment sender site name.
@@ -168,22 +175,24 @@ public class ShipmentReceivingForm extends ShipmentForm
 	{
 		this.fromPage = fromPage;
 	}
+
 	/**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.
-     */
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.
+	 */
 	@Override
 	protected void reset()
 	{
-	/*	super.reset();
-		this.senderSiteName = null;
-		this.receiverSiteName = null;
-		this.senderContactPersonName = null;
-		this.receiverContactPersonName = null;
-		this.specimenCollection = new ArrayList<Specimen>();
-		this.containerCollection = new ArrayList<StorageContainer>();
-		this.fromPage = null;*/
+		/*	super.reset();
+			this.senderSiteName = null;
+			this.receiverSiteName = null;
+			this.senderContactPersonName = null;
+			this.receiverContactPersonName = null;
+			this.specimenCollection = new ArrayList<Specimen>();
+			this.containerCollection = new ArrayList<StorageContainer>();
+			this.fromPage = null;*/
 	}
+
 	/**
 	 * Returns the id assigned to form bean.
 	 * @return shipment receiving form id.
@@ -193,6 +202,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	{
 		return Constants.SHIPMENT_RECEIVING_FORM_ID;
 	}
+
 	/**
 	 * this method overrides corresponding method of base class.
 	 * @param arg0 the domain object to set.
@@ -204,108 +214,117 @@ public class ShipmentReceivingForm extends ShipmentForm
 		// Set details - sender, receiver, senderSite, receiverSite.
 		setSendingDetails(arg0);
 	}
-    /**
-     * this is the method that will be called to save
-     * the indexed properties when the form is saved.
-     * @param index the index using which the specimen object is to be retreived.
-     * @return Specimen object.
-     */
-    public Specimen getSpecimenItem(int index)
-    {
-        // make sure that orderList is not null
-        if(this.specimenCollection == null)
-        {
-            this.specimenCollection = new ArrayList<Specimen>();
-        }
-        // indexes do not come in order, populate empty spots
-        while(index >= this.specimenCollection.size())
-        {
-            this.specimenCollection.add(new Specimen());
-        }
-        // return the requested item
-        return (Specimen) specimenCollection.get(index);
-    }
-    /**
-     * this is the method that will be called to save
-     * the indexed properties when the form is saved.
-     * @param index index to retreive container from collection.
-     * @return StorageContainer object.
-     */
-    public StorageContainer getContainerItem(int index)
-    {
-        // make sure that orderList is not null
-        if(this.containerCollection == null)
-        {
-            this.containerCollection = new ArrayList<StorageContainer>();
-        }
-        // indexes do not come in order, populate empty spots
-      while(index >= this.containerCollection.size())
-      {
-            this.containerCollection.add(new StorageContainer());
-      }
-        // return the requested item
-        return (StorageContainer) containerCollection.get(index);
-    }
-    /**
+
+	/**
+	 * this is the method that will be called to save
+	 * the indexed properties when the form is saved.
+	 * @param index the index using which the specimen object is to be retreived.
+	 * @return Specimen object.
+	 */
+	public Specimen getSpecimenItem(int index)
+	{
+		// make sure that orderList is not null
+		if (this.specimenCollection == null)
+		{
+			this.specimenCollection = new ArrayList < Specimen >();
+		}
+		// indexes do not come in order, populate empty spots
+		while (index >= this.specimenCollection.size())
+		{
+			this.specimenCollection.add(new Specimen());
+		}
+		// return the requested item
+		return (Specimen) specimenCollection.get(index);
+	}
+
+	/**
+	 * this is the method that will be called to save
+	 * the indexed properties when the form is saved.
+	 * @param index index to retreive container from collection.
+	 * @return StorageContainer object.
+	 */
+	public StorageContainer getContainerItem(int index)
+	{
+		// make sure that orderList is not null
+		if (this.containerCollection == null)
+		{
+			this.containerCollection = new ArrayList < StorageContainer >();
+		}
+		// indexes do not come in order, populate empty spots
+		while (index >= this.containerCollection.size())
+		{
+			this.containerCollection.add(new StorageContainer());
+		}
+		// return the requested item
+		return (StorageContainer) containerCollection.get(index);
+	}
+
+	/**
 	 * Set the shipment's necessary details.
 	 * @param arg0 the object to set.
 	 */
 	private void setSendingDetails(AbstractDomainObject arg0)
 	{
-		if(arg0 instanceof Shipment)
+		if (arg0 instanceof Shipment)
 		{
-			Shipment shipment=(Shipment)arg0;
-			if(shipment.getSenderSite()!=null)
+			Shipment shipment = (Shipment) arg0;
+			if (shipment.getSenderSite() != null)
 			{
 				this.senderSiteName = shipment.getSenderSite().getName();
 			}
 			else
 			{
-				this.senderSiteName = "" ;
+				this.senderSiteName = "";
 			}
-			if(shipment.getReceiverSite()!=null)
+			if (shipment.getReceiverSite() != null)
 			{
 				this.receiverSiteName = shipment.getReceiverSite().getName();
 			}
 			else
 			{
-				this.senderSiteName = "" ;
+				this.senderSiteName = "";
 			}
-			if(shipment.getSenderContactPerson() != null)
+			if (shipment.getSenderContactPerson() != null)
 			{
-				this.senderContactPersonName = shipment.getSenderContactPerson().getLastName()+ ", " + shipment.getSenderContactPerson().getFirstName();
+				this.senderContactPersonName = shipment.getSenderContactPerson().getLastName()
+						+ ", " + shipment.getSenderContactPerson().getFirstName();
 			}
 			else
 			{
 				this.senderContactPersonName = "";
 			}
-			if(shipment.getReceiverContactPerson() != null)
+			if (shipment.getReceiverContactPerson() != null)
 			{
-				this.receiverContactPersonName = shipment.getReceiverContactPerson().getLastName() + ", " + shipment.getReceiverContactPerson().getFirstName();
+				this.receiverContactPersonName = shipment.getReceiverContactPerson().getLastName()
+						+ ", " + shipment.getReceiverContactPerson().getFirstName();
 			}
 			else
 			{
 				this.receiverContactPersonName = "";
 			}
-//			this.senderSiteName = (shipment.getSenderSite() != null ? shipment.getSenderSite().getName() : "");
-//			this.receiverSiteName = (shipment.getReceiverSite() != null ? shipment.getReceiverSite().getName() : "");
-//			this.senderContactPersonName = (shipment.getSenderContactPerson() != null ? shipment.getSenderContactPerson().getLastName() + ", " + shipment.getSenderContactPerson().getFirstName() : "");
-//			this.receiverContactPersonName = (shipment.getReceiverContactPerson() != null ? shipment.getReceiverContactPerson().getLastName() + ", " + shipment.getReceiverContactPerson().getFirstName() : "");
+			//			this.senderSiteName = (shipment.getSenderSite() != null ? shipment.getSenderSite().getName() : "");
+			//			this.receiverSiteName = (shipment.getReceiverSite() != null ? shipment.getReceiverSite().getName() : "");
+			//			this.senderContactPersonName = (shipment.getSenderContactPerson() != null ? shipment.getSenderContactPerson().getLastName() + ", " + shipment.getSenderContactPerson().getFirstName() : "");
+			//			this.receiverContactPersonName = (shipment.getReceiverContactPerson() != null ? shipment.getReceiverContactPerson().getLastName() + ", " + shipment.getReceiverContactPerson().getFirstName() : "");
 		}
 	}
+
 	/**
 	 * this method populates the shipment content details.
 	 * @param shipment object of baseshipment class.
 	 */
 	protected void populateShipmentContentsDetails(BaseShipment shipment)
 	{
-		if(shipment.getContainerCollection()!=null)
+		if (shipment.getContainerCollection() != null)
 		{
-			Iterator<StorageContainer> containerIterator=shipment.getContainerCollection().iterator();
-			while(containerIterator.hasNext())
+			Iterator < StorageContainer > containerIterator = shipment.getContainerCollection()
+					.iterator();
+			while (containerIterator.hasNext())
 			{
-				StorageContainer container=containerIterator.next();
-				if(container.getStorageType()!=null && !container.getStorageType().getName().equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))
+				StorageContainer container = containerIterator.next();
+				if (container.getStorageType() != null
+						&& !container.getStorageType().getName().equals(
+								Constants.SHIPMENT_CONTAINER_TYPE_NAME))
 				{
 					this.containerCollection.add(container);
 				}
@@ -316,16 +335,17 @@ public class ShipmentReceivingForm extends ShipmentForm
 			}
 		}
 	}
+
 	/**
 	 * this method populates the specimen details.
 	 * @param specimenPositionCollection the collection containing the position of specimen.
 	 */
-	private void populateSpecimenDetails(Collection<SpecimenPosition> specimenPositionCollection)
+	private void populateSpecimenDetails(Collection < SpecimenPosition > specimenPositionCollection)
 	{
-		Iterator<SpecimenPosition> spPosIterator=specimenPositionCollection.iterator();
-		while(spPosIterator.hasNext())
+		Iterator < SpecimenPosition > spPosIterator = specimenPositionCollection.iterator();
+		while (spPosIterator.hasNext())
 		{
-			SpecimenPosition position=spPosIterator.next();
+			SpecimenPosition position = spPosIterator.next();
 			specimenCollection.add(position.getSpecimen());
 		}
 	}

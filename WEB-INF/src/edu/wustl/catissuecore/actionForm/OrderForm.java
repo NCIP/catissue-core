@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,9 @@ import edu.wustl.common.util.global.Validator;
  * @author deepti_phadnis
  * 
  */
-public class OrderForm extends AbstractActionForm 
+public class OrderForm extends AbstractActionForm
 {
+
 	/**
 	 * String contains the order name
 	 */
@@ -35,7 +37,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @param orderRequestName String contains the order name
 	 */
-	public void setOrderRequestName(String orderRequestName) 
+	public void setOrderRequestName(String orderRequestName)
 	{
 		this.orderRequestName = orderRequestName;
 	}
@@ -43,7 +45,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @return orderRequestName
 	 */
-	public String getOrderRequestName() 
+	public String getOrderRequestName()
 	{
 		return (this.orderRequestName);
 	}
@@ -51,7 +53,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @param distributionProtocol String contains the distribution protocol
 	 */
-	public void setDistributionProtocol(String distributionProtocol) 
+	public void setDistributionProtocol(String distributionProtocol)
 	{
 		this.distributionProtocol = distributionProtocol;
 	}
@@ -59,7 +61,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @return distributionProtocol
 	 */
-	public String getDistributionProtocol() 
+	public String getDistributionProtocol()
 	{
 		return (this.distributionProtocol);
 	}
@@ -75,7 +77,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @return comments
 	 */
-	public String getComments() 
+	public String getComments()
 	{
 		return (this.comments);
 	}
@@ -83,7 +85,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @param abstractDomain AbstractDomainObject
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain) 
+	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 	}
 
@@ -118,20 +120,17 @@ public class OrderForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) 
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 
-		if ((orderRequestName == null) || (orderRequestName.length() == 0)) 
+		if ((orderRequestName == null) || (orderRequestName.length() == 0))
 		{
-			errors.add("orderRequestName", new ActionError(
-					"errors.ordername.required"));
+			errors.add("orderRequestName", new ActionError("errors.ordername.required"));
 		}
-		if ((distributionProtocol == null)
-				|| (distributionProtocol.equals("-1"))) 
+		if ((distributionProtocol == null) || (distributionProtocol.equals("-1")))
 		{
 			errors.add("distributionProtocol", new ActionError(
 					"errors.distributionprotocol.required"));
@@ -144,7 +143,7 @@ public class OrderForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -102,19 +102,19 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * The State where the user stays.
 	 */
-	private String state=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
+	private String state = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
 
 	/**
 	 * The Country where the user stays.
 	 */
-	private String country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
+	private String country = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_COUNTRY);
 
 	/**
 	 * The zip code of city where the user stays.
 	 * */
 	private String zipCode;
 
-	
 	/**
 	 * Phone number of the user.
 	 * */
@@ -128,7 +128,7 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * Role of the user.
 	 * */
-	private String role= "";
+	private String role = "";
 
 	/**
 	 * Cancer Research Group of the user.  
@@ -144,34 +144,33 @@ public class UserForm extends AbstractActionForm
 	 * Status of user in the system.
 	 */
 	private String status;
-	
+
 	private Long csmUserId;
-	
+
 	//Mandar 24-Apr-06 Bug 972 : Confirm email address
 	/**
 	 * COnfirm EmailAddress of the user.
 	 */
 	private String confirmEmailAddress;
 
-	protected String[] siteIds ;
-	
+	protected String[] siteIds;
+
 	public String[] getSiteIds()
 	{
 		return this.siteIds;
 	}
 
-	
 	public void setSiteIds(String[] siteIds)
 	{
 		this.siteIds = siteIds;
 	}
-	
+
 	/**
 	 * No argument constructor for UserForm class. 
 	 */
 	public UserForm()
 	{
-//		reset();
+		//		reset();
 	}
 
 	//Mandar : 24-Apr-06 : bug id : 972
@@ -514,15 +513,15 @@ public class UserForm extends AbstractActionForm
 	 */
 	public void setRole(String role)
 	{
-		if (role != null && role.equalsIgnoreCase("-1")) 
+		if (role != null && role.equalsIgnoreCase("-1"))
 		{
 			// this.role = Constants.NON_ADMIN_USER;
 			this.role = "";
 		}
-        else
-        {
-            this.role = role;
-        }
+		else
+		{
+			this.role = role;
+		}
 	}
 
 	/**
@@ -547,7 +546,8 @@ public class UserForm extends AbstractActionForm
 	public int getFormId()
 	{
 		int formId = Constants.APPROVE_USER_FORM_ID;
-		if ((this.getPageOf() != null) && (Constants.PAGE_OF_APPROVE_USER.equals(this.getPageOf()) == false))
+		if ((this.getPageOf() != null)
+				&& (Constants.PAGE_OF_APPROVE_USER.equals(this.getPageOf()) == false))
 		{
 			formId = Constants.USER_FORM_ID;
 		}
@@ -593,32 +593,32 @@ public class UserForm extends AbstractActionForm
 	 * */
 	protected void reset()
 	{
-//		this.lastName = null;
-//		this.firstName = null;
-//		this.institutionId = -1;
-//		this.emailAddress = null;
-//		this.departmentId = -1;
-//		this.street = null;
-//		this.city = null;
-//		/**
-//	     * Name : Virender Mehta
-//	     * Reviewer: Sachin Lale
-//	     * Bug ID: defaultValueConfiguration_BugID
-//	     * Patch ID:defaultValueConfiguration_BugID_5
-//	     * Description: Configuration for default value for State and country
-//	    */
-//		this.state = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
-//		this.country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
-//		this.zipCode = null;
-//		this.phoneNumber = null;
-//		this.faxNumber = null;
-//		this.role = null;
-//		this.cancerResearchGroupId = -1;
-//		this.status = Constants.ACTIVITY_STATUS_NEW;
-//		this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
-//		//Mandar : 24-Apr-06 : bug 972:
-//		this.confirmEmailAddress = null;
-		
+		//		this.lastName = null;
+		//		this.firstName = null;
+		//		this.institutionId = -1;
+		//		this.emailAddress = null;
+		//		this.departmentId = -1;
+		//		this.street = null;
+		//		this.city = null;
+		//		/**
+		//	     * Name : Virender Mehta
+		//	     * Reviewer: Sachin Lale
+		//	     * Bug ID: defaultValueConfiguration_BugID
+		//	     * Patch ID:defaultValueConfiguration_BugID_5
+		//	     * Description: Configuration for default value for State and country
+		//	    */
+		//		this.state = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
+		//		this.country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
+		//		this.zipCode = null;
+		//		this.phoneNumber = null;
+		//		this.faxNumber = null;
+		//		this.role = null;
+		//		this.cancerResearchGroupId = -1;
+		//		this.status = Constants.ACTIVITY_STATUS_NEW;
+		//		this.activityStatus = Constants.ACTIVITY_STATUS_NEW;
+		//		//Mandar : 24-Apr-06 : bug 972:
+		//		this.confirmEmailAddress = null;
+
 	}
 
 	/**
@@ -652,10 +652,10 @@ public class UserForm extends AbstractActionForm
 				{
 					setPwd();
 				}
-				catch(SMException e)
+				catch (SMException e)
 				{
-					logger.error(e.getMessage(),e);
-				}                
+					logger.error(e.getMessage(), e);
+				}
 			}
 			if (Constants.PAGE_OF_USER_PROFILE.equals(this.getPageOf()))
 			{
@@ -669,21 +669,20 @@ public class UserForm extends AbstractActionForm
 		logger.debug("this.csmUserid" + this.csmUserId);
 	}
 
-
 	/**
 	 * @throws SMException
 	 */
 	private void setPwd() throws SMException
 	{
-		if(this.csmUserId != null) //in case user not approved
+		if (this.csmUserId != null) //in case user not approved
 		{
-			gov.nih.nci.security.authorization.domainobjects.User csmUser = 
-				SecurityManagerFactory.getSecurityManager().getUserById(this.getCsmUserId().toString());
-			if(csmUser != null)
-		    {
-		    	this.setNewPassword(csmUser.getPassword());
-		    	this.setConfirmNewPassword(csmUser.getPassword());
-		    }
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory
+					.getSecurityManager().getUserById(this.getCsmUserId().toString());
+			if (csmUser != null)
+			{
+				this.setNewPassword(csmUser.getPassword());
+				this.setConfirmNewPassword(csmUser.getPassword());
+			}
 		}
 		else
 		{
@@ -692,13 +691,14 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param user
 	 */
 	private void setUserData(User user)
 	{
-		if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((this.getPageOf() != null) && (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))))
+		if ((getFormId() == Constants.APPROVE_USER_FORM_ID)
+				|| ((this.getPageOf() != null) && (Constants.PAGE_OF_USER_ADMIN.equals(this
+						.getPageOf()))))
 		{
 			this.setActivityStatus(user.getActivityStatus());
 
@@ -711,7 +711,6 @@ public class UserForm extends AbstractActionForm
 			}
 		}
 	}
-
 
 	/**
 	 * 
@@ -732,7 +731,6 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param user
 	 */
@@ -743,7 +741,6 @@ public class UserForm extends AbstractActionForm
 			this.comments = user.getComments();
 		}
 	}
-
 
 	/**
 	 * @param user
@@ -762,7 +759,6 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param user
 	 */
@@ -779,7 +775,6 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param user
 	 */
@@ -791,27 +786,29 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-	private void setUserRole(String roleId) 
+	private void setUserRole(String roleId)
 	{
 		this.role = "";
 		if (roleId != null && roleId.equalsIgnoreCase(Constants.ADMIN_USER))
-        {
-            this.role = Constants.SUPER_ADMIN_USER;
-        }
+		{
+			this.role = Constants.SUPER_ADMIN_USER;
+		}
 		if (roleId != null && roleId.equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
-        {
-            this.role = Constants.SUPER_ADMIN_USER;
-        }
+		{
+			this.role = Constants.SUPER_ADMIN_USER;
+		}
 	}
 
 	private void chkEmpty(ActionErrors errors, Validator validator, String key, String value)
 	{
 		if (validator.isEmpty(value))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue(key)));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue(key)));
 		}
 
 	}
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
@@ -854,9 +851,8 @@ public class UserForm extends AbstractActionForm
 		{
 			logger.error(excp.getMessage(), excp);
 		}
-        return errors;
+		return errors;
 	}
-
 
 	/**
 	 * @param errors
@@ -867,45 +863,46 @@ public class UserForm extends AbstractActionForm
 		if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
 		{
 			chkSites(errors, validator);
-			chkMail(errors, validator,"user.emailAddress", emailAddress);
+			chkMail(errors, validator, "user.emailAddress", emailAddress);
 
 			// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
 			if (!this.getPageOf().equals(Constants.PAGE_OF_USER_PROFILE))
 			{
-				chkMail(errors, validator,"user.confirmemailAddress", confirmEmailAddress);
+				chkMail(errors, validator, "user.confirmemailAddress", confirmEmailAddress);
 				compMail(errors);
 			}
 			//Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress end
 
-			chkNames(errors, validator, "user.lastName" , lastName);
-			chkNames(errors, validator, "user.firstName" , firstName);
+			chkNames(errors, validator, "user.lastName", lastName);
+			chkNames(errors, validator, "user.firstName", firstName);
 			chkEmpty(errors, validator, "user.city", city);
 			chkValOpt(errors, validator, "user.state", state);
 			chkValOpt(errors, validator, "user.country", country);
 			chkValOpt(errors, validator, "user.institution", String.valueOf(institutionId));
 			chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));
-			chkValOpt(errors, validator, "user.cancerResearchGroup", String.valueOf(cancerResearchGroupId));
+			chkValOpt(errors, validator, "user.cancerResearchGroup", String
+					.valueOf(cancerResearchGroupId));
 			chkValOpt(errors, validator, "user.activityStatus", this.getActivityStatus());
 		}
 	}
-
 
 	/**
 	 * @param errors
 	 * @param validator
 	 */
-	private void chkNames(ActionErrors errors, Validator validator, String key, String value)  
+	private void chkNames(ActionErrors errors, Validator validator, String key, String value)
 	{
 		if (validator.isEmpty(value))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-					.getValue(key)));
-		}else if(validator.isXssVulnerable(value)){ //Bug:7976 & 7977: added check for xxs vulnerable
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid", ApplicationProperties
-					.getValue(key)));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue(key)));
+		}
+		else if (validator.isXssVulnerable(value))
+		{ //Bug:7976 & 7977: added check for xxs vulnerable
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.xss.invalid",
+					ApplicationProperties.getValue(key)));
 		}
 	}
-
 
 	/**
 	 * @param request
@@ -914,10 +911,11 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void adminEdit(HttpServletRequest request, ActionErrors errors, Validator validator)
 	{
-		if(this.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN) && this.getOperation().equals(Constants.EDIT))
+		if (this.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN)
+				&& this.getOperation().equals(Constants.EDIT))
 		{
 			String pageFrom = request.getParameter("pageFrom");
-			if(!"ApproveUser".equals(pageFrom))
+			if (!"ApproveUser".equals(pageFrom))
 			{
 				chkEmpty(errors, validator, "user.newPassword", newPassword);
 				chkEmpty(errors, validator, "user.confirmNewPassword", confirmNewPassword);
@@ -929,42 +927,42 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param request
 	 * @param errors
 	 */
 	private void chkPwd(HttpServletRequest request, ActionErrors errors)
 	{
-		int result=PasswordManager.SUCCESS;
-		if(!Constants.DUMMY_PASSWORD.equals(newPassword)){
-			Boolean  isPasswordChanged = (Boolean)request.getSession() .getAttribute(Constants.PASSWORD_CHANGE_IN_SESSION);
-			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,isPasswordChanged);
+		int result = PasswordManager.SUCCESS;
+		if (!Constants.DUMMY_PASSWORD.equals(newPassword))
+		{
+			Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
+					Constants.PASSWORD_CHANGE_IN_SESSION);
+			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,
+					isPasswordChanged);
 		}
-		
+
 		if (result != PasswordManager.SUCCESS)
 		{
 			// get error message of validation failure where param is result of validate() method
-		    String errorMessage = PasswordManager.getErrorMessage(result);
+			String errorMessage = PasswordManager.getErrorMessage(result);
 			logger.debug("error from Password validate " + errorMessage);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
 		}
 	}
 
-
 	/**
 	 * @param errors
 	 * @param validator
 	 */
-	private void chkValOpt(ActionErrors errors, Validator validator, String key, String value) 
+	private void chkValOpt(ActionErrors errors, Validator validator, String key, String value)
 	{
 		if (!validator.isValidOption(value))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-					.getValue(key)));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue(key)));
 		}
 	}
-
 
 	/**
 	 * @param errors
@@ -977,28 +975,26 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
 	/**
 	 * @param errors
 	 * @param validator
 	 */
-	private void chkMail(ActionErrors errors, Validator validator, String key, String value) 
+	private void chkMail(ActionErrors errors, Validator validator, String key, String value)
 	{
 		if (validator.isEmpty(value))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-					.getValue(key)));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue(key)));
 		}
 		else
 		{
 			if (!validator.isValidEmailAddress(value))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-						.getValue(key)));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue(key)));
 			}
 		}
 	}
-
 
 	/**
 	 * @param errors
@@ -1006,13 +1002,12 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void chkSites(ActionErrors errors, Validator validator)
 	{
-		if (siteIds!=null && siteIds.length>0 && validator.isEmpty(role))
+		if (siteIds != null && siteIds.length > 0 && validator.isEmpty(role))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-					.getValue("user.roleIsRequired")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("user.roleIsRequired")));
 		}
 	}
-
 
 	/**
 	 * @param request
@@ -1025,19 +1020,20 @@ public class UserForm extends AbstractActionForm
 		{
 			// Call static method PasswordManager.validatePasswordOnFormBean() where params are
 			// new password,old password,user name
-			Boolean  isPasswordChanged = (Boolean)request.getSession() .getAttribute(Constants.PASSWORD_CHANGE_IN_SESSION);
-			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, isPasswordChanged);
-				
+			Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
+					Constants.PASSWORD_CHANGE_IN_SESSION);
+			int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,
+					isPasswordChanged);
+
 			if (result != PasswordManager.SUCCESS)
 			{
 				// get error message of validation failure where param is result of validate() method
-			    String errorMessage = PasswordManager.getErrorMessage(result);
+				String errorMessage = PasswordManager.getErrorMessage(result);
 				logger.debug("error from Password validate " + errorMessage);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
 			}
 		}
 	}
-
 
 	/**
 	 * @param errors
@@ -1049,7 +1045,8 @@ public class UserForm extends AbstractActionForm
 		{
 			if (!newPassword.equals(confirmNewPassword))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"errors.confirmNewPassword.reType"));
 			}
 		}
 	}
@@ -1075,6 +1072,4 @@ public class UserForm extends AbstractActionForm
 		}
 	}
 
-
-	
 }

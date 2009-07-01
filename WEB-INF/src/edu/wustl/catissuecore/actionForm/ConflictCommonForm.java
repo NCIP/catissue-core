@@ -8,7 +8,6 @@
  * Created on Feb 27,2007
  */
 
-
 package edu.wustl.catissuecore.actionForm;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -20,62 +19,59 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class ConflictCommonForm extends AbstractActionForm
 {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * String for participant Name
 	 */
 	protected String participantName;
-	
+
 	/**
 	 * String for surgicalPathologyNumber of report
 	 */
 	protected String surgicalPathologyNumber;
-	
+
 	/**
 	 * String for report Date
 	 */
 	protected String reportDate;
-	
+
 	/**
 	 * String for report collectionDate
 	 */
 	protected String reportCollectionDate;
-	
+
 	/**
 	 * String for siteName 
 	 */
 	protected String siteName;
-	
+
 	/**
 	 * String for socialSecurityNumber of participant
 	 */
 	protected String socialSecurityNumber;
-	
+
 	/**
 	 * String for birth Date participant
 	 */
 	protected String birthDate;
-		
-	
-	
+
 	public int getFormId()
-	{	
+	{
 		return 0;
 	}
 
 	protected void reset()
 	{
-	
+
 	}
 
 	public void setAllValues(AbstractDomainObject abstractDomain)
-	{		
-		
+	{
+
 	}
-	
-	
+
 	/**
 	 * This mettod is called to set the surgicalPathologyNumber
 	 * @param surgicalPathologyNumber the surgicalPathologyNumber to set
@@ -84,6 +80,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	{
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	}
+
 	/**
 	 * @return the surgicalPathologyNumber
 	 */
@@ -91,7 +88,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	{
 		return surgicalPathologyNumber;
 	}
-	
+
 	/**
 	 * T
 	 * @return
@@ -100,7 +97,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	{
 		return siteName;
 	}
-	
+
 	/**
 	 * This mettod is called to set the site Name
 	 * @param siteName
@@ -109,8 +106,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	{
 		this.siteName = siteName;
 	}
-	
-	
+
 	/** 
 	 * @return report Date
 	 */
@@ -118,7 +114,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	{
 		return reportDate;
 	}
-	
+
 	/**
 	 * This mettod is called to set the site Name
 	 * @param siteName
@@ -131,7 +127,8 @@ public class ConflictCommonForm extends AbstractActionForm
 	/**
 	 * @return name of the participant
 	 */
-	public String getParticipantName() {
+	public String getParticipantName()
+	{
 		return participantName;
 	}
 
@@ -139,14 +136,16 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the participant Name
 	 * @param participantName
 	 */
-	public void setParticipantName(final String participantName) {
+	public void setParticipantName(final String participantName)
+	{
 		this.participantName = participantName;
 	}
 
 	/**
 	 * @return the birth date of the participant
 	 */
-	public String getBirthDate() {
+	public String getBirthDate()
+	{
 		return birthDate;
 	}
 
@@ -154,15 +153,16 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the birth Date
 	 * @param birthDate
 	 */
-	public void setBirthDate(final String birthDate) {
+	public void setBirthDate(final String birthDate)
+	{
 		this.birthDate = birthDate;
 	}
 
-	
 	/**
 	 * @return the social security number of the participant
 	 */
-	public String getSocialSecurityNumber() {
+	public String getSocialSecurityNumber()
+	{
 		return socialSecurityNumber;
 	}
 
@@ -170,7 +170,8 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This mettod is called to set the socialSecurityNumber 
 	 * @param socialSecurityNumber
 	 */
-	public void setSocialSecurityNumber(String socialSecurityNumber) {
+	public void setSocialSecurityNumber(String socialSecurityNumber)
+	{
 		this.socialSecurityNumber = socialSecurityNumber;
 	}
 
@@ -178,17 +179,19 @@ public class ConflictCommonForm extends AbstractActionForm
 	 * This method called to get the collection date
 	 * @return
 	 */
-	 
-	public String getReportCollectionDate() {
+
+	public String getReportCollectionDate()
+	{
 		return reportCollectionDate;
 	}
-	
+
 	/**
 	 * This method called to set the collection date
 	 * @param reportCollectionDate
 	 */
 
-	public void setReportCollectionDate(String reportCollectionDate) {
+	public void setReportCollectionDate(String reportCollectionDate)
+	{
 		this.reportCollectionDate = reportCollectionDate;
 	}
 
@@ -196,10 +199,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
-	}
 
-	
-	
+	}
 
 }

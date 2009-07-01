@@ -8,7 +8,6 @@
  * Created on Feb 27,2007
  */
 
-
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
@@ -20,28 +19,29 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
-
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 {
-	
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ClinicalStudyRegistrationForm.class);
 
 	/**
 	 * Default serial version ID
 	 */
 	private static final long serialVersionUID = 1L;
-		
 
 	/**
 	 * String for first name of participant
@@ -82,8 +82,8 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	/**
 	 * Collection for medical identifier numbers of participant
 	 */
-	protected Collection medicalIdentifierNumbers=new HashSet();
-	
+	protected Collection medicalIdentifierNumbers = new HashSet();
+
 	/**
 	 * Map for medical identifier numbers
 	 */
@@ -91,8 +91,8 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	/**
 	 * int counter for map size
 	 */
-	private int counter=0;
-	
+	private int counter = 0;
+
 	/**
 	 * This is the method to get date of birth of particicpant
 	 * @return birthDate Date of Birth of participant
@@ -101,7 +101,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return birthDate;
 	}
-	
+
 	/**
 	 * This is the method to set date of birth of particicpant
 	 * @param dateOfBirth Date of Birth of participant
@@ -110,7 +110,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.birthDate = dateOfBirth;
 	}
-	
+
 	/**
 	 * This is the method to get death date of particicpant
 	 * @return deathDate Death date of participant
@@ -119,7 +119,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return deathDate;
 	}
-	
+
 	/**
 	 * This is the method to set death date of particicpant
 	 * @param dateOfDeath Death date of participant
@@ -128,7 +128,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.deathDate = dateOfDeath;
 	}
-	
+
 	/**
 	 * This is the method to get ethinicity of particicpant
 	 * @return ethinicity Ethinicity participant
@@ -137,7 +137,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return ethinicity;
 	}
-	
+
 	/**
 	 * This is the method to set ethinicity of particicpant
 	 * @param ethinicity Ethinicity participant
@@ -146,7 +146,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.ethinicity = ethinicity;
 	}
-	
+
 	/**
 	 * This is the method to get name of particicpant
 	 * @return firstName First name of participant
@@ -155,7 +155,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return participantName;
 	}
-	
+
 	/**
 	 * This is the method to set name of particicpant
 	 * @param firstName First name of participant
@@ -164,7 +164,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.participantName = firstName;
 	}
-	
+
 	/**
 	 * This is the method to get gender of particicpant
 	 * @return gender Gender of particicpant
@@ -173,7 +173,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return gender;
 	}
-	
+
 	/**
 	 * This is the method to set gender of particicpant
 	 * @param gender Gender of particicpant
@@ -182,7 +182,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.gender = gender;
 	}
-	
+
 	/**
 	 * This is the method to get vital status of particicpant
 	 * @return lastName Last name of participant
@@ -191,7 +191,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return vitalStatus;
 	}
-	
+
 	/**
 	 * This is the method to set vital status of particicpant
 	 * @param lastName Last name of participant
@@ -200,7 +200,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.vitalStatus = vitalStatus;
 	}
-	
+
 	/**
 	 * This is the method to get collection of MedicalIdentifierNumbers of particicpant
 	 * @return medicalIdentifierNumbers Medical Identifier Number of Participant
@@ -209,7 +209,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return medicalIdentifierNumbers;
 	}
-	
+
 	/**
 	 * This is the method to set collection of MedicalIdentifierNumbers of particicpant
 	 * @param medicalIdentifierNumbers Medical Identifier Number of Participant
@@ -218,7 +218,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.medicalIdentifierNumbers = medicalIdentifierNumbers;
 	}
-	
+
 	/**
 	 * This is the method to get collection of race of particicpant
 	 * @return race Race of participant
@@ -227,7 +227,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return race;
 	}
-	
+
 	/**
 	 * This is the method to set collection of race of particicpant
 	 * @param race Race of participant
@@ -236,7 +236,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.race = race;
 	}
-	
+
 	/**
 	 * This is the method to get sex genotype of particicpant
 	 * @return sexGenotype Sex genotype of particicpant
@@ -245,7 +245,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return sexGenotype;
 	}
-	
+
 	/**
 	 * This is the method to set sex genotype of particicpant
 	 * @param sexGenotype Sex genotype of particicpant
@@ -254,7 +254,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.sexGenotype = sexGenotype;
 	}
-	
+
 	/**
 	 * This is the method to get Social Security Number of particicpant
 	 * @return socialSecurityNumber Social Security Number (SSN) of participant
@@ -272,14 +272,13 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.socialSecurityNumber = socialsecurityNumber;
 	}
-	
-	
+
 	/**
 	 * Default Constructor of the class
 	 */
 	public ConflictParticipantDataDetailsForm()
 	{
-//		reset();
+		//		reset();
 	}
 
 	/** 
@@ -287,12 +286,10 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 * 
 	 */
-	protected void reset() 
+	protected void reset()
 	{
-		
+
 	}
-
-
 
 	/**
 	 *  set values of participant related variables
@@ -300,50 +297,51 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject domainObj)
 	{
-		String dtePattern =CommonServiceLocator.getInstance().getDatePattern();
-		final Participant participant =(Participant)domainObj;
+		String dtePattern = CommonServiceLocator.getInstance().getDatePattern();
+		final Participant participant = (Participant) domainObj;
 		try
 		{
-			this.participantName=participant.getLastName()+","+participant.getFirstName();
-			this.vitalStatus=participant.getVitalStatus();
-			if(participant.getBirthDate()!=null)
+			this.participantName = participant.getLastName() + "," + participant.getFirstName();
+			this.vitalStatus = participant.getVitalStatus();
+			if (participant.getBirthDate() != null)
 			{
-				this.birthDate= Utility.parseDateToString(participant.getBirthDate(), dtePattern);
+				this.birthDate = Utility.parseDateToString(participant.getBirthDate(), dtePattern);
 			}
-			if(participant.getDeathDate()!=null)
+			if (participant.getDeathDate() != null)
 			{
-				this.deathDate= Utility.parseDateToString(participant.getDeathDate(), dtePattern);
+				this.deathDate = Utility.parseDateToString(participant.getDeathDate(), dtePattern);
 			}
-			this.ethinicity=participant.getEthnicity();
-			final Collection tempRaceColl=participant.getRaceCollection();
-			final Iterator raceIter=tempRaceColl.iterator();
-			this.race="";
-			final StringBuffer tempStr=new StringBuffer();
-			Race raceObj=null;
-			while(raceIter.hasNext())
+			this.ethinicity = participant.getEthnicity();
+			final Collection tempRaceColl = participant.getRaceCollection();
+			final Iterator raceIter = tempRaceColl.iterator();
+			this.race = "";
+			final StringBuffer tempStr = new StringBuffer();
+			Race raceObj = null;
+			while (raceIter.hasNext())
 			{
-				raceObj =(Race) raceIter.next();
+				raceObj = (Race) raceIter.next();
 				tempStr.append(raceObj.getRaceName());
 				tempStr.append(", ");
 			}
-			this.race=tempStr.toString();
-			this.gender=participant.getGender();
-			this.sexGenotype=participant.getSexGenotype();
-			this.socialSecurityNumber=participant.getSocialSecurityNumber();
-			this.medicalIdentifierNumbers=participant.getParticipantMedicalIdentifierCollection();
-			
-			if(medicalIdentifierNumbers != null)
-	        {
-	        	values=edu.wustl.catissuecore.caties.util.ViewSPRUtil.getMedicalIdentifierNumbers(medicalIdentifierNumbers);
-	        	counter = medicalIdentifierNumbers.size();
-	        }
+			this.race = tempStr.toString();
+			this.gender = participant.getGender();
+			this.sexGenotype = participant.getSexGenotype();
+			this.socialSecurityNumber = participant.getSocialSecurityNumber();
+			this.medicalIdentifierNumbers = participant.getParticipantMedicalIdentifierCollection();
+
+			if (medicalIdentifierNumbers != null)
+			{
+				values = edu.wustl.catissuecore.caties.util.ViewSPRUtil
+						.getMedicalIdentifierNumbers(medicalIdentifierNumbers);
+				counter = medicalIdentifierNumbers.size();
+			}
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
 			logger.error("viewSPR:Participant information is null");
 		}
 	}
-	
+
 	/** 
 	 * On the basis of Request for submitting comments different form ID will be returned to save two different kind of comments
 	 * review comment and quarantine comments
@@ -351,16 +349,15 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @return identifier of Form
 	 */
 	public int getFormId()
-	{	int result = Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID; 
-		if(this.getSubmittedFor().equalsIgnoreCase("quarantine"))
+	{
+		int result = Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID;
+		if (this.getSubmittedFor().equalsIgnoreCase("quarantine"))
 		{
 			result = Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}
 		return result;
 	}
-	
-	
-	
+
 	/**
 	 * This is the method to get counter that is size of map for medical identifier numbers
 	 * @return counter Counter for the number of elemets in MedicalIdentifierMap
@@ -369,7 +366,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return counter;
 	}
-	
+
 	/**
 	 * This is the method to set counter that is size of map for medical identifier numbers
 	 * @param counter Counter for the number of elemets in MedicalIdentifierMap
@@ -378,53 +375,56 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		this.counter = counter;
 	}
-	
+
 	/**
 	 * This is the method to add a key value pair to map for medical identifier numbers
 	 * @param key key to set value in map
 	 * @param value object to be set as value in map
 	 */
-	public void setValue(final String key, final Object value) 
-    {
-		if (isMutable()){values.put(key, value);}
-    }
+	public void setValue(final String key, final Object value)
+	{
+		if (isMutable())
+		{
+			values.put(key, value);
+		}
+	}
 
 	/**
 	 * This is the method to retrieve a value for given key from map for medical identifier numbers
 	 * @param key key to retrieve object from map
 	 * @return object retrieved object from map
 	 */
-	public Object getValue(final String key) 
-    {
+	public Object getValue(final String key)
+	{
 		return values.get(key);
-    }
-      
- 	/**
- 	 * This is the method to retrieve all values for all keys from map for medical identifier numbers
- 	 * @return collection Returns all the objects stored in map
- 	 */
- 	public Collection getAllValues() 
- 	{
- 		return values.values();
- 	}
+	}
 
- 	/**
- 	 * This is the method to add multiple key value pair to map for medical identifier numbers
- 	 * @param values map of object
- 	 */
- 	public void setValues(final Map values)
- 	{
- 		this.values = values;
- 	}
- 
- 	/**
- 	 * This is the method to retrieve multiple values from map for medical identifier numbers
- 	 * @return map map of object
- 	 */
- 	public Map getValues()
- 	{
- 		return this.values;
- 	}
+	/**
+	 * This is the method to retrieve all values for all keys from map for medical identifier numbers
+	 * @return collection Returns all the objects stored in map
+	 */
+	public Collection getAllValues()
+	{
+		return values.values();
+	}
+
+	/**
+	 * This is the method to add multiple key value pair to map for medical identifier numbers
+	 * @param values map of object
+	 */
+	public void setValues(final Map values)
+	{
+		this.values = values;
+	}
+
+	/**
+	 * This is the method to retrieve multiple values from map for medical identifier numbers
+	 * @return map map of object
+	 */
+	public Map getValues()
+	{
+		return this.values;
+	}
 
 	/** 
 	 * This is the overriden method to get the id of the domain object of the page from which this age is accessed 
@@ -435,7 +435,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	{
 		return super.getId();
 	}
-	
+
 	/** 
 	 * This is the overriden method to set the id of the domain object of the page from which this age is accessed 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setId(long)
@@ -450,9 +450,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	
 }

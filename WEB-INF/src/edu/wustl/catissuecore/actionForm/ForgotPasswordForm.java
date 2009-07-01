@@ -30,88 +30,86 @@ import edu.wustl.common.util.global.Validator;
 public class ForgotPasswordForm extends AbstractActionForm
 {
 
-    /**
-     * EmailAddress of the user whose password is to be searched.
-     */
-    private String emailAddress;
+	/**
+	 * EmailAddress of the user whose password is to be searched.
+	 */
+	private String emailAddress;
 
-    /**
-     * Returns the emailAddress of the user whose password is to be searched.
-     * @return the emailAddress of the user whose password is to be searched.
-     */
-    public String getEmailAddress()
-    {
-        return emailAddress;
-    }
+	/**
+	 * Returns the emailAddress of the user whose password is to be searched.
+	 * @return the emailAddress of the user whose password is to be searched.
+	 */
+	public String getEmailAddress()
+	{
+		return emailAddress;
+	}
 
-    /**
-     * Sets the emailAddress of the user whose password is to be searched.
-     * @param emailAddress the emailAddress of the user whose password is to be searched.
-     */
-    public void setEmailAddress(String emailAddress)
-    {
-        this.emailAddress = emailAddress;
-    }
+	/**
+	 * Sets the emailAddress of the user whose password is to be searched.
+	 * @param emailAddress the emailAddress of the user whose password is to be searched.
+	 */
+	public void setEmailAddress(String emailAddress)
+	{
+		this.emailAddress = emailAddress;
+	}
 
-    /**
-     * @return FORGOT_PASSWORD_FORM_ID The form id of ForgotPasswordForm.
-     */
-    public int getFormId()
-    {
-        return Constants.FORGOT_PASSWORD_FORM_ID;
-    }
+	/**
+	 * @return FORGOT_PASSWORD_FORM_ID The form id of ForgotPasswordForm.
+	 */
+	public int getFormId()
+	{
+		return Constants.FORGOT_PASSWORD_FORM_ID;
+	}
 
-    /**
-     * Populates all the fields from the domain object to the form bean.
-     * @param abstractDomain An AbstractDomain Object  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        
-    }
+	/**
+	 * Populates all the fields from the domain object to the form bean.
+	 * @param abstractDomain An AbstractDomain Object  
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
 
-    /**
+	}
+
+	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param arg0 Actionmapping instance
 	 * @param arg1 HttpServletRequest instance
 	 */
-    public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
-    {
-        ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
+	public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
 
-        if (validator.isEmpty(emailAddress))
-        {
-            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                    "errors.item.required", ApplicationProperties
-                            .getValue("user.emailAddress")));
-        }
-        else
-        {
-            if (!validator.isValidEmailAddress(emailAddress))
-            {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                        "errors.item.format", ApplicationProperties
-                                .getValue("user.emailAddress")));
-            }
-        }
+		if (validator.isEmpty(emailAddress))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("user.emailAddress")));
+		}
+		else
+		{
+			if (!validator.isValidEmailAddress(emailAddress))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("user.emailAddress")));
+			}
+		}
 
-        return errors;
-    }
-    
+		return errors;
+	}
+
 	/**
 	 * Overrides the method in the AbstractActionForm.
 	 */
 	protected void reset()
 	{
-		
+
 	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

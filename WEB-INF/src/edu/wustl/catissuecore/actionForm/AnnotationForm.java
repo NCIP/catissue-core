@@ -5,6 +5,7 @@
  *@author 
  *@version 1.0
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.io.Serializable;
@@ -26,7 +27,8 @@ import edu.wustl.common.util.logger.Logger;
  * @author preeti_munot
  * 
  */
-public class AnnotationForm extends AbstractActionForm implements Serializable {
+public class AnnotationForm extends AbstractActionForm implements Serializable
+{
 
 	/**
 	 * logger Logger - Generic logger.
@@ -51,91 +53,113 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 
 	private String deoperation;
 
-	public String[] getConditionVal() {
+	public String[] getConditionVal()
+	{
 		return conditionVal;
 	}
 
-	public void setConditionVal(final String[] conditionVal) {
+	public void setConditionVal(final String[] conditionVal)
+	{
 		this.conditionVal = conditionVal;
 	}
 
-	public String getSelectedStaticEntityId() {
+	public String getSelectedStaticEntityId()
+	{
 		return this.selectedStaticEntityId;
 	}
 
-	public void setSelectedStaticEntityId(String selectedStaticEntityId) {
+	public void setSelectedStaticEntityId(String selectedStaticEntityId)
+	{
 		this.selectedStaticEntityId = selectedStaticEntityId;
 	}
 
-	public List getSystemEntitiesList() {
+	public List getSystemEntitiesList()
+	{
 		return this.systemEntitiesList;
 	}
 
-	public void setSystemEntitiesList(List systemEntitiesList) {
+	public void setSystemEntitiesList(List systemEntitiesList)
+	{
 		this.systemEntitiesList = systemEntitiesList;
 	}
 
-	public String getAnnotationEntitiesXML() {
+	public String getAnnotationEntitiesXML()
+	{
 		return this.annotationEntitiesXML;
 	}
 
-	public void setAnnotationEntitiesXML(String annotationEntitiesXML) {
+	public void setAnnotationEntitiesXML(String annotationEntitiesXML)
+	{
 		this.annotationEntitiesXML = annotationEntitiesXML;
 	}
 
-	public String getAnnotationGroupsXML() {
+	public String getAnnotationGroupsXML()
+	{
 		return this.annotationGroupsXML;
 	}
 
-	public void setAnnotationGroupsXML(String annotationGroupsXML) {
+	public void setAnnotationGroupsXML(String annotationGroupsXML)
+	{
 		this.annotationGroupsXML = annotationGroupsXML;
 	}
 
-	public int getFormId() {
+	public int getFormId()
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void setAllValues(AbstractDomainObject abstractDomain) {
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
-	protected void reset() {
+	protected void reset()
+	{
 		// TODO Auto-generated method stub
 
 	}
 
-	public List getConditionalInstancesList() {
+	public List getConditionalInstancesList()
+	{
 		return conditionalInstancesList;
 	}
 
-	public void setConditionalInstancesList(List conditionalInstancesList) {
+	public void setConditionalInstancesList(List conditionalInstancesList)
+	{
 		this.conditionalInstancesList = conditionalInstancesList;
 	}
 
-	public void setDeoperation(final String deoperation) {
+	public void setDeoperation(final String deoperation)
+	{
 		this.deoperation = deoperation;
 	}
 
-	public String getDeoperation() {
+	public String getDeoperation()
+	{
 		return deoperation;
 	}
 
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) {
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
-		try {
-			if ((deoperation != null && "add".equals(deoperation)) && (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false))
+		try
+		{
+			if ((deoperation != null && "add".equals(deoperation))
+					&& (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false))
 			{
-//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false) 
+				//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false) 
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("anno.Entity")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("anno.Entity")));
 				}
 
 			}
-		} catch (Exception excp) {
+		}
+		catch (Exception excp)
+		{
 			logger.error(excp.getMessage(), excp);
 		}
 		return errors;
@@ -145,6 +169,6 @@ public class AnnotationForm extends AbstractActionForm implements Serializable {
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

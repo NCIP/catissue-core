@@ -54,6 +54,10 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.util.HibernateMetaData;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class RequestDetailsForm extends AbstractActionForm
 {
 
@@ -83,11 +87,19 @@ public class RequestDetailsForm extends AbstractActionForm
 	 */
 	private String orderName;
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getOrderName()
 	{
 		return orderName;
 	}
 
+	/**
+	 * 
+	 * @param orderName
+	 */
 	public void setOrderName(String orderName)
 	{
 		this.orderName = orderName;
@@ -100,6 +112,10 @@ public class RequestDetailsForm extends AbstractActionForm
 		return isDirectDistribution;
 	}
 
+	/**
+	 * 
+	 * @param isDirectDistribution
+	 */
 	public void setIsDirectDistribution(Boolean isDirectDistribution)
 	{
 		this.isDirectDistribution = isDirectDistribution;

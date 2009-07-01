@@ -39,6 +39,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.util.HibernateMetaData;
+
 /**
  * This Class is used to encapsulate all the request parameters passed from StorageType.jsp page.
  * @author aniruddha_phadnis
@@ -214,7 +215,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/**
 	 * Specifies if the barcode is editable or not
 	 */
-	private String isBarcodeEditable = (String) DefaultValueManager.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
+	private String isBarcodeEditable = (String) DefaultValueManager
+			.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
 
 	/**
 	 * No argument constructor for StorageTypeForm class 
@@ -253,17 +255,21 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.parentContainerId = parent.getId().longValue();
 			this.parentContainerSelected = "Auto";
 
-			StorageContainer parentContainer = (StorageContainer) HibernateMetaData.getProxyObjectImpl(parent);
+			StorageContainer parentContainer = (StorageContainer) HibernateMetaData
+					.getProxyObjectImpl(parent);
 			if (container != null && container.getLocatedAtPosition() != null)
 			{
-				this.positionInParentContainer = parentContainer.getStorageType().getName() + " : " + parentContainer.getId() + " Pos("
+				this.positionInParentContainer = parentContainer.getStorageType().getName() + " : "
+						+ parentContainer.getId() + " Pos("
 						+ container.getLocatedAtPosition().getPositionDimensionOne() + ","
 						+ container.getLocatedAtPosition().getPositionDimensionTwo() + ")";
 
 				//Sri: Fix for bug #
 
-				this.positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOne().intValue();
-				this.positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwo().intValue();
+				this.positionDimensionOne = container.getLocatedAtPosition()
+						.getPositionDimensionOne().intValue();
+				this.positionDimensionTwo = container.getLocatedAtPosition()
+						.getPositionDimensionTwo().intValue();
 			}
 
 			this.siteName = parentContainer.getSite().getName();
@@ -279,7 +285,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.oneDimensionCapacity = container.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = container.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = Utility.toString(container.getStorageType().getTwoDimensionLabel());
+		this.twoDimensionLabel = Utility
+				.toString(container.getStorageType().getTwoDimensionLabel());
 
 		if (container.getNoOfContainers() != null)
 		{
@@ -1050,19 +1057,20 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			//{
 			if (this.typeId == -1)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,
-						new ActionError("errors.item.required", ApplicationProperties.getValue("storageContainer.type")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.type")));
 			}
 			if (!validator.isValidOption(isFull) && this.noOfContainers == 1)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected", ApplicationProperties
-						.getValue("storageContainer.isContainerFull")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+						ApplicationProperties.getValue("storageContainer.isContainerFull")));
 			}
 
-			if (parentContainerSelected.equals(Constants.SITE) && siteId == -1 && this.noOfContainers == 1)
+			if (parentContainerSelected.equals(Constants.SITE) && siteId == -1
+					&& this.noOfContainers == 1)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,
-						new ActionError("errors.item.required", ApplicationProperties.getValue("storageContainer.site")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.site")));
 			}
 			else if ("Auto".equals(parentContainerSelected) && this.noOfContainers == 1)
 			{
@@ -1072,8 +1080,10 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 							|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
 							|| !validator.isNumeric(String.valueOf(parentContainerId), 1))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("storageContainer.parentContainer")));
+						errors
+								.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.format", ApplicationProperties
+												.getValue("storageContainer.parentContainer")));
 					}
 				}
 				else
@@ -1096,15 +1106,16 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 			/*if (this.noOfContainers == 1)
 			{*/
-			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers", errors, validator);
+			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
+					errors, validator);
 			/*}*/
 			//validations for Container name
 			//Modified by falguni
-			if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl && validator.isEmpty(containerName)
-					&& this.noOfContainers == 1)
+			if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl
+					&& validator.isEmpty(containerName) && this.noOfContainers == 1)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR,
-						new ActionError("errors.item.required", ApplicationProperties.getValue("storageContainer.name")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.name")));
 			}
 
 			//validation for collection protocol
@@ -1114,8 +1125,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 				{
 					if (collectionIds[i] == -1)
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("storageContainer.collectionProtocolTitle")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties
+										.getValue("storageContainer.collectionProtocolTitle")));
 					}
 
 				}
@@ -1127,37 +1139,41 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			/*new chnage checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
 					errors);*/
 
-			if (this.getOperation().equals(Constants.EDIT) && !validator.isValidOption(this.getActivityStatus()))
+			if (this.getOperation().equals(Constants.EDIT)
+					&& !validator.isValidOption(this.getActivityStatus()))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("site.activityStatus")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("site.activityStatus")));
 			}
 			// validations for temperature
-			if (!validator.isEmpty(defaultTemperature) && (!validator.isDouble(defaultTemperature, false)))
+			if (!validator.isEmpty(defaultTemperature)
+					&& (!validator.isDouble(defaultTemperature, false)))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-						.getValue("storageContainer.temperature")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("storageContainer.temperature")));
 			}
 
 			//VALIDATIONS FOR DIMENSION 1.
 			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-						.getValue("storageContainer.oneDimension")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("storageContainer.oneDimension")));
 			}
 			else
 			{
 				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("storageContainer.oneDimension")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("storageContainer.oneDimension")));
 				}
 			}
 
 			//Validations for dimension 2
-			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity)) && (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
+			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity))
+					&& (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-						.getValue("storageContainer.twoDimension")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("storageContainer.twoDimension")));
 			}
 
 			if (this.noOfContainers > 1 && this.getSimilarContainersMap().size() > 0)
@@ -1167,18 +1183,23 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 				for (int i = 1; i <= this.noOfContainers; i++)
 				{
-					String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i + "_barcode"); //simCont:1_barcode
+					String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i
+							+ "_barcode"); //simCont:1_barcode
 					if (iBarcode != null && iBarcode.equals("")) // this is done because barcode is empty string set by struts
 					{ // but barcode in DB is unique but can be null.
 						this.setSimilarContainerMapValue("simCont:" + i + "_barcode", null);
 					}
 
-					int checkedButtonStatus = Integer.parseInt((String) getSimilarContainerMapValue("checkedButton"));
-					String containerName = (String) getSimilarContainerMapValue("simCont:" + i + "_name");
-					if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl && validator.isEmpty(containerName))
+					int checkedButtonStatus = Integer
+							.parseInt((String) getSimilarContainerMapValue("checkedButton"));
+					String containerName = (String) getSimilarContainerMapValue("simCont:" + i
+							+ "_name");
+					if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl
+							&& validator.isEmpty(containerName))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-								.getValue("storageContainer.name")));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.item.required", ApplicationProperties
+										.getValue("storageContainer.name")));
 					}
 					String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
 					if (checkedButtonStatus == 2 || siteId == null)
@@ -1186,7 +1207,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 						String radioButonKey = "radio_" + i;
 						String containerIdKey = containerPrefixKey + i + "_parentContainerId";
-						String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
+						//String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
 						String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
 						String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
 
@@ -1196,24 +1217,32 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key);
 							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key);
 
-							if (parentContId.equals("-1") || positionDimensionOne.equals("-1") || positionDimensionTwo.equals("-1"))
+							if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
+									|| positionDimensionTwo.equals("-1"))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-										.getValue("similarcontainers.location")));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.required", ApplicationProperties
+												.getValue("similarcontainers.location")));
 								this.setSimilarContainerMapValue("checkedButton", "2");
 							}
 						}
 						else
 						{
-							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key + "_fromMap");
-							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key + "_fromMap");
+							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key
+									+ "_fromMap");
+							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key
+									+ "_fromMap");
 
-							if (positionDimensionOne != null && !positionDimensionOne.trim().equals("") && !validator.isDouble(positionDimensionOne)
-									|| positionDimensionTwo != null && !positionDimensionTwo.trim().equals("")
+							if (positionDimensionOne != null
+									&& !positionDimensionOne.trim().equals("")
+									&& !validator.isDouble(positionDimensionOne)
+									|| positionDimensionTwo != null
+									&& !positionDimensionTwo.trim().equals("")
 									&& !validator.isDouble(positionDimensionTwo))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-										.getValue("specimen.positionInStorageContainer")));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.format", ApplicationProperties
+												.getValue("specimen.positionInStorageContainer")));
 								break;
 
 							}
@@ -1224,8 +1253,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 					{
 						if (siteId.equals("-1"))
 						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("storageContainer.site")));
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.required", ApplicationProperties
+											.getValue("storageContainer.site")));
 						}
 					}
 				}
@@ -1248,8 +1278,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 		if (flag)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-					.getValue("storageContainer.parentContainer")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					ApplicationProperties.getValue("storageContainer.parentContainer")));
 		}
 
 	}
@@ -1268,7 +1298,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			{
 				if (Ids[i] == 1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue(message)));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue(message)));
 					break;
 				}
 			}

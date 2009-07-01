@@ -41,11 +41,12 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 public class AdvanceSearchForm extends ActionForm
 {
 
-	private static final long serialVersionUID = 1234567890L;
+	private static final long				serialVersionUID	= 1234567890L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(AdvanceSearchForm.class);
+	private static org.apache.log4j.Logger	logger				= Logger
+																		.getLogger(AdvanceSearchForm.class);
 
 	/**
 	 * @return Returns the columnNames.
@@ -98,35 +99,35 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * A map that handles all the values of Advanced Search pages
 	 */
-	private Map values = new HashMap();
+	private Map			values			= new HashMap();
 
 	/**
 	 * A map that handles event parameters' data
 	 */
-	private final Map eventMap = new HashMap();
+	private final Map	eventMap		= new HashMap();
 
 	/**
 	 * Objectname of the advancedConditionNode Object
 	 */
-	private String objectName = "";
+	private String		objectName		= "";
 
 	/**
 	 * Selected node from the query tree
 	 */
-	private String selectedNode = "";
+	private String		selectedNode	= "";
 
 	/**
 	 * A counter that holds the number of event parameter rows
 	 */
-	private int eventCounter = 1;
+	private int			eventCounter	= 1;
 
-	private String itemNodeId = "";
+	private String		itemNodeId		= "";
 
 	//Variables neccessary for Configuration of Advance Search Results 
 
-	private String tableName;
-	private String[] selectedColumnNames;
-	private String[] columnNames;
+	private String		tableName;
+	private String[]	selectedColumnNames;
+	private String[]	columnNames;
 
 	/**
 	 * Returns the selected node from a query tree.
@@ -455,7 +456,7 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * Map to hold values for rows to display calendar icon.
 	 */
-	protected Map showCalendarValues = new HashMap();
+	protected Map	showCalendarValues	= new HashMap();
 
 	/**
 	 * @return Returns the showCalendarValues.

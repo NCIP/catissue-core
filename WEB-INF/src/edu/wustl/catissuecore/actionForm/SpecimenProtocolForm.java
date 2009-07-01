@@ -4,6 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
@@ -27,7 +28,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-
 
 /**
  * @author kapil_kaveeshwar
@@ -66,7 +66,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	protected Map values = new LinkedHashMap();
-	
+
 	/**
 	 * Associates the specified object with the specified key in the map.
 	 * @param key the key to which the object is mapped.
@@ -74,10 +74,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-	    if (isMutable())
-	    {
-	        values.put(key, value);
-	    }
+		if (isMutable())
+		{
+			values.put(key, value);
+		}
 	}
 
 	/**
@@ -270,31 +270,33 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-	    SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
-		
+		SpecimenProtocol protocol = (SpecimenProtocol) abstractDomain;
+
 		this.setId(protocol.getId().longValue());
-		
-		if(protocol.getPrincipalInvestigator() != null && protocol.getPrincipalInvestigator().getId() != null)
+
+		if (protocol.getPrincipalInvestigator() != null
+				&& protocol.getPrincipalInvestigator().getId() != null)
 		{
-			this.principalInvestigatorId = protocol.getPrincipalInvestigator()
-				.getId().longValue();
+			this.principalInvestigatorId = protocol.getPrincipalInvestigator().getId().longValue();
 		}
 		else
 		{
 			this.principalInvestigatorId = -1;
 		}
-		
+
 		this.title = Utility.toString(protocol.getTitle());
 		this.shortTitle = Utility.toString(protocol.getShortTitle());
-		this.startDate = Utility.parseDateToString(protocol.getStartDate(),CommonServiceLocator.getInstance().getDatePattern());
-		this.endDate = Utility.parseDateToString(protocol.getEndDate(),CommonServiceLocator.getInstance().getDatePattern());
+		this.startDate = Utility.parseDateToString(protocol.getStartDate(), CommonServiceLocator
+				.getInstance().getDatePattern());
+		this.endDate = Utility.parseDateToString(protocol.getEndDate(), CommonServiceLocator
+				.getInstance().getDatePattern());
 		this.irbID = Utility.toString(protocol.getIrbIdentifier());
 		this.enrollment = Utility.toString(protocol.getEnrollment());
 		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
-		
+
 		this.setActivityStatus(Utility.toString(protocol.getActivityStatus()));
 	}
-	
+
 	/**
 	 * Resets the values of all the fields. Is called by the overridden reset
 	 * method defined in ActionForm.
@@ -309,10 +311,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.irbID = null;
 		this.enrollment = null;
 		this.descriptionURL = null;
-		
+
 		values = new LinkedHashMap();
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
@@ -325,138 +327,154 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		Validator validator = new Validator();
 		try
 		{
-			if (this.getOperation()!=null && (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT) || this.getOperation().equals("AssignPrivilegePage")))
-            {
-                if(this.principalInvestigatorId == -1)
+			if (this.getOperation() != null
+					&& (this.getOperation().equals(Constants.ADD)
+							|| this.getOperation().equals(Constants.EDIT) || this.getOperation()
+							.equals("AssignPrivilegePage")))
+			{
+				if (this.principalInvestigatorId == -1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.principalinvestigator")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+							ApplicationProperties
+									.getValue("collectionprotocol.principalinvestigator")));
 				}
 
-                if (validator.isEmpty(this.title))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
-                }
-                
-                if (validator.isEmpty(this.shortTitle))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.shorttitle")));
-                }
-                
-//              if (validator.isEmpty(this.irbID))
-//              {
-//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
-//              }
+				if (validator.isEmpty(this.title))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
+				}
 
-// --- startdate
-                //  date validation according to bug id  722 and 730 and 939
-        		String errorKey = validator.validateDate(startDate ,false);
-        		if(errorKey.trim().length() >0)
-        		{
-        			logger.debug("startdate errorKey : " +errorKey);
-        			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
-        		}
+				if (validator.isEmpty(this.shortTitle))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("collectionprotocol.shorttitle")));
+				}
 
-//  --- end date        		
-             	if (!validator.isEmpty(endDate))
-    			{
-    	         	//  date validation according to bug id  722 and 730 and 939
-    	    		errorKey = validator.validateDate(endDate ,false);
-    	    		if(errorKey.trim().length() >0 && !errorKey.equals(""))
-    	    		{
-            			logger.debug("enddate errorKey: " + errorKey );
-    	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
-    	    		}
-    			}
-                
-      			// code added as per bug id 235 
-    			// code to validate startdate less than end date
-    			// check the start date less than end date
-    			if (validator.checkDate(startDate) && validator.checkDate(endDate))
-    			{
-    				if(!validator.compareDates(startDate,endDate))
-    				{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
-    				}
-    			}
-    			if (!validator.isEmpty(enrollment))
-                {
+				//              if (validator.isEmpty(this.irbID))
+				//              {
+				//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
+				//              }
 
-    				try
+				// --- startdate
+				//  date validation according to bug id  722 and 730 and 939
+				String errorKey = validator.validateDate(startDate, false);
+				if (errorKey.trim().length() > 0)
+				{
+					logger.debug("startdate errorKey : " + errorKey);
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
+							ApplicationProperties.getValue("collectionprotocol.startdate")));
+				}
+
+				//  --- end date        		
+				if (!validator.isEmpty(endDate))
+				{
+					//  date validation according to bug id  722 and 730 and 939
+					errorKey = validator.validateDate(endDate, false);
+					if (errorKey.trim().length() > 0 && !errorKey.equals(""))
 					{
-    					Integer intEnrollment = new Integer(enrollment);
+						logger.debug("enddate errorKey: " + errorKey);
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
+								ApplicationProperties.getValue("collectionprotocol.enddate")));
 					}
-    				catch(NumberFormatException e)
+				}
+
+				// code added as per bug id 235 
+				// code to validate startdate less than end date
+				// check the start date less than end date
+				if (validator.checkDate(startDate) && validator.checkDate(endDate))
+				{
+					if (!validator.compareDates(startDate, endDate))
 					{
-    					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
-					}                 	
-                }    				
-            }
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"specimenprotocol.invaliddate", ApplicationProperties
+										.getValue("specimenprotocol.invaliddate")));
+					}
+				}
+				if (!validator.isEmpty(enrollment))
+				{
+
+					try
+					{
+						//Integer intEnrollment = new Integer(enrollment);
+					}
+					catch (NumberFormatException e)
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",
+								ApplicationProperties.getValue("collectionprotocol.participants")));
+					}
+				}
+			}
 		}
 		catch (Exception excp)
 		{
-	    	// use of logger as per bug 79
-	    	logger.error("error in SPForm : " + excp.getMessage(),excp); 
+			// use of logger as per bug 79
+			logger.error("error in SPForm : " + excp.getMessage(), excp);
 			errors = new ActionErrors();
 		}
 		return errors;
 	}
-	
+
 	/**
 	 * 
 	 * @param key Atring Array of Key
 	 * @param requirement Specimen Requirement
 	 */
-	protected void setSpecimenRequirement(String [] key, DistributionSpecimenRequirement requirement)
+	protected void setSpecimenRequirement(String[] key, DistributionSpecimenRequirement requirement)
 	{
-	    values.put(key[0] , requirement.getSpecimenClass());
-		values.put(key[1] , AppUtility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
-		values.put(key[2] , requirement.getSpecimenType());
-		values.put(key[3] , requirement.getTissueSite());
-		values.put(key[4] , requirement.getPathologyStatus());
+		values.put(key[0], requirement.getSpecimenClass());
+		values.put(key[1], AppUtility.getUnit(requirement.getSpecimenClass(), requirement
+				.getSpecimenType()));
+		values.put(key[2], requirement.getSpecimenType());
+		values.put(key[3], requirement.getTissueSite());
+		values.put(key[4], requirement.getPathologyStatus());
 		//values.put(key[5] , AppUtility.toString(requirement.getQuantity().getValue()));
-		
-		if(!AppUtility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
+
+		if (!AppUtility.isQuantityDouble(requirement.getSpecimenClass(), requirement
+				.getSpecimenType()))
 		{
 			Double doubleQuantity = requirement.getQuantity();
-			if(doubleQuantity == null)
+			if (doubleQuantity == null)
 			{
-				values.put(key[5] , "0"); 
+				values.put(key[5], "0");
 			}
 			else if (doubleQuantity.toString().contains("E"))
-	    	{    		
-				values.put(key[5] , doubleQuantity.toString()); 
-	    	}
-	    	else
-	    	{
-	    		long longQuantity = doubleQuantity.longValue();
-	    		values.put(key[5] , new Long(longQuantity).toString()); 
-	    		
-	    	}		
-	
-		}
-		else
-		{
-			if(requirement.getQuantity() == null)
 			{
-				values.put(key[5] , "0"); 
+				values.put(key[5], doubleQuantity.toString());
 			}
 			else
 			{
-				values.put(key[5] , requirement.getQuantity().toString());
+				long longQuantity = doubleQuantity.longValue();
+				values.put(key[5], new Long(longQuantity).toString());
+
+			}
+
+		}
+		else
+		{
+			if (requirement.getQuantity() == null)
+			{
+				values.put(key[5], "0");
+			}
+			else
+			{
+				values.put(key[5], requirement.getQuantity().toString());
 			}
 		}
-		
-		values.put(key[6] , Utility.toString(requirement.getId()));
-		
-		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity() != null)
+
+		values.put(key[6], Utility.toString(requirement.getId()));
+
+		if (requirement.getSpecimenClass().equals(Constants.TISSUE)
+				&& requirement.getQuantity() != null)
 		{
 			String tissueType = requirement.getSpecimenType();
-			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE)
-					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) 
-					||tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  
-			        ||tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
+			if (tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE)
+					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
+					|| tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)
+					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
-				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().intValue())));
+				values.put(key[5], Utility.toString(new Integer(requirement.getQuantity()
+						.intValue())));
 			}
 		}
 	}

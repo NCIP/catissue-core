@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on May 23rd, 2005
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,109 +32,112 @@ import edu.wustl.common.util.logger.Logger;
  * */
 public class CancerResearchGroupForm extends AbstractActionForm
 {
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ClinicalStudyRegistrationForm.class);
 
-    /**
-     * Name of the CancerResearchGroup.
-     */
-    private String name;
-    
-    /**
-     * No argument constructor for UserForm class 
-     */
-    public CancerResearchGroupForm()
-    {
-    	super();
-//        reset();
-    }
+	/**
+	 * Name of the CancerResearchGroup.
+	 */
+	private String name;
 
-    /**
-     * Copies the data from an AbstractDomain object to a CancerResearchGroupForm object.
-     * @param abstractDomain An AbstractDomain object.  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
-        setId(cancerResearchGroup.getId().longValue());
-        this.name = cancerResearchGroup.getName();
-    }
+	/**
+	 * No argument constructor for UserForm class 
+	 */
+	public CancerResearchGroupForm()
+	{
+		super();
+		//        reset();
+	}
 
-    /**
-     * Returns the name of the CancerResearchGroup.
-     * @return String representing the name of the CancerResearchGroup
-     */
-    public String getName()
-    {
-        return this.name;
-    }
+	/**
+	 * Copies the data from an AbstractDomain object to a CancerResearchGroupForm object.
+	 * @param abstractDomain An AbstractDomain object.  
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) abstractDomain;
+		setId(cancerResearchGroup.getId().longValue());
+		this.name = cancerResearchGroup.getName();
+	}
 
-    /**
-     * Sets the name of this CancerResearchGroup
-     * @param name Name of the CancerResearchGroup.
-     */
-    public void setName(final String name)
-    {
-        this.name = name;
-    }
+	/**
+	 * Returns the name of the CancerResearchGroup.
+	 * @return String representing the name of the CancerResearchGroup
+	 */
+	public String getName()
+	{
+		return this.name;
+	}
 
-    /**
-     * Checks the operation to be performed is add operation.
-     * @return Returns true if operation is equal to "add", else it returns false
-     * */
-    public boolean isAddOperation()
-    {
-        return getOperation().equals(Constants.ADD);
-    }
-    
-    /**
-     * Returns the id assigned to form bean
-     * @return CANCER_RESEARCH_GROUP_FORM_ID
-     */
-    public int getFormId()
-    {
-        return Constants.CANCER_RESEARCH_GROUP_FORM_ID;
-    }
-    
-    /**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.  
-     * */
-    protected void reset()
-    {
-    }
+	/**
+	 * Sets the name of this CancerResearchGroup
+	 * @param name Name of the CancerResearchGroup.
+	 */
+	public void setName(final String name)
+	{
+		this.name = name;
+	}
 
-    /**
+	/**
+	 * Checks the operation to be performed is add operation.
+	 * @return Returns true if operation is equal to "add", else it returns false
+	 * */
+	public boolean isAddOperation()
+	{
+		return getOperation().equals(Constants.ADD);
+	}
+
+	/**
+	 * Returns the id assigned to form bean
+	 * @return CANCER_RESEARCH_GROUP_FORM_ID
+	 */
+	public int getFormId()
+	{
+		return Constants.CANCER_RESEARCH_GROUP_FORM_ID;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.  
+	 * */
+	protected void reset()
+	{
+	}
+
+	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-    {
-        final ActionErrors errors = new ActionErrors();
-        final Validator validator = new Validator();
-        try
-        {
-            if (validator.isEmpty(name))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("cancerResearchGroup.name")));
-            }    
-        }
-        catch(Exception excp)
-        {
-            logger.error(excp.getMessage(),excp);
-        }
-        return errors;
-     }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
+		try
+		{
+			if (validator.isEmpty(name))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("cancerResearchGroup.name")));
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage(), excp);
+		}
+		return errors;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on July 16, 2008
  */
+
 package edu.wustl.catissuecore.actionForm.shippingtracking;
 
 import org.apache.struts.action.ActionForm;
@@ -17,6 +18,7 @@ import org.apache.struts.action.ActionForm;
  */
 public class DashboardForm extends ActionForm
 {
+
 	/**
 	 * integer containing records per page on the dashboard.
 	 */
@@ -29,6 +31,7 @@ public class DashboardForm extends ActionForm
 	{
 		return recordsPerPage;
 	}
+
 	/**
 	 * sets the records per page of the dashboard.
 	 * @param recordsPerPage containing count of pages.

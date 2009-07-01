@@ -14,7 +14,6 @@ package edu.wustl.catissuecore.actionForm;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -60,7 +59,6 @@ import edu.wustl.common.util.logger.Logger;
 public class ParticipantForm extends AbstractActionForm implements Serializable
 {
 
-
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -93,17 +91,20 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * The gender of a participant.
 	 */
-	protected String gender = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_GENDER);
+	protected String gender = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_GENDER);
 
 	/**
 	 * The genotype of a participant.
 	 */
-	protected String genotype = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_GENOTYPE);
+	protected String genotype = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_GENOTYPE);
 
 	/**
 	 * The string to determine if barcode field is editable
 	 */
-	private String isBarcodeEditable = (String) DefaultValueManager.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
+	private String isBarcodeEditable = (String) DefaultValueManager
+			.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
 	/**
 	 * Social Security Number of the Participant.
 	 */
@@ -119,12 +120,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * The race to which the Participant belongs.
 	 */
-	protected String[] raceTypes = {(String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_RACE)};
+	protected String[] raceTypes = {(String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_RACE)};
 
 	/**
 	 * Participant's ethnicity status.
 	 */
-	protected String ethnicity = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_ETHNICITY);
+	protected String ethnicity = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_ETHNICITY);
 
 	/**
 	 * The Date of Death of the Participant.
@@ -134,7 +137,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Vital status of the Participant.
 	 */
-	protected String vitalStatus = (String) DefaultValueManager.getDefaultValue(Constants.DEFAULT_VITAL_STATUS);
+	protected String vitalStatus = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_VITAL_STATUS);
 
 	/**
 	 * Map to handle values of all the Participant Medical Identifiers
@@ -152,7 +156,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Consent Response Collection for given collection protocols 
 	 */
-	protected Collection<ConsentResponseBean> consentResponseBeanCollection;
+	protected Collection < ConsentResponseBean > consentResponseBeanCollection;
 
 	/**
 	 * Consent Response hashtable entered by the user.
@@ -214,7 +218,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.lastName = Utility.toString(participant.getLastName());
 		this.firstName = Utility.toString(participant.getFirstName());
 		this.middleName = Utility.toString(participant.getMiddleName());
-		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern());
+		this.birthDate = Utility.parseDateToString(participant.getBirthDate(), CommonServiceLocator
+				.getInstance().getDatePattern());
 		this.gender = participant.getGender();
 		this.genotype = participant.getSexGenotype();
 		setSSN(participant.getSocialSecurityNumber());
@@ -241,11 +246,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		//        this.race = participant.getRace();
 		this.setActivityStatus(participant.getActivityStatus());
 		this.ethnicity = participant.getEthnicity();
-		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), CommonServiceLocator.getInstance().getDatePattern());;
+		this.deathDate = Utility.parseDateToString(participant.getDeathDate(), CommonServiceLocator
+				.getInstance().getDatePattern());;
 		this.vitalStatus = participant.getVitalStatus();
 
 		//Populating the map with the participant medical identifiers data 
-		Collection medicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
+		Collection medicalIdentifierCollection = participant
+				.getParticipantMedicalIdentifierCollection();
 
 		if (medicalIdentifierCollection != null)
 		{
@@ -255,11 +262,15 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			Iterator it = medicalIdentifierCollection.iterator();
 			while (it.hasNext())
 			{
-				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) it.next();
+				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) it
+						.next();
 
-				String key1 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID); // "ParticipantMedicalIdentifier:" + i +"_Site_id";
-				String key2 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER); // "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-				String key3 = AppUtility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID); // "ParticipantMedicalIdentifier:" + i +"_id";
+				String key1 = AppUtility.getParticipantMedicalIdentifierKeyFor(i,
+						Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID); // "ParticipantMedicalIdentifier:" + i +"_Site_id";
+				String key2 = AppUtility.getParticipantMedicalIdentifierKeyFor(i,
+						Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER); // "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+				String key3 = AppUtility.getParticipantMedicalIdentifierKeyFor(i,
+						Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID); // "ParticipantMedicalIdentifier:" + i +"_id";
 
 				Site site = participantMedicalIdentifier.getSite();
 
@@ -272,7 +283,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 					values.put(key1, Utility.toString(Constants.SELECT_OPTION));
 				}
 
-				values.put(key2, Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+				values.put(key2, Utility.toString(participantMedicalIdentifier
+						.getMedicalRecordNumber()));
 				values.put(key3, Utility.toString(participantMedicalIdentifier.getId()));
 
 				i++;
@@ -282,7 +294,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
 		//Populating the map with the registrations of a Participant to a Collection Protocol. 
 		//(Abhishek Mehta)
-		Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+		Collection collectionProtocolRegistrationCollection = participant
+				.getCollectionProtocolRegistrationCollection();
 
 		if (collectionProtocolRegistrationCollection != null)
 		{
@@ -291,47 +304,67 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			{
 				consentResponseHashTable = new LinkedHashMap();
 			}
-			consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
+			consentResponseBeanCollection = new LinkedHashSet < ConsentResponseBean >();
 			int i = 1;
 
 			Iterator it = collectionProtocolRegistrationCollection.iterator();
 			while (it.hasNext())
 			{
-				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) it.next();
+				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) it
+						.next();
 				if (collectionProtocolRegistration.getActivityStatus() != null
-						&& !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+						&& !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(
+								Constants.DISABLED))
 				{
-					String collectionProtocolId = "CollectionProtocolRegistration:" + i + "_CollectionProtocol_id";
-					String collectionProtocolTitle = "CollectionProtocolRegistration:" + i + "_CollectionProtocol_shortTitle";
-					String collectionProtocolParticipantId = "CollectionProtocolRegistration:" + i + "_protocolParticipantIdentifier";
+					String collectionProtocolId = "CollectionProtocolRegistration:" + i
+							+ "_CollectionProtocol_id";
+					String collectionProtocolTitle = "CollectionProtocolRegistration:" + i
+							+ "_CollectionProtocol_shortTitle";
+					String collectionProtocolParticipantId = "CollectionProtocolRegistration:" + i
+							+ "_protocolParticipantIdentifier";
 					String barcode = "CollectionProtocolRegistration:" + i + "_barcode";
-					String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:" + i + "_registrationDate";
-					String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i + "_id";
-					String isConsentAvailable = "CollectionProtocolRegistration:" + i + "_isConsentAvailable";
+					String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
+							+ i + "_registrationDate";
+					String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i
+							+ "_id";
+					String isConsentAvailable = "CollectionProtocolRegistration:" + i
+							+ "_isConsentAvailable";
 					String isActive = "CollectionProtocolRegistration:" + i + "_activityStatus";
 
-					Collection consentTierCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
+					Collection consentTierCollection = collectionProtocolRegistration
+							.getCollectionProtocol().getConsentTierCollection();
 					if (consentTierCollection != null && consentTierCollection.isEmpty())
 					{
-						collectionProtocolRegistrationValues.put(isConsentAvailable, Constants.NO_CONSENTS_DEFINED);
+						collectionProtocolRegistrationValues.put(isConsentAvailable,
+								Constants.NO_CONSENTS_DEFINED);
 					}
 					else if (consentTierCollection != null && !consentTierCollection.isEmpty())
 					{
-						collectionProtocolRegistrationValues.put(isConsentAvailable, Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
+						collectionProtocolRegistrationValues.put(isConsentAvailable,
+								Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 
-					String date = Utility.parseDateToString(collectionProtocolRegistration.getRegistrationDate(), CommonServiceLocator.getInstance().getDatePattern());
+					String date = Utility.parseDateToString(collectionProtocolRegistration
+							.getRegistrationDate(), CommonServiceLocator.getInstance()
+							.getDatePattern());
 
-					collectionProtocolRegistrationValues.put(collectionProtocolId, Utility.toString(collectionProtocolRegistration
-							.getCollectionProtocol().getId()));
-					collectionProtocolRegistrationValues.put(collectionProtocolTitle, Utility.toString(collectionProtocolRegistration
-							.getCollectionProtocol().getShortTitle()));
-					collectionProtocolRegistrationValues.put(collectionProtocolParticipantId, Utility.toString(collectionProtocolRegistration
-							.getProtocolParticipantIdentifier()));
-					collectionProtocolRegistrationValues.put(barcode, Utility.toString(collectionProtocolRegistration.getBarcode()));
-					collectionProtocolRegistrationValues.put(collectionProtocolRegistrationDate, date);
-					collectionProtocolRegistrationValues.put(collectionProtocolIdentifier, Utility.toString(collectionProtocolRegistration.getId()));
-					collectionProtocolRegistrationValues.put(isActive, Utility.toString(collectionProtocolRegistration.getActivityStatus()));
+					collectionProtocolRegistrationValues.put(collectionProtocolId, Utility
+							.toString(collectionProtocolRegistration.getCollectionProtocol()
+									.getId()));
+					collectionProtocolRegistrationValues.put(collectionProtocolTitle, Utility
+							.toString(collectionProtocolRegistration.getCollectionProtocol()
+									.getShortTitle()));
+					collectionProtocolRegistrationValues.put(collectionProtocolParticipantId,
+							Utility.toString(collectionProtocolRegistration
+									.getProtocolParticipantIdentifier()));
+					collectionProtocolRegistrationValues.put(barcode, Utility
+							.toString(collectionProtocolRegistration.getBarcode()));
+					collectionProtocolRegistrationValues.put(collectionProtocolRegistrationDate,
+							date);
+					collectionProtocolRegistrationValues.put(collectionProtocolIdentifier, Utility
+							.toString(collectionProtocolRegistration.getId()));
+					collectionProtocolRegistrationValues.put(isActive, Utility
+							.toString(collectionProtocolRegistration.getActivityStatus()));
 
 					getConsentResponse(collectionProtocolRegistration);
 
@@ -356,10 +389,13 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		try
 		{
 
-			logger.debug(":::::::: collection protocol id  :"+collectionProtocolRegistration.getCollectionProtocol().getId());
-			logger.debug(":::::::: collection protocol registration  id :"+collectionProtocolRegistration.getId());
-			
-			long collectionProtocolID = collectionProtocolRegistration.getCollectionProtocol().getId();
+			logger.debug(":::::::: collection protocol id  :"
+					+ collectionProtocolRegistration.getCollectionProtocol().getId());
+			logger.debug(":::::::: collection protocol registration  id :"
+					+ collectionProtocolRegistration.getId());
+
+			long collectionProtocolID = collectionProtocolRegistration.getCollectionProtocol()
+					.getId();
 			String signedConsentURL = collectionProtocolRegistration.getSignedConsentDocumentURL();
 			User consentWitness = collectionProtocolRegistration.getConsentWitness();
 			long witnessId = -1;
@@ -368,13 +404,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				witnessId = consentWitness.getId();
 			}
 
-			String consentSignatureDate = Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), CommonServiceLocator.getInstance().getDatePattern());
-			Collection consentResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+			String consentSignatureDate = Utility
+					.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(),
+							CommonServiceLocator.getInstance().getDatePattern());
+			Collection consentResponseCollection = collectionProtocolRegistration
+					.getConsentTierResponseCollection();
 			Collection consentResponse;
 
 			if (consentResponseCollection == null || consentResponseCollection.isEmpty())
 			{
-				consentResponseCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
+				consentResponseCollection = collectionProtocolRegistration.getCollectionProtocol()
+						.getConsentTierCollection();
 				consentResponse = getConsentResponseCollection(consentResponseCollection, false);
 			}
 			else
@@ -382,13 +422,15 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				consentResponse = getConsentResponseCollection(consentResponseCollection, true);
 			}
 
-			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID, signedConsentURL, witnessId,
-					consentSignatureDate, consentResponse, Constants.WITHDRAW_RESPONSE_NOACTION);
+			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID,
+					signedConsentURL, witnessId, consentSignatureDate, consentResponse,
+					Constants.WITHDRAW_RESPONSE_NOACTION);
 
 			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
 			if (consentResponseHashTable.containsKey(consentResponseKey))
 			{
-				throw AppUtility.getApplicationException(null, "errors.participant.duplicate.collectionProtocol", "ParticipantForm.java");
+				throw AppUtility.getApplicationException(null,
+						"errors.participant.duplicate.collectionProtocol", "ParticipantForm.java");
 			}
 			consentResponseHashTable.put(consentResponseKey, consentResponseBean);
 			consentResponseBeanCollection.add(consentResponseBean);
@@ -403,9 +445,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Returns the consentBean collection from consent tier response for given protocol collection id
 	 * (Abhishek Mehta)
 	 */
-	private Collection getConsentResponseCollection(Collection consentResponse, boolean isResponseExist)
+	private Collection getConsentResponseCollection(Collection consentResponse,
+			boolean isResponseExist)
 	{
-		Collection<ConsentBean> consentBeanCollection = new HashSet<ConsentBean>();
+		Collection < ConsentBean > consentBeanCollection = new HashSet < ConsentBean >();
 		if (consentResponse != null)
 		{
 			Iterator consentResponseIter = consentResponse.iterator();
@@ -414,14 +457,18 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				ConsentBean consentBean = new ConsentBean();
 				if (isResponseExist)
 				{
-					ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseIter.next();
+					ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseIter
+							.next();
 					ConsentTier consentTier = consentTierResponse.getConsentTier();
 					consentBean.setConsentTierID(Utility.toString(consentTier.getId()));
 					consentBean.setStatement(consentTier.getStatement());
 					consentBean.setParticipantResponse(consentTierResponse.getResponse());
-					consentBean.setParticipantResponseID(Utility.toString(consentTierResponse.getId()));
-					logger.debug("::::::: participant response :::"+consentTierResponse.getResponse());
-					logger.debug("::::::: participant response id :::"+consentTierResponse.getId());
+					consentBean.setParticipantResponseID(Utility.toString(consentTierResponse
+							.getId()));
+					logger.debug("::::::: participant response :::"
+							+ consentTierResponse.getResponse());
+					logger.debug("::::::: participant response id :::"
+							+ consentTierResponse.getId());
 				}
 				else
 				{
@@ -643,20 +690,23 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			String errorKeyForDeathDate = "";
 
 			// Added by Geeta for DFCI
-			if(!Variables.isLastNameNull){
-				if(validator.isEmpty(lastName)){
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.participant.lastName"));
-				   }
+			if (!Variables.isLastNameNull)
+			{
+				if (validator.isEmpty(lastName))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"error.participant.lastName"));
+				}
 			}
-			
+
 			if (!validator.isEmpty(birthDate))
 			{
 				// date validation according to bug id  722 and 730
 				errorKeyForBirthDate = validator.validateDate(birthDate, true);
 				if (errorKeyForBirthDate.trim().length() > 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForBirthDate, ApplicationProperties
-							.getValue("participant.birthDate")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForBirthDate,
+							ApplicationProperties.getValue("participant.birthDate")));
 				}
 			}
 
@@ -665,38 +715,50 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				errorKeyForDeathDate = validator.validateDate(deathDate, true);
 				if (errorKeyForDeathDate.trim().length() > 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForDeathDate, ApplicationProperties
-							.getValue("participant.deathDate")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForDeathDate,
+							ApplicationProperties.getValue("participant.deathDate")));
 				}
 			}
 
 			if ((!validator.isEmpty(birthDate) && !validator.isEmpty(deathDate))
-					&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0))
+					&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim()
+							.length() == 0))
 			{
 				boolean errorKey1 = validator.compareDates(birthDate, deathDate);
 
 				if (!errorKey1)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("participant.invaliddate", ApplicationProperties
-							.getValue("participant.invaliddate")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"participant.invaliddate", ApplicationProperties
+									.getValue("participant.invaliddate")));
 				}
 			}
 
-			String socialSecurityNumber = socialSecurityNumberPartA + "-" + socialSecurityNumberPartB + "-" + socialSecurityNumberPartC;
-			if (!validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB + socialSecurityNumberPartC)
+			String socialSecurityNumber = socialSecurityNumberPartA + "-"
+					+ socialSecurityNumberPartB + "-" + socialSecurityNumberPartC;
+			if (!validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
+					+ socialSecurityNumberPartC)
 					&& !validator.isValidSSN(socialSecurityNumber))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", ApplicationProperties
-						.getValue("participant.socialSecurityNumber")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
+						ApplicationProperties.getValue("participant.socialSecurityNumber")));
 			}
 
 			//Validation for Blank Participant 
-			if (validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate)
-					&& (validator.isEmpty(deathDate)) && !validator.isValidOption(gender) && !validator.isValidOption(vitalStatus)
-					&& !validator.isValidOption(genotype) && ethnicity.equals("-1")
-					&& validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB + socialSecurityNumberPartC))
+			if (validator.isEmpty(lastName)
+					&& validator.isEmpty(firstName)
+					&& validator.isEmpty(middleName)
+					&& validator.isEmpty(birthDate)
+					&& (validator.isEmpty(deathDate))
+					&& !validator.isValidOption(gender)
+					&& !validator.isValidOption(vitalStatus)
+					&& !validator.isValidOption(genotype)
+					&& ethnicity.equals("-1")
+					&& validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
+							+ socialSecurityNumberPartC))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"errors.participant.atLeastOneFieldRequired"));
 			}
 
 			//Validations for Add-More Block
@@ -728,8 +790,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				else if ((validator.isValidOption(value1) && value2.trim().equals(""))
 						|| (!validator.isValidOption(value1) && !value2.trim().equals("")))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing", ApplicationProperties
-							.getValue("participant.msg")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.participant.missing", ApplicationProperties
+									.getValue("participant.msg")));
 					break;
 				}
 				index++;
@@ -751,15 +814,17 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			while (true)
 			{
 				String keyOne = collectionProtocolClassName + index + collectionProtocolId;
-				String keyTwo = collectionProtocolClassName + index + collectionProtocolParticipantId;
-				String keyThree = collectionProtocolClassName + index + collectionProtocolRegistrationDate;
+				String keyTwo = collectionProtocolClassName + index
+						+ collectionProtocolParticipantId;
+				String keyThree = collectionProtocolClassName + index
+						+ collectionProtocolRegistrationDate;
 				String keyFour = collectionProtocolClassName + index + collectionProtocolIdentifier;
 				String keyFive = collectionProtocolClassName + index + isConsentAvailable;
 				String keySix = collectionProtocolClassName + index + isActive;
 				String KeySeven = collectionProtocolClassName + index + collectionProtocolTitle;
 
 				String value1 = (String) collectionProtocolRegistrationValues.get(keyOne);
-				String value2 = (String) collectionProtocolRegistrationValues.get(keyTwo);
+				//String value2 = (String) collectionProtocolRegistrationValues.get(keyTwo);
 				String value3 = (String) collectionProtocolRegistrationValues.get(keyThree);
 				String value6 = (String) collectionProtocolRegistrationValues.get(keySix);
 
@@ -795,21 +860,24 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				else if ((validator.isValidOption(value1) && !validator.isValidOption(value6))
 						|| (!validator.isValidOption(value1) && !validator.isValidOption(value6)))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.participantRegistration.missing", ApplicationProperties
-							.getValue("participant.msg")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.participant.participantRegistration.missing",
+							ApplicationProperties.getValue("participant.msg")));
 					break;
 				}
 
 				if (errorKey.trim().length() > 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey, ApplicationProperties.getValue("participant.cpr.msg")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
+							ApplicationProperties.getValue("participant.cpr.msg")));
 					break;
 				}
 
 				index++;
 			}
 
-			collectionProtocolRegistrationValueCounter = collectionProtocolRegistrationValueCounter - count;
+			collectionProtocolRegistrationValueCounter = collectionProtocolRegistrationValueCounter
+					- count;
 
 			//Getting ConsentRegistrationBean from the  session and creating consent response map.
 			setConsentResponse(session);
@@ -836,15 +904,16 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			int size = consentResponsesHashTable.size();
 			if (this.consentResponseBeanCollection == null)
 			{
-				this.consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
+				this.consentResponseBeanCollection = new LinkedHashSet < ConsentResponseBean >();
 			}
 
 			for (int i = 1; i <= size; i++)
 			{
-				String collectionProtocolID = (String) collectionProtocolRegistrationValues.get("CollectionProtocolRegistration:" + i
-						+ "_CollectionProtocol_id");
+				String collectionProtocolID = (String) collectionProtocolRegistrationValues
+						.get("CollectionProtocolRegistration:" + i + "_CollectionProtocol_id");
 				String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
-				ConsentResponseBean consentResponseBean = (ConsentResponseBean) consentResponsesHashTable.get(consentResponseKey);
+				ConsentResponseBean consentResponseBean = (ConsentResponseBean) consentResponsesHashTable
+						.get(consentResponseKey);
 
 				if (consentResponseBean != null)
 				{
@@ -986,7 +1055,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * @param counter The counter.
 	 * @see #getCounter()
 	 */
-	public void setCollectionProtocolRegistrationValueCounter(int collectionProtocolRegistrationValueCounter)
+	public void setCollectionProtocolRegistrationValueCounter(
+			int collectionProtocolRegistrationValueCounter)
 	{
 		this.collectionProtocolRegistrationValueCounter = collectionProtocolRegistrationValueCounter;
 	}
@@ -1116,7 +1186,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Returns the Consent Response Collection entered by the user. 
 	 * @return
 	 */
-	public Collection<ConsentResponseBean> getConsentResponseBeanCollection()
+	public Collection < ConsentResponseBean > getConsentResponseBeanCollection()
 	{
 		return consentResponseBeanCollection;
 	}
@@ -1125,7 +1195,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * 
 	 * @param consentResponseBeanCollection Consent Response Collection entered by the user
 	 */
-	public void setConsentResponseBeanCollection(Collection<ConsentResponseBean> consentResponseBeanCollection)
+	public void setConsentResponseBeanCollection(
+			Collection < ConsentResponseBean > consentResponseBeanCollection)
 	{
 		this.consentResponseBeanCollection = consentResponseBeanCollection;
 	}
@@ -1159,7 +1230,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

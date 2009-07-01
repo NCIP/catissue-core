@@ -38,8 +38,10 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(EmbeddedEventParametersForm.class);
-	private String embeddingMedium = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_EMBEDDING_MEDIUM);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(EmbeddedEventParametersForm.class);
+	private String embeddingMedium = (String) DefaultValueManager
+			.getDefaultValue(Constants.DEFAULT_EMBEDDING_MEDIUM);
 
 	/**
 	 * @return embeddingMedium Getting embeddingMedium
@@ -48,7 +50,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	{
 		return embeddingMedium;
 	}
-	
+
 	/**
 	 * @param embeddingMedium Setting embeddingMedium
 	 */
@@ -74,50 +76,51 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters)abstractDomain ;
+		EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters) abstractDomain;
 		this.embeddingMedium = Utility.toString(embeddedEventParametersObject.getEmbeddingMedium());
 	}
-	
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-	 public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-	 {
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
 		ActionErrors errors = super.validate(mapping, request);
-		 Validator validator = new Validator();
-         
-		 try
-		 {
+		Validator validator = new Validator();
+
+		try
+		{
 			if (!validator.isValidOption(embeddingMedium))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("embeddedeventparameters.embeddingMedium")));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("embeddedeventparameters.embeddingMedium")));
 			}
-		 }
-		 catch(Exception excp)
-		 {
-			 logger.error(excp.getMessage());
-		 }
-		 return errors;
-	  }
-	 /**
-      * Resets the values of all the fields.
-      * This method defined in ActionForm is overridden in this class.
-      */
-      protected void reset()
-     {
-//         super.reset();
-//         this.embeddingMedium = null;
-     }
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
+	/**
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
+	protected void reset()
+	{
+		//         super.reset();
+		//         this.embeddingMedium = null;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-  
+
 }

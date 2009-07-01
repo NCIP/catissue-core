@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on July 28th, 2005
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import edu.wustl.common.util.logger.Logger;
 */
 public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersForm
 {
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Type of the movement e.g. Check-in or Check-out.
@@ -37,10 +39,9 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ClinicalStudyRegistrationForm.class);
+	private static org.apache.log4j.Logger logger = Logger
+			.getLogger(ClinicalStudyRegistrationForm.class);
 
-	
-	
 	/**
 	 * @return Returns the storageStatus.
 	 * Type of the movement e.g. Check-in or Check-out.
@@ -49,6 +50,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	{
 		return storageStatus;
 	}
+
 	/**
 	 * @param storageStatus The storageStatus to set.
 	 */
@@ -56,9 +58,8 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	{
 		this.storageStatus = storageStatus;
 	}
-	
-	
-// ---- super class methods
+
+	// ---- super class methods
 	// ----- SUPERCLASS METHODS
 	/** 
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
@@ -77,52 +78,55 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		final CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter)abstractDomain ;
-		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject.getStorageStatus()); 
+		final CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter) abstractDomain;
+		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject
+				.getStorageStatus());
 	}
-	
+
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	 
-    	 final  ActionErrors errors = super.validate(mapping, request);
-    	 final  Validator validator = new Validator();
-         
-         try
-         {
-         	// checks the storageStatus
-         	// changed from isEmpty to isValidOption as per bug 294 textbox to dropdown
-           	if (!validator.isValidOption(storageStatus))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameter.storagestatus")));
-            }
-         }
-         catch(Exception excp)
-         {
-             logger.error(excp.getMessage());
-         }
-         return errors;
-      }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
+
+		try
+		{
+			// checks the storageStatus
+			// changed from isEmpty to isValidOption as per bug 294 textbox to dropdown
+			if (!validator.isValidOption(storageStatus))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties
+								.getValue("checkincheckouteventparameter.storagestatus")));
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage());
+		}
+		return errors;
+	}
+
 	/**
 	 * Method to reset class Attributes
 	 */
-    protected void reset()
-  	{
-//      	super.reset();
-//        this.storageStatus = null;
-  	}
+	protected void reset()
+	{
+		//      	super.reset();
+		//        this.storageStatus = null;
+	}
+
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.HashMap;
@@ -17,7 +18,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-public class OrderBiospecimenArrayForm extends AbstractActionForm 
+/**
+ * @author renuka_bajpai
+ *
+ */
+public class OrderBiospecimenArrayForm extends AbstractActionForm
 {
 
 	/**
@@ -49,7 +54,6 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	private String[] itemsToRemove = null;
 
-	
 	/**
 	 * @return itemsToRemove
 	 */
@@ -61,7 +65,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @param itemsToRemove String array containing itemsToRemove 
 	 */
-	public void setItemsToRemove(String[] itemsToRemove) 
+	public void setItemsToRemove(String[] itemsToRemove)
 	{
 		this.itemsToRemove = itemsToRemove;
 	}
@@ -69,7 +73,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @return List of defineArrayObj
 	 */
-	public List getDefineArrayObj() 
+	public List getDefineArrayObj()
 	{
 		return defineArrayObj;
 	}
@@ -86,7 +90,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @return boolean true 
 	 */
 	public boolean isAddOperation()
-	
+
 	{
 		return true;
 	}
@@ -102,7 +106,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @param distrbutionProtocol String containing Distribution Protocol
 	 */
-	public void setDistrbutionProtocol(String distrbutionProtocol) 
+	public void setDistrbutionProtocol(String distrbutionProtocol)
 	{
 		this.distrbutionProtocol = distrbutionProtocol;
 	}
@@ -143,7 +147,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @return FormId
 	 */
-	public int getFormId() 
+	public int getFormId()
 	{
 		return Constants.ORDER_ARRAY_FORM_ID;
 	}
@@ -159,7 +163,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param mapping ActionMapping
 	 * @param request HttpServletRequest
 	 */
-	public void reset(ActionMapping mapping, HttpServletRequest request) 
+	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
 	}
 
@@ -168,67 +172,69 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request)
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
 		ActionErrors errors = new ActionErrors();
 		HttpSession session = request.getSession();
 		Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 
-		if (selectedItems != null) 
+		if (selectedItems != null)
 		{
 			boolean isNumber = true;
-			if (values != null && values.size() != 0) 
+			if (values != null && values.size() != 0)
 			{
 				String cnt = null;
 				int reqQntyError = 0;
-				String reqQntyValue=null;	
-				for (int i = 0; i < selectedItems.length; i++) 
+				//String reqQntyValue = null;
+				for (int i = 0; i < selectedItems.length; i++)
 				{
 					cnt = selectedItems[i];
 					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
 					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
-					
+
 					//to check for site:Only those specimen Array can be ordered which belongs to same site
-					if (dataMap!=null && dataMap.containsKey("None"))
+					if (dataMap != null && dataMap.containsKey("None"))
 					{
 						List orderItems = (List) dataMap.get("None");
-						if(!orderItems.isEmpty() && orderItems.size()>0)
-						{	
-							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems.get(0);
-							if(!orderSpecimenBean.getDistributionSite().equals(values.get(disSiteKey)))
+						if (!orderItems.isEmpty() && orderItems.size() > 0)
+						{
+							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
+									.get(0);
+							if (!orderSpecimenBean.getDistributionSite().equals(
+									values.get(disSiteKey)))
 							{
-								errors.add("values", new ActionError("errors.same.distributionSite"));
+								errors.add("values",
+										new ActionError("errors.same.distributionSite"));
 								values.clear();
 								break;
 							}
 						}
-						
+
 					}
-					
-					if((values.get(disSiteKey)) == null || !isSameSite())
+
+					if ((values.get(disSiteKey)) == null || !isSameSite())
 					{
-						errors.add("values", new ActionError("errors.specimenArray.same.distributionSite.required"));
+						errors.add("values", new ActionError(
+								"errors.specimenArray.same.distributionSite.required"));
 						values.clear();
 						break;
 					}
-										
+
 					if (typeOfArray.equals("false"))
 					{
 						values.put(key, "0.0");
 					}
 
-					else 
+					else
 					{
-						if ((values.get(key)) == null
-								|| (values.get(key)).equals("")) 
+						if ((values.get(key)) == null || (values.get(key)).equals(""))
 						{
 							reqQntyError = 1;
 							break;
 						}
 
-						else 
+						else
 						{
 							isNumber = AppUtility.isNumeric(values.get(key).toString());
 							if (!(isNumber))
@@ -238,9 +244,8 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 							}
 							else
 							{
-								Double reqQnty = new Double(values.get(
-										key).toString());
-								if (reqQnty < 0.0 || reqQnty==0.0)
+								Double reqQnty = new Double(values.get(key).toString());
+								if (reqQnty < 0.0 || reqQnty == 0.0)
 								{
 									reqQntyError = 1;
 									break;
@@ -251,8 +256,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 				}
 				if (reqQntyError == 1)
 				{
-					errors.add("values", new ActionError(
-							"errors.requestedQuantity.required"));
+					errors.add("values", new ActionError("errors.requestedQuantity.required"));
 					values.clear();
 				}
 				if (reqQntyError == 2)
@@ -274,20 +278,22 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 			for (int i = 0; i < selectedItems.length; i++)
 			{
 				String cnt = selectedItems[i];
-				String disSite = (String)values.get("OrderSpecimenBean:" + cnt + "_distributionSite");
+				String disSite = (String) values.get("OrderSpecimenBean:" + cnt
+						+ "_distributionSite");
 				for (int j = 0; j < selectedItems.length; j++)
 				{
 					String count = selectedItems[j];
-					String disSiteInner = (String)values.get("OrderSpecimenBean:" + count + "_distributionSite");
-					if(!disSiteInner.equals(disSite))
+					String disSiteInner = (String) values.get("OrderSpecimenBean:" + count
+							+ "_distributionSite");
+					if (!disSiteInner.equals(disSite))
 					{
 						return false;
 					}
 				}
 			}
-			
+
 		}
-				
+
 		return isSameSite;
 	}
 
@@ -309,7 +315,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @param selectedItems String array containing selectedItems
 	 */
-	public void setSelectedItems(String[] selectedItems) 
+	public void setSelectedItems(String[] selectedItems)
 	{
 		this.selectedItems = selectedItems;
 	}
@@ -318,7 +324,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param key String containing the key of map 
 	 * @param value String containing the value of map 
 	 */
-	public void setValue(String key, Object value) 
+	public void setValue(String key, Object value)
 	{
 		if (isMutable())
 		{
@@ -330,7 +336,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param key String containing the key of map 
 	 * @return value in map corresponding to the key
 	 */
-	public Object getValue(String key) 
+	public Object getValue(String key)
 	{
 		return values.get(key);
 	}
@@ -346,7 +352,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @param values Map containing the key-value pairs 
 	 */
-	public void setValues(Map values) 
+	public void setValues(Map values)
 	{
 		this.values = values;
 	}
@@ -355,7 +361,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

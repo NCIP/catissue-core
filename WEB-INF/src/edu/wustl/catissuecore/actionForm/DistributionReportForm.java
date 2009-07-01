@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-
 import java.util.Calendar;
 
 import edu.wustl.catissuecore.domain.Distribution;
@@ -18,55 +17,56 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionReportForm extends AbstractActionForm
 {
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionReportForm.class);
 	/**
-     * System generated unique identifier.
-     * */
+	 * System generated unique identifier.
+	 * */
 	private long id;
-    
-    /**
-     * Time in hours for the Event Parameter.
-     * */
-    private String timeInHours;
 
-    /**
-     * Time in minutes for the Event Parameter.
-     * */
-    private String timeInMinutes;
+	/**
+	 * Time in hours for the Event Parameter.
+	 * */
+	private String timeInHours;
 
-    /**
-     * Date of the Event Parameter.
-     * */
-    private String dateOfEvent;
-   /**
-     * Id of the User.   
-     */
-    private String userName;
+	/**
+	 * Time in minutes for the Event Parameter.
+	 * */
+	private String timeInMinutes;
 
-    /**
-     * Comments on the event parameter.   
-     */
-    private String comments;
+	/**
+	 * Date of the Event Parameter.
+	 * */
+	private String dateOfEvent;
+	/**
+	  * Id of the User.   
+	  */
+	private String userName;
 
+	/**
+	 * Comments on the event parameter.   
+	 */
+	private String comments;
 
-	private String fromSite;
+	//private String fromSite;
 	private String toSite;
 	private String distributionProtocolTitle;
 	private Long distributionId;
-	
+
 	private Integer distributionType = Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
-	
+
 	/**
 	 * @return distributionType Return type of Distribution
 	 */
-	public Integer getDistributionType() 
+	public Integer getDistributionType()
 	{
 		return distributionType;
 	}
+
 	/**
 	 * @param distributionType Setting Distribution Type
 	 */
@@ -74,58 +74,63 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.distributionType = distributionType;
 	}
+
 	/**
 	 * @param abstractDomainObject An AbstractDomainObject obj
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
 
-		Distribution distribution = (Distribution)abstractDomainObject;
-		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
-		String lName = (String)distribution.getDistributedBy().getLastName();
- 		String fName = (String)distribution.getDistributedBy().getFirstName();
- 		logger.debug("User's name"+lName+" "+fName );
- 		this.userName = lName + ", " + fName;
- 		Calendar calender = Calendar.getInstance();
- 		calender.setTime(distribution.getTimestamp());
- 		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
- 		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
- 		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),CommonServiceLocator.getInstance().getDatePattern());
- 		this.id = distribution.getId().longValue() ;
+		Distribution distribution = (Distribution) abstractDomainObject;
+		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol()
+				.getTitle());
+		String lName = (String) distribution.getDistributedBy().getLastName();
+		String fName = (String) distribution.getDistributedBy().getFirstName();
+		logger.debug("User's name" + lName + " " + fName);
+		this.userName = lName + ", " + fName;
+		Calendar calender = Calendar.getInstance();
+		calender.setTime(distribution.getTimestamp());
+		this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
+		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
+		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),
+				CommonServiceLocator.getInstance().getDatePattern());
+		this.id = distribution.getId().longValue();
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
-		this.comments  = Utility.toString(distribution.getComment());
+		this.comments = Utility.toString(distribution.getComment());
 		distributionId = distribution.getId();
 	}
-	
-//	/**
-//	 * @return fromSite
-//	 */ 
-//	public String getFromSite() {
-//		return fromSite;
-//	}
-//
-//	/**
-//	 * @param fromSite
-//	 */
-//	public void setFromSite(String fromSite) {
-//		this.fromSite = fromSite;
-//	}
+
+	//	/**
+	//	 * @return fromSite
+	//	 */ 
+	//	public String getFromSite() {
+	//		return fromSite;
+	//	}
+	//
+	//	/**
+	//	 * @param fromSite
+	//	 */
+	//	public void setFromSite(String fromSite) {
+	//		this.fromSite = fromSite;
+	//	}
 
 	/**
 	 * @return toSite Return Site
 	 */
-	public String getToSite() 
+	public String getToSite()
 	{
 		return toSite;
 	}
+
 	/**
 	 * @return Returns the distributionProtocolTitle.
 	 */
-	public String getDistributionProtocolTitle() 
+	public String getDistributionProtocolTitle()
 	{
 		return distributionProtocolTitle;
 	}
+
 	/**
 	 * @param distributionProtocolTitle The distributionProtocolTitle to set.
 	 */
@@ -133,6 +138,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.distributionProtocolTitle = distributionProtocolTitle;
 	}
+
 	/**
 	 * @param toSite The toSite to set.
 	 */
@@ -148,7 +154,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		return comments;
 	}
-	
+
 	/**
 	 * @param comments The comments to set.
 	 */
@@ -156,7 +162,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.comments = comments;
 	}
-		
+
 	/**
 	 * @return Returns the dateOfEvent.
 	 */
@@ -164,7 +170,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		return dateOfEvent;
 	}
-	
+
 	/**
 	 * @param dateOfEvent The dateOfEvent to set.
 	 */
@@ -172,7 +178,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.dateOfEvent = dateOfEvent;
 	}
-	
+
 	/**
 	 * @return timeInMinutes Returns the time_InMinutes.
 	 */
@@ -180,7 +186,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		return timeInMinutes;
 	}
-	
+
 	/**
 	 * @param time_InMinutes The time_InMinutes to set.
 	 */
@@ -188,7 +194,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.timeInMinutes = time_InMinutes;
 	}
-		
+
 	/**
 	 * @return timeInHours Returns the timeStamp.
 	 */
@@ -196,7 +202,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		return timeInHours;
 	}
-	
+
 	/**
 	 * @param timeStamp The timeStamp to set.
 	 */
@@ -204,7 +210,7 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		this.timeInHours = timeStamp;
 	}
-	
+
 	/**
 	 * @return userName Returns the userId.
 	 */
@@ -212,35 +218,39 @@ public class DistributionReportForm extends AbstractActionForm
 	{
 		return userName;
 	}
-	
+
 	/**
 	 * @param userName The userId to set.
 	 */
 	public void setUserName(String userName)
 	{
 		this.userName = userName;
-	}    
+	}
+
 	/**
 	 *@return id
 	 */
 	public long getId()
 	{
-		return this.id ;
+		return this.id;
 	}
+
 	/**
 	 * @param id Setting id
 	 */
 	public void setId(long id)
 	{
-		this.id = id ; 
+		this.id = id;
 	}
+
 	/**
 	 * @return distributionId Returns the distributionId.
 	 */
-	public Long getDistributionId() 
+	public Long getDistributionId()
 	{
 		return distributionId;
 	}
+
 	/**
 	 * @param distributionId The distributionId to set.
 	 */
@@ -257,19 +267,21 @@ public class DistributionReportForm extends AbstractActionForm
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	/**
-     * Resets the values of all the fields.
-     * This method defined in ActionForm is overridden in this class.
-     */
+	 * Resets the values of all the fields.
+	 * This method defined in ActionForm is overridden in this class.
+	 */
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

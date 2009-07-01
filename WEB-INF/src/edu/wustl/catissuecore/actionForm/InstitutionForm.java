@@ -38,99 +38,97 @@ public class InstitutionForm extends AbstractActionForm
 	 * logger Logger - Generic logger.
 	 */
 	private static org.apache.log4j.Logger logger = Logger.getLogger(InstitutionForm.class);
-    /**
-     * A string containing the name of the institute.
-     */
-    private String name = null;  
+	/**
+	 * A string containing the name of the institute.
+	 */
+	private String name = null;
 
-    /**
-     * No argument constructor for InstitutionForm class 
-     */
-    public InstitutionForm()
-    {
-//        reset();
-    }
+	/**
+	 * No argument constructor for InstitutionForm class 
+	 */
+	public InstitutionForm()
+	{
+		//        reset();
+	}
 
-    /**
-     * This function Copies the data from an institute object to a InstitutionForm object.
-     * @param abstractDomain An Institute object containing the information about the institute.  
-     */
-    public void setAllValues(AbstractDomainObject abstractDomain)
-    {
-        Institution institute = (Institution) abstractDomain;
-        this.setId(institute.getId().longValue());
-        this.name = institute.getName();
-    }
+	/**
+	 * This function Copies the data from an institute object to a InstitutionForm object.
+	 * @param abstractDomain An Institute object containing the information about the institute.  
+	 */
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		Institution institute = (Institution) abstractDomain;
+		this.setId(institute.getId().longValue());
+		this.name = institute.getName();
+	}
 
-    
-    /**
-     * Returns the login name of the institute.
-     * @return String representing the login name of the institute
-     * @see #setLoginName(String)
-     */
-    public String getName()
-    {
-        return (this.name);
-    }
+	/**
+	 * Returns the login name of the institute.
+	 * @return String representing the login name of the institute
+	 * @see #setLoginName(String)
+	 */
+	public String getName()
+	{
+		return (this.name);
+	}
 
-    /**
-     * Sets the login name of this institute
-     * @param name login name of the institute.
-     * @see #getLoginName()
-     */
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	/**
+	 * Sets the login name of this institute
+	 * @param name login name of the institute.
+	 * @see #getLoginName()
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    
-    /**
-     * @return INSTITUTION_FORM_ID Returns the id assigned to form bean
-     */
-    public int getFormId()
-    {
-        return Constants.INSTITUTION_FORM_ID;
-    }
-    
- 
-    /**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.  
-     * */
-    protected void reset()
-    {
-      
-    }
+	/**
+	 * @return INSTITUTION_FORM_ID Returns the id assigned to form bean
+	 */
+	public int getFormId()
+	{
+		return Constants.INSTITUTION_FORM_ID;
+	}
 
-    /**
+	/**
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.  
+	 * */
+	protected void reset()
+	{
+
+	}
+
+	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
-    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-    {
-        ActionErrors errors = new ActionErrors();
-        Validator validator = new Validator();
-        try
-        {
-        	if (validator.isEmpty(name))
-            {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("institution.name")));
-            }
-        }
-        catch(Exception excp)
-        {
-            logger.error(excp.getMessage(),excp);
-        }
-        return errors;
-     }
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+		try
+		{
+			if (validator.isEmpty(name))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("institution.name")));
+			}
+		}
+		catch (Exception excp)
+		{
+			logger.error(excp.getMessage(), excp);
+		}
+		return errors;
+	}
 
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
-       
+
 }

@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on July 16, 2008
  */
+
 package edu.wustl.catissuecore.actionForm.shippingtracking;
 
 import java.util.Iterator;
@@ -30,10 +31,12 @@ import edu.wustl.common.util.global.Validator;
  */
 public class ShipmentRequestForm extends BaseShipmentForm
 {
+
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long	serialVersionUID	= 1L;
+
 	/**
 	 * Returns the id assigned to form bean.
 	 * @return shipment request form id.
@@ -43,6 +46,7 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	{
 		return Constants.SHIPMENT_REQUEST_FORM_ID;
 	}
+
 	/**
 	 * this method sets all the values.
 	 * @param arg0 domain object to set.
@@ -56,6 +60,7 @@ public class ShipmentRequestForm extends BaseShipmentForm
 			populateShipmentRequestContents(shipmentRequest);
 		}
 	}
+
 	/**
 	 * populates the shipment request contents.
 	 * @param shipmentRequest object of ShipmentRequest class.
@@ -65,6 +70,7 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		populateContentContainers(shipmentRequest);
 		populateContentSpecimens(shipmentRequest);
 	}
+
 	/**
 	 * populates the specimen contents.
 	 * @param shipmentRequest object of ShipmentRequest class.
@@ -75,22 +81,23 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		this.specimenCounter = 0;
 		if (shipmentRequest.getSpecimenCollection() != null)
 		{
-			Iterator<Specimen> specimenIterator = shipmentRequest
-					.getSpecimenCollection().iterator();
+			Iterator < Specimen > specimenIterator = shipmentRequest.getSpecimenCollection()
+					.iterator();
 			while (specimenIterator.hasNext())
 			{
 				Specimen specimen = specimenIterator.next();
 				if (specimen != null && specimen.getLabel() != null)
 				{
 					this.specimenCounter++;
-					this.specimenDetailsMap.put("specimenLabel_"
-							+ specimenCounter, specimen.getLabel());
-					this.specimenDetailsMap.put("specimenBarcode_"
-							+ specimenCounter, specimen.getBarcode());
+					this.specimenDetailsMap.put("specimenLabel_" + specimenCounter, specimen
+							.getLabel());
+					this.specimenDetailsMap.put("specimenBarcode_" + specimenCounter, specimen
+							.getBarcode());
 				}
 			}
 		}
 	}
+
 	/**
 	 * populates the containers in the shipment.
 	 * @param shipmentRequest object of ShipmentRequest class.
@@ -101,7 +108,7 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		this.containerCounter = 0;
 		if (shipmentRequest.getContainerCollection() != null)
 		{
-			Iterator<StorageContainer> containerIterator = shipmentRequest
+			Iterator < StorageContainer > containerIterator = shipmentRequest
 					.getContainerCollection().iterator();
 			while (containerIterator.hasNext())
 			{
@@ -109,22 +116,22 @@ public class ShipmentRequestForm extends BaseShipmentForm
 				if (container != null && container.getName() != null)
 				{
 					this.containerCounter++;
-					this.containerDetailsMap.put("containerLabel_"
-							+ containerCounter, container.getName());
-					this.containerDetailsMap.put("containerBarcode_"
-							+ containerCounter, container.getBarcode());
+					this.containerDetailsMap.put("containerLabel_" + containerCounter, container
+							.getName());
+					this.containerDetailsMap.put("containerBarcode_" + containerCounter, container
+							.getBarcode());
 				}
 			}
 		}
 	}
+
 	/**
 	 * this method calidates the action form.
 	 * @param mapping ActionMapping object.
 	 * @param request HttpServletRequest object.
 	 * @return errors object of ActionErrors class.
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request)
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
 		validateBasicShipmentRequestInfo(errors);
@@ -155,30 +162,26 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		String dateErrorString = validator.validateDate(this.sendDate, false);
 		if (validator.isEmpty(this.label))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"errors.item.required", ApplicationProperties
-							.getValue("shipment.label")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.label")));
 		}
 
 		// checking for empty requesterSiteId (default = 0 is empty)
 		if (this.senderSiteId == 0)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"errors.item.required", ApplicationProperties
-							.getValue("shipment.request.requesterSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.request.requesterSite")));
 		}
 
 		if (dateErrorString != null && !dateErrorString.trim().equals(""))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					dateErrorString, ApplicationProperties
-							.getValue("shipment.sendDate")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(dateErrorString,
+					ApplicationProperties.getValue("shipment.sendDate")));
 		}
 		if (!validator.isValidOption("" + (this.senderSiteId)))
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"errors.item.required", ApplicationProperties
-							.getValue("shipment.senderSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("shipment.senderSite")));
 		}
 	}
 
