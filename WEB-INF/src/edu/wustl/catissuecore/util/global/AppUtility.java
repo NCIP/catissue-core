@@ -1251,7 +1251,7 @@ public class AppUtility
 	 * @throws ClassNotFoundException
 	 *             ClassNotFoundException
 	 */
-	public static List executeQuery(String hql) throws ApplicationException
+	public static List<Object[]> executeQuery(String hql) throws ApplicationException
 	{
 		IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
 				Constants.APPLICATION_NAME);
@@ -1261,7 +1261,48 @@ public class AppUtility
 		dao.closeSession();
 		return list;
 	}
+	
+	/**
+	 * Executes sql Query and returns the results.
+	 * 
+	 * @param sql
+	 *            String hql
+	 * @throws DAOException
+	 *             DAOException
+	 * @throws ClassNotFoundException
+	 *             ClassNotFoundException
+	 */
+	public static List executeSQLQuery(String sql) throws ApplicationException
+	{
+	   	    JDBCDAO jdbcDAO = openJDBCSession();
+			List list = jdbcDAO.executeQuery(sql);
+	        return list;
+	}
 
+	
+	public static Long getLastAvailableValue(String sql){
+		Long noOfRecords = new Long("0");
+		List list=null;
+		try{
+			list=executeSQLQuery(sql.toString());
+			if(list!=null && list.size()>0)
+			{
+				noOfRecords=new Long((String)list.get(0));
+			}
+		}
+		catch (DAOException daoExp)
+		{
+			logger.debug(daoExp.getMessage(), daoExp);
+		}
+		catch (ApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return noOfRecords;
+	}
+	
+	
 	// for conflictResolver pagination:kalpana
 	public static PagenatedResultData executeForPagination(String sql,
 			SessionDataBean sessionDataBean, boolean isSecureExecute, Map queryResultObjectDataMap,
@@ -2113,13 +2154,13 @@ public class AppUtility
 			pg.setProtectionGroupName(pgName);
 			ProtectionGroupSearchCriteria pgSearchCriteria = new ProtectionGroupSearchCriteria(pg);
 			pgList = privilegeUtility.getUserProvisioningManager().getObjects(pgSearchCriteria);
+			
 			if (pgList != null && !pgList.isEmpty())
 			{
 				pg = pgList.get(0);
 			}
 
-			new PrivilegeUtility().getUserProvisioningManager().removeGroupFromProtectionGroup(
-					pg.getProtectionGroupId().toString(), group.getGroupId().toString());
+			new PrivilegeUtility().getUserProvisioningManager().removeGroupFromProtectionGroup(pg.getProtectionGroupId().toString(), group.getGroupId().toString());
 			PrivilegeManager.getInstance().removePrivilegeCache(user.getLoginName());
 		}
 		catch (SMException e)
