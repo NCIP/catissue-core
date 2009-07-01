@@ -20,9 +20,15 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ */
 public class AddCRGAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(AddCRGAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,

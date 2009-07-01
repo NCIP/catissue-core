@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -30,7 +30,10 @@ public class LoadDynamicExtensionsAction extends BaseAction
 {
 
 	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * @see edu.wustl.common.action.BaseAction#executeAction
+	 * (org.apache.struts.action.ActionMapping, org.apache.struts.action
+	 * .ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.
+	 * http.HttpServletResponse)
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -62,8 +65,8 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	}
 
 	/**
-	 * @param request 
-	 * @return
+	 * @param request : request)
+	 * @return String : String
 	 */
 	private String getDynamicExtensionsURL(HttpServletRequest request)
 	{
@@ -74,7 +77,8 @@ public class LoadDynamicExtensionsAction extends BaseAction
 		SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
 				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 
-		String userId = sessionbean.getUserId().toString(); //request.getSession().getAttribute("SESSION_DATA").toString();
+		String userId = sessionbean.getUserId().toString(); 
+		//request.getSession().getAttribute("SESSION_DATA").toString();
 		String isAuthenticatedUser = "false";
 		if (userId != null)
 		{

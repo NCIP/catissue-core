@@ -2,7 +2,6 @@
  * <p>Title: OutGoingShipmentAction Class.</p>
  * <p>Description:OutGoingShipmentAction contains all the SendingShipment Id.</p>
  * Copyright: Copyright (c) year 2008.
- * Company: 
  * @author vijay_chittem .
  * @version 1.00.
  * Created on July 29th 2008.

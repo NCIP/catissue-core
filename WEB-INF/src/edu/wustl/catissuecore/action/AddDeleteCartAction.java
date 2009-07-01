@@ -29,7 +29,6 @@ import edu.wustl.common.query.queryobject.impl.metadata.QueryOutputTreeAttribute
 import edu.wustl.common.query.queryobject.impl.metadata.SelectedColumnsMetadata;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.QuerySessionData;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.global.AQConstants;
 
 /**
@@ -41,7 +40,6 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping,
 	 *      org.apache.struts.action.ActionForm,
 	 *      javax.servlet.http.HttpServletRequest,
@@ -80,7 +78,6 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		else if (Constants.DELETE.equals(operation))
 			target = delete(request, target, getCheckboxValues(searchForm));
 
-		//sets the message in the session. This message is showed in popup on the result view page if the 
 		//'id' attribute of the orderable entity is not included in view.
 		String message;
 		if (selectedColumnMetaData == null)
@@ -93,7 +90,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * checks if the current view contains any orderable entity and if the 'id' attribute of the entity is 
+	 * checks if the current view contains any orderable entity and if the 'id' attribute of the entity is
 	 * included in the view.
 	 * @param selectedColumnsMetadata - gives current entity and attribute list
 	 * @param cart - gives the attribute list of the entities present in the cart.
@@ -128,7 +125,8 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		}
 		if (areListsequal)
 		{
-			//if the two views are same checks if orderable entity is present and id attribute is present
+			//if the two views are same checks if
+			//orderable entity is present and id attribute is present
 			Iterator < QueryOutputTreeAttributeMetadata > iterator = selectedAttributeMetaDataList
 					.iterator();
 			QueryOutputTreeAttributeMetadata element;
@@ -155,12 +153,12 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * @param request
-	 * @param searchForm
-	 * @param isCheckAllAcrossAllChecked
-	 * @param attributeList
-	 * @return
-	 * @throws DAOException
+	 * @param request : request
+	 * @param searchForm : searchForm
+	 * @param isCheckAllAcrossAllChecked : isCheckAllAcrossAllChecked
+	 * @param attributeList : attributeList
+	 * @return String : String
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private String add(HttpServletRequest request, AdvanceSearchForm searchForm,
 			String isCheckAllAcrossAllChecked, List < AttributeInterface > attributeList)
@@ -185,10 +183,10 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * @param request
-	 * @param target
-	 * @param chkBoxValues
-	 * @return
+	 * @param request : request
+	 * @param target : target
+	 * @param chkBoxValues : chkBoxValues
+	 * @return String : String
 	 */
 	private String delete(HttpServletRequest request, String target, List < Integer > chkBoxValues)
 	{
@@ -206,7 +204,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 			// if My List is empty sets the value to true.
 			request.getSession().setAttribute(Constants.IS_LIST_EMPTY, Constants.TRUE);
 		}
-		// set the options 
+		// set the options
 		setCartView(request, cart);
 		target = new String(Constants.SHOPPING_CART_DELETE);
 
@@ -214,12 +212,12 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * @param request
-	 * @param chkBoxValues
-	 * @param cart
-	 * @param attributeList
-	 * @return
-	 * @throws DAOException
+	 * @param request : request
+	 * @param chkBoxValues : chkBoxValues
+	 * @param cart : cart
+	 * @param attributeList : attributeList
+	 * @return String : String
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private String addToCart(HttpServletRequest request, List < Integer > chkBoxValues,
 			QueryShoppingCart cart, List < AttributeInterface > attributeList)
@@ -247,7 +245,8 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 					oldAttributeList, attributeList);
 			if (indexArray != null)
 			{
-				List < List < String >> tempdataList = getManipulatedDataList(dataList, indexArray);
+				List < List < String >> tempdataList
+				= getManipulatedDataList(dataList, indexArray);
 				addDataToCart(cart, tempdataList, chkBoxValues, request, columnList);
 			}
 			else
@@ -263,13 +262,11 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 
 	/**
 	 * Add data in Cart .
-	 * 
 	 * @param cart a shopping cart object preset in session.
-	 * @param dataList List of records. 
-	 * @param request HttpServletRequest.
-	 * @param response HttpServletResponse.
-	 * @param chkBoxValues
-	 * @param columnList
+	 * @param dataList : dataList
+	 * @param request : request
+	 * @param chkBoxValues : chkBoxValues
+	 * @param columnList :columnList
 	*/
 	public void addDataToCart(QueryShoppingCart cart, List < List < String >> dataList,
 			List < Integer > chkBoxValues, HttpServletRequest request, List < String > columnList)
@@ -314,7 +311,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param cart a shopping cart object preset in session.
-	 * @param chkBoxValues
+	 * @param chkBoxValues : chkBoxValues
 	 */
 	public void deleteFromCart(QueryShoppingCart cart, List < Integer > chkBoxValues)
 	{
@@ -326,7 +323,8 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	/**
 	 * Get Pegination data list .
 	 * @param request HttpServletRequest.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException : ApplicationException
+	 * @return dataList : dataList
 	*/
 	public List < List < String >> getPaginationDataList(HttpServletRequest request)
 			throws ApplicationException
@@ -364,7 +362,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	/**
 	 * @param dataList list of cart records.
 	 * @param indexArray array of indexes of new attributes.
-	 * @return
+	 * @return List < List < String >> : List
 	 */
 	private List < List < String >> getManipulatedDataList(List < List < String >> dataList,
 			int[] indexArray)

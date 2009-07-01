@@ -48,17 +48,20 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 //			try
 //			{
 				//Populate
-				boolean isRejectAndResend=processRejectAndReturnContents(request,(ShipmentReceivingForm)form);
+				boolean isRejectAndResend=
+					processRejectAndReturnContents(request,(ShipmentReceivingForm)form);
 				//bug 11543
 				try
 				{
-					forward=commonEditAction.execute(mapping, (ShipmentReceivingForm)form, request, response);
+					forward=commonEditAction.execute
+					(mapping, (ShipmentReceivingForm)form, request, response);
 				}
 				catch (ApplicationException e)
 				{
 					logger.debug(e.getMessage(),e);
 					ActionErrors actionErrors = new ActionErrors();
-					actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError(e.getFormattedMessage()));
+					actionErrors.add
+					(ActionErrors.GLOBAL_ERROR, new ActionError(e.getFormattedMessage()));
 					saveErrors(request, actionErrors);
 					forward=mapping.findForward(Constants.FAILURE);
 					e.printStackTrace();
@@ -155,7 +158,10 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 			shipmentForm.setContainerLabelChoice("ContainerLabel");
 			for (StorageContainer container : containerCollection)
 			{
-				if(container!=null && container.getActivityStatus()!=null && container.getActivityStatus().trim().equals(edu.wustl.catissuecore.util.shippingtracking.Constants.REJECT_AND_RESEND))
+				if(container!=null && container.getActivityStatus()!=null &&
+						container.getActivityStatus().trim().
+						equals(edu.wustl.catissuecore.util.shippingtracking.
+								Constants.REJECT_AND_RESEND))
 				{
 					isRejectAndResend=true;
 					int containerCounter=shipmentForm.getContainerCounter();
@@ -184,13 +190,18 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 			shipmentForm.setSpecimenLabelChoice("SpecimenLabel");
 			for (Specimen specimen : specimenCollection)
 			{
-				if(specimen!=null && specimen.getActivityStatus()!=null && specimen.getActivityStatus().trim().equals(edu.wustl.catissuecore.util.shippingtracking.Constants.REJECT_AND_RESEND))
+				if(specimen!=null && specimen.getActivityStatus()!=null
+						&& specimen.getActivityStatus().trim().
+						equals(edu.wustl.catissuecore.util.shippingtracking.
+								Constants.REJECT_AND_RESEND))
 				{
 					isRejectAndResend=true;
 					int specimenCount=shipmentForm.getSpecimenCounter();
 					specimenCount++;
 					shipmentForm.setSpecimenCounter(specimenCount);
-					shipmentForm.getSpecimenDetailsMap().put("specimenLabel_"+specimenCount, specimen.getLabel());
+					shipmentForm.getSpecimenDetailsMap().put
+					("specimenLabel_"+specimenCount,
+							specimen.getLabel());
 				}
 			}
 		}

@@ -29,6 +29,9 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
+/**
+ * @author renuka_bajpai
+ */
 public abstract class BulkOperationAction extends SecureAction
 {
 
@@ -43,15 +46,15 @@ public abstract class BulkOperationAction extends SecureAction
 			specimenIds = getSpecimenIds(request);
 		}
 
-		//Set common request parameters for all events
+		// Set common request parameters for all events
 		setCommonRequestParameters(request, specimenIds);
 
 		BulkEventOperationsForm eventParametersForm = (BulkEventOperationsForm) form;
-		//Set operation
+		// Set operation
 		String operation = (String) request.getAttribute(Constants.OPERATION);
 		eventParametersForm.setOperation(operation);
 
-		//Set current user
+		// Set current user
 		SessionDataBean sessionData = getSessionData(request);
 		if (sessionData != null && sessionData.getUserId() != null)
 		{
@@ -65,7 +68,7 @@ public abstract class BulkOperationAction extends SecureAction
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 
-		//Set event specific request params
+		// Set event specific request params
 		setEventSpecificRequestParameters(eventParametersForm, request, specimenIds);
 
 		if (specimenIds == null || specimenIds.size() == 0)
@@ -85,29 +88,37 @@ public abstract class BulkOperationAction extends SecureAction
 	}
 
 	/**
-	 * This method sets all the common parameters for the SpecimenEventParameter pages
-	 * @param request HttpServletRequest instance in which the data will be set. 
-	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 * This method sets all the common parameters for the SpecimenEventParameter
+	 * pages.
+	 * @param request : request
+	 * @param specimenIds : specimenIds
+	 * @throws Exception : Exception
 	 */
 	private void setCommonRequestParameters(HttpServletRequest request, List specimenIds)
 			throws Exception
 	{
-		//Set the minutesList attribute 
+		// Set the minutesList attribute
 		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 
-		//Set the hourList attribute 
+		// Set the hourList attribute
 		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 
-		//Set User List
+		// Set User List
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
 		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
 		request.setAttribute(Constants.USERLIST, userCollection);
 
-		//Set Specimen Ids
+		// Set Specimen Ids
 		request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenIds);
 	}
 
+	/**
+	 * @param eventParametersForm : eventParametersForm
+	 * @param request : request
+	 * @param specimenIds : specimenIds
+	 * @throws Exception : Exception
+	 */
 	private void setEventSpecificRequestParameters(BulkEventOperationsForm eventParametersForm,
 			HttpServletRequest request, List specimenIds) throws Exception
 	{
@@ -131,8 +142,10 @@ public abstract class BulkOperationAction extends SecureAction
 		}
 	}
 
-	/*
-	 * This method returns all specimen ids in cart
+	/**
+	 * This method returns all specimen ids in cart.
+	 * @param request : request
+	 * @return List : List
 	 */
 	private List getSpecimenIds(HttpServletRequest request)
 	{
@@ -152,6 +165,12 @@ public abstract class BulkOperationAction extends SecureAction
 		return specimenIds;
 	}
 
+	/**
+	 * @param eventParametersForm : eventParametersForm
+	 * @param specimenRow : specimenRow
+	 * @param specimenId : specimenId
+	 * @param request : request
+	 */
 	protected abstract void fillFormData(BulkEventOperationsForm eventParametersForm,
 			List specimenRow, String specimenId, HttpServletRequest request);
 

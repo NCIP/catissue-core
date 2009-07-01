@@ -38,7 +38,8 @@ public class ProcessMyListInputAction extends SecureAction
 			{
 				List < String > specimenLabels = (List < String >) request.getSession()
 						.getAttribute(
-								edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LABELS_LIST);
+								edu.wustl.catissuecore.util.global.
+								Constants.SPECIMEN_LABELS_LIST);
 				//if(specimenLabels.size()>0)
 				if (!(specimenLabels.isEmpty()))
 				{
@@ -50,7 +51,8 @@ public class ProcessMyListInputAction extends SecureAction
 			{
 				List < String > containerNames = (List < String >) request.getSession()
 						.getAttribute(
-								edu.wustl.catissuecore.util.global.Constants.CONTAINER_NAMES_LIST);
+								edu.wustl.catissuecore.util.global.
+								Constants.CONTAINER_NAMES_LIST);
 				//if(containerNames.size()>0)
 				if (!(containerNames.isEmpty()))
 				{

@@ -20,9 +20,15 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ */
 public class AddDepartmentAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(AddDepartmentAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -41,7 +47,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 		departmentForm.setOperation(Constants.ADD);
 		departmentForm.setName(departmentName);
 
-		//Saving the department to the Database using COmmonAddEditAction
+		// Saving the department to the Database using COmmonAddEditAction
 		ActionForward forward = super.execute(mapping, departmentForm, request, response);
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
@@ -65,7 +71,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 		response.setContentType("text/html");
 
 		/**
-		 * sending the response as  departmentId @ departmentName
+		 * sending the response as departmentId @ departmentName
 		 */
 		out.write(responseString);
 

@@ -90,7 +90,8 @@ public class AddEditShipmentRequestAction extends SecureAction
 									"object.drafted.successOnly", "Shipment Request"));
 						}
 					}
-					else if (operation.equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
+					else if (operation.
+							equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
 					{
 						DAO dao = null;
 						ShipmentRequest shipmentReqOld = null;
@@ -135,7 +136,8 @@ public class AddEditShipmentRequestAction extends SecureAction
 		}
 		//		catch (UserNotAuthorizedException authorizedException)
 		//		{
-		//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(authorizedException.getMessage()));
+		//			errors.add(ActionErrors.GLOBAL_ERROR, 
+		//new ActionError(authorizedException.getMessage()));
 		//		}
 		//to be verified...
 		catch (ApplicationException ex)

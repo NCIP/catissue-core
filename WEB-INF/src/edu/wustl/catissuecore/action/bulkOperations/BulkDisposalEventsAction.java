@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 import edu.wustl.catissuecore.util.global.Constants;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class BulkDisposalEventsAction extends BulkOperationAction
 {
 

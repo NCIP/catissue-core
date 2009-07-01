@@ -1,7 +1,6 @@
 /*
  * Created on Jan 17, 2007
  * @author
- *
  */
 
 package edu.wustl.catissuecore.action.annotations;
@@ -20,7 +19,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
@@ -33,19 +31,26 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * @author preeti_munot
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author preeti_munot To change the template for this generated type comment
+ *         go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
+ *         Comments
  */
 public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger
 			.getCommonLogger(LoadDynamicExtentionsDataEntryPageAction.class);
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action
+	 * .ActionMapping, org.apache.struts.action.ActionForm,
+	 * javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -54,7 +59,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm) form;
 		updateCache(request, annotationDataEntryForm);
 
-		//Set as request attribute
+		// Set as request attribute
 		String dynExtDataEntryURL = getDynamicExtensionsDataEntryURL(request,
 				annotationDataEntryForm);
 		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_DATA_ENTRY_URL_ATTRIB,
@@ -64,12 +69,12 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param request
-	 * @param annotationDataEntryForm 
-	 * @throws CacheException 
-	 * @throws DynamicExtensionsApplicationException
-	 * @throws NumberFormatException 
-	 * @throws BizLogicException BizLogic Exception
+	 * @param request : request
+	 * @param annotationDataEntryForm : annotationDataEntryForm
+	 * @throws CacheException : CacheException,
+	 * @throws NumberFormatException : NumberFormatException
+	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void updateCache(HttpServletRequest request,
 			AnnotationDataEntryForm annotationDataEntryForm) throws CacheException,
@@ -78,8 +83,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		String staticEntityId = annotationDataEntryForm.getParentEntityId();
 		String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
 
-		//Set into Cache
-		//CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
+		// Set into Cache
+		// CatissueCoreCacheManager cacheManager =
+		// CatissueCoreCacheManager.getInstance();
 		HttpSession session = request.getSession();
 		Long entityMapId = getEntityMapId(AppUtility.toLong(staticEntityId), AppUtility
 				.toLong(dynEntContainerId));
@@ -91,9 +97,11 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param annotationDataEntryForm
-	 * @throws BizLogicException BizLogic Exception
-	 * @throws DynamicExtensionsApplicationException 
+	 * @param staticEntityId : staticEntityId
+	 * @param dynamicEntityContainerId : dynamicEntityContainerId)
+	 * @return Long : Long
+	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId)
 			throws DynamicExtensionsSystemException, BizLogicException
@@ -114,8 +122,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @param deContainerId
-	 * @param entityMapsForStaticEntity 
+	 * @param deContainerId : deContainerId
+	 * @param entityMapsForStaticEntity : entityMapsForStaticEntity
+	 * @return EntityMap : EntityMap
 	 */
 	private EntityMap getEntityMapForSelectedDE(Long deContainerId,
 			List < EntityMap > entityMapsForStaticEntity)
@@ -130,7 +139,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 				if ((entityMap != null) && (entityMap.getContainerId() != null))
 				{
 					if (entityMap.getContainerId().longValue() == deContainerId.longValue())
-					//If matches the specified DE container id	 
+					// If matches the specified DE container id
 					{
 						return entityMap;
 					}
@@ -141,7 +150,9 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	}
 
 	/**
-	 * @return
+	 * @param request : request
+	 * @param annotationDataEntryForm : annotationDataEntryForm
+	 * @return String : String
 	 */
 	private String getDynamicExtensionsDataEntryURL(HttpServletRequest request,
 			AnnotationDataEntryForm annotationDataEntryForm)
@@ -157,7 +168,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 			isAuthenticatedUser = "true";
 		}
 
-		//Append container id
+		// Append container id
 		logger.info("Load data entry page for Dynamic Extension Entity ["
 				+ annotationDataEntryForm.getSelectedAnnotation() + "]");
 		dynExtDataEntryURL = dynExtDataEntryURL + "&"
@@ -174,7 +185,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		String selectedAnnotation = request.getParameter("selectedAnnotation");
 		String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY + "?"
 				+ "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
-		//append callback url
+		// append callback url
 		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.getCallbackURLParamName()
 				+ "=" + request.getContextPath() + callbackURL + "&isAuthenticatedUser="
 				+ isAuthenticatedUser;

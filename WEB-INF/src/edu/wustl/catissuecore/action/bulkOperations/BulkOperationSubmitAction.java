@@ -24,9 +24,14 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ */
 public class BulkOperationSubmitAction extends BaseAction
 {
-
+/**
+ * logger
+ */
 	private transient Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
 
 	@Override
@@ -50,7 +55,7 @@ public class BulkOperationSubmitAction extends BaseAction
 		{
 			if (specimenIds != null && specimenIds.size() > 0)
 			{
-				//Insert bulk events
+				// Insert bulk events
 				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
 						.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
@@ -65,7 +70,8 @@ public class BulkOperationSubmitAction extends BaseAction
 				ActionErrors errors = null;
 				if (specimenIds != null && specimenIds.size() > 0)
 				{
-					if (bulkEventOperationsForm.getOperation().equals(Constants.BULK_TRANSFERS))
+					if (bulkEventOperationsForm.getOperation().
+							equals(Constants.BULK_TRANSFERS))
 					{
 						messages = new ActionMessages();
 						messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage(
@@ -89,32 +95,25 @@ public class BulkOperationSubmitAction extends BaseAction
 			}
 		}
 
-		/*catch (UserNotAuthorizedException ex)
-		{
-			SessionDataBean sessionDataBean = getSessionData(request);
-		    String userName = "";
-		    if(sessionDataBean != null)
-			{
-			    userName = sessionDataBean.getUserName();
-			}
-			UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
-			String className = new CommonAddEditAction().getActualClassName(SpecimenEventParameters.class.getName());
-			String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
-			String baseObject = "";
-		    if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
-		    {
-		        baseObject = excp.getBaseObject();
-		    } 
-		    else 
-		    {
-		        baseObject = className;
-		    }
-		      
-		    ActionErrors errors = new ActionErrors();
-		    ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
-			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
-		}*/
+		/*
+		 * catch (UserNotAuthorizedException ex) { SessionDataBean
+		 * sessionDataBean = getSessionData(request); String userName = "";
+		 * if(sessionDataBean != null) { userName =
+		 * sessionDataBean.getUserName(); } UserNotAuthorizedException excp =
+		 * (UserNotAuthorizedException) ex; String className = new
+		 * CommonAddEditAction
+		 * ().getActualClassName(SpecimenEventParameters.class.getName());
+		 * String decoratedPrivilegeName =
+		 * Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName()); String
+		 * baseObject = ""; if (excp.getBaseObject() != null &&
+		 * excp.getBaseObject().trim().length() != 0) { baseObject =
+		 * excp.getBaseObject(); } else { baseObject = className; } ActionErrors
+		 * errors = new ActionErrors(); ActionError error = new
+		 * ActionError("access.addedit.object.denied", userName,
+		 * className,decoratedPrivilegeName,baseObject);
+		 * errors.add(ActionErrors.GLOBAL_ERROR, error); saveErrors(request,
+		 * errors); }
+		 */
 		catch (BizLogicException excp)
 		{
 			logger.debug(excp.getCustomizedMsg());

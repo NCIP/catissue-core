@@ -7,17 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 
+/**
+ * @author renuka_bajpai
+ */
 public class BulkTransferEventsAction extends BulkOperationAction
 {
 
-	/**
-	 * This method fills the form data for each specimen
-	 * @param eventParametersForm
-	 * @param specimenIds
-	 * @param sessionDataBean
-	 * @throws Exception
-	 */
 
+/**
+ * @param eventParametersForm : eventParametersForm
+ * @param specimenRow : specimenRow
+ * @param specimenId : specimenId
+ * @param request : request
+ */
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
 			String specimenId, HttpServletRequest request)
 	{

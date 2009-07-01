@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -26,17 +26,20 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
 import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
+import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Constants;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class SaveAnnotationsConditionsAction extends BaseAction
 {
 
@@ -55,18 +58,17 @@ public class SaveAnnotationsConditionsAction extends BaseAction
         return actionfwd;
     }
 /**
- * 
- * @param annotationForm
- * @param request
- * @throws CacheException
- * @throws BizLogicException
- * @throws DynamicExtensionsApplicationException
+ * @param annotationForm : annotationForm
+ * @param request : request
+ * @throws CacheException : CacheException
+ * @throws BizLogicException : BizLogicException
+ * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
  */
     private void saveConditions(AnnotationForm annotationForm,
             HttpServletRequest request) throws CacheException, BizLogicException, DynamicExtensionsSystemException
     {
-        
-        String containerId = request.getParameter("containerId"); 
+
+        String containerId = request.getParameter("containerId");
         AnnotationBizLogic bizLogic = new AnnotationBizLogic();
         List dynamicList = new ArrayList();
         dynamicList = bizLogic.getListOfStaticEntities(Long.valueOf(containerId));
@@ -76,25 +78,25 @@ public class SaveAnnotationsConditionsAction extends BaseAction
         if (dynamicList != null && !dynamicList.isEmpty())
         {
             EntityMap entityMap = (EntityMap) dynamicList.get(0);
-            
+
             Collection<FormContext> formCollPrev = AppUtility.getFormContexts(entityMap.getId());
 
 			Collection<FormContext> currFormColl= new HashSet<FormContext>();
-            int conditionValindex = 0;            
+            int conditionValindex = 0;
             AnnotationUtil util = new AnnotationUtil();
             Boolean check = util.checkForAll(annotationForm.getConditionVal());
             if (formCollPrev != null && !formCollPrev.isEmpty())
             {
                 Iterator<FormContext> formCollIt = formCollPrev.iterator();
-                
+
                 if (annotationForm.getConditionVal() != null)
                 {
 	                while (formCollIt.hasNext())
 	                {
 	                    FormContext formContext = (FormContext) formCollIt.next();
-	                    
+
 	        			Collection<EntityMapCondition> entityMapConditions = AppUtility.getEntityMapConditions(formContext.getId());
-	        			
+
 	                    if((formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(""))&&(formContext.getStudyFormLabel() == null || formContext.getStudyFormLabel().equals("")))
 	                    {
 	                    if (entityMapConditions != null
@@ -111,7 +113,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	                                    EntityMapCondition condn = entityMapCondIter.next();
 	                                    condn.setStaticRecordId(Long.valueOf(annotationForm.getConditionVal()[conditionValindex]));
 	                                }
-	                                else 
+	                                else
 	                                {//if current conditions are more than previously added then make new condn obj
 	                                    EntityMapCondition condn = new EntityMapCondition();
 	                                    condn.setStaticRecordId(Long.valueOf(annotationForm.getConditionVal()[conditionValindex]));
@@ -123,7 +125,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	                                conditionValindex++;
 	                            }
 	                            else if(annotationForm.getConditionVal().length <= entityMapConditions.size())
-	                            {//if previously added conditions were more than current one then deassociate previous 
+	                            {//if previously added conditions were more than current one then deassociate previous
 	                                EntityMapCondition condn = entityMapCondIter.next();
 	                                condn.setFormContext(null);
 	                            }
@@ -150,7 +152,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
                 }
                 entityMap.setFormContextCollection(currFormColl);
                 bizLogic.updateEntityMap(entityMap);
-            }               
+            }
         }
-    }    
+    }
 }

@@ -151,9 +151,9 @@ public class BaseShipmentAction extends SecureAction
 					.getPermittedSitesForUser(userId, isAdmin));
 		}
 		//Sets the sender and reciever site list attribute
-		final String sourceObjectName = Site.class.getName();
-		final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
-		final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
+		//final String sourceObjectName = Site.class.getName();
+		//final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
+		//final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
 		//Collection<NameValueBean> siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
 		Collection < NameValueBean > siteList = this.getNVBRepositorySites();//bug 12247
 		siteList = removeInTransitSite(siteList);
@@ -303,8 +303,8 @@ public class BaseShipmentAction extends SecureAction
 	 * bug 12247
 	 * Added to set only Repository sites in receiver combobox in shipment and shipment request.
 	 * This method will return list of NameValueBean objects of all Repository sites.
-	 * @return
-	 * @throws BizLogicException
+	 * @return List : List < NameValueBean >
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List < NameValueBean > getNVBRepositorySites() throws BizLogicException
 	{

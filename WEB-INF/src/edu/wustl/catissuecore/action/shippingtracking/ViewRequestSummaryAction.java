@@ -35,17 +35,23 @@ import edu.wustl.dao.DAO;
 public class ViewRequestSummaryAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	Logger logger = Logger.getCommonLogger(ViewRequestSummaryAction.class);
 
 	/**
 	 * action method for shipment request summary.
-	 * @param mapping object of ActionMapping class.
-	 * @param form object of ActionForm class.
-	 * @param request object of HttpServletRequest class.
-	 * @param response object of HttpServletResponse class.
+	 * @param mapping
+	 *            object of ActionMapping class.
+	 * @param form
+	 *            object of ActionForm class.
+	 * @param request
+	 *            object of HttpServletRequest class.
+	 * @param response
+	 *            object of HttpServletResponse class.
 	 * @return forward mapping.
-	 * @throws Exception if some problem occurs.
-	 */
+	  */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -63,9 +69,9 @@ public class ViewRequestSummaryAction extends SecureAction
 		}
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
 		ActionErrors actionErrors = new ActionErrors();
-		//		Create DAO for passing as an argument to bizlogic's validate
+		// Create DAO for passing as an argument to bizlogic's validate
 		DAO dao = null;
-		//Create ShipmentRequest Object explicitly
+		// Create ShipmentRequest Object explicitly
 		ShipmentRequest shipmentRequest = new ShipmentRequest();
 		try
 		{
@@ -76,7 +82,8 @@ public class ViewRequestSummaryAction extends SecureAction
 				form = (ShipmentRequestForm) request.getAttribute("shipmentRequestForm");
 			}
 			request.setAttribute("shipmentRequestForm", shipmentRequestForm);
-			// Call ShipmentRequestBizlogic's method to validate the contents of the shipment request
+			// Call ShipmentRequestBizlogic's method to validate the contents of
+			// the shipment request
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
 					.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
@@ -86,7 +93,8 @@ public class ViewRequestSummaryAction extends SecureAction
 				if (shipmentRequestForm.getId() != 0l)
 				{
 					List shipmentRequestList = dao.retrieve(ShipmentRequest.class.getName(),
-							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+							edu.wustl.catissuecore.util.global.
+							Constants.SYSTEM_IDENTIFIER,
 							shipmentRequestForm.getId());
 					if (shipmentRequestList != null && shipmentRequestList.size() == 1)
 					{
@@ -96,7 +104,7 @@ public class ViewRequestSummaryAction extends SecureAction
 			}
 			shipmentRequest.setAllValues(shipmentRequestForm);
 			// Check whether user have privilege to create request.
-			//If not throws UserNotAuthorizedException.
+			// If not throws UserNotAuthorizedException.
 			bizLogic.isAuthorized(dao, shipmentRequest, getSessionData(request));
 			// Validations.
 			boolean isValid = false;
@@ -116,7 +124,8 @@ public class ViewRequestSummaryAction extends SecureAction
 				int count = 0;
 				if (shipmentRequestCollection != null)
 				{
-					Iterator < ShipmentRequest > shipmentRequestIterator = shipmentRequestCollection
+					Iterator < ShipmentRequest > shipmentRequestIterator
+					= shipmentRequestCollection
 							.iterator();
 					ShipmentRequest shipmentRequestObject = shipmentRequestIterator.next();
 					ShipmentRequestForm shipmentReqFormTemp = new ShipmentRequestForm();
@@ -126,23 +135,29 @@ public class ViewRequestSummaryAction extends SecureAction
 						for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
 								.getSpecimenCounter(); specimenCounter++)
 						{
-							specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
-									.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
+							specimenLabelArr[specimenCount++] =
+								(String) shipmentReqFormTemp
+									.getSpecimenDetails("specimenLabel_"
+											+ (specimenCounter + 1));
 						}
 					}
 					if (shipmentReqFormTemp.getContainerCounter() > 0)
 					{
-						for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
+						for (int containerCounter = 0;
+						containerCounter < shipmentReqFormTemp
 								.getContainerCounter(); containerCounter++)
 						{
-							containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
-									.getContainerDetails("containerLabel_" + (containerCounter + 1));
+							containerLabelArr[containerCount++] =
+								(String) shipmentReqFormTemp
+									.getContainerDetails("containerLabel_"
+											+ (containerCounter + 1));
 						}
 					}
 					specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
 					containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
 					// adding reciever site's names to the array
-					recieverSiteNameArr[count] = (String) shipmentRequestObject.getReceiverSite()
+					recieverSiteNameArr[count] =
+						(String) shipmentRequestObject.getReceiverSite()
 							.getName();
 					count++;
 					shipmentReqFormTemp = new ShipmentRequestForm();
@@ -153,17 +168,20 @@ public class ViewRequestSummaryAction extends SecureAction
 						shipmentReqFormTemp = new ShipmentRequestForm();
 						shipmentReqFormTemp.setAllValues(shipmentRequestObject);
 						specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
-						containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
+						containerCountArr[count] =
+							shipmentReqFormTemp.getContainerCounter();
 						// adding reciever site's names to the array
 						recieverSiteNameArr[count] = (String) shipmentRequestObject
 								.getReceiverSite().getName();
 						count++;
 						if (shipmentReqFormTemp.getSpecimenCounter() > 0)
 						{
-							for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
+							for (int specimenCounter = 0;
+							specimenCounter < shipmentReqFormTemp
 									.getSpecimenCounter(); specimenCounter++)
 							{
-								specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
+								specimenLabelArr[specimenCount++] =
+									(String) shipmentReqFormTemp
 										.getSpecimenDetails("specimenLabel_"
 												+ (specimenCounter + 1));
 							}
@@ -173,7 +191,8 @@ public class ViewRequestSummaryAction extends SecureAction
 							for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
 									.getContainerCounter(); containerCounter++)
 							{
-								containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
+								containerLabelArr[containerCount++] =
+									(String) shipmentReqFormTemp
 										.getContainerDetails("containerLabel_"
 												+ (containerCounter + 1));
 							}
@@ -204,37 +223,41 @@ public class ViewRequestSummaryAction extends SecureAction
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
-					.getMessage()));//bug 12568
+					.getMessage()));// bug 12568
 			logger.debug(appException.getMessage(), appException);
 		}
-		//		catch (UserNotAuthorizedException excp)
-		//		{
-		//            //ActionErrors errors = new ActionErrors();
-		//            SessionDataBean sessionDataBean = getSessionData(request);
-		//            String userName = "";
-		//            if(sessionDataBean != null)
-		//        	{
-		//        	    userName = sessionDataBean.getUserName();
-		//        	}
-		//            String className = getActualClassName(shipmentRequest.getClass().getName());
-		//            String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
-		//            String baseObject = "";
-		//            if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
-		//            {
-		//                baseObject = excp.getBaseObject();
-		//            }
-		//            else
-		//            {
-		//                baseObject = className;
-		//            }
-		//            ActionError error = new ActionError("access.addedit.object.denied", userName, className,decoratedPrivilegeName,baseObject);
-		//            actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-		//        	//saveErrors(request, errors);
-		//        	target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-		//            Logger.out.error(excp.getMessage(), excp);
-		//            //return mapping.getInputForward();
-		//            //return mapping.findForward(Constants.FAILURE);
-		//        }
+		// catch (UserNotAuthorizedException excp)
+		// {
+		// //ActionErrors errors = new ActionErrors();
+		// SessionDataBean sessionDataBean = getSessionData(request);
+		// String userName = "";
+		// if(sessionDataBean != null)
+		// {
+		// userName = sessionDataBean.getUserName();
+		// }
+		// String className =
+		// getActualClassName(shipmentRequest.getClass().getName());
+		// String decoratedPrivilegeName =
+		// Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
+		// String baseObject = "";
+		// if (excp.getBaseObject() != null &&
+		// excp.getBaseObject().trim().length() != 0)
+		// {
+		// baseObject = excp.getBaseObject();
+		// }
+		// else
+		// {
+		// baseObject = className;
+		// }
+		// ActionError error = new ActionError("access.addedit.object.denied",
+		// userName, className,decoratedPrivilegeName,baseObject);
+		// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+		// //saveErrors(request, errors);
+		// target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
+		// Logger.out.error(excp.getMessage(), excp);
+		// //return mapping.getInputForward();
+		// //return mapping.findForward(Constants.FAILURE);
+		// }
 		finally
 		{
 			try
@@ -253,9 +276,11 @@ public class ViewRequestSummaryAction extends SecureAction
 
 	/**
 	 * checks for the authorization.
-	 * @param arg0 the request to be processed.
+	 * @param arg0
+	 *            the request to be processed.
 	 * @return boolean result of the operation.
-	 * @throws Exception if some problem occurs.
+	 * @throws Exception
+	 *             if some problem occurs.
 	 */
 	protected boolean isAuthorizedToExecute(HttpServletRequest arg0) throws Exception
 	{
@@ -264,7 +289,8 @@ public class ViewRequestSummaryAction extends SecureAction
 
 	/**
 	 * gets the class name.
-	 * @param name string to be parsed for.
+	 * @param name
+	 *            string to be parsed for.
 	 * @return string containing the class name.
 	 */
 	public String getActualClassName(String name)

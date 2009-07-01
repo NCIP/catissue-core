@@ -92,7 +92,8 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 			isValid = bizLogic.validate(shipmentRequest, dao, operation);
 			if (isValid)
 			{
-				Collection < ShipmentRequest > shipmentRequestCollection = new HashSet < ShipmentRequest >();
+				Collection < ShipmentRequest > shipmentRequestCollection =
+					new HashSet < ShipmentRequest >();
 				shipmentRequestCollection.add(shipmentRequest);
 				Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
 				Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
@@ -111,17 +112,21 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 						for (int specimenCounter = 0; specimenCounter < shipmentRequestForm
 								.getSpecimenCounter(); specimenCounter++)
 						{
-							specimenLabelArr[specimenCount++] = (String) shipmentRequestForm
-									.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
+							specimenLabelArr[specimenCount++] =
+								(String) shipmentRequestForm
+									.getSpecimenDetails("specimenLabel_"
+											+ (specimenCounter + 1));
 						}
 					}
 					// Set containers label to containerLabelArr[]
 					if (shipmentRequestForm.getContainerCounter() > 0)
 					{
-						for (int containerCounter = 0; containerCounter < shipmentRequestForm
+						for (int containerCounter = 0;
+						containerCounter < shipmentRequestForm
 								.getContainerCounter(); containerCounter++)
 						{
-							containerLabelArr[containerCount++] = (String) shipmentRequestForm
+							containerLabelArr[containerCount++] =
+								(String) shipmentRequestForm
 									.getContainerDetails("containerLabel_" + (containerCounter + 1));
 						}
 					}

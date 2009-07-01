@@ -31,7 +31,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * this class implements the action for shipment receiving view.
@@ -56,7 +55,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 		if (request.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER) != null)
 		{
 			shipmentId = Long.parseLong(request
-					.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER));
+					.getParameter(edu.wustl.
+							catissuecore.util.global.Constants.SYSTEM_IDENTIFIER));
 		}
 		ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) form;
 		Shipment shipment = null;
@@ -74,7 +74,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 		//String exceedingMaxLimit = "false";
 
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
+				.getBizLogic(edu.wustl.catissuecore.util.
+						global.Constants.STORAGE_CONTAINER_FORM_ID);
 		// Get storageType for a "Shipment container".
 		/*StorageType st = ((List < StorageType >) bizLogic.retrieve(StorageType.class.getName(),
 				Constants.NAME, Constants.SHIPMENT_CONTAINER_TYPE_NAME)).get(0);*/
@@ -123,7 +124,6 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param bizLogic object of StorageContainerBizLogic class.
 	 * @param request the request to be processed.
 	 * @param shipmentReceivingForm form containing all values.
-	 * @throws DAOException if some database operation fails
 	 */
 	private void setContainerStorageInformation(TreeMap containerMap,
 			StorageContainerBizLogic bizLogic, HttpServletRequest request,
@@ -158,7 +158,6 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param shipment in which specimen storage info is to be set.
 	 * @param request the request to be processed.
 	 * @param shipmentReceivingForm form containing all values.
-	 * @throws DAOException if some database operation fails
 	 */
 	private void setSpecimenStorageInformation(StorageContainerBizLogic bizLogic,
 			TreeMap containerMap, HttpServletRequest request,
@@ -212,12 +211,17 @@ public class ShowShipmentReceivingAction extends SecureAction
 					{
 						//Create DAO
 						dao = AppUtility.openDAOSession(null);
-						IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-						NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-								.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+						IFactory factory = AbstractFactoryConfig.
+						getInstance().getBizLogicFactory();
+						NewSpecimenBizLogic newSpecimenBizLogic =
+							(NewSpecimenBizLogic) factory
+								.getBizLogic(edu.wustl.catissuecore.util.global.
+										Constants.NEW_SPECIMEN_FORM_ID);
 
-						collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
-						if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
+						collectionProtocolId =
+							newSpecimenBizLogic.getObjectId(dao, specimen);
+						if (collectionProtocolId != null 
+								&& !collectionProtocolId.trim().equals(""))
 						{
 							collectionProtocolId = collectionProtocolId.split("_")[1];
 						}
@@ -241,7 +245,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 					}
 				}
 				request.setAttribute(
-						edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
+						edu.wustl.catissuecore.util.
+						global.Constants.COLLECTION_PROTOCOL_ID,
 						collectionProtocolId);
 			}
 		}
@@ -290,11 +295,15 @@ public class ShowShipmentReceivingAction extends SecureAction
 						{
 							if (counter <= numSpecimens)
 							{
-								String initailValuesKey = "Specimen:" + counter + "_initialValues";
+								String initailValuesKey = "Specimen:"
+									+ counter + "_initialValues";
 								String[] initialValues = new String[3];
-								initialValues[0] = ((NameValueBean) containerId[i]).getValue();
-								initialValues[1] = ((NameValueBean) xDim[j]).getValue();
-								initialValues[2] = ((NameValueBean) yDimList.get(k)).getValue();
+								initialValues[0] =
+									((NameValueBean) containerId[i]).getValue();
+								initialValues[1] =
+									((NameValueBean) xDim[j]).getValue();
+								initialValues[2] =
+									((NameValueBean) yDimList.get(k)).getValue();
 								specimenMap.put(initailValuesKey, initialValues);
 								counter++;
 							}
@@ -354,13 +363,15 @@ public class ShowShipmentReceivingAction extends SecureAction
 						{
 							if (counter <= numContainers)
 							{
-								String initailValuesKey = "Container:" + counter + "_initialValues";
+								String initailValuesKey = "Container:"
+									+ counter + "_initialValues";
 
 								String[] initialValues = new String[3];
 								initialValues[0] = ((NameValueBean) containerId[i]).getValue();
 								initialValues[1] = ((NameValueBean) xDim[j]).getValue();
 								initialValues[2] = ((NameValueBean) yDimList.get(k)).getValue();
-								shipmentContainerMap.put(initailValuesKey, initialValues);
+								shipmentContainerMap.put
+								(initailValuesKey, initialValues);
 
 								counter++;
 							}
