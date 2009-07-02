@@ -232,7 +232,7 @@ public class FlexInterface
 	 */
 	public List<String> getSpecimenClassStatusPVList()
 	{
-		Map<String, List<NameValueBean>> specimenTypeMap = getSpecimenTypeMap();
+		Map<String, List<NameValueBean>> specimenTypeMap = AppUtility.getSpecimenTypeMap();
 		Set<String> specimenKeySet = specimenTypeMap.keySet();
 		List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 
@@ -250,7 +250,7 @@ public class FlexInterface
 	 */
 	public List<String> getFluidSpecimenTypePVList()
 	{
-		Map specimenTypeMap = getSpecimenTypeMap();
+		Map specimenTypeMap = AppUtility.getSpecimenTypeMap();
 		List<NameValueBean> aList = (List) specimenTypeMap.get("Fluid");
 		return toStrList(aList);
 	}
@@ -260,7 +260,7 @@ public class FlexInterface
 	 */
 	public List<String> getTissueSpecimenTypePVList()
 	{
-		Map specimenTypeMap = getSpecimenTypeMap();
+		Map specimenTypeMap = AppUtility.getSpecimenTypeMap();
 		List<NameValueBean> aList = (List) specimenTypeMap.get("Tissue");
 		return toStrList(aList);
 	}
@@ -270,7 +270,7 @@ public class FlexInterface
 	 */
 	public List<String> getMolecularSpecimenTypePVList()
 	{
-		Map specimenTypeMap = getSpecimenTypeMap();
+		Map specimenTypeMap = AppUtility.getSpecimenTypeMap();
 		List<NameValueBean> aList = (List<NameValueBean>) specimenTypeMap.get("Molecular");
 		return toStrList(aList);
 	}
@@ -280,50 +280,11 @@ public class FlexInterface
 	 */
 	public List<String> getCellSpecimenTypePVList()
 	{
-		Map specimenTypeMap = getSpecimenTypeMap();
+		Map specimenTypeMap = AppUtility.getSpecimenTypeMap();
 		List<NameValueBean> aList = (List<NameValueBean>) specimenTypeMap.get("Cell");
 		return toStrList(aList);
 	}
 
-	/**
-	 * @return List.
-	 */
-	private Map<String, List<NameValueBean>> getSpecimenTypeMap()
-	{
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE("Specimen");
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
-
-		//List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList("Specimen", null);
-		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
-		//specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
-		{
-			List<NameValueBean> innerList = new ArrayList<NameValueBean>();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			//String tmpStr = pv.getValue();
-			//specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-			while (itr1.hasNext())
-			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
-				//Setting Specimen Type
-				String tmpInnerStr = pv1.getValue();
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-
-			subTypeMap.put(pv.getValue(), innerList);
-		}
-		//System.out.println("subTypeMap "+subTypeMap);
-		return subTypeMap;
-	}
 
 	/**
 	 * @return List.
