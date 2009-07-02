@@ -20,13 +20,24 @@ import edu.wustl.common.action.BaseAction;
 /**
  * @author santosh_chandak
  *
- * This class is used to set request/session data after successful password change. 
+ * This class is used to set request/session data after successful password change.
  */
 public class SetSessionDataForUpdatePasswordAction extends BaseAction
 {
 
 	/**
-	 *  This method sets the session data required for change password feature.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -35,8 +46,8 @@ public class SetSessionDataForUpdatePasswordAction extends BaseAction
 		request.getSession().setAttribute(Constants.PASSWORD_CHANGE_IN_SESSION, new Boolean(true));
 
 		/**
-		 *  TEMP_SESSION_DATA is set when user is forced to change the password, at that time  
-		 *  SESSION_DATA is set to Null. Here we set the SESSION_DATA with TEMP_SESSION_DATA, if  
+		 *  TEMP_SESSION_DATA is set when user is forced to change the password, at that time
+		 *  SESSION_DATA is set to Null. Here we set the SESSION_DATA with TEMP_SESSION_DATA, if
 		 *  TEMP_SESSION_DATA is not null.
 		 */
 		if (request.getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null)

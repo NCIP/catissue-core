@@ -22,13 +22,29 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.tree.QueryTreeNodeData;
 
 /**
- * This action is for getting the Tree For Events and Specimens collected Under that Event for a Collection Protocol
- * @author Virender Mehta
+ * This action is for getting the Tree For Events and Specimens collected Under
+ * that Event for a Collection Protocol.
  *
+ * @author Virender Mehta
  */
 public class ShowCollectionProtocolTreeAction extends BaseAction
 {
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -66,14 +82,16 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 					.iterator();
 			while (collectionProtocolEventBeanCollectionItr.hasNext())
 			{
-				CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
+				CollectionProtocolEventBean collectionProtocolEventBean =
+					(CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 						.next();
 				String objectName = collectionProtocolEventBean.getCollectionPointLabel()
 						+ Constants.CLASS;
-				//if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
-				//{
-				//objectName=Constants.VIEW_SUMMARY
-				//}				
+				// if(operation!=null &&
+				// operation.equals(Constants.VIEW_SUMMARY))
+				// {
+				// objectName=Constants.VIEW_SUMMARY
+				// }
 				displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()
 						+ " " + collectionProtocolEventBean.getCollectionPointLabel();
 				parentIdentifier = collectionProtocolBean.getTitle();
@@ -85,13 +103,16 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 
 				if (SpecimenRequirementMap != null)
 				{
-					Collection specimenRequirementBeanCollection = (Collection) SpecimenRequirementMap
+					Collection specimenRequirementBeanCollection =
+						(Collection) SpecimenRequirementMap
 							.values();
-					Iterator specimenRequirementBeanCollectionItr = specimenRequirementBeanCollection
+					Iterator specimenRequirementBeanCollectionItr =
+						specimenRequirementBeanCollection
 							.iterator();
 					while (specimenRequirementBeanCollectionItr.hasNext())
 					{
-						SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
+						SpecimenRequirementBean specimenRequirementBean =
+							(SpecimenRequirementBean) specimenRequirementBeanCollectionItr
 								.next();
 						specimenDisplayName = createSpecimenNode(objectName, identifier,
 								specimenRequirementBean, treeData, operation);
@@ -112,20 +133,22 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 
 	/**
 	 * This is a recursive method for getting node data.
-	 * @param parentObjectname
-	 * @param parentIdentifier	
-	 * @param specimenRequirementBean
-	 * @param treeData
-	 * @param operation
+	 *
+	 * @param parentObjectname : parentObjectname
+	 * @param parentIdentifier : parentIdentifier
+	 * @param specimenRequirementBean : specimenRequirementBean
+	 * @param treeData : treeData
+	 * @param operation : operation
+	 * @return String : String
 	 */
 	private String createSpecimenNode(String parentObjectname, String parentIdentifier,
 			SpecimenRequirementBean specimenRequirementBean, Vector treeData, String operation)
 	{
 		String objectName = Constants.NEW_SPECIMEN;
-		//if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
-		//{
-		//objectName=Constants.VIEW_SUMMARY;
-		//}
+		// if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
+		// {
+		// objectName=Constants.VIEW_SUMMARY;
+		// }
 		String identifier = specimenRequirementBean.getUniqueIdentifier();
 
 		String displayName = Constants.SPECIMEN + "_"
@@ -142,7 +165,8 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			parentObjectname = objectName;
 			while (aliquotsCollectionItr.hasNext())
 			{
-				SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
+				SpecimenRequirementBean specimenRequirementBean1 =
+					(SpecimenRequirementBean) aliquotsCollectionItr
 						.next();
 
 				displayName = Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
@@ -159,7 +183,8 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			parentObjectname = objectName;
 			while (deriveSpecimenCollectionItr.hasNext())
 			{
-				SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
+				SpecimenRequirementBean specimenRequirementBean1 =
+					(SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
 				displayName = Constants.DERIVED_SPECIMEN
@@ -174,13 +199,13 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 
 	/**
 	 * Description : This is a common method is for adding node.
-	 * 																							
-	 * @param objectName
-	 * @param displayName
-	 * @param parentIdentifier
-	 * @param identifier
-	 * @param parentObjectname
-	 * @param treeData
+	 *
+	 * @param objectName : objectName
+	 * @param displayName : displayName
+	 * @param parentIdentifier : parentIdentifier
+	 * @param identifier : identifier
+	 * @param parentObjectname : parentObjectname
+	 * @param treeData : treeData
 	 */
 	private void addNode(String objectName, String displayName, String parentIdentifier,
 			String identifier, String parentObjectname, Vector < QueryTreeNodeData > treeData)

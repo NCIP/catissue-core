@@ -10,13 +10,14 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.util.MSRUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * Sets data for site,user,action and role on page loading and handles the ajax requests.
+ * Sets data for site,user,action and role on page loading and handles the ajax
+ * requests.
+ *
  * @author vipin_bansal
  */
 public class ShowAssignPrivilegePageAction extends BaseAction
@@ -28,15 +29,29 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 	 */
 	private static org.apache.log4j.Logger logger = Logger
 			.getLogger(CatissueCoreServletContextListener.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ActionForward findForward = null;
-		//String pageOf = request.getParameter(Constants.PAGE_OF);
+		// String pageOf = request.getParameter(Constants.PAGE_OF);
 		MSRUtil msrUtil = new MSRUtil();
 		final CollectionProtocolForm cpForm = (CollectionProtocolForm) form;
-		//final String operation = (String) request.getParameter(Constants.OPERATION);
+		// final String operation = (String)
+		// request.getParameter(Constants.OPERATION);
 		final String cpOperation = (String) request.getParameter("cpOperation");
 		request.setAttribute("cpOperation", cpOperation);
 		if (("AssignPrivilegePage".equals(cpOperation)))

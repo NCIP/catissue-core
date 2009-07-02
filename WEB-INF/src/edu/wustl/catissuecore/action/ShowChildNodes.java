@@ -19,19 +19,33 @@ import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
 
 /**
- * This class class through AJAX call, when user clicks on [+] sign on UI, this class will retrieve all the 
- * required containers under the clicked node. 
- * @author virender_mehta
+ * This class class through AJAX call, when user clicks on [+] sign on UI, this
+ * class will retrieve all the required containers under the clicked node.
  *
+ * @author virender_mehta
  */
 public class ShowChildNodes extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		PrintWriter out = response.getWriter();
-		Vector < StorageContainerTreeNode > containerNodeVector = new Vector < StorageContainerTreeNode >();
+		Vector < StorageContainerTreeNode > containerNodeVector =
+			new Vector < StorageContainerTreeNode >();
 		StringBuffer xmlData = new StringBuffer();
 		String nodeName = request.getParameter(Constants.NODE_NAME);
 		Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
@@ -45,10 +59,12 @@ public class ShowChildNodes extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param childVector This vector contains all the nodes, when user clicks on [+] sign then ajax call retrieve
-	 * all the child node. 
-	 * @param xmlData This is a string buffer and have all the information of the node that is to be transfered to jsp.
+	 * @param childVector
+	 *            This vector contains all the nodes, when user clicks on [+]
+	 *            sign then ajax call retrieve all the child node.
+	 * @param xmlData
+	 *            This is a string buffer and have all the information of the
+	 *            node that is to be transfered to jsp.
 	 * @return xmlData
 	 */
 	private StringBuffer makeXMLData(Vector < StorageContainerTreeNode > childVector,

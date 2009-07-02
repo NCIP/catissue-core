@@ -1,11 +1,14 @@
 /**
- * <p>Title: ShoppingCartAction Class>
- * <p>Description:	This class initializes the fields of ShoppingCart.jsp Page</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ShoppingCartAction Class>
+ * <p>
+ * Description: This class initializes the fields of ShoppingCart.jsp Page
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Aniruddha Phadnis
- * @version 1.00
- * Created on Jul 18, 2005
+ * @version 1.00 Created on Jul 18, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -44,23 +47,41 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.query.util.global.AQConstants;
 import edu.wustl.simplequery.query.ShoppingCart;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ShoppingCartAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ShoppingCartAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in ShoppingCart.jsp Page.
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		HttpSession session = request.getSession(true);
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		String pageNo = (String) request.getParameter(Constants.PAGE_NUMBER);
-		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		String pageOff = (String) request.getParameter(Constants.PAGE_OF);
 		List paginationDataList = null;
 		if (pageNo != null)
@@ -73,7 +94,7 @@ public class ShoppingCartAction extends BaseAction
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic) factory
 				.getBizLogic(Constants.SHOPPING_CART_FORM_ID);
-		//ShoppingCartForm shopForm = (ShoppingCartForm)form;
+		// ShoppingCartForm shopForm = (ShoppingCartForm)form;
 		AdvanceSearchForm advForm = (AdvanceSearchForm) form;
 		String isCheckAllAcrossAllChecked = (String) request
 				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
@@ -84,72 +105,79 @@ public class ShoppingCartAction extends BaseAction
 
 		if (operation == null)
 		{
-			/*List specimenList = bizLogic.retrieve(Specimen.class.getName());
-			Iterator it = specimenList.iterator();
-			
-			while(it.hasNext())
-			{
-				Specimen specimen = (Specimen)it.next();
-				cart.add(specimen);
-			}
-			
-			session.setAttribute(Constants.SHOPPING_CART,cart);*/
+			/*
+			 * List specimenList = bizLogic.retrieve(Specimen.class.getName());
+			 * Iterator it = specimenList.iterator(); while(it.hasNext()) {
+			 * Specimen specimen = (Specimen)it.next(); cart.add(specimen); }
+			 * session.setAttribute(Constants.SHOPPING_CART,cart);
+			 */
 
 			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, makeGridData(cart));
 		}
 		else
 		{
 			session.setAttribute("OrderForm", "true");
-			if (operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
+			if (operation.equals(Constants.ADD)) // IF OPERATION IS "ADD"
 			{
-				//Get the checkbox map values
+				// Get the checkbox map values
 				Map map = advForm.getValues();
 				Logger.out.debug("map of shopping form:" + map);
 				Object obj[] = map.keySet().toArray();
 
 				if (pageOff != null && pageOff.equals(Constants.PAGE_OF_QUERY_MODULE))
 				{
-					/*List spreadsheetColumns = (List) session
-							.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);*/
+					/*
+					 * List spreadsheetColumns = (List) session
+					 * .getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+					 */
 					System.out.println("");
 				}
-				//Get the column Ids from session
+				// Get the column Ids from session
 				Map columnIdsMap = (Map) session.getAttribute(Constants.COLUMN_ID_MAP);
 
-				//Get the select column List from session to get the specimen data
+				// Get the select column List from session to get the specimen
+				// data
 				String[] selectedColumns = (String[]) session
 						.getAttribute(Constants.SELECT_COLUMN_LIST);
 
 				/**
-				 * Name: Deepti
-				 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
-				 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
-				 * 
-				 *  Here, as results are not stored in session, the sql is executed again to form the shopping cart list.  
+				 * Name: Deepti Description: Query performance issue. Instead of
+				 * saving complete query results in session, resultd will be
+				 * fetched for each result page navigation. object of class
+				 * QuerySessionData will be saved in session, which will contain
+				 * the required information for query execution while navigating
+				 * through query result pages. Here, as results are not stored
+				 * in session, the sql is executed again to form the shopping
+				 * cart list.
 				 */
 				int recordsPerPage = new Integer(recordsPerPageStr);
 				int pageNum = new Integer(pageNo);
 				QuerySessionData querySessionData = (QuerySessionData) session
-						.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-				if (isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equals("true"))
+						.getAttribute(edu.wustl.common.util.global.
+								Constants.QUERY_SESSION_DATA);
+				if (isCheckAllAcrossAllChecked != null
+						&& isCheckAllAcrossAllChecked.equals("true"))
 				{
-					Integer totalRecords = (Integer) session.getAttribute(Constants.TOTAL_RESULTS);
+					Integer totalRecords = (Integer)
+					session.getAttribute(Constants.TOTAL_RESULTS);
 					recordsPerPage = totalRecords;
 					pageNum = 1;
 				}
 				paginationDataList = AppUtility.getPaginationDataList(request,
-						getSessionData(request), recordsPerPage, pageNum, querySessionData);
+						getSessionData(request),
+						recordsPerPage, pageNum, querySessionData);
 
 				request.setAttribute(Constants.PAGINATION_DATA_LIST, paginationDataList);
 
 				Logger.out.debug("column ids map in shopping cart" + columnIdsMap);
 
-				//get the specimen column id from the map
+				// get the specimen column id from the map
 				int specimenColumnId = ((Integer) columnIdsMap.get(Constants.SPECIMEN + "."
 						+ Constants.IDENTIFIER)).intValue() - 1;
 				Logger.out.debug("specimen column id in shopping cart" + specimenColumnId);
 				int spreadsheetSpecimenIndex = -1;
-				//get the column in which the specimen column id is displayed in the spreadsheet data
+				// get the column in which the specimen column id is displayed
+				// in the spreadsheet data
 				for (int k = 0; k < selectedColumns.length; k++)
 				{
 					if (selectedColumns[k].equals(Constants.COLUMN + specimenColumnId))
@@ -160,7 +188,7 @@ public class ShoppingCartAction extends BaseAction
 				}
 				Object[] selectedSpecimenIds = null;
 				boolean isError = false;
-				//Bug#2003: For having unique records in result view
+				// Bug#2003: For having unique records in result view
 				if (spreadsheetSpecimenIndex == -1)
 				{
 					ActionErrors errors = new ActionErrors();
@@ -180,7 +208,8 @@ public class ShoppingCartAction extends BaseAction
 					{
 						List selectedRow = (List) paginationDataList.get(index);
 						Logger.out.debug("index selected :" + index);
-						selectedSpecimenIds[index] = selectedRow.get(spreadsheetSpecimenIndex);
+						selectedSpecimenIds[index] =
+							selectedRow.get(spreadsheetSpecimenIndex);
 						Logger.out.debug("specimen id to be added to cart :"
 								+ selectedSpecimenIds[index]);
 					}
@@ -188,7 +217,7 @@ public class ShoppingCartAction extends BaseAction
 				}
 				else
 				{
-					//Add to cart the selected specified Ids.  
+					// Add to cart the selected specified Ids.
 					selectedSpecimenIds = new Object[obj.length];
 					for (int j = 0; j < obj.length; j++)
 					{
@@ -202,7 +231,7 @@ public class ShoppingCartAction extends BaseAction
 						Logger.out.debug("specimen id to be added to cart :"
 								+ selectedSpecimenIds[j]);
 					}
-					//Mandar 27-Apr-06 : bug 1129
+					// Mandar 27-Apr-06 : bug 1129
 				}
 				try
 				{
@@ -212,7 +241,9 @@ public class ShoppingCartAction extends BaseAction
 				{
 					logger.debug(bizEx.getMessage(), bizEx);
 					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError("shoppingcart.error", bizEx.getMessage());
+					ActionError error =
+						new ActionError("shoppingcart.error",
+								bizEx.getMessage());
 					errors.add(ActionErrors.GLOBAL_ERROR, error);
 					saveErrors(request, errors);
 					Logger.out.error(bizEx.getMessage(), bizEx);
@@ -220,7 +251,8 @@ public class ShoppingCartAction extends BaseAction
 					isError = true;
 				}
 				session.setAttribute(Constants.SHOPPING_CART, cart);
-				//List dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+				// List dataList = (List)
+				// session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				List columnList = (List) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 				request.setAttribute(Constants.PAGE_OF, AQConstants.PAGEOF_QUERY_RESULTS);
@@ -229,31 +261,32 @@ public class ShoppingCartAction extends BaseAction
 					target = Constants.SHOPPING_CART_ADD;
 				}
 			}
-			else if (operation.equals(Constants.DELETE)) //IF OPERATION IS "DELETE"
+			else if (operation.equals(Constants.DELETE))
 			{
 
-				//Extracting map from formbean that gives rows to be deleted
+				// Extracting map from formbean that gives rows to be deleted
 				Map map = advForm.getValues();
 				logger.debug("map of shopping form:" + map);
 				Object obj[] = map.keySet().toArray();
 				logger.debug("cart in shopping cart action " + cart.getCart());
-				/*Deleting the selected rows from Shopping Cart object & setting
-				 *it again in the session 
+				/*
+				 * Deleting the selected rows from Shopping Cart object &
+				 * settingit again in the session
 				 */
 				session.setAttribute(Constants.SHOPPING_CART, bizLogic.delete(cart, obj));
 			}
-			else if (operation.equals(Constants.EXPORT)) //IF OPERATION IS "EXPORT"
+			else if (operation.equals(Constants.EXPORT))
 			{
 				String fileName = CommonServiceLocator.getInstance().getAppHome()
 						+ System.getProperty("file.separator") + session.getId() + ".csv";
 
-				//Extracting map from formbean that gives rows to be exported
+				// Extracting map from formbean that gives rows to be exported
 				Map map = advForm.getValues();
 				Object obj[] = map.keySet().toArray();
 
 				List cartList = bizLogic.export(cart, obj, fileName);
 				String delimiter = Constants.DELIMETER;
-				//Exporting the data to shopping cart file & sending it to user
+				// Exporting the data to shopping cart file & sending it to user
 				ExportReport report = new ExportReport(fileName);
 				report.writeData(cartList, delimiter);
 				report.closeFile();
@@ -272,7 +305,8 @@ public class ShoppingCartAction extends BaseAction
 			}
 			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, makeGridData(cart));
 		}
-		//Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
+		// Sets the operation attribute to be used in the Add/Edit Shopping Cart
+		// Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
 		request.setAttribute(Constants.MENU_SELECTED, new String("18"));
@@ -303,7 +337,11 @@ public class ShoppingCartAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	//This function prepares the data in Grid Format
+	/**
+	 * This function prepares the data in Grid Format.
+	 * @param cart : cart
+	 * @return List : list
+	 */
 	private List makeGridData(ShoppingCart cart)
 	{
 		List gridData = new ArrayList();
@@ -324,9 +362,11 @@ public class ShoppingCartAction extends BaseAction
 
 					List rowData = new ArrayList();
 
-					//Adding checkbox as a first column of the grid
-					//	rowData.add("<input type='checkbox' name='value(CB_" + specimen.getId() + ")' id='" + id + "' onClick='changeData(this)'>");
-					rowData.add(String.valueOf(specimen.getId())); // for check box value
+					// Adding checkbox as a first column of the grid
+					// rowData.add("<input type='checkbox' name='value(CB_" +
+					// specimen.getId() + ")' id='" + id +
+					// "' onClick='changeData(this)'>");
+					rowData.add(String.valueOf(specimen.getId()));
 					rowData.add(String.valueOf(specimen.getId()));
 					rowData.add(specimen.getClassName());
 
@@ -349,7 +389,13 @@ public class ShoppingCartAction extends BaseAction
 
 		return gridData;
 	}
-
+	/**
+	 *
+	 * @param advForm : advForm
+	 * @param request : request
+	 * @param cart : cart
+	 * @param session : session
+	 */
 	private void addToOrderLiist(AdvanceSearchForm advForm, HttpServletRequest request,
 			ShoppingCart cart, HttpSession session)
 	{
@@ -373,7 +419,7 @@ public class ShoppingCartAction extends BaseAction
 					strSpecimenId = String.valueOf(specimen.getId());
 					specimenIdList.add(strSpecimenId);
 				}
-				//request.setAttribute("specimenId", specimenIdList);
+				// request.setAttribute("specimenId", specimenIdList);
 				session.setAttribute("specimenId", specimenIdList);
 			}
 		}
