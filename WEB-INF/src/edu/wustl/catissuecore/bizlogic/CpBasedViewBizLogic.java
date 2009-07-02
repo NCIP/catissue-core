@@ -220,14 +220,19 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		String participantDisplayInfo = null;
 		try
 		{
-			hql = "select cpr.particpant.id,cpr.particpant.lastName,cpr.particpant.firstName,"
+			/*hql = "select cpr.particpant.id,cpr.particpant.lastName,cpr.particpant.firstName,"
 					+ "cpr.protocolParticipantIdentifier from "
 					+ CollectionProtocolRegistration.class.getName()
 					+ "where cpr.collectionProtocol.id = " + cpId + " and cpr.activityStatus != '"
 					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and "
 					+ "cpr.particpant.activityStatus != '"
-					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by cpr.particpant.id";
+					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by cpr.particpant.id";*/
 
+			hql= "select p.id,p.lastName,p.firstName,cpr.protocolParticipantIdentifier from " + CollectionProtocolRegistration.class.getName()
+				+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = " + cpId
+				+ " and cpr.activityStatus != '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' and " +
+				"p.activityStatus != '"+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by p.id";
+			
 			List<Object[]> participantList = AppUtility.executeQuery(hql);
 
 			for (int j = 0; j < participantList.size(); j++)
