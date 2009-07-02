@@ -8,13 +8,16 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 
 /**
  * @author supriya_dankh
  *
  */
-public class UserDTO
+public class UserDTO extends AbstractDomainObject
 {
   
 	private User user;
@@ -39,6 +42,25 @@ public class UserDTO
 	public void setUserRowIdBeanMap(Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap) 
 	{
 		this.userRowIdBeanMap = userRowIdBeanMap;
+	}
+
+	@Override
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setAllValues(IValueObject valueObject)
+			throws AssignDataException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setId(Long identifier) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
