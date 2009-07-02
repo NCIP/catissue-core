@@ -1,4 +1,3 @@
-
 /**
  * <p>Title: ConflictReportAction Class>
  * <p>Description:	Initialization action for conflict Report view
@@ -31,7 +30,6 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-
 /**
  * @author renuka_bajpai
  *
@@ -56,21 +54,8 @@ public class ConflictReportAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
-
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-
-		List reportQueueDataList = new ArrayList();
-		ReportLoaderQueue reportLoaderQueue = null;
-		reportQueueDataList = getReportQueueDataList(reportQueueId);
-		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
-		{
-			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
-		}
-
-		String newConfictedReport = reportLoaderQueue.getReportText();
-
-		//retrieved the identified report
-		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
+		String newConfictedReport = ViewSPRUtil.getSynthesizedTextForReportQueue(reportQueueId);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
 	}
