@@ -1,9 +1,8 @@
 /**
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
  * @author Ashish Gupta
- * @version 1.00
- * Created on Sep 19, 2006
+ * @version 1.00 Created on Sep 19, 2006
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -22,37 +21,41 @@ import edu.wustl.dao.exception.DAOException;
 
 public class DepartmentBizLogic extends CatissueDefaultBizLogic
 {
-
+	/**
+	 * 
+	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
-	{		
-		//comment by Ashwin
+	{
+		// comment by Ashwin
 		Department department = (Department) obj;
 		if (department == null)
 		{
-			 String message = ApplicationProperties.getValue("app.department");
-			 throw getBizLogicException(null, "domain.object.null.err.msg", message);
-			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
+			String message = ApplicationProperties.getValue("app.department");
+			throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			// throw new DAOException("domain.object.null.err.msg", new
+			// String[]{"Institution"});
 		}
-		
+
 		Validator validate = new Validator();
 		if (validate.isEmpty(department.getName()))
 		{
 			String message = ApplicationProperties.getValue("department.name");
 			throw getBizLogicException(null, "errors.item.required", message);
-			
-			//throw new DAOException("errors.item.required", new String[]{message});
+
+			// throw new DAOException("errors.item.required", new
+			// String[]{message});
 		}
 		return true;
 	}
-	
+
 	/**
-	 * @author Baljeet Singh
-	 * This method returns the Id of the latest department corresponding to the name
-	 * @param departmentName
-	 * @return
-	 * @throws BizLogicException
+	 * @author Baljeet Singh This method returns the Id of the latest department
+	 *         corresponding to the name
+	 * @param departmentName : departmentName
+	 * @return String
+	 * @throws BizLogicException  : BizLogicException
 	 */
-	public String getLatestDepartment(String departmentName)throws BizLogicException
+	public String getLatestDepartment(String departmentName) throws BizLogicException
 	{
 		try
 		{
@@ -60,39 +63,43 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
 			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause(Constants.NAME,departmentName));
+			queryWhereClause.addCondition(new EqualClause(Constants.NAME, departmentName));
 
-			List departmentList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
+			List departmentList = retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 			Long departmentId = null;
-			if((departmentList != null) && (departmentList.size()>0))
+			if ((departmentList != null) && (departmentList.size() > 0))
 			{
-				departmentId =(Long)departmentList.get(0);
+				departmentId = (Long) departmentList.get(0);
 			}
 			return departmentId.toString();
 		}
-		catch(DAOException daoexp)
+		catch (DAOException daoexp)
 		{
 			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
-	
+
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
+	 * @param domainObject : domainObject
+	 * @param dao : dao
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
+	 *      java.lang.Object)
 	 */
-	public String getObjectId(DAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}
-	
+
 	/**
-	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
-	 * (non-Javadoc)
+	 * To get PrivilegeName for authorization check from
+	 * 'PermissionMapDetails.xml' (non-Javadoc)
+	 * @param domainObject : domainObject
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
 	protected String getPrivilegeKey(Object domainObject)
-    {
-    	return Constants.ADD_EDIT_DEPARTMENT;
-    }
- }
+	{
+		return Constants.ADD_EDIT_DEPARTMENT;
+	}
+}

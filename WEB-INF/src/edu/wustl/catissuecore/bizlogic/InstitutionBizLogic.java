@@ -22,10 +22,21 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
-
+/**
+ * @author
+ *
+ */
 public class InstitutionBizLogic extends CatissueDefaultBizLogic
 {
+
 	private transient Logger logger = Logger.getCommonLogger(InstitutionBizLogic.class);
+	/**
+	 * @param obj : obj
+	 * @param dao : dao
+	 * @param operation : operation
+	 * @throws BizLogicException : BizLogicException
+	 * @return boolean
+	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// comment by Ashwin
@@ -37,7 +48,6 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 			 throw getBizLogicException(null, "domain.object.null.err.msg", message);
 			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
 		}
-		
 		Validator validate = new Validator();
 		if (validate.isEmpty(institution.getName()))
 		{
@@ -51,10 +61,10 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 
     /**
      * @author Baljeet Singh
-     * This method returns the id of the Institution given the name 
-     * @param institutionName
-     * @return
-     * @throws BizLogicException
+     * This method returns the id of the Institution given the name
+     * @param institutionName : institutionName
+     * @return String
+     * @throws BizLogicException : BizLogicException
      */
 	public String getLatestInstitution(String institutionName)throws BizLogicException
 	{
@@ -76,19 +86,23 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
-	
-	
+
 	/**
+	 * @param dao : dao
+	 * @param domainObject : domainObject
+	 * @return String
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(DAO dao, Object domainObject) 
+	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}
-	
+
 	/**
+	 * @param domainObject : domainObject
+	 * @return String
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)

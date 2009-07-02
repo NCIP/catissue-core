@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.domain.User;
@@ -14,85 +15,102 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
-
 /**
  * This class is used to store the QuarantineEventParameter object to database
- * @author vijay_pande
  * 
+ * @author vijay_pande
  */
 public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 {
-	private transient Logger logger = Logger.getCommonLogger(QuarantineEventParameterBizLogic.class);
+
+	private transient Logger logger = Logger
+			.getCommonLogger(QuarantineEventParameterBizLogic.class);
+
 	/**
-	 * Saves the Pathology Report Quarantine Event Parameter object in the database.
-	 * @param obj The storageType object to be saved.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * Saves the Pathology Report Quarantine Event Parameter object in the
+	 * database.
+	 * 
+	 * @param obj
+	 *            The storageType object to be saved.
+	 * @param session
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
-		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieveById(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId()); 
-		deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE_REQUEST);
-		deidentifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-		dao.update(deidentifiedSurgicalPathologyReport);
-		String className;
-		className=User.class.getName();
-		Object object = dao.retrieveById(className, sessionDataBean.getUserId());
-		quarantineParam.setUser((User)object);
-		dao.insert(quarantineParam);
-		
-		AuditManager auditManager = getAuditManager(sessionDataBean);
-		auditManager.insertAudit(dao,quarantineParam);
-		// Since  QuarantineEventParameter is in PUBLIC_DATA_GROUP protection objects not required
-		/*
-		Set protectionObjects = new HashSet();
-		protectionObjects.add(quarantineParam);
-		try
-		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, null);
+			QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = (DeidentifiedSurgicalPathologyReport) dao
+					.retrieveById(DeidentifiedSurgicalPathologyReport.class.getName(),
+							quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId());
+			deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE_REQUEST);
+			deidentifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED
+					.toString());
+			dao.update(deidentifiedSurgicalPathologyReport);
+			String className;
+			className = User.class.getName();
+			Object object = dao.retrieveById(className, sessionDataBean.getUserId());
+			quarantineParam.setUser((User) object);
+			dao.insert(quarantineParam);
+
+			AuditManager auditManager = getAuditManager(sessionDataBean);
+			auditManager.insertAudit(dao, quarantineParam);
+			// Since QuarantineEventParameter is in PUBLIC_DATA_GROUP protection
+			// objects not required
+			/*
+			 * Set protectionObjects = new HashSet();
+			 * protectionObjects.add(quarantineParam); try {
+			 * SecurityManager.getInstance
+			 * (this.getClass()).insertAuthorizationData(null,
+			 * protectionObjects, null); } catch (SMException e) { throw
+			 * handleSMException(e); }
+			 */
 		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
-		}*/
-		}
-		catch(DAOException daoExp)
+		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
-		} catch (AuditException e)
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		catch (AuditException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
 	/**
 	 * Updates the persistent object in the database.
-	 * @param obj The object to be updated.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * 
+	 * @param obj
+	 *            The object to be updated.
+	 * @param session
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
 			QuarantineEventParameter oldquarantineParam = (QuarantineEventParameter) oldObj;
 			QuarantineEventParameter newquarantineParam = (QuarantineEventParameter) obj;
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = oldquarantineParam.getDeIdentifiedSurgicalPathologyReport();
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = oldquarantineParam
+					.getDeIdentifiedSurgicalPathologyReport();
 			oldquarantineParam.setStatus(newquarantineParam.getStatus());
-			if(oldquarantineParam.getStatus().equalsIgnoreCase(Constants.COMMENT_STATUS_QUARANTINED))
+			if (oldquarantineParam.getStatus().equalsIgnoreCase(
+					Constants.COMMENT_STATUS_QUARANTINED))
 			{
 				deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE);
-				deidentifiedSurgicalPathologyReport.setIsQuarantined(Status.ACTIVITY_STATUS_DISABLED.toString());
+				deidentifiedSurgicalPathologyReport
+						.setIsQuarantined(Status.ACTIVITY_STATUS_DISABLED.toString());
 			}
 			else
 			{
-				deidentifiedSurgicalPathologyReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
+				deidentifiedSurgicalPathologyReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE
+						.toString());
 			}
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.update(deidentifiedSurgicalPathologyReport);
@@ -100,9 +118,9 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newquarantineParam);
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
-			logger.error("Error occured while updating object of QuarantineEventParameter"+ex);
+			logger.error("Error occured while updating object of QuarantineEventParameter" + ex);
 		}
 	}
 }

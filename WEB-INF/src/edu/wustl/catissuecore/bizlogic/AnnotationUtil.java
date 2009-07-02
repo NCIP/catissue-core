@@ -1,8 +1,15 @@
 /**
- *<p>Title: </p>
- *<p>Description:  </p>
- *<p>Copyright:TODO</p>
- *@author
+ *<p>
+ * Title:
+ * </p>
+ *<p>
+ * Description:
+ * </p>
+ *<p>
+ * Copyright:TODO
+ * </p>
+ * 
+ * @author
  *@version 1.0
  */
 
@@ -56,12 +63,12 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author vishvesh_mulay
- *
  */
 public class AnnotationUtil
 {
 
 	private static Logger logger = Logger.getCommonLogger(AnnotationUtil.class);
+
 	/**
 	 * @param staticEntityId
 	 * @param dynamicEntityId
@@ -72,71 +79,79 @@ public class AnnotationUtil
 	 * @throws BizLogicException
 	 */
 	public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId,
-			boolean isEntityFromXmi)throws BizLogicException
-			
+			boolean isEntityFromXmi) throws BizLogicException
+
 	{
 		//
-		//        // Get instance of static entity from entity cache maintained by caB2B code
-		//        EntityInterface staticEntity = EntityCacheFactory.getInstance()
-		//                .getEntityById(staticEntityId);
+		// // Get instance of static entity from entity cache maintained by
+		// caB2B code
+		// EntityInterface staticEntity = EntityCacheFactory.getInstance()
+		// .getEntityById(staticEntityId);
 		//
-		//        //Get dynamic Entity from entity Manger
-		//        EntityInterface dynamicEntity = (entityManager
-		//                .getContainerByIdentifier(dynamicEntityId.toString()))
-		//                .getEntity();
+		// //Get dynamic Entity from entity Manger
+		// EntityInterface dynamicEntity = (entityManager
+		// .getContainerByIdentifier(dynamicEntityId.toString()))
+		// .getEntity();
 
-		//This change is done because when the hierarchy of objects grow in dynamic extensions then NonUniqueObjectException is thrown.
-		//So static entity and dynamic entity are brought in one session and then associated.
+		// This change is done because when the hierarchy of objects grow in
+		// dynamic extensions
+		// then NonUniqueObjectException is thrown.
+		// So static entity and dynamic entity are brought in one session and
+		// then associated.
 		DAO dao = null;
 
 		AssociationInterface association = null;
 		EntityInterface staticEntity = null;
 		EntityInterface dynamicEntity = null;
-		
+
 		try
 		{
 			String appName = DynamicExtensionDAO.getInstance().getAppName();
 			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 			dao.openSession(null);
-			staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(), staticEntityId);
-			dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class.getName(),
-					dynamicEntityId)).getAbstractEntity();
-			
+			staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(),
+					staticEntityId);
+			dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class
+					.getName(), dynamicEntityId)).getAbstractEntity();
+
 			dao.closeSession();
 		}
 		catch (DAOException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
+			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
 		}
 		finally
 		{
 			try
 			{
 				dao.closeSession();
-			}			
+			}
 			catch (DAOException exp)
 			{
 				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
-				//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
+				// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+				throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
 			}
 		}
-		
+
 		try
 		{
-			//			Get entitygroup that is used by caB2B for path finder purpose.
+			// Get entitygroup that is used by caB2B for path finder purpose.
 
-			//			Commented this line since performance issue for Bug 6433
-			//EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
-			//List<EntityInterface> processedEntityList = new ArrayList<EntityInterface>();
+			// Commented this line since performance issue for Bug 6433
+			// EntityGroupInterface entityGroupInterface =
+			// Utility.getEntityGroup(staticEntity);
+			// List<EntityInterface> processedEntityList = new
+			// ArrayList<EntityInterface>();
 
-			//addCatissueGroup(dynamicEntity, entityGroupInterface,processedEntityList);
+			// addCatissueGroup(dynamicEntity,
+			// entityGroupInterface,processedEntityList);
 
-			//Create source role and target role for the association
+			// Create source role and target role for the association
 			String roleName = staticEntityId.toString().concat("_").concat(
 					dynamicEntityId.toString());
 			RoleInterface sourceRole = getRole(AssociationType.CONTAINTMENT, roleName,
@@ -144,16 +159,16 @@ public class AnnotationUtil
 			RoleInterface targetRole = getRole(AssociationType.CONTAINTMENT, roleName,
 					Cardinality.ZERO, Cardinality.MANY);
 
-			//Create association with the created source and target roles.
+			// Create association with the created source and target roles.
 			association = getAssociation(dynamicEntity, AssociationDirection.SRC_DESTINATION,
 					roleName, sourceRole, targetRole);
 
-			//Create constraint properties for the created association.
+			// Create constraint properties for the created association.
 			ConstraintPropertiesInterface constraintProperties = getConstraintProperties(
 					staticEntity, dynamicEntity);
 			association.setConstraintProperties(constraintProperties);
 
-			//Add association to the static entity and save it.
+			// Add association to the static entity and save it.
 			staticEntity.addAssociation(association);
 			Long start = new Long(System.currentTimeMillis());
 
@@ -164,41 +179,46 @@ public class AnnotationUtil
 			System.out.println("Time required to persist one entity is " + (end - start) / 1000
 					+ "seconds");
 
-			//Add the column related to the association to the entity table of the associated entities.
+			// Add the column related to the association to the entity table of
+			// the associated entities.
 			EntityManager.getInstance().addAssociationColumn(association);
 
-			//			Collection<AssociationInterface> staticEntityAssociation = staticEntity
-			//					.getAssociationCollection();
-			//			for (AssociationInterface tempAssociation : staticEntityAssociation)
-			//			{
-			//				if (tempAssociation.getName().equals(association.getName()))
-			//				{
-			//					association = tempAssociation;
-			//					break;
-			//				}
-			//			}
+			// Collection<AssociationInterface> staticEntityAssociation =
+			// staticEntity
+			// .getAssociationCollection();
+			// for (AssociationInterface tempAssociation :
+			// staticEntityAssociation)
+			// {
+			// if (tempAssociation.getName().equals(association.getName()))
+			// {
+			// association = tempAssociation;
+			// break;
+			// }
+			// }
 
 			Set<PathObject> processedPathList = new HashSet<PathObject>();
-			addQueryPathsForAllAssociatedEntities(dynamicEntity, staticEntity, association.getId(),staticEntity.getId(), processedPathList);
+			addQueryPathsForAllAssociatedEntities(dynamicEntity, staticEntity, association.getId(),
+					staticEntity.getId(), processedPathList);
 
 			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 		}
 		catch (DynamicExtensionsSystemException e)
 		{
 			logger.debug(e.getMessage(), e);
-			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(null,null ,e.getMessage());   
-			
-		} catch (DynamicExtensionsApplicationException e)
+			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null, null, e.getMessage());
+
+		}
+		catch (DynamicExtensionsApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
-			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(null,null ,e.getMessage());   
-			
+			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null, null, e.getMessage());
+
 		}
 		return association.getId();
 	}
-	
+
 	/**
 	 * @param staticEntityId
 	 * @param dynamicEntityId
@@ -208,45 +228,45 @@ public class AnnotationUtil
 	 * @throws DynamicExtensionsSystemException
 	 * @throws BizLogicException
 	 */
-	public static synchronized Long addNewPathsForExistingMainContainers(Long staticEntityId, Long dynamicEntityId,
-			boolean isEntityFromXmi)
-			throws //DynamicExtensionsSystemException,
+	public static synchronized Long addNewPathsForExistingMainContainers(Long staticEntityId,
+			Long dynamicEntityId, boolean isEntityFromXmi)
+			throws // DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
 			BizLogicException
 	{
 		String appName = DynamicExtensionDAO.getInstance().getAppName();
 		DAO dao = null;
 		AssociationInterface association = null;
-		
+
 		try
 		{
 			dao = DAOConfigFactory.getInstance().getDAOFactory(appName).getDAO();
 			dao.openSession(null);
-		
-		
-		
-		EntityInterface staticEntity = null;
-		EntityInterface dynamicEntity = null;
-		
-		staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(), staticEntityId);
-		dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class.getName(),
-					dynamicEntityId)).getAbstractEntity();
-			
-		association = getAssociationForEntity(staticEntity, dynamicEntity);
 
-		Set<PathObject> processedPathList = new HashSet<PathObject>();
-			
-		addQueryPathsForEntityHierarchy(dynamicEntity, staticEntity, association.getId(), staticEntity.getId(), processedPathList);
-		addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
+			EntityInterface staticEntity = null;
+			EntityInterface dynamicEntity = null;
+
+			staticEntity = (EntityInterface) dao.retrieveById(Entity.class.getName(),
+					staticEntityId);
+			dynamicEntity = (EntityInterface) ((Container) dao.retrieveById(Container.class
+					.getName(), dynamicEntityId)).getAbstractEntity();
+
+			association = getAssociationForEntity(staticEntity, dynamicEntity);
+
+			Set<PathObject> processedPathList = new HashSet<PathObject>();
+
+			addQueryPathsForEntityHierarchy(dynamicEntity, staticEntity, association.getId(),
+					staticEntity.getId(), processedPathList);
+			addEntitiesToCache(isEntityFromXmi, dynamicEntity, staticEntity);
 
 		}
-		
+
 		catch (DAOException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-			throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
+			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
 
 		}
 		finally
@@ -255,26 +275,28 @@ public class AnnotationUtil
 			{
 				dao.closeSession();
 			}
-			
+
 			catch (DAOException exp)
 			{
 				logger.debug(exp.getMessage(), exp);
 				exp.printStackTrace();
-				//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
-				throw new BizLogicException(exp.getErrorKey(),exp ,exp.getMsgValues());   
+				// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
+				throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
 
 			}
 		}
 		return association.getId();
 	}
-	
+
 	/**
 	 * getAssociationForEntity.
+	 * 
 	 * @param staticEntity
 	 * @param dynamicEntity
 	 * @return
 	 */
-	public static AssociationInterface getAssociationForEntity(EntityInterface staticEntity,AbstractEntityInterface dynamicEntity)
+	public static AssociationInterface getAssociationForEntity(EntityInterface staticEntity,
+			AbstractEntityInterface dynamicEntity)
 	{
 		Collection<AssociationInterface> associationCollection = staticEntity
 				.getAssociationCollection();
@@ -288,7 +310,7 @@ public class AnnotationUtil
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param dynamicEntity
 	 * @param entityGroupInterface
@@ -320,7 +342,7 @@ public class AnnotationUtil
 		try
 		{
 			jdbcDAO = openSession();
-			ispathAdded = isPathAdded(staticEntity.getId(),dynamicEntity.getId(), jdbcDAO);
+			ispathAdded = isPathAdded(staticEntity.getId(), dynamicEntity.getId(), jdbcDAO);
 		}
 		catch (DAOException daoExp)
 		{
@@ -339,16 +361,16 @@ public class AnnotationUtil
 				e.printStackTrace();
 			}
 		}
-		if(!ispathAdded)
+		if (!ispathAdded)
 		{
-			if(dynamicEntity.getId() != null)
+			if (dynamicEntity.getId() != null)
 			{
 				addPathsForQuery(staticEntity.getId(), dynamicEntity, staticEntityId, associationId);
 			}
 		}
 		Collection<AssociationInterface> associationCollection = dynamicEntity
-		.getAssociationCollection();
-		for(AssociationInterface association : associationCollection)
+				.getAssociationCollection();
+		for (AssociationInterface association : associationCollection)
 		{
 			System.out.println("PERSISTING PATH");
 			addQueryPathsForEntityHierarchy(association.getTargetEntity(), dynamicEntity,
@@ -358,7 +380,7 @@ public class AnnotationUtil
 		System.out.println("Time required to add complete paths is" + (end - start) / 1000
 				+ "seconds");
 	}
-	
+
 	/**
 	 * @param staticEntityId
 	 * @param dynamicEntityId
@@ -371,7 +393,7 @@ public class AnnotationUtil
 		{
 			PreparedStatement preparedStatement = null;
 			ResultSet resultSet = null;
-		
+
 			String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
 			preparedStatement = jdbcDAO.getPreparedStatement(checkForPathQuery);
 			preparedStatement.setLong(1, staticEntityId);
@@ -400,7 +422,7 @@ public class AnnotationUtil
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		
+
 		return ispathAdded;
 	}
 
@@ -408,7 +430,8 @@ public class AnnotationUtil
 	 * @param dynamicEntity
 	 * @param staticEntity
 	 */
-	public static void addCatissueGroup(EntityInterface dynamicEntity, EntityGroupInterface entityGroupInterface,List<EntityInterface> processedEntityList)
+	public static void addCatissueGroup(EntityInterface dynamicEntity,
+			EntityGroupInterface entityGroupInterface, List<EntityInterface> processedEntityList)
 	{
 		if (processedEntityList.contains(dynamicEntity))
 		{
@@ -419,7 +442,8 @@ public class AnnotationUtil
 			processedEntityList.add(dynamicEntity);
 		}
 
-		//Add the entity group to the dynamic entity and all it's associated entities.
+		// Add the entity group to the dynamic entity and all it's associated
+		// entities.
 		if (!checkBaseEntityGroup(dynamicEntity.getEntityGroup()))
 		{
 			dynamicEntity.setEntityGroup(entityGroupInterface);
@@ -429,8 +453,10 @@ public class AnnotationUtil
 
 		for (AssociationInterface associationInteface : associationCollection)
 		{
-			addCatissueGroup(associationInteface.getTargetEntity(), entityGroupInterface, processedEntityList);
-			//associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
+			addCatissueGroup(associationInteface.getTargetEntity(), entityGroupInterface,
+					processedEntityList);
+			// associationInteface.getTargetEntity().addEntityGroupInterface(
+			// entityGroupInterface);
 		}
 	}
 
@@ -456,10 +482,11 @@ public class AnnotationUtil
 	 * @throws BizLogicException
 	 */
 	public static void addQueryPathsForAllAssociatedEntities(EntityInterface dynamicEntity,
-			EntityInterface staticEntity, Long associationId, Long staticEntityId, Set<PathObject> processedPathList) throws BizLogicException
+			EntityInterface staticEntity, Long associationId, Long staticEntityId,
+			Set<PathObject> processedPathList) throws BizLogicException
 	{
 		Long start = new Long(System.currentTimeMillis());
-		if(staticEntity != null)
+		if (staticEntity != null)
 		{
 			PathObject pathObject = new PathObject();
 			pathObject.setSourceEntity(staticEntity);
@@ -474,7 +501,8 @@ public class AnnotationUtil
 				processedPathList.add(pathObject);
 			}
 
-			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity,staticEntityId, associationId);
+			AnnotationUtil.addPathsForQuery(staticEntity.getId(), dynamicEntity, staticEntityId,
+					associationId);
 		}
 
 		Collection<AssociationInterface> associationCollection = dynamicEntity
@@ -482,11 +510,12 @@ public class AnnotationUtil
 		for (AssociationInterface associationInteface : associationCollection)
 		{
 			System.out.println("PERSISTING PATH");
-			addQueryPathsForAllAssociatedEntities( associationInteface
-					.getTargetEntity(),dynamicEntity, associationInteface.getId(),staticEntityId,processedPathList);
+			addQueryPathsForAllAssociatedEntities(associationInteface.getTargetEntity(),
+					dynamicEntity, associationInteface.getId(), staticEntityId, processedPathList);
 
-			//			AnnotationUtil.addPathsForQuery(dynamicEntity.getId(), associationInteface
-			//					.getTargetEntity().getId(), associationInteface.getId());
+			// AnnotationUtil.addPathsForQuery(dynamicEntity.getId(),
+			// associationInteface
+			// .getTargetEntity().getId(), associationInteface.getId());
 		}
 		Long end = new Long(System.currentTimeMillis());
 		System.out.println("Time required to add complete paths is" + (end - start) / 1000
@@ -505,29 +534,34 @@ public class AnnotationUtil
 	{
 		Long start = new Long(System.currentTimeMillis());
 
-//      Commented the code as this is not required since cache is refreshed using refreshCache.
+		// Commented the code as this is not required since cache is refreshed
+		// using refreshCache.
 
-//		Set<EntityInterface> entitySet = new HashSet<EntityInterface>();
-//		entitySet.add(dynamicEntity);
-//		entitySet.add(staticEntity);
-//		DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity, entitySet);
+		// Set<EntityInterface> entitySet = new HashSet<EntityInterface>();
+		// entitySet.add(dynamicEntity);
+		// entitySet.add(staticEntity);
+		// DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity,
+		// entitySet);
 		if (!isEntityFromXmi)
 		{
-//			Commented the code as this is not required since cache is refreshed using refreshCache.
+			// Commented the code as this is not required since cache is
+			// refreshed using refreshCache.
 
-//			for (EntityInterface entity : entitySet)
-//			{
-//				EntityCache.getInstance().addEntityToCache(entity);
-//			}
-			//EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
+			// for (EntityInterface entity : entitySet)
+			// {
+			// EntityCache.getInstance().addEntityToCache(entity);
+			// }
+			// EntityInterface
+			// cachedStaticEntityInterfaceEntityCache.getInstance
+			// ().getEntityById(staticEntityId);
 			Connection conn = null;
 			try
 			{
 				InitialContext ctx = new InitialContext();
 				String DATASOURCE_JNDI_NAME = "java:/catissuecore";
-		        DataSource ds = (DataSource)ctx.lookup(DATASOURCE_JNDI_NAME);
-		        conn = ds.getConnection();
-				PathFinder.getInstance().refreshCache(conn,true);
+				DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
+				conn = ds.getConnection();
+				PathFinder.getInstance().refreshCache(conn, true);
 			}
 			catch (Exception e)
 			{
@@ -538,7 +572,7 @@ public class AnnotationUtil
 			{
 				try
 				{
-					if(conn!=null)
+					if (conn != null)
 					{
 						conn.close();
 					}
@@ -567,25 +601,24 @@ public class AnnotationUtil
 	 * @param dynamicEntity
 	 * @return
 	 */
-	 private static ConstraintPropertiesInterface getConstraintProperties(
-				EntityInterface staticEntity, EntityInterface dynamicEntity)
+	private static ConstraintPropertiesInterface getConstraintProperties(
+			EntityInterface staticEntity, EntityInterface dynamicEntity)
+	{
+		ConstraintPropertiesInterface constprop = DomainObjectFactory.getInstance()
+				.createConstraintProperties();
+		constprop.setName(dynamicEntity.getTableProperties().getName());
+		for (AttributeInterface attribute : staticEntity.getPrimaryKeyAttributeCollection())
 		{
-			ConstraintPropertiesInterface constprop = DomainObjectFactory.getInstance()
-					.createConstraintProperties();
-			constprop.setName(dynamicEntity.getTableProperties().getName());
-			for (AttributeInterface attribute : staticEntity.getPrimaryKeyAttributeCollection())
-			{
-				constprop.getTgtEntityConstraintKeyProperties().getTgtForiegnKeyColumnProperties()
-						.setName(
-								"DYEXTN_AS_" + staticEntity.getId().toString() + "_"
-										+ dynamicEntity.getId().toString());
-				constprop.getTgtEntityConstraintKeyProperties().setSrcPrimaryKeyAttribute(attribute);
+			constprop.getTgtEntityConstraintKeyProperties().getTgtForiegnKeyColumnProperties()
+					.setName(
+							"DYEXTN_AS_" + staticEntity.getId().toString() + "_"
+									+ dynamicEntity.getId().toString());
+			constprop.getTgtEntityConstraintKeyProperties().setSrcPrimaryKeyAttribute(attribute);
 
-			}
-			constprop.getSrcEntityConstraintKeyPropertiesCollection().clear();
-			return constprop;
 		}
-
+		constprop.getSrcEntityConstraintKeyPropertiesCollection().clear();
+		return constprop;
+	}
 
 	/**
 	 * @param targetEntity
@@ -597,10 +630,10 @@ public class AnnotationUtil
 	 */
 	private static AssociationInterface getAssociation(EntityInterface targetEntity,
 			AssociationDirection associationDirection, String assoName, RoleInterface sourceRole,
-			RoleInterface targetRole) throws BizLogicException 
+			RoleInterface targetRole) throws BizLogicException
 	{
 		AssociationInterface association = null;
-		try 
+		try
 		{
 			association = DomainObjectFactory.getInstance().createAssociation();
 			association.setTargetEntity(targetEntity);
@@ -608,22 +641,27 @@ public class AnnotationUtil
 			association.setName(assoName);
 			association.setSourceRole(sourceRole);
 			association.setTargetRole(targetRole);
-		} 
-		catch (DynamicExtensionsSystemException exp) {
+		}
+		catch (DynamicExtensionsSystemException exp)
+		{
 			logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
-			//ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
-			throw new BizLogicException(null,null ,exp.getMessage());    
+			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
+			throw new BizLogicException(null, null, exp.getMessage());
 		}
 		return association;
 	}
 
 	/**
-	 * @param associationType associationType
-	 * @param name name
-	 * @param minCard  minCard
-	 * @param maxCard maxCard
-	 * @return  RoleInterface
+	 * @param associationType
+	 *            associationType
+	 * @param name
+	 *            name
+	 * @param minCard
+	 *            minCard
+	 * @param maxCard
+	 *            maxCard
+	 * @return RoleInterface
 	 */
 	private static RoleInterface getRole(AssociationType associationType, String name,
 			Cardinality minCard, Cardinality maxCard)
@@ -642,7 +680,7 @@ public class AnnotationUtil
 	 * @param deAssociationID
 	 */
 	public static void addPathsForQuery(Long staticEntityId, EntityInterface dynamicEntity,
-			Long hookEntityId,Long deAssociationID)
+			Long hookEntityId, Long deAssociationID)
 	{
 		Long maxPathId = getMaxId("path_id", "path");
 		maxPathId += 1;
@@ -654,12 +692,12 @@ public class AnnotationUtil
 					deAssociationID);
 		}
 	}
+
 	/**
-	 *
 	 * @param hookEntityId
 	 */
-	private static void addPathFromStaticEntity(Long maxPathId, Long hookEntityId, Long previousDynamicEntity,Long dynamicEntityId,
-			Long deAssociationId)
+	private static void addPathFromStaticEntity(Long maxPathId, Long hookEntityId,
+			Long previousDynamicEntity, Long dynamicEntityId, Long deAssociationId)
 	{
 		ResultSet resultSet = null;
 		PreparedStatement statement = null;
@@ -668,24 +706,23 @@ public class AnnotationUtil
 		try
 		{
 			jdbcDAO = openSession();
-			
+
 			query = "select ASSOCIATION_ID from INTRA_MODEL_ASSOCIATION where DE_ASSOCIATION_ID="
-				+ deAssociationId;
+					+ deAssociationId;
 			statement = jdbcDAO.getPreparedStatement(query);
 			resultSet = statement.executeQuery();
 			resultSet.next();
 			Long intraModelAssociationId = resultSet.getLong(1);
-			jdbcDAO.closeStatement(resultSet);			
+			jdbcDAO.closeStatement(resultSet);
 
-			query = "select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID="
-					+ hookEntityId + " and LAST_ENTITY_ID=" + previousDynamicEntity;
+			query = "select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID=" + hookEntityId
+					+ " and LAST_ENTITY_ID=" + previousDynamicEntity;
 			statement = jdbcDAO.getPreparedStatement(query);
 			resultSet = statement.executeQuery();
 			resultSet.next();
 			String path = resultSet.getString(1);
 			path = path.concat("_").concat(intraModelAssociationId.toString());
-			jdbcDAO.closeStatement(resultSet);	
-
+			jdbcDAO.closeStatement(resultSet);
 
 			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
 			statement = jdbcDAO.getPreparedStatement(query);
@@ -728,14 +765,15 @@ public class AnnotationUtil
 
 		}
 	}
+
 	/**
 	 * @param maxPathId
 	 * @param staticEntityId
 	 * @param dynamicEntityId
 	 * @param deAssociationID
 	 */
-	private static void insertNewPaths(Long maxPathId, Long staticEntityId,  EntityInterface dynamicEntity,
-			Long deAssociationID)
+	private static void insertNewPaths(Long maxPathId, Long staticEntityId,
+			EntityInterface dynamicEntity, Long deAssociationID)
 	{
 		// StringBuffer query = new StringBuffer();
 		Long intraModelAssociationId = getMaxId("ASSOCIATION_ID", "ASSOCIATION");
@@ -743,12 +781,13 @@ public class AnnotationUtil
 		JDBCDAO jdbcDAO = null;
 		try
 		{
-			jdbcDAO  = openSession();
+			jdbcDAO = openSession();
 
 			String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
 					+ intraModelAssociationId
 					+ ","
-					+ edu.wustl.cab2b.server.path.AssociationType.INTRA_MODEL_ASSOCIATION.getValue() + ")";
+					+ edu.wustl.cab2b.server.path.AssociationType.INTRA_MODEL_ASSOCIATION
+							.getValue() + ")";
 			String intraModelQuery = "insert into INTRA_MODEL_ASSOCIATION (ASSOCIATION_ID, DE_ASSOCIATION_ID) values ("
 					+ intraModelAssociationId + "," + deAssociationID + ")";
 			String directPathQuery = "insert into PATH (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values ("
@@ -766,11 +805,12 @@ public class AnnotationUtil
 			list.add(directPathQuery);
 
 			executeQuery(jdbcDAO, list);
-			
+
 			maxPathId += 1;
 			addInheritancePaths(maxPathId, dynamicEntity, staticEntityId, jdbcDAO);
-			//addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId, intraModelAssociationId,
-					//conn);
+			// addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId,
+			// intraModelAssociationId,
+			// conn);
 			jdbcDAO.commit();
 		}
 		catch (Exception e)
@@ -791,26 +831,28 @@ public class AnnotationUtil
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * This method replicates paths of parent entity for derived entity
+	 * 
 	 * @param maxPathId
-	 * @param connection 
+	 * @param connection
 	 * @param dynamicEntityId
 	 * @param conn
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws DynamicExtensionsApplicationException 
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
 	 */
-	private static void addInheritancePaths(Long maxPathId, EntityInterface entity, Long staticEntityId, JDBCDAO jdbcDAO)
-			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	private static void addInheritancePaths(Long maxPathId, EntityInterface entity,
+			Long staticEntityId, JDBCDAO jdbcDAO) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException
 	{
 		ResultSet resultSet = null; // NOPMD - DD anomaly
 
 		try
 		{
-			//This map is added because the following algo creates multiple paths between same entities
-			//The map will contains only single unique path between entities
+			// This map is added because the following algo creates multiple
+			// paths between same entities
+			// The map will contains only single unique path between entities
 			Map<String, Object> mapQuery = new HashMap<String, Object>();
 			List<String> query = new ArrayList<String>();
 			String sql = "";
@@ -821,7 +863,8 @@ public class AnnotationUtil
 
 			while (entity.getParentEntity() != null)
 			{
-				//replicate outgoing paths of parent entity (outgoing associations)
+				// replicate outgoing paths of parent entity (outgoing
+				// associations)
 				Collection<AssociationInterface> allAssociations = entity.getParentEntity()
 						.getAllAssociations();
 				for (AssociationInterface association : allAssociations)
@@ -849,8 +892,8 @@ public class AnnotationUtil
 						{
 							sql = "INSERT INTO path values(" + maxPathId + "," + entity.getId()
 									+ ",'" + intermediatePath + "'," + last_entity_id + ")";
-							String uniquepathStr = entity.getId() + "_" + intermediatePath
-									+ "_" + last_entity_id;
+							String uniquepathStr = entity.getId() + "_" + intermediatePath + "_"
+									+ last_entity_id;
 							if (!mapQuery.containsKey(uniquepathStr))
 							{
 								mapQuery.put(uniquepathStr, null);
@@ -862,7 +905,8 @@ public class AnnotationUtil
 
 				}
 
-				// replicate incoming paths of parent entity (incoming associations)
+				// replicate incoming paths of parent entity (incoming
+				// associations)
 				intermediatePath = "";
 				sql = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
 						+ entity.getParentEntity().getId();
@@ -886,11 +930,10 @@ public class AnnotationUtil
 						ispathAdded = isPathAdded(first_entity_id, entity.getId(), jdbcDAO);
 						if (!ispathAdded)
 						{
-							sql = "INSERT INTO path values(" + maxPathId + ","
-									+ first_entity_id + ",'" + intermediatePath + "',"
-									+ entity.getId() + ")";
-							String uniquepathStr = first_entity_id + "_" + intermediatePath
-									+ "_" + entity.getId();
+							sql = "INSERT INTO path values(" + maxPathId + "," + first_entity_id
+									+ ",'" + intermediatePath + "'," + entity.getId() + ")";
+							String uniquepathStr = first_entity_id + "_" + intermediatePath + "_"
+									+ entity.getId();
 
 							if (!mapQuery.containsKey(uniquepathStr))
 							{
@@ -901,32 +944,35 @@ public class AnnotationUtil
 						}
 					}
 				}
-				
+
 				entity = entity.getParentEntity();
 			}
-			
+
 			executeQuery(jdbcDAO, query);
 
-		}//while
+		}// while
 		catch (SQLException e)
 		{
-			throw new DynamicExtensionsSystemException("SQL Exception while adding paths for derived entity.", e);
+			throw new DynamicExtensionsSystemException(
+					"SQL Exception while adding paths for derived entity.", e);
 		}
 		catch (DAOException e)
 		{
-			throw new DynamicExtensionsSystemException("SQL Exception while adding paths for derived entity.", e);
+			throw new DynamicExtensionsSystemException(
+					"SQL Exception while adding paths for derived entity.", e);
 		}
 	}
 
 	private static JDBCDAO openSession() throws DAOException
 	{
 		String applicationName = CommonServiceLocator.getInstance().getAppName();
-		JDBCDAO jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
+		JDBCDAO jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName)
+				.getJDBCDAO();
 		jdbcDAO.openSession(null);
-		
+
 		return jdbcDAO;
 	}
-	
+
 	private static JDBCDAO closeSession(JDBCDAO jdbcDAO) throws DAOException
 	{
 		jdbcDAO.closeSession();
@@ -950,12 +996,11 @@ public class AnnotationUtil
 		String query = "";
 		try
 		{
-			//resultSet = getIndirectPaths(conn, staticEntityId);
+			// resultSet = getIndirectPaths(conn, staticEntityId);
 			query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
 					+ staticEntityId;
 			statement = conn.prepareStatement(query);
 			resultSet = statement.executeQuery();
-
 
 			query = "insert into path (PATH_ID, FIRST_ENTITY_ID,INTERMEDIATE_PATH, LAST_ENTITY_ID) values (?,?,?,?)";
 			statement = conn.prepareStatement(query);
@@ -996,45 +1041,47 @@ public class AnnotationUtil
 		}
 	}
 
-//	/**
-//	 * @param conn
-//	 * @param staticEntityId
-//	 * @return
-//	 * @throws SQLException
-//	 */
-//	private static ResultSet getIndirectPaths(Connection conn, Long staticEntityId)
-//	{
-//		String query = "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
-//				+ staticEntityId;
-//		java.sql.PreparedStatement statement = null;
-//		ResultSet resultSet = null;
-//		try
-//		{
-//			statement = conn.prepareStatement(query);
-//			resultSet = statement.executeQuery();
-//		}
-//		catch (SQLException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		finally
-//		{
-//			try
-//			{
-//
-//				statement.close();
-//			}
-//			catch (SQLException e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//		}
-//		return resultSet;
-//	}
+	// /**
+	// * @param conn
+	// * @param staticEntityId
+	// * @return
+	// * @throws SQLException
+	// */
+	// private static ResultSet getIndirectPaths(Connection conn, Long
+	// staticEntityId)
+	// {
+	// String query =
+	// "select FIRST_ENTITY_ID,INTERMEDIATE_PATH from path where LAST_ENTITY_ID="
+	// + staticEntityId;
+	// java.sql.PreparedStatement statement = null;
+	// ResultSet resultSet = null;
+	// try
+	// {
+	// statement = conn.prepareStatement(query);
+	// resultSet = statement.executeQuery();
+	// }
+	// catch (SQLException e)
+	// {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// finally
+	// {
+	// try
+	// {
+	//
+	// statement.close();
+	// }
+	// catch (SQLException e)
+	// {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// }
+	// return resultSet;
+	// }
 
 	/**
 	 * @param conn
@@ -1043,10 +1090,10 @@ public class AnnotationUtil
 	 */
 	private static void executeQuery(JDBCDAO jdbcDAO, List<String> queryList)
 	{
-	
+
 		try
 		{
-			
+
 			for (String query : queryList)
 			{
 				jdbcDAO.executeUpdate(query);
@@ -1057,7 +1104,7 @@ public class AnnotationUtil
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -1068,8 +1115,9 @@ public class AnnotationUtil
 	private static Long getMaxId(String columnName, String tableName)
 	{
 		String query = "select max(" + columnName + ") from " + tableName;
-		//		HibernateDAO hibernateDAO = (HibernateDAO) DAOFactory.getInstance().getDAO(
-		//				0);
+		// HibernateDAO hibernateDAO = (HibernateDAO)
+		// DAOFactory.getInstance().getDAO(
+		// 0);
 		ResultSet resultSet = null;
 		JDBCDAO jdbcDAO = null;
 		try

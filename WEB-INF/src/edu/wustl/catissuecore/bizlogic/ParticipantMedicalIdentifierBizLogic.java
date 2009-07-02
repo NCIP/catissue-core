@@ -20,33 +20,33 @@ import edu.wustl.dao.DAO;
 
 public class ParticipantMedicalIdentifierBizLogic extends CatissueDefaultBizLogic
 {
-
+	/**
+	 * @param obj : obj
+	 * @param dao : dao
+	 * @param operation : operation
+	 * @return boolean
+	 * @throws BizLogicException : BizLogicException
+	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
-	{	
-		
+	{
 		//throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
-		
 		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) obj;
-			
 		Site site = participantMedicalIdentifier.getSite();
 		Participant participant = participantMedicalIdentifier.getParticipant();
 		String medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
 		if (site==null || site.getId()==null)
 		{
-		
 			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		if (participant==null || participant.getId()==null)
 		{
-		
 			throw getBizLogicException(null, "participant.medical.identifier.creation.error", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		Validator validate = new Validator();
 		if (validate.isEmpty(medicalRecordNumber))
 		{
-		
 			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}

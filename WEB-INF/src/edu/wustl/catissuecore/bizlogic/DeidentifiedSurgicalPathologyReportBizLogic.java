@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.HashMap;
@@ -21,35 +22,45 @@ import edu.wustl.dao.DAO;
 import edu.wustl.security.global.Permissions;
 
 /**
- * Used to store deidentified pathology report to the database 
- *
+ * Used to store deidentified pathology report to the database
  */
 public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBizLogic
-{	
-	private transient Logger logger = Logger.getCommonLogger(DeidentifiedSurgicalPathologyReportBizLogic.class);
+{
+
+	private transient Logger logger = Logger
+			.getCommonLogger(DeidentifiedSurgicalPathologyReportBizLogic.class);
+
 	/**
 	 * Saves the Deidentified pathology reportobject in the database.
-	 * @param obj The storageType object to be saved.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * @param dao : dao
+	 * @param obj
+	 *            The storageType object to be saved.
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException : BizLogicException
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
 			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
 			dao.insert(deidentifiedReport);
-			
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)retrieveAttribute(dao,SpecimenCollectionGroup.class,
-					deidentifiedReport.getSpecimenCollectionGroup().getId(), "identifiedSurgicalPathologyReport");
+
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) retrieveAttribute(
+					dao, SpecimenCollectionGroup.class, deidentifiedReport
+							.getSpecimenCollectionGroup().getId(),
+					"identifiedSurgicalPathologyReport");
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
-			identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
+			identifiedSurgicalPathologyReport
+					.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
 			dao.update(identifiedSurgicalPathologyReport);
-			
+
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(deidentifiedReport);
-		
-		}catch (Exception e)
+
+		}
+		catch (Exception e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
@@ -58,50 +69,65 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 
 	/**
 	 * Method to get dynamicGroup for given Report
-	 * @param obj DeidentifiedSurgicalPathologyReport object
+	 * 
+	 * @param obj
+	 *            DeidentifiedSurgicalPathologyReport object
 	 * @return Array of dynamicGroup
-	 * @throws SMException Security manager exception
-	 * @throws BizLogicException 
-	 *//*
-	private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj) throws BizLogicException
-	{
-		DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport= (DeidentifiedSurgicalPathologyReport)obj;
-		CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),deIdentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getId(),Constants.COLUMN_NAME_CPR);
-		String[] dynamicGroups = new String[1];
-
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
-				collectionProtocolRegistration, Constants.getCollectionProtocolPGName(null));
-		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
-		return dynamicGroups;
-	}
-	*/
+	 * @throws SMException
+	 *             Security manager exception
+	 * @throws BizLogicException
+	 */
+	/*
+	 * private String[] getDynamicGroups(DAO dao, AbstractDomainObject obj)
+	 * throws BizLogicException { DeidentifiedSurgicalPathologyReport
+	 * deIdentifiedSurgicalPathologyReport=
+	 * (DeidentifiedSurgicalPathologyReport)obj; CollectionProtocolRegistration
+	 * collectionProtocolRegistration
+	 * =(CollectionProtocolRegistration)dao.retrieveAttribute
+	 * (SpecimenCollectionGroup
+	 * .class.getName(),deIdentifiedSurgicalPathologyReport
+	 * .getSpecimenCollectionGroup().getId(),Constants.COLUMN_NAME_CPR);
+	 * String[] dynamicGroups = new String[1]; dynamicGroups[0] =
+	 * SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
+	 * collectionProtocolRegistration,
+	 * Constants.getCollectionProtocolPGName(null));
+	 * Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]); return
+	 * dynamicGroups; }
+	 */
 	/**
 	 * Updates the persistent object in the database.
-	 * @param obj The object to be updated.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * @param dao : dao
+	 * @param obj
+	 *            The object to be updated.
+	 * @param oldObj : oldObj
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException : BizLogicException
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
 			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
-			if(report.getTextContent().getId()==null)
+			if (report.getTextContent().getId() == null)
 			{
-				dao.insert(report.getTextContent());	
+				dao.insert(report.getTextContent());
 			}
 			dao.update(report);
 
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
-			logger.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"+ex);
+			logger
+					.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"
+							+ ex);
 		}
 	}
 
 	/**
 	 * @return a collection of all deidentified reports
-	 * @throws Exception
+	 * @throws Exception : Exception
 	 */
 	public Map getAllIdentifiedReports() throws Exception
 	{
@@ -110,23 +136,26 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
 
-		// getting all the Deidentified reports from the database 
+		// getting all the Deidentified reports from the database
 		List listOfReports = bizLogic.retrieve(sourceObjectName);
 		Map mapOfReports = new HashMap();
 		for (int i = 0; i < listOfReports.size(); i++)
 		{
-			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) listOfReports.get(i);
+			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) listOfReports
+					.get(i);
 			mapOfReports.put(report.getId(), report);
 		}
-		return  mapOfReports;
+		return mapOfReports;
 	}
-	
 
 	/**
-	 * This function takes identifier as parameter and returns corresponding DeidentifiedSurgicalPathologyReport
-	 * @param identifier system generated unique id for report
+	 * This function takes identifier as parameter and returns corresponding
+	 * DeidentifiedSurgicalPathologyReport
+	 * 
+	 * @param identifier
+	 *            system generated unique id for report
 	 * @return Deidentified pathology report of given identifier
-	 * @throws Exception
+	 * @throws Exception : Exception
 	 */
 	public DeidentifiedSurgicalPathologyReport getReportById(Long identifier) throws Exception
 	{
@@ -135,21 +164,22 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
 
-		// getting all the deidentified reports from the database 
+		// getting all the deidentified reports from the database
 		Object object = bizLogic.retrieve(sourceObjectName, identifier);
 		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) object;
 		return report;
 
 	}
-	
+
 	@Override
-	public boolean isReadDeniedTobeChecked() {
+	public boolean isReadDeniedTobeChecked()
+	{
 		return true;
 	}
-	
+
 	@Override
 	public String getReadDeniedPrivilegeName()
 	{
 		return Permissions.READ_DENIED;
-	}	
+	}
 }

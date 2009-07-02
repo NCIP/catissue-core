@@ -38,15 +38,21 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
- * SpecimenArrayAliquotsBizLogic class is used to create SpecimenArray aliquots from the parent SpecimenArray
- * and to inserts all the aliquotes into the database 
+ * SpecimenArrayAliquotsBizLogic class is used to create SpecimenArray aliquots
+ * from the parent SpecimenArray and to inserts all the aliquotes into the
+ * database
  * @author jitendra_agrawal
  */
 public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 {
 
 	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAliquotsBizLogic.class);
-
+	/**
+	 * @param obj : obj
+	 * @param dao : dao
+	 * @param sessionDataBean : sessionDataBean
+	 * @throws BizLogicException : BizLogicException
+	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -76,7 +82,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			}
 			for (int i = 1; i <= specimenArray.getAliquotCount(); i++)
 			{
-				//Preparing the map keys			
+				// Preparing the map keys
 				String radioButonKey = "radio_" + i;
 				String labelKey = specimenKey + i + "_label";
 				String idKey = specimenKey + i + "_id";
@@ -87,28 +93,33 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				String posDim2Key = specimenKey + i + "_positionDimensionTwo";
 				String storageContainerNameKey = specimenKey + i + "_StorageContainer_name";
 
-				//Retrieving the quantity, barcode & location values for each aliquot
+				// Retrieving the quantity, barcode & location values for each
+				// aliquot
 				String label = (String) aliquotMap.get(labelKey);
 				String barcode = (String) aliquotMap.get(barcodeKey);
 
 				String containerId = (String) aliquotMap.get(containerIdKey);
 				String posDim1 = (String) aliquotMap.get(posDim1Key);
 				String posDim2 = (String) aliquotMap.get(posDim2Key);
-				//Create an object of Specimen Subclass
+				// Create an object of Specimen Subclass
 				SpecimenArray aliquotSpecimenArray = new SpecimenArray();
 
 				/**
-				 * Start: Change for API Search   --- Jitendra 06/10/2006
-				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-				 * So we removed default class level initialization on domain object and are initializing in method
-				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 * Start: Change for API Search --- Jitendra 06/10/2006 In Case
+				 * of Api Search, previoulsy it was failing since there was
+				 * default class level initialization on domain object. For
+				 * example in User object, it was initialized as protected
+				 * String lastName=""; So we removed default class level
+				 * initialization on domain object and are initializing in
+				 * method setAllValues() of domain object. But in case of Api
+				 * Search, default values will not get set since setAllValues()
+				 * method of domainObject will not get called. To avoid null
+				 * pointer exception, we are setting the default values same as
+				 * we were setting in setAllValues() method of domainObject.
 				 */
 				ApiSearchUtil.setSpecimenArrayDefault(aliquotSpecimenArray);
 
-				//End: Change for API Search
+				// End: Change for API Search
 
 				ContainerPosition cntPos = aliquotSpecimenArray.getLocatedAtPosition();
 				if (cntPos == null)
@@ -117,12 +128,12 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				}
 				if (parentSpecimenArray != null)
 				{
-					//check for closed ParentSpecimenArray
+					// check for closed ParentSpecimenArray
 					checkStatus(dao, parentSpecimenArray,
 							"Fail to create Aliquots, Parent SpecimenArray");
-					//		cntPos.setOccupiedContainer(aliquotSpecimenArray);
+					// cntPos.setOccupiedContainer(aliquotSpecimenArray);
 
-					//		aliquotSpecimenArray.setParent(parentSpecimenArray);
+					// aliquotSpecimenArray.setParent(parentSpecimenArray);
 					aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray
 							.getSpecimenArrayType());
 					aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
@@ -137,14 +148,16 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				aliquotSpecimenArray.setAliquot(true);
 				aliquotSpecimenArray.setFull(Boolean.valueOf(false));
 
-				//Explicity set barcode to null if it is empty as its a unique key in the database
+				// Explicity set barcode to null if it is empty as its a unique
+				// key in the database
 				if (barcode != null && barcode.trim().length() == 0)
 				{
 					barcode = null;
 				}
 				aliquotSpecimenArray.setBarcode(barcode);
 
-				//Explicity set barcode to null if it is empty as its a unique key in the database
+				// Explicity set barcode to null if it is empty as its a unique
+				// key in the database
 				if (label != null && label.trim().length() == 0)
 				{
 					label = null;
@@ -155,22 +168,24 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				{
 					storageContainerObj.setId(new Long(containerId));
 
-					//check for closed Storage Container
+					// check for closed Storage Container
 					checkStatus(dao, storageContainerObj, "Storage Container");
 
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-					//check for all validations on the storage container.
+					// check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
 							sessionDataBean, false, null);
 
 					String sourceObjectName = StorageContainer.class.getName();
 					String[] selectColumnName = {"name"};
-					//String[] whereColumnName = {"id"}; //"storageContainer."+edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
-					//String[] whereColumnCondition = {"="};
-					//Object[] whereColumnValue = {new Long(containerId)};
-					//String joinCondition = null;
+					// String[] whereColumnName = {"id"};
+					// //"storageContainer."+edu
+					// .wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
+					// String[] whereColumnCondition = {"="};
+					// Object[] whereColumnValue = {new Long(containerId)};
+					// String joinCondition = null;
 
 					QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 					queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(containerId)));
@@ -182,15 +197,16 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 						storageContainerObj.setName((String) list.get(0));
 						aliquotMap.put(storageContainerNameKey, (String) list.get(0));
 					}
-					//					}
+					// }
 				}
 				else
 				{
 					aliquotSpecimenArray.setLocatedAtPosition(null);
-					//		aliquotSpecimenArray.setStorageContainer(null);
+					// aliquotSpecimenArray.setStorageContainer(null);
 				}
 
-				//Setting the attributes - storage positions, available, acivity status & lineage
+				// Setting the attributes - storage positions, available,
+				// acivity status & lineage
 				if (containerId != null)
 				{
 					cntPos.setPositionDimensionOne(new Integer(posDim1));
@@ -200,8 +216,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					//				cntPos.setPositionDimensionOne(null);
-					//				cntPos.setPositionDimensionTwo(null);
+					// cntPos.setPositionDimensionOne(null);
+					// cntPos.setPositionDimensionTwo(null);
 					cntPos = null;
 				}
 
@@ -209,9 +225,9 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 
 				aliquotSpecimenArray.setAvailable(Boolean.TRUE);
 				aliquotSpecimenArray.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
-				//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
+				// aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
-				//Inserting an aliquot in the database
+				// Inserting an aliquot in the database
 				if (isAuthorized((DAO) dao, obj, sessionDataBean))
 				{
 					specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);
@@ -223,9 +239,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 							"");
 					throw getBizLogicException(exc, exc.getErrorKeyName(), exc.getMsgValues());
 				}
-				//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
+				// postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 
-				// set ID of Specimen array inserted to be used in Aliqut summary page
+				// set ID of Specimen array inserted to be used in Aliqut
+				// summary page
 				aliquotMap.put(idKey, aliquotSpecimenArray.getId());
 
 			}
@@ -237,7 +254,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				updateParentSpecimenArray(parentSpecimenArray);
 				if (isAuthorized((DAO) dao, obj, sessionDataBean))
 				{
-					specimenArrayBizLogic.update(dao,parentSpecimenArray, oldSpecimenArray,
+					specimenArrayBizLogic.update(dao, parentSpecimenArray, oldSpecimenArray,
 							sessionDataBean);
 				}
 				else
@@ -249,17 +266,20 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 
-			//Populate aliquot map with parent specimenArray's data
+			// Populate aliquot map with parent specimenArray's data
 			populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray, dao);
 
 		}
 		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-
+	/**
+	 * 
+	 * @param parentSpecimenArray : parentSpecimenArray
+	 */
 	private void updateParentSpecimenArray(SpecimenArray parentSpecimenArray)
 	{
 		parentSpecimenArray.setAvailable(Boolean.valueOf(false));
@@ -281,17 +301,23 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function populates the parent specimenArray information in aliquot map. This map will be
-	 * be retrieved in ForwardToProcessor & will be set in the request scope. Then the map will
-	 * be retrieved from request scope in SpecimenArrayAliquotAction if the page is of "SpecimenArrayAliquotSummary" &
-	 * the formbean will be populated with the appropriate data.
-	 * 
-	 * @param aliquotMap Map
-	 * @param specimenArray SpecimenArray
-	 * @throws BizLogicException 
+	 * This function populates the parent specimenArray information in aliquot
+	 * map. This map will be be retrieved in ForwardToProcessor & will be set in
+	 * the request scope. Then the map will be retrieved from request scope in
+	 * SpecimenArrayAliquotAction if the page is of
+	 * "SpecimenArrayAliquotSummary" & the formbean will be populated with the
+	 * appropriate data.
+	 * @param dao : dao
+	 * @param aliquotMap
+	 *            Map
+	 * @param specimenArray
+	 *            SpecimenArray
+	 * @param parentSpecimenArray : parentSpecimenArray
+	 * @throws BizLogicException : BizLogicException
+	 * @throws DAOException : DAOException
 	 */
 	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray,
-			SpecimenArray parentSpecimenArray, DAO dao) throws BizLogicException,DAOException
+			SpecimenArray parentSpecimenArray, DAO dao) throws BizLogicException, DAOException
 	{
 		try
 		{
@@ -300,15 +326,15 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_CLASS, parentSpecimenArray
 					.getSpecimenArrayType().getSpecimenClass());
 			/**
-			 * Name : Virender
-			 * Reviewer: Prafull
-			 * Retriving specimenObject
-			 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
+			 * Name : Virender Reviewer: Prafull Retriving specimenObject
+			 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES,
+			 * parentSpecimenArray
+			 * .getSpecimenArrayType().getSpecimenTypeCollection());
 			 */
 			Collection specimenTypeCollection = (Collection) retrieveAttribute(dao,
-					SpecimenArray.class,parentSpecimenArray.getId(),
+					SpecimenArray.class, parentSpecimenArray.getId(),
 					"elements(specimenArrayType.specimenTypeCollection)");
-		
+
 			aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
 			aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray
 					.getAliquotCount()));
@@ -318,17 +344,21 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
 	/**
-	 * 
-	 * @param parentSpecimenArray SpecimenArray
-	 * @param aliquotSpecimenArray SpecimenArray
-	 * @param aliquotCount int
-	 * @param dao DAO
+	 * @param parentSpecimenArray
+	 *            SpecimenArray
+	 * @param aliquotSpecimenArray
+	 *            SpecimenArray
+	 * @param aliquotCount
+	 *            int
+	 * @param dao
+	 *            DAO
 	 * @return Collection
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Collection populateSpecimenArrayContentCollectionForAliquot(
 			SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray,
@@ -349,16 +379,20 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				specimenArrayContent = new SpecimenArrayContent();
 
 				/**
-				 * Start: Change for API Search   --- Jitendra 06/10/2006
-				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
-				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
-				 * So we removed default class level initialization on domain object and are initializing in method
-				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
-				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
-				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 * Start: Change for API Search --- Jitendra 06/10/2006 In Case
+				 * of Api Search, previoulsy it was failing since there was
+				 * default class level initialization on domain object. For
+				 * example in User object, it was initialized as protected
+				 * String lastName=""; So we removed default class level
+				 * initialization on domain object and are initializing in
+				 * method setAllValues() of domain object. But in case of Api
+				 * Search, default values will not get set since setAllValues()
+				 * method of domainObject will not get called. To avoid null
+				 * pointer exception, we are setting the default values same as
+				 * we were setting in setAllValues() method of domainObject.
 				 */
 				ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
-				//End:-  Change for API Search 
+				// End:- Change for API Search
 
 				specimenArrayContent.setSpecimen(parentSpecimenArrayContent.getSpecimen());
 				specimenArrayContent.setPositionDimensionOne(parentSpecimenArrayContent
@@ -366,7 +400,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				specimenArrayContent.setPositionDimensionTwo(parentSpecimenArrayContent
 						.getPositionDimensionTwo());
 				specimenArrayContent.setSpecimenArray(aliquotSpecimenArray);
-				// Due to Lazy loading instanceOf method was returning false everytime. Fix for bug id:4864
+				// Due to Lazy loading instanceOf method was returning false
+				// everytime. Fix for bug id:4864
 				// Object is explicitly retrieved from DB
 				Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
 						parentSpecimenArrayContent.getSpecimen().getId());
@@ -381,7 +416,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 						Double initialQuantity = parentInitialQuantity.doubleValue() / aliquotCount;
 						specimenArrayContent.setInitialQuantity(initialQuantity);
 						// reset quantity value of parent array content to 0.0
-						//parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+						// parentSpecimenArrayContent.getInitialQuantity().
+						// setValue(Double.valueOf("0"));
 					}
 
 					specimenArrayContent
@@ -396,10 +432,15 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-
+	/**
+	 * 
+	 * @param sourceObjectName : sourceObjectName
+	 * @return long
+	 * @throws BizLogicException : BizLogicException
+	 */
 	public long getNextAvailableNumber(String sourceObjectName) throws BizLogicException
 	{
 		JDBCDAO jdbcDao = null;
@@ -428,14 +469,20 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		catch (ApplicationException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(),daoExp.getMsgValues());
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
 			closeJDBCSession(jdbcDao);
 		}
 	}
-
+	
+	/**
+	 * @param obj : obj
+	 * @param dao : dao
+	 * @param sessionDataBean : sessionDataBean
+	 * @throws BizLogicException : BizLogicException
+	 */
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -472,7 +519,12 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 
 	}
-
+	/**
+	 * @param dao :dao
+	 * @param ado : ado
+	 * @param errorName : errorName
+	 * @throws BizLogicException : BizLogicException
+	 */
 	protected void checkStatus(DAO dao, IActivityStatus ado, String errorName)
 			throws BizLogicException
 	{
@@ -502,7 +554,11 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
+	 * @param dao : dao
+	 * @param domainObject : domainObject
+	 * @return String
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
+	 *      java.lang.Object)
 	 */
 	public String getObjectId(DAO dao, Object domainObject)
 	{
@@ -524,14 +580,19 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * (non-Javadoc)
-	 * @throws  
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * @param dao : dao
+	 * @param domainObject : domainObject
+	 * @
+	 * @throws BizLogicException : BizLogicException
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO,
+	 *      java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+				.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		return specimenArrayBizLogic.isAuthorized(dao, domainObject, sessionDataBean);
 	}
 }

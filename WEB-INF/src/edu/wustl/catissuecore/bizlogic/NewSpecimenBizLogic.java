@@ -1,9 +1,11 @@
 /**
- * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
- *@version Suite V1.1
- * Code re factoring on 15th May 2008
+ * <p>
+ * Description: NewSpecimenBizLogicHDAO is used to add new specimen information
+ * into the database using Hibernate.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ * @version Suite V1.1 Code re factoring on 15th May 2008
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -97,12 +99,16 @@ import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
- * NewSpecimenHDAO is used to add new specimen information into the database using hibernate
+ * NewSpecimenHDAO is used to add new specimen information into the database
+ * using hibernate
  */
 public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 
 	private transient Logger logger = Logger.getCommonLogger(NewSpecimenBizLogic.class);
+	/**
+	 * containerHoldsSpecimenClasses.
+	 */
 	private Map<Long, Collection<String>> containerHoldsSpecimenClasses = new HashMap<Long, Collection<String>>();
 	private Map<Long, Collection<CollectionProtocol>> containerHoldsCPs = new HashMap<Long, Collection<CollectionProtocol>>();
 	private HashSet<String> storageContainerIds = new HashSet<String>();
@@ -116,11 +122,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Saves the Specimen object in the database.
-	 * @param obj The Specimen object to be saved.
-	 * @param sessionDataBean The session in which the object is saved.
-	 * @param dao DAO object
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @param obj
+	 *            The Specimen object to be saved.
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             Database related Exception
 	 */
 
 	protected void insert(final Object obj, final DAO dao, SessionDataBean sessionDataBean)
@@ -133,7 +142,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			populateDomainObjectToInsert(dao, sessionDataBean, specimen);
 			dao.insert(specimen);
 			AuditManager auditManager = getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao,specimen);
+			auditManager.insertAudit(dao, specimen);
 		}
 		catch (ApplicationException exp)
 		{
@@ -144,9 +153,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO Object 
-	 * @param specimen Sepecimen Object
-	 * @throws BizLogicException DAO Exception
+	 * @param dao
+	 *            DAO Object
+	 * @param specimen
+	 *            Sepecimen Object
+	 * @throws BizLogicException : BizLogicException
+	 * @throws DAOException : DAOException
 	 */
 	private void setParent(DAO dao, Specimen specimen) throws BizLogicException, DAOException
 	{
@@ -173,28 +185,31 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param  specimen Specimen Object to be save
-	 * @param  sessionDataBean The session in which the object is saved.
-	 * @param  dao DAO object
-	 * @throws BizLogicException 
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
-	 * @throws SMException 
-	 * @throws SMException SME exception
+	 * @param specimen
+	 *            Specimen Object to be save
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             Database related Exception
+	 * @throws DAOException : DAOException
+	 *             User Not Authorized Exception
+	 * @throws SMException : SMException
 	 */
 	private void populateDomainObjectToInsert(DAO dao, SessionDataBean sessionDataBean,
 			Specimen specimen) throws BizLogicException, DAOException, SMException
 	{
 		setSpecimenCreatedOnDate(specimen);
 		setSpecimenParent(specimen, dao);
-		//bug no. 4265
+		// bug no. 4265
 		if (specimen.getLineage() != null && specimen.getLineage().equalsIgnoreCase("Derived")
 				&& specimen.getDisposeParentSpecimen() == true)
 		{
 			checkParentSpecimenDisposal(sessionDataBean, specimen, dao,
 					Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
 		}
-		//allocatePositionForSpecimen(specimen);
+		// allocatePositionForSpecimen(specimen);
 		setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 		setSpecimenAttributes(dao, specimen, sessionDataBean);
 		generateLabel(specimen);
@@ -203,8 +218,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dQuantity quantity of Specimen
-	 * @param specimen Specimen object to insert
+	 * @param dQuantity
+	 *            quantity of Specimen
+	 * @param specimen
+	 *            Specimen object to insert
 	 */
 	private void calculateQuantity(Specimen specimen)
 	{
@@ -221,7 +238,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			//bug 11174
+			// bug 11174
 			parentSpecimen.setIsAvailable(Boolean.TRUE);
 			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
 			{
@@ -231,29 +248,34 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Parent Specimen
-	 * @throws BizLogicException Database related Exception
-	 * This method retrieves the parent specimen events and sets them in the parent specimen
+	 * @param specimen
+	 *            Parent Specimen
+	 * @throws BizLogicException
+	 *             Database related Exception This method retrieves the parent
+	 *             specimen events and sets them in the parent specimen
 	 */
 	private void setParentSpecimenData(Specimen specimen)
 	{
 		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
-		//11177 S
+		// 11177 S
 		if (specimen.getPathologicalStatus() == null
 				|| Constants.DOUBLE_QUOTES.equals(specimen.getPathologicalStatus()))
 		{
 			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 		}
-		//specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
-		//11177 E
+		//specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus())
+		// ;
+		// 11177 E
 		setParentCharacteristics(parentSpecimen, specimen);
 		setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
 		setParentBioHazard(parentSpecimen, specimen);
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @param parentSpecimen Parent Specimen Object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param parentSpecimen
+	 *            Parent Specimen Object
 	 */
 	private void setParentBioHazard(Specimen parentSpecimen, Specimen specimen)
 	{
@@ -272,7 +294,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen This method sets the created on date = collection date
+	 * @param specimen
+	 *            This method sets the created on date = collection date
 	 **/
 	private void setCreatedOnDate(Specimen specimen)
 	{
@@ -295,9 +318,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Set default events to specimens
-	 * @param sessionDataBean Session data bean
-	 * This method sets the default events to specimens if they are null
+	 * @param specimen
+	 *            Set default events to specimens
+	 * @param sessionDataBean
+	 *            Session data bean This method sets the default events to
+	 *            specimens if they are null
 	 */
 	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
 	{
@@ -318,11 +343,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method gives the error message.
-	 * This method is override for customizing error message
-	 * @param obj - Object
-	 * @param operation Type of operation
-	 * @param daoException Database related Exception
+	 * This method gives the error message. This method is override for
+	 * customizing error message
+	 * @param obj
+	 *            - Object
+	 * @param operation
+	 *            Type of operation
+	 * @param daoException
+	 *            Database related Exception
 	 * @return formatedException returns formated exception
 	 */
 	public String getErrorMessage(DAOException daoException, Object obj, String operation)
@@ -341,16 +369,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session details
-	 * @param specimen parent specimen object
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User is not Authorized
-	 * @throws BizLogicException 
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimen  : specimen
+	 * @param disposalReason  : disposalReason
+	 * @throws BizLogicException  : BizLogicException
+	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
 	 */
 	public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
-			String disposalReason) throws BizLogicException, UserNotAuthorizedException,
-			BizLogicException
+			String disposalReason) throws BizLogicException, UserNotAuthorizedException
 	{
 		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen,
 				disposalReason);
@@ -361,16 +387,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session details
-	 * @param specimen parent specimen object
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User is not Authorized
-	 * @throws BizLogicException 
+	 * @param disposalReason : disposalReason
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session details
+	 * @param specimen
+	 *            parent specimen object
+	 * @throws BizLogicException
+	 *             Database related Exception
+	 * @throws UserNotAuthorizedException
+	 *             User is not Authorized
+	 * @throws BizLogicException
 	 */
 	public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
-			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException,
-			BizLogicException
+			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException
 	{
 		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen,
 				disposalReason);
@@ -381,9 +412,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean
-	 * @param specimen
-	 * @return
+	 * @param disposalReason : disposalReason
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimen : specimen
+	 * @return DisposalEventParameters
 	 */
 
 	private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean,
@@ -401,7 +433,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
+	 * @param specimen : specimen
 	 */
 	private void setSpecimenCreatedOnDate(Specimen specimen)
 	{
@@ -423,7 +455,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
+	 * @param specimen  : specimen
 	 */
 	private void setQuantity(Specimen specimen)
 	{
@@ -443,8 +475,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 * @param sessionDataBean
+	 * @param specimen : specimen
+	 * @param sessionDataBean  : sessionDataBean
 	 */
 	private void setSpecimenEvents(Specimen specimen, SessionDataBean sessionDataBean)
 	{
@@ -475,15 +507,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen Object
-	 * @param dao DAO object
-	 * @param sessionDataBean Session data
-	 * @param partOfMulipleSpecimen boolean true or false
-	 * @throws BizLogicException Database related exception
-	 * @throws SMException Security related exception
-	 * @throws BizLogicException 
-	 * @throws SMException 
-	 * @throws BizLogicException 
+	 * @param specimen
+	 *            Specimen Object
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session data
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws SMException
+	 *             Security related exception
+	 * @throws DAOException : DAOException
 	 */
 	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException, DAOException, SMException
@@ -499,8 +533,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param parentSpecimen Parent Specimen Object
-	 * @param childSpecimen Child Specimen Object
+	 * @param parentSpecimen
+	 *            Parent Specimen Object
+	 * @param childSpecimen
+	 *            Child Specimen Object
 	 */
 	private void setParentCharacteristics(Specimen parentSpecimen, Specimen childSpecimen)
 	{
@@ -523,8 +559,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen Object
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen Object
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void generateBarCode(Specimen specimen) throws BizLogicException
 	{
@@ -548,15 +586,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen Object
-	 * @param externalIdentifierCollection Collection of external identifier
+	 * @param specimen
+	 *            Specimen Object
+	 * @param externalIdentifierCollection
+	 *            Collection of external identifier
 	 */
 	private void setDefaultExternalIdentifiers(Specimen specimen)
 	{
 		Collection<ExternalIdentifier> extIdntyColl = specimen.getExternalIdentifierCollection();
 		if (extIdntyColl != null)
 		{
-			if (extIdntyColl.isEmpty()) //Dummy entry added for query
+			if (extIdntyColl.isEmpty()) // Dummy entry added for query
 			{
 				setEmptyExternalIdentifier(specimen, extIdntyColl);
 			}
@@ -567,7 +607,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			//Dummy entry added for query.
+			// Dummy entry added for query.
 			extIdntyColl = new HashSet<ExternalIdentifier>();
 			setEmptyExternalIdentifier(specimen, extIdntyColl);
 			specimen.setExternalIdentifierCollection(extIdntyColl);
@@ -575,10 +615,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen Object
-	 * @param dao DAO object
-	 * @param parentSpecimen Parent Specimen Object
-	 * @throws BizLogicException Database related Exception
+	 * @param specimen
+	 *            Specimen Object
+	 * @param dao
+	 *            DAO object
+	 * @param parentSpecimen
+	 *            Parent Specimen Object
+	 * @throws BizLogicException
+	 *             Database related Exception
 	 */
 	private void setSpecimenParent(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -590,16 +634,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 			setParentSpecimenData(specimen);
 		}
-		//Bug 11481 S
+		// Bug 11481 S
 		String lineage = specimen.getLineage();
 		CollectionProtocol cp = new CollectionProtocol();
 		Long scgId = specimen.getSpecimenCollectionGroup().getId();
-		
-		Long colpId = (Long)specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-		String activityStatus = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+
+		Long colpId = (Long) specimen.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		String activityStatus = specimen.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
 		cp.setId(colpId);
 		cp.setActivityStatus(activityStatus);
-		
+
 		if (lineage != null && !lineage.equalsIgnoreCase("New"))
 		{
 			String parentCollStatus = ((Specimen) specimen.getParentSpecimen())
@@ -616,58 +662,46 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				checkStatus(dao, cp, "Collection Protocal");
 			}
 		}
-		//Bug 11481 E
+		// Bug 11481 E
 
 		checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
 	}
 
-	//Bug 11481 S
+	// Bug 11481 S
 	/**
-	 * This Function is used to get Activity Status and Collection Protocol ID.	
-	 * @param dao DAO object
+	 * This Function is used to get Activity Status and Collection Protocol ID.
+	 *
+	 * @param dao
+	 *            DAO object
 	 * @param scgId
 	 * @return CollectionProtocol
-	 * @throws BizLogicException 
-	 * @throws ClassNotFoundException 	
-	*/
-	/*public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao, Long scgId)
-			throws BizLogicException
-	{
-		List activityStatusList = null;
-		CollectionProtocol cp = new CollectionProtocol();
-		try
-		{
-
-			String activityStatusHQL = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
-					+ "scg.collectionProtocolRegistration.collectionProtocol.activityStatus "
-					+ "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
-					+ "where scg.id = " + scgId;
-			activityStatusList = dao.executeQuery(activityStatusHQL);
-			if (!activityStatusList.isEmpty())
-			{
-				Object[] array = new Object[1];
-				array = (Object[]) activityStatusList.get(0);
-				Long id = (Long) array[0];
-				String activityStatus = (String) array[1];
-				cp.setId(id);
-				cp.setActivityStatus(activityStatus);
-			}
-		}
-		catch (DAOException daoExp)
-		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, "dao.error", "");
-		}
-		return cp;
-	}*/
-
-	//Bug 11481 E
-
-	/**
-	 * @param dao
-	 * @param parentSpecimen
-	 * @return
 	 * @throws BizLogicException
+	 * @throws ClassNotFoundException
+	 */
+	/*
+	 * public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao,
+	 * Long scgId) throws BizLogicException { List activityStatusList = null;
+	 * CollectionProtocol cp = new CollectionProtocol(); try { String
+	 * activityStatusHQL =
+	 * "select scg.collectionProtocolRegistration.collectionProtocol.id," +
+	 * "scg.collectionProtocolRegistration.collectionProtocol.activityStatus " +
+	 * "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg " +
+	 * "where scg.id = " + scgId; activityStatusList =
+	 * dao.executeQuery(activityStatusHQL); if (!activityStatusList.isEmpty()) {
+	 * Object[] array = new Object[1]; array = (Object[])
+	 * activityStatusList.get(0); Long id = (Long) array[0]; String
+	 * activityStatus = (String) array[1]; cp.setId(id);
+	 * cp.setActivityStatus(activityStatus); } } catch (DAOException daoExp) {
+	 * logger.debug(daoExp.getMessage(), daoExp); throw
+	 * getBizLogicException(daoExp, "dao.error", ""); } return cp; }
+	 */
+
+	// Bug 11481 E
+	/**
+	 * @param dao : dao
+	 * @param parentSpecimen : parentSpecimen
+	 * @return Specimen
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Specimen getParentSpecimenByLabel(DAO dao, Specimen parentSpecimen)
 			throws BizLogicException
@@ -680,21 +714,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if ((value == null) || (value != null && value.equals("")))
 			{
 				column = "barcode";
-				value = parentSpecimen.getBarcode();	
-				//label and barcode r coming null
-				//bug 12586 start
-				if((value == null) || (value != null && value.equals("")))
+				value = parentSpecimen.getBarcode();
+				// label and barcode r coming null
+				// bug 12586 start
+				if ((value == null) || (value != null && value.equals("")))
 				{
 					value = parentSpecimen.getId().toString();
 					column = Constants.SYSTEM_IDENTIFIER;
 				}
-				//bug 12586 end
+				// bug 12586 end
 			}
 			parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
 
 			if (parentSpecimenList == null || parentSpecimenList.isEmpty())
 			{
-				throw getBizLogicException(null, "invalid.label.barcode",value);
+				throw getBizLogicException(null, "invalid.label.barcode", value);
 
 			}
 			parentSpecimen = (Specimen) parentSpecimenList.get(0);
@@ -702,16 +736,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), 
-					daoExp.getMsgValues());
+			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return parentSpecimen;
 	}
 
 	/**
-	 * @param specimen
-	 * @param dao
-	 * @throws BizLogicException
+	 * @param specimen : specimen
+	 * @param dao : dao
+	 * @throws BizLogicException  : BizLogicException
 	 */
 	private void setSCGToSpecimen(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -725,8 +758,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen Object
-	 * @throws BizLogicException Database related Exception
+	 * @param specimen
+	 *            Specimen Object
+	 * @throws BizLogicException
+	 *             Database related Exception
 	 */
 	private void generateLabel(Specimen specimen) throws BizLogicException
 	{
@@ -753,8 +788,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen object
-	 * @param externalIdentifierCollection Collection of external identifier
+	 * @param specimen
+	 *            Specimen object
+	 * @param externalIdentifierCollection
+	 *            Collection of external identifier
 	 */
 	private void setSpecimenToExternalIdentifier(Specimen specimen,
 			Collection<ExternalIdentifier> externalIdentifierCollection)
@@ -768,8 +805,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen object
-	 * @param externalIdentifierCollection Collection of external identifier
+	 * @param specimen
+	 *            Specimen object
+	 * @param externalIdentifierCollection
+	 *            Collection of external identifier
 	 */
 	private void setEmptyExternalIdentifier(Specimen specimen,
 			Collection<ExternalIdentifier> externalIdentifierCollection)
@@ -783,11 +822,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * To be remove
-	 *@param obj Domain object
-	 *@param dao DAO object
-	 *@param sessionDataBean The session in which the object is saved.
-	 *@throws BizLogicException Database related Exception
-	 *@throws UserNotAuthorizedException User Not Authorized Exception
+	 *
+	 * @param obj
+	 *            Domain object
+	 *@param dao
+	 *            DAO object
+	 *@param sessionDataBean
+	 *            The session in which the object is saved.
+	 *@throws BizLogicException
+	 *             Database related Exception
+	 *@throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -798,11 +843,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * To be remove
-	 *@param speCollection Specimen Collection
-	 *@param dao DAO object
-	 *@param sessionDataBean The session in which the object is saved.
-	 *@throws BizLogicException Database related Exception
-	 *@throws UserNotAuthorizedException User Not Authorized Exception
+	 *
+	 * @param speCollection
+	 *            Specimen Collection
+	 *@param dao
+	 *            DAO object
+	 *@param sessionDataBean
+	 *            The session in which the object is saved.
+	 *@throws BizLogicException
+	 *             Database related Exception
+	 *@throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	protected void postInsert(Collection<AbstractDomainObject> speCollection, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -840,9 +891,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param currentObj Current Object
-	 * @param oldObj Persistent Object
-	 * @throws BizLogicException 
+	 * @param currentObj
+	 *            Current Object
+	 * @param oldObj
+	 *            Persistent Object
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void updateChildAttributes(Object currentObj, Object oldObj) throws BizLogicException
 	{
@@ -875,8 +928,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param containerMap Map of containers
-	 * @param specimen Current Specimen
+	 * @param containerMap
+	 *            Map of containers
+	 * @param specimen
+	 *            Current Specimen
 	 */
 	void updateStorageLocations(TreeMap containerMap, Specimen specimen)
 	{
@@ -898,9 +953,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj AbstractDomainObject
+	 * @param obj
+	 *            AbstractDomainObject
 	 * @return dynamicGroups Dynamic group entry for CSM
-	 * @throws SMException SMException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	protected String[] getDynamicGroups(AbstractSpecimenCollectionGroup obj)
 			throws BizLogicException
@@ -930,10 +986,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * To be remove
-	 * @param container Storage Container Object
-	 * @param specimen Current Specimen Object
-	 * @param dao DAO Object
-	 * @throws BizLogicException Database related exception
+	 *
+	 * @param container
+	 *            Storage Container Object
+	 * @param specimen
+	 *            Current Specimen Object
+	 * @param dao
+	 *            DAO Object
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws DAOException : DAOException
 	 */
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen,
 			DAO dao) throws BizLogicException, DAOException
@@ -976,17 +1038,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (getCorrespondingOldObject(collectionProtColl, protocol.getId()) == null)
 			{
-				throw getBizLogicException(null, "spec.nt.held.by.storage",	protocol.getTitle());
+				throw getBizLogicException(null, "spec.nt.held.by.storage", protocol.getTitle());
 			}
 		}
 
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @param dao DAO object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param dao
+	 *            DAO object
 	 * @return CP
-	 * @throws BizLogicException database exception
+	 * @throws BizLogicException
+	 *             database exception
+	 * @throws DAOException : DAOException
 	 */
 	private CollectionProtocol retriveSCGAndCP(Specimen specimen, DAO dao)
 			throws BizLogicException, DAOException
@@ -1016,10 +1082,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimenID Specimen Identifier
-	 * @param dao DAO object
+	 * @param specimenID
+	 *            Specimen Identifier
+	 * @param dao
+	 *            DAO object
 	 * @return specimenCollectionGroup SCG object
-	 * @throws BizLogicException Database related Exception
+	 * @throws BizLogicException
+	 *             Database related Exception
 	 */
 	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao)
 			throws BizLogicException
@@ -1056,12 +1125,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Updates the persistent object in the database.
-	 * @param obj The object to be updated.
-	 * @param oldObj Persistent object
-	 * @param dao DAO object
-	 * @param sessionDataBean The session in which the object is saved
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 *
+	 * @param obj
+	 *            The object to be updated.
+	 * @param oldObj
+	 *            Persistent object
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            The session in which the object is saved
+	 * @throws BizLogicException
+	 *             Database related Exception
 	 */
 	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -1088,12 +1162,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj The object to be updated.
-	 * @param oldObj Persistent object
-	 * @param dao DAO object
-	 * @param sessionDataBean The session in which the object is saved
-	 * @throws BizLogicException Database related Exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @param obj
+	 *            The object to be updated.
+	 * @param oldObj
+	 *            Persistent object
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            The session in which the object is saved
+	 * @throws BizLogicException
+	 *             Database related Exception
+	 * @throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	private void updateSpecimen(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -1107,9 +1187,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			updateSpecimenData(dao, sessionDataBean, specimen, specimenOld);
 			Specimen persistentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
 					specimenOld.getId());
-			//Calculate Quantity
+			// Calculate Quantity
 			calculateAvailableQunatity(specimen, persistentSpecimen);
-           	//To assign storage locations to anticipated specimen
+			// To assign storage locations to anticipated specimen
 			if (specimenOld.getCollectionStatus().equals("Pending")
 					&& specimen.getCollectionStatus().equals("Collected")
 					&& specimen.getSpecimenPosition() != null)
@@ -1119,27 +1199,29 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 				persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
 			}
-			//Set Specimen Domain Object
+			// Set Specimen Domain Object
 			createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld,
 					persistentSpecimen);
 			dao.update(persistentSpecimen);
 			updateChildAttributes(specimen, specimenOld);
 			AuditManager auditManager = getAuditManager(sessionDataBean);
-			//Audit of Specimen
-			auditManager.updateAudit(dao,persistentSpecimen, specimenOld);
-		
-			//Audit of Specimen Characteristics
-			auditManager.updateAudit(dao,persistentSpecimen.getSpecimenCharacteristics(), specimenOld
-					.getSpecimenCharacteristics());
-			
-			//Disable functionality
+			// Audit of Specimen
+			auditManager.updateAudit(dao, persistentSpecimen, specimenOld);
+
+			// Audit of Specimen Characteristics
+			auditManager.updateAudit(dao, persistentSpecimen.getSpecimenCharacteristics(),
+					specimenOld.getSpecimenCharacteristics());
+
+			// Disable functionality
 			disableSpecimen(dao, specimen, persistentSpecimen);
 		}
 		catch (DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		} catch (AuditException e) {
+		}
+		catch (AuditException e)
+		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
@@ -1171,10 +1253,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimen Specimen
-	 * @param persistentSpecimen parentSpecimen
-	 * @throws BizLogicException Database related exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimen
+	 *            Specimen
+	 * @param persistentSpecimen
+	 *            parentSpecimen
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void disableSpecimen(DAO dao, Specimen specimen, Specimen persistentSpecimen)
 			throws BizLogicException
@@ -1212,12 +1298,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session details
-	 * @param specimen Current Specimen
-	 * @param specimenOld Old Specimen
-	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session details
+	 * @param specimen
+	 *            Current Specimen
+	 * @param specimenOld
+	 *            Old Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	private void updateSpecimenData(DAO dao, SessionDataBean sessionDataBean, Specimen specimen,
 			Specimen specimenOld) throws BizLogicException
@@ -1249,17 +1341,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				specimen.setIsAvailable(new Boolean(true));
 			}
-			/*else
-			{
-				specimen.setAvailable(new Boolean(true));
-			} */
-			/*  //bug #7594	
-			if (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase(specimen.getCollectionStatus()) &&
-					(Constants.COLLECTION_STATUS_PENDING).equals(specimenOld.getCollectionStatus()))
-			{
-			    specimen.setAvailable(true);
-				specimen.setAvailableQuantity(specimenOld.getInitialQuantity());
-			   } */
+			/*
+			 * else { specimen.setAvailable(new Boolean(true)); }
+			 */
+			/*
+			 * //bug #7594 if
+			 * (Constants.COLLECTION_STATUS_COLLECTED.equalsIgnoreCase
+			 * (specimen.getCollectionStatus()) &&
+			 * (Constants.COLLECTION_STATUS_PENDING
+			 * ).equals(specimenOld.getCollectionStatus())) {
+			 * specimen.setAvailable(true);
+			 * specimen.setAvailableQuantity(specimenOld.getInitialQuantity());
+			 * }
+			 */
 
 		}
 		catch (DAOException daoExp)
@@ -1270,10 +1364,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimen Current Specimen
-	 * @param specimenOld Old Specimen
-	 * @throws BizLogicException Database related exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param specimenOld
+	 *            Old Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateSpecimen(DAO dao, Specimen specimen, Specimen specimenOld)
 			throws BizLogicException
@@ -1284,31 +1382,33 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					&& specimen.getCollectionStatus().equals("Pending")
 					&& specimen.getSpecimenPosition() != null)
 			{
-				throw getBizLogicException(null, "status.collected","");
+				throw getBizLogicException(null, "status.collected", "");
 			}
-			throw getBizLogicException(null, "position.nt.changed",
-					"");
+			throw getBizLogicException(null, "position.nt.changed", "");
 		}
 		if (!specimenOld.getLineage().equals(specimen.getLineage()))
 		{
-			throw getBizLogicException(null, "lineage.nt.changed",
-					"");
+			throw getBizLogicException(null, "lineage.nt.changed", "");
 		}
 		if (!specimenOld.getClassName().equals(specimen.getClassName()))
 		{
-			throw getBizLogicException(null, "clzz.nt.changed",
-					"");
+			throw getBizLogicException(null, "clzz.nt.changed", "");
 		}
-		/*// bug # 7594
-		if (((Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) && 
-				   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimenOld.getCollectionStatus()) &&
-					 (!(specimen.getAvailable().booleanValue()) || new Double(0.0).equals(Double.parseDouble(specimen.getAvailableQuantity().toString())))))
-		{
-			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
-		}*/
+		/*
+		 * // bug # 7594 if
+		 * (((Constants.COLLECTION_STATUS_COLLECTED).equals(specimen
+		 * .getCollectionStatus()) &&
+		 * (Constants.COLLECTION_STATUS_COLLECTED).equals
+		 * (specimenOld.getCollectionStatus()) &&
+		 * (!(specimen.getAvailable().booleanValue()) || new
+		 * Double(0.0).equals(Double
+		 * .parseDouble(specimen.getAvailableQuantity().toString()))))) { throw
+		 * newDAOException(ApplicationProperties.getValue(
+		 * "specimen.available.operation")); }
+		 */
 		if (specimen.isParentChanged())
 		{
-			//Check whether container is moved to one of its sub container.
+			// Check whether container is moved to one of its sub container.
 			if (isUnderSubSpecimen(specimen, specimen.getParentSpecimen().getId()))
 			{
 				throw getBizLogicException(null, "errors.specimen.under.subspecimen", "");
@@ -1322,13 +1422,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session data
-	 * @param specimen Current Specimen
-	 * @param specimenOld Persistent Specimen
-	 * @param persistentSpecimen Persistent Specimen
-	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session data
+	 * @param specimen
+	 *            Current Specimen
+	 * @param specimenOld
+	 *            Persistent Specimen
+	 * @param persistentSpecimen
+	 *            Persistent Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	private void createPersistentSpecimenObj(DAO dao, SessionDataBean sessionDataBean,
 			Specimen specimen, Specimen specimenOld, Specimen persistentSpecimen)
@@ -1337,13 +1444,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		persistentSpecimen.setLabel(specimen.getLabel());
 		persistentSpecimen.setBarcode(specimen.getBarcode());
 		persistentSpecimen.setCreatedOn(specimen.getCreatedOn());
-		//bug #8039
-		/*  if (((Constants.COLLECTION_STATUS_COLLECTED).equals(persistentSpecimen.getCollectionStatus()) && 
-			   (Constants.COLLECTION_STATUS_COLLECTED).equals(specimen.getCollectionStatus()) &&
-				 (new Double(0.0).equals(persistentSpecimen.getAvailableQuantity()))))
-		{
-			throw new DAOException(ApplicationProperties.getValue("specimen.available.operation"));
-		  }*/
+		// bug #8039
+		/*
+		 * if
+		 * (((Constants.COLLECTION_STATUS_COLLECTED).equals(persistentSpecimen
+		 * .getCollectionStatus()) &&
+		 * (Constants.COLLECTION_STATUS_COLLECTED).equals
+		 * (specimen.getCollectionStatus()) && (new
+		 * Double(0.0).equals(persistentSpecimen.getAvailableQuantity())))) {
+		 * throw newDAOException(ApplicationProperties.getValue(
+		 * "specimen.available.operation")); }
+		 */
 		persistentSpecimen.setIsAvailable(specimen.getIsAvailable());
 		persistentSpecimen.setBiohazardCollection(specimen.getBiohazardCollection());
 		persistentSpecimen.setNoOfAliquots(specimen.getNoOfAliquots());
@@ -1409,13 +1520,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session data
-	 * @param specimen Current Specimen
-	 * @param specimenOld Persistent Specimen
-	 * @param persistentSpecimen Persistent Specimen
-	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session data
+	 * @param specimen
+	 *            Current Specimen
+	 * @param specimenOld
+	 *            Persistent Specimen
+	 * @param persistentSpecimen
+	 *            Persistent Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	private void setExternalIdentifier(DAO dao, SessionDataBean sessionDataBean, Specimen specimen,
 			Specimen specimenOld, Specimen persistentSpecimen) throws BizLogicException
@@ -1449,9 +1567,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						persistExId.setValue(exId.getValue());
 						ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(
 								oldExternalIdentifierCollection, exId.getId());
-						
+
 						AuditManager auditManager = getAuditManager(sessionDataBean);
-						auditManager.updateAudit(dao,exId, oldExId);
+						auditManager.updateAudit(dao, exId, oldExId);
 
 					}
 				}
@@ -1462,15 +1580,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		} catch (AuditException e) {
+		}
+		catch (AuditException e)
+		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @param parentSpecimenID Parent Specimen Identifier
+	 * @param specimen
+	 *            Current Specimen
+	 * @param parentSpecimenID
+	 *            Parent Specimen Identifier
 	 * @return boolean true or false
 	 */
 	private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
@@ -1496,7 +1618,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Current Specimen
+	 * @param specimen
+	 *            Current Specimen
 	 */
 	private void setDisableToSubSpecimen(Specimen specimen)
 	{
@@ -1513,12 +1636,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimen Current Specimen
-	 * @param sessionDataBean Session details
-	 * @param partOfMultipleSpecimen boolean true or false
-	 * @throws BizLogicException Database related exception
-	 * @throws SMException Security related exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param sessionDataBean
+	 *            Session details
+	 * @param partOfMultipleSpecimen
+	 *            boolean true or false
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws SMException
+	 *             Security related exception
 	 */
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean)
 			throws BizLogicException, SMException
@@ -1545,8 +1674,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 * @param consentTierStatusCollection
+	 * @param specimen : specimen
+	 * @param consentTierStatusCollection : specimen
 	 */
 	private void setConsentTierStatus(Specimen specimen,
 			Collection<ConsentTierStatus> consentTierStatusCollection)
@@ -1568,9 +1697,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO Object
-	 * @param specimen Current Specimen
-	 * @throws BizLogicException Database related exception
+	 * @param dao
+	 *            DAO Object
+	 * @param specimen
+	 *            Current Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void setParentSpecimen(DAO dao, Specimen specimen) throws BizLogicException
 	{
@@ -1583,12 +1715,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimen Current Specimen
-	 * @param sessionDataBean Session details
-	 * @param partOfMultipleSpecimen boolean true or false
-	 * @throws BizLogicException Database related exception
-	 * @throws SMException Security related exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param sessionDataBean
+	 *            Session details
+	 * @param partOfMultipleSpecimen
+	 *            boolean true or false
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws SMException
+	 *             Security related exception
 	 */
 	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen,
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
@@ -1616,11 +1754,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					{
 						storageContainerObj = setStorageContainerId(dao, specimen);
 					}
-					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(storageContainerObj
-							.getActivityStatus()))
+					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(
+							storageContainerObj.getActivityStatus()))
 					{
-						throw getBizLogicException(null, "st.colosed",
-								"");
+						throw getBizLogicException(null, "st.colosed", "");
 					}
 					chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
 					validateUserForContainer(sessionDataBean, storageContainerObj);
@@ -1642,7 +1779,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				specPos.setStorageContainer(storageContainerObj);
 				specimen.setSpecimenPosition(specPos);
 
-				//bug 8294
+				// bug 8294
 				String storageValue = null;
 				Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
 				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
@@ -1671,7 +1808,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 								.getPositionDimensionOne().toString(), specimen
 								.getSpecimenPosition().getPositionDimensionTwo().toString(),
 						sessionDataBean, partOfMultipleSpecimen, specimen);
-				//		specimen.setStorageContainer(storageContainerObj);
+				// specimen.setStorageContainer(storageContainerObj);
 			}
 		}
 		catch (ApplicationException exp)
@@ -1682,10 +1819,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean Session Details
-	 * @param storageContainerObj Storage Container Object
-	 * @throws SMException Security related exception
-	 * @throws BizLogicException Database related exception
+	 * @param sessionDataBean
+	 *            Session Details
+	 * @param storageContainerObj
+	 *            Storage Container Object
+	 * @throws SMException
+	 *             Security related exception
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateUserForContainer(SessionDataBean sessionDataBean,
 			Container storageContainerObj) throws BizLogicException
@@ -1712,11 +1853,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					+ storageContainerObj.getId();
 			boolean userAuthorize = true;
 			// Commented by Vishvesh & Ravindra for MSR for C1
-			//privilegeCache.hasPrivilege(storageContainerSecObj, Permissions.USE);
+			// privilegeCache.hasPrivilege(storageContainerSecObj,
+			// Permissions.USE);
 
 			if (!userAuthorize)
 			{
-				throw getBizLogicException(null, "user.not.auth.use.storage", storageContainerObj.getName());
+				throw getBizLogicException(null, "user.not.auth.use.storage", storageContainerObj
+						.getName());
 			}
 		}
 		catch (SMException e)
@@ -1727,8 +1870,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @param storageContainerObj Storage Container Object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param storageContainerObj
+	 *            Storage Container Object
 	 * @return storageContainerObj Storage Container Object
 	 */
 	private StorageContainer chkParentStorageContainer(Specimen specimen,
@@ -1752,10 +1897,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @param dao object
+	 * @param specimen
+	 *            Current Specimen
+	 * @param dao
+	 *            object
 	 * @return storageContainerObj Storage Container Object
-	 * @throws BizLogicException Database related exception
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private StorageContainer setStorageContainerId(DAO dao, Specimen specimen)
 			throws BizLogicException
@@ -1771,8 +1919,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "incorrect.storage",
-						"");
+				throw getBizLogicException(null, "incorrect.storage", "");
 			}
 		}
 		catch (DAOException daoExp)
@@ -1784,13 +1931,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * 
-	 * @param newSpecimen
-	 * @param dao
-	 * @param sessionDataBean
-	 * @param partOfMultipleSpecimen
-	 * @throws BizLogicException
-	 * @throws SMException
+	 * @param newSpecimen : newSpecimen
+	 * @param dao : dao
+	 * @param sessionDataBean : sessionDataBean
+	 * @param partOfMultipleSpecimen : partOfMultipleSpecimen
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void setSpecimenStorageRecursively(Specimen newSpecimen, DAO dao,
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
@@ -1815,8 +1960,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Current Specimen
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Current Specimen
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void allocatePositionForSpecimen(Specimen specimen) throws BizLogicException
 	{
@@ -1828,7 +1975,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				//bug 8294
+				// bug 8294
 				String storageValue = null;
 				Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
 				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
@@ -1854,17 +2001,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					Object[] arguments = {specimen.getLabel(), containerName, pos1, pos2};
 					String errorMsg = Constants.CONTAINER_ERROR_MSG;
-					throw getBizLogicException(null, "spec.storage.not.free", specimen.getLabel()+":"+
-							containerName+":"+ pos1+":"+ pos2);
+					throw getBizLogicException(null, "spec.storage.not.free", specimen.getLabel()
+							+ ":" + containerName + ":" + pos1 + ":" + pos2);
 				}
 			}
 		}
 	}
 
 	/**
-	 * @param dao DAO Object
-	 * @param specimenCollectionGroupArr Array of Specimen Collection Group
-	 * @throws BizLogicException Database related exception
+	 * @param dao
+	 *            DAO Object
+	 * @param specimenCollectionGroupArr
+	 *            Array of Specimen Collection Group
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao,
 			Long specimenCollectionGroupArr[]) throws BizLogicException
@@ -1880,15 +2030,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param speIDArr Array of Specimen Id
-	 * @throws BizLogicException Database related exception
+	 * @param dao
+	 *            DAO object
+	 * @param speIDArr
+	 *            Array of Specimen Id
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void disableSubSpecimens(DAO dao, Long speIDArr[]) throws BizLogicException
 	{
-		/*List listOfSubElement = disableObjects(dao, AbstractSpecimen.class, "parentSpecimen",
-				"CATISSUE_ABSTRACT_SPECIMEN", "PARENT_SPECIMEN_ID", speIDArr);
-		*/
+		/*
+		 * List listOfSubElement = disableObjects(dao, AbstractSpecimen.class,
+		 * "parentSpecimen", "CATISSUE_ABSTRACT_SPECIMEN", "PARENT_SPECIMEN_ID",
+		 * speIDArr);
+		 */
 		List listOfSubElement = disableObjects(dao, "CATISSUE_SPECIMEN", Specimen.class,
 				"parentSpecimen", speIDArr);
 
@@ -1900,124 +2055,159 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Todo Remove this method 
-	 * @param dao DAO object
-	 * @param privilegeName Type of privilege
-	 * @param specimenCollectionGroupArr Array of specimenCollectionGroup
-	 * @param userId User Identifier
-	 * @param assignToUser boolean
-	 * @param roleId Role id
-	 * @param assignOperation boolean
-	 * @throws BizLogicException Database related exception
-	 * @throws SMException Security related exception
+	 * Todo Remove this method
+	 *
+	 * @param dao
+	 *            DAO object
+	 * @param privilegeName
+	 *            Type of privilege
+	 * @param specimenCollectionGroupArr
+	 *            Array of specimenCollectionGroup
+	 * @param userId
+	 *            User Identifier
+	 * @param assignToUser
+	 *            boolean
+	 * @param roleId
+	 *            Role id
+	 * @param assignOperation
+	 *            boolean
+	 * @throws BizLogicException
+	 *             Database related exception
+	 * @throws SMException
+	 *             Security related exception
 	 */
 	/*
-		public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName, Long[] specimenCollectionGroupArr, Long userId, String roleId,
-				boolean assignToUser, boolean assignOperation) throws SMException, DAOException
-		{
-			Logger.out.debug("assignPrivilegeToRelatedObjectsForSCG NewSpecimenBizLogic");
-			List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class, "specimenCollectionGroup", specimenCollectionGroupArr);
-			if (!listOfSpecimenId.isEmpty())
-			{
-				super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId), userId, roleId, assignToUser,
-						assignOperation);
-				List specimenCharacteristicsIds = super.getRelatedObjects(dao, AbstractSpecimen.class, new String[]{"specimenCharacteristics."
-						+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, Utility.toLongArray(listOfSpecimenId));
-				super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
-						assignOperation);
-				assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId), userId, roleId, assignToUser,
-						assignOperation);
-			}
-		}
-
-		*//**
-		 * Todo Remove this method
-		 * @param dao DAO object
-		 * @param privilegeName privilegeName
-		 * @param class1 Class
-		 * @param speIDArr Array of Specimen Id
-		 * @param userId User Identifier
-		 * @param roleId Role Identifier
-		 * @param assignToUser boolean true or false
-		 * @param assignOperation boolean
-		 * @throws SMException Security related Exception
-		 * @throws BizLogicException Database related exception
-		 */
+	 * public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String
+	 * privilegeName, Long[] specimenCollectionGroupArr, Long userId, String
+	 * roleId, boolean assignToUser, boolean assignOperation) throws
+	 * SMException, DAOException {
+	 * Logger.out.debug("assignPrivilegeToRelatedObjectsForSCG NewSpecimenBizLogic"
+	 * ); List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class,
+	 * "specimenCollectionGroup", specimenCollectionGroupArr); if
+	 * (!listOfSpecimenId.isEmpty()) { super.setPrivilege(dao, privilegeName,
+	 * Specimen.class, Utility.toLongArray(listOfSpecimenId), userId, roleId,
+	 * assignToUser, assignOperation); List specimenCharacteristicsIds =
+	 * super.getRelatedObjects(dao, AbstractSpecimen.class, new
+	 * String[]{"specimenCharacteristics." + Constants.SYSTEM_IDENTIFIER}, new
+	 * String[]{Constants.SYSTEM_IDENTIFIER},
+	 * Utility.toLongArray(listOfSpecimenId)); super.setPrivilege(dao,
+	 * privilegeName, Address.class,
+	 * Utility.toLongArray(specimenCharacteristicsIds), userId, roleId,
+	 * assignToUser, assignOperation); assignPrivilegeToSubSpecimens(dao,
+	 * privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId),
+	 * userId, roleId, assignToUser, assignOperation); } }
+	 *//**
+	 * Todo Remove this method
+	 *
+	 * @param dao
+	 *            DAO object
+	 * @param privilegeName
+	 *            privilegeName
+	 * @param class1
+	 *            Class
+	 * @param speIDArr
+	 *            Array of Specimen Id
+	 * @param roleId
+	 *            Role Identifier
+	 * @param assignToUser
+	 *            boolean true or false
+	 * @param assignOperation
+	 *            boolean
+	 * @throws SMException
+	 *             Security related Exception
+	 * @throws BizLogicException
+	 *             Database related exception
+	 */
 	/*
-		private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1, Long[] speIDArr, Long userId, String roleId,
-				boolean assignToUser, boolean assignOperation) throws SMException, DAOException
-		{
-			List listOfSubElement = super.getRelatedObjects(dao, AbstractSpecimen.class, "parentSpecimen", speIDArr);
-
-			if (listOfSubElement.isEmpty())
-			{
-				return;
-			}
-			super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
-			List specimenCharacteristicsIds = super.getRelatedObjects(dao, AbstractSpecimen.class, new String[]{"specimenCharacteristics."
-					+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, Utility.toLongArray(listOfSubElement));
-			super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
-					assignOperation);
-
-			assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
-					assignOperation);
-		}
-
-		 Todo Remove this method
-		 * (non-Javadoc)
-		 * @see edu.wustl.common.bizlogic.DefaultBizLogic#setPrivilege(edu.wustl.common.dao.DAO, java.lang.String, java.lang.Class, java.lang.Long[], java.lang.Long, java.lang.String, boolean, boolean)
-		 
-		public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
-				boolean assignOperation) throws SMException, DAOException
-		{
-			super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
-			List specimenCharacteristicsIds = super.getRelatedObjects(dao, AbstractSpecimen.class, new String[]{"specimenCharacteristics."
-					+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, objectIds);
-			super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
-					assignOperation);
-
-			assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, objectIds, userId, roleId, assignToUser, assignOperation);
-		}
-
-		*//**
-		 * Todo Remove this method
-		 * @param dao DAO object
-		 * @param privilegeName privilegeName
-		 * @param objectIds Array of Passed object Id
-		 * @param userId User Identifier
-		 * @param roleId Role Identifier
-		 * @param assignToUser boolean true or false
-		 * @param assignOperation boolean
-		 * @throws SMException Security related Exception
-		 * @throws BizLogicException Database related exception
-		 */
+	 * private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName,
+	 * Class class1, Long[] speIDArr, Long userId, String roleId, boolean
+	 * assignToUser, boolean assignOperation) throws SMException, DAOException {
+	 * List listOfSubElement = super.getRelatedObjects(dao,
+	 * AbstractSpecimen.class, "parentSpecimen", speIDArr); if
+	 * (listOfSubElement.isEmpty()) { return; } super.setPrivilege(dao,
+	 * privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement),
+	 * userId, roleId, assignToUser, assignOperation); List
+	 * specimenCharacteristicsIds = super.getRelatedObjects(dao,
+	 * AbstractSpecimen.class, new String[]{"specimenCharacteristics." +
+	 * Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER},
+	 * Utility.toLongArray(listOfSubElement)); super.setPrivilege(dao,
+	 * privilegeName, Address.class,
+	 * Utility.toLongArray(specimenCharacteristicsIds), userId, roleId,
+	 * assignToUser, assignOperation); assignPrivilegeToSubSpecimens(dao,
+	 * privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement),
+	 * userId, roleId, assignToUser, assignOperation); } Todo Remove this method
+	 * (non-Javadoc)
+	 * @see
+	 * edu.wustl.common.bizlogic.DefaultBizLogic#setPrivilege(edu.wustl.common
+	 * .dao.DAO, java.lang.String, java.lang.Class, java.lang.Long[],
+	 * java.lang.Long, java.lang.String, boolean, boolean) public void
+	 * setPrivilege(DAO dao, String privilegeName, Class objectType, Long[]
+	 * objectIds, Long userId, String roleId, boolean assignToUser, boolean
+	 * assignOperation) throws SMException, DAOException {
+	 * super.setPrivilege(dao, privilegeName, objectType, objectIds, userId,
+	 * roleId, assignToUser, assignOperation); List specimenCharacteristicsIds =
+	 * super.getRelatedObjects(dao, AbstractSpecimen.class, new
+	 * String[]{"specimenCharacteristics." + Constants.SYSTEM_IDENTIFIER}, new
+	 * String[]{Constants.SYSTEM_IDENTIFIER}, objectIds);
+	 * super.setPrivilege(dao, privilegeName, Address.class,
+	 * Utility.toLongArray(specimenCharacteristicsIds), userId, roleId,
+	 * assignToUser, assignOperation); assignPrivilegeToSubSpecimens(dao,
+	 * privilegeName, Specimen.class, objectIds, userId, roleId, assignToUser,
+	 * assignOperation); }
+	 *//**
+	 * Todo Remove this method
+	 *
+	 * @param dao
+	 *            DAO object
+	 * @param privilegeName
+	 *            privilegeName
+	 * @param objectIds
+	 *            Array of Passed object Id
+	 * @param userId
+	 *            User Identifier
+	 * @param roleId
+	 *            Role Identifier
+	 * @param assignToUser
+	 *            boolean true or false
+	 * @param assignOperation
+	 *            boolean
+	 * @throws SMException
+	 *             Security related Exception
+	 * @throws BizLogicException
+	 *             Database related exception
+	 */
 	/*
-		public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
-				boolean assignToUser, boolean assignOperation) throws SMException, DAOException
-		{
-			String[] selectColumnNames = {"specimen.id"};
-			String[] whereColumnNames = {"id"};
-			List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, selectColumnNames, whereColumnNames, objectIds);
-			if (!listOfSubElement.isEmpty())
-			{
-				super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
-						assignOperation);
-			}
-		}*/
+	 * public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao,
+	 * String privilegeName, Long[] objectIds, Long userId, String roleId,
+	 * boolean assignToUser, boolean assignOperation) throws SMException,
+	 * DAOException { String[] selectColumnNames = {"specimen.id"}; String[]
+	 * whereColumnNames = {"id"}; List listOfSubElement =
+	 * super.getRelatedObjects(dao, DistributedItem.class, selectColumnNames,
+	 * whereColumnNames, objectIds); if (!listOfSubElement.isEmpty()) {
+	 * super.setPrivilege(dao, privilegeName, Specimen.class,
+	 * Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+	 * assignOperation); } }
+	 */
 
 	/**
-	 * Overriding the parent class's method to validate the enumerated attribute values
-	 * @param obj Type of object linkedHashSet or domain object
-	 * @param dao DAO object
-	 * @param operation Type of Operation
+	 * Overriding the parent class's method to validate the enumerated attribute
+	 * values
+	 *
+	 * @param obj
+	 *            Type of object linkedHashSet or domain object
+	 * @param dao
+	 *            DAO object
+	 * @param operation
+	 *            Type of Operation
 	 * @return result
-	 * @throws BizLogicException Database related exception
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 
 		boolean result = false;
-		//Bug 11481 S
+		// Bug 11481 S
 
 		try
 		{
@@ -2032,16 +2222,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
 						+ specimen.getId();
 				collStatusList = dao.executeQuery(collStatusHQL);
-				//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-				
-				if(scgId != null)
+				// cp = getActivityStatusOfCollectionProtocol(dao, scgId);
+
+				if (scgId != null)
 				{
-					AbstractSpecimenCollectionGroup specimenCollectionGroup=(AbstractSpecimenCollectionGroup)dao.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
-					Long colpId = (Long)specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-					String activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+					AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
+							.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",
+									scgId);
+					Long colpId = (Long) specimenCollectionGroup
+							.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+					String activityStatus = specimenCollectionGroup
+							.getCollectionProtocolRegistration().getCollectionProtocol()
+							.getActivityStatus();
 					cp.setId(colpId);
 					cp.setActivityStatus(activityStatus);
-					
+
 				}
 				String collStatus = null;
 				if (!collStatusList.isEmpty())
@@ -2076,10 +2271,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 			}
-			//Bug 11481 E
+			// Bug 11481 E
 			if (obj instanceof LinkedHashSet)
 			{
-				//bug no. 8081 and 8083
+				// bug no. 8081 and 8083
 				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 				{
 					validateLable(obj);
@@ -2109,8 +2304,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj
-	 * @throws BizLogicException
+	 * @param obj : obj
+	 * @throws BizLogicException  : BizLogicException
 	 */
 	private void validateLable(Object obj) throws BizLogicException
 	{
@@ -2142,12 +2337,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Validate Single Specimen
-	 * @param specimen Specimen Object to validate
-	 * @param dao DAO object
-	 * @param operation Add/Edit
-	 * @param partOfMulipleSpecimen boolean
+	 *
+	 * @param specimen
+	 *            Specimen Object to validate
+	 * @param dao
+	 *            DAO object
+	 * @param operation
+	 *            Add/Edit
+	 * @param partOfMulipleSpecimen
+	 *            boolean
 	 * @return boolean
-	 * @throws BizLogicException Database related exception
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation,
 			boolean partOfMulipleSpecimen) throws BizLogicException
@@ -2169,7 +2370,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			validateDerivedSpecimens(specimen, dao, operation);
 		}
-		//new method call added.
+		// new method call added.
 
 		return true;
 	}
@@ -2182,21 +2383,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (derivedSpecimens != null)
 		{
 			Iterator it = derivedSpecimens.iterator();
-			//validate derived specimens
+			// validate derived specimens
 			int i = 0;
 			while (it.hasNext())
 			{
 				Specimen derivedSpecimen = (Specimen) it.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-				//11177 S
+				// 11177 S
 				if (derivedSpecimen.getPathologicalStatus() == null
 						|| Constants.DOUBLE_QUOTES.equals(derivedSpecimen.getPathologicalStatus()))
 				{
 					derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 				}
-				//derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
-				//11177 E
+				// derivedSpecimen.setPathologicalStatus(specimen.
+				// getPathologicalStatus());
+				// 11177 E
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
 				try
 				{
@@ -2209,23 +2411,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					message += " (This message is for Derived Specimen " + j
 							+ " of Parent Specimen number )";
 					logger.debug(message, exp);
-					throw getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j).toString());
+					throw getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j)
+							.toString());
 				}
 
-				/*	if (!result)
-					{
-						break;
-					}*/
+				/*
+				 * if (!result) { break; }
+				 */
 				i++;
 			}
 		}
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param operation Add/Edit
-	 * @param validator Validator ObjectClass contains the methods used for validation of the fields in the userform
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param operation
+	 *            Add/Edit
+	 * @param validator
+	 *            Validator ObjectClass contains the methods used for validation
+	 *            of the fields in the userform
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateEnumeratedData(Specimen specimen, String operation, Validator validator)
 			throws BizLogicException
@@ -2243,16 +2450,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			throw getBizLogicException(null, "protocol.type.errMsg", "");
 		}
-		/*bug # 7594 if (operation.equals(Constants.EDIT))
-		{
-			if (specimen.getCollectionStatus() != null
-					&& specimen.getCollectionStatus().equals("Collected")
-					&& !specimen.getAvailable().booleanValue())
-			{
-				throw new DAOException(ApplicationProperties
-						.getValue("specimen.available.operation"));
-			}
-		}*/
+		/*
+		 * bug # 7594 if (operation.equals(Constants.EDIT)) { if
+		 * (specimen.getCollectionStatus() != null &&
+		 * specimen.getCollectionStatus().equals("Collected") &&
+		 * !specimen.getAvailable().booleanValue()) { throw new
+		 * DAOException(ApplicationProperties
+		 * .getValue("specimen.available.operation")); } }
+		 */
 		if (operation.equals(Constants.ADD))
 		{
 			if ((specimen.getIsAvailable() == null)
@@ -2289,9 +2494,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param validator Validator ObjectClass contains the methods used for validation of the fields in the userform
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param validator
+	 *            Validator ObjectClass contains the methods used for validation
+	 *            of the fields in the userform
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateSpecimenData(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -2305,16 +2514,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 			throw getBizLogicException(null, "errors.item.required", message);
 		}
-		/*if (!Variables.isSpecimenLabelGeneratorAvl)
-		{
-			if (specimen.getParentSpecimen() != null
-					&& ((Specimen) specimen.getParentSpecimen()).getLabel() == null
-					&& specimen.getParentSpecimen().getId() == null)
-			{
-				String message = ApplicationProperties.getValue("createSpecimen.parent");
-				throw getBizLogicException(null, "errors.item.required", message);
-			}
-		}*/
+		/*
+		 * if (!Variables.isSpecimenLabelGeneratorAvl) { if
+		 * (specimen.getParentSpecimen() != null && ((Specimen)
+		 * specimen.getParentSpecimen()).getLabel() == null &&
+		 * specimen.getParentSpecimen().getId() == null) { String message =
+		 * ApplicationProperties.getValue("createSpecimen.parent"); throw
+		 * getBizLogicException(null, "errors.item.required", message); } }
+		 */
 		if (validator.isEmpty(specimen.getSpecimenClass()))
 		{
 			String message = ApplicationProperties.getValue("specimen.type");
@@ -2328,8 +2535,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateSpecimenCharacterstics(Specimen specimen) throws BizLogicException
 	{
@@ -2378,9 +2587,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param validator Validator ObjectClass contains the methods used for validation of the fields in the userform
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param validator
+	 *            Validator ObjectClass contains the methods used for validation
+	 *            of the fields in the userform
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateSpecimenEvent(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -2416,9 +2629,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param dao DAO object
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateStorageContainer(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -2440,10 +2656,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						.getStorageContainer();
 				String sourceObjectName = StorageContainer.class.getName();
 				String[] selectColumnName = {"id"};
-				//			String[] whereColumnName = {"name"};
-				//			String[] whereColumnCondition = {"="};
-				//			Object[] whereColumnValue = {specimen.getSpecimenPosition().getStorageContainer().getName()};
-				//			String joinCondition = null;
+				// String[] whereColumnName = {"name"};
+				// String[] whereColumnCondition = {"="};
+				// Object[] whereColumnValue =
+				// {specimen.getSpecimenPosition().getStorageContainer
+				// ().getName()};
+				// String joinCondition = null;
 				String storageContainerName = specimen.getSpecimenPosition().getStorageContainer()
 						.getName();
 
@@ -2471,9 +2689,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param validator Validator ObjectClass contains the methods used for validation of the fields in the userform
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param validator
+	 *            Validator ObjectClass contains the methods used for validation
+	 *            of the fields in the userform
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateExternalIdentifier(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -2507,9 +2729,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param validator Validator ObjectClass contains the methods used for validation of the fields in the userform
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param validator
+	 *            Validator ObjectClass contains the methods used for validation
+	 *            of the fields in the userform
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateBioHazard(Specimen specimen, Validator validator) throws BizLogicException
 	{
@@ -2538,11 +2764,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen to validate
-	 * @param operation Add/Edit
-	 * @param dao DAO object
-	 * @param partOfMulipleSpecimen boolean
-	 * @throws BizLogicException Database related exception
+	 * @param specimen
+	 *            Specimen to validate
+	 * @param operation
+	 *            Add/Edit
+	 * @param dao
+	 *            DAO object
+	 * @param partOfMulipleSpecimen
+	 *            boolean
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	private void validateFields(Specimen specimen, DAO dao, String operation,
 			boolean partOfMulipleSpecimen) throws BizLogicException
@@ -2582,8 +2813,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw getBizLogicException(null, "errors.item.required", quantityString);
 			}
 			/**
-			 * This method gives first valid storage position to a specimen if it is not given
-			 * If storage position is given it validates the storage position
+			 * This method gives first valid storage position to a specimen if
+			 * it is not given If storage position is given it validates the
+			 * storage position
 			 **/
 			StorageContainerUtil.validateStorageLocationForSpecimen(specimen, storageContainerIds);
 		}
@@ -2596,10 +2828,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function checks whether the storage position of a specimen is changed or not
-	 * & returns the status accordingly
-	 * @param oldSpecimen Persistent Object
-	 * @param newSpecimen New Object
+	 * This function checks whether the storage position of a specimen is
+	 * changed or not & returns the status accordingly
+	 *
+	 * @param oldSpecimen
+	 *            Persistent Object
+	 * @param newSpecimen
+	 *            New Object
 	 * @return boolean
 	 */
 	private boolean isStoragePositionChanged(Specimen oldSpecimen, Specimen newSpecimen)
@@ -2608,9 +2843,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		StorageContainer oldContainer = null;
 		StorageContainer newContainer = null;
 		if (oldSpecimen.getSpecimenPosition() != null)
+		{
 			oldContainer = oldSpecimen.getSpecimenPosition().getStorageContainer();
+		}
 		if (newSpecimen.getSpecimenPosition() != null)
+		{
 			newContainer = newSpecimen.getSpecimenPosition().getStorageContainer();
+		}
 		if (oldContainer == null && newContainer == null)
 		{
 			return false;
@@ -2648,8 +2887,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Set event parameters from parent specimen to derived specimen
-	 * @param parentSpecimen specimen
-	 * @param deriveSpecimen Derived Specimen
+	 *
+	 * @param parentSpecimen
+	 *            specimen
+	 * @param deriveSpecimen
+	 *            Derived Specimen
 	 * @return set
 	 */
 	private Set<AbstractDomainObject> populateDeriveSpecimenEventCollection(
@@ -2688,7 +2930,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * This method will retrive no of specimen in the catissue_specimen table
-	 * @param sessionData Session data
+	 *
+	 * @param sessionData
+	 *            Session data
 	 * @return Count of Specimen
 	 */
 	public int totalNoOfSpecimen(SessionDataBean sessionData)
@@ -2719,9 +2963,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * This function will retrive SCG Id from SCG Name
-	 * @param specimen Current Specimen
-	 * @param dao DAO Object
-	 * @throws BizLogicException Database related exception
+	 *
+	 * @param specimen
+	 *            Current Specimen
+	 * @param dao
+	 *            DAO Object
+	 * @throws BizLogicException
+	 *             Database related exception
 	 */
 	public void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -2731,9 +2979,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (specimenCollGpName != null && !specimenCollGpName.equals(""))
 			{
 				String[] selectColumnName = {"id"};
-				//String[] whereColumnName = {"name"};
-				//String[] whereColumnCondition = {"="};
-				//String[] whereColumnValue = {specimenCollGpName};
+				// String[] whereColumnName = {"name"};
+				// String[] whereColumnCondition = {"="};
+				// String[] whereColumnValue = {specimenCollGpName};
 
 				QueryWhereClause queryWhereClause = new QueryWhereClause(
 						SpecimenCollectionGroup.class.getName());
@@ -2756,12 +3004,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method updates the consents and specimen based on the the consent withdrawal option.
-	 * @param specimen New object
-	 * @param oldSpecimen Old Object
-	 * @param dao DAO object
-	 * @param sessionDataBean Session Details
-	 * @throws BizLogicException Database exception
+	 * This method updates the consents and specimen based on the the consent
+	 * withdrawal option.
+	 *
+	 * @param specimen
+	 *            New object
+	 * @param oldSpecimen
+	 *            Old Object
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session Details
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void updateConsentWithdrawStatus(Specimen specimen, Specimen oldSpecimen, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -2798,11 +3053,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method is used to update the consent status of child specimens as per the option selected by the user
-	 * @param specimen New object
-	 * @param oldSpecimen Old Object
-	 * @param dao DAO object
-	 * @throws BizLogicException Database exception
+	 * This method is used to update the consent status of child specimens as
+	 * per the option selected by the user
+	 * @param specimen
+	 *            New object
+	 * @param oldSpecimen
+	 *            Old Object
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             Database exception
+	 * @throws DAOException : DAOException
 	 */
 	private void updateConsentStatus(Specimen specimen, DAO dao, Specimen oldSpecimen)
 			throws BizLogicException, DAOException
@@ -2840,13 +3101,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function is used to update specimens and their dervied & aliquot specimens
-	 * @param newSpecimenCollection List of specimens to update along with children
-	 * specimens.
-	 * @param sessionDataBean current user session information
-	 * @param dao DAO object
-	 * @throws BizLogicException If DAO fails to update one or more specimens
-	 * this function will throw DAOException.
+	 * This function is used to update specimens and their dervied & aliquot
+	 * specimens
+	 * @param newSpecimenCollection
+	 *            List of specimens to update along with children specimens.
+	 * @param sessionDataBean
+	 *            current user session information
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             If DAO fails to update one or more specimens this function
+	 *             will throw DAOException.
+	 * @throws DAOException : DAOException
 	 */
 	public void updateAnticipatorySpecimens(DAO dao,
 			Collection<AbstractDomainObject> newSpecimenCollection, SessionDataBean sessionDataBean)
@@ -2856,13 +3122,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function is used to bulk update multiple specimens. If
-	 * any specimen contains children specimens those will be inserted
-	 * @param newSpecimenCollection List of specimens to update along with
-	 * new children specimens if any. 7
-	 * @param sessionDataBean current user session information
-	 * @throws BizLogicException If DAO fails to update one or more specimens
-	 * this function will throw DAOException.
+	 * This function is used to bulk update multiple specimens. If any specimen
+	 * contains children specimens those will be inserted
+	 *
+	 * @param newSpecimenCollection
+	 *            List of specimens to update along with new children specimens
+	 *            if any. 7
+	 * @param sessionDataBean
+	 *            current user session information
+	 * @throws BizLogicException
+	 *             If DAO fails to update one or more specimens this function
+	 *             will throw DAOException.
 	 */
 	public void bulkUpdateSpecimens(Collection<AbstractDomainObject> newSpecimenCollection,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -2915,23 +3185,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				logger.debug(e.getMessage(), e);
 				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
-			
-			
-			
-			/*String errorMsg = "Failed to save. ";
-			if (specimenCtr != 0)
-			{
-				errorMsg = "specimen number " + specimenCtr + " cannot be saved. ";
-				if (childSpecimenCtr != 0)
-				{
-					errorMsg = "Cannot insert child specimen " + childSpecimenCtr
-							+ ", of specimen " + specimenCtr + ". ";
-					throw getBizLogicException(exception, "child.nt.saved", childSpecimenCtr+":"+specimenCtr);
-				}
-				throw getBizLogicException(exception, exception., ""+specimenCtr);
-			}*/
+
+			/*
+			 * String errorMsg = "Failed to save. "; if (specimenCtr != 0) {
+			 * errorMsg = "specimen number " + specimenCtr +
+			 * " cannot be saved. "; if (childSpecimenCtr != 0) { errorMsg =
+			 * "Cannot insert child specimen " + childSpecimenCtr +
+			 * ", of specimen " + specimenCtr + ". "; throw
+			 * getBizLogicException(exception, "child.nt.saved",
+			 * childSpecimenCtr+":"+specimenCtr); } throw
+			 * getBizLogicException(exception, exception., ""+specimenCtr); }
+			 */
 			// bug#12703
-			throw getBizLogicException(exception, exception.getErrorKeyName(),exception.getMsgValues() );
+			throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+					.getMsgValues());
 		}
 		finally
 		{
@@ -2940,14 +3207,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean Session details
-	 * @param dao DAO Object
-	 * @param childSpecimenCtr Count
-	 * @param specimenDO Persistent object
-	 * @param childrenSpecimenCollection childSpecimen Collection
+	 * @param sessionDataBean
+	 *            Session details
+	 * @param dao
+	 *            DAO Object
+	 * @param childSpecimenCtr
+	 *            Count
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param childrenSpecimenCollection
+	 *            childSpecimen Collection
 	 * @return count
-	 * @throws BizLogicException Database Exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @throws BizLogicException
+	 *             Database Exception
+	 * @throws UserNotAuthorizedException
+	 *             User Not Authorized Exception
 	 */
 	private int updateChildSpecimen(SessionDataBean sessionDataBean, DAO dao, int childSpecimenCtr,
 			Specimen specimenDO, Collection<AbstractSpecimen> childrenSpecimenCollection)
@@ -3001,11 +3275,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param newSpecimenCollection Specimen Collection
-	 * @param sessionDataBean Session Details
-	 * @param updateChildrens boolean
-	 * @throws BizLogicException Database exception
+	 * @param dao
+	 *            DAO object
+	 * @param newSpecimenCollection
+	 *            Specimen Collection
+	 * @param sessionDataBean
+	 *            Session Details
+	 * @param updateChildrens
+	 *            boolean
+	 * @throws BizLogicException
+	 *             Database exception
+	 * @throws DAOException : DAOException
 	 */
 	protected void updateMultipleSpecimens(DAO dao,
 			Collection<AbstractDomainObject> newSpecimenCollection,
@@ -3039,7 +3319,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			while (iterator.hasNext())
 			{
 				Specimen newSpecimen = (Specimen) iterator.next();
-				//				validateCollectionStatus(newSpecimen );
+				// validateCollectionStatus(newSpecimen );
 				updateSingleSpecimen(dao, newSpecimen, sessionDataBean, updateChildrens);
 			}
 			postInsert(newSpecimenCollection, dao, sessionDataBean);
@@ -3051,62 +3331,73 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	//Bug 11481 S
+	// Bug 11481 S
 	/**
-	 * This function validate if CP is closed then anticipatory specimen can not be collected.
-	 * @param dao DAO object
-	 * @param newSpecimen
-	 * @param specimenDO
+	 * This function validate if CP is closed then anticipatory specimen can not
+	 * be collected.
 	 * @param dao
-	 * @throws BizLogicException Database exception
+	 *            DAO object
+	 * @param newSpecimen : newSpecimen
+	 * @param specimenDO : specimenDO
+	 * @param dao : dao
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	public void validateIfCPisClosed(Specimen specimenDO, Specimen newSpecimen, DAO dao)
 			throws BizLogicException
 	{
 		try
 		{
-		String lineage = specimenDO.getLineage();
-		Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
-		CollectionProtocol cp = new CollectionProtocol();
-		//cp = getActivityStatusOfCollectionProtocol(dao, scgId);
-		
-		AbstractSpecimenCollectionGroup specimenCollectionGroup=(AbstractSpecimenCollectionGroup)dao.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
-		String activityStatus = "";
-		//if(specimenCollectionGroup instanceof SpecimenCollectionGroup)
-		//{
+			String lineage = specimenDO.getLineage();
+			Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
+			CollectionProtocol cp = new CollectionProtocol();
+			// cp = getActivityStatusOfCollectionProtocol(dao, scgId);
 
-			Long colpId = (Long)specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-			activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
+			AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
+					.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
+			String activityStatus = "";
+			// if(specimenCollectionGroup instanceof SpecimenCollectionGroup)
+			// {
+
+			Long colpId = (Long) specimenCollectionGroup.getCollectionProtocolRegistration()
+					.getCollectionProtocol().getId();
+			activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration()
+					.getCollectionProtocol().getActivityStatus();
 
 			cp.setId(colpId);
 			cp.setActivityStatus(activityStatus);
-		//}
-		//String activityStatus = cp.getActivityStatus();
-		String oldCollectionStatus = specimenDO.getCollectionStatus();
-		String newCollectionStatus = newSpecimen.getCollectionStatus();
-		if (lineage.equals("New")
-				&& activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
-		{
-			if (!oldCollectionStatus.equalsIgnoreCase(newCollectionStatus))
+			// }
+			// String activityStatus = cp.getActivityStatus();
+			String oldCollectionStatus = specimenDO.getCollectionStatus();
+			String newCollectionStatus = newSpecimen.getCollectionStatus();
+			if (lineage.equals("New")
+					&& activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
-				checkStatus(dao, cp, "Collection Protocol");
+				if (!oldCollectionStatus.equalsIgnoreCase(newCollectionStatus))
+				{
+					checkStatus(dao, cp, "Collection Protocol");
+				}
 			}
 		}
-		}
-		catch(DAOException exp)
+		catch (DAOException exp)
 		{
 			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
-	//Bug 11481 E	
+	// Bug 11481 E
 
 	/**
-	 * @param dao DAO object
-	 * @param sessionDataBean Session Details
-	 * @param updateChildrens boolean
-	 * @param newSpecimen Specimen Object
-	 * @throws BizLogicException Database exception
+	 * @param dao
+	 *            DAO object
+	 * @param sessionDataBean
+	 *            Session Details
+	 * @param updateChildrens
+	 *            boolean
+	 * @param newSpecimen
+	 *            Specimen Object
+	 * @throws BizLogicException
+	 *             Database exception
 	 * @return Specimen object
 	 */
 	public Specimen updateSingleSpecimen(DAO dao, Specimen newSpecimen,
@@ -3121,9 +3412,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if (object != null)
 				{
 					specimenDO = (Specimen) object;
-					//Bug 11481 S		
+					// Bug 11481 S
 					validateIfCPisClosed(specimenDO, newSpecimen, dao);
-					//Bug 11481 E	
+					// Bug 11481 E
 					updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
 					if (updateChildrens)
 					{
@@ -3141,19 +3432,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (DAOException exception)
 		{
 			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, exception.getErrorKeyName(),
-					exception.getMsgValues());
+			throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+					.getMsgValues());
 		}
 
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimenVO New Object
-	 * @param specimenDO Persistent object
-	 * @param sessionDataBean Session Details
-	 * @throws BizLogicException Database exception
-	 * @throws SMException Security exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimenVO
+	 *            New Object
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param sessionDataBean
+	 *            Session Details
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3178,10 +3473,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param id Identifier
-	 * @param specimenCollection Specimen Collection
+	 * @param id
+	 *            Identifier
+	 * @param specimenCollection
+	 *            Specimen Collection
 	 * @return Specimen
-	 * @throws BizLogicException Database exception
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private Specimen getCorelatedSpecimen(Long id, Collection<AbstractSpecimen> specimenCollection)
 			throws BizLogicException
@@ -3199,9 +3497,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen Specimen
-	 * @param dao DAO object
-	 * @throws BizLogicException Database exception
+	 * @param specimen
+	 *            Specimen
+	 * @param dao
+	 *            DAO object
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -3232,7 +3533,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						Specimen specimenObject = (Specimen) (list.get(i));
 						if (!specimenObject.getId().equals(specimen.getId()))
 						{
-							throw getBizLogicException(null, "barcode.already.exits ", specimen.getBarcode());
+							throw getBizLogicException(null, "barcode.already.exits ", specimen
+									.getBarcode());
 
 						}
 					}
@@ -3247,12 +3549,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimenVO New Object
-	 * @param specimenDO Persistent object
-	 * @param sessionDataBean session details
-	 * @throws BizLogicException Database exception
-	 * @throws SMException Security exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimenVO
+	 *            New Object
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param sessionDataBean
+	 *            session details
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3273,7 +3579,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			specimenDO.setSpecimenPosition(null);
-			//specimenDO.setStorageContainer(null);
+			// specimenDO.setStorageContainer(null);
 		}
 		calculateAvailableQunatity(specimenVO, specimenDO);
 		String oldStatus = specimenDO.getCollectionStatus();
@@ -3303,12 +3609,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimenVO New Object
-	 * @param specimenDO Persistent object
-	 * @param sessionDataBean session details
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
-	 * @throws BizLogicException  Database exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimenVO
+	 *            New Object
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param sessionDataBean
+	 *            session details
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void setSpecimenData(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3346,12 +3656,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimenVO New Object
-	 * @param specimenDO Persistent object
-	 * @param sessionDataBean session details
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
-	 * @throws BizLogicException  Database exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimenVO
+	 *            New Object
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param sessionDataBean
+	 *            session details
+	 * @throws BizLogicException
+	 *             Database exception
 	 */
 	private void updateExtenalIdentifier(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3381,18 +3695,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							persistetnExt.setName(ex.getName());
 							persistetnExt.setValue(ex.getValue());
 							dao.update(persistetnExt);
-							
+
 							AuditManager auditManager = getAuditManager(sessionDataBean);
-							auditManager.updateAudit(dao,persistetnExt, ex);
+							auditManager.updateAudit(dao, persistetnExt, ex);
 						}
 					}
 				}
 				catch (DAOException e)
 				{
 					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "ext.mult.spec.nt.updated",
-							"");
-				} catch (AuditException e) {
+					throw getBizLogicException(e, "ext.mult.spec.nt.updated", "");
+				}
+				catch (AuditException e)
+				{
 					logger.debug(e.getMessage(), e);
 					throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 				}
@@ -3402,9 +3717,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Logic for Calculate Quantity
-	 * @param specimenVO New Specimen object
-	 * @param specimenDO Persistent Object
-	 * @throws BizLogicException Database Exception
+	 * @param specimenVO
+	 *            New Specimen object
+	 * @param specimenDO
+	 *            Persistent Object
+	 * @throws BizLogicException
+	 *             Database Exception
 	 */
 	private void calculateAvailableQunatity(Specimen specimenVO, Specimen specimenDO)
 			throws BizLogicException
@@ -3440,7 +3758,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 
 				newAvailQty = modifiedInitQty;
-				specimenVO.setIsAvailable(new Boolean(true));//bug 11174
+				specimenVO.setIsAvailable(new Boolean(true));// bug 11174
 			}
 			else if (differenceQty == 0 || !specimenDO.getCollectionStatus().equals("Pending"))
 			{
@@ -3477,10 +3795,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				availableQuantity = newAvailQty;
 			}
-			/* if ((specimenDO.getAvailableQuantity() != null && specimenDO.getAvailableQuantity() > 0))
-			{
-				specimenDO.setAvailable(Boolean.TRUE);
-			}*/
+			/*
+			 * if ((specimenDO.getAvailableQuantity() != null &&
+			 * specimenDO.getAvailableQuantity() > 0)) {
+			 * specimenDO.setAvailable(Boolean.TRUE); }
+			 */
 			Double oldInitialQty = null;
 			if (specimenDO.getInitialQuantity() == null)
 			{
@@ -3496,10 +3815,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimenDO Persistent object
-	 * @param differenceQty Change in quantity
-	 * @param newAvailQty New Available quantity
-	 * @throws BizLogicException Database Exception
+	 * @param specimenDO
+	 *            Persistent object
+	 * @param differenceQty
+	 *            Change in quantity
+	 * @param newAvailQty
+	 *            New Available quantity
+	 * @throws BizLogicException
+	 *             Database Exception
 	 */
 	private void calculateParentQuantity(Specimen specimenDO, double differenceQty,
 			double newAvailQty) throws BizLogicException
@@ -3518,8 +3841,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			if (parentAvl < 0)
 			{
-				throw getBizLogicException(null, "insuff.avai.quan",
-						"");
+				throw getBizLogicException(null, "insuff.avai.quan", "");
 			}
 			parentSpecimen.setAvailableQuantity(parentAvl);
 		}
@@ -3534,7 +3856,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param containerHoldsCPs Map of container that can holds CP
+	 * @param containerHoldsCPs
+	 *            Map of container that can holds CP
 	 */
 	public void setContainerHoldsCPs(Map<Long, Collection<CollectionProtocol>> containerHoldsCPs)
 	{
@@ -3550,7 +3873,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param containerHoldsSpecimenClasses container of SpecimenClasses
+	 * @param containerHoldsSpecimenClasses
+	 *            container of SpecimenClasses
 	 */
 	public void setContainerHoldsSpecimenClasses(
 			Map<Long, Collection<String>> containerHoldsSpecimenClasses)
@@ -3559,11 +3883,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao DAO object
-	 * @param specimenVO New Specimen object
-	 * @param specimenDO Persistent Object
-	 * @throws BizLogicException Database Exception
-	 * @throws SMException Security exception
+	 * @param dao
+	 *            DAO object
+	 * @param specimenVO
+	 *            New Specimen object
+	 * @param specimenDO
+	 *            Persistent Object
+	 * @throws BizLogicException
+	 *             Database Exception
 	 */
 	private void setStorageContainer(DAO dao, Specimen specimenVO, Specimen specimenDO)
 			throws BizLogicException
@@ -3589,7 +3916,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		specimenDO.setSpecimenPosition(specPos);
 
-		//		specimenDO.setStorageContainer(storageContainer);	
+		// specimenDO.setStorageContainer(storageContainer);
 	}
 
 	/**
@@ -3601,7 +3928,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param cpbased boolean
+	 * @param cpbased
+	 *            boolean
 	 */
 	public void setCpbased(boolean cpbased)
 	{
@@ -3609,10 +3937,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function throws BizLogicException if the domainObj is of type SpecimenCollectionRequirementGroup
-	 * @param domainObj current domain object
-	 * @param uiForm current form
-	 * @throws BizLogicException BizLogic exception
+	 * This function throws BizLogicException if the domainObj is of type
+	 * SpecimenCollectionRequirementGroup
+	 *
+	 * @param domainObj
+	 *            current domain object
+	 * @param uiForm
+	 *            current form
+	 * @throws BizLogicException
+	 *             BizLogic exception
 	 */
 	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm)
 			throws BizLogicException
@@ -3627,17 +3960,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
 			newSpecimenForm.setForwardTo(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
-			throw getBizLogicException(null, "req.spec.nt.edited",
-					"");
+			throw getBizLogicException(null, "req.spec.nt.edited", "");
 
 		}
 	}
 
 	/**
-	 * This function is used for retriving specimen and sub specimen's attributes
-	 * @param specimenID id of the specimen
-	 * @param finalDataList the data list to be populated
-	 * @throws BizLogicException 
+	 * This function is used for retriving specimen and sub specimen's
+	 * attributes
+	 * @param sessionData : sessionData
+	 * @param specimenID
+	 *            id of the specimen
+	 * @param finalDataList
+	 *            the data list to be populated
+	 * @throws BizLogicException : BizLogicException
+	 * @return Specimen
 	 */
 	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData)
 			throws BizLogicException
@@ -3674,11 +4011,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * 
-	 * @param specimenID
-	 * @param finalDataList
-	 * @return
-	 * @throws BizLogicException
+	 *
+	 * @param specimen  : specimen
+	 * @param finalDataList : finalDataList
+	 * @throws BizLogicException  :BizLogicException
 	 */
 	private void getSpecimenInternal(Specimen specimen, List finalDataList)
 			throws BizLogicException
@@ -3718,18 +4054,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * return the specimen object
-	 * @param specimenID
-	 * @param dao
-	 * @return
-	 * @throws BizLogicException
+	 *
+	 * @param specimenID : specimenID
+	 * @param dao : dao
+	 * @return Specimen
+	 * @throws BizLogicException : BizLogicException
 	 */
 	public Specimen getSpecimenObj(String specimenID, DAO dao) throws BizLogicException
 	{
 
 		try
 		{
-			Object object = dao.retrieveById(Specimen.class.getName(), Long.valueOf(specimenID));//new Long(specimenID)
-
+			Object object = dao.retrieveById(Specimen.class.getName(), Long.valueOf(specimenID));// new
 			if (object == null)
 			{
 				throw getBizLogicException(null, "no.spec.returned", "");
@@ -3745,11 +4081,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean
-	 * @param specimen
-	 * @param dao
-	 * @throws UserNotAuthorizedException
-	 * @throws BizLogicException
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimen : specimen
+	 * @param dao : dao
+	 * @param disposalReason : disposalReason
+	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
+	 * @throws DAOException : DAOException
 	 */
 	public void checkParentSpecimenDisposal(SessionDataBean sessionDataBean, Specimen specimen,
 			DAO dao, String disposalReason) throws UserNotAuthorizedException, DAOException
@@ -3774,58 +4111,64 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check
 	 * (non-Javadoc)
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
+	 * @param dao : dao
+	 * @param domainObject : domainObject
+	 * @return String
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
+	 *      java.lang.Object)
 	 */
-	 public String getObjectId(DAO dao, Object domainObject)
+	public String getObjectId(DAO dao, Object domainObject)
 	{
 		String objectId = "";
 		Specimen specimen = null;
 		Long cpId = null;
 		List<Long> list = null;
-        try
-		{ 
-		if (domainObject instanceof LinkedHashSet)
+		try
 		{
-			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
-			specimen = (Specimen) linkedHashSet.iterator().next();
-		}
-		else if (domainObject instanceof Specimen)
-		{
-			specimen = (Specimen) domainObject;
-		}
+			if (domainObject instanceof LinkedHashSet)
+			{
+				LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+				specimen = (Specimen) linkedHashSet.iterator().next();
+			}
+			else if (domainObject instanceof Specimen)
+			{
+				specimen = (Specimen) domainObject;
+			}
 
-		SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
-		
 			String query = null;
-		    if (specimen.getParentSpecimen() != null)
+			if (specimen.getParentSpecimen() != null)
 			{
-		       query ="select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "+
-					   		"specimen.label = '"+ specimen.getParentSpecimen().getLabel() +"'" ;
-		       list = new DefaultBizLogic().executeQuery(query);
-				Iterator<Long> itr = list.iterator();
-				while(itr.hasNext()){
-					cpId =  (Long)itr.next();
-				}
-		    }
-			else if (cpId == null && specimen.getId() != null)
-			{
-				query ="select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "+
-		   		"specimen.id = '"+ specimen.getId() +"'" ;
+				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+						+ "specimen.label = '" + specimen.getParentSpecimen().getLabel() + "'";
 				list = new DefaultBizLogic().executeQuery(query);
 				Iterator<Long> itr = list.iterator();
-				while(itr.hasNext()){
-					cpId =  (Long)itr.next();
+				while (itr.hasNext())
+				{
+					cpId = (Long) itr.next();
 				}
 			}
-			if (cpId == null && scg.getId() != null) 
+			else if (cpId == null && specimen.getId() != null)
 			{
-				query ="select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "+
-		   		"specimenCollectionGroup.id = '"+ scg.getId() +"'" ;
+				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
+						+ "specimen.id = '" + specimen.getId() + "'";
 				list = new DefaultBizLogic().executeQuery(query);
 				Iterator<Long> itr = list.iterator();
-				while(itr.hasNext()){
-					cpId =  (Long)itr.next();
+				while (itr.hasNext())
+				{
+					cpId = (Long) itr.next();
+				}
+			}
+			if (cpId == null && scg.getId() != null)
+			{
+				query = "select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
+						+ "specimenCollectionGroup.id = '" + scg.getId() + "'";
+				list = new DefaultBizLogic().executeQuery(query);
+				Iterator<Long> itr = list.iterator();
+				while (itr.hasNext())
+				{
+					cpId = (Long) itr.next();
 				}
 			}
 		}
@@ -3837,7 +4180,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (cpId != null)
 		{
 			objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
-			
+
 		}
 		else
 		{
@@ -3846,10 +4189,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		return objectId;
 	}
-	
+
 	/**
-	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
-	 * (non-Javadoc)
+	 * To get PrivilegeName for authorization check from
+	 * 'PermissionMapDetails.xml' (non-Javadoc)
+	 * @param domainObject : domainObject
+	 * @return String
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
 	protected String getPrivilegeKey(Object domainObject)
@@ -3883,12 +4228,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * (non-Javadoc)
-	 * @throws UserNotAuthorizedException 
-	 * @throws BizLogicException 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
-	 * 
+	 * @param dao : dao
+	 * @param domainObject : domainObject
+	 * @param sessionDataBean : sessionDataBean
+	 * @return boolean
+	 * @throws BizLogicException : BizLogicException
+	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO,
+	 *      java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean) throws BizLogicException
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		String protectionElementName = null;
@@ -3899,8 +4248,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				return true;
 			}
-			//	Get the base object id against which authorization will take place 
-			if(domainObject != null)
+			// Get the base object id against which authorization will take
+			// place
+			if (domainObject != null)
 			{
 				if (domainObject instanceof List)
 				{
@@ -3915,8 +4265,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					protectionElementName = getObjectId(dao, domainObject);
 					Site site = null;
 					StorageContainer sc = null;
-					//	Handle for SERIAL CHECKS, whether user has access to source site or not
-					
+					// Handle for SERIAL CHECKS, whether user has access to
+					// source site or not
+
 					if (domainObject instanceof Specimen)
 					{
 						SpecimenPosition specimenPosition = null;
@@ -3924,34 +4275,42 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 						List<Site> list = null;
 						if (specimen.getLineage() != null
-								&& ((Constants.DERIVED_SPECIMEN).equals(specimen.getLineage()) || 
-										(Constants.ALIQUOT).equals(specimen.getLineage())))
+								&& ((Constants.DERIVED_SPECIMEN).equals(specimen.getLineage()) || (Constants.ALIQUOT)
+										.equals(specimen.getLineage())))
 						{
-							if (specimen.getParentSpecimen().getLabel() != null && !specimen.getParentSpecimen().getLabel().equals(""))
+							if (specimen.getParentSpecimen().getLabel() != null
+									&& !specimen.getParentSpecimen().getLabel().equals(""))
 							{
-								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
-								"specimen.label = '"+ specimen.getParentSpecimen().getLabel() +"'" ;
+								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
+										+ "specimen.label = '"
+										+ specimen.getParentSpecimen().getLabel() + "'";
 							}
-							else if (parentSpecimen.getBarcode() != null && !parentSpecimen.getBarcode().equals(""))
-								{
-								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
-								"specimen.barcode = '"+ parentSpecimen.getBarcode() +"'" ;
-								}
+							else if (parentSpecimen.getBarcode() != null
+									&& !parentSpecimen.getBarcode().equals(""))
+							{
+								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
+										+ "specimen.barcode = '"
+										+ parentSpecimen.getBarcode()
+										+ "'";
+							}
 							else
-								{
-								query ="select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "+
-								" specimen.id = "+ specimen.getParentSpecimen().getId() ;
-								}
-						
-							if(query != null ) {
+							{
+								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
+										+ " specimen.id = " + specimen.getParentSpecimen().getId();
+							}
+
+							if (query != null)
+							{
 								list = executeQuery(query);
-								if(list != null) {
+								if (list != null)
+								{
 									Iterator<Site> itr = list.iterator();
-									while(itr.hasNext()){
-										site =  (Site)itr.next();
+									while (itr.hasNext())
+									{
+										site = (Site) itr.next();
 									}
 								}
-							} 
+							}
 						}
 						else
 						{
@@ -3959,67 +4318,76 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							{
 								sc = specimen.getSpecimenPosition().getStorageContainer();
 							}
-							if (specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
+							if (specimen.getSpecimenPosition() != null
+									&& specimen.getSpecimenPosition().getStorageContainer()
+											.getSite() == null)
 							{
 								if (sc.getId() != null)
 								{
-									query ="select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "+
-							   		" storageContainer.id = "+ sc.getId() ;
+									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "
+											+ " storageContainer.id = " + sc.getId();
 								}
 								else
 								{
-									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "+
-							   		" storageContainer.name = "+ sc.getName() ;
+									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "
+											+ " storageContainer.name = " + sc.getName();
 								}
-								if(query != null )
+								if (query != null)
 								{
 									list = executeQuery(query);
-									if(list != null) {
+									if (list != null)
+									{
 										Iterator<Site> itr = list.iterator();
-										while(itr.hasNext()){
-											site =  (Site)itr.next();
+										while (itr.hasNext())
+										{
+											site = (Site) itr.next();
 										}
 									}
 									if (list.isEmpty())
 									{
-										throw getBizLogicException(null, "sc.unableToFindContainer", "");
+										throw getBizLogicException(null,
+												"sc.unableToFindContainer", "");
 									}
 								}
 							}
 						}
-	
+
 						if (site != null) // Specimen is NOT Virtually Located
 						{
-							BizLogicException e = AppUtility
-							.getUserNotAuthorizedException(Constants.Association, site
-									.getObjectId(), domainObject.getClass().getSimpleName());
-							throw getBizLogicException(e,  e.getErrorKeyName(), e.getMsgValues());
+							BizLogicException e = AppUtility.getUserNotAuthorizedException(
+									Constants.Association, site.getObjectId(), domainObject
+											.getClass().getSimpleName());
+							throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 						}
 					}
 				}
-				
+
 				if (protectionElementName.equals(Constants.allowOperation))
 				{
 					return true;
 				}
-				//Get the required privilege name which we would like to check for the logged in user.
+				// Get the required privilege name which we would like to check
+				// for the logged in user.
 				String privilegeName = getPrivilegeName(domainObject);
 				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 						sessionDataBean.getUserName());
-	
+
 				String[] privilegeNames = privilegeName.split(",");
-				// Checking whether the logged in user has the required privilege on the given protection element
+				// Checking whether the logged in user has the required
+				// privilege on the given protection element
 				if (privilegeNames.length > 1)
 				{
 					if ((privilegeCache.hasPrivilege(protectionElementName, privilegeNames[0]))
-							|| (privilegeCache.hasPrivilege(protectionElementName, privilegeNames[1])))
+							|| (privilegeCache.hasPrivilege(protectionElementName,
+									privilegeNames[1])))
 					{
 						isAuthorized = true;
 					}
 				}
 				else
 				{
-					isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
+					isAuthorized = privilegeCache
+							.hasPrivilege(protectionElementName, privilegeName);
 				}
 				if (isAuthorized)
 				{
@@ -4038,15 +4406,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-			catch (SMException e)
-			{
-				logger.debug(e.getMessage(), e);
-				throw AppUtility.handleSMException(e);
-			}
+		catch (SMException e)
+		{
+			logger.debug(e.getMessage(), e);
+			throw AppUtility.handleSMException(e);
+		}
 		return isAuthorized;
 	}
 
-	
 	@Override
 	public boolean isReadDeniedTobeChecked()
 	{
@@ -4067,22 +4434,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				&& !Constants.COLLECTION_STATUS_COLLECTED.equals(parent.getCollectionStatus())
 				&& (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus())))
 		{
-			throw getBizLogicException(null, "child.nt.coll","");
+			throw getBizLogicException(null, "child.nt.coll", "");
 		}
 	}
 
 	/**
 	 * This method called from orderbizlogic to distribute and close specimen
-	* @param sessionDataBean
-	* @param specimen
-	* @param dao
-	* @throws BizLogicException
-	* @throws UserNotAuthorizedException
-	* @throws BizLogicException
-	*/
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimen : specimen
+	 * @param dao  :dao
+	 * @param disposalReason : disposalReason
+	 * @throws BizLogicException : BizLogicException
+	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
+	 */
 	public void disposeAndCloseSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
-			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException,
-			BizLogicException
+			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException
 	{
 		if (!Status.ACTIVITY_STATUS_CLOSED.toString().equals(specimen.getActivityStatus()))
 		{
@@ -4126,7 +4492,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if (id != null)
 				{
 					String idString = String.valueOf(id);
-					Long idLong = Long.valueOf(idString);//new Long(idString);
+					Long idLong = Long.valueOf(idString);// new Long(idString);
 					Specimen childSpecimen = new Specimen();
 					childSpecimen.setId(idLong);
 					refreshTitliSearchIndex(operation, childSpecimen);
