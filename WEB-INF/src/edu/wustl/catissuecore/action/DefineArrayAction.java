@@ -28,13 +28,30 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class DefineArrayAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DefineArrayAction.class);
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -84,7 +101,8 @@ public class DefineArrayAction extends BaseAction
 				Object object = bizLogic.retrieve(sourceObjectName, new Long(request
 						.getParameter("arrayType")));
 				SpecimenArrayType containerTyperow = (SpecimenArrayType) object;
-				//SpecimenArrayType spec=(SpecimenArrayType)containerType.get(0);
+				// SpecimenArrayType
+				// spec=(SpecimenArrayType)containerType.get(0);
 
 				Capacity capacityobj = (Capacity) containerTyperow.getCapacity();
 
@@ -95,7 +113,8 @@ public class DefineArrayAction extends BaseAction
 				defineArray.setArrayClass(containerTyperow.getSpecimenClass());
 
 				String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString() + ":"
-						+ new Integer(capacityobj.getTwoDimensionCapacity()).toString() + ":"
+						+ new Integer(capacityobj.getTwoDimensionCapacity()).toString()
+						+ ":"
 						+ defineArray.getArrayClass();
 
 				PrintWriter out = response.getWriter();
@@ -107,8 +126,7 @@ public class DefineArrayAction extends BaseAction
 			String typeOf = null;
 			typeOf = request.getParameter("typeOf");
 
-			if (typeOf == null)
-				typeOf = request.getAttribute("typeOf").toString();
+			if (typeOf == null) typeOf = request.getAttribute("typeOf").toString();
 
 			request.setAttribute("typeOf", typeOf);
 

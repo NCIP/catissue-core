@@ -26,14 +26,16 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 
 	/**
 	 * @param request object of HttpServletRequest
-	 * @throws Exception generic exception
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		DisposalEventParametersForm disposalEventParametersForm = (DisposalEventParametersForm) eventParametersForm;
+		DisposalEventParametersForm disposalEventParametersForm =
+			(DisposalEventParametersForm) eventParametersForm;
 		if (disposalEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;

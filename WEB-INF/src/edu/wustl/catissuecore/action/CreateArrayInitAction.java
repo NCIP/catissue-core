@@ -1,11 +1,15 @@
 /**
- * <p>Title: CreateArrayInitAction Class>
- * <p>Description:	CreateArrayInitAction populates the fields in the Specimen Array page with array information.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: CreateArrayInitAction Class>
+ * <p>
+ * Description: CreateArrayInitAction populates the fields in the Specimen Array
+ * page with array information.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ramya Nagraj
- * @version 1.00
- * Created on Dec 14,2006
+ * @version 1.00 Created on Dec 14,2006
  */
 
 package edu.wustl.catissuecore.action;
@@ -46,35 +50,38 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.dao.exception.DAOException;
 
 /**
- * CreateArrayInitAction populates specimenarrayform object to display pre-populated data in specimenarray.jsp when 
- * navigated from CreateArray button of Ordering System module
- * @author ramya_nagraj
+ * @author renuka_bajpai
  */
 public class CreateArrayInitAction extends BaseAction
 {
 
 	/**
-	 * This function populates defined array information in the ActionForm object for predefined 
-	 * values to be shown in SpecimenArray.jsp
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
-	 * @return ActionForward object
-	 * @throws Exception object
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeAction(ActionMapping mapping
+			, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//Obtain session object from request.
+		// Obtain session object from request.
 		HttpSession session = request.getSession();
 
-		//Retrieve from query string
-		//String arrayName = request.getParameter("array");
-		//String operation = request.getParameter("operation");
+		// Retrieve from query string
+		// String arrayName = request.getParameter("array");
+		// String operation = request.getParameter("operation");
 
 		String arrayName = (String) request.getAttribute(Constants.ARRAY_NAME);
 		String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -87,7 +94,7 @@ public class CreateArrayInitAction extends BaseAction
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 
-		//Obtain specimenArray BizLogic
+		// Obtain specimenArray BizLogic
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 				.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
@@ -101,15 +108,17 @@ public class CreateArrayInitAction extends BaseAction
 			Set defineArrayKeySet = defineArrayMap.keySet();
 			Iterator defineArrayKeySetItr = defineArrayKeySet.iterator();
 
-			//The Set has only one element(i.e,defineArrayRequestBean instance)
-			DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean) defineArrayKeySetItr
+			// The Set has only one element(i.e,defineArrayRequestBean instance)
+			DefinedArrayRequestBean definedArrayRequestBean =
+				(DefinedArrayRequestBean) defineArrayKeySetItr
 					.next();
 
 			if (definedArrayRequestBean.getArrayName().equals(arrayName))
 			{
 				SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 
-				//Set Specimen Class in request attribute to be displayed in SpecimenArray.jsp
+				// Set Specimen Class in request attribute to be displayed in
+				// SpecimenArray.jsp
 				List specimenClassList = new ArrayList();
 
 				String colName = "specimenClass";
@@ -122,27 +131,33 @@ public class CreateArrayInitAction extends BaseAction
 				String specimenClassId = specimenArrayType.getId().toString();
 				String specimenClass = specimenArrayType.getSpecimenClass();
 
-				//Populate Specimen Class List in the request scope.
-				NameValueBean specClassNameValue = new NameValueBean(specimenClass, specimenClassId);
+				// Populate Specimen Class List in the request scope.
+				NameValueBean specClassNameValue =
+					new NameValueBean(specimenClass, specimenClassId);
 				specimenClassList.add(specClassNameValue);
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 				specimenArrayForm.setSpecimenClass(specimenClass);
 
-				//Set Specimen Types 
+				// Set Specimen Types
 				List specimenTypeList = setClassAndtype(specimenArrayForm, specimenArrayType);
 
-				//specimens ArrayList contains the id of all specimens in the given defined array.   
-				/*List definedArrayDetailsBeanList = (ArrayList) defineArrayMap
-						.get(definedArrayRequestBean);*/
+				// specimens ArrayList contains the id of all specimens in the
+				// given defined array.
+				/*
+				 * List definedArrayDetailsBeanList = (ArrayList) defineArrayMap
+				 * .get(definedArrayRequestBean);
+				 */
 
 				List specimensObjList = new ArrayList();
 				List specimenIdList = (ArrayList) request.getAttribute(Constants.SPECIMEN_ID_LIST);
-				//specimensObjList = constructSpecimenObjList(definedArrayDetailsBeanList);
+				// specimensObjList =
+				// constructSpecimenObjList(definedArrayDetailsBeanList);
 				specimensObjList = constructSpecimenObjList(specimenIdList);
-				//Populate arraycontentmap and set it in request scope.
+				// Populate arraycontentmap and set it in request scope.
 				Map arrayContentMap = new HashMap();
-				arrayContentMap = populateArrayContentMap(definedArrayRequestBean, specimensObjList);
+				arrayContentMap = populateArrayContentMap
+				(definedArrayRequestBean, specimensObjList);
 				request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
 						arrayContentMap);
 				specimenArrayForm.setSubOperation("");
@@ -150,14 +165,15 @@ public class CreateArrayInitAction extends BaseAction
 
 				request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-				//Set the specimen name (i.e,label) in the form
+				// Set the specimen name (i.e,label) in the form
 				specimenArrayForm.setName(definedArrayRequestBean.getArrayName());
 
-				//Setting newSpecimenArrayOrderItem Id
+				// Setting newSpecimenArrayOrderItem Id
 				specimenArrayForm.setNewArrayOrderItemId(definedArrayRequestBean.getOrderItemId());
 				specimenArrayForm.setIsDefinedArray("True");
 
-				//Set the array type in request attribute to be viewed in SpecimenArray.jsp
+				// Set the array type in request attribute to be viewed in
+				// SpecimenArray.jsp
 				List arrayTypeList = new ArrayList();
 				String arrayTypeName = definedArrayRequestBean.getArrayType();
 				String arrayTypeId = definedArrayRequestBean.getArrayTypeId();
@@ -167,13 +183,13 @@ public class CreateArrayInitAction extends BaseAction
 
 				specimenArrayForm.setSpecimenArrayTypeId(new Long(arrayTypeId).longValue());
 
-				//Set Dimensions in the form
+				// Set Dimensions in the form
 				specimenArrayForm.setOneDimensionCapacity(Integer.parseInt(definedArrayRequestBean
 						.getOneDimensionCapacity()));
 				specimenArrayForm.setTwoDimensionCapacity(Integer.parseInt(definedArrayRequestBean
 						.getTwoDimensionCapacity()));
 
-				//Set the User List in request attribute.
+				// Set the User List in request attribute.
 				UserBizLogic userBizLogic = (UserBizLogic) factory
 						.getBizLogic(Constants.USER_FORM_ID);
 				Collection userCollection = userBizLogic.getUsers(operation);
@@ -181,15 +197,17 @@ public class CreateArrayInitAction extends BaseAction
 
 				String subOperation = specimenArrayForm.getSubOperation();
 				TreeMap containerMap = new TreeMap();
-				//boolean isChangeArrayType = false;
+				// boolean isChangeArrayType = false;
 
 				if (subOperation != null)
 				{
 					SpecimenArrayType arrayType = null;
 					if (specimenArrayForm.getSpecimenArrayTypeId() > 0)
 					{
-						Object object = specimenArrayBizLogic.retrieve(SpecimenArrayType.class
-								.getName(), specimenArrayForm.getSpecimenArrayTypeId());
+						Object object = specimenArrayBizLogic.
+						retrieve(SpecimenArrayType.class
+								.getName(),
+								specimenArrayForm.getSpecimenArrayTypeId());
 						if (object != null)
 						{
 							arrayType = (SpecimenArrayType) object;
@@ -198,7 +216,8 @@ public class CreateArrayInitAction extends BaseAction
 					specimenTypeList = setClassAndtype(specimenArrayForm, arrayType);
 				}
 
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+				StorageContainerBizLogic storageContainerBizLogic =
+					(StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 				containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(
 						specimenArrayForm.getSpecimenArrayTypeId(), 0, sessionData,
@@ -212,19 +231,22 @@ public class CreateArrayInitAction extends BaseAction
 				request.setAttribute("initValues", initialValues);
 
 				break;
-			}//End if(definedArrayRequestBean.getArrayName().equals(arrayName))
-		}//End Outer While
+			}// End if(definedArrayRequestBean.getArrayName().equals(arrayName))
+		}// End Outer While
 		SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 		specimenArrayForm.setForwardTo("orderDetails");
 		return mapping.findForward("success");
 	}
 
 	/**
-	 * This function retrieves specimens given the id and populates them in the arraylist
-	 * @param definedArrayDetailsBeanList List containing definedArrayDetailsBean instances
-	 * @return specimensObjList List containing specimen objects
-	 * @throws NumberFormatException
-	 * @throws DAOException
+	 * This function retrieves specimens given the id and populates them in the
+	 * arraylist.
+	 *
+	 * @param specimenIdList
+	 *            : specimenIdList
+	 * @return List : List
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private List constructSpecimenObjList(List specimenIdList) throws BizLogicException
 	{
@@ -235,10 +257,11 @@ public class CreateArrayInitAction extends BaseAction
 		Iterator itr = specimenIdList.iterator();
 		while (itr.hasNext())
 		{
-			//DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
+			// DefinedArrayDetailsBean definedArrayDetailsBean =
+			// (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
 			Long specimenId = (Long) itr.next();
 			Object object = orderBizLogic.retrieve(Specimen.class.getName(), specimenId);
-			//Set the specimen domain instances in the specimens object list.
+			// Set the specimen domain instances in the specimens object list.
 			specimensObjList.add(object);
 		}
 		return specimensObjList;
@@ -246,9 +269,12 @@ public class CreateArrayInitAction extends BaseAction
 
 	/**
 	 * This function populates the map to dispaly it in the grid.
-	 * @param definedArrayRequestBean DefinedArrayRequestBean Object
-	 * @param specimensObjList ArrayList containing the specimens
-	 * @return arrayContentMap Map containing the speicmens to display in the grid.
+	 *
+	 * @param definedArrayRequestBean
+	 *            : definedArrayRequestBean
+	 * @param specimensObjList
+	 *            : specimensObjList
+	 * @return Map : Map
 	 */
 	private Map populateArrayContentMap(DefinedArrayRequestBean definedArrayRequestBean,
 			List specimensObjList)
@@ -256,7 +282,7 @@ public class CreateArrayInitAction extends BaseAction
 		Map arrayContentMap = new HashMap();
 		String key = null;
 		String value = null;
-		//Obtain the one and two dimension capacity
+		// Obtain the one and two dimension capacity
 		int row = new Integer(definedArrayRequestBean.getOneDimensionCapacity()).intValue();
 		int col = new Integer(definedArrayRequestBean.getTwoDimensionCapacity()).intValue();
 		int columnCount = col;
@@ -299,15 +325,16 @@ public class CreateArrayInitAction extends BaseAction
 		return arrayContentMap;
 	}
 
-	//TODO The functions below should be moved to common utility class as it is being used in SpecimenArrayAction.java also.
-
 	/**
 	 * set class & type values for specimen array.
-	 * @param specimenArrayForm 
-	 * @param specimenArrayBizLogic
-	 * @param request
-	 * @return  array type
-	 * @throws DAOException
+	 *
+	 * @param specimenArrayForm
+	 *            : specimenArrayForm
+	 * @param specimenArrayType
+	 *            : specimenArrayType
+	 * @return List : List
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private List setClassAndtype(SpecimenArrayForm specimenArrayForm,
 			SpecimenArrayType specimenArrayType) throws BizLogicException
@@ -333,7 +360,7 @@ public class CreateArrayInitAction extends BaseAction
 			specTypeNameValue = new NameValueBean(specimentype, specimentype);
 			specimenTypeList.add(specTypeNameValue);
 		}
-		//Set specimenType in the form
+		// Set specimenType in the form
 		specimenArrayForm.setSpecimenTypes(specimenTypeArr);
 		return specimenTypeList;
 	}

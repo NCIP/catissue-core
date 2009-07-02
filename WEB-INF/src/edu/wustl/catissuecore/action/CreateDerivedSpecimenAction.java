@@ -1,6 +1,7 @@
 /**
  * <p>Title: CreateDerivedSpecimenAction Class>
- * <p>Description:	CreateDerivedSpecimenAction populates the fields in the Create Specimen page with information extracted from the order placed.</p>
+ * <p>Description:	CreateDerivedSpecimenAction populates the fields
+ *  in the Create Specimen page with information extracted from the order placed.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Ashish Gupta
@@ -65,7 +66,7 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		String requestedQty = "";
 		String parentSpecimenId = "";
 
-		//whether request is from request details page or defined array page 
+		//whether request is from request details page or defined array page
 		if (specimenId != null)
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();

@@ -1,6 +1,7 @@
 /**
  * <p>Title: ConsentResponseDisplayAction Class>
- * <p>Description: ConsentResponseDisplayAction class is for displaying consent response on ParticipantConsentTracking.jsp </p>
+ * <p>Description: ConsentResponseDisplayAction class is for
+ * displaying consent response on ParticipantConsentTracking.jsp </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Abhishek Mehta
@@ -47,9 +48,24 @@ import edu.wustl.common.beans.NameValueBean;
 public class ConsentResponseDisplayAction extends BaseAction
 {
 
-	//This will keep track of no of consents for a particular participant
+	/**
+	 * consentCounter.
+	 */
 	int consentCounter;
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -76,7 +92,8 @@ public class ConsentResponseDisplayAction extends BaseAction
 		//Bug: 5935
 		//Remove old list of specimen from Session.
 		session.removeAttribute(Constants.SPECIMEN_LIST);
-		//As per the collection protocol registration id of Participant set All Participant's Specimen List to Session
+		//As per the collection protocol registration id of Participant set
+		//All Participant's Specimen List to Session
 		if (collectionProtocolRegIdValue != null && !(collectionProtocolRegIdValue.equals("")))
 		{
 			List < String > columnList = ConsentUtil.columnNames();
@@ -89,7 +106,8 @@ public class ConsentResponseDisplayAction extends BaseAction
 		}
 		//Getting witness name list for CollectionProtocolID
 		List witnessList = ConsentUtil.witnessNameList(collectionProtocolId);
-		//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
+		//Getting ResponseList if Operation=Edit
+		// then "Withdraw" is added to the List
 		List < NameValueBean > responseList = AppUtility.responceList(operation);
 
 		//Getting consent response map.
@@ -98,7 +116,8 @@ public class ConsentResponseDisplayAction extends BaseAction
 
 		Map consentResponseMap;
 		if (consentResponseHashTable != null
-				&& consentResponseHashTable.containsKey(consentResponseKey)) // If Map already exist in session
+				&& consentResponseHashTable.containsKey(consentResponseKey))
+			// If Map already exist in session
 		{
 			ConsentResponseBean consentResponseBean = (ConsentResponseBean) consentResponseHashTable
 					.get(consentResponseKey);
@@ -129,12 +148,12 @@ public class ConsentResponseDisplayAction extends BaseAction
 		return mapping.findForward(pageOf);
 	}
 
-	/**
-	 * Returns the Map of consent responses for given collection protocol.
-	 * @param consentResponse
-	 * @param isMapExist
-	 * @return
-	 */
+/**
+ * Returns the Map of consent responses for given collection protocol.
+ * @param consentResponse : consentResponse
+ * @param isMapExist : isMapExist
+ * @return Map : Map
+ */
 	private Map getConsentResponseMap(Collection consentResponse, boolean isMapExist)
 	{
 		Map consentResponseMap = new LinkedHashMap();

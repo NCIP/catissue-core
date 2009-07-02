@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 
 /**
  * This class is called when user clicks on Delete button on Specimen Array page
+ *
  * @author nitesh_marwaha
  */
 import java.io.IOException;
@@ -27,16 +28,31 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class DeleteSpecimenArrayAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DeleteSpecimenArrayAction.class);
 
 	/**
-	 * This method sets the activity status to 'Disabled' and then calls execute method of CommonAddEditAction. 
-	 * @author nitesh_marwaha
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException
+	 *             : IOException
+	 * @throws ServletException
+	 *             : ServletException
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,

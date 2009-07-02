@@ -31,14 +31,26 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.dao.exception.DAOException;
 
 /**
- * AddSpecimenAction gets the Specimen Id from Label or Barcode
+ * AddSpecimenAction gets the Specimen Id from Label or Barcode.
  * @author santosh_chandak
  */
 public class DerivedMultipleSpecimenAddAction extends SecureAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @throws DAOException : DAOException
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -49,8 +61,10 @@ public class DerivedMultipleSpecimenAddAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	/**
+	 *
+	 * @param form : form
+	 * @return String : String
 	 */
 
 	protected String getObjectId(AbstractActionForm form)

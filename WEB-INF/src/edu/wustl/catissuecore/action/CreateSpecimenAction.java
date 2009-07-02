@@ -1,8 +1,13 @@
 /**
- * <p>Title: CreateSpecimenAction Class>
- * <p>Description:	CreateSpecimenAction initializes the fields in the Create Specimen page.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: CreateSpecimenAction Class>
+ * <p>
+ * Description: CreateSpecimenAction initializes the fields in the Create
+ * Specimen page.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Aniruddha Phadnis
  * @version 1.00
  */
@@ -59,13 +64,26 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * CreateSpecimenAction initializes the fields in the Create Specimen page.
+ *
  * @author aniruddha_phadnis
  */
 public class CreateSpecimenAction extends SecureAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -75,25 +93,26 @@ public class CreateSpecimenAction extends SecureAction
 		List < NameValueBean > storagePositionList = AppUtility.getStoragePositionTypeList();
 
 		request.setAttribute("storageList", storagePositionList);
-		//List of keys used in map of ActionForm
+		// List of keys used in map of ActionForm
 		List key = new ArrayList();
 		key.add("ExternalIdentifier:i_name");
 		key.add("ExternalIdentifier:i_value");
 
-		//boolean to indicate whether the suitable containers to be shown in dropdown 
-		//is exceeding the max limit.
+		// boolean to indicate whether the suitable containers to be shown in
+		// dropdown
+		// is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 
-		//Gets the map from ActionForm
+		// Gets the map from ActionForm
 		Map map = createForm.getExternalIdentifier();
 
-		//Calling DeleteRow of BaseAction class
+		// Calling DeleteRow of BaseAction class
 		MapDataParser.deleteRow(key, map, request.getParameter("status"));
 
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 
-		//Sets the operation attribute to be used in the Add/Edit User Page. 
+		// Sets the operation attribute to be used in the Add/Edit User Page.
 		request.setAttribute(Constants.OPERATION, operation);
 		String virtuallyLocated = request.getParameter("virtualLocated");
 		if (virtuallyLocated != null && virtuallyLocated.equals("true"))
@@ -102,9 +121,8 @@ public class CreateSpecimenAction extends SecureAction
 		}
 
 		/**
-		 * Patch ID: 3835_1_16
-		 * See also: 1_1 to 1_5
-		 * Description : CreatedOn date by default should be current date.
+		 * Patch ID: 3835_1_16 See also: 1_1 to 1_5 Description : CreatedOn date
+		 * by default should be current date.
 		 */
 
 		createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
@@ -126,12 +144,14 @@ public class CreateSpecimenAction extends SecureAction
 				Constants.SESSION_DATA);
 
 		/*
-		 // ---- chetan 15-06-06 ----
-		 StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		 Map containerMap = bizLogic.getAllocatedContainerMap();
-		 request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
-		 // -------------------------
-		 request.setAttribute(Constants.PAGE_OF,pageOf);
+		 * // ---- chetan 15-06-06 ---- StorageContainerBizLogic bizLogic =
+		 * (StorageContainerBizLogic
+		 * )BizLogicFactory.getInstance().getBizLogic(Constants
+		 * .STORAGE_CONTAINER_FORM_ID); Map containerMap =
+		 * bizLogic.getAllocatedContainerMap();
+		 * request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+		 * // -------------------------
+		 * request.setAttribute(Constants.PAGE_OF,pageOf);
 		 */
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		DefaultBizLogic dao = new DefaultBizLogic();
@@ -144,21 +164,25 @@ public class CreateSpecimenAction extends SecureAction
 			try
 			{
 				jdbcDAO = AppUtility.openJDBCSession();
-				//if this action bcos of delete external identifier then validation should not happen.
+				// if this action bcos of delete external identifier then
+				// validation should not happen.
 				if (request.getParameter("button") == null)
 				{
 					String parentSpecimenLabel = null;
 					Long parentSpecimenID = null;
-					//Bug-2784: If coming from NewSpecimen page, then only set parent specimen label.
+					// Bug-2784: If coming from NewSpecimen page, then only set
+					// parent specimen label.
 					Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 					if (forwardToHashMap != null
 							&& forwardToHashMap.get("parentSpecimenId") != null
 							&& forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
 					{
 						parentSpecimenID = (Long) forwardToHashMap.get("parentSpecimenId");
-						parentSpecimenLabel = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
+						parentSpecimenLabel = forwardToHashMap.get
+						(Constants.SPECIMEN_LABEL)
 								.toString();
-						request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
+						request.setAttribute(Constants.PARENT_SPECIMEN_ID,
+								parentSpecimenID);
 						createForm.setParentSpecimenLabel(parentSpecimenLabel);
 						createForm.setLabel("");
 					}
@@ -166,26 +190,36 @@ public class CreateSpecimenAction extends SecureAction
 					if (createForm.getLabel() == null || createForm.getLabel().equals(""))
 					{
 						/**
-						 * Name : Virender Mehta
-						 * Reviewer: Sachin Lale
-						 * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
+						 * Name : Virender Mehta Reviewer: Sachin Lale
+						 * Description: By getting instance of
+						 * AbstractSpecimenGenerator abstract class current
+						 * label retrived and set.
 						 */
-						//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
+						// int totalNoOfSpecimen =
+						// bizLogic.totalNoOfSpecimen(sessionData)+1;
 						HashMap inputMap = new HashMap();
-						inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, parentSpecimenLabel);
+						inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY,
+								parentSpecimenLabel);
 						inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String
 								.valueOf(parentSpecimenID));
 
-						//SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-						//createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
+						// SpecimenLabelGenerator abstractSpecimenGenerator =
+						// SpecimenLabelGeneratorFactory.getInstance();
+						// createForm.setLabel(abstractSpecimenGenerator.
+						// getNextAvailableDeriveSpecimenlabel(inputMap));
 					}
 
 					if (forwardToHashMap == null
 							&& ((createForm.getRadioButton().equals("1")
-									&& createForm.getParentSpecimenLabel() != null && !createForm
-									.getParentSpecimenLabel().equals("")) || (createForm
+									&& createForm.
+									getParentSpecimenLabel() != null
+									&& !createForm
+									.getParentSpecimenLabel().equals(""))
+									|| (createForm
 									.getRadioButton().equals("2")
-									&& createForm.getParentSpecimenBarcode() != null && !createForm
+									&& createForm
+									.getParentSpecimenBarcode() != null
+									&& !createForm
 									.getParentSpecimenBarcode().equals(""))))
 					{
 						String errorString = null;
@@ -196,26 +230,31 @@ public class CreateSpecimenAction extends SecureAction
 						if (createForm.getRadioButton().equals("1"))
 						{
 							columnName[0] = Constants.SYSTEM_LABEL;
-							columnValue[0] = createForm.getParentSpecimenLabel().trim();
+							columnValue[0] = createForm
+							.getParentSpecimenLabel().trim();
 							errorString = ApplicationProperties
 									.getValue("quickEvents.specimenLabel");
 						}
 						else
 						{
 							columnName[0] = Constants.SYSTEM_BARCODE;
-							columnValue[0] = createForm.getParentSpecimenBarcode().trim();
-							errorString = ApplicationProperties.getValue("quickEvents.barcode");
+							columnValue[0] = createForm.
+							getParentSpecimenBarcode().trim();
+							errorString = ApplicationProperties.
+							getValue("quickEvents.barcode");
 						}
 
 						String[] selectColumnName = {Constants.COLUMN_NAME_SCG_ID};
 						String[] whereColumnCondition = {"="};
-						List scgList = dao.retrieve(Specimen.class.getName(), selectColumnName,
-								columnName, whereColumnCondition, columnValue, null);
+						List scgList = dao.retrieve
+						(Specimen.class.getName(), selectColumnName,
+								columnName, whereColumnCondition,
+								columnValue, null);
 
 						boolean isSpecimenExist = true;
 						if (scgList != null && !scgList.isEmpty())
 						{
-							//						Specimen sp = (Specimen) spList.get(0);
+							// Specimen sp = (Specimen) spList.get(0);
 							Long scgId = (Long) scgList.get(0);
 							long cpId = getCpId(dao, scgId);
 							if (cpId == -1)
@@ -224,22 +263,32 @@ public class CreateSpecimenAction extends SecureAction
 							}
 							String spClass = createForm.getClassName();
 
-							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-							request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
-							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
+							request.setAttribute
+							(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+							request.setAttribute
+							(Constants.SPECIMEN_CLASS_NAME, spClass);
+							if (virtuallyLocated != null &&
+									virtuallyLocated.equals("false"))
 							{
 								createForm.setVirtuallyLocated(false);
 							}
 							if (spClass != null
-									&& createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
+									&& createForm.getStContSelection()
+									!= Constants.
+									RADIO_BUTTON_VIRTUALLY_LOCATED)
 							{
 
-								IFactory factory = AbstractFactoryConfig.getInstance()
+								IFactory factory =
+									AbstractFactoryConfig.getInstance()
 										.getBizLogicFactory();
-								StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
-										.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-								containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-										spClass, 0, exceedingMaxLimit, sessionData, jdbcDAO);
+								StorageContainerBizLogic scbizLogic =
+									(StorageContainerBizLogic) factory
+								.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+								containerMap = scbizLogic.
+								getAllocatedContaienrMapForSpecimen(cpId,
+										spClass, 0,
+										exceedingMaxLimit,
+										sessionData, jdbcDAO);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);
 								if (containerMap.isEmpty())
@@ -248,41 +297,49 @@ public class CreateSpecimenAction extends SecureAction
 									{
 										errors = new ActionErrors();
 									}
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-											"storageposition.not.available"));
+									errors.add(ActionErrors.GLOBAL_ERROR,
+											new ActionError(
+									"storageposition.not.available"));
 									saveErrors(request, errors);
 								}
 								if (errors == null || errors.size() == 0)
 								{
 									initialValues = StorageContainerUtil
-											.checkForInitialValues(containerMap);
+									.checkForInitialValues(containerMap);
 								}
 								else
 								{
 									String[] startingPoints = new String[3];
-									startingPoints[0] = createForm.getStorageContainer();
-									startingPoints[1] = createForm.getPositionDimensionOne();
-									startingPoints[2] = createForm.getPositionDimensionTwo();
+									startingPoints[0] =
+										createForm.getStorageContainer();
+									startingPoints[1] =
+										createForm.
+										getPositionDimensionOne();
+									startingPoints[2] =
+										createForm.
+										getPositionDimensionTwo();
 									initialValues = new ArrayList();
 									initialValues.add(startingPoints);
 								}
 
 							}
 							/**
-							 * Name : Vijay_Pande
-							 * Patch ID: 4283_2 
-							 * See also: 1-3
-							 * Description: If radio button is clicked for map then clear values in the drop down list for storage position
+							 * Name : Vijay_Pande Patch ID: 4283_2 See also: 1-3
+							 * Description: If radio button is clicked for map
+							 * then clear values in the drop down list for
+							 * storage position
 							 */
 							if (spClass != null
-									&& createForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
+									&& createForm.getStContSelection()
+									== Constants.RADIO_BUTTON_FOR_MAP)
 							{
-								String[] startingPoints = new String[]{"-1", "-1", "-1"};
+								String[] startingPoints =
+									new String[]{"-1", "-1", "-1"};
 								initialValues = new ArrayList();
 								initialValues.add(startingPoints);
 								request.setAttribute("initValues", initialValues);
 							}
-							/** -- patch ends here  --*/
+							/** -- patch ends here -- */
 						}
 						else
 						{
@@ -298,7 +355,8 @@ public class CreateSpecimenAction extends SecureAction
 								errors = new ActionErrors();
 							}
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"quickEvents.specimen.notExists", errorString));
+									"quickEvents.specimen.notExists",
+									errorString));
 							saveErrors(request, errors);
 							request.setAttribute("disabled", "true");
 							createForm.setVirtuallyLocated(true);
@@ -365,11 +423,11 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("initValues", initialValues);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
-		//Setting the specimen type list
+		// Setting the specimen type list
 		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-		//Setting biohazard list
+		// Setting biohazard list
 		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
@@ -380,7 +438,7 @@ public class CreateSpecimenAction extends SecureAction
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
-		//*************  ForwardTo implementation *************
+		// ************* ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
 		if (forwardToHashMap != null)
@@ -402,30 +460,29 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
 				createForm.setStContSelection(1);
-				//				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
-				//						.getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
-				//				initialValues = checkForInitialValues(containerMap);
+				// containerMap =
+				// getContainerMap(createForm.getParentSpecimenId(), createForm
+				// .getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
+				// initialValues = checkForInitialValues(containerMap);
 				/**
-				 * Name : Vijay_Pande
-				 * Reviewer Name : Sachin_Lale
-				 * Bug ID: 4283
-				 * Patch ID: 4283_1 
-				 * See also: 1-3
-				 * Description: Proper Storage location of derived specimen was not populated while coming from newly created parent specimen page.
-				 * Initial value were generated but not set to form variables.
+				 * Name : Vijay_Pande Reviewer Name : Sachin_Lale Bug ID: 4283
+				 * Patch ID: 4283_1 See also: 1-3 Description: Proper Storage
+				 * location of derived specimen was not populated while coming
+				 * from newly created parent specimen page. Initial value were
+				 * generated but not set to form variables.
 				 */
-				//				if(initialValues!=null)
-				//				{
-				//					initialValues = checkForInitialValues(containerMap);
-				//					String[] startingPoints=(String[])initialValues.get(0);
-				//					createForm.setStorageContainer(startingPoints[0]);
-				//					createForm.setPos1(startingPoints[1]);
-				//					createForm.setPos2(startingPoints[2]);		
-				//				}
-				/**  --patch ends here -- */
+				// if(initialValues!=null)
+				// {
+				// initialValues = checkForInitialValues(containerMap);
+				// String[] startingPoints=(String[])initialValues.get(0);
+				// createForm.setStorageContainer(startingPoints[0]);
+				// createForm.setPos1(startingPoints[1]);
+				// createForm.setPos2(startingPoints[2]);
+				// }
+				/** --patch ends here -- */
 			}
 		}
-		//*************  ForwardTo implementation *************
+		// ************* ForwardTo implementation *************
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		if (createForm.isVirtuallyLocated())
@@ -444,6 +501,23 @@ public class CreateSpecimenAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
+	/**
+	 * @param specimenId
+	 *            : specimenId
+	 * @param className
+	 *            : className
+	 * @param dao
+	 *            : dao
+	 * @param scbizLogic
+	 *            : scbizLogic
+	 * @param exceedingMaxLimit
+	 *            : exceedingMaxLimit
+	 * @param request
+	 *            : request
+	 * @return TreeMap : TreeMap
+	 * @throws ApplicationException
+	 *             : ApplicationException
+	 */
 	TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
 			StorageContainerBizLogic scbizLogic, String exceedingMaxLimit,
 			HttpServletRequest request) throws ApplicationException
@@ -481,6 +555,15 @@ public class CreateSpecimenAction extends SecureAction
 		}
 	}
 
+	/**
+	 * @param dao
+	 *            : dao
+	 * @param scgId
+	 *            : scgId
+	 * @return long : long
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
 	private long getCpId(DefaultBizLogic dao, Long scgId) throws BizLogicException
 	{
 		long cpId = -1;
@@ -500,8 +583,12 @@ public class CreateSpecimenAction extends SecureAction
 		return cpId;
 	}
 
-	//Mandar : 23June08 : For JSP Refractoring --------
-	// Mandar : 16June08 For JSP refactoring
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 */
 
 	private void setPageData(HttpServletRequest request, CreateSpecimenForm form)
 	{
@@ -517,16 +604,23 @@ public class CreateSpecimenAction extends SecureAction
 		setXterIdData(request, form);
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 */
 	private void setPageData1(HttpServletRequest request, CreateSpecimenForm form)
 	{
 		String operation = (String) request.getAttribute(Constants.OPERATION);
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 
-		//TODO to check where are these used
-		//			String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
-		//			Integer identifierFieldIndex = new Integer(4);
-		//			String pageView=operation;
-		//			boolean readOnlyValue=false;
+		// TODO to check where are these used
+		// String exceedsMaxLimit =
+		// (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+		// Integer identifierFieldIndex = new Integer(4);
+		// String pageView=operation;
+		// boolean readOnlyValue=false;
 
 		String formName = operation;
 		String editViewButton = "buttons." + Constants.EDIT;
@@ -537,7 +631,7 @@ public class CreateSpecimenAction extends SecureAction
 		{
 			editViewButton = "buttons." + Constants.VIEW;
 			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
-			//			readOnlyValue=true;
+			// readOnlyValue=true;
 		}
 		else
 		{
@@ -547,7 +641,7 @@ public class CreateSpecimenAction extends SecureAction
 				formName = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION;
 				printAction = "CPQueryPrintDeriveSpecimen";
 			}
-			//			readOnlyValue=false;
+			// readOnlyValue=false;
 		}
 
 		if (operation != null && operation.equals(Constants.VIEW))
@@ -555,13 +649,16 @@ public class CreateSpecimenAction extends SecureAction
 			readOnlyForAll = true;
 		}
 
-		//-------------
+		// -------------
 
 		String changeAction3 = "setFormAction('" + formName + "')";
 		String confirmDisableFuncName = "confirmDisable('" + formName
 				+ "',document.forms[0].activityStatus)";
-		/*String submitAndDistribute = "setSubmitted('ForwardTo','" + printAction + "','"
-				+ Constants.SPECIMEN_FORWARD_TO_LIST[4][1] + "')," + confirmDisableFuncName;*/
+		/*
+		 * String submitAndDistribute = "setSubmitted('ForwardTo','" +
+		 * printAction + "','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1] +
+		 * "')," + confirmDisableFuncName;
+		 */
 		String addMoreSubmitFunctionName = "setSubmitted('ForwardTo','" + printAction + "','"
 				+ Constants.SPECIMEN_FORWARD_TO_LIST[3][1] + "')";
 		String addMoreSubmit = addMoreSubmitFunctionName + "," + confirmDisableFuncName;
@@ -618,9 +715,18 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("multipleSpecimen", multipleSpecimen);
 		request.setAttribute("action", action);
 
-		//		String onCheckboxChange = "setVirtuallyLocated(this,"+multipleSpecimen+")" ;		Not used anywhere
+		// String onCheckboxChange =
+		// "setVirtuallyLocated(this,"+multipleSpecimen+")" ; Not used anywhere
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 * @param pageOf
+	 *            : pageOf
+	 */
 	private void setPageData2(HttpServletRequest request, CreateSpecimenForm form, String pageOf)
 	{
 		String actionToCall2 = null;
@@ -645,17 +751,26 @@ public class CreateSpecimenAction extends SecureAction
 		String multipleSpecimen = (String) request.getAttribute("multipleSpecimen");
 		if (multipleSpecimen.equals("1"))
 		{
-			deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&status=true&retainForm=true\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+			deleteChecked = "deleteChecked(\'addExternalIdentifier\'," +
+					"\'NewMultipleSpecimenAction.do?method=" +
+					"showDerivedSpecimenDialog&status=true&retainForm=" +
+					"true\',document.forms[0].exIdCounter,\'chk_ex_\'," +
+					"false);";
 		}
 		else
 		{
 			if (pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
 			{
-				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'CPQueryCreateSpecimen.do?pageOf=pageOfCreateSpecimenCPQuery&status=true&button=deleteExId\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'" +
+						"CPQueryCreateSpecimen.do?pageOf=" +
+						"pageOfCreateSpecimenCPQuery&status=true&button=deleteExId\'," +
+						"document.forms[0].exIdCounter,\'chk_ex_\',false);";
 			}
 			else
 			{
-				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId\',document.forms[0].exIdCounter,\'chk_ex_\',false);";
+				deleteChecked = "deleteChecked(\'addExternalIdentifier\',\'CreateSpecimen.do?" +
+						"pageOf=pageOfCreateSpecimen&status=true&button=deleteExId\'," +
+						"document.forms[0].exIdCounter,\'chk_ex_\',false);";
 			}
 		}
 		request.setAttribute("deleteChecked", deleteChecked);
@@ -676,7 +791,8 @@ public class CreateSpecimenAction extends SecureAction
 				String nodeId = "Specimen_" + parentSpecimenId.toString();
 				showRefreshTree = "true";
 				String refreshTree = "refreshTree('" + Constants.CP_AND_PARTICIPANT_VIEW + "','"
-						+ Constants.CP_TREE_VIEW + "','" + Constants.CP_SEARCH_CP_ID + "','"
+						+ Constants.CP_TREE_VIEW + "','" +
+						Constants.CP_SEARCH_CP_ID + "','"
 						+ Constants.CP_SEARCH_PARTICIPANT_ID + "','" + nodeId + "');";
 				request.setAttribute("refreshTree", refreshTree);
 			}
@@ -684,6 +800,14 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("showRefreshTree", showRefreshTree);
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 * @param pageOf
+	 *            : pageOf
+	 */
 	private void setPageData3(HttpServletRequest request, CreateSpecimenForm form, String pageOf)
 	{
 		boolean readOnlyForAll = ((Boolean) request.getAttribute("readOnlyForAll")).booleanValue();
@@ -708,6 +832,10 @@ public class CreateSpecimenAction extends SecureAction
 
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 */
 	private void setConstantValues(HttpServletRequest request)
 	{
 		request.setAttribute("oper", Constants.OPERATION);
@@ -724,6 +852,12 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("SPECIMEN_FORWARD_TO_LIST", Constants.SPECIMEN_FORWARD_TO_LIST[3][0]);
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 */
 	private void setNComboData(HttpServletRequest request, CreateSpecimenForm form)
 	{
 		String[] attrNames = {"storageContainer", "positionDimensionOne", "positionDimensionTwo"};
@@ -741,20 +875,16 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("initValues", initValues);
 
 		String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
-		if (className == null)
-			className = "";
+		if (className == null) className = "";
 
 		String collectionProtocolId = (String) request
 				.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-		if (collectionProtocolId == null)
-			collectionProtocolId = "";
+		if (collectionProtocolId == null) collectionProtocolId = "";
 
-		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
-				+ "&"
-				+ Constants.CAN_HOLD_SPECIMEN_CLASS
-				+ "="
-				+ className
-				+ "&"
+		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;"
+				+ "selectedContainerName=selectedContainerName&amp;"
+				+ "pos1=pos1&amp;pos2=pos2&amp;containerId=containerId" + "&"
+				+ Constants.CAN_HOLD_SPECIMEN_CLASS + "=" + className + "&"
 				+ Constants.CAN_HOLD_COLLECTION_PROTOCOL + "=" + collectionProtocolId;
 		String buttonOnClicked = "mapButtonClickedOnNewSpecimen('" + url + "','createSpecimen')";
 
@@ -785,6 +915,12 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("jsForOutermostDataTable", jsForOutermostDataTable);
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 */
 	private void setXterIdData(HttpServletRequest request, CreateSpecimenForm form)
 	{
 		String eiDispType1 = request.getParameter("eiDispType");
@@ -799,8 +935,10 @@ public class CreateSpecimenAction extends SecureAction
 		request.setAttribute("delExtIds", delExtIds);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	/**
+	 * @param form
+	 *            : form
+	 * @return String : String
 	 */
 
 	protected String getObjectId(AbstractActionForm form)
@@ -821,6 +959,5 @@ public class CreateSpecimenAction extends SecureAction
 			}
 		}
 		return null;
-
 	}
 }

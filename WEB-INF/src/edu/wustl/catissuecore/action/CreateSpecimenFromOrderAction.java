@@ -1,11 +1,15 @@
 /**
- * <p>Title: CreateSpecimenFromOrderAction Class>
- * <p>Description:	CreateSpecimenFromOrderAction populates the fields in the New Specimen page with information extracted from the order placed.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: CreateSpecimenFromOrderAction Class>
+ * <p>
+ * Description: CreateSpecimenFromOrderAction populates the fields in the New
+ * Specimen page with information extracted from the order placed.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ashish Gupta
- * @version 1.00
- * Created on Feb 05,2007
+ * @version 1.00 Created on Feb 05,2007
  */
 
 package edu.wustl.catissuecore.action;
@@ -30,18 +34,22 @@ import edu.wustl.common.factory.IFactory;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class CreateSpecimenFromOrderAction extends BaseAction
 {
 
 	/**
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
+	 * @param mapping
+	 *            object
+	 * @param form
+	 *            object
+	 * @param request
+	 *            object
+	 * @param response
+	 *            object
 	 * @return ActionForward object
-	 * @throws Exception object
+	 * @throws Exception
+	 *             object
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -52,13 +60,13 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 		String rowNumber = request.getParameter("rowNumber");
 
 		String beanName = request.getParameter("bean");
-		//Keys
+		// Keys
 
 		String requestedClassKey = "";
 		String requestedTypeKey = "";
 		String requestedQtyKey = "";
 		String specimenCollGrpIdKey = "";
-		//whether request is from request details page or defined array page 
+		// whether request is from request details page or defined array page
 		if (beanName != null && !beanName.equals(""))
 		{
 			requestedClassKey = "DefinedArrayDetailsBean:" + rowNumber + "_className";
@@ -75,15 +83,15 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 		}
 
 		Map valuesMap = requestDetailsForm.getValues();
-		//getting the values
+		// getting the values
 		String requestedClass = (String) valuesMap.get(requestedClassKey);
 		String requestedType = (String) valuesMap.get(requestedTypeKey);
 		String requestedQty = ((String) valuesMap.get(requestedQtyKey)).toString();
 		String specimenCollGrpId = ((String) valuesMap.get(specimenCollGrpIdKey)).toString();
 
-		//		New Specimen Form to populate.
+		// New Specimen Form to populate.
 		NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
-		//Setting the values in CreateSpecimenForm
+		// Setting the values in CreateSpecimenForm
 		newSpecimenForm.setSpecimenCollectionGroupId(specimenCollGrpId);
 
 		newSpecimenForm.setClassName(requestedClass);

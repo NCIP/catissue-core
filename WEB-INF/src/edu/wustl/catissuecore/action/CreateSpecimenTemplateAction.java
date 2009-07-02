@@ -37,35 +37,42 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class CreateSpecimenTemplateAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(CreateSpecimenTemplateAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm) form;
 		HttpSession session = request.getSession();
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		String pageOf = (String) request.getParameter("pageOf");
 		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
-		//This will give node id when flow is from Specimen Tree View.
+		// This will give node id when flow is from Specimen Tree View.
 		String mapkey = (String) request.getParameter("key");
 		String nodeId = (String) request.getParameter(Constants.TREE_NODE_ID);
 		if (mapkey != null && selectedNode != null && !selectedNode.contains(mapkey))
@@ -78,16 +85,18 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		if (pageOf != null && pageOf.equalsIgnoreCase("error"))
 		{
-			//Bug 11567 S
-			//getEventAndSpecimenBean(mapkey, request);
-			//Bug 11567 E
+			// Bug 11567 S
+			// getEventAndSpecimenBean(mapkey, request);
+			// Bug 11567 E
 			mapkey = null;
 		}
 		request.setAttribute("pageOf", pageOf);
-		//Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
+		// Sets the operation attribute to be used in the Edit/View Specimen
+		// Page in Advance Search Object View.
 		request.setAttribute(Constants.OPERATION, operation);
 
-		//This will give Event key, Under that event Specimens are collected when flow is from Define event Page.
+		// This will give Event key, Under that event Specimens are collected
+		// when flow is from Define event Page.
 
 		String key = (String) session.getAttribute("listKey");
 
@@ -99,10 +108,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		tissueSiteList.addAll(AppUtility.tissueSiteList());
 
-		//Getting tissue side list
+		// Getting tissue side list
 		tissueSideList.addAll(AppUtility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 
-		//Getting pathological status list
+		// Getting pathological status list
 		pathologicalStatusList.addAll(AppUtility
 				.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 		Map subTypeMap = AppUtility.getSpecimenTypeMap();
@@ -142,7 +151,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			{
 				createSpecimenTemplateForm
 						.setCollectionEventCollectionProcedure((String) DefaultValueManager
-								.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+								.getDefaultValue(Constants.
+										DEFAULT_COLLECTION_PROCEDURE));
 			}
 			if (createSpecimenTemplateForm.getCollectionEventContainer() == null)
 			{
@@ -153,7 +163,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			{
 				createSpecimenTemplateForm
 						.setReceivedEventReceivedQuality((String) DefaultValueManager
-								.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+								.getDefaultValue(Constants.
+										DEFAULT_RECEIVED_QUALITY));
 			}
 		}
 		List storageContainerList = new LinkedList();
@@ -161,16 +172,16 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		storageContainerList.add(new NameValueBean("Auto", "Auto"));
 		storageContainerList.add(new NameValueBean("Manual", "Manual"));
 
-		//setting the procedure
+		// setting the procedure
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
-		//set the container lists
+		// set the container lists
 		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CONTAINER, null);
 		request.setAttribute(Constants.CONTAINER_LIST, containerList);
 
-		//setting the quality for received events
+		// setting the quality for received events
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
@@ -192,12 +203,12 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		// sets the Side list
 		request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
 
-		//Storage Container List
+		// Storage Container List
 		request.setAttribute("storageContainerList", storageContainerList);
 
-		//Event Key
+		// Event Key
 		request.setAttribute("key", key);
-		//Node Key
+		// Node Key
 		request.setAttribute("mapkey", mapkey);
 		if (nodeId != null)
 		{
@@ -240,11 +251,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param request HttpServletRequest
-	 * @param operation add/ edit
-	 * @param specimenCollectionGroupForm SpecimenCollectionGroup Form
-	 * @throws BizLogicException 
-	 * @throws DAOException Database exception
+	 * @param request : request
+	 * @param operation : operation
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void setUserInForm(HttpServletRequest request, String operation,
 			CreateSpecimenTemplateForm createSpecimenTemplateForm) throws BizLogicException
@@ -268,10 +278,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param request HttpServletRequest
-	 * @param operation operation add/edit
-	 * @return userCollection
-	 * @throws BizLogicException 
+	 *
+	 * @param request : request
+	 * @param operation : operation
+	 * @return Collection < User > : Collection < User >
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Collection < User > retriveUser(HttpServletRequest request, String operation)
 			throws BizLogicException
@@ -294,11 +305,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param keyToken String Tokenizer object
-	 * @param specimenRequirementBean Specimen req bean
-	 * @param parentKey parent key
-	 * @return specimenRequirementBean
+	 *
+	 * @param keyToken : keyToken
+	 * @param specimenRequirementBean : specimenRequirementBean
+	 * @param parentKey : parentKey
+	 * @return SpecimenRequirementBean : SpecimenRequirementBean
 	 */
 	private SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken,
 			SpecimenRequirementBean specimenRequirementBean, String parentKey)
@@ -310,7 +321,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			if (specimenKey.startsWith("A"))
 			{
 				Map aliqutCollectionMap = specimenRequirementBean.getAliquotSpecimenCollection();
-				SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) aliqutCollectionMap
+				SpecimenRequirementBean childSpecimenRequirementBean =
+					(SpecimenRequirementBean) aliqutCollectionMap
 						.get(currentKey);
 				SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(keyToken,
 						childSpecimenRequirementBean, currentKey);
@@ -319,7 +331,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			else
 			{
 				Map deriveCollectionMap = specimenRequirementBean.getDeriveSpecimenCollection();
-				SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) deriveCollectionMap
+				SpecimenRequirementBean childSpecimenRequirementBean =
+					(SpecimenRequirementBean) deriveCollectionMap
 						.get(currentKey);
 				SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(keyToken,
 						childSpecimenRequirementBean, currentKey);
@@ -331,8 +344,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 * @param createSpecimenTemplateForm
+	 *            createSpecimenTemplateForm
 	 */
 	private void clearFormOnAddSpecimenRequirement(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm)
@@ -361,10 +374,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param createSpecimenTemplateForm  createSpecimenTemplateForm
-	 * @param mapkey event key
-	 * @param request HttpServletRequest
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param mapkey : mapkey
+	 * @param request : request
 	 */
 	private void initCreateSpecimenTemplateForm(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm, String mapkey,
@@ -389,7 +402,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				.getReceivedEventUserId());
 
 		setCollAndRecEvents(createSpecimenTemplateForm, request, specimenRequirementBean);
-		//Derive
+		// Derive
 		LinkedHashMap deriveSpecimenLinkedHashMap = null;
 		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
 				&& !specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
@@ -409,9 +422,12 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
-	 * @param request HttpServletRequest
-	 * @param specimenRequirementBean Specimen requirement bean
+	 * @param createSpecimenTemplateForm
+	 *            createSpecimenTemplateForm
+	 * @param request
+	 *            HttpServletRequest
+	 * @param specimenRequirementBean
+	 *            Specimen requirement bean
 	 */
 	private void setCollAndRecEvents(CreateSpecimenTemplateForm createSpecimenTemplateForm,
 			HttpServletRequest request, SpecimenRequirementBean specimenRequirementBean)
@@ -437,7 +453,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				createSpecimenTemplateForm.setReceivedUserName(recEventUser);
 			}
 		}
-		//Collected and received events
+		// Collected and received events
 		createSpecimenTemplateForm.setCollectionEventContainer(specimenRequirementBean
 				.getCollectionEventContainer());
 		createSpecimenTemplateForm.setReceivedEventReceivedQuality(specimenRequirementBean
@@ -445,7 +461,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setCollectionEventCollectionProcedure(specimenRequirementBean
 				.getCollectionEventCollectionProcedure());
 
-		//Aliquot
+		// Aliquot
 		createSpecimenTemplateForm.setNoOfAliquots(specimenRequirementBean.getNoOfAliquots());
 		createSpecimenTemplateForm.setQuantityPerAliquot(specimenRequirementBean
 				.getQuantityPerAliquot());
@@ -454,8 +470,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param mapkey Key for Event
-	 * @param request HttpServletRequest
+	 * @param mapkey
+	 *            Key for Event
+	 * @param request
+	 *            HttpServletRequest
 	 * @return specimenRequirementBean
 	 */
 	private SpecimenRequirementBean getEventAndSpecimenBean(String mapkey,
@@ -473,10 +491,12 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+		CollectionProtocolEventBean collectionProtocolEventBean =
+			(CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(eventKey);
 		Map specimenRequirementmaps = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
-		SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean) specimenRequirementmaps
+		SpecimenRequirementBean parentSpecimenRequirementBean =
+			(SpecimenRequirementBean) specimenRequirementmaps
 				.get(specimenKey);
 		SpecimenRequirementBean specimenRequirementBean = getSpecimenBeanFromMap(stringToken,
 				parentSpecimenRequirementBean, specimenKey);

@@ -27,13 +27,30 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class DefineArraySubmitAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DefineArraySubmitAction.class);
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -67,7 +84,7 @@ public class DefineArraySubmitAction extends BaseAction
 			logger.error(e.getMessage(), e);
 		}
 
-		//added for checking if array of same name exists
+		// added for checking if array of same name exists
 		if (session.getAttribute("DefineArrayFormObjects") != null)
 		{
 			defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
@@ -77,7 +94,8 @@ public class DefineArraySubmitAction extends BaseAction
 				DefineArrayForm defineArrayObj = (DefineArrayForm) defineArrayFormList.get(i);
 				if (defineArrayObj.getArrayName().equals(defineArray.getArrayName()))
 				{
-					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					ActionErrors errors = (ActionErrors) request.getAttribute
+					(Globals.ERROR_KEY);
 					if (errors == null || errors.size() == 0)
 					{
 						errors = new ActionErrors();
@@ -94,8 +112,7 @@ public class DefineArraySubmitAction extends BaseAction
 
 		String typeOf = request.getParameter("typeOf");
 		request.setAttribute("typeOf", typeOf);
-		if (target.equals("success"))
-			defineArrayFormList.add(defineArray);
+		if (target.equals("success")) defineArrayFormList.add(defineArray);
 		session.setAttribute("DefineArrayFormObjects", defineArrayFormList);
 		return mapping.findForward(target);
 	}

@@ -1,12 +1,15 @@
 /**
-* <p>Title: ConsentVerificationAction Class>
-* <p>Description:        This class used to verify the consents at order view page.</p>
-* Copyright:    Copyright (c) year
-* Company: Washington University, School of Medicine, St. Louis.
-* @author kalpana thakur
-* @version 1.00
-* Created on oct 5, 2007
-*/
+ * <p>
+ * Title: ConsentVerificationAction Class>
+ * <p>
+ * Description: This class used to verify the consents at order view page.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
+ * @author kalpana thakur
+ * @version 1.00 Created on oct 5, 2007
+ */
 
 package edu.wustl.catissuecore.action;
 
@@ -46,33 +49,58 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
+/**
+ * @author renuka_bajpai
+ */
 public class ConsentVerificationAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ConsentVerificationAction.class);
-	//This counter will keep track of the no of consentTiers 
+	// This counter will keep track of the no of consentTiers
+	/**
+	 * consentTierCounter.
+	 */
 	int consentTierCounter;
+	/**
+	 * listOfMap.
+	 */
+
 	List listOfMap = null;
+	/**
+	 * listOfStringArray.
+	 */
 	List listOfStringArray = null;
+	/**
+	 * labelIndexCount.
+	 */
 	String labelIndexCount = "";
 
 	/**
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
-	 * @return value for ActionForward object
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DistributionForm dForm = (DistributionForm) form;
 
-		//Show Consents for Specimen
-		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); //"specimenConsents"
+		// Show Consents for Specimen
+		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); // "specimenConsents"
 
 		String specimenIdentifier = (String) request.getParameter(Constants.SPECIMEN_ID);
 		Long specimenId = null;
@@ -83,7 +111,7 @@ public class ConsentVerificationAction extends BaseAction
 			Specimen specimen = getListOfSpecimen(specimenId);
 			showConsents(dForm, specimen, request, (String) specimen.getLabel());
 
-			request.setAttribute("barcodeStatus", Constants.VALID);//valid
+			request.setAttribute("barcodeStatus", Constants.VALID);// valid
 			return mapping.findForward(Constants.POPUP);
 
 		}
@@ -91,10 +119,11 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 			{
-				String speciemnIdValue = request.getParameter("speciemnIdValue");//barcodelabel
+				String speciemnIdValue = request.getParameter("speciemnIdValue");// barcodelabel
 				labelIndexCount = request.getParameter("labelIndexCount");
 				StringTokenizer stringToken = new StringTokenizer(speciemnIdValue, "|");
-				//StringTokenizer stringTokenForIndex = new StringTokenizer(labelIndexCount, "|");
+				// StringTokenizer stringTokenForIndex = new
+				// StringTokenizer(labelIndexCount, "|");
 				listOfMap = new ArrayList();
 				listOfStringArray = new ArrayList();
 				while (stringToken.hasMoreTokens())
@@ -108,11 +137,11 @@ public class ConsentVerificationAction extends BaseAction
 				request.setAttribute("listOfMap", listOfMap);
 				request.setAttribute("labelIndexCount", labelIndexCount);
 
-				return mapping.findForward(Constants.VIEWAll);//ViewAll
+				return mapping.findForward(Constants.VIEWAll);// ViewAll
 			}
 
 		}
-		//Consent Tracking 
+		// Consent Tracking
 		logger.debug("executeSecureAction");
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -120,15 +149,15 @@ public class ConsentVerificationAction extends BaseAction
 		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
 
-	/**
-	 * This function will fetch witness name,url,consent date for a barcode/lable
-	 * @param dForm Instance of Distribution form
-	 * @param specimen Specimen object
-	 * @param request With request parameter we will fetch specimenconsent Variable present in request. 
-	 * @param barcodeLable This parameter have barcode or lable value
-	 * @throws DAOException 
-	 * @throws ClassNotFoundException 
-	 */
+/**
+ * This function will fetch witness name,url,consent date for a
+ * barcode/lable.
+ * @param dForm : dForm
+ * @param specimen : specimen
+ * @param request : request
+ * @param barcodeLable : barcodeLable
+ * @throws ApplicationException : ApplicationException
+ */
 	private void showConsents(DistributionForm dForm, Specimen specimen,
 			HttpServletRequest request, String barcodeLable) throws ApplicationException
 	{
@@ -149,7 +178,8 @@ public class ConsentVerificationAction extends BaseAction
 		CollectionProtocolRegistration collectionProtocolRegistration = null;
 		if (collectionProtocolRegistrationList != null)
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) collectionProtocolRegistrationList
+			collectionProtocolRegistration =
+				(CollectionProtocolRegistration) collectionProtocolRegistrationList
 					.get(0);
 		}
 
@@ -163,7 +193,8 @@ public class ConsentVerificationAction extends BaseAction
 			consentWitness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
 					.getName(), collectionProtocolRegistration.getId(), "consentWitness");
 		}
-		//Resolved Lazy ---- User consentWitness= collectionProtocolRegistration.getConsentWitness();
+		// Resolved Lazy ---- User consentWitness=
+		// collectionProtocolRegistration.getConsentWitness();
 		if (consentWitness == null)
 		{
 			initialWitnessValue = Constants.NULL;
@@ -189,8 +220,9 @@ public class ConsentVerificationAction extends BaseAction
 			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;//(CollectionProtocolRegistration)collProtObject.get(0);
-		//Getting WitnessName,Consent Date,Signed Url using collectionProtocolRegistration object
+		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;
+		// Getting WitnessName,Consent Date,Signed Url using
+		// collectionProtocolRegistration object
 		String witnessName = "";
 		String getConsentDate = "";
 		String getSignedConsentURL = "";
@@ -246,32 +278,34 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			getSignedConsentURL = Utility.toString(cprObject.getSignedConsentDocumentURL());
 		}
-		//Setting WitnessName,ConsentDate and Signed Consent Url				
+		// Setting WitnessName,ConsentDate and Signed Consent Url
 		dForm.setConsentDate(getConsentDate);
 		dForm.setSignedConsentUrl(getSignedConsentURL);
 
-		//Getting ConsentResponse collection for CPR level
-		//Resolved lazy ---  collectionProtocolRegistration.getConsentTierResponseCollection();
+		// Getting ConsentResponse collection for CPR level
+		// Resolved lazy ---
+		// collectionProtocolRegistration.getConsentTierResponseCollection();
 		Collection participantResponseCollection = (Collection) bizLogic.retrieveAttribute(
 				CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
 						.getId(), "elements(consentTierResponseCollection)");
-		//Getting ConsentResponse collection for Specimen level
-		//Resolved lazy --- specimen.getConsentTierStatusCollection();
+		// Getting ConsentResponse collection for Specimen level
+		// Resolved lazy --- specimen.getConsentTierStatusCollection();
 		Collection specimenLevelResponseCollection = (Collection) bizLogic
 				.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 						"elements(consentTierStatusCollection)");
-		//Prepare Map and iterate both Collections  
+		// Prepare Map and iterate both Collections
 		Map tempMap = prepareConsentMap(participantResponseCollection,
 				specimenLevelResponseCollection);
-		//Setting map and counter in the form 
+		// Setting map and counter in the form
 		dForm.setConsentResponseForDistributionValues(tempMap);
 		dForm.setConsentTierCounter(consentTierCounter);
 		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS);
 		if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 		{
-			//For no consents and Consent waived
+			// For no consents and Consent waived
 			if (consentTierCounter > 0
-					&& !(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED)))//disabled
+					&& !(specimen.getActivityStatus().
+							equalsIgnoreCase(Constants.DISABLED)))// disabled
 			{
 				String[] barcodeLabelAttribute = new String[5];
 				barcodeLabelAttribute[0] = witnessName;
@@ -288,16 +322,24 @@ public class ConsentVerificationAction extends BaseAction
 	}
 
 	/**
-	 * @param dForm object of DistributionForm
-	 * @param request object of HttpServletRequest
-	 * @throws DAOException DAO exception
+	 * @param dForm
+	 *            object of DistributionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @throws DAOException
+	 *             DAO exception
 	 */
 
-	//	Consent Tracking 
+	// Consent Tracking
 	/**
 	 * Prepare Map for Consent tiers
-	 * @param participantResponseList   This list will be iterated and added to map to populate participant Response status.
-	 * @param specimenLevelResponseList This List will be iterated and added to map to populate Specimen Level response.
+	 *
+	 * @param participantResponseList
+	 *            This list will be iterated and added to map to populate
+	 *            participant Response status.
+	 * @param specimenLevelResponseList
+	 *            This List will be iterated and added to map to populate
+	 *            Specimen Level response.
 	 * @return tempMap
 	 */
 	private Map prepareConsentMap(Collection participantResponseList,
@@ -312,13 +354,15 @@ public class ConsentVerificationAction extends BaseAction
 			Iterator consentResponseCollectionIter = participantResponseList.iterator();
 			while (consentResponseCollectionIter.hasNext())
 			{
-				ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
+				ConsentTierResponse consentTierResponse =
+					(ConsentTierResponse) consentResponseCollectionIter
 						.next();
 				consentTierID = consentTierResponse.getConsentTier().getId();
 				Iterator specimenCollectionIter = specimenLevelResponseList.iterator();
 				while (specimenCollectionIter.hasNext())
 				{
-					ConsentTierStatus specimenConsentResponse = (ConsentTierStatus) specimenCollectionIter
+					ConsentTierStatus specimenConsentResponse =
+						(ConsentTierStatus) specimenCollectionIter
 							.next();
 					consentID = specimenConsentResponse.getConsentTier().getId();
 					if (consentTierID.longValue() == consentID.longValue())
@@ -329,16 +373,19 @@ public class ConsentVerificationAction extends BaseAction
 						String responseKey = "ConsentBean:" + i + "_participantResponse";
 						String participantResponceIdKey = "ConsentBean:" + i
 								+ "_participantResponseID";
-						String specimenResponsekey = "ConsentBean:" + i + "_specimenLevelResponse";
+						String specimenResponsekey = "ConsentBean:"
+							+ i + "_specimenLevelResponse";
 						String specimenResponseIDkey = "ConsentBean:" + i
 								+ "_specimenLevelResponseID";
-						//Adding Keys and its data into the Map
+						// Adding Keys and its data into the Map
 						tempMap.put(idKey, consent.getId());
 						tempMap.put(statementKey, consent.getStatement());
 						tempMap.put(responseKey, consentTierResponse.getResponse());
 						tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-						tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
-						tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
+						tempMap.put(specimenResponsekey,
+								specimenConsentResponse.getStatus());
+						tempMap.put(specimenResponseIDkey,
+								specimenConsentResponse.getId());
 						i++;
 						break;
 					}
@@ -354,11 +401,13 @@ public class ConsentVerificationAction extends BaseAction
 
 	}
 
-	/**
-	 * This method sets all the common parameters for the SpecimenEventParameter pages
-	 * @param request HttpServletRequest instance in which the data will be set. 
-	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
-	 */
+/**
+ * This method sets all the common parameters for the SpecimenEventParameter
+ * pages.
+ * @param specimenId : specimenId
+ * @return Specimen : Specimen
+ * @throws BizLogicException : BizLogicException
+ */
 
 	private Specimen getListOfSpecimen(Long specimenId) throws BizLogicException
 	{
@@ -370,5 +419,4 @@ public class ConsentVerificationAction extends BaseAction
 		Specimen specimen = (Specimen) object;
 		return specimen;
 	}
-
 }

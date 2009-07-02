@@ -20,13 +20,28 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
 /**
- * This class is for Support delete feature from CP
- * @author virender_mehta
+ * This class is for Support delete feature from CP.
  *
+ * @author virender_mehta
  */
 public class DeleteNodeFromCPAction extends BaseAction
 {
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -48,7 +63,8 @@ public class DeleteNodeFromCPAction extends BaseAction
 			{
 				eventMapKey = st.nextToken();
 			}
-			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+			CollectionProtocolEventBean collectionProtocolEventBean =
+				(CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventMapKey);
 			Map specimenReqMap = (LinkedHashMap) collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap();
@@ -73,12 +89,18 @@ public class DeleteNodeFromCPAction extends BaseAction
 	}
 
 	/**
-	 * This method is for removing child specimen
-	 * @param specimenReqMap Requirement Specimen map
-	 * @param parentReqMapKey Map key
-	 * @param collectionProtocolEventKey Event Key
-	 * @param st String toknizer
-	 * @param specimenType type of specimen
+	 * This method is for removing child specimen.
+	 *
+	 * @param specimenReqMap
+	 *            Requirement Specimen map
+	 * @param parentReqMapKey
+	 *            Map key
+	 * @param collectionProtocolEventKey
+	 *            Event Key
+	 * @param st
+	 *            String toknizer
+	 * @param specimenType
+	 *            type of specimen
 	 */
 	private void removeChildSpecimen(Map specimenReqMap, String parentReqMapKey,
 			String collectionProtocolEventKey, StringTokenizer st, char specimenType)
@@ -103,8 +125,8 @@ public class DeleteNodeFromCPAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param specimenKey Specimen key
+	 * @param specimenKey
+	 *            Specimen key.
 	 * @return child specimen's first character
 	 */
 	private char getSpecimenType(String specimenKey)
@@ -119,9 +141,12 @@ public class DeleteNodeFromCPAction extends BaseAction
 	}
 
 	/**
-	 * Remove aliquot specimen
-	 * @param collectionProtocolEventKey Event key
-	 * @param spReqBean Requirement bean
+	 * Remove aliquot specimen.
+	 *
+	 * @param collectionProtocolEventKey
+	 *            Event key
+	 * @param spReqBean
+	 *            Requirement bean
 	 * @return aliquotMap map of aliquot specimen
 	 */
 	private Map removeAliquot(String collectionProtocolEventKey, SpecimenRequirementBean spReqBean)
@@ -137,10 +162,13 @@ public class DeleteNodeFromCPAction extends BaseAction
 	}
 
 	/**
-	 * Remove derive specimen
+	 * Remove derive specimen.
+	 *
 	 * @param collectionProtocolEventKey
+	 *            : collectionProtocolEventKey
 	 * @param spReqBean
-	 * @return driveMap map of derive specimen
+	 *            : spReqBean
+	 * @return Map : Map
 	 */
 	private Map removeDerive(String collectionProtocolEventKey, SpecimenRequirementBean spReqBean)
 	{
@@ -153,5 +181,4 @@ public class DeleteNodeFromCPAction extends BaseAction
 		}
 		return driveMap;
 	}
-
 }

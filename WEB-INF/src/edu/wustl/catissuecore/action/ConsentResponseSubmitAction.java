@@ -1,6 +1,7 @@
 /**
  * <p>Title: ConsentResponseSubmitAction Class>
- * <p>Description: ConsentResponseSubmitAction class is for creating session object of consent response for selected collection protocol registration </p>
+ * <p>Description: ConsentResponseSubmitAction class is for
+ *  creating session object of consent response for selected collection protocol registration </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Abhishek Mehta
@@ -29,12 +30,31 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class ConsentResponseSubmitAction extends BaseAction
 {
-
+/**
+ * logger.
+ */
 	private static org.apache.log4j.Logger logger = Logger
 			.getLogger(ConsentResponseSubmitAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -54,17 +74,20 @@ public class ConsentResponseSubmitAction extends BaseAction
 					.generateData(consentResponseValues);
 
 			/*Iterator itr = consentResponseCollection.iterator();
-			
+
 			while(itr.hasNext())
 			{
 				ConsentBean consentBean = (ConsentBean)itr.next();
-				logger.debug(":::submit  participant response ::"+consentBean.getParticipantResponse());
-				logger.debug(":::submit  participant response id ::"+consentBean.getParticipantResponseID());
+				logger.debug(":::submit  participant response ::"
+				+consentBean.getParticipantResponse());
+				logger.debug(":::submit  participant response id ::"
+				+consentBean.getParticipantResponseID());
 			}*/
 
 			String withdrawlButtonStatus = consentForm.getWithdrawlButtonStatus();
 			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID,
-					signedConsentUrl, witnessId, consentSignatureDate, consentResponseCollection,
+					signedConsentUrl, witnessId, consentSignatureDate,
+					consentResponseCollection,
 					withdrawlButtonStatus);
 			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
 			Map consentResponseHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);

@@ -17,21 +17,28 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class DirectDistributeAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DirectDistributeAction.class);
 
 	/**
-	* @param mapping ActionMapping object
-	* @param form ActionForm object
-	* @param request HttpServletRequest object
-	* @param response HttpServletResponse object
-	* @return ActionForward object
-	* @throws Exception object
-	*/
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
+	 * @return ActionForward object
+	 * @throws Exception
+	 *             object
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

@@ -24,8 +24,18 @@ import edu.wustl.common.action.BaseAction;
 public class DefineEventsAction extends BaseAction
 {
 
-	/** (non-Javadoc)
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -56,9 +66,9 @@ public class DefineEventsAction extends BaseAction
 	}
 
 	/**
-	 * @param cpForm a collection protocol form to be used to
-	 * populate collection protocol bean.
-	 * @param cpBean collection protocol bean to be populated.
+	 *
+	 * @param cpForm : cpForm
+	 * @param cpBean : cpBean
 	 */
 	private void populateCollectionProtocolBean(final CollectionProtocolForm cpForm,
 			CollectionProtocolBean cpBean)
@@ -74,7 +84,7 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setIrbID(cpForm.getIrbID());
 		cpBean.setActivityStatus(cpForm.getActivityStatus());
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
-		//For Consent Tab		
+		//For Consent Tab
 		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());
 		Map consentMap = CollectionProtocolUtil.sortConsentMap(cpForm.getConsentValues());//bug 8905
 		//cpBean.setConsentValues(cpForm.getConsentValues());
