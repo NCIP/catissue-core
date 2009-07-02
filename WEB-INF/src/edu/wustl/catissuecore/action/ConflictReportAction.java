@@ -54,8 +54,21 @@ public class ConflictReportAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-		String newConfictedReport = ViewSPRUtil.getSynthesizedTextForReportQueue(reportQueueId);
+
+		List reportQueueDataList = new ArrayList();
+		ReportLoaderQueue reportLoaderQueue = null;
+		reportQueueDataList = getReportQueueDataList(reportQueueId);
+		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
+		{
+			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
+		}
+
+		String newConfictedReport = reportLoaderQueue.getReportText();
+
+		//retrieved the identified report
+		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
 	}
