@@ -2,14 +2,10 @@
 package edu.wustl.catissuecore.printservicemodule;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.util.IdComparator;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 
 /**
@@ -18,44 +14,6 @@ import edu.wustl.common.util.Utility;
  */
 public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 {
-
-	/**
-	 * @param abstractDomainObject Specimen Object
-	 * @param listMap List of Specimen details including all child specimen.
-	 */
-	protected void createObjectMap(AbstractDomainObject abstractDomainObject, ArrayList listMap,
-			String printerType, String printerLocation, String ipAddress)
-	{
-
-		if (abstractDomainObject instanceof Specimen)
-		{
-
-			Specimen objSpecimen = (Specimen) abstractDomainObject;
-			ArrayList specimenList = new ArrayList();
-			specimenList.add(objSpecimen);
-			getAllSpecimenList(objSpecimen, specimenList);
-			Collections.sort(specimenList, new IdComparator());
-			for (int cnt = 0; cnt < specimenList.size(); cnt++)
-			{
-				Specimen obj = (Specimen) specimenList.get(cnt);
-				addDataToPrint(obj,listMap,printerType,printerLocation,ipAddress);
-			}
-		}
-
-	}
-	void createObjectMap(List<AbstractDomainObject> abstractDomainObjectList,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
-	{
-		//Bug 11509 
-		Collections.sort(abstractDomainObjectList,new IdComparator());
-		for(AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
-		{
-			if(abstractDomainObject instanceof Specimen)
-			{
-				Specimen obj = (Specimen)abstractDomainObject;	
-				addDataToPrint(obj,listMap,printerType,printerLocation,ipAddress);			
-			}
-		}
-	}
 	private void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
 	{
 		LinkedHashMap dataMap = new LinkedHashMap();
