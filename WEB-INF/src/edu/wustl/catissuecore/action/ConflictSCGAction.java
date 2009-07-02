@@ -38,15 +38,19 @@ public class ConflictSCGAction extends BaseAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in ConflictView.jsp Page.
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
-	 * @return ActionForward object
-	 * @throws Exception object
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -72,10 +76,10 @@ public class ConflictSCGAction extends BaseAction
 	}
 
 	/**
-	 * To retrieve the reportQueue list
-	 * @param reportQueueId
-	 * @return
-	 * @throws DAOException
+	 * To retrieve the reportQueue list.
+	 * @param reportQueueId : reportQueueId
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
@@ -89,11 +93,11 @@ public class ConflictSCGAction extends BaseAction
 	}
 
 	/**
-	 * To retrieve the existing report
-	 * @param reportQueueId
-	 * @return
-	 * @throws BizLogicException
-	 * @throws ClassNotFoundException
+	 * To retrieve the existing report.
+	 * @param reportQueueId : reportQueueId
+	 * @return String : String
+	 * @throws BizLogicException : BizLogicException
+	 * @throws ClassNotFoundException : ClassNotFoundException
 	 */
 	private String retrieveExistingReport(String reportQueueId) throws BizLogicException,
 			ClassNotFoundException

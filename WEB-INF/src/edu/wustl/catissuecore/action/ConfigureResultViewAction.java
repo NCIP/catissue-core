@@ -25,9 +25,8 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 import edu.wustl.simplequery.query.QueryTableData;
 
 /**
- * This is the action class for configuring columns in result view 
- * @author Poornima Govindrao
- *  
+ * @author renuka_bajpai
+ *
  */
 public class ConfigureResultViewAction extends BaseAction
 {
@@ -38,12 +37,19 @@ public class ConfigureResultViewAction extends BaseAction
 	private transient Logger logger = Logger.getCommonLogger(ConfigureResultViewAction.class);
 
 	/**
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

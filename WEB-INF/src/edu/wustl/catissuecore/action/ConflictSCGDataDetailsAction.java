@@ -30,7 +30,20 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
  */
 public class ConflictSCGDataDetailsAction extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -41,7 +54,7 @@ public class ConflictSCGDataDetailsAction extends BaseAction
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.SCG_ID_TO_ASSOCIATE, SCGId);
 
-		//Retrieved the SCG and populated the bean 	
+		//Retrieved the SCG and populated the bean
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(
 				SCGId));

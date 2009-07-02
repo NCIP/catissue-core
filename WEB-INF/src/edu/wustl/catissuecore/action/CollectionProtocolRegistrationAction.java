@@ -1,11 +1,16 @@
 /**
- * <p>Title: DepartmentAction Class</p>
- * <p>Description:	This class initializes the fields in the Department Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: DepartmentAction Class
+ * </p>
+ * <p>
+ * Description: This class initializes the fields in the Department Add/Edit
+ * webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ajay Sharma
- * @version 1.00
- * Created on May 23rd, 2005
+ * @version 1.00 Created on May 23rd, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -54,36 +59,48 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
+ *
  * @author ajay_sharma
  */
 
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
-
+/**
+ * logger.
+ */
 	private transient Logger logger = Logger
 			.getCommonLogger(CollectionProtocolRegistrationAction.class);
-	//This will keep track of no of consents for a particular participant
+	// This will keep track of no of consents for a particular participant
+	/**
+	 * consentCounter.
+	 */
 	int consentCounter;
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various fields in Participant Registration Add/Edit webpage.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) form;
-		//Gets the value of the operation parameter.
+		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm =
+			(CollectionProtocolRegistrationForm) form;
+		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		//CollectionProtocolId
-		//Consent Tracking (Virender Mehta)
+		// CollectionProtocolId
+		// Consent Tracking (Virender Mehta)
 		String selectedCollectionProtocolId = null;
 		if (request.getParameter(Constants.CP_SEARCH_CP_ID) != null)
 		{
@@ -97,16 +114,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			catch (ClassCastException exp)
 			{
 				logger
-						.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"
-								+ exp);
+						.debug("Class cast Exception in" +
+								" CollectionProtocolRegistrationAction :" +
+								exp);
 			}
 		}
 		selectedCollectionProtocolId = String.valueOf(collectionProtocolRegistrationForm
 				.getCollectionProtocolID());
-		//Adding name,value pair in NameValueBean
-		//Getting witness name list for CollectionProtocolID
+		// Adding name,value pair in NameValueBean
+		// Getting witness name list for CollectionProtocolID
 		List witnessList = ConsentUtil.witnessNameList(selectedCollectionProtocolId);
-		//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
+		// Getting ResponseList if Operation=Edit then "Withdraw" is added to
+		// the List
 		List responseList = AppUtility.responceList(operation);
 		Set consentList = (Set) ConsentUtil.getConsentList(selectedCollectionProtocolId);
 		List requestConsentList = new ArrayList(consentList);
@@ -125,13 +144,16 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
 			CollectionProtocolRegistration collectionProtocolRegistration = AppUtility
 					.getcprObj(cprID);
-			//List added for grid
+			// List added for grid
 			List specimenDetails = new ArrayList();
 			ConsentUtil.getSpecimenDetails(collectionProtocolRegistration, specimenDetails);
 			List < String > columnList = ConsentUtil.columnNames();
-			//Lazy Resolved ---  collectionProtocolRegistration.getConsentTierResponseCollection();
+			// Lazy Resolved ---
+			// collectionProtocolRegistration.getConsentTierResponseCollection
+			// ();
 			Collection consentResponse = (Collection) bizLogic.retrieveAttribute(
-					CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
+					CollectionProtocolRegistration.class.getName(),
+					collectionProtocolRegistration
 							.getId(), "elements(consentTierResponseCollection)");
 			Map tempMap = prepareMap(consentResponse);
 			collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
@@ -142,8 +164,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		}
 		request.setAttribute("witnessList", witnessList);
 		request.setAttribute("responseList", responseList);
-		//Consent Tracking Virender Mehta		
-		//Sets the operation attribute to be used in the Add/Edit User Page. 
+		// Consent Tracking Virender Mehta
+		// Sets the operation attribute to be used in the Add/Edit User Page.
 
 		request.setAttribute(Constants.OPERATION, operation);
 		if (operation.equalsIgnoreCase(Constants.ADD))
@@ -158,34 +180,40 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			}
 		}
 
-		//Sets the pageOf attribute
+		// Sets the pageOf attribute
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		// Mandar : code for Addnew Collection Protocol data 24-Jan-06
-		//		String collectionProtocolID = (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID);
-		//		if(collectionProtocolID != null && collectionProtocolID.trim().length() > 0 )
-		//		{
-		//			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> CP ID in CPR : "+ collectionProtocolID  );
-		//			((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(Long.parseLong(collectionProtocolID));
-		//		}
+		// String collectionProtocolID =
+		// (String)request.getAttribute(Constants.ADD_NEW_COLLECTION_PROTOCOL_ID
+		// );
+		// if(collectionProtocolID != null &&
+		// collectionProtocolID.trim().length() > 0 )
+		// {
+		// Logger.out.debug(
+		// ">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> CP ID in CPR : "+
+		// collectionProtocolID );
+		//((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(Long
+		// .parseLong(collectionProtocolID));
+		// }
 		// Mandar -- 24-Jan-06 end
 
-		//        String reqPath = request.getParameter(Constants.REQ_PATH);
-		//		if (reqPath != null)
-		//			request.setAttribute(Constants.REQ_PATH, reqPath);
-		//		
-		//		Logger.out.debug("PartProtReg redirect :---------- "+ reqPath  );
-		//        
+		// String reqPath = request.getParameter(Constants.REQ_PATH);
+		// if (reqPath != null)
+		// request.setAttribute(Constants.REQ_PATH, reqPath);
+		//
+		// Logger.out.debug("PartProtReg redirect :---------- "+ reqPath );
+		//
 		// ----------------add new end-----
 
-		//get list of Protocol title.
+		// get list of Protocol title.
 		String sourceObjectName = CollectionProtocol.class.getName();
 
-		//Smita changes start
+		// Smita changes start
 		String[] displayNameFields = {"shortTitle"};
-		//Smita changes end
+		// Smita changes end
 
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
@@ -203,38 +231,46 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			{
 				try
 				{
-					AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
+					AddNewSessionDataBean addNewSessionDataBean =
+						(AddNewSessionDataBean) formBeanStack
 							.peek();
 
-					SpecimenCollectionGroupForm sessionFormBean = (SpecimenCollectionGroupForm) addNewSessionDataBean
+					SpecimenCollectionGroupForm sessionFormBean =
+						(SpecimenCollectionGroupForm) addNewSessionDataBean
 							.getAbstractActionForm();
 
 					((CollectionProtocolRegistrationForm) form)
-							.setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+							.setCollectionProtocolID
+							(sessionFormBean.getCollectionProtocolId());
 				}
 				catch (ClassCastException exp)
 				{
 					logger
-							.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"
+							.debug("Class cast Exception in" +
+									" CollectionProtocolRegistrationAction ~>"
 									+ exp);
 				}
 			}
 		}
 
-		//		if(request.getParameter(Constants.CP_SEARCH_CP_ID)!=null)
-		//		{
-		//			long cpSearchCpId = new Long(request.getParameter(Constants.CP_SEARCH_CP_ID)).longValue();
-		//			try
-		//			{
-		//		    ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(cpSearchCpId);
-		//			}
-		//        	catch(ClassCastException exp)
-		//			{
-		//        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
-		//			}
-		//		}
+		// if(request.getParameter(Constants.CP_SEARCH_CP_ID)!=null)
+		// {
+		// long cpSearchCpId = new
+		// Long(request.getParameter(Constants.CP_SEARCH_CP_ID)).longValue();
+		// try
+		// {
+		// ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(
+		// cpSearchCpId);
+		// }
+		// catch(ClassCastException exp)
+		// {
+		// Logger.out.debug(
+		// "Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"
+		// +exp);
+		// }
+		// }
 
-		//get list of Participant's names
+		// get list of Participant's names
 		sourceObjectName = Participant.class.getName();
 		String[] participantsFields = {"lastName", "firstName", "birthDate", "socialSecurityNumber"};
 		String[] whereColumnName = {"lastName", "firstName", "birthDate", "socialSecurityNumber"};
@@ -273,7 +309,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields,
 				false);
 
-		//get list of Disabled Participants
+		// get list of Disabled Participants
 		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName2 = {"activityStatus"};
 		String[] whereColumnCondition2 = {"="};
@@ -285,16 +321,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				valueField, whereColumnName2, whereColumnCondition2, whereColumnValue2,
 				joinCondition2, separatorBetweenFields2, false);
 
-		//removing disabled participants from the list of Participants
+		// removing disabled participants from the list of Participants
 		list = removeDisabledParticipant(list, listOfDisabledParticipant);
 
-		// Sets the participantList attribute to be used in the Site Add/Edit Page.
+		// Sets the participantList attribute to be used in the Site Add/Edit
+		// Page.
 		request.setAttribute(Constants.PARTICIPANT_LIST, list);
 
-		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+		// Sets the activityStatusList attribute to be used in the Site Add/Edit
+		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		//*************  ForwardTo implementation *************
+		// ************* ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
 		if (forwardToHashMap != null)
@@ -307,13 +345,19 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					|| (request.getParameter("lastName").trim().length() > 0)
 					|| (request.getParameter("birthDate").trim().length() > 0)
 					|| ((request.getParameter("socialSecurityNumberPartA").trim().length() > 0)
-							&& (request.getParameter("socialSecurityNumberPartB").trim().length() > 0) && (request
-							.getParameter("socialSecurityNumberPartC").trim().length() > 0)))
+							&& (request.getParameter
+									("socialSecurityNumberPartB").trim()
+									.length() > 0)
+							&& (request
+							.getParameter("socialSecurityNumberPartC")
+							.trim().length() > 0)))
 			{
-				CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
+				CollectionProtocolRegistrationForm cprForm =
+					(CollectionProtocolRegistrationForm) form;
 				cprForm.setParticipantID(participantId.longValue());
-				//cprForm.setCheckedButton(true);
-				//Bug-2819: Performance issue due to participant drop down: Jitendra
+				// cprForm.setCheckedButton(true);
+				// Bug-2819: Performance issue due to participant drop down:
+				// Jitendra
 				Object object = bizLogic.retrieve(sourceObjectName, participantId);
 				if (object != null)
 				{
@@ -330,9 +374,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				try
 				{
 					Long participantId = new Long(request.getParameter("participantId"));
-					CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
+					CollectionProtocolRegistrationForm cprForm =
+						(CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
-					//cprForm.setCheckedButton(true);
+					// cprForm.setCheckedButton(true);
 					Object object = bizLogic.retrieve(sourceObjectName, participantId);
 					if (object != null)
 					{
@@ -346,16 +391,17 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 			}
 
-			//Bug- 2819 :  Jitendra
+			// Bug- 2819 : Jitendra
 			if (((CollectionProtocolRegistrationForm) form).getParticipantID() != 0)
 			{
 				try
 				{
 					Long participantId = new Long(((CollectionProtocolRegistrationForm) form)
 							.getParticipantID());
-					CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
+					CollectionProtocolRegistrationForm cprForm =
+						(CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
-					//cprForm.setCheckedButton(true);                
+					// cprForm.setCheckedButton(true);
 					Object object = bizLogic.retrieve(sourceObjectName, participantId);
 					if (object != null)
 					{
@@ -369,12 +415,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 			}
 		}
-		//*************  ForwardTo implementation *************
+		// ************* ForwardTo implementation *************
 
-		/*   Logger.out.info("--------------------------------- caching ---------------");
-		   CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		   List list12 =cBizLogic.getAllParticipantRegistrationInfo();
-		   Logger.out.info("--------------------------------- caching end ---------------");*/
+		/*
+		 * Logger.out.info("--------------------------------- caching ---------------"
+		 * ); CollectionProtocolRegistrationBizLogic cBizLogic =
+		 * (CollectionProtocolRegistrationBizLogic
+		 * )BizLogicFactory.getInstance().
+		 * getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID); List
+		 * list12 =cBizLogic.getAllParticipantRegistrationInfo();
+		 * Logger.out.info
+		 * ("--------------------------------- caching end ---------------");
+		 */
 
 		if (request.getParameter(Constants.OPERATION).equals(Constants.EDIT))
 		{
@@ -392,8 +444,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	}
 
 	/**
-	 * @param listOfParticipant list of participant
-	 * @param listOfDisabledParticipant list of disabled participant
+	 * @param listOfParticipant
+	 *            list of participant
+	 * @param listOfDisabledParticipant
+	 *            list of disabled participant
 	 * @return list of participant those having activityStatus not as disabled
 	 */
 	private List removeDisabledParticipant(List listOfParticipant, List listOfDisabledParticipant)
@@ -412,13 +466,14 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 			if (Long.parseLong(participantBean.getValue()) == -1)
 			{
-				//listOfActiveParticipant.add(listOfParticipant.get(i));
+				// listOfActiveParticipant.add(listOfParticipant.get(i));
 				continue;
 			}
 
 			for (int j = 0; j < listOfDisabledParticipant.size(); j++)
 			{
-				if (Long.parseLong(((NameValueBean) listOfDisabledParticipant.get(j)).getValue()) == -1)
+				if (Long.parseLong(((NameValueBean)
+						listOfDisabledParticipant.get(j)).getValue()) == -1)
 				{
 					continue;
 				}
@@ -444,10 +499,13 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	}
 
 	/**
-	 * @param participantProtocolId String value for participant Protocol id
-	 * @param bizLogic object of class implementing IBizLogic
+	 * @param participantProtocolId
+	 *            String value for participant Protocol id
+	 * @param bizLogic
+	 *            object of class implementing IBizLogic
 	 * @return String for respective participant Id
-	 * @throws Exception generic exception
+	 * @throws Exception
+	 *             generic exception
 	 */
 	private String getParticipantIdForProtocolId(String participantProtocolId, IBizLogic bizLogic)
 			throws Exception
@@ -471,9 +529,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	}
 
 	/**
-	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
-	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID
-	 * @return tempMap
+	 * Prepare map for Showing Consents for a CollectionprotocolID when
+	 * Operation=Add.
+	 *
+	 * @param partiResponseCollection : partiResponseCollection
+	 * @return Map : tempMap
 	 */
 	private Map prepareMap(Collection partiResponseCollection)
 	{
@@ -490,7 +550,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			Long consentID;
 			while (consentResponseCollectionIter.hasNext())
 			{
-				ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
+				ConsentTierResponse consentTierResponse =
+					(ConsentTierResponse) consentResponseCollectionIter
 						.next();
 				ConsentTier consent = (ConsentTier) consentTierResponse.getConsentTier();
 				consentTierID = consentTierResponse.getConsentTier().getId();
@@ -518,8 +579,12 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	}
 
 	/**
-	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
-	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID
+	 * Prepare map for Showing Consents for a CollectionprotocolID when
+	 * Operation=Add.
+	 *
+	 * @param requestConsentList
+	 *            This is the List of Consents for a selected
+	 *            CollectionProtocolID
 	 * @return tempMap
 	 */
 	private Map prepareConsentMap(List requestConsentList)

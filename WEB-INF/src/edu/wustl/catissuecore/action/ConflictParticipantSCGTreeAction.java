@@ -37,7 +37,20 @@ import edu.wustl.common.factory.IFactory;
  */
 public class ConflictParticipantSCGTreeAction extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -59,7 +72,7 @@ public class ConflictParticipantSCGTreeAction extends BaseAction
 		String siteName = (String) reportLoaderQueue.getSiteName();
 		Long reportId = (Long) reportLoaderQueue.getId();
 
-		//To retrieve the tree data  
+		//To retrieve the tree data
 		treeData = reportLoaderQueueBizLogic.getTreeViewData(reportId, siteName, treeData);
 		request.setAttribute("treeData", treeData);
 
@@ -67,12 +80,12 @@ public class ConflictParticipantSCGTreeAction extends BaseAction
 
 	}
 
-	/**
-	 * To retieve the Report Queue List
-	 * @param reportQueueId
-	 * @return
-	 * @throws DAOException
-	 */
+/**
+ *
+ * @param reportQueueId : reportQueueId
+ * @return List : List
+ * @throws BizLogicException : BizLogicException
+ */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();

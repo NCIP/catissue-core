@@ -29,6 +29,7 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 
 	/**
 	 * @param  request object of HttpServletRequest
+	 * @param  eventParametersForm : eventParametersForm
 	 * @throws Exception generic exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
@@ -36,7 +37,8 @@ public class CollectionEventParametersAction extends SpecimenEventParametersActi
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		CollectionEventParametersForm collectionEventParametersForm = (CollectionEventParametersForm) eventParametersForm;
+		CollectionEventParametersForm collectionEventParametersForm =
+			(CollectionEventParametersForm) eventParametersForm;
 		if (collectionEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.COLLECTION_EVENT_PARAMETERS_EDIT_ACTION;

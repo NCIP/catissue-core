@@ -1,11 +1,15 @@
 /**
- * <p>Title: CollectionProtocolAction Class>
- * <p>Description:	This class initializes the fields in the CollectionProtocol Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: CollectionProtocolAction Class>
+ * <p>
+ * Description: This class initializes the fields in the CollectionProtocol
+ * Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Mandar Deshmukh
- * @version 1.00
- * Created on Mar 22, 2005
+ * @version 1.00 Created on Mar 22, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -44,29 +48,42 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields in the CollectionProtocol Add/Edit webpage.
+ *
  * @author Mandar Deshmukh
  */
 public class CollectionProtocolAction extends SpecimenProtocolAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolAction.class);
-	//This will keep track of no of consents for a particular participant
+	// This will keep track of no of consents for a particular participant
+	/**
+	 * consentCounter.
+	 */
 	int consentCounter = 0;
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various fields in CollectionProtocol Add/Edit webpage.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.executeSecureAction(mapping, form, request, response);
-		//pageOf required for Advance Search Object View.
+		// pageOf required for Advance Search Object View.
 
 		String tabSel = (String) request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
@@ -84,7 +101,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		//Gets the value of the operation attribute.
+		// Gets the value of the operation attribute.
 
 		HttpSession newSession = request.getSession();
 		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) newSession
@@ -111,14 +128,15 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 
 		logger.debug("operation in coll prot action" + operation);
-		//Sets the operation attribute to be used in the Edit/View Collection Protocol Page in Advance Search Object View. 
+		// Sets the operation attribute to be used in the Edit/View Collection
+		// Protocol Page in Advance Search Object View.
 
 		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
 		String cp_id = String.valueOf(collectionProtocolForm.getId());
 		if (!cp_id.equalsIgnoreCase("0"))
 		{
 			CollectionProtocol collectionProtocol = getCPObj(cp_id);
-			//Resolved lazy --- collectionProtocol.getConsentTierCollection();
+			// Resolved lazy --- collectionProtocol.getConsentTierCollection();
 			Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
 					CollectionProtocol.class.getName(), collectionProtocol.getId(),
 					"elements(consentTierCollection)");
@@ -132,16 +150,16 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance()
 					.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
-		//Name of delete button clicked
+		// Name of delete button clicked
 		String button = request.getParameter("button");
 
-		//Row number of outerblock
+		// Row number of outerblock
 		String outer = request.getParameter("blockCounter");
 
-		//      Gets the map from ActionForm
+		// Gets the map from ActionForm
 		Map map = collectionProtocolForm.getValues();
 
-		//       List of keys used in map of ActionForm
+		// List of keys used in map of ActionForm
 		List key = new ArrayList();
 		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
 		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
@@ -157,7 +175,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			}
 			else
 			{
-				//keys of outer block
+				// keys of outer block
 				key.add("CollectionProtocolEvent:outer_clinicalStatus");
 				key.add("CollectionProtocolEvent:outer_studyCalendarEventPoint");
 				MapDataParser.deleteRow(key, map, request.getParameter("status"));
@@ -184,11 +202,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (collectionProtocolForm != null)
 		{
 			currentCollectionProtocolDate = collectionProtocolForm.getStartDate();
-			if (currentCollectionProtocolDate == null)
-				currentCollectionProtocolDate = "";
+			if (currentCollectionProtocolDate == null) currentCollectionProtocolDate = "";
 			collectionProtocolEndDate = collectionProtocolForm.getEndDate();
-			if (collectionProtocolEndDate == null)
-				collectionProtocolEndDate = "";
+			if (collectionProtocolEndDate == null) collectionProtocolEndDate = "";
 		}
 		String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
@@ -199,7 +215,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			if (collectionProtocolForm != null)
 			{
-				appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="
+				appendingPath = "/CollectionProtocolSearch.do?operation="
+						+ "search&pageOf=pageOfCollectionProtocol&id="
 						+ collectionProtocolForm.getId();
 			}
 		}
@@ -284,9 +301,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	}
 
 	/**
-	 * This function will return CollectionProtocolRegistration object 
-	 * @param cp_id Selected SpecimenCollectionGroup ID
+	 * This function will return CollectionProtocolRegistration object.
+	 *
+	 * @param cp_id
+	 *            : cp_id
 	 * @return collectionProtocolObject
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private CollectionProtocol getCPObj(String cp_id) throws BizLogicException
 	{
@@ -300,6 +321,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		return collectionProtocolObject;
 	}
 
+	/**
+	 * @param consentTierColl
+	 *            : consentTierColl
+	 * @return Map : Map
+	 */
 	private Map prepareConsentMap(Collection consentTierColl)
 	{
 		Map tempMap = new HashMap();
@@ -325,6 +351,17 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 * @param pageOf
+	 *            : pageOf
+	 * @param mapping
+	 *            : mapping
+	 * @return ActionForward : ActionForward
+	 */
 	private ActionForward initCollectionProtocolPage(HttpServletRequest request, ActionForm form,
 			String pageOf, ActionMapping mapping)
 	{
@@ -347,7 +384,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		collectionProtocolForm.setAliqoutInSameContainer(collectionProtocolBean
 				.isAliqoutInSameContainer());
-		//For Consent Tab
+		// For Consent Tab
 		collectionProtocolForm
 				.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());
 		collectionProtocolForm.setConsentValues(collectionProtocolBean.getConsentValues());
@@ -356,6 +393,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		return (mapping.findForward(pageOf));
 	}
 
+	/**
+	 * @param request
+	 *            : request
+	 */
 	private void initCleanSession(HttpServletRequest request)
 	{
 		HttpSession session = request.getSession();

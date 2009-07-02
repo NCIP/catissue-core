@@ -1,11 +1,12 @@
 /**
- * <p>Title: ConflictViewAction Class>
- * <p>Description:	Initialization action for conflict view
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ConflictViewAction Class>
+ * <p>
+ * Description: Initialization action for conflict view Copyright: Copyright (c)
+ * year Company: Washington University, School of Medicine, St. Louis.
+ *
  * @version 1.00
- * @author kalpana Thakur
- * Created on sep 18,2007
+ * @author kalpana Thakur Created on sep 18,2007
  */
 
 package edu.wustl.catissuecore.action;
@@ -37,28 +38,33 @@ import edu.wustl.common.util.global.QuerySessionData;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class ConflictViewAction extends SecureAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in ConflictView.jsp Page.
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
-	 * @return ActionForward object
-	 * @throws Exception object
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConflictViewForm conflictViewForm = (ConflictViewForm) form;
 		int selectedFilter = Integer.parseInt(conflictViewForm.getSelectedFilter());
 
-		// Added by Ravindra to disallow Non Super Admin users to view Conflicting Reports
+		// Added by Ravindra to disallow Non Super Admin users to view
+		// Conflicting Reports
 		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 		if (!sessionDataBean.isAdmin())
@@ -77,35 +83,46 @@ public class ConflictViewAction extends SecureAction
 			filterList.add(0, new NameValueBean(retrieveFilterList[i], i));
 		}
 		Collections.sort(filterList);
-		//Setting the list in request
+		// Setting the list in request
 		request.getSession().setAttribute(Constants.FILTER_LIST, filterList);
 
-		//Returns the page number to be shown.
+		// Returns the page number to be shown.
 		int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
-		//Gets the session of this request.
+		// Gets the session of this request.
 		HttpSession session = request.getSession();
 
-		//The start index in the list of users to be approved/rejected.
-		//int startIndex = Constants.ZERO;
+		// The start index in the list of users to be approved/rejected.
+		// int startIndex = Constants.ZERO;
 		String sqlString = "";
 
 		if (selectedFilter == 0)
 		{
-			sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME ,REPORT_COLLECTION_DATE from catissue_report_queue where status='PARTICIPANT_CONFLICT' or status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
+			sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER," +
+					"REPORT_LOADED_DATE,STATUS ,SITE_NAME ," +
+					"REPORT_COLLECTION_DATE from catissue_report_queue" +
+					" where status='PARTICIPANT_CONFLICT' or status='SCG_PARTIAL_CONFLICT'" +
+					" or status='SCG_CONFLICT'";
 
 		}
 		else
-		{ //retrieving only the participant conflicts
+		{ // retrieving only the participant conflicts
 			if (selectedFilter == 1)
 			{
-				sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE from catissue_report_queue where status='PARTICIPANT_CONFLICT'";
+				sqlString = "select PARTICIPANT_NAME ," +
+						"IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER," +
+						"REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE" +
+						" from catissue_report_queue where status='PARTICIPANT_CONFLICT'";
 			}
 			else
-			{ //retrieving all the scg conflicts both partial and exact match
+			{ // retrieving all the scg conflicts both partial and exact match
 				if (selectedFilter == 2)
 				{
-					sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE from catissue_report_queue where status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
+					sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ," +
+							"SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ," +
+							"SITE_NAME,REPORT_COLLECTION_DATE from" +
+							" catissue_report_queue where" +
+							" status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
 				}
 
 			}
@@ -146,13 +163,13 @@ public class ConflictViewAction extends SecureAction
 		// List of results the query will return on execution.
 		List list = pagenatedResultData.getResult();
 
-		//request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-		//request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
+		// request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+		// request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 
-		//Saves the page number in the request.
+		// Saves the page number in the request.
 		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
 
-		//Saves the total number of results in the request. 
+		// Saves the total number of results in the request.
 		session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(pagenatedResultData
 				.getTotalRecords()));
 
@@ -171,10 +188,10 @@ public class ConflictViewAction extends SecureAction
 	}
 
 	/**
-	 * To prepare the grid to display on conflictView.jsp
-	 * @param reportQueueDataList
-	 * @param selectedFilter 
-	 * @return
+	 * To prepare the grid to display on conflictView.jsp.
+	 *
+	 * @param reportQueueDataList : reportQueueDataList
+	 * @return List : List
 	 */
 	private List makeGridData(List reportQueueDataList)
 	{

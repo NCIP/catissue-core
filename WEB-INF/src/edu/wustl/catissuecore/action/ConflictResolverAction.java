@@ -1,12 +1,12 @@
 /**
- * <p>Title: ConflictResolverAction Class>
- * <p>Description:	Conflict Resolver Action class
- * Copyright:    Copyright (c) year
+ * <p>
+ * Title: ConflictResolverAction Class>
+ * <p>
+ * Description: Conflict Resolver Action class Copyright: Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
+ *
  * @version 1.00
- *@author kalpana Thakur
- * Created on sep 18,2007
- * 
+ *@author kalpana Thakur Created on sep 18,2007
  */
 
 package edu.wustl.catissuecore.action;
@@ -48,23 +48,30 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class ConflictResolverAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ConflictResolverAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in ConflictView.jsp Page.
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
-	 * @return ActionForward object
-	 * @throws Exception object
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -76,19 +83,19 @@ public class ConflictResolverAction extends BaseAction
 		String button = request.getParameter(Constants.CONFLICT_BUTTON);
 		String errorMessage = null;
 
-		//		overwrite the existing report
+		// overwrite the existing report
 		if (button.trim().equalsIgnoreCase(Constants.OVERWRITE_REPORT))
 		{
 			overwriteReport(request, reportQueueId);
 		}
 
-		//		Ignore new Report
+		// Ignore new Report
 		if (button.trim().equalsIgnoreCase(Constants.IGNORE_NEW_REPORT))
 		{
 			ignoreNewReport(reportQueueId);
 		}
 
-		//		Creating a new Participant		
+		// Creating a new Participant
 		if (button.trim().equalsIgnoreCase(Constants.CREATE_NEW_PARTICIPANT))
 		{
 			errorMessage = createNewParticipant(request, reportQueueId);
@@ -103,7 +110,7 @@ public class ConflictResolverAction extends BaseAction
 			{
 				if (participantIdToAssociate != null && !participantIdToAssociate.equals(""))
 				{
-					//				Associate existing participant with Report						
+					// Associate existing participant with Report
 					createNewSCG(request, reportQueueId, participantIdToAssociate);
 				}
 			}
@@ -112,7 +119,7 @@ public class ConflictResolverAction extends BaseAction
 
 				if (specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 				{
-					//					Associate existing SCG with Report	
+					// Associate existing SCG with Report
 					associateSCGWithReport(request, reportQueueId, participantIdToAssociate,
 							specimenCollGrpId);
 				}
@@ -123,11 +130,15 @@ public class ConflictResolverAction extends BaseAction
 	}
 
 	/**
-	 * To create new participant and associate it to the report:
+	 * To create new participant and associate it to the report.
+	 *
 	 * @param request
+	 *            : request
 	 * @param reportQueueId
-	 * @throws Exception 
+	 *            : reportQueueId
+	 * @return String : String
 	 * @throws Exception
+	 *             : Exception
 	 */
 	private String createNewParticipant(HttpServletRequest request, String reportQueueId)
 			throws Exception
@@ -149,12 +160,13 @@ public class ConflictResolverAction extends BaseAction
 		catch (Exception e)
 		{
 			logger.info(e.getMessage(), e);
-			//System.out.println("Error Occurred !!!!!");
+			// System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
-			//Setting the status to NEW
-			//			reportLoaderQueue.setParticipantCollection(null);
-			//			reportLoaderQueue.setStatus(CaTIESConstants.PARTICIPANT_CREATION_ERROR);
-			//			updateReportLoaderQueue(reportLoaderQueue,request);
+			// Setting the status to NEW
+			// reportLoaderQueue.setParticipantCollection(null);
+			// reportLoaderQueue.setStatus(CaTIESConstants.
+			// PARTICIPANT_CREATION_ERROR);
+			// updateReportLoaderQueue(reportLoaderQueue,request);
 			return errorMessage;
 		}
 
@@ -162,9 +174,10 @@ public class ConflictResolverAction extends BaseAction
 		// Adding the new participant
 		participantColl.add(participant);
 		reportLoaderQueue.setParticipantCollection(participantColl);
-		//The new SCG for this participant will be inserted by the FileProcessorThread
+		// The new SCG for this participant will be inserted by the
+		// FileProcessorThread
 
-		//Setting the status to NEW
+		// Setting the status to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 		reportLoaderQueue.setSpecimenCollectionGroup(null);
 		updateReportLoaderQueue(reportLoaderQueue, request);
@@ -173,12 +186,18 @@ public class ConflictResolverAction extends BaseAction
 	}
 
 	/**
-	 * To associate existing participant to the report and to create new SCG:
+	 * To associate existing participant to the report and to create new SCG.
+	 *
 	 * @param request
+	 *            : request
 	 * @param reportQueueId
+	 *            : reportQueueId
 	 * @param participantIdToAssociate
-	 * @throws BizLogicException 
-	 * @throws NumberFormatException 
+	 *            : participantIdToAssociate
+	 * @throws NumberFormatException
+	 *             : NumberFormatException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private void createNewSCG(HttpServletRequest request, String reportQueueId,
 			String participantIdToAssociate) throws NumberFormatException, BizLogicException
@@ -187,13 +206,14 @@ public class ConflictResolverAction extends BaseAction
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 
-		//Changing the status of the report in the queue to NEW
+		// Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 
-		//Create new SCG
+		// Create new SCG
 		reportLoaderQueue.setSpecimenCollectionGroup(null);
 
-		//removing all participants from CATISSUE_REPORT_PARTICIP_REL other than the selected participant
+		// removing all participants from CATISSUE_REPORT_PARTICIP_REL other
+		// than the selected participant
 		Collection participantColl = reportLoaderQueue.getParticipantCollection();
 		Iterator iter = participantColl.iterator();
 		Set tempColl = new HashSet();
@@ -207,19 +227,27 @@ public class ConflictResolverAction extends BaseAction
 		}
 		reportLoaderQueue.setParticipantCollection(tempColl);
 
-		//Updating the report queue obj
+		// Updating the report queue obj
 		updateReportLoaderQueue(reportLoaderQueue, request);
 	}
 
 	/**
-	 * Associate the existing SCG to the report
+	 * Associate the existing SCG to the report.
+	 *
 	 * @param request
+	 *            : request
 	 * @param reportQueueId
+	 *            : reportQueueId
 	 * @param participantIdToAssociate
+	 *            : participantIdToAssociate
 	 * @param specimenCollGrpId
+	 *            : specimenCollGrpId
 	 * @throws DAOException
+	 *             : DAOException
 	 * @throws BizLogicException
+	 *             : BizLogicException
 	 * @throws UserNotAuthorizedException
+	 *             : UserNotAuthorizedException
 	 */
 	private void associateSCGWithReport(HttpServletRequest request, String reportQueueId,
 			String participantIdToAssociate, String specimenCollGrpId) throws DAOException,
@@ -229,10 +257,10 @@ public class ConflictResolverAction extends BaseAction
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 
-		//Changing the status of the report in the queue to NEW
+		// Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 
-		//Associating the SCG
+		// Associating the SCG
 		if (specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 		{
 			SpecimenCollectionGroup scg = null;
@@ -249,7 +277,7 @@ public class ConflictResolverAction extends BaseAction
 			reportLoaderQueue.setSpecimenCollectionGroup(scg);
 		}
 
-		//Retrieving participantID if it is null
+		// Retrieving participantID if it is null
 		if (participantIdToAssociate == null || participantIdToAssociate.equals(""))
 		{
 			DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
@@ -259,7 +287,8 @@ public class ConflictResolverAction extends BaseAction
 			participantIdToAssociate = (String) partID.toString();
 		}
 
-		//removing all participants from CATISSUE_REPORT_PARTICIP_REL other than the selected participant
+		// removing all participants from CATISSUE_REPORT_PARTICIP_REL other
+		// than the selected participant
 		Collection participantColl = reportLoaderQueue.getParticipantCollection();
 		Iterator iter = participantColl.iterator();
 		Set tempColl = new HashSet();
@@ -274,14 +303,17 @@ public class ConflictResolverAction extends BaseAction
 		}
 		reportLoaderQueue.setParticipantCollection(tempColl);
 
-		//Updating the report queue obj
+		// Updating the report queue obj
 		updateReportLoaderQueue(reportLoaderQueue, request);
 	}
 
 	/**
-	 * updating the reportloaderQueue obj
+	 * updating the reportloaderQueue obj.
+	 *
 	 * @param reportLoaderQueue
+	 *            : reportLoaderQueue
 	 * @param request
+	 *            : request
 	 */
 	private void updateReportLoaderQueue(ReportLoaderQueue reportLoaderQueue,
 			HttpServletRequest request)
@@ -304,13 +336,14 @@ public class ConflictResolverAction extends BaseAction
 
 	/**
 	 * @param request
-	 * @return SessionDataBean * 
+	 *            : request
+	 * @return SessionDataBean : SessionDataBean
 	 */
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{
 		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
 		/**
-		 *  This if loop is specific to Password Security feature.
+		 * This if loop is specific to Password Security feature.
 		 */
 		if (obj == null)
 		{
@@ -326,9 +359,12 @@ public class ConflictResolverAction extends BaseAction
 	}
 
 	/**
-	 * To generate the errors
+	 * To generate the errors.
+	 *
 	 * @param request
+	 *            : request
 	 * @param errorMessage
+	 *            : errorMessage
 	 */
 	private void setActionError(HttpServletRequest request, String errorMessage)
 	{
@@ -339,55 +375,66 @@ public class ConflictResolverAction extends BaseAction
 	}
 
 	/**
-	 * 
 	 * @param session
+	 *            : session
 	 */
 	protected void resetSessionAttributes(HttpSession session)
 	{
-		//Removing the session objects
+		// Removing the session objects
 		session.removeAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE);
 		session.removeAttribute(Constants.SCG_ID_TO_ASSOCIATE);
 
 	}
 
 	/**
-	 * Ignore the new report and use the existing one. 
-	* @param reportQueueId
-	* @throws DAOException
-	* @throws UserNotAuthorizedException
-	* @throws BizLogicException
-	*/
+	 * Ignore the new report and use the existing one.
+	 *
+	 * @param reportQueueId
+	 *            : reportQueueId
+	 * @throws DAOException
+	 *             : DAOException
+	 * @throws UserNotAuthorizedException
+	 *             : UserNotAuthorizedException
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
 	protected void ignoreNewReport(String reportQueueId) throws DAOException,
 			UserNotAuthorizedException, BizLogicException
 	{
-		//Long cprId = null;
+		// Long cprId = null;
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
 
-		//deleting the reportloaderQueue object
+		// deleting the reportloaderQueue object
 		reportLoaderQueueBizLogic.delete(reportLoaderQueue, 0);
 
 	}
 
-	/**To overwrite the existing report
-	* @param request
-	* @param reportQueueId
-	* @throws BizLogicException 
-	* @throws NumberFormatException 
-	* @throws DAOException
-	*/
+	/**
+	 * To overwrite the existing report.
+	 *
+	 * @param request
+	 *            : request
+	 * @param reportQueueId
+	 *            : reportQueueId
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 * @throws NumberFormatException
+	 *             : NumberFormatException
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
 	protected void overwriteReport(HttpServletRequest request, String reportQueueId)
 			throws NumberFormatException, BizLogicException
 	{
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 
-		//Changing the status of the report in the queue to NEW
+		// Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.OVERWRITE_REPORT);
 		updateReportLoaderQueue(reportLoaderQueue, request);
-
 	}
 }

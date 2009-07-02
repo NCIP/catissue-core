@@ -38,7 +38,20 @@ import edu.wustl.common.factory.IFactory;
  */
 public class ConflictReportAction extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -62,10 +75,10 @@ public class ConflictReportAction extends BaseAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	/**To retrieve the list of report loader Queue
-	 * @param reportQueueId
-	 * @return
-	 * @throws DAOException
+	/**To retrieve the list of report loader Queue.
+	 * @param reportQueueId : reportQueueId
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{

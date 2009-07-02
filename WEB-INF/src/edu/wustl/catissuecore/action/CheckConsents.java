@@ -42,7 +42,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CheckConsents extends BaseAction
 {
-
+/**
+ * logger.
+ */
 	private transient Logger logger = Logger.getCommonLogger(CheckConsents.class);
 
 	/**
@@ -52,7 +54,7 @@ public class CheckConsents extends BaseAction
 	* @param request HttpServletRequest object
 	* @param response HttpServletResponse object
 	* @return ActionForward object
-	* @throws Exception object
+	* @throws Exception : Exception
 	*/
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -73,15 +75,19 @@ public class CheckConsents extends BaseAction
 				}
 				else
 				{
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
+					IFactory factory = AbstractFactoryConfig.
+					getInstance().getBizLogicFactory();
+					CollectionProtocolBizLogic collectionProtocolBizLogic =
+						(CollectionProtocolBizLogic) factory
 							.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-					Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class
+					Object object = collectionProtocolBizLogic.
+					retrieve(CollectionProtocol.class
 							.getName(), new Long(collectionProtocolId));
 					CollectionProtocol collectionProtocol = (CollectionProtocol) object;
 					Collection consentTierCollection = (Collection) collectionProtocolBizLogic
 							.retrieveAttribute(CollectionProtocol.class.getName(),
-									collectionProtocol.getId(), "elements(consentTierCollection)");
+									collectionProtocol.getId(),
+									"elements(consentTierCollection)");
 
 					if (consentTierCollection.isEmpty())
 					{
@@ -90,7 +96,8 @@ public class CheckConsents extends BaseAction
 					}
 					else
 					{
-						out.print(Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);//Consent Response
+						out.print(Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
+						//Consent Response
 					}
 				}
 			}
@@ -101,7 +108,8 @@ public class CheckConsents extends BaseAction
 				int barcodeLabelBasedDistribution = 1;
 				String labelBarcodeDistributionValue = request
 						.getParameter(Constants.DISTRIBUTION_ON);//lableBarcode
-				if (labelBarcodeDistributionValue.equalsIgnoreCase(Constants.BARCODE_DISTRIBUTION))//"1"
+				if (labelBarcodeDistributionValue.equalsIgnoreCase
+						(Constants.BARCODE_DISTRIBUTION))//"1"
 				{
 					barcodeLabelBasedDistribution = 1;
 				}
@@ -133,9 +141,11 @@ public class CheckConsents extends BaseAction
 				Long specimenId = (Long) specimen.getId();
 
 				String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"
-						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
+						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup" +
+								" as scg,"
 						+ " edu.wustl.catissuecore.domain.Specimen as spec "
-						+ " where spec.specimenCollectionGroup.id=scg.id and spec.id=" + specimenId;
+						+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="
+						+ specimenId;
 
 				List collectionProtocolList = AppUtility.executeQuery(colProtHql);
 				CollectionProtocol collectionProtocol = null;
@@ -169,9 +179,11 @@ public class CheckConsents extends BaseAction
 	}
 
 	/**
-	 * This function returns SpecimenCollectionGroup object by reading Barcode value
-	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
-	 * @return specimenCollectionGroup SpecimenCollectionGroup object
+	 * This function returns SpecimenCollectionGroup object by reading Barcode value.
+	 * @param barcodeLabel : barcodeLabel
+	 * @param barcodeLabelBasedDistribution : barcodeLabelBasedDistribution
+	 * @return Specimen : Specimen
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Specimen getConsentListForSpecimen(String barcodeLabel,
 			int barcodeLabelBasedDistribution) throws BizLogicException
@@ -182,7 +194,8 @@ public class CheckConsents extends BaseAction
 		String colName = null;
 		if (barcodeLabelBasedDistribution == Constants.BARCODE_BASED_DISTRIBUTION)
 		{
-			colName = Constants.SYSTEM_BARCODE;//"barcode"	
+			colName = Constants.SYSTEM_BARCODE;
+			//"barcode"
 		}
 		else
 		{

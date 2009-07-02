@@ -15,13 +15,27 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- *Common tab action class defined for forwarding the action to the corresponding Add action from the simpleQueryInterface.jsp file 
+ *Common tab action class defined for forwarding the action to the
+ * corresponding Add action from the simpleQueryInterface.jsp file.
  * @author nitesh_marwaha
  *
  */
 public class CommonTabAction extends Action
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException

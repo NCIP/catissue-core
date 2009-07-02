@@ -1,6 +1,7 @@
 /**
  * <p>Title: CheckInCheckOutEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the CheckInCheckOutEventParameters Add/Edit webpage.</p>
+ * <p>Description:	This class initializes the fields in the
+ *  CheckInCheckOutEventParameters Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -25,8 +26,9 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 {
 
 	/**
-	 * @param  request object of HttpServletRequest
-	 * @throws Exception generic exception
+	 * @param  request : request
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
@@ -34,7 +36,8 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 
 		String formName = null;
 		boolean readOnlyValue;
-		CheckInCheckOutEventParametersForm checkInCheckOutEventParametersForm = (CheckInCheckOutEventParametersForm) eventParametersForm;
+		CheckInCheckOutEventParametersForm checkInCheckOutEventParametersForm =
+			(CheckInCheckOutEventParametersForm) eventParametersForm;
 		if (checkInCheckOutEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION;
