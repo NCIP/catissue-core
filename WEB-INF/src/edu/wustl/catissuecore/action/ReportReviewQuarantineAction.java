@@ -32,25 +32,35 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
 
 /**
- * <p>Title: ReportReviewQuarantineAction Class>
- * <p>Description:	This class fetch the list from the database where STSTUS="Pending".</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ReportReviewQuarantineAction Class>
+ * <p>
+ * Description: This class fetch the list from the database where
+ * STSTUS="Pending".
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Virender Mehta
- * @version 1.00
- * Created on Feb 02,2007
+ * @version 1.00 Created on Feb 02,2007
  */
 public class ReportReviewQuarantineAction extends BaseAction
 {
 
 	/**
 	 * Overrides the execute method in Action class.
-	 * @param mapping ActionMapping object
-	 * @param form ActionForm object
-	 * @param request HttpServletRequest object
-	 * @param response HttpServletResponse object
+	 *
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
 	 * @return ActionForward object
-	 * @throws Exception object
+	 * @throws Exception
+	 *             object
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -79,7 +89,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 			AbstractDomainObject reportObject = null;
 			SurgicalPathologyReport surgicalPathologyReport = null;
 			String scgName = null;
-			//Long reportId = null;
+			// Long reportId = null;
 			User user = null;
 			Date timestamp = new Date();
 			if (reportAction.equalsIgnoreCase(Constants.REVIEW))
@@ -90,33 +100,39 @@ public class ReportReviewQuarantineAction extends BaseAction
 						.retrieveAttribute(PathologyReportReviewParameter.class.getName(),
 								reportObject.getId(), "surgicalPathologyReport");
 				user = (User) defaultBizLogic.retrieveAttribute(
-						PathologyReportReviewParameter.class.getName(), reportObject.getId(),
+						PathologyReportReviewParameter.class.getName(),
+						reportObject.getId(),
 						"user");
 			}
 			else
 			{
 				reportObject = (QuarantineEventParameter) reportStatusList.get(iCount);
 				timestamp = ((QuarantineEventParameter) reportObject).getTimestamp();
-				surgicalPathologyReport = (SurgicalPathologyReport) ((QuarantineEventParameter) reportObject)
+				surgicalPathologyReport = (SurgicalPathologyReport)
+				((QuarantineEventParameter) reportObject)
 						.getDeIdentifiedSurgicalPathologyReport();
 				user = (User) defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class
 						.getName(), reportObject.getId(), "user");
 			}
 			if (surgicalPathologyReport instanceof DeidentifiedSurgicalPathologyReport)
 			{
-				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = (DeidentifiedSurgicalPathologyReport) surgicalPathologyReport;
+				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =
+					(DeidentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				scgName = (String) defaultBizLogic
-						.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(),
+						.retrieveAttribute
+						(DeidentifiedSurgicalPathologyReport.class.getName(),
 								deidentifiedSurgicalPathologyReport.getId(),
 								"specimenCollectionGroup.name");
 
 			}
 			else
 			{
-				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
+				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport =
+					(IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				scgName = (String) defaultBizLogic.retrieveAttribute(
 						IdentifiedSurgicalPathologyReport.class.getName(),
-						identifiedSurgicalPathologyReport.getId(), "specimenCollectionGroup.name");
+						identifiedSurgicalPathologyReport.getId(),
+						"specimenCollectionGroup.name");
 
 			}
 
@@ -126,7 +142,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 			dataList.add(witnessFullName);
 			dataList.add(scgName);
 			dataList.add(reportObject.getId());
-			//dataList.add(surgicalPathologyReport.getAccessionNumber());
+			// dataList.add(surgicalPathologyReport.getAccessionNumber());
 			Site reportSource = (Site) defaultBizLogic.retrieveAttribute(
 					SurgicalPathologyReport.class.getName(), surgicalPathologyReport.getId(),
 					"reportSource");
@@ -135,20 +151,20 @@ public class ReportReviewQuarantineAction extends BaseAction
 		}
 		List columnList = columnNames();
 		request.setAttribute(Constants.REPORT_STATUS_LIST, finalDataList);
-		//request.setAttribute(Constants.COLUMN_LIST,columnList);
+		// request.setAttribute(Constants.COLUMN_LIST,columnList);
 		request.setAttribute("pageOf", pageOf);
-		//For Pagenation	
-		//Gets the session of this request.
+		// For Pagenation
+		// Gets the session of this request.
 		List list = null, showList = null;
-		//Returns the page number to be shown.
+		// Returns the page number to be shown.
 		int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
-		//Gets the session of this request.
+		// Gets the session of this request.
 		HttpSession session = request.getSession();
 
-		//The start index in the list of users to be approved/rejected.
+		// The start index in the list of users to be approved/rejected.
 		int startIndex = Constants.ZERO;
-		//The end index in the list of users to be approved/rejected.
+		// The end index in the list of users to be approved/rejected.
 		int recordsPerPage = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
 		if (request.getParameter(Constants.RESULTS_PER_PAGE) != null)
@@ -163,26 +179,26 @@ public class ReportReviewQuarantineAction extends BaseAction
 		int endIndex = recordsPerPage;
 		if (pageNum == Constants.START_PAGE)
 		{
-			//If start page is to be shown retrieve the list from the database.
+			// If start page is to be shown retrieve the list from the database.
 			list = finalDataList;
 			if (recordsPerPage > list.size())
 			{
 				endIndex = list.size();
 			}
 
-			//Save the list of users in the sesson.
+			// Save the list of users in the sesson.
 			session.setAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST, list);
 		}
 		else
 		{
-			//Get the list of users from the session.
+			// Get the list of users from the session.
 			list = (List) session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
 			if (recordsPerPage != Integer.MAX_VALUE)
 			{
-				//Set the start index of the users in the list.
+				// Set the start index of the users in the list.
 				startIndex = (pageNum - 1) * recordsPerPage;
 
-				//Set the end index of the users in the list.
+				// Set the end index of the users in the list.
 				endIndex = startIndex + recordsPerPage;
 
 				if (endIndex > list.size())
@@ -197,33 +213,36 @@ public class ReportReviewQuarantineAction extends BaseAction
 			}
 		}
 
-		//Gets the list of users to be shown on the page.
+		// Gets the list of users to be shown on the page.
 		showList = list.subList(startIndex, endIndex);
 
-		//Saves the list of users to be shown on the page in the request.
-		//request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
+		// Saves the list of users to be shown on the page in the request.
+		// request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
 		AppUtility.setGridData(showList, columnList, request);
 		Integer identifierFieldIndex = new Integer(4);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
-		//Saves the page number in the request.
+		// Saves the page number in the request.
 		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
 
-		//Saves the total number of results in the request. 
+		// Saves the total number of results in the request.
 		session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(list.size()));
 
 		session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
-		//Saves the number of results per page in the request.
-		//Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
-		//        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE));
+		// Saves the number of results per page in the request.
+		// Prafull:Commented this can be retrived directly from constants on
+		// jsp, so no need to save it in request.
+		// request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(
+		// Constants.NUMBER_RESULTS_PER_PAGE));
 
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
-	 * Adding name,value pair in NameValueBean for Witness Name
-	 * @param collProtId Get Witness List for this ID
-	 * @return consentWitnessList
-	 * @throws BizLogicException 
+	 * Adding name,value pair in NameValueBean for Witness Name.
+	 * @param reportStatus : reportStatus
+	 * @param reportAction : reportAction
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	public List getReportStatus(String reportStatus, String reportAction) throws BizLogicException
 	{
@@ -247,8 +266,9 @@ public class ReportReviewQuarantineAction extends BaseAction
 	}
 
 	/**
-	 * This function adds the columns to the List
-	 * @return columnList 
+	 * This function adds the columns to the List.
+	 *
+	 * @return List :columnList
 	 */
 	public List columnNames()
 	{

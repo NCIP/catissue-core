@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package edu.wustl.catissuecore.action;
@@ -27,10 +27,12 @@ import edu.wustl.common.action.BaseAction;
 abstract public class QueryShoppingCartAction extends BaseAction
 {
 
-	/** sets the options enabled or disabled depending on the entities and their attributes present 
-	 * in the cart.
-	 * @param request
-	 * @param cart
+	/**
+	 * sets the options enabled or disabled depending on the entities and their
+	 * attributes present in the cart.
+	 *
+	 * @param request : request
+	 * @param cart : cart
 	 */
 	protected void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{
@@ -54,7 +56,8 @@ abstract public class QueryShoppingCartAction extends BaseAction
 								attribute.getEntity().getName()))
 						{
 							request
-									.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT,
+									.setAttribute(Constants.
+											IS_SPECIMENARRAY_PRESENT,
 											Constants.TRUE);
 						}
 					}
@@ -63,24 +66,26 @@ abstract public class QueryShoppingCartAction extends BaseAction
 									StorageContainer.class.getName()))
 					{
 						isContainerPresent = Constants.TRUE;
-						request.setAttribute(Constants.IS_CONTAINER_PRESENT, Constants.TRUE);
+						request.setAttribute(Constants.IS_CONTAINER_PRESENT,
+								Constants.TRUE);
 					}
 				}
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
 				return;
 			}
 		}
-		//List Empty Message added in QueryShoppingCart.jsp page
-		//		ActionErrors errors = new ActionErrors();
-		//		ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
-		//		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		//		saveErrors(request, errors);
+		// List Empty Message added in QueryShoppingCart.jsp page
+		// ActionErrors errors = new ActionErrors();
+		// ActionError error = new ActionError("ShoppingCart.emptyCartTitle");
+		// errors.add(ActionErrors.GLOBAL_ERROR, error);
+		// saveErrors(request, errors);
 	}
 
 	/**
 	 * Separates a index of checkbox present in object obj.
-	 * 
-	 * @param obj.
+	 *
+	 * @param obj
+	 *            .
 	 * @return index.
 	 */
 	protected Integer getIndex(Object obj)
@@ -91,7 +96,11 @@ abstract public class QueryShoppingCartAction extends BaseAction
 		int index = Integer.parseInt(strTokens.nextToken());
 		return new Integer(index);
 	}
-
+	/**
+	 *
+	 * @param searchForm : searchForm
+	 * @return List < Integer > : List < Integer >
+	 */
 	protected List < Integer > getCheckboxValues(AdvanceSearchForm searchForm)
 	{
 		Map map = searchForm.getValues();

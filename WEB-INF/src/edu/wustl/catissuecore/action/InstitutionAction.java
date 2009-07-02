@@ -21,6 +21,10 @@ import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class InstitutionAction extends SecureAction
 {
 
@@ -45,7 +49,7 @@ public class InstitutionAction extends SecureAction
 
 		InstitutionForm institutionForm = (InstitutionForm) form;
 		institutionForm.setOperation(operation);
-		//Sets the operation attribute to be used in the Add/Edit Institution Page. 
+		//Sets the operation attribute to be used in the Add/Edit Institution Page.
 		String formName = Constants.INSTITUTION_ADD_ACTION;
 		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		institutionForm.setSubmittedFor(submittedFor);

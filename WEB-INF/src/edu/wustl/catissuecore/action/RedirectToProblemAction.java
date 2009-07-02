@@ -22,14 +22,25 @@ public class RedirectToProblemAction extends Action
 {
 
 	/**
-	 * 
+	 * RedirectToProblemAction().
 	 */
 	public RedirectToProblemAction()
 	{
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,

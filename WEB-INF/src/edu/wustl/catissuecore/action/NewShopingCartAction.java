@@ -42,12 +42,36 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.querysuite.EntityCacheFactory;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class NewShopingCartAction extends BaseAction
 {
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 * @throws DynamicExtensionsSystemException
+	 *             : DynamicExtensionsSystemException
+	 * @throws CheckedException
+	 *             : CheckedException
+	 * @throws DynamicExtensionsApplicationException
+	 *             : DynamicExtensionsApplicationException
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws BizLogicException,
 			DynamicExtensionsSystemException, CheckedException,
@@ -66,10 +90,11 @@ public class NewShopingCartAction extends BaseAction
 		List < AttributeInterface > cartAttributeList = new ArrayList < AttributeInterface >();
 		List < String > columnList = new ArrayList < String >();
 		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
-		/** value of readOnly attribute is specified in UpdateBulkSpecimensAction and UpdateSpecimenStatusAction
-		 *  This value will only true in case of addition of multiple specimen.
-		 *  This is done to disable collected checkbox in specimen summary page.
-		    bug 12959
+		/**
+		 * value of readOnly attribute is specified in UpdateBulkSpecimensAction
+		 * and UpdateSpecimenStatusAction This value will only true in case of
+		 * addition of multiple specimen. This is done to disable collected
+		 * checkbox in specimen summary page. bug 12959
 		 */
 		Boolean readOnly = (Boolean) request.getAttribute("readOnly");
 		if (readOnly != null)
@@ -81,14 +106,15 @@ public class NewShopingCartAction extends BaseAction
 			}
 		}
 
-		//int[] searchTarget = prepareSearchTarget();
-		//int basedOn = 0;
+		// int[] searchTarget = prepareSearchTarget();
+		// int basedOn = 0;
 
-		//Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
-		//String[] searchString  ={"specimen"};
+		// Set<EntityInterface> entityCollection = new
+		// HashSet<EntityInterface>();
+		// String[] searchString ={"specimen"};
 		Collection < AttributeInterface > attributeCollection = new ArrayList < AttributeInterface >();
 		EntityCache cache = EntityCacheFactory.getInstance();
-		//MetadataSearch advancedSearch = new MetadataSearch(cache);
+		// MetadataSearch advancedSearch = new MetadataSearch(cache);
 		Long specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 				"specimenEntityId");
 
@@ -104,19 +130,20 @@ public class NewShopingCartAction extends BaseAction
 					specimenEntityId);
 		}
 		attributeCollection = cache.getEntityById(specimenEntityId).getEntityAttributesForQuery();
-		//		MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
-		//		entityCollection = matchedClass.getEntityCollection();
-		//		List resultList = new ArrayList(entityCollection);
-		//		for (int i = 0; i < resultList.size(); i++)
-		//		{
-		//			EntityInterface entity = (EntityInterface) resultList.get(i);
-		//			String fullyQualifiedEntityName = entity.getName();
-		//			if(fullyQualifiedEntityName.equals(Specimen.class.getName()))
-		//			{
-		//				attributeCollection=entity.getEntityAttributesForQuery();
-		//				break;
-		//			}	
-		//		}
+		// MatchedClass matchedClass = advancedSearch.search(searchTarget,
+		// searchString, basedOn);
+		// entityCollection = matchedClass.getEntityCollection();
+		// List resultList = new ArrayList(entityCollection);
+		// for (int i = 0; i < resultList.size(); i++)
+		// {
+		// EntityInterface entity = (EntityInterface) resultList.get(i);
+		// String fullyQualifiedEntityName = entity.getName();
+		// if(fullyQualifiedEntityName.equals(Specimen.class.getName()))
+		// {
+		// attributeCollection=entity.getEntityAttributesForQuery();
+		// break;
+		// }
+		// }
 		Iterator < AttributeInterface > attributreItr = attributeCollection.iterator();
 
 		String[] selectColumnName = new String[attributeCollection.size()];
@@ -140,7 +167,7 @@ public class NewShopingCartAction extends BaseAction
 		}
 		else
 		{
-			/*deleted the cart*/
+			/* deleted the cart */
 			if (queryShoppingCart.isEmpty())
 			{
 				queryShoppingCart.setCartAttributeList(cartAttributeList);
@@ -158,7 +185,7 @@ public class NewShopingCartAction extends BaseAction
 					selectColumnName = new String[oldAttributeList.size()];
 					selectColumnName = getManiputedColumnList(queryShoppingCart
 							.getCartAttributeList());
-					//cartAttributeList=new ArrayList<AttributeInterface>();
+					// cartAttributeList=new ArrayList<AttributeInterface>();
 					cartAttributeList = oldAttributeList;
 
 				}
@@ -174,7 +201,7 @@ public class NewShopingCartAction extends BaseAction
 		{
 			cartnew = createListOfItems(form, selectColumnName, request);
 
-			//Action Errors changed to Action Messages
+			// Action Errors changed to Action Messages
 			ActionMessages messages = new ActionMessages();
 			int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(
 					oldAttributeList, cartAttributeList);
@@ -189,7 +216,8 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError", count, cartnew.size()
+								"shoppingcart.duplicateObjError",
+								count, cartnew.size()
 										+ oldCartSize - newCartSize));
 						saveMessages(request, messages);
 					}
@@ -206,7 +234,8 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError", count, cartnew.size()
+								"shoppingcart.duplicateObjError",
+								count, cartnew.size()
 										+ oldCartSize - newCartSize));
 						saveMessages(request, messages);
 					}
@@ -228,7 +257,11 @@ public class NewShopingCartAction extends BaseAction
 				queryShoppingCart);
 		return mapping.findForward(pageOf);
 	}
-
+	/**
+	 *
+	 * @param oldAttributeList : oldAttributeList
+	 * @return String[] : String[]
+	 */
 	private String[] getManiputedColumnList(List < AttributeInterface > oldAttributeList)
 	{
 
@@ -246,17 +279,19 @@ public class NewShopingCartAction extends BaseAction
 	}
 
 	/**
-	 * @param form  object of ActionForm
-	 * @param request 
-	 * @return cart
-	 * @throws DAOException Database related Exception
+	 *
+	 * @param form : form
+	 * @param selectColumnName : selectColumnName
+	 * @param request : request
+	 * @return List < List < String >> : List < List < String >>
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List < List < String >> createListOfItems(ActionForm form, String[] selectColumnName,
 			HttpServletRequest request) throws BizLogicException
 	{
 		String objName = Specimen.class.getName();
 		IBizLogic bizLogic = getBizLogic(objName);
-		//Object searchObjects = null;
+		// Object searchObjects = null;
 		AliquotForm aliquotForm = new AliquotForm();
 		SpecimenForm specimenForm = new SpecimenForm();
 
@@ -316,9 +351,10 @@ public class NewShopingCartAction extends BaseAction
 	}
 
 	/**
-	 * @param domainObjectName name of domain object
-	 * @return
-	 * @throws BizLogicException 
+	 * @param domainObjectName
+	 *            name of domain object
+	 * @return IBizLogic : IBizLogic
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private IBizLogic getBizLogic(String domainObjectName) throws BizLogicException
 	{
@@ -329,8 +365,8 @@ public class NewShopingCartAction extends BaseAction
 	}
 
 	/**
-	 * @param obj Specimen Object
-	 * @return
+	 * @param list : list
+	 * @return List < String > : list
 	 */
 	private List < String > createList(List list)
 	{
@@ -343,7 +379,8 @@ public class NewShopingCartAction extends BaseAction
 			{
 				if (obj1[j] instanceof Date)
 				{
-					cartList[j] = Utility.parseDateToString((Date) obj1[j], CommonServiceLocator
+					cartList[j] = Utility.parseDateToString((Date) obj1[j],
+							CommonServiceLocator
 							.getInstance().getDatePattern());
 				}
 				else
@@ -360,7 +397,8 @@ public class NewShopingCartAction extends BaseAction
 	}
 
 	/**
-	 * @param request object of HttpServletRequest
+	 * @param request
+	 *            : request
 	 */
 	private void addDifferentCartViewError(HttpServletRequest request)
 	{
@@ -372,19 +410,19 @@ public class NewShopingCartAction extends BaseAction
 		target = new String(edu.wustl.catissuecore.util.global.Constants.DIFFERENT_VIEW_IN_CART);
 	}
 
-	//	private int[] prepareSearchTarget()
-	//	{
-	//		List<Integer> target = new ArrayList<Integer>();
-	//		System.out.println();
-	//		target.add(new Integer(Constants.CLASS));
-	//		target.add(new Integer(Constants.ATTRIBUTE));
-	//		target.add(new Integer(Constants.PV));
-	//		int[] searchTarget = new int[target.size()];
-	//		
-	//		for (int i = 0; i < target.size(); i++)
-	//		{
-	//			searchTarget[i] = ((Integer) (target.get(i))).intValue();
-	//		}
-	//		return searchTarget;
-	//	}
+	// private int[] prepareSearchTarget()
+	// {
+	// List<Integer> target = new ArrayList<Integer>();
+	// System.out.println();
+	// target.add(new Integer(Constants.CLASS));
+	// target.add(new Integer(Constants.ATTRIBUTE));
+	// target.add(new Integer(Constants.PV));
+	// int[] searchTarget = new int[target.size()];
+	//
+	// for (int i = 0; i < target.size(); i++)
+	// {
+	// searchTarget[i] = ((Integer) (target.get(i))).intValue();
+	// }
+	// return searchTarget;
+	// }
 }

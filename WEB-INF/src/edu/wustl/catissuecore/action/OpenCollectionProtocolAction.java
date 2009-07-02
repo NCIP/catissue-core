@@ -15,16 +15,27 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
 /**
- * Forward to collection protocol main page 
+ * Forward to collection protocol main page.
  * @author pathik_sheth
  *
  */
 public class OpenCollectionProtocolAction extends BaseAction
 {
 
-	@Override
+
 	/**
-	 *Set  add/edit operation is being performed    
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

@@ -29,6 +29,20 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  */
 public class MultipleSpecimenFlexInitAction extends SecureAction
 {
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -79,7 +93,18 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 
 		return mapping.findForward("success");
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @param mode : mode
+	 * @param parentType : parentType
+	 * @param parentName : parentName
+	 * @param numberOfSpecimens : numberOfSpecimens
+	 * @param showParentSelection : showParentSelection
+	 * @param showLabel : showLabel
+	 * @param showBarcode : showBarcode
+	 * @param dateFormat : dateFormat
+	 */
 	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType,
 			String parentName, String numberOfSpecimens, String showParentSelection,
 			String showLabel, String showBarcode, String dateFormat)
@@ -95,7 +120,12 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
 
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @param parentType : parentType
+	 * @return String : String
+	 */
 	private String getParentName(HttpServletRequest request, String parentType)
 	{
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
@@ -126,7 +156,11 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		return "";
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @return String : String
+	 */
 	private String getNumberOfSpecimens(HttpServletRequest request)
 	{
 		String numberOfSpecimens = request.getParameter(Constants.NUMBER_OF_SPECIMENS);
@@ -138,8 +172,10 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		return numberOfSpecimens;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
+	/**
+	 *
+	 * @param form : form
+	 * @return String : String
 	 */
 
 	protected String getObjectId(AbstractActionForm form)

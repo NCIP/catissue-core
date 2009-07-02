@@ -31,13 +31,17 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
-/**Action for ordering specimen
- * @author deepti_phadnis
- * 
+
+/**
+ * @author renuka_bajpai
+ *
  */
 public class OrderSpecimenInitAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(OrderSpecimenInitAction.class);
 
 	/**
@@ -74,7 +78,7 @@ public class OrderSpecimenInitAction extends BaseAction
 			{
 				request.setAttribute("specimen", specimen);
 
-				//Setting specimen class list	
+				//Setting specimen class list
 				List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_SPECIMEN_CLASS, null);
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -136,7 +140,12 @@ public class OrderSpecimenInitAction extends BaseAction
 		}
 		return mapping.findForward(target);
 	}
-
+	/**
+	 *
+	 * @param setPV : setPV
+	 * @param specimenClassList : specimenClassList
+	 * @return Map : Map
+	 */
 	private Map getSubTypeMap(Set setPV, List specimenClassList)
 	{
 		Iterator itr = setPV.iterator();
@@ -168,7 +177,7 @@ public class OrderSpecimenInitAction extends BaseAction
 		return subTypeMap;
 	}
 
-	/** function for getting protocol name
+	/** function for getting protocol name.
 	 * @param request HttpServletRequest object
 	 * @param spec OrderSpecimenForm object
 	 * @param orderForm OrderForm object
@@ -196,7 +205,7 @@ public class OrderSpecimenInitAction extends BaseAction
 	/** function for getting data from database
 	 * @param request HttpServletRequest object
 	 * @return List of specimen objects
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
 
 }

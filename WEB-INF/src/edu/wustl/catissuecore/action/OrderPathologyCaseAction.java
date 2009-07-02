@@ -31,21 +31,25 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
 /**
- * Action for ordering specimen
- * 
+ * Action for ordering specimen.
+ *
  * @author deepti_phadnis
- * 
  */
 public class OrderPathologyCaseAction extends BaseAction
 {
 
 	/**
-	 * @param mapping ActionMapping object
-	 * @param form ActionForm object
-	 * @param request HttpServletRequest object
-	 * @param response HttpServletResponse object
-	 * @return ActionForward object 
-	 * @throws Exception object
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
+	 * @return ActionForward object
+	 * @throws Exception
+	 *             object
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -102,8 +106,10 @@ public class OrderPathologyCaseAction extends BaseAction
 	}
 
 	/**
-	 * function for setting the class and type 
-	 * @param request HttpServletRequest object 
+	 * function for setting the class and type.
+	 *
+	 * @param request
+	 *            HttpServletRequest object
 	 */
 	private void setClassAndTypeInList(HttpServletRequest request)
 	{
@@ -149,7 +155,7 @@ public class OrderPathologyCaseAction extends BaseAction
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
 
-		//specimenClassList.remove(1);
+		// specimenClassList.remove(1);
 
 		// sets the Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -160,13 +166,15 @@ public class OrderPathologyCaseAction extends BaseAction
 	}
 
 	/**
-	 * @param request HttpServletRequest object
-	 * @param pathology OrderPathologyCaseForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param pathology
+	 *            OrderPathologyCaseForm object
 	 */
 	private void setSiteAndStatus(HttpServletRequest request, OrderPathologyCaseForm pathology)
 	{
 
-		//NameValueBean bean = null;
+		// NameValueBean bean = null;
 		// Setting tissue site list
 		List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_TISSUE_SITE, null);
@@ -180,10 +188,14 @@ public class OrderPathologyCaseAction extends BaseAction
 	}
 
 	/**
-	 * @param request HttpServletRequest object
-	 * @param pathology OrderPathologyCaseForm object
-	 * @param orderForm OrderForm object
-	 * @throws Exception object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param pathology
+	 *            OrderPathologyCaseForm object
+	 * @param orderForm
+	 *            OrderForm object
+	 * @throws Exception
+	 *             object
 	 */
 	private void getProtocolName(HttpServletRequest request, OrderPathologyCaseForm pathology,
 			OrderForm orderForm) throws Exception

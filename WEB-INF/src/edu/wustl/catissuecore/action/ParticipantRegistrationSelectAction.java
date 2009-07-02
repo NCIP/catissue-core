@@ -42,9 +42,23 @@ import edu.wustl.common.util.logger.Logger;
 public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger
 			.getCommonLogger(ParticipantRegistrationSelectAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -109,7 +123,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			}
 
 			participantForm
-					.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistrationAppended);
+					.setCollectionProtocolRegistrationValues
+					(mapCollectionProtocolRegistrationAppended);
 			participantForm.setCollectionProtocolRegistrationValueCounter((cprCountOld + cprCount));
 			participantForm.setValues(mapParticipantMedicalIdentifierOld);
 			participantForm.setConsentResponseBeanCollection(consentResponseBeanCollectionOld);
@@ -126,7 +141,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			else
 			{
 				participantForm
-						.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistration);
+						.setCollectionProtocolRegistrationValues
+						(mapCollectionProtocolRegistration);
 				participantForm.setCollectionProtocolRegistrationValueCounter(cprCount);
 				participantForm.setValues(mapParticipantMedicalIdentifier);
 				participantForm.setConsentResponseBeanCollection(consentResponseBeanCollection);
@@ -142,8 +158,11 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		return forward;
 	}
 
-	/*
-	 * This method is for updating consent response 
+	/**
+	 *
+	 * @param consentResponseBeanCollection : consentResponseBeanCollection
+	 * @param consentResponseBeanCollectionOld : consentResponseBeanCollectionOld
+	 * @param consentResponseHashTableOld : consentResponseHashTableOld
 	 */
 	private void updateConsentResponse(Collection consentResponseBeanCollection,
 			Collection consentResponseBeanCollectionOld, Map consentResponseHashTableOld)
@@ -165,8 +184,11 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		}
 	}
 
-	/*
-	 * Checking that given collection protocol is aleady exist in consentResponseBeanCollection
+	/**
+	 *
+	 * @param consentResponseBeanCollection : consentResponseBeanCollection
+	 * @param collectionProtocolId : collectionProtocolId
+	 * @return boolean : boolean
 	 */
 	private boolean isAlreadyExist(Collection consentResponseBeanCollection,
 			long collectionProtocolId)
@@ -185,9 +207,10 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		return false;
 	}
 
-	/*
-	 * This method will remove invalid entries from the Map
-	 * //Abhishek mehta
+	/**
+	 *
+	 * @param participantMedicalIdentifier : participantMedicalIdentifier
+	 * @return Map : Map
 	 */
 	private Map participantMedicalIdentifierMap(Map participantMedicalIdentifier)
 	{
@@ -222,9 +245,14 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		return participantMedicalIdentifier;
 	}
 
-	/*
-	 * This method is for appending collection protocol registration for given participant.
-	 * //Abhishek mehta
+	/**
+	 *
+	 * @param mapCollectionProtocolRegistration : mapCollectionProtocolRegistration
+	 * @param cprCount : cprCount
+	 * @param mapCollectionProtocolRegistrationOld : mapCollectionProtocolRegistrationOld
+	 * @param cprCountOld : cprCountOld
+	 * @return Map : Map
+	 * @throws Exception : Exception
 	 */
 	private Map appendCollectionProtocolRegistrations(Map mapCollectionProtocolRegistration,
 			int cprCount, Map mapCollectionProtocolRegistrationOld, int cprCountOld)
@@ -282,14 +310,16 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			mapCollectionProtocolRegistrationOld.put(isActiveNew, status);
 		}
 
-		mapCollectionProtocolRegistrationOld = participantCollectionProtocolRegistration(mapCollectionProtocolRegistrationOld);
+		mapCollectionProtocolRegistrationOld =
+			participantCollectionProtocolRegistration(mapCollectionProtocolRegistrationOld);
 
 		return mapCollectionProtocolRegistrationOld;
 	}
 
-	/*
-	 * This method will remove invalid entries from the Map
-	 * //Abhishek mehta
+	/**
+	 *
+	 * @param collectionProtocolRegistrationValues : collectionProtocolRegistrationValues
+	 * @return Map : Map
 	 */
 	private Map participantCollectionProtocolRegistration(Map collectionProtocolRegistrationValues)
 	{

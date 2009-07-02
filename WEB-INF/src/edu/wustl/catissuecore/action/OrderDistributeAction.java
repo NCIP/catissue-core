@@ -19,18 +19,22 @@ import edu.wustl.common.action.BaseAction;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class OrderDistributeAction extends BaseAction
 {
 
 	/**
-	 * @param mapping ActionMapping object
-	 * @param form ActionForm object
-	 * @param request HttpServletRequest object
-	 * @param response HttpServletResponse object
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
 	 * @return ActionForward object
-	 * @throws Exception object
+	 * @throws Exception
+	 *             object
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

@@ -17,12 +17,26 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.dao.exception.DAOException;
 
 /**
- * This class sets the link values for the Help.jsp page tab/icons
+ * This class sets the link values for the Help.jsp page tab/icons.
  * @author sagar_baldwa
  */
 public class RedirectToHelpAction extends Action
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @throws DAOException : DAOException
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, DAOException

@@ -16,7 +16,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.dao.JDBCDAO;
 
 /**
- * 
+ *
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright: (c) Washington University, School of Medicine 2005</p>
@@ -33,6 +33,7 @@ public class LogoutAction extends BaseAction
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

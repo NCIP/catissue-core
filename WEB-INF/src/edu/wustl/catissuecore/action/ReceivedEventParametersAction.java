@@ -26,7 +26,11 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
-
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
@@ -35,7 +39,8 @@ public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;
-		ReceivedEventParametersForm receivedEventParametersForm = (ReceivedEventParametersForm) eventParametersForm;
+		ReceivedEventParametersForm receivedEventParametersForm =
+			(ReceivedEventParametersForm) eventParametersForm;
 		if (receivedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.RECEIVED_EVENT_PARAMETERS_EDIT_ACTION;

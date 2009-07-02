@@ -24,8 +24,25 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class MultipleSpecimenViewAction extends BaseAction
 {
+	/**
+	 * logger.
+	 */
 
 	private transient Logger logger = Logger.getCommonLogger(MultipleSpecimenViewAction.class);
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -36,7 +53,8 @@ public class MultipleSpecimenViewAction extends BaseAction
 		HttpSession session = request.getSession();
 		try
 		{
-			LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap = new LinkedHashMap < String , CollectionProtocolEventBean >();
+			LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap =
+				new LinkedHashMap < String , CollectionProtocolEventBean >();
 			CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 			String pageOf = request.getParameter(Constants.PAGE_OF);
 			eventBean.setUniqueIdentifier("EventID-1");

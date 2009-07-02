@@ -40,23 +40,32 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
- * This class is for Print Action
+ * This class is for Print Action.
+ *
  * @author falguni_sachde
  */
 public class PrintAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(PrintAction.class);
 
 	/**
 	 * Overrides the execute method of Action class.
-	 * 
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws IOException I/O exception
-	 * @throws ServletException servlet exception
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException
+	 *             I/O exception
+	 * @throws ServletException
+	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -83,7 +92,7 @@ public class PrintAction extends Action
 			gov.nih.nci.security.authorization.domainobjects.User objUser = getUserObject(request,
 					objBean);
 			HashMap forwardToPrintMap = (HashMap) request.getAttribute("forwardToPrintMap");
-			//SCG Label printing
+			// SCG Label printing
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& forwardToPrintMap.get("specimenCollectionGroupId") != null)
 			{
@@ -122,8 +131,9 @@ public class PrintAction extends Action
 				setStatusMessage(printStauts, request);
 
 			}
-			//For Specimen 
-			//Check for Specimen type of object.Retrieve object based on Id and call printerimpl class
+			// For Specimen
+			// Check for Specimen type of object.Retrieve object based on Id and
+			// call printerimpl class
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& forwardToPrintMap.get("specimenId") != null)
 			{
@@ -134,7 +144,8 @@ public class PrintAction extends Action
 				try
 				{
 					dao.openSession(null);
-					Specimen objSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+					Specimen objSpecimen = (Specimen) dao.retrieveById
+					(Specimen.class.getName(),
 							new Long(specimenId));
 
 					LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
@@ -154,9 +165,10 @@ public class PrintAction extends Action
 				setStatusMessage(printStauts, request);
 			}
 
-			//nextforwardTo = printAliquotLabel(form, request, nextforwardTo,objBean);
-			//nextforwardTo - coming null now CPQueryPrintSpecimenEdit
-			//For multiple specimen page
+			// nextforwardTo = printAliquotLabel(form, request,
+			// nextforwardTo,objBean);
+			// nextforwardTo - coming null now CPQueryPrintSpecimenEdit
+			// For multiple specimen page
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& request.getAttribute("printMultiple") != null
 					&& request.getAttribute("printMultiple").equals("1"))
@@ -181,7 +193,7 @@ public class PrintAction extends Action
 				else
 					nextforwardTo = Constants.SUCCESS;
 			}
-			//		    	For Anti. specimen page
+			// For Anti. specimen page
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& request.getAttribute("AntiSpecimen") != null
 					&& request.getAttribute("AntiSpecimen").equals("1"))
@@ -203,7 +215,7 @@ public class PrintAction extends Action
 
 				nextforwardTo = "printAntiSuccess";
 			}
-			//added for Storage Container Printing 
+			// added for Storage Container Printing
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& forwardToPrintMap.get("StorageContainerObjID") != null)
 			{
@@ -214,7 +226,9 @@ public class PrintAction extends Action
 				LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("storagecontainer");
 				if (similarContainerList == null || similarContainerList.size() == 0)
 				{
-					String containerId = (String) forwardToPrintMap.get("StorageContainerObjID");
+					String containerId =
+						(String)
+						forwardToPrintMap.get("StorageContainerObjID");
 					if (containerId != null)
 					{
 						NameValueBean bean = new NameValueBean(containerId, containerId);
@@ -225,7 +239,8 @@ public class PrintAction extends Action
 				try
 				{
 					dao.openSession(null);
-					List < AbstractDomainObject > containerList = new ArrayList < AbstractDomainObject >();
+					List < AbstractDomainObject > containerList =
+						new ArrayList < AbstractDomainObject >();
 					for (int i = 0; i < similarContainerList.size(); i++)
 					{
 						NameValueBean bean = (NameValueBean) similarContainerList.get(i);
@@ -255,8 +270,8 @@ public class PrintAction extends Action
 		}
 		catch (Exception e)
 		{
-			//Any other exception
-			//e.printStackTrace();
+			// Any other exception
+			// e.printStackTrace();
 			logger.debug(e.getMessage(), e);
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
@@ -272,13 +287,13 @@ public class PrintAction extends Action
 	}
 
 	/**
-	 * @param form
-	 * @param request
-	 * @param nextforwardTo
-	 * @param strIpAddress
-	 * @param objUser
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param form : form
+	 * @param request : request
+	 * @param nextforwardTo : nextforwardTo
+	 * @param objBean : objBean
+	 * @return String : String
+	 * @throws Exception : Exception
 	 */
 	public String printAliquotLabel(ActionForm form, HttpServletRequest request,
 			String nextforwardTo, SessionDataBean objBean) throws Exception
@@ -323,14 +338,14 @@ public class PrintAction extends Action
 	}
 
 	/**
-	 * @param printStauts
-	 * @param request
+	 * @param printStauts : printStauts
+	 * @param request : request
 	 */
 	private void setStatusMessage(boolean printStauts, HttpServletRequest request)
 	{
 		if (printStauts)
 		{
-			//printservice returns true ,Printed Successfully
+			// printservice returns true ,Printed Successfully
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
 			{
@@ -343,7 +358,8 @@ public class PrintAction extends Action
 		else
 		{
 
-			//If any case print service return false ,it means error while printing.
+			// If any case print service return false ,it means error while
+			// printing.
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
 			{
@@ -355,7 +371,13 @@ public class PrintAction extends Action
 		}
 
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @param objBean : objBean
+	 * @return User : User
+	 * @throws SMException : SMException
+	 */
 	private User getUserObject(HttpServletRequest request, SessionDataBean objBean)
 			throws SMException
 	{

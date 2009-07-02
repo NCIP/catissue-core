@@ -23,7 +23,20 @@ import edu.wustl.common.util.global.Status;
  */
 public class OpenStorageContainerAction extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -104,8 +117,10 @@ public class OpenStorageContainerAction extends BaseAction
 		  storageContainerBean.setCheckedButton(storageContainerForm.getCheckedButton());
 		  storageContainerBean.setCollectionIds(storageContainerForm.getCollectionIds());
 		  storageContainerBean.setContainerName(storageContainerForm.getContainerName());
-		  storageContainerBean.setHoldsSpecimenArrTypeIds(storageContainerForm.getHoldsSpecimenArrTypeIds());
-		  storageContainerBean.setHoldsSpecimenClassTypes(storageContainerForm.getHoldsSpecimenClassTypes());
+		  storageContainerBean.setHoldsSpecimenArrTypeIds
+		  (storageContainerForm.getHoldsSpecimenArrTypeIds());
+		  storageContainerBean.setHoldsSpecimenClassTypes(storageContainerForm.
+		  getHoldsSpecimenClassTypes());
 		  storageContainerBean.setHoldsStorageTypeIds(storageContainerForm.getHoldsStorageTypeIds());
 		  storageContainerBean.setOneDimensionCapacity(storageContainerForm.getOneDimensionCapacity());
 		  storageContainerBean.setTwoDimensionCapacity(storageContainerForm.getTwoDimensionCapacity());

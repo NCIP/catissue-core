@@ -1,6 +1,7 @@
 /**
  * <p>Title: MolecularSpecimenReviewParametersAction Class</p>
- * <p>Description:	This class initializes the fields in the MolecularSpecimenReviewParameters Add/Edit webpage.</p>
+ * <p>Description:	This class initializes the fields in the
+ *  MolecularSpecimenReviewParameters Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -22,7 +23,7 @@ import edu.wustl.common.factory.IFactory;
 
 /**
  * @author mandar_deshmukh
- * 
+ *
  * This class initializes the fields in the MolecularSpecimenReviewParameters
  * Add/Edit webpage.
  */
@@ -31,7 +32,8 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 
 	/**
 	 * @param request object of HttpServletRequest
-	 * @throws Exception generic exception
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
@@ -41,7 +43,8 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 		String isRNA = null;
 
 		boolean readOnlyValue;
-		MolecularSpecimenReviewParametersForm molecularSpecimenReviewParametersForm = (MolecularSpecimenReviewParametersForm) eventParametersForm;
+		MolecularSpecimenReviewParametersForm molecularSpecimenReviewParametersForm =
+			(MolecularSpecimenReviewParametersForm) eventParametersForm;
 		if (molecularSpecimenReviewParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
@@ -59,16 +62,17 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 		request.setAttribute("isRNA", isRNA);
 		request.setAttribute("changeAction", changeAction);
 		request.setAttribute("formName", formName);
-		/** 
+		/**
 		* Sets the isRNA attribute. It is used to display "Ratio 28S To 18S" field
-		* only for Specimen of Type = "Molecular" and subType = "RNA". 
+		* only for Specimen of Type = "Molecular" and subType = "RNA".
 		*/
 		String specimenID = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
 		if (((request.getAttribute("isRNA") != null) && (request.getAttribute("isRNA")
 				.equals("true")))
 				|| ((request.getAttribute("molecularSpecimenReviewParametersForm") != null)
-						&& !(molecularSpecimenReviewParametersForm.getIsRNA() == null) && (molecularSpecimenReviewParametersForm
+						&& !(molecularSpecimenReviewParametersForm.getIsRNA() == null)
+						&& (molecularSpecimenReviewParametersForm
 						.getIsRNA().equals("true"))))
 		{
 			molecularSpecimenReviewParametersForm.setCheckRNA("true");

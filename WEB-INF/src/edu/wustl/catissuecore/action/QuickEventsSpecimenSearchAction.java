@@ -1,6 +1,7 @@
 /**
  * <p>Title: QuickEventsSpecimenSearchAction Class</p>
- * <p>Description:  This class validates the entries from the Quickevents webpage and directs the flow accordingly. </p>
+ * <p>Description:  This class validates the entries from the
+ *  Quickevents webpage and directs the flow accordingly. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -36,7 +37,8 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * <p>Title: QuickEventsSpecimenSearchAction Class</p>
- * <p>Description:  This class validates the entries from the Quickevents webpage and directs the flow accordingly. </p>
+ * <p>Description:  This class validates the entries from the
+ *  Quickevents webpage and directs the flow accordingly. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -48,9 +50,19 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Redirects the user to either the events page or the QuickEvents webpage based on the condition.
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -71,7 +83,8 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 			if (qEForm.getCheckedButton().equals("1"))
 			{
 				specimenLabel = qEForm.getSpecimenLabel();
-				specimenFound = isExistingSpecimen(Constants.SYSTEM_LABEL, specimenLabel, bizLogic);
+				specimenFound = isExistingSpecimen
+				(Constants.SYSTEM_LABEL, specimenLabel, bizLogic);
 				errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
 			}
 			else if (qEForm.getCheckedButton().equals("2"))
@@ -109,7 +122,12 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 		return mapping.findForward(pageOf);
 	}
 
-	//This method validates the formbean.
+	/**
+	 * This method validates the formbean.
+	 * @param request : request
+	 * @param form : form
+	 * @return String : String
+	 */
 	private String validate(HttpServletRequest request, QuickEventsForm form)
 	{
 		Validator validator = new Validator();
@@ -151,7 +169,14 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 		saveErrors(request, errors);
 		return pageOf;
 	}
-
+	/**
+	 *
+	 * @param sourceObject : sourceObject
+	 * @param value : value
+	 * @param bizlogic : bizlogic
+	 * @return String : String
+	 * @throws Exception : Exception
+	 */
 	private String isExistingSpecimen(String sourceObject, String value, IBizLogic bizlogic)
 			throws Exception
 	{
@@ -159,7 +184,8 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString()}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+		String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString()};
+		//"storageContainer."+Constants.SYSTEM_IDENTIFIER
 		String[] whereColumnCondition = {"=", "!="};
 		Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString()};
 		String joinCondition = Constants.AND_JOIN_CONDITION;

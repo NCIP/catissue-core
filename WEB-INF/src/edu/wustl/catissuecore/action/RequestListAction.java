@@ -1,11 +1,15 @@
 /**
- * <p>Title: RequestListAction Class>
- * <p>Description:	This class initializes the fields of RequestListAdministratorView.jsp Page</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: RequestListAction Class>
+ * <p>
+ * Description: This class initializes the fields of
+ * RequestListAdministratorView.jsp Page
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ashish Gupta
- * @version 1.00
- * Created on Oct 04,2006
+ * @version 1.00 Created on Oct 04,2006
  */
 
 package edu.wustl.catissuecore.action;
@@ -33,19 +37,29 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Validator;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class RequestListAction extends SecureAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in RequestListAdministratorView.jsp Page.
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
+	 * Overrides the execute method of Action class. Initializes the various
+	 * fields in RequestListAdministratorView.jsp Page.
+	 *
+	 * @param mapping
+	 *            object
+	 * @param form
+	 *            object
+	 * @param request
+	 *            object
+	 * @param response
+	 *            object
 	 * @return ActionForward object
-	 * @throws Exception object
-	 * */
+	 * @throws Exception
+	 *             object
+	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -53,8 +67,8 @@ public class RequestListAction extends SecureAction
 		List requestViewBeanList = null, requestListFromDB = null, showList = null;
 		RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
 
-		//For Pagenation	
-		//Gets the session of this request.
+		// For Pagenation
+		// Gets the session of this request.
 		HttpSession session = request.getSession();
 		String pageNumStr = request.getParameter(Constants.PAGE_NUMBER);
 		int pageNum = 0;
@@ -63,9 +77,9 @@ public class RequestListAction extends SecureAction
 			pageNum = Integer.parseInt(pageNumStr);
 			request.setAttribute(Constants.PAGE_NUMBER, pageNumStr);
 		}
-		//The start index in the list of users to be approved/rejected.
+		// The start index in the list of users to be approved/rejected.
 		int startIndex = Constants.ZERO;
-		//The end index in the list of users to be approved/rejected.
+		// The end index in the list of users to be approved/rejected.
 		int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;
 		SessionDataBean sessionData = getSessionData(request);
 
@@ -91,7 +105,7 @@ public class RequestListAction extends SecureAction
 					requestViewBean.setSerialNo(serialNo);
 					serialNo++;
 				}
-				//Setting the number of new and pending requests
+				// Setting the number of new and pending requests
 				setNumberOfNewAndPendingRequests(requestListForm, requestViewBeanList);
 				session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(totalResults));
 			}
@@ -99,17 +113,17 @@ public class RequestListAction extends SecureAction
 			{
 				endIndex = requestViewBeanList.size();
 			}
-			//Save the list of users in the sesson.
+			// Save the list of users in the sesson.
 			session.setAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST, requestViewBeanList);
 		}
 		else
 		{
-			//Get the list of users from the session.
+			// Get the list of users from the session.
 			requestViewBeanList = (List) session
 					.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
-			//Set the start index of the users in the list.
+			// Set the start index of the users in the list.
 			startIndex = (pageNum - 1) * Constants.NUMBER_RESULTS_PER_PAGE;
-			//Set the end index of the users in the list.
+			// Set the end index of the users in the list.
 			endIndex = startIndex + Constants.NUMBER_RESULTS_PER_PAGE;
 			if (endIndex > requestViewBeanList.size())
 			{
@@ -118,9 +132,9 @@ public class RequestListAction extends SecureAction
 			// Setting the number of new and pending requests
 			setNumberOfRequests(requestListForm, sessionData.getUserName(), sessionData.getUserId());
 		}
-		//Gets the list of users to be shown on the page.
+		// Gets the list of users to be shown on the page.
 		showList = requestViewBeanList.subList(startIndex, endIndex);
-		//Saves the list of users to be shown on the page in the request.
+		// Saves the list of users to be shown on the page in the request.
 		request.setAttribute("RequestList", showList);
 		// OrderDetails Status to display in drop down
 		List requestStatusListToDisplay = CDEManager.getCDEManager().getPermissibleValueList(
@@ -131,28 +145,32 @@ public class RequestListAction extends SecureAction
 
 		return mapping.findForward("success");
 	}
-
 	/**
 	 * @param request
 	 * @return
 	 */
 	/*
-		private List getUserSitesWithDistributionPrev(HttpServletRequest request,Boolean isSuperAdmin)
-		{
-			SessionDataBean sessionData = getSessionData(request);
-			System.out.println("");
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionData.getUserName());
-			
-			OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			List siteIds = (List)orderBizLogic.getRelatedSiteIds(sessionData.getUserId(),privilegeCache,isSuperAdmin);
-			
-	    	return siteIds;
-		}*/
+	 * private List getUserSitesWithDistributionPrev(HttpServletRequest
+	 * request,Boolean isSuperAdmin) { SessionDataBean sessionData =
+	 * getSessionData(request); System.out.println(""); PrivilegeManager
+	 * privilegeManager = PrivilegeManager.getInstance(); PrivilegeCache
+	 * privilegeCache =
+	 * privilegeManager.getPrivilegeCache(sessionData.getUserName());
+	 * OrderBizLogic orderBizLogic =
+	 * (OrderBizLogic)BizLogicFactory.getInstance()
+	 * .getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID); List siteIds =
+	 * (
+	 * List)orderBizLogic.getRelatedSiteIds(sessionData.getUserId(),privilegeCache
+	 * ,isSuperAdmin); return siteIds; }
+	 */
+
 
 	/**
-	 * @param requestListFilterationForm object
-	 * @throws BizLogicException 
+	 *
+	 * @param requestListFilterationForm : requestListFilterationForm
+	 * @param userName : userName
+	 * @param userId : userId
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void setNumberOfRequests(RequestListFilterationForm requestListFilterationForm,
 			String userName, Long userId) throws BizLogicException
@@ -166,6 +184,12 @@ public class RequestListAction extends SecureAction
 
 	}
 
+	/**
+	 * @param requestListFilterationForm
+	 *            : requestListFilterationForm
+	 * @param requestViewBeanList
+	 *            : requestViewBeanList
+	 */
 	private void setNumberOfNewAndPendingRequests(
 			RequestListFilterationForm requestListFilterationForm, List requestViewBeanList)
 	{

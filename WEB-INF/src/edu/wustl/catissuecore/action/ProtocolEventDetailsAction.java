@@ -24,11 +24,25 @@ import edu.wustl.common.cde.CDEManager;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class ProtocolEventDetailsAction extends BaseAction
 {
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -36,7 +50,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		HttpSession session = request.getSession();
 
-		//Event Key when flow is form Specimen Requirement Page
+		// Event Key when flow is form Specimen Requirement Page
 		String key = (String) request.getParameter(Constants.EVENT_KEY);
 		String eventKey = null;
 		if (key == null)
@@ -81,10 +95,10 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setCollectionPointLabel("");
 			protocolEventDetailsForm.setClinicalStatus((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
-			//removed as value not in cache  and chnaged default to empty
+			// removed as value not in cache and chnaged default to empty
 			protocolEventDetailsForm.setClinicalDiagnosis((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
-			//request.setAttribute("clinicalDiagnosis","");
+			// request.setAttribute("clinicalDiagnosis","");
 			protocolEventDetailsForm
 					.setCollectionEventCollectionProcedure((String) DefaultValueManager
 							.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
@@ -104,22 +118,25 @@ public class ProtocolEventDetailsAction extends BaseAction
 		request.setAttribute("clinicalDiagnosis", protocolEventDetailsForm.getClinicalDiagnosis());
 		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CLINICAL_STATUS, null);
-		//removed as value not in cache 
-		//List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
+		// removed as value not in cache
+		// List clinicalDiagnosisList =
+		// CDEManager.getCDEManager().getPermissibleValueList
+		// (Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
 		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-		//removed as value not in cache  and chnaged default to empty
-		//request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+		// removed as value not in cache and chnaged default to empty
+		// request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST,
+		// clinicalDiagnosisList);
 
-		//setting the procedure
+		// setting the procedure
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
-		//set the container lists
+		// set the container lists
 		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CONTAINER, null);
 		request.setAttribute(Constants.CONTAINER_LIST, containerList);
 
-		//setting the quality for received events
+		// setting the quality for received events
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
@@ -134,10 +151,12 @@ public class ProtocolEventDetailsAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * @param mapping ActionMapping
-	 * @param protocolEventDetailsForm protocolEventDetails Form
-	 * @param request HttpServletRequest
+	 * @param mapping
+	 *            ActionMapping
+	 * @param protocolEventDetailsForm
+	 *            protocolEventDetails Form
+	 * @param request
+	 *            HttpServletRequest
 	 */
 	private void initSpecimenrequirementForm(ActionMapping mapping,
 			ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)
@@ -146,17 +165,18 @@ public class ProtocolEventDetailsAction extends BaseAction
 		Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
-		//If flow is from Specimen Requirement page save button.
+		// If flow is from Specimen Requirement page save button.
 		String collectionProtocolEventKey = (String) request.getAttribute(Constants.EVENT_KEY);
 
 		if (collectionProtocolEventKey == null)
 		{
-			//If flow is from Specimen Tree View if Event Node is clicked to open Event page in Edit mode.
+			// If flow is from Specimen Tree View if Event Node is clicked to
+			// open Event page in Edit mode.
 			collectionProtocolEventKey = (String) request.getParameter(Constants.EVENT_KEY);
 		}
 		if (collectionProtocolEventKey == null)
 		{
-			//If flow is when user Clicks Define Event button.
+			// If flow is when user Clicks Define Event button.
 			collectionProtocolEventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
 		}
 		StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
@@ -164,7 +184,8 @@ public class ProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventKey = st.nextToken();
 		}
-		CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+		CollectionProtocolEventBean collectionProtocolEventBean =
+			(CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(collectionProtocolEventKey);
 		if (new Long(collectionProtocolEventBean.getId()) != null
 				&& collectionProtocolEventBean.getId() > 0)

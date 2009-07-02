@@ -1,11 +1,15 @@
 /**
- * <p>Title: ForgotPasswordSearchAction Class>
- * <p>Description:	This Class is used to retrieve the password of the user and mail it to his email address.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ForgotPasswordSearchAction Class>
+ * <p>
+ * Description: This Class is used to retrieve the password of the user and mail
+ * it to his email address.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Gautam Shetty
- * @version 1.00
- * Created on Apr 19, 2005
+ * @version 1.00 Created on Apr 19, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -31,19 +35,34 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This Class is used to retrieve the password of the user and mail it to his email address.
+ * This Class is used to retrieve the password of the user and mail it to his
+ * email address.
+ *
  * @author gautam_shetty
  */
 public class ForgotPasswordSearchAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ForgotPasswordSearchAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Adds the user information in the database.
-	 *
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException
+	 *             IOException
+	 * @throws ServletException
+	 *             ServletException
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -57,8 +76,9 @@ public class ForgotPasswordSearchAction extends Action
 			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm
 					.getFormId());
 
-			//Retrieves and sends the password to the user whose email address is passed 
-			//else returns the error key in case of an error.
+			// Retrieves and sends the password to the user whose email address
+			// is passed
+			// else returns the error key in case of an error.
 			SessionDataBean sessionData = new SessionDataBean();
 			sessionData.setUserName(forgotPasswordForm.getEmailAddress());
 			String message = userBizLogic.sendForgotPassword(forgotPasswordForm.getEmailAddress(),

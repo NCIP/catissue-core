@@ -1,8 +1,13 @@
 /**
- * <p>Title: ParticipantLookupAction Class>
- * <p>Description:	This Action Class invokes the Participant Lookup Algorithm and gets matching participants</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ParticipantLookupAction Class>
+ * <p>
+ * Description: This Action Class invokes the Participant Lookup Algorithm and
+ * gets matching participants
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author vaishali_khandelwal
  * @Created on May 19, 2006
  */
@@ -47,23 +52,29 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class ParticipantLookupAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ParticipantLookupAction.class);
 
 	/**
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
 	 * @return value for ActionForward object
 	 */
 	@Override
@@ -82,7 +93,7 @@ public class ParticipantLookupAction extends BaseAction
 		AbstractDomainObject abstractDomain = factoryObj.getDomainObject(abstractForm.getFormId(),
 				abstractForm);
 		Participant participant = (Participant) abstractDomain;
-		// 11968 S		
+		// 11968 S
 		if (!isAuthorized(mapping, request, participant))
 		{
 			ActionErrors errors = new ActionErrors();
@@ -93,8 +104,9 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		// 11968 E
 		logger.debug("Participant Id :" + request.getParameter("participantId"));
-		//checks weather participant is selected from the list and so forwarding to next action instead of participant lookup.
-		//Abhishek Mehta
+		// checks weather participant is selected from the list and so
+		// forwarding to next action instead of participant lookup.
+		// Abhishek Mehta
 		if (request.getAttribute("continueLookup") == null)
 		{
 			if (request.getParameter("participantId") != null
@@ -123,13 +135,14 @@ public class ParticipantLookupAction extends BaseAction
 				messages = new ActionMessages();
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						"participant.lookup.success",
-						"Submit was not successful because some matching participants found."));
-				//Creating the column headings for Data Grid
+						"Submit was not successful because some matching" +
+						" participants found."));
+				// Creating the column headings for Data Grid
 				List columnList = getColumnHeadingList(bizlogic, partMRNColName);
 				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 				request.setAttribute(Constants.PARTICIPANT_MRN_COL_NAME, partMRNColName);
 
-				//Getitng the Participant List in Data Grid Format
+				// Getitng the Participant List in Data Grid Format
 				List participantDisplayList = getParticipantDisplayList(matchingParticipantList,
 						bizlogic);
 				request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST,
@@ -137,7 +150,7 @@ public class ParticipantLookupAction extends BaseAction
 
 				target = Constants.PARTICIPANT_LOOKUP_SUCCESS;
 			}
-			//	if no participant match found then add the participant in system
+			// if no participant match found then add the participant in system
 			else
 			{
 				target = Constants.PARTICIPANT_ADD_FORWARD;
@@ -148,9 +161,10 @@ public class ParticipantLookupAction extends BaseAction
 			target = Constants.PARTICIPANT_ADD_FORWARD;
 		}
 
-		//if any matching participants are there then show the participants otherwise add the participant
+		// if any matching participants are there then show the participants
+		// otherwise add the participant
 
-		//setting the Submitted_for and Forward_to variable in request
+		// setting the Submitted_for and Forward_to variable in request
 		if (request.getParameter(Constants.SUBMITTED_FOR) != null
 				&& !request.getParameter(Constants.SUBMITTED_FOR).equals(""))
 		{
@@ -177,6 +191,13 @@ public class ParticipantLookupAction extends BaseAction
 	}
 
 	// 11968 S
+	/**
+	 *
+	 * @param mapping : mapping
+	 * @param request : request
+	 * @param participant : participant
+	 * @return boolean : boolean
+	 */
 	private boolean isAuthorized(ActionMapping mapping, HttpServletRequest request,
 			Participant participant)
 	{
@@ -208,13 +229,18 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		return authorizedFlag;
 	}
-
 	// 11968 E
+	/**
+	 *
+	 * @param participant : participant
+	 * @return boolean : boolean
+	 */
 
 	private boolean isCallToLookupLogicNeeded(Participant participant)
 	{
 		if ((participant.getFirstName() == null || participant.getFirstName().length() == 0)
-				&& (participant.getMiddleName() == null || participant.getMiddleName().length() == 0)
+				&& (participant.getMiddleName() == null ||
+						participant.getMiddleName().length() == 0)
 				&& (participant.getLastName() == null || participant.getLastName().length() == 0)
 				&& (participant.getSocialSecurityNumber() == null || participant
 						.getSocialSecurityNumber().length() == 0)
@@ -228,15 +254,20 @@ public class ParticipantLookupAction extends BaseAction
 	}
 
 	/**
-	 * This Function creates the Column Headings for Data Grid
-	 * @param bizlogic instance of ParticipantBizLogic
-	 * @throws Exception generic exception
+	 * This Function creates the Column Headings for Data Grid.
+	 *
+	 * @param bizlogic
+	 *            instance of ParticipantBizLogic
+	 * @param partMRNColName : partMRNColName
+	 * @throws Exception
+	 *             generic exception
 	 * @return List Column List
 	 */
 	private List getColumnHeadingList(ParticipantBizLogic bizlogic, StringBuffer partMRNColName)
 			throws Exception
 	{
-		//Creating the column list which is used in Data grid to display column headings
+		// Creating the column list which is used in Data grid to display column
+		// headings
 		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_MEDICAL_RECORD_NO,
 				Constants.PARTICIPANT_GENDER, Constants.PARTICIPANT_BIRTH_DATE,
 				Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER, Constants.PARTICIPANT_DEATH_DATE,
@@ -251,16 +282,17 @@ public class ParticipantLookupAction extends BaseAction
 		List displayList = bizlogic.getColumnList(columnList, partMRNColName);
 
 		displayList.add(0, Constants.PARTICIPANT_NAME_HEADERLABEL);
-		//	displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
+		// displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
 		return displayList;
 	}
 
 	/**
-	 * This functions creates Particpant List with each participant informaton  with the match probablity
-	 * @param participantList list of participant
-	 * @param bizLogic : ParticipantBizLogic
-	 * @return List of Participant Information  List
-	 * @throws DAOException : db exception
+	 * 	 * This functions creates Particpant List with each participant informaton
+		 * with the match probablity.
+	 * @param participantList : participantList
+	 * @param bizLogic : bizLogic
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List getParticipantDisplayList(List participantList, ParticipantBizLogic bizLogic)
 			throws BizLogicException
@@ -278,11 +310,11 @@ public class ParticipantLookupAction extends BaseAction
 	}
 
 	/**
-	 *  To get participant info
-	 * @param bizLogic :ParticipantBizLogic
-	 * @param participant :Participant
-	 * @return List of particcipant info
-	 * @throws DAOException :db exception
+	 *
+	 * @param bizLogic : bizLogic
+	 * @param participant : participant
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List getParticipantInfo(ParticipantBizLogic bizLogic, Participant participant)
 			throws BizLogicException
@@ -304,31 +336,31 @@ public class ParticipantLookupAction extends BaseAction
 		participantInfo.add(Utility.toString(mrn));
 		participantInfo.add(Utility.toString(participant.getGender()));
 
-		//participantInfo.add(Utility.toString(participant.getBirthDate()));
-		// Added by Geeta  for date format change.
+		// participantInfo.add(Utility.toString(participant.getBirthDate()));
+		// Added by Geeta for date format change.
 		participantInfo.add(Utility.parseDateToString(participant.getBirthDate(),
 				CommonServiceLocator.getInstance().getDatePattern()));
-		// End by geeta  
+		// End by geeta
 		if (!Variables.isSSNRemove)
 		{
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
 		}
-		//participantInfo.add(Utility.toString(participant.getDeathDate()));
-		// Added by Geeta  for date format change.
+		// participantInfo.add(Utility.toString(participant.getDeathDate()));
+		// Added by Geeta for date format change.
 		participantInfo.add(Utility.parseDateToString(participant.getDeathDate(),
 				CommonServiceLocator.getInstance().getDatePattern()));
-		//End by Geeta
+		// End by Geeta
 		participantInfo.add(Utility.toString(participant.getVitalStatus()));
 		participantInfo.add(participant.getId());
 		return participantInfo;
 	}
 
 	/**
-	 * Method to get MRNs related to a participant.
-	 * @param bizLogic  ParticipantBizLogic
-	 * @param participant :participant
-	 * @return String
-	 * @throws DAOException : db exception
+	 *
+	 * @param bizLogic : bizLogic
+	 * @param participant : participant
+	 * @return String : String
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private String getParticipantMrnDisplay(ParticipantBizLogic bizLogic, Participant participant)
 			throws BizLogicException

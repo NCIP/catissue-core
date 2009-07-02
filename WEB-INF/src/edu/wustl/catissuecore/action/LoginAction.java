@@ -34,28 +34,45 @@ import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
- * 
- *<p>Title: </p>
- *<p>Description:  </p>
- *<p>Copyright: (c) Washington University, School of Medicine 2005</p>
- *<p>Company: Washington University, School of Medicine, St. Louis.</p>
- *@author Aarti Sharma
+ * <p>
+ * Title:
+ * </p>
+ *<p>
+ * Description:
+ * </p>
+ *<p>
+ * Copyright: (c) Washington University, School of Medicine 2005
+ * </p>
+ *<p>
+ * Company: Washington University, School of Medicine, St. Louis.
+ * </p>
+ *
+ * @author Aarti Sharma
  *@version 1.0
  */
 public class LoginAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(LoginAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various drop down fields in Institute.jsp Page.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws IOException I/O exception
-	 * @throws ServletException servlet exception
+	 * Overrides the execute method of Action class. Initializes the various
+	 * drop down fields in Institute.jsp Page.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException
+	 *             I/O exception
+	 * @throws ServletException
+	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -69,14 +86,13 @@ public class LoginAction extends Action
 		}
 
 		HttpSession prevSession = request.getSession();
-		if (prevSession != null)
-			prevSession.invalidate();
+		if (prevSession != null) prevSession.invalidate();
 
 		LoginForm loginForm = (LoginForm) form;
 		Logger.out.info("Inside Login Action, Just before validation");
 
 		String loginName = loginForm.getLoginName();
-		//        String password = PasswordManager.encode(loginForm.getPassword());
+		// String password = PasswordManager.encode(loginForm.getPassword());
 
 		try
 		{
@@ -88,8 +104,11 @@ public class LoginAction extends Action
 						password);
 				if (loginOK)
 				{
-					/*PrivilegeCache privilegeCache = PrivilegeManager.getInstance()
-							.getPrivilegeCache(loginName);*/
+					/*
+					 * PrivilegeCache privilegeCache =
+					 * PrivilegeManager.getInstance()
+					 * .getPrivilegeCache(loginName);
+					 */
 
 					logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 					HttpSession session = request.getSession(true);
@@ -117,7 +136,8 @@ public class LoginAction extends Action
 					sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 					session.setAttribute(Constants.SESSION_DATA, sessionData);
 					session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					IFactory factory = AbstractFactoryConfig.
+					getInstance().getBizLogicFactory();
 					UserBizLogic userBizLogic = (UserBizLogic) factory
 							.getBizLogic(Constants.USER_FORM_ID);
 
@@ -125,11 +145,13 @@ public class LoginAction extends Action
 
 					setSecurityParamsInSessionData(validUser, sessionData);
 
-					String validRole = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
+					String validRole = getForwardToPageOnLogin
+					(validUser.getCsmUserId().longValue());
 					if (validRole != null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
 					{
 						ActionErrors errors = new ActionErrors();
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.noRole"));
+						errors.add(ActionErrors.GLOBAL_ERROR,
+								new ActionError("errors.noRole"));
 						saveErrors(request, errors);
 						session.setAttribute(Constants.SESSION_DATA, null);
 						return mapping.findForward(Constants.FAILURE);
@@ -137,33 +159,35 @@ public class LoginAction extends Action
 
 					if (!result.equals(Constants.SUCCESS))
 					{
-						//ActionError changed to ActionMessage
+						// ActionError changed to ActionMessage
 						ActionMessages messages = new ActionMessages();
-						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result));
+						messages.add(ActionMessages.GLOBAL_MESSAGE,
+								new ActionMessage(result));
 						saveMessages(request, messages);
 
 						session.setAttribute(Constants.SESSION_DATA, null);
 						session.setAttribute(Constants.TEMP_SESSION_DATA, sessionData);
-						request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CHANGE_PASSWORD);
+						request.setAttribute(Constants.PAGE_OF,
+								Constants.PAGE_OF_CHANGE_PASSWORD);
 						return mapping.findForward(Constants.ACCESS_DENIED);
 					}
 
-					//Determining Role Name- Start
+					// Determining Role Name- Start
 					/**
-					 * Name : Virender Mehta
-					 * Reviewer: Sachin Lale
-					 * Bug ID: 3842
-					 * Patch ID: 3842_1
-					 * See also: 3842_2
-					 * Description: Default views based on user login
-					 * 				If user login as admin Default view is set Administrator Tab 
-					 * 				If user login as Technicion Default view is set as Collection Protocol Base View Under Biospecimen Tab 
-					 * 				If user login as Supervisor Default view is set as Collection Protocol Base View Under Biospecimen Tab
-					 * 				If user login as Scientist Default view is set as Admin Advance Search unser Search tab
+					 * Name : Virender Mehta Reviewer: Sachin Lale Bug ID: 3842
+					 * Patch ID: 3842_1 See also: 3842_2 Description: Default
+					 * views based on user login If user login as admin Default
+					 * view is set Administrator Tab If user login as Technicion
+					 * Default view is set as Collection Protocol Base View
+					 * Under Biospecimen Tab If user login as Supervisor Default
+					 * view is set as Collection Protocol Base View Under
+					 * Biospecimen Tab If user login as Scientist Default view
+					 * is set as Admin Advance Search unser Search tab
 					 * Forwarding to default page depending on user role
 					 */
 					String forwardToPage = Constants.SUCCESS;
-					//getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
+					//getForwardToPageOnLogin(validUser.getCsmUserId().longValue
+					// ());
 					return (mapping.findForward(forwardToPage));
 				}
 				else
@@ -190,10 +214,14 @@ public class LoginAction extends Action
 	}
 
 	/**
-	 * To set the Security Parameters in the given SessionDataBean object depending upon the role of the user.
-	 * @param validUser reference to the User.
-	 * @param sessionData The reference to the SessionDataBean object.
-	 * @throws SMException
+	 * To set the Security Parameters in the given SessionDataBean object
+	 * depending upon the role of the user.
+	 *
+	 * @param validUser
+	 *            reference to the User.
+	 * @param sessionData
+	 *            The reference to the SessionDataBean object.
+	 * @throws SMException : SMException
 	 */
 	private void setSecurityParamsInSessionData(User validUser, SessionDataBean sessionData)
 			throws SMException
@@ -213,14 +241,15 @@ public class LoginAction extends Action
 	}
 
 	/**
-	 * Patch ID: 3842_2
-	 * This function will take LoginID for user and return the appropriate default page.
-	 * Get role from securitymanager and modify the role name where first 
-	 * character is in upper case and rest all are in lower case add prefix "pageOf" 
-	 * to modified role name and forward to that page.  
-	 * @param loginId
-	 * @return
-	 * @throws SMException
+	 * Patch ID: 3842_2 This function will take LoginID for user and return the
+	 * appropriate default page. Get role from securitymanager and modify the
+	 * role name where first character is in upper case and rest all are in
+	 * lower case add prefix "pageOf" to modified role name and forward to that
+	 * page.
+	 *
+	 * @param loginId : loginId
+	 * @return String : String
+	 * @throws SMException : SMException
 	 */
 
 	private String getForwardToPageOnLogin(Long loginId) throws SMException
@@ -233,21 +262,32 @@ public class LoginAction extends Action
 			modifiedRolename = "pageOfScientist";
 		else
 			modifiedRolename = "pageOfAdministrator";
-		//String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
+		// String modifiedRolename =
+		// roleName.substring(0,1).toUpperCase()+roleName
+		// .substring(1,roleName.length()).toLowerCase();
 		return (modifiedRolename);
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @param errorKey : errorKey
+	 */
 	private void handleError(HttpServletRequest request, String errorKey)
 	{
 		ActionErrors errors = new ActionErrors();
 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey));
-		//Report any errors we have discovered
+		// Report any errors we have discovered
 		if (!errors.isEmpty())
 		{
 			saveErrors(request, errors);
 		}
 	}
-
+	/**
+	 *
+	 * @param loginName : loginName
+	 * @return User : User
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private User getUser(String loginName) throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();

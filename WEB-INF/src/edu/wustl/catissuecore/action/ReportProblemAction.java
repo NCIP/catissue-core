@@ -34,8 +34,18 @@ public class ReportProblemAction extends Action
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various in ReportProblem webpage.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -60,7 +70,7 @@ public class ReportProblemAction extends Action
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 
-		//Sets the operation attribute to be used in the Add/Edit Problem Page. 
+		//Sets the operation attribute to be used in the Add/Edit Problem Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
 		if (operation.equals(Constants.EDIT))

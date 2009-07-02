@@ -23,8 +23,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
 /**
- * Created : 03-July-2006
- * @author mandar_deshmukh
+ * Created : 03-July-2006.
+ * @author mandar_deshmukh.
  *
  * This class initializes the atributes required for the QuickEvents webpage.
  */
@@ -48,7 +48,8 @@ public class QuickEventsAction extends BaseAction
 		//IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		//IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		//String[] fields = {Constants.SYSTEM_IDENTIFIER};
-		/*   List specimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
+		/*   List specimenList = bizLogic.getList(Specimen.class.getName(), fields,
+		 *  Constants.SYSTEM_IDENTIFIER, true);
 		 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
 
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);

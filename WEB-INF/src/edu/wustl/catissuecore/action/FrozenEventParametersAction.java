@@ -28,7 +28,8 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 
 	/**
 	 * @param request object of HttpServletRequest
-	 * @throws Exception generic exception
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
@@ -38,7 +39,8 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;
-		FrozenEventParametersForm frozenEventParametersForm = (FrozenEventParametersForm) eventParametersForm;
+		FrozenEventParametersForm frozenEventParametersForm =
+			(FrozenEventParametersForm) eventParametersForm;
 		if (frozenEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.FROZEN_EVENT_PARAMETERS_EDIT_ACTION;
@@ -60,7 +62,8 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		List methodList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_METHOD, null);
 		request.setAttribute("methodList", methodList);
-		//request.setAttribute("frozenEventParametersAddAction", Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION);
+		//request.setAttribute("frozenEventParametersAddAction",
+		//Constants.FROZEN_EVENT_PARAMETERS_ADD_ACTION);
 	}
 
 }

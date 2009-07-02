@@ -1,11 +1,14 @@
 /**
- * <p>Title: RequestDetailsAction Class>
- * <p>Description:	This class initializes the fields of RequestDetails.jsp Page</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: RequestDetailsAction Class>
+ * <p>
+ * Description: This class initializes the fields of RequestDetails.jsp Page
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ashish Gupta
- * @version 1.00
- * Created on Oct 05,2006
+ * @version 1.00 Created on Oct 05,2006
  */
 
 package edu.wustl.catissuecore.action;
@@ -87,23 +90,29 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class RequestDetailsAction extends BaseAction
 {
+	/**
+	 * logger.
+	 */
 
 	private transient Logger logger = Logger.getCommonLogger(RequestDetailsAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in RequestDetails.jsp Page.
-	 * @param mapping object
-	 * @param form object
-	 * @param request object
-	 * @param response object
-	 * @return ActionForward object
-	 * @throws Exception object
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -129,8 +138,9 @@ public class RequestDetailsAction extends BaseAction
 
 		if (orderDetailsId != null && !orderDetailsId.equals(""))
 		{
-			requestId = orderDetailsId; //		
-			//Setting the order id in the form to retrieve the corresponding orderitems from the db in CommonAddEditAction.
+			requestId = orderDetailsId;
+			// Setting the order id in the form to retrieve the corresponding
+			// orderitems from the db in CommonAddEditAction.
 			requestDetailsForm.setId((new Long(requestId)).longValue());
 		}
 		else
@@ -138,8 +148,7 @@ public class RequestDetailsAction extends BaseAction
 		{
 			Object obj = request.getSession().getAttribute("REQUEST_DETAILS_FORM");
 			RequestDetailsForm rDForm = null;
-			if (obj != null)
-				rDForm = (RequestDetailsForm) obj;
+			if (obj != null) rDForm = (RequestDetailsForm) obj;
 			requestId = "" + rDForm.getId();
 			orderDetailsId = requestId;
 			requestDetailsForm.setId((new Long(requestId)).longValue());
@@ -153,7 +162,7 @@ public class RequestDetailsAction extends BaseAction
 
 		}
 
-		//		ajax call to change the available quantity on change of specimen
+		// ajax call to change the available quantity on change of specimen
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
@@ -162,34 +171,37 @@ public class RequestDetailsAction extends BaseAction
 		if (isAjaxCalled && request.getParameter("specimenId") != null)
 		{
 			setSpecimenDetails(request, response, orderBizLogic);
-			//			for ajax return null as Actionservlet returns ActionForward object
+			// for ajax return null as Actionservlet returns ActionForward
+			// object
 			return null;
 		}
 		if (isAjaxCalled && request.getParameter("distributionProtId") != null)
 		{
 			setRequesterName(request, response, orderBizLogic);
-			//			for ajax return null as Actionservlet returns ActionForward object
+			// for ajax return null as Actionservlet returns ActionForward
+			// object
 			return null;
 		}
 
 		// order items status to display
 		List requestedItemsStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
-		//removing the --select-- from the list and adding --select Status for all-- to the list
+		// removing the --select-- from the list and adding --select Status for
+		// all-- to the list
 		requestedItemsStatusList.remove(0);
 		requestedItemsStatusList.add(0, new NameValueBean(ApplicationProperties
 				.getValue("orderingSystem.details.distributionStatus"), "-1"));
 		request.setAttribute(Constants.REQUESTED_ITEMS_STATUS_LIST, requestedItemsStatusList);
 
-		//Setting the Site List
+		// Setting the Site List
 		List siteList = getSiteListToDisplay();
 		request.setAttribute(Constants.SITE_LIST_OBJECT, siteList);
 
-		//setting Item Status List in Request
+		// setting Item Status List in Request
 		request.setAttribute(Constants.ITEM_STATUS_LIST, OrderingSystemUtil
 				.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW));
 
-		//setting Items status list without "Distributed" option.
+		// setting Items status list without "Distributed" option.
 		List tempList = OrderingSystemUtil
 				.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 		Iterator tempListIter = tempList.iterator();
@@ -208,10 +220,11 @@ public class RequestDetailsAction extends BaseAction
 				break;
 			}
 		}
-		//For orderitems in defined array, "Ready for array preparation" status is present instead of "Distribute"		
+		// For orderitems in defined array, "Ready for array preparation" status
+		// is present instead of "Distribute"
 		request.setAttribute(Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY, tempList);
 
-		//The order items list corresponding to the request Id
+		// The order items list corresponding to the request Id
 		getRequestDetailsList(requestId, requestDetailsForm, request, response);
 
 		if (request.getParameter(Constants.TAB_INDEX_ID) != null)
@@ -220,7 +233,7 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setTabIndex(tabIndexId.intValue());
 		}
 
-		//Sets the Distribution Protocol Id List.
+		// Sets the Distribution Protocol Id List.
 		SessionDataBean sessionLoginInfo = getSessionData(request);
 		Long loggedInUserID = sessionLoginInfo.getUserId();
 		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
@@ -234,11 +247,13 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This method will be called to set the specimen Quantity and quantity type.
-	 * @param request
-	 * @param response
-	 * @param orderBizLogic
-	 * @throws Exception
+	 * This method will be called to set the specimen Quantity and quantity
+	 * type.
+	 *
+	 * @param request : request
+	 * @param response : response
+	 * @param orderBizLogic : orderBizLogic
+	 * @throws Exception : Exception
 	 */
 	private void setSpecimenDetails(HttpServletRequest request, HttpServletResponse response,
 			OrderBizLogic orderBizLogic) throws Exception
@@ -256,10 +271,11 @@ public class RequestDetailsAction extends BaseAction
 
 	/**
 	 * This method will be called to set the requester name.
-	 * @param request
-	 * @param response
-	 * @param orderBizLogic
-	 * @throws IOException
+	 *
+	 * @param request : request
+	 * @param response : response
+	 * @param orderBizLogic : orderBizLogic
+	 * @throws IOException : IOException
 	 */
 	private void setRequesterName(HttpServletRequest request, HttpServletResponse response,
 			OrderBizLogic orderBizLogic) throws IOException
@@ -277,7 +293,10 @@ public class RequestDetailsAction extends BaseAction
 		response.setContentType("text/html");
 		out.write(requesterName);
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 */
 	private void cleanSession(HttpServletRequest request)
 	{
 		request.getSession().removeAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
@@ -286,17 +305,24 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function constructs lists of RequestDetails bean objects,map of definedarrays and ExistingArrayDetails bean instances to display
-	 * on RequestDetails.jsp and ArrayRequests.jsp by setting all the lists in HttpServletRequest object.
-	 * @param id String containing the requestId
-	 * @param requestDetailsForm RequestDetailsForm object
-	 * @param request HttpServletRequest object
-	 * @throws Exception 
+	 * This function constructs lists of RequestDetails bean objects,map of
+	 * definedarrays and ExistingArrayDetails bean instances to display on
+	 * RequestDetails.jsp and ArrayRequests.jsp by setting all the lists in
+	 * HttpServletRequest object.
+	 *
+	 * @param id
+	 *            String containing the requestId
+	 * @param requestDetailsForm
+	 *            RequestDetailsForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response : response
+	 * @throws Exception : Exception
 	 */
 	private void getRequestDetailsList(String id, RequestDetailsForm requestDetailsForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//fetching the order object corresponding to obtained id.
+		// fetching the order object corresponding to obtained id.
 
 		long startTime = System.currentTimeMillis();
 		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
@@ -313,7 +339,7 @@ public class RequestDetailsAction extends BaseAction
 
 			OrderDetails orderDetails = (OrderDetails) orderBizLogic.getOrderListFromDB(id, dao);
 
-			//			 The request details  corresponding to the request Id
+			// The request details corresponding to the request Id
 			RequestViewBean requestListBean = null;
 
 			requestListBean = getRequestObject(orderDetails);
@@ -325,18 +351,20 @@ public class RequestDetailsAction extends BaseAction
 
 			Collection orderItemsListFromDB = orderDetails.getOrderItemCollection();
 
-			//populating Map in the form only on loading. If error is present, use form present in request.
+			// populating Map in the form only on loading. If error is present,
+			// use form present in request.
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if (errors == null)
 			{
 				cleanSession(request);
-				//Showing specimen tab by default.
+				// Showing specimen tab by default.
 				requestDetailsForm.setTabIndex(1);
 				requestDetailsForm.setAllValuesForOrder(orderDetails, request, dao);
 
 				List requestDetailsList = new ArrayList();
 				OrderItem orderItem = null;
-				//List containing the list of defined arrays and existing arrays  
+				// List containing the list of defined arrays and existing
+				// arrays
 				List arrayRequestDetailsList = new ArrayList();
 				List arrayRequestDetailsMapList = new ArrayList();
 				if ((orderItemsListFromDB != null) && (!orderItemsListFromDB.isEmpty()))
@@ -351,40 +379,47 @@ public class RequestDetailsAction extends BaseAction
 						orderItem = (OrderItem) iter.next();
 						if (orderItem instanceof SpecimenOrderItem)
 						{
-							requestDetailsList = populateRequestDetailsListForSpecimenOrderItems(
+							requestDetailsList =
+								populateRequestDetailsListForSpecimenOrderItems(
 									orderItem, request, requestDetailsList);
 						}
-						//In case of Defined Array
+						// In case of Defined Array
 						if (orderItem instanceof NewSpecimenArrayOrderItem)
 						{
 							Map arrayMap = new HashMap();
-							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) orderItem;
+							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem =
+								(NewSpecimenArrayOrderItem) orderItem;
 							arrayMap = populateArrayMap(newSpecimenArrayOrderItem);
-							//Add defined-array list into the arrayRequestDetails list 
+							// Add defined-array list into the
+							// arrayRequestDetails list
 							arrayRequestDetailsMapList.add(arrayMap);
 						}
-						//In case of Existing BioSpecimen Array Items
+						// In case of Existing BioSpecimen Array Items
 						if (orderItem instanceof ExistingSpecimenArrayOrderItem)
 						{
 							ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem) orderItem;
 							ExistingArrayDetailsBean existingArrayDetailsBean = populateExistingArrayItemsList(existingSpecimenArrayOrderItem);
-							//Add existingArrayBEan list into arrayRequestDetails list
+							// Add existingArrayBEan list into
+							// arrayRequestDetails list
 							arrayRequestDetailsList.add(existingArrayDetailsBean);
 						}
-					}//End while
+					}// End while
 				}
-				//Call to populateItemStatusList() when order items present in OrderList
+				// Call to populateItemStatusList() when order items present in
+				// OrderList
 				if (requestDetailsList.size() > 0)
 				{
 					populateItemStatusList(requestDetailsList, request, "addToOrderList");
 				}
-				//Call to populateItemStatusList() when order items are added to Defined Array
+				// Call to populateItemStatusList() when order items are added
+				// to Defined Array
 				if (arrayRequestDetailsMapList.size() > 0)
 				{
 					populateItemStatusList(arrayRequestDetailsMapList, request,
 							"addToDefinedArrays");
 				}
-				//Call to populateItemStatusList() when order items are added to Existing Array
+				// Call to populateItemStatusList() when order items are added
+				// to Existing Array
 				if (arrayRequestDetailsList.size() > 0)
 				{
 					populateItemStatusList(arrayRequestDetailsList, request, "addToExistingArrays");
@@ -420,7 +455,12 @@ public class RequestDetailsAction extends BaseAction
 			}
 		}
 	}
-
+	/**
+	 *
+	 * @param orderDetails : orderDetails
+	 * @param orderItemId : orderItemId
+	 * @return OrderItem : OrderItem
+	 */
 	private OrderItem getOrderItem(OrderDetails orderDetails, Long orderItemId)
 	{
 		Collection orderItemsList = orderDetails.getOrderItemCollection();
@@ -440,11 +480,10 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * 
-	 * Need to change this method ...
-	 * to remove all the DB retrieves...
-	 * @param requestDetailsForm
-	 * @param orderItemsListFromDB
+	 * Need to change this method ... to remove all the DB retrieves.
+	 * @param requestDetailsForm : requestDetailsForm
+	 * @param orderDetails : orderDetails
+	 * @throws DAOException : DAOException
 	 */
 	private void populateRequestForMap(RequestDetailsForm requestDetailsForm,
 			OrderDetails orderDetails) throws DAOException
@@ -463,22 +502,29 @@ public class RequestDetailsAction extends BaseAction
 			{
 				List allSpecimensToDisplay = new ArrayList();
 				rowNumber = getRowNumber(key);
-				//				Fetching the order item id
+				// Fetching the order item id
 				orderItemId = (String) valuesMap.get(key);
 				OrderItem orderItem = (OrderItem) getOrderItem(orderDetails, Long
 						.parseLong(orderItemId));
-				//OrderItem orderItem = (OrderItem) orderItemListFromDb.get(0);
+				// OrderItem orderItem = (OrderItem) orderItemListFromDb.get(0);
 
-				//List finalChildrenSpecimenList = new ArrayList();
+				// List finalChildrenSpecimenList = new ArrayList();
 
 				if (orderItem instanceof DerivedSpecimenOrderItem)
 				{
 					List allSpecimen = new ArrayList();
 					DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-					/*Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen( derivedSpecimenOrderItem.getParentSpecimen().getChildSpecimenCollection());
-
-					finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,
-							derivedSpecimenOrderItem.getSpecimenClass(), derivedSpecimenOrderItem.getSpecimenType());*/
+					/*
+					 * Collection childrenSpecimenList =
+					 * OrderingSystemUtil.getAllChildrenSpecimen(
+					 * derivedSpecimenOrderItem
+					 * .getParentSpecimen().getChildSpecimenCollection());
+					 * finalChildrenSpecimenList =
+					 * OrderingSystemUtil.getChildrenSpecimenForClassAndType
+					 * (childrenSpecimenList,
+					 * derivedSpecimenOrderItem.getSpecimenClass(),
+					 * derivedSpecimenOrderItem.getSpecimenType());
+					 */
 
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
 							.getParentSpecimen());
@@ -540,8 +586,8 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param str
-	 * @return
+	 * @param str : str
+	 * @return String : String
 	 */
 	private String getRowNumber(String str)
 	{
@@ -553,18 +599,20 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param orderItem
-	 * @param request
-	 * @return
-	 * @throws DAOException 
+	 * @param orderItem : orderItem
+	 * @param request : request
+	 * @param requestDetailsList : requestDetailsList
+	 * @return List : List
+	 * @throws DAOException : DAOException
 	 */
 	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem,
 			HttpServletRequest request, List requestDetailsList) throws DAOException
 	{
-		// The row number to update available quantity on selecting the required specimen from 'request for' drop down.
+		// The row number to update available quantity on selecting the required
+		// specimen from 'request for' drop down.
 		int finalSpecimenListId = 0;
 		SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
-		//Incase of order items in the Order List
+		// Incase of order items in the Order List
 		if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
 		{
 			RequestDetailsBean requestDetailsBean = new RequestDetailsBean();
@@ -597,11 +645,11 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function populates existingArrayDetailsList with the existing Bio Speicmen Array Information by fetching the data from
-	 * ExistingSpecimenArrayOrderItem domain object.
-	 * @param existingArrayDetailsBean ExistingArrayDetailsBean object
-	 * @param existingSpecimenArrayOrderItem ExistingSpecimenArrayOrderItem object
-	 * @return existingArrayDetailsBean ExistingArrayDetailsBean object
+	 * 	 * This function populates existingArrayDetailsList with the existing Bio
+		 * Speicmen Array Information by fetching the data from
+		 * ExistingSpecimenArrayOrderItem domain object.
+	 * @param existingSpecimenArrayOrderItem : existingSpecimenArrayOrderItem
+	 * @return ExistingArrayDetailsBean : ExistingArrayDetailsBean
 	 */
 	private ExistingArrayDetailsBean populateExistingArrayItemsList(
 			ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem)
@@ -621,23 +669,28 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function populates the arrayDetailsList with map objects.Each map contains arrayRequestBean object as teh key and list of order items
-	 * (for that defined array) as the value.
-	 * @param newSpecimenArrayOrderItem NewSpecimenArrayOrderItem object
+	 * This function populates the arrayDetailsList with map objects.Each map
+	 * contains arrayRequestBean object as teh key and list of order items (for
+	 * that defined array) as the value.
+	 *
+	 * @param newSpecimenArrayOrderItem
+	 *            NewSpecimenArrayOrderItem object
 	 * @return definedArrayMap Map object
-	 * @throws DAOException object
+	 * @throws DAOException
+	 *             object
 	 */
 	private Map populateArrayMap(NewSpecimenArrayOrderItem newSpecimenArrayOrderItem)
 			throws DAOException
 	{
 		Map definedArrayMap = new HashMap();
 		List arrayItemsList = new ArrayList();
-		//Create new instance of ArrayRequestBean to save the name,type,dimensions of the defined array 
+		// Create new instance of ArrayRequestBean to save the
+		// name,type,dimensions of the defined array
 		DefinedArrayRequestBean arrayRequestBean = new DefinedArrayRequestBean();
 		arrayRequestBean = populateArrayRequestBean(arrayRequestBean, newSpecimenArrayOrderItem);
 		Collection specimenOrderItemCollection = newSpecimenArrayOrderItem
 				.getSpecimenOrderItemCollection();
-		//Calculating the condition to enable or disable "Create Array Button"
+		// Calculating the condition to enable or disable "Create Array Button"
 		String condition = OrderingSystemUtil
 				.determineCreateArrayCondition(specimenOrderItemCollection);
 
@@ -670,19 +723,21 @@ public class RequestDetailsAction extends BaseAction
 				arrayDetailsBean = populatePathologicalCasesForArrayDetails(arrayDetailsBean,
 						specimenOrderItem);
 			}
-			//arrayDetailsBean.setArrayRequestBean(arrayRequestBean);
-			//Add all the arrayDetailsBean in the list
+			// arrayDetailsBean.setArrayRequestBean(arrayRequestBean);
+			// Add all the arrayDetailsBean in the list
 			arrayItemsList.add(arrayDetailsBean);
 		}
 		definedArrayMap.put(arrayRequestBean, arrayItemsList);
 
-		//Return the list containing arrayDetailsBean instances
+		// Return the list containing arrayDetailsBean instances
 		return definedArrayMap;
 	}
 
 	/**
-	 * @param arrayRequestBean object
-	 * @param newSpecimenArrayOrderItem object
+	 * @param arrayRequestBean
+	 *            object
+	 * @param newSpecimenArrayOrderItem
+	 *            object
 	 * @return DefinedArrayRequestBean object
 	 */
 	private DefinedArrayRequestBean populateArrayRequestBean(
@@ -707,7 +762,7 @@ public class RequestDetailsAction extends BaseAction
 		{
 			arrayRequestBean.setArrayId(specimenArrayObj.getId().toString());
 		}
-		//Populate status list of individual array
+		// Populate status list of individual array
 		List arrayStatusList = OrderingSystemUtil
 				.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 		arrayRequestBean.setArrayStatusList(arrayStatusList);
@@ -715,16 +770,19 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param arrayDetailsBean object
-	 * @param specimenOrderItem object
+	 * @param arrayDetailsBean
+	 *            object
+	 * @param specimenOrderItem
+	 *            object
 	 * @return DefinedArrayDetailsBean object
 	 */
 	private DefinedArrayDetailsBean populateExistingSpecimensForArrayDetails(
 			DefinedArrayDetailsBean arrayDetailsBean, SpecimenOrderItem specimenOrderItem)
 	{
-		ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) specimenOrderItem;
+		ExistingSpecimenOrderItem existingSpecimenOrderItem =
+			(ExistingSpecimenOrderItem) specimenOrderItem;
 		arrayDetailsBean.setRequestedItem(existingSpecimenOrderItem.getSpecimen().getLabel());
-		//Add empty list since it is the case of existing speicmen
+		// Add empty list since it is the case of existing speicmen
 		arrayDetailsBean.setSpecimenList(new ArrayList());
 		arrayDetailsBean
 				.setSpecimenId((existingSpecimenOrderItem.getSpecimen().getId()).toString());
@@ -743,8 +801,10 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param arrayDetailsBean object
-	 * @param specimenOrderItem object
+	 * @param arrayDetailsBean
+	 *            object
+	 * @param specimenOrderItem
+	 *            object
 	 * @return DefinedArrayDetailsBean object
 	 */
 	private DefinedArrayDetailsBean populateDerivedSpecimensForArrayDetails(
@@ -754,11 +814,12 @@ public class RequestDetailsAction extends BaseAction
 		arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getParentSpecimen().getLabel());
 		arrayDetailsBean.setSpecimenId(derivedSpecimenOrderItem.getParentSpecimen().getId()
 				.toString());
-		//Obtain all children specimens
+		// Obtain all children specimens
 		Collection childrenSpecimenList = OrderingSystemUtil
 				.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen()
 						.getChildSpecimenCollection());
-		//Obtain only those specimens of this class and type from the above list
+		// Obtain only those specimens of this class and type from the above
+		// list
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(
 				childrenSpecimenList, derivedSpecimenOrderItem.getSpecimenClass(),
 				derivedSpecimenOrderItem.getSpecimenType());
@@ -781,21 +842,25 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param arrayDetailsBean object
-	 * @param specimenOrderItem object
+	 * @param arrayDetailsBean
+	 *            object
+	 * @param specimenOrderItem
+	 *            object
 	 * @return DefinedArrayDetailsBean object
 	 */
 	private DefinedArrayDetailsBean populatePathologicalCasesForArrayDetails(
 			DefinedArrayDetailsBean arrayDetailsBean, SpecimenOrderItem specimenOrderItem)
 	{
-		PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) specimenOrderItem;
+		PathologicalCaseOrderItem pathologicalCaseOrderItem =
+			(PathologicalCaseOrderItem) specimenOrderItem;
 		boolean isDerived = false;
 		arrayDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup()
 				.getSurgicalPathologyNumber());
 		Collection childrenSpecimenList = pathologicalCaseOrderItem.getSpecimenCollectionGroup()
 				.getSpecimenCollection();
-		//		 Removing distributed option if no specimens are present in that SCG. ie. childrenSpecimenList.size() == 0
-		//TODO
+		// Removing distributed option if no specimens are present in that SCG.
+		// ie. childrenSpecimenList.size() == 0
+		// TODO
 		if (childrenSpecimenList.size() == 0)
 		{
 			isDerived = true;
@@ -811,9 +876,10 @@ public class RequestDetailsAction extends BaseAction
 			List finalChildrenSpecimenCollection = null;
 			if (pathologicalCaseOrderItem.getSpecimenClass() != null
 					&& pathologicalCaseOrderItem.getSpecimenType() != null
-					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
+					&& !pathologicalCaseOrderItem.getSpecimenClass().
+					trim().equalsIgnoreCase("")
 					&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
-			{ //"Derived"	   
+			{ // "Derived"
 				finalChildrenSpecimenCollection = OrderingSystemUtil
 						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
 								pathologicalCaseOrderItem.getSpecimenClass(),
@@ -821,7 +887,7 @@ public class RequestDetailsAction extends BaseAction
 				isDerived = true;
 			}
 			else
-			{ //"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
+			{ // "Block" . Specimen class = "Tissue" , Specimen Type = "Block".
 				finalChildrenSpecimenCollection = OrderingSystemUtil
 						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
 								"Block");
@@ -856,7 +922,8 @@ public class RequestDetailsAction extends BaseAction
 		}
 		arrayDetailsBean.setRequestedQuantity(pathologicalCaseOrderItem.getRequestedQuantity()
 				.toString());
-		//Displaying the quantity of the first specimen in the request for drop down.
+		// Displaying the quantity of the first specimen in the request for drop
+		// down.
 		if (childrenSpecimenListToDisplay.size() > 1)
 		{
 			arrayDetailsBean.setAvailableQuantity(((Specimen) totalChildrenSpecimenColl.get(1))
@@ -866,7 +933,7 @@ public class RequestDetailsAction extends BaseAction
 		{
 			arrayDetailsBean.setAvailableQuantity("");
 		}
-		//Assigned Quantity
+		// Assigned Quantity
 		if (pathologicalCaseOrderItem.getDistributedItem() != null)
 		{
 			arrayDetailsBean.setAssignedQty(pathologicalCaseOrderItem.getDistributedItem()
@@ -881,11 +948,14 @@ public class RequestDetailsAction extends BaseAction
 		return arrayDetailsBean;
 	}
 
-	//	 Populates a list of Requset object to display  as header info on RequestDetails.jsp	
+	// Populates a list of Requset object to display as header info on
+	// RequestDetails.jsp
 	/**
-	 * @param orderDetails OrderDetails
+	 * @param orderDetails
+	 *            OrderDetails
 	 * @return RequestViewBean object
-	 * @throws DAOException object
+	 * @throws DAOException
+	 *             object
 	 */
 	private RequestViewBean getRequestObject(OrderDetails orderDetails) throws DAOException
 	{
@@ -900,58 +970,61 @@ public class RequestDetailsAction extends BaseAction
 	/**
 	 * @param id
 	 * @return
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
-	/*private Specimen getSpecimenFromDB(String id) throws BizLogicException
-	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		Object object = newSpecimenBizLogic.retrieve(Specimen.class.getName(), new Long(id));
-		return (Specimen) object;
-	}*/
+	/*
+	 * private Specimen getSpecimenFromDB(String id) throws BizLogicException {
+	 * IFactory factory =
+	 * AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	 * NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+	 * .getBizLogic(Constants.NEW_SPECIMEN_FORM_ID); Object object =
+	 * newSpecimenBizLogic.retrieve(Specimen.class.getName(), new Long(id));
+	 * return (Specimen) object; }
+	 */
 
 	/**
 	 * @param id
 	 * @return
-	 * @throws BizLogicException 
-	 * @throws NumberFormatException 
+	 * @throws BizLogicException
+	 * @throws NumberFormatException
 	 * @throws DAOException
 	 */
-	/*private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id) throws BizLogicException
-	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
-				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
-				.getName(), new Long(id));
-		return (SpecimenCollectionGroup) object;
-	}*/
+	/*
+	 * private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id)
+	 * throws BizLogicException { IFactory factory =
+	 * AbstractFactoryConfig.getInstance().getBizLogicFactory();
+	 * SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic =
+	 * (SpecimenCollectionGroupBizLogic) factory
+	 * .getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID); Object object
+	 * = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
+	 * .getName(), new Long(id)); return (SpecimenCollectionGroup) object; }
+	 */
 
 	/**
 	 * @param id
 	 * @return
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
-	/*private OrderItem getOrderItemFromDB(String id) throws BizLogicException
-	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
-				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		Object object = orderBizLogic.retrieve(OrderItem.class.getName(), new Long(id));
-		return (OrderItem) object;
-	}*/
+	/*
+	 * private OrderItem getOrderItemFromDB(String id) throws BizLogicException
+	 * { IFactory factory =
+	 * AbstractFactoryConfig.getInstance().getBizLogicFactory(); OrderBizLogic
+	 * orderBizLogic = (OrderBizLogic) factory
+	 * .getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID); Object object =
+	 * orderBizLogic.retrieve(OrderItem.class.getName(), new Long(id)); return
+	 * (OrderItem) object; }
+	 */
 
 	/**
-	 * @return List of site objects.
-	 * @throws BizLogicException 
+	 * @return List : List of site objects.
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List getSiteListToDisplay() throws BizLogicException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		//Sets the Site list.
+		// Sets the Site list.
 		String sourceObjectName = Site.class.getName();
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
@@ -963,10 +1036,12 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param requestDetailsBean RequestDetailsBean
-	 * @param existingSpecimenorderItem ExistingSpecimenOrderItem
+	 * @param requestDetailsBean
+	 *            RequestDetailsBean
+	 * @param existingSpecimenorderItem
+	 *            ExistingSpecimenOrderItem
 	 * @return RequestDetailsBean object
-	 * @throws DAOException 
+	 * @throws DAOException : DAOException
 	 */
 	private RequestDetailsBean populateRequestDetailsBeanForExistingSpecimen(
 			RequestDetailsBean requestDetailsBean,
@@ -994,7 +1069,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 
 		// condition added by vaishali beacause requested Qty is coming NULL.
-		//@FIX ME
+		// @FIX ME
 
 		if (existingSpecimenorderItem.getRequestedQuantity() != null)
 			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity()
@@ -1007,7 +1082,7 @@ public class RequestDetailsAction extends BaseAction
 		requestDetailsBean.setType(existingSpecimenorderItem.getSpecimen().getSpecimenType());
 		requestDetailsBean.setDescription(existingSpecimenorderItem.getDescription());
 		requestDetailsBean.setOrderItemId(existingSpecimenorderItem.getId().toString());
-		//	  Assigned Quantity
+		// Assigned Quantity
 		if (existingSpecimenorderItem.getDistributedItem() != null)
 		{
 			requestDetailsBean.setAssignedQty(existingSpecimenorderItem.getDistributedItem()
@@ -1018,11 +1093,17 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function populates RequestDetailsBean object by fethcing data from DerivedSpecimenOrderItem domain object
-	 * @param requestDetailsBean RequestDetailsBean object
-	 * @param derivedSpecimenorderItem DerivedSpecimenOrderItem object
-	 * @param request HttpServletRequest object
-	 * @param finalSpecimenListId primitive integer value
+	 * This function populates RequestDetailsBean object by fethcing data from
+	 * DerivedSpecimenOrderItem domain object.
+	 *
+	 * @param requestDetailsBean
+	 *            RequestDetailsBean object
+	 * @param derivedSpecimenorderItem
+	 *            DerivedSpecimenOrderItem object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param finalSpecimenListId
+	 *            primitive integer value
 	 * @return RequestDetailsBean object
 	 */
 	private RequestDetailsBean populateRequestDetailsBeanForDerivedSpecimen(
@@ -1039,35 +1120,39 @@ public class RequestDetailsAction extends BaseAction
 		List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(
 				childrenSpecimenList, derivedSpecimenorderItem.getSpecimenClass(),
 				derivedSpecimenorderItem.getSpecimenType());
-		//	  removing final specimen List from session
+		// removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
-		//To display the available quantity of the selected specimen from RequestFor dropdown.
-		//request.getSession().setAttribute("finalSpecimenList"+finalSpecimenListId, finalChildrenSpecimenList);
+		// To display the available quantity of the selected specimen from
+		// RequestFor dropdown.
+		// request.getSession().setAttribute("finalSpecimenList"+
+		// finalSpecimenListId, finalChildrenSpecimenList);
 
 		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				finalChildrenSpecimenList, null);
 
-		//setting requestFor list in request
-		//request.setAttribute(Constants.REQUEST_FOR_LIST, childrenSpecimenListToDisplay);
+		// setting requestFor list in request
+		// request.setAttribute(Constants.REQUEST_FOR_LIST,
+		// childrenSpecimenListToDisplay);
 
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		requestDetailsBean.setSpecimenId(specimenId.toString());
 		requestDetailsBean.setInstanceOf("Derived");
 		requestDetailsBean.setRequestedQty(derivedSpecimenorderItem.getRequestedQuantity()
 				.toString());
-		//Displaying the quantity of the first specimen in the request for drop down.
+		// Displaying the quantity of the first specimen in the request for drop
+		// down.
 		requestDetailsBean.setAvailableQty("NA");
 		requestDetailsBean.setSelectedSpecimenType("NA");
 
-		/*if (childrenSpecimenListToDisplay.size() > 1)
-		{
-			requestDetailsBean.setAvailableQty(((Specimen) finalChildrenSpecimenList.get(1)).getAvailableQuantity().toString());
-		}
-		else
-		{
-			requestDetailsBean.setAvailableQty("NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
-		}*/
-		//Assigned Quantity
+		/*
+		 * if (childrenSpecimenListToDisplay.size() > 1) {
+		 * requestDetailsBean.setAvailableQty(((Specimen)
+		 * finalChildrenSpecimenList.get(1)).getAvailableQuantity().toString());
+		 * } else {
+		 * requestDetailsBean.setAvailableQty("NA");//derivedSpecimenorderItem
+		 * .getSpecimen().getAvailableQuantity().getValue().toString() }
+		 */
+		// Assigned Quantity
 		if (derivedSpecimenorderItem.getDistributedItem() != null)
 		{
 			requestDetailsBean.setAssignedQty(derivedSpecimenorderItem.getDistributedItem()
@@ -1083,11 +1168,17 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function populates RequestDetailsBean instances by fetching data from PathologicalCaseOrderItem domain instance
-	 * @param requestDetailsBean RequestDetailsBean object
-	 * @param pathologicalCaseOrderItem DerivedSpecimenOrderItem object
-	 * @param request HttpServletRequest object
-	 * @param finalSpecimenListId primitive integer value
+	 * This function populates RequestDetailsBean instances by fetching data
+	 * from PathologicalCaseOrderItem domain instance.
+	 *
+	 * @param requestDetailsBean
+	 *            RequestDetailsBean object
+	 * @param pathologicalCaseOrderItem
+	 *            DerivedSpecimenOrderItem object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param finalSpecimenListId
+	 *            primitive integer value
 	 * @return requestDetailsBean RequestDetailsBean object
 	 */
 	private RequestDetailsBean populateRequestDetailsBeanForPathologicalCase(
@@ -1101,8 +1192,9 @@ public class RequestDetailsAction extends BaseAction
 
 		Collection childrenSpecimenList = pathologicalCaseOrderItem.getSpecimenCollectionGroup()
 				.getSpecimenCollection();
-		// Removing distributed option if no specimens are present in that SCG. ie. childrenSpecimenList.size() == 0
-		//TODO find better option for this
+		// Removing distributed option if no specimens are present in that SCG.
+		// ie. childrenSpecimenList.size() == 0
+		// TODO find better option for this
 		if (childrenSpecimenList.size() == 0)
 		{
 			isDerived = true;
@@ -1121,7 +1213,7 @@ public class RequestDetailsAction extends BaseAction
 					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
 					&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
 			{
-				//"Derived"	   
+				// "Derived"
 				finalChildrenSpecimenCollection = OrderingSystemUtil
 						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
 								pathologicalCaseOrderItem.getSpecimenClass(),
@@ -1130,7 +1222,8 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else
 			{
-				//"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
+				// "Block" . Specimen class = "Tissue" , Specimen Type =
+				// "Block".
 				finalChildrenSpecimenCollection = OrderingSystemUtil
 						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
 								"Block");
@@ -1142,14 +1235,18 @@ public class RequestDetailsAction extends BaseAction
 				while (finalChildrenSpecimenCollectionIterator.hasNext())
 				{
 					totalChildrenSpecimenColl
-							.add((Specimen) (finalChildrenSpecimenCollectionIterator.next()));
+							.add
+							((Specimen)
+									(finalChildrenSpecimenCollectionIterator.next()));
 				}
 			}
 		}
-		//	    	removing final specimen List from session
+		// removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
-		//To display the available quantity of the selected specimen from RequestFor dropdown.
-		//request.getSession().setAttribute("finalSpecimenList"+finalSpecimenListId, totalChildrenSpecimenColl);
+		// To display the available quantity of the selected specimen from
+		// RequestFor dropdown.
+		// request.getSession().setAttribute("finalSpecimenList"+
+		// finalSpecimenListId, totalChildrenSpecimenColl);
 
 		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
@@ -1167,16 +1264,15 @@ public class RequestDetailsAction extends BaseAction
 		}
 		requestDetailsBean.setRequestedQty(pathologicalCaseOrderItem.getRequestedQuantity()
 				.toString());
-		//Displaying the quantity of the first specimen in the request for drop down.
-		/*if (childrenSpecimenListToDisplay.size() != 0)
-		{
-			requestDetailsBean.setAvailableQty(((Specimen) totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
-		}
-		else
-		{
-			requestDetailsBean.setAvailableQty("-");
-		}*/
-		//	  Assigned Quantity
+		// Displaying the quantity of the first specimen in the request for drop
+		// down.
+		/*
+		 * if (childrenSpecimenListToDisplay.size() != 0) {
+		 * requestDetailsBean.setAvailableQty(((Specimen)
+		 * totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
+		 * } else { requestDetailsBean.setAvailableQty("-"); }
+		 */
+		// Assigned Quantity
 		if (pathologicalCaseOrderItem.getDistributedItem() != null)
 		{
 			requestDetailsBean.setAssignedQty(pathologicalCaseOrderItem.getDistributedItem()
@@ -1192,11 +1288,17 @@ public class RequestDetailsAction extends BaseAction
 	}
 
 	/**
-	 * This function populates the items status for individual order items in OrderList,DefinedArray List and Existing Array List
-	 * and sets each of the list in the request attribute. 
-	 * @param requestList ArrayList containing the list of orderitem objects 
-	 * @param request HttpServletRequest object
-	 * @param itemsAddedToArray String indicating whether items are to be added to defined array,existing array or to the speicmen orderlist
+	 * This function populates the items status for individual order items in
+	 * OrderList,DefinedArray List and Existing Array List and sets each of the
+	 * list in the request attribute.
+	 *
+	 * @param requestList
+	 *            ArrayList containing the list of orderitem objects
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param itemsAddedToArray
+	 *            String indicating whether items are to be added to defined
+	 *            array,existing array or to the speicmen orderlist
 	 */
 	void populateItemStatusList(List requestList, HttpServletRequest request,
 			String itemsAddedToArray)
@@ -1205,7 +1307,7 @@ public class RequestDetailsAction extends BaseAction
 		while (requestlistItr.hasNext())
 		{
 			Object orderItemObj = requestlistItr.next();
-			//In case of define array
+			// In case of define array
 			if (orderItemObj instanceof Map)
 			{
 				Map defineArrayMap = (HashMap) orderItemObj;
@@ -1213,34 +1315,41 @@ public class RequestDetailsAction extends BaseAction
 				Iterator keySetItr = keys.iterator();
 				while (keySetItr.hasNext())
 				{
-					DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean) keySetItr
+					DefinedArrayRequestBean definedArrayRequestBean =
+						(DefinedArrayRequestBean) keySetItr
 							.next();
-					//Obtain request list for each defined array 
+					// Obtain request list for each defined array
 					List defineArrayDetailsList = (ArrayList) defineArrayMap
 							.get(definedArrayRequestBean);
 					Iterator defineArrayDetailsListItr = defineArrayDetailsList.iterator();
 					while (defineArrayDetailsListItr.hasNext())
 					{
-						DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean) defineArrayDetailsListItr
+						DefinedArrayDetailsBean definedArrayDetailsBean =
+							(DefinedArrayDetailsBean) defineArrayDetailsListItr
 								.next();
-						//Get possible next statuses for a given status
+						// Get possible next statuses for a given status
 						List possibleStatusList = (List) request
-								.getAttribute(Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY);
-						//Set possibleStatusList in the DefinedArrayDetails bean instance.
+								.getAttribute(Constants.
+										ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY);
+						// Set possibleStatusList in the DefinedArrayDetails
+						// bean instance.
 						definedArrayDetailsBean.setItemStatusList(possibleStatusList);
-					} //End while (while loop to iterate definedArrayList)
-				}//End while (While loop to iterate list containing map objects for deifned array)				
-			}//End if(orderItemObj instanceof Map)
+					} // End while (while loop to iterate definedArrayList)
+				}// End while (While loop to iterate list containing map objects
+					// for deifned array)
+			}// End if(orderItemObj instanceof Map)
 			else
-			{ //In case of Existing Array
+			{ // In case of Existing Array
 				if (orderItemObj instanceof ExistingArrayDetailsBean)
 				{
-					ExistingArrayDetailsBean existingArrayDetailsBean = (ExistingArrayDetailsBean) orderItemObj;
+					ExistingArrayDetailsBean existingArrayDetailsBean =
+						(ExistingArrayDetailsBean) orderItemObj;
 					List possibleStatusList = OrderingSystemUtil
 							.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 					existingArrayDetailsBean.setItemStatusList(possibleStatusList);
 				}
-				//In case of Request Details List displayed in RequestDetails.jsp
+				// In case of Request Details List displayed in
+				// RequestDetails.jsp
 				if (orderItemObj instanceof RequestDetailsBean)
 				{
 					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
@@ -1249,27 +1358,32 @@ public class RequestDetailsAction extends BaseAction
 							.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 					requestDetailsBean.setItemsStatusList(possibleStatusList);
 				}
-			}//End else			
-		}//End OuterMost while		
-		/*Set the requestList in request Attribute*/
+			}// End else
+		}// End OuterMost while
+		/* Set the requestList in request Attribute */
 		if (itemsAddedToArray.equals("addToDefinedArrays"))
-		{ //Set the request attribute ARRAY_REQUESTSMAP_LIST when items are to be displayed in the DefinedArrays List(ArrayRequests.jsp)
+		{ // Set the request attribute ARRAY_REQUESTSMAP_LIST when items are to
+			// be displayed in the DefinedArrays List(ArrayRequests.jsp)
 			request.setAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST, requestList);
 		}
 		if (itemsAddedToArray.equals("addToExistingArrays"))
-		{ //Set the request attribute ARRAY_REQUESTSMAP_LIST when items are to be displayed in the Existing Arrays List(ArrayRequests.jsp)
+		{ // Set the request attribute ARRAY_REQUESTSMAP_LIST when items are to
+			// be displayed in the Existing Arrays List(ArrayRequests.jsp)
 			request.setAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST, requestList);
 		}
 		if (itemsAddedToArray.equals("addToOrderList"))
-		{ //Set the request attribute REQUEST_DETAILS_LIST when items are to be displayed in the RequestDetails.jsp
+		{ // Set the request attribute REQUEST_DETAILS_LIST when items are to be
+			// displayed in the RequestDetails.jsp
 			request.setAttribute(Constants.REQUEST_DETAILS_LIST, requestList);
 		}
 	}
 
 	/**
-	 * method for getting isOnChange from request
-	 * @param request:object of HttpServletResponse
-	 * @return isOnChange :boolean 
+	 * method for getting isOnChange from request.
+	 *
+	 * @param request
+	 *            :object of HttpServletResponse
+	 * @return isOnChange :boolean
 	 */
 	private boolean isAjaxCalled(HttpServletRequest request)
 	{
@@ -1281,7 +1395,13 @@ public class RequestDetailsAction extends BaseAction
 		}
 		return isOnChange;
 	}
-
+	/**
+	 *
+	 * @param specimen : specimen
+	 * @param response : response
+	 * @param identifier : identifier
+	 * @throws Exception : Exception
+	 */
 	private void sendSpecimenDetails(Specimen specimen, HttpServletResponse response,
 			String identifier) throws Exception
 	{
@@ -1298,20 +1418,24 @@ public class RequestDetailsAction extends BaseAction
 		else
 		{
 			responseString = identifier + Constants.RESPONSE_SEPARATOR + "NA"
-					+ Constants.RESPONSE_SEPARATOR + "NA" + Constants.RESPONSE_SEPARATOR + "NA";
+					+ Constants.RESPONSE_SEPARATOR +
+					"NA" + Constants.RESPONSE_SEPARATOR + "NA";
 		}
 		response.setContentType("text/html");
 		out.write(responseString);
 	}
 
 	/**
-	 * This method loads the title as Name and id as value of distribution protocol from database 
-	 * and return the namevalue bean of ditribution protocol for a given PI.
-	 * @param piID User id of PI for which all the distribution protocol is to be loaded.
-	 * @return Returns the list of namevalue bean of ditribution protocol for a given PI.
-	 * @throws DAOException Throws DAOException if any database releated error occures
-	 * @throws BizLogicException 
-	 **/
+	 * 	 * This method loads the title as Name and id as value of distribution
+		 * protocol from database and return the namevalue bean of ditribution
+		 * protocol for a given PI.
+	 * @param piID : piID
+	 * @param roleName : roleName
+	 * @param sessionDataBean : sessionDataBean
+	 * @return List : List
+	 * @throws DAOException : DAOException
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private List loadDistributionProtocol(final Long piID, String roleName,
 			SessionDataBean sessionDataBean) throws DAOException, BizLogicException
 	{
@@ -1328,7 +1452,8 @@ public class RequestDetailsAction extends BaseAction
 		Object[] whereColVal = {Status.ACTIVITY_STATUS_CLOSED.toString()};
 		String separatorBetweenFields = "";
 
-		// checking for the role. if role is admin / supervisor then show all the distribution protocols.
+		// checking for the role. if role is admin / supervisor then show all
+		// the distribution protocols.
 		if (roleName.equals(Constants.ADMINISTRATOR) || roleName.equals(Constants.SUPERVISOR))
 		{
 			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
@@ -1344,14 +1469,16 @@ public class RequestDetailsAction extends BaseAction
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 			boolean isToExcludeDisabled = true;
 
-			//Get data from database
+			// Get data from database
 			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
-					valueFieldCol, whereColumnName, colCondition, whereColumnValue, joinCondition,
+					valueFieldCol, whereColumnName, colCondition,
+					whereColumnValue, joinCondition,
 					separatorBetweenFields, isToExcludeDisabled);
 		}
 
 		// Fix for bug #9543 - start
-		// Check for Distribution privilege & if privilege present, show all DP's in DP list
+		// Check for Distribution privilege & if privilege present, show all
+		// DP's in DP list
 		if (!roleName.equals(Constants.ADMINISTRATOR) && sessionDataBean != null)
 		{
 			Session session = null;
@@ -1364,7 +1491,7 @@ public class RequestDetailsAction extends BaseAction
 			dao = daoFact.getDAO();
 			try
 			{
-				//session = DBUtil.getCleanSession();
+				// session = DBUtil.getCleanSession();
 				dao.openSession(null);
 				User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
 						.getUserId());
@@ -1396,7 +1523,8 @@ public class RequestDetailsAction extends BaseAction
 				{
 					distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
 							valueFieldCol, whereColNames, whereColCond, whereColVal,
-							Constants.AND_JOIN_CONDITION, separatorBetweenFields, true);
+							Constants.AND_JOIN_CONDITION,
+							separatorBetweenFields, true);
 				}
 			}
 			catch (BizLogicException e1)
@@ -1421,7 +1549,13 @@ public class RequestDetailsAction extends BaseAction
 
 		return distributionProtocolList;
 	}
-
+	/**
+	 *
+	 * @param sessionDataBean : sessionDataBean
+	 * @param siteIds : siteIds
+	 * @param cpIds : cpIds
+	 * @return boolean : boolean
+	 */
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
 			HashSet < Long > siteIds, HashSet < Long > cpIds)
 	{

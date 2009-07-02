@@ -14,6 +14,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class ProcedureEventParametersAction extends SpecimenEventParametersAction
 {
 
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
@@ -23,7 +28,8 @@ public class ProcedureEventParametersAction extends SpecimenEventParametersActio
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;
-		ProcedureEventParametersForm procedureEventParametersForm = (ProcedureEventParametersForm) eventParametersForm;
+		ProcedureEventParametersForm procedureEventParametersForm =
+			(ProcedureEventParametersForm) eventParametersForm;
 		if (procedureEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.PROCEDURE_EVENT_PARAMETERS_EDIT_ACTION;
