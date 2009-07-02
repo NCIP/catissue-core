@@ -39,7 +39,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 
 /**
- * AddSpecimenAction gets the Specimen Id from Label or Barcode
+ * AddSpecimenAction gets the Specimen Id from Label or Barcode.
  * @author santosh_chandak
  */
 public class AddSpecimenAction extends SecureAction
@@ -47,6 +47,14 @@ public class AddSpecimenAction extends SecureAction
 
 	/**
 	 * Overrides the execute method of Action class.
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @throws BizLogicException : BizLogicException
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -81,7 +89,8 @@ public class AddSpecimenAction extends SecureAction
 		List list = bizLogic.retrieve(sourceObjectName, whereColumnName[0], whereColumnValue[0]);
 
 		/**
-		 *  If list is not empty, set the Parent specimen Id and forward to success. 
+		 *  If list is not empty, set the Parent
+		 *  specimen Id and forward to success.
 		 *  If list is null or empty, forward to failure.
 		 */
 		if (list != null && !list.isEmpty())
@@ -92,10 +101,11 @@ public class AddSpecimenAction extends SecureAction
 			{
 				/**
 				* Name : Falguni Sachde
-				* Reviewer Name : Sachin Lale 
+				* Reviewer Name : Sachin Lale
 				* Bug ID: 4919
-				* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
-				* 			   link and specimen status is disabled 	
+				* Description: Added new error message and check for pageOf flow,
+				* 	if user clicks directly derived
+				* 			   link and specimen status is disabled
 				*/
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -110,10 +120,11 @@ public class AddSpecimenAction extends SecureAction
 			{
 				/**
 				* Name : Falguni Sachde
-				* Reviewer Name : Sachin Lale 
+				* Reviewer Name : Sachin Lale
 				* Bug ID: 4919
-				* Description: Added new error message and check for pageOf flow, if user clicks directly derived 
-				* 			   link and specimen status is disabled 	
+				* Description: Added new error message and check for pageOf flow,
+				*  if user clicks directly derived
+				* 			   link and specimen status is disabled
 				*/
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed",
@@ -126,7 +137,7 @@ public class AddSpecimenAction extends SecureAction
 
 			Long specimen = (Long) objSpecimen.getId();
 			createForm.setParentSpecimenId("" + specimen.longValue());
-			createForm.setReset(false); // Will not reset the parameters   
+			createForm.setReset(false); // Will not reset the parameters
 			if (pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
 			{
 				return mapping.findForward(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY);
@@ -137,7 +148,6 @@ public class AddSpecimenAction extends SecureAction
 		{
 			return mapping.findForward(Constants.FAILURE);
 		}
-
 	}
 
 	/**
@@ -159,9 +169,8 @@ public class AddSpecimenAction extends SecureAction
 	}
 
 	/**
-	 * 
-	 * @param form
-	 * @return
+	 * @param form : form
+	 * @return String : String
 	 */
 	protected String getObjectId(AbstractActionForm form)
 	{

@@ -47,22 +47,43 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author abhijit_naik
- *
  */
 public class AnticipatorySpecimenViewAction extends BaseAction
 {
 
 	/**
-	 * 
+	 * .
 	 */
 	private static final String SPECIMEN_KEY_PREFIX = "S_";
+	/**
+	 * cpId.
+	 */
 	Long cpId = null;
+	/**
+	 * autoStorageContainer.
+	 */
 	private SpecimenAutoStorageContainer autoStorageContainer;
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(AnticipatorySpecimenViewAction.class);
+	/**
+	 * asignedPositonSet.
+	 */
 	Set asignedPositonSet = null;
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form : object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -81,8 +102,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		{
 			id = (Long) forwardToHashMap.get("specimenCollectionGroupId");
 
-			if (id != null)
-				specimenCollectionGroupForm.setId(id);
+			if (id != null) specimenCollectionGroupForm.setId(id);
 
 			specimenId = (Long) forwardToHashMap.get("specimenId");
 			if (specimenId != null)
@@ -123,8 +143,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
 			autoStorageContainer.setCollectionProtocol(cpId);
 			autoStorageContainer.setSpecimenStoragePositions(bean);
-			if (request.getParameter("target") != null)
-				target = request.getParameter("target");
+			if (request.getParameter("target") != null) target = request.getParameter("target");
 
 			autoStorageContainer.fillAllocatedPositionSet(asignedPositonSet);
 			session.setAttribute("asignedPositonSet", asignedPositonSet);
@@ -144,20 +163,21 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	}
 
 	/**
-	 * @param session
-	 * @param specimencollectionGroup
-	 * @throws DAOException
-	 * @throws BizLogicException 
+	 * @param session : session
+	 * @param specimencollectionGroup : specimencollectionGroup
+	 * @throws DAOException : DAOException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void addSCGSpecimensToSession(HttpSession session,
 			SpecimenCollectionGroup specimencollectionGroup) throws DAOException, BizLogicException
 	{
-		LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap = new LinkedHashMap < String , CollectionProtocolEventBean >();
+		LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap =
+			new LinkedHashMap < String , CollectionProtocolEventBean >();
 
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimencollectionGroup.getId().longValue()));
-		// sorting of specimen collection accoding to id 
+		// sorting of specimen collection accoding to id
 		LinkedList < Specimen > specimenList = new LinkedList < Specimen >();
 		Iterator < Specimen > itr = specimencollectionGroup.getSpecimenCollection().iterator();
 
@@ -188,19 +208,26 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 
 		eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(specimenList, cpId));
-		//eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
-		//specimencollectionGroup.getSpecimenCollection(),cpId ));
+		// eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
+		// specimencollectionGroup.getSpecimenCollection(),cpId ));
 		String globalSpecimenId = "E" + eventBean.getUniqueIdentifier() + "_";
 		cpEventMap.put(globalSpecimenId, eventBean);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 	}
-
+/**
+ *
+ * @param specimenCollection : specimenCollection
+ * @param collectionProtocolId : collectionProtocolId
+ * @return LinkedHashMap : LinkedHashMap
+ * @throws DAOException : DAOException
+ */
 	protected LinkedHashMap < String , GenericSpecimen > getSpecimensMap(
 			Collection < Specimen > specimenCollection, long collectionProtocolId)
 			throws DAOException
 	{
-		LinkedHashMap < String , GenericSpecimen > specimenMap = new LinkedHashMap < String , GenericSpecimen >();
+		LinkedHashMap < String , GenericSpecimen > specimenMap =
+			new LinkedHashMap < String , GenericSpecimen >();
 
 		Iterator < Specimen > specimenIterator = specimenCollection.iterator();
 		while (specimenIterator.hasNext())
@@ -220,12 +247,20 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		return specimenMap;
 	}
-
+/**
+ *
+ * @param specimenCollection : specimenCollection
+ * @param specimenId : specimenId
+ * @param collectionProtocolId : collectionProtocolId
+ * @return LinkedHashMap < String , GenericSpecimen > : LinkedHashMap
+ * @throws DAOException : DAOException
+ */
 	protected LinkedHashMap < String , GenericSpecimen > getSpecimensMap(
 			Collection specimenCollection, long specimenId, long collectionProtocolId)
 			throws DAOException
 	{
-		LinkedHashMap < String , GenericSpecimen > specimenMap = new LinkedHashMap < String , GenericSpecimen >();
+		LinkedHashMap < String , GenericSpecimen > specimenMap =
+			new LinkedHashMap < String , GenericSpecimen >();
 
 		Iterator specimenIterator = specimenCollection.iterator();
 		while (specimenIterator.hasNext())
@@ -244,12 +279,20 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		return specimenMap;
 	}
-
+/**
+ *
+ * @param specimenMap : specimenMap
+ * @param id : id
+ * @param specBean : specBean
+ * @param prefix : prefix
+ * @return LinkedHashMap < String , GenericSpecimen > : LinkedHashMap
+ */
 	private LinkedHashMap < String , GenericSpecimen > getOrderedMap(
 			LinkedHashMap < String , GenericSpecimen > specimenMap, Long id,
 			GenericSpecimenVO specBean, String prefix)
 	{
-		LinkedHashMap < String , GenericSpecimen > orderedMap = new LinkedHashMap < String , GenericSpecimen >();
+		LinkedHashMap < String , GenericSpecimen > orderedMap =
+			new LinkedHashMap < String , GenericSpecimen >();
 		Object[] keyArray = specimenMap.keySet().toArray();
 		for (int ctr = 0; ctr < keyArray.length; ctr++)
 		{
@@ -268,7 +311,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		return specimenMap;
 	}
-
+/**
+ *
+ * @param specimen : specimen
+ * @param parentSpecimenVO : parentSpecimenVO
+ * @throws DAOException : DAOException
+ */
 	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO)
 			throws DAOException
 	{
@@ -284,8 +332,10 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 		Iterator < AbstractSpecimen > iterator = specimenChildrenCollection.iterator();
 
-		LinkedHashMap < String , GenericSpecimen > aliquotMap = new LinkedHashMap < String , GenericSpecimen >();
-		LinkedHashMap < String , GenericSpecimen > derivedMap = new LinkedHashMap < String , GenericSpecimen >();
+		LinkedHashMap < String , GenericSpecimen > aliquotMap =
+			new LinkedHashMap < String , GenericSpecimen >();
+		LinkedHashMap < String , GenericSpecimen > derivedMap =
+			new LinkedHashMap < String , GenericSpecimen >();
 
 		while (iterator.hasNext())
 		{
@@ -293,18 +343,20 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			String lineage = childSpecimen.getLineage();
 
 			GenericSpecimenVO specimenBean = getSpecimenBean(childSpecimen, specimen.getLabel());
-			//addToSpToAutoCont(specimenBean);
+			// addToSpToAutoCont(specimenBean);
 			setChildren(childSpecimen, specimenBean);
 			String prefix = lineage + specimen.getId() + "_";
 			specimenBean.setUniqueIdentifier(prefix + childSpecimen.getId());
 
 			if (Constants.ALIQUOT.equals(childSpecimen.getLineage()))
 			{
-				aliquotMap = getOrderedMap(aliquotMap, childSpecimen.getId(), specimenBean, prefix);
+				aliquotMap = getOrderedMap(aliquotMap, childSpecimen.getId(),
+						specimenBean, prefix);
 			}
 			else
 			{
-				derivedMap = getOrderedMap(derivedMap, childSpecimen.getId(), specimenBean, prefix);
+				derivedMap = getOrderedMap(derivedMap, childSpecimen.getId(),
+						specimenBean, prefix);
 			}
 			specimenBean.setCollectionProtocolId(cpId);
 
@@ -336,8 +388,15 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		parentSpecimenVO.setAliquotSpecimenCollection(aliquotMap);
 		parentSpecimenVO.setDeriveSpecimenCollection(derivedMap);
 	}
-
-	protected GenericSpecimenVO getSpecimenBean(Specimen specimen, String parentName)
+/**
+ *
+ * @param specimen : specimen
+ * @param parentName : parentName
+ * @return GenericSpecimenVO : GenericSpecimenVO
+ * @throws DAOException : DAOException
+ */
+	protected GenericSpecimenVO getSpecimenBean(Specimen specimen,
+			String parentName)
 			throws DAOException
 	{
 		GenericSpecimenVO specimenDataBean = new GenericSpecimenVO();
@@ -353,7 +412,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 
 		specimenDataBean.setCheckedSpecimen(true);
-		specimenDataBean.setPrintSpecimen(specimenDataBean.getPrintSpecimen());//Bug 12631
+		specimenDataBean.setPrintSpecimen(specimenDataBean.getPrintSpecimen());// Bug
+
 		if (Constants.SPECIMEN_COLLECTED.equals(specimen.getCollectionStatus()))
 		{
 			specimenDataBean.setReadOnly(true);
@@ -365,13 +425,17 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setTissueSide(characteristics.getTissueSide());
 			specimenDataBean.setTissueSite(characteristics.getTissueSite());
 		}
-		//specimenDataBean.setExternalIdentifierCollection(specimen.getExternalIdentifierCollection());
-		//specimenDataBean.setBiohazardCollection(specimen.getBiohazardCollection());
-		//specimenDataBean.setSpecimenEventCollection(specimen.getSpecimenEventCollection());
+		// specimenDataBean.setExternalIdentifierCollection(specimen.
+		// getExternalIdentifierCollection());
+		//specimenDataBean.setBiohazardCollection(specimen.getBiohazardCollection
+		// ());
+		// specimenDataBean.setSpecimenEventCollection(specimen.
+		// getSpecimenEventCollection());
 
-		//		specimenDataBean.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
+		// specimenDataBean.setSpecimenCollectionGroup(specimen.
+		// getSpecimenCollectionGroup());
 
-		//		specimenDataBean.setStorageContainer(null);
+		// specimenDataBean.setStorageContainer(null);
 		String concentration = "";
 		if ("Molecular".equals(specimen.getClassName()))
 		{
@@ -394,29 +458,36 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					.getPositionDimensionTwo()));
 			specimenDataBean.setStorageContainerForSpecimen("Auto");
 		}
-		//Mandar : 18Aug08 to check for virtual specimens which are collected after updating the initial storage types. START
+		// Mandar : 18Aug08 to check for virtual specimens which are collected
+		// after updating the initial storage types. START
 		else if (specimen != null && specimen.getSpecimenPosition() == null
 				&& "Collected".equals(specimen.getCollectionStatus()))
 		{
 			specimenDataBean.setStorageContainerForSpecimen("Virtual");
-		} // //Mandar : 18Aug08 to check for virtual specimens which are collected after updating the initial storage types. END
+		} // //Mandar : 18Aug08 to check for virtual specimens which are
+			// collected after updating the initial storage types. END
 		else
 		{
-			//TODO:After model change 
 			storageType = getStorageType(specimen);
 			specimenDataBean.setStorageContainerForSpecimen(storageType);
 
 		}
-		/*if ("Auto".equals(storageType))
-		{
-			autoStorageContainer.addSpecimen(specimenDataBean, specimenDataBean.getClassName());
-		}*/
-		//setChildren(specimen, specimenDataBean);
-		//specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
-		//specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen, Constants.ALIQUOT));
+		/*
+		 * if ("Auto".equals(storageType)) {
+		 * autoStorageContainer.addSpecimen(specimenDataBean,
+		 * specimenDataBean.getClassName()); }
+		 */
+		// setChildren(specimen, specimenDataBean);
+		// specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen,
+		// Constants.ALIQUOT));
+		// specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen,
+		// Constants.ALIQUOT));
 		return specimenDataBean;
 	}
-
+/**
+ *
+ * @param specimenDataBean : specimenDataBean
+ */
 	private void addToSpToAutoCont(GenericSpecimenVO specimenDataBean)
 	{
 		if ("Auto".equals(specimenDataBean.getStorageContainerForSpecimen()))
@@ -425,7 +496,11 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 
 	}
-
+/**
+ *
+ * @param specimen : specimen
+ * @return String : String
+ */
 	private String getStorageType(Specimen specimen)
 	{
 		String storageType;
@@ -442,26 +517,29 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	}
 
 	/**
-	 * @param session
-	 * @param specimencollectionGroup
-	 * @throws DAOException
-	 * @throws BizLogicException 
+	 *
+	 * @param session : session
+	 * @param specimenId : specimenId
+	 * @param specimenList : specimenList
+	 * @throws DAOException : DAOException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void addSpecimensToSession(HttpSession session, Long specimenId, List specimenList)
 			throws DAOException, BizLogicException
 	{
-		LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap = new LinkedHashMap < String , CollectionProtocolEventBean >();
+		LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap =
+			new LinkedHashMap < String , CollectionProtocolEventBean >();
 
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimenId.longValue()));
 
-		// sorting of specimen collection accoding to id 
+		// sorting of specimen collection accoding to id
 
 		Comparator spIdComp = new IdComparator();
 		Collections.sort(specimenList, spIdComp);
 
-		//List specList = new LinkedList();
+		// List specList = new LinkedList();
 		long lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimenId);
 		setLabelInSpecimen(specimenId, specimenList, lastAliquotNo);
 
@@ -486,13 +564,21 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 	}
-
+/**
+ *
+ * @param specimenId : specimenId
+ * @param scgSpecimenList : scgSpecimenList
+ * @param session : session
+ * @throws DAOException : DAOException
+ * @throws BizLogicException : BizLogicException
+ */
 	private void getSpcimensToShowOnSummary(long specimenId, Collection scgSpecimenList,
 			HttpSession session) throws DAOException, BizLogicException
 	{
 		List < Specimen > specimenList = new ArrayList < Specimen >();
-		//Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
-		//getSpcimensToShowOnSummary(specimenId,scgSpecimenList);
+		// Collection scgSpecimenList =
+		// specimencollectionGroup.getSpecimenCollection();
+		// getSpcimensToShowOnSummary(specimenId,scgSpecimenList);
 		if (scgSpecimenList != null)
 		{
 			Iterator itr = scgSpecimenList.iterator();
@@ -504,7 +590,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 				{
 					if (specimen.getId().equals(specimenId)
 							|| (specimen.getParentSpecimen() != null && specimen
-									.getParentSpecimen().getId().equals(specimenId)))
+									.getParentSpecimen().getId().
+									equals(specimenId)))
 					{
 						specimenList.add(specimen);
 					}
@@ -513,7 +600,13 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		}
 		addSpecimensToSession(session, specimenId, specimenList);
 	}
-
+/**
+ *
+ * @param specimenId : specimenId
+ * @param specimenList : specimenList
+ * @param lastChildNo : lastChildNo
+ * @throws DAOException : DAOException
+ */
 	public void setLabelInSpecimen(Long specimenId, Collection specimenList, long lastChildNo)
 			throws DAOException
 	{
@@ -524,16 +617,20 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			{
 				Specimen specimen = (Specimen) itr.next();
 				if (specimen.getId().equals(specimenId)
-						|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen()
+						|| (specimen.getParentSpecimen() != null &&
+								specimen.getParentSpecimen()
 								.getId().equals(specimenId)))
 				{
 					if (specimen.getLabel() == null || specimen.getLabel().equals(""))
 					{
 
-						if (specimen.getLineage().equals(Constants.ALIQUOT))
+						if (specimen.getLineage().
+								equals(Constants.ALIQUOT))
 						{
-							if (specimen.getParentSpecimen().getLabel() != null)
-								specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
+							if (specimen.getParentSpecimen().
+									getLabel() != null)
+								specimen.setLabel
+								(specimen.getParentSpecimen().getLabel() + "_"
 										+ (++lastChildNo));
 						}
 						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))

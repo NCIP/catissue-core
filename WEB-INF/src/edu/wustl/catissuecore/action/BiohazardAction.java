@@ -24,6 +24,10 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
 
+/**
+ * @author renuka_bajpai
+ *
+ */
 public class BiohazardAction extends SecureAction
 {
 
@@ -35,6 +39,7 @@ public class BiohazardAction extends SecureAction
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
+	 * @return ActionForward : ActionForward
 	 * */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -65,7 +70,7 @@ public class BiohazardAction extends SecureAction
 
 		request.setAttribute("formName", formName);
 
-		//Sets the operation attribute to be used in the Add/Edit Institute Page. 
+		//Sets the operation attribute to be used in the Add/Edit Institute Page.
 		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);

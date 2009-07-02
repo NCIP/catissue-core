@@ -32,6 +32,7 @@ public class ChangePasswordAction extends BaseAction
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

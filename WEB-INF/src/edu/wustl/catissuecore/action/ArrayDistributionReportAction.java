@@ -35,27 +35,34 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 
 /**
- * This is the action class for displaying the Distribution report
+ * This is the action class for displaying the Distribution report.
  * @author Rahul Ner
- *  
+ *
  */
 
 public class ArrayDistributionReportAction extends BaseDistributionReportAction
 {
 
 	/**
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 
-		//Retrieve the distribution ID which is set in CommonAddEdit Action 
+		//Retrieve the distribution ID which is set in CommonAddEdit Action
 		Long distributionId = (Long) request.getAttribute(Constants.DISTRIBUTION_ID);
 
 		//retrieve from configuration form if it is null
@@ -68,14 +75,15 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		{
 			distributionId = (Long) forwardToHashMap.get("distributionId");
 		}
-		/*Retrieve from request attribute if it null. 
+		/*Retrieve from request attribute if it null.
 		 */
 		if (distributionId == null)
 		{
 			distributionId = (Long) request.getAttribute(Constants.SYSTEM_IDENTIFIER);
 		}
 
-		/*Retrieve from request parameter if it null. This request parameter is set in Distribution page incase the Report button 
+		/*Retrieve from request parameter if it null. This request parameter is set
+		 *  in Distribution page incase the Report button
 		 *is clicked from Distribution Edit page
 		 */
 		if (distributionId == null)
@@ -83,7 +91,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			distributionId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		}
 
-		//Set it in configuration form if it is not null 
+		//Set it in configuration form if it is not null
 		if (distributionId != null)
 			configForm.setDistributionId(distributionId);
 
@@ -94,7 +102,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
 		distributionReportForm.setDistributionType(new Integer(
 				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
-		SessionDataBean sessionData = getSessionData(request);
+		//SessionDataBean sessionData = getSessionData(request);
 		String action = configForm.getNextAction();
 
 		/*    	//Set the columns for Distribution report
@@ -125,10 +133,10 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param dist
-	 * @param configForm
-	 * @param sessionData
-	 * @return
+	 * @param dist : dist
+	 * @param configForm : configForm
+	 * @param sessionData : sessionData
+	 * @return List : List
 	 */
 	protected List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm,
 			SessionDataBean sessionData)
@@ -139,7 +147,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		//For Code model sync
 		//dist.getSpecimenArrayCollection();
 		//Specimen Ids which are getting distributed.
-		String[] specimenArrayIds = new String[specimenArrayCollection.size()];
+		//String[] specimenArrayIds = new String[specimenArrayCollection.size()];
 		int i = 0;
 		Iterator itr = specimenArrayCollection.iterator();
 
@@ -158,12 +166,11 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param array
-	 * @param specimenColumns
-	 * @param sessionData
-	 * @param arrayEntry
-	 * @param fillerList
-	 * @throws BizLogicException 
+	 * @param array : array
+	 * @param specimenColumns : specimenColumns
+	 * @param sessionData : sessionData
+	 * @param arrayEntry : arrayEntry
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void getSpecimenDetails(SpecimenArray array, String[] specimenColumns,
 			SessionDataBean sessionData, ArrayDistributionReportEntry arrayEntry)
@@ -241,11 +248,12 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param array
-	 * @param selectedColumns
-	 * @param sessionData
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param array : array
+	 * @param selectedColumns : selectedColumns
+	 * @param sessionData : sessionData
+	 * @return List : List
+	 * @throws Exception : Exception
 	 */
 	private List getArrayDetails(SpecimenArray array, String[] selectedColumns,
 			SessionDataBean sessionData) throws Exception
@@ -291,13 +299,13 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param dist
-	 * @param configForm
-	 * @param sessionData
-	 * @param arrayColumns
-	 * @param specimenColumns
-	 * @return
-	 * @throws Exception
+	 * @param dist : dist
+	 * @param configForm : configForm
+	 * @param sessionData : sessionData
+	 * @param arrayColumns : arrayColumns
+	 * @param specimenColumns : specimenColumns
+	 * @return List : List
+	 * @throws Exception : Exception
 	 */
 	protected List getListOfArrayDataForSave(Distribution dist, ConfigureResultViewForm configForm,
 			SessionDataBean sessionData, String[] arrayColumns, String[] specimenColumns)
@@ -318,13 +326,13 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param dist
-	 * @param configForm
-	 * @param sessionData
-	 * @param arrayColumns
-	 * @param specimenColumns
-	 * @return
-	 * @throws Exception
+	 * @param dist : dist
+	 * @param configForm : configForm
+	 * @param sessionData : sessionData
+	 * @param arrayColumns : arrayColumns
+	 * @param specimenColumns : specimenColumns
+	 * @return List : List
+	 * @throws Exception : Exception
 	 */
 	protected List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm,
 			SessionDataBean sessionData, String[] arrayColumns, String[] specimenColumns)
@@ -344,11 +352,10 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * Name: Virender Mehta
-	 * Reviewer: Prafull
-	 * Retrive SpecimenArrayCollection from parent Specimen
-	 * Replaced Iterator itr = dist.getSpecimenArrayCollection().iterator();
-	 * @throws BizLogicException 
+	 * Retrive SpecimenArrayCollection from parent Specimen.
+	 * @param dist : dist
+	 * @return Collection : Collection
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private Collection getSpecimenArrayCollection(Distribution dist) throws BizLogicException
 	{

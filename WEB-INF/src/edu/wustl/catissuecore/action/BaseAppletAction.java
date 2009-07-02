@@ -21,21 +21,26 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This action provides common base to all the action that handles request from an applet.
- * 
+ * This action provides common base to all the action that handles request from
+ * an applet.
+ *
  * @author Rahul Ner.
  */
 public abstract class BaseAppletAction extends SecureAction
 {
-
+/**
+ * logger.
+ */
 	private transient Logger logger = Logger.getCommonLogger(BaseAppletAction.class);
 
 	/**
-	 * This method write input map to the response in the form of BaseAppletModel.
-	 * 
-	 * @param  response 
-	 * @param  outputMap Map that need to send to applet.
-	 * @throws Exception
+	 * This method write input map to the response in the form of
+	 * BaseAppletModel.
+	 *
+	 * @param response : response
+	 * @param outputMap
+	 *            Map that need to send to applet.
+	 * @throws Exception : Exception
 	 */
 	protected void writeMapToResponse(HttpServletResponse response, Map outputMap) throws Exception
 	{
@@ -47,12 +52,12 @@ public abstract class BaseAppletAction extends SecureAction
 	}
 
 	/**
-	 * This method reads  AppletModelInterface from request 
-	 * and return the map inside it.
-	 * 
-	 * @param request 
-	 * @return map inside AppletModelInterface
-	 * @throws Exception
+	 * This method reads AppletModelInterface from request and return the map
+	 * inside it.
+	 * @param request : request
+	 * @return Map : Map
+	 * @throws IOException : IOException
+	 * @throws ClassNotFoundException : ClassNotFoundException
 	 */
 	protected Map readMapFromRequest(HttpServletRequest request) throws IOException,
 			ClassNotFoundException
@@ -63,12 +68,16 @@ public abstract class BaseAppletAction extends SecureAction
 		return model.getData();
 	}
 
-	/*
-	 * Overriden from BaseAction.
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
+	 *            object of ActionMapping
 	 * @param form
+	 *            object of ActionForm
 	 * @param request
+	 *            object of HttpServletRequest
 	 * @param response
+	 *            object of HttpServletResponse
 	 */
 	protected void preExecute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response)
@@ -85,42 +94,59 @@ public abstract class BaseAppletAction extends SecureAction
 	}
 
 	/**
-	 * This method is overided do save input map before reading anything from request.
-	 * 
-	 * @see org.apache.struts.actions.DispatchAction#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * This method is overided do save input map before reading anything from
+	 * request.
+	 *
+	 * @see org.apache.struts.actions.DispatchAction#execute(org.apache.struts.action.ActionMapping,
+	 *      org.apache.struts.action.ActionForm,
+	 *      javax.servlet.http.HttpServletRequest,
+	 *      javax.servlet.http.HttpServletResponse)
 	 */
-	//	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
-	//			HttpServletRequest request, HttpServletResponse response) throws Exception
-	//	{
-	//		try {
-	//			Map inputMap = readMapFromRequest(request);
-	//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
-	//		} catch (Exception e) {
-	//			
-	//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
-	//		}
+	// public ActionForward execute(ActionMapping actionMapping, ActionForm
+	// actionForm,
+	// HttpServletRequest request, HttpServletResponse response) throws
+	// Exception
+	// {
+	// try {
+	// Map inputMap = readMapFromRequest(request);
+	// request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+	// } catch (Exception e) {
 	//
-	//		return super.execute(actionMapping, actionForm, request, response);
-	//	}
-	// --------- Changes By  Mandar : 05Dec06 for Bug 2866 
+	// request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+	// }
+	//
+	// return super.execute(actionMapping, actionForm, request, response);
+	// }
+	// --------- Changes By Mandar : 05Dec06 for Bug 2866
 	// --------- Extending SecureAction.
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * */
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//---- Code from execute 
-		//		try {
-		//			Map inputMap = readMapFromRequest(request);
-		//			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
-		//		} catch (Exception e) {
-		//			
-		//			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
-		//		}
-		//		---- Code from execute
+		// ---- Code from execute
+		// try {
+		// Map inputMap = readMapFromRequest(request);
+		// request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+		// } catch (Exception e) {
+		//
+		// request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+		// }
+		// ---- Code from execute
 
-		//-- code for handling method calls
+		// -- code for handling method calls
 		String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName != null)
 		{
@@ -129,20 +155,29 @@ public abstract class BaseAppletAction extends SecureAction
 		return null;
 	}
 
-	/*
-	 * This method calls the specified method passed as parameter.
-	 * 
+	/**
+	 * @param methodName : methodName
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @return ActionForward : ActionForward
+	 * @throws Exception : Exception
 	 */
 	protected abstract ActionForward invokeMethod(String methodName, ActionMapping mapping,
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception;
 
-	/*
-	 * This method returns the method with the specified name if the method exists. Return null other wise.
-	 */
+/**
+ * This method returns the method with the specified name if the method
+ * exists. Return null other wise.
+ * @param name : name
+ * @param className : className
+ * @return Method : Method
+ */
 	protected Method getMethod(String name, Class className)
 	{
-		//argument types
+		// argument types
 		Class[] types = {ActionMapping.class, ActionForm.class, HttpServletRequest.class,
 				HttpServletResponse.class};
 		try

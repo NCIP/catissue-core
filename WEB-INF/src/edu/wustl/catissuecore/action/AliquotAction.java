@@ -1,11 +1,14 @@
 /**
- * <p>Title: AliquotAction Class>
- * <p>Description:	AliquotAction initializes all the fields of the page, Aliquots.jsp.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: AliquotAction Class>
+ * <p>
+ * Description: AliquotAction initializes all the fields of the page,
+ * Aliquots.jsp.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
  * @author Aniruddha Phadnis
- * @version 1.00
- * Created on May 12, 2006
+ * @version 1.00 Created on May 12, 2006
  */
 
 package edu.wustl.catissuecore.action;
@@ -71,16 +74,22 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//-- code for handling method calls
+		// -- code for handling method calls
 		if (request.getParameter(Constants.CP_QUERY) != null)
 		{
 			request.setAttribute(Constants.CP_QUERY, "CPQuery");
@@ -94,11 +103,10 @@ public class AliquotAction extends SecureAction
 		List < NameValueBean > storagePositionList = AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		/**
-		 * Patch ID: 3835_1_6
-		 * See also: 1_1 to 1_5
-		 * Description : set current date to aliquot
+		 * Patch ID: 3835_1_6 See also: 1_1 to 1_5 Description : set current
+		 * date to aliquot
 		 */
-		//   if(((AliquotForm)form).getCreatedDate() == null||)
+		// if(((AliquotForm)form).getCreatedDate() == null||)
 		if ((((AliquotForm) form).getNextForwardTo() != null)
 				&& (((AliquotForm) form).getNextForwardTo()).equals(""))
 		{
@@ -112,11 +120,17 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * Overrides the execute method of Action class.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeContainerChange(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -126,18 +140,19 @@ public class AliquotAction extends SecureAction
 		{
 			jdbcDAO = AppUtility.openJDBCSession();
 			AliquotForm aliquotForm = (AliquotForm) form;
-			//boolean to indicate whether the suitable containers to be shown in dropdown 
-			//is exceeding the max limit.
+			// boolean to indicate whether the suitable containers to be shown
+			// in dropdown
+			// is exceeding the max limit.
 			String exceedingMaxLimit = "false";
 
-			//Getting the value pageOf parameter.
+			// Getting the value pageOf parameter.
 
 			String pageOf = request.getParameter(Constants.PAGE_OF);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-			//Map containerMap = bizLogic.getAllocatedContainerMap();
+			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			int aliquotCount = 0;
 			if (aliquotForm.isAliqoutInSameContainer())
@@ -171,9 +186,12 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param aliquotForm object of AliquotForm
-	 * @param containerMap object of TreeMap for container data
-	 * @param request object of HttpServletRequest
+	 * @param aliquotForm
+	 *            object of AliquotForm
+	 * @param containerMap
+	 *            object of TreeMap for container data
+	 * @param request
+	 *            object of HttpServletRequest
 	 */
 	private void populateStorageLocationsOnContainerChange(AliquotForm aliquotForm,
 			TreeMap containerMap, HttpServletRequest request)
@@ -229,11 +247,17 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * Overrides the execute method of Action class.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAliquotAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -243,15 +267,16 @@ public class AliquotAction extends SecureAction
 		{
 			jdbcDAO = AppUtility.openJDBCSession();
 			AliquotForm aliquotForm = (AliquotForm) form;
-			//boolean to indicate whether the suitable containers to be shown in dropdown 
-			//is exceeding the max limit.
+			// boolean to indicate whether the suitable containers to be shown
+			// in dropdown
+			// is exceeding the max limit.
 			String exceedingMaxLimit = "false";
 			String specimenLabel = aliquotForm.getSpecimenLabel();
 			request.setAttribute("createdDate", aliquotForm.getCreatedDate());
-			//For Storing Label/Barcode, Aliquot Count, Quantity per Aliquot
+			// For Storing Label/Barcode, Aliquot Count, Quantity per Aliquot
 			Map tempAliquotMap = new HashMap();
-			//Extracting the values of the operation & pageOf parameters.
-			//String operation = request.getParameter(Constants.OPERATION);
+			// Extracting the values of the operation & pageOf parameters.
+			// String operation = request.getParameter(Constants.OPERATION);
 			String pageOf = request.getParameter(Constants.PAGE_OF);
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
@@ -260,19 +285,24 @@ public class AliquotAction extends SecureAction
 					Constants.SESSION_DATA);
 			AppUtility.setDefaultPrinterTypeLocation(aliquotForm);
 			/**
-			 *  Following code ensures that 
-			 *  1. Label/Barcode, Aliquot Count, Quantity per Aliquot submitted on click of Submit button 
-			 *  and that on click of create button is same. In case they are different show the error 
-			 *  'You have to resubmit the page in case you edit any of Parent Specimen Label/Barcode, Aliquot Count, Quantity per Aliquot.'
-			 *  2. If checkbox 'Create all Aliquots in the Same Container' is checked(true), populate 
-			 *  Aliquot form with only those containers which has sufficient empty space to hold all the aliquots.
-			 *  3. If checkbox 'Create all Aliquots in the Same Container' is checked(true), on click of create, 
-			 *  check whether all the specimens are in the same container. If they are not in the same container,
-			 *  show error 'Create failed because you can not choose different containers to store the Aliquots' 
+			 * Following code ensures that 1. Label/Barcode, Aliquot Count,
+			 * Quantity per Aliquot submitted on click of Submit button and that
+			 * on click of create button is same. In case they are different
+			 * show the error 'You have to resubmit the page in case you edit
+			 * any of Parent Specimen Label/Barcode, Aliquot Count, Quantity per
+			 * Aliquot.' 2. If checkbox 'Create all Aliquots in the Same
+			 * Container' is checked(true), populate Aliquot form with only
+			 * those containers which has sufficient empty space to hold all the
+			 * aliquots. 3. If checkbox 'Create all Aliquots in the Same
+			 * Container' is checked(true), on click of create, check whether
+			 * all the specimens are in the same container. If they are not in
+			 * the same container, show error 'Create failed because you can not
+			 * choose different containers to store the Aliquots'
 			 */
 			// --------- Start Bug 2309--------------
 			/**
-			 * Store the values of label/barcode,aliquot count, quantity per aliquot on click of submit 
+			 * Store the values of label/barcode,aliquot count, quantity per
+			 * aliquot on click of submit
 			 */
 			if (aliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 			{
@@ -284,7 +314,8 @@ public class AliquotAction extends SecureAction
 			else if (aliquotForm.getButtonClicked().equalsIgnoreCase("create")
 					|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
 			{
-				// arePropertiesChanged is used to identify if any of  label/barcode,aliquot count, quantity per aliquot are changed
+				// arePropertiesChanged is used to identify if any of
+				// label/barcode,aliquot count, quantity per aliquot are changed
 				boolean arePropertiesChanged = false;
 				tempAliquotMap = (HashMap) request.getSession().getAttribute("tempAliquotMap");
 				String label = (String) tempAliquotMap.get("label");
@@ -293,7 +324,8 @@ public class AliquotAction extends SecureAction
 				{
 					if (label == null
 							|| !label.trim()
-									.equalsIgnoreCase(aliquotForm.getSpecimenLabel().trim()))
+									.equalsIgnoreCase
+									(aliquotForm.getSpecimenLabel().trim()))
 					{
 						arePropertiesChanged = true;
 					}
@@ -301,7 +333,8 @@ public class AliquotAction extends SecureAction
 				else
 				{
 					if (barcode == null
-							|| !barcode.trim().equalsIgnoreCase(aliquotForm.getBarcode().trim()))
+							|| !barcode.trim().
+							equalsIgnoreCase(aliquotForm.getBarcode().trim()))
 					{
 						arePropertiesChanged = true;
 					}
@@ -320,10 +353,10 @@ public class AliquotAction extends SecureAction
 				{
 					arePropertiesChanged = true;
 				}
-
-				/** 
-				 * areContainersDifferent checks whether user has selected diffrent containers when 
-				 * 'Store all Containers aliquots in same container' is true
+				/**
+				 * areContainersDifferent checks whether user has selected
+				 * diffrent containers when 'Store all Containers aliquots in
+				 * same container' is true
 				 */
 				boolean areContainersDifferent = false;
 				boolean wrongStorageContainerName = false;
@@ -340,7 +373,8 @@ public class AliquotAction extends SecureAction
 					{
 						String radioButonKey = "radio_" + i;
 						String containerIdKey = specimenKey + i + "_StorageContainer_id";
-						String containerNameKey = specimenKey + i + "_StorageContainer_name";
+						String containerNameKey = specimenKey + i
+						+ "_StorageContainer_name";
 						String containerId = null;
 						if (aliquotMap.get(radioButonKey) != null
 								&& aliquotMap.get(radioButonKey).equals("2"))
@@ -350,7 +384,8 @@ public class AliquotAction extends SecureAction
 						else if (aliquotMap.get(radioButonKey) != null
 								&& aliquotMap.get(radioButonKey).equals("3"))
 						{
-							String containerName = (String) aliquotMap.get(containerNameKey
+							String containerName =
+								(String) aliquotMap.get(containerNameKey
 									+ "_fromMap");
 
 							String sourceObjectName = StorageContainer.class.getName();
@@ -362,7 +397,8 @@ public class AliquotAction extends SecureAction
 							IBizLogic defaultBizLogic = factory
 									.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 							List list = defaultBizLogic.retrieve(sourceObjectName,
-									selectColumnName, whereColumnName, whereColumnCondition,
+									selectColumnName, whereColumnName,
+									whereColumnCondition,
 									whereColumnValue, joinCondition);
 
 							if (!list.isEmpty())
@@ -377,8 +413,10 @@ public class AliquotAction extends SecureAction
 								{
 									errors = new ActionErrors();
 								}
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-										"errors.specimen.storageContainerEditBox"));
+								errors.add(ActionErrors.GLOBAL_ERROR,
+										new ActionError(
+										"errors.specimen." +
+										"storageContainerEditBox"));
 								saveErrors(request, errors);
 							}
 
@@ -391,7 +429,8 @@ public class AliquotAction extends SecureAction
 						else
 						{
 							// check whether all container IDs are same
-							if (containerId == null || !containerId.equals(tempContainerId))
+							if (containerId == null ||
+									!containerId.equals(tempContainerId))
 							{
 								areContainersDifferent = true;
 							}
@@ -401,14 +440,17 @@ public class AliquotAction extends SecureAction
 				}
 
 				/**
-				 *  Repopulate the form with available storage container locations in case
-				 *  1. User has changed any of label/barcode, aliquot count, quantity per aliquote
-				 *  2. User has selected different containers to store the aliquotes when 'Store all aliquots in same container..'
-				 *     checkbox is checked(true)
-				 *  3. User has changed state of checkbox from checked to unchecked or vice versa    
+				 * Repopulate the form with available storage container
+				 * locations in case 1. User has changed any of label/barcode,
+				 * aliquot count, quantity per aliquote 2. User has selected
+				 * different containers to store the aliquotes when 'Store all
+				 * aliquots in same container..' checkbox is checked(true) 3.
+				 * User has changed state of checkbox from checked to unchecked
+				 * or vice versa
 				 */
 
-				if (arePropertiesChanged == true || areContainersDifferent == true
+				if (arePropertiesChanged == true ||
+						areContainersDifferent == true
 						|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
 				{
 
@@ -467,18 +509,18 @@ public class AliquotAction extends SecureAction
 				}
 
 				/**
-				 *  Forward to addEditAction in following cases
-				 *  1. 'Store all aliquots in same container..' Checkbox is checked and user has selected the same container
-				 *  2. 'Store all aliquots in same container..' Checkbox is unchecked
+				 * Forward to addEditAction in following cases 1. 'Store all
+				 * aliquots in same container..' Checkbox is checked and user
+				 * has selected the same container 2. 'Store all aliquots in
+				 * same container..' Checkbox is unchecked
 				 */
 				if (areContainersDifferent == false)
 				{
 					Map aliquotMap = aliquotForm.getAliquotMap();
 					Iterator keyIterator = aliquotMap.keySet().iterator();
 					/**
-					 * 	 Bug no. 560 If total quantity entered by user is greater than initial available quantity,
-					 *   show the 'System can not distribute available quantity among the aliquots due to insufficient amount' error message  
-					 * 
+					 * Bug no. 560 If total quantity entered by user is greater
+					 * than initial available quantity,
 					 */
 
 					double totalQuantity = 0;
@@ -499,14 +541,15 @@ public class AliquotAction extends SecureAction
 							if (!validator.isDouble(value))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-										"errors.item.format", ApplicationProperties
+										"errors.item.format",
+										ApplicationProperties
 												.getValue("specimen.quantity")));
 							}
 							else
 								totalQuantity += Double.parseDouble(value);
 						}
 					}
-					//Resolved bug# 4314 Virender
+					// Resolved bug# 4314 Virender
 					DecimalFormat dFormat = new DecimalFormat("#.000");
 					totalQuantity = Double.parseDouble(dFormat.format(totalQuantity));
 
@@ -518,24 +561,33 @@ public class AliquotAction extends SecureAction
 								"errors.item.qtyInsufficient"));
 						saveErrors(request, errors);
 						TreeMap containerMap = null;
-						if (aliquotForm.isAliqoutInSameContainer())
+						if (aliquotForm.
+								isAliqoutInSameContainer())
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), Integer
-									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
+							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen
+									(aliquotForm.getColProtId(),
+											aliquotForm.getClassName(),
+									Integer.parseInt
+									(aliquotForm.getNoOfAliquots()),
+									exceedingMaxLimit,
 									sessionData, jdbcDAO);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), 0,
-									exceedingMaxLimit, sessionData, jdbcDAO);
+							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen
+									(aliquotForm.getColProtId(),
+											aliquotForm.getClassName(),
+											0,exceedingMaxLimit,
+											sessionData, jdbcDAO);
 						}
 
 						populateAliquotsStorageLocations(aliquotForm, containerMap);
-						request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-						request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-						request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CREATE_ALIQUOT);
+						request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,
+								exceedingMaxLimit);
+						request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,
+								containerMap);
+						request.setAttribute(Constants.PAGE_OF,
+								Constants.PAGE_OF_CREATE_ALIQUOT);
 						setPageData(request, pageOf, aliquotForm);
 						return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT);
 					}
@@ -545,7 +597,7 @@ public class AliquotAction extends SecureAction
 				}
 
 			}
-			// --------END Bug 2309----------		
+			// --------END Bug 2309----------
 
 			if (Constants.PAGE_OF_ALIQUOT_SUMMARY.equals(pageOf))
 			{
@@ -556,7 +608,8 @@ public class AliquotAction extends SecureAction
 					aliquotForm.setClassName(Utility.toString(map
 							.get(Constants.CDE_NAME_SPECIMEN_CLASS)));
 					aliquotForm
-							.setType(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_TYPE)));
+							.setType(Utility.toString(map.get
+									(Constants.CDE_NAME_SPECIMEN_TYPE)));
 					aliquotForm.setTissueSite(Utility.toString(map
 							.get(Constants.CDE_NAME_TISSUE_SITE)));
 					aliquotForm.setTissueSide(Utility.toString(map
@@ -576,7 +629,8 @@ public class AliquotAction extends SecureAction
 				{
 					ActionMessages messages = new ActionMessages();
 					messages
-							.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("aliquots.success"));
+							.add(ActionErrors.GLOBAL_MESSAGE,
+									new ActionMessage("aliquots.success"));
 					saveMessages(request, messages);
 				}
 
@@ -599,10 +653,10 @@ public class AliquotAction extends SecureAction
 			if (specimenLabel != null)
 			{
 				aliquotForm.setSpecimenLabel(specimenLabel);
-				//by falguni-When user selects parent specimen barcode and submit.
-				if (!aliquotForm.getCheckedButton().equals("2"))
-					aliquotForm.setCheckedButton("1");
-				//resolvede bug #4236 Virender Mehta
+				// by falguni-When user selects parent specimen barcode and
+				// submit.
+				if (!aliquotForm.getCheckedButton().equals("2")) aliquotForm.setCheckedButton("1");
+				// resolvede bug #4236 Virender Mehta
 				if (aliquotForm.getCheckedButton().equals("1"))
 				{
 					tempAliquotMap.put("label", aliquotForm.getSpecimenLabel());
@@ -614,7 +668,7 @@ public class AliquotAction extends SecureAction
 				}
 			}
 
-			//Map containerMap = bizLogic.getAllocatedContainerMap();
+			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
 			{
@@ -632,25 +686,35 @@ public class AliquotAction extends SecureAction
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
 
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), Integer
-									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
+							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen
+									(aliquotForm
+									.getColProtId(),
+									aliquotForm.getClassName(),
+									Integer
+									.parseInt(aliquotForm.getNoOfAliquots()),
+									exceedingMaxLimit,
 									sessionData, jdbcDAO);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), 0,
+							containerMap = bizLogic.
+							getAllocatedContaienrMapForSpecimen(aliquotForm
+									.getColProtId(),
+									aliquotForm.getClassName(), 0,
 									exceedingMaxLimit, sessionData, jdbcDAO);
 						}
-						pageOf = checkForSufficientAvailablePositions(request, containerMap,
+						pageOf = checkForSufficientAvailablePositions(request,
+								containerMap,
 								aliquotCount);
 
-						if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
+						if (Constants.PAGE_OF_CREATE_ALIQUOT.
+								equals(pageOf))
 						{
-							if (!aliquotForm.getButtonClicked().equals("none"))
+							if (!aliquotForm.getButtonClicked().
+									equals("none"))
 							{
-								populateAliquotsStorageLocations(aliquotForm, containerMap);
+								populateAliquotsStorageLocations(aliquotForm,
+										containerMap);
 							}
 						}
 					}
@@ -660,9 +724,12 @@ public class AliquotAction extends SecureAction
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 			request.setAttribute(Constants.PAGE_OF, pageOf);
 
-			/*  String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
-			 List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
-			 request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList); */
+			/*
+			 * String [] displayNameField = {Constants.SYSTEM_IDENTIFIER}; List
+			 * specimenIdList = bizLogic.getList(Specimen.class.getName(),
+			 * displayNameField, Constants.SYSTEM_IDENTIFIER, true);
+			 * request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList);
+			 */
 			setParentSpecimenInRequest(request);
 			setPageData(request, pageOf, aliquotForm);
 			return mapping.findForward(pageOf);
@@ -680,12 +747,16 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method checks whether the specimen with given label exists or not.
-	 * @param request object of HttpServletRequest
-	 * @param form object of AliquotForm
-	 * @return String containing value for PAGEOF 
-	 * @throws Exception generic exception
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param form
+	 *            object of AliquotForm
+	 * @return String containing value for PAGEOF
+	 * @throws Exception
+	 *             generic exception
 	 */
-	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
+	private String checkForSpecimen(HttpServletRequest request,
+			AliquotForm form) throws Exception
 	{
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -725,13 +796,13 @@ public class AliquotAction extends SecureAction
 			if (specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
 				/**
-				* Name : Virender Mehta
-				* Reviewer Name : Sachin Lale 
-				* Bug ID: 4040
-				* Description: Added new error message and check for pageOf flow, if user clicks directly aliquot 
-				* 			   link and specimen status is closed then validation is done at Aliquot.jsp else validation message will be shown 
-				* 			   is directed to NewSpecimen.jsp page		
-				*/
+				 * Name : Virender Mehta Reviewer Name : Sachin Lale Bug ID:
+				 * 4040 Description: Added new error message and check for
+				 * pageOf flow, if user clicks directly aliquot link and
+				 * specimen status is closed then validation is done at
+				 * Aliquot.jsp else validation message will be shown is directed
+				 * to NewSpecimen.jsp page
+				 */
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed",
 						"Specimen"));
@@ -755,12 +826,11 @@ public class AliquotAction extends SecureAction
 					.equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				/**
-				* Name : Falguni Sachde
-				* Reviewer Name : Sachin Lale 
-				* Bug ID: 4919
-				* Description: Added new error message and check for pageOf flow, if user clicks directly aliquot 
-				* 			   link and specimen status is disabled 	
-				*/
+				 * Name : Falguni Sachde Reviewer Name : Sachin Lale Bug ID:
+				 * 4919 Description: Added new error message and check for
+				 * pageOf flow, if user clicks directly aliquot link and
+				 * specimen status is disabled
+				 */
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.parentobject.disabled", "Specimen"));
@@ -777,21 +847,22 @@ public class AliquotAction extends SecureAction
 				}
 			}
 			/**
-			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
-			 * required for Bug 2309
+			 * set the value of aliquotInSameContainer which was set while
+			 * creation of collection protocol required for Bug 2309
 			 */
 
 			/**
-			 * Name: Virender Mehta
-			 * Reviewer name: Aarti Sharma
-			 * Description: Resolved Performance Issue 
-			 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol().getAliqoutInSameContainer();
-			 *  fired hql.
+			 * Name: Virender Mehta Reviewer name: Aarti Sharma Description:
+			 * Resolved Performance Issue For retrive
+			 * specimen.getSpecimenCollectionGroup
+			 * ().getCollectionProtocolEvent()
+			 * .getCollectionProtocol().getAliqoutInSameContainer(); fired hql.
 			 */
 			Boolean aliquotInSameContainer = null;
 			aliquotInSameContainer = (Boolean) bizLogic
 					.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
-							"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.aliquotInSameContainer");
+							"specimenCollectionGroup.collectionProtocolEvent." +
+							"collectionProtocol.aliquotInSameContainer");
 			if (aliquotInSameContainer != null)
 			{
 				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
@@ -804,7 +875,8 @@ public class AliquotAction extends SecureAction
 
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 			{
-				boolean isDouble = AppUtility.isQuantityDouble(form.getClassName(), form.getType());
+				boolean isDouble = AppUtility.isQuantityDouble
+				(form.getClassName(), form.getType());
 
 				if (!distributeAvailableQuantity(form, isDouble))
 				{
@@ -829,11 +901,15 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * This method checks whether there are sufficient storage locations are available or not.
-	 * @param request object of HttpServletRequest
-	 * @param containerMap Map containing data for contaner
-	 * @param aliquotCount aliquot count in int
-	 * @return String containing value for PAGEOF 
+	 * This method checks whether there are sufficient storage locations are
+	 * available or not.
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param containerMap
+	 *            Map containing data for contaner
+	 * @param aliquotCount
+	 *            aliquot count in int
+	 * @return String containing value for PAGEOF
 	 */
 	private String checkForSufficientAvailablePositions(HttpServletRequest request,
 			Map containerMap, int aliquotCount)
@@ -869,18 +945,17 @@ public class AliquotAction extends SecureAction
 		}
 	}
 
-	/**
-	 * This method populates parent specimen's data in formbean
-	 * @param form object of AliquotForm
-	 * @param specimen object of Specimen
-	 * @param bizLogic object of class implemeting IBizLogic
-	 * @throws DAOException DAO exception
-	 * @throws ClassNotFoundException 
-	 */
+/**
+ * This method populates parent specimen's data in formbean.
+ * @param form : form
+ * @param specimen : specimen
+ * @param bizLogic : bizLogic
+ * @throws ApplicationException : ApplicationException
+ */
 	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic)
 			throws ApplicationException
 	{
-		//SpecimenCharacteristics chars= null;
+		// SpecimenCharacteristics chars= null;
 		form.setClassName(specimen.getClassName());
 		form.setType(specimen.getSpecimenType());
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
@@ -890,19 +965,23 @@ public class AliquotAction extends SecureAction
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
 		/**
-		 * Name: Virender Mehta
-		 * Reviewer name: Aarti Sharma
-		 * Description: Resolved Performance Issue 
-		 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(),
-		 * fired hql.
+		 * Name: Virender Mehta Reviewer name: Aarti Sharma Description:
+		 * Resolved Performance Issue For retrive
+		 * specimen.getSpecimenCollectionGroup
+		 * ().getCollectionProtocolRegistration
+		 * ().getCollectionProtocol().getId(), fired hql.
 		 */
-		/*	String hql = "select scg.id "+
-			" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg," +
-			" edu.wustl.catissuecore.domain.Specimen as spec " +
-			" where spec.specimenCollectionGroup.id=scg.id and spec.id="+specimen.getId();*/
+		/*
+		 * String hql = "select scg.id "+
+		 * " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
+		 * + " edu.wustl.catissuecore.domain.Specimen as spec " +
+		 * " where spec.specimenCollectionGroup.id=scg.id and spec.id="
+		 * +specimen.getId();
+		 */
 
 		String hql1 = "select specimen.specimenCollectionGroup.id,"
-				+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id "
+				+ "specimen.specimenCollectionGroup." +
+						"collectionProtocolRegistration.collectionProtocol.id "
 				+ " from edu.wustl.catissuecore.domain.Specimen specimen" + " where specimen.id="
 				+ specimen.getId();
 
@@ -910,12 +989,14 @@ public class AliquotAction extends SecureAction
 		Object[] obj = (Object[]) scgIdList.get(0);
 		Object scgId = obj[0];
 		Object cpID = obj[1];
-		/*if(obj!=null)
-		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
-			cpID = collectionProtocol.getId();
-		}*/
-		//cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
+		/*
+		 * if(obj!=null) { CollectionProtocol collectionProtocol =
+		 * (CollectionProtocol) obj; cpID = collectionProtocol.getId(); }
+		 */
+		// cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(),
+		// specimen.getId(),
+		// "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"
+		// );
 		form.setSpCollectionGroupId(Long.valueOf(scgId.toString()));
 		form.setColProtId(Long.valueOf(cpID.toString()));
 		if (specimen instanceof MolecularSpecimen)
@@ -927,43 +1008,41 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * This method returns the available quantity as per the specimen type
-	 * @param specimen object of Specimen
+	 * This method returns the available quantity as per the specimen type.
+	 * @param specimen
+	 *            object of Specimen
 	 * @return String containing value for availableQuantity
 	 */
 	private String getAvailableQuantity(Specimen specimen)
 	{
-		/* Aniruddha : 17/06/2006 TO BE DELETED LATER
-		 String availableQuantity = "";
-		 
-		 if(specimen instanceof CellSpecimen)
-		 {
-		 availableQuantity = String.valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
-		 }
-		 else if(specimen instanceof FluidSpecimen)
-		 {
-		 availableQuantity = String.valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter());
-		 }
-		 else if(specimen instanceof MolecularSpecimen)
-		 {
-		 availableQuantity = String.valueOf(((MolecularSpecimen)specimen).getAvailableQuantityInMicrogram());
-		 }
-		 else if(specimen instanceof TissueSpecimen)
-		 {
-		 availableQuantity = String.valueOf(((TissueSpecimen)specimen).getAvailableQuantityInGram());
-		 }
-		 
-		 return availableQuantity;
+		/*
+		 * Aniruddha : 17/06/2006 TO BE DELETED LATER String availableQuantity =
+		 * ""; if(specimen instanceof CellSpecimen) { availableQuantity =
+		 * String.
+		 * valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
+		 * } else if(specimen instanceof FluidSpecimen) { availableQuantity =
+		 * String
+		 * .valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter
+		 * ()); } else if(specimen instanceof MolecularSpecimen) {
+		 * availableQuantity =String.valueOf(((MolecularSpecimen)specimen).
+		 * getAvailableQuantityInMicrogram()); } else if(specimen instanceof
+		 * TissueSpecimen) { availableQuantity =
+		 * String.valueOf(((TissueSpecimen)
+		 * specimen).getAvailableQuantityInGram()); } return availableQuantity;
 		 */
 		return specimen.getAvailableQuantity().toString();
 	}
 
 	/**
-	 * This method distributes the available quantity among the aliquots. On successful distribution the function return true else false.
-	 * @param form object of AliquotForm
-	 * @param isDouble boolean for isDouble
+	 * This method distributes the available quantity among the aliquots. On
+	 * successful distribution the function return true else false.
+	 * @param form
+	 *            object of AliquotForm
+	 * @param isDouble
+	 *            boolean for isDouble
 	 * @return boolean value for success
-	 * @throws Exception generic exception
+	 * @throws Exception
+	 *             generic exception
 	 */
 	private boolean distributeAvailableQuantity(AliquotForm form, boolean isDouble)
 			throws Exception
@@ -985,9 +1064,9 @@ public class AliquotAction extends SecureAction
 			if (form.getQuantityPerAliquot() == null
 					|| form.getQuantityPerAliquot().trim().length() == 0)
 			{
-				//Resolved bug# 4403 
-				//				dQuantity = availableQuantity / aliquotCount;
-				//				dQuantity = Double.parseDouble(dFormat.format(dQuantity));
+				// Resolved bug# 4403
+				// dQuantity = availableQuantity / aliquotCount;
+				// dQuantity = Double.parseDouble(dFormat.format(dQuantity));
 				BigDecimal bgAvailTemp = new BigDecimal(availableQuantity);
 				BigDecimal bgCntTemp = new BigDecimal(aliquotCount);
 				BigDecimal bgAvail = bgAvailTemp.setScale(2, BigDecimal.ROUND_HALF_EVEN);
@@ -995,9 +1074,9 @@ public class AliquotAction extends SecureAction
 				BigDecimal bgQuantity = bgAvail.divide(bgCnt, 2, BigDecimal.ROUND_FLOOR);
 				dQuantity = bgQuantity.doubleValue();
 				/**
-				 *  Fixed bug 3656
+				 * Fixed bug 3656
 				 */
-				//availableQuantity = 0;
+				// availableQuantity = 0;
 				availableQuantity = availableQuantity
 						- Double.parseDouble(dFormat.format((dQuantity * aliquotCount)));
 				availableQuantity = Double.parseDouble(dFormat.format(availableQuantity));
@@ -1052,19 +1131,21 @@ public class AliquotAction extends SecureAction
 
 		Map aliquotMap = form.getAliquotMap();
 		/**
-		 * Name : Virender Mehta
-		 * Reviewer: Sachin Lale
-		 * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set. 
+		 * Name : Virender Mehta Reviewer: Sachin Lale Description: By getting
+		 * instance of AbstractSpecimenGenerator abstract class current label
+		 * retrived and set.
 		 */
-		//		Commented by Falguni -As now label generation is done in Biz logic
-		/*SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
-		
-		HashMap inputMap = new HashMap();
-		inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, form.getSpecimenLabel());
-		inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, form.getSpecimenID());
-		
-		List<String> aliquotLabels = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(inputMap, aliquotCount);
-		*/
+		// Commented by Falguni -As now label generation is done in Biz logic
+		/*
+		 * SpecimenLabelGenerator abstractSpecimenGenerator =
+		 * SpecimenLabelGeneratorFactory.getInstance(); HashMap inputMap = new
+		 * HashMap(); inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY,
+		 * form.getSpecimenLabel());
+		 * inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, form.getSpecimenID());
+		 * List<String> aliquotLabels =
+		 * abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel
+		 * (inputMap, aliquotCount);
+		 */
 		long totalAliquotCount = 0;
 		if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
 				&& form.getSpecimenLabel() != null)
@@ -1075,12 +1156,12 @@ public class AliquotAction extends SecureAction
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
-			//bug no. 8081 & 8083
+			// bug no. 8081 & 8083
 			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
 					&& form.getSpecimenLabel() != null)
 			{
 				String labelKey = "Specimen:" + i + "_label";
-				//			aliquotMap.put(labelKey,"Abc");
+				// aliquotMap.put(labelKey,"Abc");
 				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
 			}
 
@@ -1091,9 +1172,12 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * This function populates the availability map with available storage locations
-	 * @param form object of AliquotForm
-	 * @param containerMap Map containing data for container
+	 * This function populates the availability map with available storage
+	 * locations.
+	 * @param form
+	 *            object of AliquotForm
+	 * @param containerMap
+	 *            Map containing data for container
 	 */
 	private void populateAliquotsStorageLocations(AliquotForm form, Map containerMap)
 	{
@@ -1117,13 +1201,18 @@ public class AliquotAction extends SecureAction
 							{
 								String containerKey = "Specimen:" + counter
 										+ "_StorageContainer_id";
-								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
-								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
+								String pos1Key = "Specimen:" + counter
+								+ "_positionDimensionOne";
+								String pos2Key = "Specimen:" +
+								counter + "_positionDimensionTwo";
 
-								aliquotMap.put(containerKey, ((NameValueBean) containerId[i])
+								aliquotMap.put(containerKey, ((NameValueBean)
+										containerId[i])
 										.getValue());
-								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k))
+								aliquotMap.put(pos1Key, ((NameValueBean)
+										xDim[j]).getValue());
+								aliquotMap.put(pos2Key, ((NameValueBean)
+										yDimList.get(k))
 										.getValue());
 
 								counter++;
@@ -1144,10 +1233,13 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This function checks the quantity per aliquot is valid or not
-	 * @param request object of HttpServletRequest
-	 * @param form object of AliquotForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param form
+	 *            object of AliquotForm
 	 * @return String containing value for pageOf
-	 * @throws Exception generic exception
+	 * @throws Exception
+	 *             generic exception
 	 */
 	private String checkQuantityPerAliquot(HttpServletRequest request, AliquotForm form)
 			throws Exception
@@ -1165,8 +1257,10 @@ public class AliquotAction extends SecureAction
 				{
 					if (!validator.isDouble(quantityPerAliquot.trim()))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-								ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
+						errors.add(ActionErrors.GLOBAL_ERROR,
+								new ActionError("errors.item.format",
+								ApplicationProperties.
+								getValue("aliquots.qtyPerAliquot")));
 						saveErrors(request, errors);
 						return Constants.PAGE_OF_ALIQUOT;
 					}
@@ -1175,8 +1269,10 @@ public class AliquotAction extends SecureAction
 				{
 					if (!validator.isNumeric(quantityPerAliquot.trim()))
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-								ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
+						errors.add(ActionErrors.GLOBAL_ERROR,
+								new ActionError("errors.item.format",
+								ApplicationProperties.
+								getValue("aliquots.qtyPerAliquot")));
 						saveErrors(request, errors);
 						return Constants.PAGE_OF_ALIQUOT;
 					}
@@ -1196,8 +1292,10 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method validates the formbean.
-	 * @param request object of HttpServletRequest
-	 * @param form object of AliquotForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param form
+	 *            object of AliquotForm
 	 * @return String containing value for pageOf
 	 */
 	private String validate(HttpServletRequest request, AliquotForm form)
@@ -1240,7 +1338,8 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
-	 * @param request object of HttpServletRequest
+	 * @param request
+	 *            object of HttpServletRequest
 	 * @return ActionErrors
 	 */
 	private ActionErrors getActionErrors(HttpServletRequest request)
@@ -1256,37 +1355,27 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request object of HttpServletRequest
+	 * @param request
+	 *            object of HttpServletRequest
 	 */
 	/*
-	private void setParentSpecimenInRequest(HttpServletRequest request)
-	{
-		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-		if (forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
-		{   
-			if(forwardToHashMap.get("parentSpecimenId") instanceof Long)
-			{
-				String parentSpecimenId = forwardToHashMap.get("parentSpecimenId").toString();
-				request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenId);
-				
-			}
-			else
-			{
-				request.setAttribute(Constants.PARENT_SPECIMEN_ID, forwardToHashMap.get("parentSpecimenId"));
-			}
-		}
-		else
-		{
-			if (request.getParameter(Constants.PARENT_SPECIMEN_ID) != null)
-			{
-				request.setAttribute(Constants.PARENT_SPECIMEN_ID, request.getParameter(Constants.PARENT_SPECIMEN_ID));
-			}
-		}
-	}
-	*/
-	//--- Mandar : 23June08 : For JSP Refactoring ------------------
+	 * private void setParentSpecimenInRequest(HttpServletRequest request) { Map
+	 * forwardToHashMap = (Map) request.getAttribute("forwardToHashMap"); if
+	 * (forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") !=
+	 * null) { if(forwardToHashMap.get("parentSpecimenId") instanceof Long) {
+	 * String parentSpecimenId =
+	 * forwardToHashMap.get("parentSpecimenId").toString();
+	 * request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenId); }
+	 * else { request.setAttribute(Constants.PARENT_SPECIMEN_ID,
+	 * forwardToHashMap.get("parentSpecimenId")); } } else { if
+	 * (request.getParameter(Constants.PARENT_SPECIMEN_ID) != null) {
+	 * request.setAttribute(Constants.PARENT_SPECIMEN_ID,
+	 * request.getParameter(Constants.PARENT_SPECIMEN_ID)); } } }
+	 */
+	// --- Mandar : 23June08 : For JSP Refactoring ------------------
 	/**
-	 * @param request object of HttpServletRequest
+	 * @param request
+	 *            object of HttpServletRequest
 	 */
 	private void setParentSpecimenInRequest(HttpServletRequest request)
 	{
@@ -1313,7 +1402,11 @@ public class AliquotAction extends SecureAction
 		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSPId);
 		request.setAttribute("parentSPId", parentSPId);
 	}
-
+/**
+ * @param request : request
+ * @param pageOf : pageOf
+ * @param form : form
+ */
 	private void setPageData(HttpServletRequest request, String pageOf, AliquotForm form)
 	{
 		request.setAttribute("pageOf", pageOf);
@@ -1362,19 +1455,22 @@ public class AliquotAction extends SecureAction
 			action1 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf="
 					+ Constants.PAGE_OF_CREATE_ALIQUOT
 					+ "&operation=add&menuSelected=15&buttonClicked=submit&"
-					+ Constants.PARENT_SPECIMEN_ID + "=" + psid + "&" + Constants.CP_QUERY + "="
+					+ Constants.PARENT_SPECIMEN_ID + "=" + psid
+					+ "&" + Constants.CP_QUERY + "="
 					+ CPQuery;
 
 			action2 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf="
 					+ Constants.PAGE_OF_CREATE_ALIQUOT
 					+ "&operation=add&menuSelected=15&buttonClicked=create&"
-					+ Constants.PARENT_SPECIMEN_ID + "=" + psid + "&" + Constants.CP_QUERY + "="
+					+ Constants.PARENT_SPECIMEN_ID + "=" + psid + "&" +
+					Constants.CP_QUERY + "="
 					+ CPQuery;
 
 			action3 = Constants.CP_QUERY_CREATE_ALIQUOT_ACTION + "?pageOf="
 					+ Constants.PAGE_OF_CREATE_ALIQUOT
 					+ "&operation=add&menuSelected=15&buttonClicked=checkbox&"
-					+ Constants.PARENT_SPECIMEN_ID + "=" + psid + "&" + Constants.CP_QUERY + "="
+					+ Constants.PARENT_SPECIMEN_ID + "=" + psid +
+					"&" + Constants.CP_QUERY + "="
 					+ CPQuery;
 		}
 		else
@@ -1403,7 +1499,8 @@ public class AliquotAction extends SecureAction
 		{
 			unit = AppUtility.getUnit(form.getClassName(), form.getType());
 		}
-		//request.setAttribute("operation",Utility.toString(Constants.OPERATION));
+		//request.setAttribute("operation",Utility.toString(Constants.OPERATION)
+		// );
 		request.setAttribute("unit", unit);
 		request.setAttribute("ADD", Constants.ADD);
 
@@ -1428,7 +1525,8 @@ public class AliquotAction extends SecureAction
 		int colspanValue1 = 0;
 
 		if ((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl)
-				|| (Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
+				|| (Variables.isSpecimenLabelGeneratorAvl
+						&& !Variables.isSpecimenBarcodeGeneratorAvl))
 		{
 			colspanValue1 = 1;
 		}
@@ -1444,7 +1542,10 @@ public class AliquotAction extends SecureAction
 		setAliquotData(request, form);
 		setAliquotBeans(request, form, psid, CPQuery);
 	}
-
+/**
+ * @param request : request
+ * @param form : form
+ */
 	private void setAliquotData(HttpServletRequest request, AliquotForm form)
 	{
 		Map dataMap = new HashMap();
@@ -1460,7 +1561,12 @@ public class AliquotAction extends SecureAction
 		String[] tdStyleClassArray = {"formFieldSized15", "customFormField", "customFormField"};
 		request.setAttribute("tdStyleClassArray", tdStyleClassArray);
 	}
-
+/**
+ * @param request : request
+ * @param form : form
+ * @param psid : psid
+ * @param cpQuery : cpQuery
+ */
 	private void setAliquotBeans(HttpServletRequest request, AliquotForm form, String psid,
 			String cpQuery)
 	{
@@ -1484,10 +1590,13 @@ public class AliquotAction extends SecureAction
 		}
 		request.setAttribute("aliquotBeanList", aliquotBeanList);
 	}
-
+/**
+ * @param request : request
+ * @param createdDate : createdDate
+ */
 	public void setDateComponentData(HttpServletRequest request, String createdDate)
 	{
-		//		String createdDate = Utility.toString(form.getCreatedDate());
+		// String createdDate = Utility.toString(form.getCreatedDate());
 		String nameOfForm = "aliquotForm";
 		String dateFormName = "createdDate";
 		if (createdDate.trim().length() > 0)
@@ -1506,22 +1615,27 @@ public class AliquotAction extends SecureAction
 		request.setAttribute("dateFormName", dateFormName);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.action.SecureAction#getObjectId(edu.wustl.common.actionForm.AbstractActionForm)
-	 */
+/**
+ * @param form : form
+ * @return String : String
+ */
 	protected String getObjectId(AbstractActionForm form)
 	{
 		AliquotForm aliquotForm = (AliquotForm) form;
 		if (aliquotForm.getSpCollectionGroupId() != 0L
 				&& aliquotForm.getSpCollectionGroupId() != -1L)
 		{
-			//SpecimenCollectionGroup specimenCollectionGroup = null;
+			// SpecimenCollectionGroup specimenCollectionGroup = null;
 			return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_"
 					+ aliquotForm.getSpCollectionGroupId();
 		}
 		return null;
 	}
-
+/**
+ * @param specId : specId
+ * @return long : long
+ * @throws BizLogicException : BizLogicException
+ */
 	public synchronized long getTotalNoOfAliquotSpecimen(Long specId) throws BizLogicException
 	{
 		long aliquotChildCount = 0;

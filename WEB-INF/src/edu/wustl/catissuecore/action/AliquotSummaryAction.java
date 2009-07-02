@@ -1,6 +1,5 @@
 /*
  * Created on Oct 3, 2006
- * 
  */
 
 package edu.wustl.catissuecore.action;
@@ -26,13 +25,14 @@ public class AliquotSummaryAction extends BaseAction
 {
 
 	/**
-	 * This method will get call from Aliquot Summary page. 
+	 * This method will get call from Aliquot Summary page.
 	 * Overrides the execute method of Action class.
 	 * @param mapping object of ActionMapping
 	 * @param form object of ActionForm
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

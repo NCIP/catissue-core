@@ -25,23 +25,34 @@ import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
- * This is the action class for saving the Distribution report
+ * This is the action class for saving the Distribution report.
+ *
  * @author Rahul Ner
- *  
  */
 
 public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAction
 {
 
 	/**
-	 * @see edu.wustl.catissuecore.action.ArrayDistributionReportAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
-		//Retrieve the distribution ID
-		Long distributionId = configForm.getDistributionId();;
+		// Retrieve the distribution ID
+		Long distributionId = configForm.getDistributionId();
 
 		Distribution dist = getDistribution(distributionId, getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
@@ -50,7 +61,7 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 		distributionReportForm.setDistributionType(new Integer(
 				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
 
-		//Set the columns for Distribution report
+		// Set the columns for Distribution report
 		String action = configForm.getNextAction();
 		String selectedColumns[] = getSelectedColumns(action, configForm, true);
 		String[] columnNames = getColumnNames(selectedColumns);
@@ -62,7 +73,7 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 				specimenColumns);
 
 		setSelectedMenuRequestAttribute(request);
-		//Save the report as a CSV file at the client side
+		// Save the report as a CSV file at the client side
 		HttpSession session = request.getSession();
 		if (session != null)
 		{
@@ -81,13 +92,14 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	}
 
 	/**
-	 * saves report for list of ArrayDistributionReportEntry
-	 * @param distributionReportForm
-	 * @param listOfData
-	 * @param fileName
-	 * @param arrayColumnNames
-	 * @param specimenColumnNames
-	 * @throws IOException
+	 * saves report for list of ArrayDistributionReportEntry.
+	 *
+	 * @param distributionReportForm : distributionReportForm
+	 * @param listOfData : listOfData
+	 * @param fileName : fileName
+	 * @param arrayColumnNames : arrayColumnNames
+	 * @param specimenColumnNames : specimenColumnNames
+	 * @throws IOException : IOException
 	 */
 	protected void saveReport(DistributionReportForm distributionReportForm, List listOfData,
 			String fileName, String[] arrayColumnNames, String[] specimenColumnNames)
@@ -114,13 +126,14 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	}
 
 	/**
-	 * Adds a section to report
-	 * @param report
-	 * @param columnNames
-	 * @param listOfData
-	 * @param noblankLines
-	 * @param columnIndent
-	 * @throws IOException
+	 * Adds a section to report.
+	 *
+	 * @param report : report
+	 * @param columnNames : columnNames
+	 * @param listOfData : listOfData
+	 * @param noblankLines : noblankLines
+	 * @param columnIndent : columnIndent
+	 * @throws IOException : IOException
 	 */
 	protected void addSection(ExportReport report, String[] columnNames, List listOfData,
 			int noblankLines, int columnIndent) throws IOException

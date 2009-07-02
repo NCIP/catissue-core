@@ -37,6 +37,7 @@ public class CancerResearchGroupAction extends SecureAction
 	 * @param request object of HttpServletRequest
 	 * @param response object of HttpServletResponse
 	 * @throws Exception generic exception
+	 * @return ActionForward : ActionForward
 	 * */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -58,7 +59,7 @@ public class CancerResearchGroupAction extends SecureAction
 		}
 		else
 		{
-			formName = Constants.CANCER_RESEARCH_GROUP_ADD_ACTION;;
+			formName = Constants.CANCER_RESEARCH_GROUP_ADD_ACTION;
 			readOnlyValue = false;
 		}
 		request.setAttribute("operationAdd", Constants.ADD);

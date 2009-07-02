@@ -7,15 +7,23 @@ import edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 
+/**
+ * @author renuka_bajpai
+ */
 public class CellSpecimenReviewParametersAction extends SpecimenEventParametersAction
 {
-
+/**
+ * @param request : request
+ * @param eventParametersForm : eventParametersForm
+ * @throws Exception : Exception
+ */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		CellSpecimenReviewParametersForm cellSpecimenReviewParametersForm = (CellSpecimenReviewParametersForm) eventParametersForm;
+		CellSpecimenReviewParametersForm cellSpecimenReviewParametersForm =
+			(CellSpecimenReviewParametersForm) eventParametersForm;
 		if (cellSpecimenReviewParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
@@ -34,5 +42,4 @@ public class CellSpecimenReviewParametersAction extends SpecimenEventParametersA
 				Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION);
 		request.setAttribute("containerList", Constants.CONTAINER_LIST);
 	}
-
 }

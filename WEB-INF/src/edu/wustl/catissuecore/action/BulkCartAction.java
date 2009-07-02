@@ -28,18 +28,24 @@ import edu.wustl.common.exception.BizLogicException;
 
 /**
  * @author santhoshkumar_c
- *
  */
 public class BulkCartAction extends QueryShoppingCartAction
 {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -47,7 +53,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	{
 		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		HttpSession session = request.getSession();
-		String target = null;;
+		String target = null;
 		String operation = request.getParameter(Constants.OPERATION);
 
 		QueryShoppingCart cart = (QueryShoppingCart) session
@@ -85,6 +91,16 @@ public class BulkCartAction extends QueryShoppingCartAction
 		return mapping.findForward(target);
 	}
 
+	/**
+	 * @param searchForm
+	 *            : searchForm
+	 * @param session
+	 *            : session
+	 * @param cart
+	 *            : cart
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
 	private void getOrderableEntityIds(AdvanceSearchForm searchForm, HttpSession session,
 			QueryShoppingCart cart) throws BizLogicException
 	{
@@ -98,6 +114,15 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 	}
 
+	/**
+	 * @param searchForm
+	 *            : searchForm
+	 * @param session
+	 *            : session
+	 * @param operation
+	 *            : operation
+	 * @return String : String
+	 */
 	private String createShipment(AdvanceSearchForm searchForm, HttpSession session,
 			String operation)
 	{
@@ -121,6 +146,12 @@ public class BulkCartAction extends QueryShoppingCartAction
 		return target;
 	}
 
+	/**
+	 * @param session
+	 *            : session
+	 * @param entityIdsMap
+	 *            : entityIdsMap
+	 */
 	private void getMapDetailsForShipment(HttpSession session,
 			Map < String , Set < String >> entityIdsMap)
 	{
@@ -137,11 +168,20 @@ public class BulkCartAction extends QueryShoppingCartAction
 		session.setAttribute(Constants.CONTAINER_NAMES_LIST, containerNames);
 	}
 
-	private Map < String , Set < String >> getShippingEntityNames(
+	/**
+	 * @param cartAttributeList
+	 *            : cartAttributeList
+	 * @param chkBoxValues
+	 *            : chkBoxValues
+	 * @param cart
+	 *            : cart
+	 * @return Map < String , Set < String >> : Map < String , Set < String >>
+	 */
+	private Map < String , Set < String > > getShippingEntityNames(
 			List < AttributeInterface > cartAttributeList, List < Integer > chkBoxValues,
 			QueryShoppingCart cart)
 	{
-		Map < String , Set < String >> entityIdsMap = getShippingEntityMap();
+		Map < String , Set < String > > entityIdsMap = getShippingEntityMap();
 		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		List < String > orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
 		for (AttributeInterface attribute : cartAttributeList)
@@ -159,7 +199,8 @@ public class BulkCartAction extends QueryShoppingCartAction
 			}
 
 			if ((Constants.SYSTEM_NAME.equals(attribute.getName()))
-					&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
+					&& attribute.getEntity().getName().
+					equals(StorageContainer.class.getName()))
 			{
 				String entityName = attribute.getEntity().getName();
 
@@ -172,7 +213,10 @@ public class BulkCartAction extends QueryShoppingCartAction
 		return entityIdsMap;
 	}
 
-	private Map < String , Set < String >> getShippingEntityMap()
+	/**
+	 * @return Map < String , Set < String >> : Map < String , Set < String >>
+	 */
+	private Map < String , Set < String > > getShippingEntityMap()
 	{
 		Map < String , Set < String >> entityIdsMap = new LinkedHashMap < String , Set < String >>();
 		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet < String >());
@@ -182,9 +226,12 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param searchForm
+	 *            : searchForm
 	 * @param session
+	 *            : session
 	 * @param operation
-	 * @return
+	 *            : operation
+	 * @return String : String
 	 */
 	private String editMultipleSpecimen(AdvanceSearchForm searchForm, HttpSession session,
 			String operation)
@@ -206,9 +253,12 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param request
+	 *            : request
 	 * @param searchForm
+	 *            : searchForm
 	 * @param operation
-	 * @return
+	 *            : operation
+	 * @return String : String
 	 */
 	private String bulkOperations(HttpServletRequest request, AdvanceSearchForm searchForm,
 			String operation)
@@ -228,6 +278,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param session
+	 *            : session
 	 */
 	private void removeSessionAttributes(HttpSession session)
 	{
@@ -241,7 +292,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param session
+	 *            : session
 	 * @param entityIdsMap
+	 *            : entityIdsMap
 	 */
 	private void getMapDetails(HttpSession session, Map < String , Set < String >> entityIdsMap)
 	{
@@ -275,7 +328,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * @return
+	 * @return Map < String , Set < String >> : Map < String , Set < String >>
 	 */
 	private Map < String , Set < String >> getEntityMap()
 	{
@@ -292,10 +345,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 	/**
 	 * @param cartAttributeList
+	 *            : cartAttributeList
 	 * @param chkBoxValues
+	 *            : chkBoxValues
 	 * @param cart
-	 * @return
-	 * @throws BizLogicException 
+	 *            : cart
+	 * @return Map < String , Set < String >> : Map < String , Set < String >>
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private Map < String , Set < String >> getOrderableEntityIds(
 			List < AttributeInterface > cartAttributeList, List < Integer > chkBoxValues,

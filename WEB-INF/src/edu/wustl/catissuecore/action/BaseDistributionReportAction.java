@@ -45,22 +45,31 @@ import edu.wustl.simplequery.query.SimpleConditionsNode;
 import edu.wustl.simplequery.query.SimpleQuery;
 
 /**
- * This is the Base action class for the Distribution report actions
+ * This is the Base action class for the Distribution report actions.
+ *
  * @author Poornima Govindrao
- *  
  */
 public abstract class BaseDistributionReportAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(BaseDistributionReportAction.class);
 
+	/**
+	 * @param selectedColumnsList
+	 *            : selectedColumnsList
+	 * @return String[] : String[]
+	 */
 	protected String[] getColumnNames(String[] selectedColumnsList)
 	{
 		String[] columnNames = new String[selectedColumnsList.length];
 		for (int i = 0; i < selectedColumnsList.length; i++)
 		{
-			/*Split the string which is in the form TableAlias.columnNames.columnDisplayNames
-			 * to get the column Names 
+			/*
+			 * Split the string which is in the form
+			 * TableAlias.columnNames.columnDisplayNames to get the column Names
 			 */
 			StringTokenizer st = new StringTokenizer(selectedColumnsList[i], ".");
 			while (st.hasMoreTokens())
@@ -69,22 +78,28 @@ public abstract class BaseDistributionReportAction extends BaseAction
 				st.nextToken();
 				columnNames[i] = st.nextToken();
 				logger.debug("Selected column names in configuration " + columnNames[i]);
-				if (st.hasMoreTokens())
-					st.nextToken();
+				if (st.hasMoreTokens()) st.nextToken();
 			}
 		}
 		return columnNames;
 	}
 
+	/**
+	 * @param dist
+	 *            : dist
+	 * @return DistributionReportForm : DistributionReportForm
+	 * @throws Exception
+	 *             : Exception
+	 */
 	protected DistributionReportForm getDistributionReportForm(Distribution dist) throws Exception
 	{
-		//For a given Distribution object set the values for Distribution report.
+		// For a given Distribution object set the values for Distribution
+		// report.
 		DistributionReportForm distributionReportForm = new DistributionReportForm();
 		/**
-		 * Name : Virender
-		 * Reviewer: Prafull
-		 * Calling retrieveForEditMode method from DefaultBizlogic, this method will call setAllvalue of the Abstract form.
-		 * removed 	distributionReportForm.setAllValues(dist)
+		 * Name : Virender Reviewer: Prafull Calling retrieveForEditMode method
+		 * from DefaultBizlogic, this method will call setAllvalue of the
+		 * Abstract form. removed distributionReportForm.setAllValues(dist)
 		 */
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Distribution.class.getName(), dist.getId(),
@@ -92,10 +107,21 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		return distributionReportForm;
 	}
 
+	/**
+	 * @param distributionId
+	 *            : distributionId
+	 * @param sessionDataBean
+	 *            : sessionDataBean
+	 * @param securityParam
+	 *            : securityParam
+	 * @return Distribution : Distribution
+	 * @throws Exception
+	 *             : Exception
+	 */
 	protected Distribution getDistribution(Long distributionId, SessionDataBean sessionDataBean,
 			int securityParam) throws Exception
 	{
-		//For a given Distribution ID retrieve the distribution object
+		// For a given Distribution ID retrieve the distribution object
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		Object object = bizLogic.retrieve(Distribution.class.getName(), distributionId);
@@ -103,33 +129,43 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		return dist;
 	}
 
+	/**
+	 * @param dist
+	 *            : dist
+	 * @param configForm
+	 *            : configForm
+	 * @param sessionData
+	 *            : sessionData
+	 * @return List : List
+	 * @throws Exception
+	 *             : Exception
+	 */
 	protected List getListOfData(Distribution dist, ConfigureResultViewForm configForm,
 			SessionDataBean sessionData) throws Exception
 	{
-		//Get the list of data for Distributed items data for the report.
+		// Get the list of data for Distributed items data for the report.
 		List listOfData = new ArrayList();
 		/**
-		 * Name : Virender
-		 * Reviewer: Prafull
-		 * Retriving collection of Distributed Items.
-		 * dist.getDistributedItemCollection(); 
+		 * Name : Virender Reviewer: Prafull Retriving collection of Distributed
+		 * Items. dist.getDistributedItemCollection();
 		 */
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogicObj = factory.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		Collection distributedItemCollection = (Collection) bizLogicObj.retrieveAttribute(
 				Distribution.class.getName(), dist.getId(), "elements(distributedItemCollection)");
-		//Specimen Ids which are getting distributed.
+		// Specimen Ids which are getting distributed.
 		String[] specimenIds = new String[distributedItemCollection.size()];
 		int i = 0;
-		// This string contain list of all comma separated specimen Ids (<Specimen Id 1>, <Specimen Id 2>)
+		// This string contain list of all comma separated specimen Ids
+		// (<Specimen Id 1>, <Specimen Id 2>)
 		String listOfSpecimenId = new String();
 		Iterator itr = distributedItemCollection.iterator();
 		while (itr.hasNext())
 		{
 			DistributedItem item = (DistributedItem) itr.next();
 			Specimen specimen = item.getSpecimen();
-			//Logger.out.debug("Specimen "+specimen);
-			//Logger.out.debug("Specimen "+specimen.getId());
+			// Logger.out.debug("Specimen "+specimen);
+			// Logger.out.debug("Specimen "+specimen.getId());
 			if (specimen != null)
 			{
 				specimenIds[i] = specimen.getId().toString();
@@ -187,9 +223,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		tableSet.add(Query.SPECIMEN_COLLECTION_GROUP);
 		tableSet.add(Constants.DISTRIBUTED_ITEM);
 		tableSet.add(Query.SPECIMEN_CHARACTERISTICS);
-		//Vector vector = setViewElements(selectedColumns);
+		// Vector vector = setViewElements(selectedColumns);
 
-		//Set the resultViewVector
+		// Set the resultViewVector
 		Vector vector = new Vector();
 		for (i = 0; i < selectedColumns.length; i++)
 		{
@@ -207,7 +243,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 					tableInPath = st.nextToken();
 				}
 			}
-			//Include the tables in tableSet if tableInPath is not null.
+			// Include the tables in tableSet if tableInPath is not null.
 			if (tableInPath != null)
 			{
 				StringTokenizer tableInPathTokenizer = new StringTokenizer(tableInPath, ":");
@@ -218,7 +254,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 					QueryBizLogic bizLogic = (QueryBizLogic) factory
 							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 					aliasName = bizLogic.getAliasName(Constants.TABLE_ID_COLUMN, tableId);
-					logger.debug("aliasName for from Set**************************" + aliasName);
+					logger.debug("aliasName for from Set :" + aliasName);
 				}
 
 				if (aliasName != null)
@@ -240,16 +276,26 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		identifierColumnNames = simpleQueryBizLogic.addObjectIdentifierColumnsToQuery(
 				queryResultObjectDataMap, query);
 		simpleQueryBizLogic.setDependentIdentifiedColumnIds(queryResultObjectDataMap, query);
-		//List list = query.execute(sessionData, true,queryResultObjectDataMap, false);
-		//listOfData.add(list);
-		//return listOfData;
+		// List list = query.execute(sessionData, true,queryResultObjectDataMap,
+		// false);
+		// listOfData.add(list);
+		// return listOfData;
 		return (List) query.execute(sessionData, true, queryResultObjectDataMap, false);
 	}
 
+	/**
+	 * @param action
+	 *            : action
+	 * @param form
+	 *            : form
+	 * @param specimenArrayDistribution
+	 *            : specimenArrayDistribution
+	 * @return String[] : String[]
+	 */
 	protected String[] getSelectedColumns(String action, ConfigureResultViewForm form,
 			boolean specimenArrayDistribution)
 	{
-		//Set the columns according action(Default/Configured report)
+		// Set the columns according action(Default/Configured report)
 		if (("configure").equals(action))
 		{
 			String selectedColumns[] = form.getSelectedColumnNames();
@@ -273,14 +319,42 @@ public abstract class BaseDistributionReportAction extends BaseAction
 
 	}
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected abstract ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception;
 
+	/**
+	 * @param request
+	 *            : request
+	 */
 	protected void setSelectedMenuRequestAttribute(HttpServletRequest request)
 	{
 		request.setAttribute(Constants.MENU_SELECTED, new String("16"));
 	}
 
+	/**
+	 * @param key
+	 *            : key
+	 * @param value
+	 *            : value
+	 * @param list
+	 *            : list
+	 * @return List : List
+	 */
 	protected List createList(String key, String value, List list)
 	{
 		List newList = new ArrayList();
@@ -291,10 +365,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	}
 
 	/**
-	 * Adds Distribution header
+	 * Adds Distribution header.
+	 * @param distributionData : distributionData
 	 * @param distributionReportForm
+	 *            : distributionReportForm
 	 * @param report
+	 *            : report
 	 * @throws IOException
+	 *             : IOException
 	 */
 	protected void addDistributionHeader(List distributionData,
 			DistributionReportForm distributionReportForm, ExportReport report) throws IOException

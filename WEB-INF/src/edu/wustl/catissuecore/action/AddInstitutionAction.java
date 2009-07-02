@@ -1,7 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
-//import edu.wustl.catissuecore.actionForm.DepartmentForm;
+// import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -21,9 +21,15 @@ import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
+/**
+ * @author renuka_bajpai
+ */
 public class AddInstitutionAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(AddInstitutionAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
