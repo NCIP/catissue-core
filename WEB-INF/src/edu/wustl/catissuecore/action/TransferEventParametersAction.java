@@ -1,11 +1,15 @@
 /**
- * <p>Title: TransferEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the TransferEventParameters Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: TransferEventParametersAction Class>
+ * <p>
+ * Description: This class initializes the fields in the TransferEventParameters
+ * Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Mandar Deshmukh
- * @version 1.00
- * Created on Aug 05, 2005
+ * @version 1.00 Created on Aug 05, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -41,18 +45,25 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
- * @author mandar_deshmukh
- * This class initializes the fields in the TransferEventParameters Add/Edit webpage.
+ * @author mandar_deshmukh This class initializes the fields in the
+ *         TransferEventParameters Add/Edit webpage.
  */
 public class TransferEventParametersAction extends SpecimenEventParametersAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TransferEventParametersAction.class);
-
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
-		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm) eventParametersForm;
+		TransferEventParametersForm transferEventParametersForm =
+			(TransferEventParametersForm) eventParametersForm;
 
 		List < NameValueBean > storagePositionListForTransferEvent = AppUtility
 				.getStoragePositionTypeListForTransferEvent();
@@ -63,8 +74,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		TreeMap containerMap = new TreeMap();
-		//boolean to indicate whether the suitable containers to be shown in dropdown 
-		//is exceeding the max limit.
+		// boolean to indicate whether the suitable containers to be shown in
+		// dropdown
+		// is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		List initialValues = null;
 
@@ -93,7 +105,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		request.setAttribute("storContId", Constants.STORAGE_CONTAINER_ID);
 		request.setAttribute("add", Constants.ADD);
 
-		//    	
+
 		if (transferEventParametersForm.getOperation().equals(Constants.ADD))
 		{
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -104,7 +116,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			logger.debug("\t\t*******************************SpecimenID : " + identifier);
 			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 
-			//	 ---- chetan 15-06-06 ----
+			// ---- chetan 15-06-06 ----
 
 			// -------------------------
 
@@ -121,46 +133,58 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					String storageContainerID = null;
 					String fromPositionData = "virtual Location";
 
-					//Ashish - 7/6/06 - Retriving Storage container for performance improvement.
+					// Ashish - 7/6/06 - Retriving Storage container for
+					// performance improvement.
 					String sourceObjectName = Specimen.class.getName();
 					Long id = specimen.getId();
-					String attributeName = "specimenPosition.storageContainer";//Constants.COLUMN_NAME_STORAGE_CONTAINER;
-					StorageContainer stContainer = (StorageContainer) bizLogic.retrieveAttribute(
+					String attributeName = "specimenPosition.storageContainer";
+					StorageContainer stContainer =
+						(StorageContainer) bizLogic.retrieveAttribute(
 							sourceObjectName, id, attributeName);
 
 					if (stContainer != null)
 					{
 						if (specimen != null && specimen.getSpecimenPosition() != null
-								&& specimen.getSpecimenPosition().getPositionDimensionOne() != null
-								&& specimen.getSpecimenPosition().getPositionDimensionTwo() != null)
+								&& specimen.getSpecimenPosition().
+								getPositionDimensionOne() != null
+								&& specimen.getSpecimenPosition().
+								getPositionDimensionTwo() != null)
 						{
-							positionOne = specimen.getSpecimenPosition().getPositionDimensionOne()
+							positionOne = specimen.getSpecimenPosition().
+							getPositionDimensionOne()
 									.toString();
-							positionTwo = specimen.getSpecimenPosition().getPositionDimensionTwo()
+							positionTwo = specimen.getSpecimenPosition().
+							getPositionDimensionTwo()
 									.toString();
-							//StorageContainer container = specimen.getStorageContainer();
+							// StorageContainer container =
+							// specimen.getStorageContainer();
 							storageContainerID = stContainer.getId().toString();
-							fromPositionData = stContainer.getName() + ":" + " Pos(" + positionOne
+							fromPositionData = stContainer.getName()
+							+ ":" + " Pos(" + positionOne
 									+ "," + positionTwo + ")";
 						}
 					}
-					//The fromPositionData(storageContainer Info) of specimen of this event.
+					// The fromPositionData(storageContainer Info) of specimen
+					// of this event.
 					transferEventParametersForm.setFromPositionData(fromPositionData);
 
-					//POSITION 1
+					// POSITION 1
 					request.setAttribute(Constants.POS_ONE, positionOne);
 
-					//POSITION 2
+					// POSITION 2
 					request.setAttribute(Constants.POS_TWO, positionTwo);
 
-					//storagecontainer info
+					// storagecontainer info
 					request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
 
-					//Ashish ---  5th June 07 --- retriving cp object when lazy = true.	for performance improvement			
-					Long collectionProtocolId = getCollectionProtocolId(specimen.getId(), bizLogic);
+					// Ashish --- 5th June 07 --- retriving cp object when lazy
+					// = true. for performance improvement
+					Long collectionProtocolId = getCollectionProtocolId
+					(specimen.getId(), bizLogic);
 					long cpId = collectionProtocolId.longValue();
-					//				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-					//				.getCollectionProtocol().getId().longValue();
+					// long cpId = specimen.getSpecimenCollectionGroup().
+					// getCollectionProtocolRegistration()
+					// .getCollectionProtocol().getId().longValue();
 
 					String className = specimen.getClassName();
 
@@ -172,7 +196,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					SessionDataBean sessionData = (SessionDataBean) request.getSession()
 							.getAttribute(Constants.SESSION_DATA);
 
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className,
+					containerMap = scbizLogic.
+					getAllocatedContaienrMapForSpecimen(cpId, className,
 							0, exceedingMaxLimit, sessionData, jdbcDAO);
 					initialValues = setInitialValue(request, transferEventParametersForm,
 							containerMap);
@@ -243,7 +268,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				Constants.TRANSFER_EVENT_PARAMETERS_ADD_ACTION);
 
 		// scriplet shifted from TransferEventParameters.jsp
-		//		Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+		// Map dataMap = (Map)
+		// request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 
 		request.setAttribute("labelNames", Constants.STORAGE_CONTAINER_LABEL);
 
@@ -263,7 +289,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		String rowNumber = "1";
 		String styClass = "formFieldSized5";
 		String tdStyleClass = "customFormField";
-		//boolean disabled = true;
+		// boolean disabled = true;
 		String onChange = "onCustomListBoxChange(this)";
 
 		request.setAttribute("onChange", onChange);
@@ -277,18 +303,17 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		System.out.println("###########################" + containerMap);
 		System.out.println("###########################" + getJSEquivalentFor);
 
-		//boolean buttonDisabled = true;
+		// boolean buttonDisabled = true;
 
 		String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
-		if (className == null)
-			className = "";
+		if (className == null) className = "";
 
 		String collectionProtocolId = (String) request
 				.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-		if (collectionProtocolId == null)
-			collectionProtocolId = "";
+		if (collectionProtocolId == null) collectionProtocolId = "";
 
-		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
+		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=" +
+				"selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 				+ "&"
 				+ Constants.CAN_HOLD_SPECIMEN_CLASS
 				+ "="
@@ -297,7 +322,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				+ Constants.CAN_HOLD_COLLECTION_PROTOCOL + "=" + collectionProtocolId;
 
 		String buttonOnClicked = "mapButtonClickedOnNewSpecimen('" + url + "','transferEvents')";
-		// String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
+		// String buttonOnClicked =
+		// "javascript:NewWindow('"+url+"','name','810','320','yes');return false"
+		// ;
 		request.setAttribute("buttonOnClicked", buttonOnClicked);
 		String noOfEmptyCombos = "3";
 
@@ -319,10 +346,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	}
 
 	/**
-	 * @param request
-	 * @param transferEventParametersForm
-	 * @param containerMap
-	 * @return
+	 * @param request : request
+	 * @param transferEventParametersForm : transferEventParametersForm
+	 * @param containerMap : containerMap
+	 * @return List : List
 	 */
 	private List setInitialValue(HttpServletRequest request,
 			TransferEventParametersForm transferEventParametersForm, TreeMap containerMap)
@@ -356,17 +383,17 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	}
 
 	/**
-	 * @param specimenId
-	 * @param bizLogic
-	 * @return
-	 * @throws DAOException
-	 * Retriving collection protocol id from specimen.
+	 *
+	 * @param specimenId : specimenId
+	 * @param bizLogic : bizLogic
+	 * @return Long : Long
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic)
 			throws ApplicationException
 	{
-		//Changed by Falguni.
-		//Find collectionprotocol id using HQL
+		// Changed by Falguni.
+		// Find collectionprotocol id using HQL
 		String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol.id"
 				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
 				+ " edu.wustl.catissuecore.domain.Specimen as spec "

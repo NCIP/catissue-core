@@ -42,11 +42,21 @@ public class SummaryAction extends Action
 	 */
 	private static Logger logger = Logger.getCommonLogger(SummaryAction.class);
 
-	/* (non-Javadoc)
-	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, 
-	 * org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, 
-	 * javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
+
 	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

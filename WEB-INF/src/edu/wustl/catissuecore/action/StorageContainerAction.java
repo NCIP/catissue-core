@@ -283,11 +283,14 @@ public class StorageContainerAction extends SecureAction
 		AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
 		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
+
 	/**
-	 *
-	 * @param request : request
-	 * @param storageContainerForm : storageContainerForm
-	 * @param session : session
+	 * @param request
+	 *            : request
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @param session
+	 *            : session
 	 */
 	private void setStorageType(HttpServletRequest request,
 			StorageContainerForm storageContainerForm, HttpSession session)
@@ -322,12 +325,15 @@ public class StorageContainerAction extends SecureAction
 		// *************End Bug:1938 ForwardTo implementation *************
 
 	}
-/**
- *
- * @param request : request
- * @param storageContainerForm : storageContainerForm
- * @throws ApplicationException : ApplicationException
- */
+
+	/**
+	 * @param request
+	 *            : request
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @throws ApplicationException
+	 *             : ApplicationException
+	 */
 	private void setRequestAttributes(HttpServletRequest request,
 			StorageContainerForm storageContainerForm) throws ApplicationException
 	{
@@ -426,12 +432,16 @@ public class StorageContainerAction extends SecureAction
 			}
 		}
 	}
+
 	/**
-	 *
-	 * @param storageContainerForm : storageContainerForm
-	 * @param operation : operation
-	 * @param request : request
-	 * @throws BizLogicException : BizLogicException
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @param operation
+	 *            : operation
+	 * @param request
+	 *            : request
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private void onTypeChange(StorageContainerForm storageContainerForm, String operation,
 			HttpServletRequest request) throws BizLogicException
@@ -530,12 +540,16 @@ public class StorageContainerAction extends SecureAction
 		}
 
 	}
+
 	/**
-	 *
-	 * @param containerMap : containerMap
-	 * @param storageContainerForm : storageContainerForm
-	 * @param request : request
-	 * @throws ApplicationException : ApplicationException
+	 * @param containerMap
+	 *            : containerMap
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @param request
+	 *            : request
+	 * @throws ApplicationException
+	 *             : ApplicationException
 	 */
 	private void SetParentStorageContainersForAdd(TreeMap containerMap,
 			StorageContainerForm storageContainerForm, HttpServletRequest request)
@@ -580,12 +594,16 @@ public class StorageContainerAction extends SecureAction
 		}
 		request.setAttribute("initValues", initialValues);
 	}
+
 	/**
-	 * 
-	 * @param containerMap : containerMap
-	 * @param storageContainerForm : storageContainerForm
-	 * @param request : request
-	 * @throws BizLogicException : BizLogicException
+	 * @param containerMap
+	 *            : containerMap
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @param request
+	 *            : request
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private void SetParentStorageCOntainersForEdit(TreeMap containerMap,
 			StorageContainerForm storageContainerForm, HttpServletRequest request)
@@ -610,8 +628,7 @@ public class StorageContainerAction extends SecureAction
 				if (parent != null)
 				{
 					Long id = parent.getId();
-					if (cont != null && cont.getLocatedAtPosition()
-							!= null)
+					if (cont != null && cont.getLocatedAtPosition() != null)
 					{
 						Integer pos1 = cont.getLocatedAtPosition().
 						getPositionDimensionOne();
@@ -619,8 +636,8 @@ public class StorageContainerAction extends SecureAction
 						getPositionDimensionTwo();
 						String parentContainerName = parent.getName();
 
-						StorageContainerUtil.
-						addPostions(containerMap, id, parentContainerName,
+						StorageContainerUtil.addPostions
+						(containerMap, id, parentContainerName,
 								pos1, pos2);
 					}
 				}
@@ -663,10 +680,12 @@ public class StorageContainerAction extends SecureAction
 		}
 		request.setAttribute("initValues", initialValues);
 	}
+
 	/**
-	 *
-	 * @param request : request
-	 * @param storageContainerForm : storageContainerForm
+	 * @param request
+	 *            : request
+	 * @param storageContainerForm
+	 *            : storageContainerForm
 	 */
 	private void setFormAttributesForAddNew(HttpServletRequest request,
 			StorageContainerForm storageContainerForm)
@@ -683,13 +702,12 @@ public class StorageContainerAction extends SecureAction
 		String siteID = (String) request.getAttribute(Constants.ADD_NEW_SITE_ID);
 		if (siteID != null && siteID.trim().length() > 0)
 		{
-			logger
-					.debug(" ToSite ID in Distribution Action : "
-							+ siteID);
+			logger.debug(" ToSite ID in Distribution Action : " + siteID);
 			storageContainerForm.setSiteId(Long.parseLong(siteID));
 		}
 
 	}
+
 	/*
 	 * private void onSiteOrParentContChange(HttpServletRequest
 	 * request,HttpServletResponse response, StorageContainerForm
@@ -710,10 +728,11 @@ public class StorageContainerAction extends SecureAction
 	 * sendCollectionIds(collectionIds,response);; }
 	 */
 	/**
-	 *
-	 * @param request : request
+	 * @param request
+	 *            : request
 	 * @return long[] : long[]
-	 * @throws BizLogicException : BizLogicException
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private long[] parentContChange(HttpServletRequest request) throws BizLogicException
 	{
@@ -734,6 +753,7 @@ public class StorageContainerAction extends SecureAction
 		}
 		return new long[]{-1};
 	}
+
 	/*
 	 * private void sendCollectionIds(long[] collectionIds, HttpServletResponse
 	 * response) throws IOException { PrintWriter out = response.getWriter();
@@ -745,9 +765,10 @@ public class StorageContainerAction extends SecureAction
 	 * out.write(collectionIdStr); }
 	 */
 	/**
-	 *
-	 * @param storageContainerForm : storageContainerForm
-	 * @param storageContainerBean : storageContainerBean
+	 * @param storageContainerForm
+	 *            : storageContainerForm
+	 * @param storageContainerBean
+	 *            : storageContainerBean
 	 */
 
 	private void initStorageContainerForm(StorageContainerForm storageContainerForm,

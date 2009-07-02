@@ -1,12 +1,15 @@
 /**
- * <p>Title: UserEditProfileAction Class>
- * <p>Description:	This action class has been added for bug: 7978,
- * because id has been removed for request parameter from User Profile> Edit.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: UserEditProfileAction Class>
+ * <p>
+ * Description: This action class has been added for bug: 7978, because id has
+ * been removed for request parameter from User Profile> Edit.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ravi Kumar
- * @version 1.00
- * Created on Aug 02, 2008
+ * @version 1.00 Created on Aug 02, 2008
  */
 
 package edu.wustl.catissuecore.action;
@@ -27,19 +30,25 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.Constants;
 
 /**
- * This class set id in request from session and call CommonSearchAction
+ * This class set id in request from session and call CommonSearchAction.
  */
 public class UserEditProfileAction extends BaseAction
 {
 
 	/**
 	 * Overrides the execute method in Action class.
-	 * @param mapping ActionMapping object
-	 * @param form ActionForm object
-	 * @param request HttpServletRequest object
-	 * @param response HttpServletResponse object
+	 *
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
 	 * @return ActionForward object
-	 * @throws Exception object
+	 * @throws Exception
+	 *             object
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

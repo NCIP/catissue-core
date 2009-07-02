@@ -1,11 +1,14 @@
 /**
- * <p>Title: UserAction Class>
- * <p>Description:	This class initializes the fields in the User Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: UserAction Class>
+ * <p>
+ * Description: This class initializes the fields in the User Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Gautam Shetty
- * @version 1.00
- * Created on Mar 22, 2005
+ * @version 1.00 Created on Mar 22, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -48,17 +51,30 @@ import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * This class initializes the fields in the User Add/Edit webpage.
- * 
+ *
  * @author gautam_shetty
  */
 public class UserAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UserAction.class);
 
 	/**
-	 * Overrides the execute method of Action class. Sets the various fields in
-	 * User Add/Edit webpage.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -74,8 +90,8 @@ public class UserAction extends SecureAction
 
 		// method to get myProfile-Add Privilege
 		SessionDataBean sessionDataBean = getSessionData(request);
-		//	String readOnlyForPrivOnEdit = "";
-		//	String disablePrivButton = "false";
+		// String readOnlyForPrivOnEdit = "";
+		// String disablePrivButton = "false";
 		long loggedInUserId = 0;
 		if ((Constants.PAGE_OF_USER).equals(pageOf) && sessionDataBean.getUserId() != null)
 		{
@@ -86,15 +102,16 @@ public class UserAction extends SecureAction
 				&& loggedInUserId == userForm.getId())
 		{
 			pageOf = Constants.PAGE_OF_USER_PROFILE;
-			//			readOnlyForPrivOnEdit = "disabled='true'";
-			//			disablePrivButton ="true";
-			//			request.setAttribute("readOnlyForPrivOnEdit", readOnlyForPrivOnEdit);
-			//			request.setAttribute("disablePrivButton", disablePrivButton);
+			// readOnlyForPrivOnEdit = "disabled='true'";
+			// disablePrivButton ="true";
+			// request.setAttribute("readOnlyForPrivOnEdit",
+			// readOnlyForPrivOnEdit);
+			// request.setAttribute("disablePrivButton", disablePrivButton);
 
 		}
 		// method to get myProfile end here
 
-		//method to preserve data on validation
+		// method to preserve data on validation
 		MSRUtil msrUtil = new MSRUtil();
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
@@ -106,7 +123,7 @@ public class UserAction extends SecureAction
 				session.removeAttribute(Constants.USER_ROW_ID_BEAN_MAP);
 			}
 		}
-		//method to preserve data on validation end here
+		// method to preserve data on validation end here
 
 		String formName, prevPage = null, nextPage = null;
 		boolean roleStatus = false;
@@ -128,7 +145,8 @@ public class UserAction extends SecureAction
 			{
 				if (userForm.getCsmUserId().longValue() == 0)
 				{
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					IFactory factory = AbstractFactoryConfig.getInstance().
+					getBizLogicFactory();
 					UserBizLogic bizLogic = (UserBizLogic) factory
 							.getBizLogic(Constants.USER_FORM_ID);
 					String sourceObjName = User.class.getName();
@@ -137,7 +155,8 @@ public class UserAction extends SecureAction
 					String[] whereColCond = {"="};
 					Object[] whereColVal = {userForm.getId()};
 
-					List regList = bizLogic.retrieve(sourceObjName, selectColName, whereColName,
+					List regList = bizLogic.retrieve(sourceObjName,
+							selectColName, whereColName,
 							whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
 					if (regList != null && !regList.isEmpty())
 					{
@@ -186,7 +205,9 @@ public class UserAction extends SecureAction
 		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
 				&& (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString())
 						|| userForm.getStatus()
-								.equals(Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
+								.equals(Status.
+										APPROVE_USER_REJECT_STATUS.
+										toString()) || userForm
 						.getStatus().equals(Constants.SELECT_OPTION)))
 		{
 			roleStatus = true;
@@ -201,7 +222,8 @@ public class UserAction extends SecureAction
 		}
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			// request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP,
+			// request.getSession(true).setAttribute(Constants.
+			// USER_ROW_ID_BEAN_MAP,
 			// null);
 
 			if (userForm.getCountry() == null)
@@ -271,7 +293,7 @@ public class UserAction extends SecureAction
 		// and the user page is of administrative tab.
 		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
 		{
-			//String activityStatusList = Constants.ACTIVITYSTATUSLIST;
+			// String activityStatusList = Constants.ACTIVITYSTATUSLIST;
 			request.setAttribute("activityStatusList", Constants.USER_ACTIVITY_STATUS_VALUES);
 		}
 
@@ -361,7 +383,11 @@ public class UserAction extends SecureAction
 			target = Constants.OPEN_PAGE_IN_CPFRAME;
 		return mapping.findForward(target);
 	}
-
+	/**
+	 *
+	 * @param session : session
+	 * @param id : id
+	 */
 	private void setUserPrivileges(HttpSession session, long id)
 	{
 		if (id == 0)
@@ -392,25 +418,29 @@ public class UserAction extends SecureAction
 			e.printStackTrace();
 		}
 	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
+	 * @see
+	 * edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax
+	 * .servlet.http.HttpServletRequest)
 	 */
-	/*protected boolean isAuthorizedToExecute(HttpServletRequest request)
-			throws Exception {
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) {
-			return super.isAuthorizedToExecute(request);
-		}
-		return true;
-	}*/
+	/*
+	 * protected boolean isAuthorizedToExecute(HttpServletRequest request)
+	 * throws Exception { String pageOf =
+	 * request.getParameter(Constants.PAGE_OF); if
+	 * (pageOf.equals(Constants.PAGE_OF_USER_ADMIN)) { return
+	 * super.isAuthorizedToExecute(request); } return true; }
+	 */
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)
+	 * @see
+	 * edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet
+	 * .http.HttpServletRequest)
+	 */
+	/**
+	 * @param request : request
+	 * @return SessionDataBean : SessionDataBean
 	 */
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{

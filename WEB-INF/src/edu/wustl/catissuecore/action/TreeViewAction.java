@@ -1,8 +1,12 @@
 /**
- * <p>Title: TreeViewAction Class>
- * <p>Description: TreeViewAction is used to display the query results tree view.</p>
- * Copyright: Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: TreeViewAction Class>
+ * <p>
+ * Description: TreeViewAction is used to display the query results tree view.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Gautam Shetty
  * @version 1.00
  */
@@ -23,20 +27,35 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * TreeViewAction is used to display the query results tree view.
+ *
  * @author gautam_shetty
  */
 public class TreeViewAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TreeViewAction.class);
 
 	/**
-	 * Overrides the execute method in Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//Sets the pageOf attribute (for Add,Edit or Query Interface)
+		// Sets the pageOf attribute (for Add,Edit or Query Interface)
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		logger.debug("pageOf in treeview........" + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);

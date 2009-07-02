@@ -13,25 +13,34 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.logger.Logger;
 
-/*
- * Name : Kapil Kaveeshwar
- * Reviewer: Sachin Lale
- * Bug ID: Menu_Splitter
- * Patch ID: Menu_Splitter_3
- * See also: All Menu_Splitter
- * Description: Maintains the last state of menu splitter in the session of the user. Next time user
- * navigates to the page the state can be preserved. This part of the code stores the menu status in 
- * session. This is invoked by splitter.js via AJAX call.
+/**
+ * @author renuka_bajpai
+ *
  */
 public class UpdateSpillterStatusAction extends BaseAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UpdateSpillterStatusAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param actionMap
+	 *            object of ActionMapping
+	 * @param actionForm
+	 *            object of ActionForm
+	 * @param req
+	 *            object of HttpServletRequest
+	 * @param res
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping actionMap, ActionForm actionForm,
 			HttpServletRequest req, HttpServletResponse res) throws Exception
 	{
-		//Reads the menu splitter status from request	
+		//Reads the menu splitter status from request
 		String menuStatus = req.getParameter(Constants.SPLITTER_STATUS_REQ_PARAM);
 		logger.debug("Menu Status " + menuStatus);
 

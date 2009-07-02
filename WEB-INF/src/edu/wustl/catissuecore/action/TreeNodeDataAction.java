@@ -23,21 +23,41 @@ import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This action is for getting the tree-vector for storage container; to be given to DHTMLX tree 
- * @author pallavi_mistry
- *
+ * @author renuka_bajpai
  */
 public class TreeNodeDataAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
+	/**
+	 * finalDataListVector.
+	 */
 	Vector finalDataListVector = null;
+
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		//Map columnIdsMap = new HashMap();
+		// Map columnIdsMap = new HashMap();
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		logger.debug("pageOf in treeview........" + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -75,7 +95,7 @@ public class TreeNodeDataAction extends BaseAction
 			}
 			TreeDataInterface bizLogic = new StorageContainerBizLogic();
 			List dataList = new Vector();
-			//List disableSpecimenIdsList = new ArrayList();
+			// List disableSpecimenIdsList = new ArrayList();
 			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();
@@ -113,9 +133,10 @@ public class TreeNodeDataAction extends BaseAction
 	}
 
 	/**
-	 * This is a recursive method to make the final-vector for DHTML tree of storage containers
-	 * @param datalist
-	 * @param finalDataListVector
+	 * 	 * This is a recursive method to make the final-vector for DHTML tree of
+		 * storage containers.
+	 * @param datalist : datalist
+	 * @param finalDataListVector : finalDataListVector
 	 */
 	void createTreeNodeVector(List datalist, Vector finalDataListVector)
 	{

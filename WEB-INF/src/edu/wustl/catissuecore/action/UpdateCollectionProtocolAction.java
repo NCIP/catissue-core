@@ -27,16 +27,30 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
-;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class UpdateCollectionProtocolAction extends BaseAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UpdateCollectionProtocolAction.class);
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception

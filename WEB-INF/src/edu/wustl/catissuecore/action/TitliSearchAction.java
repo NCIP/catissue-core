@@ -1,6 +1,3 @@
-/**
- * 
- */
 
 package edu.wustl.catissuecore.action;
 
@@ -28,22 +25,27 @@ import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * perform Titli Search
+ * perform Titli Search.
+ *
  * @author Juber Patel
- * 
  */
 public class TitliSearchAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TitliSearchAction.class);
 
 	/**
-	 * @param mapping the mapping
-	 * @param form the action form
-	 * @param request the request
-	 * @param response the response
+	 * @param mapping
+	 *            the mapping
+	 * @param form
+	 *            the action form
+	 * @param request
+	 *            the request
+	 * @param response
+	 *            the response
 	 * @return action forward
-	 * 
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -65,21 +67,26 @@ public class TitliSearchAction extends Action
 			request.getSession().setAttribute(TitliSearchConstants.TITLI_SORTED_RESULT_MAP,
 					sortedResultMap);
 
-			//set the internationalized displaySearchString 
+			// set the internationalized displaySearchString
 			List placeHolders = new ArrayList();
 			placeHolders.add(searchString);
-			//String displaySearchString = ApplicationProperties.getValue(Constants.TITLI_SEARCH_STRING_PROPERTY, placeHolders);
+			// String displaySearchString =
+			// ApplicationProperties.getValue(Constants
+			// .TITLI_SEARCH_STRING_PROPERTY, placeHolders);
 			titliSearchForm.setDisplaySearchString("TiTLi Search");
 
-			//set the internationalized displayStats
+			// set the internationalized displayStats
 			placeHolders = new ArrayList();
 			placeHolders.add(Integer.toString(matchList.getNumberOfMatches()));
 			placeHolders.add(Double.toString(matchList.getTimeTaken()));
-			//String displayStats = ApplicationProperties.getValue(Constants.TITLI_STATS_PROPERTY, placeHolders);
+			// String displayStats =
+			// ApplicationProperties.getValue(Constants.TITLI_STATS_PROPERTY,
+			// placeHolders);
 			titliSearchForm.setDisplayStats("Found " + matchList.getNumberOfMatches()
 					+ " matches in " + matchList.getTimeTaken() + " seconds");
 
-			//if matches are from just one table, go directly to TitliFetchAction, skip TitliResultUpdatable.jsp 
+			// if matches are from just one table, go directly to
+			// TitliFetchAction, skip TitliResultUpdatable.jsp
 			if (sortedResultMap.size() == 1)
 			{
 				try
@@ -87,8 +94,9 @@ public class TitliSearchAction extends Action
 					Name tableName = sortedResultMap.keySet().toArray(new Name[0])[0];
 					String label = TitliTableMapper.getInstance().getLabel(tableName);
 
-					//set the selectedLabel to the label of the only table
-					//setting the selectedLabel is necessary for getSelectedGroup() to work properly
+					// set the selectedLabel to the label of the only table
+					// setting the selectedLabel is necessary for
+					// getSelectedGroup() to work properly
 					titliSearchForm.setSelectedLabel(label);
 
 				}
@@ -108,13 +116,15 @@ public class TitliSearchAction extends Action
 			logger.error("TitliException in TitliSearchAction : " + e.getMessage(), e);
 		}
 		logger.info("from titli search action..............!!");
-		//System.out.println("from titli search action..............!!");
+		// System.out.println("from titli search action..............!!");
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
-	 * @param name name 
-	 * @param path path
+	 * @param name
+	 *            name
+	 * @param path
+	 *            path
 	 * @return the created ActionForward
 	 */
 	private ActionForward getActionForward(String name, String path)

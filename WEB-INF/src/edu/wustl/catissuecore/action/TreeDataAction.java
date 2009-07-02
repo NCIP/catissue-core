@@ -1,9 +1,13 @@
 /**
- * <p>Title: TreeDataAction Class>
- * <p>Description: TreeDataAction creates a tree from the temporary query results 
- * table and passes it to applet.</p>
- * Copyright: Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: TreeDataAction Class>
+ * <p>
+ * Description: TreeDataAction creates a tree from the temporary query results
+ * table and passes it to applet.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Gautam Shetty
  * @version 1.00
  */
@@ -29,23 +33,39 @@ import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * TreeDataAction creates a tree from the temporary query results table 
- * and passes it to applet.
+ * TreeDataAction creates a tree from the temporary query results table and
+ * passes it to applet.
+ *
  * @author gautam_shetty
  */
 public class TreeDataAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TreeDataAction.class);
 
 	/**
-	 * Overrides the execute method of the Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ObjectOutputStream out = null;
-		//Map columnIdsMap = new HashMap();
+		// Map columnIdsMap = new HashMap();
 
 		try
 		{
@@ -53,7 +73,8 @@ public class TreeDataAction extends BaseAction
 			TreeDataInterface bizLogic = new StorageContainerBizLogic();
 			Vector dataList = new Vector();
 
-			//Map containerMap = new HashMap(), containerRelationMap = new HashMap();
+			// Map containerMap = new HashMap(), containerRelationMap = new
+			// HashMap();
 			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();

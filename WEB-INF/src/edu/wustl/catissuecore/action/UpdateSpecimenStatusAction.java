@@ -48,18 +48,31 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class UpdateSpecimenStatusAction extends BaseAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UpdateSpecimenStatusAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -76,7 +89,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			SessionDataBean sessionDataBean = (SessionDataBean) session
 					.getAttribute(Constants.SESSION_DATA);
 
-			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection, sessionDataBean);
+			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection,
+			// sessionDataBean);
 			if (specimenDomainCollection != null && specimenDomainCollection.size() > 0)
 			{
 				Iterator < Specimen > spcItr = specimenDomainCollection.iterator();
@@ -87,10 +101,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			Object obj = session.getAttribute("SCGFORM");
 
-			//11July08 : Mandar : For GenericSpecimen
+			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					false);
-			//added this to disable collected checkboxes  
+			// added this to disable collected checkboxes
 
 			if (request.getParameter("target") != null
 					&& request.getParameter("target").equals("viewSummary"))
@@ -102,42 +116,49 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				specimenSummaryForm.setShowLabel(true);
 				saveMessages(request, actionMessages);
 				specimenSummaryForm.setReadOnly(true);
-				//bug 12959
-				request.setAttribute("readOnly", true);//to disable collected checkbox in specimen summary page
+				// bug 12959
+				request.setAttribute("readOnly", true);
 
 			}
 			if (specimenSummaryForm.getPrintCheckbox() != null
 					&& specimenSummaryForm.getPrintCheckbox().equals("true"))
 			{
-				//By Falguni Sachde
-				//Code Reviewer:Abhijit Naik
-				//Bug :6569 : In case of collected SCG ,the specimenDomainCollection not contains all specimen.
-				//To get all specimen related with give SCG ,query with SCG id and get SpecimenCollection 
+				// By Falguni Sachde
+				// Code Reviewer:Abhijit Naik
+				// Bug :6569 : In case of collected SCG ,the
+				// specimenDomainCollection not contains all specimen.
+				// To get all specimen related with give SCG ,query with SCG id
+				// and get SpecimenCollection
 				if (obj == null)
 				{
 					logger
-							.fatal("SCG id is null failed to execute print of scg -UpdateSpecimenStatusAction");
+							.fatal("SCG id is null failed to execute" +
+									" print of scg -" +
+									"UpdateSpecimenStatusAction");
 				}
 				else
 				{
-					HashSet specimenCollection = getSpecimensToPrint((Long) obj, sessionDataBean);
-					//bug 11169
-					// Set specimenprintCollection = specimenSummaryForm.getSpecimenPrintList();
-					//Set domainObjSet = this.getSpecimensFromGenericSpecimens(specimenprintCollection);					
+					HashSet specimenCollection = getSpecimensToPrint
+					((Long) obj, sessionDataBean);
+					// bug 11169
+					// Set specimenprintCollection =
+					// specimenSummaryForm.getSpecimenPrintList();
+					// Set domainObjSet = this.getSpecimensFromGenericSpecimens(
+					// specimenprintCollection);
 
 					HashMap forwardToPrintMap = new HashMap();
 					forwardToPrintMap.put("printAntiSpecimen", getSpecimensToPrint(
 							specimenSummaryForm, specimenCollection));
 					request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 					request.setAttribute("AntiSpecimen", "1");
-					//bug 12141 start
+					// bug 12141 start
 					if (specimenSummaryForm.getForwardTo() != null
 							&& !specimenSummaryForm.getForwardTo().equals(
 									Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 					{
 						return mapping.findForward(Constants.PRINT_ANTICIPATORY_SPECIMENS);
 					}
-					//bug 12141 end
+					// bug 12141 end
 				}
 			}
 
@@ -155,17 +176,18 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				}
 				request.setAttribute("specimenIdList", specimenIdList);
 				saveToken(request);
-				//bug 12141 start
+				// bug 12141 start
 				if (specimenSummaryForm.getPrintCheckbox() != null
 						&& specimenSummaryForm.getPrintCheckbox().equals("true"))
 				{
-					return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);//"printAnticipatorySpecimens";
+					return mapping.findForward(Constants.
+							ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);
 				}
 				else
 				{
 					return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
 				}
-				//bug 12141 end
+				// bug 12141 end
 			}
 
 			return mapping.findForward(Constants.SUCCESS);
@@ -173,7 +195,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		catch (Exception exception)
 		{
 			logger.debug(exception.getMessage(), exception);
-			//11July08 : Mandar : For GenericSpecimen
+			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					false);
 			// Suman-For bug #8228
@@ -183,14 +205,22 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					|| exception
 							.getMessage()
 							.equals(
-									"Failed to update multiple specimen Either Storagecontainer is full! or it cannot accomodate all the specimens.")
+									"Failed to update multiple specimen" +
+									" Either Storagecontainer is full!" +
+									" or it cannot accomodate all the" +
+									" specimens.")
 					|| exception
 							.getMessage()
 							.equals(
-									"Failed to update multiple specimen Storagecontainer information not found!"))
+									"Failed to update multiple specimen" +
+									" Storagecontainer information not" +
+									" found!"))
 			{
 				clearSCLocation(specimenSummaryForm);
-				s = "Please allocate a different container to the specimens shown below with empty container names as the container you specified has insufficient space";
+				s = "Please allocate a different container to the" +
+						" specimens shown below with empty container" +
+						" names as the container you specified has" +
+						" insufficient space";
 			}
 			else
 			{
@@ -201,13 +231,17 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			String pageOf = request.getParameter(Constants.PAGE_OF);
-			if (pageOf != null)
-				request.setAttribute(Constants.PAGE_OF, pageOf);
+			if (pageOf != null) request.setAttribute(Constants.PAGE_OF, pageOf);
 			return mapping.findForward(Constants.FAILURE);
 		}
 
 	}
-
+/**
+ *
+ * @param specimenSummaryForm : specimenSummaryForm
+ * @param specimenDomainCollection : specimenDomainCollection
+ * @return Set < Specimen > : Set < Specimen >
+ */
 	private Set < Specimen > getSpecimensToPrint(ViewSpecimenSummaryForm specimenSummaryForm,
 			HashSet specimenDomainCollection)
 	{
@@ -234,9 +268,11 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		return specimensToPrint;
 	}
 
-	// bug 8228 -suman
-	// this method checks for free locations of a container and clears the ones
-	// which are not available
+	/**
+	 *
+	 * @param specimenSummaryForm : specimenSummaryForm
+	 * @throws Exception : Exception
+	 */
 	private void clearSCLocation(ViewSpecimenSummaryForm specimenSummaryForm) throws Exception
 	{
 		List < GenericSpecimen > specimenList = specimenSummaryForm.getSpecimenList();
@@ -264,8 +300,13 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		checkList(derivedList, allocatedPositions, tempContainerSize);
 	}
 
-	// this method check if the x and y positions are given and clears them if
-	// not allocated.
+	/**
+	 *
+	 * @param gs : gs
+	 * @param allocatedPositions : allocatedPositions
+	 * @param containerSize : containerSize
+	 * @return int : int
+	 */
 	public int checkList(List < GenericSpecimen > gs, List < String > allocatedPositions,
 			int containerSize)
 	{
@@ -313,10 +354,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	// end bug 8228 - Suman
 
 	/**
-	 * @param eventId
-	 * @param session
-	 * @return
-	 * @throws ApplicationException 
+	 * @param eventId : eventId
+	 * @param session : session
+	 * @return LinkedHashSet : LinkedHashSet
+	 * @throws ApplicationException : ApplicationException
 	 */
 	protected LinkedHashSet getSpecimensToSave(String eventId, HttpSession session)
 			throws ApplicationException
@@ -351,7 +392,13 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		return specimenDomainCollection;
 	}
 
-	//Abhishek Mehta : Performance related Changes
+	/**
+	 *
+	 * @param specimenVO : specimenVO
+	 * @param parentSpecimen : parentSpecimen
+	 * @return Collection : Collection
+	 * @throws ApplicationException : ApplicationException
+	 */
 	private Collection getChildrenSpecimens(GenericSpecimen specimenVO, Specimen parentSpecimen)
 			throws ApplicationException
 	{
@@ -409,9 +456,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	}
 
 	/**
-	 * @param specimenVO
-	 * @return
-	 * @throws ApplicationException Application Exception
+	 * @param specimenVO : specimenVO
+	 * @return Specimen : Specimen
+	 * @throws ApplicationException
+	 *             Application Exception
 	 */
 	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO)
 			throws ApplicationException
@@ -455,7 +503,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 		specimen.setBarcode(specimenVO.getBarCode());
 
-		/* bug 6015  vaishali khandelwal*/
+		/* bug 6015 vaishali khandelwal */
 
 		/* end bug 6015 */
 
@@ -480,14 +528,14 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		else
 		{
 			specimen.setCollectionStatus("Pending");
-			//Mandar : 25July08: ------- start ------------
+			// Mandar : 25July08: ------- start ------------
 			specimen.setAvailableQuantity(new Double(0));
-			//Mandar : 25July08: ------- end ------------
+			// Mandar : 25July08: ------- end ------------
 		}
 
 		if ("Virtual".equals(specimenVO.getStorageContainerForSpecimen()))
 		{
-			//	specimen.setStorageContainer(null);
+			// specimen.setStorageContainer(null);
 			specimen.setSpecimenPosition(null);
 		}
 		else
@@ -499,9 +547,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	}
 
 	/**
-	 * @param specimenVO
-	 * @param specimen
-	 * @throws ApplicationException 
+	 * @param specimenVO : specimenVO
+	 * @param specimen : specimen
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private void setStorageContainer(GenericSpecimen specimenVO, Specimen specimen)
 			throws ApplicationException
@@ -561,18 +609,18 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		if (specimenVO.getSelectedContainerName() == null
 				|| specimenVO.getSelectedContainerName().trim().length() == 0)
 		{
-			//ErrorKey errorKey = ErrorKey.getErrorKey("action.error");
+			// ErrorKey errorKey = ErrorKey.getErrorKey("action.error");
 
 			throw AppUtility.getApplicationException(null, "spec.storage.missing", specimenVO
 					.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
-		//	specimen.setStorageContainer(storageContainer);
+		// specimen.setStorageContainer(storageContainer);
 	}
 
 	/**
-	 * @param specimenVO
-	 * @return
+	 * @param specimenVO : specimenVO
+	 * @return Long : Long
 	 */
 	private Long getSpecimenId(GenericSpecimen specimenVO)
 	{
@@ -586,10 +634,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	}
 
 	/**
-	 * @param scgId
-	 * @param sessionDataBean
-	 * @return
-	 * @throws BizLogicException
+	 * @param scgId : scgId
+	 * @param sessionDataBean : sessionDataBean
+	 * @return HashSet : HashSet
+	 * @throws BizLogicException : BizLogicException
 	 */
 	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -602,7 +650,11 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		return specimenCollection;
 
 	}
-
+	/**
+	 *
+	 * @param specimenColl : specimenColl
+	 * @param timeStamp : timeStamp
+	 */
 	private void setCreatedOnDate(Collection < AbstractSpecimen > specimenColl, Date timeStamp)
 	{
 		try
@@ -631,13 +683,23 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 	}
 
+	/**
+	 * @param specimen
+	 *            : specimen
+	 * @return Date : Date
+	 */
 	private Date getTimeStamp(Specimen specimen)
 	{
 		Date timeStamp = null;
 		try
 		{
-			String query = "select collectionEventParameters.timestamp from edu.wustl.catissuecore.domain.CollectionEventParameters as collectionEventParameters where "
-					+ " collectionEventParameters.specimenCollectionGroup.id = (select specimen.specimenCollectionGroup.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+			String query = "select collectionEventParameters.timestamp" +
+					" from edu.wustl.catissuecore.domain.CollectionEventParameters" +
+					" as collectionEventParameters where "
+					+ " collectionEventParameters.specimenCollectionGroup.id" +
+							" = (select specimen.specimenCollectionGroup.id" +
+							" from edu.wustl.catissuecore.domain.Specimen as" +
+							" specimen where "
 					+ "specimen.id = " + specimen.getId() + ")";
 
 			List < Date > list = new DefaultBizLogic().executeQuery(query);

@@ -9,17 +9,25 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class ThawEventParametersAction extends SpecimenEventParametersAction
 {
 
+	/**
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param eventParametersForm
+	 *            : eventParametersForm
+	 * @throws Exception
+	 *             : Exception
+	 */
 	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		// TODO Auto-generated method stub
-		//String operation = (String) request.getAttribute(Constants.OPERATION);
+		// String operation = (String)
+		// request.getAttribute(Constants.OPERATION);
 		String formName, specimenId = null;
 		ThawEventParametersForm thawEventParametersForm = (ThawEventParametersForm) eventParametersForm;
 

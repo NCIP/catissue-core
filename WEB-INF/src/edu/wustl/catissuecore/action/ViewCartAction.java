@@ -15,32 +15,36 @@ import edu.wustl.query.util.global.AQConstants;
 
 /**
  * @author santhoshkumar_c
- *
  */
 public class ViewCartAction extends QueryShoppingCartAction
 {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
+		// AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		HttpSession session = request.getSession();
 		String target = null;
 
 		QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
-		// Check if user wants to view the cart.		  
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		setCartView(request, cart);
 		target = new String(Constants.VIEW);

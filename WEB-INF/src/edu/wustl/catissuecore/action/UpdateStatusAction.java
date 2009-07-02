@@ -1,8 +1,12 @@
 /**
- * <p>Title: UpdateStatusAction Class>
- * <p>Description:	UpdateStatusAction displays updated status values.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: UpdateStatusAction Class>
+ * <p>
+ * Description: UpdateStatusAction displays updated status values.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ramya Nagraj
  * @version 1.00
  */
@@ -34,24 +38,32 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class updates the status of all ordered specimens in one go.
- * @author ramya_nagraj
  *
+ * @author ramya_nagraj
  */
 
 public class UpdateStatusAction extends BaseAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UpdateStatusAction.class);
 
 	/**
-	* Overrides the execute method in Action class.
-	* @param mapping ActionMapping object
-	* @param form ActionForm object
-	* @param request HttpServletRequest object
-	* @param response HttpServletResponse object
-	* @return ActionForward object
-	* @throws Exception object
-	*/
+	 * Overrides the execute method in Action class.
+	 *
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
+	 * @return ActionForward object
+	 * @throws Exception
+	 *             object
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -110,9 +122,12 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function sends the response string to the browser
-	 * @param responseList List containing the statuses of individual order items
-	 * @param response HttpServletResponse object
+	 * This function sends the response string to the browser.
+	 *
+	 * @param responseList
+	 *            List containing the statuses of individual order items
+	 * @param response
+	 *            HttpServletResponse object
 	 */
 	private void sendResponseString(List responseList, HttpServletResponse response)
 	{
@@ -130,10 +145,14 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function sends the response string to the browser
-	 * @param responseList List containing the statuses of defined arrays
-	 * @param responseListForExistingArray List containing the statuses of existing arrays
-	 * @param response HttpServletResponse object
+	 * This function sends the response string to the browser.
+	 *
+	 * @param responseList
+	 *            List containing the statuses of defined arrays
+	 * @param responseListForExistingArray
+	 *            List containing the statuses of existing arrays
+	 * @param response
+	 *            HttpServletResponse object
 	 */
 	private void sendResponseString(List responseList, List responseListForExistingArray,
 			HttpServletResponse response)
@@ -152,9 +171,13 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function constructs updated response list for the defined arrays in ArrayRequests.jsp
-	 * @param definedArrayRequestMapList List containing the map of defined arrays
-	 * @param updateValue String containing new status value to be updated
+	 * This function constructs updated response list for the defined arrays in
+	 * ArrayRequests.jsp.
+	 *
+	 * @param definedArrayRequestMapList
+	 *            List containing the map of defined arrays
+	 * @param updateValue
+	 *            String containing new status value to be updated
 	 * @return responseList List containing the new status of defined arrays
 	 */
 	private List constructResponseListForDefinedArray(List definedArrayRequestMapList,
@@ -170,23 +193,26 @@ public class UpdateStatusAction extends BaseAction
 			Map defineArrayMap = (Map) definedArrayRequestMapListItr.next();
 			Set defineArraySet = (Set) defineArrayMap.keySet();
 			Iterator defineArraySetItr = defineArraySet.iterator();
-			//Set has only one element that is,DefineArrayRequestBean instance
+			// Set has only one element that is,DefineArrayRequestBean instance
 			definedArrayRequestBean = (DefinedArrayRequestBean) defineArraySetItr.next();
 			List arrayStatusCollec = (ArrayList) definedArrayRequestBean.getArrayStatusList();
 			List newStatusList = constructNewStatusList(arrayStatusCollec);
 			if (newStatusList.contains(updateValue))
 			{
 				newStatusList.remove(updateValue);
-				//To display updated new value in the first option of <html:select>
+				// To display updated new value in the first option of
+				// <html:select>
 				newStatusList.add(0, updateValue);
 
-				/*index needed to identify the rows.
-				Add individual collection in responseList*/
+				/*
+				 * index needed to identify the rows. Add individual collection
+				 * in responseList
+				 */
 				responseList.add(i, newStatusList);
 			}
 			else
 			{
-				responseList.add(i, newStatusList);//list of beans sent in the response.
+				responseList.add(i, newStatusList);
 			}
 
 			i++;
@@ -195,10 +221,15 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function constructs updated response list for the order items in ExistingArray in the ArrayRequests.jsp
-	 * @param existingArrayRequestList List containing the statuses of individual existing arrays
-	 * @param updateValue String containing new status value to be updated
-	 * @return responseList List containing the new status list for all existing arrays
+	 * This function constructs updated response list for the order items in
+	 * ExistingArray in the ArrayRequests.jsp.
+	 *
+	 * @param existingArrayRequestList
+	 *            List containing the statuses of individual existing arrays
+	 * @param updateValue
+	 *            String containing new status value to be updated
+	 * @return responseList List containing the new status list for all existing
+	 *         arrays
 	 */
 	private List constructResponseListForExistingArray(List existingArrayRequestList,
 			String updateValue)
@@ -220,16 +251,19 @@ public class UpdateStatusAction extends BaseAction
 			if (newStatusList.contains(updateValue))
 			{
 				newStatusList.remove(updateValue);
-				//To display updated new value in the first option of <html:select>
+				// To display updated new value in the first option of
+				// <html:select>
 				newStatusList.add(0, updateValue);
 
-				/*index needed to identify the rows.
-				Add individual collection in responseList*/
+				/*
+				 * index needed to identify the rows. Add individual collection
+				 * in responseList
+				 */
 				responseList.add(i, newStatusList);
 			}
 			else
 			{
-				responseList.add(i, newStatusList);//list of beans sent in the response.
+				responseList.add(i, newStatusList);
 			}
 			i++;
 		}
@@ -237,9 +271,14 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function constructs updated response list for the order items in RequestDetails.jsp
-	 * @param requestDetailsList ArrayList containing the statuses of all specimens
-	 * @param updateValue String containing new status value to be updated.This is obtained from the request.
+	 * This function constructs updated response list for the order items in
+	 * RequestDetails.jsp.
+	 *
+	 * @param requestDetailsList
+	 *            ArrayList containing the statuses of all specimens
+	 * @param updateValue
+	 *            String containing new status value to be updated.This is
+	 *            obtained from the request.
 	 * @return List ArrayList containing lists of new statuses of all specimens
 	 */
 	private List constructResponseListForRequestDetailsList(List requestDetailsList,
@@ -263,18 +302,21 @@ public class UpdateStatusAction extends BaseAction
 					&& newStatusList.contains(updateValue))
 			{
 				newStatusList.remove(updateValue);
-				//To display updated new value in the first option of <html:select>
+				// To display updated new value in the first option of
+				// <html:select>
 				newStatusList.add(0, updateValue);
 
-				/*index needed to identify the rows.
-				Add individual collection in responseList*/
+				/*
+				 * index needed to identify the rows. Add individual collection
+				 * in responseList
+				 */
 				responseList.add(i, newStatusList);
 			}
 			else
 			{
 				newStatusList.remove(requestDetailsBean.getAssignedStatus());
 				newStatusList.add(0, requestDetailsBean.getAssignedStatus());
-				responseList.add(i, newStatusList);//list of beans sent in the response.
+				responseList.add(i, newStatusList);
 			}
 			i++;
 		}
@@ -282,33 +324,41 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function accepts current item status list of individual order items which is in the form of
-	 * name-value form.It parses them and returns a list containing only the status values.
-	 * @param currentStatusList List containing the current status list of order items
-	 * @return newStatusList ArrayList containing new statuses of individual order items
+	 * This function accepts current item status list of individual order items
+	 * which is in the form of name-value form.It parses them and returns a list
+	 * containing only the status values.
+	 *
+	 * @param currentStatusList
+	 *            List containing the current status list of order items
+	 * @return newStatusList ArrayList containing new statuses of individual
+	 *         order items
 	 */
 	private List constructNewStatusList(List currentStatusList)
 	{
-		//newStatusList contains status of individual order item
+		// newStatusList contains status of individual order item
 		List newStatusList = new ArrayList();
 
 		for (Iterator itr = currentStatusList.iterator(); itr.hasNext();)
 		{
-			//The status value contains string in the form of name:<option> value:<option>
+			// The status value contains string in the form of name:<option>
+			// value:<option>
 			String statusValue = itr.next().toString();
 
-			int firstIndex = statusValue.lastIndexOf(":"); //Last Index of ":".
-			int lastIndex = statusValue.length(); //Length of String.		
+			int firstIndex = statusValue.lastIndexOf(":"); // Last Index of ":".
+			int lastIndex = statusValue.length(); // Length of String.
 			statusValue = statusValue.substring(firstIndex + 1, lastIndex);
 
-			newStatusList.add(statusValue); //Add the values to Collection.
+			newStatusList.add(statusValue); // Add the values to Collection.
 		}
 		return newStatusList;
 	}
 
 	/**
-	 * This function converts the list of objects in responseList(ArrayList) into a String form.
-	 * @param responseList ArrayList containing the list of RequestDetailsBean instances.
+	 * This function converts the list of objects in responseList(ArrayList)
+	 * into a String form.
+	 *
+	 * @param responseList
+	 *            ArrayList containing the list of RequestDetailsBean instances.
 	 * @return String containing the response text.
 	 */
 	private String makeOutputString(List responseList)
@@ -316,24 +366,24 @@ public class UpdateStatusAction extends BaseAction
 		int i = 0;
 		StringBuffer responseStrBuffer = new StringBuffer();
 		List statusList = new ArrayList();
-		//Use ';' delimiter to separate between each row.
+		// Use ';' delimiter to separate between each row.
 		while (i < responseList.size())
 		{
 			statusList = (List) responseList.get(i);
-			//Loop for each row.
+			// Loop for each row.
 			for (int j = 0; j < statusList.size(); j++)
 			{
 				String responseString = (String) statusList.get(j);
 
-				//Separate OptionText and OptionValue with '|'
+				// Separate OptionText and OptionValue with '|'
 				responseStrBuffer.append(responseString).append("|").append(responseString);
 
-				//Separate individual options by '||'
+				// Separate individual options by '||'
 				responseStrBuffer.append("||");
 
 			}
 			responseStrBuffer.append(";");
-			//Separate each row with ';'.
+			// Separate each row with ';'.
 			i++;
 		}
 		String responseString = responseStrBuffer.toString();
@@ -348,12 +398,15 @@ public class UpdateStatusAction extends BaseAction
 	}
 
 	/**
-	 * This function contructs a string containing the statuses of defined arrays and existing arrays 
-	 * which are separated by a delimiter
-	 * @param responseListForDefinedArray ArrayList containing the new statuslist of defined arrays 
-	 * @param responseListForExistingArray ArrayList containing the new status list of existing arrays
-	 * @return responseString String containing the statuses of defined arrays and existing arrays 
-	 * separated by a delimiter
+	 * This function contructs a string containing the statuses of defined
+	 * arrays and existing arrays which are separated by a delimiter.
+	 *
+	 * @param responseListForDefinedArray
+	 *            ArrayList containing the new statuslist of defined arrays
+	 * @param responseListForExistingArray
+	 *            ArrayList containing the new status list of existing arrays
+	 * @return responseString String containing the statuses of defined arrays
+	 *         and existing arrays separated by a delimiter
 	 */
 	private String makeOutputString(List responseListForDefinedArray,
 			List responseListForExistingArray)
@@ -362,16 +415,16 @@ public class UpdateStatusAction extends BaseAction
 		StringBuffer responseStrBuffer = new StringBuffer();
 		List statusList = new ArrayList();
 
-		//Use ';' delimiter to separate between each row.
+		// Use ';' delimiter to separate between each row.
 		while (i < responseListForDefinedArray.size())
 		{
 			statusList = (List) responseListForDefinedArray.get(i);
-			//Loop for each row.
+			// Loop for each row.
 			for (int j = 0; j < statusList.size(); j++)
 			{
 				String responseString = (String) statusList.get(j);
 
-				//Separate OptionText and OptionValue with '|'
+				// Separate OptionText and OptionValue with '|'
 				responseStrBuffer.append(responseString).append("|").append(responseString);
 				if (j != statusList.size() - 1)
 				{
@@ -379,7 +432,7 @@ public class UpdateStatusAction extends BaseAction
 				}
 			}
 			responseStrBuffer.append(";");
-			//Separate each row with ';'.
+			// Separate each row with ';'.
 			i++;
 		}
 		String responseString = responseStrBuffer.toString();
@@ -393,20 +446,21 @@ public class UpdateStatusAction extends BaseAction
 			while (i < responseListForExistingArray.size())
 			{
 				statusList = (List) responseListForExistingArray.get(i);
-				//Loop for each row
+				// Loop for each row
 				for (int j = 0; j < statusList.size(); j++)
 				{
 					String responseStringForExistingArray = (String) statusList.get(j);
 
-					//Separate OptionText and OptionValue with '|'
-					responseStrBuffer.append(responseStringForExistingArray).append("|").append(
+					// Separate OptionText and OptionValue with '|'
+					responseStrBuffer.
+					append(responseStringForExistingArray).append("|").append(
 							responseStringForExistingArray);
 
-					//Separate individual options by '||'
+					// Separate individual options by '||'
 					responseStrBuffer.append("||");
 				}
 				responseStrBuffer.append(";");
-				//Separate each row with ';'.
+				// Separate each row with ';'.
 				i++;
 			}
 			String responseStringForExistingArray = responseStrBuffer.toString();

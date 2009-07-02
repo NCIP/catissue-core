@@ -50,14 +50,31 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
-	//private SpecimenCollectionGroup specimenCollectionGroup = null;
+	/**
+	 * specimenSummaryForm.
+	 */
 	private ViewSpecimenSummaryForm specimenSummaryForm = null;
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -76,8 +93,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			LinkedHashSet specimenDomainCollection = getSpecimensToSave(eventId, session);
 			if (ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(specimenSummaryForm.getUserAction()))
 			{
-				//Abhishek Mehta : Performance related Changes
-				Collection < AbstractDomainObject > specimenCollection = new LinkedHashSet < AbstractDomainObject >();
+				// Abhishek Mehta : Performance related Changes
+				Collection < AbstractDomainObject > specimenCollection =
+					new LinkedHashSet < AbstractDomainObject >();
 				specimenCollection.addAll(specimenDomainCollection);
 				new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean, 0, false);
 				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
@@ -91,18 +109,17 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 						sessionDataBean);
 				setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
 
-				//11479 S
+				// 11479 S
 				updateWithNewStorageLocation(session, sessionDataBean, eventId,
 						specimenDomainCollection);
-				//11479 E
+				// 11479 E
 
-				/*Iterator iter=specimenDomainCollection.iterator();
-				List specimenIdList=new ArrayList();
-				while( iter.hasNext())
-				{
-					specimenIdList.add(((Specimen)iter.next()).getId());
-				}
-				request.setAttribute("specimenIdList", specimenIdList);*/
+				/*
+				 * Iterator iter=specimenDomainCollection.iterator(); List
+				 * specimenIdList=new ArrayList(); while( iter.hasNext()) {
+				 * specimenIdList.add(((Specimen)iter.next()).getId()); }
+				 * request.setAttribute("specimenIdList", specimenIdList);
+				 */
 			}
 			ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -111,13 +128,13 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			specimenSummaryForm.setShowLabel(true);
 			saveMessages(request, actionMessages);
 			specimenSummaryForm.setReadOnly(true);
-			//bug 12959
-			request.setAttribute("readOnly", true);//to disable collected checkbox in specimen summary page.
+			// bug 12959
+			request.setAttribute("readOnly", true);
 
-			//if(request.getParameter("pageOf") != null)
-			//	return mapping.findForward(request.getParameter("pageOf"));
+			// if(request.getParameter("pageOf") != null)
+			// return mapping.findForward(request.getParameter("pageOf"));
 
-			//19May08 : Mandar : For GenericSpecimen
+			// 19May08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					true);
 			if (request.getAttribute("printflag") != null
@@ -130,14 +147,14 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				request.setAttribute("printMultiple", "1");
 				if (request.getParameter("pageOf") != null)
 					request.setAttribute("pageOf", request.getParameter("pageOf"));
-				//bug 12656 start
+				// bug 12656 start
 				if (specimenSummaryForm.getForwardTo() != null
 						&& !specimenSummaryForm.getForwardTo().equals(
 								Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 				{
 					return mapping.findForward("printMultiple");
 				}
-				//bug 12656 end
+				// bug 12656 end
 
 			}
 			if (specimenSummaryForm.getForwardTo() != null
@@ -155,28 +172,35 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				{
 					request.setAttribute("pageOf", Constants.SUCCESS);
 				}
-				//bug 12656 start
+				// bug 12656 start
 				if (request.getAttribute("printflag") != null
 						&& request.getAttribute("printflag").equals("1"))
 				{
-					//request.setAttribute("pageOf", Constants.SUCCESS);//commented as add to my list + print - menubar disappers
-					return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);//"printAnticipatorySpecimens";
+					// request.setAttribute("pageOf",
+					// Constants.SUCCESS);//commented as add to my list + print
+					// - menubar disappers
+					return mapping.findForward
+					(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT);
 				}
 				else
 				{
 					if (request.getAttribute("pageOf") != null
 							&& request.getAttribute("pageOf").equals(
-									Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
+									Constants.
+									PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
 					{
 						return mapping
-								.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART_WITHOUT_MENU);//
+								.findForward
+								(Constants.
+										ADD_MULTIPLE_SPECIMEN_TO_CART_WITHOUT_MENU);//
 					}
 					else
 					{
-						return mapping.findForward(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
+						return mapping.findForward
+						(Constants.ADD_MULTIPLE_SPECIMEN_TO_CART);
 					}
 				}
-				//bug 12656 end
+				// bug 12656 end
 
 			}
 			if (request.getParameter("pageOf") != null)
@@ -187,7 +211,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		catch (Exception exception)
 		{
 			logger.debug(exception.getMessage(), exception);
-			//11July08 : Mandar : For GenericSpecimen
+			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					true);
 
@@ -232,7 +256,12 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}
-
+	/**
+	 *
+	 * @param specimenSummaryForm : specimenSummaryForm
+	 * @param specimenDomainCollection : specimenDomainCollection
+	 * @return Set < Specimen > : Set < Specimen >
+	 */
 	private Set < Specimen > getSpecimensToPrint(ViewSpecimenSummaryForm specimenSummaryForm,
 			LinkedHashSet specimenDomainCollection)
 	{
@@ -258,11 +287,19 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 		return specimensToPrint;
 	}
-
+	/**
+	 *
+	 * @param session : session
+	 * @param sessionDataBean : sessionDataBean
+	 * @param eventId : eventId
+	 * @param specimenDomainCollection : specimenDomainCollection
+	 * @throws DAOException : DAOException
+	 */
 	private void updateWithNewStorageLocation(HttpSession session, SessionDataBean sessionDataBean,
 			String eventId, LinkedHashSet specimenDomainCollection) throws DAOException
 	{
-		//Iterator < Specimen > specimensItr = specimenDomainCollection.iterator();
+		// Iterator < Specimen > specimensItr =
+		// specimenDomainCollection.iterator();
 		Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
@@ -298,8 +335,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				SpecimenDataBean deriveSpecimenDataBean = (SpecimenDataBean) deriveItr.next();
 				Specimen deriveSpec = deriveSpecimenDataBean.getCorresSpecimen();
 				if ((deriveSpec.getSpecimenPosition() != null)
-						&& (deriveSpec.getSpecimenPosition().getPositionDimensionOne() != null)
-						&& (deriveSpec.getSpecimenPosition().getPositionDimensionTwo() != null))
+						&& (deriveSpec.getSpecimenPosition().
+								getPositionDimensionOne() != null)
+						&& (deriveSpec.getSpecimenPosition().
+								getPositionDimensionTwo() != null))
 				{
 					deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec
 							.getSpecimenPosition().getPositionDimensionOne()));
@@ -315,9 +354,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	}
 
 	/**
-	 * @param specimenVO
-	 * @return
-	 * @throws ApplicationException 
+	 * @param specimenVO : specimenVO
+	 * @return Specimen : Specimen
+	 * @throws ApplicationException : ApplicationException
 	 */
 	protected Specimen createSpecimenDomainObject(GenericSpecimen specimenVO)
 			throws ApplicationException
@@ -325,7 +364,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		specimenVO = (SpecimenDataBean) specimenVO;
 		specimenVO.setCheckedSpecimen(specimenVO.getCheckedSpecimen());
-		specimenVO.setPrintSpecimen(specimenVO.getPrintSpecimen());//Bug 12631
+		specimenVO.setPrintSpecimen(specimenVO.getPrintSpecimen());// Bug 12631
 		Specimen specimen = super.createSpecimenDomainObject(specimenVO);
 		setValuesForSpecimen(specimen, specimenVO);
 		if (ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(specimenSummaryForm.getUserAction()))
@@ -335,14 +374,18 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		return specimen;
 	}
-
+	/**
+	 *
+	 * @param specimen : specimen
+	 * @param genericSpecimen : genericSpecimen
+	 */
 	protected void setValuesForNewSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
 	{
 		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
 
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		specimen.setComment(specimenDataBean.getComment());
-		//bug 12936 start
+		// bug 12936 start
 		if (specimenDataBean.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
@@ -351,14 +394,14 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		{
 			specimen.setCollectionStatus("Pending");
 		}
-		//bug 12936 end
+		// bug 12936 end
 		if (specimen.getCreatedOn() == null)
 		{
 			specimen.setCreatedOn(new Date());
 		}
-		//specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
+		// specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
 		genericSpecimen.setCheckedSpecimen(specimenDataBean.getCheckedSpecimen());
-		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());//Bug 12631
+		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());
 		specimenDataBean.setCorresSpecimen(specimen);
 
 		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
@@ -369,7 +412,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
 			while (iterator.hasNext())
 			{
-				SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) iterator
+				SpecimenEventParameters specimenEventParameters =
+					(SpecimenEventParameters) iterator
 						.next();
 				specimenEventParameters.setSpecimen(specimen);
 
@@ -377,7 +421,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 
 	}
-
+	/**
+	 *
+	 * @param specimen : specimen
+	 * @param genericSpecimen : genericSpecimen
+	 */
 	protected void setValuesForSpecimen(Specimen specimen, GenericSpecimen genericSpecimen)
 	{
 		SpecimenDataBean specimenDataBean = (SpecimenDataBean) genericSpecimen;
@@ -394,7 +442,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		specimen.setParentSpecimen(specimenDataBean.getParentSpecimen());
 		specimen.setComment(specimenDataBean.getComment());
 		specimen
-				.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+				.setExternalIdentifierCollection
+				(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
 		if (specimenDataBean.getCorresSpecimen() != null)
@@ -404,7 +453,12 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 		specimenDataBean.setCorresSpecimen(specimen);
 	}
-
+/**
+ *
+ * @param EventId : EventId
+ * @param request : request
+ * @param SpecimenCollection : SpecimenCollection
+ */
 	private void setLabelBarCodesToSessionData(String EventId, HttpServletRequest request,
 			Collection SpecimenCollection)
 	{
@@ -416,7 +470,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	}
 
 	/**
-	 * @param specimenMap
+	 * @param specimenMap : specimenMap
 	 */
 	private void setLabelBarCodeToSpecimens(LinkedHashMap specimenMap)
 	{
@@ -443,8 +497,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	}
 
 	/**
-	 * @param specimen
-	 * @param formSpecimen
+	 * @param specimen : specimen
+	 * @param formSpecimen : formSpecimen
 	 * @return
 	 */
 	private void setParentLabelToFormSpecimen(Specimen specimen, GenericSpecimen formSpecimen)

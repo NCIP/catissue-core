@@ -1,6 +1,7 @@
 /**
  * <p>Title: TissueSpecimenReviewEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the TissueSpecimenReviewEventParameters Add/Edit webpage.</p>
+ * <p>Description:	This class initializes the fields in the
+ *  TissueSpecimenReviewEventParameters Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -22,11 +23,15 @@ import edu.wustl.common.cde.CDEManager;
 /**
  * @author mandar_deshmukh
  * This class initializes the fields in the TissueSpecimenReviewEventParameters Add/Edit webpage.
- * 
+ *
  */
 public class TissueSpecimenReviewEventParametersAction extends SpecimenEventParametersAction
 {
-
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
@@ -35,7 +40,8 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;
-		TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm = (TissueSpecimenReviewEventParametersForm) eventParametersForm;
+		TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm =
+			(TissueSpecimenReviewEventParametersForm) eventParametersForm;
 		if (tissueSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION;

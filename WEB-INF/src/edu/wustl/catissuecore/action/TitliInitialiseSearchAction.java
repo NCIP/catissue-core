@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package edu.wustl.catissuecore.action;
@@ -19,14 +19,16 @@ import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * Initialize Titli Search
- * 
+ * Initialize Titli Search.
+ *
  * @author Juber Patel
- * 
+ *
  */
 public class TitliInitialiseSearchAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TitliInitialiseSearchAction.class);
 
 	/**
@@ -39,7 +41,7 @@ public class TitliInitialiseSearchAction extends Action
 	 * @param response
 	 *            the response
 	 * @return action forward
-	 * 
+	 *
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)

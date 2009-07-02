@@ -45,20 +45,49 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SubmitUserAction extends Action
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SubmitUserAction.class);
+
+	/**
+	 * target.
+	 */
 	String target = null;
+
+	/**
+	 * abstractDomain.
+	 */
 	AbstractDomainObject abstractDomain = null;
+
+	/**
+	 * messages.
+	 */
 	ActionMessages messages = null;
+
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws AssignDataException
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws AssignDataException
@@ -99,6 +128,17 @@ public class SubmitUserAction extends Action
 		return mapping.findForward(target);
 	}
 
+	/**
+	 * @param mapping
+	 *            : mapping
+	 * @param request
+	 *            : request
+	 * @param form
+	 *            : form
+	 * @return ActionForward : ActionForward
+	 * @throws ApplicationException
+	 *             : ApplicationException
+	 */
 	private ActionForward executeAddUser(ActionMapping mapping, HttpServletRequest request,
 			AbstractActionForm form) throws ApplicationException
 	{
@@ -109,17 +149,19 @@ public class SubmitUserAction extends Action
 		AbstractActionForm abstractForm = (AbstractActionForm) form;
 		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm
 				.getFormId());
-		//UserBizLogic bizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		// UserBizLogic bizLogic = (UserBizLogic)
+		// BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 		HttpSession session = request.getSession();
-		//SessionDataBean sessionDataBean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		//bizLogic.insert(user, sessionDataBean, 0);
+		// SessionDataBean sessionDataBean = (SessionDataBean)
+		// session.getAttribute(Constants.SESSION_DATA);
+		// bizLogic.insert(user, sessionDataBean, 0);
 		target = new String(Constants.SUCCESS);
 		AbstractDomainObject abstractDomain = (AbstractDomainObject) user;
 		UserDTO userDTO = getUserDTO(user, session);
 
 		insertUser(userDTO, request.getSession(), form);
 
-		//	Attributes to decide AddNew action
+		// Attributes to decide AddNew action
 		String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, user.getId());
 		logger.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"
@@ -152,7 +194,8 @@ public class SubmitUserAction extends Action
 
 					String forwardTo = addNewSessionDataBean.getForwardTo();
 					logger.debug("forwardTo in CommonAddEditAction--------->" + forwardTo);
-					sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(),
+					sessionFormBean.setAddNewObjectIdentifier
+					(addNewSessionDataBean.getAddNewFor(),
 							abstractDomain.getId());
 					sessionFormBean.setMutable(false);
 					if (formBeanStack.isEmpty())
@@ -160,7 +203,8 @@ public class SubmitUserAction extends Action
 						session.removeAttribute(Constants.FORM_BEAN_STACK);
 						request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 						logger
-								.debug("SubmittedFor set as Default in CommonAddEditAction===========");
+								.debug("SubmittedFor set as Default in" +
+										" CommonAddEditAction===========");
 
 						logger.debug("cleaning FormBeanStack from session*************");
 					}
@@ -184,14 +228,16 @@ public class SubmitUserAction extends Action
 					if ((sessionFormBean.getOperation().equals("edit")))
 					{
 						logger
-								.debug("Edit object Identifier while AddNew is from Edit operation==>"
+								.debug("Edit object Identifier while AddNew " +
+										"is from Edit operation==>"
 										+ sessionFormBean.getId());
 						ActionForward editForward = new ActionForward();
 
 						String addPath = (mapping.findForward(forwardTo)).getPath();
 						logger.debug("Operation before edit==========>" + addPath);
 
-						String editPath = addPath.replaceFirst("operation=add", "operation=edit");
+						String editPath = addPath.replaceFirst
+						("operation=add", "operation=edit");
 						logger.debug("Operation edited=============>" + editPath);
 						editForward.setPath(editPath);
 
@@ -204,7 +250,8 @@ public class SubmitUserAction extends Action
 					target = new String(Constants.FAILURE);
 
 					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError("errors.item.unknown", AbstractDomainObject
+					ActionError error = new ActionError
+					("errors.item.unknown", AbstractDomainObject
 							.parseClassName(objectName));
 					errors.add(ActionErrors.GLOBAL_ERROR, error);
 					saveErrors(request, errors);
@@ -238,52 +285,30 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * Used to return UserNotAuthorizedException in case of add as well as edit user
-	 * @param abstractDomain User Object
-	 * @param e User Not Authorized Exception
-	 * @param sessionDataBean Session related data
-	 * @param errors
+	 * @param mapping
+	 *            : mapping
+	 * @param request
+	 *            : request
+	 * @param abstractForm
+	 *            : abstractForm
+	 * @return ActionForward : ActionForward
+	 * @throws ApplicationException
+	 *             : ApplicationException
 	 */
-/*	private void getUserNotAuthorizedException(AbstractDomainObject abstractDomain,
-			UserNotAuthorizedException e, SessionDataBean sessionDataBean, ActionErrors errors)
-	{
-		String userName = "";
-
-		if (sessionDataBean != null)
-		{
-			userName = sessionDataBean.getUserName();
-		}
-		String className = Utility.getActualClassName(abstractDomain.getClass().getName());
-		String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(e
-				.getPrivilegeName());
-		String baseObject = "";
-		if (e.getBaseObject() != null && e.getBaseObject().trim().length() != 0)
-		{
-			baseObject = e.getBaseObject();
-		}
-		else
-		{
-			baseObject = className;
-		}
-
-		ActionError error = new ActionError("access.addedit.object.denied", userName, className,
-				decoratedPrivilegeName, baseObject);
-		errors.add(ActionErrors.GLOBAL_ERROR, error);
-	}
-*/
 	private ActionForward executeEditUser(ActionMapping mapping, HttpServletRequest request,
 			AbstractActionForm abstractForm) throws ApplicationException
 	{
 		target = new String(Constants.SUCCESS);
 		DAO dao = null;
-		//If operation is edit, update the data in the database.
+		// If operation is edit, update the data in the database.
 
-		//	        List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
-		//									  new Long(abstractForm.getId()));
-		//	        if (!list.isEmpty())
-		//	        {
-		//	        	abstractDomain = (AbstractDomainObject) list.get(0);
-		//	            abstractDomain.setAllValues(abstractForm);
+		// List list = bizLogic.retrieve(objectName,
+		// Constants.SYSTEM_IDENTIFIER,
+		// new Long(abstractForm.getId()));
+		// if (!list.isEmpty())
+		// {
+		// abstractDomain = (AbstractDomainObject) list.get(0);
+		// abstractDomain.setAllValues(abstractForm);
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		IDomainObjectFactory abstractDomainObjectFactory = getIDomainObjectFactory();
 		String objectName = getObjectName(abstractDomainObjectFactory, abstractForm);
@@ -345,7 +370,8 @@ public class SubmitUserAction extends Action
 
 			if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 			{
-				logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+				logger.debug("SubmittedFor is ForwardTo in" +
+						" CommonAddEditAction...");
 
 				request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 
@@ -402,10 +428,16 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * This method generates HashMap of data required to be forwarded if Form is submitted for Print request
-	 * @param abstractForm	Form submitted
-	 * @param abstractDomain	DomainObject Added/Edited
-	 * @return	HashMap of data required to be forwarded
+	 * * This method generates HashMap of data required to be forwarded if Form
+	 * is submitted for Print request
+	 *
+	 * @param abstractForm
+	 *            : abstractForm
+	 * @param abstractDomain
+	 *            : abstractDomain
+	 * @return HashMap : HashMap
+	 * @throws BizLogicException
+	 *             : BizLogicException
 	 */
 	private HashMap generateForwardToPrintMap(AbstractActionForm abstractForm,
 			AbstractDomainObject abstractDomain) throws BizLogicException
@@ -418,6 +450,15 @@ public class SubmitUserAction extends Action
 		return forwardToPrintMap;
 	}
 
+	/**
+	 * @param abstractForm
+	 *            : abstractForm
+	 * @param abstractDomain
+	 *            : abstractDomain
+	 * @return HashMap : HashMap
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
 	private HashMap generateForwardToHashMap(AbstractActionForm abstractForm,
 			AbstractDomainObject abstractDomain) throws BizLogicException
 	{
@@ -429,6 +470,13 @@ public class SubmitUserAction extends Action
 		return forwardToHashMap;
 	}
 
+	/**
+	 * @param abstractDomainObjectFactory
+	 *            : abstractDomainObjectFactory
+	 * @param abstractForm
+	 *            : abstractForm
+	 * @return String : String
+	 */
 	public String getObjectName(IDomainObjectFactory abstractDomainObjectFactory,
 			AbstractActionForm abstractForm)
 	{
@@ -436,15 +484,17 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * 
 	 * @param user
+	 *            : user
 	 * @param session
-	 * @return
+	 *            : session
+	 * @return UserDTO : UserDTO
 	 */
 	private UserDTO getUserDTO(User user, HttpSession session)
 	{
 		UserDTO userDTO = new UserDTO();
-		Map < String , SiteUserRolePrivilegeBean > userRowIdBeanMap = (Map < String , SiteUserRolePrivilegeBean >) session
+		Map < String , SiteUserRolePrivilegeBean > userRowIdBeanMap =
+			(Map < String , SiteUserRolePrivilegeBean >) session
 				.getAttribute("rowIdBeanMapForUserPage");
 		userDTO.setUser(user);
 		userDTO.setUserRowIdBeanMap(userRowIdBeanMap);
@@ -452,11 +502,14 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * 
 	 * @param userDTO
+	 *            : userDTO
 	 * @param session
+	 *            : session
+	 * @param form
+	 *            : form
 	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
+	 *             : BizLogicException
 	 */
 	private void insertUser(UserDTO userDTO, HttpSession session, AbstractActionForm form)
 			throws BizLogicException
@@ -480,11 +533,17 @@ public class SubmitUserAction extends Action
 
 	/**
 	 * This method will add the success message into ActionMessages object
-	 * @param messages ActionMessages
-	 * @param abstractDomain AbstractDomainObject
-	 * @param addoredit String
-	 * @param queryBizLogic QueryBizLogic
-	 * @param objectName String
+	 *
+	 * @param messages
+	 *            ActionMessages
+	 * @param abstractDomain
+	 *            AbstractDomainObject
+	 * @param addoredit
+	 *            String
+	 * @param queryBizLogic
+	 *            QueryBizLogic
+	 * @param objectName
+	 *            String
 	 */
 	private void addMessage(ActionMessages messages, AbstractDomainObject abstractDomain,
 			String addoredit, QueryBizLogic queryBizLogic, String objectName)
@@ -516,6 +575,11 @@ public class SubmitUserAction extends Action
 		}
 	}
 
+	/**
+	 * @return IDomainObjectFactory : IDomainObjectFactory
+	 * @throws ApplicationException
+	 *             : ApplicationException
+	 */
 	public IDomainObjectFactory getIDomainObjectFactory() throws ApplicationException
 	{
 		try
@@ -526,7 +590,8 @@ public class SubmitUserAction extends Action
 		}
 		catch (BizLogicException exception)
 		{
-			//logger.error("Failed to get QueryBizLogic object from BizLogic Factory");
+			// logger.error(
+			// "Failed to get QueryBizLogic object from BizLogic Factory");
 			throw new ApplicationException(ErrorKey.getErrorKey("errors.item"), exception,
 					"Failed to get DomainObjectFactory in base Add/Edit.");
 		}

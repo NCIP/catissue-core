@@ -1,11 +1,10 @@
 /**
- * 
+ *
  */
 
 package edu.wustl.catissuecore.action;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,32 +55,53 @@ import edu.wustl.simplequery.query.SimpleQuery;
 import edu.wustl.simplequery.query.Table;
 
 /**
- * show the records from the selected entity
+ * show the records from the selected entity.
+ *
  * @author Juber Patel
- * 
  */
 public class TitliFetchAction extends Action
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(TitliFetchAction.class);
+	/**
+	 * alias.
+	 */
 	private String alias;
+	/**
+	 * dataList.
+	 */
 	private List dataList;
+	/**
+	 * columnNames.
+	 */
 	private List columnNames;
+	/**
+	 * id.
+	 */
 	private int id;
+	/**
+	 * identifierIndex.
+	 */
 	private int identifierIndex;
 
 	/**
-	 * @param mapping the mapping
-	 * @param form the action form
-	 * @param request the request
-	 * @param response the response
+	 * @param mapping
+	 *            the mapping
+	 * @param form
+	 *            the action form
+	 * @param request
+	 *            the request
+	 * @param response
+	 *            the response
 	 * @return action forward
-	 * 
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		// set the request and session attributes required by DataView.jsp and forward
+		// set the request and session attributes required by DataView.jsp and
+		// forward
 		// for that we need to fetch the selected group of records
 
 		TitliSearchForm titliSearchForm = (TitliSearchForm) form;
@@ -90,7 +110,8 @@ public class TitliFetchAction extends Action
 				.getAttribute(Constants.TITLI_SORTED_RESULT_MAP)));
 
 		TitliResultGroup resultGroup = titliSearchForm.getSelectedGroup();
-		Collection < SimpleConditionsNode > simpleConditionsNodeCollection = getSimpleConditionsNodeCollecton(
+		Collection < SimpleConditionsNode > simpleConditionsNodeCollection =
+			getSimpleConditionsNodeCollecton(
 				resultGroup, request);
 		setDataAndColumnLists(simpleConditionsNodeCollection, request);
 
@@ -98,7 +119,8 @@ public class TitliFetchAction extends Action
 		{
 			request.getSession().setAttribute(AQConstants.IS_SIMPLE_SEARCH, Constants.TRUE);
 
-			//if there is only one record in the selected group, go directly to the edit page
+			// if there is only one record in the selected group, go directly to
+			// the edit page
 			if (dataList.size() == 1)
 			{
 				String pageOf = resultGroup.getPageOf();
@@ -118,7 +140,8 @@ public class TitliFetchAction extends Action
 			request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, identifierIndex);
 			request.setAttribute(Constants.PAGE_NUMBER, 1);
 			request.getSession().setAttribute(Constants.TOTAL_RESULTS, dataList.size());
-			//request.getSession().setAttribute(Constants.RESULTS_PER_PAGE, 10);
+			// request.getSession().setAttribute(Constants.RESULTS_PER_PAGE,
+			// 10);
 
 		}
 		catch (TitliFetchException e)
@@ -132,7 +155,12 @@ public class TitliFetchAction extends Action
 
 		return mapping.findForward(Constants.SUCCESS);
 	}
-
+	/**
+	 *
+	 * @param name : name
+	 * @param path : path
+	 * @return ActionForward : ActionForward
+	 */
 	private ActionForward getActionForward(String name, String path)
 	{
 		ActionForward actionForward = new ActionForward();
@@ -143,15 +171,21 @@ public class TitliFetchAction extends Action
 	}
 
 	/**
-	 * Create a collection of SimpleConditionsNode as needed to create SimpleQuery 
-	 * @param resultGroup the result group for the selected table
-	 * @param request the servlet request 
-	 * @return a collection of SimpleConditionsNode as needed to create SimpleQuery
+	 * Create a collection of SimpleConditionsNode as needed to create
+	 * SimpleQuery.
+	 *
+	 * @param resultGroup
+	 *            the result group for the selected table
+	 * @param request
+	 *            the servlet request
+	 * @return a collection of SimpleConditionsNode as needed to create
+	 *         SimpleQuery
 	 */
 	Collection < SimpleConditionsNode > getSimpleConditionsNodeCollecton(
 			TitliResultGroup resultGroup, HttpServletRequest request)
 	{
-		Collection < SimpleConditionsNode > simpleConditionsNodeCollection = new ArrayList < SimpleConditionsNode >();
+		Collection < SimpleConditionsNode > simpleConditionsNodeCollection =
+			new ArrayList < SimpleConditionsNode >();
 		MatchListInterface matchList = resultGroup.getNativeGroup().getMatchList();
 		try
 		{
@@ -166,7 +200,8 @@ public class TitliFetchAction extends Action
 
 			int count = 1;
 
-			//for each match form a SimpleConditionsNode and add it to the collection
+			// for each match form a SimpleConditionsNode and add it to the
+			// collection
 			for (MatchInterface match : matchList)
 			{
 				Name identifier = new Name(Constants.IDENTIFIER);
@@ -204,10 +239,12 @@ public class TitliFetchAction extends Action
 	}
 
 	/**
-	 * Create SimpleQuery from the given collection of SimpleConditionsNode, execute it and get the resultant data list 
-	 * @param simpleConditionsNodeCollection
-	 * @param request the servlet request
-	 * 
+	 * Create SimpleQuery from the given collection of SimpleConditionsNode,
+	 * execute it and get the resultant data list.
+	 *
+	 * @param simpleConditionsNodeCollection : simpleConditionsNodeCollection
+	 * @param request
+	 *            the servlet request
 	 */
 	private void setDataAndColumnLists(
 			Collection < SimpleConditionsNode > simpleConditionsNodeCollection,
@@ -217,7 +254,7 @@ public class TitliFetchAction extends Action
 		columnNames = new ArrayList();
 		HttpSession session = request.getSession();
 		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, alias);
-		//Sets the condition objects from user in the query object.
+		// Sets the condition objects from user in the query object.
 		((SimpleQuery) query).addConditions(simpleConditionsNodeCollection);
 
 		Map queryResultObjectDataMap = new HashMap();
@@ -234,11 +271,15 @@ public class TitliFetchAction extends Action
 				Iterator itr = simpleConditionsNodeCollection.iterator();
 				while (itr.hasNext())
 				{
-					SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode) itr.next();
-					Table table = simpleConditionsNode.getCondition().getDataElement().getTable();
-					DataElement dataElement = simpleConditionsNode.getCondition().getDataElement();
+					SimpleConditionsNode simpleConditionsNode =
+						(SimpleConditionsNode) itr.next();
+					Table table = simpleConditionsNode.getCondition().
+					getDataElement().getTable();
+					DataElement dataElement =
+						simpleConditionsNode.getCondition().getDataElement();
 					String field = table.getTableName() + "." + table.getTableName() + "."
-							+ dataElement.getField() + "." + dataElement.getFieldType();
+							+ dataElement.getField() + "." +
+							dataElement.getFieldType();
 					fieldList.add(field);
 				}
 			}
@@ -262,7 +303,7 @@ public class TitliFetchAction extends Action
 				columnNames.add((String) identifierColumnNames.get(i));
 			}
 
-			//Get the index of Identifier field of main object.
+			// Get the index of Identifier field of main object.
 			Vector tableAliasNames = new Vector();
 			tableAliasNames.add(alias);
 			Map tableMap = query.getIdentifierColumnIds(tableAliasNames);
@@ -276,7 +317,8 @@ public class TitliFetchAction extends Action
 			PagenatedResultData pagenatedResultData = null;
 
 			/*
-			 * recordsPerPage = number of results to be displayed on a single page
+			 * recordsPerPage = number of results to be displayed on a single
+			 * page
 			 */
 			int recordsPerPage;
 
@@ -323,16 +365,18 @@ public class TitliFetchAction extends Action
 	}
 
 	/**
-	 * get the alias for the give table name from appropriate database table
-	 * @param tableName the table name for which to get the alias
-	 * @return alias for the give table name from appropriate database table
+	 *
+	 * @param tableName : tableName
+	 * @param request : request
+	 * @throws DAOException : DAOException
+	 * @throws ClassNotFoundException : ClassNotFoundException
 	 */
 	private void setAliasFor(String tableName, HttpServletRequest request) throws DAOException,
 			ClassNotFoundException
 	{
-		//Statement statement;
+		// Statement statement;
 
-		//String query=null;
+		// String query=null;
 
 		String query = "select " + Constants.TABLE_ALIAS_NAME_COLUMN + " from "
 				+ Constants.TABLE_DATA_TABLE_NAME + " where " + Constants.TABLE_TABLE_NAME_COLUMN
@@ -347,7 +391,11 @@ public class TitliFetchAction extends Action
 		dao.closeSession();
 
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @return SessionDataBean : SessionDataBean
+	 */
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{
 		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);

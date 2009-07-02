@@ -55,10 +55,35 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class SubmitSpecimenCPAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SubmitSpecimenCPAction.class);
+
+	/**
+	 * specimenSummaryForm.
+	 */
 	private ViewSpecimenSummaryForm specimenSummaryForm;
+
+	/**
+	 * specimenCollectionGroup.
+	 */
 	private SpecimenCollectionGroup specimenCollectionGroup = null;
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -86,7 +111,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 					if (collectionProtocolBean != null
 							&& collectionProtocolBean.getActivityStatus() != null)
 					{
-						ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean
+						ViewSpecimenSummaryForm.setCollectionProtocolStatus
+						(collectionProtocolBean
 								.getActivityStatus());
 					}
 					return mapping.findForward("updateCP");
@@ -198,9 +224,10 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * @param cpEventMap
-	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
+	 *
+	 * @param cpEventMap : cpEventMap
+	 * @param session : session
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void insertSpecimens(LinkedHashMap cpEventMap, HttpSession session)
 			throws BizLogicException
@@ -213,9 +240,10 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * @param collectionProtocol
-	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
+	 *
+	 * @param collectionProtocolDTO : collectionProtocolDTO
+	 * @param session : session
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO,
 			HttpSession session) throws BizLogicException
@@ -228,11 +256,10 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * Multiple specimen
-	 * 
-	 * @param request
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param request : request
+	 * @return LinkedHashMap : LinkedHashMap
+	 * @throws Exception : Exception
 	 */
 	private LinkedHashMap populateSpecimenDomainObjectMap(HttpServletRequest request)
 			throws Exception
@@ -269,7 +296,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 					Specimen parentSpeciemn = (Specimen) specimen.getParentSpecimen();
 
 					Long scgId = parentSpeciemn.getSpecimenCollectionGroup().getId();
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					IFactory factory = AbstractFactoryConfig.getInstance()
+					.getBizLogicFactory();
 					IBizLogic iBizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
 							scgId);
@@ -307,9 +335,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * @param specimenDataBean
-	 * @param parentSpecimen
-	 * @param childSpecimenList
+	 * @param specimenDataBean : specimenDataBean
+	 * @param parentSpecimen : parentSpecimen
+	 * @param childSpecimenList : childSpecimenList
 	 */
 	private void getDerivedSpecimens(SpecimenDataBean specimenDataBean, Specimen parentSpecimen,
 			ArrayList childSpecimenList)
@@ -332,9 +360,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * @param specimenDataBean
-	 * @param parentSpecimen
-	 * @param childSpecimenList
+	 * @param specimenDataBean : specimenDataBean
+	 * @param parentSpecimen : parentSpecimen
+	 * @param childSpecimenList : childSpecimenList
 	 */
 	private void getAliquotSpecimens(SpecimenDataBean specimenDataBean, Specimen parentSpecimen,
 			ArrayList childSpecimenList)
@@ -354,7 +382,11 @@ public class SubmitSpecimenCPAction extends BaseAction
 			childSpecimenList.add(aliquotSpecimen);
 		}
 	}
-
+	/**
+	 *
+	 * @param specimenDataBean : specimenDataBean
+	 * @return Specimen : Specimen
+	 */
 	private Specimen getSpecimenDomainObjectFromObject(SpecimenDataBean specimenDataBean)
 	{
 		Specimen specimen;
@@ -398,7 +430,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 		specimen.setSpecimenType(specimenDataBean.getType());
 
 		specimen
-				.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
+				.setExternalIdentifierCollection
+				(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 
 		if (specimenDataBean.getSpecimenEventCollection() != null
@@ -408,7 +441,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 			HashSet speEventParamSet = new HashSet();
 			while (iterator.hasNext())
 			{
-				SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) iterator
+				SpecimenEventParameters specimenEventParameters =
+					(SpecimenEventParameters) iterator
 						.next();
 				if (specimenEventParameters.getUser() != null)
 				{
