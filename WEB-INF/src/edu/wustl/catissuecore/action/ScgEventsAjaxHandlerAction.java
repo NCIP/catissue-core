@@ -1,11 +1,15 @@
 /**
- * <p>Title: ScgEventsAjaxHandlerAction Class>
- * <p>Description:  This class populates the events fields in the Specimen page based on the SCG selected.</p>
- * Copyright:  Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ScgEventsAjaxHandlerAction Class>
+ * <p>
+ * Description: This class populates the events fields in the Specimen page
+ * based on the SCG selected.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Ashish Gupta
- * @version 1.00
- * Created on April 17, 2007
+ * @version 1.00 Created on April 17, 2007
  */
 
 package edu.wustl.catissuecore.action;
@@ -35,17 +39,35 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
  * @author ashish_gupta
- *
  */
 public class ScgEventsAjaxHandlerAction extends BaseAction
 {
 
+	/**
+	 * collectionEventParameters.
+	 */
+
 	CollectionEventParameters collectionEventParameters = null;
+
+	/**
+	 * receivedEventParameters.
+	 */
+
 	ReceivedEventParameters receivedEventParameters = null;
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various Collection and Received events based on SCG id.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -56,7 +78,8 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		if (scgId != null && !scgId.equals(""))
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
+			SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic =
+				(SpecimenCollectionGroupBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 
 			Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
@@ -74,7 +97,8 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 						Object temp = iter.next();
 						if (temp instanceof CollectionEventParameters)
 						{
-							collectionEventParameters = (CollectionEventParameters) temp;
+							collectionEventParameters =
+								(CollectionEventParameters) temp;
 						}
 						else if (temp instanceof ReceivedEventParameters)
 						{
@@ -86,7 +110,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 				}
 			}
 		}
-		//    	Writing to response
+		// Writing to response
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/xml");
 		out.write(xmlData.toString());
@@ -95,7 +119,9 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	}
 
 	/**
-	 * @return
+	 *
+	 * @param xmlData : xmlData
+	 * @return StringBuffer : StringBuffer
 	 */
 	private StringBuffer makeXMLData(StringBuffer xmlData)
 	{
@@ -116,8 +142,8 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	}
 
 	/**
-	 * @param xmlData
-	 * @return
+	 * @param xmlData : xmlData
+	 * @return StringBuffer : StringBuffer
 	 */
 	private StringBuffer appendCollectionEvents(StringBuffer xmlData)
 	{
@@ -155,9 +181,10 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</CollectionContainer>");
 
 		xmlData.append("<CollectionComments>");
-		/* Bug Id: 4134
-		 Patch ID: 4134_2			
-		 Description: Added AppUtility.toString()		*/
+		/*
+		 * Bug Id: 4134 Patch ID: 4134_2 Description: Added
+		 * AppUtility.toString()
+		 */
 		xmlData.append(Utility.toString(collectionEventParameters.getComment()));
 		xmlData.append("</CollectionComments>");
 
@@ -165,8 +192,8 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	}
 
 	/**
-	 * @param xmlData
-	 * @return
+	 * @param xmlData : xmlData
+	 * @return StringBuffer : StringBuffer
 	 */
 	private StringBuffer appendReceivedEvents(StringBuffer xmlData)
 	{
@@ -200,10 +227,10 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</ReceivedQuality>");
 
 		xmlData.append("<ReceivedComments>");
-		/*Bug Id: 4134
-		Patch ID: 4134_1			
-		Description: Added AppUtility.toString()		
-		*/
+		/*
+		 * Bug Id: 4134 Patch ID: 4134_1 Description: Added
+		 * AppUtility.toString()
+		 */
 		xmlData.append(Utility.toString(receivedEventParameters.getComment()));
 		xmlData.append("</ReceivedComments>");
 

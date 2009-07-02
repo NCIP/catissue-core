@@ -31,13 +31,27 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SaveSpecimenRequirementAction extends BaseAction
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SaveSpecimenRequirementAction.class);
+	/**
+	 * logger.
+	 */
 
+	private transient Logger logger = Logger.getCommonLogger(SaveSpecimenRequirementAction.class);
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -52,12 +66,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			Map collectionProtocolEventMap = (Map) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-			CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+			CollectionProtocolEventBean collectionProtocolEventBean =
+				(CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventKey);
 			Integer totalNoOfSpecimen = collectionProtocolEventBean.getSpecimenRequirementbeanMap()
 					.size();
 			SpecimenRequirementBean specimenRequirementBean = createSpecimenBean(
-					createSpecimenTemplateForm, collectionProtocolEventBean.getUniqueIdentifier(),
+					createSpecimenTemplateForm,
+					collectionProtocolEventBean.getUniqueIdentifier(),
 					totalNoOfSpecimen);
 			if (specimenRequirementBean != null)
 			{
@@ -82,7 +98,13 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		return (mapping.findForward(Constants.SUCCESS));
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 * @param totalNoOfSpecimen : totalNoOfSpecimen
+	 * @return SpecimenRequirementBean : SpecimenRequirementBean
+	 */
 	private SpecimenRequirementBean createSpecimenBean(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier,
 			Integer totalNoOfSpecimen)
@@ -112,7 +134,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			{
 				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
 				deriveSpecimenMap = getderiveSpecimen(deriveSpecimenCollection,
-						createSpecimenTemplateForm, specimenRequirementBean.getUniqueIdentifier());
+						createSpecimenTemplateForm,
+						specimenRequirementBean.getUniqueIdentifier());
 			}
 		}
 		catch (Exception e)
@@ -125,7 +148,13 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap) deriveSpecimenMap);
 		return specimenRequirementBean;
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 * @param totalNoOfSpecimen : totalNoOfSpecimen
+	 * @return SpecimenRequirementBean : SpecimenRequirementBean
+	 */
 	private SpecimenRequirementBean createSpecimen(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier,
 			Integer totalNoOfSpecimen)
@@ -139,14 +168,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setLineage(Constants.NEW_SPECIMEN);
 		setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
 
-		//Aliquot
+		// Aliquot
 		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
 		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm
 				.getQuantityPerAliquot());
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
 				.getStorageLocationForAliquotSpecimen());
 
-		//Derive
+		// Derive
 		if (createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
 		{
 			createSpecimenTemplateForm.setDeriveSpecimenValues(null);
@@ -158,8 +187,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
-	 * @param createSpecimenTemplateForm
-	 * @param specimenRequirementBean
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param specimenRequirementBean : specimenRequirementBean
 	 */
 	private void setSessionDataBean(CreateSpecimenTemplateForm createSpecimenTemplateForm,
 			SpecimenRequirementBean specimenRequirementBean)
@@ -175,7 +204,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm
 				.getStorageLocationForSpecimen());
 
-		//Collected and received events
+		// Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(createSpecimenTemplateForm
 				.getCollectionEventUserId());
 		specimenRequirementBean.setReceivedEventUserId(createSpecimenTemplateForm
@@ -187,7 +216,12 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm
 				.getCollectionEventCollectionProcedure());
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 * @return Map : Map
+	 */
 	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,
 			String uniqueIdentifier)
 	{
@@ -205,7 +239,15 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		return aliquotMap;
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 * @param quantityPerAliquot : quantityPerAliquot
+	 * @param iCount : iCount
+	 * @param specimenRequirementBean : specimenRequirementBean
+	 * @return String : String
+	 */
 	private String createAliquot(CreateSpecimenTemplateForm createSpecimenTemplateForm,
 			String uniqueIdentifier, String quantityPerAliquot, int iCount,
 			SpecimenRequirementBean specimenRequirementBean)
@@ -229,7 +271,13 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setNoOfDeriveSpecimen(0);
 		return quantityPerAliquot;
 	}
-
+	/**
+	 *
+	 * @param deriveSpecimenCollection : deriveSpecimenCollection
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param uniqueIdentifier : uniqueIdentifier
+	 * @return Map : map
+	 */
 	private Map getderiveSpecimen(Collection deriveSpecimenCollection,
 			CreateSpecimenTemplateForm createSpecimenTemplateForm, String uniqueIdentifier)
 	{
@@ -255,11 +303,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setType(deriveSpecimenBean.getSpecimenType());
 			specimenRequirementBean.setStorageContainerForSpecimen(deriveSpecimenBean
 					.getStorageLocation());
-			//Aliquot
+			// Aliquot
 			specimenRequirementBean.setNoOfAliquots(null);
 			specimenRequirementBean.setQuantityPerAliquot(null);
 			specimenRequirementBean.setStorageContainerForAliquotSpecimem("");
-			//Derive
+			// Derive
 			specimenRequirementBean.setDeriveSpecimen(null);
 			specimenRequirementBean.setNoOfDeriveSpecimen(0);
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
@@ -269,7 +317,12 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		return deriveSpecimenMap;
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @param request : request
+	 * @throws Exception : Exception
+	 */
 	private void initCreateSpecimenTemplateForm(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm, HttpServletRequest request)
 			throws Exception
@@ -321,7 +374,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				.getStorageLocationForAliquotSpecimen());
 		specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
 
-		//Derive
+		// Derive
 		int noOfDeriveSpecimen = new Integer(createSpecimenTemplateForm.getNoOfDeriveSpecimen());
 		int noOfBeanDerive = new Integer(specimenRequirementBean.getNoOfDeriveSpecimen());
 		int totalNewDeriveSpecimen = noOfDeriveSpecimen - noOfBeanDerive;
@@ -331,7 +384,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		if (deriveSpecimenMap != null && deriveSpecimenMap.size() != 0)
 		{
 			deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
-			// for ordering 
+			// for ordering
 			IdComparator deriveSpBeanComp = new IdComparator();
 			List deriveSpecimenList = new LinkedList(deriveSpecimenCollection);
 			Collections.sort(deriveSpecimenList, deriveSpBeanComp);
@@ -377,7 +430,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
 	}
-
+	/**
+	 *
+	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 * @return Double : Double
+	 */
 	private Double calculateQuantity(CreateSpecimenTemplateForm createSpecimenTemplateForm)
 	{
 		String noOfAliquotes = createSpecimenTemplateForm.getNoOfAliquots();

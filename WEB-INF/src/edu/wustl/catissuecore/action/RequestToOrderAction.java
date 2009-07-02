@@ -1,6 +1,6 @@
 /*
- * Copyright: Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
  */
 
 package edu.wustl.catissuecore.action;
@@ -42,29 +42,44 @@ import flex.messaging.io.ArrayList;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
- * <p>Title: RequestToOrderAction Class>
- * <p>Description:	This class initializes the fields of jsp page to request the bio-specimens.</p>
+ * <p>
+ * Title: RequestToOrderAction Class>
+ * <p>
+ * Description: This class initializes the fields of jsp page to request the
+ * bio-specimens.
+ * </p>
+ *
  * @author deepti_phadnis
  * @version 1.00
  */
 public class RequestToOrderAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
+
 	private transient Logger logger = Logger.getCommonLogger(RequestToOrderAction.class);
 
 	/**
-	 * Method to initialize the fields required on the UI pages.
-	 * @param mapping Struts's ActionMapping
-	 * @param form Referance to associated actionform with action and jsp
-	 * @param request Referance to HTTP request 
-	 * @param response Referance to HTTP response
-	 * @return Returns the path of the mapped JSP/Action to which page will be forwared after sucessful execution of action
-	 * @throws Exception throws exception in case of any logical or runtime error.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//Sets the Distribution Protocol Id List.
+		// Sets the Distribution Protocol Id List.
 		SessionDataBean sessionLoginInfo = getSessionData(request);
 		Long loggedInUserID = sessionLoginInfo.getUserId();
 		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
@@ -77,13 +92,16 @@ public class RequestToOrderAction extends BaseAction
 	}
 
 	/**
-	 * This method loads the title as Name and id as value of distribution protocol from database 
-	 * and return the namevalue bean of ditribution protocol for a given PI.
-	 * @param piID User id of PI for which all the distribution protocol is to be loaded.
-	 * @return Returns the list of namevalue bean of ditribution protocol for a given PI.
-	 * @throws BizLogicException 
-	 * @throws DAOException Throws DAOException if any database releated error occures
-	 **/
+	 * 	 * This method loads the title as Name and id as value of distribution
+		 * protocol from database and return the namevalue bean of ditribution
+		 * protocol for a given PI.
+	 * @param piID : piID
+	 * @param roleName : roleName
+	 * @param sessionDataBean : sessionDataBean
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
+	 * @throws DAOException : DAOException
+	 */
 	private List loadDistributionProtocol(final Long piID, String roleName,
 			SessionDataBean sessionDataBean) throws BizLogicException, DAOException
 	{
@@ -101,7 +119,8 @@ public class RequestToOrderAction extends BaseAction
 		Object[] whereColVal = {Status.ACTIVITY_STATUS_CLOSED.toString()};
 		String separatorBetweenFields = "";
 
-		// checking for the role. if role is admin / supervisor then show all the distribution protocols.
+		// checking for the role. if role is admin / supervisor then show all
+		// the distribution protocols.
 		if (roleName.equals(Constants.ADMINISTRATOR) || roleName.equals(Constants.SUPERVISOR))
 		{
 			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
@@ -117,14 +136,16 @@ public class RequestToOrderAction extends BaseAction
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 			boolean isToExcludeDisabled = true;
 
-			//Get data from database
+			// Get data from database
 			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
-					valueFieldCol, whereColumnName, colCondition, whereColumnValue, joinCondition,
+					valueFieldCol, whereColumnName,
+					colCondition, whereColumnValue, joinCondition,
 					separatorBetweenFields, isToExcludeDisabled);
 		}
 
 		// Fix for bug #9543 - start
-		// Check for Distribution privilege & if privilege present, show all DP's in DP list
+		// Check for Distribution privilege & if privilege present, show all
+		// DP's in DP list
 		if (!roleName.equals(Constants.ADMINISTRATOR) && sessionDataBean != null)
 		{
 			HashSet < Long > siteIds = new HashSet < Long >();
@@ -166,7 +187,8 @@ public class RequestToOrderAction extends BaseAction
 				{
 					distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
 							valueFieldCol, whereColNames, whereColCond, whereColVal,
-							Constants.AND_JOIN_CONDITION, separatorBetweenFields, true);
+							Constants.AND_JOIN_CONDITION,
+							separatorBetweenFields, true);
 				}
 			}
 			finally
@@ -179,7 +201,13 @@ public class RequestToOrderAction extends BaseAction
 
 		return distributionProtocolList;
 	}
-
+	/**
+	 *
+	 * @param sessionDataBean : sessionDataBean
+	 * @param siteIds : siteIds
+	 * @param cpIds : cpIds
+	 * @return boolean : boolean
+	 */
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
 			HashSet < Long > siteIds, HashSet < Long > cpIds)
 	{

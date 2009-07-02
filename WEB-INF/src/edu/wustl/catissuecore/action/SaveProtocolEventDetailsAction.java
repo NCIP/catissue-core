@@ -20,11 +20,23 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SaveProtocolEventDetailsAction extends BaseAction
 {
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws DAOException
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws DAOException
 	{
@@ -76,12 +88,16 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 				+ "class_" + collectionProtocolEventBean.getUniqueIdentifier());
 		String listKey = collectionProtocolEventBean.getUniqueIdentifier();
 		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);
-		//request.setAttribute("listKey", listKey);
+		// request.setAttribute("listKey", listKey);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				collectionProtocolEventMap);
 		return (mapping.findForward(pageOf));
 	}
-
+	/**
+	 *
+	 * @param collectionProtocolEventBean : collectionProtocolEventBean
+	 * @param protocolEventDetailsForm : protocolEventDetailsForm
+	 */
 	private void setCollectionProtocolBean(CollectionProtocolEventBean collectionProtocolEventBean,
 			ProtocolEventDetailsForm protocolEventDetailsForm)
 	{

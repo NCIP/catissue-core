@@ -17,20 +17,29 @@ import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
- * This class is called when user clicks on BioSpecimen tab.
- * Technicians can not access cp based view. But other users can access , so this class checks if the logged user is a technician .If yes then 
- * default page shown is specimen search. For users other than technician default page is CP based view.  
- * @author deepti_shelar
- * 
- * 
- * Bug id :4278
- * Patch id : 4278_1
+ * This class is called when user clicks on BioSpecimen tab. Technicians can not
+ * access cp based view. But other users can access , so this class checks if
+ * the logged user is a technician .If yes then default page shown is specimen
+ * search. For users other than technician default page is CP based view.
+ *
+ * @author deepti_shelar Bug id :4278 Patch id : 4278_1
  */
 public class RoleBasedForwardAction extends BaseAction
 {
 
 	/**
-	 * Overrides the executeACtion method of BaseAction class.Checks if the logged user is a technician then access is denied for cp based view.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -44,10 +53,13 @@ public class RoleBasedForwardAction extends BaseAction
 	}
 
 	/**
-	 * @param request HttpServletRequest
+	 * @param request
+	 *            HttpServletRequest
 	 * @return String rolename
-	 * @throws NumberFormatException NumberFormatException
-	 * @throws SMException SMException
+	 * @throws NumberFormatException
+	 *             NumberFormatException
+	 * @throws SMException
+	 *             SMException
 	 */
 	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException,
 			SMException
