@@ -1,11 +1,15 @@
 /**
- * <p>Title: SpecimenEventParametersAction Class>
- * <p>Description:	This class initializes the fields in the SpecimenEventParametersAction Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: SpecimenEventParametersAction Class>
+ * <p>
+ * Description: This class initializes the fields in the
+ * SpecimenEventParametersAction Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Mandar Deshmukh
- * @version 1.00
- * Created on July 28, 2005
+ * @version 1.00 Created on July 28, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -34,36 +38,47 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initializes the fields in the SpecimenEventParameters Add/Edit webpage.
- * It is a parent class for some Event Parameter Classes.
+ * This class initializes the fields in the SpecimenEventParameters Add/Edit
+ * webpage. It is a parent class for some Event Parameter Classes.
+ *
  * @author mandar deshmukh
  */
 
 public class SpecimenEventParametersAction extends BaseAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenEventParametersAction.class);
 
 	/**
-	 * This method sets all the common parameters for the SpecimenEventParameter pages
-	 * @param request HttpServletRequest instance in which the data will be set. 
-	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
+	 * This method sets all the common parameters for the SpecimenEventParameter
+	 * pages.
+	 *
+	 * @param request
+	 *            HttpServletRequest instance in which the data will be set.
+	 * @throws Exception
+	 *             Throws Exception. Helps in handling exceptions at one common
+	 *             point.
 	 */
 	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
 	{
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 
 		String operation = request.getParameter(Constants.OPERATION);
-		//Sets the operation attribute to be used in the Add/Edit FrozenEventParameters Page. 
+		// Sets the operation attribute to be used in the Add/Edit
+		// FrozenEventParameters Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
-		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		// Sets the minutesList attribute to be used in the Add/Edit
+		// FrozenEventParameters Page.
 		request.setAttribute("minutesList", Constants.MINUTES_ARRAY);
 
-		//Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		// Sets the hourList attribute to be used in the Add/Edit
+		// FrozenEventParameters Page.
 		request.setAttribute("hourList", Constants.HOUR_ARRAY);
 
-		//The id of specimen of this event.
+		// The id of specimen of this event.
 		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 		logger.debug("\t\t SpecimenEventParametersAction************************************ : "
@@ -75,7 +90,20 @@ public class SpecimenEventParametersAction extends BaseAction
 		request.setAttribute(Constants.USERLIST, userCollection);
 
 	}
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -83,7 +111,7 @@ public class SpecimenEventParametersAction extends BaseAction
 
 		EventParametersForm eventParametersForm = (EventParametersForm) form;
 
-		//	 if operation is add
+		// if operation is add
 		if (eventParametersForm.isAddOperation())
 		{
 			if (eventParametersForm.getUserId() == 0)
@@ -104,7 +132,8 @@ public class SpecimenEventParametersAction extends BaseAction
 			}
 			if (eventParametersForm.getTimeInHours() == null)
 			{
-				eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+				eventParametersForm.setTimeInHours
+				(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 			}
 			if (eventParametersForm.getTimeInMinutes() == null)
 			{
@@ -117,12 +146,13 @@ public class SpecimenEventParametersAction extends BaseAction
 			String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			if (specimenId == null)
 			{
-				SpecimenEventParametersForm sepF = ((SpecimenEventParametersForm) eventParametersForm);
+				SpecimenEventParametersForm sepF =
+					((SpecimenEventParametersForm) eventParametersForm);
 				specimenId = "" + sepF.getSpecimenId();
 				request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 			}
 		}
-		//Changes by Anup
+		// Changes by Anup
 
 		String operation = (String) request.getAttribute(Constants.OPERATION);
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
@@ -152,10 +182,11 @@ public class SpecimenEventParametersAction extends BaseAction
 		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
 	}
 
-	/*  This method will be overridden by the sub classes
-	 * It is called from setCommonRequestParameters().
-	 * It will be used to set the SubClass specific parameters.
-	 */
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{

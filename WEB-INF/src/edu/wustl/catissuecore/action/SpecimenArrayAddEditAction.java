@@ -21,15 +21,33 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * <p>This class initializes the fields of SpecimenArrayAddEditAction.java</p>
+ * <p>
+ * This class initializes the fields of SpecimenArrayAddEditAction.java.
+ * </p>
+ *
  * @author Ashwin Gupta
  * @version 1.1
  */
 public class SpecimenArrayAddEditAction extends CommonAddEditAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAddEditAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -50,13 +68,16 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 					SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
 					specimenArrayForm.setSpecArrayContentCollection(specimenArrayContentList);
 				}
-				/*				AbstractDomainObject abstractDomain = abstractDomainObjectFactory.getDomainObject(abstractForm.getFormId(), abstractForm);
-								if (abstractDomain instanceof SpecimenArray) 
-								{
-									SpecimenArray specimenArray = (SpecimenArray) abstractDomain;
-									specimenArray.setSpecimenArrayContentCollection(specimenArrayContentList);
-								}
-				*/
+				/*
+				 * AbstractDomainObject abstractDomain =
+				 * abstractDomainObjectFactory
+				 * .getDomainObject(abstractForm.getFormId(), abstractForm); if
+				 * (abstractDomain instanceof SpecimenArray) { SpecimenArray
+				 * specimenArray = (SpecimenArray) abstractDomain;
+				 * specimenArray.
+				 * setSpecimenArrayContentCollection(specimenArrayContentList);
+				 * }
+				 */
 			}
 			catch (Exception exception)
 			{

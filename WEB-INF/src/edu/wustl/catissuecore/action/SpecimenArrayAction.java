@@ -1,8 +1,6 @@
 /*
- * Created on Jul 13, 2006
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Created on Jul 13, 2006 TODO To change the template for this generated file
+ * go to Window - Preferences - Java - Code Style - Code Templates
  */
 
 package edu.wustl.catissuecore.action;
@@ -40,20 +38,36 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
- * Specimen Array action is used to perform action level operations for specimen array object.
+ * Specimen Array action is used to perform action level operations for specimen
+ * array object.
+ *
  * @author gautam_shetty
  * @author ashwin_gupta
  */
 public class SpecimenArrayAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAction.class);
 
 	/**
-	 * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -67,8 +81,9 @@ public class SpecimenArrayAction extends SecureAction
 		SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
-		//boolean to indicate whether the suitable containers to be shown in dropdown 
-		//is exceeding the max limit.
+		// boolean to indicate whether the suitable containers to be shown in
+		// dropdown
+		// is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		String[] arrayTypeLabelProperty = {"name"};
 		String arrayTypeProperty = "id";
@@ -80,14 +95,16 @@ public class SpecimenArrayAction extends SecureAction
 		if (operation.equals(Constants.ADD))
 		{
 			specimenArrayTypeList = specimenArrayBizLogic.getList(
-					SpecimenArrayType.class.getName(), arrayTypeLabelProperty, arrayTypeProperty,
+					SpecimenArrayType.class.getName(),
+					arrayTypeLabelProperty, arrayTypeProperty,
 					true);
 			for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
 			{
 				NameValueBean nameValueBean = (NameValueBean) iter.next();
 				// remove ANY entry from array type list
 				if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE)
-						&& nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+						&& nameValueBean.getName().
+						equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
 				{
 					iter.remove();
 					break;
@@ -101,7 +118,8 @@ public class SpecimenArrayAction extends SecureAction
 			String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {new Long(specimenArrayForm.getSpecimenArrayTypeId())};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
-			//specimenArrayBizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenArrayForm.getSpecimenArrayTypeId()));
+			// specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),
+			// new Long(specimenArrayForm.getSpecimenArrayTypeId()));
 			List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class
 					.getName(), selectColumnName, whereColumnName, whereColumnCondition,
 					whereColumnValue, joinCondition);
@@ -117,7 +135,7 @@ public class SpecimenArrayAction extends SecureAction
 		}
 
 		request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
-		//Setting the specimen class list
+		// Setting the specimen class list
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -129,7 +147,7 @@ public class SpecimenArrayAction extends SecureAction
 			logger.debug(Constants.MENU_SELECTED + " " + strMenu + " set successfully");
 		}
 
-		//Setting the specimen type list
+		// Setting the specimen type list
 		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
@@ -155,7 +173,7 @@ public class SpecimenArrayAction extends SecureAction
 					arrayType);
 			if (subOperation.equals("ChangeArraytype"))
 			{
-				//specimenArrayForm.setCreateSpecimenArray("no");
+				// specimenArrayForm.setCreateSpecimenArray("no");
 				isChangeArrayType = true;
 
 				specimenArrayForm.setOneDimensionCapacity(arrayType.getCapacity()
@@ -168,9 +186,11 @@ public class SpecimenArrayAction extends SecureAction
 				specimenArrayForm.setCreateSpecimenArray("yes");
 				request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
 						createSpecimenArrayMap(specimenArrayForm));
-				//request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
+				// request.getSession().setAttribute(Constants.
+				// SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
 			}
-			//else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray")) || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
+			// else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray"))
+			// || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
 			else if (subOperation.equalsIgnoreCase("CreateSpecimenArray"))
 			{
 				specimenArrayForm.setCreateSpecimenArray("yes");
@@ -231,12 +251,12 @@ public class SpecimenArrayAction extends SecureAction
 
 	/**
 	 * set class & type values for specimen array.
-	 * @param specimenArrayForm 
-	 * @param specimenArrayBizLogic
-	 * @param request
-	 * @return  array type
-	 * @throws DAOException
-	 * @throws BizLogicException 
+	 *
+	 * @param specimenArrayForm : specimenArrayForm
+	 * @param specimenArrayBizLogic : specimenArrayBizLogic
+	 * @param arrayType : arrayType
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private List doSetClassAndType(SpecimenArrayForm specimenArrayForm,
 			SpecimenArrayBizLogic specimenArrayBizLogic, SpecimenArrayType arrayType)
@@ -250,13 +270,13 @@ public class SpecimenArrayAction extends SecureAction
 			{
 				specimenArrayForm.setSpecimenClass(arrayType.getSpecimenClass());
 				/**
-				 * Name: Virender Mehta
-				 * Reviewer: Prafull
-				 * Retrive Child Specimen Collection from parent Specimen
-				 * String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()]; 
+				 * Name: Virender Mehta Reviewer: Prafull Retrive Child Specimen
+				 * Collection from parent Specimen String[] specimenTypeArr =
+				 * new String[arrayType.getSpecimenTypeCollection().size()];
 				 */
 				Collection specimenTypeCollection = (Collection) specimenArrayBizLogic
-						.retrieveAttribute(SpecimenArrayType.class.getName(), arrayType.getId(),
+						.retrieveAttribute(SpecimenArrayType.class.
+								getName(), arrayType.getId(),
 								"elements(specimenTypeCollection)");
 				String[] specimenTypeArr = new String[specimenTypeCollection.size()];
 				specimenTypeList = new ArrayList();
@@ -278,7 +298,9 @@ public class SpecimenArrayAction extends SecureAction
 
 	/**
 	 * Creates specimen array map which will contain specimen array contents.
-	 * @param specimenArrayForm array Form
+	 *
+	 * @param specimenArrayForm
+	 *            array Form
 	 * @return map
 	 */
 	private Map createSpecimenArrayMap(SpecimenArrayForm specimenArrayForm)

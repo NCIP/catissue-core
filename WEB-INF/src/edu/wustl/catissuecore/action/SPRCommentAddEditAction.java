@@ -23,18 +23,36 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SPRCommentAddEditAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SPRCommentAddEditAction.class);
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm = (ViewSurgicalPathologyReportForm) form;
+		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm =
+			(ViewSurgicalPathologyReportForm) form;
 		try
 		{
 			AbstractDomainObject abstractDomain = (AbstractDomainObject) (new DomainObjectFactory()
@@ -52,12 +70,16 @@ public class SPRCommentAddEditAction extends BaseAction
 				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 				if (abstractDomainOld instanceof QuarantineEventParameter)
 				{
-					QuarantineEventParameter quarantineEventParamanter = (QuarantineEventParameter) abstractDomainOld;
-					DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) bizLogic
-							.retrieveAttribute(QuarantineEventParameter.class.getName(),
+					QuarantineEventParameter quarantineEventParamanter =
+						(QuarantineEventParameter) abstractDomainOld;
+					DeidentifiedSurgicalPathologyReport deidReport =
+						(DeidentifiedSurgicalPathologyReport) bizLogic
+							.retrieveAttribute
+							(QuarantineEventParameter.class.getName(),
 									quarantineEventParamanter.getId(),
 									Constants.COLUMN_NAME_DEID_REPORT);
-					quarantineEventParamanter.setDeIdentifiedSurgicalPathologyReport(deidReport);
+					quarantineEventParamanter.
+					setDeIdentifiedSurgicalPathologyReport(deidReport);
 				}
 				bizLogic.update(abstractDomain, abstractDomainOld, 0, getSessionData(request));
 			}

@@ -1,6 +1,6 @@
 /**
  * <p>Title: SpecimenCollectionGroupAction Class>
- * <p>Description:	SpecimenCollectionGroupAction initializes the fields in the 
+ * <p>Description:	SpecimenCollectionGroupAction initializes the fields in the
  * New Specimen Collection Group page.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -34,7 +34,18 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -46,7 +57,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 		 * Patch ID: Bug#4129_1
 		 * Description: Changes made to support the restriction on SCG.
 		 */
-		//Accessing specimen collection group id and name 
+		//Accessing specimen collection group id and name
 		String specimenCollectionGroupId = request.getParameter("id");
 		String specimenCollectionGroupName = request.getParameter("name");
 
@@ -80,16 +91,17 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 				SpecimenCollectionGroup specimenCollectionGroup = AppUtility
 						.getSpecimenCollectionGroup(specimenCollectionGroupId);
 				collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
-				//SpecimenCollectionRequirementGroup collectionRequirementGroup = collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
+				//SpecimenCollectionRequirementGroup collectionRequirementGroup//
+				//= collectionProtocolEvent.getRequiredCollectionSpecimenGroup();
 
 				specimenRequirementCollection = collectionProtocolEvent
 						.getSpecimenRequirementCollection();
-				//collectionRequirementGroup.getSpecimenCollection(); 
+				//collectionRequirementGroup.getSpecimenCollection();
 
 				//Populate the number of Specimen Requirements.
 				numberOfSpecimen = specimenRequirementCollection.size();
 			}
-			//Sets the value for number of specimen field on the specimen collection group page. 
+			//Sets the value for number of specimen field on the specimen collection group page.
 			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
 
 			if (actionForward == null)
@@ -97,7 +109,9 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 				if ((specimenRequirementCollection != null)
 						&& (!specimenRequirementCollection.isEmpty()))
 				{
-					//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
+					//Set checkbox status depending upon the days
+					//of study calendar event point.
+					// If it is zero, then unset the restrict
 					//checkbox, otherwise set the restrict checkbox
 					if (collectionProtocolEvent != null)
 					{
@@ -105,16 +119,19 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 								.getStudyCalendarEventPoint();
 						if (studyCalendarEventPoint.doubleValue() == 0)
 						{
-							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+							request.setAttribute
+							(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 						}
 						else
 						{
-							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.TRUE);
+							request.setAttribute
+							(Constants.RESTRICT_SCG_CHECKBOX, Constants.TRUE);
 						}
 					}
 					else
 					{
-						request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+						request.setAttribute
+						(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 					}
 				}
 

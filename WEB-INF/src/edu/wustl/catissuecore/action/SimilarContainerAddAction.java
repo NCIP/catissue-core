@@ -25,13 +25,27 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SimilarContainerAddAction extends CommonAddEditAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SimilarContainerAddAction.class);
-
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -69,8 +83,10 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 				String contName = (String) simMap.get(simContPrefix + "name");
 				String Id = (String) simMap.get(simContPrefix + "Id");
 				logger.info("contName:" + contName);
-				/*String Id = new Long(storageContainerForm.getId()
-						- (noOfContainers - i)).toString();*/
+				/*
+				 * String Id = new Long(storageContainerForm.getId() -
+				 * (noOfContainers - i)).toString();
+				 */
 				logger.info("Id:" + Id);
 				list.add(new NameValueBean(contName, Id));
 			}

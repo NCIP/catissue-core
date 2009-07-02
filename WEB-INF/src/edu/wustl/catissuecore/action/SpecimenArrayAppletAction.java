@@ -16,7 +16,10 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * <p>This class initializes the fields of SpecimenArrayAppletAction.java</p>
+ * <p>
+ * This class initializes the fields of SpecimenArrayAppletAction.java.
+ * </p>
+ *
  * @author Ashwin Gupta
  * @version 1.1
  */
@@ -24,47 +27,41 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 {
 
 	/**
-	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
-		Object object = getObject(request);
-		String operation = request.getParameter(Constants.OPERATION);
-		
-		if (operation != null)
-		{	
-			if (operation.equals("getArrayData")) 
-			{
-				return getArrayData(mapping,form,request,response,object);
-			}	
-			else if (operation.equals("updateSessionData")) 
-			{
-				return updateSessionData(mapping,form,request,response,object);
-			}
-		}
-		return null;
-	}
-	*/
+	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
+	 *      org.apache.struts.action.ActionForm,
+	 *      javax.servlet.http.HttpServletRequest,
+	 *      javax.servlet.http.HttpServletResponse) public ActionForward
+	 *      execute(ActionMapping mapping, ActionForm form, HttpServletRequest
+	 *      request, HttpServletResponse response) throws Exception {
+	 *      //ObjectInputStream inputStream = new
+	 *      ObjectInputStream(request.getInputStream()); Object object =
+	 *      getObject(request); String operation =
+	 *      request.getParameter(Constants.OPERATION); if (operation != null) {
+	 *      if (operation.equals("getArrayData")) { return
+	 *      getArrayData(mapping,form,request,response,object); } else if
+	 *      (operation.equals("updateSessionData")) { return
+	 *      updateSessionData(mapping,form,request,response,object); } } return
+	 *      null; }
+	 */
 
 	/**
-	 * @param request http request
+	 * @param request
+	 *            http request
 	 * @return stream object
 	 * @throws Exception
-	private Object getObject(HttpServletRequest request) throws Exception
-	{
-		ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
-		Object object = inputStream.readObject();
-		return object;
-	}
-	*/
+	 *             private Object getObject(HttpServletRequest request) throws
+	 *             Exception { ObjectInputStream inputStream = new
+	 *             ObjectInputStream(request.getInputStream()); Object object =
+	 *             inputStream.readObject(); return object; }
+	 */
 
 	/**
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @param object
-	 * @return
-	 * @throws Exception
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @return ActionForward : ActionForward
+	 * @throws Exception : Exception
 	 */
 	public ActionForward getArrayData(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -81,13 +78,13 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 	}
 
 	/**
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @param object
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @return ActionForward : ActionForward
+	 * @throws Exception : Exception
 	 */
 	public ActionForward updateSessionData(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -99,8 +96,15 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 		return null;
 	}
 
-	//================================
-	//	 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  start
+	/**
+	 * @param methodName : methodName
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @return ActionForward : ActionForward
+	 * @throws Exception : Exception
+	 */
 	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -117,6 +121,7 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 		}
 		return null;
 	}
-	//		 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  end
+	// --------- Changes By Mandar : 05Dec06 for Bug 2866. --- Extending
+	// SecureAction. end
 
 }

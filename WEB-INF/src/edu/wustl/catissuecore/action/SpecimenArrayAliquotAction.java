@@ -43,15 +43,28 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 
 /**
- * SpecimenArrayAliquotAction initializes all the fields of the page SpecimenArrayAliquots.jsp.
+ * SpecimenArrayAliquotAction initializes all the fields of the page
+ * SpecimenArrayAliquots.jsp.
+ *
  * @author jitendra_agrawal
  */
 public class SpecimenArrayAliquotAction extends SecureAction
 {
-
 	/**
-	 * Overrides the execute method of Action class.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
+
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -62,20 +75,22 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
-		//Bean List for the dropdown for the storage location
+		// Bean List for the dropdown for the storage location
 		List < NameValueBean > storagePositionListForSpecimenArrayAliquot = AppUtility
 				.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storagePositionListForSpecimenArrayAliquot",
 				storagePositionListForSpecimenArrayAliquot);
-		//boolean to indicate whether the suitable containers to be shown in dropdown 
-		//is exceeding the max limit.
+		// boolean to indicate whether the suitable containers to be shown in
+		// dropdown
+		// is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 		{
 			Map tempAliquotMap = new HashMap();
 			if (specimenArrayAliquotForm.getCheckedButton().equals("1"))
 			{
-				tempAliquotMap.put("label", specimenArrayAliquotForm.getParentSpecimenArrayLabel());
+				tempAliquotMap.put("label",
+						specimenArrayAliquotForm.getParentSpecimenArrayLabel());
 			}
 			else
 			{
@@ -86,7 +101,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		else if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("create"))
 		{
-			//arePropertiesChanged is used to identify if any of  label/barcode, aliquot count are changed
+			// arePropertiesChanged is used to identify if any of label/barcode,
+			// aliquot count are changed
 			boolean arePropertiesChanged = false;
 			Map tempAliquotMap = (HashMap) request.getSession().getAttribute("tempAliquotMap");
 			String label = (String) tempAliquotMap.get("label");
@@ -95,7 +111,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			{
 				if (label == null
 						|| !label.trim().equalsIgnoreCase(
-								specimenArrayAliquotForm.getParentSpecimenArrayLabel().trim()))
+								specimenArrayAliquotForm.
+								getParentSpecimenArrayLabel().trim()))
 				{
 					arePropertiesChanged = true;
 				}
@@ -118,8 +135,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			}
 
 			/**
-			 * Repopulate the form with storage container locations in case user has changed 
-			 * any of label/barcode, aliquot count, quantity per aliquot.
+			 * Repopulate the form with storage container locations in case user
+			 * has changed any of label/barcode, aliquot count, quantity per
+			 * aliquot.
 			 */
 			if (arePropertiesChanged == true)
 			{
@@ -141,7 +159,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 
 				TreeMap containerMap = new TreeMap();
 				checkForSpecimenArray(request, specimenArrayAliquotForm);
-				//int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
+				// int aliquotCount =
+				// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 				Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,
 						sessionData, exceedingMaxLimit);
@@ -155,7 +174,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			}
 			else
 			{
-				//TODO
+				// TODO
 				specimenArrayAliquotForm.setButtonClicked("none");
 				return mapping.findForward(Constants.COMMON_ADD_EDIT);
 			}
@@ -168,7 +187,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 
 			if (map != null)
 			{
-				//TODO
+				// TODO
 				specimenArrayAliquotForm.setSpecimenClass(Utility.toString(map
 						.get(Constants.ALIQUOT_SPECIMEN_CLASS)));
 				specimenArrayAliquotForm.setSpecimenArrayType(Utility.toString(map
@@ -206,7 +225,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 
 				if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 				{
-					int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
+					int aliquotCount =
+						Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(
 							id.longValue(), 0, sessionData, exceedingMaxLimit);
@@ -219,7 +239,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 								.getAttribute(Globals.ERROR_KEY);
 						if (errors == null || errors.size() == 0)
 						{
-							populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
+							populateAliquotsStorageLocations
+							(specimenArrayAliquotForm, containerMap);
 						}
 					}
 				}
@@ -230,7 +251,12 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}
-
+	/**
+	 *
+	 * @param request : request
+	 * @param form : form
+	 * @return String : String
+	 */
 	private String validate(HttpServletRequest request, SpecimenArrayAliquotForm form)
 	{
 
@@ -238,11 +264,13 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	}
 
 	/**
-	 * 
-	 * @param request HttpServletRequest
-	 * @param form SpecimenArrayAliquotForm
-	 * @return String
-	 * @throws Exception
+	 * @param request
+	 *            HttpServletRequest
+	 * @param form
+	 *            SpecimenArrayAliquotForm
+	 * @return String : String
+	 * @throws BizLogicException : BizLogicException
+	 * @throws Exception : Exception
 	 */
 	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form)
 			throws BizLogicException, Exception
@@ -280,10 +308,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		{
 			SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);
 			/**
-			 * Name : Virender
-			 * Reviewer: Prafull
-			 * Retriving specimenArrayTypeObject
-			 * replaced SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType();
+			 * Name : Virender Reviewer: Prafull Retriving
+			 * specimenArrayTypeObject replaced SpecimenArrayType arrayType =
+			 * specimenArray.getSpecimenArrayType();
 			 */
 			if (Status.ACTIVITY_STATUS_DISABLED.toString()
 					.equals(specimenArray.getActivityStatus()))
@@ -293,7 +320,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 						"errors.specimenArrayAliquots.disabled", "Parent Specimen Array"));
 				saveErrors(request, errors);
 				return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
-				//throw BizLogicException("Fail to create Aliquots, Parent SpecimenArray" + " " + ApplicationProperties.getValue("error.object.disabled"));
+				// throw BizLogicException(
+				// "Fail to create Aliquots, Parent SpecimenArray" + " " +
+				// ApplicationProperties.getValue("error.object.disabled"));
 			}
 			SpecimenArrayType arrayType = (SpecimenArrayType) bizLogic.retrieveAttribute(
 					SpecimenArray.class.getName(), specimenArray.getId(), "specimenArrayType");
@@ -301,15 +330,15 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			form.setSpecimenClass(arrayType.getSpecimenClass());
 
 			/**
-			 * Name: Virender Mehta
-			 * Reviewer: Prafull
-			 * Retrive Child Specimen Collection from parent Specimen
-			 * String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()]; 
+			 * Name: Virender Mehta Reviewer: Prafull Retrive Child Specimen
+			 * Collection from parent Specimen String[] specimenTypeArr = new
+			 * String[arrayType.getSpecimenTypeCollection().size()];
 			 */
 			Collection specimenTypeCollection = (Collection) bizLogic.retrieveAttribute(
 					SpecimenArrayType.class.getName(), arrayType.getId(),
 					"elements(specimenTypeCollection)");
-			//String[] specimenTypeArr = new String[specimenTypeCollection.size()];
+			// String[] specimenTypeArr = new
+			// String[specimenTypeCollection.size()];
 
 			List specimenTypeList = setSpecimenTypes(specimenTypeCollection, form);
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
@@ -323,7 +352,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
 
 			/**
-			 *  Putting the default label values in the AliquotMap 
+			 * Putting the default label values in the AliquotMap
 			 */
 			for (int i = 1; i <= aliquotCount; i++)
 			{
@@ -342,10 +371,15 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	}
 
 	/**
-	 * This method checks whether there are sufficient storage locations are available or not.
-	 * @param request HttpServletRequest
-	 * @param containerMap Map
-	 * @param aliquotCount int
+	 * This method checks whether there are sufficient storage locations are
+	 * available or not.
+	 *
+	 * @param request
+	 *            HttpServletRequest
+	 * @param containerMap
+	 *            Map
+	 * @param aliquotCount
+	 *            int
 	 * @return String
 	 */
 	private String checkForSufficientAvailablePositions(HttpServletRequest request,
@@ -379,9 +413,13 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	}
 
 	/**
-	 * This function populates the availability map with available storage locations
-	 * @param form SpecimenArrayAliquotForm
-	 * @param containerMap Map
+	 * This function populates the availability map with available storage
+	 * locations.
+	 *
+	 * @param form
+	 *            SpecimenArrayAliquotForm
+	 * @param containerMap
+	 *            Map
 	 */
 	private void populateAliquotsStorageLocations(SpecimenArrayAliquotForm form, Map containerMap)
 	{
@@ -394,10 +432,10 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	}
 
 	/**
-	 * This method returns the ActionErrors object present in the request scope.
-	 * If it is absent method creates & returns new ActionErrors object.
-	 * @param request
-	 * @return
+	 * 	 * This method returns the ActionErrors object present in the request scope.
+		 * If it is absent method creates & returns new ActionErrors object.
+	 * @param request : request
+	 * @return ActionErrors : ActionErrors
 	 */
 	private ActionErrors getActionErrors(HttpServletRequest request)
 	{
@@ -410,10 +448,11 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	}
 
 	/**
-	 * 
-	 * @param specimenTypeCollection Collection
-	 * @param form SpecimenArrayAliquotForm
-	 * @retutn List 
+	 * @param specimenTypeCollection
+	 *            Collection
+	 * @param form
+	 *            SpecimenArrayAliquotForm
+	 * @return List : List
 	 */
 	private List setSpecimenTypes(Collection specimenTypeCollection, SpecimenArrayAliquotForm form)
 	{

@@ -34,19 +34,37 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
- * This is the method for submitting Collection Protocol
- * @author virender_mehta
+ * This is the method for submitting Collection Protocol.
  *
+ * @author virender_mehta
  */
 public class SubmitCPAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SubmitCPAction.class);
 
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//HashMap<String, String> resultMap = new HashMap<String, String>();
+		// HashMap<String, String> resultMap = new HashMap<String, String>();
 		String target = Constants.SUCCESS;
 		try
 		{
@@ -58,7 +76,7 @@ public class SubmitCPAction extends BaseAction
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 			session.setAttribute("tempKey", treeNode);
 			String operation = collectionProtocolBean.getOperation();
-			if ("update".equals(operation))//"update"
+			if ("update".equals(operation))// "update"
 			{
 				target = "updateCP";
 				return mapping.findForward(target);
@@ -83,8 +101,8 @@ public class SubmitCPAction extends BaseAction
 		{
 			logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
-			//String errorMsg = ex.getFormattedMessage();
-			//resultMap.put(Constants.ERROR_DETAIL, errorMsg);
+			// String errorMsg = ex.getFormattedMessage();
+			// resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 					.getMessage()));
@@ -122,15 +140,18 @@ public class SubmitCPAction extends BaseAction
 	}
 
 	/**
-	 * @param collectionProtocol Collection Protocol Object
-	 * @param session Session Object
-	 * @return  collectionProtocolDTO 
+	 * @param collectionProtocol
+	 *            Collection Protocol Object
+	 * @param session
+	 *            Session Object
+	 * @return collectionProtocolDTO : collectionProtocolDTO
 	 */
 	private CollectionProtocolDTO getCoolectionProtocolDTO(CollectionProtocol collectionProtocol,
 			HttpSession session)
 	{
 		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
-		Map < String , SiteUserRolePrivilegeBean > rowIdBeanMap = (Map < String , SiteUserRolePrivilegeBean >) session
+		Map < String , SiteUserRolePrivilegeBean > rowIdBeanMap =
+			(Map < String , SiteUserRolePrivilegeBean >) session
 				.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
@@ -138,9 +159,10 @@ public class SubmitCPAction extends BaseAction
 	}
 
 	/**
-	 * @param collectionProtocol Collection Protocol Object
-	 * @throws BizLogicException BizLogic exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 *
+	 * @param collectionProtocolDTO : collectionProtocolDTO
+	 * @param session : session
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO,
 			HttpSession session) throws BizLogicException

@@ -1,11 +1,14 @@
 /**
- * <p>Title: SpreadsheetExportAction Class>
- * <p>Description:	This class exports the data of a spreadsheet to a file.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: SpreadsheetExportAction Class>
+ * <p>
+ * Description: This class exports the data of a spreadsheet to a file.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Aniruddha Phadnis
- * @version 1.00
- * Created on Oct 24, 2005
+ * @version 1.00 Created on Oct 24, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -38,10 +41,25 @@ import edu.wustl.common.util.logger.Logger;
 public class SpreadsheetExportAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpreadsheetExportAction.class);
 
 	/**
-	 * This class exports the data of a spreadsheet to a file.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -56,22 +74,25 @@ public class SpreadsheetExportAction extends BaseAction
 		String isCheckAllAcrossAllChecked = (String) request
 				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
 
-		//Extracting map from formbean which gives the serial numbers of selected rows
+		// Extracting map from formbean which gives the serial numbers of
+		// selected rows
 		Map map = searchForm.getValues();
 		Object[] obj = map.keySet().toArray();
 
-		//Getting column data & grid data from session
+		// Getting column data & grid data from session
 		List < String > columnList = (List < String >) session
 				.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		/**
-		 * Name: Deepti
-		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
-		 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
-		 * 
-		 * Here, as results are not stored in session, the sql is fired again to form the shopping cart list.  
+		 * Name: Deepti Description: Query performance issue. Instead of saving
+		 * complete query results in session, resultd will be fetched for each
+		 * result page navigation. object of class QuerySessionData will be
+		 * saved in session, which will contain the required information for
+		 * query execution while navigating through query result pages. Here, as
+		 * results are not stored in session, the sql is fired again to form the
+		 * shopping cart list.
 		 */
 		String pageNo = (String) request.getParameter(Constants.PAGE_NUMBER);
-		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		if (pageNo != null)
 		{
 			request.setAttribute(Constants.PAGE_NUMBER, pageNo);
@@ -91,15 +112,15 @@ public class SpreadsheetExportAction extends BaseAction
 				recordsPerPage, pageNum, querySessionData);
 		List < List < String >> dataList = (List < List < String >>) session
 				.getAttribute(Constants.EXPORT_DATA_LIST);
-		if (dataList == null)
-			dataList = dataList1;
-		//List<String> entityIdsList = (List<String>) session.getAttribute(Constants.ENTITY_IDS_LIST);
+		if (dataList == null) dataList = dataList1;
+		// List<String> entityIdsList = (List<String>)
+		// session.getAttribute(Constants.ENTITY_IDS_LIST);
 		Map < Integer , List < String >> entityIdsMap = (Map < Integer , List < String >>) session
 				.getAttribute(Constants.ENTITY_IDS_MAP);
-		//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
+		// Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed. start
 
 		logger
-				.debug("---------------------------------------------------------------------------------");
+				.debug("-------");
 		logger.debug("06-apr-06 : cl size :-" + columnList.size());
 		logger.debug(columnList);
 		logger.debug("--");
@@ -145,14 +166,14 @@ public class SpreadsheetExportAction extends BaseAction
 		logger.debug(tmpDataList);
 
 		logger
-				.debug("---------------------------------------------------------------------------------");
+				.debug("---");
 		columnList = tmpColumnList;
 		dataList = tmpDataList;
-		//    	Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end  
+		// Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end
 
 		List < List < String >> exportList = new ArrayList();
 
-		//Adding first row(column names) to exportData
+		// Adding first row(column names) to exportData
 		exportList.add(columnList);
 		List < String > idIndexList = new ArrayList < String >();
 		int columnsSize = columnList.size();
@@ -189,7 +210,7 @@ public class SpreadsheetExportAction extends BaseAction
 		}
 		String delimiter = Constants.DELIMETER;
 		ExportReport report = null;
-		//Exporting the data to the given file & sending it to user
+		// Exporting the data to the given file & sending it to user
 		if (entityIdsMap != null && !entityIdsMap.isEmpty())
 		{
 			report = new ExportReport(path, csvfileName, zipFileName);

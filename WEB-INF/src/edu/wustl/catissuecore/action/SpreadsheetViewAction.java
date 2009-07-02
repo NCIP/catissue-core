@@ -1,8 +1,6 @@
 /*
- * Created on Aug 25, 2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * Created on Aug 25, 2005 TODO To change the template for this generated file
+ * go to Window - Preferences - Java - Code Style - Code Templates
  */
 
 package edu.wustl.catissuecore.action;
@@ -26,36 +24,46 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.query.util.global.AQConstants;
 
 /**
- * @author gautam_shetty
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author gautam_shetty TODO To change the template for this generated type
+ *         comment go to Window - Preferences - Java - Code Style - Code
+ *         Templates
  */
 public class SpreadsheetViewAction extends BaseAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpreadsheetViewAction.class);
 
 	/**
-	 * This method get call for simple search as well as advanced search.
-	 * This method also get call when user clicks on page no of Pagination tag 
-	 * from simple search result page as well as advanced search result page.
-	 * Each time it calculates the paginationList to be displayed by grid control
-	 * by getting pageNum from request object.
-	 * @Override   
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		/**
-		 * Name: Deepti
-		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
-		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
-		 * 
-		 *  Here, extending this class from BaseAction  
+		 * Name: Deepti Description: Query performance issue. Instead of saving
+		 * complete query results in session, resultd will be fetched for each
+		 * result page navigation. object of class QuerySessionData will be
+		 * saved session, which will contain the required information for query
+		 * execution while navigating through query result pages. Here,
+		 * extending this class from BaseAction
 		 */
 		HttpSession session = request.getSession();
-		//changes are done for check all 
+		// changes are done for check all
 		String checkAllPages = "";
 		String ch = (String) request.getParameter(Constants.CHECK_ALL_PAGES);
 		if (ch == null || ch.equals(""))
@@ -93,11 +101,12 @@ public class SpreadsheetViewAction extends BaseAction
 		}
 		logger.debug("Pageof in spreadsheetviewaction.........:" + pageOf);
 		Object defaultViewAttribute = request.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
-		if (defaultViewAttribute != null)// When the Default specimen view Check box is checked or unchecked, this will be evaluated.
+		if (defaultViewAttribute != null)
 		{
 			List list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
 			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-			//			edu.wustl.catissuecore.util.global.AppUtility.setGridData( list,columnNames, request);
+			// edu.wustl.catissuecore.util.global.AppUtility.setGridData(
+			// list,columnNames, request);
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, list);
 		}
@@ -109,9 +118,12 @@ public class SpreadsheetViewAction extends BaseAction
 			list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
 			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
-			//Set the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST in the session.
-			//Next time when user clicks on pages of pagination Tag, it get the same list from the session
-			//and based on current page no, it will calculate paginationDataList to be displayed by grid control.
+			// Set the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST in the
+			// session.
+			// Next time when user clicks on pages of pagination Tag, it get the
+			// same list from the session
+			// and based on current page no, it will calculate
+			// paginationDataList to be displayed by grid control.
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(Constants.PAGINATION_DATA_LIST, list);
 			AppUtility.setGridData(list, columnNames, request);
@@ -127,10 +139,11 @@ public class SpreadsheetViewAction extends BaseAction
 
 		int pageNum = Constants.START_PAGE;
 		System.out.println(pageNum);
-		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		List paginationDataList = null, columnList = null;
 
-		//Get the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST from the session.
+		// Get the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST from the
+		// session.
 		columnList = (List) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 		if (request.getParameter(Constants.PAGE_NUMBER) != null)
@@ -158,19 +171,23 @@ public class SpreadsheetViewAction extends BaseAction
 			AppUtility.setGridData(paginationDataList, columnList, request);
 		}
 
-		/* if(pagination != null && pagination.equalsIgnoreCase("true"))
-		 {
-		 request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
-		 }*/
+		/*
+		 * if(pagination != null && pagination.equalsIgnoreCase("true")) {
+		 * request
+		 * .setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList); }
+		 */
 
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
 
 		session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
-		//session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage);
-		//Set the result per page attribute in the request to be uesd by pagination Tag.
-		//      Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
-		//        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
+		// session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage);
+		// Set the result per page attribute in the request to be uesd by
+		// pagination Tag.
+		// Prafull:Commented this can be retrived directly from constants on
+		// jsp, so no need to save it in request.
+		// request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(
+		// Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}

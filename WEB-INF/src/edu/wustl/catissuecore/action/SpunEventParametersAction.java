@@ -9,11 +9,15 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SpunEventParametersAction extends SpecimenEventParametersAction
 {
 
+	/**
+	* @param request object of HttpServletRequest
+	* @param eventParametersForm : eventParametersForm
+	* @throws Exception : Exception
+	*/
 	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
@@ -21,7 +25,8 @@ public class SpunEventParametersAction extends SpecimenEventParametersAction
 		// TODO Auto-generated method stub
 		SpunEventParametersForm spunEventParametersForm = (SpunEventParametersForm) eventParametersForm;
 
-		//String operation = (String) request.getAttribute(Constants.OPERATION);
+		// String operation = (String)
+		// request.getAttribute(Constants.OPERATION);
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;

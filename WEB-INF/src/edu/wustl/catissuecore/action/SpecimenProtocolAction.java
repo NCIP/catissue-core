@@ -1,11 +1,16 @@
 /**
- * <p>Title: SpecimenProtocolAction Class</p>
- * <p>Description:	This class initializes the fields in the Collection / Distribution Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: SpecimenProtocolAction Class
+ * </p>
+ * <p>
+ * Description: This class initializes the fields in the Collection /
+ * Distribution Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Mandar Deshmukh
- * @version 1.00
- * Created on Mar 22, 2005
+ * @version 1.00 Created on Mar 22, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -40,31 +45,49 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initializes the fields in the Collection / Distribution Add/Edit webpage.
+ * This class initializes the fields in the Collection / Distribution Add/Edit
+ * webpage.
+ *
  * @author Mandar Deshmukh
  */
 public class SpecimenProtocolAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenProtocolAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various fields in Collection / Distribution Add/Edit webpage.
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
+
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		if (operation == null)
 		{
 			operation = (String) request.getAttribute(Constants.OPERATION);
 		}
-		//Sets the operation attribute to be used in the Add/Edit Collection / Distribution Page. 
+		// Sets the operation attribute to be used in the Add/Edit Collection /
+		// Distribution Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
-		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+		// Sets the activityStatusList attribute to be used in the Site Add/Edit
+		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -82,14 +105,15 @@ public class SpecimenProtocolAction extends SecureAction
 		logger.debug("2");
 		Iterator itr = setPV.iterator();
 
-		//	    	String classValues[][] = new String[setPV.size()][];
+		// String classValues[][] = new String[setPV.size()][];
 		List specimenClassList = new ArrayList();
 		Map subTypeMap = new HashMap();
 		logger.debug("\n\n\n\n**********MAP DATA************\n");
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		// Fill the Map with Specimen as Keys and Subtypes as values.
-		// Used for dynamically generation of JavaScript arrays for Specimen Type.
+		// Used for dynamically generation of JavaScript arrays for Specimen
+		// Type.
 		while (itr.hasNext())
 		{
 			List innerList = new ArrayList();
@@ -121,11 +145,12 @@ public class SpecimenProtocolAction extends SecureAction
 
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-		//	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+		// NameValueBean undefinedVal = new
+		// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 
 		/**
-		 * Patch ID:TissueSiteCombo_BugID_3
-		 * Description: Setting TissueList with only Leaf node. 
+		 * Patch ID:TissueSiteCombo_BugID_3 Description: Setting TissueList with
+		 * only Leaf node.
 		 */
 		List tissueSiteList = AppUtility.tissueSiteList();
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
@@ -135,12 +160,15 @@ public class SpecimenProtocolAction extends SecureAction
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
 
 		// Mandar : 03-apr-06 start
-		/*End date is not been refreshed after Protocol is closed or activated. Refreshing the enddate manually. */
+		/*
+		 * End date is not been refreshed after Protocol is closed or activated.
+		 * Refreshing the enddate manually.
+		 */
 		logger.debug("04-Apr-06");
 		SpecimenProtocolForm spForm = (SpecimenProtocolForm) form;
 		if (operation.equalsIgnoreCase(Constants.EDIT))
 		{
-			//Mandar: 25-july-06 bizlogic call updated.
+			// Mandar: 25-july-06 bizlogic call updated.
 			SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic) factory
 					.getBizLogic(spForm.getFormId());
 			String tmpEndDate = bizLogic.getEndDate(spForm.getId(), getSessionData(request));

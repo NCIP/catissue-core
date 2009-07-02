@@ -1,11 +1,14 @@
 /**
- * <p>Title: SiteAction Class>
- * <p>Description:	This class initializes the fields of the Site Add/Edit webpage.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: SiteAction Class>
+ * <p>
+ * Description: This class initializes the fields of the Site Add/Edit webpage.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Aniruddha Phadnis
- * @version 1.00
- * Created on Jul 18, 2005
+ * @version 1.00 Created on Jul 18, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -33,26 +36,41 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class initializes the fields of the Site Add/Edit webpage.
+ *
  * @author aniruddha_phadnis
  */
 public class SiteAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SiteAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various fields in Site Add/Edit webpage.
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		SiteForm siteForm = (SiteForm) form;
 
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 
-		//Sets the operation attribute to be used in the Add/Edit User Page.
+		// Sets the operation attribute to be used in the Add/Edit User Page.
 
 		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
@@ -73,20 +91,21 @@ public class SiteAction extends SecureAction
 		request.setAttribute("operationEdit", Constants.EDIT);
 		request.setAttribute("operationForActivityStatus", Constants.OPERATION);
 
-		//Sets the countryList attribute to be used in the Add/Edit User Page.
+		// Sets the countryList attribute to be used in the Add/Edit User Page.
 		List countryList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COUNTRY_LIST, null);
 		request.setAttribute(Constants.COUNTRYLIST, countryList);
 
-		//Sets the stateList attribute to be used in the Add/Edit User Page.
+		// Sets the stateList attribute to be used in the Add/Edit User Page.
 		List stateList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_STATE_LIST, null);
 		request.setAttribute(Constants.STATELIST, stateList);
 
-		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+		// Sets the activityStatusList attribute to be used in the Site Add/Edit
+		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.SITE_ACTIVITY_STATUS_VALUES);
 
-		//Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
+		// Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
 		List siteList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SITE_TYPE, null);
 		request.setAttribute(Constants.SITETYPELIST, siteList);
@@ -153,8 +172,10 @@ public class SiteAction extends SecureAction
 	}
 
 	/**
-	 * method for getting coordinatorId from request
-	 * @param request :object of HttpServletResponse
+	 * method for getting coordinatorId from request.
+	 *
+	 * @param request
+	 *            :object of HttpServletResponse
 	 * @return coordinatorId
 	 */
 	private Long getCoordinatorId(HttpServletRequest request)
@@ -178,9 +199,11 @@ public class SiteAction extends SecureAction
 	}
 
 	/**
-	 * method for getting isOnChange from request
-	 * @param request:object of HttpServletResponse
-	 * @return isOnChange :boolean 
+	 * method for getting isOnChange from request.
+	 *
+	 * @param request
+	 *            :object of HttpServletResponse
+	 * @return isOnChange :boolean
 	 */
 	private boolean getIsOnChange(HttpServletRequest request)
 	{

@@ -1,11 +1,14 @@
 /**
- * <p>Title: StorageTypeAction Class>
- * <p>Description:	This class initializes the fields of StorageType.jsp Page</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: StorageTypeAction Class>
+ * <p>
+ * Description: This class initializes the fields of StorageType.jsp Page
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Aniruddha Phadnis
- * @version 1.00
- * Created on Jul 18, 2005
+ * @version 1.00 Created on Jul 18, 2005
  */
 
 package edu.wustl.catissuecore.action;
@@ -33,18 +36,30 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class StorageTypeAction extends SecureAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(StorageTypeAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Initializes the various fields in StorageType.jsp Page.
-	 * @author Vaishali Khandelwal
-	 * */
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -73,7 +88,7 @@ public class StorageTypeAction extends SecureAction
 		request.setAttribute("holds_List_2", Constants.HOLDS_LIST2);
 		request.setAttribute("holds_List_3", Constants.HOLDS_LIST3);
 
-		//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
+		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
 		int dimTwoCapacity = 0;
 		if (storageTypeForm != null)
 		{
@@ -86,7 +101,8 @@ public class StorageTypeAction extends SecureAction
 			tdClassName = "formRequiredLabel";
 			strStar = "<span class=" + "blue_ar_b" + "><img src="
 					+ "images/uIEnhancementImages/star.gif" + " alt=" + "Mandatory" + " width="
-					+ "6" + " height=" + "6" + " hspace=" + "0" + " vspace=" + "3" + " /></span>";
+					+ "6" + " height=" + "6" + " hspace=" + "0"
+					+ " vspace=" + "3" + " /></span>";
 		}
 		request.setAttribute("tdClassName", tdClassName);
 		request.setAttribute("strStar", strStar);
@@ -101,7 +117,7 @@ public class StorageTypeAction extends SecureAction
 		request.setAttribute("submit", Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]);
 		request.setAttribute("addContainer", Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]);
 
-		//Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end	
+		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end
 
 		logger.info("SpecimenArray/specimen:" + storageTypeForm.getSpecimenOrArrayType());
 		if (storageTypeForm.getSpecimenOrArrayType() == null)
@@ -111,41 +127,42 @@ public class StorageTypeAction extends SecureAction
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		StorageTypeBizLogic bizLogic = (StorageTypeBizLogic) factory
 				.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
-		//Gets the value of the operation parameter.
+		// Gets the value of the operation parameter.
 
-		//Sets the operation attribute to be used in the Add/Edit Institute Page. 
-		//Gets the Storage Type List and sets it in request
+		// Sets the operation attribute to be used in the Add/Edit Institute
+		// Page.
+		// Gets the Storage Type List and sets it in request
 		List list1 = bizLogic.retrieve(StorageType.class.getName());
 		List storageTypeList = AppUtility.getStorageTypeList(list1, true);
-		//Collections.sort(storageTypeList);
+		// Collections.sort(storageTypeList);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
 
 		// get the Specimen class and type from the cde
 		List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
 		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 
-		//Gets the Specimen array Type List and sets it in request
+		// Gets the Specimen array Type List and sets it in request
 		List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
 		List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
 
-		//Bug #4297
-		//	  	if(operation.equals(Constants.ADD))
-		//	  	{
-		//	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
-		//	  		//storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
-		//	  		if(storageTypeForm.getOneDimensionCapacity() == 0 &&
-		//	  				storageTypeForm.getTwoDimensionCapacity() == 0)
-		//	  		{
-		//	  			storageTypeForm.setOneDimensionCapacity(0);
-		//	  			storageTypeForm.setTwoDimensionCapacity(0);
-		//	  		}
-		//	  	}
+		// Bug #4297
+		// if(operation.equals(Constants.ADD))
+		// {
+		// // new model storageTypeForm.setHoldsSpecimenClassTypeIds(new
+		// long[]{1});
+		// //storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
+		// if(storageTypeForm.getOneDimensionCapacity() == 0 &&
+		// storageTypeForm.getTwoDimensionCapacity() == 0)
+		// {
+		// storageTypeForm.setOneDimensionCapacity(0);
+		// storageTypeForm.setTwoDimensionCapacity(0);
+		// }
+		// }
 		// ------------- add new
 
 		AbstractActionForm aForm = (AbstractActionForm) form;
-		if (reqPath != null && aForm != null)
-			aForm.setRedirectTo(reqPath);
+		if (reqPath != null && aForm != null) aForm.setRedirectTo(reqPath);
 
 		logger.debug("StorageTypeAction redirect :---------- " + reqPath);
 

@@ -37,18 +37,36 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * <p>This class initializes the fields of SpecimenArraySearchAction.java</p>
+ * <p>
+ * This class initializes the fields of SpecimenArraySearchAction.java.
+ * </p>
+ *
  * @author Ashwin Gupta
  * @version 1.1
  */
 public class SpecimenArraySearchAction extends CommonSearchAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(SpecimenArraySearchAction.class);
 
 	/**
-	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws IOException : IOException
+	 * @throws ServerException : ServerException
+	 * @return ActionForward : ActionForward
 	 */
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServerException
@@ -74,7 +92,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 			Collection arrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
 			SpecimenArrayContent arrayContent = null;
-			//int rowCount = specimenArrayForm.getOneDimensionCapacity();
+			// int rowCount = specimenArrayForm.getOneDimensionCapacity();
 			int columnCount = specimenArrayForm.getTwoDimensionCapacity();
 			int rowNo = 0;
 			int columnNo = 0;
@@ -86,13 +104,12 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 			{
 				arrayContent = (SpecimenArrayContent) iter.next();
 
-				// decrement by 1 because of array index starts from 0 (-1 from stored value).
+				// decrement by 1 because of array index starts from 0 (-1 from
+				// stored value).
 				rowNo = arrayContent.getPositionDimensionOne().intValue() - 1;
 				columnNo = arrayContent.getPositionDimensionTwo().intValue() - 1;
 				/**
-				 * Name : Virender
-				 * Reviewer: Prafull
-				 * Retriving specimenObject
+				 * Name : Virender Reviewer: Prafull Retriving specimenObject
 				 * replaced arrayContent.getSpecimen()
 				 */
 				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -104,15 +121,18 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 				if (specimen != null)
 				{
 					if ((specimenArrayForm.getEnterSpecimenBy() != null)
-							&& (specimenArrayForm.getEnterSpecimenBy().equalsIgnoreCase("Barcode")))
+							&& (specimenArrayForm.getEnterSpecimenBy().
+									equalsIgnoreCase("Barcode")))
 					{
-						key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
+						key = SpecimenArrayAppletUtil.getArrayMapKey
+						(rowNo, columnNo, columnCount,
 								AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX);
 						value = specimen.getBarcode();
 					}
 					else
 					{
-						key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
+						key = SpecimenArrayAppletUtil.getArrayMapKey
+						(rowNo, columnNo, columnCount,
 								AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX);
 						value = specimen.getLabel();
 					}
@@ -122,26 +142,37 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 						// check qunatity not null
 						if (arrayContent.getInitialQuantity() != null)
 						{
-							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo,
-									columnCount, AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
+							key = SpecimenArrayAppletUtil.getArrayMapKey
+							(rowNo, columnNo,
+									columnCount,
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
 							value = arrayContent.getInitialQuantity().toString();
 							arrayContentMap.put(key, value);
 						}
 
 						// check concentration not null
-						if (arrayContent.getConcentrationInMicrogramPerMicroliter() != null)
+						if (arrayContent.getConcentrationInMicrogramPerMicroliter()
+								!= null)
 						{
-							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo,
-									columnCount, AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX);
-							value = arrayContent.getConcentrationInMicrogramPerMicroliter()
+							key = SpecimenArrayAppletUtil.
+							getArrayMapKey(rowNo, columnNo,
+									columnCount,
+									AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX);
+							value = arrayContent.
+							getConcentrationInMicrogramPerMicroliter()
 									.toString();
 							arrayContentMap.put(key, value);
 						}
 
-						/*					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX);
-											value = specimen.getId().toString();
-											arrayContentMap.put(key,value);
-						*/}
+						/*
+						 * key =
+						 * SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo
+						 * ,columnCount,AppletConstants.
+						 * ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX); value =
+						 * specimen.getId().toString();
+						 * arrayContentMap.put(key,value);
+						 */}
 
 					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
 							AppletConstants.ARRAY_CONTENT_ATTR_ID_INDEX);
@@ -160,7 +191,8 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 				}
 			}
 			specimenArrayForm.setCreateSpecimenArray("yes");
-			// set sub operation :: solution for problem with specimen type selection 
+			// set sub operation :: solution for problem with specimen type
+			// selection
 			specimenArrayForm.setSubOperation("");
 			request.getSession()
 					.setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY, arrayContentMap);

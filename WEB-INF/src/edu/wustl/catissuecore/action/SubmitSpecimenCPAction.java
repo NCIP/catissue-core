@@ -51,7 +51,6 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author renuka_bajpai
- *
  */
 public class SubmitSpecimenCPAction extends BaseAction
 {
@@ -69,7 +68,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 		try
 		{
 			specimenSummaryForm = (ViewSpecimenSummaryForm) form;
-			//String actionValue = request.getParameter("action");
+			// String actionValue = request.getParameter("action");
 
 			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(specimenSummaryForm
 					.getRequestType()))
@@ -82,7 +81,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(specimenSummaryForm
 						.getUserAction()))
 				{
-					//					for disabling of CP set the collection protocol status: kalpana
+					// for disabling of CP set the collection protocol status:
+					// kalpana
 					if (collectionProtocolBean != null
 							&& collectionProtocolBean.getActivityStatus() != null)
 					{
@@ -118,7 +118,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(specimenSummaryForm
 						.getUserAction()))
 				{
-					//execute update multiplespecimens.
+					// execute update multiplespecimens.
 				}
 				else
 				{
@@ -136,8 +136,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 			target = Constants.SUCCESS;
 
-			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
-				target = pageOf;
+			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu")) target = pageOf;
 
 			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 		}
@@ -229,7 +228,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 	}
 
 	/**
-	 * Multiple specimen 
+	 * Multiple specimen
+	 * 
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -377,7 +377,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 		specimen.setLabel(specimenDataBean.getLabel());
 		specimen.setPathologicalStatus(specimenDataBean.getPathologicalStatus());
 
-		//specimen.setAvailable(Boolean.FALSE);
+		// specimen.setAvailable(Boolean.FALSE);
 		Double availableQuantity = new Double(0);
 		double value = 0;
 		String s = specimenDataBean.getQuantity();
@@ -424,7 +424,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName(specimenDataBean.getStorageContainerForSpecimen());
 
-		//	specimen.setStorageContainer(null);
+		// specimen.setStorageContainer(null);
 		specimen.setSpecimenPosition(null);
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
