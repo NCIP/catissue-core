@@ -1,17 +1,34 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
+import titli.controller.Name;
+import titli.controller.RecordIdentifier;
+import titli.controller.interfaces.IndexRefresherInterface;
+import titli.controller.interfaces.ObjectMetadataInterface;
+import titli.controller.interfaces.TitliInterface;
+import titli.model.Titli;
+import titli.model.TitliException;
+import titli.model.util.TitliResultGroup;
+import titli.model.util.TitliTableMapper;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
@@ -21,7 +38,6 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
-
 /**
  * This is a default biz logic class for catissue. All BizLogic classes should extend from this.
  * @author deepti_shelar
@@ -296,8 +312,87 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		return true;
 	}
 	
+	/**
+	 * refresh the titli search index to reflect the changes in the database.
+	 * @param operation the operation to be performed : "insert", "update" or "delete"
+	 * @param obj the object corresponding to the record to be refreshed
+	 */
+	protected void refreshTitliSearchIndex(String operation, Object obj)
+	{
+		try
+		{
+			Properties prop = new Properties();
+			prop.load(Utility.getCurrClassLoader().getResourceAsStream("titli.properties"));
+			String className = prop.getProperty("titliObjectMetadataImplementor");
+			ObjectMetadataInterface objectMetadataInterface = (ObjectMetadataInterface) Class
+					.forName(className).newInstance();
+			String tableName = objectMetadataInterface.getTableName(obj);
+			if (!tableName.equalsIgnoreCase(""))
+			{
+				String objId = objectMetadataInterface.getUniqueIdentifier(obj);
+				String mainTableName = TitliTableMapper.getInstance().returnMainTable(tableName);
+				if (mainTableName != null)
+				{
+					tableName = mainTableName;
+				}
+				if (operation != null)
+				{
+					performOperation(operation, tableName, objId);
+				}
+			}
+		}
+		catch (Exception excep)
+		{
+			logger.error("Titli search index cound not be refreshed for opeartion." + operation,
+					excep);
+		}
+
+	}
+
+	/**
+	 * This method perform insert,update or delete operation.
+	 * @param operation type of operation.
+	 * @param tableName Table Name
+	 * @param objId Object Id
+	 * @throws TitliException throws this exception if operation unsuccessful.
+	 */
+	private void performOperation(String operation, String tableName, String objId)
+			throws TitliException
+	{
+		Map<Name, String> uniqueKey = new HashMap<Name, String>();
+		uniqueKey.put(new Name(Constants.IDENTIFIER), objId);
+		TitliInterface titli = Titli.getInstance();
+		Name dbName = (titli.getDatabases().keySet().toArray(new Name[0]))[0];
+		RecordIdentifier recordIdentifier = new RecordIdentifier(dbName, new Name(tableName),
+				uniqueKey);
+
+		IndexRefresherInterface indexRefresher = titli.getIndexRefresher();
+
+		if (TitliSearchConstants.TITLI_INSERT_OPERATION.equalsIgnoreCase(operation))
+		{
+			indexRefresher.insert(recordIdentifier);
+		}
+		else if (TitliSearchConstants.TITLI_UPDATE_OPERATION.equalsIgnoreCase(operation))
+		{
+			indexRefresher.update(recordIdentifier);
+		}
+		else if (TitliSearchConstants.TITLI_DELETE_OPERATION.equalsIgnoreCase(operation))
+		{
+			indexRefresher.delete(recordIdentifier);
+		}
+	}
 	
-	
+	public void refreshTitliSearchIndex(Collection<AbstractDomainObject> objCollection,String operation)
+	throws BizLogicException 
+	{
+		if (TitliResultGroup.isTitliConfigured)
+		{
+			for (AbstractDomainObject obj : objCollection)
+			{
+				refreshTitliSearchIndex(operation, obj);
+			}
+		}
+	}
 	
 
 }
