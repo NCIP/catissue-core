@@ -216,30 +216,29 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
-		String hql = null;
+		StringBuffer hql = new StringBuffer();
 		String participantDisplayInfo = null;
 		try
 		{
-			/*hql = "select cpr.particpant.id,cpr.particpant.lastName,cpr.particpant.firstName,"
-					+ "cpr.protocolParticipantIdentifier from "
-					+ CollectionProtocolRegistration.class.getName()
-					+ "where cpr.collectionProtocol.id = " + cpId + " and cpr.activityStatus != '"
-					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and "
-					+ "cpr.particpant.activityStatus != '"
-					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by cpr.particpant.id";*/
+			hql
+					.append("select cpr.participant.id,cpr.participant.lastName,cpr.participant.firstName,cpr.protocolParticipantIdentifier from ");
+			hql.append(CollectionProtocolRegistration.class.getName());
+			hql.append(" as cpr  where  cpr.collectionProtocol.id = ");
+			hql.append(cpId);
+			hql.append(" and cpr.activityStatus != '");
+			hql.append(Status.ACTIVITY_STATUS_DISABLED.toString());
+			hql.append(" ' and ");
+			hql.append(" cpr.participant.activityStatus != '");
+			hql
+					.append(Status.ACTIVITY_STATUS_DISABLED.toString()
+							+ "' order by cpr.participant.id");
 
-			hql= "select p.id,p.lastName,p.firstName,cpr.protocolParticipantIdentifier from " + CollectionProtocolRegistration.class.getName()
-				+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = " + cpId
-				+ " and cpr.activityStatus != '" + Status.ACTIVITY_STATUS_DISABLED.toString() + "' and " +
-				"p.activityStatus != '"+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by p.id";
-			
-			List<Object[]> participantList = AppUtility.executeQuery(hql);
+			List<Object[]> participantList = AppUtility.executeQuery(hql.toString());
 
 			for (int j = 0; j < participantList.size(); j++)
 			{
 				Object[] participantObj = (Object[]) participantList.get(j);
 				participantDisplayInfo = getFormattedParticpantInfo(participantObj);
-
 				int index = participantDisplayInfo.indexOf(":");
 				Long Id = null;
 				String name = "";
