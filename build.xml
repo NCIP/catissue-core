@@ -10,6 +10,11 @@
 	  </classpath>
 	</taskdef>
 	
+	<loadfile property="dist.revision" srcFile="./.svn/entries">  
+			<filterchain>  
+				<headfilter lines="1" skip="4"/>
+			</filterchain>  
+	</loadfile>
 
 	<!--define require dir and Properties -->
 	<property file="JMeterTest.properties" />
@@ -290,6 +295,8 @@
 	     	<attribute name="CSM-Version" value="${csm.version}"/>
 	     	<attribute name="caCore-Version" value="${cacore.version}"/>
 	     	<attribute name="Build-on" value="${TODAY}"/>
+	     	<attribute name="SVN-URL" value="${dist.revision}" />
+	     	 				
 	    </manifest>
 		<replace dir="${base.dir}/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
 			<include name ="log4j.properties"/>
