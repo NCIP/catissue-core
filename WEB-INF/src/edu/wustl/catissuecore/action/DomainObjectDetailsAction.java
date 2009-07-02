@@ -1,6 +1,6 @@
 /**
  * <p>Title: UserDetailsAction Class>
- * <p>Description:	UserDetailsAction is used to display details of user 
+ * <p>Description:	UserDetailsAction is used to display details of user.
  * whose membership is to be approved/Rejected.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -80,7 +80,8 @@ public class DomainObjectDetailsAction extends SecureAction
 		/**
 		 * Name: Vijay Pande
 		 * Reviewer Name: Aarti Sharma
-		 * Instead of setAllValues() method retrieveForEditMode() method is called to bypass lazy loading error in domain object
+		 * Instead of setAllValues() method retrieveForEditMode() method
+		 *  is called to bypass lazy loading error in domain object
 		 */
 		//abstractActionForm.setAllValues(currentDomainObject);
 		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();

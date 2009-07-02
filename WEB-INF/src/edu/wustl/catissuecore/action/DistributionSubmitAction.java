@@ -28,24 +28,32 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * @author Rahul Ner 
+ * @author Rahul Ner
  * @since v1.1
- *
  */
 public class DistributionSubmitAction extends CommonAddEditAction
 {
 
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DistributionSubmitAction.class);
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various fields in DistributionProtocol Add/Edit webpage.
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * Overrides the execute method of Action class. Sets the various fields in
+	 * DistributionProtocol Add/Edit webpage.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
 	 * @return value for ActionForward object
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -67,12 +75,18 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	}
 
 	/**
-	 * @param mapping object of ActionMapping
-	 * @param form object of ActionForm
-	 * @param request object of HttpServletRequest
-	 * @param response object of HttpServletResponse
-	 * @throws Exception generic exception
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
 	 * @return value for ActionForward object
+	 * @throws IOException : IOException
+	 * @throws ServletException : ServletException
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -147,7 +161,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 
 			for (int i = 1; i <= dform.getCounter(); i++)
 			{
-				//String specimenArraykey = "SpecimenArray:" + i + "_id";
+				// String specimenArraykey = "SpecimenArray:" + i + "_id";
 				String specimenArraykey = "DistributedItem:" + i + "_SpecimenArray_id";
 				if (dform.getValue(specimenArraykey) != null
 						&& !dform.getValue(specimenArraykey).equals(""))

@@ -34,7 +34,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionProtocolAction extends SpecimenProtocolAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DistributionProtocolAction.class);
 
 	/**

@@ -25,20 +25,27 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author santhoshkumar_c
- *
  */
 public class ExportCartAction extends QueryShoppingCartAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(ExportCartAction.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -51,12 +58,15 @@ public class ExportCartAction extends QueryShoppingCartAction
 
 	/**
 	 * Export Cart data.
-	 * 
-	 * @param cart a shopping cart object preset in session. 
-	 * @param request HttpServletRequest.
-	 * @param response HttpServletResponse.
+	 *
 	 * @param chkBoxValues
-	*/
+	 *            chkBoxValues
+	 * @param request
+	 *            HttpServletRequest.
+	 * @param response
+	 *            HttpServletResponse.
+	 * @param chkBoxValues
+	 */
 	public void export(List < Integer > chkBoxValues, HttpServletRequest request,
 			HttpServletResponse response)
 	{
@@ -88,7 +98,8 @@ public class ExportCartAction extends QueryShoppingCartAction
 	}
 
 	/**
-	 * @param session HttpSession object.
+	 * @param session
+	 *            HttpSession object.
 	 * @return file name.
 	 */
 	private String getFileName(HttpSession session)

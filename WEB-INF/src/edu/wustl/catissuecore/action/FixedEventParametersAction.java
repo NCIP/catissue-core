@@ -28,7 +28,8 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 
 	/**
 	 * @param request object of HttpServletRequest
-	 * @throws Exception generic exception
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception

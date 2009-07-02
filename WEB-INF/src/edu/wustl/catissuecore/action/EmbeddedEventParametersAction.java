@@ -21,13 +21,13 @@ import edu.wustl.common.cde.CDEManager;
 
 /**
  * This class initializes the fields in the EmbeddedEventParameters Add/Edit webpage.
- 
  */
 public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 {
 
 	/**
 	 * @param request object of HttpServletRequest
+	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception generic exception
 	 */
 	protected void setRequestParameters(HttpServletRequest request,
@@ -35,7 +35,8 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName, specimenId = null;
-		EmbeddedEventParametersForm embeddedEventParametersForm = (EmbeddedEventParametersForm) eventParametersForm;
+		EmbeddedEventParametersForm embeddedEventParametersForm =
+			(EmbeddedEventParametersForm) eventParametersForm;
 		boolean readOnlyValue;
 		if (embeddedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{

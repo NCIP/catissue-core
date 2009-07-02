@@ -25,31 +25,39 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This is the action class for saving the Distribution report
+ * This is the action class for saving the Distribution report.
+ *
  * @author Poornima Govindrao
- *  
  */
 
 public class DistributionReportSaveAction extends BaseDistributionReportAction
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DistributionReportSaveAction.class);
 
 	/**
-	* Overrides the execute method of Action class.
-	* Sets the various fields in DistributionProtocol Add/Edit webpage.
-	* @param mapping object of ActionMapping
-	* @param form object of ActionForm
-	* @param request object of HttpServletRequest
-	* @param response object of HttpServletResponse
-	* @throws Exception generic exception
-	* @return value for ActionForward object
-	* */
+	 * Overrides the execute method of Action class. Sets the various fields in
+	 * DistributionProtocol Add/Edit webpage.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return value for ActionForward object
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
-		//Retrieve the distribution ID
+		// Retrieve the distribution ID
 		Long distributionId = configForm.getDistributionId();
 
 		Distribution dist = getDistribution(distributionId, getSessionData(request),
@@ -58,13 +66,13 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
 		List listOfData = getListOfData(dist, configForm, sessionData);
 
-		//Set the columns for Distribution report
+		// Set the columns for Distribution report
 		String action = configForm.getNextAction();
 		String[] selectedColumns = getSelectedColumns(action, configForm, false);
 		String[] columnNames = getColumnNames(selectedColumns);
 
 		setSelectedMenuRequestAttribute(request);
-		//Save the report as a CSV file at the client side
+		// Save the report as a CSV file at the client side
 		HttpSession session = request.getSession();
 		if (session != null)
 		{
@@ -80,16 +88,21 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 	}
 
 	/**
-	 * @param distributionReportForm object of DistributionReportForm
-	 * @param listOfData list of data
-	 * @param fileName String for fileName
-	 * @param columnNames String array of column names
-	 * @throws IOException I/O exception 
+	 * @param distributionReportForm
+	 *            object of DistributionReportForm
+	 * @param listOfData
+	 *            list of data
+	 * @param fileName
+	 *            String for fileName
+	 * @param columnNames
+	 *            String array of column names
+	 * @throws IOException
+	 *             I/O exception
 	 */
 	private void saveReport(DistributionReportForm distributionReportForm, List listOfData,
 			String fileName, String[] columnNames) throws IOException
 	{
-		//Save the report data in a CSV file at server side
+		// Save the report data in a CSV file at server side
 		logger.debug("Save action");
 		ExportReport report = new ExportReport(fileName);
 		List distributionData = new ArrayList();
@@ -110,12 +123,12 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		while (dataListItr.hasNext())
 		{
 			List rowList = (List) dataListItr.next();
-			//Remove extra ID columns from all rows.-Bug 5590
+			// Remove extra ID columns from all rows.-Bug 5590
 			for (int cntRow = 0; cntRow < rowList.size(); cntRow++)
 			{
 				List data = (List) rowList.get(cntRow);
 				int extraColumns = data.size() - ((List) distributedItemsColumns.get(0)).size();
-				//Remove extra ID columns
+				// Remove extra ID columns
 				if (extraColumns > 0)
 				{
 					int size = data.size() - 1;

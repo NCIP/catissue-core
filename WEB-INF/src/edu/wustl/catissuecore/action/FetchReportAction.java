@@ -28,17 +28,26 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-
 /**
  * @author vijay_pande
- *
  */
 public class FetchReportAction extends BaseAction
 {
 
 	/**
-	 * Overrides the execute method of Action class.
-	 * Sets the various Collection and Received events based on SCG id.
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 *
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -49,21 +58,23 @@ public class FetchReportAction extends BaseAction
 		if (reportId != null && !reportId.equals(""))
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
+			IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic =
+				(IdentifiedSurgicalPathologyReportBizLogic) factory
 					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 
 			Object object = identifiedReportBizLogic.retrieve(
 					IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
 			if (object != null)
 			{
-				IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) object;
+				IdentifiedSurgicalPathologyReport identifiedReport =
+					(IdentifiedSurgicalPathologyReport) object;
 				if (identifiedReport.getSpecimenCollectionGroup() != null)
 				{
 					xmlData = makeXMLData(xmlData, identifiedReport);
 				}
 			}
 		}
-		//    	Writing to response
+		// Writing to response
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/xml");
 		out.write(xmlData.toString());
@@ -72,8 +83,11 @@ public class FetchReportAction extends BaseAction
 	}
 
 	/**
-	 * @return
-	 * @throws DAOException 
+	 *
+	 * @param xmlData : xmlData
+	 * @param identifiedReport : identifiedReport
+	 * @return StringBuffer : StringBuffer
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private StringBuffer makeXMLData(StringBuffer xmlData,
 			IdentifiedSurgicalPathologyReport identifiedReport) throws BizLogicException
@@ -82,7 +96,8 @@ public class FetchReportAction extends BaseAction
 		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic.retrieveAttribute(
 				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
 				Constants.COLUMN_NAME_SCG);
-		DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) defaultBizLogic
+		DeidentifiedSurgicalPathologyReport deidReport =
+			(DeidentifiedSurgicalPathologyReport) defaultBizLogic
 				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 		Site source = (Site) defaultBizLogic.retrieveAttribute(
@@ -145,7 +160,11 @@ public class FetchReportAction extends BaseAction
 		return xmlData;
 
 	}
-
+	/**
+	 *
+	 * @param conceptBeanList : conceptBeanList
+	 * @return String : String
+	 */
 	private String getConceptBeans(List conceptBeanList)
 	{
 		String[] onClickMethod = null;
@@ -174,7 +193,8 @@ public class FetchReportAction extends BaseAction
 
 				String chkBoxId = "select" + i;
 				onClickMethod[i] = "selectByOffset(document.getElementById('" + chkBoxId + "'),'"
-						+ startOff + "','" + endOff + "','" + colours[i] + "','" + conceptName
+						+ startOff + "','" + endOff + "','" +
+						colours[i] + "','" + conceptName
 						+ "')";
 				script.append("<ConceptBean>");
 				script.append("<ConceptName>");
