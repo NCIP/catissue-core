@@ -57,18 +57,7 @@ public class ConflictSCGAction extends BaseAction
 		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
 
 		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-
-		List reportQueueDataList = new ArrayList();
-		ReportLoaderQueue reportLoaderQueue = null;
-		reportQueueDataList = getReportQueueDataList(reportQueueId);
-		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
-		{
-			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
-		}
-
-		String newConfictedReport = reportLoaderQueue.getReportText();
-		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
-
+		String newConfictedReport = ViewSPRUtil.getSynthesizedTextForReportQueue(reportQueueId);
 		String existingConflictedReport = retrieveExistingReport(reportQueueId);
 		conflictSCGForm.setExistingConflictedReport(existingConflictedReport);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
