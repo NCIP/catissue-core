@@ -1,8 +1,12 @@
 /**
- * <p>Title: ShowFramedPageAction Class>
- * <p>Description:	ShowFramedPageAction is used to display the query results view.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ShowFramedPageAction Class>
+ * <p>
+ * Description: ShowFramedPageAction is used to display the query results view.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
+ *
  * @author Gautam Shetty
  * @version 1.00
  */
@@ -28,7 +32,8 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 
 /**
- * ShowFramedPageAction is used to display the query results view
+ * ShowFramedPageAction is used to display the query results view.
+ *
  * @author gautam_shetty
  */
 public class ShowFramedPageAction extends Action
@@ -36,22 +41,28 @@ public class ShowFramedPageAction extends Action
 
 	/**
 	 * Overrides the execute method in Action class.
-	 * @param mapping ActionMapping object
-	 * @param form ActionForm object
-	 * @param request HttpServletRequest object
-	 * @param response HttpServletResponse object
+	 *
+	 * @param mapping
+	 *            ActionMapping object
+	 * @param form
+	 *            ActionForm object
+	 * @param request
+	 *            HttpServletRequest object
+	 * @param response
+	 *            HttpServletResponse object
 	 * @return ActionForward object
-	 * @throws Exception object
+	 * @throws Exception
+	 *             object
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//Sets the pageOf attribute (for Add,Edit or Query Interface)
+		// Sets the pageOf attribute (for Add,Edit or Query Interface)
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		HttpSession session = request.getSession();
 
-		//Aniruddha : For removing hardcoded names of html component
+		// Aniruddha : For removing hardcoded names of html component
 		session.setAttribute(Constants.CONTAINER_STYLEID, request
 				.getParameter(Constants.CONTAINER_STYLEID));
 		System.out.println(request.getParameter(Constants.CONTAINER_STYLEID));
@@ -132,7 +143,7 @@ public class ShowFramedPageAction extends Action
 				session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL, collectionProtocol);
 			}
 		}
-		//Added By Ramya for orderingsystem module.
+		// Added By Ramya for orderingsystem module.
 		else if (pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE))
 		{
 			session = request.getSession();
@@ -141,12 +152,13 @@ public class ShowFramedPageAction extends Action
 			if (request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID) != null)
 			{
 				String strSpecimenId = request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID);
-				//String strSpecimenId = (String) session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
+				// String strSpecimenId = (String)
+				// session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
 				Long specimenId = new Long(strSpecimenId);
 				bizLogic = new SpecimenTreeBizLogic(specimenId, false);
 
 			}
-			//SCG Id is set in case of Pathology Case
+			// SCG Id is set in case of Pathology Case
 			if (request.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID) != null)
 			{
 				String strSpecimenCollgrpId = request
@@ -163,9 +175,10 @@ public class ShowFramedPageAction extends Action
 			request.setAttribute(Constants.SPECIMEN_TYPE, specimentype);
 			request.setAttribute(Constants.SPECIMEN_CLASS, specimenClass);
 
-			//Obtain the tree nodes in a vector format.
+			// Obtain the tree nodes in a vector format.
 			Vector dataList = ((SpecimenTreeBizLogic) bizLogic).getTreeViewData();
-			//Set the vector in request scope to be accessed in SpecimenTreeView.jsp
+			// Set the vector in request scope to be accessed in
+			// SpecimenTreeView.jsp
 			request.setAttribute(Constants.TREE_DATA_LIST, dataList);
 		}
 		return mapping.findForward(pageOf);
