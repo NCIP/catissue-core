@@ -12,7 +12,8 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class is a thread which converts a single identified report into its equivalent de-identified report.
+ * This class is a thread which converts a single identified report into its
+ * equivalent de-identified report.
  * @author vijay_pande
  */
 public class DeidentifierReportThread extends Thread
@@ -24,9 +25,12 @@ public class DeidentifierReportThread extends Thread
 	private AbstractDeidentifier deidentifier;
 
 	/**
-	 * constructor for the DeidReportThread thread 
-	 * @param identifiedReport identified Surgical Pathology Report
-	 * @throws Exception Generic exception
+	 * constructor for the DeidReportThread thread
+	 * @param deidentifier : deidentifier
+	 * @param ispr
+	 *            identified Surgical Pathology Report
+	 * @throws Exception
+	 *             Generic exception
 	 */
 	public DeidentifierReportThread(IdentifiedSurgicalPathologyReport ispr,
 			AbstractDeidentifier deidentifier) throws Exception
@@ -36,7 +40,8 @@ public class DeidentifierReportThread extends Thread
 	}
 
 	/**
-	 * This is default run method of the thread. Which is like a deid pipeline. This pipeline manages the de-identification process. 
+	 * This is default run method of the thread. Which is like a deid pipeline.
+	 * This pipeline manages the de-identification process.
 	 * @see java.lang.Thread#run()
 	 */
 	public void run()
@@ -55,7 +60,8 @@ public class DeidentifierReportThread extends Thread
 			logger.error("Deidentification process is failed:", ex);
 			try
 			{
-				// if any exception occures then update the status of the identified report to failed
+				// if any exception occures then update the status of the
+				// identified report to failed
 				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
 				CaCoreAPIService.updateObject(identifiedReport);
 				Long endTime = new Date().getTime();
@@ -77,9 +83,12 @@ public class DeidentifierReportThread extends Thread
 	}
 
 	/**
-	 * Method to save deidentified report and to update status of identified report
-	 * @param deidentifiedReport deidentified report to be saved
-	 * @throws Exception generic exception occurred
+	 * Method to save deidentified report and to update status of identified
+	 * report
+	 * @param deidentifiedReport
+	 *            deidentified report to be saved
+	 * @throws Exception
+	 *             generic exception occurred
 	 */
 	private void saveReports(DeidentifiedSurgicalPathologyReport deidentifiedReport)
 			throws Exception

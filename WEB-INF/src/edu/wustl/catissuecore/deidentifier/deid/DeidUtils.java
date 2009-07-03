@@ -14,7 +14,8 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class provides various utility methods which helps for the deidentification process
+ * This class provides various utility methods which helps for the
+ * deidentification process
  * @author vijay_pande
  */
 public class DeidUtils
@@ -23,12 +24,16 @@ public class DeidUtils
 	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
 
 	/**
-	 * This mathod takes the identified report, its participant and converts 
-	 * all the information into an appropriate xml document
-	 * @param participant participant
-	 * @param ispr identified surgical pathology report
-	 * @param sprText sysnthesized text
-	 * @return Elelment which contains other all the report element as childnodes
+	 * This mathod takes the identified report, its participant and converts all
+	 * the information into an appropriate xml document
+	 * @param participant
+	 *            participant
+	 * @param ispr
+	 *            identified surgical pathology report
+	 * @param sprText
+	 *            sysnthesized text
+	 * @return Elelment which contains other all the report element as
+	 *         childnodes
 	 */
 	protected static Element buildReportElement(final Participant participant,
 			final IdentifiedSurgicalPathologyReport ispr, String sprText)
@@ -56,7 +61,7 @@ public class DeidUtils
 
 			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
-			//iterate over participant medical identifier collection
+			// iterate over participant medical identifier collection
 			for (ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
 			{
 				mrn += " ";
@@ -76,7 +81,7 @@ public class DeidUtils
 
 			// add patientId element to root element
 			reportElement.addContent(patientIdElement);
-			//add report type element to root element
+			// add report type element to root element
 			reportElement.addContent(reportTypeElement);
 			// add report header element to root element
 			reportElement.addContent(reportHeaderElement);
@@ -91,12 +96,17 @@ public class DeidUtils
 	}
 
 	/**
-	 * This method converts the raw input information about participant into XML format
-	 * @param variable participant
-	 * @param value participant name or medical record number
-	 * @param role role of articipant
-	 * @return Elelment which contains input information 
-	 * @throws Exception a generic exception occured while creating person element
+	 * This method converts the raw input information about participant into XML
+	 * format
+	 * @param variable
+	 *            participant
+	 * @param value
+	 *            participant name or medical record number
+	 * @param role
+	 *            role of articipant
+	 * @return Elelment which contains input information
+	 * @throws Exception
+	 *             a generic exception occured while creating person element
 	 */
 
 	protected static Element buildHeaderPersonElement(final String variable, final String value,
@@ -125,10 +135,13 @@ public class DeidUtils
 
 	/**
 	 * This method converts the raw header values into appropriate XML element
-	 * @param variable Report Header
-	 * @param value its value
+	 * @param variable
+	 *            Report Header
+	 * @param value
+	 *            its value
 	 * @return Elelemnt that contains header data element
-	 * @throws Exception a generic exception occured while creating data element
+	 * @throws Exception
+	 *             a generic exception occured while creating data element
 	 */
 
 	protected static Element buildHeaderDataElement(final String variable, final String value)
@@ -139,7 +152,7 @@ public class DeidUtils
 		headerDataElement = new Element(CaTIESConstants.HEADER_DATA);
 		// create element variable
 		Element variableElement = new Element(CaTIESConstants.VARIABLE);
-		//create element value
+		// create element value
 		Element valueElement = new Element(CaTIESConstants.VALUE);
 		// set variable
 		variableElement.addContent(variable);
@@ -156,7 +169,8 @@ public class DeidUtils
 
 	/**
 	 * This method removes all the illegal XML characters from the input text
-	 * @param sprText synthesized text
+	 * @param sprText
+	 *            synthesized text
 	 * @return text without ellegal XML characters
 	 */
 	public static String removeIllegalXmlCharacters(String sprText)

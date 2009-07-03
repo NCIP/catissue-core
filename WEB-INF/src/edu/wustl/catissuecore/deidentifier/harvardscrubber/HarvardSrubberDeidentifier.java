@@ -29,12 +29,19 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
-
+/**
+ * @author
+ *
+ */
 public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 {
 
 	private static Scrubber scrubber;
-
+	/**
+	 * @param identifiedReport : identifiedReport
+	 * @throws Exception : Exception
+	 * @return DeidentifiedSurgicalPathologyReport
+	 */
 	public DeidentifiedSurgicalPathologyReport deidentify(
 			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
@@ -58,7 +65,11 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
 		return deidentifiedSurgicalPathologyReport;
 	}
-
+	/**
+	 * @param identifiedReport : identifiedReport
+	 * @return : File
+	 * @throws Exception : Exception
+	 */
 	private File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport)
 			throws Exception
 	{
@@ -83,7 +94,9 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 
 		return fileTosScrub;
 	}
-
+	/**
+	 * @throws Exception : Exception
+	 */
 	public void initialize() throws Exception
 	{
 		JDOMTools jdom = new JDOMTools();
@@ -94,12 +107,17 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		scrubber = ScrubberBuilder.makeScrubber(document);
 		scrubber.init();
 	}
-
+	/**
+	 * @throws Exception : Exception
+	 */
 	public void shutdown() throws Exception
 	{
 		scrubber.shutdown();
 	}
-
+	/**
+	 * @param identifiedReport : identifiedReport
+	 * @return Element
+	 */
 	private Element buildReportBody(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
 		Participant participant = identifiedReport.getSpecimenCollectionGroup()
@@ -161,7 +179,10 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		body.addContent(pathologyCase);
 		return body;
 	}
-
+	/**
+	 * @param identifiedReport : identifiedReport
+	 * @return Element
+	 */
 	private Element buildReportHeader(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
 		Participant participant = identifiedReport.getSpecimenCollectionGroup()
@@ -200,7 +221,11 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 
 		return header;
 	}
-
+	/**
+	 * @param elementName : elementName
+	 * @param value : value
+	 * @return Element
+	 */
 	private Element getElement(String elementName, String value)
 	{
 		Element element = new Element(elementName);

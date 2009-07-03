@@ -29,8 +29,9 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
- * This class is responsible to fetch identified reports and to spawn a separate thread to convert identified reports into deidentiied reports.
- * This class manages the thread pool so that excessive threads will not be spawned. 
+ * This class is responsible to fetch identified reports and to spawn a separate
+ * thread to convert identified reports into deidentiied reports. This class
+ * manages the thread pool so that excessive threads will not be spawned.
  * @author vijay_pande
  */
 public class DeIDPipelineManager
@@ -52,6 +53,7 @@ public class DeIDPipelineManager
 
 	/**
 	 * Default constructor of the class
+	 * @throws Exception : Exception
 	 */
 	public DeIDPipelineManager() throws Exception
 	{
@@ -70,8 +72,10 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * This method is responsible for creating prerequisite environment that is required for initialization of the DeID process
-	 * @throws Exception throws exception occured in the initialization process.
+	 * This method is responsible for creating prerequisite environment that is
+	 * required for initialization of the DeID process
+	 * @throws Exception
+	 *             throws exception occured in the initialization process.
 	 */
 	private void initDeid() throws Exception
 	{
@@ -85,7 +89,7 @@ public class DeIDPipelineManager
 		// Max no og threads that should be created by threadPoolExecutor
 		maxPoolSize = Integer.parseInt(CaTIESProperties
 				.getValue(CaTIESConstants.MAX_THREADPOOL_SIZE));
-		// Thread alive time 
+		// Thread alive time
 		keepAliveSeconds = 100;
 		try
 		{
@@ -103,8 +107,9 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * This method is responsible for managing the overall process of de-identification
-	 * @throws InterruptedException 
+	 * This method is responsible for managing the overall process of
+	 * de-identification
+	 * @throws InterruptedException : InterruptedException
 	 */
 	public void startProcess() throws InterruptedException
 	{
@@ -114,11 +119,13 @@ public class DeIDPipelineManager
 			try
 			{
 				logger.info("Deidentification process started at " + new Date().toString());
-				// Fetch the list of identified report Ids that are pending for de-identification
+				// Fetch the list of identified report Ids that are pending for
+				// de-identification
 				List isprIDList = getReportIDList();
 				// Process reports that are pending for de-identification
 				processReports(isprIDList);
-				// if report list contains less than one report then thread will go to sleep
+				// if report list contains less than one report then thread will
+				// go to sleep
 				logger.info("Deidentification process finished at " + new Date().toString()
 						+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties
@@ -136,22 +143,28 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 *  This method is responsible for managing the pool of thread, fetching individual reports by ID and intiating the de-identification rpocess.
-	 * @param isprIDList Identified surgical pathology report ID list
-	 * @throws Exception generic exception
+	 * This method is responsible for managing the pool of thread, fetching
+	 * individual reports by ID and intiating the de-identification rpocess.
+	 * @param isprIDList
+	 *            Identified surgical pathology report ID list
+	 * @throws Exception
+	 *             generic exception
 	 */
 	private void processReports(List isprIDList) throws Exception
 	{
-		// set policy for the handling of rejected threads by thread pool manager
+		// set policy for the handling of rejected threads by thread pool
+		// manager
 		rejectedExecutionHandler = new ThreadPoolExecutor.AbortPolicy();
-		// Instantiate threadPoolExecutor which manages the pool of thread, this is feature of java 1.5
+		// Instantiate threadPoolExecutor which manages the pool of thread, this
+		// is feature of java 1.5
 		ThreadPoolExecutor deidExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
 				keepAliveSeconds, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), Executors
 						.defaultThreadFactory(), this.rejectedExecutionHandler);
 
 		if (isprIDList != null || isprIDList.size() > 0)
 		{
-			// if report list contains more than or equal to one reports then process reports
+			// if report list contains more than or equal to one reports then
+			// process reports
 			try
 			{
 				CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,
@@ -187,17 +200,22 @@ public class DeIDPipelineManager
 				deidExecutor.shutdown();
 				throw ex;
 			}
-			// check to wait until all active theads finish their task before shutting down the thread pool manager
+			// check to wait until all active theads finish their task before
+			// shutting down the thread pool manager
 			while (deidExecutor.getActiveCount() > 0)
 			{
-				// if there are active threads then sleep for 100 seconds 
+				// if there are active threads then sleep for 100 seconds
 				Thread.sleep(100000);
 			}
 			// shut down the thread pool manager
 			deidExecutor.shutdown();
 		}
 	}
-
+	/**
+	 * @param identifiedReportId : identifiedReportId
+	 * @return IdentifiedSurgicalPathologyReport
+	 * @throws Exception : Exception
+	 */
 	private IdentifiedSurgicalPathologyReport getIdentifiedReport(Long identifiedReportId)
 			throws Exception
 	{
@@ -243,9 +261,11 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * Method to retrieve Identified report for deidentification process 
+	 * Method to retrieve Identified report for deidentification process
 	 * @return object of IdentifiedSurgicalPathologyReport
-	 * @throws Exception generic exception occured while retrieving object of deidentified report
+	 * @throws Exception
+	 *             generic exception occured while retrieving object of
+	 *             deidentified report
 	 */
 	private List getReportIDList() throws Exception
 	{
@@ -260,7 +280,8 @@ public class DeIDPipelineManager
 
 	/**
 	 * Main method for the DeIDPipeline class
-	 * @param args commandline arguments
+	 * @param args
+	 *            commandline arguments
 	 */
 	public static void main(String[] args)
 	{
@@ -275,7 +296,8 @@ public class DeIDPipelineManager
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			//Logger.error("Error while initializing DeidPipelineManager "+ ex);
+			// Logger.error("Error while initializing DeidPipelineManager "+
+			// ex);
 		}
 
 	}

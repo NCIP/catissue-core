@@ -21,9 +21,11 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
-
+/**
+ * @author
+ *
+ */
 public class DeIDDeidentifier extends AbstractDeidentifier
 {
 
@@ -31,19 +33,24 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	protected static String configFileName;
 	protected static JniDeID deid;
 	private static String pathToConfigFiles;
-
+	/**
+	 * @throws Exception : Exception
+	 */
 	public void initialize() throws Exception
 	{
-		// To store path of the directory for the config files, here 'catissue-properties' directory
+		// To store path of the directory for the config files, here
+		// 'catissue-properties' directory
 		pathToConfigFiles = new String(CommonServiceLocator.getInstance().getAppHome()
 				+ System.getProperty("file.separator") + "caTIES_conf"
 				+ System.getProperty("file.separator"));
 
-		// Function call to store name of config file name required for de-identification native call, deid.cfg
+		// Function call to store name of config file name required for
+		// de-identification native call, deid.cfg
 		setConfigFileName();
 		// Instantiates wrapper class for deid native call
 		deid = new JniDeID();
-		// set path of the directionary that is required by native call for deidentification 
+		// set path of the directionary that is required by native call for
+		// deidentification
 		deid
 				.setDictionaryLocation(CaTIESProperties
 						.getValue(CaTIESConstants.DEID_DCTIONARY_FOLDER));
@@ -52,14 +59,20 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		// load deidLibrary required for native call
 		JniDeID.loadDeidLibrary();
 	}
-
+	/**
+	 * shutdown
+	 */
 	public void shutdown()
 	{
 		logger.info("Unloading deid library");
 		// unload deid library
 		JniDeID.unloadDeidLibrary();
 	}
-
+	/**
+	 * @param identifiedReport : identifiedReport
+	 * @throws Exception : Exception
+	 * @return DeidentifiedSurgicalPathologyReport
+	 */
 	public DeidentifiedSurgicalPathologyReport deidentify(
 			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
@@ -68,9 +81,11 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	}
 
 	/**
-	 * This method temporarily saves the name of deid config  file name. 
-	 * This deid config file contains the keywords which will be the input for deidentification
-	 * @throws Exception Generic exception
+	 * This method temporarily saves the name of deid config file name. This
+	 * deid config file contains the keywords which will be the input for
+	 * deidentification
+	 * @throws Exception
+	 *             Generic exception
 	 */
 	protected void setConfigFileName() throws Exception
 	{
@@ -79,14 +94,17 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				+ CaTIESProperties.getValue(CaTIESConstants.DEID_CONFIG_FILE_NAME));
 		// create handle to file
 		File cfgFile = new File(cfgFileName);
-		// set configFileName  to the path of config file 
+		// set configFileName to the path of config file
 		configFileName = cfgFile.getAbsolutePath();
 		logger.info("Config file name is " + configFileName);
 	}
 
 	/**
-	 * This is default run method of the thread. Which is like a deid pipeline. This pipeline manages the de-identification process. 
-	 * @throws Exception 
+	 * This is default run method of the thread. Which is like a deid pipeline.
+	 * This pipeline manages the de-identification process.
+	 * @param identifiedReport : identifiedReport
+	 * @return DeidentifiedSurgicalPathologyReport
+	 * @throws Exception : Exception
 	 * @see java.lang.Thread#run()
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeidentifiedReport(
@@ -112,7 +130,8 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		String deidReportText = null;
 
 		logger.info("Calling native call for report " + identifiedReport.getId().toString());
-		// function call which contains the actual native call for deidentification
+		// function call which contains the actual native call for
+		// deidentification
 		deidReportText = deIdentify(deidRequest);
 		logger.info("Calling native call finished successfully for report "
 				+ identifiedReport.getId().toString());
@@ -138,11 +157,16 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	}
 
 	/**
-	 * Method to create and initialize object of DeidentifiedSurgicalPathologyReport
-	 * @param identifiedReport identified surgical pathology report
-	 * @param deidText de-intified text
+	 * Method to create and initialize object of
+	 * DeidentifiedSurgicalPathologyReport
+	 * @param ispr
+	 *            identified surgical pathology report
+	 * @param deidText
+	 *            de-intified text
 	 * @return DeidentifiedSurgicalPathologyReport
-	 * @throws Exception a generic exception oocured while creating de-identified report instance.
+	 * @throws Exception
+	 *             a generic exception oocured while creating de-identified
+	 *             report instance.
 	 */
 	private DeidentifiedSurgicalPathologyReport createDeidPathologyReport(
 			IdentifiedSurgicalPathologyReport ispr, String deidText) throws Exception
@@ -157,7 +181,8 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		// set identified report to deidentified report
 		tc.setSurgicalPathologyReport(deidReport);
 
-		// set text content which contains deidentified text to deidentified report 
+		// set text content which contains deidentified text to deidentified
+		// report
 		deidReport.setTextContent(tc);
 		// set default value for flag for review
 		deidReport.setIsFlagForReview(new Boolean(false));
@@ -166,10 +191,14 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	}
 
 	/**
-	 * This method is responsible for preparing and calling a native method call to convert plain text into deindentified text.
-	 * @param text text to be de-identified
+	 * This method is responsible for preparing and calling a native method call
+	 * to convert plain text into deindentified text.
+	 * @param text
+	 *            text to be de-identified
 	 * @return de-identified text
-	 * @throws Exception ocured while calling a native method call for de-identification
+	 * @throws Exception
+	 *             ocured while calling a native method call for
+	 *             de-identification
 	 */
 	public String deIdentify(String text) throws Exception
 	{
@@ -194,7 +223,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				logger.info("Native call success");
 				BufferedReader br = new BufferedReader(new FileReader(postdeidFile));
 
-				//read all contents from output file
+				// read all contents from output file
 				String line = "";
 				while ((line = br.readLine()) != null)
 				{

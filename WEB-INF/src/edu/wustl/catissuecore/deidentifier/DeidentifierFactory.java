@@ -3,10 +3,18 @@ package edu.wustl.catissuecore.deidentifier;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-
+/**
+ * @author
+ *
+ */
 public class DeidentifierFactory
 {
-
+	/**
+	 * @return AbstractDeidentifier
+	 * @throws ClassNotFoundException : ClassNotFoundException
+	 * @throws InstantiationException : InstantiationException
+	 * @throws IllegalAccessException : IllegalAccessException
+	 */
 	public static AbstractDeidentifier getDeidentiifier() throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException
 	{
