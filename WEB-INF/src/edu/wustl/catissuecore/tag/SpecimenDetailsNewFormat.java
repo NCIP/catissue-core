@@ -936,7 +936,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	{
 		if(specimenSummaryForm.getShowCheckBoxes())
 		 {
-			 sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" checked=\"checked\"></center>");
+			 if(Constants.TRUE.equalsIgnoreCase(nameValue[1]))
+			 {
+			   sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"true\" checked=\"checked\"></center>");
+			 }
+			 else
+			 {
+				 sb.append("<center><input type=\"checkbox\" name=\""+nameValue[0]+"\" value=\"on\"></center>");
+			 }
     	 }
 		 else
 		 {

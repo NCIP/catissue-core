@@ -98,7 +98,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String selectedContainerName;
 	private String containerId;
 	private boolean checkedSpecimen = true;
-	private boolean printSpecimen = true;//janhavi
+	private boolean printSpecimen = false;//janhavi
 	private Specimen corresSpecimen;
 	private Long collectionProtocolId = -1l;
 	private GenericSpecimen formSpecimenVo;
