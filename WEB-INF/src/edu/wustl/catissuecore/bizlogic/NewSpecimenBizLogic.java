@@ -4142,7 +4142,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
 						+ "specimen.label = '" + specimen.getParentSpecimen().getLabel() + "'";
-				list = new DefaultBizLogic().executeQuery(query);
+				list = dao.executeQuery(query);
 				Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
@@ -4153,7 +4153,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
 						+ "specimen.id = '" + specimen.getId() + "'";
-				list = new DefaultBizLogic().executeQuery(query);
+				list = dao.executeQuery(query);
 				Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
@@ -4164,7 +4164,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				query = "select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
 						+ "specimenCollectionGroup.id = '" + scg.getId() + "'";
-				list = new DefaultBizLogic().executeQuery(query);
+				list = dao.executeQuery(query);
 				Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
