@@ -453,14 +453,14 @@ String lbl = "Apply first to all";
 						valign="middle" align="center"><logic:equal
 						name="viewSpecimenSummaryForm" property="showCheckBoxes"
 						value="true">
-						<input type="checkbox" name="chkAllSpecimen"
+						<input type="checkbox" name="chkAllSpecimen" checked="checked"
 							onclick="ChangeCheckBoxStatus('specimen',this)" />
 					</logic:equal></td>
 					<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
 						valign="middle" align="center"><logic:equal
 						name="viewSpecimenSummaryForm" property="showCheckBoxes"
 						value="true">
-						<input type="checkbox" name="printAll" checked="checked"
+						<input type="checkbox" name="printAll"
 							onclick="ChangePrintCheckBoxStatus('specimen',this)" />
 					</logic:equal></td>
 				</TR>
@@ -543,14 +543,14 @@ String lbl = "Apply first to all";
 							align="center" valign="middle"><logic:equal
 							name="viewSpecimenSummaryForm" property="showCheckBoxes"
 							value="true">
-							<input type="checkbox" name="chkAllDerived"
+							<input type="checkbox" name="chkAllDerived" checked="checked"
 								onclick="ChangeCheckBoxStatus('derived',this)" />
 						</logic:equal></td>
 						<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
 							align="center" valign="middle"><logic:equal
 							name="viewSpecimenSummaryForm" property="showCheckBoxes"
 							value="true">
-							<input type="checkbox" name="printAllDerived" checked="checked"
+							<input type="checkbox" name="printAllDerived"
 								onclick="ChangePrintCheckBoxStatus('derived',this)" />
 						</logic:equal></td>
 					</TR>
@@ -607,13 +607,13 @@ String lbl = "Apply first to all";
 		  <tr>
 		  	<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
 			  <logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+					<input type="checkbox" name="chkAllAliquot" checked="checked" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
 			 </logic:equal>
 		    </td>
 
 			<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
 			  <logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-			     <input type="checkbox" name="printAllAliquot" checked="checked" onclick="ChangePrintCheckBoxStatus('aliquot',this)"/>
+			     <input type="checkbox" name="printAllAliquot" onclick="ChangePrintCheckBoxStatus('aliquot',this)"/>
 			 </logic:equal>
 			</td>
 		  </tr>
