@@ -14,7 +14,7 @@ import edu.wustl.common.util.Utility;
  */
 public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 {
-	private void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
+	protected void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
 	{
 		LinkedHashMap dataMap = new LinkedHashMap();
 		dataMap.put("class", specimen.getClassName());
