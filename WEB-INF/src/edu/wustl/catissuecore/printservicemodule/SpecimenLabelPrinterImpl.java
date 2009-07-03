@@ -74,11 +74,11 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			if(abstractDomainObject instanceof Specimen)
 			{
 				Specimen obj = (Specimen)abstractDomainObject;	
-				addDataToPrint(obj,listMap,printerType,printerLocation);			
+				addDataToPrint(obj,listMap,printerType,printerLocation,ipAddress);			
 			}
 		}
 	}
-	private void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation)
+	protected void addDataToPrint(Specimen specimen,ArrayList listMap,String printerType,String printerLocation,String ipAddress)
 	{
 		LinkedHashMap dataMap = new LinkedHashMap();
 		String label= specimen.getLabel();
@@ -122,7 +122,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 			for(int cnt=0;cnt < specimenList.size();cnt++)
 			{
 				Specimen obj = (Specimen)specimenList.get(cnt);
-				addDataToPrint(obj,listMap,printerType,printerLocation);	
+				addDataToPrint(obj,listMap,printerType,printerLocation,ipAddress);	
 			}
 		}
 	
