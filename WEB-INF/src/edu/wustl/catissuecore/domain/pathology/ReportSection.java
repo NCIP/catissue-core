@@ -7,8 +7,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Represents different logical sections of surgical pathology report.
- * @hibernate.class
- * table="CATISSUE_REPORT_SECTION"
+ * @hibernate.class table="CATISSUE_REPORT_SECTION"
  */
 
 public class ReportSection extends AbstractDomainObject
@@ -29,8 +28,7 @@ public class ReportSection extends AbstractDomainObject
 	protected String name;
 
 	/**
-	 * Start off set of reporting section. 
-	 * 
+	 * Start off set of reporting section.
 	 */
 	protected Integer startOffSet;
 
@@ -45,18 +43,20 @@ public class ReportSection extends AbstractDomainObject
 	protected Long id;
 
 	/**
-	* @return system generated id
-	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	* unsaved-value="null" generator-class="native" 
-	* @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_SECTION_SEQ"
-	*/
+	 * @return system generated id
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_REPORT_SECTION_SEQ"
+	 */
 	public Long getId()
 	{
 		return id;
 	}
 
 	/**
-	 * @param id sets system generated id
+	 * @param id
+	 *            sets system generated id
 	 */
 	public void setId(Long id)
 	{
@@ -73,9 +73,8 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return text information of the report section.
-	 * @hibernate.property name="documentFragment"
-	 * type="string" column="DOCUMENT_FRAGMENT" 
-	 * length="1000"
+	 * @hibernate.property name="documentFragment" type="string"
+	 *                     column="DOCUMENT_FRAGMENT" length="1000"
 	 */
 	public String getDocumentFragment()
 	{
@@ -83,7 +82,8 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	/**
-	 * @param documentFragment Sets the text information of the report section.
+	 * @param documentFragment
+	 *            Sets the text information of the report section.
 	 */
 	public void setDocumentFragment(String documentFragment)
 	{
@@ -92,9 +92,8 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the end off set of the report section.
-	 * @hibernate.property name="endOffSet"
-	 * type="integer" column="END_OFFSET" 
-	 * length="10"
+	 * @hibernate.property name="endOffSet" type="integer" column="END_OFFSET"
+	 *                     length="10"
 	 */
 	public Integer getEndOffSet()
 	{
@@ -102,7 +101,8 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	/**
-	 * @param endOffSet sets the end off set of the report section.
+	 * @param endOffSet
+	 *            sets the end off set of the report section.
 	 */
 	public void setEndOffSet(Integer endOffSet)
 	{
@@ -111,9 +111,7 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the name of the report section.
-	 * @hibernate.property  name="name"
-	 * type="string" column="NAME" 
-	 * length="100"
+	 * @hibernate.property name="name" type="string" column="NAME" length="100"
 	 */
 	public String getName()
 	{
@@ -121,7 +119,8 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	/**
-	 * @param name sets the name of the report section.
+	 * @param name
+	 *            sets the name of the report section.
 	 */
 	public void setName(String name)
 	{
@@ -130,9 +129,8 @@ public class ReportSection extends AbstractDomainObject
 
 	/**
 	 * @return the start offset of the report section.
-	 * @hibernate.property name="startOffSet"
-	 * type="integer" column="START_OFFSET" 
-	 * length="10"
+	 * @hibernate.property name="startOffSet" type="integer"
+	 *                     column="START_OFFSET" length="10"
 	 */
 	public Integer getStartOffSet()
 	{
@@ -140,18 +138,19 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	/**
-	 * @param startOffSet sets the startoff set of the report section.
+	 * @param startOffSet
+	 *            sets the startoff set of the report section.
 	 */
 	public void setStartOffSet(Integer startOffSet)
 	{
 		this.startOffSet = startOffSet;
 	}
 
-	/** 
+	/**
 	 * @return the text content.
-	 * 	@hibernate.many-to-one 	name="textContent"
-	 * 	class="edu.wustl.catissuecore.domain.pathology.TextContent"
-	 * 	column="TEXT_CONTENT_ID" not-null="false"
+	 * @hibernate.many-to-one name="textContent"
+	 *                        class="edu.wustl.catissuecore.domain.pathology.TextContent"
+	 *                        column="TEXT_CONTENT_ID" not-null="false"
 	 */
 	public TextContent getTextContent()
 	{
@@ -159,13 +158,17 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	/**
-	 * @param textContent sets the text content.
+	 * @param textContent
+	 *            sets the text content.
 	 */
 	public void setTextContent(TextContent textContent)
 	{
 		this.textContent = textContent;
 	}
-
+	/**
+	 * @param arg0 : arg0
+	 * @throws AssignDataException : AssignDataException
+	 */
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub

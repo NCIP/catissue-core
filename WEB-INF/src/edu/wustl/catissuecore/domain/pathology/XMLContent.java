@@ -3,17 +3,15 @@ package edu.wustl.catissuecore.domain.pathology;
 
 /**
  * Represents xml content of the pathology report.
- * @hibernate.joined-subclass
- * table="CATISSUE_REPORT_XMLCONTENT" 
- * @hibernate.joined-subclass-key
- * column="IDENTIFIER"
+ * @hibernate.joined-subclass table="CATISSUE_REPORT_XMLCONTENT"
+ * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
 
 public class XMLContent extends ReportContent
 {
 
 	/**
-	 * Surgical Pathology report of the current text data. 
+	 * Surgical Pathology report of the current text data.
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
 
@@ -25,11 +23,11 @@ public class XMLContent extends ReportContent
 
 	}
 
-	/**		
-	 *  @return surgical pathology report of current binary data.
-	 * 	@hibernate.many-to-one name="surgicalPathologyReport"
-	 * 	class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
-	 * 	column="REPORT_ID" not-null="false"
+	/**
+	 * @return surgical pathology report of current binary data.
+	 * @hibernate.many-to-one name="surgicalPathologyReport"
+	 *                        class="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
+	 *                        column="REPORT_ID" not-null="false"
 	 */
 	public SurgicalPathologyReport getSurgicalPathologyReport()
 	{
@@ -37,8 +35,8 @@ public class XMLContent extends ReportContent
 	}
 
 	/**
-	 * @param surgicalPathologyReport sets the surgical pathology report of current binary content.  
-	 * 
+	 * @param surgicalPathologyReport
+	 *            sets the surgical pathology report of current binary content.
 	 */
 	public void setSurgicalPathologyReport(SurgicalPathologyReport surgicalPathologyReport)
 	{

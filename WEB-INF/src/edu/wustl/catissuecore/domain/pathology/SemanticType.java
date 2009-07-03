@@ -1,11 +1,13 @@
 /**
- * <p>Title: SemanticType Class>
- * <p>Description:  SemanticType domain object.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: SemanticType Class>
+ * <p>
+ * Description: SemanticType domain object.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
  * @author Ashish Gupta
- * @version 1.00
- * Created on March 07,2007
+ * @version 1.00 Created on March 07,2007
  */
 
 package edu.wustl.catissuecore.domain.pathology;
@@ -15,8 +17,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * @hibernate.class table="CATISSUE_SEMANTIC_TYPE"
- * Represents sematic type
+ * @hibernate.class table="CATISSUE_SEMANTIC_TYPE" Represents sematic type
  */
 public class SemanticType extends AbstractDomainObject
 {
@@ -33,8 +34,10 @@ public class SemanticType extends AbstractDomainObject
 
 	/**
 	 * @return identifier
-	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_SEMANTIC_TYPE_SEQ"
+	 * @hibernate.id type="long" length="30" column="IDENTIFIER"
+	 *               generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_SEMANTIC_TYPE_SEQ"
 	 */
 	public Long getId()
 	{
@@ -43,7 +46,8 @@ public class SemanticType extends AbstractDomainObject
 
 	/**
 	 * Set identifier of the sematic type
-	 * @param id sets identifier
+	 * @param id
+	 *            sets identifier
 	 */
 	public void setId(Long id)
 	{
@@ -62,7 +66,8 @@ public class SemanticType extends AbstractDomainObject
 
 	/**
 	 * Set label of the sematic type
-	 * @param label sets label
+	 * @param label
+	 *            sets label
 	 */
 	public void setLabel(String label)
 	{
@@ -78,10 +83,11 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * Method to populate abstractForm from domain Object
-	 *  (non-Javadoc)
+	 * Method to populate abstractForm from domain Object (non-Javadoc)
+	 * @throws AssignDataException : AssignDataException
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
-	 * @param abstractForm abstract form
+	 * @param abstractForm
+	 *            abstract form
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{

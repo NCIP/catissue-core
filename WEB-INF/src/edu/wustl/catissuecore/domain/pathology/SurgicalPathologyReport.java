@@ -13,8 +13,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Represents the surgical pathology report.
- * @hibernate.class
- * table="CATISSUE_PATHOLOGY_REPORT"
+ * @hibernate.class table="CATISSUE_PATHOLOGY_REPORT"
  */
 
 public class SurgicalPathologyReport extends AbstractDomainObject
@@ -50,7 +49,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	protected Set pathologyReportReviewParameterCollection;
 
 	/**
-	 * Specimen collection group of the report 
+	 * Specimen collection group of the report
 	 */
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
@@ -84,9 +83,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * @return activity status of the pathology report.
-	 * @hibernate.property name="activityStatus"
-	 * type="string" column="ACTIVITY_STATUS" 
-	 * length="100"
+	 * @hibernate.property name="activityStatus" type="string"
+	 *                     column="ACTIVITY_STATUS" length="100"
 	 */
 	public String getActivityStatus()
 	{
@@ -95,7 +93,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets activity status of the report
-	 * @param activityStatus sets activity status of the pathology report.
+	 * @param activityStatus
+	 *            sets activity status of the pathology report.
 	 */
 	public void setActivityStatus(String activityStatus)
 	{
@@ -103,10 +102,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	 * @return the binary content of the pathology report.	
-	 * @hibernate.one-to-one  name="binaryContent"
-	 * class="edu.wustl.catissuecore.domain.pathology.BinaryContent"
-	 * property-ref="surgicalPathologyReport" not-null="false" cascade="save-update"
+	 * @return the binary content of the pathology report.
+	 * @hibernate.one-to-one name="binaryContent"
+	 *                       class="edu.wustl.catissuecore.domain.pathology.BinaryContent"
+	 *                       property-ref="surgicalPathologyReport"
+	 *                       not-null="false" cascade="save-update"
 	 */
 	public BinaryContent getBinaryContent()
 	{
@@ -115,7 +115,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets binary text content
-	 * @param binaryContent sets binary content of the pathology report.
+	 * @param binaryContent
+	 *            sets binary content of the pathology report.
 	 */
 	public void setBinaryContent(BinaryContent binaryContent)
 	{
@@ -123,11 +124,12 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	* @return system generated id 
-	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	* unsaved-value="null" generator-class="native" 
-	* @hibernate.generator-param name="sequence" value="CATISSUE_PATHOLOGY_REPORT_SEQ"
-	*/
+	 * @return system generated id
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_PATHOLOGY_REPORT_SEQ"
+	 */
 	public Long getId()
 	{
 		return id;
@@ -135,7 +137,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets id
-	 * @param id sets system generated id
+	 * @param id
+	 *            sets system generated id
 	 */
 	public void setId(Long id)
 	{
@@ -143,11 +146,10 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	* @return the review flag for pathology report. 
-	* @hibernate.property 	name="isFlagForReview"
-	* column="REVIEW_FLAG" length="10"
-	* not-null="false"
-	**/
+	 * @return the review flag for pathology report.
+	 * @hibernate.property name="isFlagForReview" column="REVIEW_FLAG"
+	 *                     length="10" not-null="false"
+	 **/
 	public Boolean getIsFlagForReview()
 	{
 		return isFlagForReview;
@@ -155,7 +157,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets isFlagForReview
-	 * @param isFlagForReview Sets review flag for pathology report.
+	 * @param isFlagForReview
+	 *            Sets review flag for pathology report.
 	 */
 	public void setIsFlagForReview(Boolean isFlagForReview)
 	{
@@ -163,12 +166,13 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	* @return collection of pathology report review parameters.
-	* @hibernate.set inverse="false" table="CATISSUE_REVIEWREPORT_PARAM"
-	* lazy="false" cascade="all" 
-	* @hibernate.collection-key column="REPORT_ID"
-	* @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
-	*/
+	 * @return collection of pathology report review parameters.
+	 * @hibernate.set inverse="false" table="CATISSUE_REVIEWREPORT_PARAM"
+	 *                lazy="false" cascade="all"
+	 * @hibernate.collection-key column="REPORT_ID"
+	 * @hibernate.collection-one-to-many class=
+	 *                                   "edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
+	 */
 	public Set getPathologyReportReviewParameterCollection()
 	{
 		return pathologyReportReviewParameterCollection;
@@ -176,7 +180,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets a collection of pathology report review parameter
-	 * @param pathologyReportReviewParameterCollection sets collection of pathology report review parameters.
+	 * @param pathologyReportReviewParameterCollection
+	 *            sets collection of pathology report review parameters.
 	 */
 	public void setPathologyReportReviewParameterCollection(
 			Set pathologyReportReviewParameterCollection)
@@ -187,8 +192,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	/**
 	 * @return reportSource associated with pathology report.
 	 * @hibernate.many-to-one name="reportSource"
-	 * class="edu.wustl.catissuecore.domain.Site"
-	 * column="SOURCE_ID" not-null="false"
+	 *                        class="edu.wustl.catissuecore.domain.Site"
+	 *                        column="SOURCE_ID" not-null="false"
 	 */
 	public Site getReportSource()
 	{
@@ -197,7 +202,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets reportSource of the report
-	 * @param reportSource sets reportSource of the pathology report.
+	 * @param reportSource
+	 *            sets reportSource of the pathology report.
 	 */
 	public void setReportSource(Site reportSource)
 	{
@@ -207,8 +213,9 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	/**
 	 * @return text content of the pathology report.
 	 * @hibernate.one-to-one name="textContent"
-	 * class="edu.wustl.catissuecore.domain.pathology.TextContent"
-	 * property-ref="surgicalPathologyReport" not-null="false" cascade="save-update"
+	 *                       class="edu.wustl.catissuecore.domain.pathology.TextContent"
+	 *                       property-ref="surgicalPathologyReport"
+	 *                       not-null="false" cascade="save-update"
 	 */
 	public TextContent getTextContent()
 	{
@@ -217,18 +224,20 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets text content
-	 * @param textContent sets text content of the pathology report.
+	 * @param textContent
+	 *            sets text content of the pathology report.
 	 */
 	public void setTextContent(TextContent textContent)
 	{
 		this.textContent = textContent;
 	}
 
-	/**	
+	/**
 	 * @return xml content of the pathology report.
 	 *@hibernate.one-to-one name="xmlContent"
-	 *class="edu.wustl.catissuecore.domain.pathology.XMLContent"
-	 *property-ref="surgicalPathologyReport" not-null="false" cascade="save-update"
+	 *                       class="edu.wustl.catissuecore.domain.pathology.XMLContent"
+	 *                       property-ref="surgicalPathologyReport"
+	 *                       not-null="false" cascade="save-update"
 	 */
 	public XMLContent getXmlContent()
 	{
@@ -237,7 +246,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Set xml content
-	 * @param xmlContent sets xml content of the pathology report.
+	 * @param xmlContent
+	 *            sets xml content of the pathology report.
 	 */
 	public void setXmlContent(XMLContent xmlContent)
 	{
@@ -246,9 +256,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * @return rreport status of the pathology report.
-	 * @hibernate.property name="reportStatus"
-	 * type="string" column="REPORT_STATUS" 
-	 * length="100"
+	 * @hibernate.property name="reportStatus" type="string"
+	 *                     column="REPORT_STATUS" length="100"
 	 */
 	public String getReportStatus()
 	{
@@ -257,7 +266,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Set status of the report
-	 * @param reportStatus sets report status of the pathology report.
+	 * @param reportStatus
+	 *            sets report status of the pathology report.
 	 */
 	public void setReportStatus(String reportStatus)
 	{
@@ -266,8 +276,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * @return the collection date and time of current pathology report.
-	 * @hibernate.property name="collectionDateTime"
-	 * type="date" column="COLLECTION_DATE_TIME" 
+	 * @hibernate.property name="collectionDateTime" type="date"
+	 *                     column="COLLECTION_DATE_TIME"
 	 */
 	public Date getCollectionDateTime()
 	{
@@ -276,7 +286,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets collection date and time of the report
-	 * @param collectionDateTime collection date and time of the report.
+	 * @param collectionDateTime
+	 *            collection date and time of the report.
 	 */
 	public void setCollectionDateTime(Date collectionDateTime)
 	{
@@ -285,16 +296,22 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Copies all values from the AbstractForm object
-	 * @param abstractForm The AbstractForm object
-	 * @throws AssignDataException exception occured while assigning data to form attributes
+	 * @param abstractForm
+	 *            The AbstractForm object
+	 * @throws AssignDataException
+	 *             exception occured while assigning data to form attributes
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	/**
+	 * @param valueObject : valueObject
+	 * @throws AssignDataException : AssignDataException
+	 * @see
+	 * edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common
+	 * .actionForm.IValueObject)
 	 */
 	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
@@ -303,11 +320,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	}
 
-	/**	
+	/**
 	 * @return specimen collection group of the report.
 	 * @hibernate.many-to-one name="specimenCollectionGroup"
-	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	 * column="SCG_ID" not-null="false"
+	 *                        class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	 *                        column="SCG_ID" not-null="false"
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
@@ -315,13 +332,16 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	 * @param specimenCollectionGroup sets specimen collection group of the identified report.
+	 * @param specimenCollectionGroup
+	 *            sets specimen collection group of the identified report.
 	 */
 	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
-
+	/**
+	 * @return String
+	 */
 	public String getObjectId()
 	{
 		return SurgicalPathologyReport.class.getName() + "_" + this.getId();

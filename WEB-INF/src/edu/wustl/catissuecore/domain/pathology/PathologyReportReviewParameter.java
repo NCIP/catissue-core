@@ -10,12 +10,9 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
- * Represents the review report parameters 
+ * Represents the review report parameters
  * @hibernate.class
  * table="CATISSUE_REVIEW_PARAMS"
  */
@@ -50,47 +47,61 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	protected String comment;
 
 	/**
-	 * Reviewer role 
+	 * Reviewer role
 	 */
 	protected String reviewerRole;
-
+	/**
+	 * @return Date
+	 */
 	public Date getTimestamp()
 	{
 		return timestamp;
 	}
-
+	/**
+	 * @param timestamp : timestamp
+	 */
 	public void setTimestamp(Date timestamp)
 	{
 		this.timestamp = timestamp;
 	}
-
+	/**
+	 * @return User
+	 */
 	public User getUser()
 	{
 		return user;
 	}
-
+	/**
+	 * @param user : user
+	 */
 	public void setUser(User user)
 	{
 		this.user = user;
 	}
-
+	/**
+	 * @return String
+	 */
 	public String getComment()
 	{
 		return comment;
 	}
-
+	/**
+	 * @param comment : comment
+	 */
 	public void setComment(String comment)
 	{
 		this.comment = comment;
 	}
-
+	/**
+	 * @param id : id
+	 */
 	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
 	/**
-	 * Surgical pathology report associated with current review parameter set.  
+	 * Surgical pathology report associated with current review parameter set. 
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
 
@@ -108,7 +119,6 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	}
 
 	/**
-	 * 
 	 * @return System generated unique id.
 	 * @see #setId(Integer)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
@@ -121,7 +131,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	}
 
 	/**
-	 *@return reviewer role 
+	 *@return reviewer role
 	 * @hibernate.property  name="reviewerRole"
 	 * type="string" column="REVIEWER_ROLE"
 	 * length="100"
@@ -158,12 +168,11 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 		this.surgicalPathologyReport = surgicalPathologyReport;
 	}
 
-	/** 
+	/**
 	 * This method sets all values for the PathologyReportReviewParameter object.
 	 * @param abstractForm Abstract action form
 	 * @throws AssignDataException exception occured while assigning data to form attributes
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
-	 * 
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
@@ -210,7 +219,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 
 	/**
 	 * This is the method to get status
-	 * @return reviewe status 
+	 * @return reviewe status
 	 * @hibernate.property  name="status"
 	 * type="string" column="STATUS"
 	 * length="100"

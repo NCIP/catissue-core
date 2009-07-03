@@ -85,7 +85,7 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	}
 
 	/**
-	 * @return name of referent classification 
+	 * @return name of referent classification
 	 * @hibernate.property type="string" length="500" column="NAME"
 	 */
 	public String getName()
@@ -100,7 +100,10 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	{
 		this.name = name;
 	}
-
+	/**
+	 * @param abstractForm : abstractForm
+	 * @throws AssignDataException : AssignDataException
+	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub

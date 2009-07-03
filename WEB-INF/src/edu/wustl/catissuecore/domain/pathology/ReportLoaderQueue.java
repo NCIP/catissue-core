@@ -11,8 +11,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Represents different logical sections of surgical pathology report.
- * @hibernate.class
- * table="CATISSUE_REPORT_QUEUE"
+ * @hibernate.class table="CATISSUE_REPORT_QUEUE"
  */
 public class ReportLoaderQueue extends AbstractDomainObject
 {
@@ -29,10 +28,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	protected Date reportCollectionDate;
 
 	/**
-	 * @return status information. 
-	 * @hibernate.property name="status"
-	 * type="string" column="STATUS" 
-	 * length="10"
+	 * @return status information.
+	 * @hibernate.property name="status" type="string" column="STATUS"
+	 *                     length="10"
 	 */
 	public String getStatus()
 	{
@@ -41,7 +39,8 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Set the status of the queue record
-	 * @param status status of the record of queue
+	 * @param status
+	 *            status of the record of queue
 	 */
 	public void setStatus(String status)
 	{
@@ -58,20 +57,21 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Constructor with text as input
-	 * @param text report text
-	 * 
+	 * @param text
+	 *            report text
 	 */
 	public ReportLoaderQueue(String text)
 	{
-		//this.id=new Long(4);
+		// this.id=new Long(4);
 		this.reportText = text;
 	}
 
 	/**
 	 * @return system generated id
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native" 
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_QUEUE_SEQ"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_REPORT_QUEUE_SEQ"
 	 */
 	public Long getId()
 	{
@@ -80,7 +80,8 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Set id of the object
-	 * @param id of the object
+	 * @param id
+	 *            of the object
 	 */
 	public void setId(Long id)
 	{
@@ -89,10 +90,13 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Returns the collection of Studies for this Protocol.
-	 * @hibernate.set name="participantCollection" table="CATISSUE_REPORT_PARTICIP_REL" 
-	 * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.set name="participantCollection"
+	 *                table="CATISSUE_REPORT_PARTICIP_REL" cascade="save-update"
+	 *                inverse="false" lazy="false"
 	 * @hibernate.collection-key column="REPORT_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Participant" column="PARTICIPANT_ID"
+	 * @hibernate.collection-many-to-many
+	 *                                    class="edu.wustl.catissuecore.domain.Participant"
+	 *                                    column="PARTICIPANT_ID"
 	 * @return Returns the collection of Studies for this Protocol.
 	 */
 	public Collection getParticipantCollection()
@@ -102,7 +106,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * @param collection
-	 * Assign set of participants to current object
+	 *            Assign set of participants to current object
 	 */
 	public void setParticipantCollection(Collection collection)
 	{
@@ -110,10 +114,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return reportText information. 
-	 * @hibernate.property name="reportText"
-	 * type="string" column="REPORT_TEXT" 
-	 * length="4000"
+	 * @return reportText information.
+	 * @hibernate.property name="reportText" type="string" column="REPORT_TEXT"
+	 *                     length="4000"
 	 */
 	public String getReportText()
 	{
@@ -122,13 +125,18 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Set report text
-	 * @param reportText report text 
+	 *
+	 * @param reportText
+	 *            report text
 	 */
 	public void setReportText(String reportText)
 	{
 		this.reportText = reportText;
 	}
-
+	/**
+	 * @param abstractForm : abstractForm
+	 * @throws AssignDataException : AssignDataException
+	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 
@@ -136,8 +144,10 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * @return the specimenCollectionGroup
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"  column="SPECIMEN_COLL_GRP_ID" cascade="save-update"
-	 *
+	 * @hibernate.many-to-one
+	 *                        class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	 *                        column="SPECIMEN_COLL_GRP_ID"
+	 *                        cascade="save-update"
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
@@ -145,7 +155,8 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param specimenCollectionGroup the specimenCollectionGroup to set
+	 * @param specimenCollectionGroup
+	 *            the specimenCollectionGroup to set
 	 */
 	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
@@ -153,10 +164,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return surgical pathology number  
-	 * @hibernate.property name="surgicalPathologyNumber"
-	 * type="string" column="SURGICAL_PATHOLOGY_NUMBER" 
-	 * length="255"
+	 * @return surgical pathology number
+	 * @hibernate.property name="surgicalPathologyNumber" type="string"
+	 *                     column="SURGICAL_PATHOLOGY_NUMBER" length="255"
 	 */
 	public String getSurgicalPathologyNumber()
 	{
@@ -164,7 +174,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param surgicalPathologyNumber
+	 * @param accessionNumber : accessionNumber
 	 */
 	public void setSurgicalPathologyNumber(String accessionNumber)
 	{
@@ -172,10 +182,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return participant name 
-	 * @hibernate.property name="participantName"
-	 * type="string" column="PARTICIPANT_NAME" 
-	 * length="255"
+	 * @return participant name
+	 * @hibernate.property name="participantName" type="string"
+	 *                     column="PARTICIPANT_NAME" length="255"
 	 */
 	public String getParticipantName()
 	{
@@ -183,7 +192,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param participantName
+	 * @param participantName : participantName
 	 */
 	public void setParticipantName(String participantName)
 	{
@@ -191,9 +200,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return report Loaded Date 
-	 * @hibernate.property name="reportLoadedDate"
-	 * type="date" column="REPORT_LOADED_DATE" 
+	 * @return report Loaded Date
+	 * @hibernate.property name="reportLoadedDate" type="date"
+	 *                     column="REPORT_LOADED_DATE"
 	 */
 	public Date getReportLoadedDate()
 	{
@@ -201,7 +210,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param reportLoadedDate
+	 * @param reportLoadedDate : reportLoadedDate
 	 */
 	public void setReportLoadedDate(Date reportLoadedDate)
 	{
@@ -209,10 +218,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return site name 
-	 * @hibernate.property name="siteName"
-	 * type="string" column="SITE_NAME" 
-	 * length="255"
+	 * @return site name
+	 * @hibernate.property name="siteName" type="string" column="SITE_NAME"
+	 *                     length="255"
 	 */
 	public String getSiteName()
 	{
@@ -220,7 +228,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param siteName
+	 * @param siteName : siteName
 	 */
 	public void setSiteName(String siteName)
 	{
@@ -228,9 +236,9 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @return report Loaded Date 
-	 * @hibernate.property name="reportCollectionDate"
-	 * type="date" column="REPORT_COLLECTION_DATE" 
+	 * @return report Loaded Date
+	 * @hibernate.property name="reportCollectionDate" type="date"
+	 *                     column="REPORT_COLLECTION_DATE"
 	 */
 	public Date getReportCollectionDate()
 	{
@@ -238,7 +246,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * @param reportCollectionDate
+	 * @param reportCollectionDate : reportCollectionDate
 	 */
 	public void setReportCollectionDate(Date reportCollectionDate)
 	{

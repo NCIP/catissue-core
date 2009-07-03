@@ -25,7 +25,7 @@ public class Concept extends AbstractDomainObject
 {
 
 	/**
-	 * 
+	 *
 	 */
 	protected String conceptUniqueIdentifier;
 
@@ -97,7 +97,6 @@ public class Concept extends AbstractDomainObject
 	 * @return system generated id for the concept
 	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_SEQ"
-	 * 
 	 */
 	public Long getId()
 	{
@@ -114,7 +113,7 @@ public class Concept extends AbstractDomainObject
 
 	/**
 	 * @return name of the concept
-	 * @hibernate.property type="string" length="500" column="NAME" 
+	 * @hibernate.property type="string" length="500" column="NAME"
 	 */
 	public String getName()
 	{
@@ -131,7 +130,7 @@ public class Concept extends AbstractDomainObject
 
 	/**
 	 * @return symantice type for the concept
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.SemanticType" column="SEMANTIC_TYPE_ID" cascade="save-update" 
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.SemanticType" column="SEMANTIC_TYPE_ID" cascade="save-update"
 	 */
 	public SemanticType getSemanticType()
 	{
@@ -145,7 +144,10 @@ public class Concept extends AbstractDomainObject
 	{
 		this.semanticType = semanticType;
 	}
-
+	/**
+	 * @param abstractForm : abstractForm
+	 * @throws AssignDataException : AssignDataException
+	 */
 	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{

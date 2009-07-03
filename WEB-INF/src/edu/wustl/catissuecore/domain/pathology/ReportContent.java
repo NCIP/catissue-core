@@ -7,36 +7,37 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * Represents the contents of surgical pathology reports.  
- * @hibernate.class
- * table="CATISSUE_REPORT_CONTENT"
+ * Represents the contents of surgical pathology reports.
+ * @hibernate.class table="CATISSUE_REPORT_CONTENT"
  */
 public class ReportContent extends AbstractDomainObject
 {
 
 	/**
-	* Data content of surgical pathology report.
-	*/
+	 * Data content of surgical pathology report.
+	 */
 	protected String data;
 
 	/**
-	* System generated unique id.
-	*/
+	 * System generated unique id.
+	 */
 	protected Long id;
 
 	/**
-	* @return system generated id
-	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	* unsaved-value="null" generator-class="native" 
-	* @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_CONTENT_SEQ"
-	*/
+	 * @return system generated id
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_REPORT_CONTENT_SEQ"
+	 */
 	public Long getId()
 	{
 		return id;
 	}
 
 	/**
-	 * @param id sets system generated id
+	 * @param id
+	 *            sets system generated id
 	 */
 	public void setId(Long id)
 	{
@@ -45,8 +46,8 @@ public class ReportContent extends AbstractDomainObject
 
 	/**
 	 * @return report content data.
-	 * @hibernate.property name="data" type="String"
-	 * column="REPORT_DATA" length="4000"
+	 * @hibernate.property name="data" type="String" column="REPORT_DATA"
+	 *                     length="4000"
 	 */
 	public String getData()
 	{
@@ -54,7 +55,8 @@ public class ReportContent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param data Report Data to set.
+	 * @param data
+	 *            Report Data to set.
 	 */
 	public void setData(String data)
 	{
@@ -68,15 +70,21 @@ public class ReportContent extends AbstractDomainObject
 	{
 
 	}
-
+	/**
+	 * @param arg0 : arg0
+	 * @throws AssignDataException : AssignDataException
+	 */
 	public void setAllValues(AbstractActionForm arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	/**
+	 * @param valueObject : valueObject
+	 * @see
+	 * edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common
+	 * .actionForm.IValueObject)
 	 */
 	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException

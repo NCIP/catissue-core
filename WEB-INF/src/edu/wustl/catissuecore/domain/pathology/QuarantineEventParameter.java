@@ -10,13 +10,10 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * Reprtesents quarantine report parameters
- * @hibernate.class
- * table="CATISSUE_QUARANTINE_PARAMS"
+ * @hibernate.class table="CATISSUE_QUARANTINE_PARAMS"
  */
 public class QuarantineEventParameter extends AbstractDomainObject implements java.io.Serializable
 {
@@ -47,7 +44,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	protected String comment;
 
 	/**
-	 * quarantine status of the associated deidentified report. 
+	 * quarantine status of the associated deidentified report.
 	 */
 	protected Boolean quarantineStatus;
 
@@ -70,12 +67,12 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * 
 	 * @return System generated unique id.
 	 * @see #setId(Integer)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_QUARANTINE_PARAMS_SEQ" 
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_QUARANTINE_PARAMS_SEQ"
 	 */
 	public Long getId()
 	{
@@ -83,10 +80,10 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 *  @return deidentified pathology report.
-	 * 	@hibernate.many-to-one 	name="deidentifiedSurgicalPathologyReport"
-	 * 	class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
-	 * 	column="DEID_REPORT_ID" not-null="false"
+	 * @return deidentified pathology report.
+	 * @hibernate.many-to-one name="deidentifiedSurgicalPathologyReport" class=
+	 *                        "edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 *                        column="DEID_REPORT_ID" not-null="false"
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
@@ -94,7 +91,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * @param deidentifiedSurgicalPathologyReport sets deidentified pathology report.
+	 * @param deIdentifiedSurgicalPathologyReport : sets deidentified pathology report.
 	 */
 
 	public void setDeIdentifiedSurgicalPathologyReport(
@@ -102,47 +99,61 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
-
+	/**
+	 * @return Date
+	 */
 	public Date getTimestamp()
 	{
 		return timestamp;
 	}
-
+	/**
+	 * @param timestamp : timestamp
+	 */
 	public void setTimestamp(Date timestamp)
 	{
 		this.timestamp = timestamp;
 	}
-
+	/**
+	 * @return User
+	 */
 	public User getUser()
 	{
 		return user;
 	}
-
+	/**
+	 * @param user : user
+	 */
 	public void setUser(User user)
 	{
 		this.user = user;
 	}
-
+	/**
+	 * @return String
+	 */
 	public String getComment()
 	{
 		return comment;
 	}
-
+	/**
+	 * @param comment : comment
+	 */
 	public void setComment(String comment)
 	{
 		this.comment = comment;
 	}
-
+	/**
+	 * @param id : id
+	 */
 	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
 	/**
-	  *  @return quarantine status of the deidentified pathology report
-	  *  @hibernate.property  name="quarantineStatus"
-	  *  type="boolean" column="IS_QUARANTINED"
-	  */
+	 * @return quarantine status of the deidentified pathology report
+	 * @hibernate.property name="quarantineStatus" type="boolean"
+	 *                     column="IS_QUARANTINED"
+	 */
 
 	public Boolean getQuarantineStatus()
 	{
@@ -150,19 +161,21 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * @param quarantineStatus sets quarantine status of the pathology report.
+	 * @param quarantineStatus
+	 *            sets quarantine status of the pathology report.
 	 */
 	public void setQuarantineStatus(Boolean quarantineStatus)
 	{
 		this.quarantineStatus = quarantineStatus;
 	}
 
-	/** 
+	/**
 	 * This method sets all values for the QuarantineEventParameter object.
-	 * @param abstractForm Abstract action form
-	 * @throws AssignDataException exception occured while assigning data to form attributes
+	 * @param abstractForm
+	 *            Abstract action form
+	 * @throws AssignDataException
+	 *             exception occured while assigning data to form attributes
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
-	 * 
 	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
@@ -191,8 +204,10 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * @param form AbstractActionForm
-	 * @throws AssignDataException object.
+	 * @param form
+	 *            AbstractActionForm
+	 * @throws AssignDataException
+	 *             object.
 	 */
 	public QuarantineEventParameter(AbstractActionForm form) throws AssignDataException
 	{
@@ -210,10 +225,9 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * @return quarantine comment status 
-	 * @hibernate.property  name="status"
-	 * type="string" column="STATUS"
-	 * length="100"
+	 * @return quarantine comment status
+	 * @hibernate.property name="status" type="string" column="STATUS"
+	 *                     length="100"
 	 */
 	public String getStatus()
 	{
@@ -222,7 +236,8 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 
 	/**
 	 * Returns quarantine comment status.
-	 * @param status of comment
+	 * @param status
+	 *            of comment
 	 */
 	public void setStatus(String status)
 	{

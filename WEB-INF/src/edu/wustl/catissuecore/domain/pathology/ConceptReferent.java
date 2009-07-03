@@ -1,11 +1,13 @@
 /**
- * <p>Title: ConceptReferent Class>
- * <p>Description:  ConceptReferent domain object.</p>
- * Copyright:    Copyright (c) year
- * Company: Washington University, School of Medicine, St. Louis.
+ * <p>
+ * Title: ConceptReferent Class>
+ * <p>
+ * Description: ConceptReferent domain object.
+ * </p>
+ * Copyright: Copyright (c) year Company: Washington University, School of
+ * Medicine, St. Louis.
  * @author Ashish Gupta
- * @version 1.00
- * Created on March 07,2007
+ * @version 1.00 Created on March 07,2007
  */
 
 package edu.wustl.catissuecore.domain.pathology;
@@ -16,8 +18,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Represents the concept referent of the pathology report.
- * @hibernate.class
- * table="CATISSUE_CONCEPT_REFERENT"
+ * @hibernate.class table="CATISSUE_CONCEPT_REFERENT"
  */
 public class ConceptReferent extends AbstractDomainObject
 {
@@ -33,12 +34,12 @@ public class ConceptReferent extends AbstractDomainObject
 	protected Long id;
 
 	/**
-	 * modifier flag. 
+	 * modifier flag.
 	 */
 	protected Boolean isModifier;
 
 	/**
-	 * The concept is negated one or not. 
+	 * The concept is negated one or not.
 	 */
 	protected Boolean isNegated;
 
@@ -53,7 +54,8 @@ public class ConceptReferent extends AbstractDomainObject
 	protected Concept concept;
 
 	/**
-	 * Concept referent classification associated with the current concept referent.
+	 * Concept referent classification associated with the current concept
+	 * referent.
 	 */
 	protected ConceptReferentClassification conceptReferentClassification;
 
@@ -72,7 +74,9 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return concept associated with current concept referent.
-	 * @hibernate.many-to-one column="CONCEPT_ID" class="edu.wustl.catissuecore.domain.pathology.Concept" cascade="save-update"
+	 * @hibernate.many-to-one column="CONCEPT_ID"
+	 *                        class="edu.wustl.catissuecore.domain.pathology.Concept"
+	 *                        cascade="save-update"
 	 */
 	public Concept getConcept()
 	{
@@ -80,7 +84,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param concept sets concept 
+	 * @param concept
+	 *            sets concept
 	 */
 	public void setConcept(Concept concept)
 	{
@@ -89,7 +94,9 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return concept referent classification
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification" column="CONCEPT_CLASSIFICATION_ID" cascade="none"
+	 * @hibernate.many-to-one class=
+	 *                        "edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification"
+	 *                        column="CONCEPT_CLASSIFICATION_ID" cascade="none"
 	 */
 	public ConceptReferentClassification getConceptReferentClassification()
 	{
@@ -97,7 +104,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param conceptReferentClassification concept referent classification
+	 * @param conceptReferentClassification
+	 *            concept referent classification
 	 */
 	public void setConceptReferentClassification(
 			ConceptReferentClassification conceptReferentClassification)
@@ -105,11 +113,11 @@ public class ConceptReferent extends AbstractDomainObject
 		this.conceptReferentClassification = conceptReferentClassification;
 	}
 
-	/**	
-	 * @return deidentified report associated with the concept referent. 
-	 * @hibernate.many-to-one  name="deidentifiedSurgicalPathologyReport"
-	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
-	 * column="DEIDENTIFIED_REPORT_ID" not-null="false"
+	/**
+	 * @return deidentified report associated with the concept referent.
+	 * @hibernate.many-to-one name="deidentifiedSurgicalPathologyReport" class=
+	 *                        "edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 *                        column="DEIDENTIFIED_REPORT_ID" not-null="false"
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
@@ -117,7 +125,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param deidentifiedSurgicalPathologyReport sets the deidentified report.
+	 * @param deIdentifiedSurgicalPathologyReport
+	 *            sets the deidentified report.
 	 */
 	public void setDeIdentifiedSurgicalPathologyReport(
 			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport)
@@ -127,7 +136,7 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return end offset
-	 * @hibernate.property type="long" column="END_OFFSET" length="30" 
+	 * @hibernate.property type="long" column="END_OFFSET" length="30"
 	 */
 	public Long getEndOffset()
 	{
@@ -135,7 +144,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param endOffset sets end offset
+	 * @param endOffset
+	 *            sets end offset
 	 */
 	public void setEndOffset(Long endOffset)
 	{
@@ -143,18 +153,20 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	* @return system generated id for concept referent
-	* @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	* unsaved-value="null" generator-class="native" 
-	* @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_REFERENT_SEQ"
-	*/
+	 * @return system generated id for concept referent
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_CONCEPT_REFERENT_SEQ"
+	 */
 	public Long getId()
 	{
 		return id;
 	}
 
 	/**
-	 * @param id sets system generated id
+	 * @param id
+	 *            sets system generated id
 	 */
 	public void setId(Long id)
 	{
@@ -171,7 +183,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param isModifier sets modifier flag
+	 * @param isModifier
+	 *            sets modifier flag
 	 */
 	public void setIsModifier(Boolean isModifier)
 	{
@@ -188,7 +201,8 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param isNegated sets negated flag
+	 * @param isNegated
+	 *            sets negated flag
 	 */
 	public void setIsNegated(Boolean isNegated)
 	{
@@ -205,13 +219,17 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param startOffset sets start offset
+	 * @param startOffset
+	 *            sets start offset
 	 */
 	public void setStartOffset(Long startOffset)
 	{
 		this.startOffset = startOffset;
 	}
-
+	/**
+	 * @param abstractForm : abstractForm
+	 * @throws AssignDataException : AssignDataException
+	 */
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
