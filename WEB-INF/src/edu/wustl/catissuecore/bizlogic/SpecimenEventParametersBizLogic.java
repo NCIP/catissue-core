@@ -400,8 +400,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			postInsertPerEvent(obj, dao);
 		}
-		
-
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 
 	private void postInsertPerEvent(Object obj, DAO dao)

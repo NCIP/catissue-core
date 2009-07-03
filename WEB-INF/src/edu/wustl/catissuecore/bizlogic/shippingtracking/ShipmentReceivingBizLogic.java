@@ -385,6 +385,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	protected void postUpdate(DAO dao, Object obj1, Object obj2,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		super.postUpdate(dao, obj1, obj2,
+				sessionDataBean);
 //		if(obj1!=null && obj1 instanceof Shipment)
 //		{
 //			Shipment shipment=(Shipment)obj1;

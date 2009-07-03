@@ -517,7 +517,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		{
 			logger.debug(e.getMessage(), e);
 		}
-
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 	/**
 	 * @param dao :dao

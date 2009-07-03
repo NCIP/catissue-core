@@ -839,6 +839,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		Map containerMap = getStorageContainerMap();
 		updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 
 	/**
@@ -870,6 +871,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		storageContainerIds.clear();
+		super.postInsert(speCollection, dao, sessionDataBean);
 	}
 
 	/**
@@ -1249,7 +1251,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
 		}
-
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
 	/**
@@ -4462,10 +4464,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	private void refreshTitliSearchIndexSingle(String operation, Object obj)
+	protected void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{
 		List result = null;
-		super.refreshTitliSearchIndex(operation, obj);
+		super.refreshTitliSearchIndexSingle(operation, obj);
 
 		try
 		{
@@ -4501,32 +4503,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					Long idLong = Long.valueOf(idString);// new Long(idString);
 					Specimen childSpecimen = new Specimen();
 					childSpecimen.setId(idLong);
-					refreshTitliSearchIndex(operation, childSpecimen);
+					refreshTitliSearchIndexSingle(operation, childSpecimen);
 				}
 			}
 		}
 	}
 
-	private void refreshTitliSearchIndexMultiple(String operation,
-			Collection<AbstractDomainObject> objCollection)
-	{
-		for (AbstractDomainObject obj : objCollection)
-		{
-			refreshTitliSearchIndexSingle(operation, obj);
-		}
-	}
+	
 
-	@Override
-	protected void refreshTitliSearchIndex(String operation, Object obj)
-	{
-
-		if (obj instanceof LinkedHashSet)
-		{
-			refreshTitliSearchIndexMultiple(operation, (LinkedHashSet<AbstractDomainObject>) obj);
-		}
-		else
-		{
-			refreshTitliSearchIndexSingle(operation, obj);
-		}
-	}
+	
 	}

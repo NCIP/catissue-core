@@ -296,11 +296,13 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				StorageContainerUtil.addStorageContainerInContainerMap(cont, containerMap);
 
 			}
+			
 		}
 		catch (Exception e)
 		{
 			logger.debug(e.getMessage(), e);
 		}
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 
 	/**

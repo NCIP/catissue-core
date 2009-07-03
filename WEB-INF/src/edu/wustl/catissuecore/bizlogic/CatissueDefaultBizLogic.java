@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -312,12 +313,13 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		return true;
 	}
 	
+	
 	/**
 	 * refresh the titli search index to reflect the changes in the database.
 	 * @param operation the operation to be performed : "insert", "update" or "delete"
 	 * @param obj the object corresponding to the record to be refreshed
 	 */
-	protected void refreshTitliSearchIndex(String operation, Object obj)
+	protected void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{
 		try
 		{
@@ -347,6 +349,38 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 					excep);
 		}
 
+	}
+	
+	public void refreshTitliSearchIndexMultiple(Collection<AbstractDomainObject> objCollection,String operation)
+	throws BizLogicException 
+	{
+			for (AbstractDomainObject obj : objCollection)
+			{
+				refreshTitliSearchIndexSingle(operation, obj);
+			}
+	}
+	
+	protected void refreshTitliSearchIndex(String operation, Object obj)
+	{
+		try
+		{
+			if (TitliResultGroup.isTitliConfigured)
+			{
+				if (obj instanceof LinkedHashSet)
+				{
+					refreshTitliSearchIndexMultiple((LinkedHashSet<AbstractDomainObject>) obj,operation);
+				}
+				else
+				{
+					
+					refreshTitliSearchIndexSingle(operation, obj);
+				}
+			}	
+		}
+		catch(BizLogicException bizLogicExp)
+		{
+			
+		}
 	}
 
 	/**
@@ -382,17 +416,66 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 	}
 	
-	public void refreshTitliSearchIndex(Collection<AbstractDomainObject> objCollection,String operation)
-	throws BizLogicException 
+	
+	/**
+	 *@param objCollection object collection.
+	 *@param dao The dao object.
+	 *@param sessionDataBean session specific Data
+	 *@throws BizLogicException Generic BizLogic Exception
+	 */
+	@Override
+	protected void postInsert(Collection<AbstractDomainObject> objCollection, DAO dao,
+			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		if (TitliResultGroup.isTitliConfigured)
-		{
-			for (AbstractDomainObject obj : objCollection)
-			{
-				refreshTitliSearchIndex(operation, obj);
-			}
-		}
+		super.postInsert(objCollection, dao, sessionDataBean);
+		refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, objCollection);
+
+	}
+
+	/**
+	 * This method gets called after insert method.
+	 * Any logic after inserting object in database can be included here.
+	 * @param obj The inserted object.
+	 * @param dao the dao object
+	 * @param sessionDataBean session specific data
+	 * @throws BizLogicException Generic BizLogic Exception
+	 * */
+	@Override
+	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+			throws BizLogicException
+	{
+		super.postInsert(obj, dao, sessionDataBean);
+		refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, obj);
 	}
 	
+	/**
+	 * This method gets called after update method.
+	 * Any logic after updating into database can be included here.
+	 * @param dao the dao object
+	 * @param currentObj The object to be updated.
+	 * @param oldObj The old object.
+	 * @param sessionDataBean session specific data
+	 * @throws BizLogicException Generic BizLogic Exception
+	 * */
+	@Override
+	protected void postUpdate(DAO dao, Object currentObj, Object oldObj,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
+		refreshTitliSearchIndex(TitliSearchConstants.TITLI_UPDATE_OPERATION, currentObj);
+	}
+	
+	/**
+	 * Deletes an object from the database.
+	 * @param obj The object to be deleted.
+	 * @param dao The dao object.
+	 * @throws BizLogicException Generic BizLogic Exception
+	 */
+	@Override
+	public void delete(Object obj) throws BizLogicException
+	{
+		super.delete(obj);
+		refreshTitliSearchIndex(TitliSearchConstants.TITLI_DELETE_OPERATION, obj);
+	}
 
 }

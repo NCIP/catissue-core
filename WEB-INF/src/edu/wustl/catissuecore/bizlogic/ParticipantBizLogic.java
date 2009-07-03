@@ -198,6 +198,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
 		updateCache(obj);
+		super.postInsert(obj, dao, sessionDataBean);
 		// Commented for removing the cp based cache. 
 		/*	
 			Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection.iterator();
@@ -282,6 +283,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
 	/**
@@ -1615,11 +1617,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	@Override
-	public void refreshTitliSearchIndex(String operation, Object obj)
+	public void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{
 		try
 		{
-			super.refreshTitliSearchIndex(operation, obj);
+			super.refreshTitliSearchIndexSingle(operation, obj);
 			Participant participant = (Participant) obj;
 			Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
@@ -1645,7 +1647,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 							{
 								SpecimenCollectionGroup scg = (SpecimenCollectionGroup) itscgCollection
 										.next();
-								super.refreshTitliSearchIndex(operation, scg);
+								super.refreshTitliSearchIndexSingle(operation, scg);
 								// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
 
 								// Fetch the Specimens in the given SCG explicitly
@@ -1657,7 +1659,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 									while (itspecimenCollection.hasNext())
 									{
 										Specimen specimen = (Specimen) itspecimenCollection.next();
-										super.refreshTitliSearchIndex(operation, specimen);
+										super.refreshTitliSearchIndexSingle(operation, specimen);
 									}
 								}
 

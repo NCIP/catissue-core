@@ -145,6 +145,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// }
 
 		}
+		super.postInsert(obj, dao, sessionDataBean);
 
 	}
 	/**
@@ -211,7 +212,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			}
 
 		}
-
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
 	/**

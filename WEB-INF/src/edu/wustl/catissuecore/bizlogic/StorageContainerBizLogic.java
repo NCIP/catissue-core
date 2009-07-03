@@ -416,7 +416,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} catch (Exception e) {
 			logger.debug(e.getMessage(), e);
 		}
-
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 
 	/**
@@ -986,6 +986,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 
 			}
+			
+			super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 
 		} catch (ApplicationException e) {
 			logger.error(e.getMessage(), e);

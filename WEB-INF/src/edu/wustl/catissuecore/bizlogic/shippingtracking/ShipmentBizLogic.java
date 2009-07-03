@@ -262,6 +262,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 				shipmentRequestBizLogic.update(dao, shipmentRequest, null,sessionDataBean);//bug 12557
 			}
 		}
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 	/**
 	 * @param arg0 the object of DAO class.

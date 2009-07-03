@@ -938,6 +938,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			throws BizLogicException
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+		super.postInsert(obj, dao, sessionDataBean);
 		// Commented by Geeta for removing the CP 
 		//ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		//participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
@@ -1214,6 +1215,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				participantRegCacheManager.deRegisterParticipant(newCPId, newParticipantId, newProtocolParticipantId);
 			}
 		*/
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
 	private String[] getDynamicGroups(AbstractDomainObject obj) throws BizLogicException

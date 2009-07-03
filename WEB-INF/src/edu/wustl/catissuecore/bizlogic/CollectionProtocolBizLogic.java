@@ -299,6 +299,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			collectionProtocol = (CollectionProtocol) obj;
 		}
+		
+		super.postInsert(obj, dao, sessionDataBean);
 		// Commented by Geeta for removing teh CP 
 		//ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 		//participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(), collectionProtocol.getTitle(), collectionProtocol.getShortTitle());
@@ -1271,7 +1273,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				participantRegistrationCacheManager.removeCP(collectionProtocol.getId());
 			}
 		 */
-
+		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
 	//	mandar : 31-Jan-07 ----------- consents tracking
