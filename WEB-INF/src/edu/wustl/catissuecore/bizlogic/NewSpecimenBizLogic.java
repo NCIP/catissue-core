@@ -3508,17 +3508,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			List list = dao.retrieve(Specimen.class.getCanonicalName(), "label", specimen
-					.getLabel());
-			if (!list.isEmpty())
+			List list = null;
+			// If label generation is off then label is null and it gives error as
+			//"Label is already exists"
+			if(specimen.getLabel()!=null)//bug 13100
 			{
-				for (int i = 0; i < list.size(); i++)
+				list = dao.retrieve(Specimen.class.getCanonicalName(), "label", specimen
+						.getLabel());
+				if (!list.isEmpty())
 				{
-					Specimen specimenObject = (Specimen) (list.get(i));
-					if (!specimenObject.getId().equals(specimen.getId()))
+					for (int i = 0; i < list.size(); i++)
 					{
-						throw getBizLogicException(null, "label.already.exits", specimen.getLabel());
+						Specimen specimenObject = (Specimen) (list.get(i));
+						if (!specimenObject.getId().equals(specimen.getId()))
+						{
+							throw getBizLogicException(null, "label.already.exits", specimen.getLabel());
 
+						}
 					}
 				}
 			}
@@ -4523,4 +4529,4 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			refreshTitliSearchIndexSingle(operation, obj);
 		}
 	}
-}
+	}

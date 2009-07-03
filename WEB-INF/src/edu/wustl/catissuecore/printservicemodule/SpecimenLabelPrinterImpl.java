@@ -82,7 +82,18 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter {
 	{
 		LinkedHashMap dataMap = new LinkedHashMap();
 		String label= specimen.getLabel();
+		//bug 13100
+		//if any property is null the Nullpointerexception is thrown while creating
+		//string data from Document in getStringFromDocument()
+		if(label == null)
+		{
+			label = " ";
+		}
 		String barcode = specimen.getBarcode();
+		if(barcode == null)
+		{
+			barcode = " ";
+		}
 		dataMap.put("class",specimen.getClassName());
 		dataMap.put("id",specimen.getId().toString());
 		dataMap.put("label",label);
