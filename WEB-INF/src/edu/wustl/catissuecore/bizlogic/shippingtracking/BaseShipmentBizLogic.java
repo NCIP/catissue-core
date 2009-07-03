@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
+import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
@@ -105,32 +106,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			{
 				logger.debug("failed to send email..");
 			}
-    		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-			if (specimenPositionList != null && !specimenPositionList.isEmpty())
-			{
-				for (SpecimenPosition specimenPosition : specimenPositionList)
-				{
-					StorageContainerUtil.insertSinglePositionInContainerMap(
-							specimenPosition.getStorageContainer(),
-							containerMap, specimenPosition
-									.getPositionDimensionOne().intValue(),
-							specimenPosition.getPositionDimensionTwo()
-									.intValue());
-				}
-			}
-			if (containerPositionList != null
-					&& !containerPositionList.isEmpty())
-			{
-				for (ContainerPosition containerPosition : containerPositionList)
-				{
-					StorageContainerUtil.insertSinglePositionInContainerMap(
-							containerPosition.getParentContainer(),
-							containerMap, containerPosition
-									.getPositionDimensionOne().intValue(),
-							containerPosition.getPositionDimensionTwo()
-									.intValue());
-				}
-			}
+			insertSinglePositionInContainerMap(specimenPositionList,
+					containerPositionList);
 		}
 		catch (DAOException daoException)
 		{
@@ -1199,32 +1176,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			shipment.getContainerCollection().addAll(containerCollection);
 			this.validateContainerInShipment(oldShipment, shipment);// bug 11410
 			dao.update(shipment);
-			Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-			if (specimenPositionList != null && !specimenPositionList.isEmpty())
-			{
-				for (SpecimenPosition specimenPosition : specimenPositionList)
-				{
-					StorageContainerUtil.insertSinglePositionInContainerMap(
-							specimenPosition.getStorageContainer(),
-							containerMap, specimenPosition
-									.getPositionDimensionOne().intValue(),
-							specimenPosition.getPositionDimensionTwo()
-									.intValue());
-				}
-			}
-			if (containerPositionList != null
-					&& !containerPositionList.isEmpty())
-			{
-				for (ContainerPosition containerPosition : containerPositionList)
-				{
-					StorageContainerUtil.insertSinglePositionInContainerMap(
-							containerPosition.getParentContainer(),
-							containerMap, containerPosition
-									.getPositionDimensionOne().intValue(),
-							containerPosition.getPositionDimensionTwo()
-									.intValue());
-				}
-			}
+			insertSinglePositionInContainerMap(specimenPositionList,
+					containerPositionList);
 
 			// Add mailing functionality
 			boolean mailStatus = sendNotification(shipment, sessionDataBean);
@@ -1513,5 +1466,41 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return Constants.ADD_EDIT_SHIPMENT;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param specimenPositionList
+	 * @param containerPositionList
+	 */
+	public static void  insertSinglePositionInContainerMap(List<SpecimenPosition> specimenPositionList,List<ContainerPosition> containerPositionList){
+		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+		if (specimenPositionList != null && !specimenPositionList.isEmpty())
+		{
+			for (SpecimenPosition specimenPosition : specimenPositionList)
+			{
+				StorageContainerUtil.insertSinglePositionInContainerMap(
+						specimenPosition.getStorageContainer(),
+						containerMap, specimenPosition
+								.getPositionDimensionOne().intValue(),
+						specimenPosition.getPositionDimensionTwo()
+								.intValue());
+			}
+		}
+		if (containerPositionList != null
+				&& !containerPositionList.isEmpty())
+		{
+			for (ContainerPosition containerPosition : containerPositionList)
+			{
+				StorageContainerUtil.insertSinglePositionInContainerMap(
+						containerPosition.getParentContainer(),
+						containerMap, containerPosition
+								.getPositionDimensionOne().intValue(),
+						containerPosition.getPositionDimensionTwo()
+								.intValue());
+			}
+		}
 	}
 }
