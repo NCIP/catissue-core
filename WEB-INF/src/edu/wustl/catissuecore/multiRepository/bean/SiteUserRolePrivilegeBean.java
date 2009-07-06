@@ -1,6 +1,7 @@
 /**
- * 
+ *
  */
+
 package edu.wustl.catissuecore.multiRepository.bean;
 
 import java.util.List;
@@ -10,82 +11,217 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.NameValueBean;
 
-
 /**
  * @author supriya_dankh
- * A java object used to populate ViewSitePrivilegesSummar.jsp. 
+ * A java object used to populate ViewSitePrivilegesSummar.jsp.
  */
 public class SiteUserRolePrivilegeBean
 {
-	private List<Site> siteList ;
+
+	/**
+	 * Specify site List.
+	 */
+	private List<Site> siteList;
+	/**
+	 * Specify Instance of CollectionProtocol.
+	 */
 	private CollectionProtocol collectionProtocol;
-	private User user ;
-    private NameValueBean role;
-    private List<NameValueBean> privileges;
-    private boolean isAllCPChecked = false;
-    private boolean isRowDeleted = false;
-    private boolean isRowEdited = true;
-//    private boolean isRowAddedInEditMode= false;
-    private boolean isCustChecked= false;
-    
-//	public boolean isRowAddedInEditMode() {
-//		return isRowAddedInEditMode;
-//	}
-//	public void setRowAddedInEditMode(boolean isRowAddedInEditMode) {
-//		this.isRowAddedInEditMode = isRowAddedInEditMode;
-//	}
-	public CollectionProtocol getCollectionProtocol() {
+	/**
+	 * Specify Instance of User.
+	 */
+	private User user;
+	/**
+	 *  Specify Instance of NameValueBean for role.
+	 */
+	private NameValueBean role;
+	/**
+	 * Specify privileges list.
+	 */
+	private List<NameValueBean> privileges;
+	/**
+	 * Specify is All CP Checked.
+	 */
+	private boolean isAllCPChecked = false;
+	/**
+	 *  Specify isRowDeleted.
+	 */
+	private boolean isRowDeleted = false;
+	/**
+	 *  Specify isRowEdited.
+	 */
+	private boolean isRowEdited = true;
+	//    private boolean isRowAddedInEditMode= false;
+	/**
+	 * Specify isCustChecked.
+	 */
+	private boolean isCustChecked = false;
+
+	//	public boolean isRowAddedInEditMode() {
+	//		return isRowAddedInEditMode;
+	//	}
+	//	public void setRowAddedInEditMode(boolean isRowAddedInEditMode) {
+	//		this.isRowAddedInEditMode = isRowAddedInEditMode;
+	//	}
+
+	/**
+	 * This method returns collectionProtocol.
+	 * @return collectionProtocol.
+	 */
+	public CollectionProtocol getCollectionProtocol()
+	{
 		return collectionProtocol;
 	}
-	public void setCollectionProtocol(CollectionProtocol collectionProtocol) {
+
+	/**
+	 * This method sets collectionProtocol.
+	 * @param collectionProtocol CollectionProtocol object to be set.
+	 */
+	public void setCollectionProtocol(CollectionProtocol collectionProtocol)
+	{
 		this.collectionProtocol = collectionProtocol;
 	}
-	public List<NameValueBean> getPrivileges() {
+
+	/**
+	 * This method get list of privileges.
+	 * @return privileges.
+	 */
+	public List<NameValueBean> getPrivileges()
+	{
 		return privileges;
 	}
-	public void setPrivileges(List<NameValueBean> privileges) {
+
+	/**
+	 * This method set privileges.
+	 * @param privileges privileges to be set.
+	 */
+	public void setPrivileges(List<NameValueBean> privileges)
+	{
 		this.privileges = privileges;
 	}
-	public NameValueBean getRole() {
+
+	/**
+	 * This method returns role.
+	 * @return role.
+	 */
+	public NameValueBean getRole()
+	{
 		return role;
 	}
-	public void setRole(NameValueBean role) {
+
+	/**
+	 * This method set role.
+	 * @param role role to be set.
+	 */
+	public void setRole(NameValueBean role)
+	{
 		this.role = role;
 	}
-	public List<Site> getSiteList() {
+
+	/**
+	 * This method get site list.
+	 * @return site List
+	 */
+	public List<Site> getSiteList()
+	{
 		return siteList;
 	}
-	public void setSiteList(List<Site> siteList) {
+
+	/**
+	 * This method set site List.
+	 * @param siteList site List to be set.
+	 */
+	public void setSiteList(List<Site> siteList)
+	{
 		this.siteList = siteList;
 	}
-	public User getUser() {
+
+	/**
+	 * This method returns user.
+	 * @return user
+	 */
+	public User getUser()
+	{
 		return user;
 	}
-	public void setUser(User user) {
+
+	/**
+	 * This method set user.
+	 * @param user user to be set.
+	 */
+	public void setUser(User user)
+	{
 		this.user = user;
 	}
-	public boolean isAllCPChecked() {
+
+	/**
+	 * This method returns is all CP checked.
+	 * @return isAllCPChecked boolean value.
+	 */
+	public boolean isAllCPChecked()
+	{
 		return isAllCPChecked;
 	}
-	public void setAllCPChecked(boolean isAllCPChecked) {
+
+	/**
+	 * This method set AllCPChecked.
+	 * @param isAllCPChecked is All CP Checked.
+	 */
+	public void setAllCPChecked(boolean isAllCPChecked)
+	{
 		this.isAllCPChecked = isAllCPChecked;
 	}
-	public boolean isRowDeleted() {
+
+	/**
+	 * This method returns isRowDeleted.
+	 * @return isRowDeleted.
+	 */
+	public boolean isRowDeleted()
+	{
 		return isRowDeleted;
 	}
-	public void setRowDeleted(boolean isRowDeleted) {
+
+	/**
+	 * This method set isRowDeleted.
+	 * @param isRowDeleted is Row Deleted.
+	 */
+	public void setRowDeleted(boolean isRowDeleted)
+	{
 		this.isRowDeleted = isRowDeleted;
-	} 
-	public boolean isRowEdited() {
+	}
+
+	/**
+	 * This method returns is Row Edited.
+	 * @return isRowEdited.
+	 */
+	public boolean isRowEdited()
+	{
 		return isRowEdited;
 	}
-	public void setRowEdited(boolean isRowEdited) {
+
+	/**
+	 * This method set isRowEdited.
+	 * @param isRowEdited is Row Edited.
+	 */
+	public void setRowEdited(boolean isRowEdited)
+	{
 		this.isRowEdited = isRowEdited;
 	}
-	public boolean isCustChecked() {
+
+	/**
+	 * This method returns isCustChecked.
+	 * @return isCustChecked.
+	 */
+	public boolean isCustChecked()
+	{
 		return isCustChecked;
 	}
-	public void setCustChecked(boolean isCustChecked) {
+
+	/**
+	 * This method set isCustChecked.
+	 * @param isCustChecked isCustChecked.
+	 */
+	public void setCustChecked(boolean isCustChecked)
+	{
 		this.isCustChecked = isCustChecked;
 	}
 }
