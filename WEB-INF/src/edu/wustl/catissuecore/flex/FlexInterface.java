@@ -1915,24 +1915,19 @@ public class FlexInterface
 	 * @param cpId :Collection protocol Id
 	 * @return the list of Participants
 	 */
-	public List getParticipantsList(String cpId, String cpTitle)
+	public List getParticipantsList(String cpId, String cpTitle) throws ApplicationException
 	{
 		//Setting the cp title in session
 		session = flex.messaging.FlexContext.getHttpRequest().getSession();
 		session.setAttribute("cpTitle", cpTitle);
 		List<CpAndParticipentsBean> participantsList = new ArrayList<CpAndParticipentsBean>();
-		try
-		{
+		
 			// Removed the cp based cache : Geeta
 			CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 			participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long
 					.parseLong(cpId));
-		}
-		catch (BizLogicException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
 		//Sorting the participants
 		ParticipantComparator partComp = new ParticipantComparator();
 		Collections.sort(participantsList, partComp);
