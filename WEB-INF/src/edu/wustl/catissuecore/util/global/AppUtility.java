@@ -1281,7 +1281,7 @@ public class AppUtility
 		return list;
 	}
 
-	public static Long getLastAvailableValue(String sql)
+	public static Long getLastAvailableValue(String sql) throws ApplicationException
 	{
 		Long noOfRecords = new Long("0");
 		List list = null;
@@ -1289,13 +1289,12 @@ public class AppUtility
 		try
 		{
 			list = executeSQLQuery(sql.toString());
-			if (list != null && list.size() > 0)
+		    if (list != null && list.size() > 0)
 			{
-				if(records!=null && records.size()>0){
 					records = (List) list.get(0);
-					noOfRecords = new Long((String) records.get(0));
-				}
-			
+					if(records!=null  && records.size()>0){
+						noOfRecords = new Long((String) records.get(0));
+					}
 			}
 		}
 		catch (DAOException daoExp)
@@ -1305,7 +1304,7 @@ public class AppUtility
 		catch (ApplicationException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationException(e.getErrorKey(), e, e.getMessage());
 		}
 		return noOfRecords;
 	}
