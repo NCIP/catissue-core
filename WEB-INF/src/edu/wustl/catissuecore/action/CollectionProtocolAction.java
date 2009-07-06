@@ -202,15 +202,23 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (collectionProtocolForm != null)
 		{
 			currentCollectionProtocolDate = collectionProtocolForm.getStartDate();
-			if (currentCollectionProtocolDate == null) currentCollectionProtocolDate = "";
+			if (currentCollectionProtocolDate == null)
+				{
+				currentCollectionProtocolDate = "";
+				}
 			collectionProtocolEndDate = collectionProtocolForm.getEndDate();
-			if (collectionProtocolEndDate == null) collectionProtocolEndDate = "";
+			if (collectionProtocolEndDate == null)
+				{
+				collectionProtocolEndDate = "";
+				}
 		}
 		String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
 		if (reqPath != null)
+		{
 			appendingPath = reqPath
 					+ "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+		}
 		if (!operation.equals("add"))
 		{
 			if (collectionProtocolForm != null)
@@ -227,7 +235,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			editViewButton = "buttons." + Constants.VIEW;
 			formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;
 			if (pageOf.equals(Constants.QUERY))
+			{
 				formName = Constants.QUERY_COLLECTION_PROTOCOL_EDIT_ACTION + "?pageOf=" + pageOf;
+			}
 
 		}
 		else

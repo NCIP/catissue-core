@@ -850,7 +850,9 @@ public class ParticipantAction extends SecureAction
 		DAO dao = null;
 
 		if (participantForm.getCpId() != 0L && participantForm.getCpId() != -1L)
+		{
 			return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + participantForm.getCpId();
+		}
 
 		else if (participantForm.getCpId() == -1L && participantForm.getId() != 0L)
 		{
@@ -897,7 +899,9 @@ public class ParticipantAction extends SecureAction
 
 		}
 		else
+		{
 			return null;
+		}
 
 	}
 }

@@ -77,7 +77,9 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		// ----------For Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
+		{
 			request.setAttribute(Constants.REQ_PATH, reqPath);
+		}
 		logger.debug("DP Action reqPath : ---- " + reqPath);
 
 		// Mandar : code for Addnew Coordinator data 24-Jan-06

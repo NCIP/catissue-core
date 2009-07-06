@@ -138,7 +138,9 @@ public class ConflictViewAction extends SecureAction
 			session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
 		}
 		else
+		{
 			recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+		}
 
 		PagenatedResultData pagenatedResultData = null;
 		pagenatedResultData = AppUtility.executeForPagination(sqlString, getSessionData(request),

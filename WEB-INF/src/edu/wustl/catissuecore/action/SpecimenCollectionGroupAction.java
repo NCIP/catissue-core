@@ -1486,10 +1486,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
 		if (specimenCollectionGroupForm.getCollectionProtocolId() != 0L
 				&& specimenCollectionGroupForm.getCollectionProtocolId() != -1L)
+		{
 			return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_"
 					+ specimenCollectionGroupForm.getCollectionProtocolId();
+		}
 		else
+		{
 			return null;
+		}
 
 	}
 }

@@ -54,9 +54,13 @@ public class ProtocolEventDetailsAction extends BaseAction
 		String key = (String) request.getParameter(Constants.EVENT_KEY);
 		String eventKey = null;
 		if (key == null)
+		{
 			eventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
+		}
 		else
+		{
 			eventKey = key;
+		}
 		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		String checkForSpecimen = null;
 		if (selectedNode != null)

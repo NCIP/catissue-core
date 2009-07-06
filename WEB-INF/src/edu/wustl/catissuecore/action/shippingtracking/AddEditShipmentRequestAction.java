@@ -136,7 +136,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 		}
 		//		catch (UserNotAuthorizedException authorizedException)
 		//		{
-		//			errors.add(ActionErrors.GLOBAL_ERROR, 
+		//			errors.add(ActionErrors.GLOBAL_ERROR,
 		//new ActionError(authorizedException.getMessage()));
 		//		}
 		//to be verified...

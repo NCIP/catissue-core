@@ -32,7 +32,6 @@ import edu.wustl.security.privilege.PrivilegeManager;
  */
 public class DisplayAnnotationDataEntryPageAction extends BaseAction
 {
-
 	/*
 	 * private transient Logger logger = Logger
 	 * .getCommonLogger(DisplayAnnotationDataEntryPageAction.class);
@@ -45,6 +44,20 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	 * .ActionMapping, org.apache.struts.action.ActionForm,
 	 * javax.servlet.http.HttpServletRequest,
 	 * javax.servlet.http.HttpServletResponse)
+	 */
+	/**
+	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,

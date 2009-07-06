@@ -98,6 +98,8 @@ public class SaveOrderInitAction extends BaseAction
 			return mapping.findForward("success");
 		}
 		else
+		{
 			return mapping.findForward("failure");
+		}
 	}
 }

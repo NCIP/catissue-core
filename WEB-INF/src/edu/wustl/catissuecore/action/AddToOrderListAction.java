@@ -317,12 +317,10 @@ public class AddToOrderListAction extends BaseAction
 					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
 							+ "_specimenName"));
 			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_availableQuantity",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"
-							+ strSelectedItems[j]
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
 							+ "_availableQuantity"));
 			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_requestedQuantity",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"
-							+ strSelectedItems[j]
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
 							+ "_requestedQuantity"));
 			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_description",
 					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]

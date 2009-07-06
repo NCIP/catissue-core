@@ -389,7 +389,9 @@ public class NewShopingCartAction extends BaseAction
 				}
 			}
 			else
+			{
 				cartList[j] = null;
+			}
 
 		}
 

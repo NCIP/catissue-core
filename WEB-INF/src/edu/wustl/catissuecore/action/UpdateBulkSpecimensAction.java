@@ -146,7 +146,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 				request.setAttribute("printMultiple", "1");
 				if (request.getParameter("pageOf") != null)
+				{
 					request.setAttribute("pageOf", request.getParameter("pageOf"));
+				}
 				// bug 12656 start
 				if (specimenSummaryForm.getForwardTo() != null
 						&& !specimenSummaryForm.getForwardTo().equals(
@@ -204,7 +206,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 
 			}
 			if (request.getParameter("pageOf") != null)
+			{
 				return mapping.findForward(request.getParameter("pageOf"));
+			}
 
 			return mapping.findForward(Constants.SUCCESS);
 		}
@@ -252,7 +256,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			if (request.getParameter("pageOf") != null)
+			{
 				return mapping.findForward("multipleSpWithMenuFaliure");
+			}
 			return mapping.findForward(Constants.FAILURE);
 		}
 	}

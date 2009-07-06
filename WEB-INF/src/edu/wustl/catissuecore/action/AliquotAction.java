@@ -546,7 +546,9 @@ public class AliquotAction extends SecureAction
 												.getValue("specimen.quantity")));
 							}
 							else
+							{
 								totalQuantity += Double.parseDouble(value);
+							}
 						}
 					}
 					// Resolved bug# 4314 Virender

@@ -332,7 +332,9 @@ public class TitliFetchAction extends Action
 				session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
 			}
 			else
+			{
 				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+			}
 
 			pagenatedResultData = query.execute(getSessionData(request), isSecureExecute,
 					queryResultObjectDataMap, query.hasConditionOnIdentifiedField(), 0,

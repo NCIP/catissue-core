@@ -380,7 +380,9 @@ public class UserAction extends SecureAction
 		// ------------- add new
 		logger.debug("USerAction redirect :---------- " + reqPath);
 		if (openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
+		{
 			target = Constants.OPEN_PAGE_IN_CPFRAME;
+		}
 		return mapping.findForward(target);
 	}
 	/**

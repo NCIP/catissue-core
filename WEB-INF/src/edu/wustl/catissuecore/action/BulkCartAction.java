@@ -238,7 +238,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 	{
 		String target;
 		if (session.getAttribute(Constants.SPECIMEN_ID) != null)
+		{
 			session.removeAttribute(Constants.SPECIMEN_ID);
+		}
 		QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
@@ -380,7 +382,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 					entityName = Constants.SPECIMEN_CLASSNAME;
 				}
 				if (Constants.SPECIMEN_CLASSNAME.equals(entityName))
+				{
 					tempEntityIdsList = bizLogic.getListOfOrderItem(tempEntityIdsList);
+				}
 				Set < String > idMap = entityIdsMap.get(entityName);
 				idMap.addAll(tempEntityIdsList);
 			}

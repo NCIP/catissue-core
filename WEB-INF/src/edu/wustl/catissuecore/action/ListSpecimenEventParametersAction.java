@@ -66,7 +66,6 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class. Initializes the various
 	 * fields in SpecimenEventParameters.jsp Page.
-	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form

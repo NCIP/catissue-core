@@ -148,7 +148,10 @@ public class RequestDetailsAction extends BaseAction
 		{
 			Object obj = request.getSession().getAttribute("REQUEST_DETAILS_FORM");
 			RequestDetailsForm rDForm = null;
-			if (obj != null) rDForm = (RequestDetailsForm) obj;
+			if (obj != null)
+				{
+				rDForm = (RequestDetailsForm) obj;
+				}
 			requestId = "" + rDForm.getId();
 			orderDetailsId = requestId;
 			requestDetailsForm.setId((new Long(requestId)).longValue());
@@ -1072,8 +1075,10 @@ public class RequestDetailsAction extends BaseAction
 		// @FIX ME
 
 		if (existingSpecimenorderItem.getRequestedQuantity() != null)
+		{
 			requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity()
 					.toString());
+		}
 		requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen()
 				.getAvailableQuantity().toString());
 

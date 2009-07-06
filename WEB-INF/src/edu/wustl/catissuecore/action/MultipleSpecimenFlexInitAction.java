@@ -52,7 +52,9 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 
 		String mode = Constants.ADD;
 		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
+		{
 			mode = Constants.EDIT;
+		}
 
 		String showParentSelection = "false";
 		String showLabel = "true";

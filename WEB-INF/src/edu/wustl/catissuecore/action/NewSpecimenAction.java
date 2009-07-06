@@ -550,7 +550,9 @@ public class NewSpecimenAction extends SecureAction
 		 * specimens
 		 */
 		if (operation.equals(Constants.ADD))
+		{
 			populateEventsFromScg(specimenCollectionGroup, specimenForm);
+		}
 		Object scgForm = request.getAttribute("scgForm");
 		if (scgForm != null)
 		{

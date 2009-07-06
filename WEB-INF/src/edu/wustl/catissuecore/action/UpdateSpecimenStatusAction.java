@@ -231,7 +231,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			saveErrors(request, actionErrors);
 			saveToken(request);
 			String pageOf = request.getParameter(Constants.PAGE_OF);
-			if (pageOf != null) request.setAttribute(Constants.PAGE_OF, pageOf);
+			if (pageOf != null)
+				{
+				request.setAttribute(Constants.PAGE_OF, pageOf);
+				}
 			return mapping.findForward(Constants.FAILURE);
 		}
 
@@ -497,9 +500,13 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		specimen.setSpecimenClass(specimenVO.getClassName());
 		specimen.setSpecimenType(specimenVO.getType());
 		if ("".equals(specimenVO.getDisplayName()))
+		{
 			specimen.setLabel(null);
+		}
 		else
+		{
 			specimen.setLabel(specimenVO.getDisplayName());
+		}
 
 		specimen.setBarcode(specimenVO.getBarCode());
 

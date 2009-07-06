@@ -117,7 +117,9 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 				return (ActionForward) method.invoke(this, args);
 			}
 			else
+			{
 				return null;
+			}
 		}
 		return null;
 	}

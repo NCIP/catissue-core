@@ -14,7 +14,12 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class BulkDisposalEventsAction extends BulkOperationAction
 {
-
+	/**
+	 * @param eventParametersForm : eventParametersForm
+	 * @param specimenRow : specimenRow
+	 * @param specimenId : specimenId
+	 * @param request : request
+	 */
 	@Override
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
 			String specimenId, HttpServletRequest request)

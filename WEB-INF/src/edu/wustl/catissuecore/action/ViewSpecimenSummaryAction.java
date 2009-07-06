@@ -122,7 +122,9 @@ public class ViewSpecimenSummaryAction extends Action
 			}
 			// bug 12656
 			if (request.getParameter("pageOf") != null)
+			{
 				request.setAttribute("pageOf", request.getParameter("pageOf"));
+			}
 
 			if (eventId == null)
 			{

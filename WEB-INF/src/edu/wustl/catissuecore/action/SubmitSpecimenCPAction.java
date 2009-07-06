@@ -162,7 +162,10 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 			target = Constants.SUCCESS;
 
-			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu")) target = pageOf;
+			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
+				{
+				target = pageOf;
+				}
 
 			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 		}

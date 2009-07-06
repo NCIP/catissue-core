@@ -112,7 +112,10 @@ public class SpreadsheetExportAction extends BaseAction
 				recordsPerPage, pageNum, querySessionData);
 		List < List < String >> dataList = (List < List < String >>) session
 				.getAttribute(Constants.EXPORT_DATA_LIST);
-		if (dataList == null) dataList = dataList1;
+		if (dataList == null)
+			{
+			dataList = dataList1;
+			}
 		// List<String> entityIdsList = (List<String>)
 		// session.getAttribute(Constants.ENTITY_IDS_LIST);
 		Map < Integer , List < String >> entityIdsMap = (Map < Integer , List < String >>) session

@@ -258,10 +258,13 @@ public class LoginAction extends Action
 		String roleName = securityManager.getRoleName(loginId);
 		String modifiedRolename = "";
 		if (roleName == null || roleName.equals(""))
-
+		{
 			modifiedRolename = "pageOfScientist";
+		}
 		else
+		{
 			modifiedRolename = "pageOfAdministrator";
+		}
 		// String modifiedRolename =
 		// roleName.substring(0,1).toUpperCase()+roleName
 		// .substring(1,roleName.length()).toLowerCase();

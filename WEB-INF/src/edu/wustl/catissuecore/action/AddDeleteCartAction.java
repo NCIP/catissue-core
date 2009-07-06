@@ -45,6 +45,14 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 	 *      javax.servlet.http.HttpServletRequest,
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
+	/**
+	 * @param mapping : mapping
+	 * @param form : form
+	 * @param request : request
+	 * @param response : response
+	 * @throws Exception : Exception
+	 * @return ActionForward
+	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -67,7 +75,9 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		List < AttributeInterface > attributeList = null;
 		if (selectedColumnMetaData != null)
+		{
 			attributeList = selectedColumnMetaData.getAttributeList();
+		}
 
 		// Check if user wants to add in Shopping Cart.
 		if (Constants.ADD.equals(operation))
@@ -76,14 +86,20 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 
 		}// Check if user wants to delete record from cart.
 		else if (Constants.DELETE.equals(operation))
+		{
 			target = delete(request, target, getCheckboxValues(searchForm));
+		}
 
 		//'id' attribute of the orderable entity is not included in view.
 		String message;
 		if (selectedColumnMetaData == null)
+		{
 			message = null;
+		}
 		else
+		{
 			message = getMessageIfIdNotPresentForOrderableEntities(selectedColumnMetaData, cart);
+		}
 		session.setAttribute(Constants.VALIDATION_MESSAGE_FOR_ORDERING, message);
 		request.setAttribute(Constants.PAGE_OF, AQConstants.PAGEOF_QUERY_MODULE);
 		return mapping.findForward(target);
@@ -172,9 +188,13 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		String target;
 		List < Integer > chkBoxValues;
 		if (Constants.TRUE.equals(isCheckAllAcrossAllChecked))
+		{
 			chkBoxValues = null;
+		}
 		else
+		{
 			chkBoxValues = getCheckboxValues(searchForm);
+		}
 		target = addToCart(request, chkBoxValues, cart, attributeList);
 
 		// if My List is not empty sets the value to false.
@@ -278,9 +298,13 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		int duplicateRecordCount = 0;
 
 		if (chkBoxValues != null)
+		{
 			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
+		}
 		else
+		{
 			duplicateRecordCount = dataList.size() - addRecordCount;
+		}
 		//ActionErrors changed to ActionMessages
 		ActionMessages messages = new ActionMessages();
 		// Check if no. of duplicate records is not zero then set a error message.
@@ -300,8 +324,6 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"shoppingcart.duplicateObjError", addRecordCount, duplicateRecordCount));
 		}
-		else
-			;
 
 		session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);

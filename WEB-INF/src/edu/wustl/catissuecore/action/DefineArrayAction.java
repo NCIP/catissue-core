@@ -126,7 +126,10 @@ public class DefineArrayAction extends BaseAction
 			String typeOf = null;
 			typeOf = request.getParameter("typeOf");
 
-			if (typeOf == null) typeOf = request.getAttribute("typeOf").toString();
+			if (typeOf == null)
+				{
+				typeOf = request.getAttribute("typeOf").toString();
+				}
 
 			request.setAttribute("typeOf", typeOf);
 
@@ -134,6 +137,8 @@ public class DefineArrayAction extends BaseAction
 			return mapping.findForward("success");
 		}
 		else
+		{
 			return mapping.findForward("failure");
+		}
 	}
 }

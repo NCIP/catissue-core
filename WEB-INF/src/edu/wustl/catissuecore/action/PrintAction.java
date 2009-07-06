@@ -189,9 +189,13 @@ public class PrintAction extends Action
 				setStatusMessage(printStauts, request);
 
 				if (request.getAttribute("pageOf") != null)
+				{
 					nextforwardTo = request.getAttribute("pageOf").toString();
+				}
 				else
+				{
 					nextforwardTo = Constants.SUCCESS;
+				}
 			}
 			// For Anti. specimen page
 			if (forwardToPrintMap != null && forwardToPrintMap.size() > 0

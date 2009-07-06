@@ -108,11 +108,16 @@ public class DefineArraySubmitAction extends BaseAction
 			}
 		}
 		else
+		{
 			defineArrayFormList = new ArrayList();
+		}
 
 		String typeOf = request.getParameter("typeOf");
 		request.setAttribute("typeOf", typeOf);
-		if (target.equals("success")) defineArrayFormList.add(defineArray);
+		if (target.equals("success"))
+			{
+			defineArrayFormList.add(defineArray);
+			}
 		session.setAttribute("DefineArrayFormObjects", defineArrayFormList);
 		return mapping.findForward(target);
 	}

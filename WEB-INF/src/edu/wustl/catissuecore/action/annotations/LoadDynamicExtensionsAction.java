@@ -35,6 +35,19 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	 * .ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.
 	 * http.HttpServletResponse)
 	 */
+	/**
+	 * @param mapping
+	 *            object of ActionMapping
+	 * @param form
+	 *            object of ActionForm
+	 * @param request
+	 *            object of HttpServletRequest
+	 * @param response
+	 *            object of HttpServletResponse
+	 * @throws Exception
+	 *             generic exception
+	 * @return ActionForward : ActionForward
+	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -77,7 +90,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
 		SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
 				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 
-		String userId = sessionbean.getUserId().toString(); 
+		String userId = sessionbean.getUserId().toString();
 		//request.getSession().getAttribute("SESSION_DATA").toString();
 		String isAuthenticatedUser = "false";
 		if (userId != null)

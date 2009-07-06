@@ -2,7 +2,7 @@
  * <p>Title: ShipmentReceivedAction Class.</p>
  * <p>Description:ShipmentReceivedAction contains all the ShipmentReceivedId.</p>
  * Copyright: Copyright (c) year 2008.
- * Company: 
+ * Company:
  * @author vijay_chittem .
  * @version 1.00.
  * Created on July 29th 2008.

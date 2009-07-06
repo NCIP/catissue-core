@@ -186,8 +186,14 @@ public class ShowStorageGridViewAction extends BaseAction
 			String oneDimLabel = storageType.getOneDimensionLabel();
 			String twoDimLabel = storageType.getTwoDimensionLabel();
 
-			if (oneDimLabel == null) oneDimLabel = " ";
-			if (twoDimLabel == null) twoDimLabel = " ";
+			if (oneDimLabel == null)
+				{
+				oneDimLabel = " ";
+				}
+			if (twoDimLabel == null)
+				{
+				twoDimLabel = " ";
+				}
 
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
@@ -427,7 +433,9 @@ public class ShowStorageGridViewAction extends BaseAction
 						storageContainer);
 			}
 			else
+			{
 				enablePage = false;
+			}
 		}
 
 		// checking for sepecimen class.
@@ -435,9 +443,13 @@ public class ShowStorageGridViewAction extends BaseAction
 		if (enablePage && holdspecimenClass != null)
 		{
 			if (!holdspecimenClass.equals(""))
+			{
 				enablePage = bizLogic.canHoldSpecimenClass(holdspecimenClass, storageContainer);
+			}
 			else
+			{
 				enablePage = false;
+			}
 		}
 
 		// checking for specimen array type.
@@ -452,11 +464,15 @@ public class ShowStorageGridViewAction extends BaseAction
 						storageContainer);
 			}
 			else
+			{
 				enablePage = false;
+			}
 		}
 
 		if (enablePage)
+		{
 			request.setAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE, Constants.TRUE);
+		}
 	}
 
 	/**

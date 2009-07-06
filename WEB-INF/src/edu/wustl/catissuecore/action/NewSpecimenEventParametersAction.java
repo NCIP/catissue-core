@@ -86,7 +86,9 @@ public class NewSpecimenEventParametersAction extends SecureAction
 
 			String identifier = (String) request.getAttribute("specimenIdentifier");
 			if (identifier == null)
+			{
 				identifier = (String) request.getParameter("specimenIdentifier");
+			}
 
 			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 

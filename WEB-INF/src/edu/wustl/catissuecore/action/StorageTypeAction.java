@@ -162,7 +162,10 @@ public class StorageTypeAction extends SecureAction
 		// ------------- add new
 
 		AbstractActionForm aForm = (AbstractActionForm) form;
-		if (reqPath != null && aForm != null) aForm.setRedirectTo(reqPath);
+		if (reqPath != null && aForm != null)
+			{
+			aForm.setRedirectTo(reqPath);
+			}
 
 		logger.debug("StorageTypeAction redirect :---------- " + reqPath);
 

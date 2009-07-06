@@ -220,7 +220,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 
 						collectionProtocolId =
 							newSpecimenBizLogic.getObjectId(dao, specimen);
-						if (collectionProtocolId != null 
+						if (collectionProtocolId != null
 								&& !collectionProtocolId.trim().equals(""))
 						{
 							collectionProtocolId = collectionProtocolId.split("_")[1];

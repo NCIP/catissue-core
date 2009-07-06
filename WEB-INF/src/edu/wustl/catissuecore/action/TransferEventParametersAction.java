@@ -111,7 +111,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			String identifier = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			if (identifier == null)
+			{
 				identifier = (String) request.getParameter(Constants.SPECIMEN_ID);
+			}
 
 			logger.debug("\t\t*******************************SpecimenID : " + identifier);
 			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
@@ -306,11 +308,17 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		// boolean buttonDisabled = true;
 
 		String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
-		if (className == null) className = "";
+		if (className == null)
+			{
+			className = "";
+			}
 
 		String collectionProtocolId = (String) request
 				.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-		if (collectionProtocolId == null) collectionProtocolId = "";
+		if (collectionProtocolId == null)
+			{
+			collectionProtocolId = "";
+			}
 
 		String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=" +
 				"selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"

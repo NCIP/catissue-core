@@ -173,7 +173,9 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 			form.setCollectionProtocolShortTitle(shortTitle);
 			if (studyCalEvtPoint != null)
+			{
 				form.setStudyCalEvtPoint(studyCalEvtPoint.toString() + " Days");
+			}
 
 			form.setCollectionProtocolID(cpId);
 		}
@@ -216,9 +218,13 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	{
 		boolean isParticipantRegToCP = chkParticipantRegToCP(participantId, cpId, form);
 		if (isParticipantRegToCP)
+		{
 			return Constants.EDIT;
+		}
 		else
+		{
 			return Constants.ADD;
+		}
 
 	}
 	/*
@@ -320,7 +326,10 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		if (regList != null && !regList.isEmpty())
 		{
 			String PPI = (String) regList.get(0);
-			if (PPI != null) form.setParticipantProtocolID(PPI);
+			if (PPI != null)
+				{
+				form.setParticipantProtocolID(PPI);
+				}
 		}
 	}
 

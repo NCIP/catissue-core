@@ -324,13 +324,19 @@ public class ShoppingCartAction extends BaseAction
 			else
 			{
 				if (session.getAttribute("RequestedBioSpecimens") != null)
+				{
 					session.removeAttribute("RequestedBioSpecimens");
+				}
 
 				if (session.getAttribute("OrderForm") != null)
+				{
 					session.removeAttribute("OrderForm");
+				}
 
 				if (session.getAttribute("DefineArrayFormObjects") != null)
+				{
 					session.removeAttribute("DefineArrayFormObjects");
+				}
 			}
 			request.setAttribute(Constants.IS_SPECIMENID_PRESENT, "true");
 		}
@@ -371,9 +377,13 @@ public class ShoppingCartAction extends BaseAction
 					rowData.add(specimen.getClassName());
 
 					if (specimen.getSpecimenType() != null)
+					{
 						rowData.add(specimen.getSpecimenType());
+					}
 					else
+					{
 						rowData.add("");
+					}
 
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSite());
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSide());
