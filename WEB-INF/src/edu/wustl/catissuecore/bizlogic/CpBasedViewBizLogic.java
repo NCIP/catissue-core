@@ -213,7 +213,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 */
 
 	public List<CpAndParticipentsBean> getRegisteredParticipantInfoCollection(Long cpId)
-			throws BizLogicException
+			throws BizLogicException,ApplicationException
 	{
 		List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
 		StringBuffer hql = new StringBuffer();
@@ -257,6 +257,9 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		catch (ApplicationException e)
 		{
 			// TODO Auto-generated catch block
+			throw new ApplicationException(e.getErrorKey(),e,e.getMsgValues());
+		}
+		catch(Exception e){
 			e.printStackTrace();
 		}
 		return participantInfoList;
@@ -273,10 +276,20 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		String protocolParticipantId = null;
 		String lastName = null;
 		String firstName = null;
-		String info = (String) participantObj[0].toString();
-		lastName = (String) participantObj[1].toString();
-		firstName = (String) participantObj[2].toString();
-		protocolParticipantId = (String) participantObj[3].toString();
+		String info = null;
+		if(participantObj[0]!=null){
+			info= (String) participantObj[0].toString();
+		}
+		if(participantObj[1]!=null){
+			lastName = (String) participantObj[1].toString();
+		}
+		if(participantObj[2]!=null){
+			firstName = (String) participantObj[2].toString();
+		}
+		
+		if(participantObj[3]!=null){
+			protocolParticipantId = (String) participantObj[3].toString();
+		}
 		participantDisplayInfo = "";
 
 		if (lastName != null && !lastName.equals(""))
