@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -37,8 +38,9 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	//String DATASOURCE_JNDI_NAME = "java:/catissuecore";
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException 
 	 */
-	public DefaultCPRBarcodeGenerator()
+	public DefaultCPRBarcodeGenerator() throws ApplicationException
 	{
 		super();
 		init();
@@ -50,7 +52,7 @@ public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * barcode from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		try
 		{

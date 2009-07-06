@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -25,10 +26,18 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSCGBarcodeGenerator()
+	public DefaultSCGBarcodeGenerator () 
 	{
 		super();
-		init();
+		try{
+			
+			init();
+		}catch (ApplicationException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			
+		}
+		
 	}
 
 	/**
@@ -38,7 +47,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * barcode from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		currentBarcode = new Long(0);
 		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";

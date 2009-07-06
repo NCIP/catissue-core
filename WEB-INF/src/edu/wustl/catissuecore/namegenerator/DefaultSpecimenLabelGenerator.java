@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
@@ -32,9 +33,11 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSpecimenLabelGenerator()
+	public DefaultSpecimenLabelGenerator()throws ApplicationException
 	{
-		init();
+	
+			init();
+			// TODO Auto-generated catch block
 	}
 
 	/**
@@ -44,7 +47,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		String databaseConstant = null;
 		try
@@ -77,7 +80,6 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		catch (Exception ex)
 		{
 			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
 		}
 	}
 

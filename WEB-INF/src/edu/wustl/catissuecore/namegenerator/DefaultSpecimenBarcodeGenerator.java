@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
@@ -32,7 +33,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSpecimenBarcodeGenerator()
+	public DefaultSpecimenBarcodeGenerator() throws ApplicationException
 	{
 		super();
 		init();
@@ -44,7 +45,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		String databaseConstant = null;
 		try
@@ -74,10 +75,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 			}
 			currentBarcode = AppUtility.getLastAvailableValue(sql.toString());
 		}
-		catch (Exception ex)
+		catch (ApplicationException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
+			throw new ApplicationException(ex.getErrorKey(),ex,ex.getMessage());
 		}
 	}
 

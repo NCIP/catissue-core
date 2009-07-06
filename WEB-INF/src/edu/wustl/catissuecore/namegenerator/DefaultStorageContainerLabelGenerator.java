@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -28,7 +29,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultStorageContainerLabelGenerator()
+	public DefaultStorageContainerLabelGenerator() throws ApplicationException
 	{
 		super();
 		init();
@@ -41,7 +42,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		currentLabel = new Long(0);
 		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";

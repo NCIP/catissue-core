@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -27,7 +28,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultStorageContainerBarcodeGenerator()
+	public DefaultStorageContainerBarcodeGenerator() throws ApplicationException
 	{
 		super();
 		init();
@@ -40,7 +41,7 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		currentBarcode = new Long(0);
 		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";

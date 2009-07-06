@@ -7,6 +7,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -31,7 +32,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSCGLabelGenerator()
+	public DefaultSCGLabelGenerator() throws ApplicationException
 	{
 		super();
 		init();
@@ -43,7 +44,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		currentLabel = getLastAvailableSCGLabel(null);
 	}
@@ -51,7 +52,7 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	 * @param databaseConstant databaseConstant
 	 * @return noOfRecords
 	 */
-	private Long getLastAvailableSCGLabel(String databaseConstant)
+	private Long getLastAvailableSCGLabel(String databaseConstant) throws ApplicationException
 	{
 		Long noOfRecords = new Long("0");
 		String sql = "Select max(IDENTIFIER) as MAX_IDENTIFIER from CATISSUE_ABS_SPECI_COLL_GROUP";

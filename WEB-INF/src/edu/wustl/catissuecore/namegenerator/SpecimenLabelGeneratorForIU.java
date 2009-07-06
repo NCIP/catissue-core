@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.common.exception.ApplicationException;
 
 /**
  * This is the Specimen Label Generator for Indiana University.
@@ -16,7 +17,7 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public SpecimenLabelGeneratorForIU()
+	public SpecimenLabelGeneratorForIU() throws ApplicationException
 	{
 		super();
 	}

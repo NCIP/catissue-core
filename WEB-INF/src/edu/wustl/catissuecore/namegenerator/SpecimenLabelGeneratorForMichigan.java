@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -23,7 +24,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	/**
 	 * Default Constructor.
 	 */
-	public SpecimenLabelGeneratorForMichigan()
+	public SpecimenLabelGeneratorForMichigan() throws ApplicationException
 	{
 		super();
 	}
@@ -34,7 +35,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 * will be called. This method will first check the Datatbase Name and then
 	 * set function name that will convert lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
 		currentLabel = new Long("0");
 		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";

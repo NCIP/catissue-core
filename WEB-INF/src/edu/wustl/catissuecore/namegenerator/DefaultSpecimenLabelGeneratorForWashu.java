@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -43,7 +44,7 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSpecimenLabelGeneratorForWashu()
+	public DefaultSpecimenLabelGeneratorForWashu() throws ApplicationException
 	{
 		try
 		{
@@ -54,7 +55,6 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		catch (Exception ex)
 		{
 			logger.debug(ex.getMessage(), ex);
-			ex.printStackTrace();
 		}
 	}
 

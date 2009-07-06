@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -24,7 +25,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/**
 	 * Default Constructor.
 	 */
-	public SpecimenBarcodeGeneratorForMichigan()
+	public SpecimenBarcodeGeneratorForMichigan() throws ApplicationException
 	{
 		super();
 	}
@@ -34,11 +35,11 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 * will be called. This method will first check the Datatbase Name and then
 	 * set function name that will convert lable from int to String
 	 */
-	protected void init()
+	protected void init() throws ApplicationException
 	{
-		currentBarcode = Long.valueOf(0);
-		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-		currentBarcode=AppUtility.getLastAvailableValue(sql);
+			currentBarcode = Long.valueOf(0);
+			String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
+			currentBarcode=AppUtility.getLastAvailableValue(sql);			
 	}
 	
 	/**

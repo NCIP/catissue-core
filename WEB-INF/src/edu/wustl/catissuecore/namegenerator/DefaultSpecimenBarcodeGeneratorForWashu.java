@@ -9,6 +9,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -35,7 +36,7 @@ public class DefaultSpecimenBarcodeGeneratorForWashu extends DefaultSpecimenBarc
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSpecimenBarcodeGeneratorForWashu()
+	public DefaultSpecimenBarcodeGeneratorForWashu() throws ApplicationException
 	{
 		super();
 		init();
