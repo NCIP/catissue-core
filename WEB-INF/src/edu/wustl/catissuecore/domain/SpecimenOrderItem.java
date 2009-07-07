@@ -34,7 +34,7 @@ public class SpecimenOrderItem extends OrderItem
 	 */
 	public NewSpecimenArrayOrderItem getNewSpecimenArrayOrderItem()
 	{
-		return newSpecimenArrayOrderItem;
+		return this.newSpecimenArrayOrderItem;
 	}
 
 	/**

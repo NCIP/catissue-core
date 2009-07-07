@@ -230,7 +230,7 @@ public class DomainObjectFactory implements IDomainObjectFactory
 		{
 			case Constants.USER_FORM_ID :
 			case Constants.APPROVE_USER_FORM_ID :
-				UserForm userForm = (UserForm) form;
+				final UserForm userForm = (UserForm) form;
 				abstractDomain = new User(userForm);
 				break;
 			case Constants.PARTICIPANT_FORM_ID :
@@ -249,7 +249,7 @@ public class DomainObjectFactory implements IDomainObjectFactory
 				abstractDomain = new Site(form);
 				break;
 			case Constants.REPORTED_PROBLEM_FORM_ID :
-				ReportedProblemForm reportedProblemForm = (ReportedProblemForm) form;
+				final ReportedProblemForm reportedProblemForm = (ReportedProblemForm) form;
 				abstractDomain = new ReportedProblem(reportedProblemForm);
 				break;
 			case Constants.DEPARTMENT_FORM_ID :
@@ -299,8 +299,8 @@ public class DomainObjectFactory implements IDomainObjectFactory
 				break;
 
 			case Constants.NEW_SPECIMEN_FORM_ID :
-				NewSpecimenForm newForm = (NewSpecimenForm) form;
-				String type = newForm.getClassName();
+				final NewSpecimenForm newForm = (NewSpecimenForm) form;
+				final String type = newForm.getClassName();
 				if (Constants.TISSUE.equals(type))
 				{
 					abstractDomain = new TissueSpecimen(newForm);
@@ -320,8 +320,8 @@ public class DomainObjectFactory implements IDomainObjectFactory
 				break;
 
 			case Constants.CREATE_SPECIMEN_FORM_ID :
-				CreateSpecimenForm crForm = (CreateSpecimenForm) form;
-				String sType = crForm.getClassName();
+				final CreateSpecimenForm crForm = (CreateSpecimenForm) form;
+				final String sType = crForm.getClassName();
 
 				if (Constants.TISSUE.equals(sType))
 				{
@@ -432,7 +432,12 @@ public class DomainObjectFactory implements IDomainObjectFactory
 		}
 		return abstractDomain;
 	}
-
+	/**
+	 * @param arg0 : arg0
+	 * @param arg1 : arg1
+	 * @throws ApplicationException : ApplicationException
+	 * @return AbstractActionForm : AbstractActionForm
+	 */
 	public AbstractActionForm getFormBean(Object arg0, String arg1) throws ApplicationException
 	{
 		// TODO Auto-generated method stub

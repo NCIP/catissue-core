@@ -34,7 +34,7 @@ public class DefineArraySubmitAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DefineArraySubmitAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(DefineArraySubmitAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -51,37 +51,39 @@ public class DefineArraySubmitAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DefineArrayForm defineArray = (DefineArrayForm) form;
-		HttpSession session = request.getSession(true);
+		final DefineArrayForm defineArray = (DefineArrayForm) form;
+		final HttpSession session = request.getSession(true);
 
 		List defineArrayFormList = null;
 		String target = "success";
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 		try
 		{
-			String sourceObjectName = SpecimenArrayType.class.getName();
-			String[] displayName = {"name"};
-			String valueField = Constants.SYSTEM_IDENTIFIER;
-			List arrayTypeList = bizLogic.getList(sourceObjectName, displayName, valueField, true);
+			final String sourceObjectName = SpecimenArrayType.class.getName();
+			final String[] displayName = {"name"};
+			final String valueField = Constants.SYSTEM_IDENTIFIER;
+			final List arrayTypeList = bizLogic.getList(sourceObjectName, displayName, valueField,
+					true);
 
 			for (int i = 0; i < arrayTypeList.size(); i++)
 			{
-				NameValueBean obj = (NameValueBean) arrayTypeList.get(i);
+				final NameValueBean obj = (NameValueBean) arrayTypeList.get(i);
 				if (defineArray.getArraytype().equals(obj.getValue()))
 				{
 					defineArray.setArrayTypeName(obj.getName());
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
 
 		// added for checking if array of same name exists
@@ -91,18 +93,19 @@ public class DefineArraySubmitAction extends BaseAction
 
 			for (int i = 0; i < defineArrayFormList.size(); i++)
 			{
-				DefineArrayForm defineArrayObj = (DefineArrayForm) defineArrayFormList.get(i);
+				final DefineArrayForm defineArrayObj
+				= (DefineArrayForm) defineArrayFormList.get(i);
 				if (defineArrayObj.getArrayName().equals(defineArray.getArrayName()))
 				{
-					ActionErrors errors = (ActionErrors) request.getAttribute
-					(Globals.ERROR_KEY);
+					ActionErrors errors
+					= (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 					if (errors == null || errors.size() == 0)
 					{
 						errors = new ActionErrors();
 					}
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"orderingsystem.arrayname.present"));
-					saveErrors(request, errors);
+					this.saveErrors(request, errors);
 					target = "defineArrayPage";
 				}
 			}
@@ -112,12 +115,12 @@ public class DefineArraySubmitAction extends BaseAction
 			defineArrayFormList = new ArrayList();
 		}
 
-		String typeOf = request.getParameter("typeOf");
+		final String typeOf = request.getParameter("typeOf");
 		request.setAttribute("typeOf", typeOf);
 		if (target.equals("success"))
-			{
+		{
 			defineArrayFormList.add(defineArray);
-			}
+		}
 		session.setAttribute("DefineArrayFormObjects", defineArrayFormList);
 		return mapping.findForward(target);
 	}

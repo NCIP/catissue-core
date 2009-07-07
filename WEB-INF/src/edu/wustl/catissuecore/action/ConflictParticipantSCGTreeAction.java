@@ -30,13 +30,13 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 
-
 /**
  * @author renuka_bajpai
  *
  */
 public class ConflictParticipantSCGTreeAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -51,26 +51,27 @@ public class ConflictParticipantSCGTreeAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
 		ReportLoaderQueue reportLoaderQueue = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
 
 		Vector treeData = new Vector();
 		List reportQueueData = new ArrayList();
 		Iterator iter = null;
-		reportQueueData = getReportQueueDataList(reportQueueId);
+		reportQueueData = this.getReportQueueDataList(reportQueueId);
 		iter = reportQueueData.iterator();
 		if (iter.hasNext())
 		{
 			reportLoaderQueue = (ReportLoaderQueue) iter.next();
 		}
-		String siteName = (String) reportLoaderQueue.getSiteName();
-		Long reportId = (Long) reportLoaderQueue.getId();
+		final String siteName = reportLoaderQueue.getSiteName();
+		final Long reportId = reportLoaderQueue.getId();
 
 		//To retrieve the tree data
 		treeData = reportLoaderQueueBizLogic.getTreeViewData(reportId, siteName, treeData);
@@ -80,18 +81,18 @@ public class ConflictParticipantSCGTreeAction extends BaseAction
 
 	}
 
-/**
- *
- * @param reportQueueId : reportQueueId
- * @return List : List
- * @throws BizLogicException : BizLogicException
- */
+	/**
+	 *
+	 * @param reportQueueId : reportQueueId
+	 * @return List : List
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+		final List reportQueueList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
 				.getName(), Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
 		return reportQueueList;
 	}

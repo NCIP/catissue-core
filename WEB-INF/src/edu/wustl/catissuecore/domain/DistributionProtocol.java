@@ -16,6 +16,7 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -50,7 +51,8 @@ public class DistributionProtocol extends SpecimenProtocol
 	/**
 	 * Collection of specimenRequirements associated with the DistributionProtocol.
 	 */
-	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
+	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection
+	= new HashSet<DistributionSpecimenRequirement>();
 
 	/**
 	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
@@ -72,7 +74,7 @@ public class DistributionProtocol extends SpecimenProtocol
 	public DistributionProtocol(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -86,7 +88,7 @@ public class DistributionProtocol extends SpecimenProtocol
 	 */
 	public Collection<DistributionSpecimenRequirement> getDistributionSpecimenRequirementCollection()
 	{
-		return distributionSpecimenRequirementCollection;
+		return this.distributionSpecimenRequirementCollection;
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class DistributionProtocol extends SpecimenProtocol
 	 */
 	public Collection getCollectionProtocolCollection()
 	{
-		return collectionProtocolCollection;
+		return this.collectionProtocolCollection;
 	}
 
 	/**
@@ -129,23 +131,24 @@ public class DistributionProtocol extends SpecimenProtocol
 	* @param abstractForm An CollectionProtocolForm object containing the
 	* information about the CollectionProtocol.
 	* */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 			super.setAllValues(abstractForm);
 
-			DistributionProtocolForm dpForm = (DistributionProtocolForm) abstractForm;
+			final DistributionProtocolForm dpForm = (DistributionProtocolForm) abstractForm;
 
-			Map map = dpForm.getValues();
+			final Map map = dpForm.getValues();
 			//map = fixMap(map);
 			logger.debug("MAP " + map);
-			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			this.distributionSpecimenRequirementCollection = new HashSet(parser.generateData(map));
 			logger.debug("specimenRequirementCollection "
 					+ this.distributionSpecimenRequirementCollection);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -155,15 +158,17 @@ public class DistributionProtocol extends SpecimenProtocol
 	 * To String.
 	 * @return String.
 	 */
+	@Override
 	public String toString()
 	{
-		return title + " " + distributionSpecimenRequirementCollection;
+		return this.title + " " + this.distributionSpecimenRequirementCollection;
 	}
 
 	/**
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.title;

@@ -49,7 +49,7 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 */
 	public SpecimenArray getSpecimenArray()
 	{
-		return specimenArray;
+		return this.specimenArray;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 */
 	public SpecimenArrayType getSpecimenArrayType()
 	{
-		return specimenArrayType;
+		return this.specimenArrayType;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 */
 	public Collection getSpecimenOrderItemCollection()
 	{
-		return specimenOrderItemCollection;
+		return this.specimenOrderItemCollection;
 	}
 
 	/**

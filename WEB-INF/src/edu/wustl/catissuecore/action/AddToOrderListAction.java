@@ -36,13 +36,12 @@ public class AddToOrderListAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(AddToOrderListAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(AddToOrderListAction.class);
 
 	/**
 	 * Overrides the execute method of BaseAction class. Initializes various
 	 * fields in OrderItem and OrderList.jsp. Also removes the selected
 	 * orderitems from speicmen map
-	 * 
 	 * @param mapping
 	 *            object
 	 * @param form
@@ -59,16 +58,16 @@ public class AddToOrderListAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		if (session.getAttribute("OrderForm") != null)
 		{
-			logger.debug(" Start --------- In AddToOrderListAction.java ");
+			this.logger.debug(" Start --------- In AddToOrderListAction.java ");
 			Map itemMap = new HashMap();
 
 			String target = null;
 			String arrayName = null;
 
-			String typeOf = request.getParameter("typeOf");
+			final String typeOf = request.getParameter("typeOf");
 			// for specimen
 
 			if (request.getParameter("remove") == null)
@@ -76,11 +75,13 @@ public class AddToOrderListAction extends BaseAction
 				// For Biospecimen
 				if (typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 				{
-					OrderSpecimenForm orderSpecimenFormObject = (OrderSpecimenForm) form;
+					final OrderSpecimenForm orderSpecimenFormObject = (OrderSpecimenForm) form;
 					if (orderSpecimenFormObject.getSelectedItems() != null)
 					{
 						// put key-value pair in map
-						itemMap = (Map) putValueInMapSpecimen(orderSpecimenFormObject, request);
+						itemMap = (Map) this
+								.putValueInMapSpecimen(orderSpecimenFormObject
+										, request);
 						orderSpecimenFormObject.setSelectedItems(null);
 						target = Constants.SPECIMEN_ORDER_FORM_TYPE;
 					}
@@ -90,10 +91,12 @@ public class AddToOrderListAction extends BaseAction
 				// For BiospecimenArray
 				if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 				{
-					OrderBiospecimenArrayForm orderArrayFormObject = (OrderBiospecimenArrayForm) form;
+					final OrderBiospecimenArrayForm orderArrayFormObject
+					= (OrderBiospecimenArrayForm) form;
 					if (orderArrayFormObject.getSelectedItems() != null)
 					{
-						itemMap = (Map) putValueInMapArray(orderArrayFormObject, request);
+						itemMap = (Map) this.putValueInMapArray(orderArrayFormObject
+								, request);
 						orderArrayFormObject.setSelectedItems(null);
 						target = Constants.ARRAY_ORDER_FORM_TYPE;
 					}
@@ -103,11 +106,13 @@ public class AddToOrderListAction extends BaseAction
 				// Pathology
 				if (typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 				{
-					OrderPathologyCaseForm pathologyFormObject = (OrderPathologyCaseForm) form;
+					final OrderPathologyCaseForm pathologyFormObject
+					= (OrderPathologyCaseForm) form;
 					if (pathologyFormObject.getSelectedItems() != null)
 					{
 						// put key-value pair in map
-						itemMap = (Map) putValueInMapPathology(pathologyFormObject, request);
+						itemMap = (Map) this.putValueInMapPathology(pathologyFormObject
+								, request);
 						pathologyFormObject.setSelectedItems(null);
 						target = Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
 					}
@@ -117,14 +122,14 @@ public class AddToOrderListAction extends BaseAction
 				/*
 				 * Following code gets list of bean objects from map
 				 */
-				MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
+				final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 				orderItemSet = (HashSet) parser.generateData(itemMap);
 
-				Iterator it = orderItemSet.iterator();
-				List orderItemsList = new ArrayList();
+				final Iterator it = orderItemSet.iterator();
+				final List orderItemsList = new ArrayList();
 				while (it.hasNext())
 				{
-					OrderSpecimenBean specbean = (OrderSpecimenBean) it.next();
+					final OrderSpecimenBean specbean = (OrderSpecimenBean) it.next();
 					orderItemsList.add(specbean);
 				}
 
@@ -143,11 +148,13 @@ public class AddToOrderListAction extends BaseAction
 				dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 				if (dataMap.containsKey(arrayName))
 				{
-					List orderItem = (List) dataMap.get(arrayName);
-					Iterator orderItemItr = orderItemsList.iterator();
+					final List orderItem = (List) dataMap.get(arrayName);
+					final Iterator orderItemItr = orderItemsList.iterator();
 					while (orderItemItr.hasNext())
 					{
-						OrderSpecimenBean specimenBean = (OrderSpecimenBean) orderItemItr.next();
+						final OrderSpecimenBean specimenBean
+						= (OrderSpecimenBean) orderItemItr
+								.next();
 						orderItem.add(specimenBean);
 					}
 					dataMap.put(arrayName, orderItem);
@@ -167,34 +174,41 @@ public class AddToOrderListAction extends BaseAction
 			else
 			// if(request.getParameter("remove") != null)
 			{
-				String remove = request.getParameter("remove");
+				final String remove = request.getParameter("remove");
 				if (remove.equals("yes"))
 				{
 					if (typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 					// If typeOf == 'specimen'
 					{
-						OrderSpecimenForm orderSpecimenFormObject = (OrderSpecimenForm) form;
-						removeSelectedItems(orderSpecimenFormObject.getItemsToRemove(), session);
+						final OrderSpecimenForm orderSpecimenFormObject
+						= (OrderSpecimenForm) form;
+						this.removeSelectedItems(orderSpecimenFormObject
+								.getItemsToRemove(),
+								session);
 						target = Constants.SPECIMEN_ORDER_FORM_TYPE;
 					}
 					else if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 					// If typeOf == 'biospecimen array'
 					{
-						OrderBiospecimenArrayForm orderArrayFormObject = (OrderBiospecimenArrayForm) form;
-						removeSelectedItems(orderArrayFormObject.getItemsToRemove(), session);
+						final OrderBiospecimenArrayForm orderArrayFormObject
+						= (OrderBiospecimenArrayForm) form;
+						this.removeSelectedItems(orderArrayFormObject
+								.getItemsToRemove(), session);
 						target = Constants.ARRAY_ORDER_FORM_TYPE;
 					}
 					else if (typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 					// If typeOf == 'pathological case'
 					{
-						OrderPathologyCaseForm pathologyFormObject = (OrderPathologyCaseForm) form;
-						removeSelectedItems(pathologyFormObject.getItemsToRemove(), session);
+						final OrderPathologyCaseForm pathologyFormObject
+						= (OrderPathologyCaseForm) form;
+						this.removeSelectedItems(pathologyFormObject
+								.getItemsToRemove(), session);
 						target = Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
 					}
 				}// End if(remove == "yes")
 			}// End else
 
-			logger.debug(" End --------- In AddToOrderListAction.java ");
+			this.logger.debug(" End --------- In AddToOrderListAction.java ");
 			return mapping.findForward(target);
 		}
 		else
@@ -205,9 +219,8 @@ public class AddToOrderListAction extends BaseAction
 	}
 
 	/**
-	 * This function accepts string array and removes the selected items from
+	 * This function accepts string array and removes the selected items from.
 	 * the list and stores the new listin the session
-	 * 
 	 * @param itemsToRemove
 	 *            String [] containing the selected order items to be removed
 	 * @param session
@@ -224,32 +237,32 @@ public class AddToOrderListAction extends BaseAction
 			List orderItemsToRetainList = new ArrayList();
 
 			// Temporary maps to store the orderitems to be removed
-			HashMap orderItemstoRemoveMap = new HashMap();
-			List orderItemsToRemoveList = new ArrayList();
+			final HashMap orderItemstoRemoveMap = new HashMap();
+			final List orderItemsToRemoveList = new ArrayList();
 			String arrayNameToRemove = "";
 
 			// Iterate till the length of string array
-			for (int itemCount = 0; itemCount < itemsToRemove.length; itemCount++)
+			for (final String itemsKey : itemsToRemove)
 			{
-				String itemsKey = itemsToRemove[itemCount];
-
-				int index1 = itemsKey.indexOf("_");
-				int index2 = itemsKey.lastIndexOf("_");
+				final int index1 = itemsKey.indexOf("_");
+				final int index2 = itemsKey.lastIndexOf("_");
 
 				arrayNameToRemove = itemsKey.substring(0, index1);
-				String specimenNameToRemove = itemsKey.substring(index1 + 1, index2);
-				String strRowIndex = itemsKey.substring(index2 + 1, itemsKey.length());
-				int rowIndex = Integer.parseInt(strRowIndex);
+				final String specimenNameToRemove = itemsKey.substring(index1 + 1, index2);
+				final String strRowIndex = itemsKey.substring(index2 + 1, itemsKey.length());
+				final int rowIndex = Integer.parseInt(strRowIndex);
 
 				if (session.getAttribute(Constants.REQUESTED_BIOSPECIMENS) != null)
 				{
-					Map orderItemsMap = (HashMap) session
+					final Map orderItemsMap = (HashMap) session
 							.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 
 					if (orderItemsMap.containsKey(arrayNameToRemove))
 					{
-						List orderItemsList = (ArrayList) orderItemsMap.get(arrayNameToRemove);
-						OrderSpecimenBean orderSpecimenBeanObj = (OrderSpecimenBean) orderItemsList
+						final List orderItemsList = (ArrayList) orderItemsMap
+								.get(arrayNameToRemove);
+						final OrderSpecimenBean orderSpecimenBeanObj
+						= (OrderSpecimenBean) orderItemsList
 								.get(rowIndex);
 
 						// Move the orderspecimenobjects that are
@@ -275,13 +288,14 @@ public class AddToOrderListAction extends BaseAction
 			 */
 
 			// Iterate the keySet.
-			Iterator orderItemstoRemoveMapItr = orderItemstoRemoveMap.keySet().iterator();
+			final Iterator orderItemstoRemoveMapItr = orderItemstoRemoveMap.keySet().iterator();
 			while (orderItemstoRemoveMapItr.hasNext())
 			{
-				String arrayName = (String) orderItemstoRemoveMapItr.next();
+				final String arrayName = (String) orderItemstoRemoveMapItr.next();
 				if (orderItemsToRetainMap.containsKey(arrayName))
 				{
-					List itemsToRemoveList = (ArrayList) orderItemstoRemoveMap.get(arrayName);
+					final List itemsToRemoveList
+					= (ArrayList) orderItemstoRemoveMap.get(arrayName);
 					orderItemsToRetainList = (ArrayList) orderItemsToRetainMap.get(arrayName);
 
 					// Remove the selected order items from the original list
@@ -305,54 +319,54 @@ public class AddToOrderListAction extends BaseAction
 			HttpServletRequest request)
 	{
 		// LinkedHashMap introduced to retain order
-		Map specimenMap = new LinkedHashMap();
-		String[] strSelectedItems = orderSpecimenFormObject.getSelectedItems();
-		Map tempOrderSpecimenFormObjectMap = orderSpecimenFormObject.getValues();
-		for (int j = 0; j < strSelectedItems.length; j++)
+		final Map specimenMap = new LinkedHashMap();
+		final String[] strSelectedItems = orderSpecimenFormObject.getSelectedItems();
+		final Map tempOrderSpecimenFormObjectMap = orderSpecimenFormObject.getValues();
+		for (final String strSelectedItem : strSelectedItems)
 		{
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenId",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenId",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenId"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenName",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenName",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenName"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_availableQuantity",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_availableQuantity",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_availableQuantity"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_requestedQuantity",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_requestedQuantity",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_requestedQuantity"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_description",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_description",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_description"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_unitRequestedQuantity",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_unitRequestedQuantity"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenClass",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenClass",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenClass"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenType",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenType",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenType"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_isDerived",
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_isDerived",
 					orderSpecimenFormObject.getTypeOfSpecimen());
 			if (orderSpecimenFormObject.getTypeOfSpecimen().equalsIgnoreCase("true"))
 			{
-				specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenClass",
+				specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenClass",
 						orderSpecimenFormObject.getClassName());
-				specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenType",
+				specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenType",
 						orderSpecimenFormObject.getType());
 			}
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_checkedToRemove",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_checkedToRemove",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_checkedToRemove"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_typeOfItem",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_typeOfItem",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_typeOfItem"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_distributionSite",
-					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_distributionSite",
+					tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_distributionSite"));
-			specimenMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_arrayName",
+			specimenMap.put("OrderSpecimenBean:" + strSelectedItem + "_arrayName",
 					orderSpecimenFormObject.getAddToArray());
 		}
 		return specimenMap;
@@ -368,51 +382,52 @@ public class AddToOrderListAction extends BaseAction
 	private Map putValueInMapArray(OrderBiospecimenArrayForm orderArrayFormObject,
 			HttpServletRequest request)
 	{
-		Map arrayMap = new HashMap();
-		String[] strSelectedItems = orderArrayFormObject.getSelectedItems();
-		Map tempOrderArrayFormObjectMap = orderArrayFormObject.getValues();
+		final Map arrayMap = new HashMap();
+		final String[] strSelectedItems = orderArrayFormObject.getSelectedItems();
+		final Map tempOrderArrayFormObjectMap = orderArrayFormObject.getValues();
 		// put key-value pair in map
 
-		for (int j = 0; j < strSelectedItems.length; j++)
+		for (final String strSelectedItem : strSelectedItems)
 		{
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenId",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenId",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenId"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenName",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenName",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenName"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_availableQuantity",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_availableQuantity",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_availableQuantity"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_requestedQuantity",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_requestedQuantity",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_requestedQuantity"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_description",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_description",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_description"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_unitRequestedQuantity",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_unitRequestedQuantity"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_checkedToRemove",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_checkedToRemove",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_checkedToRemove"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_isDerived",
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_isDerived",
 					orderArrayFormObject.getTypeOfArray());
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_typeOfItem",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_typeOfItem",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_typeOfItem"));
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_arrayName", "None");
-			arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_distributionSite",
-					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_arrayName", "None");
+			arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_distributionSite",
+					tempOrderArrayFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_distributionSite"));
 			if (orderArrayFormObject.getTypeOfArray().equals("false"))
 			{
-				arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_unitRequestedQuantity",
-						" ");
+				arrayMap
+						.put("OrderSpecimenBean:" + strSelectedItem +
+								"_unitRequestedQuantity", " ");
 			}
 			else
 			{
-				arrayMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_unitRequestedQuantity",
+				arrayMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
 						"count");
 			}
 
@@ -433,68 +448,68 @@ public class AddToOrderListAction extends BaseAction
 	{
 		// int reqQntyError = 0;
 		// boolean isNumber = true;
-		Map pathologyMap = new HashMap();
-		String[] strSelectedItems = pathologyFormObject.getSelectedItems();
-		Map tempOrderPathologyFormObjectMap = pathologyFormObject.getValues();
-		for (int j = 0; j < strSelectedItems.length; j++)
+		final Map pathologyMap = new HashMap();
+		final String[] strSelectedItems = pathologyFormObject.getSelectedItems();
+		final Map tempOrderPathologyFormObjectMap = pathologyFormObject.getValues();
+		for (final String strSelectedItem : strSelectedItems)
 		{
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenId",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenId",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenId"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenName",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenName",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_specimenName"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_availableQuantity",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_availableQuantity",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_availableQuantity"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_requestedQuantity",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_requestedQuantity",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_requestedQuantity"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_description",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_description",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_description"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j]
-					+ "_specimenCollectionGroup", tempOrderPathologyFormObjectMap
-					.get("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenCollectionGroup"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_collectionProtocol",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenCollectionGroup",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
+							+ "_specimenCollectionGroup"));
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_collectionProtocol",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_collectionProtocol"));
 
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_isDerived",
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_isDerived",
 					pathologyFormObject.getTypeOfCase());
 
 			if (pathologyFormObject.getTypeOfCase().equals("false"))
 			{
-				pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenClass",
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenClass",
 						pathologyFormObject.getClassName());
-				pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenType",
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenType",
 						pathologyFormObject.getType());
-				pathologyMap
-						.put("OrderSpecimenBean:" + strSelectedItems[j] + "_unitRequestedQuantity",
-								tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"
-										+ strSelectedItems[j] + "_unitRequestedQuantity"));
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
+						tempOrderPathologyFormObjectMap
+						.get("OrderSpecimenBean:" + strSelectedItem
+								+ "_unitRequestedQuantity"));
 			}
 			else
 			{
-				pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenClass",
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenClass",
 						"Tissue");
-				pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_specimenType",
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenType",
 						"Fixed Tissue Block");
-				pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j]
-						+ "_unitRequestedQuantity", "count");
+				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
+						"count");
 			}
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_checkedToRemove",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_checkedToRemove",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_checkedToRemove"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_typeOfItem",
-					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItems[j]
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_typeOfItem",
+					tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 							+ "_typeOfItem"));
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_arrayName",
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_arrayName",
 					pathologyFormObject.getAddToArray());
 
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_pathologicalStatus",
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_pathologicalStatus",
 					pathologyFormObject.getPathologicalStatus());
-			pathologyMap.put("OrderSpecimenBean:" + strSelectedItems[j] + "_tissueSite",
+			pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_tissueSite",
 					pathologyFormObject.getTissueSite());
 
 		}

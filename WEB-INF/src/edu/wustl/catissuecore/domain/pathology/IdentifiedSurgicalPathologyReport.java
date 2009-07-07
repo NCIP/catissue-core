@@ -13,17 +13,22 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -3942632327778301489L;
+
+	/**
 	 * Deidentified surgical pathology report.
 	 */
 	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
 	/**
-	 * Specimen collection group of the report
+	 * Specimen collection group of the report.
 	 */
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public IdentifiedSurgicalPathologyReport()
 	{
@@ -39,7 +44,7 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deIdentifiedSurgicalPathologyReport;
+		return this.deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
@@ -57,15 +62,17 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 *                        class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	 *                        column="SCG_ID" not-null="false"
 	 */
+	@Override
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
 	 * @param specimenCollectionGroup
 	 *            sets specimen collection group of the identified report.
 	 */
+	@Override
 	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;

@@ -31,12 +31,14 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		FixedEventParametersForm fixedEventParametersForm = (FixedEventParametersForm) eventParametersForm;
+		final FixedEventParametersForm fixedEventParametersForm
+		= (FixedEventParametersForm) eventParametersForm;
 
 		if (fixedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
@@ -54,7 +56,7 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 		request.setAttribute("fixedEventParametersAddAction",
 				Constants.FIXED_EVENT_PARAMETERS_ADD_ACTION);
 		// SETS THE FIXATION LIST
-		List fixationList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List fixationList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_FIXATION_TYPE, null);
 		request.setAttribute("fixationList", fixationList);
 	}

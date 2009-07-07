@@ -33,10 +33,9 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * An individual from whom a specimen is collected.
@@ -155,7 +154,7 @@ public class Participant extends AbstractDomainObject
 	*/
 	public Collection getClinicalStudyRegistrationCollection()
 	{
-		return clinicalStudyRegistrationCollection;
+		return this.clinicalStudyRegistrationCollection;
 	}
 
 	/**
@@ -183,7 +182,7 @@ public class Participant extends AbstractDomainObject
 	public Participant(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -209,24 +208,26 @@ public class Participant extends AbstractDomainObject
 		this.clinicalStudyRegistrationCollection = null;
 		this.collectionProtocolRegistrationCollection = null;
 		this.clinicalStudyRegistrationCollection = null;
-		Collection<Race> raceCollection = new ArrayList<Race>();
-		Iterator<Race> raceItr = participant.getRaceCollection().iterator();
+		final Collection<Race> raceCollection = new ArrayList<Race>();
+		final Iterator<Race> raceItr = participant.getRaceCollection().iterator();
 		while (raceItr.hasNext())
 		{
-			Race race = new Race(raceItr.next());
+			final Race race = new Race(raceItr.next());
 			race.setParticipant(this);
 			raceCollection.add(race);
 		}
 		this.raceCollection = raceCollection;
 
-		Collection<ParticipantMedicalIdentifier> pmiCollection = new ArrayList<ParticipantMedicalIdentifier>();
+		final Collection<ParticipantMedicalIdentifier> pmiCollection
+		= new ArrayList<ParticipantMedicalIdentifier>();
 		if (participant.getParticipantMedicalIdentifierCollection() != null)
 		{
-			Iterator<ParticipantMedicalIdentifier> pmiItr = participant
+			final Iterator<ParticipantMedicalIdentifier> pmiItr = participant
 					.getParticipantMedicalIdentifierCollection().iterator();
 			while (pmiItr.hasNext())
 			{
-				ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr.next());
+				final ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier(pmiItr
+						.next());
 				pmi.setParticipant(this);
 				pmiCollection.add(pmi);
 			}
@@ -245,7 +246,7 @@ public class Participant extends AbstractDomainObject
 	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -268,7 +269,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getLastName()
 	{
-		return lastName;
+		return this.lastName;
 	}
 
 	/**
@@ -290,7 +291,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getFirstName()
 	{
-		return firstName;
+		return this.firstName;
 	}
 
 	/**
@@ -312,7 +313,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getMiddleName()
 	{
-		return middleName;
+		return this.middleName;
 	}
 
 	/**
@@ -333,7 +334,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Date getBirthDate()
 	{
-		return birthDate;
+		return this.birthDate;
 	}
 
 	/**
@@ -355,7 +356,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getGender()
 	{
-		return gender;
+		return this.gender;
 	}
 
 	/**
@@ -377,7 +378,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getSexGenotype()
 	{
-		return sexGenotype;
+		return this.sexGenotype;
 	}
 
 	/**
@@ -421,7 +422,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Collection getRaceCollection()
 	{
-		return raceCollection;
+		return this.raceCollection;
 	}
 
 	/**
@@ -441,7 +442,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getEthnicity()
 	{
-		return ethnicity;
+		return this.ethnicity;
 	}
 
 	/**
@@ -463,7 +464,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getSocialSecurityNumber()
 	{
-		return socialSecurityNumber;
+		return this.socialSecurityNumber;
 	}
 
 	/**
@@ -485,7 +486,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -506,7 +507,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Date getDeathDate()
 	{
-		return deathDate;
+		return this.deathDate;
 	}
 
 	/**
@@ -527,7 +528,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getVitalStatus()
 	{
-		return vitalStatus;
+		return this.vitalStatus;
 	}
 
 	/**
@@ -550,7 +551,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Collection getParticipantMedicalIdentifierCollection()
 	{
-		return participantMedicalIdentifierCollection;
+		return this.participantMedicalIdentifierCollection;
 	}
 
 	/**
@@ -574,7 +575,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Collection getCollectionProtocolRegistrationCollection()
 	{
-		return collectionProtocolRegistrationCollection;
+		return this.collectionProtocolRegistrationCollection;
 	}
 
 	/**
@@ -596,11 +597,11 @@ public class Participant extends AbstractDomainObject
 	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
-		String nullString = null;
+		final String nullString = null;
 		try
 		{
-			ParticipantForm form = (ParticipantForm) abstractForm;
-			Validator validator = new Validator();
+			final ParticipantForm form = (ParticipantForm) abstractForm;
+			final Validator validator = new Validator();
 
 			this.activityStatus = form.getActivityStatus();
 			this.firstName = form.getFirstName();
@@ -638,28 +639,28 @@ public class Participant extends AbstractDomainObject
 			//	        	this.race = form.getRace();
 			//	        else
 			//	        	this.race = null;
-			raceCollection.clear();
-			String[] raceTypes = form.getRaceTypes();
+			this.raceCollection.clear();
+			final String[] raceTypes = form.getRaceTypes();
 			if (raceTypes != null)
 			{
 				for (int i = 0; i < raceTypes.length; i++)
 				{
 					if (!raceTypes[i].equals("-1"))
 					{
-						Race race = new Race();
+						final Race race = new Race();
 						race.setRaceName(raceTypes[i]);
 						race.setParticipant(this);
-						raceCollection.add(race);
+						this.raceCollection.add(race);
 					}
 
 				}
 			}
 
-			String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() + "-"
+			final String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA() + "-"
 					+ form.getSocialSecurityNumberPartB() + "-"
 					+ form.getSocialSecurityNumberPartC();
 
-			if (!validator.isEmpty(socialSecurityNumberTemp)
+			if (!Validator.isEmpty(socialSecurityNumberTemp)
 					&& validator.isValidSSN(socialSecurityNumberTemp))
 			{
 				this.socialSecurityNumber = socialSecurityNumberTemp;
@@ -669,11 +670,11 @@ public class Participant extends AbstractDomainObject
 				this.socialSecurityNumber = nullString;
 			}
 
-			this.birthDate = Utility.parseDate(form.getBirthDate(), Utility.datePattern(form
-					.getBirthDate()));
+			this.birthDate = CommonUtilities.parseDate(form.getBirthDate(), CommonUtilities
+					.datePattern(form.getBirthDate()));
 
-			this.deathDate = Utility.parseDate(form.getDeathDate(), Utility.datePattern(form
-					.getDeathDate()));
+			this.deathDate = CommonUtilities.parseDate(form.getDeathDate(), CommonUtilities
+					.datePattern(form.getDeathDate()));
 
 			if (validator.isValidOption(form.getVitalStatus()))
 			{
@@ -685,27 +686,28 @@ public class Participant extends AbstractDomainObject
 			}
 
 			this.participantMedicalIdentifierCollection.clear();
-			Map map = form.getValues();
+			final Map map = form.getValues();
 			logger.debug("Map " + map);
-			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			this.participantMedicalIdentifierCollection = parser.generateData(map);
 
 			//Collection Protocol Registration of the participant
 			//(Abhishek Mehta)
 			this.collectionProtocolRegistrationCollection.clear();
-			Map mapCollectionProtocolRegistrationCollection = form
+			final Map mapCollectionProtocolRegistrationCollection = form
 					.getCollectionProtocolRegistrationValues();
 			logger.debug("Map " + map);
-			MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
+			final MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
 					"edu.wustl.catissuecore.domain");
-			this.collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
+			this.collectionProtocolRegistrationCollection
+			= parserCollectionProtocolRegistrationCollection
 					.generateData(mapCollectionProtocolRegistrationCollection);
 			logger.debug("ParticipantMedicalIdentifierCollection "
-					+ participantMedicalIdentifierCollection);
+					+ this.participantMedicalIdentifierCollection);
 
-			setConsentsResponseToCollectionProtocolRegistration(form);
+			this.setConsentsResponseToCollectionProtocolRegistration(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
@@ -715,19 +717,21 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * Setting Consent Response for the collection protocol.
 	 * @param form ParticipantForm.
+	 * @throws Exception : Exception
 	 */
 	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form)
 			throws Exception
 	{
 		logger.debug(":: participant id  :" + form.getId());
-		Collection<ConsentResponseBean> consentResponseBeanCollection = form
+		final Collection<ConsentResponseBean> consentResponseBeanCollection = form
 				.getConsentResponseBeanCollection();
-		Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
+		final Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
 		while (itr.hasNext())
 		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itr
+			final CollectionProtocolRegistration collectionProtocolRegistration
+			= (CollectionProtocolRegistration) itr
 					.next();
-			setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
+			this.setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
 		}
 	}
 
@@ -735,19 +739,21 @@ public class Participant extends AbstractDomainObject
 	 * Set Consent Response for given collection protocol.
 	 * @param collectionProtocolRegistration CollectionProtocolRegistration.
 	 * @param consentResponseBeanCollection Collection.
+	 * @throws Exception : Exception
 	 */
 	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration,
 			Collection consentResponseBeanCollection) throws Exception
 	{
 		if (consentResponseBeanCollection != null && !consentResponseBeanCollection.isEmpty())
 		{
-			Iterator itr = consentResponseBeanCollection.iterator();
+			final Iterator itr = consentResponseBeanCollection.iterator();
 			while (itr.hasNext())
 			{
-				ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
-				long cpIDcollectionProtocolRegistration = collectionProtocolRegistration
+				final ConsentResponseBean consentResponseBean = (ConsentResponseBean) itr.next();
+				final long cpIDcollectionProtocolRegistration = collectionProtocolRegistration
 						.getCollectionProtocol().getId().longValue();
-				long cpIDconsentRegistrationBean = consentResponseBean.getCollectionProtocolID();
+				final long cpIDconsentRegistrationBean = consentResponseBean
+						.getCollectionProtocolID();
 				if (cpIDcollectionProtocolRegistration == cpIDconsentRegistrationBean)
 				{
 
@@ -757,21 +763,22 @@ public class Participant extends AbstractDomainObject
 					logger.debug(":: collection protocol Registration id  :"
 							+ collectionProtocolRegistration.getId());
 
-					String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
-					long witnessId = consentResponseBean.getWitnessId();
-					String consentDate = consentResponseBean.getConsentDate();
-					Collection consentTierResponseCollection = prepareConsentTierResponseCollection(
-							consentResponseBean.getConsentResponse(), true);
+					final String signedConsentUrl = consentResponseBean.getSignedConsentUrl();
+					final long witnessId = consentResponseBean.getWitnessId();
+					final String consentDate = consentResponseBean.getConsentDate();
+					final Collection consentTierResponseCollection = this
+							.prepareConsentTierResponseCollection(consentResponseBean
+									.getConsentResponse(), true);
 
 					collectionProtocolRegistration.setSignedConsentDocumentURL(signedConsentUrl);
 					if (witnessId > 0)
 					{
-						User consentWitness = new User();
+						final User consentWitness = new User();
 						consentWitness.setId(new Long(witnessId));
 						collectionProtocolRegistration.setConsentWitness(consentWitness);
 					}
 
-					collectionProtocolRegistration.setConsentSignatureDate(Utility
+					collectionProtocolRegistration.setConsentSignatureDate(CommonUtilities
 							.parseDate(consentDate));
 					collectionProtocolRegistration
 							.setConsentTierResponseCollection(consentTierResponseCollection);
@@ -786,12 +793,13 @@ public class Participant extends AbstractDomainObject
 		{
 			if (collectionProtocolRegistration.getCollectionProtocol() != null)
 			{
-				String cpIDcollectionProtocolRegistration = collectionProtocolRegistration
+				final String cpIDcollectionProtocolRegistration = collectionProtocolRegistration
 						.getCollectionProtocol().getId().toString();
-				Collection consentTierCollection = getConsentList(cpIDcollectionProtocolRegistration);
+				final Collection consentTierCollection = this
+						.getConsentList(cpIDcollectionProtocolRegistration);
 
-				Collection consentTierResponseCollection = prepareConsentTierResponseCollection(
-						consentTierCollection, false);
+				final Collection consentTierResponseCollection = this
+						.prepareConsentTierResponseCollection(consentTierCollection, false);
 				collectionProtocolRegistration
 						.setConsentTierResponseCollection(consentTierResponseCollection);
 			}
@@ -808,21 +816,21 @@ public class Participant extends AbstractDomainObject
 	private Collection prepareConsentTierResponseCollection(Collection consentResponse,
 			boolean isResponse)
 	{
-		Collection consentTierResponseCollection = new HashSet();
+		final Collection consentTierResponseCollection = new HashSet();
 		if (consentResponse != null && !consentResponse.isEmpty())
 		{
 			if (isResponse)
 			{
-				Iterator iter = consentResponse.iterator();
+				final Iterator iter = consentResponse.iterator();
 				ConsentUtil.createConsentResponseColl(consentTierResponseCollection, iter);
 			}
 			else
 			{
-				Iterator iter = consentResponse.iterator();
+				final Iterator iter = consentResponse.iterator();
 				while (iter.hasNext())
 				{
-					ConsentTier consentTier = (ConsentTier) iter.next();
-					ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+					final ConsentTier consentTier = (ConsentTier) iter.next();
+					final ConsentTierResponse consentTierResponse = new ConsentTierResponse();
 					consentTierResponse.setResponse(Constants.NOT_SPECIFIED);
 					consentTierResponse.setConsentTier(consentTier);
 					consentTierResponseCollection.add(consentTierResponse);
@@ -836,17 +844,16 @@ public class Participant extends AbstractDomainObject
 	 * Consent List for given collection protocol.
 	 * @param collectionProtocolID String.
 	 * @return Collection.
-	 * @throws BizLogicException 
-	 * @throws NumberFormatException 
-	 * @throws DAOException DAOException.
+	 * @throws BizLogicException : BizLogicException
+	 * @throws NumberFormatException : NumberFormatException
 	 */
 	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException,
 			BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		Collection consentTierCollection = (Collection) collectionProtocolBizLogic
+		final Collection consentTierCollection = (Collection) collectionProtocolBizLogic
 				.retrieveAttribute(CollectionProtocol.class.getName(), Long
 						.valueOf(collectionProtocolID), "elements(consentTierCollection)");
 		return consentTierCollection;
@@ -856,6 +863,7 @@ public class Participant extends AbstractDomainObject
 	 * Returns message label to display on success add or edit.
 	 * @return String.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return AppUtility.getlLabel(this.lastName, this.firstName);

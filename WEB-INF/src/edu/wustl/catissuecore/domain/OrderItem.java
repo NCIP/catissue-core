@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -73,9 +74,10 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -83,6 +85,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -95,7 +98,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 */
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
 	/**
@@ -114,7 +117,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 */
 	public Double getRequestedQuantity()
 	{
-		return requestedQuantity;
+		return this.requestedQuantity;
 	}
 
 	/**
@@ -133,7 +136,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**
@@ -153,7 +156,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 */
 	public OrderDetails getOrderDetails()
 	{
-		return orderDetails;
+		return this.orderDetails;
 	}
 
 	/**
@@ -171,7 +174,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 */
 	public DistributedItem getDistributedItem()
 	{
-		return distributedItem;
+		return this.distributedItem;
 	}
 
 	/**

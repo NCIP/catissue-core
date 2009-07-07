@@ -35,7 +35,7 @@ public class DefineArrayAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DefineArrayAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(DefineArrayAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -52,27 +52,28 @@ public class DefineArrayAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DefineArrayForm defineArray = (DefineArrayForm) form;
-		HttpSession session = request.getSession();
+		final DefineArrayForm defineArray = (DefineArrayForm) form;
+		final HttpSession session = request.getSession();
 		if (session.getAttribute("OrderForm") != null)
 		{
 			try
 			{
-				String[] arrayTypeLabelProperty = {"name"};
-				String arrayTypeProperty = "id";
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+				final String[] arrayTypeLabelProperty = {"name"};
+				final String arrayTypeProperty = "id";
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 						.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 				List specimenArrayTypeList = new ArrayList();
 
 				specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class
 						.getName(), arrayTypeLabelProperty, arrayTypeProperty, true);
-				for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
+				for (final Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
 				{
-					NameValueBean nameValueBean = (NameValueBean) iter.next();
+					final NameValueBean nameValueBean = (NameValueBean) iter.next();
 					// remove ANY entry from array type list
 					if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE)
 							&& nameValueBean.getName().equalsIgnoreCase(
@@ -84,27 +85,27 @@ public class DefineArrayAction extends BaseAction
 				}
 				request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
-				logger.error(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
 				return null;
 			}
 
 			if (request.getParameter("arrayType") != null)
 			{
 
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
-				String sourceObjectName = SpecimenArrayType.class.getName();
+				final String sourceObjectName = SpecimenArrayType.class.getName();
 
-				Object object = bizLogic.retrieve(sourceObjectName, new Long(request
+				final Object object = bizLogic.retrieve(sourceObjectName, new Long(request
 						.getParameter("arrayType")));
-				SpecimenArrayType containerTyperow = (SpecimenArrayType) object;
+				final SpecimenArrayType containerTyperow = (SpecimenArrayType) object;
 				// SpecimenArrayType
 				// spec=(SpecimenArrayType)containerType.get(0);
 
-				Capacity capacityobj = (Capacity) containerTyperow.getCapacity();
+				final Capacity capacityobj = containerTyperow.getCapacity();
 
 				defineArray.setDimenmsionX(new Integer(capacityobj.getOneDimensionCapacity())
 						.toString());
@@ -112,12 +113,12 @@ public class DefineArrayAction extends BaseAction
 						.toString());
 				defineArray.setArrayClass(containerTyperow.getSpecimenClass());
 
-				String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString() + ":"
-						+ new Integer(capacityobj.getTwoDimensionCapacity()).toString()
-						+ ":"
+				final String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString()
+						+ ":" + new Integer(capacityobj
+								.getTwoDimensionCapacity()).toString() + ":"
 						+ defineArray.getArrayClass();
 
-				PrintWriter out = response.getWriter();
+				final PrintWriter out = response.getWriter();
 				response.setContentType("text/html");
 				out.write(dimen);
 				return null;
@@ -127,9 +128,9 @@ public class DefineArrayAction extends BaseAction
 			typeOf = request.getParameter("typeOf");
 
 			if (typeOf == null)
-				{
+			{
 				typeOf = request.getAttribute("typeOf").toString();
-				}
+			}
 
 			request.setAttribute("typeOf", typeOf);
 

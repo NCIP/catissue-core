@@ -42,11 +42,12 @@ public class DeleteNodeFromCPAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
-		HttpSession session = request.getSession();
+		final ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
+		final HttpSession session = request.getSession();
 		Map collectionProtocolEventMap = null;
 		if (session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
 		{
@@ -56,33 +57,32 @@ public class DeleteNodeFromCPAction extends BaseAction
 
 		if ("specimenRequirement".equals(request.getParameter("pageOf")))
 		{
-			String collectionProtocolEventKey = (String) request.getParameter(Constants.EVENT_KEY);
+			final String collectionProtocolEventKey = request.getParameter(Constants.EVENT_KEY);
 			String eventMapKey = null;
-			StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
+			final StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
 			if (st.hasMoreTokens())
 			{
 				eventMapKey = st.nextToken();
 			}
-			CollectionProtocolEventBean collectionProtocolEventBean =
-				(CollectionProtocolEventBean) collectionProtocolEventMap
+			final CollectionProtocolEventBean collectionProtocolEventBean
+			= (CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventMapKey);
-			Map specimenReqMap = (LinkedHashMap) collectionProtocolEventBean
-					.getSpecimenRequirementbeanMap();
+			final Map specimenReqMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 			if (specimenReqMap.containsKey(collectionProtocolEventKey))
 			{
 				specimenReqMap.remove(collectionProtocolEventKey);
 			}
 			else
 			{
-				String parentReqMapKey = eventMapKey + "_" + st.nextToken();
-				char specimenType = getSpecimenType(collectionProtocolEventKey);
-				removeChildSpecimen(specimenReqMap, parentReqMapKey, collectionProtocolEventKey,
-						st, specimenType);
+				final String parentReqMapKey = eventMapKey + "_" + st.nextToken();
+				final char specimenType = this.getSpecimenType(collectionProtocolEventKey);
+				this.removeChildSpecimen(specimenReqMap, parentReqMapKey,
+						collectionProtocolEventKey, st, specimenType);
 			}
 		}
 		else
 		{
-			String mapkey = protocolEventDetailsForm.getCollectionProtocolEventkey();
+			final String mapkey = protocolEventDetailsForm.getCollectionProtocolEventkey();
 			collectionProtocolEventMap.remove(mapkey);
 		}
 		return mapping.findForward(Constants.SUCCESS);
@@ -105,21 +105,21 @@ public class DeleteNodeFromCPAction extends BaseAction
 	private void removeChildSpecimen(Map specimenReqMap, String parentReqMapKey,
 			String collectionProtocolEventKey, StringTokenizer st, char specimenType)
 	{
-		SpecimenRequirementBean spReqBean = (SpecimenRequirementBean) specimenReqMap
+		final SpecimenRequirementBean spReqBean = (SpecimenRequirementBean) specimenReqMap
 				.get(parentReqMapKey);
 		Map childMap = null;
 		if (specimenType == 'A')
 		{
-			childMap = removeAliquot(collectionProtocolEventKey, spReqBean);
+			childMap = this.removeAliquot(collectionProtocolEventKey, spReqBean);
 		}
 		else
 		{
-			childMap = removeDerive(collectionProtocolEventKey, spReqBean);
+			childMap = this.removeDerive(collectionProtocolEventKey, spReqBean);
 		}
 		if (childMap != null)
 		{
 			parentReqMapKey = parentReqMapKey + "_" + st.nextToken();
-			removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st,
+			this.removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st,
 					specimenType);
 		}
 	}
@@ -132,7 +132,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 	private char getSpecimenType(String specimenKey)
 	{
 		String specimenType = null;
-		StringTokenizer st = new StringTokenizer(specimenKey, "_");
+		final StringTokenizer st = new StringTokenizer(specimenKey, "_");
 		while (st.hasMoreTokens())
 		{
 			specimenType = st.nextToken();

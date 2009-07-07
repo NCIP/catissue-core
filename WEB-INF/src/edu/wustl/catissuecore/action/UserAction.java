@@ -60,7 +60,7 @@ public class UserAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(UserAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(UserAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -76,20 +76,21 @@ public class UserAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-		String reqPath = (String) request.getParameter(Constants.REQ_PATH);
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
-		String openInCPFrame = (String) request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
-		UserForm userForm = (UserForm) form;
+		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String reqPath = request.getParameter(Constants.REQ_PATH);
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String openInCPFrame = request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
+		final UserForm userForm = (UserForm) form;
 
 		// method to get myProfile-Add Privilege
-		SessionDataBean sessionDataBean = getSessionData(request);
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// String readOnlyForPrivOnEdit = "";
 		// String disablePrivButton = "false";
 		long loggedInUserId = 0;
@@ -112,10 +113,10 @@ public class UserAction extends SecureAction
 		// method to get myProfile end here
 
 		// method to preserve data on validation
-		MSRUtil msrUtil = new MSRUtil();
+		final MSRUtil msrUtil = new MSRUtil();
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			HttpSession session = request.getSession();
+			final HttpSession session = request.getSession();
 			boolean dirtyVar = false;
 			dirtyVar = new Boolean(request.getParameter("dirtyVar"));
 			if (!dirtyVar)
@@ -145,23 +146,22 @@ public class UserAction extends SecureAction
 			{
 				if (userForm.getCsmUserId().longValue() == 0)
 				{
-					IFactory factory = AbstractFactoryConfig.getInstance().
-					getBizLogicFactory();
-					UserBizLogic bizLogic = (UserBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final UserBizLogic bizLogic = (UserBizLogic) factory
 							.getBizLogic(Constants.USER_FORM_ID);
-					String sourceObjName = User.class.getName();
-					String[] selectColName = {"csmUserId"};
-					String[] whereColName = {"id"};
-					String[] whereColCond = {"="};
-					Object[] whereColVal = {userForm.getId()};
+					final String sourceObjName = User.class.getName();
+					final String[] selectColName = {"csmUserId"};
+					final String[] whereColName = {"id"};
+					final String[] whereColCond = {"="};
+					final Object[] whereColVal = {userForm.getId()};
 
-					List regList = bizLogic.retrieve(sourceObjName,
-							selectColName, whereColName,
-							whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
+					final List regList = bizLogic.retrieve(sourceObjName, selectColName,
+							whereColName, whereColCond, whereColVal, Constants.AND_JOIN_CONDITION);
 					if (regList != null && !regList.isEmpty())
 					{
-						Object obj = (Object) regList.get(0);
-						Long id = (Long) obj;
+						final Object obj = regList.get(0);
+						final Long id = (Long) obj;
 						userForm.setCsmUserId(id);
 					}
 				}
@@ -171,7 +171,7 @@ public class UserAction extends SecureAction
 		{
 			if (!pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
 			{
-				setUserPrivileges(request.getSession(), userForm.getId());
+				this.setUserPrivileges(request.getSession(), userForm.getId());
 			}
 
 			if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER))
@@ -205,9 +205,7 @@ public class UserAction extends SecureAction
 		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
 				&& (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString())
 						|| userForm.getStatus()
-								.equals(Status.
-										APPROVE_USER_REJECT_STATUS.
-										toString()) || userForm
+								.equals(Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
 						.getStatus().equals(Constants.SELECT_OPTION)))
 		{
 			roleStatus = true;
@@ -243,7 +241,7 @@ public class UserAction extends SecureAction
 		userForm.setSubmittedFor(submittedFor);
 		userForm.setRedirectTo(reqPath);
 
-		String roleStatusforJSP = roleStatus + "";
+		final String roleStatusforJSP = roleStatus + "";
 
 		request.setAttribute("roleStatus", roleStatusforJSP);
 		request.setAttribute("formName", formName);
@@ -251,41 +249,41 @@ public class UserAction extends SecureAction
 		request.setAttribute("nextPageURL", nextPage);
 
 		// Sets the countryList attribute to be used in the Add/Edit User Page.
-		List countryList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List countryList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COUNTRY_LIST, null);
 		request.setAttribute("countryList", countryList);
 
 		// Sets the stateList attribute to be used in the Add/Edit User Page.
-		List stateList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List stateList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_STATE_LIST, null);
 		request.setAttribute("stateList", stateList);
 
 		// Sets the pageOf attribute (for Add,Edit or Query Interface).
 		String target = pageOf;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
 
 		// Sets the instituteList attribute to be used in the Add/Edit User
 		// Page.
 		String sourceObjectName = Institution.class.getName();
-		String[] displayNameFields = {Constants.NAME};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
+		final String[] displayNameFields = {Constants.NAME};
+		final String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		List instituteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
-				false);
+		final List instituteList = bizLogic.getList(sourceObjectName, displayNameFields,
+				valueField, false);
 		request.setAttribute("instituteList", instituteList);
 
 		// Sets the departmentList attribute to be used in the Add/Edit User
 		// Page.
 		sourceObjectName = Department.class.getName();
-		List departmentList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
-				false);
+		final List departmentList = bizLogic.getList(sourceObjectName, displayNameFields,
+				valueField, false);
 		request.setAttribute("departmentList", departmentList);
 
 		// Sets the cancerResearchGroupList attribute to be used in the Add/Edit
 		// User Page.
 		sourceObjectName = CancerResearchGroup.class.getName();
-		List cancerResearchGroupList = bizLogic.getList(sourceObjectName, displayNameFields,
+		final List cancerResearchGroupList = bizLogic.getList(sourceObjectName, displayNameFields,
 				valueField, false);
 		request.setAttribute("cancerResearchGroupList", cancerResearchGroupList);
 
@@ -314,16 +312,17 @@ public class UserAction extends SecureAction
 			request.setAttribute("statusList", Constants.APPROVE_USER_STATUS_VALUES);
 		}
 
-		logger.debug("pageOf :---------- " + pageOf);
+		this.logger.debug("pageOf :---------- " + pageOf);
 
 		// To show Role as Scientist
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
+		final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME)
+				.getDAO();
 		dao.openSession(sessionDataBean);
-		List < User > userList = dao.retrieve(User.class.getName(), "emailAddress", userForm
+		final List<User> userList = dao.retrieve(User.class.getName(), "emailAddress", userForm
 				.getEmailAddress());
 		if (!userList.isEmpty())
 		{
-			User user = userList.get(0);
+			final User user = userList.get(0);
 
 			if (!user.getRoleId().equals(Constants.ADMIN_USER))
 			{
@@ -336,7 +335,7 @@ public class UserAction extends SecureAction
 		dao.closeSession();
 
 		// For Privilege
-		String roleId = userForm.getRole();
+		final String roleId = userForm.getRole();
 		boolean flagForSARole = false;
 		if ((Constants.SUPER_ADMIN_USER).equals(roleId))
 		{
@@ -348,14 +347,14 @@ public class UserAction extends SecureAction
 
 		msrUtil.onFirstTimeLoad(mapping, request);
 
-		final String cpOperation = (String) request.getParameter("cpOperation");
+		final String cpOperation = request.getParameter("cpOperation");
 		if (cpOperation != null)
 		{
 			return msrUtil.setAJAXResponse(request, response, cpOperation);
 		}
 		// Parameters for JSP
 
-		int SELECT_OPTION_VALUE = Constants.SELECT_OPTION_VALUE;
+		final int SELECT_OPTION_VALUE = Constants.SELECT_OPTION_VALUE;
 		boolean readOnlyEmail = false;
 		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
 		{
@@ -378,13 +377,14 @@ public class UserAction extends SecureAction
 		request.setAttribute("operation", operation);
 		request.setAttribute("openInCPFrame", openInCPFrame);
 		// ------------- add new
-		logger.debug("USerAction redirect :---------- " + reqPath);
+		this.logger.debug("USerAction redirect :---------- " + reqPath);
 		if (openInCPFrame != null && Constants.TRUE.equalsIgnoreCase(openInCPFrame))
 		{
 			target = Constants.OPEN_PAGE_IN_CPFRAME;
 		}
 		return mapping.findForward(target);
 	}
+
 	/**
 	 *
 	 * @param session : session
@@ -398,28 +398,29 @@ public class UserAction extends SecureAction
 		}
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
-			User user = (User) bizLogic.retrieve(User.class.getName(), id);
-			String role = user.getRoleId();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.USER_FORM_ID);
+			final User user = (User) bizLogic.retrieve(User.class.getName(), id);
+			final String role = user.getRoleId();
 			if (role != null && !role.equalsIgnoreCase(Constants.ADMIN_USER))
 			{
-				PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+				final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 				// privilegeManager.removePrivilegeCache(user.getLoginName());
-				PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
+				final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
 						.getLoginName());
 				privilegeCache.refresh();
-				Map < String , SiteUserRolePrivilegeBean > privilegeMap = CaTissuePrivilegeUtility
+				final Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility
 						.getAllPrivileges(privilegeCache);
 				session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
 			}
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
-			logger.debug(e.getLogMessage(), e);
+			this.logger.debug(e.getLogMessage(), e);
 			e.printStackTrace();
 		}
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -444,9 +445,10 @@ public class UserAction extends SecureAction
 	 * @param request : request
 	 * @return SessionDataBean : SessionDataBean
 	 */
+	@Override
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
 		{
 			return super.getSessionData(request);

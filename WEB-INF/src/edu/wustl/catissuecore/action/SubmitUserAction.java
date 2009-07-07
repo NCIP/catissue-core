@@ -37,7 +37,7 @@ import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -56,7 +56,7 @@ public class SubmitUserAction extends Action
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SubmitUserAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SubmitUserAction.class);
 
 	/**
 	 * target.
@@ -89,43 +89,44 @@ public class SubmitUserAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws AssignDataException
 	{
 		try
 		{
-			AbstractActionForm abstractForm = (AbstractActionForm) form;
+			final AbstractActionForm abstractForm = (AbstractActionForm) form;
 			if (abstractForm.isAddOperation())
 			{
 
-				return executeAddUser(mapping, request, abstractForm);
+				return this.executeAddUser(mapping, request, abstractForm);
 			}
 			else
 			{
-				return executeEditUser(mapping, request, abstractForm);
+				return this.executeEditUser(mapping, request, abstractForm);
 			}
 		}
-		catch (BizLogicException excp)
+		catch (final BizLogicException excp)
 		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("errors.item", excp.getMessage());
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("errors.item", excp.getMessage());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
-			target = new String(Constants.FAILURE);
+			this.saveErrors(request, errors);
+			this.target = new String(Constants.FAILURE);
 
-			logger.error(excp.getMessage(), excp);
+			this.logger.error(excp.getMessage(), excp);
 		}
-		catch (DAOException excp)
+		catch (final DAOException excp)
 		{
-			target = Constants.FAILURE;
-			logger.error(excp.getMessage(), excp);
+			this.target = Constants.FAILURE;
+			this.logger.error(excp.getMessage(), excp);
 		}
-		catch (ApplicationException excep)
+		catch (final ApplicationException excep)
 		{
-			target = Constants.FAILURE;
-			logger.error(excep.getMessage(), excep);
+			this.target = Constants.FAILURE;
+			this.logger.error(excep.getMessage(), excep);
 		}
-		return mapping.findForward(target);
+		return mapping.findForward(this.target);
 	}
 
 	/**
@@ -143,102 +144,100 @@ public class SubmitUserAction extends Action
 			AbstractActionForm form) throws ApplicationException
 	{
 		User user = null;
-		IDomainObjectFactory abstractDomainObjectFactory = getIDomainObjectFactory();
-		AbstractActionForm form1 = (AbstractActionForm) form;
+		final IDomainObjectFactory abstractDomainObjectFactory = this.getIDomainObjectFactory();
+		final AbstractActionForm form1 = form;
 		user = (User) abstractDomainObjectFactory.getDomainObject(form1.getFormId(), form1);
-		AbstractActionForm abstractForm = (AbstractActionForm) form;
-		String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm
+		final AbstractActionForm abstractForm = form;
+		final String objectName = abstractDomainObjectFactory.getDomainObjectName(abstractForm
 				.getFormId());
 		// UserBizLogic bizLogic = (UserBizLogic)
 		// BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		// SessionDataBean sessionDataBean = (SessionDataBean)
 		// session.getAttribute(Constants.SESSION_DATA);
 		// bizLogic.insert(user, sessionDataBean, 0);
-		target = new String(Constants.SUCCESS);
-		AbstractDomainObject abstractDomain = (AbstractDomainObject) user;
-		UserDTO userDTO = getUserDTO(user, session);
+		this.target = new String(Constants.SUCCESS);
+		final AbstractDomainObject abstractDomain = user;
+		final UserDTO userDTO = this.getUserDTO(user, session);
 
-		insertUser(userDTO, request.getSession(), form);
+		this.insertUser(userDTO, request.getSession(), form);
 
 		// Attributes to decide AddNew action
-		String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
+		final String submittedFor = request.getParameter(Constants.SUBMITTED_FOR);
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, user.getId());
-		logger.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"
+		this.logger.debug("Checking parameter SubmittedFor in CommonAddEditAction--->"
 				+ request.getParameter(Constants.SUBMITTED_FOR));
-		logger.debug("SubmittedFor attribute of Form-Bean received---->"
+		this.logger.debug("SubmittedFor attribute of Form-Bean received---->"
 				+ abstractForm.getSubmittedFor());
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic queryBizLogic = factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic queryBizLogic = factory
 				.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
-		messages = new ActionMessages();
+		this.messages = new ActionMessages();
 
-		addMessage(messages, abstractDomain, "add", (QueryBizLogic) queryBizLogic, objectName);
+		this.addMessage(this.messages, abstractDomain, "add", (QueryBizLogic) queryBizLogic,
+				objectName);
 
 		if ((submittedFor != null) && (submittedFor.equals("AddNew")))
 		{
-			logger.debug("SubmittedFor is AddNew in CommonAddEditAction...................");
+			this.logger.debug("SubmittedFor is AddNew in CommonAddEditAction...................");
 
-			Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
+			final Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
 
 			if (formBeanStack != null)
 			{
 
-				AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
+				final AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
 						.pop();
 
 				if (addNewSessionDataBean != null)
 				{
-					AbstractActionForm sessionFormBean = addNewSessionDataBean
+					final AbstractActionForm sessionFormBean = addNewSessionDataBean
 							.getAbstractActionForm();
 
-					String forwardTo = addNewSessionDataBean.getForwardTo();
-					logger.debug("forwardTo in CommonAddEditAction--------->" + forwardTo);
-					sessionFormBean.setAddNewObjectIdentifier
-					(addNewSessionDataBean.getAddNewFor(),
+					final String forwardTo = addNewSessionDataBean.getForwardTo();
+					this.logger.debug("forwardTo in CommonAddEditAction--------->" + forwardTo);
+					sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(),
 							abstractDomain.getId());
 					sessionFormBean.setMutable(false);
 					if (formBeanStack.isEmpty())
 					{
 						session.removeAttribute(Constants.FORM_BEAN_STACK);
 						request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-						logger
-								.debug("SubmittedFor set as Default in" +
-										" CommonAddEditAction===========");
+						this.logger.debug("SubmittedFor set as Default in"
+								+ " CommonAddEditAction===========");
 
-						logger.debug("cleaning FormBeanStack from session*************");
+						this.logger.debug("cleaning FormBeanStack from session*************");
 					}
 					else
 					{
 						request.setAttribute(Constants.SUBMITTED_FOR, "AddNew");
 					}
-					String formBeanName = Utility.getFormBeanName(sessionFormBean);
+					final String formBeanName = CommonUtilities.getFormBeanName(sessionFormBean);
 					request.setAttribute(formBeanName, sessionFormBean);
 
-					logger.debug("InitiliazeAction operation=========>"
+					this.logger.debug("InitiliazeAction operation=========>"
 							+ sessionFormBean.getOperation());
 
-					if (messages != null)
+					if (this.messages != null)
 					{
-						saveMessages(request, messages);
+						this.saveMessages(request, this.messages);
 					}
-					String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
+					final String statusMessageKey
+					= String.valueOf(abstractForm.getFormId() + "."
 							+ String.valueOf(abstractForm.isAddOperation()));
 					request.setAttribute(Constants.STATUS_MESSAGE_KEY, statusMessageKey);
 					if ((sessionFormBean.getOperation().equals("edit")))
 					{
-						logger
-								.debug("Edit object Identifier while AddNew " +
-										"is from Edit operation==>"
-										+ sessionFormBean.getId());
-						ActionForward editForward = new ActionForward();
+						this.logger.debug("Edit object Identifier while AddNew "
+								+ "is from Edit operation==>" + sessionFormBean.getId());
+						final ActionForward editForward = new ActionForward();
 
-						String addPath = (mapping.findForward(forwardTo)).getPath();
-						logger.debug("Operation before edit==========>" + addPath);
+						final String addPath = (mapping.findForward(forwardTo)).getPath();
+						this.logger.debug("Operation before edit==========>" + addPath);
 
-						String editPath = addPath.replaceFirst
-						("operation=add", "operation=edit");
-						logger.debug("Operation edited=============>" + editPath);
+						final String editPath = addPath.replaceFirst("operation=add",
+								"operation=edit");
+						this.logger.debug("Operation edited=============>" + editPath);
 						editForward.setPath(editPath);
 
 						return editForward;
@@ -247,41 +246,41 @@ public class SubmitUserAction extends Action
 				}
 				else
 				{
-					target = new String(Constants.FAILURE);
+					this.target = new String(Constants.FAILURE);
 
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError
-					("errors.item.unknown", AbstractDomainObject
-							.parseClassName(objectName));
+					final ActionErrors errors = new ActionErrors();
+					final ActionError error = new ActionError("errors.item.unknown",
+							AbstractDomainObject.parseClassName(objectName));
 					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
+					this.saveErrors(request, errors);
 				}
 			}
 		}
 		else if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 		{
-			logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+			this.logger
+					.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
 			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-			request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm,
+			request.setAttribute("forwardToHashMap", this.generateForwardToHashMap(abstractForm,
 					abstractDomain));
 		}
 		if (abstractForm.getForwardTo() != null && abstractForm.getForwardTo().trim().length() > 0)
 		{
-			String forwardTo = abstractForm.getForwardTo();
-			logger.debug("ForwardTo in Add :-- : " + forwardTo);
-			target = forwardTo;
+			final String forwardTo = abstractForm.getForwardTo();
+			this.logger.debug("ForwardTo in Add :-- : " + forwardTo);
+			this.target = forwardTo;
 		}
-		request.setAttribute("forwardToPrintMap", generateForwardToPrintMap(abstractForm,
+		request.setAttribute("forwardToPrintMap", this.generateForwardToPrintMap(abstractForm,
 				abstractDomain));
-		if (messages != null)
+		if (this.messages != null)
 		{
-			saveMessages(request, messages);
+			this.saveMessages(request, this.messages);
 		}
-		String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
+		final String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
 				+ String.valueOf(abstractForm.isAddOperation()));
 		request.setAttribute(Constants.STATUS_MESSAGE_KEY, statusMessageKey);
 
-		return mapping.findForward(target);
+		return mapping.findForward(this.target);
 	}
 
 	/**
@@ -298,7 +297,7 @@ public class SubmitUserAction extends Action
 	private ActionForward executeEditUser(ActionMapping mapping, HttpServletRequest request,
 			AbstractActionForm abstractForm) throws ApplicationException
 	{
-		target = new String(Constants.SUCCESS);
+		this.target = new String(Constants.SUCCESS);
 		DAO dao = null;
 		// If operation is edit, update the data in the database.
 
@@ -309,12 +308,12 @@ public class SubmitUserAction extends Action
 		// {
 		// abstractDomain = (AbstractDomainObject) list.get(0);
 		// abstractDomain.setAllValues(abstractForm);
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		IDomainObjectFactory abstractDomainObjectFactory = getIDomainObjectFactory();
-		String objectName = getObjectName(abstractDomainObjectFactory, abstractForm);
-		abstractDomain = defaultBizLogic.populateDomainObject(objectName, new Long(abstractForm
-				.getId()), abstractForm);
-		if (abstractDomain != null)
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final IDomainObjectFactory abstractDomainObjectFactory = this.getIDomainObjectFactory();
+		final String objectName = this.getObjectName(abstractDomainObjectFactory, abstractForm);
+		this.abstractDomain = defaultBizLogic.populateDomainObject(objectName, new Long(
+				abstractForm.getId()), abstractForm);
+		if (this.abstractDomain != null)
 		{
 			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
 
@@ -325,24 +324,24 @@ public class SubmitUserAction extends Action
 				abstractDomainOld = (AbstractDomainObject) dao.retrieveById(objectName, new Long(
 						abstractForm.getId()));
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.debug(ex.getMessage(), ex);
+				this.logger.debug(ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
-			HttpSession session = request.getSession();
-			UserDTO userCurrent = getUserDTO((User) abstractDomain, session);
-			User userOld = (User) abstractDomainOld;
+			final HttpSession session = request.getSession();
+			final UserDTO userCurrent = this.getUserDTO((User) this.abstractDomain, session);
+			final User userOld = (User) abstractDomainOld;
 
-			updateUser(userCurrent, userOld, request.getSession(), abstractForm);
+			this.updateUser(userCurrent, userOld, request.getSession(), abstractForm);
 
 			try
 			{
 				dao.closeSession();
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.debug(ex.getMessage(), ex);
+				this.logger.debug(ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 
@@ -350,9 +349,9 @@ public class SubmitUserAction extends Action
 					&& (Status.ACTIVITY_STATUS_DISABLED.toString().equals(abstractForm
 							.getActivityStatus())))
 			{
-				String moveTo = abstractForm.getOnSubmit();
-				logger.debug("MoveTo in Disabled :-- : " + moveTo);
-				ActionForward reDirectForward = new ActionForward();
+				final String moveTo = abstractForm.getOnSubmit();
+				this.logger.debug("MoveTo in Disabled :-- : " + moveTo);
+				final ActionForward reDirectForward = new ActionForward();
 				reDirectForward.setPath(moveTo);
 				return reDirectForward;
 			}
@@ -360,71 +359,71 @@ public class SubmitUserAction extends Action
 			if (abstractForm.getOnSubmit() != null
 					&& abstractForm.getOnSubmit().trim().length() > 0)
 			{
-				String forwardTo = abstractForm.getOnSubmit();
-				logger.debug("OnSubmit :-- : " + forwardTo);
+				final String forwardTo = abstractForm.getOnSubmit();
+				this.logger.debug("OnSubmit :-- : " + forwardTo);
 				return (mapping.findForward(forwardTo));
 			}
 
-			String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
-			logger.debug("Submitted for in Edit CommonAddEditAction===>" + submittedFor);
+			final String submittedFor = request.getParameter(Constants.SUBMITTED_FOR);
+			this.logger.debug("Submitted for in Edit CommonAddEditAction===>" + submittedFor);
 
 			if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 			{
-				logger.debug("SubmittedFor is ForwardTo in" +
-						" CommonAddEditAction...");
+				this.logger.debug("SubmittedFor is ForwardTo in" + " CommonAddEditAction...");
 
 				request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 
-				request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm,
-						abstractDomain));
+				request.setAttribute("forwardToHashMap", this.generateForwardToHashMap(
+						abstractForm, this.abstractDomain));
 			}
 
 			if (abstractForm.getForwardTo() != null
 					&& abstractForm.getForwardTo().trim().length() > 0)
 			{
-				String forwardTo = abstractForm.getForwardTo();
-				logger.debug("ForwardTo in Edit :-- : " + forwardTo);
+				final String forwardTo = abstractForm.getForwardTo();
+				this.logger.debug("ForwardTo in Edit :-- : " + forwardTo);
 
-				target = forwardTo;
+				this.target = forwardTo;
 			}
 
-			String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-			logger.debug("pageof for query edit==" + pageOf);
+			final String pageOf = request.getParameter(Constants.PAGE_OF);
+			this.logger.debug("pageof for query edit==" + pageOf);
 			if (pageOf != null)
 			{
 				if (pageOf.equals(Constants.QUERY))
 				{
-					target = pageOf;
+					this.target = pageOf;
 				}
 			}
-			messages = new ActionMessages();
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic queryBizLogic = factory
+			this.messages = new ActionMessages();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic queryBizLogic = factory
 					.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
-			addMessage(messages, abstractDomain, "edit", (QueryBizLogic) queryBizLogic, objectName);
+			this.addMessage(this.messages, this.abstractDomain, "edit",
+					(QueryBizLogic) queryBizLogic, objectName);
 		}
 		else
 		{
-			target = new String(Constants.FAILURE);
+			this.target = new String(Constants.FAILURE);
 
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("errors.item.unknown", AbstractDomainObject
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("errors.item.unknown", AbstractDomainObject
 					.parseClassName(objectName));
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 		}
-		request.setAttribute("forwardToPrintMap", generateForwardToPrintMap(abstractForm,
-				abstractDomain));
+		request.setAttribute("forwardToPrintMap", this.generateForwardToPrintMap(abstractForm,
+				this.abstractDomain));
 
-		if (messages != null)
+		if (this.messages != null)
 		{
-			saveMessages(request, messages);
+			this.saveMessages(request, this.messages);
 		}
 
-		String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
+		final String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
 				+ String.valueOf(abstractForm.isAddOperation()));
 		request.setAttribute(Constants.STATUS_MESSAGE_KEY, statusMessageKey);
-		return mapping.findForward(target);
+		return mapping.findForward(this.target);
 	}
 
 	/**
@@ -443,8 +442,8 @@ public class SubmitUserAction extends Action
 			AbstractDomainObject abstractDomain) throws BizLogicException
 	{
 		HashMap forwardToPrintMap = null;
-		IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
-		AbstractForwardToProcessor forwardToProcessor = factory.getForwardToPrintProcessor();
+		final IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+		final AbstractForwardToProcessor forwardToProcessor = factory.getForwardToPrintProcessor();
 		forwardToPrintMap = (HashMap) forwardToProcessor.populateForwardToData(abstractForm,
 				abstractDomain);
 		return forwardToPrintMap;
@@ -463,8 +462,8 @@ public class SubmitUserAction extends Action
 			AbstractDomainObject abstractDomain) throws BizLogicException
 	{
 		HashMap forwardToHashMap;
-		IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
-		AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
+		final IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+		final AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
 		forwardToHashMap = (HashMap) forwardToProcessor.populateForwardToData(abstractForm,
 				abstractDomain);
 		return forwardToHashMap;
@@ -492,9 +491,8 @@ public class SubmitUserAction extends Action
 	 */
 	private UserDTO getUserDTO(User user, HttpSession session)
 	{
-		UserDTO userDTO = new UserDTO();
-		Map < String , SiteUserRolePrivilegeBean > userRowIdBeanMap =
-			(Map < String , SiteUserRolePrivilegeBean >) session
+		final UserDTO userDTO = new UserDTO();
+		final Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute("rowIdBeanMapForUserPage");
 		userDTO.setUser(user);
 		userDTO.setUserRowIdBeanMap(userRowIdBeanMap);
@@ -514,19 +512,25 @@ public class SubmitUserAction extends Action
 	private void insertUser(UserDTO userDTO, HttpSession session, AbstractActionForm form)
 			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(form.getFormId());
-		SessionDataBean sessionDataBean = (SessionDataBean) session
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(form.getFormId());
+		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
 		bizLogic.insert(userDTO, sessionDataBean, 0);
 	}
-
+	/**
+	 * @param userCurrent : userCurrent
+	 * @param userOld : userOld
+	 * @param session : session
+	 * @param form : form
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private void updateUser(UserDTO userCurrent, User userOld, HttpSession session,
 			AbstractActionForm form) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(form.getFormId());
-		SessionDataBean sessionDataBean = (SessionDataBean) session
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(form.getFormId());
+		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
 		bizLogic.update(userCurrent, userOld, 0, sessionDataBean);
 	}
@@ -548,29 +552,29 @@ public class SubmitUserAction extends Action
 	private void addMessage(ActionMessages messages, AbstractDomainObject abstractDomain,
 			String addoredit, QueryBizLogic queryBizLogic, String objectName)
 	{
-		String message = abstractDomain.getMessageLabel();
-		Validator validator = new Validator();
-		boolean isEmpty = validator.isEmpty(message);
+		final String message = abstractDomain.getMessageLabel();
+		final Validator validator = new Validator();
+		final boolean isEmpty = Validator.isEmpty(message);
 		String displayName = null;
 		try
 		{
 			displayName = queryBizLogic.getDisplayNamebyTableName(HibernateMetaData
 					.getTableName(abstractDomain.getClass()));
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			displayName = AbstractDomainObject.parseClassName(objectName);
-			logger.error(excp.getMessage(), excp);
+			this.logger.error(excp.getMessage(), excp);
 		}
 
 		if (!isEmpty)
 		{
-			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("object." + addoredit
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object." + addoredit
 					+ ".success", displayName, message));
 		}
 		else
 		{
-			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("object." + addoredit
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object." + addoredit
 					+ ".successOnly", displayName));
 		}
 	}
@@ -584,11 +588,11 @@ public class SubmitUserAction extends Action
 	{
 		try
 		{
-			IDomainObjectFactory factory = AbstractFactoryConfig.getInstance()
+			final IDomainObjectFactory factory = AbstractFactoryConfig.getInstance()
 					.getDomainObjectFactory();
 			return factory;
 		}
-		catch (BizLogicException exception)
+		catch (final BizLogicException exception)
 		{
 			// logger.error(
 			// "Failed to get QueryBizLogic object from BizLogic Factory");

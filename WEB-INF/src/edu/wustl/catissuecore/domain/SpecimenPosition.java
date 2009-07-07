@@ -31,7 +31,7 @@ public class SpecimenPosition extends AbstractPosition
 	 */
 	public Specimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SpecimenPosition extends AbstractPosition
 	 */
 	public StorageContainer getStorageContainer()
 	{
-		return storageContainer;
+		return this.storageContainer;
 	}
 
 	/**

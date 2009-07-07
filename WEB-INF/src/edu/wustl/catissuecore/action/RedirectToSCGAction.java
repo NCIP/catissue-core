@@ -24,6 +24,7 @@ import edu.wustl.dao.daofactory.IDAOFactory;
  */
 public class RedirectToSCGAction extends Action
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -43,23 +44,23 @@ public class RedirectToSCGAction extends Action
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		Long id = (Long) request.getSession().getAttribute("SCGFORM");
-		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
+		final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
+		final Long id = (Long) request.getSession().getAttribute("SCGFORM");
+		final IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
 				CommonServiceLocator.getInstance().getAppName());
 		DAO hibernateDao = null;
 		hibernateDao = daoFact.getDAO();
 
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
 
 		hibernateDao.openSession(sessionDataBean);
 
-		Object object = hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(),
+		final Object object = hibernateDao.retrieveById(SpecimenCollectionGroup.class.getName(),
 				new Long(id));
 		if (object != null)
 		{
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
+			final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 			specimenCollectionGroupForm.setAllValues(specimenCollectionGroup);
 		}
 		hibernateDao.closeSession();

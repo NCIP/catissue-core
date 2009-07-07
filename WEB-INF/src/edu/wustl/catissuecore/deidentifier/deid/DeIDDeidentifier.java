@@ -28,10 +28,21 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeIDDeidentifier extends AbstractDeidentifier
 {
-
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DeIDDeidentifier.class);
+	/**
+	 * configFileName.
+	 */
 	protected static String configFileName;
+	/**
+	 * deid.
+	 */
 	protected static JniDeID deid;
+	/**
+	 * pathToConfigFiles.
+	 */
 	private static String pathToConfigFiles;
 	/**
 	 * @throws Exception : Exception
@@ -60,7 +71,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		JniDeID.loadDeidLibrary();
 	}
 	/**
-	 * shutdown
+	 * shutdown.
 	 */
 	public void shutdown()
 	{
@@ -157,7 +168,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 	}
 
 	/**
-	 * Method to create and initialize object of
+	 * Method to create and initialize object of.
 	 * DeidentifiedSurgicalPathologyReport
 	 * @param ispr
 	 *            identified surgical pathology report
@@ -243,7 +254,8 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		{
 			logger
 					.error(
-							"File system error occured while creating or deleting temporary files for deidentification",
+							"File system error occured while creating" +
+							" or deleting temporary files for deidentification",
 							ex);
 			throw ex;
 		}

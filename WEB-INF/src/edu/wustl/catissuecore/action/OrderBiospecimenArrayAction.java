@@ -39,28 +39,29 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		OrderBiospecimenArrayForm arrayObject = (OrderBiospecimenArrayForm) form;
-		HttpSession session = request.getSession();
+		final OrderBiospecimenArrayForm arrayObject = (OrderBiospecimenArrayForm) form;
+		final HttpSession session = request.getSession();
 		String target = null;
 
 		if (session.getAttribute("OrderForm") != null)
 		{
-			OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
+			final OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
 			arrayObject.setOrderForm(orderForm);
 
 			if (orderForm.getDistributionProtocol() != null)
 			{
-				getProtocolName(request, arrayObject, orderForm);
+				this.getProtocolName(request, arrayObject, orderForm);
 			}
 
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
-			List specimenArrayList = (List) orderBizLogic.getSpecimenArrayDataFromDatabase(request);
+			final List specimenArrayList = orderBizLogic.getSpecimenArrayDataFromDatabase(request);
 			request.setAttribute("SpecimenNameList", specimenArrayList);
 
 			request.setAttribute("typeOf", "specimenArray");
@@ -88,14 +89,14 @@ public class OrderBiospecimenArrayAction extends BaseAction
 	private void getProtocolName(HttpServletRequest request, OrderBiospecimenArrayForm arrayObject,
 			OrderForm orderForm) throws Exception
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List protocolList = orderBizLogic.getDistributionProtocol(request);
+		final List protocolList = orderBizLogic.getDistributionProtocol(request);
 
 		for (int i = 0; i < protocolList.size(); i++)
 		{
-			NameValueBean obj = (NameValueBean) protocolList.get(i);
+			final NameValueBean obj = (NameValueBean) protocolList.get(i);
 
 			if (orderForm.getDistributionProtocol().equals(obj.getValue()))
 			{

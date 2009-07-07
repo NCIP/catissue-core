@@ -55,7 +55,7 @@ public class ConflictResolverAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ConflictResolverAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(ConflictResolverAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -72,36 +72,38 @@ public class ConflictResolverAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		HttpSession session = request.getSession();
-		String participantIdToAssociate = (String) session
+		final HttpSession session = request.getSession();
+		final String participantIdToAssociate = (String) session
 				.getAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE);
-		String specimenCollGrpId = (String) session.getAttribute(Constants.SCG_ID_TO_ASSOCIATE);
-		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
-		String button = request.getParameter(Constants.CONFLICT_BUTTON);
+		final String specimenCollGrpId = (String) session
+				.getAttribute(Constants.SCG_ID_TO_ASSOCIATE);
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
+		final String button = request.getParameter(Constants.CONFLICT_BUTTON);
 		String errorMessage = null;
 
 		// overwrite the existing report
 		if (button.trim().equalsIgnoreCase(Constants.OVERWRITE_REPORT))
 		{
-			overwriteReport(request, reportQueueId);
+			this.overwriteReport(request, reportQueueId);
 		}
 
 		// Ignore new Report
 		if (button.trim().equalsIgnoreCase(Constants.IGNORE_NEW_REPORT))
 		{
-			ignoreNewReport(reportQueueId);
+			this.ignoreNewReport(reportQueueId);
 		}
 
 		// Creating a new Participant
 		if (button.trim().equalsIgnoreCase(Constants.CREATE_NEW_PARTICIPANT))
 		{
-			errorMessage = createNewParticipant(request, reportQueueId);
+			errorMessage = this.createNewParticipant(request, reportQueueId);
 			if (errorMessage != null)
 			{
-				setActionError(request, errorMessage);
+				this.setActionError(request, errorMessage);
 			}
 		}
 		else
@@ -111,7 +113,7 @@ public class ConflictResolverAction extends BaseAction
 				if (participantIdToAssociate != null && !participantIdToAssociate.equals(""))
 				{
 					// Associate existing participant with Report
-					createNewSCG(request, reportQueueId, participantIdToAssociate);
+					this.createNewSCG(request, reportQueueId, participantIdToAssociate);
 				}
 			}
 			else if (button.trim().equalsIgnoreCase(Constants.USE_SELECTED_SCG))
@@ -120,12 +122,13 @@ public class ConflictResolverAction extends BaseAction
 				if (specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 				{
 					// Associate existing SCG with Report
-					associateSCGWithReport(request, reportQueueId, participantIdToAssociate,
+					this.associateSCGWithReport(request
+							, reportQueueId, participantIdToAssociate,
 							specimenCollGrpId);
 				}
 			}
 		}
-		resetSessionAttributes(session);
+		this.resetSessionAttributes(session);
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
@@ -148,18 +151,18 @@ public class ConflictResolverAction extends BaseAction
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
 
-		Participant participant = Utility.getParticipantFromReportLoaderQueue(reportQueueId);
+		final Participant participant = Utility.getParticipantFromReportLoaderQueue(reportQueueId);
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory
 				.getBizLogic(Participant.class.getName());
 		try
 		{
-			participantBizLogic.insert(participant, getSessionData(request), 0);
+			participantBizLogic.insert(participant, this.getSessionData(request), 0);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.info(e.getMessage(), e);
+			this.logger.info(e.getMessage(), e);
 			// System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
 			// Setting the status to NEW
@@ -170,7 +173,7 @@ public class ConflictResolverAction extends BaseAction
 			return errorMessage;
 		}
 
-		Collection participantColl = new HashSet();
+		final Collection participantColl = new HashSet();
 		// Adding the new participant
 		participantColl.add(participant);
 		reportLoaderQueue.setParticipantCollection(participantColl);
@@ -180,7 +183,7 @@ public class ConflictResolverAction extends BaseAction
 		// Setting the status to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.NEW);
 		reportLoaderQueue.setSpecimenCollectionGroup(null);
-		updateReportLoaderQueue(reportLoaderQueue, request);
+		this.updateReportLoaderQueue(reportLoaderQueue, request);
 
 		return errorMessage;
 	}
@@ -214,12 +217,12 @@ public class ConflictResolverAction extends BaseAction
 
 		// removing all participants from CATISSUE_REPORT_PARTICIP_REL other
 		// than the selected participant
-		Collection participantColl = reportLoaderQueue.getParticipantCollection();
-		Iterator iter = participantColl.iterator();
-		Set tempColl = new HashSet();
+		final Collection participantColl = reportLoaderQueue.getParticipantCollection();
+		final Iterator iter = participantColl.iterator();
+		final Set tempColl = new HashSet();
 		while (iter.hasNext())
 		{
-			Participant participant = (Participant) iter.next();
+			final Participant participant = (Participant) iter.next();
 			if (participant.getId().toString().equals(participantIdToAssociate.trim()))
 			{
 				tempColl.add(participant);
@@ -228,7 +231,7 @@ public class ConflictResolverAction extends BaseAction
 		reportLoaderQueue.setParticipantCollection(tempColl);
 
 		// Updating the report queue obj
-		updateReportLoaderQueue(reportLoaderQueue, request);
+		this.updateReportLoaderQueue(reportLoaderQueue, request);
 	}
 
 	/**
@@ -264,34 +267,35 @@ public class ConflictResolverAction extends BaseAction
 		if (specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 		{
 			SpecimenCollectionGroup scg = null;
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic
+			= (ReportLoaderQueueBizLogic) factory
 					.getBizLogic(ReportLoaderQueue.class.getName());
-			Object object = reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class
+			final Object object = reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class
 					.getName(), new Long(specimenCollGrpId));
 			if (object != null)
 			{
 				scg = (SpecimenCollectionGroup) object;
 			}
-			cprId = (Long) scg.getCollectionProtocolRegistration().getId();
+			cprId = scg.getCollectionProtocolRegistration().getId();
 			reportLoaderQueue.setSpecimenCollectionGroup(scg);
 		}
 
 		// Retrieving participantID if it is null
 		if (participantIdToAssociate == null || participantIdToAssociate.equals(""))
 		{
-			DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-			Long partID = (Long) defaultBizLogic.retrieveAttribute(
+			final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+			final Long partID = (Long) defaultBizLogic.retrieveAttribute(
 					CollectionProtocolRegistration.class.getName(), cprId,
 					Constants.COLUMN_NAME_PARTICIPANT_ID);
-			participantIdToAssociate = (String) partID.toString();
+			participantIdToAssociate = partID.toString();
 		}
 
 		// removing all participants from CATISSUE_REPORT_PARTICIP_REL other
 		// than the selected participant
-		Collection participantColl = reportLoaderQueue.getParticipantCollection();
-		Iterator iter = participantColl.iterator();
-		Set tempColl = new HashSet();
+		final Collection participantColl = reportLoaderQueue.getParticipantCollection();
+		final Iterator iter = participantColl.iterator();
+		final Set tempColl = new HashSet();
 		Participant participant = null;
 		while (iter.hasNext())
 		{
@@ -304,7 +308,7 @@ public class ConflictResolverAction extends BaseAction
 		reportLoaderQueue.setParticipantCollection(tempColl);
 
 		// Updating the report queue obj
-		updateReportLoaderQueue(reportLoaderQueue, request);
+		this.updateReportLoaderQueue(reportLoaderQueue, request);
 	}
 
 	/**
@@ -321,16 +325,17 @@ public class ConflictResolverAction extends BaseAction
 
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic
+			= (ReportLoaderQueueBizLogic) factory
 					.getBizLogic(ReportLoaderQueue.class.getName());
-			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, 0,
-					getSessionData(request));
+			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, 0, this
+					.getSessionData(request));
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Error Updating ReportQueue" + e);
+			this.logger.error("Error Updating ReportQueue" + e);
 		}
 	}
 
@@ -339,6 +344,7 @@ public class ConflictResolverAction extends BaseAction
 	 *            : request
 	 * @return SessionDataBean : SessionDataBean
 	 */
+	@Override
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{
 		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
@@ -351,7 +357,7 @@ public class ConflictResolverAction extends BaseAction
 		}
 		if (obj != null)
 		{
-			SessionDataBean sessionData = (SessionDataBean) obj;
+			final SessionDataBean sessionData = (SessionDataBean) obj;
 			return sessionData;
 		}
 		return null;
@@ -368,10 +374,10 @@ public class ConflictResolverAction extends BaseAction
 	 */
 	private void setActionError(HttpServletRequest request, String errorMessage)
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionError error = new ActionError("errors.item", errorMessage);
+		final ActionErrors errors = new ActionErrors();
+		final ActionError error = new ActionError("errors.item", errorMessage);
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		saveErrors(request, errors);
+		this.saveErrors(request, errors);
 	}
 
 	/**
@@ -404,8 +410,8 @@ public class ConflictResolverAction extends BaseAction
 		// Long cprId = null;
 		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = Utility.getReportQueueObject(reportQueueId);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
 
 		// deleting the reportloaderQueue object
@@ -435,6 +441,6 @@ public class ConflictResolverAction extends BaseAction
 
 		// Changing the status of the report in the queue to NEW
 		reportLoaderQueue.setStatus(CaTIESConstants.OVERWRITE_REPORT);
-		updateReportLoaderQueue(reportLoaderQueue, request);
+		this.updateReportLoaderQueue(reportLoaderQueue, request);
 	}
 }

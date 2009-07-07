@@ -17,11 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
@@ -129,7 +127,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	public OrderDetails(AbstractActionForm form) throws AssignDataException
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -140,9 +138,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -150,6 +149,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -164,7 +164,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	*/
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public Boolean getMailNotification()
 	{
-		return mailNotification;
+		return this.mailNotification;
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public DistributionProtocol getDistributionProtocol()
 	{
-		return distributionProtocol;
+		return this.distributionProtocol;
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public Collection getOrderItemCollection()
 	{
-		return orderItemCollection;
+		return this.orderItemCollection;
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public Date getRequestedDate()
 	{
-		return requestedDate;
+		return this.requestedDate;
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**
@@ -292,8 +292,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 	/**
 	 * @param abstractForm object.
-	 * @throws AssignDataException object.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
@@ -302,16 +302,16 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			final AbstractActionForm abstractActionForm = (AbstractActionForm) abstractForm;
 			if (abstractActionForm.isAddOperation()) //insert
 			{
-				operationAdd = true;
-				insertOrderDetails(abstractActionForm);
+				this.operationAdd = true;
+				this.insertOrderDetails(abstractActionForm);
 			}
 			else
-			//update 
+			//update
 			{
-				updateOrderDetails(abstractActionForm);
+				this.updateOrderDetails(abstractActionForm);
 			}
 		}
-		catch (BizLogicException exp)
+		catch (final BizLogicException exp)
 		{
 			exp.printStackTrace();
 		}
@@ -330,51 +330,51 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		if (abstractActionForm.getPageOf().equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 		{
 			final OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) abstractActionForm;
-			orderItemsMap = putOrderDetailsForSpecimen(orderSpecimenForm);
-			newSpecimenArrayObjList = (List) putnewArrayDetailsforArray(orderSpecimenForm
+			orderItemsMap = this.putOrderDetailsForSpecimen(orderSpecimenForm);
+			newSpecimenArrayObjList = this.putnewArrayDetailsforArray(orderSpecimenForm
 					.getDefineArrayObj());
 		}
 
 		if (abstractActionForm.getPageOf().equals(Constants.ARRAY_ORDER_FORM_TYPE))
 		{
 			final OrderBiospecimenArrayForm orderBiospecimenArrayForm = (OrderBiospecimenArrayForm) abstractActionForm;
-			orderItemsMap = (HashMap) putOrderDetailsForArray(orderBiospecimenArrayForm);
-			newSpecimenArrayObjList = (List) putnewArrayDetailsforArray(orderBiospecimenArrayForm
+			orderItemsMap = this.putOrderDetailsForArray(orderBiospecimenArrayForm);
+			newSpecimenArrayObjList = this.putnewArrayDetailsforArray(orderBiospecimenArrayForm
 					.getDefineArrayObj());
 
 		}
 		if (abstractActionForm.getPageOf().equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 		{
 			final OrderPathologyCaseForm orderPathologyCaseForm = (OrderPathologyCaseForm) abstractActionForm;
-			orderItemsMap = (HashMap) putOrderDetailsForPathologyCase(orderPathologyCaseForm);
-			newSpecimenArrayObjList = (List) putnewArrayDetailsforArray(orderPathologyCaseForm
+			orderItemsMap = this.putOrderDetailsForPathologyCase(orderPathologyCaseForm);
+			newSpecimenArrayObjList = this.putnewArrayDetailsforArray(orderPathologyCaseForm
 					.getDefineArrayObj());
 		}
 		//Obtain orderItemCollection.
 		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
-			orderItemsCollection = (LinkedHashSet) parser.generateData(orderItemsMap);
+			orderItemsCollection = parser.generateData(orderItemsMap);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.debug(e);
 		}
 
-		Collection orderItemsSet = new LinkedHashSet();
+		final Collection orderItemsSet = new LinkedHashSet();
 
-		Iterator orderItemsCollectionItr = orderItemsCollection.iterator();
+		final Iterator orderItemsCollectionItr = orderItemsCollection.iterator();
 		OrderItem orderItem = null;
 		SpecimenOrderItem specimenOrderItem = null;
 
 		while (orderItemsCollectionItr.hasNext())
 		{
-			OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItemsCollectionItr
+			final OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItemsCollectionItr
 					.next();
 			Double reqQty = new Double(0);
 			if (orderSpecimenBean.getTypeOfItem().equals("specimen"))
 			{
-				specimenOrderItem = (SpecimenOrderItem) setBioSpecimen(orderSpecimenBean);
+				specimenOrderItem = this.setBioSpecimen(orderSpecimenBean);
 				if (orderSpecimenBean.getArrayName().equals("None"))
 				{
 					orderItem = specimenOrderItem;
@@ -384,15 +384,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					if (newSpecimenArrayObjList != null)
 					{
-						Iterator iteratorNewSpecimen = newSpecimenArrayObjList.iterator();
+						final Iterator iteratorNewSpecimen = newSpecimenArrayObjList.iterator();
 						while (iteratorNewSpecimen.hasNext())
 						{
-							NewSpecimenArrayOrderItem newSpecimenArrayObj = (NewSpecimenArrayOrderItem) iteratorNewSpecimen
+							final NewSpecimenArrayOrderItem newSpecimenArrayObj = (NewSpecimenArrayOrderItem) iteratorNewSpecimen
 									.next();
 							if (newSpecimenArrayObj.getName().equals(
 									orderSpecimenBean.getArrayName()))
 							{
-								Collection orderItemCollection = (Set) newSpecimenArrayObj
+								Collection orderItemCollection = newSpecimenArrayObj
 										.getSpecimenOrderItemCollection();
 								if (orderItemCollection == null)
 								{
@@ -413,7 +413,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 			if (Constants.PATHOLOGYCASE_ORDER_FORM_TYPE.equals(orderSpecimenBean.getTypeOfItem()))
 			{
-				specimenOrderItem = (SpecimenOrderItem) setPathologyCase(orderSpecimenBean);
+				specimenOrderItem = this.setPathologyCase(orderSpecimenBean);
 				if (Constants.NONE.equals(orderSpecimenBean.getArrayName()))
 				{
 					orderItem = specimenOrderItem;
@@ -423,15 +423,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					if (newSpecimenArrayObjList != null)
 					{
-						Iterator iteratorNewSpecArrObj = newSpecimenArrayObjList.iterator();
+						final Iterator iteratorNewSpecArrObj = newSpecimenArrayObjList.iterator();
 						while (iteratorNewSpecArrObj.hasNext())
 						{
-							NewSpecimenArrayOrderItem newSpecimenArrayObj = (NewSpecimenArrayOrderItem) iteratorNewSpecArrObj
+							final NewSpecimenArrayOrderItem newSpecimenArrayObj = (NewSpecimenArrayOrderItem) iteratorNewSpecArrObj
 									.next();
 							if (newSpecimenArrayObj.getName().equals(
 									orderSpecimenBean.getArrayName()))
 							{
-								Collection orderItemCollection = (Set) newSpecimenArrayObj
+								Collection orderItemCollection = newSpecimenArrayObj
 										.getSpecimenOrderItemCollection();
 								if (orderItemCollection == null)
 								{
@@ -451,7 +451,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			}
 			if (Constants.ARRAY_ORDER_FORM_TYPE.equals(orderSpecimenBean.getTypeOfItem()))
 			{
-				orderItem = getOrderArrayItem(orderSpecimenBean, orderItem);
+				orderItem = this.getOrderArrayItem(orderSpecimenBean, orderItem);
 				if ((Constants.ARRAY_ORDER_FORM_TYPE.equals(orderSpecimenBean.getTypeOfItem()))
 						&& (Constants.TISSUE.equals(orderSpecimenBean.getSpecimenClass()))
 						&& (orderSpecimenBean.getSpecimenType().equals("unblock")))
@@ -471,7 +471,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 		if (newSpecimenArrayObjList != null)
 		{
-			Iterator iteratorNewSpecObj = newSpecimenArrayObjList.iterator();
+			final Iterator iteratorNewSpecObj = newSpecimenArrayObjList.iterator();
 			while (iteratorNewSpecObj.hasNext())
 			{
 				orderItem = (NewSpecimenArrayOrderItem) iteratorNewSpecObj.next();
@@ -494,7 +494,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 		if (Constants.FALSE.equals(orderSpecimenBean.getIsDerived())) //Existing specimen.
 		{
-			specimenOrderItem = setExistingSpecimenOrderItem(orderSpecimenBean);
+			specimenOrderItem = this.setExistingSpecimenOrderItem(orderSpecimenBean);
 			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
@@ -503,7 +503,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		else
 		//Derived specimen.
 		{
-			specimenOrderItem = setDerivedSpecimenOrderItem(orderSpecimenBean);
+			specimenOrderItem = this.setDerivedSpecimenOrderItem(orderSpecimenBean);
 			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
@@ -524,7 +524,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 		if (Constants.FALSE.equals(orderSpecimenBean.getIsDerived())) //Existing specimen.
 		{
-			specimenOrderItem = setExistingOrderItemForPathology(orderSpecimenBean);
+			specimenOrderItem = this.setExistingOrderItemForPathology(orderSpecimenBean);
 			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
@@ -532,7 +532,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		else
 		{
-			specimenOrderItem = setDerivedOrderItemForPathology(orderSpecimenBean);
+			specimenOrderItem = this.setDerivedOrderItemForPathology(orderSpecimenBean);
 			reqQty = new Double(orderSpecimenBean.getRequestedQuantity());
 			specimenOrderItem.setRequestedQuantity(reqQty);
 			specimenOrderItem.setDescription(orderSpecimenBean.getDescription());
@@ -549,9 +549,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private ExistingSpecimenOrderItem setExistingSpecimenOrderItem(
 			OrderSpecimenBean orderSpecimenBean)
 	{
-		ExistingSpecimenOrderItem existingOrderItem = new ExistingSpecimenOrderItem();
+		final ExistingSpecimenOrderItem existingOrderItem = new ExistingSpecimenOrderItem();
 		//Set Parent specimen
-		Specimen specimen = new Specimen();
+		final Specimen specimen = new Specimen();
 		specimen.setId(Long.valueOf(orderSpecimenBean.getSpecimenId()));
 		existingOrderItem.setSpecimen(specimen);
 
@@ -565,9 +565,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private DerivedSpecimenOrderItem setDerivedSpecimenOrderItem(OrderSpecimenBean orderSpecimenBean)
 	{
-		DerivedSpecimenOrderItem derivedSpecimenOrderItem = new DerivedSpecimenOrderItem();
+		final DerivedSpecimenOrderItem derivedSpecimenOrderItem = new DerivedSpecimenOrderItem();
 		//Set Parent specimen
-		Specimen specimen = new Specimen();
+		final Specimen specimen = new Specimen();
 		specimen.setId(Long.valueOf(orderSpecimenBean.getSpecimenId()));
 		derivedSpecimenOrderItem.setParentSpecimen(specimen);
 		derivedSpecimenOrderItem.setSpecimenClass(orderSpecimenBean.getSpecimenClass());
@@ -584,12 +584,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private PathologicalCaseOrderItem setExistingOrderItemForPathology(
 			OrderSpecimenBean orderSpecimenBean)
 	{
-		PathologicalCaseOrderItem existingOrderItem = new PathologicalCaseOrderItem();
+		final PathologicalCaseOrderItem existingOrderItem = new PathologicalCaseOrderItem();
 		existingOrderItem.setTissueSite(orderSpecimenBean.getTissueSite());
 		existingOrderItem.setPathologicalStatus(orderSpecimenBean.getPathologicalStatus());
 		existingOrderItem.setSpecimenClass(orderSpecimenBean.getSpecimenClass());
 		existingOrderItem.setSpecimenType(orderSpecimenBean.getSpecimenType());
-		SpecimenCollectionGroup specimenCollGroup = new SpecimenCollectionGroup();
+		final SpecimenCollectionGroup specimenCollGroup = new SpecimenCollectionGroup();
 		specimenCollGroup.setId(Long.valueOf(orderSpecimenBean.getSpecimenCollectionGroup()));
 		existingOrderItem.setSpecimenCollectionGroup(specimenCollGroup);
 
@@ -604,12 +604,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private PathologicalCaseOrderItem setDerivedOrderItemForPathology(
 			OrderSpecimenBean orderSpecimenBean)
 	{
-		PathologicalCaseOrderItem derivedOrderItem = new PathologicalCaseOrderItem();
+		final PathologicalCaseOrderItem derivedOrderItem = new PathologicalCaseOrderItem();
 		derivedOrderItem.setTissueSite(orderSpecimenBean.getTissueSite());
 		derivedOrderItem.setPathologicalStatus(orderSpecimenBean.getPathologicalStatus());
 		derivedOrderItem.setSpecimenClass(orderSpecimenBean.getSpecimenClass());
 		derivedOrderItem.setSpecimenType(orderSpecimenBean.getSpecimenType());
-		SpecimenCollectionGroup specimenCollGroup = new SpecimenCollectionGroup();
+		final SpecimenCollectionGroup specimenCollGroup = new SpecimenCollectionGroup();
 		specimenCollGroup.setId(Long.valueOf(orderSpecimenBean.getSpecimenCollectionGroup()));
 		derivedOrderItem.setSpecimenCollectionGroup(specimenCollGroup);
 
@@ -628,13 +628,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderBiospecimenArrayForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		String protocolId = orderBiospecimenArrayForm.getOrderForm().getDistributionProtocol();
+		final String protocolId = orderBiospecimenArrayForm.getOrderForm()
+				.getDistributionProtocol();
 
 		if (protocolId != null && !protocolId.equals(""))
 		{
-			Long distributionId = Long.valueOf(orderBiospecimenArrayForm.getOrderForm()
+			final Long distributionId = Long.valueOf(orderBiospecimenArrayForm.getOrderForm()
 					.getDistributionProtocol());
-			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			final DistributionProtocol distributionProtocolObj = new DistributionProtocol();
 			distributionProtocolObj.setId(distributionId);
 			this.setDistributionProtocol(distributionProtocolObj);
 		}
@@ -654,18 +655,18 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderSpecimenForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		String protocolId = orderSpecimenForm.getOrderForm().getDistributionProtocol();
+		final String protocolId = orderSpecimenForm.getOrderForm().getDistributionProtocol();
 
 		if (protocolId != null && !protocolId.equals(""))
 		{
-			Long distributionId = Long.valueOf(orderSpecimenForm.getOrderForm()
+			final Long distributionId = Long.valueOf(orderSpecimenForm.getOrderForm()
 					.getDistributionProtocol());
-			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			final DistributionProtocol distributionProtocolObj = new DistributionProtocol();
 			distributionProtocolObj.setId(distributionId);
 			this.setDistributionProtocol(distributionProtocolObj);
 		}
 
-		Map orderItemsMap = (LinkedHashMap) orderSpecimenForm.getValues();
+		final Map orderItemsMap = orderSpecimenForm.getValues();
 		return orderItemsMap;
 	}
 
@@ -681,13 +682,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setName(orderPathologyCaseForm.getOrderForm().getOrderRequestName());
 		this.setStatus(Constants.ORDER_REQUEST_STATUS_NEW);
 		this.setRequestedDate(new Date());
-		String protocolId = orderPathologyCaseForm.getOrderForm().getDistributionProtocol();
+		final String protocolId = orderPathologyCaseForm.getOrderForm().getDistributionProtocol();
 
 		if (protocolId != null && !protocolId.equals(""))
 		{
-			Long distributionId = Long.valueOf(orderPathologyCaseForm.getOrderForm()
+			final Long distributionId = Long.valueOf(orderPathologyCaseForm.getOrderForm()
 					.getDistributionProtocol());
-			DistributionProtocol distributionProtocolObj = new DistributionProtocol();
+			final DistributionProtocol distributionProtocolObj = new DistributionProtocol();
 			distributionProtocolObj.setId(distributionId);
 			this.setDistributionProtocol(distributionProtocolObj);
 		}
@@ -702,7 +703,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private OrderItem getOrderArrayItem(OrderSpecimenBean orderSpecimenBean, OrderItem orderItem)
 	{
-		SpecimenArray specimenArray = new SpecimenArray();
+		final SpecimenArray specimenArray = new SpecimenArray();
 		specimenArray.setId(Long.valueOf(orderSpecimenBean.getSpecimenId()));
 
 		ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = new ExistingSpecimenArrayOrderItem();
@@ -723,16 +724,16 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		if (newArrayOrderItems != null)
 		{
 			newOrderItems = new ArrayList();
-			Iterator orderArrayItemsCollectionItr = newArrayOrderItems.iterator();
+			final Iterator orderArrayItemsCollectionItr = newArrayOrderItems.iterator();
 
 			while (orderArrayItemsCollectionItr.hasNext())
 			{
-				DefineArrayForm defineArrayObj = (DefineArrayForm) orderArrayItemsCollectionItr
+				final DefineArrayForm defineArrayObj = (DefineArrayForm) orderArrayItemsCollectionItr
 						.next();
-				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
+				final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
 				newSpecimenArrayOrderItem.setName(defineArrayObj.getArrayName());
 
-				SpecimenArrayType specimenArrayTypeObj = new SpecimenArrayType();
+				final SpecimenArrayType specimenArrayTypeObj = new SpecimenArrayType();
 
 				//specimenArrayTypeObj.setName(defineArrayObj.getArraytype());
 				specimenArrayTypeObj.setId(Long.valueOf(defineArrayObj.getArraytype()));
@@ -746,11 +747,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	/**
 	 * Update the Order Details.
 	 * @param abstractActionForm object.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void updateOrderDetails(AbstractActionForm abstractActionForm) throws BizLogicException
 	{
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) abstractActionForm;
+		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) abstractActionForm;
 		if (requestDetailsForm.getMailNotification() != null
 				&& requestDetailsForm.getMailNotification().booleanValue() == Boolean.TRUE)
 		{
@@ -759,33 +760,33 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		//Setting Comments in Order Domain Obj.
 		this.setComment(requestDetailsForm.getAdministratorComments());
 		//Setting the order Id.
-		Long orderId = Long.valueOf(requestDetailsForm.getId());
+		final Long orderId = Long.valueOf(requestDetailsForm.getId());
 		this.setId(orderId);
 
 		if (requestDetailsForm.getIsDirectDistribution() != null
 				&& requestDetailsForm.getIsDirectDistribution().booleanValue() == Boolean.TRUE)
 		{
 			this.setName(requestDetailsForm.getOrderName());
-			setDistributionProtocol(requestDetailsForm.getDistributionProtocolId());
+			this.setDistributionProtocol(requestDetailsForm.getDistributionProtocolId());
 		}
 
-		Collection beanObjSet = parseValuesMap(requestDetailsForm.getValues());
-		Iterator iter = beanObjSet.iterator();
-		Collection<OrderItem> domainObjSet = new HashSet<OrderItem>();
-		Collection distributionObjectCollection = new HashSet();
-		Distribution distribution = new Distribution();
+		final Collection beanObjSet = this.parseValuesMap(requestDetailsForm.getValues());
+		final Iterator iter = beanObjSet.iterator();
+		final Collection<OrderItem> domainObjSet = new HashSet<OrderItem>();
+		final Collection distributionObjectCollection = new HashSet();
+		final Distribution distribution = new Distribution();
 		// set by pratha
 		distribution.setComment(requestDetailsForm.getAdministratorComments());
-		Collection<DistributedItem> distributedItemCollection = new HashSet<DistributedItem>();
+		final Collection<DistributedItem> distributedItemCollection = new HashSet<DistributedItem>();
 		while (iter.hasNext())
 		{
 			//Setting the Order Id
-			OrderDetails order = setOrderId(orderId);
-			Object obj = iter.next();
+			final OrderDetails order = this.setOrderId(orderId);
+			final Object obj = iter.next();
 			//For specimen order item.
 			if (obj instanceof RequestDetailsBean)
 			{
-				RequestDetailsBean requestDetailsBean = (RequestDetailsBean) obj;
+				final RequestDetailsBean requestDetailsBean = (RequestDetailsBean) obj;
 				//For skipping iteration when status drop down is disabled.
 				if (requestDetailsBean.getAssignedStatus() == null
 						|| Constants.DOUBLE_QUOTES.equalsIgnoreCase(requestDetailsBean
@@ -793,15 +794,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					continue;
 				}
-				OrderItem orderItem = populateOrderItemForSpecimenOrderItems(requestDetailsBean,
-						order, distributedItemCollection, distribution, requestDetailsForm,
-						distributionObjectCollection);
+				final OrderItem orderItem = this.populateOrderItemForSpecimenOrderItems(
+						requestDetailsBean, order, distributedItemCollection, distribution,
+						requestDetailsForm, distributionObjectCollection);
 				domainObjSet.add(orderItem);
 			}
 			//For defined array header object.
 			else if (obj instanceof DefinedArrayRequestBean)
 			{
-				DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean) obj;
+				final DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean) obj;
 				//For skipping iteration when status drop down is disabled.
 				if (definedArrayRequestBean.getAssignedStatus() == null
 						|| Constants.DOUBLE_QUOTES.equalsIgnoreCase(definedArrayRequestBean
@@ -809,15 +810,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					continue;
 				}
-				OrderItem orderItem = populateOrderItemForArrayHeader(definedArrayRequestBean,
-						order, distributedItemCollection, distribution, requestDetailsForm,
-						distributionObjectCollection);
+				final OrderItem orderItem = this.populateOrderItemForArrayHeader(
+						definedArrayRequestBean, order, distributedItemCollection, distribution,
+						requestDetailsForm, distributionObjectCollection);
 				domainObjSet.add(orderItem);
 			}
 			//For defined array details.
 			else if (obj instanceof DefinedArrayDetailsBean)
 			{
-				DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean) obj;
+				final DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean) obj;
 				//For skipping iteration when status drop down is disabled.
 				if (definedArrayDetailsBean.getAssignedStatus() == null
 						|| Constants.DOUBLE_QUOTES.equalsIgnoreCase(definedArrayDetailsBean
@@ -825,13 +826,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					continue;
 				}
-				OrderItem orderItem = setOrderForDefineArrayDetails(order, definedArrayDetailsBean);
+				final OrderItem orderItem = this.setOrderForDefineArrayDetails(order,
+						definedArrayDetailsBean);
 				domainObjSet.add(orderItem);
 			}
 			//For Existing array order item.
 			else if (obj instanceof ExistingArrayDetailsBean)
 			{
-				ExistingArrayDetailsBean existingArrayDetailsBean = (ExistingArrayDetailsBean) obj;
+				final ExistingArrayDetailsBean existingArrayDetailsBean = (ExistingArrayDetailsBean) obj;
 				// For skipping iteration when status drop down is disabled.
 				if (existingArrayDetailsBean.getAssignedStatus() == null
 						|| Constants.DOUBLE_QUOTES.equalsIgnoreCase(existingArrayDetailsBean
@@ -839,9 +841,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{
 					continue;
 				}
-				OrderItem orderItem = populateOrderItemForExistingArray(existingArrayDetailsBean,
-						order, distributedItemCollection, distribution, requestDetailsForm,
-						distributionObjectCollection);
+				final OrderItem orderItem = this.populateOrderItemForExistingArray(
+						existingArrayDetailsBean, order, distributedItemCollection, distribution,
+						requestDetailsForm, distributionObjectCollection);
 				domainObjSet.add(orderItem);
 			}
 		}
@@ -849,20 +851,23 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setOrderItemCollection(domainObjSet);
 	}
 
+	/**
+	 * @param distributionProtId : distributionProtId
+	 */
 	private void setDistributionProtocol(String distributionProtId)
 	{
 
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			DistributionProtocol distributionProtocol = orderBizLogic
+			final DistributionProtocol distributionProtocol = orderBizLogic
 					.retrieveDistributionProtocol(distributionProtId);
 			this.setDistributionProtocol(distributionProtocol);
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
 			e.printStackTrace();
 		}
@@ -895,7 +900,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	public Collection getDistributionCollection()
 	{
-		return distributionCollection;
+		return this.distributionCollection;
 	}
 
 	/**
@@ -910,16 +915,17 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	* Returns message label to display on success add or edit.
 	* @return String object
 	*/
+	@Override
 	public String getMessageLabel()
 	{
 		String messageLabel;
-		if (operationAdd)
+		if (this.operationAdd)
 		{
 			messageLabel = this.name;
 		}
 		else
 		{
-			int numberItem = OrderBizLogic.numberItemsUpdated;
+			final int numberItem = OrderBizLogic.numberItemsUpdated;
 			messageLabel = " " + numberItem + " OrderItems.";
 		}
 		return messageLabel;
@@ -933,7 +939,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private Distribution setDistributionProtocolInDistribution(Distribution distribution,
 			RequestDetailsForm requestDetailsForm)
 	{
-		DistributionProtocol distributionProtocol = new DistributionProtocol();
+		final DistributionProtocol distributionProtocol = new DistributionProtocol();
 		distributionProtocol.setId(Long.valueOf(requestDetailsForm.getDistributionProtocolId()));
 		distribution.setDistributionProtocol(distributionProtocol);
 		return distribution;
@@ -947,7 +953,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param requestDetailsForm object
 	 * @param distributionObjectCollection object
 	 * @return OrderItem object
-	 * @throws BizLogicException 
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean,
 			OrderDetails order, Collection distributedItemCollection, Distribution distribution,
@@ -960,11 +966,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		DerivedSpecimenOrderItem derivedOrderItem = null;
 		ExistingSpecimenOrderItem existingOrderItem = null;
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
-		Specimen specimen = new Specimen();
+		final Specimen specimen = new Specimen();
 		if (requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
 		{
 			existingOrderItem = new ExistingSpecimenOrderItem();
@@ -981,10 +987,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			SpecimenCollectionGroup specimenCollectionGroup = null;
 			try
 			{
-				specimenCollectionGroup = (SpecimenCollectionGroup) orderBizLogic.retrieveSCG(Long
+				specimenCollectionGroup = orderBizLogic.retrieveSCG(Long
 						.parseLong(requestDetailsBean.getSpecimenCollGroupId()));
 			}
-			catch (BizLogicException exception)
+			catch (final BizLogicException exception)
 			{
 				logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
 			}
@@ -1013,8 +1019,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 						.getDistributedItemId())))
 		{
 			//Setting the Site for distribution.
-			distribution = setSiteInDistribution(distribution, requestDetailsForm);
-			DistributedItem distributedItem = new DistributedItem();
+			distribution = this.setSiteInDistribution(distribution, requestDetailsForm);
+			final DistributedItem distributedItem = new DistributedItem();
 
 			specimen.setId(Long.valueOf(requestDetailsBean.getRequestFor()));
 
@@ -1027,11 +1033,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				distributedItem.setQuantity(new Double(requestDetailsBean.getRequestedQty()));
 			}
 
-			distribution = setDistributedItemCollectionInDistribution(orderItem, distributedItem,
-					distribution, distributedItemCollection);
+			distribution = this.setDistributedItemCollectionInDistribution(orderItem,
+					distributedItem, distribution, distributedItemCollection);
 
 			//Setting the distribution protocol in Distribution.
-			distribution = setDistributionProtocolInDistribution(distribution, requestDetailsForm);
+			distribution = this.setDistributionProtocolInDistribution(distribution,
+					requestDetailsForm);
 
 			distributionObjectCollection.add(distribution);
 		}
@@ -1072,7 +1079,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	private Distribution setSiteInDistribution(Distribution distribution,
 			RequestDetailsForm requestDetailsForm)
 	{
-		Site toSite = new Site();
+		final Site toSite = new Site();
 		toSite.setId(Long.valueOf(requestDetailsForm.getSite()));
 		distribution.setToSite(toSite);
 		return distribution;
@@ -1082,14 +1089,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param order object
 	 * @param definedArrayDetailsBean object
 	 * @return OrderItem object
-	 * @throws BizLogicException 
+	 * @throws BizLogicException : BizLogicException
 	 */
 
 	private OrderItem setOrderForDefineArrayDetails(OrderDetails order,
 			DefinedArrayDetailsBean definedArrayDetailsBean) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
 		SpecimenOrderItem specOrderItem = null;
@@ -1099,10 +1106,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = null;
 		try
 		{
-			specOrderItem = (SpecimenOrderItem) orderBizLogic.retrieveSpecimenOrderItem(Long
+			specOrderItem = orderBizLogic.retrieveSpecimenOrderItem(Long
 					.parseLong(definedArrayDetailsBean.getOrderItemId()));
 		}
-		catch (BizLogicException exception)
+		catch (final BizLogicException exception)
 		{
 			logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
 		}
@@ -1127,8 +1134,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		if (Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION
 				.equalsIgnoreCase(definedArrayDetailsBean.getAssignedStatus().trim()))
 		{
-			DistributedItem distributedItem = new DistributedItem();
-			Specimen specimen = new Specimen();
+			final DistributedItem distributedItem = new DistributedItem();
+			final Specimen specimen = new Specimen();
 
 			if (definedArrayDetailsBean.getRequestFor() == null
 					|| Constants.DOUBLE_QUOTES.equalsIgnoreCase(definedArrayDetailsBean
@@ -1164,7 +1171,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private OrderDetails setOrderId(Long orderId)
 	{
-		OrderDetails order = new OrderDetails();
+		final OrderDetails order = new OrderDetails();
 		order.setId(orderId);
 		return order;
 	}
@@ -1177,7 +1184,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param requestDetailsForm object
 	 * @param distributionObjectCollection object
 	 * @return OrderItem object
-	 * @throws BizLogicException 
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private OrderItem populateOrderItemForArrayHeader(
 			DefinedArrayRequestBean definedArrayRequestBean, OrderDetails order,
@@ -1185,17 +1192,16 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection)
 			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 		NewSpecimenArrayOrderItem orderItem = null;
 		try
 		{
-			orderItem = (NewSpecimenArrayOrderItem) orderBizLogic
-					.retrieveNewSpecimenArrayOrderItem(Long.valueOf(definedArrayRequestBean
-							.getOrderItemId()));
+			orderItem = orderBizLogic.retrieveNewSpecimenArrayOrderItem(Long
+					.valueOf(definedArrayRequestBean.getOrderItemId()));
 		}
-		catch (BizLogicException exception)
+		catch (final BizLogicException exception)
 		{
 			logger.debug("Not able to retrieve Order item.", exception);
 		}
@@ -1211,13 +1217,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				&& Constants.DOUBLE_QUOTES.equals(definedArrayRequestBean.getDistributedItemId()))
 		{
 			//Setting the Site for distribution.
-			distribution = setSiteInDistribution(distribution, requestDetailsForm);
+			distribution = this.setSiteInDistribution(distribution, requestDetailsForm);
 
-			DistributedItem distributedItem = new DistributedItem();
+			final DistributedItem distributedItem = new DistributedItem();
 			if (orderItem.getSpecimenArray() != null
 					&& orderItem.getSpecimenArray().getId() != null)
 			{
-				distributedItem.setSpecimenArray((SpecimenArray) orderItem.getSpecimenArray());
+				distributedItem.setSpecimenArray(orderItem.getSpecimenArray());
 			}
 			/*SpecimenArray specimenArray = new SpecimenArray();
 			if(definedArrayRequestBean.getArrayId() != null && !definedArrayRequestBean.getArrayId().
@@ -1230,11 +1236,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			//For setting assigned quantity in Distribution.
 			distributedItem.setQuantity(new Double("1"));
 
-			distribution = setDistributedItemCollectionInDistribution(orderItem, distributedItem,
-					distribution, distributedItemCollection);
+			distribution = this.setDistributedItemCollectionInDistribution(orderItem,
+					distributedItem, distribution, distributedItemCollection);
 
 			//Setting the distribution protocol in Distribution.
-			distribution = setDistributionProtocolInDistribution(distribution, requestDetailsForm);
+			distribution = this.setDistributionProtocolInDistribution(distribution,
+					requestDetailsForm);
 
 			distributionObjectCollection.add(distribution);
 		}
@@ -1255,13 +1262,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			Collection distributedItemCollection, Distribution distribution,
 			RequestDetailsForm requestDetailsForm, Collection distributionObjectCollection)
 	{
-		ExistingSpecimenArrayOrderItem existingSpecArrOrderItem = new ExistingSpecimenArrayOrderItem();
+		final ExistingSpecimenArrayOrderItem existingSpecArrOrderItem = new ExistingSpecimenArrayOrderItem();
 		//Updating Description and Status.
 
 		existingSpecArrOrderItem.setId(Long.valueOf(existingArrayDetailsBean.getOrderItemId()));
 		existingSpecArrOrderItem.setStatus(existingArrayDetailsBean.getAssignedStatus());
 		existingSpecArrOrderItem.setDescription(existingArrayDetailsBean.getAddDescription());
-		SpecimenArray specimenArray = new SpecimenArray();
+		final SpecimenArray specimenArray = new SpecimenArray();
 		if (existingArrayDetailsBean.getArrayId() != null
 				&& !Constants.DOUBLE_QUOTES.equalsIgnoreCase(existingArrayDetailsBean.getArrayId()
 						.trim()))
@@ -1279,9 +1286,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				&& Constants.DOUBLE_QUOTES.equals(existingArrayDetailsBean.getDistributedItemId()))
 		{
 			//Setting the Site for distribution.
-			distribution = setSiteInDistribution(distribution, requestDetailsForm);
+			distribution = this.setSiteInDistribution(distribution, requestDetailsForm);
 			//Making distributed items
-			DistributedItem distributedItem = new DistributedItem();
+			final DistributedItem distributedItem = new DistributedItem();
 			distributedItem.setSpecimenArray(specimenArray);
 
 			if (existingArrayDetailsBean.getRequestedQuantity().equals("0.0"))
@@ -1293,10 +1300,12 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				distributedItem.setQuantity(new Double(existingArrayDetailsBean
 						.getRequestedQuantity()));
 			}
-			distribution = setDistributedItemCollectionInDistribution(existingSpecArrOrderItem,
-					distributedItem, distribution, distributedItemCollection);
+			distribution = this.setDistributedItemCollectionInDistribution(
+					existingSpecArrOrderItem, distributedItem, distribution,
+					distributedItemCollection);
 			//Setting the distribution protocol in Distribution.
-			distribution = setDistributionProtocolInDistribution(distribution, requestDetailsForm);
+			distribution = this.setDistributionProtocolInDistribution(distribution,
+					requestDetailsForm);
 			distributionObjectCollection.add(distribution);
 		}
 		return existingSpecArrOrderItem;
@@ -1314,7 +1323,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		{
 			beanObjSet = mapDataParser.generateData(map);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.debug(e);
 		}

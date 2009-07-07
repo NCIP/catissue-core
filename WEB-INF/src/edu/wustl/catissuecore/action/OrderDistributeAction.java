@@ -36,24 +36,26 @@ public class OrderDistributeAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		OrderForm requestOrder = (OrderForm) form;
+		final OrderForm requestOrder = (OrderForm) form;
 		requestOrder.setOrderRequestName(null);
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		session.setAttribute("OrderForm", requestOrder);
 
-		List < String > specimenIds = (List) session.getAttribute(Constants.SPECIMEN_ID);
-		List < String > specimenArrayIds = (List) session.getAttribute(Constants.SPECIMEN_ARRAY_ID);
-		List < String > pathalogicalCaseIds = (List) session
+		final List<String> specimenIds = (List) session.getAttribute(Constants.SPECIMEN_ID);
+		final List<String> specimenArrayIds = (List) session
+				.getAttribute(Constants.SPECIMEN_ARRAY_ID);
+		final List<String> pathalogicalCaseIds = (List) session
 				.getAttribute(Constants.PATHALOGICAL_CASE_ID);
-		List < String > deidentifiedPathalogicalCaseIds = (List) session
+		final List<String> deidentifiedPathalogicalCaseIds = (List) session
 				.getAttribute(Constants.DEIDENTIFIED_PATHALOGICAL_CASE_ID);
-		List < String > surgicalPathalogicalCaseIds = (List) session
+		final List<String> surgicalPathalogicalCaseIds = (List) session
 				.getAttribute(Constants.SURGICAL_PATHALOGY_CASE_ID);
 
 		String target = null;
@@ -75,14 +77,14 @@ public class OrderDistributeAction extends BaseAction
 		}
 		else
 		{
-			ActionErrors errors = new ActionErrors();
+			final ActionErrors errors = new ActionErrors();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ordering.note2"));
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ordering.a"));
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ordering.b"));
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ordering.c"));
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.ordering.d"));
 
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 			target = "failure";
 		}
 

@@ -15,15 +15,15 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.bizlogic.CpBasedViewBizLogic;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.dao.exception.DAOException;
 
 /**
- * This action is for getting the collection protocol and participants
+ * This action is for getting the collection protocol and participants.
  * registered for that collection protocol from cache
  * @author vaishali_khandelwal
  */
 public class ShowCPAndParticipantsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -38,12 +38,13 @@ public class ShowCPAndParticipantsAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		CPSearchForm cpsearchForm = (CPSearchForm) form;
+		final CPSearchForm cpsearchForm = (CPSearchForm) form;
 		// Removed the cache manager related code : Geeta
-		CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
+		final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 		List participantColl = new ArrayList();
 		Long cpId = null;
 		if (cpsearchForm.getCpId() != null && cpsearchForm.getCpId().longValue() != -1)
@@ -65,12 +66,12 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		if (request.getParameter("participantId") != null
 				&& !request.getParameter("participantId").equals(""))
 		{
-			Long participantId = new Long(request.getParameter("participantId"));
+			final Long participantId = new Long(request.getParameter("participantId"));
 			cpsearchForm.setParticipantId(participantId);
 		}
 		// when collection protocol gets changes then don't shown any
 		// participant seelcted...
-		String cpChange = request.getParameter("cpChange");
+		final String cpChange = request.getParameter("cpChange");
 		if (cpChange != null)
 		{
 			cpsearchForm.setParticipantId(null);

@@ -24,11 +24,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class MultipleSpecimenViewAction extends BaseAction
 {
+
 	/**
 	 * logger.
 	 */
 
-	private transient Logger logger = Logger.getCommonLogger(MultipleSpecimenViewAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(MultipleSpecimenViewAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -44,26 +47,27 @@ public class MultipleSpecimenViewAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
+		final ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		try
 		{
-			LinkedHashMap < String , CollectionProtocolEventBean > cpEventMap =
-				new LinkedHashMap < String , CollectionProtocolEventBean >();
-			CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
-			String pageOf = request.getParameter(Constants.PAGE_OF);
+			final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap
+			= new LinkedHashMap<String, CollectionProtocolEventBean>();
+			final CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
+			final String pageOf = request.getParameter(Constants.PAGE_OF);
 			eventBean.setUniqueIdentifier("EventID-1");
-			LinkedHashMap specimenCollection = (LinkedHashMap) session
+			final LinkedHashMap specimenCollection = (LinkedHashMap) session
 					.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
 
 			eventBean.setSpecimenRequirementbeanMap(specimenCollection);
 
-			String globalSpecimenId = "E" + eventBean.getUniqueIdentifier() + "_";
+			final String globalSpecimenId = "E" + eventBean.getUniqueIdentifier() + "_";
 			cpEventMap.put(globalSpecimenId, eventBean);
 			session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
@@ -86,9 +90,9 @@ public class MultipleSpecimenViewAction extends BaseAction
 			}
 			return mapping.findForward(Constants.SUCCESS);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return null;

@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -17,6 +18,11 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class SpecimenArrayType extends ContainerType
 {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -6330322793240274619L;
 
 	/**
 	 * specimenClass.
@@ -44,7 +50,7 @@ public class SpecimenArrayType extends ContainerType
 	public SpecimenArrayType(AbstractActionForm actionForm) throws AssignDataException
 	{
 		super();
-		setAllValues((IValueObject) actionForm);
+		this.setAllValues(actionForm);
 	}
 
 	/**
@@ -53,7 +59,7 @@ public class SpecimenArrayType extends ContainerType
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -116,7 +122,7 @@ public class SpecimenArrayType extends ContainerType
 				specimenTypeCollection = new HashSet();
 			}
 		*/
-		return specimenTypeCollection;
+		return this.specimenTypeCollection;
 	}
 
 	/**
@@ -134,37 +140,38 @@ public class SpecimenArrayType extends ContainerType
 	 * edu.wustl.common.actionForm.AbstractActionForm)
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject actionForm) throws AssignDataException
 	{
-		SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
+		final SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
 
-		if (specimenTypeCollection == null)
+		if (this.specimenTypeCollection == null)
 		{
-			specimenTypeCollection = new HashSet();
+			this.specimenTypeCollection = new HashSet();
 		}
 
 		this.id = Long.valueOf(specimenArrayTypeForm.getId());
 		this.name = specimenArrayTypeForm.getName();
 		// Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(capacity))
+		if (SearchUtil.isNullobject(this.capacity))
 		{
-			capacity = new Capacity();
+			this.capacity = new Capacity();
 		}
 
-		capacity.setOneDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
+		this.capacity.setOneDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
 				.getOneDimensionCapacity()));
-		capacity.setTwoDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
+		this.capacity.setTwoDimensionCapacity(Integer.valueOf(specimenArrayTypeForm
 				.getTwoDimensionCapacity()));
 		this.comment = specimenArrayTypeForm.getComment();
 		this.specimenClass = specimenArrayTypeForm.getSpecimenClass();
-		String[] specimenTypes = specimenArrayTypeForm.getSpecimenTypes();
+		final String[] specimenTypes = specimenArrayTypeForm.getSpecimenTypes();
 		if ((specimenTypes != null) && (specimenTypes.length > 0))
 		{
-			for (int i = 0; i < specimenTypes.length; i++)
+			for (final String specimenType : specimenTypes)
 			{
-				if (specimenTypes[i] != null)
+				if (specimenType != null)
 				{
-					specimenTypeCollection.add(specimenTypes[i]);
+					this.specimenTypeCollection.add(specimenType);
 				}
 			}
 		}

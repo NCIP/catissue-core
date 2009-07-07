@@ -59,7 +59,7 @@ public class ShowStorageGridViewAction extends BaseAction
 	 * logger.
 	 */
 
-	private transient Logger logger = Logger.getCommonLogger(ShowStorageGridViewAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(ShowStorageGridViewAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -76,6 +76,7 @@ public class ShowStorageGridViewAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -118,14 +119,14 @@ public class ShowStorageGridViewAction extends BaseAction
 		// saveErrors(request,errors);
 		// return mapping.findForward(Constants.FAILURE);
 		// }
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 		{
 			target = Constants.PAGE_OF_STORAGE_CONTAINER;
 		}
 
 		// Sri: Added to get the position of the storage container map
-		String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+		final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 		if ((null != position) && ("" != position))
 		{
 			Long positionOne;
@@ -133,13 +134,13 @@ public class ShowStorageGridViewAction extends BaseAction
 			try
 			{
 				// The two positions are separated by :
-				StringTokenizer strToken = new StringTokenizer(position, ":");
+				final StringTokenizer strToken = new StringTokenizer(position, ":");
 				positionOne = Long.valueOf(strToken.nextToken());
 				positionTwo = Long.valueOf(strToken.nextToken());
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.debug(ex.getMessage(), ex);
+				this.logger.debug(ex.getMessage(), ex);
 				// Will not select anything
 				positionOne = null;
 				positionTwo = null;
@@ -148,11 +149,12 @@ public class ShowStorageGridViewAction extends BaseAction
 			request.setAttribute(Constants.POS_TWO, positionTwo);
 
 		}
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-		Object containerObject = bizLogic.retrieve(StorageContainer.class.getName(), new Long(id));
+		final Object containerObject = bizLogic.retrieve(StorageContainer.class.getName(),
+				new Long(id));
 		StorageContainerGridObject storageContainerGridObject = null;
 		int[][] fullStatus = null;
 		int[][] childContainerIds = null;
@@ -163,17 +165,16 @@ public class ShowStorageGridViewAction extends BaseAction
 		if (containerObject != null)
 		{
 			storageContainerGridObject = new StorageContainerGridObject();
-			StorageContainer storageContainer = (StorageContainer) containerObject;
+			final StorageContainer storageContainer = (StorageContainer) containerObject;
 
-			setEnablePageAttributeIfRequired(request, storageContainer, bizLogic);
+			this.setEnablePageAttributeIfRequired(request, storageContainer, bizLogic);
 
-			Site site = (Site) bizLogic.retrieveAttribute(StorageContainer.class.getName(),
+			final Site site = (Site) bizLogic.retrieveAttribute(StorageContainer.class.getName(),
 					storageContainer.getId(), "site");// container.getSite();
 			request.setAttribute("siteName", site.getName());
 
-			StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
-					StorageContainer.class.getName(),
-					storageContainer.getId(), "storageType");// storageContainer
+			final StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
+					StorageContainer.class.getName(), storageContainer.getId(), "storageType");// storageContainer
 			// .
 			// getStorageType
 			// (
@@ -187,13 +188,13 @@ public class ShowStorageGridViewAction extends BaseAction
 			String twoDimLabel = storageType.getTwoDimensionLabel();
 
 			if (oneDimLabel == null)
-				{
+			{
 				oneDimLabel = " ";
-				}
+			}
 			if (twoDimLabel == null)
-				{
+			{
 				twoDimLabel = " ";
-				}
+			}
 
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
@@ -202,8 +203,10 @@ public class ShowStorageGridViewAction extends BaseAction
 			storageContainerGridObject.setType(storageType.getName());
 			storageContainerGridObject.setName(storageContainer.getName());
 
-			Integer oneDimensionCapacity = storageContainer.getCapacity().getOneDimensionCapacity();
-			Integer twoDimensionCapacity = storageContainer.getCapacity().getTwoDimensionCapacity();
+			final Integer oneDimensionCapacity = storageContainer.getCapacity()
+					.getOneDimensionCapacity();
+			final Integer twoDimensionCapacity = storageContainer.getCapacity()
+					.getTwoDimensionCapacity();
 
 			childContainerIds = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
 					.intValue() + 1];
@@ -222,7 +225,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			// (Collection)bizLogic.retrieveAttribute(StorageContainer
 			// .class.getName(), storageContainer.getId(),
 			// "elements(children)");//storageContainer.getChildren();
-			Collection children = bizLogic.getContainerChildren(storageContainer.getId());
+			final Collection children = bizLogic.getContainerChildren(storageContainer.getId());
 			// Collection<ContainerPosition> occPosColl = (Collection)
 			// bizLogic.retrieveAttribute(StorageContainer.class.getName(),
 			// storageContainer.getId(), "elements(occupiedPositions)");
@@ -239,49 +242,42 @@ public class ShowStorageGridViewAction extends BaseAction
 
 			if (children != null)
 			{
-				Iterator iterator = children.iterator();
+				final Iterator iterator = children.iterator();
 				while (iterator.hasNext())
 				{
-					Object object = iterator.next();
-					StorageContainer childStorageContainer =
-						(StorageContainer) HibernateMetaData
+					final Object object = iterator.next();
+					final StorageContainer childStorageContainer = (StorageContainer) HibernateMetaData
 							.getProxyObjectImpl(object);
 					if (childStorageContainer != null
 							&& childStorageContainer.getLocatedAtPosition() != null)
 					{
-						Integer positionDimensionOne =
-							childStorageContainer.getLocatedAtPosition()
-								.getPositionDimensionOne();
-						Integer positionDimensionTwo =
-							childStorageContainer.getLocatedAtPosition()
-								.getPositionDimensionTwo();
+						final Integer positionDimensionOne = childStorageContainer
+								.getLocatedAtPosition().getPositionDimensionOne();
+						final Integer positionDimensionTwo = childStorageContainer
+								.getLocatedAtPosition().getPositionDimensionTwo();
 
-						fullStatus[positionDimensionOne.intValue()]
-						           [positionDimensionTwo.intValue()] = 1;
-						childContainerIds[positionDimensionOne.intValue()]
-						                  [positionDimensionTwo.intValue()] =
-									childStorageContainer.getId().intValue();
-						childContainerType[positionDimensionOne.intValue()]
-						                   [positionDimensionTwo.intValue()] =
-									Constants.CONTAINER_LABEL_CONTAINER_MAP
+						fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
+						childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
+								.intValue()] = childStorageContainer.getId().intValue();
+						childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
+								.intValue()] = Constants.CONTAINER_LABEL_CONTAINER_MAP
 								+ childStorageContainer.getName();
-						childContainerName[positionDimensionOne.
-						                   intValue()][positionDimensionTwo
+						childContainerName[positionDimensionOne.intValue()][positionDimensionTwo
 								.intValue()] = childStorageContainer.getName();
 					}
 				}
 			}
 
-			IBizLogic specimenBizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			final IBizLogic specimenBizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 			// Showing Specimens in the Container map.
 			String sourceObjectName = Specimen.class.getName();
-			String[] selectColumnName = {"id", "specimenPosition.positionDimensionOne",
+			final String[] selectColumnName = {"id", "specimenPosition.positionDimensionOne",
 					"specimenPosition.positionDimensionTwo", "label"};
-			String[] whereColumnName = {"specimenPosition.storageContainer.id"};
-			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {Long.valueOf(id)};
-			String joinCondition = Constants.AND_JOIN_CONDITION;
+			final String[] whereColumnName = {"specimenPosition.storageContainer.id"};
+			final String[] whereColumnCondition = {"="};
+			final Object[] whereColumnValue = {Long.valueOf(id)};
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
 
 			List list = null;
 			list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
@@ -289,25 +285,22 @@ public class ShowStorageGridViewAction extends BaseAction
 
 			if (list != null)
 			{
-				Iterator iterator = list.iterator();
+				final Iterator iterator = list.iterator();
 				while (iterator.hasNext())
 				{
 					// Specimen specimen = (Specimen)iterator.next();
-					Object obj[] = (Object[]) iterator.next();
+					final Object obj[] = (Object[]) iterator.next();
 
-					Long specimenID = (Long) obj[0];
-					Integer positionDimensionOne = (Integer) obj[1];
-					Integer positionDimensionTwo = (Integer) obj[2];
-					String specimenLable = (String) obj[3];
+					final Long specimenID = (Long) obj[0];
+					final Integer positionDimensionOne = (Integer) obj[1];
+					final Integer positionDimensionTwo = (Integer) obj[2];
+					final String specimenLable = (String) obj[3];
 
-					fullStatus
-					[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] =
-								Constants.
-								SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
+							.intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
 					contentOfContainer = Constants.ALIAS_SPECIMEN;
 
 				}
@@ -326,18 +319,17 @@ public class ShowStorageGridViewAction extends BaseAction
 
 			if (list != null)
 			{
-				Iterator iterator = list.iterator();
+				final Iterator iterator = list.iterator();
 				while (iterator.hasNext())
 				{
-					Object obj[] = (Object[]) iterator.next();
+					final Object obj[] = (Object[]) iterator.next();
 
-					Long specimenID = (Long) obj[0];
-					Integer positionDimensionOne = (Integer) obj[1];
-					Integer positionDimensionTwo = (Integer) obj[2];
-					String specimenArrayLable = obj[3].toString();
+					final Long specimenID = (Long) obj[0];
+					final Integer positionDimensionOne = (Integer) obj[1];
+					final Integer positionDimensionTwo = (Integer) obj[2];
+					final String specimenArrayLable = obj[3].toString();
 
-					fullStatus
-					[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
@@ -352,10 +344,11 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.CONTENT_OF_CONTAINNER, contentOfContainer);
 		if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{
-			String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
-			logger.info("Id-----------------" + id);
-			logger.info("storageContainerType:" + storageContainerType);
-			int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(id), Long
+			final String storageContainerType = request
+					.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+			this.logger.info("Id-----------------" + id);
+			this.logger.info("storageContainerType:" + storageContainerType);
+			final int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(id), Long
 					.parseLong(storageContainerType), false);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
 			request.setAttribute(Constants.START_NUMBER, new Integer(startNumber));
@@ -369,11 +362,11 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
 
 		// Mandar : 29aug06 : to set collectionprotocol titles
-		List collectionProtocolList = bizLogic.getCollectionProtocolList(id);
+		final List collectionProtocolList = bizLogic.getCollectionProtocolList(id);
 		request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
 
 		// Mandar : 29aug06 : to set specimenclass
-		List specimenClassList = bizLogic.getSpecimenClassList(id);
+		final List specimenClassList = bizLogic.getSpecimenClassList(id);
 		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
 
 		return mapping.findForward(target);
@@ -407,28 +400,29 @@ public class ShowStorageGridViewAction extends BaseAction
 				&& activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
 			enablePage = false;
-			ActionErrors errors = new ActionErrors();
+			final ActionErrors errors = new ActionErrors();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.container.closed"));
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 		}
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		// checking for container type.
-		String holdContainerType = (String) session.getAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
+		final String holdContainerType = (String) session
+				.getAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
 		if (enablePage && holdContainerType != null && !holdContainerType.equals(""))
 		{
-			int typeId = Integer.parseInt(holdContainerType);
+			final int typeId = Integer.parseInt(holdContainerType);
 			enablePage = bizLogic.canHoldContainerType(typeId, storageContainer);
 		}
 
 		// checking for collection Protocol.
-		String holdCollectionProtocol = (String) session
+		final String holdCollectionProtocol = (String) session
 				.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 		if (enablePage && holdCollectionProtocol != null)
 		{
 			if (!holdCollectionProtocol.equals(""))
 			{
-				int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
+				final int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
 				enablePage = bizLogic.canHoldCollectionProtocol(collectionProtocolId,
 						storageContainer);
 			}
@@ -439,7 +433,8 @@ public class ShowStorageGridViewAction extends BaseAction
 		}
 
 		// checking for sepecimen class.
-		String holdspecimenClass = (String) session.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
+		final String holdspecimenClass = (String) session
+				.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
 		if (enablePage && holdspecimenClass != null)
 		{
 			if (!holdspecimenClass.equals(""))
@@ -453,13 +448,13 @@ public class ShowStorageGridViewAction extends BaseAction
 		}
 
 		// checking for specimen array type.
-		String holdspecimenArrayType = (String) session
+		final String holdspecimenArrayType = (String) session
 				.getAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 		if (enablePage && holdspecimenArrayType != null)
 		{
 			if (!holdspecimenArrayType.equals(""))
 			{
-				int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
+				final int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
 				enablePage = bizLogic.canHoldSpecimenArrayType(specimenArrayTypeId,
 						storageContainer);
 			}

@@ -35,14 +35,16 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_ABS_POSITION_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier the id to set
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -54,7 +56,7 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	 */
 	public Integer getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -71,7 +73,7 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	 */
 	public Integer getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**

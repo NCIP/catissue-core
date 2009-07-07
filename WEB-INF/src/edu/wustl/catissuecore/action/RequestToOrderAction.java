@@ -59,7 +59,7 @@ public class RequestToOrderAction extends BaseAction
 	 * logger.
 	 */
 
-	private transient Logger logger = Logger.getCommonLogger(RequestToOrderAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(RequestToOrderAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -76,17 +76,18 @@ public class RequestToOrderAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Sets the Distribution Protocol Id List.
-		SessionDataBean sessionLoginInfo = getSessionData(request);
-		Long loggedInUserID = sessionLoginInfo.getUserId();
-		long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
-		Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
+		final SessionDataBean sessionLoginInfo = this.getSessionData(request);
+		final Long loggedInUserID = sessionLoginInfo.getUserId();
+		final long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
+		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
-		List distributionProtocolList = loadDistributionProtocol(loggedInUserID, role.getName(),
-				sessionLoginInfo);
+		final List distributionProtocolList = this.loadDistributionProtocol(loggedInUserID, role
+				.getName(), sessionLoginInfo);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		return mapping.findForward("requestOrderPage");
 	}
@@ -105,19 +106,19 @@ public class RequestToOrderAction extends BaseAction
 	private List loadDistributionProtocol(final Long piID, String roleName,
 			SessionDataBean sessionDataBean) throws BizLogicException, DAOException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		List distributionProtocolList = new ArrayList();
 
-		String sourceObjectName = DistributionProtocol.class.getName();
-		String[] displayName = {"title"};
-		String valueFieldCol = Constants.ID;
+		final String sourceObjectName = DistributionProtocol.class.getName();
+		final String[] displayName = {"title"};
+		final String valueFieldCol = Constants.ID;
 		DAO dao = null;
 
-		String[] whereColNames = {Status.ACTIVITY_STATUS.toString()};
-		String[] whereColCond = {"!="};
-		Object[] whereColVal = {Status.ACTIVITY_STATUS_CLOSED.toString()};
-		String separatorBetweenFields = "";
+		final String[] whereColNames = {Status.ACTIVITY_STATUS.toString()};
+		final String[] whereColCond = {"!="};
+		final Object[] whereColVal = {Status.ACTIVITY_STATUS_CLOSED.toString()};
+		final String separatorBetweenFields = "";
 
 		// checking for the role. if role is admin / supervisor then show all
 		// the distribution protocols.
@@ -129,17 +130,17 @@ public class RequestToOrderAction extends BaseAction
 		}
 		else
 		{
-			String[] whereColumnName = {"principalInvestigator.id",
+			final String[] whereColumnName = {"principalInvestigator.id",
 					Status.ACTIVITY_STATUS.toString()};
-			String[] colCondition = {"=", "!="};
-			Object[] whereColumnValue = {piID, Status.ACTIVITY_STATUS_CLOSED.toString()};
-			String joinCondition = Constants.AND_JOIN_CONDITION;
-			boolean isToExcludeDisabled = true;
+			final String[] colCondition = {"=", "!="};
+			final Object[] whereColumnValue = {piID, Status.ACTIVITY_STATUS_CLOSED.toString()};
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
+			final boolean isToExcludeDisabled = true;
 
 			// Get data from database
 			distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
-					valueFieldCol, whereColumnName,
-					colCondition, whereColumnValue, joinCondition,
+					valueFieldCol, whereColumnName
+					, colCondition, whereColumnValue, joinCondition,
 					separatorBetweenFields, isToExcludeDisabled);
 		}
 
@@ -148,8 +149,8 @@ public class RequestToOrderAction extends BaseAction
 		// DP's in DP list
 		if (!roleName.equals(Constants.ADMINISTRATOR) && sessionDataBean != null)
 		{
-			HashSet < Long > siteIds = new HashSet < Long >();
-			HashSet < Long > cpIds = new HashSet < Long >();
+			final HashSet<Long> siteIds = new HashSet<Long>();
+			final HashSet<Long> cpIds = new HashSet<Long>();
 			boolean hasDistributionPrivilege = false;
 
 			try
@@ -157,10 +158,10 @@ public class RequestToOrderAction extends BaseAction
 				dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME)
 						.getDAO();
 				dao.openSession(null);
-				User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
+				final User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
 						.getUserId());
-				Collection < Site > siteCollection = user.getSiteCollection();
-				Collection < CollectionProtocol > cpCollection = user
+				final Collection<Site> siteCollection = user.getSiteCollection();
+				final Collection<CollectionProtocol> cpCollection = user
 						.getAssignedProtocolCollection();
 
 				// Scientist
@@ -168,27 +169,27 @@ public class RequestToOrderAction extends BaseAction
 				{
 					return distributionProtocolList;
 				}
-				for (Site site : siteCollection)
+				for (final Site site : siteCollection)
 				{
 					siteIds.add(site.getId());
 				}
 				if (cpCollection != null)
 				{
-					for (CollectionProtocol cp : cpCollection)
+					for (final CollectionProtocol cp : cpCollection)
 					{
 						cpIds.add(cp.getId());
 					}
 				}
 
-				hasDistributionPrivilege = checkDistributionPrivilege(sessionDataBean, siteIds,
-						cpIds);
+				hasDistributionPrivilege = this.checkDistributionPrivilege(sessionDataBean,
+						siteIds, cpIds);
 
 				if (hasDistributionPrivilege)
 				{
 					distributionProtocolList = bizLogic.getList(sourceObjectName, displayName,
 							valueFieldCol, whereColNames, whereColCond, whereColVal,
-							Constants.AND_JOIN_CONDITION,
-							separatorBetweenFields, true);
+							Constants.AND_JOIN_CONDITION
+							, separatorBetweenFields, true);
 				}
 			}
 			finally
@@ -201,6 +202,7 @@ public class RequestToOrderAction extends BaseAction
 
 		return distributionProtocolList;
 	}
+
 	/**
 	 *
 	 * @param sessionDataBean : sessionDataBean
@@ -209,16 +211,16 @@ public class RequestToOrderAction extends BaseAction
 	 * @return boolean : boolean
 	 */
 	private boolean checkDistributionPrivilege(SessionDataBean sessionDataBean,
-			HashSet < Long > siteIds, HashSet < Long > cpIds)
+			HashSet<Long> siteIds, HashSet<Long> cpIds)
 	{
 		boolean hasDistributionPrivilege = false;
 		try
 		{
 			String objectId = Site.class.getName();
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
-			for (Long siteId : siteIds)
+			for (final Long siteId : siteIds)
 			{
 				if (privilegeCache.hasPrivilege(objectId + "_" + siteId, Permissions.DISTRIBUTION))
 				{
@@ -226,9 +228,9 @@ public class RequestToOrderAction extends BaseAction
 				}
 			}
 			objectId = CollectionProtocol.class.getName();
-			for (Long cpId : cpIds)
+			for (final Long cpId : cpIds)
 			{
-				boolean temp = privilegeCache.hasPrivilege(objectId + "_" + cpId,
+				final boolean temp = privilegeCache.hasPrivilege(objectId + "_" + cpId,
 						Permissions.DISTRIBUTION);
 				if (temp)
 				{
@@ -238,9 +240,9 @@ public class RequestToOrderAction extends BaseAction
 						Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return hasDistributionPrivilege;

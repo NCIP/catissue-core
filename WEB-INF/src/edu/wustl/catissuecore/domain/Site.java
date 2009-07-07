@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -120,7 +121,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	public Site(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -131,9 +132,10 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * @return the system generated unique identifier.
 	 * @see #setId(Long)
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -141,6 +143,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * @param identifier identifier to be set.
 	 * @see #getId()
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -155,7 +158,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -198,7 +201,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public String getEmailAddress()
 	{
-		return emailAddress;
+		return this.emailAddress;
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public User getCoordinator()
 	{
-		return coordinator;
+		return this.coordinator;
 	}
 
 	/**
@@ -241,7 +244,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -263,7 +266,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public Address getAddress()
 	{
-		return address;
+		return this.address;
 	}
 
 	/**
@@ -280,23 +283,24 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * This function Copies the data from an SiteForm object to a Site object.
 	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 
 			//Change for API Search   --- Ashwin 04/10/2006
-			if (SearchUtil.isNullobject(coordinator))
+			if (SearchUtil.isNullobject(this.coordinator))
 			{
-				coordinator = new User();
+				this.coordinator = new User();
 			}
 			//Change for API Search   --- Ashwin 04/10/2006
-			if (SearchUtil.isNullobject(address))
+			if (SearchUtil.isNullobject(this.address))
 			{
-				address = new Address();
+				this.address = new Address();
 			}
 
-			SiteForm form = (SiteForm) abstractForm;
+			final SiteForm form = (SiteForm) abstractForm;
 			this.id = Long.valueOf(form.getId());
 			this.name = form.getName().trim();
 			this.type = form.getType();
@@ -305,17 +309,17 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 
 			this.activityStatus = form.getActivityStatus();
 			logger.debug("form.getCoordinatorId() " + form.getCoordinatorId());
-			coordinator.setId(Long.valueOf(form.getCoordinatorId()));
+			this.coordinator.setId(Long.valueOf(form.getCoordinatorId()));
 
-			address.setStreet(form.getStreet());
-			address.setCity(form.getCity());
-			address.setState(form.getState());
-			address.setCountry(form.getCountry());
-			address.setZipCode(form.getZipCode());
-			address.setPhoneNumber(form.getPhoneNumber());
-			address.setFaxNumber(form.getFaxNumber());
+			this.address.setStreet(form.getStreet());
+			this.address.setCity(form.getCity());
+			this.address.setState(form.getState());
+			this.address.setCountry(form.getCountry());
+			this.address.setZipCode(form.getZipCode());
+			this.address.setPhoneNumber(form.getPhoneNumber());
+			this.address.setFaxNumber(form.getFaxNumber());
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -325,6 +329,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;
@@ -336,7 +341,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public Collection<AbstractSpecimenCollectionGroup> getAbstractSpecimenCollectionGroupCollection()
 	{
-		return abstractSpecimenCollectionGroupCollection;
+		return this.abstractSpecimenCollectionGroupCollection;
 	}
 
 	/**
@@ -359,7 +364,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	*/
 	public Collection<CollectionProtocol> getCollectionProtocolCollection()
 	{
-		return collectionProtocolCollection;
+		return this.collectionProtocolCollection;
 	}
 
 	/**
@@ -382,7 +387,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	 */
 	public Collection<User> getAssignedSiteUserCollection()
 	{
-		return assignedSiteUserCollection;
+		return this.assignedSiteUserCollection;
 	}
 
 	/**

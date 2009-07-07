@@ -79,9 +79,10 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 * @return System generated unique id.
 	 * @see #setId(Long)
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -89,6 +90,7 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 * @param identifier id for a particular medical record.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -103,7 +105,7 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 */
 	public String getMedicalRecordNumber()
 	{
-		return medicalRecordNumber;
+		return this.medicalRecordNumber;
 	}
 
 	/**
@@ -124,7 +126,7 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 */
 	public Site getSite()
 	{
-		return site;
+		return this.site;
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 */
 	public Participant getParticipant()
 	{
-		return participant;
+		return this.participant;
 	}
 
 	/**
@@ -165,12 +167,13 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 * @param abstractForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(site))
+		if (SearchUtil.isNullobject(this.site))
 		{
-			site = new Site();
+			this.site = new Site();
 		}
 	}
 
@@ -178,8 +181,10 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject
 	 * To String.
 	 * @return String.
 	 */
+	@Override
 	public String toString()
 	{
-		return "ParticipantMedicalIdentifier: " + id + ", " + medicalRecordNumber + ", " + site;
+		return "ParticipantMedicalIdentifier: " + this.id + ", " + this.medicalRecordNumber + ", "
+				+ this.site;
 	}
 }

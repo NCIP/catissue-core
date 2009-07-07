@@ -27,30 +27,35 @@ public class Concept extends AbstractDomainObject
 	/**
 	 *
 	 */
+	private static final long serialVersionUID = 982000479650093510L;
+
+	/**
+	 *
+	 */
 	protected String conceptUniqueIdentifier;
 
 	/**
-	 * System generated unique ID
+	 * System generated unique ID.
 	 */
 	protected Long id;
 
 	/**
-	 * Name of the concept
+	 * Name of the concept.
 	 */
 	protected String name;
 
 	/**
-	 * semantic type of the concept
+	 * semantic type of the concept.
 	 */
 	protected SemanticType semanticType;
 
 	/**
-	 * Concept referent collection
+	 * Concept referent collection.
 	 */
 	protected Collection conceptReferentCollection = new HashSet();
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public Concept()
 	{
@@ -65,7 +70,7 @@ public class Concept extends AbstractDomainObject
 	 */
 	public Collection getConceptReferentCollection()
 	{
-		return conceptReferentCollection;
+		return this.conceptReferentCollection;
 	}
 
 	/**
@@ -82,7 +87,7 @@ public class Concept extends AbstractDomainObject
 	 */
 	public String getConceptUniqueIdentifier()
 	{
-		return conceptUniqueIdentifier;
+		return this.conceptUniqueIdentifier;
 	}
 
 	/**
@@ -98,14 +103,16 @@ public class Concept extends AbstractDomainObject
 	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id sests system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -117,7 +124,7 @@ public class Concept extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -130,11 +137,13 @@ public class Concept extends AbstractDomainObject
 
 	/**
 	 * @return symantice type for the concept
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.SemanticType" column="SEMANTIC_TYPE_ID" cascade="save-update"
+	 * @hibernate.many-to-one
+	 *  class="edu.wustl.catissuecore.domain.pathology.SemanticType"
+	 *   column="SEMANTIC_TYPE_ID" cascade="save-update"
 	 */
 	public SemanticType getSemanticType()
 	{
-		return semanticType;
+		return this.semanticType;
 	}
 
 	/**
@@ -144,6 +153,7 @@ public class Concept extends AbstractDomainObject
 	{
 		this.semanticType = semanticType;
 	}
+
 	/**
 	 * @param abstractForm : abstractForm
 	 * @throws AssignDataException : AssignDataException

@@ -53,6 +53,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -65,10 +66,11 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
-/**
- * logger.
- */
-	private transient Logger logger = Logger
+
+	/**
+	 * logger.
+	 */
+	private transient final Logger logger = Logger
 			.getCommonLogger(CollectionProtocolRegistrationAction.class);
 	// This will keep track of no of consents for a particular participant
 	/**
@@ -90,75 +92,74 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm =
-			(CollectionProtocolRegistrationForm) form;
+		final CollectionProtocolRegistrationForm collectionProtocolRegistrationForm
+		= (CollectionProtocolRegistrationForm) form;
 		// Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String operation = request.getParameter(Constants.OPERATION);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		// CollectionProtocolId
 		// Consent Tracking (Virender Mehta)
 		String selectedCollectionProtocolId = null;
 		if (request.getParameter(Constants.CP_SEARCH_CP_ID) != null)
 		{
-			long collectionProtocolId = new Long(request.getParameter(Constants.CP_SEARCH_CP_ID))
-					.longValue();
+			final long collectionProtocolId = new Long(request
+					.getParameter(Constants.CP_SEARCH_CP_ID)).longValue();
 			try
 			{
 				((CollectionProtocolRegistrationForm) form)
 						.setCollectionProtocolID(collectionProtocolId);
 			}
-			catch (ClassCastException exp)
+			catch (final ClassCastException exp)
 			{
-				logger
-						.debug("Class cast Exception in" +
-								" CollectionProtocolRegistrationAction :" +
-								exp);
+				this.logger.debug("Class cast Exception in"
+						+ " CollectionProtocolRegistrationAction :" + exp);
 			}
 		}
 		selectedCollectionProtocolId = String.valueOf(collectionProtocolRegistrationForm
 				.getCollectionProtocolID());
 		// Adding name,value pair in NameValueBean
 		// Getting witness name list for CollectionProtocolID
-		List witnessList = ConsentUtil.witnessNameList(selectedCollectionProtocolId);
+		final List witnessList = ConsentUtil.witnessNameList(selectedCollectionProtocolId);
 		// Getting ResponseList if Operation=Edit then "Withdraw" is added to
 		// the List
-		List responseList = AppUtility.responceList(operation);
-		Set consentList = (Set) ConsentUtil.getConsentList(selectedCollectionProtocolId);
-		List requestConsentList = new ArrayList(consentList);
+		final List responseList = AppUtility.responceList(operation);
+		final Set consentList = (Set) ConsentUtil.getConsentList(selectedCollectionProtocolId);
+		final List requestConsentList = new ArrayList(consentList);
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+			final ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if (errors == null)
 			{
-				Map tempMap = prepareConsentMap(requestConsentList);
+				final Map tempMap = this.prepareConsentMap(requestConsentList);
 				collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
 			}
 			collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size());
 		}
 		else
 		{
-			String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
-			CollectionProtocolRegistration collectionProtocolRegistration = AppUtility
+			final String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
+			final CollectionProtocolRegistration collectionProtocolRegistration = AppUtility
 					.getcprObj(cprID);
 			// List added for grid
-			List specimenDetails = new ArrayList();
+			final List specimenDetails = new ArrayList();
 			ConsentUtil.getSpecimenDetails(collectionProtocolRegistration, specimenDetails);
-			List < String > columnList = ConsentUtil.columnNames();
+			final List<String> columnList = ConsentUtil.columnNames();
 			// Lazy Resolved ---
 			// collectionProtocolRegistration.getConsentTierResponseCollection
 			// ();
-			Collection consentResponse = (Collection) bizLogic.retrieveAttribute(
-					CollectionProtocolRegistration.class.getName(),
-					collectionProtocolRegistration
+			final Collection consentResponse = (Collection) bizLogic.retrieveAttribute(
+					CollectionProtocolRegistration.class.getName()
+					, collectionProtocolRegistration
 							.getId(), "elements(consentTierResponseCollection)");
-			Map tempMap = prepareMap(consentResponse);
+			final Map tempMap = this.prepareMap(consentResponse);
 			collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
-			collectionProtocolRegistrationForm.setConsentTierCounter(consentCounter);
-			HttpSession session = request.getSession();
+			collectionProtocolRegistrationForm.setConsentTierCounter(this.consentCounter);
+			final HttpSession session = request.getSession();
 			session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 			session.setAttribute(Constants.COLUMNLIST, columnList);
 		}
@@ -170,18 +171,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm) form;
+			final CollectionProtocolRegistrationForm cpform
+			= (CollectionProtocolRegistrationForm) form;
 			cpform.setId(0);
 			if (cpform.getRegistrationDate() == null)
 			{
-				cpform.setRegistrationDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
-						.getInstance().getTime(), CommonServiceLocator.getInstance()
-						.getDatePattern()));
+				cpform.setRegistrationDate(CommonUtilities.parseDateToString(Calendar.getInstance()
+						.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 			}
 		}
 
 		// Sets the pageOf attribute
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
@@ -212,43 +213,41 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String sourceObjectName = CollectionProtocol.class.getName();
 
 		// Smita changes start
-		String[] displayNameFields = {"shortTitle"};
+		final String[] displayNameFields = {"shortTitle"};
 		// Smita changes end
 
-		String valueField = Constants.SYSTEM_IDENTIFIER;
+		final String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
 
-		logger.debug("SubmittedFor on CPRAction====>"
+		this.logger.debug("SubmittedFor on CPRAction====>"
 				+ request.getAttribute(Constants.SUBMITTED_FOR));
 		if ((request.getAttribute(Constants.SUBMITTED_FOR) != null)
 				&& (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
 		{
-			HttpSession session = request.getSession();
-			Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
+			final HttpSession session = request.getSession();
+			final Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
 
 			if (formBeanStack != null)
 			{
 				try
 				{
-					AddNewSessionDataBean addNewSessionDataBean =
-						(AddNewSessionDataBean) formBeanStack
+					final AddNewSessionDataBean addNewSessionDataBean
+					= (AddNewSessionDataBean) formBeanStack
 							.peek();
 
-					SpecimenCollectionGroupForm sessionFormBean =
-						(SpecimenCollectionGroupForm) addNewSessionDataBean
+					final SpecimenCollectionGroupForm sessionFormBean
+					= (SpecimenCollectionGroupForm) addNewSessionDataBean
 							.getAbstractActionForm();
 
 					((CollectionProtocolRegistrationForm) form)
-							.setCollectionProtocolID
-							(sessionFormBean.getCollectionProtocolId());
+							.setCollectionProtocolID(sessionFormBean
+									.getCollectionProtocolId());
 				}
-				catch (ClassCastException exp)
+				catch (final ClassCastException exp)
 				{
-					logger
-							.debug("Class cast Exception in" +
-									" CollectionProtocolRegistrationAction ~>"
-									+ exp);
+					this.logger.debug("Class cast Exception in"
+							+ " CollectionProtocolRegistrationAction ~>" + exp);
 				}
 			}
 		}
@@ -272,15 +271,17 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		// get list of Participant's names
 		sourceObjectName = Participant.class.getName();
-		String[] participantsFields = {"lastName", "firstName", "birthDate", "socialSecurityNumber"};
-		String[] whereColumnName = {"lastName", "firstName", "birthDate", "socialSecurityNumber"};
+		final String[] participantsFields = {"lastName", "firstName", "birthDate",
+				"socialSecurityNumber"};
+		final String[] whereColumnName = {"lastName", "firstName", "birthDate",
+				"socialSecurityNumber"};
 		String[] whereColumnCondition;
 		Object[] whereColumnValue;
 
 		// get Database name and set conditions
 
-		String appName = CommonServiceLocator.getInstance().getAppName();
-		String databaseType = DAOConfigFactory.getInstance().getDAOFactory(appName)
+		final String appName = CommonServiceLocator.getInstance().getAppName();
+		final String databaseType = DAOConfigFactory.getInstance().getDAOFactory(appName)
 				.getDataBaseType();
 
 		if (databaseType.equals(Constants.MYSQL_DATABASE))
@@ -302,27 +303,27 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			whereColumnValue = new String[]{};
 		}
 
-		String joinCondition = Constants.OR_JOIN_CONDITION;
-		String separatorBetweenFields = ", ";
+		final String joinCondition = Constants.OR_JOIN_CONDITION;
+		final String separatorBetweenFields = ", ";
 
 		list = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields,
 				false);
 
 		// get list of Disabled Participants
-		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName2 = {"activityStatus"};
-		String[] whereColumnCondition2 = {"="};
-		String[] whereColumnValue2 = {Status.ACTIVITY_STATUS_DISABLED.toString()};
-		String joinCondition2 = Constants.AND_JOIN_CONDITION;
-		String separatorBetweenFields2 = ",";
+		final String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnName2 = {"activityStatus"};
+		final String[] whereColumnCondition2 = {"="};
+		final String[] whereColumnValue2 = {Status.ACTIVITY_STATUS_DISABLED.toString()};
+		final String joinCondition2 = Constants.AND_JOIN_CONDITION;
+		final String separatorBetweenFields2 = ",";
 
-		List listOfDisabledParticipant = bizLogic.getList(sourceObjectName, participantsFields2,
-				valueField, whereColumnName2, whereColumnCondition2, whereColumnValue2,
-				joinCondition2, separatorBetweenFields2, false);
+		final List listOfDisabledParticipant = bizLogic.getList(sourceObjectName,
+				participantsFields2, valueField, whereColumnName2, whereColumnCondition2,
+				whereColumnValue2, joinCondition2, separatorBetweenFields2, false);
 
 		// removing disabled participants from the list of Participants
-		list = removeDisabledParticipant(list, listOfDisabledParticipant);
+		list = this.removeDisabledParticipant(list, listOfDisabledParticipant);
 
 		// Sets the participantList attribute to be used in the Site Add/Edit
 		// Page.
@@ -333,11 +334,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
 		// ************* ForwardTo implementation *************
-		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+		final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
 		if (forwardToHashMap != null)
 		{
-			Long participantId = (Long) forwardToHashMap.get("participantId");
+			final Long participantId = (Long) forwardToHashMap.get("participantId");
 			Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"
 					+ participantId);
 
@@ -345,23 +346,21 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					|| (request.getParameter("lastName").trim().length() > 0)
 					|| (request.getParameter("birthDate").trim().length() > 0)
 					|| ((request.getParameter("socialSecurityNumberPartA").trim().length() > 0)
-							&& (request.getParameter
-									("socialSecurityNumberPartB").trim()
-									.length() > 0)
-							&& (request
+							&& (request.getParameter("socialSecurityNumberPartB")
+									.trim().length() > 0) && (request
 							.getParameter("socialSecurityNumberPartC")
 							.trim().length() > 0)))
 			{
-				CollectionProtocolRegistrationForm cprForm =
-					(CollectionProtocolRegistrationForm) form;
+				final CollectionProtocolRegistrationForm cprForm
+				= (CollectionProtocolRegistrationForm) form;
 				cprForm.setParticipantID(participantId.longValue());
 				// cprForm.setCheckedButton(true);
 				// Bug-2819: Performance issue due to participant drop down:
 				// Jitendra
-				Object object = bizLogic.retrieve(sourceObjectName, participantId);
+				final Object object = bizLogic.retrieve(sourceObjectName, participantId);
 				if (object != null)
 				{
-					Participant participant = (Participant) object;
+					final Participant participant = (Participant) object;
 					cprForm.setParticipantName(participant.getMessageLabel());
 				}
 
@@ -373,21 +372,21 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			{
 				try
 				{
-					Long participantId = new Long(request.getParameter("participantId"));
-					CollectionProtocolRegistrationForm cprForm =
-						(CollectionProtocolRegistrationForm) form;
+					final Long participantId = new Long(request.getParameter("participantId"));
+					final CollectionProtocolRegistrationForm cprForm
+					= (CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
 					// cprForm.setCheckedButton(true);
-					Object object = bizLogic.retrieve(sourceObjectName, participantId);
+					final Object object = bizLogic.retrieve(sourceObjectName, participantId);
 					if (object != null)
 					{
-						Participant participant = (Participant) object;
+						final Participant participant = (Participant) object;
 						cprForm.setParticipantName(participant.getMessageLabel());
 					}
 				}
-				catch (NumberFormatException e)
+				catch (final NumberFormatException e)
 				{
-					logger.debug("NumberFormatException Occured :" + e);
+					this.logger.debug("NumberFormatException Occured :" + e);
 				}
 			}
 
@@ -396,22 +395,23 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			{
 				try
 				{
-					Long participantId = new Long(((CollectionProtocolRegistrationForm) form)
+					final Long participantId
+					= new Long(((CollectionProtocolRegistrationForm) form)
 							.getParticipantID());
-					CollectionProtocolRegistrationForm cprForm =
-						(CollectionProtocolRegistrationForm) form;
+					final CollectionProtocolRegistrationForm cprForm
+					= (CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
 					// cprForm.setCheckedButton(true);
-					Object object = bizLogic.retrieve(sourceObjectName, participantId);
+					final Object object = bizLogic.retrieve(sourceObjectName, participantId);
 					if (object != null)
 					{
-						Participant participant = (Participant) object;
+						final Participant participant = (Participant) object;
 						cprForm.setParticipantName(participant.getMessageLabel());
 					}
 				}
-				catch (NumberFormatException e)
+				catch (final NumberFormatException e)
 				{
-					logger.debug("NumberFormatException Occured :" + e);
+					this.logger.debug("NumberFormatException Occured :" + e);
 				}
 			}
 		}
@@ -430,12 +430,13 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		if (request.getParameter(Constants.OPERATION).equals(Constants.EDIT))
 		{
-			CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
+			final CollectionProtocolRegistrationForm cprForm
+			= (CollectionProtocolRegistrationForm) form;
 			String participantId = new Long(cprForm.getParticipantID()).toString();
 			if (cprForm.getParticipantID() == 0 && cprForm.getParticipantProtocolID() != null)
 			{
-				participantId = getParticipantIdForProtocolId(cprForm.getParticipantProtocolID(),
-						bizLogic);
+				participantId = this.getParticipantIdForProtocolId(cprForm
+						.getParticipantProtocolID(), bizLogic);
 			}
 			request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, participantId);
 		}
@@ -452,7 +453,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	 */
 	private List removeDisabledParticipant(List listOfParticipant, List listOfDisabledParticipant)
 	{
-		List listOfActiveParticipant = new ArrayList();
+		final List listOfActiveParticipant = new ArrayList();
 
 		Logger.out.debug("No. Of Participants ~~~~~~~~~~~~~~~~~~~~~~~>" + listOfParticipant.size());
 		Logger.out.debug("No. Of Disabled Participants ~~~~~~~~~~~~~~~~~~~~~~~>"
@@ -461,7 +462,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		listOfActiveParticipant.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		for (int i = 0; i < listOfParticipant.size(); i++)
 		{
-			NameValueBean participantBean = (NameValueBean) listOfParticipant.get(i);
+			final NameValueBean participantBean = (NameValueBean) listOfParticipant.get(i);
 			boolean isParticipantDisable = false;
 
 			if (Long.parseLong(participantBean.getValue()) == -1)
@@ -472,13 +473,13 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 			for (int j = 0; j < listOfDisabledParticipant.size(); j++)
 			{
-				if (Long.parseLong(((NameValueBean)
-						listOfDisabledParticipant.get(j)).getValue()) == -1)
+				if (Long.parseLong(((NameValueBean) listOfDisabledParticipant
+						.get(j)).getValue()) == -1)
 				{
 					continue;
 				}
 
-				NameValueBean disabledParticipant = (NameValueBean) listOfDisabledParticipant
+				final NameValueBean disabledParticipant = (NameValueBean) listOfDisabledParticipant
 						.get(j);
 				if (participantBean.getValue().equals(disabledParticipant.getValue()))
 				{
@@ -492,7 +493,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			}
 		}
 
-		logger.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"
+		this.logger.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"
 				+ listOfActiveParticipant.size());
 
 		return listOfActiveParticipant;
@@ -510,18 +511,18 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	private String getParticipantIdForProtocolId(String participantProtocolId, IBizLogic bizLogic)
 			throws Exception
 	{
-		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String[] selectColumnName = {"participant.id"};
-		String[] whereColumnName = {"protocolParticipantIdentifier"};
-		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {participantProtocolId};
-		List participantList = bizLogic.retrieve(sourceObjectName, selectColumnName,
+		final String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		final String[] selectColumnName = {"participant.id"};
+		final String[] whereColumnName = {"protocolParticipantIdentifier"};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {participantProtocolId};
+		final List participantList = bizLogic.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue,
 				Constants.AND_JOIN_CONDITION);
 		if (participantList != null && !participantList.isEmpty())
 		{
 
-			String participantId = ((Long) participantList.get(0)).toString();
+			final String participantId = ((Long) participantList.get(0)).toString();
 			return participantId;
 
 		}
@@ -537,11 +538,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	 */
 	private Map prepareMap(Collection partiResponseCollection)
 	{
-		Map tempMap = new LinkedHashMap();
+		final Map tempMap = new LinkedHashMap();
 		if (partiResponseCollection != null)
 		{
 			int i = 0;
-			Iterator consentResponseCollectionIter = partiResponseCollection.iterator();
+			final Iterator consentResponseCollectionIter = partiResponseCollection.iterator();
 			String idKey = null;
 			String statementKey = null;
 			String responsekey = null;
@@ -550,10 +551,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			Long consentID;
 			while (consentResponseCollectionIter.hasNext())
 			{
-				ConsentTierResponse consentTierResponse =
-					(ConsentTierResponse) consentResponseCollectionIter
+				final ConsentTierResponse consentTierResponse
+				= (ConsentTierResponse) consentResponseCollectionIter
 						.next();
-				ConsentTier consent = (ConsentTier) consentTierResponse.getConsentTier();
+				final ConsentTier consent = consentTierResponse.getConsentTier();
 				consentTierID = consentTierResponse.getConsentTier().getId();
 				consentID = consent.getId();
 				if (consentTierID.longValue() == consentID.longValue())
@@ -569,7 +570,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					i++;
 				}
 			}
-			consentCounter = i;
+			this.consentCounter = i;
 			return tempMap;
 		}
 		else
@@ -589,16 +590,16 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	 */
 	private Map prepareConsentMap(List requestConsentList)
 	{
-		Map tempMap = new HashMap();
+		final Map tempMap = new HashMap();
 		if (requestConsentList != null)
 		{
 			int i = 0;
-			Iterator consentTierCollectionIter = requestConsentList.iterator();
+			final Iterator consentTierCollectionIter = requestConsentList.iterator();
 			String idKey = null;
 			String statementKey = null;
 			while (consentTierCollectionIter.hasNext())
 			{
-				ConsentTier consent = (ConsentTier) consentTierCollectionIter.next();
+				final ConsentTier consent = (ConsentTier) consentTierCollectionIter.next();
 				idKey = "ConsentBean:" + i + "_consentTierID";
 				statementKey = "ConsentBean:" + i + "_statement";
 

@@ -47,15 +47,16 @@ public class ReportProblemAction extends Action
 	 * @throws ServletException : ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		final Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
 		if (obj != null)
 		{
-			SessionDataBean sessionData = (SessionDataBean) obj;
-			ReportedProblemForm reportedProblemForm = (ReportedProblemForm) form;
+			final SessionDataBean sessionData = (SessionDataBean) obj;
+			final ReportedProblemForm reportedProblemForm = (ReportedProblemForm) form;
 			if (reportedProblemForm != null)
 			{
 				reportedProblemForm.setNameOfReporter(sessionData.getLastName() + ", "
@@ -68,16 +69,16 @@ public class ReportProblemAction extends Action
 		CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
 
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		//Sets the operation attribute to be used in the Add/Edit Problem Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
 		if (operation.equals(Constants.EDIT))
 		{
-			Long prevIdentifier = (Long) request.getAttribute(Constants.PREVIOUS_PAGE);
+			final Long prevIdentifier = (Long) request.getAttribute(Constants.PREVIOUS_PAGE);
 			request.setAttribute(Constants.PREVIOUS_PAGE, prevIdentifier);
-			Long nextIdentifier = (Long) request.getAttribute(Constants.NEXT_PAGE);
+			final Long nextIdentifier = (Long) request.getAttribute(Constants.NEXT_PAGE);
 			request.setAttribute(Constants.NEXT_PAGE, nextIdentifier);
 		}
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST,

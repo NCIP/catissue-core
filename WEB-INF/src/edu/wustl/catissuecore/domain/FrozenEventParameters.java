@@ -48,7 +48,7 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	 */
 	public String getMethod()
 	{
-		return method;
+		return this.method;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	public FrozenEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -85,15 +85,16 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	 * @param abstractForm An FrozenEventParametersForm object
 	 * containing the information about the frozenEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			FrozenEventParametersForm form = (FrozenEventParametersForm) abstractForm;
+			final FrozenEventParametersForm form = (FrozenEventParametersForm) abstractForm;
 			this.method = form.getMethod();
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

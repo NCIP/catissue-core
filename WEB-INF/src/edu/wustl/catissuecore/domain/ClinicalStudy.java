@@ -49,7 +49,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	public ClinicalStudy(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	  */
 	public Collection getClinicalStudyEventCollection()
 	{
-		return clinicalStudyEventCollection;
+		return this.clinicalStudyEventCollection;
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 */
 	public Collection getCoordinatorCollection()
 	{
-		return coordinatorCollection;
+		return this.coordinatorCollection;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 */
 	public Collection getClinicalStudyRegistrationCollection()
 	{
-		return clinicalStudyRegistrationCollection;
+		return this.clinicalStudyRegistrationCollection;
 	}
 
 	/**
@@ -139,6 +139,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 * Set all values in the form.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		User coordinator = null;
@@ -146,24 +147,24 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 		{
 			super.setAllValues(abstractForm);
 
-			ClinicalStudyForm cpForm = (ClinicalStudyForm) abstractForm;
+			final ClinicalStudyForm cpForm = (ClinicalStudyForm) abstractForm;
 
-			coordinatorCollection.clear();
-			long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
+			this.coordinatorCollection.clear();
+			final long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
 			if (coordinatorsArr != null)
 			{
-				for (int i = 0; i < coordinatorsArr.length; i++)
+				for (final long element : coordinatorsArr)
 				{
-					if (coordinatorsArr[i] != -1)
+					if (element != -1)
 					{
 						coordinator = new User();
-						coordinator.setId(Long.valueOf(coordinatorsArr[i]));
-						coordinatorCollection.add(coordinator);
+						coordinator.setId(Long.valueOf(element));
+						this.coordinatorCollection.add(coordinator);
 					}
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -173,6 +174,7 @@ public class ClinicalStudy extends SpecimenProtocol implements java.io.Serializa
 	 * Returns message label to display on success add or edit.
 	 * @return String message label.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.title;

@@ -56,7 +56,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	public CancerResearchGroup(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -66,15 +66,17 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CANCER_RES_GRP_SEQ"
 	 * @return a unique id assigned to the cancer research group.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Sets an id for the cancer research group.
 	 * @param identfier Unique id to be assigned to the cancer research group.
 	 */
+	@Override
 	public void setId(Long identfier)
 	{
 		this.id = identfier;
@@ -88,7 +90,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -108,6 +110,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 * Set all values on the form object.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) abstractForm;
@@ -118,6 +121,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 	 * Returns message label to display on success add or edit.
 	 * @return String type label.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;

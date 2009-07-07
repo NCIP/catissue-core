@@ -68,6 +68,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -82,6 +83,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECI_ARRAY_CNTNT_SEQ"
 	 * @return Long.
 	 */
+	@Override
 	public Long getId()
 	{
 		return this.id;
@@ -94,7 +96,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public Double getConcentrationInMicrogramPerMicroliter()
 	{
-		return concentrationInMicrogramPerMicroliter;
+		return this.concentrationInMicrogramPerMicroliter;
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public Double getInitialQuantity()
 	{
-		return initialQuantity;
+		return this.initialQuantity;
 	}
 
 	/**
@@ -129,7 +131,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public Integer getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public Integer getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -164,7 +166,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public Specimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 */
 	public SpecimenArray getSpecimenArray()
 	{
-		return specimenArray;
+		return this.specimenArray;
 	}
 
 	/**
@@ -201,24 +203,25 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	 * @param arg0 IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(initialQuantity))
+		if (SearchUtil.isNullobject(this.initialQuantity))
 		{
-			initialQuantity = new Double(0);
+			this.initialQuantity = new Double(0);
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(specimenArray))
+		if (SearchUtil.isNullobject(this.specimenArray))
 		{
-			specimenArray = new SpecimenArray();
+			this.specimenArray = new SpecimenArray();
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(specimen))
+		if (SearchUtil.isNullobject(this.specimen))
 		{
-			specimen = new Specimen();
+			this.specimen = new Specimen();
 		}
 	}
 }

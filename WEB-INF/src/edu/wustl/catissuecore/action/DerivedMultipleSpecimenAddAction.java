@@ -52,11 +52,12 @@ public class DerivedMultipleSpecimenAddAction extends SecureAction
 	 * @throws DAOException : DAOException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, DAOException
 	{
-		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		request.setAttribute(Constants.DERIVED_FORM, createSpecimenForm);
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -69,18 +70,19 @@ public class DerivedMultipleSpecimenAddAction extends SecureAction
 
 	protected String getObjectId(AbstractActionForm form)
 	{
-		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if (createSpecimenForm.getParentSpecimenId() != null
 				|| createSpecimenForm.getParentSpecimenId() != "")
 		{
-			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			final Specimen specimen = AppUtility.getSpecimen(createSpecimenForm
+					.getParentSpecimenId());
 			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-			CollectionProtocolRegistration cpr = specimenCollectionGroup
+			final CollectionProtocolRegistration cpr = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
 			if (cpr != null)
 			{
-				CollectionProtocol cp = cpr.getCollectionProtocol();
+				final CollectionProtocol cp = cpr.getCollectionProtocol();
 				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
 			}
 		}

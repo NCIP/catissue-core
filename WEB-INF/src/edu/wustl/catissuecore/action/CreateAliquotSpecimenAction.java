@@ -21,6 +21,7 @@ import edu.wustl.common.factory.IFactory;
  */
 public class CreateAliquotSpecimenAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -35,21 +36,22 @@ public class CreateAliquotSpecimenAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String specimenId = request.getParameter("specimenId");
+		final String specimenId = request.getParameter("specimenId");
 		Specimen specimen = null;
 		if (specimenId != null)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			specimen = (Specimen) orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
+			specimen = orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
 
 		}
 		System.out.println("");
-		AliquotForm aliquotForm = (AliquotForm) form;
+		final AliquotForm aliquotForm = (AliquotForm) form;
 		aliquotForm.setSpecimenLabel(specimen.getLabel());
 		aliquotForm.setNoOfAliquots("1");
 		aliquotForm.setForwardTo("orderDetails");

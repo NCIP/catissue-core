@@ -52,7 +52,8 @@ public class DirectDistributeInitAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DirectDistributeInitAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(DirectDistributeInitAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -72,68 +73,71 @@ public class DirectDistributeInitAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String typeOf = request.getParameter("typeOf");
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final String typeOf = request.getParameter("typeOf");
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
-		SessionDataBean sessionData = getSessionData(request);
-		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionData
+		final SessionDataBean sessionData = this.getSessionData(request);
+		final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionData
 				.getUserName());
 
-		User user = getUser(sessionData.getUserName(), sessionData.getUserId());
-		List siteIdsList = (List) orderBizLogic.getUserSitesWithDistributionPrev(user,
+		final User user = this.getUser(sessionData.getUserName(), sessionData.getUserId());
+		final List siteIdsList = (List) orderBizLogic.getUserSitesWithDistributionPrev(user,
 				privilegeCache);
 		boolean isValidTodistribute = false;
 
 		if (typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 		{
-			OrderSpecimenForm orderSpecForm = (OrderSpecimenForm) form;
-			List specimenCollection = (List) orderBizLogic.getSpecimenDataFromDatabase(request);
-			isValidTodistribute = isValidToDistributeSpecimenCheckPviOnSite(specimenCollection,
-					siteIdsList);
+			final OrderSpecimenForm orderSpecForm = (OrderSpecimenForm) form;
+			final List specimenCollection = (List) orderBizLogic
+					.getSpecimenDataFromDatabase(request);
+			isValidTodistribute = this.isValidToDistributeSpecimenCheckPviOnSite(
+					specimenCollection, siteIdsList);
 			if (!isValidTodistribute)
 			{
-				isValidTodistribute = isValidToDistributeSpecimenCheckPviOnCP(specimenCollection,
-						privilegeCache, sessionData);
+				isValidTodistribute = this.isValidToDistributeSpecimenCheckPviOnCP(
+						specimenCollection, privilegeCache, sessionData);
 			}
 			// Collections.sort(specimenCollection, new SpecimenComparator());
-			orderSpecForm.setValues(putValueInSpecimenMap(specimenCollection));
-			OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
+			orderSpecForm.setValues(this.putValueInSpecimenMap(specimenCollection));
+			final OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
 			orderSpecForm.setOrderForm(orderFrom);
 			orderSpecForm.setPageOf("specimen");
 		}
 		else if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 		{
 
-			OrderBiospecimenArrayForm orderArrayForm = (OrderBiospecimenArrayForm) form;
-			List specimenArrayCollection = (List) orderBizLogic
+			final OrderBiospecimenArrayForm orderArrayForm = (OrderBiospecimenArrayForm) form;
+			final List specimenArrayCollection = (List) orderBizLogic
 					.getSpecimenArrayDataFromDatabase(request);
-			isValidTodistribute = isValidToDistributeSpecArray(specimenArrayCollection, siteIdsList);
-			orderArrayForm.setValues(putValueInArrayMap(specimenArrayCollection));
+			isValidTodistribute = this.isValidToDistributeSpecArray(specimenArrayCollection,
+					siteIdsList);
+			orderArrayForm.setValues(this.putValueInArrayMap(specimenArrayCollection));
 			// Obtain OrderForm instance from the session.
-			OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
+			final OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
 			orderArrayForm.setOrderForm(orderFrom);
 			orderArrayForm.setPageOf("specimenArray");
 		}
 		else
 		{
-			OrderPathologyCaseForm pathologyForm = (OrderPathologyCaseForm) form;
-			List pathologyCollection = (List) orderBizLogic.getPathologyDataFromDatabase(request);
-			isValidTodistribute = isValidToDistributePathoCase(pathologyCollection, privilegeCache,
-					sessionData);
-			pathologyForm.setValues(putValueInPathologyMap(pathologyCollection));
-			OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
+			final OrderPathologyCaseForm pathologyForm = (OrderPathologyCaseForm) form;
+			final List pathologyCollection = (List) orderBizLogic
+					.getPathologyDataFromDatabase(request);
+			isValidTodistribute = this.isValidToDistributePathoCase(pathologyCollection,
+					privilegeCache, sessionData);
+			pathologyForm.setValues(this.putValueInPathologyMap(pathologyCollection));
+			final OrderForm orderFrom = (OrderForm) request.getSession().getAttribute("OrderForm");
 			pathologyForm.setOrderForm(orderFrom);
 			pathologyForm.setPageOf("pathologyCase");
 		}
 		if (!orderBizLogic.isSuperAdmin(user) && !isValidTodistribute)
 		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("access.denied.to.distribute");
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("access.denied.to.distribute");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 			return mapping.findForward("failure");
 		}
 
@@ -155,7 +159,7 @@ public class DirectDistributeInitAction extends BaseAction
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			User user = (User) dao.retrieveById(User.class.getName(), userId);
+			final User user = (User) dao.retrieveById(User.class.getName(), userId);
 			return user;
 		}
 		finally
@@ -164,6 +168,7 @@ public class DirectDistributeInitAction extends BaseAction
 		}
 
 	}
+
 	/**
 	 *
 	 * @param specimenCollection : specimenCollection
@@ -175,19 +180,19 @@ public class DirectDistributeInitAction extends BaseAction
 	{
 		boolean isValidToDistribute = true;
 
-		Iterator < Specimen > specItr = specimenCollection.iterator();
+		final Iterator<Specimen> specItr = specimenCollection.iterator();
 
 		while (specItr.hasNext())
 		{
-			Specimen specimen = specItr.next();
+			final Specimen specimen = specItr.next();
 			// specimen.getSpecimenCollectionGroup().
 			// getCollectionProtocolRegistration
 			// ().getCollectionProtocol().getId()
-			SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
+			final SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
 			if (specimenPosition != null)
 			{
-				if (!siteIdsList.contains(specimenPosition.
-						getStorageContainer().getSite().getId()))
+				if (!siteIdsList.contains(specimenPosition
+						.getStorageContainer().getSite().getId()))
 				{
 					isValidToDistribute = false;
 					break;
@@ -197,27 +202,28 @@ public class DirectDistributeInitAction extends BaseAction
 
 		return isValidToDistribute;
 	}
-    /**
-     *
-     * @param specimenCollection : specimenCollection
-     * @param privilegeCache : privilegeCache
-     * @param sessionDataBean : sessionDataBean
-     * @return boolean : boolean
-     * @throws SMException : SMException
-     */
+
+	/**
+	 *
+	 * @param specimenCollection : specimenCollection
+	 * @param privilegeCache : privilegeCache
+	 * @param sessionDataBean : sessionDataBean
+	 * @return boolean : boolean
+	 * @throws SMException : SMException
+	 */
 	private boolean isValidToDistributeSpecimenCheckPviOnCP(List specimenCollection,
 			PrivilegeCache privilegeCache, SessionDataBean sessionDataBean) throws SMException
 	{
 		boolean isValidToDistribute = true;
 
-		Iterator < Specimen > specItr = specimenCollection.iterator();
+		final Iterator<Specimen> specItr = specimenCollection.iterator();
 
 		while (specItr.hasNext())
 		{
-			Specimen specimen = specItr.next();
-			Long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-					.getCollectionProtocol().getId();
-			String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
+			final Specimen specimen = specItr.next();
+			final Long cpId = specimen.getSpecimenCollectionGroup()
+					.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+			final String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
 			boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
 					Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 			if (!isAuthorized)
@@ -236,6 +242,7 @@ public class DirectDistributeInitAction extends BaseAction
 
 		return isValidToDistribute;
 	}
+
 	/**
 	 *
 	 * @param specArrayCollection : specArrayCollection
@@ -246,13 +253,13 @@ public class DirectDistributeInitAction extends BaseAction
 	{
 		boolean isValidToDistribute = true;
 
-		Iterator < SpecimenArray > specArrayItr = specArrayCollection.iterator();
+		final Iterator<SpecimenArray> specArrayItr = specArrayCollection.iterator();
 
 		while (specArrayItr.hasNext())
 		{
-			SpecimenArray specimenArray = specArrayItr.next();
+			final SpecimenArray specimenArray = specArrayItr.next();
 
-			StorageContainer storageContainer = (StorageContainer) specimenArray
+			final StorageContainer storageContainer = (StorageContainer) specimenArray
 					.getLocatedAtPosition().getParentContainer();
 			if (!siteIdsList.contains(storageContainer.getSite().getId()))
 			{
@@ -263,6 +270,7 @@ public class DirectDistributeInitAction extends BaseAction
 
 		return isValidToDistribute;
 	}
+
 	/**
 	 *
 	 * @param pathologyReports : pathologyReports
@@ -277,33 +285,36 @@ public class DirectDistributeInitAction extends BaseAction
 	{
 		boolean isValidToDistribute = true;
 
-		Iterator pathologyReportsIter = pathologyReports.iterator();
+		final Iterator pathologyReportsIter = pathologyReports.iterator();
 
 		try
 		{
 			while (pathologyReportsIter.hasNext())
 			{
-				SurgicalPathologyReport surgPathReports =
-					(SurgicalPathologyReport) pathologyReportsIter
+				final SurgicalPathologyReport surgPathReports
+				= (SurgicalPathologyReport) pathologyReportsIter
 						.next();
-				SpecimenCollectionGroup specimenCollectionGroup =
-					(SpecimenCollectionGroup) surgPathReports
+				final SpecimenCollectionGroup specimenCollectionGroup
+				= (SpecimenCollectionGroup) surgPathReports
 						.getSpecimenCollectionGroup();
 
 				if (specimenCollectionGroup != null)
 				{
 
-					Long cpId = specimenCollectionGroup.getCollectionProtocolRegistration()
+					final Long cpId
+					= specimenCollectionGroup.getCollectionProtocolRegistration()
 							.getCollectionProtocol().getId();
-					String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
-					boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
-							Variables.privilegeDetailsMap.get
-							(Constants.DISTRIBUTE_SPECIMENS));
+					final String objectId
+					= Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
+					boolean isAuthorized
+					= privilegeCache.hasPrivilege(objectId,
+							Variables.privilegeDetailsMap
+							.get(Constants.DISTRIBUTE_SPECIMENS));
 					if (!isAuthorized)
 					{
 						isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(
-								Permissions.DISTRIBUTION,
-								sessionDataBean, cpId.toString());
+								Permissions.DISTRIBUTION
+								, sessionDataBean, cpId.toString());
 					}
 
 					if (!isAuthorized)
@@ -314,9 +325,9 @@ public class DirectDistributeInitAction extends BaseAction
 				}
 			}
 		}
-		catch (SMException smExp)
+		catch (final SMException smExp)
 		{
-			logger.debug(smExp.getMessage(), smExp);
+			this.logger.debug(smExp.getMessage(), smExp);
 			throw AppUtility.getApplicationException(smExp, "sm.operation.error",
 					"Error in checking has privilege");
 		}
@@ -331,13 +342,13 @@ public class DirectDistributeInitAction extends BaseAction
 	 */
 	private Map putValueInSpecimenMap(List specimenCollection)
 	{
-		Map specimenMap = new LinkedHashMap();
-		Iterator specCollIter = specimenCollection.iterator();
+		final Map specimenMap = new LinkedHashMap();
+		final Iterator specCollIter = specimenCollection.iterator();
 		int counter = 0;
 		// boolean isValidToDistribute = false;
 		while (specCollIter.hasNext())
 		{
-			Specimen specimen = (Specimen) specCollIter.next();
+			final Specimen specimen = (Specimen) specCollIter.next();
 			specimenMap.put("OrderSpecimenBean:" + counter + "_specimenId", specimen.getId()
 					.toString());
 
@@ -376,12 +387,12 @@ public class DirectDistributeInitAction extends BaseAction
 	 */
 	private Map putValueInArrayMap(List specimenArrays)
 	{
-		Map arrayMap = new HashMap();
-		Iterator specArrayCollIter = specimenArrays.iterator();
+		final Map arrayMap = new HashMap();
+		final Iterator specArrayCollIter = specimenArrays.iterator();
 		int counter = 0;
 		while (specArrayCollIter.hasNext())
 		{
-			SpecimenArray specimenArray = (SpecimenArray) specArrayCollIter.next();
+			final SpecimenArray specimenArray = (SpecimenArray) specArrayCollIter.next();
 			arrayMap.put("OrderSpecimenBean:" + counter + "_specimenId", specimenArray.getId()
 					.toString());
 			arrayMap.put("OrderSpecimenBean:" + counter + "_specimenName", specimenArray.getName());
@@ -406,12 +417,13 @@ public class DirectDistributeInitAction extends BaseAction
 	 */
 	private Map putValueInPathologyMap(List pathologyReports)
 	{
-		Map pathologyMap = new HashMap();
-		Iterator pathologyReportsIter = pathologyReports.iterator();
+		final Map pathologyMap = new HashMap();
+		final Iterator pathologyReportsIter = pathologyReports.iterator();
 		int counter = 0;
 		while (pathologyReportsIter.hasNext())
 		{
-			SurgicalPathologyReport surgPathReports = (SurgicalPathologyReport) pathologyReportsIter
+			final SurgicalPathologyReport surgPathReports
+			= (SurgicalPathologyReport) pathologyReportsIter
 					.next();
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_specimenId", surgPathReports
 					.getId().toString());
@@ -425,20 +437,25 @@ public class DirectDistributeInitAction extends BaseAction
 			pathologyMap
 					.put("OrderSpecimenBean:" + counter +
 							"_collectionProtocol", surgPathReports
-							.getSpecimenCollectionGroup().
-							getCollectionProtocolRegistration()
+							.getSpecimenCollectionGroup()
+							.getCollectionProtocolRegistration()
 							.getCollectionProtocol().getTitle());
 
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_isDerived", "true");
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_specimenClass", "Tissue");
 			pathologyMap
-					.put("OrderSpecimenBean:" + counter +
-							"_specimenType", "Fixed Tissue Block");
-			pathologyMap.put("OrderSpecimenBean:" + counter + "_unitRequestedQuantity", "count");
-			pathologyMap.put("OrderSpecimenBean:" + counter + "_typeOfItem", "pathologyCase");
-			pathologyMap.put("OrderSpecimenBean:" + counter + "_arrayName", "None");
-			pathologyMap.put("OrderSpecimenBean:" + counter + "_pathologicalStatus", "");
-			pathologyMap.put("OrderSpecimenBean:" + counter + "_tissueSite", "");
+					.put("OrderSpecimenBean:"
+							+ counter + "_specimenType", "Fixed Tissue Block");
+			pathologyMap.put("OrderSpecimenBean:"
+					+ counter + "_unitRequestedQuantity", "count");
+			pathologyMap.put("OrderSpecimenBean:"
+					+ counter + "_typeOfItem", "pathologyCase");
+			pathologyMap.put("OrderSpecimenBean:"
+					+ counter + "_arrayName", "None");
+			pathologyMap.put("OrderSpecimenBean:"
+					+ counter + "_pathologicalStatus", "");
+			pathologyMap.put("OrderSpecimenBean:"
+					+ counter + "_tissueSite", "");
 			counter++;
 
 		}

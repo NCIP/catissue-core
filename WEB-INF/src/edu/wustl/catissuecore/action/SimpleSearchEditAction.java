@@ -40,16 +40,17 @@ public class SimpleSearchEditAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		final Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
 
-		String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
+		final String aliasName = request.getParameter(Constants.TABLE_ALIAS_NAME);
 		//		request.setAttribute(Constants.TABLE_ALIAS_NAME, aliasName);
 
-		String pageOf = Variables.aliasAndPageOfMap.get(aliasName);
+		final String pageOf = Variables.aliasAndPageOfMap.get(aliasName);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		Logger.out.debug("identifier:" + identifier + " TABLE_ALIAS_NAME:" + aliasName + ":PAGEOF:"

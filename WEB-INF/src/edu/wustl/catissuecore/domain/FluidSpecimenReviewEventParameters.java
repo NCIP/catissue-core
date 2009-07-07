@@ -51,7 +51,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public Double getCellCount()
 	{
-		return cellCount;
+		return this.cellCount;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -89,11 +89,12 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	 * @param abstractForm An FluidSpecimenReviewEventParametersForm object
 	 * containing the information about the fluidSpecimenReviewEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
+			final FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
 			logger.debug("############DomainObject################## : ");
 			logger.debug(form.getCellCount());
 			logger.debug("############################## ");
@@ -103,7 +104,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 			}
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

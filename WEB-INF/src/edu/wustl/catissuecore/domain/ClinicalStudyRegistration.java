@@ -19,8 +19,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -87,7 +86,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	public ClinicalStudyRegistration(AbstractActionForm form) throws AssignDataException
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -98,9 +97,10 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -108,6 +108,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -124,7 +125,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 */
 	public String getClinicalStudyParticipantIdentifier()
 	{
-		return clinicalStudyParticipantIdentifier;
+		return this.clinicalStudyParticipantIdentifier;
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 */
 	public Date getRegistrationDate()
 	{
-		return registrationDate;
+		return this.registrationDate;
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 */
 	public Participant getParticipant()
 	{
-		return participant;
+		return this.participant;
 	}
 
 	/**
@@ -195,7 +196,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -213,18 +214,19 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 * @param abstractForm - clinicalStudyRegistrationForm object.
 	 * @throws AssignDataException assignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
+		final ClinicalStudyRegistrationForm form = (ClinicalStudyRegistrationForm) abstractForm;
 		this.activityStatus = form.getActivityStatus();
 
-		if (SearchUtil.isNullobject(clinicalStudy))
+		if (SearchUtil.isNullobject(this.clinicalStudy))
 		{
-			clinicalStudy = new ClinicalStudy();
+			this.clinicalStudy = new ClinicalStudy();
 		}
 		if (SearchUtil.isNullobject(this.registrationDate))
 		{
-			registrationDate = new Date();
+			this.registrationDate = new Date();
 		}
 
 		this.clinicalStudy.setId(Long.valueOf(form.getClinicalStudyId()));
@@ -240,16 +242,16 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 		}
 
 		this.clinicalStudyParticipantIdentifier = form.getParticipantClinicalStudyID().trim();
-		if (clinicalStudyParticipantIdentifier.equals(""))
+		if (this.clinicalStudyParticipantIdentifier.equals(""))
 		{
 			this.clinicalStudyParticipantIdentifier = null;
 		}
 		try
 		{
-			this.registrationDate = Utility.parseDate(form.getRegistrationDate(), Utility
-					.datePattern(form.getRegistrationDate()));
+			this.registrationDate = CommonUtilities.parseDate(form.getRegistrationDate(),
+					CommonUtilities.datePattern(form.getRegistrationDate()));
 		}
-		catch (ParseException e)
+		catch (final ParseException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -264,7 +266,7 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 */
 	public ClinicalStudy getClinicalStudy()
 	{
-		return clinicalStudy;
+		return this.clinicalStudy;
 	}
 
 	/**
@@ -280,13 +282,14 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 	 * Returns message label to display on success add or edit.
 	 * @return String with message label.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
-		if (SearchUtil.isNullobject(clinicalStudy))
+		if (SearchUtil.isNullobject(this.clinicalStudy))
 		{
-			clinicalStudy = new ClinicalStudy();
+			this.clinicalStudy = new ClinicalStudy();
 		}
-		StringBuffer message = new StringBuffer();
+		final StringBuffer message = new StringBuffer();
 		message.append(this.clinicalStudy.title + " ");
 
 		if (this.participant != null)

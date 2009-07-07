@@ -34,7 +34,7 @@ public class ContainerPosition extends AbstractPosition
 	 */
 	public Container getParentContainer()
 	{
-		return parentContainer;
+		return this.parentContainer;
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class ContainerPosition extends AbstractPosition
 	 */
 	public Container getOccupiedContainer()
 	{
-		return occupiedContainer;
+		return this.occupiedContainer;
 	}
 
 	/**

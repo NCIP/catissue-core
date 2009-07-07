@@ -32,10 +32,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeViewAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TreeViewAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TreeViewAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -52,28 +53,30 @@ public class TreeViewAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Sets the pageOf attribute (for Add,Edit or Query Interface)
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		logger.debug("pageOf in treeview........" + pageOf);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		this.logger.debug("pageOf in treeview........" + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{
-			String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+			final String storageContainerType = request
+					.getParameter(Constants.STORAGE_CONTAINER_TYPE);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
-			String storageContainerID = request
+			final String storageContainerID = request
 					.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED, storageContainerID);
-			String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+			final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 			request.setAttribute(Constants.STORAGE_CONTAINER_POSITION, position);
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 		{
-			HttpSession session = request.getSession();
-			String cdeName = (String) session.getAttribute(Constants.CDE_NAME);
+			final HttpSession session = request.getSession();
+			final String cdeName = (String) session.getAttribute(Constants.CDE_NAME);
 			session.removeAttribute(Constants.CDE_NAME);
 			request.setAttribute(Constants.CDE_NAME, cdeName);
 		}

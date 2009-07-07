@@ -54,11 +54,12 @@ public class ShowFramedPageAction extends Action
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Sets the pageOf attribute (for Add,Edit or Query Interface)
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		HttpSession session = request.getSession();
 
@@ -84,14 +85,15 @@ public class ShowFramedPageAction extends Action
 		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
 				|| pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 		{
-			String storageType = request.getParameter("storageType");
-			String isStorageContainer = request.getParameter("storageContainer");
+			final String storageType = request.getParameter("storageType");
+			final String isStorageContainer = request.getParameter("storageContainer");
 			session.setAttribute("storageContainer", isStorageContainer);
 
-			String collectionProtocol = request
+			final String collectionProtocol = request
 					.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
-			String specimenClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
-			String specimenarrayType = request.getParameter(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
+			final String specimenClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+			final String specimenarrayType = request
+					.getParameter(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
 			session.setAttribute(Constants.CAN_HOLD_CONTAINER_TYPE, storageType);
 			session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL, collectionProtocol);
@@ -101,27 +103,29 @@ public class ShowFramedPageAction extends Action
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{
-			String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+			final String storageContainerType = request
+					.getParameter(Constants.STORAGE_CONTAINER_TYPE);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
-			String storageContainerID = request
+			final String storageContainerID = request
 					.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED, storageContainerID);
-			String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+			final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 			request.setAttribute(Constants.STORAGE_CONTAINER_POSITION, position);
 
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 		{
-			String propertyName = request.getParameter(Constants.PROPERTY_NAME);
+			final String propertyName = request.getParameter(Constants.PROPERTY_NAME);
 			request.setAttribute(Constants.PROPERTY_NAME, propertyName);
 
-			String cdeName = request.getParameter(Constants.CDE_NAME);
+			final String cdeName = request.getParameter(Constants.CDE_NAME);
 			session.setAttribute(Constants.CDE_NAME, cdeName);
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN))
 		{
-			String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
-			String collectionGroupName = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP);
+			final String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
+			final String collectionGroupName = request
+					.getParameter(Constants.SPECIMEN_COLLECTION_GROUP);
 			session.setAttribute(Constants.SPECIMEN_CLASS, specimenClass);
 			session.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP, collectionGroupName);
 			session.setAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY, request
@@ -129,15 +133,15 @@ public class ShowFramedPageAction extends Action
 			session.setAttribute(Constants.SPECIMEN_CALL_BACK_FUNCTION, request
 					.getParameter(Constants.SPECIMEN_CALL_BACK_FUNCTION));
 
-			DefaultBizLogic bizLogic = new DefaultBizLogic();
+			final DefaultBizLogic bizLogic = new DefaultBizLogic();
 			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS, specimenClass);
 
-			List list = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",
+			final List list = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "name",
 					collectionGroupName);
 			if (list != null && !list.isEmpty())
 			{
-				SpecimenCollectionGroup group = (SpecimenCollectionGroup) list.get(0);
-				String collectionProtocol = group.getCollectionProtocolRegistration()
+				final SpecimenCollectionGroup group = (SpecimenCollectionGroup) list.get(0);
+				final String collectionProtocol = group.getCollectionProtocolRegistration()
 						.getCollectionProtocol().getId()
 						+ "";
 				session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL, collectionProtocol);
@@ -151,32 +155,33 @@ public class ShowFramedPageAction extends Action
 
 			if (request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID) != null)
 			{
-				String strSpecimenId = request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID);
+				final String strSpecimenId = request
+						.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID);
 				// String strSpecimenId = (String)
 				// session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
-				Long specimenId = new Long(strSpecimenId);
+				final Long specimenId = new Long(strSpecimenId);
 				bizLogic = new SpecimenTreeBizLogic(specimenId, false);
 
 			}
 			// SCG Id is set in case of Pathology Case
 			if (request.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID) != null)
 			{
-				String strSpecimenCollgrpId = request
+				final String strSpecimenCollgrpId = request
 						.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID);
-				Long specimenCollgrpId = new Long(strSpecimenCollgrpId);
+				final Long specimenCollgrpId = new Long(strSpecimenCollgrpId);
 				bizLogic = new SpecimenTreeBizLogic(specimenCollgrpId, true);
 			}
 
-			String propertyName = request.getParameter(Constants.PROPERTY_NAME);
-			String specimentype = request.getParameter(Constants.SPECIMEN_TYPE);
-			String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
+			final String propertyName = request.getParameter(Constants.PROPERTY_NAME);
+			final String specimentype = request.getParameter(Constants.SPECIMEN_TYPE);
+			final String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
 
 			request.setAttribute(Constants.PROPERTY_NAME, propertyName);
 			request.setAttribute(Constants.SPECIMEN_TYPE, specimentype);
 			request.setAttribute(Constants.SPECIMEN_CLASS, specimenClass);
 
 			// Obtain the tree nodes in a vector format.
-			Vector dataList = ((SpecimenTreeBizLogic) bizLogic).getTreeViewData();
+			final Vector dataList = ((SpecimenTreeBizLogic) bizLogic).getTreeViewData();
 			// Set the vector in request scope to be accessed in
 			// SpecimenTreeView.jsp
 			request.setAttribute(Constants.TREE_DATA_LIST, dataList);

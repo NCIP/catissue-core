@@ -34,9 +34,15 @@ public class Shipment extends BaseShipment
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -4710584673076795120L;
+
+	/**
 	 * returns the message label.
 	 * @return message label.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.getLabel();
@@ -59,7 +65,7 @@ public class Shipment extends BaseShipment
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -100,14 +106,15 @@ public class Shipment extends BaseShipment
 	 * @throws AssignDataException if some assigning operation fails.
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
 	 */
+	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		if (arg0 instanceof ShipmentReceivingForm)
 		{
-			ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) arg0;
+			final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) arg0;
 
-			setBasicShipmentReceivingProperties(shipmentReceivingForm);
-			setShipmentReceivingContents(shipmentReceivingForm);
+			this.setBasicShipmentReceivingProperties(shipmentReceivingForm);
+			this.setShipmentReceivingContents(shipmentReceivingForm);
 		}
 		else
 		{
@@ -117,7 +124,7 @@ public class Shipment extends BaseShipment
 				this.barcode = ((ShipmentForm) arg0).getBarcode();
 				if (((ShipmentForm) arg0).getShipmentRequestId() != 0)
 				{
-					ShipmentRequest request = new ShipmentRequest();
+					final ShipmentRequest request = new ShipmentRequest();
 					request.setId(((ShipmentForm) arg0).getShipmentRequestId());
 					this.shipmentRequest = request;
 				}
@@ -142,8 +149,8 @@ public class Shipment extends BaseShipment
 	private void setShipmentReceivingContents(ShipmentReceivingForm shipmentReceivingForm)
 	{
 		// set the specimens and containers in containerCollection
-		populateContainerContents(shipmentReceivingForm);
-		populateSpecimenContents(shipmentReceivingForm);
+		this.populateContainerContents(shipmentReceivingForm);
+		this.populateSpecimenContents(shipmentReceivingForm);
 	}
 
 	/**
@@ -158,9 +165,9 @@ public class Shipment extends BaseShipment
 		{
 			if (container.getSpecimenPositionCollection() != null)
 			{
-				List<Specimen> specimenCollectionInForm = shipmentReceivingForm
+				final List<Specimen> specimenCollectionInForm = shipmentReceivingForm
 						.getSpecimenCollection();
-				for (SpecimenPosition spPosition : container.getSpecimenPositionCollection())
+				for (final SpecimenPosition spPosition : container.getSpecimenPositionCollection())
 				{
 					if (spPosition != null && spPosition.getSpecimen() != null
 							&& spPosition.getSpecimen().getId() != null)
@@ -169,8 +176,9 @@ public class Shipment extends BaseShipment
 						String containerName = "";
 						String pos1 = "";
 						String pos2 = "";
-						Specimen specimen = spPosition.getSpecimen();
-						String storageLocationSelection = (String) shipmentReceivingForm
+						final Specimen specimen = spPosition.getSpecimen();
+						final String storageLocationSelection
+						= (String) shipmentReceivingForm
 								.getSpecimenDetails("specimenStorageLocation_" + specimen.getId());
 						if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("1"))
@@ -184,30 +192,38 @@ public class Shipment extends BaseShipment
 									.getSpecimenDetails("containerId_" + specimen.getId());
 							pos1 = (String) shipmentReceivingForm.getSpecimenDetails("pos1_"
 									+ specimen.getId());
-							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("pos2_"
+							pos2 = (String) shipmentReceivingForm.
+							getSpecimenDetails("pos2_"
 									+ specimen.getId());
 						}
 						else if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("3"))
 						{
 							containerName = (String) shipmentReceivingForm
-									.getSpecimenDetails("selectedContainerName_" + specimen.getId());
-							pos1 = (String) shipmentReceivingForm.getSpecimenDetails("position1_"
+									.getSpecimenDetails("selectedContainerName_"
+											+ specimen.getId());
+							pos1 = (String) shipmentReceivingForm
+							.getSpecimenDetails("position1_"
 									+ specimen.getId());
-							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("position2_"
+							pos2 = (String) shipmentReceivingForm
+							.getSpecimenDetails("position2_"
 									+ specimen.getId());
 						}
-						if ((containerId != null || containerName != null) && pos1 != null
+						if ((containerId != null || containerName != null)
+								&& pos1 != null
 								&& pos2 != null && !pos2.trim().equals(""))
 						{
-							StorageContainer spPosContainer = new StorageContainer();
+							final StorageContainer spPosContainer
+							= new StorageContainer();
 							if (storageLocationSelection != null
-									&& storageLocationSelection.trim().equals("3"))
+									&& storageLocationSelection.trim()
+									.equals("3"))
 							{
 								spPosContainer.setName(containerName);
 							}
 							else if (storageLocationSelection != null
-									&& storageLocationSelection.trim().equals("2"))
+									&& storageLocationSelection.trim()
+									.equals("2"))
 							{
 								spPosContainer.setId(Long.parseLong(containerId));
 							}
@@ -216,11 +232,12 @@ public class Shipment extends BaseShipment
 							spPosition.setStorageContainer(spPosContainer);
 						}
 						// Set the user selected activity status for specimen.
-						for (Specimen specimenInForm : specimenCollectionInForm)
+						for (final Specimen specimenInForm : specimenCollectionInForm)
 						{
 							if (specimen.getId().equals(specimenInForm.getId()))
 							{
-								specimen.setActivityStatus(specimenInForm.getActivityStatus());
+								specimen.setActivityStatus
+								(specimenInForm.getActivityStatus());
 								break;
 							}
 						}
@@ -242,12 +259,14 @@ public class Shipment extends BaseShipment
 		String containerName = "";
 		String positionDim1 = "";
 		String positionDim2 = "";
-		List<StorageContainer> containerCollection = shipmentReceivingForm.getContainerCollection();
+		final List<StorageContainer> containerCollection = shipmentReceivingForm
+				.getContainerCollection();
 		if (containerCollection != null && containerCollection.size() > 0)
 		{
-			for (StorageContainer storageContainer : containerCollection)
+			for (final StorageContainer storageContainer : containerCollection)
 			{
-				StorageContainer containerObject = getContainerObject(storageContainer.getId());
+				final StorageContainer containerObject = this.getContainerObject(storageContainer
+						.getId());
 				if (containerObject != null)
 				{
 					parentContainerSelected = (String) shipmentReceivingForm
@@ -256,11 +275,13 @@ public class Shipment extends BaseShipment
 					if (parentContainerSelected != null
 							&& parentContainerSelected.trim().equals("Site"))
 					{
-						siteFromUser = (String) shipmentReceivingForm.getContainerDetails("siteId_"
+						siteFromUser
+						= (String) shipmentReceivingForm.getContainerDetails("siteId_"
 								+ storageContainer.getId());
-						if (siteFromUser != null && !siteFromUser.trim().equals(""))
+						if (siteFromUser != null
+								&& !siteFromUser.trim().equals(""))
 						{
-							Site site = new Site();
+							final Site site = new Site();
 							site.setId(Long.parseLong(siteFromUser));
 							containerObject.setSite(site);
 						}
@@ -281,27 +302,34 @@ public class Shipment extends BaseShipment
 						positionDim2 = (String) shipmentReceivingForm
 								.getContainerDetails("positionDimensionTwo_"
 										+ storageContainer.getId());
-						if (containerId != null && positionDim1 != null && positionDim2 != null)
+						if (containerId != null
+								&& positionDim1 != null && positionDim2 != null)
 						{
-							ContainerPosition position = containerObject.getLocatedAtPosition();
-							StorageContainer container = new StorageContainer();
+							final ContainerPosition position = containerObject
+									.getLocatedAtPosition();
+							final StorageContainer container = new StorageContainer();
 							container.setId(Long.parseLong(containerId));
 							if (position != null)
 							{
 								position.setParentContainer(container);
-								position.setPositionDimensionOne(Integer.parseInt(positionDim1));
-								position.setPositionDimensionTwo(Integer.parseInt(positionDim2));
+								position.setPositionDimensionOne
+								(Integer.parseInt(positionDim1));
+								position.setPositionDimensionTwo
+								(Integer.parseInt(positionDim2));
 							}
 							else
 							{
-								ContainerPosition containerPosition = new ContainerPosition();
-								containerPosition.setOccupiedContainer(containerObject);
+								final ContainerPosition containerPosition
+								= new ContainerPosition();
+								containerPosition
+								.setOccupiedContainer(containerObject);
 								containerPosition.setParentContainer(container);
 								containerPosition.setPositionDimensionOne(Integer
 										.parseInt(positionDim1));
 								containerPosition.setPositionDimensionTwo(Integer
 										.parseInt(positionDim2));
-								containerObject.setLocatedAtPosition(containerPosition);
+								containerObject.
+								setLocatedAtPosition(containerPosition);
 							}
 						}
 					}
@@ -312,30 +340,39 @@ public class Shipment extends BaseShipment
 								.getContainerDetails("selectedContainerNameCont_"
 										+ storageContainer.getId());
 						positionDim1 = (String) shipmentReceivingForm
-								.getContainerDetails("contPosition1_" + storageContainer.getId());
+								.getContainerDetails("contPosition1_"
+										+ storageContainer.getId());
 						positionDim2 = (String) shipmentReceivingForm
-								.getContainerDetails("contPosition2_" + storageContainer.getId());
-						if (containerName != null && positionDim1 != null && positionDim2 != null)
+								.getContainerDetails("contPosition2_"
+										+ storageContainer.getId());
+						if (containerName != null
+								&& positionDim1 != null && positionDim2 != null)
 						{
-							ContainerPosition position = containerObject.getLocatedAtPosition();
-							StorageContainer container = new StorageContainer();
+							final ContainerPosition position = containerObject
+									.getLocatedAtPosition();
+							final StorageContainer container = new StorageContainer();
 							container.setName(containerName);
 							if (position != null)
 							{
 								position.setParentContainer(container);
-								position.setPositionDimensionOne(Integer.parseInt(positionDim1));
-								position.setPositionDimensionTwo(Integer.parseInt(positionDim2));
+								position.setPositionDimensionOne
+								(Integer.parseInt(positionDim1));
+								position.setPositionDimensionTwo
+								(Integer.parseInt(positionDim2));
 							}
 							else
 							{
-								ContainerPosition containerPosition = new ContainerPosition();
-								containerPosition.setOccupiedContainer(containerObject);
+								final ContainerPosition containerPosition
+								= new ContainerPosition();
+								containerPosition
+								.setOccupiedContainer(containerObject);
 								containerPosition.setParentContainer(container);
 								containerPosition.setPositionDimensionOne(Integer
 										.parseInt(positionDim1));
 								containerPosition.setPositionDimensionTwo(Integer
 										.parseInt(positionDim2));
-								containerObject.setLocatedAtPosition(containerPosition);
+								containerObject
+								.setLocatedAtPosition(containerPosition);
 							}
 						}
 					}
@@ -355,7 +392,7 @@ public class Shipment extends BaseShipment
 		StorageContainer storageContainer = null;
 		if (this.containerCollection != null)
 		{
-			for (Object container : this.containerCollection)
+			for (final Object container : this.containerCollection)
 			{
 				if (container instanceof StorageContainer)
 				{
@@ -375,7 +412,7 @@ public class Shipment extends BaseShipment
 	 */
 	public ShipmentRequest getShipmentRequest()
 	{
-		return shipmentRequest;
+		return this.shipmentRequest;
 	}
 
 	/**

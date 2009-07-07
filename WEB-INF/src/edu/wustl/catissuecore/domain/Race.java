@@ -90,7 +90,7 @@ public class Race extends AbstractDomainObject implements java.io.Serializable
 	 */
 	public String getRaceName()
 	{
-		return raceName;
+		return this.raceName;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class Race extends AbstractDomainObject implements java.io.Serializable
 	 */
 	public Participant getParticipant()
 	{
-		return participant;
+		return this.participant;
 	}
 
 	/**

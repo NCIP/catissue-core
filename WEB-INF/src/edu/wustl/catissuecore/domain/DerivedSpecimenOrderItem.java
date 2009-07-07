@@ -39,7 +39,7 @@ public class DerivedSpecimenOrderItem extends NewSpecimenOrderItem
 	 */
 	public Specimen getParentSpecimen()
 	{
-		return parentSpecimen;
+		return this.parentSpecimen;
 	}
 
 	/**

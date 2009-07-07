@@ -87,14 +87,16 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_REQ_SEQ"
 	 * @return Returns the id.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -108,7 +110,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public String getSpecimenType()
 	{
-		return specimenType;
+		return this.specimenType;
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public String getPathologyStatus()
 	{
-		return pathologyStatus;
+		return this.pathologyStatus;
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public DistributionProtocol getDistributionProtocol()
 	{
-		return distributionProtocol;
+		return this.distributionProtocol;
 	}
 
 	/**
@@ -184,7 +186,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public Double getQuantity()
 	{
-		return quantity;
+		return this.quantity;
 	}
 
 	/**
@@ -201,7 +203,7 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -216,9 +218,11 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 * To String.
 	 * @return String.
 	 */
+	@Override
 	public String toString()
 	{
-		return "DSR " + this.getClass().getName() + " : " + specimenType + " | " + tissueSite;
+		return "DSR " + this.getClass().getName() + " : " + this.specimenType + " | "
+				+ this.tissueSite;
 	}
 
 	/* (non-Javadoc)
@@ -230,12 +234,13 @@ public class DistributionSpecimenRequirement extends AbstractDomainObject
 	 * @param abstractForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(quantity))
+		if (SearchUtil.isNullobject(this.quantity))
 		{
-			quantity = new Double(0);
+			this.quantity = new Double(0);
 		}
 	}
 }

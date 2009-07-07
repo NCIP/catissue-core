@@ -56,7 +56,7 @@ public class SpecimenProtocolAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenProtocolAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenProtocolAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -73,6 +73,7 @@ public class SpecimenProtocolAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -90,25 +91,27 @@ public class SpecimenProtocolAction extends SecureAction
 		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(operation);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(operation);
 		request.setAttribute(Constants.USERLIST, userCollection);
-		logger.debug("1");
+		this.logger.debug("1");
 		// get the Specimen class and type from the cde
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		logger.debug("2");
-		Iterator itr = setPV.iterator();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		this.logger.debug("2");
+		final Iterator itr = setPV.iterator();
 
 		// String classValues[][] = new String[setPV.size()][];
-		List specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
-		logger.debug("\n\n\n\n**********MAP DATA************\n");
+		final List specimenClassList = new ArrayList();
+		final Map subTypeMap = new HashMap();
+		this.logger.debug("\n\n\n\n**********MAP DATA************\n");
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		// Fill the Map with Specimen as Keys and Subtypes as values.
@@ -116,29 +119,29 @@ public class SpecimenProtocolAction extends SecureAction
 		// Type.
 		while (itr.hasNext())
 		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
-			logger.debug(tmpStr);
+			final List innerList = new ArrayList();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
+			this.logger.debug(tmpStr);
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
-			Set list1 = pv.getSubPermissibleValues();
-			logger.debug("list1 " + list1);
-			Iterator itr1 = list1.iterator();
+			final Set list1 = pv.getSubPermissibleValues();
+			this.logger.debug("list1 " + list1);
+			final Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			while (itr1.hasNext())
 			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
+				final Object obj1 = itr1.next();
+				final PermissibleValue pv1 = (PermissibleValue) obj1;
 				// set specimen type
-				String tmpInnerStr = pv1.getValue();
-				logger.debug("\t\t" + tmpInnerStr);
+				final String tmpInnerStr = pv1.getValue();
+				this.logger.debug("\t\t" + tmpInnerStr);
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
-		logger.debug("\n\n\n\n**********MAP DATA************\n");
+		this.logger.debug("\n\n\n\n**********MAP DATA************\n");
 
 		// sets the Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -152,10 +155,10 @@ public class SpecimenProtocolAction extends SecureAction
 		 * Patch ID:TissueSiteCombo_BugID_3 Description: Setting TissueList with
 		 * only Leaf node.
 		 */
-		List tissueSiteList = AppUtility.tissueSiteList();
+		final List tissueSiteList = AppUtility.tissueSiteList();
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
-		List pathologyStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List pathologyStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologyStatusList);
 
@@ -164,19 +167,20 @@ public class SpecimenProtocolAction extends SecureAction
 		 * End date is not been refreshed after Protocol is closed or activated.
 		 * Refreshing the enddate manually.
 		 */
-		logger.debug("04-Apr-06");
-		SpecimenProtocolForm spForm = (SpecimenProtocolForm) form;
+		this.logger.debug("04-Apr-06");
+		final SpecimenProtocolForm spForm = (SpecimenProtocolForm) form;
 		if (operation.equalsIgnoreCase(Constants.EDIT))
 		{
 			// Mandar: 25-july-06 bizlogic call updated.
-			SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic) factory
+			final SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic) factory
 					.getBizLogic(spForm.getFormId());
-			String tmpEndDate = bizLogic.getEndDate(spForm.getId(), getSessionData(request));
-			logger.debug("tmpendDate : " + tmpEndDate);
+			final String tmpEndDate = bizLogic.getEndDate(spForm.getId(), this
+					.getSessionData(request));
+			this.logger.debug("tmpendDate : " + tmpEndDate);
 			spForm.setEndDate(tmpEndDate);
 		}
 		// Mandar : 03-apr-06 end
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 }

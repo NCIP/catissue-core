@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -58,7 +59,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 		super();
 		this.password = password;
 		this.user = user;
-		updateDate = new Date();
+		this.updateDate = new Date();
 	}
 
 	/**
@@ -68,15 +69,17 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_PASSWORD_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Sets an id for the password.
 	 * @param identifier Unique id to be assigned to the password.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -89,7 +92,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 */
 	public String getPassword()
 	{
-		return password;
+		return this.password;
 	}
 
 	/**
@@ -108,7 +111,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 */
 	public Date getUpdateDate()
 	{
-		return updateDate;
+		return this.updateDate;
 	}
 
 	/**
@@ -127,7 +130,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 */
 	public User getUser()
 	{
-		return user;
+		return this.user;
 	}
 
 	/**
@@ -143,11 +146,12 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 * @param abstractForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		if (SearchUtil.isNullobject(user))
+		if (SearchUtil.isNullobject(this.user))
 		{
-			user = new User();
+			this.user = new User();
 		}
 	}
 
@@ -159,7 +163,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	 */
 	public int compareTo(Object obj)
 	{
-		Password pwd = (Password) obj;
+		final Password pwd = (Password) obj;
 		return pwd.getUpdateDate().compareTo(this.updateDate);
 	}
 }

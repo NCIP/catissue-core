@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.catissuecore.util.SearchUtil;
@@ -21,7 +22,7 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -84,7 +85,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	public Date getTimestamp()
 	{
-		return timestamp;
+		return this.timestamp;
 	}
 
 	/**
@@ -102,7 +103,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	public User getUser()
 	{
-		return user;
+		return this.user;
 	}
 
 	/**
@@ -120,7 +121,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -136,6 +137,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * set identifier.
 	 * @param identifier Long type.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -149,9 +151,10 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPEC_EVENT_PARAM_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -161,7 +164,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -180,7 +183,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	public AbstractSpecimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -200,34 +203,36 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * @param valueObject of IValueObject type.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
-		AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
-		EventParametersForm form = (EventParametersForm) abstractForm;
-		if (SearchUtil.isNullobject(user))
+		final AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
+		final EventParametersForm form = (EventParametersForm) abstractForm;
+		if (SearchUtil.isNullobject(this.user))
 		{
-			user = new User();
+			this.user = new User();
 		}
-		if (SearchUtil.isNullobject(timestamp))
+		if (SearchUtil.isNullobject(this.timestamp))
 		{
-			timestamp = Calendar.getInstance().getTime();
+			this.timestamp = Calendar.getInstance().getTime();
 		}
 		this.comment = form.getComments();
-		user.setId(Long.valueOf(form.getUserId()));
+		this.user.setId(Long.valueOf(form.getUserId()));
 		if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
 		{
-			setDateTimeFromCalender(form);
+			this.setDateTimeFromCalender(form);
 		}
 		if (abstractForm.isAddOperation())
 		{
-			specimen = new Specimen();
+			this.specimen = new Specimen();
 		}
-		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
+		final SpecimenEventParametersForm specimenEventParametersForm
+		= (SpecimenEventParametersForm) abstractForm;
 		logger.debug("specimenEventParametersForm.getSpecimenId()"
 				+ "............................." + specimenEventParametersForm.getSpecimenId());
-		if (specimen != null)
+		if (this.specimen != null)
 		{
-			specimen.setId(Long.valueOf(specimenEventParametersForm.getSpecimenId()));
+			this.specimen.setId(Long.valueOf(specimenEventParametersForm.getSpecimenId()));
 		}
 	}
 
@@ -237,22 +242,22 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 */
 	private void setDateTimeFromCalender(EventParametersForm form) throws AssignDataException
 	{
-		Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance();
 		Date date;
 		try
 		{
-			date = Utility.parseDate(form.getDateOfEvent(), Utility.datePattern(form
-					.getDateOfEvent()));
+			date = CommonUtilities.parseDate(form.getDateOfEvent(), CommonUtilities
+					.datePattern(form.getDateOfEvent()));
 			calendar.setTime(date);
 			this.timestamp = calendar.getTime();
 			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
 			calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 			this.timestamp = calendar.getTime();
 		}
-		catch (ParseException excp)
+		catch (final ParseException excp)
 		{
 			Logger.out.error(excp.getMessage(), excp);
-			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpecimenEventParameters.java :");
 		}
 	}
@@ -262,6 +267,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	 * @return Object of specimen event parameter type.
 	 * @throws CloneNotSupportedException CloneNotSupportedException.
 	 */
+	@Override
 	public Object clone() throws CloneNotSupportedException
 	{
 		return super.clone();
@@ -271,8 +277,9 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	* Returns message label to display on success add or edit.
 	* @return String.
 	*/
+	@Override
 	public String getMessageLabel()
 	{
-		return "specimen with label '" + getSpecimen().getLabel() + "'";
+		return "specimen with label '" + this.getSpecimen().getLabel() + "'";
 	}
 }

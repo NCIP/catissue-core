@@ -44,6 +44,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -57,7 +58,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(CollectionProtocolAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(CollectionProtocolAction.class);
 	// This will keep track of no of consents for a particular participant
 	/**
 	 * consentCounter.
@@ -79,32 +80,33 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		super.executeSecureAction(mapping, form, request, response);
 		// pageOf required for Advance Search Object View.
 
-		String tabSel = (String) request.getParameter("tabSel");
+		final String tabSel = request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
-		String invokeFunction = (String) request.getParameter("invokeFunction");
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		String invokeFunction = request.getParameter("invokeFunction");
 		if (invokeFunction == null)
 		{
 			invokeFunction = (String) request.getAttribute("invokeFunction");
 		}
-		String operation = (String) request.getParameter(Constants.OPERATION);
+		String operation = request.getParameter(Constants.OPERATION);
 		if (operation == null)
 		{
 			operation = (String) request.getAttribute(Constants.OPERATION);
 		}
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		// Gets the value of the operation attribute.
 
-		HttpSession newSession = request.getSession();
-		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) newSession
+		final HttpSession newSession = request.getSession();
+		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) newSession
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
 		if (operation == null && collectionProtocolBean != null
@@ -119,48 +121,49 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		if (invokeFunction != null && collectionProtocolBean != null)
 		{
-			initCollectionProtocolPage(request, form, pageOf, mapping);
+			this.initCollectionProtocolPage(request, form, pageOf, mapping);
 		}
 
 		if (operation.equals("add") && invokeFunction == null)
 		{
-			initCleanSession(request);
+			this.initCleanSession(request);
 		}
 
-		logger.debug("operation in coll prot action" + operation);
+		this.logger.debug("operation in coll prot action" + operation);
 		// Sets the operation attribute to be used in the Edit/View Collection
 		// Protocol Page in Advance Search Object View.
 
-		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
-		String cp_id = String.valueOf(collectionProtocolForm.getId());
+		final CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
+		final String cp_id = String.valueOf(collectionProtocolForm.getId());
 		if (!cp_id.equalsIgnoreCase("0"))
 		{
-			CollectionProtocol collectionProtocol = getCPObj(cp_id);
+			final CollectionProtocol collectionProtocol = this.getCPObj(cp_id);
 			// Resolved lazy --- collectionProtocol.getConsentTierCollection();
-			Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
+			final Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
 					CollectionProtocol.class.getName(), collectionProtocol.getId(),
 					"elements(consentTierCollection)");
-			Map tempMap = prepareConsentMap(consentTierCollection);
+			final Map tempMap = this.prepareConsentMap(consentTierCollection);
 			collectionProtocolForm.setConsentValues(tempMap);
-			collectionProtocolForm.setConsentTierCounter(consentCounter);
+			collectionProtocolForm.setConsentTierCounter(this.consentCounter);
 
 		}
 		if (collectionProtocolForm.getStartDate() == null)
 		{
-			collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance()
-					.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+			collectionProtocolForm.setStartDate(CommonUtilities.parseDateToString(Calendar
+					.getInstance().getTime()
+					, CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		// Name of delete button clicked
-		String button = request.getParameter("button");
+		final String button = request.getParameter("button");
 
 		// Row number of outerblock
-		String outer = request.getParameter("blockCounter");
+		final String outer = request.getParameter("blockCounter");
 
 		// Gets the map from ActionForm
-		Map map = collectionProtocolForm.getValues();
+		final Map map = collectionProtocolForm.getValues();
 
 		// List of keys used in map of ActionForm
-		List key = new ArrayList();
+		final List key = new ArrayList();
 		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
 		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
 		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_tissueSite");
@@ -182,37 +185,40 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			}
 		}
 
-		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CLINICAL_STATUS, null);
 		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 
-		logger.debug("page of in collectionProtocol action:" + pageOf);
+		this.logger.debug("page of in collectionProtocol action:" + pageOf);
 		request.setAttribute("pageOf", pageOf);
 
-		List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
+		final List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
 
-		List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
-		List predefinedConsentsList = (List) request
+		final List pathologyStatusList = (List) request
+				.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
+		final List predefinedConsentsList = (List) request
 				.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
 
-		String tab = (String) request.getParameter("tab");
-		String formName, pageView = operation, editViewButton = "buttons." + Constants.EDIT;
+		final String tab = request.getParameter("tab");
+		String formName;
+		final String pageView = operation;
+		String editViewButton = "buttons." + Constants.EDIT;
 		String currentCollectionProtocolDate = "";
 		String collectionProtocolEndDate = "";
 		if (collectionProtocolForm != null)
 		{
 			currentCollectionProtocolDate = collectionProtocolForm.getStartDate();
 			if (currentCollectionProtocolDate == null)
-				{
+			{
 				currentCollectionProtocolDate = "";
-				}
+			}
 			collectionProtocolEndDate = collectionProtocolForm.getEndDate();
 			if (collectionProtocolEndDate == null)
-				{
+			{
 				collectionProtocolEndDate = "";
-				}
+			}
 		}
-		String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
+		final String reqPath = (String) request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
 		if (reqPath != null)
 		{
@@ -229,7 +235,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			}
 		}
 
-		boolean readOnlyValue = false;
+		final boolean readOnlyValue = false;
 		if (operation.equals(Constants.EDIT))
 		{
 			editViewButton = "buttons." + Constants.VIEW;
@@ -250,16 +256,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			flagforPageView = true;
 		}
-		Integer collectionProtocolYear = new Integer(Utility.getYear(currentCollectionProtocolDate));
-		Integer collectionProtocolMonth = new Integer(Utility
+		final Integer collectionProtocolYear = new Integer(CommonUtilities
+				.getYear(currentCollectionProtocolDate));
+		final Integer collectionProtocolMonth = new Integer(CommonUtilities
 				.getMonth(currentCollectionProtocolDate));
-		Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate));
+		final Integer collectionProtocolDay = new Integer(CommonUtilities
+				.getDay(currentCollectionProtocolDate));
 
-		Integer collectionProtocolEndDateYear = new Integer(Utility
+		final Integer collectionProtocolEndDateYear = new Integer(CommonUtilities
 				.getYear(collectionProtocolEndDate));
-		Integer collectionProtocolEndDateMonth = new Integer(Utility
+		final Integer collectionProtocolEndDateMonth = new Integer(CommonUtilities
 				.getMonth(collectionProtocolEndDate));
-		Integer collectionProtocolEndDateDay = new Integer(Utility
+		final Integer collectionProtocolEndDateDay = new Integer(CommonUtilities
 				.getDay(collectionProtocolEndDate));
 
 		request.setAttribute("collectionProtocolYear", collectionProtocolYear);
@@ -279,14 +287,15 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		request.setAttribute("noOfConsents", noOfConsents);
 
-		String title = "collectionprotocol." + pageView + ".title";
+		final String title = "collectionprotocol." + pageView + ".title";
 
 		collectionProtocolForm.setPageOf(pageOf);
 		collectionProtocolForm.setOperation(operation);
 		collectionProtocolForm.setSubmittedFor(submittedFor);
 		collectionProtocolForm.setRedirectTo(reqPath);
-		String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class, "title");
-		String deleteAction = "deleteObject('" + formName + "','" + Constants.ADMINISTRATIVE + "')";
+		final String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class, "title");
+		final String deleteAction = "deleteObject('" + formName + "','" + Constants.ADMINISTRATIVE
+				+ "')";
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("edit", Constants.EDIT);
@@ -321,13 +330,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 */
 	private CollectionProtocol getCPObj(String cp_id) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 
-		Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(),
-				new Long(cp_id));
-		CollectionProtocol collectionProtocolObject = (CollectionProtocol) object;
+		final Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class
+				.getName(), new Long(cp_id));
+		final CollectionProtocol collectionProtocolObject = (CollectionProtocol) object;
 		return collectionProtocolObject;
 	}
 
@@ -338,21 +347,21 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 */
 	private Map prepareConsentMap(Collection consentTierColl)
 	{
-		Map tempMap = new HashMap();
+		final Map tempMap = new HashMap();
 		if (consentTierColl != null)
 		{
-			Iterator consentTierCollIter = consentTierColl.iterator();
+			final Iterator consentTierCollIter = consentTierColl.iterator();
 			int i = 0;
 			while (consentTierCollIter.hasNext())
 			{
-				ConsentTier consent = (ConsentTier) consentTierCollIter.next();
-				String statement = "ConsentBean:" + i + "_statement";
-				String statementkey = "ConsentBean:" + i + "_consentTierID";
+				final ConsentTier consent = (ConsentTier) consentTierCollIter.next();
+				final String statement = "ConsentBean:" + i + "_statement";
+				final String statementkey = "ConsentBean:" + i + "_consentTierID";
 				tempMap.put(statement, consent.getStatement());
 				tempMap.put(statementkey, consent.getId());
 				i++;
 			}
-			consentCounter = i;
+			this.consentCounter = i;
 			return tempMap;
 		}
 		else
@@ -375,9 +384,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	private ActionForward initCollectionProtocolPage(HttpServletRequest request, ActionForm form,
 			String pageOf, ActionMapping mapping)
 	{
-		CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
-		HttpSession session = request.getSession();
-		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+		final CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm) form;
+		final HttpSession session = request.getSession();
+		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		collectionProtocolForm.setPrincipalInvestigatorId(collectionProtocolBean
 				.getPrincipalInvestigatorId());
@@ -409,7 +418,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 */
 	private void initCleanSession(HttpServletRequest request)
 	{
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		session.removeAttribute("tempKey");
 		session.removeAttribute(Constants.CLICKED_NODE);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);

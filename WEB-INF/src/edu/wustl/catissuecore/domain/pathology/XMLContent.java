@@ -11,12 +11,16 @@ public class XMLContent extends ReportContent
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8175021166540458658L;
+	/**
 	 * Surgical Pathology report of the current text data.
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
 
 	/**
-	 * constructor
+	 * constructor.
 	 */
 	public XMLContent()
 	{
@@ -31,7 +35,7 @@ public class XMLContent extends ReportContent
 	 */
 	public SurgicalPathologyReport getSurgicalPathologyReport()
 	{
-		return surgicalPathologyReport;
+		return this.surgicalPathologyReport;
 	}
 
 	/**

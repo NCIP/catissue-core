@@ -52,6 +52,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 	 * consentCounter.
 	 */
 	int consentCounter;
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -66,15 +67,16 @@ public class ConsentResponseDisplayAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		ConsentResponseForm consentForm = (ConsentResponseForm) form;
-		HttpSession session = request.getSession();
+		final ConsentResponseForm consentForm = (ConsentResponseForm) form;
+		final HttpSession session = request.getSession();
 
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		//Gets the value of collection protocol id.
 		String collectionProtocolId = null;
@@ -88,7 +90,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 			collectionProtocolRegIdValue = request.getParameter("collectionProtocolRegIdValue");
 		}
 
-		long cpId = new Long(collectionProtocolId).longValue();
+		final long cpId = new Long(collectionProtocolId).longValue();
 		//Bug: 5935
 		//Remove old list of specimen from Session.
 		session.removeAttribute(Constants.SPECIMEN_LIST);
@@ -96,33 +98,34 @@ public class ConsentResponseDisplayAction extends BaseAction
 		//All Participant's Specimen List to Session
 		if (collectionProtocolRegIdValue != null && !(collectionProtocolRegIdValue.equals("")))
 		{
-			List < String > columnList = ConsentUtil.columnNames();
+			final List<String> columnList = ConsentUtil.columnNames();
 			session.setAttribute(Constants.COLUMNLIST, columnList);
-			CollectionProtocolRegistration collectionProtocolRegistration = AppUtility
+			final CollectionProtocolRegistration collectionProtocolRegistration = AppUtility
 					.getcprObj(collectionProtocolRegIdValue);
-			List specimenDetails = new ArrayList();
+			final List specimenDetails = new ArrayList();
 			ConsentUtil.getSpecimenDetails(collectionProtocolRegistration, specimenDetails);
 			session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 		}
 		//Getting witness name list for CollectionProtocolID
-		List witnessList = ConsentUtil.witnessNameList(collectionProtocolId);
+		final List witnessList = ConsentUtil.witnessNameList(collectionProtocolId);
 		//Getting ResponseList if Operation=Edit
 		// then "Withdraw" is added to the List
-		List < NameValueBean > responseList = AppUtility.responceList(operation);
+		final List<NameValueBean> responseList = AppUtility.responceList(operation);
 
 		//Getting consent response map.
-		String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + cpId;
-		Map consentResponseHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);
+		final String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + cpId;
+		final Map consentResponseHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);
 
 		Map consentResponseMap;
 		if (consentResponseHashTable != null
 				&& consentResponseHashTable.containsKey(consentResponseKey))
-			// If Map already exist in session
+		// If Map already exist in session
 		{
-			ConsentResponseBean consentResponseBean = (ConsentResponseBean) consentResponseHashTable
+			final ConsentResponseBean consentResponseBean
+			= (ConsentResponseBean) consentResponseHashTable
 					.get(consentResponseKey);
-			Collection consentResponseCollection = consentResponseBean.getConsentResponse();
-			consentResponseMap = getConsentResponseMap(consentResponseCollection, true);
+			final Collection consentResponseCollection = consentResponseBean.getConsentResponse();
+			consentResponseMap = this.getConsentResponseMap(consentResponseCollection, true);
 			consentForm.setSignedConsentUrl(consentResponseBean.getSignedConsentUrl());
 			consentForm.setWitnessId(consentResponseBean.getWitnessId());
 			consentForm.setConsentDate(consentResponseBean.getConsentDate());
@@ -130,14 +133,15 @@ public class ConsentResponseDisplayAction extends BaseAction
 		}
 		else
 		{
-			Collection consentResponseCollection = ConsentUtil.getConsentList(collectionProtocolId);
-			consentResponseMap = getConsentResponseMap(consentResponseCollection, false);
+			final Collection consentResponseCollection = ConsentUtil
+					.getConsentList(collectionProtocolId);
+			consentResponseMap = this.getConsentResponseMap(consentResponseCollection, false);
 		}
 
 		consentForm.setCollectionProtocolID(cpId);
 		consentForm.setConsentResponseValues(consentResponseMap);
-		consentForm.setConsentTierCounter(consentCounter);
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		consentForm.setConsentTierCounter(this.consentCounter);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		request.setAttribute("witnessList", witnessList);
 		request.setAttribute("responseList", responseList);
@@ -148,18 +152,18 @@ public class ConsentResponseDisplayAction extends BaseAction
 		return mapping.findForward(pageOf);
 	}
 
-/**
- * Returns the Map of consent responses for given collection protocol.
- * @param consentResponse : consentResponse
- * @param isMapExist : isMapExist
- * @return Map : Map
- */
+	/**
+	 * Returns the Map of consent responses for given collection protocol.
+	 * @param consentResponse : consentResponse
+	 * @param isMapExist : isMapExist
+	 * @return Map : Map
+	 */
 	private Map getConsentResponseMap(Collection consentResponse, boolean isMapExist)
 	{
-		Map consentResponseMap = new LinkedHashMap();
-		Set consentResponseMapSorted = new LinkedHashSet();
+		final Map consentResponseMap = new LinkedHashMap();
+		final Set consentResponseMapSorted = new LinkedHashSet();
 		//bug 8905
-		List idList = new ArrayList();
+		final List idList = new ArrayList();
 		idList.addAll(consentResponse);
 		Collections.sort(idList, new IdComparator());
 		consentResponseMapSorted.addAll(idList);
@@ -167,7 +171,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 		if (consentResponseMapSorted != null)
 		{
 			int i = 0;
-			Iterator consentResponseIter = consentResponseMapSorted.iterator();
+			final Iterator consentResponseIter = consentResponseMapSorted.iterator();
 			String idKey = null;
 			String statementKey = null;
 			String responsekey = null;
@@ -181,7 +185,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 
 				if (isMapExist)
 				{
-					ConsentBean consentBean = (ConsentBean) consentResponseIter.next();
+					final ConsentBean consentBean = (ConsentBean) consentResponseIter.next();
 					consentResponseMap.put(idKey, consentBean.getConsentTierID());
 					consentResponseMap.put(statementKey, consentBean.getStatement());
 					consentResponseMap.put(responsekey, consentBean.getParticipantResponse());
@@ -190,7 +194,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 				}
 				else
 				{
-					ConsentTier consent = (ConsentTier) consentResponseIter.next();
+					final ConsentTier consent = (ConsentTier) consentResponseIter.next();
 					consentResponseMap.put(idKey, consent.getId());
 					consentResponseMap.put(statementKey, consent.getStatement());
 					consentResponseMap.put(responsekey, "");
@@ -199,7 +203,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 				i++;
 			}
 
-			consentCounter = i;
+			this.consentCounter = i;
 		}
 		return consentResponseMap;
 	}

@@ -52,7 +52,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	 */
 	public Double getGravityForce()
 	{
-		return gravityForce;
+		return this.gravityForce;
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	 */
 	public Integer getDurationInMinutes()
 	{
-		return durationInMinutes;
+		return this.durationInMinutes;
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	public SpunEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -111,11 +111,12 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	 * @param abstractForm - SpunEventParametersForm An SpunEventParametersForm object
 	 * containing the information about the SpunEventParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
+			final SpunEventParametersForm form = (SpunEventParametersForm) abstractForm;
 
 			if (form.getGravityForce() != null && form.getGravityForce().trim().length() > 0)
 			{
@@ -129,7 +130,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

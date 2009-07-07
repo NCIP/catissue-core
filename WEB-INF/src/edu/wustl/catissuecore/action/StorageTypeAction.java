@@ -43,7 +43,7 @@ public class StorageTypeAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(StorageTypeAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(StorageTypeAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -60,17 +60,18 @@ public class StorageTypeAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		StorageTypeForm storageTypeForm = (StorageTypeForm) form;
-		String operation = (String) request.getAttribute(Constants.OPERATION);
+		final StorageTypeForm storageTypeForm = (StorageTypeForm) form;
+		final String operation = (String) request.getAttribute(Constants.OPERATION);
 		storageTypeForm.setOperation(operation);
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		storageTypeForm.setSubmittedFor(submittedFor);
-		String forwardTo = (String) request.getAttribute(Constants.FORWARD_TO);
+		final String forwardTo = (String) request.getAttribute(Constants.FORWARD_TO);
 		storageTypeForm.setForwardTo(forwardTo);
-		String reqPath = request.getParameter(Constants.REQ_PATH);
+		final String reqPath = request.getParameter(Constants.REQ_PATH);
 		storageTypeForm.setRedirectTo(reqPath);
 		String formName;
 		if (operation.equals(Constants.EDIT))
@@ -101,15 +102,14 @@ public class StorageTypeAction extends SecureAction
 			tdClassName = "formRequiredLabel";
 			strStar = "<span class=" + "blue_ar_b" + "><img src="
 					+ "images/uIEnhancementImages/star.gif" + " alt=" + "Mandatory" + " width="
-					+ "6" + " height=" + "6" + " hspace=" + "0"
-					+ " vspace=" + "3" + " /></span>";
+					+ "6" + " height=" + "6" + " hspace=" + "0" + " vspace=" + "3" + " /></span>";
 		}
 		request.setAttribute("tdClassName", tdClassName);
 		request.setAttribute("strStar", strStar);
 
-		String normalSubmit = "validate('" + submittedFor + "','"
+		final String normalSubmit = "validate('" + submittedFor + "','"
 				+ Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][1] + "')";
-		String forwardToSubmit = "validate('ForwardTo','"
+		final String forwardToSubmit = "validate('ForwardTo','"
 				+ Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][1] + "')";
 		request.setAttribute("normalSubmit", normalSubmit);
 		request.setAttribute("forwardToSubmit", forwardToSubmit);
@@ -119,31 +119,31 @@ public class StorageTypeAction extends SecureAction
 
 		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end
 
-		logger.info("SpecimenArray/specimen:" + storageTypeForm.getSpecimenOrArrayType());
+		this.logger.info("SpecimenArray/specimen:" + storageTypeForm.getSpecimenOrArrayType());
 		if (storageTypeForm.getSpecimenOrArrayType() == null)
 		{
 			storageTypeForm.setSpecimenOrArrayType("Specimen");
 		}
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageTypeBizLogic bizLogic = (StorageTypeBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final StorageTypeBizLogic bizLogic = (StorageTypeBizLogic) factory
 				.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
 		// Gets the value of the operation parameter.
 
 		// Sets the operation attribute to be used in the Add/Edit Institute
 		// Page.
 		// Gets the Storage Type List and sets it in request
-		List list1 = bizLogic.retrieve(StorageType.class.getName());
-		List storageTypeList = AppUtility.getStorageTypeList(list1, true);
+		final List list1 = bizLogic.retrieve(StorageType.class.getName());
+		final List storageTypeList = AppUtility.getStorageTypeList(list1, true);
 		// Collections.sort(storageTypeList);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
 
 		// get the Specimen class and type from the cde
-		List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
+		final List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
 		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 
 		// Gets the Specimen array Type List and sets it in request
-		List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
-		List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
+		final List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
+		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
 
 		// Bug #4297
@@ -161,15 +161,15 @@ public class StorageTypeAction extends SecureAction
 		// }
 		// ------------- add new
 
-		AbstractActionForm aForm = (AbstractActionForm) form;
+		final AbstractActionForm aForm = (AbstractActionForm) form;
 		if (reqPath != null && aForm != null)
-			{
+		{
 			aForm.setRedirectTo(reqPath);
-			}
+		}
 
-		logger.debug("StorageTypeAction redirect :---------- " + reqPath);
+		this.logger.debug("StorageTypeAction redirect :---------- " + reqPath);
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 
 }

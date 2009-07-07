@@ -44,10 +44,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class UpdateStatusAction extends BaseAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(UpdateStatusAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(UpdateStatusAction.class);
 
 	/**
 	 * Overrides the execute method in Action class.
@@ -64,6 +65,7 @@ public class UpdateStatusAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -75,46 +77,49 @@ public class UpdateStatusAction extends BaseAction
 		List responseListForExistingArray = new ArrayList();
 		List responseListForDefinedArray = new ArrayList();
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		if (session.getAttribute(Constants.REQUEST_DETAILS_LIST) != null)
 		{
-			List requestDetailsList = (ArrayList) session
+			final List requestDetailsList = (ArrayList) session
 					.getAttribute(Constants.REQUEST_DETAILS_LIST);
-			responseList = constructResponseListForRequestDetailsList(requestDetailsList,
+			responseList = this.constructResponseListForRequestDetailsList(requestDetailsList,
 					updateValue);
-			sendResponseString(responseList, response);
+			this.sendResponseString(responseList, response);
 		}
 		if (session.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST) != null
 				&& session.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null)
 		{
-			List definedArrayRequestMapList = (ArrayList) session
+			final List definedArrayRequestMapList = (ArrayList) session
 					.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
-			List existingArrayRequestList = (ArrayList) session
+			final List existingArrayRequestList = (ArrayList) session
 					.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
-			responseListForDefinedArray = constructResponseListForDefinedArray(
+			responseListForDefinedArray = this.constructResponseListForDefinedArray(
 					definedArrayRequestMapList, updateValue);
-			responseListForExistingArray = constructResponseListForExistingArray(
+			responseListForExistingArray = this.constructResponseListForExistingArray(
 					existingArrayRequestList, updateValue);
-			sendResponseString(responseListForDefinedArray, responseListForExistingArray, response);
+			this.sendResponseString(responseListForDefinedArray, responseListForExistingArray,
+					response);
 			return null;
 		}
 		if (session.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST) != null)
 		{
-			List definedArrayRequestMapList = (ArrayList) session
+			final List definedArrayRequestMapList = (ArrayList) session
 					.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
-			responseListForDefinedArray = constructResponseListForDefinedArray(
+			responseListForDefinedArray = this.constructResponseListForDefinedArray(
 					definedArrayRequestMapList, updateValue);
-			sendResponseString(responseListForDefinedArray, responseListForExistingArray, response);
+			this.sendResponseString(responseListForDefinedArray, responseListForExistingArray,
+					response);
 			return null;
 		}
 		if (session.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST) != null)
 		{
-			List existingArrayRequestList = (ArrayList) session
+			final List existingArrayRequestList = (ArrayList) session
 					.getAttribute(Constants.EXISISTINGARRAY_REQUESTS_LIST);
-			responseListForExistingArray = constructResponseListForExistingArray(
+			responseListForExistingArray = this.constructResponseListForExistingArray(
 					existingArrayRequestList, updateValue);
-			sendResponseString(responseListForDefinedArray, responseListForExistingArray, response);
+			this.sendResponseString(responseListForDefinedArray, responseListForExistingArray,
+					response);
 			return null;
 		}
 
@@ -131,15 +136,15 @@ public class UpdateStatusAction extends BaseAction
 	 */
 	private void sendResponseString(List responseList, HttpServletResponse response)
 	{
-		String responseString = makeOutputString(responseList);
+		final String responseString = this.makeOutputString(responseList);
 		try
 		{
-			PrintWriter out = response.getWriter();
+			final PrintWriter out = response.getWriter();
 			out.print(responseString);
 		}
-		catch (IOException ie)
+		catch (final IOException ie)
 		{
-			logger.error("Error occurred while sending response string for update status - "
+			this.logger.error("Error occurred while sending response string for update status - "
 					+ ie.getMessage());
 		}
 	}
@@ -157,15 +162,16 @@ public class UpdateStatusAction extends BaseAction
 	private void sendResponseString(List responseList, List responseListForExistingArray,
 			HttpServletResponse response)
 	{
-		String responseString = makeOutputString(responseList, responseListForExistingArray);
+		final String responseString = this.makeOutputString(responseList,
+				responseListForExistingArray);
 		try
 		{
-			PrintWriter out = response.getWriter();
+			final PrintWriter out = response.getWriter();
 			out.print(responseString);
 		}
-		catch (IOException ie)
+		catch (final IOException ie)
 		{
-			logger.error("Error occurred while sending response string for update status - "
+			this.logger.error("Error occurred while sending response string for update status - "
 					+ ie.getMessage());
 		}
 	}
@@ -183,20 +189,20 @@ public class UpdateStatusAction extends BaseAction
 	private List constructResponseListForDefinedArray(List definedArrayRequestMapList,
 			String updateValue)
 	{
-		List responseList = new ArrayList();
+		final List responseList = new ArrayList();
 		DefinedArrayRequestBean definedArrayRequestBean = new DefinedArrayRequestBean();
 
-		Iterator definedArrayRequestMapListItr = definedArrayRequestMapList.iterator();
+		final Iterator definedArrayRequestMapListItr = definedArrayRequestMapList.iterator();
 		int i = 0;
 		while (definedArrayRequestMapListItr.hasNext())
 		{
-			Map defineArrayMap = (Map) definedArrayRequestMapListItr.next();
-			Set defineArraySet = (Set) defineArrayMap.keySet();
-			Iterator defineArraySetItr = defineArraySet.iterator();
+			final Map defineArrayMap = (Map) definedArrayRequestMapListItr.next();
+			final Set defineArraySet = defineArrayMap.keySet();
+			final Iterator defineArraySetItr = defineArraySet.iterator();
 			// Set has only one element that is,DefineArrayRequestBean instance
 			definedArrayRequestBean = (DefinedArrayRequestBean) defineArraySetItr.next();
-			List arrayStatusCollec = (ArrayList) definedArrayRequestBean.getArrayStatusList();
-			List newStatusList = constructNewStatusList(arrayStatusCollec);
+			final List arrayStatusCollec = definedArrayRequestBean.getArrayStatusList();
+			final List newStatusList = this.constructNewStatusList(arrayStatusCollec);
 			if (newStatusList.contains(updateValue))
 			{
 				newStatusList.remove(updateValue);
@@ -234,10 +240,10 @@ public class UpdateStatusAction extends BaseAction
 	private List constructResponseListForExistingArray(List existingArrayRequestList,
 			String updateValue)
 	{
-		List responseList = new ArrayList();
+		final List responseList = new ArrayList();
 		ExistingArrayDetailsBean existingArrayDetailsBean = new ExistingArrayDetailsBean();
 
-		Iterator existingArrayRequestListItr = existingArrayRequestList.iterator();
+		final Iterator existingArrayRequestListItr = existingArrayRequestList.iterator();
 		int i = 0;
 
 		while (existingArrayRequestListItr.hasNext())
@@ -245,8 +251,8 @@ public class UpdateStatusAction extends BaseAction
 			existingArrayDetailsBean = (ExistingArrayDetailsBean) existingArrayRequestListItr
 					.next();
 
-			List orderItemStatusCollec = (ArrayList) existingArrayDetailsBean.getItemStatusList();
-			List newStatusList = constructNewStatusList(orderItemStatusCollec);
+			final List orderItemStatusCollec = existingArrayDetailsBean.getItemStatusList();
+			final List newStatusList = this.constructNewStatusList(orderItemStatusCollec);
 
 			if (newStatusList.contains(updateValue))
 			{
@@ -284,18 +290,18 @@ public class UpdateStatusAction extends BaseAction
 	private List constructResponseListForRequestDetailsList(List requestDetailsList,
 			String updateValue)
 	{
-		List responseList = new ArrayList();
+		final List responseList = new ArrayList();
 		RequestDetailsBean requestDetailsBean = new RequestDetailsBean();
 
-		Iterator requestDetailsListItr = requestDetailsList.iterator();
+		final Iterator requestDetailsListItr = requestDetailsList.iterator();
 		int i = 0;
 
 		while (requestDetailsListItr.hasNext())
 		{
 			requestDetailsBean = (RequestDetailsBean) requestDetailsListItr.next();
 
-			List orderItemStatusCollec = (ArrayList) requestDetailsBean.getItemsStatusList();
-			List newStatusList = constructNewStatusList(orderItemStatusCollec);
+			final List orderItemStatusCollec = requestDetailsBean.getItemsStatusList();
+			final List newStatusList = this.constructNewStatusList(orderItemStatusCollec);
 
 			if (!(requestDetailsBean.getAssignedStatus()
 					.equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
@@ -336,16 +342,16 @@ public class UpdateStatusAction extends BaseAction
 	private List constructNewStatusList(List currentStatusList)
 	{
 		// newStatusList contains status of individual order item
-		List newStatusList = new ArrayList();
+		final List newStatusList = new ArrayList();
 
-		for (Iterator itr = currentStatusList.iterator(); itr.hasNext();)
+		for (final Iterator itr = currentStatusList.iterator(); itr.hasNext();)
 		{
 			// The status value contains string in the form of name:<option>
 			// value:<option>
 			String statusValue = itr.next().toString();
 
-			int firstIndex = statusValue.lastIndexOf(":"); // Last Index of ":".
-			int lastIndex = statusValue.length(); // Length of String.
+			final int firstIndex = statusValue.lastIndexOf(":"); // Last Index of ":".
+			final int lastIndex = statusValue.length(); // Length of String.
 			statusValue = statusValue.substring(firstIndex + 1, lastIndex);
 
 			newStatusList.add(statusValue); // Add the values to Collection.
@@ -364,7 +370,7 @@ public class UpdateStatusAction extends BaseAction
 	private String makeOutputString(List responseList)
 	{
 		int i = 0;
-		StringBuffer responseStrBuffer = new StringBuffer();
+		final StringBuffer responseStrBuffer = new StringBuffer();
 		List statusList = new ArrayList();
 		// Use ';' delimiter to separate between each row.
 		while (i < responseList.size())
@@ -373,7 +379,7 @@ public class UpdateStatusAction extends BaseAction
 			// Loop for each row.
 			for (int j = 0; j < statusList.size(); j++)
 			{
-				String responseString = (String) statusList.get(j);
+				final String responseString = (String) statusList.get(j);
 
 				// Separate OptionText and OptionValue with '|'
 				responseStrBuffer.append(responseString).append("|").append(responseString);
@@ -388,7 +394,7 @@ public class UpdateStatusAction extends BaseAction
 		}
 		String responseString = responseStrBuffer.toString();
 
-		int lastOptionSeparator = responseString.lastIndexOf("||");
+		final int lastOptionSeparator = responseString.lastIndexOf("||");
 
 		responseString = responseString.substring(0, lastOptionSeparator);
 
@@ -422,7 +428,7 @@ public class UpdateStatusAction extends BaseAction
 			// Loop for each row.
 			for (int j = 0; j < statusList.size(); j++)
 			{
-				String responseString = (String) statusList.get(j);
+				final String responseString = (String) statusList.get(j);
 
 				// Separate OptionText and OptionValue with '|'
 				responseStrBuffer.append(responseString).append("|").append(responseString);
@@ -449,11 +455,10 @@ public class UpdateStatusAction extends BaseAction
 				// Loop for each row
 				for (int j = 0; j < statusList.size(); j++)
 				{
-					String responseStringForExistingArray = (String) statusList.get(j);
+					final String responseStringForExistingArray = (String) statusList.get(j);
 
 					// Separate OptionText and OptionValue with '|'
-					responseStrBuffer.
-					append(responseStringForExistingArray).append("|").append(
+					responseStrBuffer.append(responseStringForExistingArray).append("|").append(
 							responseStringForExistingArray);
 
 					// Separate individual options by '||'
@@ -464,7 +469,7 @@ public class UpdateStatusAction extends BaseAction
 				i++;
 			}
 			String responseStringForExistingArray = responseStrBuffer.toString();
-			int lastOptionSeparator = responseStringForExistingArray.lastIndexOf("||");
+			final int lastOptionSeparator = responseStringForExistingArray.lastIndexOf("||");
 			responseStringForExistingArray = responseStringForExistingArray.substring(0,
 					lastOptionSeparator);
 

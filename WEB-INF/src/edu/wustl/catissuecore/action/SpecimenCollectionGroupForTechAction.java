@@ -47,6 +47,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -58,8 +59,8 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 		 * Description: Changes made to support the restriction on SCG.
 		 */
 		//Accessing specimen collection group id and name
-		String specimenCollectionGroupId = request.getParameter("id");
-		String specimenCollectionGroupName = request.getParameter("name");
+		final String specimenCollectionGroupId = request.getParameter("id");
+		final String specimenCollectionGroupName = request.getParameter("name");
 
 		ActionForward actionForward = null;
 
@@ -79,16 +80,16 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 			Collection specimenRequirementCollection = null;
 			if (specimenCollectionGroupId.equals("0"))
 			{
-				ActionErrors actionErrors = new ActionErrors();
-				ActionError error = new ActionError("access.execute.action.denied");
+				final ActionErrors actionErrors = new ActionErrors();
+				final ActionError error = new ActionError("access.execute.action.denied");
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, actionErrors);
+				this.saveErrors(request, actionErrors);
 
 				actionForward = mapping.findForward(Constants.ACCESS_DENIED);
 			}
 			else
 			{
-				SpecimenCollectionGroup specimenCollectionGroup = AppUtility
+				final SpecimenCollectionGroup specimenCollectionGroup = AppUtility
 						.getSpecimenCollectionGroup(specimenCollectionGroupId);
 				collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
 				//SpecimenCollectionRequirementGroup collectionRequirementGroup//
@@ -115,23 +116,20 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 					//checkbox, otherwise set the restrict checkbox
 					if (collectionProtocolEvent != null)
 					{
-						Double studyCalendarEventPoint = collectionProtocolEvent
+						final Double studyCalendarEventPoint = collectionProtocolEvent
 								.getStudyCalendarEventPoint();
 						if (studyCalendarEventPoint.doubleValue() == 0)
 						{
-							request.setAttribute
-							(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 						}
 						else
 						{
-							request.setAttribute
-							(Constants.RESTRICT_SCG_CHECKBOX, Constants.TRUE);
+							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.TRUE);
 						}
 					}
 					else
 					{
-						request.setAttribute
-						(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+						request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
 					}
 				}
 

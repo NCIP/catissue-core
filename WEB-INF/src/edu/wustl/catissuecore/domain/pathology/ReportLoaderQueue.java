@@ -16,15 +16,49 @@ import edu.wustl.common.exception.AssignDataException;
 public class ReportLoaderQueue extends AbstractDomainObject
 {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -6046718658802415256L;
+	/**
+	 * id.
+	 */
 	protected Long id;
+	/**
+	 * report text.
+	 */
 	protected String reportText;
+	/**
+	 * participantCollection.
+	 */
 	protected Collection participantCollection;
+	/**
+	 * status.
+	 */
 	protected String status;
+	/**
+	 * specimenCollectionGroup.
+	 */
 	protected SpecimenCollectionGroup specimenCollectionGroup;
+	/**
+	 * surgicalPathologyNumber.
+	 */
 	protected String surgicalPathologyNumber;
+	/**
+	 * participantName.
+	 */
 	protected String participantName;
+	/**
+	 * reportLoadedDate.
+	 */
 	protected Date reportLoadedDate;
+	/**
+	 * siteName.
+	 */
 	protected String siteName;
+	/**
+	 * reportCollectionDate.
+	 */
 	protected Date reportCollectionDate;
 
 	/**
@@ -34,11 +68,11 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**
-	 * Set the status of the queue record
+	 * Set the status of the queue record.
 	 * @param status
 	 *            status of the record of queue
 	 */
@@ -48,7 +82,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * default Constructor
+	 * default Constructor.
 	 */
 	public ReportLoaderQueue()
 	{
@@ -56,7 +90,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	}
 
 	/**
-	 * Constructor with text as input
+	 * Constructor with text as input.
 	 * @param text
 	 *            report text
 	 */
@@ -73,16 +107,18 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_REPORT_QUEUE_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
-	 * Set id of the object
+	 * Set id of the object.
 	 * @param id
 	 *            of the object
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -101,7 +137,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public Collection getParticipantCollection()
 	{
-		return participantCollection;
+		return this.participantCollection;
 	}
 
 	/**
@@ -120,11 +156,11 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public String getReportText()
 	{
-		return reportText;
+		return this.reportText;
 	}
 
 	/**
-	 * Set report text
+	 * Set report text.
 	 *
 	 * @param reportText
 	 *            report text
@@ -133,10 +169,12 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	{
 		this.reportText = reportText;
 	}
+
 	/**
 	 * @param abstractForm : abstractForm
 	 * @throws AssignDataException : AssignDataException
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 
@@ -151,7 +189,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -170,7 +208,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public String getSurgicalPathologyNumber()
 	{
-		return surgicalPathologyNumber;
+		return this.surgicalPathologyNumber;
 	}
 
 	/**
@@ -188,7 +226,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -206,7 +244,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public Date getReportLoadedDate()
 	{
-		return reportLoadedDate;
+		return this.reportLoadedDate;
 	}
 
 	/**
@@ -224,7 +262,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public String getSiteName()
 	{
-		return siteName;
+		return this.siteName;
 	}
 
 	/**
@@ -242,7 +280,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public Date getReportCollectionDate()
 	{
-		return reportCollectionDate;
+		return this.reportCollectionDate;
 	}
 
 	/**

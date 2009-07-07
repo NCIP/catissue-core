@@ -11,11 +11,12 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
+
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -105,14 +106,16 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_PROTOCOL_SEQ"
 	 * @return Returns the id.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -127,7 +130,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public User getPrincipalInvestigator()
 	{
-		return principalInvestigator;
+		return this.principalInvestigator;
 	}
 
 	/**
@@ -145,7 +148,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public String getTitle()
 	{
-		return title;
+		return this.title;
 	}
 
 	/**
@@ -164,7 +167,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public String getShortTitle()
 	{
-		return shortTitle;
+		return this.shortTitle;
 	}
 
 	/**
@@ -182,7 +185,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public String getIrbIdentifier()
 	{
-		return irbIdentifier;
+		return this.irbIdentifier;
 	}
 
 	/**
@@ -200,7 +203,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public Date getStartDate()
 	{
-		return startDate;
+		return this.startDate;
 	}
 
 	/**
@@ -218,7 +221,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public Date getEndDate()
 	{
-		return endDate;
+		return this.endDate;
 	}
 
 	/**
@@ -236,7 +239,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public Integer getEnrollment()
 	{
-		return enrollment;
+		return this.enrollment;
 	}
 
 	/**
@@ -254,7 +257,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public String getDescriptionURL()
 	{
-		return descriptionURL;
+		return this.descriptionURL;
 	}
 
 	/**
@@ -272,7 +275,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -287,15 +290,16 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 * Set All Values in Form.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		logger.debug("SpecimenProtocol: setAllValues ");
 		try
 		{
 			//Change for API Search   --- Ashwin 04/10/2006
-			if (SearchUtil.isNullobject(principalInvestigator))
+			if (SearchUtil.isNullobject(this.principalInvestigator))
 			{
-				principalInvestigator = new User();
+				this.principalInvestigator = new User();
 			}
 
 			final SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
@@ -304,10 +308,10 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 			this.shortTitle = spForm.getShortTitle();
 			this.irbIdentifier = spForm.getIrbID();
 
-			this.startDate = Utility.parseDate(spForm.getStartDate(), Utility.datePattern(spForm
-					.getStartDate()));
-			this.endDate = Utility.parseDate(spForm.getEndDate(), Utility.datePattern(spForm
-					.getEndDate()));
+			this.startDate = CommonUtilities.parseDate(spForm.getStartDate(), CommonUtilities
+					.datePattern(spForm.getStartDate()));
+			this.endDate = CommonUtilities.parseDate(spForm.getEndDate(), CommonUtilities
+					.datePattern(spForm.getEndDate()));
 
 			if (spForm.getEnrollment() != null && spForm.getEnrollment().trim().length() > 0)
 			{
@@ -317,10 +321,10 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 			this.descriptionURL = spForm.getDescriptionURL();
 			this.activityStatus = spForm.getActivityStatus();
 
-			principalInvestigator = new User();
+			this.principalInvestigator = new User();
 			this.principalInvestigator.setId(Long.valueOf(spForm.getPrincipalInvestigatorId()));
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

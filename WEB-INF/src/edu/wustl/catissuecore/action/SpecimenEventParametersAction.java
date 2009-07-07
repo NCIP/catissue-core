@@ -33,8 +33,8 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -46,10 +46,12 @@ import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenEventParametersAction extends BaseAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenEventParametersAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(SpecimenEventParametersAction.class);
 
 	/**
 	 * This method sets all the common parameters for the SpecimenEventParameter
@@ -65,7 +67,7 @@ public class SpecimenEventParametersAction extends BaseAction
 	{
 		// Gets the value of the operation parameter.
 
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 		// Sets the operation attribute to be used in the Add/Edit
 		// FrozenEventParameters Page.
 		request.setAttribute(Constants.OPERATION, operation);
@@ -79,17 +81,20 @@ public class SpecimenEventParametersAction extends BaseAction
 		request.setAttribute("hourList", Constants.HOUR_ARRAY);
 
 		// The id of specimen of this event.
-		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
+		final String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-		logger.debug("\t\t SpecimenEventParametersAction************************************ : "
-				+ specimenId);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(operation);
+		this.logger
+				.debug("\t\t SpecimenEventParametersAction************************************ : "
+						+ specimenId);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);
 
 	}
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -104,36 +109,36 @@ public class SpecimenEventParametersAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		setCommonRequestParameters(request);
+		this.setCommonRequestParameters(request);
 
-		EventParametersForm eventParametersForm = (EventParametersForm) form;
+		final EventParametersForm eventParametersForm = (EventParametersForm) form;
 
 		// if operation is add
 		if (eventParametersForm.isAddOperation())
 		{
 			if (eventParametersForm.getUserId() == 0)
 			{
-				SessionDataBean sessionData = getSessionData(request);
+				final SessionDataBean sessionData = this.getSessionData(request);
 				if (sessionData != null && sessionData.getUserId() != null)
 				{
-					long userId = sessionData.getUserId().longValue();
+					final long userId = sessionData.getUserId().longValue();
 					eventParametersForm.setUserId(userId);
 				}
 			}
 			// set the current Date and Time for the event.
-			Calendar cal = Calendar.getInstance();
+			final Calendar cal = Calendar.getInstance();
 			if (eventParametersForm.getDateOfEvent() == null)
 			{
-				eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(),
+				eventParametersForm.setDateOfEvent(CommonUtilities.parseDateToString(cal.getTime(),
 						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 			if (eventParametersForm.getTimeInHours() == null)
 			{
-				eventParametersForm.setTimeInHours
-				(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+				eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 			}
 			if (eventParametersForm.getTimeInMinutes() == null)
 			{
@@ -146,16 +151,15 @@ public class SpecimenEventParametersAction extends BaseAction
 			String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			if (specimenId == null)
 			{
-				SpecimenEventParametersForm sepF =
-					((SpecimenEventParametersForm) eventParametersForm);
+				final SpecimenEventParametersForm sepF = ((SpecimenEventParametersForm) eventParametersForm);
 				specimenId = "" + sepF.getSpecimenId();
 				request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 			}
 		}
 		// Changes by Anup
 
-		String operation = (String) request.getAttribute(Constants.OPERATION);
-		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
+		final String operation = (String) request.getAttribute(Constants.OPERATION);
+		final String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		eventParametersForm.setPageOf(pageOf);
 		eventParametersForm.setOperation(operation);
 
@@ -166,9 +170,12 @@ public class SpecimenEventParametersAction extends BaseAction
 			currentEventParametersDate = "";
 		}
 
-		Integer eventParametersYear = new Integer(AppUtility.getYear(currentEventParametersDate));
-		Integer eventParametersMonth = new Integer(AppUtility.getMonth(currentEventParametersDate));
-		Integer eventParametersDay = new Integer(AppUtility.getDay(currentEventParametersDate));
+		final Integer eventParametersYear = new Integer(AppUtility
+				.getYear(currentEventParametersDate));
+		final Integer eventParametersMonth = new Integer(AppUtility
+				.getMonth(currentEventParametersDate));
+		final Integer eventParametersDay = new Integer(AppUtility
+				.getDay(currentEventParametersDate));
 		request.setAttribute("eventParametersYear", eventParametersYear);
 		request.setAttribute("eventParametersDay", eventParametersDay);
 		request.setAttribute("eventParametersMonth", eventParametersMonth);
@@ -178,8 +185,8 @@ public class SpecimenEventParametersAction extends BaseAction
 		request.setAttribute("userListforJSP", Constants.USERLIST);
 		request.setAttribute("pageOf", pageOf);
 		// This method will be overridden by the sub classes
-		setRequestParameters(request, eventParametersForm);
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		this.setRequestParameters(request, eventParametersForm);
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 
 	/**

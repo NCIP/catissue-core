@@ -22,8 +22,8 @@ import edu.wustl.catissuecore.actionForm.ConflictCommonForm;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 
 /**
  * @author renuka_bajpai
@@ -31,6 +31,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  */
 public class ConflictCommonAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -45,26 +46,26 @@ public class ConflictCommonAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 
 	HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		ConflictCommonForm conflictCommonForm = (ConflictCommonForm) form;
-		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		final ConflictCommonForm conflictCommonForm = (ConflictCommonForm) form;
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
 
-		conflictCommonForm.setSurgicalPathologyNumber((String) request
+		conflictCommonForm.setSurgicalPathologyNumber(request
 				.getParameter(Constants.SURGICAL_PATHOLOGY_NUMBER));
-		conflictCommonForm.setReportDate((String) request.getParameter(Constants.REPORT_DATE));
-		conflictCommonForm.setSiteName((String) request.getParameter(Constants.SITE_NAME));
-		conflictCommonForm.setReportCollectionDate((String) request
+		conflictCommonForm.setReportDate(request.getParameter(Constants.REPORT_DATE));
+		conflictCommonForm.setSiteName(request.getParameter(Constants.SITE_NAME));
+		conflictCommonForm.setReportCollectionDate(request
 				.getParameter(Constants.REPORT_COLLECTION_DATE));
 
-		Participant participant = (Participant) edu.wustl.catissuecore.caties.util.Utility
+		final Participant participant = edu.wustl.catissuecore.caties.util.Utility
 				.getParticipantFromReportLoaderQueue(reportQueueId);
-		String participantName = (String) participant.getLastName() + ","
-				+ (String) participant.getFirstName();
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(),
+		final String participantName = participant.getLastName() + "," + participant.getFirstName();
+		final String birthDate = CommonUtilities.parseDateToString(participant.getBirthDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		conflictCommonForm.setParticipantName(participantName);
 		conflictCommonForm.setBirthDate(birthDate);

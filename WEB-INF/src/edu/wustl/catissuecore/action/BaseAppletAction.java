@@ -28,10 +28,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public abstract class BaseAppletAction extends SecureAction
 {
-/**
- * logger.
- */
-	private transient Logger logger = Logger.getCommonLogger(BaseAppletAction.class);
+
+	/**
+	 * logger.
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(BaseAppletAction.class);
 
 	/**
 	 * This method write input map to the response in the form of
@@ -44,8 +45,8 @@ public abstract class BaseAppletAction extends SecureAction
 	 */
 	protected void writeMapToResponse(HttpServletResponse response, Map outputMap) throws Exception
 	{
-		ObjectOutputStream outputStream = new ObjectOutputStream(response.getOutputStream());
-		BaseAppletModel appletModel = new BaseAppletModel();
+		final ObjectOutputStream outputStream = new ObjectOutputStream(response.getOutputStream());
+		final BaseAppletModel appletModel = new BaseAppletModel();
 		appletModel.setData(outputMap);
 		outputStream.writeObject(appletModel);
 		outputStream.close();
@@ -62,8 +63,8 @@ public abstract class BaseAppletAction extends SecureAction
 	protected Map readMapFromRequest(HttpServletRequest request) throws IOException,
 			ClassNotFoundException
 	{
-		ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
-		AppletModelInterface model = (AppletModelInterface) inputStream.readObject();
+		final ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
+		final AppletModelInterface model = (AppletModelInterface) inputStream.readObject();
 		inputStream.close();
 		return model.getData();
 	}
@@ -79,15 +80,16 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @param response
 	 *            object of HttpServletResponse
 	 */
+	@Override
 	protected void preExecute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response)
 	{
 		try
 		{
-			Map inputMap = readMapFromRequest(request);
+			final Map inputMap = this.readMapFromRequest(request);
 			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
 		}
@@ -133,6 +135,7 @@ public abstract class BaseAppletAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -147,10 +150,10 @@ public abstract class BaseAppletAction extends SecureAction
 		// ---- Code from execute
 
 		// -- code for handling method calls
-		String methodName = request.getParameter(Constants.METHOD_NAME);
+		final String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName != null)
 		{
-			return invokeMethod(methodName, mapping, form, request, response);
+			return this.invokeMethod(methodName, mapping, form, request, response);
 		}
 		return null;
 	}
@@ -164,38 +167,40 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected abstract ActionForward invokeMethod(String methodName, ActionMapping mapping,
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception;
 
-/**
- * This method returns the method with the specified name if the method
- * exists. Return null other wise.
- * @param name : name
- * @param className : className
- * @return Method : Method
- */
+	/**
+	 * This method returns the method with the specified name if the method
+	 * exists. Return null other wise.
+	 * @param name : name
+	 * @param className : className
+	 * @return Method : Method
+	 */
+	@Override
 	protected Method getMethod(String name, Class className)
 	{
 		// argument types
-		Class[] types = {ActionMapping.class, ActionForm.class, HttpServletRequest.class,
+		final Class[] types = {ActionMapping.class, ActionForm.class, HttpServletRequest.class,
 				HttpServletResponse.class};
 		try
 		{
-			Method method = className.getDeclaredMethod(name, types);
+			final Method method = className.getDeclaredMethod(name, types);
 			return method;
 		}
-		catch (NoSuchMethodException excp1)
+		catch (final NoSuchMethodException excp1)
 		{
-			logger.error(excp1.getMessage(), excp1);
+			this.logger.error(excp1.getMessage(), excp1);
 		}
-		catch (NullPointerException excp2)
+		catch (final NullPointerException excp2)
 		{
-			logger.error(excp2.getMessage(), excp2);
+			this.logger.error(excp2.getMessage(), excp2);
 		}
-		catch (SecurityException excp3)
+		catch (final SecurityException excp3)
 		{
-			logger.error(excp3.getMessage(), excp3);
+			this.logger.error(excp3.getMessage(), excp3);
 		}
 		return null;
 	}

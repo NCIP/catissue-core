@@ -56,19 +56,20 @@ public class AddSpecimenAction extends SecureAction
 	 * @throws BizLogicException : BizLogicException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, BizLogicException
 	{
 
-		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final CreateSpecimenForm createForm = (CreateSpecimenForm) form;
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 
-		String sourceObjectName = Specimen.class.getName();
+		final String sourceObjectName = Specimen.class.getName();
 		//String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
-		String[] whereColumnName = new String[1];
-		Object[] whereColumnValue = new Object[1];
+		final String[] whereColumnName = new String[1];
+		final Object[] whereColumnValue = new Object[1];
 
 		// checks whether label or barcode is selected
 		if (createForm.getRadioButton().equals("1"))
@@ -84,9 +85,10 @@ public class AddSpecimenAction extends SecureAction
 
 		//String[] whereColumnCondition = {"="};
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		List list = bizLogic.retrieve(sourceObjectName, whereColumnName[0], whereColumnValue[0]);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final List list = bizLogic.retrieve(sourceObjectName, whereColumnName[0],
+				whereColumnValue[0]);
 
 		/**
 		 *  If list is not empty, set the Parent
@@ -95,7 +97,7 @@ public class AddSpecimenAction extends SecureAction
 		 */
 		if (list != null && !list.isEmpty())
 		{
-			Specimen objSpecimen = (Specimen) list.get(0);
+			final Specimen objSpecimen = (Specimen) list.get(0);
 
 			if (objSpecimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
@@ -107,12 +109,12 @@ public class AddSpecimenAction extends SecureAction
 				* 	if user clicks directly derived
 				* 			   link and specimen status is disabled
 				*/
-				ActionErrors errors = getActionErrors(request);
+				final ActionErrors errors = this.getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.parentobject.disabled", "Specimen"));
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived",
 						"Derived Specimen"));
-				saveErrors(request, errors);
+				this.saveErrors(request, errors);
 				return mapping.findForward(Constants.FAILURE);
 			}
 			else if (objSpecimen.getActivityStatus().equals(
@@ -126,16 +128,16 @@ public class AddSpecimenAction extends SecureAction
 				*  if user clicks directly derived
 				* 			   link and specimen status is disabled
 				*/
-				ActionErrors errors = getActionErrors(request);
+				final ActionErrors errors = this.getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed",
 						"Specimen"));
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.derived",
 						"Derived Specimen"));
-				saveErrors(request, errors);
+				this.saveErrors(request, errors);
 				return mapping.findForward(Constants.FAILURE);
 			}
 
-			Long specimen = (Long) objSpecimen.getId();
+			final Long specimen = objSpecimen.getId();
 			createForm.setParentSpecimenId("" + specimen.longValue());
 			createForm.setReset(false); // Will not reset the parameters
 			if (pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
@@ -174,18 +176,19 @@ public class AddSpecimenAction extends SecureAction
 	 */
 	protected String getObjectId(AbstractActionForm form)
 	{
-		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if (createSpecimenForm.getParentSpecimenId() != null
 				&& createSpecimenForm.getParentSpecimenId() != "")
 		{
-			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			final Specimen specimen = AppUtility.getSpecimen(createSpecimenForm
+					.getParentSpecimenId());
 			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-			CollectionProtocolRegistration cpr = specimenCollectionGroup
+			final CollectionProtocolRegistration cpr = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
 			if (cpr != null)
 			{
-				CollectionProtocol cp = cpr.getCollectionProtocol();
+				final CollectionProtocol cp = cpr.getCollectionProtocol();
 				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
 			}
 		}

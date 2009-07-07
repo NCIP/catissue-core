@@ -35,18 +35,19 @@ public class LogoutAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		//Delete Advance Query table if exists
-		SessionDataBean sessionData = getSessionData(request);
+		final SessionDataBean sessionData = this.getSessionData(request);
 		//Advance Query table name with userID attached
-		String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
+		final String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
 
-		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
+		final JDBCDAO jdbcDao = AppUtility.openJDBCSession();
 		jdbcDao.deleteTable(tempTableName);
 		AppUtility.closeJDBCSession(jdbcDao);
 

@@ -61,34 +61,35 @@ public class DomainObjectListAction extends SecureAction
 	 *             generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		List list = null, showList = null;
 
-		AbstractActionForm abstractForm = (AbstractActionForm) form;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());
+		final AbstractActionForm abstractForm = (AbstractActionForm) form;
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());
 
 		// Added by Ravindra to disallow Non Super Admin users to View Reported
 		// Problems
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
 		if (!sessionDataBean.isAdmin() && !(abstractForm instanceof UserForm))
 		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("access.execute.action.denied");
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("access.execute.action.denied");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 
 			return mapping.findForward(Constants.ACCESS_DENIED);
 		}
 
 		// Returns the page number to be shown.
-		int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
+		final int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
 		// Gets the session of this request.
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		// The start index in the list of users to be approved/rejected.
 		int startIndex = Constants.ZERO;
@@ -116,7 +117,7 @@ public class DomainObjectListAction extends SecureAction
 		}
 		int endIndex = recordsPerPage;
 
-		IDomainObjectFactory domainObjectFactory = AbstractFactoryConfig.getInstance()
+		final IDomainObjectFactory domainObjectFactory = AbstractFactoryConfig.getInstance()
 				.getDomainObjectFactory();
 
 		if (pageNum == Constants.START_PAGE)
@@ -124,13 +125,12 @@ public class DomainObjectListAction extends SecureAction
 			// If start page is to be shown retrieve the list from the database.
 			if (abstractForm.getFormId() == Constants.APPROVE_USER_FORM_ID)
 			{
-				String[] whereColumnNames = {"activityStatus", "activityStatus"};
-				String[] whereColumnConditions = {"=", "="};
-				String[] whereColumnValues = {"New", "Pending"};
+				final String[] whereColumnNames = {"activityStatus", "activityStatus"};
+				final String[] whereColumnConditions = {"=", "="};
+				final String[] whereColumnValues = {"New", "Pending"};
 
 				list = bizLogic.retrieve(domainObjectFactory.getDomainObjectName(abstractForm
-						.getFormId()), whereColumnNames,
-						whereColumnConditions, whereColumnValues,
+						.getFormId()), whereColumnNames, whereColumnConditions, whereColumnValues,
 						Constants.OR_JOIN_CONDITION);
 			}
 			else
@@ -184,15 +184,15 @@ public class DomainObjectListAction extends SecureAction
 		session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(list.size()));
 
 		session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
-		String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION + "?"
+		final String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION + "?"
 				+ Constants.SYSTEM_IDENTIFIER + "=";
-		String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION + "?"
+		final String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION + "?"
 				+ Constants.SYSTEM_IDENTIFIER + "=";
-		int totalResults = Integer.parseInt((String) request.getSession().getAttribute(
+		final int totalResults = Integer.parseInt((String) request.getSession().getAttribute(
 				Constants.TOTAL_RESULTS));
-		int numResultsPerPage = Integer.parseInt((String) request.getSession().getAttribute(
+		final int numResultsPerPage = Integer.parseInt((String) request.getSession().getAttribute(
 				Constants.RESULTS_PER_PAGE));
-		int[] RESULT_PERPAGE_OPTIONS = Constants.RESULT_PERPAGE_OPTIONS;
+		final int[] RESULT_PERPAGE_OPTIONS = Constants.RESULT_PERPAGE_OPTIONS;
 
 		request.setAttribute("userDetailsLink", userDetailsLink);
 		request.setAttribute("RESULT_PERPAGE_OPTIONS", RESULT_PERPAGE_OPTIONS);

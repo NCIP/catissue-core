@@ -51,40 +51,40 @@ public class BulkCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
-		HttpSession session = request.getSession();
+		final AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
+		final HttpSession session = request.getSession();
 		String target = null;
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
 		if (Constants.ADD_TO_ORDER_LIST.equals(operation))
 		{
-			removeSessionAttributes(session);
-			getOrderableEntityIds(searchForm, session, cart);
+			this.removeSessionAttributes(session);
+			this.getOrderableEntityIds(searchForm, session, cart);
 
 			target = new String(Constants.REQUEST_TO_ORDER);
 		}
 		else if (Constants.BULK_TRANSFERS.equals(operation)
 				|| Constants.BULK_DISPOSALS.equals(operation))
 		{
-			target = bulkOperations(request, searchForm, operation);
+			target = this.bulkOperations(request, searchForm, operation);
 		}
 		else if (Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
 		{
-			target = editMultipleSpecimen(searchForm, session, operation);
+			target = this.editMultipleSpecimen(searchForm, session, operation);
 		}
 		else if (edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
 				.equals(operation)
 				|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
 						.equals(operation))
 		{
-			target = createShipment(searchForm, session, operation);
+			target = this.createShipment(searchForm, session, operation);
 		}
 		else if ("requestToDistribute".equals(operation))
 		{
-			getOrderableEntityIds(searchForm, session, cart);
+			this.getOrderableEntityIds(searchForm, session, cart);
 			target = "requestToDistribute";
 		}
 
@@ -104,13 +104,13 @@ public class BulkCartAction extends QueryShoppingCartAction
 	private void getOrderableEntityIds(AdvanceSearchForm searchForm, HttpSession session,
 			QueryShoppingCart cart) throws BizLogicException
 	{
-		List < AttributeInterface > cartAttributeList = cart.getCartAttributeList();
+		final List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 
 		if (cartAttributeList != null)
 		{
-			Map < String , Set < String >> entityIdsMap = getOrderableEntityIds(cartAttributeList,
-					getCheckboxValues(searchForm), cart);
-			getMapDetails(session, entityIdsMap);
+			final Map<String, Set<String>> entityIdsMap = this.getOrderableEntityIds(
+					cartAttributeList, this.getCheckboxValues(searchForm), cart);
+			this.getMapDetails(session, entityIdsMap);
 		}
 	}
 
@@ -128,17 +128,17 @@ public class BulkCartAction extends QueryShoppingCartAction
 	{
 		String target = "";
 
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
-		removeSessionAttributes(session);
-		List < AttributeInterface > cartAttributeList = cart.getCartAttributeList();
+		this.removeSessionAttributes(session);
+		final List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 
 		if (cartAttributeList != null)
 		{
-			Map < String , Set < String >> entityIdsMap = getShippingEntityNames(cartAttributeList,
-					getCheckboxValues(searchForm), cart);
-			getMapDetailsForShipment(session, entityIdsMap);
+			final Map<String, Set<String>> entityIdsMap = this.getShippingEntityNames(
+					cartAttributeList, this.getCheckboxValues(searchForm), cart);
+			this.getMapDetailsForShipment(session, entityIdsMap);
 		}
 
 		target = new String(operation);
@@ -152,14 +152,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @param entityIdsMap
 	 *            : entityIdsMap
 	 */
-	private void getMapDetailsForShipment(HttpSession session,
-			Map < String , Set < String >> entityIdsMap)
+	private void getMapDetailsForShipment(HttpSession session, Map<String, Set<String>> entityIdsMap)
 	{
-		Set < String > specimenLabelsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
-		Set < String > containerNamesSet = entityIdsMap.get(Constants.STORAGE_CONTAINER_CLASS_NAME);
+		final Set<String> specimenLabelsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
+		final Set<String> containerNamesSet = entityIdsMap
+				.get(Constants.STORAGE_CONTAINER_CLASS_NAME);
 
-		List < String > specimenLabels = new ArrayList < String >();
-		List < String > containerNames = new ArrayList < String >();
+		final List<String> specimenLabels = new ArrayList<String>();
+		final List<String> containerNames = new ArrayList<String>();
 
 		specimenLabels.addAll(specimenLabelsSet);
 		containerNames.addAll(containerNamesSet);
@@ -177,36 +177,35 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 *            : cart
 	 * @return Map < String , Set < String >> : Map < String , Set < String >>
 	 */
-	private Map < String , Set < String > > getShippingEntityNames(
-			List < AttributeInterface > cartAttributeList, List < Integer > chkBoxValues,
+	private Map<String, Set<String>> getShippingEntityNames(
+			List<AttributeInterface> cartAttributeList, List<Integer> chkBoxValues,
 			QueryShoppingCart cart)
 	{
-		Map < String , Set < String > > entityIdsMap = getShippingEntityMap();
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List < String > orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-		for (AttributeInterface attribute : cartAttributeList)
+		final Map<String, Set<String>> entityIdsMap = this.getShippingEntityMap();
+		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		final List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+		for (final AttributeInterface attribute : cartAttributeList)
 		{
 
 			if ((Constants.SYSTEM_LABEL.equals(attribute.getName()))
 					&& ((orderableEntityNameList)).contains(attribute.getEntity().getName()))
 			{
-				String entityName = attribute.getEntity().getName();
+				final String entityName = attribute.getEntity().getName();
 
-				Set < String > tempEntityIdsList = bizLogic.getEntityLabelsList(cart, Arrays
+				final Set<String> tempEntityIdsList = bizLogic.getEntityLabelsList(cart, Arrays
 						.asList(entityName), chkBoxValues, Constants.SYSTEM_LABEL);
-				Set < String > idMap = entityIdsMap.get(entityName);
+				final Set<String> idMap = entityIdsMap.get(entityName);
 				idMap.addAll(tempEntityIdsList);
 			}
 
 			if ((Constants.SYSTEM_NAME.equals(attribute.getName()))
-					&& attribute.getEntity().getName().
-					equals(StorageContainer.class.getName()))
+					&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
 			{
-				String entityName = attribute.getEntity().getName();
+				final String entityName = attribute.getEntity().getName();
 
-				Set < String > tempEntityIdsList = bizLogic.getEntityLabelsList(cart, Arrays
+				final Set<String> tempEntityIdsList = bizLogic.getEntityLabelsList(cart, Arrays
 						.asList(entityName), chkBoxValues, Constants.SYSTEM_NAME);
-				Set < String > idMap = entityIdsMap.get(entityName);
+				final Set<String> idMap = entityIdsMap.get(entityName);
 				idMap.addAll(tempEntityIdsList);
 			}
 		}
@@ -216,11 +215,11 @@ public class BulkCartAction extends QueryShoppingCartAction
 	/**
 	 * @return Map < String , Set < String >> : Map < String , Set < String >>
 	 */
-	private Map < String , Set < String > > getShippingEntityMap()
+	private Map<String, Set<String>> getShippingEntityMap()
 	{
-		Map < String , Set < String >> entityIdsMap = new LinkedHashMap < String , Set < String >>();
-		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet < String >());
-		entityIdsMap.put(Constants.STORAGE_CONTAINER_CLASS_NAME, new LinkedHashSet < String >());
+		final Map<String, Set<String>> entityIdsMap = new LinkedHashMap<String, Set<String>>();
+		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet<String>());
+		entityIdsMap.put(Constants.STORAGE_CONTAINER_CLASS_NAME, new LinkedHashSet<String>());
 		return entityIdsMap;
 	}
 
@@ -241,12 +240,12 @@ public class BulkCartAction extends QueryShoppingCartAction
 		{
 			session.removeAttribute(Constants.SPECIMEN_ID);
 		}
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		Set < String > specimenIds = new LinkedHashSet < String >(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), getCheckboxValues(searchForm)));
+		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		final Set<String> specimenIds = new LinkedHashSet<String>(bizLogic.getEntityIdsList(cart,
+				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 		session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 
 		target = new String(operation);
@@ -266,12 +265,12 @@ public class BulkCartAction extends QueryShoppingCartAction
 			String operation)
 	{
 		String target;
-		HttpSession session = request.getSession();
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final HttpSession session = request.getSession();
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List < String > specimenIds = new ArrayList < String >(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), getCheckboxValues(searchForm)));
+		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		final List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart,
+				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 		request.setAttribute(Constants.OPERATION, operation);
 		target = new String(operation);
@@ -298,22 +297,23 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @param entityIdsMap
 	 *            : entityIdsMap
 	 */
-	private void getMapDetails(HttpSession session, Map < String , Set < String >> entityIdsMap)
+	private void getMapDetails(HttpSession session, Map<String, Set<String>> entityIdsMap)
 	{
-		Set < String > specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
-		Set < String > specimenArrayIdsSet = entityIdsMap.get(Constants.SPECIMEN_ARRAY_CLASS_NAME);
-		Set < String > pathalogicalCaseIdsSet = entityIdsMap
+		final Set<String> specimenIdsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
+		final Set<String> specimenArrayIdsSet = entityIdsMap
+				.get(Constants.SPECIMEN_ARRAY_CLASS_NAME);
+		final Set<String> pathalogicalCaseIdsSet = entityIdsMap
 				.get(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
-		Set < String > deidentifiedPathalogicalCaseIdsSet = entityIdsMap
+		final Set<String> deidentifiedPathalogicalCaseIdsSet = entityIdsMap
 				.get(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
-		Set < String > surgicalPathalogicalCaseIdsSet = entityIdsMap
+		final Set<String> surgicalPathalogicalCaseIdsSet = entityIdsMap
 				.get(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME);
 
-		List < String > specimenArrayIds = new ArrayList < String >();
-		List < String > specimenIds = new ArrayList < String >();
-		List < String > pathalogicalCaseIds = new ArrayList < String >();
-		List < String > deidentifiedPathalogicalCaseIds = new ArrayList < String >();
-		List < String > surgicalPathalogicalCaseIds = new ArrayList < String >();
+		final List<String> specimenArrayIds = new ArrayList<String>();
+		final List<String> specimenIds = new ArrayList<String>();
+		final List<String> pathalogicalCaseIds = new ArrayList<String>();
+		final List<String> deidentifiedPathalogicalCaseIds = new ArrayList<String>();
+		final List<String> surgicalPathalogicalCaseIds = new ArrayList<String>();
 
 		specimenIds.addAll(specimenIdsSet);
 		specimenArrayIds.addAll(specimenArrayIdsSet);
@@ -332,16 +332,16 @@ public class BulkCartAction extends QueryShoppingCartAction
 	/**
 	 * @return Map < String , Set < String >> : Map < String , Set < String >>
 	 */
-	private Map < String , Set < String >> getEntityMap()
+	private Map<String, Set<String>> getEntityMap()
 	{
-		Map < String , Set < String >> entityIdsMap = new LinkedHashMap < String , Set < String >>();
-		entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, new HashSet < String >());
+		final Map<String, Set<String>> entityIdsMap = new LinkedHashMap<String, Set<String>>();
+		entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, new HashSet<String>());
 		entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-				new HashSet < String >());
+				new HashSet<String>());
 		entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-				new HashSet < String >());
-		entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet < String >());
-		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet < String >());
+				new HashSet<String>());
+		entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
+		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet<String>());
 		return entityIdsMap;
 	}
 
@@ -356,14 +356,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private Map < String , Set < String >> getOrderableEntityIds(
-			List < AttributeInterface > cartAttributeList, List < Integer > chkBoxValues,
+	private Map<String, Set<String>> getOrderableEntityIds(
+			List<AttributeInterface> cartAttributeList, List<Integer> chkBoxValues,
 			QueryShoppingCart cart) throws BizLogicException
 	{
-		Map < String , Set < String >> entityIdsMap = getEntityMap();
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List < String > orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-		for (AttributeInterface attribute : cartAttributeList)
+		final Map<String, Set<String>> entityIdsMap = this.getEntityMap();
+		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		final List<String> orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
+		for (final AttributeInterface attribute : cartAttributeList)
 		{
 
 			if ((Constants.ID.equals(attribute.getName()))
@@ -371,7 +371,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 			{
 				String entityName = attribute.getEntity().getName();
 
-				Set < String > tempEntityIdsList = bizLogic.getEntityIdsList(cart, Arrays
+				Set<String> tempEntityIdsList = bizLogic.getEntityIdsList(cart, Arrays
 						.asList(entityName), chkBoxValues);
 
 				if (Constants.TISSUE_SPECIMEN.equals(entityName)
@@ -385,7 +385,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 				{
 					tempEntityIdsList = bizLogic.getListOfOrderItem(tempEntityIdsList);
 				}
-				Set < String > idMap = entityIdsMap.get(entityName);
+				final Set<String> idMap = entityIdsMap.get(entityName);
 				idMap.addAll(tempEntityIdsList);
 			}
 		}

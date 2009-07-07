@@ -41,13 +41,14 @@ public class SearchObjectAction extends Action
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		final Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
 
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		Logger.out.debug("identifier:" + identifier + " PAGEOF:" + pageOf);

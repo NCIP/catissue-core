@@ -30,7 +30,7 @@ public class SPRCommentAddEditAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SPRCommentAddEditAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SPRCommentAddEditAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -47,53 +47,49 @@ public class SPRCommentAddEditAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm =
-			(ViewSurgicalPathologyReportForm) form;
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm = (ViewSurgicalPathologyReportForm) form;
 		try
 		{
-			AbstractDomainObject abstractDomain = (AbstractDomainObject) (new DomainObjectFactory()
-					.getDomainObject(viewSurgicalPathologyReportForm.getFormId(),
-							viewSurgicalPathologyReportForm));
+			AbstractDomainObject abstractDomain = (new DomainObjectFactory().getDomainObject(
+					viewSurgicalPathologyReportForm.getFormId(), viewSurgicalPathologyReportForm));
 			abstractDomain = defaultBizLogic.populateDomainObject(abstractDomain.getClass()
 					.getName(), new Long(viewSurgicalPathologyReportForm.getId()),
 					viewSurgicalPathologyReportForm);
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(viewSurgicalPathologyReportForm.getFormId());
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(viewSurgicalPathologyReportForm
+					.getFormId());
 			if (abstractDomain != null)
 			{
-				Object object = bizLogic.retrieve(abstractDomain.getClass().getName(), new Long(
-						viewSurgicalPathologyReportForm.getId()));
-				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
+				final Object object = bizLogic.retrieve(abstractDomain.getClass().getName(),
+						new Long(viewSurgicalPathologyReportForm.getId()));
+				final AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 				if (abstractDomainOld instanceof QuarantineEventParameter)
 				{
-					QuarantineEventParameter quarantineEventParamanter =
-						(QuarantineEventParameter) abstractDomainOld;
-					DeidentifiedSurgicalPathologyReport deidReport =
-						(DeidentifiedSurgicalPathologyReport) bizLogic
-							.retrieveAttribute
-							(QuarantineEventParameter.class.getName(),
+					final QuarantineEventParameter quarantineEventParamanter = (QuarantineEventParameter) abstractDomainOld;
+					final DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) bizLogic
+							.retrieveAttribute(QuarantineEventParameter.class.getName(),
 									quarantineEventParamanter.getId(),
 									Constants.COLUMN_NAME_DEID_REPORT);
-					quarantineEventParamanter.
-					setDeIdentifiedSurgicalPathologyReport(deidReport);
+					quarantineEventParamanter.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				}
-				bizLogic.update(abstractDomain, abstractDomainOld, 0, getSessionData(request));
+				bizLogic.update(abstractDomain, abstractDomainOld, 0, this.getSessionData(request));
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.error("Error occured in SPRCommentAddEditAction " + ex);
+			this.logger.error("Error occured in SPRCommentAddEditAction " + ex);
 			return (mapping.findForward(Constants.FAILURE));
 		}
 		// OnSubmit
 		if (viewSurgicalPathologyReportForm.getOnSubmit() != null
 				&& viewSurgicalPathologyReportForm.getOnSubmit().trim().length() > 0)
 		{
-			String forwardTo = viewSurgicalPathologyReportForm.getOnSubmit();
+			final String forwardTo = viewSurgicalPathologyReportForm.getOnSubmit();
 			return (mapping.findForward(forwardTo));
 		}
 		return (mapping.findForward(Constants.SUCCESS));

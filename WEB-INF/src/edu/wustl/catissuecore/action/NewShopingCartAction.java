@@ -40,8 +40,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.query.util.querysuite.EntityCacheFactory;
 
 /**
@@ -72,36 +72,38 @@ public class NewShopingCartAction extends BaseAction
 	 *             : DynamicExtensionsApplicationException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws BizLogicException,
 			DynamicExtensionsSystemException, CheckedException,
 			DynamicExtensionsApplicationException
 	{
 
-		List < List < String >> cartnew = new ArrayList < List < String >>();
-		HttpSession session = request.getSession();
+		List<List<String>> cartnew = new ArrayList<List<String>>();
+		final HttpSession session = request.getSession();
 		int count = 0;
 		int newCartSize = 0;
 		int oldCartSize = 0;
 		QueryShoppingCart queryShoppingCart = (QueryShoppingCart) session
 				.getAttribute(edu.wustl.catissuecore.util.global.Constants.QUERY_SHOPPING_CART);
-		QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
-		List < AttributeInterface > oldAttributeList = new ArrayList < AttributeInterface >();
-		List < AttributeInterface > cartAttributeList = new ArrayList < AttributeInterface >();
-		List < String > columnList = new ArrayList < String >();
-		String pageOf = request.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
+		final QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
+		List<AttributeInterface> oldAttributeList = new ArrayList<AttributeInterface>();
+		List<AttributeInterface> cartAttributeList = new ArrayList<AttributeInterface>();
+		final List<String> columnList = new ArrayList<String>();
+		final String pageOf = request
+				.getParameter(edu.wustl.catissuecore.util.global.Constants.PAGE_OF);
 		/**
 		 * value of readOnly attribute is specified in UpdateBulkSpecimensAction
 		 * and UpdateSpecimenStatusAction This value will only true in case of
 		 * addition of multiple specimen. This is done to disable collected
 		 * checkbox in specimen summary page. bug 12959
 		 */
-		Boolean readOnly = (Boolean) request.getAttribute("readOnly");
+		final Boolean readOnly = (Boolean) request.getAttribute("readOnly");
 		if (readOnly != null)
 		{
 			if (form instanceof ViewSpecimenSummaryForm)
 			{
-				ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
+				final ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 				summaryForm.setReadOnly(readOnly);
 			}
 		}
@@ -112,8 +114,8 @@ public class NewShopingCartAction extends BaseAction
 		// Set<EntityInterface> entityCollection = new
 		// HashSet<EntityInterface>();
 		// String[] searchString ={"specimen"};
-		Collection < AttributeInterface > attributeCollection = new ArrayList < AttributeInterface >();
-		EntityCache cache = EntityCacheFactory.getInstance();
+		Collection<AttributeInterface> attributeCollection = new ArrayList<AttributeInterface>();
+		final EntityCache cache = EntityCacheFactory.getInstance();
 		// MetadataSearch advancedSearch = new MetadataSearch(cache);
 		Long specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 				"specimenEntityId");
@@ -144,14 +146,14 @@ public class NewShopingCartAction extends BaseAction
 		// break;
 		// }
 		// }
-		Iterator < AttributeInterface > attributreItr = attributeCollection.iterator();
+		final Iterator<AttributeInterface> attributreItr = attributeCollection.iterator();
 
 		String[] selectColumnName = new String[attributeCollection.size()];
 		for (int i = 0; i < attributeCollection.size(); i++)
 		{
 
-			AttributeInterface elem = attributreItr.next();
-			String columnName = elem.getName().toString();
+			final AttributeInterface elem = attributreItr.next();
+			final String columnName = elem.getName().toString();
 			selectColumnName[i] = columnName;
 			columnList.add(columnName + " : " + "Specimen");
 			cartAttributeList.add(elem);
@@ -183,7 +185,7 @@ public class NewShopingCartAction extends BaseAction
 						Specimen.class.getName()))
 				{
 					selectColumnName = new String[oldAttributeList.size()];
-					selectColumnName = getManiputedColumnList(queryShoppingCart
+					selectColumnName = this.getManiputedColumnList(queryShoppingCart
 							.getCartAttributeList());
 					// cartAttributeList=new ArrayList<AttributeInterface>();
 					cartAttributeList = oldAttributeList;
@@ -199,11 +201,11 @@ public class NewShopingCartAction extends BaseAction
 
 		if (selectColumnName != null)
 		{
-			cartnew = createListOfItems(form, selectColumnName, request);
+			cartnew = this.createListOfItems(form, selectColumnName, request);
 
 			// Action Errors changed to Action Messages
-			ActionMessages messages = new ActionMessages();
-			int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(
+			final ActionMessages messages = new ActionMessages();
+			final int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(
 					oldAttributeList, cartAttributeList);
 			if (indexArray != null)
 			{
@@ -216,16 +218,16 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError",
-								count, cartnew.size()
+								"shoppingcart.duplicateObjError"
+								, count, cartnew.size()
 										+ oldCartSize - newCartSize));
-						saveMessages(request, messages);
+						this.saveMessages(request, messages);
 					}
 					else
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"shoppingCart.addMessage", cartnew.size()));
-						saveMessages(request, messages);
+						this.saveMessages(request, messages);
 					}
 
 				}
@@ -234,43 +236,44 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError",
-								count, cartnew.size()
+								"shoppingcart.duplicateObjError"
+								, count, cartnew.size()
 										+ oldCartSize - newCartSize));
-						saveMessages(request, messages);
+						this.saveMessages(request, messages);
 					}
 				}
 
 			}
 			else
 			{
-				addDifferentCartViewError(request);
+				this.addDifferentCartViewError(request);
 			}
 
 		}
 		else
 		{
-			addDifferentCartViewError(request);
+			this.addDifferentCartViewError(request);
 		}
 
 		session.setAttribute(edu.wustl.catissuecore.util.global.Constants.QUERY_SHOPPING_CART,
 				queryShoppingCart);
 		return mapping.findForward(pageOf);
 	}
+
 	/**
 	 *
 	 * @param oldAttributeList : oldAttributeList
 	 * @return String[] : String[]
 	 */
-	private String[] getManiputedColumnList(List < AttributeInterface > oldAttributeList)
+	private String[] getManiputedColumnList(List<AttributeInterface> oldAttributeList)
 	{
 
-		String[] selectColumnName = new String[oldAttributeList.size()];
+		final String[] selectColumnName = new String[oldAttributeList.size()];
 
 		for (int i = 0; i < oldAttributeList.size(); i++)
 		{
 
-			AttributeInterface attributeInterface = oldAttributeList.get(i);
+			final AttributeInterface attributeInterface = oldAttributeList.get(i);
 
 			selectColumnName[i] = attributeInterface.getName();
 
@@ -286,61 +289,62 @@ public class NewShopingCartAction extends BaseAction
 	 * @return List < List < String >> : List < List < String >>
 	 * @throws BizLogicException : BizLogicException
 	 */
-	private List < List < String >> createListOfItems(ActionForm form, String[] selectColumnName,
+	private List<List<String>> createListOfItems(ActionForm form, String[] selectColumnName,
 			HttpServletRequest request) throws BizLogicException
 	{
-		String objName = Specimen.class.getName();
-		IBizLogic bizLogic = getBizLogic(objName);
+		final String objName = Specimen.class.getName();
+		final IBizLogic bizLogic = this.getBizLogic(objName);
 		// Object searchObjects = null;
 		AliquotForm aliquotForm = new AliquotForm();
 		SpecimenForm specimenForm = new SpecimenForm();
 
-		List < List < String >> cartnew = new ArrayList < List < String >>();
-		List < String > columnList = new ArrayList < String >();
-		String[] whereColumnCondition = {"="};
-		String[] whereColumnName = {"id"};
+		final List<List<String>> cartnew = new ArrayList<List<String>>();
+		List<String> columnList = new ArrayList<String>();
+		final String[] whereColumnCondition = {"="};
+		final String[] whereColumnName = {"id"};
 
 		if (form instanceof AliquotForm)
 		{
 			aliquotForm = (AliquotForm) form;
-			List < AbstractDomainObject > specimenList = aliquotForm.getSpecimenList();
-			Iterator < AbstractDomainObject > it = specimenList.iterator();
+			final List<AbstractDomainObject> specimenList = aliquotForm.getSpecimenList();
+			final Iterator<AbstractDomainObject> it = specimenList.iterator();
 
 			while (it.hasNext())
 			{
 
-				List < String > columnList2 = new ArrayList < String >();
-				Specimen specimen = (Specimen) it.next();
-				Object[] whereColumnValue = {specimen.getId()};
-				List ls1 = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
+				List<String> columnList2 = new ArrayList<String>();
+				final Specimen specimen = (Specimen) it.next();
+				final Object[] whereColumnValue = {specimen.getId()};
+				final List ls1 = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
 						whereColumnCondition, whereColumnValue, null);
-				columnList2 = createList(ls1);
+				columnList2 = this.createList(ls1);
 				cartnew.add(columnList2);
 			}
 		}
 		else if (form instanceof SpecimenForm)
 		{
 			specimenForm = (SpecimenForm) form;
-			Object[] whereColumnValue = {specimenForm.getId()};
-			List ls = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
+			final Object[] whereColumnValue = {specimenForm.getId()};
+			final List ls = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, null);
-			columnList = createList(ls);
+			columnList = this.createList(ls);
 			cartnew.add(columnList);
 		}
 		else if (form instanceof ViewSpecimenSummaryForm)
 		{
-			List ls = (List) request.getAttribute("specimenIdList");
+			final List ls = (List) request.getAttribute("specimenIdList");
 			if (ls != null)
 			{
-				Iterator itr = ls.iterator();
+				final Iterator itr = ls.iterator();
 				while (itr.hasNext())
 				{
 
-					List < String > columnList2 = new ArrayList < String >();
-					Object[] whereColumnValue = {Long.valueOf((itr.next()).toString())};
-					List ls1 = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
+					List<String> columnList2 = new ArrayList<String>();
+					final Object[] whereColumnValue = {Long.valueOf((itr.next()).toString())};
+					final List ls1 = bizLogic.retrieve(objName, selectColumnName
+							, whereColumnName,
 							whereColumnCondition, whereColumnValue, null);
-					columnList2 = createList(ls1);
+					columnList2 = this.createList(ls1);
 					cartnew.add(columnList2);
 				}
 			}
@@ -358,8 +362,8 @@ public class NewShopingCartAction extends BaseAction
 	 */
 	private IBizLogic getBizLogic(String domainObjectName) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(domainObjectName);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(domainObjectName);
 		return bizLogic;
 
 	}
@@ -368,20 +372,19 @@ public class NewShopingCartAction extends BaseAction
 	 * @param list : list
 	 * @return List < String > : list
 	 */
-	private List < String > createList(List list)
+	private List<String> createList(List list)
 	{
 
-		Object[] obj1 = (Object[]) list.get(0);
-		String[] cartList = new String[obj1.length];
+		final Object[] obj1 = (Object[]) list.get(0);
+		final String[] cartList = new String[obj1.length];
 		for (int j = 0; j < obj1.length; j++)
 		{
 			if (obj1[j] != null)
 			{
 				if (obj1[j] instanceof Date)
 				{
-					cartList[j] = Utility.parseDateToString((Date) obj1[j],
-							CommonServiceLocator
-							.getInstance().getDatePattern());
+					cartList[j] = CommonUtilities.parseDateToString((Date) obj1[j],
+							CommonServiceLocator.getInstance().getDatePattern());
 				}
 				else
 				{
@@ -404,12 +407,11 @@ public class NewShopingCartAction extends BaseAction
 	 */
 	private void addDifferentCartViewError(HttpServletRequest request)
 	{
-		String target;
-		ActionErrors errors = new ActionErrors();
-		ActionError error = new ActionError("shoppingcart.differentViewError");
+		final ActionErrors errors = new ActionErrors();
+		final ActionError error = new ActionError("shoppingcart.differentViewError");
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		saveErrors(request, errors);
-		target = new String(edu.wustl.catissuecore.util.global.Constants.DIFFERENT_VIEW_IN_CART);
+		this.saveErrors(request, errors);
+		new String(edu.wustl.catissuecore.util.global.Constants.DIFFERENT_VIEW_IN_CART);
 	}
 
 	// private int[] prepareSearchTarget()

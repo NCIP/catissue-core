@@ -52,7 +52,7 @@ public class SpecimenArrayAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -69,42 +69,41 @@ public class SpecimenArrayAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
-		List < NameValueBean > storagePositionListForSpecimenArray = AppUtility
+		final List<NameValueBean> storagePositionListForSpecimenArray = AppUtility
 				.getStoragePositionTypeListForTransferEvent();
 		request.setAttribute("storagePositionListForSpecimenArray",
 				storagePositionListForSpecimenArray);
-		SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+		final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 		// boolean to indicate whether the suitable containers to be shown in
 		// dropdown
 		// is exceeding the max limit.
-		String exceedingMaxLimit = "false";
-		String[] arrayTypeLabelProperty = {"name"};
-		String arrayTypeProperty = "id";
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+		final String exceedingMaxLimit = "false";
+		final String[] arrayTypeLabelProperty = {"name"};
+		final String arrayTypeProperty = "id";
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 				.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		List specimenArrayTypeList = new ArrayList();
 
 		if (operation.equals(Constants.ADD))
 		{
 			specimenArrayTypeList = specimenArrayBizLogic.getList(
-					SpecimenArrayType.class.getName(),
-					arrayTypeLabelProperty, arrayTypeProperty,
+					SpecimenArrayType.class.getName(), arrayTypeLabelProperty, arrayTypeProperty,
 					true);
-			for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
+			for (final Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
 			{
-				NameValueBean nameValueBean = (NameValueBean) iter.next();
+				final NameValueBean nameValueBean = (NameValueBean) iter.next();
 				// remove ANY entry from array type list
 				if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE)
-						&& nameValueBean.getName().
-						equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+						&& nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
 				{
 					iter.remove();
 					break;
@@ -113,22 +112,22 @@ public class SpecimenArrayAction extends SecureAction
 		}
 		else if (operation.equals(Constants.EDIT))
 		{
-			String[] selectColumnName = {"id", "name"};
-			String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {new Long(specimenArrayForm.getSpecimenArrayTypeId())};
-			String joinCondition = Constants.AND_JOIN_CONDITION;
+			final String[] selectColumnName = {"id", "name"};
+			final String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+			final String[] whereColumnCondition = {"="};
+			final Object[] whereColumnValue = {new Long(specimenArrayForm.getSpecimenArrayTypeId())};
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
 			// specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),
 			// new Long(specimenArrayForm.getSpecimenArrayTypeId()));
-			List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class
+			final List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class
 					.getName(), selectColumnName, whereColumnName, whereColumnCondition,
 					whereColumnValue, joinCondition);
 			if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty()))
 			{
-				Object[] obj = (Object[]) specimenArrayTypes.get(0);
-				Long id = (Long) obj[0];
-				String name = (String) obj[1];
-				NameValueBean nameValueBean = new NameValueBean(name, id);
+				final Object[] obj = (Object[]) specimenArrayTypes.get(0);
+				final Long id = (Long) obj[0];
+				final String name = (String) obj[1];
+				final NameValueBean nameValueBean = new NameValueBean(name, id);
 
 				specimenArrayTypeList.add(nameValueBean);
 			}
@@ -136,25 +135,26 @@ public class SpecimenArrayAction extends SecureAction
 
 		request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
 		// Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
-		String strMenu = request.getParameter(Constants.MENU_SELECTED);
+		final String strMenu = request.getParameter(Constants.MENU_SELECTED);
 		if (strMenu != null)
 		{
 			request.setAttribute(Constants.MENU_SELECTED, strMenu);
-			logger.debug(Constants.MENU_SELECTED + " " + strMenu + " set successfully");
+			this.logger.debug(Constants.MENU_SELECTED + " " + strMenu + " set successfully");
 		}
 
 		// Setting the specimen type list
 		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(operation);
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(operation);
 		request.setAttribute(Constants.USERLIST, userCollection);
 		TreeMap containerMap = new TreeMap();
-		String subOperation = specimenArrayForm.getSubOperation();
+		final String subOperation = specimenArrayForm.getSubOperation();
 		boolean isChangeArrayType = false;
 
 		if (subOperation != null)
@@ -162,14 +162,14 @@ public class SpecimenArrayAction extends SecureAction
 			SpecimenArrayType arrayType = null;
 			if (specimenArrayForm.getSpecimenArrayTypeId() > 0)
 			{
-				Object object = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),
-						specimenArrayForm.getSpecimenArrayTypeId());
+				final Object object = specimenArrayBizLogic.retrieve(SpecimenArrayType.class
+						.getName(), specimenArrayForm.getSpecimenArrayTypeId());
 				if (object != null)
 				{
 					arrayType = (SpecimenArrayType) object;
 				}
 			}
-			specimenTypeList = doSetClassAndType(specimenArrayForm, specimenArrayBizLogic,
+			specimenTypeList = this.doSetClassAndType(specimenArrayForm, specimenArrayBizLogic,
 					arrayType);
 			if (subOperation.equals("ChangeArraytype"))
 			{
@@ -185,7 +185,7 @@ public class SpecimenArrayAction extends SecureAction
 
 				specimenArrayForm.setCreateSpecimenArray("yes");
 				request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
-						createSpecimenArrayMap(specimenArrayForm));
+						this.createSpecimenArrayMap(specimenArrayForm));
 				// request.getSession().setAttribute(Constants.
 				// SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
 			}
@@ -195,11 +195,11 @@ public class SpecimenArrayAction extends SecureAction
 			{
 				specimenArrayForm.setCreateSpecimenArray("yes");
 				request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
-						createSpecimenArrayMap(specimenArrayForm));
+						this.createSpecimenArrayMap(specimenArrayForm));
 			}
 			specimenArrayForm.setSubOperation("");
 		}
-		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+		final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(
 				specimenArrayForm.getSpecimenArrayTypeId(), 0, sessionData, exceedingMaxLimit);
@@ -224,7 +224,7 @@ public class SpecimenArrayAction extends SecureAction
 		}
 
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		if (pageOf == null)
 		{
@@ -238,9 +238,9 @@ public class SpecimenArrayAction extends SecureAction
 			{
 				if ((userCollection != null) && (userCollection.size() > 1))
 				{
-					Iterator iterator = userCollection.iterator();
+					final Iterator iterator = userCollection.iterator();
 					iterator.next();
-					NameValueBean nameValueBean = (NameValueBean) iterator.next();
+					final NameValueBean nameValueBean = (NameValueBean) iterator.next();
 					specimenArrayForm.setCreatedBy(Long.valueOf(nameValueBean.getValue())
 							.longValue());
 				}
@@ -274,16 +274,15 @@ public class SpecimenArrayAction extends SecureAction
 				 * Collection from parent Specimen String[] specimenTypeArr =
 				 * new String[arrayType.getSpecimenTypeCollection().size()];
 				 */
-				Collection specimenTypeCollection = (Collection) specimenArrayBizLogic
-						.retrieveAttribute(SpecimenArrayType.class.
-								getName(), arrayType.getId(),
+				final Collection specimenTypeCollection = (Collection) specimenArrayBizLogic
+						.retrieveAttribute(SpecimenArrayType.class.getName(), arrayType.getId(),
 								"elements(specimenTypeCollection)");
-				String[] specimenTypeArr = new String[specimenTypeCollection.size()];
+				final String[] specimenTypeArr = new String[specimenTypeCollection.size()];
 				specimenTypeList = new ArrayList();
 				int i = 0;
 				String specimenType = null;
 				NameValueBean nameValueBean = null;
-				for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext(); i++)
+				for (final Iterator iter = specimenTypeCollection.iterator(); iter.hasNext(); i++)
 				{
 					specimenType = (String) iter.next();
 					specimenTypeArr[i] = specimenType;
@@ -305,10 +304,10 @@ public class SpecimenArrayAction extends SecureAction
 	 */
 	private Map createSpecimenArrayMap(SpecimenArrayForm specimenArrayForm)
 	{
-		Map arrayContentMap = new HashMap();
+		final Map arrayContentMap = new HashMap();
 		String value = "";
-		int rowCount = specimenArrayForm.getOneDimensionCapacity();
-		int columnCount = specimenArrayForm.getTwoDimensionCapacity();
+		final int rowCount = specimenArrayForm.getOneDimensionCapacity();
+		final int columnCount = specimenArrayForm.getTwoDimensionCapacity();
 
 		for (int i = 0; i < rowCount; i++)
 		{

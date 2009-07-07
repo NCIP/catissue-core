@@ -182,7 +182,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	public User(UserForm uform)
 	{
 		this();
-		setAllValues(uform);
+		this.setAllValues(uform);
 	}
 
 	/**
@@ -192,14 +192,16 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_USER_SEQ"
 	 * @return Returns the id.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -212,7 +214,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getEmailAddress()
 	{
-		return emailAddress;
+		return this.emailAddress;
 	}
 
 	/**
@@ -228,7 +230,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getOldPassword()
 	{
-		return oldPassword;
+		return this.oldPassword;
 	}
 
 	/**
@@ -246,7 +248,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getNewPassword()
 	{
-		return newPassword;
+		return this.newPassword;
 	}
 
 	/**
@@ -264,7 +266,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getFirstName()
 	{
-		return firstName;
+		return this.firstName;
 	}
 
 	/**
@@ -282,7 +284,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getLastName()
 	{
-		return lastName;
+		return this.lastName;
 	}
 
 	/**
@@ -301,7 +303,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getLoginName()
 	{
-		return loginName;
+		return this.loginName;
 	}
 
 	/**
@@ -319,7 +321,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Date getStartDate()
 	{
-		return startDate;
+		return this.startDate;
 	}
 
 	/**
@@ -337,7 +339,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -356,7 +358,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Department getDepartment()
 	{
-		return department;
+		return this.department;
 	}
 
 	/**
@@ -375,7 +377,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public CancerResearchGroup getCancerResearchGroup()
 	{
-		return cancerResearchGroup;
+		return this.cancerResearchGroup;
 	}
 
 	/**
@@ -394,7 +396,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Institution getInstitution()
 	{
-		return institution;
+		return this.institution;
 	}
 
 	/**
@@ -413,7 +415,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Address getAddress()
 	{
-		return address;
+		return this.address;
 	}
 
 	/**
@@ -434,7 +436,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Collection getCollectionProtocolCollection()
 	{
-		return collectionProtocolCollection;
+		return this.collectionProtocolCollection;
 	}
 
 	/**
@@ -450,7 +452,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getPageOf()
 	{
-		return pageOf;
+		return this.pageOf;
 	}
 
 	/**
@@ -468,7 +470,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Long getCsmUserId()
 	{
-		return csmUserId;
+		return this.csmUserId;
 	}
 
 	/**
@@ -517,7 +519,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -546,15 +548,18 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 		try
 		{
-			if (roleId.equals(Constants.DOUBLE_QUOTES) && id != null && id != 0
-					&& csmUserId != null)
+			if (roleId.equals(Constants.DOUBLE_QUOTES) && this.id != null && this.id != 0
+					&& this.csmUserId != null)
 			{
-				Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
+				final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(
+						this.csmUserId);
 				if (role != null && role.getId() != null)
+				{
 					roleId = role.getId().toString();
+				}
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
 			logger.error(e);
 		}
@@ -590,7 +595,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Collection getPasswordCollection()
 	{
-		return passwordCollection;
+		return this.passwordCollection;
 	}
 
 	/**
@@ -605,59 +610,60 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * This function Copies the data from an UserForm object to a User object.
 	 * @param abstractForm - user An UserForm object containing the information about the user.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			if (SearchUtil.isNullobject(lastName))
+			if (SearchUtil.isNullobject(this.lastName))
 			{
-				lastName = Constants.DOUBLE_QUOTES;
+				this.lastName = Constants.DOUBLE_QUOTES;
 			}
 
-			if (SearchUtil.isNullobject(firstName))
+			if (SearchUtil.isNullobject(this.firstName))
 			{
-				firstName = Constants.DOUBLE_QUOTES;
+				this.firstName = Constants.DOUBLE_QUOTES;
 			}
 
-			if (SearchUtil.isNullobject(loginName))
+			if (SearchUtil.isNullobject(this.loginName))
 			{
-				loginName = Constants.DOUBLE_QUOTES;
+				this.loginName = Constants.DOUBLE_QUOTES;
 			}
 
-			if (SearchUtil.isNullobject(emailAddress))
+			if (SearchUtil.isNullobject(this.emailAddress))
 			{
-				emailAddress = Constants.DOUBLE_QUOTES;
+				this.emailAddress = Constants.DOUBLE_QUOTES;
 			}
 
-			if (SearchUtil.isNullobject(address))
+			if (SearchUtil.isNullobject(this.address))
 			{
-				address = new Address();
+				this.address = new Address();
 			}
 
-			if (SearchUtil.isNullobject(institution))
+			if (SearchUtil.isNullobject(this.institution))
 			{
-				institution = new Institution();
+				this.institution = new Institution();
 			}
 
-			if (SearchUtil.isNullobject(department))
+			if (SearchUtil.isNullobject(this.department))
 			{
-				department = new Department();
+				this.department = new Department();
 			}
 
-			if (SearchUtil.isNullobject(cancerResearchGroup))
+			if (SearchUtil.isNullobject(this.cancerResearchGroup))
 			{
-				cancerResearchGroup = new CancerResearchGroup();
+				this.cancerResearchGroup = new CancerResearchGroup();
 			}
 
-			if (SearchUtil.isNullobject(firstTimeLogin))
+			if (SearchUtil.isNullobject(this.firstTimeLogin))
 			{
-				firstTimeLogin = Boolean.TRUE;
+				this.firstTimeLogin = Boolean.TRUE;
 			}
 
-			UserForm uform = (UserForm) abstractForm;
+			final UserForm uform = (UserForm) abstractForm;
 			this.pageOf = uform.getPageOf();
 
-			if (pageOf.equals(Constants.PAGE_OF_CHANGE_PASSWORD))
+			if (this.pageOf.equals(Constants.PAGE_OF_CHANGE_PASSWORD))
 			{
 				this.newPassword = uform.getNewPassword();
 				this.oldPassword = uform.getOldPassword();
@@ -665,15 +671,15 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 			else
 			{
 
-				if (!pageOf.equalsIgnoreCase("pageOfSignUp"))
+				if (!this.pageOf.equalsIgnoreCase("pageOfSignUp"))
 				{
-					String[] siteIds = uform.getSiteIds();
+					final String[] siteIds = uform.getSiteIds();
 					if (siteIds != null && siteIds.length != 0)
 					{
-						Collection newSiteCollection = new HashSet();
-						for (String siteId : siteIds)
+						final Collection newSiteCollection = new HashSet();
+						for (final String siteId : siteIds)
 						{
-							Site site = new Site();
+							final Site site = new Site();
 							site.setId(Long.valueOf(siteId));
 							newSiteCollection.add(site);
 						}
@@ -692,18 +698,18 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 				this.department.setId(Long.valueOf(uform.getDepartmentId()));
 				this.cancerResearchGroup.setId(Long.valueOf(uform.getCancerResearchGroupId()));
-				if (Constants.PAGE_OF_USER_PROFILE.equals(pageOf) == Boolean.FALSE)
+				if (Constants.PAGE_OF_USER_PROFILE.equals(this.pageOf) == Boolean.FALSE)
 				{
 					this.activityStatus = uform.getActivityStatus();
 				}
 
-				if (pageOf.equals(Constants.PAGE_OF_SIGNUP))
+				if (this.pageOf.equals(Constants.PAGE_OF_SIGNUP))
 				{
 					this.setStartDate(Calendar.getInstance().getTime());
 				}
 
-				if (!pageOf.equals(Constants.PAGE_OF_SIGNUP)
-						&& !pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
+				if (!this.pageOf.equals(Constants.PAGE_OF_SIGNUP)
+						&& !this.pageOf.equals(Constants.PAGE_OF_USER_PROFILE))
 				{
 					this.comments = uform.getComments();
 				}
@@ -747,13 +753,13 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 				this.address.setPhoneNumber(uform.getPhoneNumber());
 				this.address.setFaxNumber(uform.getFaxNumber());
 
-				if (Constants.PAGE_OF_USER_ADMIN.equals(pageOf))
+				if (Constants.PAGE_OF_USER_ADMIN.equals(this.pageOf))
 				{
 					this.csmUserId = uform.getCsmUserId();
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -763,6 +769,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return edu.wustl.catissuecore.util.global.AppUtility.getlLabel(this.lastName,
@@ -776,7 +783,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	public String getLatestPassword()
 	{
 		String password = null;
-		List pwdList = new ArrayList(this.getPasswordCollection());
+		final List pwdList = new ArrayList(this.getPasswordCollection());
 		if (pwdList != null)
 		{
 			Collections.sort(pwdList);
@@ -796,7 +803,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Boolean getFirstTimeLogin()
 	{
-		return firstTimeLogin;
+		return this.firstTimeLogin;
 	}
 
 	/**
@@ -817,7 +824,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Collection getClinicalStudyCollection()
 	{
-		return clinicalStudyCollection;
+		return this.clinicalStudyCollection;
 	}
 
 	/**
@@ -838,7 +845,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Collection<CollectionProtocol> getAssignedProtocolCollection()
 	{
-		return assignedProtocolCollection;
+		return this.assignedProtocolCollection;
 	}
 
 	/**
@@ -859,7 +866,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 */
 	public Collection<Site> getSiteCollection()
 	{
-		return siteCollection;
+		return this.siteCollection;
 	}
 
 	/**

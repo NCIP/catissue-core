@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -83,7 +84,7 @@ public class Biohazard extends AbstractDomainObject
 	public Biohazard(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -107,9 +108,10 @@ public class Biohazard extends AbstractDomainObject
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -117,6 +119,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -131,7 +134,7 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -153,7 +156,7 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -175,7 +178,7 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -202,7 +205,7 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public Collection getSpecimenCollection()
 	{
-		return specimenCollection;
+		return this.specimenCollection;
 	}
 
 	/**
@@ -217,6 +220,7 @@ public class Biohazard extends AbstractDomainObject
 	 * This function Copies the data from an BiohazardForm object to a Biohazard object.
 	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
@@ -226,7 +230,7 @@ public class Biohazard extends AbstractDomainObject
 			this.name = form.getName().trim();
 			this.type = form.getType();
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -238,7 +242,7 @@ public class Biohazard extends AbstractDomainObject
 	 */
 	public Boolean getPersisted()
 	{
-		return persisted;
+		return this.persisted;
 	}
 
 	/**
@@ -254,6 +258,7 @@ public class Biohazard extends AbstractDomainObject
 	* Returns message label to display on success add or edit.
 	* @return String
 	*/
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;
@@ -263,8 +268,10 @@ public class Biohazard extends AbstractDomainObject
 	 * Convert to String.
 	 * @return String
 	 */
+	@Override
 	public String toString()
 	{
-		return "EI{" + "id " + id + "\t" + "Type " + type + "\t" + "Name " + name + "}";
+		return "EI{" + "id " + this.id + "\t" + "Type " + this.type + "\t" + "Name " + this.name
+				+ "}";
 	}
 }

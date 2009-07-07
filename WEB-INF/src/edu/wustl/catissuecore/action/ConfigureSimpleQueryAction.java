@@ -46,48 +46,48 @@ public class ConfigureSimpleQueryAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Set the tables for the configuration
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (pageOf.equals(Constants.PAGE_OF_SIMPLE_QUERY_INTERFACE))
 		{
-			SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
-			HttpSession session = request.getSession();
+			final SimpleQueryInterfaceForm simpleQueryInterfaceForm = (SimpleQueryInterfaceForm) form;
+			final HttpSession session = request.getSession();
 			Map map = simpleQueryInterfaceForm.getValuesMap();
 			Logger.out.debug("Form map size" + map.size());
 			Logger.out.debug("Form map" + map);
 			if (map.size() == 0)
 			{
 				map = (Map) session
-						.getAttribute(edu.wustl.simplequery.
-								global.Constants.SIMPLE_QUERY_MAP);
+						.getAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP);
 				Logger.out.debug("Session map size" + map.size());
 				Logger.out.debug("Session map" + map);
 			}
-			Iterator iterator = map.keySet().iterator();
+			final Iterator iterator = map.keySet().iterator();
 
 			//Retrieve the size of the condition list to set size of array of tables.
-			MapDataParser parser = new MapDataParser("edu.wustl.simplequery.query");
+			final MapDataParser parser = new MapDataParser("edu.wustl.simplequery.query");
 
-			Collection simpleConditionNodeCollection = parser.generateData(map, true);
-			int counter = simpleConditionNodeCollection.size();
-			String[] selectedTables = new String[counter];
+			final Collection simpleConditionNodeCollection = parser.generateData(map, true);
+			final int counter = simpleConditionNodeCollection.size();
+			final String[] selectedTables = new String[counter];
 			int tableCount = 0;
 			while (iterator.hasNext())
 			{
-				String key = (String) iterator.next();
+				final String key = (String) iterator.next();
 				Logger.out.debug("map key" + key);
 				if (key.endsWith("_table"))
 				{
-					String table = (String) map.get(key);
+					final String table = (String) map.get(key);
 					boolean exists = false;
-					for (int arrayCount = 0; arrayCount < selectedTables.length; arrayCount++)
+					for (final String selectedTable : selectedTables)
 					{
-						if (selectedTables[arrayCount] != null)
+						if (selectedTable != null)
 						{
-							if (selectedTables[arrayCount].equals(table))
+							if (selectedTable.equals(table))
 							{
 								exists = true;
 							}
@@ -109,11 +109,11 @@ public class ConfigureSimpleQueryAction extends BaseAction
 				if (selectedColumns == null)
 				{
 
-					IFactory factory =
-						AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					QueryBizLogic bizLogic = (QueryBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final QueryBizLogic bizLogic = (QueryBizLogic) factory
 							.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-					List columnNameValueBeans = new ArrayList();
+					final List columnNameValueBeans = new ArrayList();
 					int i;
 					for (i = 0; i < selectedTables.length; i++)
 					{
@@ -123,12 +123,11 @@ public class ConfigureSimpleQueryAction extends BaseAction
 						//.addAll(bizLogic.setColumnNames(selectedTables[i]));
 					}
 					selectedColumns = new String[columnNameValueBeans.size()];
-					Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();
+					final Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();
 					i = 0;
 					while (columnNameValueBeansItr.hasNext())
 					{
-						selectedColumns[i] =
-							((NameValueBean) columnNameValueBeansItr.next())
+						selectedColumns[i] = ((NameValueBean) columnNameValueBeansItr.next())
 								.getValue();
 						i++;
 					}

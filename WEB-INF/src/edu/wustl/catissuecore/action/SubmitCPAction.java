@@ -44,7 +44,7 @@ public class SubmitCPAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SubmitCPAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SubmitCPAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -61,6 +61,7 @@ public class SubmitCPAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -68,14 +69,14 @@ public class SubmitCPAction extends BaseAction
 		String target = Constants.SUCCESS;
 		try
 		{
-			HttpSession session = request.getSession();
-			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+			final HttpSession session = request.getSession();
+			final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			String cptitle = collectionProtocolBean.getTitle();
-			String treeNode = "cpName_" + cptitle;
+			final String cptitle = collectionProtocolBean.getTitle();
+			final String treeNode = "cpName_" + cptitle;
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 			session.setAttribute("tempKey", treeNode);
-			String operation = collectionProtocolBean.getOperation();
+			final String operation = collectionProtocolBean.getOperation();
 			if ("update".equals(operation))// "update"
 			{
 				target = "updateCP";
@@ -84,29 +85,29 @@ public class SubmitCPAction extends BaseAction
 			else
 			{
 
-				CollectionProtocol collectionProtocol = CollectionProtocolUtil
+				final CollectionProtocol collectionProtocol = CollectionProtocolUtil
 						.populateCollectionProtocolObjects(request);
-				CollectionProtocolDTO collectionProtocolDTO = getCoolectionProtocolDTO(
+				final CollectionProtocolDTO collectionProtocolDTO = this.getCoolectionProtocolDTO(
 						collectionProtocol, session);
-				insertCollectionProtocol(collectionProtocolDTO, request.getSession());
+				this.insertCollectionProtocol(collectionProtocolDTO, request.getSession());
 				collectionProtocolBean.setIdentifier(collectionProtocol.getId());
 				CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 			}
-			ActionMessages actionMessages = new ActionMessages();
+			final ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.add.successOnly", "Collection Protocol"));
-			saveMessages(request, actionMessages);
+			this.saveMessages(request, actionMessages);
 		}
-		catch (ApplicationException ex)
+		catch (final ApplicationException ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			this.logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			// String errorMsg = ex.getFormattedMessage();
 			// resultMap.put(Constants.ERROR_DETAIL, errorMsg);
-			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
+			final ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 					.getMessage()));
-			SessionDataBean sessionDataBean = getSessionData(request);
+			final SessionDataBean sessionDataBean = this.getSessionData(request);
 			String userName = "";
 			if (sessionDataBean != null)
 			{
@@ -115,9 +116,10 @@ public class SubmitCPAction extends BaseAction
 			// To delegate UserNotAuthorizedException forward
 			if (ex instanceof UserNotAuthorizedException)
 			{
-				UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
-				String className = Utility.getActualClassName(CollectionProtocol.class.getName());
-				String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(excp
+				final UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
+				final String className = Utility.getActualClassName(CollectionProtocol.class
+						.getName());
+				final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(excp
 						.getPrivilegeName());
 				String baseObject = "";
 				if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
@@ -129,12 +131,12 @@ public class SubmitCPAction extends BaseAction
 					baseObject = className;
 				}
 
-				ActionError error = new ActionError("access.addedit.object.denied", userName,
+				final ActionError error = new ActionError("access.addedit.object.denied", userName,
 						className, decoratedPrivilegeName, baseObject);
 
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 			}
-			saveErrors(request, actionErrors);
+			this.saveErrors(request, actionErrors);
 		}
 		return mapping.findForward(target);
 	}
@@ -149,9 +151,8 @@ public class SubmitCPAction extends BaseAction
 	private CollectionProtocolDTO getCoolectionProtocolDTO(CollectionProtocol collectionProtocol,
 			HttpSession session)
 	{
-		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
-		Map < String , SiteUserRolePrivilegeBean > rowIdBeanMap =
-			(Map < String , SiteUserRolePrivilegeBean >) session
+		final CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
+		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
@@ -167,9 +168,9 @@ public class SubmitCPAction extends BaseAction
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO,
 			HttpSession session) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
 		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);
 	}

@@ -41,6 +41,7 @@ public class HelpAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

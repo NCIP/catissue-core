@@ -88,6 +88,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * @param valueObject IValueObject.
 	 * @throws AssignDataException assignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		//
@@ -115,15 +116,17 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * It returns the identifier.
 	 * @return identifier of type Long.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Set the identifier.
 	 * @param identifier which is of Long type.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -138,7 +141,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public SpecimenCharacteristics getSpecimenCharacteristics()
 	{
-		return specimenCharacteristics;
+		return this.specimenCharacteristics;
 	}
 
 	/**
@@ -158,7 +161,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -176,7 +179,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public String getLineage()
 	{
-		return lineage;
+		return this.lineage;
 	}
 
 	/**
@@ -203,7 +206,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public Double getInitialQuantity()
 	{
-		return initialQuantity;
+		return this.initialQuantity;
 	}
 
 	/**
@@ -222,7 +225,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public String getSpecimenType()
 	{
-		return specimenType;
+		return this.specimenType;
 	}
 
 	/**
@@ -243,7 +246,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public AbstractSpecimen getParentSpecimen()
 	{
-		return parentSpecimen;
+		return this.parentSpecimen;
 	}
 
 	/**
@@ -267,7 +270,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public Collection<AbstractSpecimen> getChildSpecimenCollection()
 	{
-		return childSpecimenCollection;
+		return this.childSpecimenCollection;
 	}
 
 	/**
@@ -292,7 +295,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
 	{
-		return specimenEventCollection;
+		return this.specimenEventCollection;
 	}
 
 	/**
@@ -339,7 +342,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**

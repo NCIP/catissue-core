@@ -28,10 +28,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ExportCartAction extends QueryShoppingCartAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ExportCartAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(ExportCartAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -51,8 +52,8 @@ public class ExportCartAction extends QueryShoppingCartAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
-		export(getCheckboxValues(searchForm), request, response);
+		final AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
+		this.export(this.getCheckboxValues(searchForm), request, response);
 		return null;
 	}
 
@@ -67,32 +68,32 @@ public class ExportCartAction extends QueryShoppingCartAction
 	 *            HttpServletResponse.
 	 * @param chkBoxValues
 	 */
-	public void export(List < Integer > chkBoxValues, HttpServletRequest request,
+	public void export(List<Integer> chkBoxValues, HttpServletRequest request,
 			HttpServletResponse response)
 	{
-		HttpSession session = request.getSession();
-		QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final HttpSession session = request.getSession();
+		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
-		List < List < String >> exportList = bizLogic.export(cart, chkBoxValues);
+		final List<List<String>> exportList = bizLogic.export(cart, chkBoxValues);
 
 		// Exporting the data to the given file & sending it to user
 		try
 		{
-			ExportReport report = new ExportReport(getFileName(session));
+			final ExportReport report = new ExportReport(this.getFileName(session));
 			report.writeData(exportList, Constants.DELIMETER);
 			report.closeFile();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.debug(e.getMessage(), e);
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("shoppingcart.exportfilexception");
+			this.logger.debug(e.getMessage(), e);
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("shoppingcart.exportfilexception");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 		}
 
-		SendFile.sendFileToClient(response, getFileName(session),
+		SendFile.sendFileToClient(response, this.getFileName(session),
 				Constants.SHOPPING_CART_FILE_NAME, Constants.APPLICATION_DOWNLOAD);
 
 	}
@@ -104,7 +105,7 @@ public class ExportCartAction extends QueryShoppingCartAction
 	 */
 	private String getFileName(HttpSession session)
 	{
-		String fileName = CommonServiceLocator.getInstance().getAppHome()
+		final String fileName = CommonServiceLocator.getInstance().getAppHome()
 				+ System.getProperty("file.separator") + session.getId() + Constants.DOT_CSV;
 		return fileName;
 	}

@@ -73,7 +73,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public Double getNeoplasticCellularityPercentage()
 	{
-		return neoplasticCellularityPercentage;
+		return this.neoplasticCellularityPercentage;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public Double getNecrosisPercentage()
 	{
-		return necrosisPercentage;
+		return this.necrosisPercentage;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public Double getLymphocyticPercentage()
 	{
-		return lymphocyticPercentage;
+		return this.lymphocyticPercentage;
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public Double getTotalCellularityPercentage()
 	{
-		return totalCellularityPercentage;
+		return this.totalCellularityPercentage;
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public String getHistologicalQuality()
 	{
-		return histologicalQuality;
+		return this.histologicalQuality;
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -200,12 +200,14 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 * @param abstractForm - tissueSpecimenReviewEventParametersForm AnTissueSpecimenReviewEventParametersForm
 	 * object containing the information about the TissueSpecimenReviewEventParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
-		String nullString = null;
+		final String nullString = null;
 		try
 		{
-			TissueSpecimenReviewEventParametersForm form = (TissueSpecimenReviewEventParametersForm) abstractForm;
+			final TissueSpecimenReviewEventParametersForm form
+			= (TissueSpecimenReviewEventParametersForm) abstractForm;
 
 			if (form.getNeoplasticCellularityPercentage() != null
 					&& form.getNeoplasticCellularityPercentage().trim().length() > 0)
@@ -229,7 +231,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 				this.lymphocyticPercentage = new Double(form.getLymphocyticPercentage());
 			}
 
-			Validator validator = new Validator();
+			final Validator validator = new Validator();
 			if (validator.isValidOption(form.getHistologicalQuality()))
 			{
 				this.histologicalQuality = form.getHistologicalQuality();
@@ -241,7 +243,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

@@ -41,10 +41,11 @@ public class RoleBasedForwardAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String roleName = getRoleNameForUser(request);
+		final String roleName = this.getRoleNameForUser(request);
 		if (roleName.equalsIgnoreCase(Roles.TECHNICIAN))
 		{
 			return mapping.findForward(Constants.ACCESS_DENIED);
@@ -64,10 +65,10 @@ public class RoleBasedForwardAction extends BaseAction
 	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException,
 			SMException
 	{
-		SessionDataBean sessionData = getSessionData(request);
-		Long userId = new Long(sessionData.getCsmUserId());
-		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
-		String roleName = securityManager.getRoleName(userId);
+		final SessionDataBean sessionData = this.getSessionData(request);
+		final Long userId = new Long(sessionData.getCsmUserId());
+		final ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+		final String roleName = securityManager.getRoleName(userId);
 		return roleName;
 	}
 }

@@ -46,7 +46,7 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 	 */
 	public Specimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ExistingSpecimenOrderItem extends SpecimenOrderItem
 	 */
 	public Collection getConsentTierStatusCollection()
 	{
-		return consentTierStatusCollection;
+		return this.consentTierStatusCollection;
 	}
 
 	/**

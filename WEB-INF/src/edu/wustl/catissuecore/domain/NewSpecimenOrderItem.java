@@ -40,7 +40,7 @@ public class NewSpecimenOrderItem extends SpecimenOrderItem
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class NewSpecimenOrderItem extends SpecimenOrderItem
 	 */
 	public String getSpecimenType()
 	{
-		return specimenType;
+		return this.specimenType;
 	}
 
 	/**

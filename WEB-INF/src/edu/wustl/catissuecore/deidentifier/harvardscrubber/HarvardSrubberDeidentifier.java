@@ -35,7 +35,9 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 {
-
+	/**
+	 * scrubber.
+	 */
 	private static Scrubber scrubber;
 	/**
 	 * @param identifiedReport : identifiedReport
@@ -57,7 +59,8 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 				.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME),
 				CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
 
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport
+		= new DeidentifiedSurgicalPathologyReport();
 		TextContent textContent = new TextContent();
 		textContent.setData(deidReportText);
 		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);

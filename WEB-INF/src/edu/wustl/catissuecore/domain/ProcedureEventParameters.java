@@ -54,7 +54,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	 */
 	public String getUrl()
 	{
-		return url;
+		return this.url;
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	public ProcedureEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -110,18 +110,19 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	 * @param abstractForm - ProcedureEventParametersForm An ProcedureEventParametersForm object
 	 * containing the information about the ProcedureEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			ProcedureEventParametersForm form = (ProcedureEventParametersForm) abstractForm;
+			final ProcedureEventParametersForm form = (ProcedureEventParametersForm) abstractForm;
 
 			this.url = form.getUrl();
 			this.name = form.getName();
 
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

@@ -36,7 +36,7 @@ public class ExistingSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 */
 	public SpecimenArray getSpecimenArray()
 	{
-		return specimenArray;
+		return this.specimenArray;
 	}
 
 	/**

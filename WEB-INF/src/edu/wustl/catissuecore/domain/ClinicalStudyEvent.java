@@ -47,7 +47,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 */
 	public ClinicalStudy getClinicalStudy()
 	{
-		return clinicalStudy;
+		return this.clinicalStudy;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 */
 	public String getCollectionPointLabel()
 	{
-		return collectionPointLabel;
+		return this.collectionPointLabel;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 */
 	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	/**
@@ -101,9 +101,10 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_STUDY_EVENT_SEQ"
 	 * @return Long type identifier.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 */
 	public Collection getEventEntryCollection()
 	{
-		return eventEntryCollection;
+		return this.eventEntryCollection;
 	}
 
 	/**
@@ -129,6 +130,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -139,6 +141,7 @@ public class ClinicalStudyEvent extends AbstractDomainObject
 	 * @param abstractForm of type IValueObject.
 	 * @throws AssignDataException assignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//

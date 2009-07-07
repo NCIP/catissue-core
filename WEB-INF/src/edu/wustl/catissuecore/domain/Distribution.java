@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -25,7 +26,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -104,7 +105,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public OrderDetails getOrderDetails()
 	{
-		return orderDetails;
+		return this.orderDetails;
 	}
 
 	/**
@@ -131,9 +132,10 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -142,6 +144,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
 	 * @param identifier system identifier.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -154,7 +157,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	public Distribution(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	// ---- Method Section
@@ -167,7 +170,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public Site getToSite()
 	{
-		return toSite;
+		return this.toSite;
 	}
 
 	/**
@@ -208,7 +211,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public DistributionProtocol getDistributionProtocol()
 	{
-		return distributionProtocol;
+		return this.distributionProtocol;
 	}
 
 	/**
@@ -231,7 +234,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public Collection getDistributedItemCollection()
 	{
-		return distributedItemCollection;
+		return this.distributedItemCollection;
 	}
 
 	/**
@@ -241,7 +244,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -266,7 +269,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public User getDistributedBy()
 	{
-		return distributedBy;
+		return this.distributedBy;
 	}
 
 	/**
@@ -282,7 +285,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -298,7 +301,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	public Date getTimestamp()
 	{
-		return timestamp;
+		return this.timestamp;
 	}
 
 	/**
@@ -313,6 +316,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * Set All Values.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
@@ -322,28 +326,29 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 			final DistributionForm form = (DistributionForm) abstractForm;
 			try
 			{
-				if (SearchUtil.isNullobject(distributedBy))
+				if (SearchUtil.isNullobject(this.distributedBy))
 				{
-					distributedBy = new User();
+					this.distributedBy = new User();
 				}
-				if (SearchUtil.isNullobject(timestamp))
+				if (SearchUtil.isNullobject(this.timestamp))
 				{
-					timestamp = Calendar.getInstance().getTime();
+					this.timestamp = Calendar.getInstance().getTime();
 				}
 
 				this.comment = form.getComments();
 
-				distributedBy.setId(Long.valueOf(form.getUserId()));
+				this.distributedBy.setId(Long.valueOf(form.getUserId()));
 
 				if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length() != 0)
 				{
 					final Calendar calendar = Calendar.getInstance();
 
-					final Date date = Utility.parseDate(form.getDateOfEvent(), Utility
-							.datePattern(form.getDateOfEvent()));
+					final Date date = CommonUtilities.parseDate(form.getDateOfEvent(),
+							CommonUtilities.datePattern(form.getDateOfEvent()));
 					calendar.setTime(date);
 					this.timestamp = calendar.getTime();
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.
+							parseInt(form.getTimeInHours()));
 					calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 					this.timestamp = calendar.getTime();
 					//this.timestamp is added twice, if there is some exception in
@@ -352,39 +357,39 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 					//current timestamp will be set
 				}
 			}
-			catch (Exception excp)
+			catch (final Exception excp)
 			{
 				Logger.out.error(excp.getMessage(), excp);
-				ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+				final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 				throw new AssignDataException(errorKey, null, "Distribution.java :");
 			}
 
-			if (SearchUtil.isNullobject(toSite))
+			if (SearchUtil.isNullobject(this.toSite))
 			{
-				toSite = new Site();
+				this.toSite = new Site();
 			}
 
-			if (SearchUtil.isNullobject(distributionProtocol))
+			if (SearchUtil.isNullobject(this.distributionProtocol))
 			{
-				distributionProtocol = new DistributionProtocol();
+				this.distributionProtocol = new DistributionProtocol();
 			}
 
-			toSite.setId(Long.valueOf(form.getToSite()));
+			this.toSite.setId(Long.valueOf(form.getToSite()));
 			//fromSite.setId(new Long(form.getFromSite()));
-			distributionProtocol.setId(Long.valueOf(form.getDistributionProtocolId()));
+			this.distributionProtocol.setId(Long.valueOf(form.getDistributionProtocolId()));
 			this.activityStatus = form.getActivityStatus();
 
 			Map map = form.getValues();
 			logger.debug("map " + map);
-			map = fixMap(map);
+			map = this.fixMap(map);
 			logger.debug("fixedMap " + map);
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			final Collection itemCollectionMap = parser.generateData(map);
-			Collection finalItemCollecitonMap = new HashSet();
-			Iterator itr = itemCollectionMap.iterator();
+			final Collection finalItemCollecitonMap = new HashSet();
+			final Iterator itr = itemCollectionMap.iterator();
 			while (itr.hasNext())
 			{
-				DistributedItem distributedItem = (DistributedItem) itr.next();
+				final DistributedItem distributedItem = (DistributedItem) itr.next();
 				if (distributedItem.getSpecimen() != null)
 				{
 					finalItemCollecitonMap.add(distributedItem);
@@ -394,10 +399,10 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 					finalItemCollecitonMap.add(distributedItem);
 				}
 			}
-			distributedItemCollection = finalItemCollecitonMap;
-			logger.debug("distributedItemCollection " + distributedItemCollection);
+			this.distributedItemCollection = finalItemCollecitonMap;
+			logger.debug("distributedItemCollection " + this.distributedItemCollection);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -410,12 +415,12 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 */
 	protected Map fixMap(Map orgMap)
 	{
-		Iterator iterator = orgMap.keySet().iterator();
-		Map newMap = new HashMap();
+		final Iterator iterator = orgMap.keySet().iterator();
+		final Map newMap = new HashMap();
 		while (iterator.hasNext())
 		{
-			String key = (String) iterator.next();
-			String value = (String) orgMap.get(key);
+			final String key = (String) iterator.next();
+			final String value = (String) orgMap.get(key);
 			if (key.endsWith("_id") || key.endsWith("uantity"))
 			{
 				newMap.put(key, value);
@@ -428,14 +433,15 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		// Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(distributionProtocol))
+		if (SearchUtil.isNullobject(this.distributionProtocol))
 		{
-			distributionProtocol = new DistributionProtocol();
+			this.distributionProtocol = new DistributionProtocol();
 		}
-		StringBuffer message = new StringBuffer();
+		final StringBuffer message = new StringBuffer();
 		message.append(this.distributionProtocol.title + " ");
 		if (this.distributedBy != null)
 		{

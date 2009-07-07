@@ -50,13 +50,14 @@ public class UserEditProfileAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		ActionForward actionForward = mapping.findForward("homePage");
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
 		if (sessionDataBean == null)
 		{
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -65,11 +66,11 @@ public class UserEditProfileAction extends BaseAction
 				errors = new ActionErrors();
 			}
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("app.session.timeout"));
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 		}
 		else
 		{
-			CommonSearchAction commonSearchAction = new CommonSearchAction();
+			final CommonSearchAction commonSearchAction = new CommonSearchAction();
 			request.setAttribute(Constants.SYSTEM_IDENTIFIER, sessionDataBean.getUserId());
 			actionForward = commonSearchAction.execute(mapping, form, request, response);
 		}

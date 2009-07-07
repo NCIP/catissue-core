@@ -607,7 +607,7 @@ public class DistributionAction extends SecureAction
 
 	// Consent Tracking Virender Mehta
 	/**
-	 * Prepare Map for Consent tiers
+	 * Prepare Map for Consent tiers.
 	 *
 	 * @param participantResponseList
 	 *            This list will be iterated and added to map to populate
@@ -712,7 +712,7 @@ public class DistributionAction extends SecureAction
 	// Consent Tracking Virender Mehta
 
 	/**
-	 * This method sets all the common parameters for the SpecimenEventParameter
+	 * This method sets all the common parameters for the SpecimenEventParameter.
 	 * pages
 	 *
 	 * @param request

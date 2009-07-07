@@ -37,7 +37,7 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	 */
 	public Integer getEntryNumber()
 	{
-		return entryNumber;
+		return this.entryNumber;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	 */
 	public ClinicalStudyEvent getClinicalStudyEvent()
 	{
-		return clinicalStudyEvent;
+		return this.clinicalStudyEvent;
 	}
 
 	/**
@@ -73,15 +73,17 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_STUDY_EVENT_ENTRY_SEQ"
 	 * @return identifier.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Set the identifier.
 	 * @param identifier unique id.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -93,6 +95,7 @@ public class ClinicalStudyEventEntry extends AbstractDomainObject
 	 * @param ivalueObject of type IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject ivalueObject) throws AssignDataException
 	{
 		//

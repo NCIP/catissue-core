@@ -36,11 +36,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ConsentResponseSubmitAction extends BaseAction
 {
-/**
- * logger.
- */
+
+	/**
+	 * logger.
+	 */
 	private static org.apache.log4j.Logger logger = Logger
 			.getLogger(ConsentResponseSubmitAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -55,22 +57,23 @@ public class ConsentResponseSubmitAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		logger.debug("Inside  consent response submit ");
-		ConsentResponseForm consentForm = (ConsentResponseForm) form;
-		HttpSession session = request.getSession();
+		final ConsentResponseForm consentForm = (ConsentResponseForm) form;
+		final HttpSession session = request.getSession();
 		if (consentForm != null)
 		{
-			long collectionProtocolID = consentForm.getCollectionProtocolID();
-			String signedConsentUrl = consentForm.getSignedConsentUrl();
-			long witnessId = consentForm.getWitnessId();
-			String consentSignatureDate = consentForm.getConsentDate();
-			Map consentResponseValues = consentForm.getConsentResponseValues();
-			MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-			Collection consentResponseCollection = mapdataParser
+			final long collectionProtocolID = consentForm.getCollectionProtocolID();
+			final String signedConsentUrl = consentForm.getSignedConsentUrl();
+			final long witnessId = consentForm.getWitnessId();
+			final String consentSignatureDate = consentForm.getConsentDate();
+			final Map consentResponseValues = consentForm.getConsentResponseValues();
+			final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+			final Collection consentResponseCollection = mapdataParser
 					.generateData(consentResponseValues);
 
 			/*Iterator itr = consentResponseCollection.iterator();
@@ -84,12 +87,11 @@ public class ConsentResponseSubmitAction extends BaseAction
 				+consentBean.getParticipantResponseID());
 			}*/
 
-			String withdrawlButtonStatus = consentForm.getWithdrawlButtonStatus();
-			ConsentResponseBean consentResponseBean = new ConsentResponseBean(collectionProtocolID,
-					signedConsentUrl, witnessId, consentSignatureDate,
-					consentResponseCollection,
-					withdrawlButtonStatus);
-			String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
+			final String withdrawlButtonStatus = consentForm.getWithdrawlButtonStatus();
+			final ConsentResponseBean consentResponseBean = new ConsentResponseBean(
+					collectionProtocolID, signedConsentUrl, witnessId, consentSignatureDate,
+					consentResponseCollection, withdrawlButtonStatus);
+			final String consentResponseKey = Constants.CONSENT_RESPONSE_KEY + collectionProtocolID;
 			Map consentResponseHashTable = (Map) session.getAttribute(Constants.CONSENT_RESPONSE);
 			if (consentResponseHashTable == null)
 			{

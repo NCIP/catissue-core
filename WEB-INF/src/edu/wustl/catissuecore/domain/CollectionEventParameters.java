@@ -54,7 +54,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 */
 	public String getCollectionProcedure()
 	{
-		return collectionProcedure;
+		return this.collectionProcedure;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 */
 	public String getContainer()
 	{
-		return container;
+		return this.container;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	public CollectionEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -108,12 +108,13 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 * @param abstractForm CollectionEventParametersForm An CollectionEventParametersForm
 	 * object containing the information about the CollectionEventParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
-			Validator validator = new Validator();
+			final CollectionEventParametersForm form = (CollectionEventParametersForm) abstractForm;
+			final Validator validator = new Validator();
 
 			if (validator.isValidOption(form.getContainer()))
 			{
@@ -128,7 +129,7 @@ public class CollectionEventParameters extends SpecimenEventParameters
 
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

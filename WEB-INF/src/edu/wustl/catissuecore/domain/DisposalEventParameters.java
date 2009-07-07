@@ -51,7 +51,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 */
 	public String getReason()
 	{
-		return reason;
+		return this.reason;
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	public DisposalEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -87,16 +87,17 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 * @param abstractForm An DisposalEventParametersForm object containing the
 	 * information about the DisposalEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
+			final DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
 			this.reason = form.getReason();
 			this.activityStatus = form.getActivityStatus();
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -108,7 +109,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	public CollectionProtocolEvent getCollectionProtocolEvent()
 	{
-		return collectionProtocolEvent;
+		return this.collectionProtocolEvent;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	public String getStorageType()
 	{
-		return storageType;
+		return this.storageType;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	public Collection<Specimen> getSpecimenCollection()
 	{
-		return specimenCollection;
+		return this.specimenCollection;
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
 
 	/**

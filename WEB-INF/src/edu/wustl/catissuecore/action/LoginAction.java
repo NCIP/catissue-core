@@ -52,10 +52,11 @@ import edu.wustl.security.manager.SecurityManagerFactory;
  */
 public class LoginAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(LoginAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(LoginAction.class);
 
 	/**
 	 * Overrides the execute method of Action class. Initializes the various
@@ -75,6 +76,7 @@ public class LoginAction extends Action
 	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -85,23 +87,26 @@ public class LoginAction extends Action
 			return (mapping.findForward(Constants.FAILURE));
 		}
 
-		HttpSession prevSession = request.getSession();
-		if (prevSession != null) prevSession.invalidate();
+		final HttpSession prevSession = request.getSession();
+		if (prevSession != null)
+		{
+			prevSession.invalidate();
+		}
 
-		LoginForm loginForm = (LoginForm) form;
+		final LoginForm loginForm = (LoginForm) form;
 		Logger.out.info("Inside Login Action, Just before validation");
 
-		String loginName = loginForm.getLoginName();
+		final String loginName = loginForm.getLoginName();
 		// String password = PasswordManager.encode(loginForm.getPassword());
 
 		try
 		{
-			User validUser = getUser(loginName);
-			String password = loginForm.getPassword();
+			final User validUser = this.getUser(loginName);
+			final String password = loginForm.getPassword();
 			if (validUser != null)
 			{
-				boolean loginOK = SecurityManagerFactory.getSecurityManager().login(loginName,
-						password);
+				final boolean loginOK = SecurityManagerFactory.getSecurityManager().login(
+						loginName, password);
 				if (loginOK)
 				{
 					/*
@@ -110,13 +115,13 @@ public class LoginAction extends Action
 					 * .getPrivilegeCache(loginName);
 					 */
 
-					logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
-					HttpSession session = request.getSession(true);
+					this.logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
+					final HttpSession session = request.getSession(true);
 
-					Long userId = validUser.getId();
-					String ipAddress = request.getRemoteAddr();
+					final Long userId = validUser.getId();
+					final String ipAddress = request.getRemoteAddr();
 
-					SessionDataBean sessionData = new SessionDataBean();
+					final SessionDataBean sessionData = new SessionDataBean();
 
 					boolean adminUser = false;
 
@@ -131,28 +136,29 @@ public class LoginAction extends Action
 					sessionData.setUserId(userId);
 					sessionData.setFirstName(validUser.getFirstName());
 					sessionData.setLastName(validUser.getLastName());
-					logger.debug("CSM USer ID ....................... : "
+					this.logger.debug("CSM USer ID ....................... : "
 							+ validUser.getCsmUserId());
 					sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 					session.setAttribute(Constants.SESSION_DATA, sessionData);
 					session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
-					IFactory factory = AbstractFactoryConfig.
-					getInstance().getBizLogicFactory();
-					UserBizLogic userBizLogic = (UserBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final UserBizLogic userBizLogic = (UserBizLogic) factory
 							.getBizLogic(Constants.USER_FORM_ID);
 
-					String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
+					final String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 
-					setSecurityParamsInSessionData(validUser, sessionData);
+					this.setSecurityParamsInSessionData(validUser, sessionData);
 
-					String validRole = getForwardToPageOnLogin
-					(validUser.getCsmUserId().longValue());
+					final String validRole
+					= this.getForwardToPageOnLogin(validUser.getCsmUserId()
+							.longValue());
 					if (validRole != null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
 					{
-						ActionErrors errors = new ActionErrors();
-						errors.add(ActionErrors.GLOBAL_ERROR,
-								new ActionError("errors.noRole"));
-						saveErrors(request, errors);
+						final ActionErrors errors = new ActionErrors();
+						errors.add(ActionErrors.GLOBAL_ERROR
+								, new ActionError("errors.noRole"));
+						this.saveErrors(request, errors);
 						session.setAttribute(Constants.SESSION_DATA, null);
 						return mapping.findForward(Constants.FAILURE);
 					}
@@ -160,15 +166,15 @@ public class LoginAction extends Action
 					if (!result.equals(Constants.SUCCESS))
 					{
 						// ActionError changed to ActionMessage
-						ActionMessages messages = new ActionMessages();
-						messages.add(ActionMessages.GLOBAL_MESSAGE,
-								new ActionMessage(result));
-						saveMessages(request, messages);
+						final ActionMessages messages = new ActionMessages();
+						messages.add(ActionMessages.GLOBAL_MESSAGE
+								, new ActionMessage(result));
+						this.saveMessages(request, messages);
 
 						session.setAttribute(Constants.SESSION_DATA, null);
 						session.setAttribute(Constants.TEMP_SESSION_DATA, sessionData);
-						request.setAttribute(Constants.PAGE_OF,
-								Constants.PAGE_OF_CHANGE_PASSWORD);
+						request.setAttribute(Constants.PAGE_OF
+								, Constants.PAGE_OF_CHANGE_PASSWORD);
 						return mapping.findForward(Constants.ACCESS_DENIED);
 					}
 
@@ -185,30 +191,31 @@ public class LoginAction extends Action
 					 * is set as Admin Advance Search unser Search tab
 					 * Forwarding to default page depending on user role
 					 */
-					String forwardToPage = Constants.SUCCESS;
+					final String forwardToPage = Constants.SUCCESS;
 					//getForwardToPageOnLogin(validUser.getCsmUserId().longValue
 					// ());
 					return (mapping.findForward(forwardToPage));
 				}
 				else
 				{
-					logger.info("User " + loginName
+					this.logger.info("User " + loginName
 							+ " Invalid user. Sending back to the login Page");
-					handleError(request, "errors.incorrectLoginNamePassword");
+					this.handleError(request, "errors.incorrectLoginNamePassword");
 					return (mapping.findForward(Constants.FAILURE));
 				}
 			} // if valid user
 			else
 			{
-				logger.info("User " + loginName + " Invalid user. Sending back to the login Page");
-				handleError(request, "errors.incorrectLoginNamePassword");
+				this.logger.info("User " + loginName
+						+ " Invalid user. Sending back to the login Page");
+				this.handleError(request, "errors.incorrectLoginNamePassword");
 				return (mapping.findForward(Constants.FAILURE));
 			} // invalid user
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.info("Exception: " + e.getMessage(), e);
-			handleError(request, "errors.incorrectLoginNamePassword");
+			this.logger.info("Exception: " + e.getMessage(), e);
+			this.handleError(request, "errors.incorrectLoginNamePassword");
 			return (mapping.findForward(Constants.FAILURE));
 		}
 	}
@@ -226,7 +233,7 @@ public class LoginAction extends Action
 	private void setSecurityParamsInSessionData(User validUser, SessionDataBean sessionData)
 			throws SMException
 	{
-		String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
+		final String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
 				validUser.getCsmUserId());
 		if (userRole != null
 				&& (userRole.equalsIgnoreCase(Roles.ADMINISTRATOR) || userRole
@@ -254,8 +261,8 @@ public class LoginAction extends Action
 
 	private String getForwardToPageOnLogin(Long loginId) throws SMException
 	{
-		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
-		String roleName = securityManager.getRoleName(loginId);
+		final ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+		final String roleName = securityManager.getRoleName(loginId);
 		String modifiedRolename = "";
 		if (roleName == null || roleName.equals(""))
 		{
@@ -270,6 +277,7 @@ public class LoginAction extends Action
 		// .substring(1,roleName.length()).toLowerCase();
 		return (modifiedRolename);
 	}
+
 	/**
 	 *
 	 * @param request : request
@@ -277,14 +285,15 @@ public class LoginAction extends Action
 	 */
 	private void handleError(HttpServletRequest request, String errorKey)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey));
 		// Report any errors we have discovered
 		if (!errors.isEmpty())
 		{
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 		}
 	}
+
 	/**
 	 *
 	 * @param loginName : loginName
@@ -293,18 +302,19 @@ public class LoginAction extends Action
 	 */
 	private User getUser(String loginName) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		String[] whereColumnName = {"activityStatus", "loginName"};
-		String[] whereColumnCondition = {"=", "="};
-		String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final String[] whereColumnName = {"activityStatus", "loginName"};
+		final String[] whereColumnCondition = {"=", "="};
+		final String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
 
-		List users = userBizLogic.retrieve(User.class.getName(), whereColumnName,
+		final List users = userBizLogic.retrieve(User.class.getName(), whereColumnName,
 				whereColumnCondition, whereColumnValue, Constants.AND_JOIN_CONDITION);
 
 		if (users != null && !users.isEmpty())
 		{
-			User validUser = (User) users.get(0);
+			final User validUser = (User) users.get(0);
 			return validUser;
 		}
 		return null;

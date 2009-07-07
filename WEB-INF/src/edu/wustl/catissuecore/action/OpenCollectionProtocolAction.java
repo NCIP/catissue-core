@@ -22,7 +22,6 @@ import edu.wustl.common.action.BaseAction;
 public class OpenCollectionProtocolAction extends BaseAction
 {
 
-
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -37,25 +36,26 @@ public class OpenCollectionProtocolAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		CollectionProtocolForm formName = (CollectionProtocolForm) form;
-		String operation = (String) request.getParameter(Constants.OPERATION);
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-		HttpSession session = request.getSession();
+		final CollectionProtocolForm formName = (CollectionProtocolForm) form;
+		final String operation = request.getParameter(Constants.OPERATION);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final HttpSession session = request.getSession();
 		if ("pageOfmainCP".equalsIgnoreCase(pageOf))
 		{
 			session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 			session.removeAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		}
-		CollectionProtocolBean cpBean = (CollectionProtocolBean) session
+		final CollectionProtocolBean cpBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		if (cpBean != null)
 		{
 			request.setAttribute("isParticipantReg", cpBean.isParticiapantReg());
 			request.setAttribute(Constants.OPERATION, operation);
-			String treeNode = "cpName_" + cpBean.getTitle();
+			final String treeNode = "cpName_" + cpBean.getTitle();
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
 		}
 		request.setAttribute("formName", formName);

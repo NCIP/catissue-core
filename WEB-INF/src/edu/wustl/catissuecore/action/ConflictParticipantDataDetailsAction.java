@@ -30,6 +30,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
  */
 public class ConflictParticipantDataDetailsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -44,21 +45,22 @@ public class ConflictParticipantDataDetailsAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictParticipantDataDetailsForm conflictParticipantDataDetailsForm =
-			(ConflictParticipantDataDetailsForm) form;
-		String participantId = (String) request.getParameter(Constants.ID);
+		final ConflictParticipantDataDetailsForm conflictParticipantDataDetailsForm
+		= (ConflictParticipantDataDetailsForm) form;
+		final String participantId = request.getParameter(Constants.ID);
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		session.setAttribute(Constants.PARTICIPANT_ID_TO_ASSOCIATE, participantId);
 		session.removeAttribute(Constants.SCG_ID_TO_ASSOCIATE);
 
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 
 		//retrieved the participant object and populated the bean
-		Object object = defaultBizLogic.retrieve(Participant.class.getName(), new Long(
+		final Object object = defaultBizLogic.retrieve(Participant.class.getName(), new Long(
 				participantId));
 		Participant participant = null;
 		if (object != null)

@@ -46,7 +46,7 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	 */
 	public String getReceivedQuality()
 	{
-		return receivedQuality;
+		return this.receivedQuality;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	public ReceivedEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -82,19 +82,20 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	 * @param abstractForm - receivedEventParametersForm An ReceivedEventParametersForm
 	 * object containing the information about the ReceivedEventParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
+			final ReceivedEventParametersForm form = (ReceivedEventParametersForm) abstractForm;
 			this.receivedQuality = form.getReceivedQuality();
 			super.setAllValues(form);
 			//call to event parameters setallvalue method
 			//        	super.setAllValues(abstractForm);
 
-			logger.debug("receivedQuality: " + receivedQuality);
+			logger.debug("receivedQuality: " + this.receivedQuality);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

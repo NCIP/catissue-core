@@ -44,7 +44,7 @@ public class TreeDataAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TreeDataAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TreeDataAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -61,6 +61,7 @@ public class TreeDataAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -69,7 +70,7 @@ public class TreeDataAction extends BaseAction
 
 		try
 		{
-			String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
+			final String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
 			TreeDataInterface bizLogic = new StorageContainerBizLogic();
 			Vector dataList = new Vector();
 
@@ -78,8 +79,8 @@ public class TreeDataAction extends BaseAction
 			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();
-				CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
-				String cdeName = request.getParameter(Constants.CDE_NAME);
+				final CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
+				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
 			}
 			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
@@ -87,10 +88,10 @@ public class TreeDataAction extends BaseAction
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
 			{
-				dataList = (Vector) bizLogic.getTreeViewData();
+				dataList = bizLogic.getTreeViewData();
 			}
 
-			String contentType = "application/x-java-serialized-object";
+			final String contentType = "application/x-java-serialized-object";
 			response.setContentType(contentType);
 			out = new ObjectOutputStream(response.getOutputStream());
 
@@ -108,9 +109,9 @@ public class TreeDataAction extends BaseAction
 				out.writeObject(dataList);
 			}
 		}
-		catch (Exception exp)
+		catch (final Exception exp)
 		{
-			logger.error(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 		}
 		finally
 		{

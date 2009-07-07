@@ -42,7 +42,7 @@ import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -50,10 +50,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ParticipantSelectAction extends BaseAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ParticipantSelectAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(ParticipantSelectAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -70,37 +71,40 @@ public class ParticipantSelectAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AbstractDomainObject abstractDomain = null;
-		ActionMessages messages = null;
+		final AbstractDomainObject abstractDomain = null;
+		final ActionMessages messages = null;
 		String target = null;
-		AbstractActionForm abstractForm = (AbstractActionForm) form;
-		ParticipantForm participantForm = (ParticipantForm) form;
-		IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
+		final AbstractActionForm abstractForm = (AbstractActionForm) form;
+		final ParticipantForm participantForm = (ParticipantForm) form;
+		final IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
 				.getDomainObjectFactory();
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());
 
-		String objectName = iDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
+		final String objectName = iDomainObjectFactory
+				.getDomainObjectName(abstractForm.getFormId());
 
-		logger.info("Participant Id-------------------" + request.getParameter("participantId"));
+		this.logger.info("Participant Id-------------------"
+				+ request.getParameter("participantId"));
 
-		Object object = bizLogic.retrieve(objectName, new Long(request
+		final Object object = bizLogic.retrieve(objectName, new Long(request
 				.getParameter("participantId")));
 		request.removeAttribute("participantForm");
-		Participant participant = (Participant) object;
+		final Participant participant = (Participant) object;
 
-		logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
+		this.logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
 		/**
 		 * Name: Vijay Pande Reviewer Name: Aarti Sharma Instead of
 		 * setAllValues() method retrieveFroEditMode() method is called to
 		 * bypass lazy loading error in domain object
 		 */
 		// participantForm.setAllValues(participant);
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
 				participantForm);
 
@@ -112,38 +116,37 @@ public class ParticipantSelectAction extends BaseAction
 		request.setAttribute("participantSelect", "yes");
 
 		// Attributes to decide AddNew action
-		String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
+		final String submittedFor = request.getParameter(Constants.SUBMITTED_FOR);
 
-		logger.info("submittedFor in ParticipantSelectAction:" + submittedFor);
+		this.logger.info("submittedFor in ParticipantSelectAction:" + submittedFor);
 		// ------------------------------------------------ AddNewAction
 		// Starts----------------------------
 		// if AddNew action is executing, load FormBean from Session and
 		// redirect to Action which initiated AddNew action
 		if ((submittedFor != null) && (submittedFor.equals("AddNew")))
 		{
-			HttpSession session = request.getSession();
-			Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
+			final HttpSession session = request.getSession();
+			final Stack formBeanStack = (Stack) session.getAttribute(Constants.FORM_BEAN_STACK);
 
 			if (formBeanStack != null)
 			{
 				// Retrieving AddNewSessionDataBean from Stack
-				AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
+				final AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
 						.pop();
 
 				if (addNewSessionDataBean != null)
 				{
 					// Retrieving FormBean stored into AddNewSessionDataBean
-					AbstractActionForm sessionFormBean = addNewSessionDataBean
+					final AbstractActionForm sessionFormBean = addNewSessionDataBean
 							.getAbstractActionForm();
 
-					String forwardTo = addNewSessionDataBean.getForwardTo();
-					logger.debug("forwardTo in ParticipantSelectAction--------->" + forwardTo);
+					final String forwardTo = addNewSessionDataBean.getForwardTo();
+					this.logger.debug("forwardTo in ParticipantSelectAction--------->" + forwardTo);
 
-					logger.info("Id-----------------" + abstractDomain.getId());
+					this.logger.info("Id-----------------" + abstractDomain.getId());
 					// Setting Identifier of new object into the FormBean to
 					// populate it on the JSP page
-					sessionFormBean.setAddNewObjectIdentifier
-					(addNewSessionDataBean.getAddNewFor(),
+					sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(),
 							abstractDomain.getId());
 
 					sessionFormBean.setMutable(false);
@@ -155,11 +158,10 @@ public class ParticipantSelectAction extends BaseAction
 					{
 						session.removeAttribute(Constants.FORM_BEAN_STACK);
 						request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-						logger
-								.debug("SubmittedFor set as Default in " +
-										"ParticipantSelectAction");
+						this.logger.debug("SubmittedFor set as Default in "
+								+ "ParticipantSelectAction");
 
-						logger.debug("cleaning FormBeanStack from session*************");
+						this.logger.debug("cleaning FormBeanStack from session*************");
 					}
 					else
 					{
@@ -170,21 +172,21 @@ public class ParticipantSelectAction extends BaseAction
 					// page being forwarded after AddNew activity,
 					// FormBean should be stored with the name defined into
 					// Struts-Config.xml to populate data properly on JSP page
-					String formBeanName = Utility.getFormBeanName(sessionFormBean);
+					final String formBeanName = CommonUtilities.getFormBeanName(sessionFormBean);
 					request.setAttribute(formBeanName, sessionFormBean);
 
-					logger.debug("InitiliazeAction operation=========>"
+					this.logger.debug("InitiliazeAction operation=========>"
 							+ sessionFormBean.getOperation());
 
 					// Storing Success messages into Request to display on JSP
 					// page being forwarded after AddNew activity
 					if (messages != null)
 					{
-						saveMessages(request, messages);
+						this.saveMessages(request, messages);
 					}
 
 					// Status message key.
-					String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
+					final String statusMessageKey = String.valueOf(abstractForm.getFormId() + "."
 							+ String.valueOf(abstractForm.isAddOperation()));
 					request.setAttribute(Constants.STATUS_MESSAGE_KEY, statusMessageKey);
 
@@ -193,18 +195,16 @@ public class ParticipantSelectAction extends BaseAction
 					// page
 					if ((sessionFormBean.getOperation().equals("edit")))
 					{
-						logger
-								.debug("Edit object Identifier while" +
-										" AddNew is from Edit operation==>"
-										+ sessionFormBean.getId());
-						ActionForward editForward = new ActionForward();
+						this.logger.debug("Edit object Identifier while"
+								+ " AddNew is from Edit operation==>" + sessionFormBean.getId());
+						final ActionForward editForward = new ActionForward();
 
-						String addPath = (mapping.findForward(forwardTo)).getPath();
-						logger.debug("Operation before edit==========>" + addPath);
+						final String addPath = (mapping.findForward(forwardTo)).getPath();
+						this.logger.debug("Operation before edit==========>" + addPath);
 
-						String editPath = addPath.replaceFirst
-						("operation=add", "operation=edit");
-						logger.debug("Operation edited=============>" + editPath);
+						final String editPath = addPath.replaceFirst("operation=add",
+								"operation=edit");
+						this.logger.debug("Operation edited=============>" + editPath);
 						editForward.setPath(editPath);
 
 						return editForward;
@@ -217,12 +217,11 @@ public class ParticipantSelectAction extends BaseAction
 				{
 					target = new String(Constants.FAILURE);
 
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError
-					("errors.item.unknown", AbstractDomainObject
-							.parseClassName(objectName));
+					final ActionErrors errors = new ActionErrors();
+					final ActionError error = new ActionError("errors.item.unknown",
+							AbstractDomainObject.parseClassName(objectName));
 					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
+					this.saveErrors(request, errors);
 				}
 			}
 		}
@@ -231,13 +230,14 @@ public class ParticipantSelectAction extends BaseAction
 		// ----------ForwardTo Starts----------------
 		else if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 		{
-			logger.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+			this.logger
+					.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
 
 			// Storing appropriate value of SUBMITTED_FOR attribute
 			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 
 			// storing HashMap of forwardTo data into Request
-			request.setAttribute("forwardToHashMap", generateForwardToHashMap(abstractForm,
+			request.setAttribute("forwardToHashMap", this.generateForwardToHashMap(abstractForm,
 					abstractDomain));
 		}
 		// ----------ForwardTo Ends----------------
@@ -245,13 +245,13 @@ public class ParticipantSelectAction extends BaseAction
 		// setting target to ForwardTo attribute of submitted Form
 		if (abstractForm.getForwardTo() != null && abstractForm.getForwardTo().trim().length() > 0)
 		{
-			String forwardTo = abstractForm.getForwardTo();
-			logger.debug("ForwardTo in Add :-- : " + forwardTo);
+			final String forwardTo = abstractForm.getForwardTo();
+			this.logger.debug("ForwardTo in Add :-- : " + forwardTo);
 			target = forwardTo;
 			// return (mapping.findForward(forwardTo));
 		}
 
-		logger.info("target in ParticipantSelectAction:" + target);
+		this.logger.info("target in ParticipantSelectAction:" + target);
 		return (mapping.findForward(target));
 
 	}
@@ -271,12 +271,12 @@ public class ParticipantSelectAction extends BaseAction
 		// AbstractForwardToProcessor forwardToProcessor=
 		// ForwardToFactory.getForwardToProcessor();
 
-		IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
-		AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
+		final IForwordToFactory factory = AbstractFactoryConfig.getInstance().getForwToFactory();
+		final AbstractForwardToProcessor forwardToProcessor = factory.getForwardToProcessor();
 
 		// Populating HashMap of the data required to be forwarded on next page
-		HashMap forwardToHashMap = (HashMap) forwardToProcessor.populateForwardToData(abstractForm,
-				abstractDomain);
+		final HashMap forwardToHashMap = (HashMap) forwardToProcessor.populateForwardToData(
+				abstractForm, abstractDomain);
 
 		return forwardToHashMap;
 	}

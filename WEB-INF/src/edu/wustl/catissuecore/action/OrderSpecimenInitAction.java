@@ -31,7 +31,6 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * @author renuka_bajpai
  *
@@ -42,7 +41,7 @@ public class OrderSpecimenInitAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(OrderSpecimenInitAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(OrderSpecimenInitAction.class);
 
 	/**
 	 * @param mapping ActionMapping object
@@ -52,27 +51,28 @@ public class OrderSpecimenInitAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		OrderSpecimenForm spec = (OrderSpecimenForm) form;
-		HttpSession session = request.getSession();
+		final OrderSpecimenForm spec = (OrderSpecimenForm) form;
+		final HttpSession session = request.getSession();
 		spec.setTypeOfSpecimen("existingSpecimen");
 		String target = null;
 
 		if (session.getAttribute("OrderForm") != null)
 		{
-			OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
+			final OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
 			spec.setOrderForm(orderForm);
 			if (orderForm.getDistributionProtocol() != null)
 			{
-				getProtocolName(request, spec, orderForm);
+				this.getProtocolName(request, spec, orderForm);
 			}
 
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			Collection specimen = (List) orderBizLogic.getSpecimenDataFromDatabase(request);
+			final Collection specimen = orderBizLogic.getSpecimenDataFromDatabase(request);
 
 			try
 			{
@@ -84,17 +84,17 @@ public class OrderSpecimenInitAction extends BaseAction
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 				//Setting the specimen type list
-				List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+				final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_SPECIMEN_TYPE, null);
 				request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 				// Get the Specimen class and type from the cde
-				CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
 						Constants.CDE_NAME_SPECIMEN_CLASS);
-				Set setPV = specimenClassCDE.getPermissibleValues();
+				final Set setPV = specimenClassCDE.getPermissibleValues();
 
 				specimenClassList = new ArrayList();
-				Map subTypeMap = getSubTypeMap(setPV, specimenClassList);
+				final Map subTypeMap = this.getSubTypeMap(setPV, specimenClassList);
 
 				// sets the Class list
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -107,24 +107,25 @@ public class OrderSpecimenInitAction extends BaseAction
 
 			}
 
-			catch (Exception excp)
+			catch (final Exception excp)
 			{
-				logger.error(excp.getMessage(), excp);
+				this.logger.error(excp.getMessage(), excp);
 			}
 
 			request.setAttribute("typeOf", "specimen");
 			request.setAttribute("OrderSpecimenForm", spec);
 
-			List orderToListArrayCollection = new ArrayList();
+			final List orderToListArrayCollection = new ArrayList();
 			orderToListArrayCollection.add(new NameValueBean("None", "None"));
 
 			if (session.getAttribute("DefineArrayFormObjects") != null)
 			{
-				List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
-				Iterator arrayListItr = arrayList.iterator();
+				final List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
+				final Iterator arrayListItr = arrayList.iterator();
 				while (arrayListItr.hasNext())
 				{
-					DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr.next();
+					final DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr
+							.next();
 					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj
 							.getArrayName(), defineArrayFormObj.getArrayName()));
 				}
@@ -140,6 +141,7 @@ public class OrderSpecimenInitAction extends BaseAction
 		}
 		return mapping.findForward(target);
 	}
+
 	/**
 	 *
 	 * @param setPV : setPV
@@ -148,28 +150,28 @@ public class OrderSpecimenInitAction extends BaseAction
 	 */
 	private Map getSubTypeMap(Set setPV, List specimenClassList)
 	{
-		Iterator itr = setPV.iterator();
+		final Iterator itr = setPV.iterator();
 
-		Map subTypeMap = new HashMap();
+		final Map subTypeMap = new HashMap();
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		while (itr.hasNext())
 		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
+			final List innerList = new ArrayList();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
+			final Set list1 = pv.getSubPermissibleValues();
+			final Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			while (itr1.hasNext())
 			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
+				final Object obj1 = itr1.next();
+				final PermissibleValue pv1 = (PermissibleValue) obj1;
 				// set specimen type
-				String tmpInnerStr = pv1.getValue();
+				final String tmpInnerStr = pv1.getValue();
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			subTypeMap.put(pv.getValue(), innerList);
@@ -186,14 +188,14 @@ public class OrderSpecimenInitAction extends BaseAction
 	private void getProtocolName(HttpServletRequest request, OrderSpecimenForm spec,
 			OrderForm orderForm) throws Exception
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List protocolList = orderBizLogic.getDistributionProtocol(request);
+		final List protocolList = orderBizLogic.getDistributionProtocol(request);
 
 		for (int i = 0; i < protocolList.size(); i++)
 		{
-			NameValueBean obj = (NameValueBean) protocolList.get(i);
+			final NameValueBean obj = (NameValueBean) protocolList.get(i);
 
 			if (orderForm.getDistributionProtocol().equals(obj.getValue()))
 			{

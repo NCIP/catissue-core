@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -80,14 +81,16 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_COLL_PROT_EVENT_SEQ"
 	 * @return Returns the id.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -101,7 +104,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	/**
@@ -121,7 +124,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public CollectionProtocol getCollectionProtocol()
 	{
-		return collectionProtocol;
+		return this.collectionProtocol;
 	}
 
 	/**
@@ -137,9 +140,11 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 * Convert to String method.
 	 * @return String type.
 	 */
+	@Override
 	public String toString()
 	{
-		return "CPE: " + clinicalStatus + " | " + studyCalendarEventPoint + " | " + this.getId();
+		return "CPE: " + this.clinicalStatus + " | " + this.studyCalendarEventPoint + " | "
+				+ this.getId();
 	}
 
 	/* (non-Javadoc)
@@ -151,6 +156,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 * @param abstractForm of IValueObject type.
 	 * @throws AssignDataException when some problem in assigning the data.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//
@@ -166,13 +172,13 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 		int returnValue = 0;
 		if (obj instanceof CollectionProtocolEvent)
 		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) obj;
-			if (studyCalendarEventPoint.doubleValue() < collectionProtocolEvent
+			final CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) obj;
+			if (this.studyCalendarEventPoint.doubleValue() < collectionProtocolEvent
 					.getStudyCalendarEventPoint().doubleValue())
 			{
 				returnValue = -1;
 			}
-			else if (studyCalendarEventPoint.doubleValue() > collectionProtocolEvent
+			else if (this.studyCalendarEventPoint.doubleValue() > collectionProtocolEvent
 					.getStudyCalendarEventPoint().doubleValue())
 			{
 				returnValue = 1;
@@ -198,7 +204,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public String getCollectionPointLabel()
 	{
-		return collectionPointLabel;
+		return this.collectionPointLabel;
 	}
 
 	/**
@@ -217,7 +223,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection getSpecimenCollectionGroupCollection()
 	{
-		return specimenCollectionGroupCollection;
+		return this.specimenCollectionGroupCollection;
 	}
 
 	/**
@@ -235,7 +241,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection<SpecimenRequirement> getSpecimenRequirementCollection()
 	{
-		return specimenRequirementCollection;
+		return this.specimenRequirementCollection;
 	}
 
 	/**
@@ -288,7 +294,7 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
 
 	/**

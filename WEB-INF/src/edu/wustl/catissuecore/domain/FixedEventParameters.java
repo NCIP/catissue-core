@@ -50,7 +50,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	 */
 	public String getFixationType()
 	{
-		return fixationType;
+		return this.fixationType;
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	 */
 	public Integer getDurationInMinutes()
 	{
-		return durationInMinutes;
+		return this.durationInMinutes;
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	public FixedEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues(abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -105,11 +105,12 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	 * @param abstractForm An FixedEventParametersForm object containing the
 	 * information about the FixedEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
+			final FixedEventParametersForm form = (FixedEventParametersForm) abstractForm;
 
 			this.fixationType = form.getFixationType();
 			if (form.getDurationInMinutes() != null
@@ -119,7 +120,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 			}
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

@@ -84,7 +84,7 @@ public class SpecimenArray extends Container
 	 */
 	public Collection getNewSpecimenArrayOrderItemCollection()
 	{
-		return newSpecimenArrayOrderItemCollection;
+		return this.newSpecimenArrayOrderItemCollection;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class SpecimenArray extends Container
 	public SpecimenArray(AbstractActionForm actionForm) throws AssignDataException
 	{
 		super();
-		setAllValues(actionForm);
+		this.setAllValues(actionForm);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class SpecimenArray extends Container
 	 */
 	public User getCreatedBy()
 	{
-		return createdBy;
+		return this.createdBy;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class SpecimenArray extends Container
 	 */
 	public Collection getSpecimenArrayContentCollection()
 	{
-		return specimenArrayContentCollection;
+		return this.specimenArrayContentCollection;
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class SpecimenArray extends Container
 	 */
 	public SpecimenArrayType getSpecimenArrayType()
 	{
-		return specimenArrayType;
+		return this.specimenArrayType;
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class SpecimenArray extends Container
 	 */
 	public Boolean getAvailable()
 	{
-		return available;
+		return this.available;
 	}
 
 	/**
@@ -217,33 +217,34 @@ public class SpecimenArray extends Container
 	 * @param actionForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject actionForm) throws AssignDataException
 	{
 		try
 		{
-			if (SearchUtil.isNullobject(specimenArrayType))
+			if (SearchUtil.isNullobject(this.specimenArrayType))
 			{
-				specimenArrayType = new SpecimenArrayType();
+				this.specimenArrayType = new SpecimenArrayType();
 			}
-			if (SearchUtil.isNullobject(createdBy))
+			if (SearchUtil.isNullobject(this.createdBy))
 			{
-				createdBy = new User();
+				this.createdBy = new User();
 			}
-			if (SearchUtil.isNullobject(locatedAtPosition))
+			if (SearchUtil.isNullobject(this.locatedAtPosition))
 			{
-				locatedAtPosition = new ContainerPosition();
+				this.locatedAtPosition = new ContainerPosition();
 			}
-			if (SearchUtil.isNullobject(locatedAtPosition.parentContainer))
+			if (SearchUtil.isNullobject(this.locatedAtPosition.parentContainer))
 			{
-				locatedAtPosition.parentContainer = new StorageContainer();
+				this.locatedAtPosition.parentContainer = new StorageContainer();
 			}
-			if (SearchUtil.isNullobject(available))
+			if (SearchUtil.isNullobject(this.available))
 			{
-				available = Boolean.TRUE;
+				this.available = Boolean.TRUE;
 			}
 			if (actionForm instanceof SpecimenArrayAliquotForm)
 			{
-				SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;
+				final SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;
 				this.aliqoutMap = form.getSpecimenArrayAliquotMap();
 				this.aliquotCount = Integer.parseInt(form.getAliquotCount());
 				this.id = Long.valueOf(form.getSpecimenArrayId());
@@ -251,8 +252,9 @@ public class SpecimenArray extends Container
 			else
 			{
 				super.setAllValues(actionForm);
-				SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
-				specimenArrayType.setId(Long.valueOf(specimenArrayForm.getSpecimenArrayTypeId()));
+				final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
+				this.specimenArrayType.setId(Long.valueOf(specimenArrayForm
+						.getSpecimenArrayTypeId()));
 
 				if (this.locatedAtPosition == null)
 				{
@@ -263,9 +265,11 @@ public class SpecimenArray extends Container
 					this.locatedAtPosition.parentContainer.setId(Long.valueOf(specimenArrayForm
 							.getStorageContainer()));
 
-					this.locatedAtPosition.positionDimensionOne = Integer.valueOf(specimenArrayForm
+					this.locatedAtPosition.positionDimensionOne
+					= Integer.valueOf(specimenArrayForm
 							.getPositionDimensionOne());
-					this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(specimenArrayForm
+					this.locatedAtPosition.positionDimensionTwo
+					= Integer.valueOf(specimenArrayForm
 							.getPositionDimensionTwo());
 					this.locatedAtPosition.occupiedContainer = this;
 
@@ -275,7 +279,8 @@ public class SpecimenArray extends Container
 					this.locatedAtPosition.parentContainer.setName(specimenArrayForm
 							.getSelectedContainerName());
 					if (specimenArrayForm.getPos1() != null
-							&& !specimenArrayForm.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
+							&& !specimenArrayForm.getPos1().trim()
+							.equals(Constants.DOUBLE_QUOTES)
 							&& specimenArrayForm.getPos2() != null
 							&& !specimenArrayForm.getPos2().trim().equals(""))
 					{
@@ -286,42 +291,48 @@ public class SpecimenArray extends Container
 						this.locatedAtPosition.occupiedContainer = this;
 					}
 				}
-				if (createdBy == null)
+				if (this.createdBy == null)
 				{
-					createdBy = new User();
+					this.createdBy = new User();
 				}
-				createdBy.setId(Long.valueOf(specimenArrayForm.getCreatedBy()));
+				this.createdBy.setId(Long.valueOf(specimenArrayForm.getCreatedBy()));
 				// done in Container class
 				/*
-				capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
-				capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
+				capacity.setOneDimensionCapacity
+				(new Integer(specimenArrayForm.getOneDimensionCapacity()));
+				capacity.setTwoDimensionCapacity
+				(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
 				*/
-				specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
-				//			SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.
+				this.specimenArrayContentCollection = specimenArrayForm
+						.getSpecArrayContentCollection();
+				//	SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.
 				//			getSpecimenArrayGridContentList());
 
 				//Ordering System
 				if (specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
 				{
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final SpecimenArrayBizLogic specimenArrayBizLogic
+					= (SpecimenArrayBizLogic) factory
 							.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
-					NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic
+					final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem
+					= specimenArrayBizLogic
 							.getNewSpecimenArrayOrderItem(Long.valueOf(specimenArrayForm
 									.getNewArrayOrderItemId()));
-					Collection tempColl = new HashSet();
+					final Collection tempColl = new HashSet();
 					tempColl.add(newSpecimenArrayOrderItem);
 					this.newSpecimenArrayOrderItemCollection = tempColl;
 					newSpecimenArrayOrderItem.setSpecimenArray(this);
 				}
 			}
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (NumberFormatException e)
+		catch (final NumberFormatException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -333,7 +344,7 @@ public class SpecimenArray extends Container
 	 */
 	public Map getAliqoutMap()
 	{
-		return aliqoutMap;
+		return this.aliqoutMap;
 	}
 
 	/**
@@ -349,7 +360,7 @@ public class SpecimenArray extends Container
 	 */
 	public int getAliquotCount()
 	{
-		return aliquotCount;
+		return this.aliquotCount;
 	}
 
 	/**
@@ -365,7 +376,7 @@ public class SpecimenArray extends Container
 	 */
 	public boolean isAliquot()
 	{
-		return aliquot;
+		return this.aliquot;
 	}
 
 	/**

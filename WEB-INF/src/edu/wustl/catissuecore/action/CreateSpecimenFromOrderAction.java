@@ -51,15 +51,16 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		HttpSession session = request.getSession();
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session
+		final HttpSession session = request.getSession();
+		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session
 				.getAttribute("REQUEST_DETAILS_FORM");
-		String rowNumber = request.getParameter("rowNumber");
+		final String rowNumber = request.getParameter("rowNumber");
 
-		String beanName = request.getParameter("bean");
+		final String beanName = request.getParameter("bean");
 		// Keys
 
 		String requestedClassKey = "";
@@ -82,15 +83,15 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 			specimenCollGrpIdKey = "RequestDetailsBean:" + rowNumber + "_specimenCollGroupId";
 		}
 
-		Map valuesMap = requestDetailsForm.getValues();
+		final Map valuesMap = requestDetailsForm.getValues();
 		// getting the values
-		String requestedClass = (String) valuesMap.get(requestedClassKey);
-		String requestedType = (String) valuesMap.get(requestedTypeKey);
-		String requestedQty = ((String) valuesMap.get(requestedQtyKey)).toString();
-		String specimenCollGrpId = ((String) valuesMap.get(specimenCollGrpIdKey)).toString();
+		final String requestedClass = (String) valuesMap.get(requestedClassKey);
+		final String requestedType = (String) valuesMap.get(requestedTypeKey);
+		final String requestedQty = ((String) valuesMap.get(requestedQtyKey)).toString();
+		final String specimenCollGrpId = ((String) valuesMap.get(specimenCollGrpIdKey)).toString();
 
 		// New Specimen Form to populate.
-		NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
+		final NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
 		// Setting the values in CreateSpecimenForm
 		newSpecimenForm.setSpecimenCollectionGroupId(specimenCollGrpId);
 
@@ -103,10 +104,10 @@ public class CreateSpecimenFromOrderAction extends BaseAction
 
 		if (specimenCollGrpId != null)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-			String scgName = bizLogic.retriveSCGNameFromSCGId(specimenCollGrpId);
+			final String scgName = bizLogic.retriveSCGNameFromSCGId(specimenCollGrpId);
 			newSpecimenForm.setSpecimenCollectionGroupName(scgName);
 		}
 		return mapping.findForward("pathological");

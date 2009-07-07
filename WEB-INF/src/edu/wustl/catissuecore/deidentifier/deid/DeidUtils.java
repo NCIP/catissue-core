@@ -14,17 +14,19 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class provides various utility methods which helps for the
+ * This class provides various utility methods which helps for the.
  * deidentification process
  * @author vijay_pande
  */
 public class DeidUtils
 {
-
+	/**
+	 * logger.
+	 */
 	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
 
 	/**
-	 * This mathod takes the identified report, its participant and converts all
+	 * This mathod takes the identified report, its participant and converts all.
 	 * the information into an appropriate xml document
 	 * @param participant
 	 *            participant
@@ -56,13 +58,15 @@ public class DeidUtils
 			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(
 					CaTIESConstants.PARTICIPANT_NAME, participant.getLastName() + ","
-							+ participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
+							+ participant.getFirstName()
+							, CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
 
 			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
 			// iterate over participant medical identifier collection
-			for (ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
+			for (ParticipantMedicalIdentifier participantMedicalIdentifier
+					: medicalIdentifierCollection)
 			{
 				mrn += " ";
 				mrn += participantMedicalIdentifier.getMedicalRecordNumber();
@@ -75,7 +79,8 @@ public class DeidUtils
 			Element reportTextElement = new Element(CaTIESConstants.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);
 			sprText += "\n||-"
-					+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
+					+ DateFormat.getDateTimeInstance()
+					.format(ispr.getCollectionDateTime()) + "-||";
 			CDATA reportCDATA = new CDATA(sprText);
 			reportTextElement.addContent(reportCDATA);
 
@@ -96,7 +101,7 @@ public class DeidUtils
 	}
 
 	/**
-	 * This method converts the raw input information about participant into XML
+	 * This method converts the raw input information about participant into XML.
 	 * format
 	 * @param variable
 	 *            participant
@@ -134,7 +139,7 @@ public class DeidUtils
 	}
 
 	/**
-	 * This method converts the raw header values into appropriate XML element
+	 * This method converts the raw header values into appropriate XML element.
 	 * @param variable
 	 *            Report Header
 	 * @param value
@@ -168,7 +173,7 @@ public class DeidUtils
 	}
 
 	/**
-	 * This method removes all the illegal XML characters from the input text
+	 * This method removes all the illegal XML characters from the input text.
 	 * @param sprText
 	 *            synthesized text
 	 * @return text without ellegal XML characters

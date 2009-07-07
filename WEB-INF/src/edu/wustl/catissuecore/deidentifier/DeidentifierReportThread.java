@@ -18,14 +18,25 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeidentifierReportThread extends Thread
 {
-
+	/**
+	 * looger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DeidentifierReportThread.class);
+	/**
+	 * obj.
+	 */
 	public static final Object obj = new Object();
+	/**
+	 * identifiedReport.
+	 */
 	private IdentifiedSurgicalPathologyReport identifiedReport;
+	/**
+	 * deidentifier.
+	 */
 	private AbstractDeidentifier deidentifier;
 
 	/**
-	 * constructor for the DeidReportThread thread
+	 * constructor for the DeidReportThread thread.
 	 * @param deidentifier : deidentifier
 	 * @param ispr
 	 *            identified Surgical Pathology Report
@@ -83,7 +94,7 @@ public class DeidentifierReportThread extends Thread
 	}
 
 	/**
-	 * Method to save deidentified report and to update status of identified
+	 * Method to save deidentified report and to update status of identified.
 	 * report
 	 * @param deidentifiedReport
 	 *            deidentified report to be saved

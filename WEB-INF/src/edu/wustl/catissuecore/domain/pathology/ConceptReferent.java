@@ -24,6 +24,11 @@ public class ConceptReferent extends AbstractDomainObject
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = 6316219407901502236L;
+
+	/**
 	 * End offset of the concept in the report.
 	 */
 	protected Long endOffset;
@@ -65,7 +70,7 @@ public class ConceptReferent extends AbstractDomainObject
 	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public ConceptReferent()
 	{
@@ -80,7 +85,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public Concept getConcept()
 	{
-		return concept;
+		return this.concept;
 	}
 
 	/**
@@ -100,7 +105,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public ConceptReferentClassification getConceptReferentClassification()
 	{
-		return conceptReferentClassification;
+		return this.conceptReferentClassification;
 	}
 
 	/**
@@ -121,7 +126,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deIdentifiedSurgicalPathologyReport;
+		return this.deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
@@ -140,7 +145,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public Long getEndOffset()
 	{
-		return endOffset;
+		return this.endOffset;
 	}
 
 	/**
@@ -159,15 +164,17 @@ public class ConceptReferent extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_CONCEPT_REFERENT_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id
 	 *            sets system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -179,7 +186,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public Boolean getIsModifier()
 	{
-		return isModifier;
+		return this.isModifier;
 	}
 
 	/**
@@ -197,7 +204,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public Boolean getIsNegated()
 	{
-		return isNegated;
+		return this.isNegated;
 	}
 
 	/**
@@ -215,7 +222,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public Long getStartOffset()
 	{
-		return startOffset;
+		return this.startOffset;
 	}
 
 	/**
@@ -226,10 +233,12 @@ public class ConceptReferent extends AbstractDomainObject
 	{
 		this.startOffset = startOffset;
 	}
+
 	/**
 	 * @param abstractForm : abstractForm
 	 * @throws AssignDataException : AssignDataException
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub

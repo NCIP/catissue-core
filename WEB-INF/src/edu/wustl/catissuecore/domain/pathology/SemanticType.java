@@ -23,12 +23,17 @@ public class SemanticType extends AbstractDomainObject
 {
 
 	/**
-	 * identifier
+	 *
+	 */
+	private static final long serialVersionUID = 8850664646682528327L;
+
+	/**
+	 * identifier.
 	 */
 	protected Long id;
 
 	/**
-	 * label
+	 * label.
 	 */
 	protected String label;
 
@@ -39,33 +44,35 @@ public class SemanticType extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_SEMANTIC_TYPE_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
-	 * Set identifier of the sematic type
+	 * Set identifier of the sematic type.
 	 * @param id
 	 *            sets identifier
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
 	/**
-	 * Returns label of the sematic type
+	 * Returns label of the sematic type.
 	 * @return label label of the sematic type
 	 * @hibernate.property type="string" length="500" column="LABEL"
 	 */
 	public String getLabel()
 	{
-		return label;
+		return this.label;
 	}
 
 	/**
-	 * Set label of the sematic type
+	 * Set label of the sematic type.
 	 * @param label
 	 *            sets label
 	 */
@@ -75,7 +82,7 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * Default Constructor of the class
+	 * Default Constructor of the class.
 	 */
 	public SemanticType()
 	{
@@ -83,12 +90,14 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * Method to populate abstractForm from domain Object (non-Javadoc)
+	 * Method to populate abstractForm from domain Object (non-Javadoc).
 	 * @throws AssignDataException : AssignDataException
-	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 * @see edu.wustl.common.domain.AbstractDomainObject
+	 * #setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * @param abstractForm
 	 *            abstract form
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 

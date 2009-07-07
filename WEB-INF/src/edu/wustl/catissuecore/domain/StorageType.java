@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -74,7 +75,7 @@ public class StorageType extends ContainerType
 	public StorageType(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
 		super();
-		setAllValues((IValueObject) abstractActionForm);
+		this.setAllValues(abstractActionForm);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class StorageType extends ContainerType
 	 */
 	public Double getDefaultTempratureInCentigrade()
 	{
-		return defaultTempratureInCentigrade;
+		return this.defaultTempratureInCentigrade;
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class StorageType extends ContainerType
 	 */
 	public Collection getHoldsSpecimenClassCollection()
 	{
-		return holdsSpecimenClassCollection;
+		return this.holdsSpecimenClassCollection;
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class StorageType extends ContainerType
 	 */
 	public Collection getHoldsStorageTypeCollection()
 	{
-		return holdsStorageTypeCollection;
+		return this.holdsStorageTypeCollection;
 	}
 
 	/**
@@ -148,7 +149,7 @@ public class StorageType extends ContainerType
 	 */
 	public Collection getHoldsSpecimenArrayTypeCollection()
 	{
-		return holdsSpecimenArrayTypeCollection;
+		return this.holdsSpecimenArrayTypeCollection;
 	}
 
 	/**
@@ -168,6 +169,7 @@ public class StorageType extends ContainerType
 	 * @throws AssignDataException AssignDataException.
 	 * @param abstractForm of IValueObject type.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
@@ -187,62 +189,63 @@ public class StorageType extends ContainerType
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
 
-			if (SearchUtil.isNullobject(capacity))
+			if (SearchUtil.isNullobject(this.capacity))
 			{
-				capacity = new Capacity();
+				this.capacity = new Capacity();
 			}
 
-			capacity.setOneDimensionCapacity(Integer.valueOf(storageTypeForm
+			this.capacity.setOneDimensionCapacity(Integer.valueOf(storageTypeForm
 					.getOneDimensionCapacity()));
-			capacity.setTwoDimensionCapacity(Integer.valueOf(storageTypeForm
+			this.capacity.setTwoDimensionCapacity(Integer.valueOf(storageTypeForm
 					.getTwoDimensionCapacity()));
 
 			//holdsStorageTypeCollection.clear();
-			holdsStorageTypeCollection = new HashSet();
-			long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
+			this.holdsStorageTypeCollection = new HashSet();
+			final long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
-				for (int i = 0; i < storageTypeArr.length; i++)
+				for (final long element : storageTypeArr)
 				{
-					logger.debug("type Id :" + storageTypeArr[i]);
-					if (storageTypeArr[i] != -1)
+					logger.debug("type Id :" + element);
+					if (element != -1)
 					{
-						StorageType storageType = new StorageType();
-						storageType.setId(Long.valueOf(storageTypeArr[i]));
-						holdsStorageTypeCollection.add(storageType);
+						final StorageType storageType = new StorageType();
+						storageType.setId(Long.valueOf(element));
+						this.holdsStorageTypeCollection.add(storageType);
 					}
 				}
 			}
 
 			//holdsSpecimenClassCollection.clear();
-			holdsSpecimenClassCollection = new HashSet();
+			this.holdsSpecimenClassCollection = new HashSet();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 			{
-				String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
+				final String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
 				if (specimenClassTypeArr != null)
 				{
 
-					for (int i = 0; i < specimenClassTypeArr.length; i++)
+					for (final String element : specimenClassTypeArr)
 					{
-						logger.debug("type Id :" + specimenClassTypeArr[i]);
-						if (specimenClassTypeArr[i].equals("-1"))
+						logger.debug("type Id :" + element);
+						if (element.equals("-1"))
 						{
-							holdsSpecimenClassCollection.addAll(AppUtility.getSpecimenClassTypes());
+							this.holdsSpecimenClassCollection.addAll(AppUtility
+									.getSpecimenClassTypes());
 							break;
 						}
 						else
 						{
-							holdsSpecimenClassCollection.add(specimenClassTypeArr[i]);
+							this.holdsSpecimenClassCollection.add(element);
 						}
 					}
 				}
 			}
 			//			holdsSpArrayTypeCollection.clear();
-			holdsSpecimenArrayTypeCollection = new HashSet();
-			populateHoldsSpecimenArrayTypeCollection(storageTypeForm);
+			this.holdsSpecimenArrayTypeCollection = new HashSet();
+			this.populateHoldsSpecimenArrayTypeCollection(storageTypeForm);
 			this.activityStatus = "Active";
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -255,17 +258,17 @@ public class StorageType extends ContainerType
 	{
 		if (storageTypeForm.getSpecimenOrArrayType().equals("SpecimenArray"))
 		{
-			long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
+			final long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
 			if (specimenArrayTypeArr != null)
 			{
-				for (int i = 0; i < specimenArrayTypeArr.length; i++)
+				for (final long element : specimenArrayTypeArr)
 				{
-					logger.debug("specimen array type Id :" + specimenArrayTypeArr[i]);
-					if (specimenArrayTypeArr[i] != -1)
+					logger.debug("specimen array type Id :" + element);
+					if (element != -1)
 					{
-						SpecimenArrayType spArrayType = new SpecimenArrayType();
-						spArrayType.setId(Long.valueOf(specimenArrayTypeArr[i]));
-						holdsSpecimenArrayTypeCollection.add(spArrayType);
+						final SpecimenArrayType spArrayType = new SpecimenArrayType();
+						spArrayType.setId(Long.valueOf(element));
+						this.holdsSpecimenArrayTypeCollection.add(spArrayType);
 					}
 				}
 			}
@@ -276,12 +279,13 @@ public class StorageType extends ContainerType
 	 * @param object Object.
 	 * @return Boolean.
 	 */
+	@Override
 	public boolean equals(Object object)
 	{
 		boolean equals = false;
 		if ((object != null) && object instanceof StorageType)
 		{
-			StorageType storageType = (StorageType) object;
+			final StorageType storageType = (StorageType) object;
 			if (this.getId().longValue() == storageType.getId().longValue())
 			{
 				equals = true;
@@ -293,6 +297,7 @@ public class StorageType extends ContainerType
 	/**
 	 * @return integer.
 	 */
+	@Override
 	public int hashCode()
 	{
 		int hashCode = super.hashCode();

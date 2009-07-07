@@ -26,6 +26,7 @@ import edu.wustl.common.tree.TreeNodeImpl;
  */
 public class ShowChildNodes extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -40,20 +41,20 @@ public class ShowChildNodes extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		PrintWriter out = response.getWriter();
-		Vector < StorageContainerTreeNode > containerNodeVector =
-			new Vector < StorageContainerTreeNode >();
+		final PrintWriter out = response.getWriter();
+		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
-		String nodeName = request.getParameter(Constants.NODE_NAME);
-		Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
-		String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
-		StorageContainerBizLogic sc = new StorageContainerBizLogic();
+		final String nodeName = request.getParameter(Constants.NODE_NAME);
+		final Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
+		final String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
+		final StorageContainerBizLogic sc = new StorageContainerBizLogic();
 		containerNodeVector = sc.getStorageContainers(identifier, nodeName, parentId);
 		response.setContentType("text/xml");
-		xmlData = makeXMLData(containerNodeVector, xmlData);
+		xmlData = this.makeXMLData(containerNodeVector, xmlData);
 		out.print(xmlData.toString());
 		return null;
 	}
@@ -67,13 +68,13 @@ public class ShowChildNodes extends BaseAction
 	 *            node that is to be transfered to jsp.
 	 * @return xmlData
 	 */
-	private StringBuffer makeXMLData(Vector < StorageContainerTreeNode > childVector,
+	private StringBuffer makeXMLData(Vector<StorageContainerTreeNode> childVector,
 			StringBuffer xmlData)
 	{
-		Iterator < StorageContainerTreeNode > childItr = childVector.iterator();
+		final Iterator<StorageContainerTreeNode> childItr = childVector.iterator();
 		while (childItr.hasNext())
 		{
-			StorageContainerTreeNode childNode = childItr.next();
+			final StorageContainerTreeNode childNode = childItr.next();
 			xmlData.append(childNode.getIdentifier());
 			xmlData.append(",");
 			xmlData.append(((TreeNodeImpl) childNode.getParentNode()).getIdentifier());

@@ -18,29 +18,34 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * Represents concept referent classification
+ * Represents concept referent classification.
  * @hibernate.class table="CATISSUE_CONCEPT_CLASSIFICATN"
  */
 public class ConceptReferentClassification extends AbstractDomainObject
 {
 
 	/**
-	 * System generated unique id
+	 *
+	 */
+	private static final long serialVersionUID = 3076789402027760090L;
+
+	/**
+	 * System generated unique id.
 	 */
 	protected Long id;
 
 	/**
-	 * name od the classification
+	 * name od the classification.
 	 */
 	protected String name;
 
 	/**
-	 * collection of concept referent
+	 * collection of concept referent.
 	 */
 	protected Collection conceptReferentCollection = new HashSet();
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public ConceptReferentClassification()
 	{
@@ -55,7 +60,7 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	 */
 	public Collection getConceptReferentCollection()
 	{
-		return conceptReferentCollection;
+		return this.conceptReferentCollection;
 	}
 
 	/**
@@ -71,14 +76,16 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_CLASSFCTN_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id sets system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -90,7 +97,7 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -100,10 +107,12 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	{
 		this.name = name;
 	}
+
 	/**
 	 * @param abstractForm : abstractForm
 	 * @throws AssignDataException : AssignDataException
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub

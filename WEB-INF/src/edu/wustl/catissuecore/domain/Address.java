@@ -73,14 +73,16 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ"
 	 * @return a unique id assigned to the address.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier Unique identifier to be assigned to the address.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -93,7 +95,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getStreet()
 	{
-		return street;
+		return this.street;
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getCity()
 	{
-		return city;
+		return this.city;
 	}
 
 	/**
@@ -131,7 +133,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getState()
 	{
-		return state;
+		return this.state;
 	}
 
 	/**
@@ -150,7 +152,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getCountry()
 	{
-		return country;
+		return this.country;
 	}
 
 	/**
@@ -169,7 +171,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getZipCode()
 	{
-		return zipCode;
+		return this.zipCode;
 	}
 
 	/**
@@ -188,7 +190,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getPhoneNumber()
 	{
-		return phoneNumber;
+		return this.phoneNumber;
 	}
 
 	/**
@@ -207,7 +209,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 */
 	public String getFaxNumber()
 	{
-		return faxNumber;
+		return this.faxNumber;
 	}
 
 	/**
@@ -227,6 +229,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	 * Set all values.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		//

@@ -29,6 +29,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  */
 public class MultipleSpecimenFlexInitAction extends SecureAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -44,11 +45,12 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		String mode = Constants.ADD;
 		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
@@ -67,8 +69,8 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			showParentSelection = "true";
 
 		}
-		String numberOfSpecimens = getNumberOfSpecimens(request);
-		String parentName = getParentName(request, parentType);
+		final String numberOfSpecimens = this.getNumberOfSpecimens(request);
+		final String parentName = this.getParentName(request, parentType);
 
 		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 		{
@@ -78,11 +80,11 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		{
 			showBarcode = "false";
 		}
-		setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,
+		this.setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,
 				showParentSelection, showLabel, showBarcode, CommonServiceLocator.getInstance()
 						.getDatePattern());
 
-		String pageOf = (String) request.getParameter("pageOf");
+		final String pageOf = request.getParameter("pageOf");
 		if (pageOf != null)
 		{
 			request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -95,6 +97,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 
 		return mapping.findForward("success");
 	}
+
 	/**
 	 *
 	 * @param request : request
@@ -122,6 +125,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
 
 	}
+
 	/**
 	 *
 	 * @param request : request
@@ -130,13 +134,13 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 */
 	private String getParentName(HttpServletRequest request, String parentType)
 	{
-		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+		final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null)
 		{
 			if (Constants.NEW_SPECIMEN_TYPE.equals(parentType))
 			{
 				String specimenCollectionGroupName = "";
-				Object obj = forwardToHashMap.get("specimenCollectionGroupName");
+				final Object obj = forwardToHashMap.get("specimenCollectionGroupName");
 				if (obj != null)
 				{
 					specimenCollectionGroupName = (String) obj;
@@ -147,7 +151,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			else if (Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
 			{
 				String parentSpecimenLabel = "";
-				Object obj = forwardToHashMap.get("specimenLabel");
+				final Object obj = forwardToHashMap.get("specimenLabel");
 				if (obj != null)
 				{
 					parentSpecimenLabel = (String) obj;
@@ -158,6 +162,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		return "";
 	}
+
 	/**
 	 *
 	 * @param request : request
@@ -182,18 +187,19 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 
 	protected String getObjectId(AbstractActionForm form)
 	{
-		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if (createSpecimenForm.getParentSpecimenId() != null
 				&& createSpecimenForm.getParentSpecimenId() != "")
 		{
-			Specimen specimen = AppUtility.getSpecimen(createSpecimenForm.getParentSpecimenId());
+			final Specimen specimen = AppUtility.getSpecimen(createSpecimenForm
+					.getParentSpecimenId());
 			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-			CollectionProtocolRegistration cpr = specimenCollectionGroup
+			final CollectionProtocolRegistration cpr = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
 			if (cpr != null)
 			{
-				CollectionProtocol cp = cpr.getCollectionProtocol();
+				final CollectionProtocol cp = cpr.getCollectionProtocol();
 				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
 			}
 		}

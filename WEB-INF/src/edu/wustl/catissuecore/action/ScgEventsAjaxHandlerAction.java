@@ -34,8 +34,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 
 /**
  * @author ashish_gupta
@@ -69,49 +69,48 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String scgId = request.getParameter("scgId");
+		final String scgId = request.getParameter("scgId");
 
 		StringBuffer xmlData = new StringBuffer();
 		if (scgId != null && !scgId.equals(""))
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic =
-				(SpecimenCollectionGroupBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 
-			Object object = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
-					.getName(), new Long(scgId));
+			final Object object = specimenCollectionGroupBizLogic.retrieve(
+					SpecimenCollectionGroup.class.getName(), new Long(scgId));
 			if (object != null)
 			{
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
-				Collection eventsColl = specimenCollectionGroup
+				final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
+				final Collection eventsColl = specimenCollectionGroup
 						.getSpecimenEventParametersCollection();
 				if (eventsColl != null && !eventsColl.isEmpty())
 				{
-					Iterator iter = eventsColl.iterator();
+					final Iterator iter = eventsColl.iterator();
 					while (iter.hasNext())
 					{
-						Object temp = iter.next();
+						final Object temp = iter.next();
 						if (temp instanceof CollectionEventParameters)
 						{
-							collectionEventParameters =
-								(CollectionEventParameters) temp;
+							this.collectionEventParameters = (CollectionEventParameters) temp;
 						}
 						else if (temp instanceof ReceivedEventParameters)
 						{
-							receivedEventParameters = (ReceivedEventParameters) temp;
+							this.receivedEventParameters = (ReceivedEventParameters) temp;
 						}
 
 					}
-					xmlData = makeXMLData(xmlData);
+					xmlData = this.makeXMLData(xmlData);
 				}
 			}
 		}
 		// Writing to response
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		response.setContentType("text/xml");
 		out.write(xmlData.toString());
 
@@ -129,11 +128,11 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("<Events>");
 
 		xmlData.append("<CollectionEvents>");
-		xmlData = appendCollectionEvents(xmlData);
+		xmlData = this.appendCollectionEvents(xmlData);
 		xmlData.append("</CollectionEvents>");
 
 		xmlData.append("<ReceivedEvents>");
-		xmlData = appendReceivedEvents(xmlData);
+		xmlData = this.appendReceivedEvents(xmlData);
 		xmlData.append("</ReceivedEvents>");
 
 		xmlData.append("</Events>");
@@ -148,36 +147,37 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	private StringBuffer appendCollectionEvents(StringBuffer xmlData)
 	{
 		xmlData.append("<CollectorId>");
-		xmlData.append(collectionEventParameters.getUser().getId().toString());
+		xmlData.append(this.collectionEventParameters.getUser().getId().toString());
 		xmlData.append("</CollectorId>");
 
 		xmlData.append("<CollectorName>");
-		xmlData.append(collectionEventParameters.getUser().getLastName() + ","
-				+ collectionEventParameters.getUser().getFirstName());
+		xmlData.append(this.collectionEventParameters.getUser().getLastName() + ","
+				+ this.collectionEventParameters.getUser().getFirstName());
 		xmlData.append("</CollectorName>");
 
 		xmlData.append("<CollectionDate>");
-		xmlData.append(Utility.parseDateToString(collectionEventParameters.getTimestamp(),
-				CommonServiceLocator.getInstance().getDatePattern()));
+		xmlData.append(CommonUtilities.parseDateToString(this.collectionEventParameters
+				.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern()));
 		xmlData.append("</CollectionDate>");
 
-		Calendar calender = Calendar.getInstance();
-		calender.setTime(collectionEventParameters.getTimestamp());
+		final Calendar calender = Calendar.getInstance();
+		calender.setTime(this.collectionEventParameters.getTimestamp());
 
 		xmlData.append("<CollectionTimeHours>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));
+		xmlData.append(CommonUtilities.toString(Integer
+				.toString(calender.get(Calendar.HOUR_OF_DAY))));
 		xmlData.append("</CollectionTimeHours>");
 
 		xmlData.append("<CollectionTimeMinutes>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+		xmlData.append(CommonUtilities.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 		xmlData.append("</CollectionTimeMinutes>");
 
 		xmlData.append("<CollectionProcedure>");
-		xmlData.append(collectionEventParameters.getCollectionProcedure());
+		xmlData.append(this.collectionEventParameters.getCollectionProcedure());
 		xmlData.append("</CollectionProcedure>");
 
 		xmlData.append("<CollectionContainer>");
-		xmlData.append(collectionEventParameters.getContainer());
+		xmlData.append(this.collectionEventParameters.getContainer());
 		xmlData.append("</CollectionContainer>");
 
 		xmlData.append("<CollectionComments>");
@@ -185,7 +185,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		 * Bug Id: 4134 Patch ID: 4134_2 Description: Added
 		 * AppUtility.toString()
 		 */
-		xmlData.append(Utility.toString(collectionEventParameters.getComment()));
+		xmlData.append(CommonUtilities.toString(this.collectionEventParameters.getComment()));
 		xmlData.append("</CollectionComments>");
 
 		return xmlData;
@@ -198,32 +198,33 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 	private StringBuffer appendReceivedEvents(StringBuffer xmlData)
 	{
 		xmlData.append("<ReceiverId>");
-		xmlData.append(receivedEventParameters.getUser().getId().toString());
+		xmlData.append(this.receivedEventParameters.getUser().getId().toString());
 		xmlData.append("</ReceiverId>");
 
 		xmlData.append("<ReceiverName>");
-		xmlData.append(receivedEventParameters.getUser().getLastName() + ","
-				+ receivedEventParameters.getUser().getFirstName());
+		xmlData.append(this.receivedEventParameters.getUser().getLastName() + ","
+				+ this.receivedEventParameters.getUser().getFirstName());
 		xmlData.append("</ReceiverName>");
 
 		xmlData.append("<ReceivedDate>");
-		xmlData.append(Utility.parseDateToString(receivedEventParameters.getTimestamp(),
-				CommonServiceLocator.getInstance().getDatePattern()));
+		xmlData.append(CommonUtilities.parseDateToString(this.receivedEventParameters
+				.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern()));
 		xmlData.append("</ReceivedDate>");
 
-		Calendar calender = Calendar.getInstance();
-		calender.setTime(receivedEventParameters.getTimestamp());
+		final Calendar calender = Calendar.getInstance();
+		calender.setTime(this.receivedEventParameters.getTimestamp());
 
 		xmlData.append("<ReceivedTimeHours>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY))));
+		xmlData.append(CommonUtilities.toString(Integer
+				.toString(calender.get(Calendar.HOUR_OF_DAY))));
 		xmlData.append("</ReceivedTimeHours>");
 
 		xmlData.append("<ReceivedTimeMinutes>");
-		xmlData.append(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+		xmlData.append(CommonUtilities.toString(Integer.toString(calender.get(Calendar.MINUTE))));
 		xmlData.append("</ReceivedTimeMinutes>");
 
 		xmlData.append("<ReceivedQuality>");
-		xmlData.append(receivedEventParameters.getReceivedQuality());
+		xmlData.append(this.receivedEventParameters.getReceivedQuality());
 		xmlData.append("</ReceivedQuality>");
 
 		xmlData.append("<ReceivedComments>");
@@ -231,7 +232,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		 * Bug Id: 4134 Patch ID: 4134_1 Description: Added
 		 * AppUtility.toString()
 		 */
-		xmlData.append(Utility.toString(receivedEventParameters.getComment()));
+		xmlData.append(CommonUtilities.toString(this.receivedEventParameters.getComment()));
 		xmlData.append("</ReceivedComments>");
 
 		return xmlData;

@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+
 import edu.wustl.catissuecore.actionForm.ContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
@@ -99,14 +100,16 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONTAINER_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param identifier The id to set.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -119,7 +122,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -136,7 +139,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -154,7 +157,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public Capacity getCapacity()
 	{
-		return capacity;
+		return this.capacity;
 	}
 
 	/**
@@ -208,7 +211,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -225,7 +228,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public Boolean isFull()
 	{
-		return full;
+		return this.full;
 	}
 
 	/**
@@ -242,7 +245,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -297,21 +300,22 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 * @param actionForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject actionForm) throws AssignDataException
 	{
-		String nullString = null;
+		final String nullString = null;
 		if (actionForm instanceof ContainerForm)
 		{
-			ContainerForm containerForm = (ContainerForm) actionForm;
+			final ContainerForm containerForm = (ContainerForm) actionForm;
 			if (SearchUtil.isNullobject(this.capacity))
 			{
-				capacity = new Capacity();
+				this.capacity = new Capacity();
 			}
 
-			Validator validator = new Validator();
+			new Validator();
 			this.id = Long.valueOf(containerForm.getId());
 
-			if (validator.isEmpty(containerForm.getBarcode()))
+			if (Validator.isEmpty(containerForm.getBarcode()))
 			{
 				this.barcode = nullString;
 			}
@@ -338,6 +342,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;
@@ -350,7 +355,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public Collection<ContainerPosition> getOccupiedPositions()
 	{
-		return occupiedPositions;
+		return this.occupiedPositions;
 	}
 
 	/**
@@ -367,7 +372,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 */
 	public ContainerPosition getLocatedAtPosition()
 	{
-		return locatedAtPosition;
+		return this.locatedAtPosition;
 	}
 
 	/**

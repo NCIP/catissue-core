@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -52,7 +53,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	public Institution(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -63,9 +64,10 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * @return A unique id assigned to the institution.
 	 * @see #setIdentifier(int)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -73,6 +75,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * @param identifier Unique id to be assigned to the institution.
 	 * @see #getIdentifier()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -87,7 +90,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -108,9 +111,10 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * Set All Values.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
-		InstitutionForm instituteForm = (InstitutionForm) abstractForm;
+		final InstitutionForm instituteForm = (InstitutionForm) abstractForm;
 
 		this.name = instituteForm.getName().trim();
 	}
@@ -119,6 +123,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;

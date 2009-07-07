@@ -32,10 +32,12 @@ import edu.wustl.common.util.logger.Logger;
 
 public class DistributionReportSaveAction extends BaseDistributionReportAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DistributionReportSaveAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(DistributionReportSaveAction.class);
 
 	/**
 	 * Overrides the execute method of Action class. Sets the various fields in
@@ -53,35 +55,37 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 	 *             generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
+		final ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 		// Retrieve the distribution ID
-		Long distributionId = configForm.getDistributionId();
+		final Long distributionId = configForm.getDistributionId();
 
-		Distribution dist = getDistribution(distributionId, getSessionData(request),
+		final Distribution dist = this.getDistribution(distributionId,
+				this.getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
-		SessionDataBean sessionData = getSessionData(request);
-		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
-		List listOfData = getListOfData(dist, configForm, sessionData);
+		final SessionDataBean sessionData = this.getSessionData(request);
+		final DistributionReportForm distributionReportForm = this.getDistributionReportForm(dist);
+		final List listOfData = this.getListOfData(dist, configForm, sessionData);
 
 		// Set the columns for Distribution report
-		String action = configForm.getNextAction();
-		String[] selectedColumns = getSelectedColumns(action, configForm, false);
-		String[] columnNames = getColumnNames(selectedColumns);
+		final String action = configForm.getNextAction();
+		final String[] selectedColumns = this.getSelectedColumns(action, configForm, false);
+		final String[] columnNames = this.getColumnNames(selectedColumns);
 
-		setSelectedMenuRequestAttribute(request);
+		this.setSelectedMenuRequestAttribute(request);
 		// Save the report as a CSV file at the client side
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		if (session != null)
 		{
-			String filePath = CommonServiceLocator.getInstance().getAppHome()
+			final String filePath = CommonServiceLocator.getInstance().getAppHome()
 					+ System.getProperty("file.separator") + "DistributionReport_"
 					+ session.getId() + ".csv";
-			saveReport(distributionReportForm, listOfData, filePath, columnNames);
-			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
-			String contentType = "application/download";
+			this.saveReport(distributionReportForm, listOfData, filePath, columnNames);
+			final String fileName = Constants.DISTRIBUTION_REPORT_NAME;
+			final String contentType = "application/download";
 			SendFile.sendFileToClient(response, filePath, fileName, contentType);
 		}
 		return null;
@@ -103,31 +107,32 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 			String fileName, String[] columnNames) throws IOException
 	{
 		// Save the report data in a CSV file at server side
-		logger.debug("Save action");
-		ExportReport report = new ExportReport(fileName);
-		List distributionData = new ArrayList();
-		addDistributionHeader(distributionData, distributionReportForm, report);
-		String delimiter = Constants.DELIMETER;
-		List distributedItemsColumns = new ArrayList();
-		List columns = new ArrayList();
-		for (int k = 0; k < columnNames.length; k++)
+		this.logger.debug("Save action");
+		final ExportReport report = new ExportReport(fileName);
+		final List distributionData = new ArrayList();
+		this.addDistributionHeader(distributionData, distributionReportForm, report);
+		final String delimiter = Constants.DELIMETER;
+		final List distributedItemsColumns = new ArrayList();
+		final List columns = new ArrayList();
+		for (final String columnName : columnNames)
 		{
-			columns.add(columnNames[k]);
-			logger.debug("Selected columns in save action " + columnNames[k]);
+			columns.add(columnName);
+			this.logger.debug("Selected columns in save action " + columnName);
 		}
 		distributedItemsColumns.add(columns);
 		distributionData.addAll(distributedItemsColumns);
-		List newDataList = new ArrayList();
+		final List newDataList = new ArrayList();
 		newDataList.add(listOfData);
-		Iterator dataListItr = newDataList.iterator();
+		final Iterator dataListItr = newDataList.iterator();
 		while (dataListItr.hasNext())
 		{
-			List rowList = (List) dataListItr.next();
+			final List rowList = (List) dataListItr.next();
 			// Remove extra ID columns from all rows.-Bug 5590
 			for (int cntRow = 0; cntRow < rowList.size(); cntRow++)
 			{
-				List data = (List) rowList.get(cntRow);
-				int extraColumns = data.size() - ((List) distributedItemsColumns.get(0)).size();
+				final List data = (List) rowList.get(cntRow);
+				final int extraColumns = data.size()
+						- ((List) distributedItemsColumns.get(0)).size();
 				// Remove extra ID columns
 				if (extraColumns > 0)
 				{

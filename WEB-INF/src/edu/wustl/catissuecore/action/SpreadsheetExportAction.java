@@ -44,7 +44,7 @@ public class SpreadsheetExportAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpreadsheetExportAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpreadsheetExportAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -61,26 +61,27 @@ public class SpreadsheetExportAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
-		HttpSession session = request.getSession();
-		String path = CommonServiceLocator.getInstance().getAppHome()
+		final AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
+		final HttpSession session = request.getSession();
+		final String path = CommonServiceLocator.getInstance().getAppHome()
 				+ System.getProperty("file.separator");
-		String csvfileName = path + Constants.SEARCH_RESULT;
-		String zipFileName = path + session.getId() + Constants.ZIP_FILE_EXTENTION;
-		String fileName = path + session.getId() + Constants.CSV_FILE_EXTENTION;
-		String isCheckAllAcrossAllChecked = (String) request
+		final String csvfileName = path + Constants.SEARCH_RESULT;
+		final String zipFileName = path + session.getId() + Constants.ZIP_FILE_EXTENTION;
+		final String fileName = path + session.getId() + Constants.CSV_FILE_EXTENTION;
+		final String isCheckAllAcrossAllChecked = request
 				.getParameter(Constants.CHECK_ALL_ACROSS_ALL_PAGES);
 
 		// Extracting map from formbean which gives the serial numbers of
 		// selected rows
-		Map map = searchForm.getValues();
-		Object[] obj = map.keySet().toArray();
+		final Map map = searchForm.getValues();
+		final Object[] obj = map.keySet().toArray();
 
 		// Getting column data & grid data from session
-		List < String > columnList = (List < String >) session
+		List<String> columnList = (List<String>) session
 				.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		/**
 		 * Name: Deepti Description: Query performance issue. Instead of saving
@@ -91,8 +92,8 @@ public class SpreadsheetExportAction extends BaseAction
 		 * results are not stored in session, the sql is fired again to form the
 		 * shopping cart list.
 		 */
-		String pageNo = (String) request.getParameter(Constants.PAGE_NUMBER);
-		String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
+		final String pageNo = request.getParameter(Constants.PAGE_NUMBER);
+		final String recordsPerPageStr = (String) session.getAttribute(Constants.RESULTS_PER_PAGE);
 		if (pageNo != null)
 		{
 			request.setAttribute(Constants.PAGE_NUMBER, pageNo);
@@ -102,41 +103,40 @@ public class SpreadsheetExportAction extends BaseAction
 		if (isCheckAllAcrossAllChecked != null
 				&& isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
 		{
-			Integer totalRecords = (Integer) session.getAttribute(Constants.TOTAL_RESULTS);
+			final Integer totalRecords = (Integer) session.getAttribute(Constants.TOTAL_RESULTS);
 			recordsPerPage = totalRecords;
 			pageNum = 1;
 		}
-		QuerySessionData querySessionData = (QuerySessionData) session
+		final QuerySessionData querySessionData = (QuerySessionData) session
 				.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
-		List dataList1 = AppUtility.getPaginationDataList(request, getSessionData(request),
-				recordsPerPage, pageNum, querySessionData);
-		List < List < String >> dataList = (List < List < String >>) session
+		final List dataList1 = AppUtility.getPaginationDataList(request, this
+				.getSessionData(request), recordsPerPage, pageNum, querySessionData);
+		List<List<String>> dataList = (List<List<String>>) session
 				.getAttribute(Constants.EXPORT_DATA_LIST);
 		if (dataList == null)
-			{
+		{
 			dataList = dataList1;
-			}
+		}
 		// List<String> entityIdsList = (List<String>)
 		// session.getAttribute(Constants.ENTITY_IDS_LIST);
-		Map < Integer , List < String >> entityIdsMap = (Map < Integer , List < String >>) session
+		final Map<Integer, List<String>> entityIdsMap = (Map<Integer, List<String>>) session
 				.getAttribute(Constants.ENTITY_IDS_MAP);
 		// Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed. start
 
-		logger
-				.debug("-------");
-		logger.debug("06-apr-06 : cl size :-" + columnList.size());
-		logger.debug(columnList);
-		logger.debug("--");
-		logger.debug("06-apr-06 : dl size :-" + dataList.size());
-		logger.debug(dataList);
+		this.logger.debug("-------");
+		this.logger.debug("06-apr-06 : cl size :-" + columnList.size());
+		this.logger.debug(columnList);
+		this.logger.debug("--");
+		this.logger.debug("06-apr-06 : dl size :-" + dataList.size());
+		this.logger.debug(dataList);
 
-		List tmpColumnList = new ArrayList();
+		final List tmpColumnList = new ArrayList();
 		int idColCount = 0;
 		// count no. of ID columns
 		for (int cnt = 0; cnt < columnList.size(); cnt++)
 		{
-			String columnName = (String) columnList.get(cnt);
-			logger.debug(columnName + " : " + columnName.length());
+			final String columnName = columnList.get(cnt);
+			this.logger.debug(columnName + " : " + columnName.length());
 			if (columnName.trim().equalsIgnoreCase("ID"))
 			{
 				idColCount++;
@@ -149,11 +149,11 @@ public class SpreadsheetExportAction extends BaseAction
 		}
 
 		// datalist filtration for ID data.
-		List tmpDataList = new ArrayList();
+		final List tmpDataList = new ArrayList();
 		for (int dataListCnt = 0; dataListCnt < dataList.size(); dataListCnt++)
 		{
-			List tmpList = (List) dataList.get(dataListCnt);
-			List tmpNewList = new ArrayList();
+			final List tmpList = dataList.get(dataListCnt);
+			final List tmpNewList = new ArrayList();
 			for (int cnt = 0; cnt < (tmpList.size() - idColCount); cnt++)
 			{
 				tmpNewList.add(tmpList.get(cnt));
@@ -161,57 +161,56 @@ public class SpreadsheetExportAction extends BaseAction
 			tmpDataList.add(tmpNewList);
 		}
 
-		logger.debug("--");
-		logger.debug("tmpcollist :" + tmpColumnList.size());
-		logger.debug(tmpColumnList);
-		logger.debug("--");
-		logger.debug("tmpdatalist :" + tmpDataList.size());
-		logger.debug(tmpDataList);
+		this.logger.debug("--");
+		this.logger.debug("tmpcollist :" + tmpColumnList.size());
+		this.logger.debug(tmpColumnList);
+		this.logger.debug("--");
+		this.logger.debug("tmpdatalist :" + tmpDataList.size());
+		this.logger.debug(tmpDataList);
 
-		logger
-				.debug("---");
+		this.logger.debug("---");
 		columnList = tmpColumnList;
 		dataList = tmpDataList;
 		// Mandar 06-Apr-06 Bugid:1165 : Extra ID columns end
 
-		List < List < String >> exportList = new ArrayList();
+		final List<List<String>> exportList = new ArrayList();
 
 		// Adding first row(column names) to exportData
 		exportList.add(columnList);
-		List < String > idIndexList = new ArrayList < String >();
-		int columnsSize = columnList.size();
+		final List<String> idIndexList = new ArrayList<String>();
+		final int columnsSize = columnList.size();
 		if (isCheckAllAcrossAllChecked != null
 				&& isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
 		{
 			for (int i = 0; i < dataList.size(); i++)
 			{
-				List < String > list = dataList.get(i);
-				List < String > subList = list.subList(0, columnsSize);
+				final List<String> list = dataList.get(i);
+				final List<String> subList = list.subList(0, columnsSize);
 				exportList.add(subList);
 				if (entityIdsMap != null && !entityIdsMap.isEmpty())
 				{
-					List < String > entityIdList = entityIdsMap.get(i);
+					final List<String> entityIdList = entityIdsMap.get(i);
 					idIndexList.addAll(entityIdList);
 				}
 			}
 		}
 		else
 		{
-			for (int i = 0; i < obj.length; i++)
+			for (final Object element : obj)
 			{
-				int indexOf = obj[i].toString().indexOf("_") + 1;
-				int index = Integer.parseInt(obj[i].toString().substring(indexOf));
-				List < String > list = dataList.get(index);
-				List < String > subList = list.subList(0, columnsSize);
+				final int indexOf = element.toString().indexOf("_") + 1;
+				final int index = Integer.parseInt(element.toString().substring(indexOf));
+				final List<String> list = dataList.get(index);
+				final List<String> subList = list.subList(0, columnsSize);
 				if (entityIdsMap != null && !entityIdsMap.isEmpty())
 				{
-					List < String > entityIdList = entityIdsMap.get(index);
+					final List<String> entityIdList = entityIdsMap.get(index);
 					idIndexList.addAll(entityIdList);
 				}
 				exportList.add(subList);
 			}
 		}
-		String delimiter = Constants.DELIMETER;
+		final String delimiter = Constants.DELIMETER;
 		ExportReport report = null;
 		// Exporting the data to the given file & sending it to user
 		if (entityIdsMap != null && !entityIdsMap.isEmpty())

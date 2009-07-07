@@ -31,7 +31,7 @@ public class TreeNodeDataAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
 	/**
 	 * finalDataListVector.
 	 */
@@ -53,32 +53,34 @@ public class TreeNodeDataAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		// Map columnIdsMap = new HashMap();
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		logger.debug("pageOf in treeview........" + pageOf);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		this.logger.debug("pageOf in treeview........" + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
 		String reload = null;
 		String target = Constants.SUCCESS;
 		if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
 		{
-			String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+			final String storageContainerType = request
+					.getParameter(Constants.STORAGE_CONTAINER_TYPE);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
-			String storageContainerID = request
+			final String storageContainerID = request
 					.getParameter(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED, storageContainerID);
-			String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
+			final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 			request.setAttribute(Constants.STORAGE_CONTAINER_POSITION, position);
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 		{
-			HttpSession session = request.getSession();
-			String cdeName = (String) session.getAttribute(Constants.CDE_NAME);
+			final HttpSession session = request.getSession();
+			final String cdeName = (String) session.getAttribute(Constants.CDE_NAME);
 			session.removeAttribute(Constants.CDE_NAME);
 			request.setAttribute(Constants.CDE_NAME, cdeName);
 		}
@@ -86,10 +88,10 @@ public class TreeNodeDataAction extends BaseAction
 		try
 		{
 			reload = request.getParameter(Constants.RELOAD);
-			SessionDataBean sessionData = getSessionData(request);
+			final SessionDataBean sessionData = this.getSessionData(request);
 			if (reload != null && reload.equals("true"))
 			{
-				String treeNodeIDToBeReloaded = request.getParameter(Constants.TREE_NODE_ID);
+				final String treeNodeIDToBeReloaded = request.getParameter(Constants.TREE_NODE_ID);
 				request.setAttribute(Constants.TREE_NODE_ID, treeNodeIDToBeReloaded);
 				request.setAttribute(Constants.RELOAD, reload);
 			}
@@ -99,8 +101,8 @@ public class TreeNodeDataAction extends BaseAction
 			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();
-				CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
-				String cdeName = request.getParameter(Constants.CDE_NAME);
+				final CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
+				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
 			}
 			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
@@ -108,26 +110,26 @@ public class TreeNodeDataAction extends BaseAction
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))
 			{
-				StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+				final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 				dataList = scBizLogic.getSiteWithDummyContainer(sessionData.getUserId());
 			}
 			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 			{
-				StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+				final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 				dataList = scBizLogic.getSiteWithDummyContainer(sessionData.getUserId());
 				target = Constants.PAGE_OF_STORAGE_CONTAINER;
 			}
 			if (dataList != null)
 			{
-				finalDataListVector = new Vector();
+				this.finalDataListVector = new Vector();
 			}
-			createTreeNodeVector(dataList, finalDataListVector);
-			request.setAttribute(Constants.TREE_DATA, finalDataListVector);
+			this.createTreeNodeVector(dataList, this.finalDataListVector);
+			request.setAttribute(Constants.TREE_DATA, this.finalDataListVector);
 
 		}
-		catch (Exception exp)
+		catch (final Exception exp)
 		{
-			logger.error(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 		}
 		return mapping.findForward(target);
 	}
@@ -142,17 +144,17 @@ public class TreeNodeDataAction extends BaseAction
 	{
 		if (datalist != null && datalist.size() != 0)
 		{
-			Iterator itr = datalist.iterator();
+			final Iterator itr = datalist.iterator();
 			while (itr.hasNext())
 			{
-				StorageContainerTreeNode node = (StorageContainerTreeNode) itr.next();
-				boolean contains = finalDataListVector.contains(node.getValue());
+				final StorageContainerTreeNode node = (StorageContainerTreeNode) itr.next();
+				final boolean contains = finalDataListVector.contains(node.getValue());
 				if (contains == false)
 				{
 					finalDataListVector.add(node);
 				}
-				List childNodeVector = node.getChildNodes();
-				createTreeNodeVector(childNodeVector, finalDataListVector);
+				final List childNodeVector = node.getChildNodes();
+				this.createTreeNodeVector(childNodeVector, finalDataListVector);
 			}
 			return;
 		}

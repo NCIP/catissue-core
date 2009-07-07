@@ -45,23 +45,23 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		HttpSession session = request.getSession();
-		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+		final HttpSession session = request.getSession();
+		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-		Map collectionProtocolEventMap = (Map) session
+		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
-		Vector < QueryTreeNodeData > treeData = new Vector < QueryTreeNodeData >();
+		final Vector<QueryTreeNodeData> treeData = new Vector<QueryTreeNodeData>();
 		String cpName = null;
 		String displayName = null;
 		String parentIdentifier = null;
 		String identifier = null;
 		String nodeId = null;
-		String specimenDisplayName = null;
 		if (collectionProtocolBean != null)
 		{
 
@@ -69,23 +69,24 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			displayName = collectionProtocolBean.getShortTitle();
 			parentIdentifier = Constants.ZERO_ID;
 			identifier = collectionProtocolBean.getTitle();
-			addNode(cpName, displayName, parentIdentifier, identifier, "", treeData);
+			this.addNode(cpName, displayName, parentIdentifier, identifier, "", treeData);
 
 		}
 
 		if (collectionProtocolEventMap != null && collectionProtocolBean != null)
 		{
 			Integer iEventCount = new Integer(1);
-			Collection collectionProtocolEventBeanCollection = (Collection) collectionProtocolEventMap
+			final Collection collectionProtocolEventBeanCollection = collectionProtocolEventMap
 					.values();
-			Iterator collectionProtocolEventBeanCollectionItr = collectionProtocolEventBeanCollection
+			final Iterator collectionProtocolEventBeanCollectionItr
+			= collectionProtocolEventBeanCollection
 					.iterator();
 			while (collectionProtocolEventBeanCollectionItr.hasNext())
 			{
-				CollectionProtocolEventBean collectionProtocolEventBean =
-					(CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
+				final CollectionProtocolEventBean collectionProtocolEventBean
+				= (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 						.next();
-				String objectName = collectionProtocolEventBean.getCollectionPointLabel()
+				final String objectName = collectionProtocolEventBean.getCollectionPointLabel()
 						+ Constants.CLASS;
 				// if(operation!=null &&
 				// operation.equals(Constants.VIEW_SUMMARY))
@@ -96,33 +97,34 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 						+ " " + collectionProtocolEventBean.getCollectionPointLabel();
 				parentIdentifier = collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
-				addNode(objectName, displayName, parentIdentifier, identifier, cpName, treeData);
+				this.addNode(objectName, displayName, parentIdentifier, identifier, cpName,
+						treeData);
 				nodeId = objectName + "_" + identifier;
-				Map SpecimenRequirementMap = collectionProtocolEventBean
+				final Map SpecimenRequirementMap = collectionProtocolEventBean
 						.getSpecimenRequirementbeanMap();
 
 				if (SpecimenRequirementMap != null)
 				{
-					Collection specimenRequirementBeanCollection =
-						(Collection) SpecimenRequirementMap
+					final Collection specimenRequirementBeanCollection = SpecimenRequirementMap
 							.values();
-					Iterator specimenRequirementBeanCollectionItr =
-						specimenRequirementBeanCollection
+					final Iterator specimenRequirementBeanCollectionItr
+					= specimenRequirementBeanCollection
 							.iterator();
 					while (specimenRequirementBeanCollectionItr.hasNext())
 					{
-						SpecimenRequirementBean specimenRequirementBean =
-							(SpecimenRequirementBean) specimenRequirementBeanCollectionItr
+						final SpecimenRequirementBean specimenRequirementBean
+						= (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
 								.next();
-						specimenDisplayName = createSpecimenNode(objectName, identifier,
-								specimenRequirementBean, treeData, operation);
+						this.createSpecimenNode(objectName, identifier
+								, specimenRequirementBean,
+								treeData, operation);
 					}
 				}
 				iEventCount++;
 			}
 		}
 
-		String clickedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		final String clickedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		request.setAttribute(Constants.OPERATION, operation);
 		request.setAttribute(Constants.TREE_DATA, treeData);
 		request.getSession().setAttribute(Constants.TREE_NODE_ID, nodeId);
@@ -144,53 +146,54 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	private String createSpecimenNode(String parentObjectname, String parentIdentifier,
 			SpecimenRequirementBean specimenRequirementBean, Vector treeData, String operation)
 	{
-		String objectName = Constants.NEW_SPECIMEN;
+		final String objectName = Constants.NEW_SPECIMEN;
 		// if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
 		// {
 		// objectName=Constants.VIEW_SUMMARY;
 		// }
-		String identifier = specimenRequirementBean.getUniqueIdentifier();
+		final String identifier = specimenRequirementBean.getUniqueIdentifier();
 
 		String displayName = Constants.SPECIMEN + "_"
 				+ specimenRequirementBean.getUniqueIdentifier();
 
-		addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname, treeData);
+		this.addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname,
+				treeData);
 
 		if (specimenRequirementBean.getAliquotSpecimenCollection() != null
 				&& !specimenRequirementBean.getAliquotSpecimenCollection().isEmpty())
 		{
-			Map aliquotsCollection = specimenRequirementBean.getAliquotSpecimenCollection();
-			Iterator aliquotsCollectionItr = aliquotsCollection.values().iterator();
+			final Map aliquotsCollection = specimenRequirementBean.getAliquotSpecimenCollection();
+			final Iterator aliquotsCollectionItr = aliquotsCollection.values().iterator();
 			parentIdentifier = identifier;
 			parentObjectname = objectName;
 			while (aliquotsCollectionItr.hasNext())
 			{
-				SpecimenRequirementBean specimenRequirementBean1 =
-					(SpecimenRequirementBean) aliquotsCollectionItr
+				final SpecimenRequirementBean specimenRequirementBean1
+				= (SpecimenRequirementBean) aliquotsCollectionItr
 						.next();
 
 				displayName = Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
-				createSpecimenNode(parentObjectname, parentIdentifier, specimenRequirementBean1,
-						treeData, operation);
+				this.createSpecimenNode(parentObjectname, parentIdentifier,
+						specimenRequirementBean1, treeData, operation);
 			}
 		}
 		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
 				&& !specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
 		{
-			Map deriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
-			Iterator deriveSpecimenCollectionItr = deriveSpecimenMap.values().iterator();
+			final Map deriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
+			final Iterator deriveSpecimenCollectionItr = deriveSpecimenMap.values().iterator();
 			parentIdentifier = identifier;
 			parentObjectname = objectName;
 			while (deriveSpecimenCollectionItr.hasNext())
 			{
-				SpecimenRequirementBean specimenRequirementBean1 =
-					(SpecimenRequirementBean) deriveSpecimenCollectionItr
+				final SpecimenRequirementBean specimenRequirementBean1
+				= (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
 				displayName = Constants.DERIVED_SPECIMEN
 						+ specimenRequirementBean1.getUniqueIdentifier();
-				createSpecimenNode(parentObjectname, parentIdentifier, specimenRequirementBean1,
-						treeData, operation);
+				this.createSpecimenNode(parentObjectname, parentIdentifier,
+						specimenRequirementBean1, treeData, operation);
 
 			}
 		}
@@ -208,9 +211,9 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	 * @param treeData : treeData
 	 */
 	private void addNode(String objectName, String displayName, String parentIdentifier,
-			String identifier, String parentObjectname, Vector < QueryTreeNodeData > treeData)
+			String identifier, String parentObjectname, Vector<QueryTreeNodeData> treeData)
 	{
-		QueryTreeNodeData treeNode = new QueryTreeNodeData();
+		final QueryTreeNodeData treeNode = new QueryTreeNodeData();
 		treeNode.setParentIdentifier(parentIdentifier);
 		treeNode.setIdentifier(identifier);
 		treeNode.setObjectName(objectName);

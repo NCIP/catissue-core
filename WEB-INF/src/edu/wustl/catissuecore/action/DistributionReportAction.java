@@ -42,10 +42,11 @@ public class DistributionReportAction extends BaseDistributionReportAction
 	 *             generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
+		final ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 		String forward = "Success";
 
 		// Retrieve the distribution ID which is set in CommonAddEdit Action
@@ -60,7 +61,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		// this condition executes when user distributes the order
 		if (request.getAttribute("forwardToHashMap") != null)
 		{
-			HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 			distributionId = (Long) forwardToHashMap.get("distributionId");
 		}
 		/*
@@ -87,30 +88,31 @@ public class DistributionReportAction extends BaseDistributionReportAction
 			configForm.setDistributionId(distributionId);
 		}
 
-		Distribution dist = getDistribution(distributionId, getSessionData(request),
+		final Distribution dist = this.getDistribution(distributionId,
+				this.getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 
 		// Retrieve the distributed items data
-		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
-		SessionDataBean sessionData = getSessionData(request);
-		List listOfData = getListOfData(dist, configForm, sessionData);
+		final DistributionReportForm distributionReportForm = this.getDistributionReportForm(dist);
+		final SessionDataBean sessionData = this.getSessionData(request);
+		final List listOfData = this.getListOfData(dist, configForm, sessionData);
 		if (listOfData.isEmpty())
 		{
 			forward = Constants.PAGE_OF_DISTRIBUTION_ARRAY;
 		}
 
 		// Set the columns for Distribution report
-		String action = configForm.getNextAction();
-		String[] selectedColumns = getSelectedColumns(action, configForm, false);
-		String[] columnNames = getColumnNames(selectedColumns);
+		final String action = configForm.getNextAction();
+		final String[] selectedColumns = this.getSelectedColumns(action, configForm, false);
+		final String[] columnNames = this.getColumnNames(selectedColumns);
 
 		// Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
 		request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
 		request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
-		setSelectedMenuRequestAttribute(request);
+		this.setSelectedMenuRequestAttribute(request);
 
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		return (mapping.findForward(forward));

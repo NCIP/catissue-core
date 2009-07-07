@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -46,7 +47,7 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 */
 	public ConsentTier getConsentTier()
 	{
-		return consentTier;
+		return this.consentTier;
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**
@@ -79,9 +80,10 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_STAT_SEQ"
 	 * @return Long type.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -89,6 +91,7 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 * @param abstractForm of IValueObjecttype.
 	 * @throws AssignDataException assignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//
@@ -98,6 +101,7 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 	 * Set identifier.
 	 * @param identifier of Long type.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;

@@ -47,45 +47,47 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
+		final ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 		// Retrieve the distribution ID
-		Long distributionId = configForm.getDistributionId();
+		final Long distributionId = configForm.getDistributionId();
 
-		Distribution dist = getDistribution(distributionId, getSessionData(request),
+		final Distribution dist = this.getDistribution(distributionId,
+				this.getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
-		SessionDataBean sessionData = getSessionData(request);
-		DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
+		final SessionDataBean sessionData = this.getSessionData(request);
+		final DistributionReportForm distributionReportForm = this.getDistributionReportForm(dist);
 		distributionReportForm.setDistributionType(new Integer(
 				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
 
 		// Set the columns for Distribution report
-		String action = configForm.getNextAction();
-		String selectedColumns[] = getSelectedColumns(action, configForm, true);
-		String[] columnNames = getColumnNames(selectedColumns);
+		final String action = configForm.getNextAction();
+		final String[] selectedColumns = this.getSelectedColumns(action, configForm, true);
+		final String[] columnNames = this.getColumnNames(selectedColumns);
 
-		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
-		String[] specimenColumnNames = getColumnNames(specimenColumns);
+		final String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
+		final String[] specimenColumnNames = this.getColumnNames(specimenColumns);
 
-		List listOfData = getListOfArrayDataForSave(dist, configForm, sessionData, selectedColumns,
-				specimenColumns);
+		final List listOfData = this.getListOfArrayDataForSave(dist, configForm, sessionData,
+				selectedColumns, specimenColumns);
 
-		setSelectedMenuRequestAttribute(request);
+		this.setSelectedMenuRequestAttribute(request);
 		// Save the report as a CSV file at the client side
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		if (session != null)
 		{
-			String filePath = CommonServiceLocator.getInstance().getAppHome()
+			final String filePath = CommonServiceLocator.getInstance().getAppHome()
 					+ System.getProperty("file.separator") + "DistributionReport_"
 					+ session.getId() + ".csv";
 
-			saveReport(distributionReportForm, listOfData, filePath, columnNames,
+			this.saveReport(distributionReportForm, listOfData, filePath, columnNames,
 					specimenColumnNames);
 
-			String fileName = Constants.DISTRIBUTION_REPORT_NAME;
-			String contentType = "application/download";
+			final String fileName = Constants.DISTRIBUTION_REPORT_NAME;
+			final String contentType = "application/download";
 			SendFile.sendFileToClient(response, filePath, fileName, contentType);
 		}
 		return null;
@@ -105,22 +107,23 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 			String fileName, String[] arrayColumnNames, String[] specimenColumnNames)
 			throws IOException
 	{
-		ExportReport report = new ExportReport(fileName);
-		String[] gridInfoLabel = {"Array Grid"};
-		String delimiter = Constants.DELIMETER;
-		List distributionData = new ArrayList();
-		addDistributionHeader(distributionData, distributionReportForm, report);
+		final ExportReport report = new ExportReport(fileName);
+		final String[] gridInfoLabel = {"Array Grid"};
+		final String delimiter = Constants.DELIMETER;
+		final List distributionData = new ArrayList();
+		this.addDistributionHeader(distributionData, distributionReportForm, report);
 		report.writeData(distributionData, delimiter);
-		Iterator itr = listOfData.iterator();
+		final Iterator itr = listOfData.iterator();
 		while (itr.hasNext())
 		{
-			ArrayDistributionReportEntry arrayEntry = (ArrayDistributionReportEntry) itr.next();
+			final ArrayDistributionReportEntry arrayEntry = (ArrayDistributionReportEntry) itr
+					.next();
 
-			List arrayInfo = new ArrayList();
+			final List arrayInfo = new ArrayList();
 			arrayInfo.add(arrayEntry.getArrayInfo());
-			addSection(report, arrayColumnNames, arrayInfo, 2, 0);
-			addSection(report, gridInfoLabel, arrayEntry.getGridInfo(), 1, 2);
-			addSection(report, specimenColumnNames, arrayEntry.getSpecimenEntries(), 1, 2);
+			this.addSection(report, arrayColumnNames, arrayInfo, 2, 0);
+			this.addSection(report, gridInfoLabel, arrayEntry.getGridInfo(), 1, 2);
+			this.addSection(report, specimenColumnNames, arrayEntry.getSpecimenEntries(), 1, 2);
 		}
 		report.closeFile();
 	}
@@ -140,11 +143,11 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 	{
 		if (columnNames != null)
 		{
-			List headerColumns = new ArrayList();
-			List columns = new ArrayList();
-			for (int k = 0; k < columnNames.length; k++)
+			final List headerColumns = new ArrayList();
+			final List columns = new ArrayList();
+			for (final String columnName : columnNames)
 			{
-				columns.add(columnNames[k]);
+				columns.add(columnName);
 			}
 			headerColumns.add(columns);
 			report.writeData(headerColumns, Constants.DELIMETER, noblankLines, columnIndent);

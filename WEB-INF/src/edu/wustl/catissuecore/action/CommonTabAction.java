@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class CommonTabAction extends Action
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -36,11 +37,12 @@ public class CommonTabAction extends Action
 	 * @throws ServletException : ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		String page = (String) request.getParameter(Constants.PAGE_OF);
+		final String page = request.getParameter(Constants.PAGE_OF);
 		if (page == null)
 		{
 			return mapping.findForward(Constants.SUCCESS);

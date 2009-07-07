@@ -60,19 +60,21 @@ public class RequestListAction extends SecureAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Validator validator = new Validator();
-		List requestViewBeanList = null, requestListFromDB = null, showList = null;
-		RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
+		new Validator();
+		List requestViewBeanList = null;
+		List showList = null;
+		final RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
 
 		// For Pagenation
 		// Gets the session of this request.
-		HttpSession session = request.getSession();
-		String pageNumStr = request.getParameter(Constants.PAGE_NUMBER);
+		final HttpSession session = request.getSession();
+		final String pageNumStr = request.getParameter(Constants.PAGE_NUMBER);
 		int pageNum = 0;
-		if (!validator.isEmpty(pageNumStr))
+		if (!Validator.isEmpty(pageNumStr))
 		{
 			pageNum = Integer.parseInt(pageNumStr);
 			request.setAttribute(Constants.PAGE_NUMBER, pageNumStr);
@@ -81,7 +83,7 @@ public class RequestListAction extends SecureAction
 		int startIndex = Constants.ZERO;
 		// The end index in the list of users to be approved/rejected.
 		int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;
-		SessionDataBean sessionData = getSessionData(request);
+		final SessionDataBean sessionData = this.getSessionData(request);
 
 		if (pageNum == Constants.START_PAGE)
 		{
@@ -90,23 +92,23 @@ public class RequestListAction extends SecureAction
 			if (requestListForm.getRequestStatusSelected() != null
 					&& !requestListForm.getRequestStatusSelected().trim().equalsIgnoreCase(""))
 			{
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 						.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 				requestViewBeanList = orderBizLogic.getRequestList(requestListForm
 						.getRequestStatusSelected(), sessionData.getUserName(), sessionData
 						.getUserId());
-				int totalResults = requestViewBeanList.size();
-				Iterator iter = requestViewBeanList.iterator();
+				final int totalResults = requestViewBeanList.size();
+				final Iterator iter = requestViewBeanList.iterator();
 				int serialNo = 1;
 				while (iter.hasNext())
 				{
-					RequestViewBean requestViewBean = (RequestViewBean) iter.next();
+					final RequestViewBean requestViewBean = (RequestViewBean) iter.next();
 					requestViewBean.setSerialNo(serialNo);
 					serialNo++;
 				}
 				// Setting the number of new and pending requests
-				setNumberOfNewAndPendingRequests(requestListForm, requestViewBeanList);
+				this.setNumberOfNewAndPendingRequests(requestListForm, requestViewBeanList);
 				session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(totalResults));
 			}
 			if (Constants.NUMBER_RESULTS_PER_PAGE > requestViewBeanList.size())
@@ -130,14 +132,15 @@ public class RequestListAction extends SecureAction
 				endIndex = requestViewBeanList.size();
 			}
 			// Setting the number of new and pending requests
-			setNumberOfRequests(requestListForm, sessionData.getUserName(), sessionData.getUserId());
+			this.setNumberOfRequests(requestListForm, sessionData.getUserName(), sessionData
+					.getUserId());
 		}
 		// Gets the list of users to be shown on the page.
 		showList = requestViewBeanList.subList(startIndex, endIndex);
 		// Saves the list of users to be shown on the page in the request.
 		request.setAttribute("RequestList", showList);
 		// OrderDetails Status to display in drop down
-		List requestStatusListToDisplay = CDEManager.getCDEManager().getPermissibleValueList(
+		final List requestStatusListToDisplay = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_REQUEST_STATUS, null);
 		// Deleting list.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		requestStatusListToDisplay.remove(0);
@@ -145,6 +148,7 @@ public class RequestListAction extends SecureAction
 
 		return mapping.findForward("success");
 	}
+
 	/**
 	 * @param request
 	 * @return
@@ -164,7 +168,6 @@ public class RequestListAction extends SecureAction
 	 * ,isSuperAdmin); return siteIds; }
 	 */
 
-
 	/**
 	 *
 	 * @param requestListFilterationForm : requestListFilterationForm
@@ -176,11 +179,11 @@ public class RequestListAction extends SecureAction
 			String userName, Long userId) throws BizLogicException
 	{
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List requestViewBeanList = orderBizLogic.getRequestList("All", userName, userId);
-		setNumberOfNewAndPendingRequests(requestListFilterationForm, requestViewBeanList);
+		final List requestViewBeanList = orderBizLogic.getRequestList("All", userName, userId);
+		this.setNumberOfNewAndPendingRequests(requestListFilterationForm, requestViewBeanList);
 
 	}
 
@@ -196,10 +199,10 @@ public class RequestListAction extends SecureAction
 		int newStatus = 0, pendingStatus = 0;
 		if (requestViewBeanList != null)
 		{
-			Iterator iter = requestViewBeanList.iterator();
+			final Iterator iter = requestViewBeanList.iterator();
 			while (iter.hasNext())
 			{
-				RequestViewBean requestViewBean = (RequestViewBean) iter.next();
+				final RequestViewBean requestViewBean = (RequestViewBean) iter.next();
 				if (requestViewBean.getStatus().trim().equalsIgnoreCase("New"))
 				{
 					newStatus++;

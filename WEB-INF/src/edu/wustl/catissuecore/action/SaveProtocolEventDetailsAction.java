@@ -23,6 +23,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SaveProtocolEventDetailsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -37,12 +38,13 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws DAOException
 	{
-		ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
-		HttpSession session = request.getSession();
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
+		final HttpSession session = request.getSession();
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		Map collectionProtocolEventMap = null;
 		CollectionProtocolEventBean collectionProtocolEventBean = null;
 		if (session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
@@ -70,7 +72,7 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 			}
 			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
 					+ (eventmapSize));
-			setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
+			this.setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
 			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),
 					collectionProtocolEventBean);
 		}
@@ -78,7 +80,7 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(protocolEventDetailsForm.getCollectionProtocolEventkey());
-			setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
+			this.setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
 			collectionProtocolEventMap.put(
 					protocolEventDetailsForm.getCollectionProtocolEventkey(),
 					collectionProtocolEventBean);
@@ -86,13 +88,14 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		session.setAttribute(Constants.TREE_NODE_ID, protocolEventDetailsForm
 				.getCollectionPointLabel()
 				+ "class_" + collectionProtocolEventBean.getUniqueIdentifier());
-		String listKey = collectionProtocolEventBean.getUniqueIdentifier();
+		final String listKey = collectionProtocolEventBean.getUniqueIdentifier();
 		session.setAttribute(Constants.NEW_EVENT_KEY, listKey);
 		// request.setAttribute("listKey", listKey);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				collectionProtocolEventMap);
 		return (mapping.findForward(pageOf));
 	}
+
 	/**
 	 *
 	 * @param collectionProtocolEventBean : collectionProtocolEventBean

@@ -45,7 +45,7 @@ public class SiteAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SiteAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SiteAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -62,18 +62,19 @@ public class SiteAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		SiteForm siteForm = (SiteForm) form;
+		final SiteForm siteForm = (SiteForm) form;
 
 		// Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		// Sets the operation attribute to be used in the Add/Edit User Page.
 
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 
 		siteForm.setSubmittedFor(submittedFor);
 		siteForm.setOperation(operation);
@@ -92,12 +93,12 @@ public class SiteAction extends SecureAction
 		request.setAttribute("operationForActivityStatus", Constants.OPERATION);
 
 		// Sets the countryList attribute to be used in the Add/Edit User Page.
-		List countryList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List countryList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COUNTRY_LIST, null);
 		request.setAttribute(Constants.COUNTRYLIST, countryList);
 
 		// Sets the stateList attribute to be used in the Add/Edit User Page.
-		List stateList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List stateList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_STATE_LIST, null);
 		request.setAttribute(Constants.STATELIST, stateList);
 
@@ -106,18 +107,19 @@ public class SiteAction extends SecureAction
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.SITE_ACTIVITY_STATUS_VALUES);
 
 		// Sets the siteTypeList attribute to be used in the Site Add/Edit Page.
-		List siteList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List siteList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SITE_TYPE, null);
 		request.setAttribute(Constants.SITETYPELIST, siteList);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection coll = userBizLogic.getUsers(operation);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection coll = userBizLogic.getUsers(operation);
 		request.setAttribute(Constants.USERLIST, coll);
 
 		// ------------------------------------------------------------------
 
-		boolean isOnChange = getIsOnChange(request);
-		Long coordinatorId = getCoordinatorId(request);
+		final boolean isOnChange = this.getIsOnChange(request);
+		final Long coordinatorId = this.getCoordinatorId(request);
 
 		if (siteForm != null && isOnChange && coordinatorId != null)
 		{
@@ -129,37 +131,37 @@ public class SiteAction extends SecureAction
 			String zipCode = "";
 			String phoneNo = "";
 
-			List userList = userBizLogic.retrieve(User.class.getName(),
+			final List userList = userBizLogic.retrieve(User.class.getName(),
 					Constants.SYSTEM_IDENTIFIER, coordinatorId);
 
 			if (userList.size() > 0)
 			{
-				User user = (User) userList.get(0);
+				final User user = (User) userList.get(0);
 				if (user != null)
 				{
 					emailAddress = user.getEmailAddress();
-					logger.debug("Email Id of Coordinator of Site : " + emailAddress);
+					this.logger.debug("Email Id of Coordinator of Site : " + emailAddress);
 
 					siteForm.setEmailAddress(emailAddress);
 					if (user.getAddress() != null)
 					{
 
-						street = (String) user.getAddress().getStreet();
+						street = user.getAddress().getStreet();
 						siteForm.setStreet(street);
 
-						city = (String) user.getAddress().getCity();
+						city = user.getAddress().getCity();
 						siteForm.setCity(city);
 
-						state = (String) user.getAddress().getState();
+						state = user.getAddress().getState();
 						siteForm.setState(state);
 
-						country = (String) user.getAddress().getCountry();
+						country = user.getAddress().getCountry();
 						siteForm.setCountry(country);
 
-						zipCode = (String) user.getAddress().getZipCode();
+						zipCode = user.getAddress().getZipCode();
 						siteForm.setZipCode(zipCode);
 
-						phoneNo = (String) user.getAddress().getPhoneNumber();
+						phoneNo = user.getAddress().getPhoneNumber();
 						siteForm.setPhoneNumber(phoneNo);
 
 					}
@@ -181,18 +183,18 @@ public class SiteAction extends SecureAction
 	private Long getCoordinatorId(HttpServletRequest request)
 	{
 		Long coordinatorId = null;
-		String coordinatorIdStr = request.getParameter("coordinatorId");
-		Validator validator = new Validator();
+		final String coordinatorIdStr = request.getParameter("coordinatorId");
+		final Validator validator = new Validator();
 		try
 		{
-			if (!validator.isEmpty(coordinatorIdStr))
+			if (!Validator.isEmpty(coordinatorIdStr))
 			{
 				coordinatorId = new Long(coordinatorIdStr);
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			coordinatorId = null;
 		}
 		return coordinatorId;
@@ -208,7 +210,7 @@ public class SiteAction extends SecureAction
 	private boolean getIsOnChange(HttpServletRequest request)
 	{
 		boolean isOnChange = false;
-		String str = request.getParameter("isOnChange");
+		final String str = request.getParameter("isOnChange");
 		if (str != null && str.equals("true"))
 		{
 			isOnChange = true;

@@ -12,14 +12,14 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
- * Reprtesents quarantine report parameters
+ * Reprtesents quarantine report parameters.
  * @hibernate.class table="CATISSUE_QUARANTINE_PARAMS"
  */
 public class QuarantineEventParameter extends AbstractDomainObject implements java.io.Serializable
 {
 
 	/**
-	 * Serial version id of the class
+	 * Serial version id of the class.
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	protected String status;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public QuarantineEventParameter()
 	{
@@ -74,9 +74,10 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_QUARANTINE_PARAMS_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deIdentifiedSurgicalPathologyReport;
+		return this.deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
@@ -99,13 +100,15 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
 	}
+
 	/**
 	 * @return Date
 	 */
 	public Date getTimestamp()
 	{
-		return timestamp;
+		return this.timestamp;
 	}
+
 	/**
 	 * @param timestamp : timestamp
 	 */
@@ -113,13 +116,15 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		this.timestamp = timestamp;
 	}
+
 	/**
 	 * @return User
 	 */
 	public User getUser()
 	{
-		return user;
+		return this.user;
 	}
+
 	/**
 	 * @param user : user
 	 */
@@ -127,13 +132,15 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		this.user = user;
 	}
+
 	/**
 	 * @return String
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
+
 	/**
 	 * @param comment : comment
 	 */
@@ -141,9 +148,11 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	{
 		this.comment = comment;
 	}
+
 	/**
 	 * @param id : id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -157,7 +166,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 
 	public Boolean getQuarantineStatus()
 	{
-		return quarantineStatus;
+		return this.quarantineStatus;
 	}
 
 	/**
@@ -175,11 +184,13 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 *            Abstract action form
 	 * @throws AssignDataException
 	 *             exception occured while assigning data to form attributes
-	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 * @see edu.wustl.catissuecore.domain.EventParameters
+	 * #setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		ViewSurgicalPathologyReportForm form = (ViewSurgicalPathologyReportForm) abstractForm;
+		final ViewSurgicalPathologyReportForm form = (ViewSurgicalPathologyReportForm) abstractForm;
 
 		this.setComment(form.getComments());
 		this.setTimestamp(new Date());
@@ -195,7 +206,8 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 		}
 		if (form.getDeIdentifiedReportId() != 0)
 		{
-			DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
+			final DeidentifiedSurgicalPathologyReport deidReport
+			= new DeidentifiedSurgicalPathologyReport();
 			deidReport.setId(new Long(form.getDeIdentifiedReportId()));
 			this.setDeIdentifiedSurgicalPathologyReport(deidReport);
 			this.setQuarantineStatus(false);
@@ -211,13 +223,14 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 */
 	public QuarantineEventParameter(AbstractActionForm form) throws AssignDataException
 	{
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
-	 * Returns message label to display on success add or edit
+	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return (" De-Identified Report.");
@@ -231,7 +244,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**

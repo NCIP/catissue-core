@@ -51,41 +51,43 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		OrderPathologyCaseForm pathology = (OrderPathologyCaseForm) form;
-		HttpSession session = request.getSession();
+		final OrderPathologyCaseForm pathology = (OrderPathologyCaseForm) form;
+		final HttpSession session = request.getSession();
 		pathology.setTypeOfCase("derivative");
 		String target = null;
 
 		if (session.getAttribute("OrderForm") != null)
 		{
-			OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
+			final OrderForm orderForm = (OrderForm) session.getAttribute("OrderForm");
 			pathology.setOrderForm(orderForm);
 			if (orderForm.getDistributionProtocol() != null)
 			{
-				getProtocolName(request, pathology, orderForm);
+				this.getProtocolName(request, pathology, orderForm);
 			}
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			Collection pathologyCase = (List) orderBizLogic.getPathologyDataFromDatabase(request);
+			final Collection pathologyCase = orderBizLogic.getPathologyDataFromDatabase(request);
 
 			request.setAttribute("pathologyCase", pathologyCase);
-			setClassAndTypeInList(request);
-			setSiteAndStatus(request, pathology);
+			this.setClassAndTypeInList(request);
+			this.setSiteAndStatus(request, pathology);
 
-			List orderToListArrayCollection = new ArrayList();
+			final List orderToListArrayCollection = new ArrayList();
 			orderToListArrayCollection.add(new NameValueBean("None", "None"));
 
 			if (session.getAttribute("DefineArrayFormObjects") != null)
 			{
-				List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
-				Iterator arrayListItr = arrayList.iterator();
+				final List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
+				final Iterator arrayListItr = arrayList.iterator();
 				while (arrayListItr.hasNext())
 				{
-					DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr.next();
+					final DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr
+							.next();
 					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj
 							.getArrayName(), defineArrayFormObj.getArrayName()));
 				}
@@ -120,36 +122,37 @@ public class OrderPathologyCaseAction extends BaseAction
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		// Setting the specimen type list
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		// Get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Iterator itr = setPV.iterator();
 
 		specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
+		final Map subTypeMap = new HashMap();
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		while (itr.hasNext())
 		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
+			final List innerList = new ArrayList();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
+			final Set list1 = pv.getSubPermissibleValues();
+			final Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			while (itr1.hasNext())
 			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
+				final Object obj1 = itr1.next();
+				final PermissibleValue pv1 = (PermissibleValue) obj1;
 				// set specimen type
-				String tmpInnerStr = pv1.getValue();
+				final String tmpInnerStr = pv1.getValue();
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			subTypeMap.put(pv.getValue(), innerList);
@@ -176,12 +179,12 @@ public class OrderPathologyCaseAction extends BaseAction
 
 		// NameValueBean bean = null;
 		// Setting tissue site list
-		List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_TISSUE_SITE, null);
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
 		// Setting pathological status list
-		List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
@@ -201,14 +204,14 @@ public class OrderPathologyCaseAction extends BaseAction
 			OrderForm orderForm) throws Exception
 	{
 		// to get the distribution protocol name
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		List protocolList = orderBizLogic.getDistributionProtocol(request);
+		final List protocolList = orderBizLogic.getDistributionProtocol(request);
 
 		for (int i = 0; i < protocolList.size(); i++)
 		{
-			NameValueBean obj = (NameValueBean) protocolList.get(i);
+			final NameValueBean obj = (NameValueBean) protocolList.get(i);
 
 			if (orderForm.getDistributionProtocol().equals(obj.getValue()))
 			{

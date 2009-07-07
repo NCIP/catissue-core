@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
@@ -85,7 +86,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getAffiliation()
 	{
-		return affiliation;
+		return this.affiliation;
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getNameOfReporter()
 	{
-		return nameOfReporter;
+		return this.nameOfReporter;
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	public ReportedProblem()
 	{
 		super();
-		reportedDate = Calendar.getInstance().getTime();
+		this.reportedDate = Calendar.getInstance().getTime();
 	}
 
 	/**
@@ -133,22 +134,23 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	public ReportedProblem(ReportedProblemForm reportedProblemForm)
 	{
 		this();
-		setAllValues(reportedProblemForm);
+		this.setAllValues(reportedProblemForm);
 	}
 
 	/**
 	 * Sets all values from the reportedProblemForm object.
 	 * @param abstractActionForm - reportedProblemForm The reportedProblemForm object.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractActionForm)
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(reportedDate))
+		if (SearchUtil.isNullobject(this.reportedDate))
 		{
-			reportedDate = new Date();
+			this.reportedDate = new Date();
 		}
 
-		ReportedProblemForm reportedProblemForm = (ReportedProblemForm) abstractActionForm;
+		final ReportedProblemForm reportedProblemForm = (ReportedProblemForm) abstractActionForm;
 		this.id = Long.valueOf(reportedProblemForm.getId());
 		this.subject = reportedProblemForm.getSubject();
 		this.from = reportedProblemForm.getFrom();
@@ -167,9 +169,10 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_REPORTED_PROBLEM_SEQ"
 	 * @see #setIdentifier(Long)
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -177,6 +180,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 * @param identifier The id to set.
 	 * @see #getIdentifier()
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -191,7 +195,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getFrom()
 	{
-		return from;
+		return this.from;
 	}
 
 	/**
@@ -213,7 +217,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getMessageBody()
 	{
-		return messageBody;
+		return this.messageBody;
 	}
 
 	/**
@@ -235,7 +239,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
 	/**
@@ -256,7 +260,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public Date getReportedDate()
 	{
-		return reportedDate;
+		return this.reportedDate;
 	}
 
 	/**
@@ -278,7 +282,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -300,7 +304,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**

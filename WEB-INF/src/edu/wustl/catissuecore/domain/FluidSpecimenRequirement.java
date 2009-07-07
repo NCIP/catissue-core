@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
@@ -48,20 +49,21 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 	public FluidSpecimenRequirement(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
 	 * @param abstractForm An SiteForm object containing the information about the site.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 			super.setAllValues(abstractForm);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -83,7 +85,8 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 	 */
 	public FluidSpecimenRequirement createClone()
 	{
-		FluidSpecimenRequirement cloneFluidRequirementSpecimen = new FluidSpecimenRequirement(this);
+		final FluidSpecimenRequirement cloneFluidRequirementSpecimen = new FluidSpecimenRequirement(
+				this);
 		return cloneFluidRequirementSpecimen;
 	}
 }

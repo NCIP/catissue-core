@@ -58,7 +58,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SubmitSpecimenCPAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SubmitSpecimenCPAction.class);
 
 	/**
 	 * specimenSummaryForm.
@@ -84,26 +84,28 @@ public class SubmitSpecimenCPAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String target = Constants.SUCCESS;
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		HashMap resultMap = new HashMap();
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final HashMap resultMap = new HashMap();
 		try
 		{
-			specimenSummaryForm = (ViewSpecimenSummaryForm) form;
+			this.specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 			// String actionValue = request.getParameter("action");
 
-			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL.equals(specimenSummaryForm
-					.getRequestType()))
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL
+					.equals(this.specimenSummaryForm.getRequestType()))
 			{
 
-				HttpSession session = request.getSession();
-				CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
+				final HttpSession session = request.getSession();
+				final CollectionProtocolBean collectionProtocolBean
+				= (CollectionProtocolBean) session
 						.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
-				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(specimenSummaryForm
+				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(this.specimenSummaryForm
 						.getUserAction()))
 				{
 					// for disabling of CP set the collection protocol status:
@@ -111,8 +113,8 @@ public class SubmitSpecimenCPAction extends BaseAction
 					if (collectionProtocolBean != null
 							&& collectionProtocolBean.getActivityStatus() != null)
 					{
-						ViewSpecimenSummaryForm.setCollectionProtocolStatus
-						(collectionProtocolBean
+						ViewSpecimenSummaryForm
+						.setCollectionProtocolStatus(collectionProtocolBean
 								.getActivityStatus());
 					}
 					return mapping.findForward("updateCP");
@@ -120,72 +122,72 @@ public class SubmitSpecimenCPAction extends BaseAction
 				else
 				{
 
-					CollectionProtocol collectionProtocol = CollectionProtocolUtil
+					final CollectionProtocol collectionProtocol = CollectionProtocolUtil
 							.populateCollectionProtocolObjects(request);
 
-					CollectionProtocolDTO collectionProtocolDTO = AppUtility
+					final CollectionProtocolDTO collectionProtocolDTO = AppUtility
 							.getCoolectionProtocolDTO(collectionProtocol, session);
-					insertCollectionProtocol(collectionProtocolDTO, request.getSession());
+					this.insertCollectionProtocol(collectionProtocolDTO, request.getSession());
 
 					collectionProtocolBean.setIdentifier(collectionProtocol.getId());
 					CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 				}
-				ActionMessages actionMessages = new ActionMessages();
+				final ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						"object.add.successOnly", "Collection Protocol"));
-				saveMessages(request, actionMessages);
+				this.saveMessages(request, actionMessages);
 			}
 
-			if (ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(specimenSummaryForm
-					.getRequestType()))
+			if (ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS
+					.equals(this.specimenSummaryForm.getRequestType()))
 			{
-				LinkedHashMap cpEventMap = populateSpecimenDomainObjectMap(request);
+				final LinkedHashMap cpEventMap = this.populateSpecimenDomainObjectMap(request);
 
-				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(specimenSummaryForm
+				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(this.specimenSummaryForm
 						.getUserAction()))
 				{
 					// execute update multiplespecimens.
 				}
 				else
 				{
-					insertSpecimens(cpEventMap, request.getSession());
+					this.insertSpecimens(cpEventMap, request.getSession());
 					MultipleSpecimenValidationUtil.setMultipleSpecimensInSession(request,
-							specimenCollectionGroup.getId());
+							this.specimenCollectionGroup.getId());
 
 				}
-				ActionMessages actionMessages = new ActionMessages();
+				final ActionMessages actionMessages = new ActionMessages();
 				actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 						"object.add.successOnly", "Specimen(s)"));
-				saveMessages(request, actionMessages);
+				this.saveMessages(request, actionMessages);
 
 			}
 
 			target = Constants.SUCCESS;
 
 			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
-				{
+			{
 				target = pageOf;
-				}
+			}
 
-			specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
+			this.specimenSummaryForm.setUserAction(ViewSpecimenSummaryForm.UPDATE_USER_ACTION);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			this.logger.debug(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
 			{
 				target = "pageOfMultipleSpWithMenuFailure";
 			}
 
-			String errorMsg = ex.getMessage();
+			final String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			ex.printStackTrace();
-			ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
+			final ActionErrors actionErrors = new ActionErrors();
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 					.getMessage()));
 
-			SessionDataBean sessionDataBean = getSessionData(request);
+			final SessionDataBean sessionDataBean = this.getSessionData(request);
 			String userName = "";
 			if (sessionDataBean != null)
 			{
@@ -195,10 +197,11 @@ public class SubmitSpecimenCPAction extends BaseAction
 			// To delegate UserNotAuthorizedException forward
 			if (ex instanceof UserNotAuthorizedException)
 			{
-				UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
+				final UserNotAuthorizedException excp = (UserNotAuthorizedException) ex;
 
-				String className = Utility.getActualClassName(CollectionProtocol.class.getName());
-				String decoratedPrivilegeName = AppUtility
+				final String className = Utility.getActualClassName(CollectionProtocol.class
+						.getName());
+				final String decoratedPrivilegeName = AppUtility
 						.getDisplayLabelForUnderscore(((UserNotAuthorizedException) ex)
 								.getPrivilegeName());
 				String baseObject = "";
@@ -210,17 +213,17 @@ public class SubmitSpecimenCPAction extends BaseAction
 				{
 					baseObject = className;
 				}
-				ActionError error = new ActionError("access.addedit.object.denied", userName,
+				final ActionError error = new ActionError("access.addedit.object.denied", userName,
 						className, decoratedPrivilegeName, baseObject);
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 			}
 
-			saveErrors(request, actionErrors);
+			this.saveErrors(request, actionErrors);
 
 		}
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		// writeMapToResponse(response, resultMap);
-		logger.debug("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
+		this.logger.debug("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
 
 		return mapping.findForward(target);
 
@@ -235,9 +238,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 	private void insertSpecimens(LinkedHashMap cpEventMap, HttpSession session)
 			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
 		bizLogic.insert(cpEventMap, sessionDataBean, 0);
 	}
@@ -251,9 +254,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 	private void insertCollectionProtocol(CollectionProtocolDTO collectionProtocolDTO,
 			HttpSession session) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		SessionDataBean sessionDataBean = (SessionDataBean) session
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
 		bizLogic.insert(collectionProtocolDTO, sessionDataBean, 0);
 	}
@@ -268,25 +271,24 @@ public class SubmitSpecimenCPAction extends BaseAction
 			throws Exception
 	{
 
-		HttpSession session = request.getSession();
-		LinkedHashMap < String , GenericSpecimen > cpEventMap;
+		final HttpSession session = request.getSession();
+		LinkedHashMap<String, GenericSpecimen> cpEventMap;
 		cpEventMap = (LinkedHashMap) session.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
-		LinkedHashMap specimenMap = new LinkedHashMap();
-		Collection specimenSessionColl = cpEventMap.values();
-		Iterator iterator = specimenSessionColl.iterator();
+		final LinkedHashMap specimenMap = new LinkedHashMap();
+		final Collection specimenSessionColl = cpEventMap.values();
+		final Iterator iterator = specimenSessionColl.iterator();
 
 		while (iterator.hasNext())
 		{
-			SpecimenDataBean specimenDataBean = (SpecimenDataBean) iterator.next();
-			Specimen specimen = getSpecimenDomainObjectFromObject(specimenDataBean);
+			final SpecimenDataBean specimenDataBean = (SpecimenDataBean) iterator.next();
+			final Specimen specimen = this.getSpecimenDomainObjectFromObject(specimenDataBean);
 
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
 				specimen.setLineage(Constants.NEW_SPECIMEN);
-				if (specimenCollectionGroup == null)
+				if (this.specimenCollectionGroup == null)
 				{
-					specimenCollectionGroup = (SpecimenCollectionGroup) specimen
-							.getSpecimenCollectionGroup();
+					this.specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
 				}
 			}
 			else
@@ -296,14 +298,15 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 				if (specimenDataBean.getSpecimenCollectionGroup() == null)
 				{
-					Specimen parentSpeciemn = (Specimen) specimen.getParentSpecimen();
+					final Specimen parentSpeciemn = (Specimen) specimen.getParentSpecimen();
 
-					Long scgId = parentSpeciemn.getSpecimenCollectionGroup().getId();
-					IFactory factory = AbstractFactoryConfig.getInstance()
-					.getBizLogicFactory();
-					IBizLogic iBizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-					Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
-							scgId);
+					final Long scgId = parentSpeciemn.getSpecimenCollectionGroup().getId();
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final IBizLogic iBizLogic
+					= factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+					final Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class
+							.getName(), scgId);
 					specimen.setSpecimenCollectionGroup((SpecimenCollectionGroup) object);
 
 				}
@@ -314,21 +317,21 @@ public class SubmitSpecimenCPAction extends BaseAction
 				}
 			}
 
-			SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+			final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 			specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
 			specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
 			specimen.setSpecimenCharacteristics(specimenCharacteristics);
 
-			ArrayList childSpecimenList = new ArrayList();
+			final ArrayList childSpecimenList = new ArrayList();
 
 			if (specimenDataBean.getAliquotSpecimenCollection() != null)
 			{
-				getAliquotSpecimens(specimenDataBean, specimen, childSpecimenList);
+				this.getAliquotSpecimens(specimenDataBean, specimen, childSpecimenList);
 			}
 
 			if (specimenDataBean.getDeriveSpecimenCollection() != null)
 			{
-				getDerivedSpecimens(specimenDataBean, specimen, childSpecimenList);
+				this.getDerivedSpecimens(specimenDataBean, specimen, childSpecimenList);
 			}
 			specimenMap.put(specimen, childSpecimenList);
 
@@ -345,15 +348,16 @@ public class SubmitSpecimenCPAction extends BaseAction
 	private void getDerivedSpecimens(SpecimenDataBean specimenDataBean, Specimen parentSpecimen,
 			ArrayList childSpecimenList)
 	{
-		Collection derivedSpecimenCollection = specimenDataBean.getDeriveSpecimenCollection()
+		final Collection derivedSpecimenCollection = specimenDataBean.getDeriveSpecimenCollection()
 				.values();
-		Iterator derivedSpecimenIteraror = derivedSpecimenCollection.iterator();
+		final Iterator derivedSpecimenIteraror = derivedSpecimenCollection.iterator();
 
 		while (derivedSpecimenIteraror.hasNext())
 		{
-			SpecimenDataBean derivedSpecimenBean = (SpecimenDataBean) derivedSpecimenIteraror
+			final SpecimenDataBean derivedSpecimenBean = (SpecimenDataBean) derivedSpecimenIteraror
 					.next();
-			Specimen derivedSpecimen = getSpecimenDomainObjectFromObject(derivedSpecimenBean);
+			final Specimen derivedSpecimen = this
+					.getSpecimenDomainObjectFromObject(derivedSpecimenBean);
 			derivedSpecimen.setParentSpecimen(parentSpecimen);
 
 			derivedSpecimen.setLineage(Constants.DERIVED_SPECIMEN);
@@ -370,21 +374,23 @@ public class SubmitSpecimenCPAction extends BaseAction
 	private void getAliquotSpecimens(SpecimenDataBean specimenDataBean, Specimen parentSpecimen,
 			ArrayList childSpecimenList)
 	{
-		Collection aliquotSpecimenCollection = specimenDataBean.getAliquotSpecimenCollection()
-				.values();
-		Iterator aliquotSpecimenIteraror = aliquotSpecimenCollection.iterator();
+		final Collection aliquotSpecimenCollection = specimenDataBean
+				.getAliquotSpecimenCollection().values();
+		final Iterator aliquotSpecimenIteraror = aliquotSpecimenCollection.iterator();
 
 		while (aliquotSpecimenIteraror.hasNext())
 		{
-			SpecimenDataBean aliquotSpecimenBean = (SpecimenDataBean) aliquotSpecimenIteraror
+			final SpecimenDataBean aliquotSpecimenBean = (SpecimenDataBean) aliquotSpecimenIteraror
 					.next();
-			Specimen aliquotSpecimen = getSpecimenDomainObjectFromObject(aliquotSpecimenBean);
+			final Specimen aliquotSpecimen = this
+					.getSpecimenDomainObjectFromObject(aliquotSpecimenBean);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
 			aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			childSpecimenList.add(aliquotSpecimen);
 		}
 	}
+
 	/**
 	 *
 	 * @param specimenDataBean : specimenDataBean
@@ -398,7 +404,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 			specimen = (Specimen) new SpecimenObjectFactory().getDomainObject(specimenDataBean
 					.getClassName());
 		}
-		catch (AssignDataException e1)
+		catch (final AssignDataException e1)
 		{
 			e1.printStackTrace();
 			return null;
@@ -415,12 +421,12 @@ public class SubmitSpecimenCPAction extends BaseAction
 		// specimen.setAvailable(Boolean.FALSE);
 		Double availableQuantity = new Double(0);
 		double value = 0;
-		String s = specimenDataBean.getQuantity();
+		final String s = specimenDataBean.getQuantity();
 		try
 		{
 			value = Double.parseDouble(s);
 		}
-		catch (NumberFormatException e)
+		catch (final NumberFormatException e)
 		{
 			value = 0;
 		}
@@ -433,19 +439,18 @@ public class SubmitSpecimenCPAction extends BaseAction
 		specimen.setSpecimenType(specimenDataBean.getType());
 
 		specimen
-				.setExternalIdentifierCollection
-				(specimenDataBean.getExternalIdentifierCollection());
+				.setExternalIdentifierCollection(specimenDataBean.getExternalIdentifierCollection());
 		specimen.setBiohazardCollection(specimenDataBean.getBiohazardCollection());
 
 		if (specimenDataBean.getSpecimenEventCollection() != null
 				&& !specimenDataBean.getSpecimenEventCollection().isEmpty())
 		{
-			Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
-			HashSet speEventParamSet = new HashSet();
+			final Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
+			final HashSet speEventParamSet = new HashSet();
 			while (iterator.hasNext())
 			{
-				SpecimenEventParameters specimenEventParameters =
-					(SpecimenEventParameters) iterator
+				final SpecimenEventParameters specimenEventParameters
+				= (SpecimenEventParameters) iterator
 						.next();
 				if (specimenEventParameters.getUser() != null)
 				{
@@ -458,12 +463,12 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 		specimen.setSpecimenCollectionGroup(specimenDataBean.getSpecimenCollectionGroup());
 
-		StorageContainer storageContainer = new StorageContainer();
+		final StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName(specimenDataBean.getStorageContainerForSpecimen());
 
 		// specimen.setStorageContainer(null);
 		specimen.setSpecimenPosition(null);
-		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		final SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide(specimenDataBean.getTissueSide());
 		specimenCharacteristics.setTissueSite(specimenDataBean.getTissueSite());
 		specimen.setSpecimenCharacteristics(specimenCharacteristics);

@@ -53,8 +53,8 @@ public class Capacity extends AbstractDomainObject
 	public Capacity(Capacity storageContainerCapacity)
 	{
 		super();
-		oneDimensionCapacity = storageContainerCapacity.oneDimensionCapacity;
-		twoDimensionCapacity = storageContainerCapacity.twoDimensionCapacity;
+		this.oneDimensionCapacity = storageContainerCapacity.oneDimensionCapacity;
+		this.twoDimensionCapacity = storageContainerCapacity.twoDimensionCapacity;
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class Capacity extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CAPACITY_SEQ"
 	 * @return Long identifier;
 	 */
+	@Override
 	public Long getId()
 	{
 		return this.id;
@@ -74,6 +75,7 @@ public class Capacity extends AbstractDomainObject
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
 	 * @param identifier Identifier.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -86,7 +88,7 @@ public class Capacity extends AbstractDomainObject
 	 */
 	public Integer getOneDimensionCapacity()
 	{
-		return oneDimensionCapacity;
+		return this.oneDimensionCapacity;
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class Capacity extends AbstractDomainObject
 	 */
 	public Integer getTwoDimensionCapacity()
 	{
-		return twoDimensionCapacity;
+		return this.twoDimensionCapacity;
 	}
 
 	/**
@@ -121,6 +123,7 @@ public class Capacity extends AbstractDomainObject
 	 * @param ivalueObject IValueObject.
 	 * @throws AssignDataException assignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject ivalueObject) throws AssignDataException
 	{
 		//

@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -55,7 +56,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	public MolecularSpecimenRequirement(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	 */
 	public Double getConcentrationInMicrogramPerMicroliter()
 	{
-		return concentrationInMicrogramPerMicroliter;
+		return this.concentrationInMicrogramPerMicroliter;
 	}
 
 	/**
@@ -90,12 +91,13 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
 	 * @param abstractForm An SiteForm object containing the information about the site.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 			super.setAllValues(abstractForm);
-			SpecimenForm form = (SpecimenForm) abstractForm;
+			final SpecimenForm form = (SpecimenForm) abstractForm;
 			if (Constants.DOUBLE_QUOTES.equals(form.getConcentration()))
 			{
 				logger.debug("Concentration is " + form.getConcentration());
@@ -105,7 +107,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 				this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -118,6 +120,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	public MolecularSpecimenRequirement(MolecularSpecimenRequirement molecularRequirementSpecimen)
 	{
 		super();
-		this.concentrationInMicrogramPerMicroliter = molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
+		this.concentrationInMicrogramPerMicroliter
+		= molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
 	}
 }

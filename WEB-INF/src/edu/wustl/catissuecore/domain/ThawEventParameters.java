@@ -49,7 +49,7 @@ public class ThawEventParameters extends SpecimenEventParameters implements java
 	public ThawEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -57,15 +57,16 @@ public class ThawEventParameters extends SpecimenEventParameters implements java
 	 * @param abstractForm - ThawEventParametersForm An ThawEventParametersForm object
 	 * containing the information about the ThawEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			ThawEventParametersForm form = (ThawEventParametersForm) abstractForm;
+			final ThawEventParametersForm form = (ThawEventParametersForm) abstractForm;
 
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

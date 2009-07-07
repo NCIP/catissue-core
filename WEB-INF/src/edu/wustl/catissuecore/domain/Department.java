@@ -53,7 +53,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	public Department(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -63,15 +63,17 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_DEPARTMENT_SEQ"
 	 * @return a unique id assigned to the department.
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Sets an id for the department.
 	 * @param identifier Unique id to be assigned to the department.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -85,7 +87,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -105,9 +107,10 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	 * Set All Values.
 	 * @param abstractForm IValueObject.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
-		DepartmentForm departmentForm = (DepartmentForm) abstractForm;
+		final DepartmentForm departmentForm = (DepartmentForm) abstractForm;
 		this.name = departmentForm.getName().trim();
 	}
 
@@ -115,6 +118,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	* Returns message label to display on success add or edit.
 	* @return String
 	*/
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;

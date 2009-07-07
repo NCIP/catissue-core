@@ -36,6 +36,7 @@ import edu.wustl.common.factory.IFactory;
  */
 public class ConflictReportAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -50,16 +51,17 @@ public class ConflictReportAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+		final ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
 
-		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
 
 		List reportQueueDataList = new ArrayList();
 		ReportLoaderQueue reportLoaderQueue = null;
-		reportQueueDataList = getReportQueueDataList(reportQueueId);
+		reportQueueDataList = this.getReportQueueDataList(reportQueueId);
 		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
 		{
 			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
@@ -81,10 +83,10 @@ public class ConflictReportAction extends BaseAction
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+		final List reportQueueList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
 				.getName(), Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
 		return reportQueueList;
 	}

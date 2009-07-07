@@ -39,20 +39,20 @@ public class ViewCartAction extends QueryShoppingCartAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		String target = null;
 
-		QueryShoppingCart cart = (QueryShoppingCart) session
+		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
-		setCartView(request, cart);
+		this.setCartView(request, cart);
 		target = new String(Constants.VIEW);
 		session.removeAttribute(AQConstants.HYPERLINK_COLUMN_MAP);
-		String eventArray[] = Constants.EVENT_PARAMETERS;
-		String newEvenetArray[] = new String[2];
+		final String eventArray[] = Constants.EVENT_PARAMETERS;
+		final String newEvenetArray[] = new String[2];
 		int count = 0;
-		for (String eventName : eventArray)
+		for (final String eventName : eventArray)
 		{
 			if (("Transfer").equals(eventName) || ("Disposal").equals(eventName))
 			{

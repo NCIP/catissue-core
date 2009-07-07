@@ -14,6 +14,10 @@ public class ReportSection extends AbstractDomainObject
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -16742958843291515L;
+	/**
 	 * Text information of the report section.
 	 */
 	protected String documentFragment;
@@ -49,22 +53,24 @@ public class ReportSection extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_REPORT_SECTION_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id
 	 *            sets system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public ReportSection()
 	{
@@ -78,7 +84,7 @@ public class ReportSection extends AbstractDomainObject
 	 */
 	public String getDocumentFragment()
 	{
-		return documentFragment;
+		return this.documentFragment;
 	}
 
 	/**
@@ -97,7 +103,7 @@ public class ReportSection extends AbstractDomainObject
 	 */
 	public Integer getEndOffSet()
 	{
-		return endOffSet;
+		return this.endOffSet;
 	}
 
 	/**
@@ -115,7 +121,7 @@ public class ReportSection extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -134,7 +140,7 @@ public class ReportSection extends AbstractDomainObject
 	 */
 	public Integer getStartOffSet()
 	{
-		return startOffSet;
+		return this.startOffSet;
 	}
 
 	/**
@@ -154,7 +160,7 @@ public class ReportSection extends AbstractDomainObject
 	 */
 	public TextContent getTextContent()
 	{
-		return textContent;
+		return this.textContent;
 	}
 
 	/**
@@ -165,10 +171,12 @@ public class ReportSection extends AbstractDomainObject
 	{
 		this.textContent = textContent;
 	}
+
 	/**
 	 * @param arg0 : arg0
 	 * @throws AssignDataException : AssignDataException
 	 */
+	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub

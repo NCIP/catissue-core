@@ -56,9 +56,10 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -66,6 +67,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -80,7 +82,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	 */
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -102,7 +104,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	 */
 	public String getTissueSide()
 	{
-		return tissueSide;
+		return this.tissueSide;
 	}
 
 	/**
@@ -147,6 +149,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 	 * @param abstractForm of IValueObject type.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//

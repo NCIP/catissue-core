@@ -57,27 +57,28 @@ public class ConflictViewAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictViewForm conflictViewForm = (ConflictViewForm) form;
-		int selectedFilter = Integer.parseInt(conflictViewForm.getSelectedFilter());
+		final ConflictViewForm conflictViewForm = (ConflictViewForm) form;
+		final int selectedFilter = Integer.parseInt(conflictViewForm.getSelectedFilter());
 
 		// Added by Ravindra to disallow Non Super Admin users to view
 		// Conflicting Reports
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
 		if (!sessionDataBean.isAdmin())
 		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("access.execute.action.denied");
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("access.execute.action.denied");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 
 			return mapping.findForward(Constants.ACCESS_DENIED);
 		}
-		String[] retrieveFilterList = Constants.CONFLICT_FILTER_LIST;
-		List filterList = new ArrayList();
+		final String[] retrieveFilterList = Constants.CONFLICT_FILTER_LIST;
+		final List filterList = new ArrayList();
 		for (int i = 0; i < retrieveFilterList.length; i++)
 		{
 			filterList.add(0, new NameValueBean(retrieveFilterList[i], i));
@@ -87,10 +88,10 @@ public class ConflictViewAction extends SecureAction
 		request.getSession().setAttribute(Constants.FILTER_LIST, filterList);
 
 		// Returns the page number to be shown.
-		int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
+		final int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
 		// Gets the session of this request.
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		// The start index in the list of users to be approved/rejected.
 		// int startIndex = Constants.ZERO;
@@ -98,38 +99,39 @@ public class ConflictViewAction extends SecureAction
 
 		if (selectedFilter == 0)
 		{
-			sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER," +
-					"REPORT_LOADED_DATE,STATUS ,SITE_NAME ," +
-					"REPORT_COLLECTION_DATE from catissue_report_queue" +
-					" where status='PARTICIPANT_CONFLICT' or status='SCG_PARTIAL_CONFLICT'" +
-					" or status='SCG_CONFLICT'";
+			sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,"
+					+ "REPORT_LOADED_DATE,STATUS ,SITE_NAME ,"
+					+ "REPORT_COLLECTION_DATE from catissue_report_queue"
+					+ " where status='PARTICIPANT_CONFLICT' or status='SCG_PARTIAL_CONFLICT'"
+					+ " or status='SCG_CONFLICT'";
 
 		}
 		else
 		{ // retrieving only the participant conflicts
 			if (selectedFilter == 1)
 			{
-				sqlString = "select PARTICIPANT_NAME ," +
-						"IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER," +
-						"REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE" +
-						" from catissue_report_queue where status='PARTICIPANT_CONFLICT'";
+				sqlString = "select PARTICIPANT_NAME ," + "IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,"
+						+ "REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE"
+						+ " from catissue_report_queue where status" +
+								"='PARTICIPANT_CONFLICT'";
 			}
 			else
 			{ // retrieving all the scg conflicts both partial and exact match
 				if (selectedFilter == 2)
 				{
-					sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ," +
-							"SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ," +
-							"SITE_NAME,REPORT_COLLECTION_DATE from" +
-							" catissue_report_queue where" +
-							" status='SCG_PARTIAL_CONFLICT' or status='SCG_CONFLICT'";
+					sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,"
+							+ "SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,"
+							+ "SITE_NAME,REPORT_COLLECTION_DATE from"
+							+ " catissue_report_queue where"
+							+ " status='SCG_PARTIAL_CONFLICT'" +
+									" or status='SCG_CONFLICT'";
 				}
 
 			}
 		}
 
 		int recordsPerPage;
-		String recordsPerPageSessionValue = (String) session
+		final String recordsPerPageSessionValue = (String) session
 				.getAttribute(Constants.RESULTS_PER_PAGE);
 		if (recordsPerPageSessionValue == null)
 		{
@@ -143,10 +145,10 @@ public class ConflictViewAction extends SecureAction
 		}
 
 		PagenatedResultData pagenatedResultData = null;
-		pagenatedResultData = AppUtility.executeForPagination(sqlString, getSessionData(request),
-				false, null, false, 0, recordsPerPage);
+		pagenatedResultData = AppUtility.executeForPagination(sqlString, this
+				.getSessionData(request), false, null, false, 0, recordsPerPage);
 
-		QuerySessionData querySessionData = new QuerySessionData();
+		final QuerySessionData querySessionData = new QuerySessionData();
 		querySessionData.setSql(sqlString);
 		querySessionData.setQueryResultObjectDataMap(null);
 		querySessionData.setSecureExecute(false);
@@ -155,15 +157,15 @@ public class ConflictViewAction extends SecureAction
 		querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
 		session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 
-		String[] retrieveColumnList = Constants.CONFLICT_LIST_HEADER;
-		List columnList = new ArrayList();
-		for (int i = 0; i < retrieveColumnList.length; i++)
+		final String[] retrieveColumnList = Constants.CONFLICT_LIST_HEADER;
+		final List columnList = new ArrayList();
+		for (final String element : retrieveColumnList)
 		{
-			columnList.add(retrieveColumnList[i]);
+			columnList.add(element);
 		}
 
 		// List of results the query will return on execution.
-		List list = pagenatedResultData.getResult();
+		final List list = pagenatedResultData.getResult();
 
 		// request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 		// request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
@@ -177,9 +179,9 @@ public class ConflictViewAction extends SecureAction
 
 		session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage + "");
 
-		List dataList = makeGridData(list);
+		final List dataList = this.makeGridData(list);
 		AppUtility.setGridData(dataList, columnList, request);
-		Integer identifierFieldIndex = new Integer(1);
+		final Integer identifierFieldIndex = new Integer(1);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		request.setAttribute("pageOf", "pageOfConflictResolver");
 		request.getSession().setAttribute(Constants.SELECTED_FILTER,
@@ -197,22 +199,22 @@ public class ConflictViewAction extends SecureAction
 	 */
 	private List makeGridData(List reportQueueDataList)
 	{
-		Iterator iter = reportQueueDataList.iterator();
-		List gridData = new ArrayList();
+		final Iterator iter = reportQueueDataList.iterator();
+		final List gridData = new ArrayList();
 
 		while (iter.hasNext())
 		{
-			List rowData = new ArrayList();
+			final List rowData = new ArrayList();
 
 			List reportDataList = new ArrayList();
 			reportDataList = (ArrayList) iter.next();
-			rowData.add((String) reportDataList.get(0));
-			rowData.add((String) reportDataList.get(1));
-			rowData.add((String) reportDataList.get(2));
-			rowData.add((String) reportDataList.get(3));
-			rowData.add((String) reportDataList.get(4));
-			rowData.add((String) reportDataList.get(5));
-			rowData.add((String) reportDataList.get(6));
+			rowData.add(reportDataList.get(0));
+			rowData.add(reportDataList.get(1));
+			rowData.add(reportDataList.get(2));
+			rowData.add(reportDataList.get(3));
+			rowData.add(reportDataList.get(4));
+			rowData.add(reportDataList.get(5));
+			rowData.add(reportDataList.get(6));
 			gridData.add(rowData);
 		}
 

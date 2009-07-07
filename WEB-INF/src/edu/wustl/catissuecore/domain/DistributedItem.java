@@ -72,7 +72,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public SpecimenArray getSpecimenArray()
 	{
-		return specimenArray;
+		return this.specimenArray;
 	}
 
 	/**
@@ -91,9 +91,10 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTED_ITEM_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -101,6 +102,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -115,7 +117,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public Double getQuantity()
 	{
-		return quantity;
+		return this.quantity;
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public Specimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -159,7 +161,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public edu.wustl.catissuecore.domain.Distribution getDistribution()
 	{
-		return distribution;
+		return this.distribution;
 	}
 
 	/**
@@ -181,16 +183,17 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 * @param abstractForm IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-		if (SearchUtil.isNullobject(specimen))
+		if (SearchUtil.isNullobject(this.specimen))
 		{
-			specimen = new Specimen();
+			this.specimen = new Specimen();
 		}
 
-		if (SearchUtil.isNullobject(distribution))
+		if (SearchUtil.isNullobject(this.distribution))
 		{
-			distribution = new Distribution();
+			this.distribution = new Distribution();
 		}
 	}
 
@@ -198,19 +201,20 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 * To String.
 	 * @return String.
 	 */
+	@Override
 	public String toString()
 	{
-		StringBuffer strVal = new StringBuffer();
-		strVal.append(id).append(" ").append(quantity).append(" ");
+		final StringBuffer strVal = new StringBuffer();
+		strVal.append(this.id).append(" ").append(this.quantity).append(" ");
 
-		if (specimen != null && specimen.getId() != null)
+		if (this.specimen != null && this.specimen.getId() != null)
 		{
-			strVal.append(specimen.getId());
+			strVal.append(this.specimen.getId());
 		}
 
-		if (specimenArray != null && specimenArray.getId() != null)
+		if (this.specimenArray != null && this.specimenArray.getId() != null)
 		{
-			strVal.append(specimenArray.getId());
+			strVal.append(this.specimenArray.getId());
 		}
 
 		return strVal.toString();
@@ -221,7 +225,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public Double getPreviousQuantity()
 	{
-		return previousQuantity;
+		return this.previousQuantity;
 	}
 
 	/**
@@ -237,7 +241,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public String getVerificationKey()
 	{
-		return verificationKey;
+		return this.verificationKey;
 	}
 
 	/**

@@ -35,7 +35,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DeleteSpecimenArrayAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(DeleteSpecimenArrayAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -54,31 +54,35 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 	 *             : ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
 
-		Map arrayContentMap = (Map) request.getSession().getAttribute(
+		final Map arrayContentMap = (Map) request.getSession().getAttribute(
 				Constants.SPECIMEN_ARRAY_CONTENT_KEY);
-		AbstractActionForm abstractForm = (AbstractActionForm) form;
+		final AbstractActionForm abstractForm = (AbstractActionForm) form;
 		abstractForm.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		try
 		{
 			if (arrayContentMap != null)
 			{
-				MapDataParser mapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
-				Collection specimenArrayContentList = mapDataParser.generateData(arrayContentMap);
+				final MapDataParser mapDataParser = new MapDataParser(
+						"edu.wustl.catissuecore.domain");
+				final Collection specimenArrayContentList = mapDataParser
+						.generateData(arrayContentMap);
 				if (abstractForm instanceof SpecimenArrayForm)
 				{
-					SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
+					final SpecimenArrayForm specimenArrayForm
+					= (SpecimenArrayForm) abstractForm;
 					specimenArrayForm.setSpecArrayContentCollection(specimenArrayContentList);
 				}
 			}
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			this.logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return super.execute(mapping, abstractForm, request, response);

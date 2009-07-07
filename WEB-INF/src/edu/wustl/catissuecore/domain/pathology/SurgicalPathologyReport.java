@@ -20,6 +20,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = 646696104152129141L;
+
+	/**
 	 * Activity status of a pathology report.
 	 */
 	protected String activityStatus;
@@ -49,7 +54,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	protected Set pathologyReportReviewParameterCollection;
 
 	/**
-	 * Specimen collection group of the report
+	 * Specimen collection group of the report.
 	 */
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
@@ -74,7 +79,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	protected Site reportSource;
 
 	/**
-	 * constructor
+	 * constructor.
 	 */
 	public SurgicalPathologyReport()
 	{
@@ -88,11 +93,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
-	 * Sets activity status of the report
+	 * Sets activity status of the report.
 	 * @param activityStatus
 	 *            sets activity status of the pathology report.
 	 */
@@ -110,11 +115,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public BinaryContent getBinaryContent()
 	{
-		return binaryContent;
+		return this.binaryContent;
 	}
 
 	/**
-	 * Sets binary text content
+	 * Sets binary text content.
 	 * @param binaryContent
 	 *            sets binary content of the pathology report.
 	 */
@@ -130,16 +135,18 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_PATHOLOGY_REPORT_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
-	 * Sets id
+	 * Sets id.
 	 * @param id
 	 *            sets system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -152,11 +159,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 **/
 	public Boolean getIsFlagForReview()
 	{
-		return isFlagForReview;
+		return this.isFlagForReview;
 	}
 
 	/**
-	 * Sets isFlagForReview
+	 * Sets isFlagForReview.
 	 * @param isFlagForReview
 	 *            Sets review flag for pathology report.
 	 */
@@ -171,15 +178,15 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 *                lazy="false" cascade="all"
 	 * @hibernate.collection-key column="REPORT_ID"
 	 * @hibernate.collection-one-to-many class=
-	 *                                   "edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
+	 * "edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
 	 */
 	public Set getPathologyReportReviewParameterCollection()
 	{
-		return pathologyReportReviewParameterCollection;
+		return this.pathologyReportReviewParameterCollection;
 	}
 
 	/**
-	 * Sets a collection of pathology report review parameter
+	 * Sets a collection of pathology report review parameter.
 	 * @param pathologyReportReviewParameterCollection
 	 *            sets collection of pathology report review parameters.
 	 */
@@ -197,11 +204,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public Site getReportSource()
 	{
-		return reportSource;
+		return this.reportSource;
 	}
 
 	/**
-	 * Sets reportSource of the report
+	 * Sets reportSource of the report.
 	 * @param reportSource
 	 *            sets reportSource of the pathology report.
 	 */
@@ -219,11 +226,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public TextContent getTextContent()
 	{
-		return textContent;
+		return this.textContent;
 	}
 
 	/**
-	 * Sets text content
+	 * Sets text content.
 	 * @param textContent
 	 *            sets text content of the pathology report.
 	 */
@@ -241,11 +248,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public XMLContent getXmlContent()
 	{
-		return xmlContent;
+		return this.xmlContent;
 	}
 
 	/**
-	 * Set xml content
+	 * Set xml content.
 	 * @param xmlContent
 	 *            sets xml content of the pathology report.
 	 */
@@ -261,11 +268,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public String getReportStatus()
 	{
-		return reportStatus;
+		return this.reportStatus;
 	}
 
 	/**
-	 * Set status of the report
+	 * Set status of the report.
 	 * @param reportStatus
 	 *            sets report status of the pathology report.
 	 */
@@ -281,11 +288,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public Date getCollectionDateTime()
 	{
-		return collectionDateTime;
+		return this.collectionDateTime;
 	}
 
 	/**
-	 * Sets collection date and time of the report
+	 * Sets collection date and time of the report.
 	 * @param collectionDateTime
 	 *            collection date and time of the report.
 	 */
@@ -295,7 +302,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
-	 * Copies all values from the AbstractForm object
+	 * Copies all values from the AbstractForm object.
 	 * @param abstractForm
 	 *            The AbstractForm object
 	 * @throws AssignDataException
@@ -328,7 +335,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -339,9 +346,11 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
+
 	/**
 	 * @return String
 	 */
+	@Override
 	public String getObjectId()
 	{
 		return SurgicalPathologyReport.class.getName() + "_" + this.getId();

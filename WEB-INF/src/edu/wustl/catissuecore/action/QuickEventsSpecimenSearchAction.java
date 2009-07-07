@@ -63,34 +63,36 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		QuickEventsForm qEForm = (QuickEventsForm) form;
+		final QuickEventsForm qEForm = (QuickEventsForm) form;
 		Logger.out.debug(qEForm.getSpecimenEventParameter());
 		String pageOf = Constants.SUCCESS;
 
-		pageOf = validate(request, qEForm);
+		pageOf = this.validate(request, qEForm);
 
 		if (pageOf.equals(Constants.SUCCESS))
 		{
 			//DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			String specimenFound = "0";
 			String errorString = "";
 			String specimenLabel = "";
 			if (qEForm.getCheckedButton().equals("1"))
 			{
 				specimenLabel = qEForm.getSpecimenLabel();
-				specimenFound = isExistingSpecimen
-				(Constants.SYSTEM_LABEL, specimenLabel, bizLogic);
+				specimenFound = this.isExistingSpecimen(Constants.SYSTEM_LABEL, specimenLabel,
+						bizLogic);
 				errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
 			}
 			else if (qEForm.getCheckedButton().equals("2"))
 			{
-				String barCode = qEForm.getBarCode();
-				specimenFound = isExistingSpecimen(Constants.SYSTEM_BARCODE, barCode, bizLogic);
+				final String barCode = qEForm.getBarCode();
+				specimenFound = this
+						.isExistingSpecimen(Constants.SYSTEM_BARCODE, barCode, bizLogic);
 				errorString = ApplicationProperties.getValue("quickEvents.barcode");
 			}
 
@@ -98,7 +100,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 			{
 				request.setAttribute(Constants.SPECIMEN_ID, specimenFound);
 				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
-				String selectedEvent = qEForm.getSpecimenEventParameter();
+				final String selectedEvent = qEForm.getSpecimenEventParameter();
 				request.setAttribute(Constants.EVENT_SELECTED, selectedEvent);
 
 				request.setAttribute("isQuickEvent", "true");
@@ -113,7 +115,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 				}
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"quickEvents.specimen.notExists", errorString));
-				saveErrors(request, errors);
+				this.saveErrors(request, errors);
 
 				pageOf = Constants.FAILURE;
 			}
@@ -130,7 +132,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 	 */
 	private String validate(HttpServletRequest request, QuickEventsForm form)
 	{
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 		String pageOf = Constants.SUCCESS;
 		if (errors == null)
@@ -144,7 +146,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 					ApplicationProperties.getValue("quickEvents.specimenLabel")));
 			pageOf = Constants.FAILURE;
 		}
-		if (form.getCheckedButton().equals("2") && validator.isEmpty(form.getBarCode()))
+		if (form.getCheckedButton().equals("2") && Validator.isEmpty(form.getBarCode()))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("quickEvents.barcode")));
@@ -166,9 +168,10 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 					ApplicationProperties.getValue("valid.quickEvents.eventparameters")));
 			pageOf = Constants.FAILURE;
 		}
-		saveErrors(request, errors);
+		this.saveErrors(request, errors);
 		return pageOf;
 	}
+
 	/**
 	 *
 	 * @param sourceObject : sourceObject
@@ -182,24 +185,24 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 	{
 		String returnValue = "0";
 
-		String sourceObjectName = Specimen.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString()};
+		final String sourceObjectName = Specimen.class.getName();
+		final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnName = {sourceObject, Status.ACTIVITY_STATUS.toString()};
 		//"storageContainer."+Constants.SYSTEM_IDENTIFIER
-		String[] whereColumnCondition = {"=", "!="};
-		Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString()};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
+		final String[] whereColumnCondition = {"=", "!="};
+		final Object[] whereColumnValue = {value, Status.ACTIVITY_STATUS_DISABLED.toString()};
+		final String joinCondition = Constants.AND_JOIN_CONDITION;
 
-		List list = bizlogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+		final List list = bizlogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition);
 
 		Logger.out.debug("MD 04-July-06 : - ><><>< " + sourceObject + " : " + value);
 		String specimenID = "0";
 		if (!list.isEmpty())
 		{
-			Object obj = list.get(0);
+			final Object obj = list.get(0);
 			Logger.out.debug("04-July-06 :- " + obj.getClass().getName());
-			Long specimen = (Long) obj;
+			final Long specimen = (Long) obj;
 			specimenID = specimen.toString();
 
 			returnValue = specimenID;

@@ -57,9 +57,10 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -67,6 +68,7 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 * @param identifier the system generated unique id.
 	 * @see #getId()
 	 * */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -81,7 +83,7 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -103,7 +105,7 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 */
 	public String getValue()
 	{
-		return value;
+		return this.value;
 	}
 
 	/**
@@ -124,7 +126,7 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 */
 	public Specimen getSpecimen()
 	{
-		return specimen;
+		return this.specimen;
 	}
 
 	/**
@@ -144,6 +146,7 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 * @param abstractForm IValueObject
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		//
@@ -153,9 +156,11 @@ public class ExternalIdentifier extends AbstractDomainObject
 	 * To String Method.
 	 * @return String.
 	 */
+	@Override
 	public String toString()
 	{
-		return "EI{" + "id " + id + "\t" + "Name " + name + "\t" + "Value " + value + "}";
+		return "EI{" + "id " + this.id + "\t" + "Name " + this.name + "\t" + "Value " + this.value
+				+ "}";
 	}
 
 	/**

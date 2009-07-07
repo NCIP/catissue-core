@@ -13,7 +13,7 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -82,7 +82,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public String getGelImageURL()
 	{
-		return gelImageURL;
+		return this.gelImageURL;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public String getQualityIndex()
 	{
-		return qualityIndex;
+		return this.qualityIndex;
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public String getLaneNumber()
 	{
-		return laneNumber;
+		return this.laneNumber;
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Integer getGelNumber()
 	{
-		return gelNumber;
+		return this.gelNumber;
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Double getAbsorbanceAt260()
 	{
-		return absorbanceAt260;
+		return this.absorbanceAt260;
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Double getAbsorbanceAt280()
 	{
-		return absorbanceAt280;
+		return this.absorbanceAt280;
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Double getRatio28STo18S()
 	{
-		return ratio28STo18S;
+		return this.ratio28STo18S;
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	public MolecularSpecimenReviewParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -255,33 +255,35 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 * @param abstractForm - MolecularSpecimenReviewParametersForm object
 	 * containing the information about the MolecularSpecimenReviewParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			MolecularSpecimenReviewParametersForm form = (MolecularSpecimenReviewParametersForm) abstractForm;
-			this.gelImageURL = Utility.toString(form.getGelImageURL());
-			this.qualityIndex = Utility.toString(form.getQualityIndex());
-			this.laneNumber = Utility.toString(form.getLaneNumber());
-			if (Utility.toString(form.getGelNumber()).trim().length() > 0)
+			final MolecularSpecimenReviewParametersForm form
+			 = (MolecularSpecimenReviewParametersForm) abstractForm;
+			this.gelImageURL = CommonUtilities.toString(form.getGelImageURL());
+			this.qualityIndex = CommonUtilities.toString(form.getQualityIndex());
+			this.laneNumber = CommonUtilities.toString(form.getLaneNumber());
+			if (CommonUtilities.toString(form.getGelNumber()).trim().length() > 0)
 			{
 				this.gelNumber = Integer.valueOf(form.getGelNumber());
 			}
-			if (Utility.toString(form.getAbsorbanceAt260()).trim().length() > 0)
+			if (CommonUtilities.toString(form.getAbsorbanceAt260()).trim().length() > 0)
 			{
 				this.absorbanceAt260 = new Double(form.getAbsorbanceAt260());
 			}
-			if (Utility.toString(form.getAbsorbanceAt280()).trim().length() > 0)
+			if (CommonUtilities.toString(form.getAbsorbanceAt280()).trim().length() > 0)
 			{
 				this.absorbanceAt280 = new Double(form.getAbsorbanceAt280());
 			}
-			if (Utility.toString(form.getRatio28STo18S()).trim().length() > 0)
+			if (CommonUtilities.toString(form.getRatio28STo18S()).trim().length() > 0)
 			{
 				this.ratio28STo18S = new Double(form.getRatio28STo18S());
 			}
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

@@ -54,7 +54,7 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 	 */
 	public String getEmbeddingMedium()
 	{
-		return embeddingMedium;
+		return this.embeddingMedium;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 	public EmbeddedEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -92,15 +92,16 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 	 * @param abstractForm An EmbeddedEventParametersForm object
 	 * containing the information about the EmbeddedEventParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			EmbeddedEventParametersForm form = (EmbeddedEventParametersForm) abstractForm;
+			final EmbeddedEventParametersForm form = (EmbeddedEventParametersForm) abstractForm;
 			this.embeddingMedium = form.getEmbeddingMedium();
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

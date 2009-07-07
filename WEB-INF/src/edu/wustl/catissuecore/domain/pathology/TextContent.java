@@ -13,6 +13,11 @@ public class TextContent extends ReportContent
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8526356845606240757L;
+
+	/**
 	 * Collection of surgical pathology report sections.
 	 */
 	protected Set reportSectionCollection;
@@ -23,7 +28,7 @@ public class TextContent extends ReportContent
 	protected SurgicalPathologyReport surgicalPathologyReport;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public TextContent()
 	{
@@ -40,7 +45,7 @@ public class TextContent extends ReportContent
 	 */
 	public Set getReportSectionCollection()
 	{
-		return reportSectionCollection;
+		return this.reportSectionCollection;
 	}
 
 	/**
@@ -60,7 +65,7 @@ public class TextContent extends ReportContent
 	 */
 	public SurgicalPathologyReport getSurgicalPathologyReport()
 	{
-		return surgicalPathologyReport;
+		return this.surgicalPathologyReport;
 	}
 
 	/**

@@ -28,14 +28,14 @@ public class DoNothingDeidentifier extends AbstractDeidentifier
 		return deidentifiedReport;
 	}
 	/**
-	 * init
+	 * init.
 	 */
 	public void initialize()
 	{
 
 	}
 	/**
-	 * stutdown
+	 * stutdown.
 	 */
 	public void shutdown()
 	{

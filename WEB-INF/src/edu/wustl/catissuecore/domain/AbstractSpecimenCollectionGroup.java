@@ -10,7 +10,6 @@ import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -98,15 +97,17 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * Set the identifer.
 	 * @param identifier as long.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -123,7 +124,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 */
 	public String getClinicalDiagnosis()
 	{
-		return clinicalDiagnosis;
+		return this.clinicalDiagnosis;
 	}
 
 	/**
@@ -148,7 +149,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 */
 	public String getClinicalStatus()
 	{
-		return clinicalStatus;
+		return this.clinicalStatus;
 	}
 
 	/**
@@ -172,7 +173,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -197,7 +198,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 */
 	public Site getSpecimenCollectionSite()
 	{
-		return specimenCollectionSite;
+		return this.specimenCollectionSite;
 	}
 
 	/**
@@ -225,8 +226,8 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 		this.setClinicalDiagnosis(form.getClinicalDiagnosis());
 		this.setClinicalStatus(form.getClinicalStatus());
 		this.setActivityStatus(form.getActivityStatus());
-		specimenCollectionSite = new Site();
-		specimenCollectionSite.setId(Long.valueOf(form.getSiteId()));
+		this.specimenCollectionSite = new Site();
+		this.specimenCollectionSite.setId(Long.valueOf(form.getSiteId()));
 
 	}
 }

@@ -79,6 +79,7 @@ public class ContainerType extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONTAINER_TYPE_SEQ"
 	 * @return Long.
 	 */
+	@Override
 	public Long getId()
 	{
 		return this.id;
@@ -90,6 +91,7 @@ public class ContainerType extends AbstractDomainObject
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
 	 * @param identifier Long.
 	 */
+	@Override
 	public void setId(Long identifier)
 	{
 		this.id = identifier;
@@ -102,7 +104,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public Capacity getCapacity()
 	{
-		return capacity;
+		return this.capacity;
 	}
 
 	/**
@@ -119,7 +121,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public String getOneDimensionLabel()
 	{
-		return oneDimensionLabel;
+		return this.oneDimensionLabel;
 	}
 
 	/**
@@ -153,7 +155,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public String getTwoDimensionLabel()
 	{
-		return twoDimensionLabel;
+		return this.twoDimensionLabel;
 	}
 
 	/**
@@ -170,7 +172,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -187,7 +189,7 @@ public class ContainerType extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
@@ -207,11 +209,12 @@ public class ContainerType extends AbstractDomainObject
 	 * @param arg0 IValueObject.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
-		if (SearchUtil.isNullobject(capacity))
+		if (SearchUtil.isNullobject(this.capacity))
 		{
-			capacity = new Capacity();
+			this.capacity = new Capacity();
 		}
 	}
 
@@ -219,6 +222,7 @@ public class ContainerType extends AbstractDomainObject
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;

@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -176,7 +177,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public boolean getIsCPBasedSpecimenEntryChecked()
 	{
-		return isCPBasedSpecimenEntryChecked;
+		return this.isCPBasedSpecimenEntryChecked;
 	}
 
 	/**
@@ -198,7 +199,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public CollectionProtocolEvent getCollectionProtocolEvent()
 	{
-		return collectionProtocolEvent;
+		return this.collectionProtocolEvent;
 	}
 
 	/**
@@ -222,7 +223,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection getSpecimenEventParametersCollection()
 	{
-		return specimenEventParametersCollection;
+		return this.specimenEventParametersCollection;
 	}
 
 	/**
@@ -242,7 +243,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection<ConsentTierStatus> getConsentTierStatusCollection()
 	{
-		return consentTierStatusCollection;
+		return this.consentTierStatusCollection;
 	}
 
 	/**
@@ -259,7 +260,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getConsentWithdrawalOption()
 	{
-		return consentWithdrawalOption;
+		return this.consentWithdrawalOption;
 	}
 
 	/**
@@ -277,7 +278,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getApplyChangesTo()
 	{
-		return applyChangesTo;
+		return this.applyChangesTo;
 	}
 
 	/**
@@ -295,7 +296,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getStringOfResponseKeys()
 	{
-		return stringOfResponseKeys;
+		return this.stringOfResponseKeys;
 	}
 
 	/**
@@ -324,7 +325,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	{
 		super();
 		logger.debug("<<< Before setting Values >>>");
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -336,7 +337,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getSurgicalPathologyNumber()
 	{
-		return surgicalPathologyNumber;
+		return this.surgicalPathologyNumber;
 	}
 
 	/**
@@ -357,9 +358,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * @return the registration of a Participant to a Collection Protocol.
 	 * @see #setCollectionProtocolRegistration(CollectionProtocolRegistration)
 	 */
+	@Override
 	public CollectionProtocolRegistration getCollectionProtocolRegistration()
 	{
-		return collectionProtocolRegistration;
+		return this.collectionProtocolRegistration;
 	}
 
 	/**
@@ -378,6 +380,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.name;
@@ -395,7 +398,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -415,7 +418,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport()
 	{
-		return deIdentifiedSurgicalPathologyReport;
+		return this.deIdentifiedSurgicalPathologyReport;
 	}
 
 	/**
@@ -437,7 +440,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public IdentifiedSurgicalPathologyReport getIdentifiedSurgicalPathologyReport()
 	{
-		return identifiedSurgicalPathologyReport;
+		return this.identifiedSurgicalPathologyReport;
 	}
 
 	/**
@@ -459,11 +462,12 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * @param valueObject of IValueObject type.
 	 * @throws AssignDataException AssignDataException.
 	 */
+	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		super.setAllValues(valueObject);
-		AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
-		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm) abstractForm;
+		final AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
+		final SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm) abstractForm;
 		try
 		{
 			this.setName(form.getName());
@@ -498,16 +502,16 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			 */
 			this.setComment(form.getComment());
 
-			collectionProtocolEvent = new CollectionProtocolEvent();
-			collectionProtocolEvent.setId(Long.valueOf(form.getCollectionProtocolEventId()));
+			this.collectionProtocolEvent = new CollectionProtocolEvent();
+			this.collectionProtocolEvent.setId(Long.valueOf(form.getCollectionProtocolEventId()));
 
 			logger.debug("form.getParticipantsMedicalIdentifierId() "
 					+ form.getParticipantsMedicalIdentifierId());
 
 			this.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
-			collectionProtocolRegistration = new CollectionProtocolRegistration();
-			collectionProtocolRegistration.setId(form.getCollectionProtocolRegistrationId());
+			this.collectionProtocolRegistration = new CollectionProtocolRegistration();
+			this.collectionProtocolRegistration.setId(form.getCollectionProtocolRegistrationId());
 			/**
 			 * Name: Vijay Pande
 			 * Reviewer Name: Aarti Sharma
@@ -517,34 +521,35 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			if (form.getRadioButtonForParticipant() == 1)
 			{
 				//value of radio button is 2 when participant name is selected
-				Participant participant = new Participant();
+				final Participant participant = new Participant();
 				/**For Migration Start**/
 				//form.setParticipantId(AppUtility.getParticipantId(form.getParticipantName()));
 				/**For Migration End**/
 				participant.setId(Long.valueOf(form.getParticipantId()));
-				collectionProtocolRegistration.setParticipant(participant);
-				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
+				this.collectionProtocolRegistration.setParticipant(participant);
+				this.collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 
-				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+				final ParticipantMedicalIdentifier participantMedicalIdentifier
+				= new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setId(Long.valueOf(form
 						.getParticipantsMedicalIdentifierId()));
 			}
 			else
 			{
-				collectionProtocolRegistration.setProtocolParticipantIdentifier(form
+				this.collectionProtocolRegistration.setProtocolParticipantIdentifier(form
 						.getProtocolParticipantIdentifier());
-				collectionProtocolRegistration.setParticipant(null);
+				this.collectionProtocolRegistration.setParticipant(null);
 			}
 
-			CollectionProtocol collectionProtocol = new CollectionProtocol();
+			final CollectionProtocol collectionProtocol = new CollectionProtocol();
 			collectionProtocol.setId(Long.valueOf(form.getCollectionProtocolId()));
-			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+			this.collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			/**
 			 * Setting the consentTier responses for SCG Level.
 			 * Virender Mehta
 			 */
-			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+			this.consentTierStatusCollection = this.prepareParticipantResponseCollection(form);
 
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			this.applyChangesTo = form.getApplyChangesTo();
@@ -558,18 +563,18 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			 * Description: Populating events in SCG
 			 */
 			//Adding Events
-			setEventsFromForm(form, form.getOperation());
+			this.setEventsFromForm(form, form.getOperation());
 			//Adding events to Specimens
 			if (form.isApplyEventsToSpecimens())
 			{
-				applyEventsToSpecimens = true;
+				this.applyEventsToSpecimens = true;
 			}
 			this.offset = Integer.valueOf(form.getOffset());
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			Logger.out.error(e.getMessage(), e);
-			ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpecimenCollectionGroup.java :");
 		}
 	}
@@ -590,7 +595,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	{
 		CollectionEventParameters collectionEventParameters = null;
 		ReceivedEventParameters receivedEventParameters = null;
-		Collection tempColl = new HashSet();
+		final Collection tempColl = new HashSet();
 		if (operation.equals(Constants.ADD))
 		{
 			collectionEventParameters = new CollectionEventParameters();
@@ -598,10 +603,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		else
 		{
-			Iterator iter = specimenEventParametersCollection.iterator();
+			final Iterator iter = this.specimenEventParametersCollection.iterator();
 			while (iter.hasNext())
 			{
-				Object temp = iter.next();
+				final Object temp = iter.next();
 				if (temp instanceof CollectionEventParameters)
 				{
 					collectionEventParameters = (CollectionEventParameters) temp;
@@ -623,7 +628,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			collectionEventParameters = new CollectionEventParameters();
 			receivedEventParameters = new ReceivedEventParameters();
 		}
-		setEventParameters(collectionEventParameters, receivedEventParameters, form);
+		this.setEventParameters(collectionEventParameters, receivedEventParameters, form);
 
 		tempColl.add(collectionEventParameters);
 		tempColl.add(receivedEventParameters);
@@ -650,7 +655,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 				.getCollectionEventCollectionProcedure());
 		collectionEventParameters.setComment(form.getCollectionEventComments());
 		collectionEventParameters.setContainer(form.getCollectionEventContainer());
-		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(), form
+		final Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(), form
 				.getCollectionEventTimeInHours(), form.getCollectionEventTimeInMinutes());
 		collectionEventParameters.setTimestamp(timestamp);
 		User user = null;
@@ -672,8 +677,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		receivedEventParameters.setUser(receivedUser);
 		receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());
-		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(), form
-				.getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
+		final Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(),
+				form.getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
 		receivedEventParameters.setTimestamp(receivedTimestamp);
 		receivedEventParameters.setSpecimenCollectionGroup(this);
 	}
@@ -686,33 +691,34 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	private Collection prepareParticipantResponseCollection(SpecimenCollectionGroupForm form)
 	{
-		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+		final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
 		Collection beanObjColl = null;
 		try
 		{
 			beanObjColl = mapdataParser.generateData(form.getConsentResponseForScgValues());
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		Iterator iter = beanObjColl.iterator();
-		Collection consentResponseColl = new HashSet();
+		final Iterator iter = beanObjColl.iterator();
+		final Collection consentResponseColl = new HashSet();
 		while (iter.hasNext())
 		{
-			ConsentBean consentBean = (ConsentBean) iter.next();
-			ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+			final ConsentBean consentBean = (ConsentBean) iter.next();
+			final ConsentTierStatus consentTierstatus = new ConsentTierStatus();
 			//Setting response
 			consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
 			if (consentBean.getSpecimenCollectionGroupLevelResponseID() != null
-					&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
+					&& consentBean.getSpecimenCollectionGroupLevelResponseID()
+					.trim().length() > 0)
 			{
 				consentTierstatus.setId(Long.parseLong(consentBean
 						.getSpecimenCollectionGroupLevelResponseID()));
 			}
 			//Setting consent tier
-			ConsentTier consentTier = new ConsentTier();
+			final ConsentTier consentTier = new ConsentTier();
 			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
 			consentTierstatus.setConsentTier(consentTier);
 			consentResponseColl.add(consentTierstatus);
@@ -725,7 +731,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public boolean isApplyEventsToSpecimens()
 	{
-		return applyEventsToSpecimens;
+		return this.applyEventsToSpecimens;
 	}
 
 	/**
@@ -763,7 +769,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 
 		if (gpName == null)
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("scg.name.null.error");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("scg.name.null.error");
 			throw new BizLogicException(errorKey, null, "SpecimenArrayTypeBizLogic.java :"
 					+ "group name can't be null for " + "SpecimenCollectionGroup Object");
 		}
@@ -776,7 +782,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getCollectionStatus()
 	{
-		return collectionStatus;
+		return this.collectionStatus;
 	}
 
 	/**
@@ -814,14 +820,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		{
 			consentTierStatusCollectionN = new HashSet();
 		}
-		Collection consentTierResponseCollection = collectionProtocolRegistration
+		final Collection consentTierResponseCollection = collectionProtocolRegistration
 				.getConsentTierResponseCollection();
-		Collection scgConsTierColl = this.getConsentTierStatusCollection();
+		final Collection scgConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 
 		if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
 		{
-			Iterator iterator = consentTierResponseCollection.iterator();
+			final Iterator iterator = consentTierResponseCollection.iterator();
 			Iterator scgIterator = null;
 			if (scgConsTierColl != null)
 			{
@@ -830,7 +836,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			}
 			while (iterator.hasNext())
 			{
-				ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator.next();
+				final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator
+						.next();
 				ConsentTierStatus consentTierstatusN;
 				if (hasMoreConsents)
 				{
@@ -841,7 +848,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 					consentTierstatusN = new ConsentTierStatus();
 					consentTierStatusCollectionN.add(consentTierstatusN);
 				}
-				ConsentTier consentTier = new ConsentTier(consentTierResponse.getConsentTier());
+				final ConsentTier consentTier = new ConsentTier(consentTierResponse
+						.getConsentTier());
 				consentTierstatusN.setConsentTier(consentTier);
 				consentTierstatusN.setStatus(consentTierResponse.getResponse());
 
@@ -859,14 +867,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	public void setDefaultSpecimenGroupName(CollectionProtocol collectionProtocol,
 			int ParticipantId, int SCGId)
 	{
-		String collectionProtocolTitle = collectionProtocol.getTitle();
+		final String collectionProtocolTitle = collectionProtocol.getTitle();
 		String maxCollTitle = collectionProtocolTitle;
 		if (collectionProtocolTitle.length() > Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 		{
 			maxCollTitle = collectionProtocolTitle.substring(0,
 					Constants.COLLECTION_PROTOCOL_TITLE_LENGTH - 1);
 		}
-		setName(maxCollTitle + "_" + ParticipantId + "_" + SCGId);
+		this.setName(maxCollTitle + "_" + ParticipantId + "_" + SCGId);
 	}
 
 	/**
@@ -875,7 +883,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Integer getOffset()
 	{
-		return offset;
+		return this.offset;
 	}
 
 	/**
@@ -898,7 +906,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Collection<Specimen> getSpecimenCollection()
 	{
-		return specimenCollection;
+		return this.specimenCollection;
 	}
 
 	/**
@@ -919,7 +927,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -938,7 +946,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -947,7 +955,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
-		String nullString = null;
+		final String nullString = null;
 		if (Constants.DOUBLE_QUOTES.equals(barcode))
 		{
 			this.barcode = nullString;
@@ -960,7 +968,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	public Date getEncounterTimestamp()
 	{
-		return encounterTimestamp;
+		return this.encounterTimestamp;
 	}
 
 	/**

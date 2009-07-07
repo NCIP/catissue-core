@@ -53,7 +53,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Double getNeoplasticCellularityPercentage()
 	{
-		return neoplasticCellularityPercentage;
+		return this.neoplasticCellularityPercentage;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public Double getViableCellPercentage()
 	{
-		return viableCellPercentage;
+		return this.viableCellPercentage;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	public CellSpecimenReviewParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -113,12 +113,13 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	 * @param abstractForm - cellSpecimenReviewParametersForm An CellSpecimenReviewParametersForm
 	 * object containing the information about the cellSpecimenReviewParameters.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			CellSpecimenReviewParametersForm form = (CellSpecimenReviewParametersForm) abstractForm;
-			setNeoplasticCellularityPercentage(form);
+			final CellSpecimenReviewParametersForm form = (CellSpecimenReviewParametersForm) abstractForm;
+			this.setNeoplasticCellularityPercentage(form);
 			if (form.getViableCellPercentage() != null
 					&& form.getViableCellPercentage().trim().length() > 0)
 			{
@@ -126,7 +127,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 			}
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

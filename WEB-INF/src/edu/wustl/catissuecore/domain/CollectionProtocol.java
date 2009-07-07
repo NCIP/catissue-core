@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -76,7 +77,8 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Collection of CollectionProtocol associated with the Parent
 	 * CollectionProtocol.
 	 */
-	protected Collection<CollectionProtocol> childCollectionProtocolCollection = new LinkedHashSet<CollectionProtocol>();
+	protected Collection<CollectionProtocol> childCollectionProtocolCollection
+	= new LinkedHashSet<CollectionProtocol>();
 
 	/**
 	 * Parent Collection Protocol.
@@ -140,7 +142,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public String getUnsignedConsentDocumentURL()
 	{
-		return unsignedConsentDocumentURL;
+		return this.unsignedConsentDocumentURL;
 	}
 
 	/**
@@ -163,7 +165,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection<ConsentTier> getConsentTierCollection()
 	{
-		return consentTierCollection;
+		return this.consentTierCollection;
 	}
 
 	/**
@@ -195,7 +197,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	public CollectionProtocol(AbstractActionForm form)
 	{
 		super();
-		setAllValues(form);
+		this.setAllValues(form);
 	}
 
 	/**
@@ -211,7 +213,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection getDistributionProtocolCollection()
 	{
-		return distributionProtocolCollection;
+		return this.distributionProtocolCollection;
 	}
 
 	/**
@@ -236,7 +238,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection getCoordinatorCollection()
 	{
-		return coordinatorCollection;
+		return this.coordinatorCollection;
 	}
 
 	/**
@@ -260,7 +262,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection getCollectionProtocolEventCollection()
 	{
-		return collectionProtocolEventCollection;
+		return this.collectionProtocolEventCollection;
 	}
 
 	/**
@@ -287,7 +289,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	public Collection getCollectionProtocolRegistrationCollection()
 	{
 
-		return collectionProtocolRegistrationCollection;
+		return this.collectionProtocolRegistrationCollection;
 	}
 
 	/**
@@ -332,6 +334,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * @param abstractForm An CollectionProtocolForm object containing the information
 	 * about the CollectionProtocol.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
@@ -340,49 +343,49 @@ public class CollectionProtocol extends SpecimenProtocol
 
 			final CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
 
-			coordinatorCollection.clear();
-			siteCollection.clear();
+			this.coordinatorCollection.clear();
+			this.siteCollection.clear();
 			this.collectionProtocolEventCollection.clear();
-			long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
+			final long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
 			if (coordinatorsArr != null)
 			{
-				for (int i = 0; i < coordinatorsArr.length; i++)
+				for (final long element : coordinatorsArr)
 				{
-					if (coordinatorsArr[i] != -1)
+					if (element != -1)
 					{
-						User coordinator = new User();
-						coordinator.setId(new Long(coordinatorsArr[i]));
-						coordinatorCollection.add(coordinator);
+						final User coordinator = new User();
+						coordinator.setId(new Long(element));
+						this.coordinatorCollection.add(coordinator);
 					}
 				}
 			}
 
-			long[] siteArr = cpForm.getSiteIds();
+			final long[] siteArr = cpForm.getSiteIds();
 			if (siteArr != null)
 			{
-				for (int i = 0; i < siteArr.length; i++)
+				for (final long element : siteArr)
 				{
-					if (siteArr[i] != -1)
+					if (element != -1)
 					{
-						Site site = new Site();
-						site.setId(new Long(siteArr[i]));
-						siteCollection.add(site);
+						final Site site = new Site();
+						site.setId(new Long(element));
+						this.siteCollection.add(site);
 					}
 				}
 			}
-			aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
+			this.aliquotInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
 			final Map map = cpForm.getValues();
 
 			/**
 			 * Name : Abhishek Mehta
 			 * Reviewer Name : Poornima
 			 * Bug ID: Collection_Event_Protocol_Order
-			 * Patch ID: Collection_Event_Protocol_Order_1 
+			 * Patch ID: Collection_Event_Protocol_Order_1
 			 * See also: 1-8
-			 * Description: To get the collection event protocols in their insertion order. 
+			 * Description: To get the collection event protocols in their insertion order.
 			 */
 			logger.debug("PRE FIX MAP " + map);
-			final Map sortedMap = sortMapOnKey(map);
+			final Map sortedMap = this.sortMapOnKey(map);
 			logger.debug("POST FIX MAP " + map);
 
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
@@ -398,11 +401,12 @@ public class CollectionProtocol extends SpecimenProtocol
 			//Setting the unsigned doc url.
 			this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
 			//Setting the consent tier collection.
-			this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
+			this.consentTierCollection = this.prepareConsentTierCollection(cpForm
+					.getConsentValues());
 
-			consentsWaived = new Boolean(cpForm.isConsentWaived());
+			this.consentsWaived = new Boolean(cpForm.isConsentWaived());
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
@@ -423,21 +427,21 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		final Object[] mapKeySet = map.keySet().toArray();
 		final int size = mapKeySet.length;
-		ArrayList<String> mList = new ArrayList<String>();
+		final ArrayList<String> mList = new ArrayList<String>();
 		for (int i = 0; i < size; i++)
 		{
-			String key = (String) mapKeySet[i];
+			final String key = (String) mapKeySet[i];
 			mList.add(key);
 		}
 
 		final KeyComparator keyComparator = new KeyComparator();
 		Collections.sort(mList, keyComparator);
 
-		LinkedHashMap<String, String> sortedMap = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> sortedMap = new LinkedHashMap<String, String>();
 		for (int i = 0; i < size; i++)
 		{
-			String key = (String) mList.get(i);
-			String value = (String) map.get(key);
+			final String key = mList.get(i);
+			final String value = (String) map.get(key);
 			sortedMap.put(key, value);
 		}
 		return sortedMap;
@@ -446,21 +450,22 @@ public class CollectionProtocol extends SpecimenProtocol
 	/**
 	 * @param consentTierMap
 	 *            Consent Tier Map
+	 * @throws Exception : Exception
 	 * @return consentStatementColl
 	 */
 	public Collection prepareConsentTierCollection(Map consentTierMap) throws Exception
 	{
 		final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
-		Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
+		final Map consentMap = CollectionProtocolUtil.sortConsentMap(consentTierMap);//bug 8905
 		final Collection beanObjColl = mapdataParser.generateData(consentMap);//consentTierMap
 
 		//Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
-		Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
-		Iterator iter = beanObjColl.iterator();
+		final Collection<ConsentTier> consentStatementColl = new LinkedHashSet<ConsentTier>();//bug 8905
+		final Iterator iter = beanObjColl.iterator();
 		while (iter.hasNext())
 		{
-			ConsentBean consentBean = (ConsentBean) iter.next();
-			ConsentTier consentTier = new ConsentTier();
+			final ConsentBean consentBean = (ConsentBean) iter.next();
+			final ConsentTier consentTier = new ConsentTier();
 			consentTier.setStatement(consentBean.getStatement());
 			//To set ID for Edit case
 			if (consentBean.getConsentTierID() != null
@@ -482,6 +487,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Returns message label to display on success add or edit.
 	 * @return String
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		return this.title;
@@ -492,6 +498,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * For equalizing
 	 * @return boolean
 	 */
+	@Override
 	public boolean equals(Object object)
 	{
 		boolean equals = false;
@@ -526,6 +533,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Method overridden to return hashcode of Id if available.
 	 * @return hashcode
 	 */
+	@Override
 	public int hashCode()
 	{
 		int hashCode = super.hashCode();
@@ -544,7 +552,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Boolean getAliquotInSameContainer()
 	{
-		return aliquotInSameContainer;
+		return this.aliquotInSameContainer;
 	}
 
 	/**
@@ -564,7 +572,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Boolean getConsentsWaived()
 	{
-		return consentsWaived;
+		return this.consentsWaived;
 	}
 
 	/**
@@ -582,7 +590,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -600,7 +608,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public CollectionProtocol getParentCollectionProtocol()
 	{
-		return parentCollectionProtocol;
+		return this.parentCollectionProtocol;
 	}
 
 	/**
@@ -618,7 +626,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection getChildCollectionProtocolCollection()
 	{
-		return childCollectionProtocolCollection;
+		return this.childCollectionProtocolCollection;
 	}
 
 	/**
@@ -635,7 +643,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Integer getSequenceNumber()
 	{
-		return sequenceNumber;
+		return this.sequenceNumber;
 	}
 
 	/**
@@ -652,7 +660,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	/**
@@ -677,7 +685,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection<User> getAssignedProtocolUserCollection()
 	{
-		return assignedProtocolUserCollection;
+		return this.assignedProtocolUserCollection;
 	}
 
 	/**
@@ -702,7 +710,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	public Collection<Site> getSiteCollection()
 	{
-		return siteCollection;
+		return this.siteCollection;
 	}
 
 	/**

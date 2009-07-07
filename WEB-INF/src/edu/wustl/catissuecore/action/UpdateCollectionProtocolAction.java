@@ -27,16 +27,18 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
-
 /**
  * @author renuka_bajpai
  */
 public class UpdateCollectionProtocolAction extends BaseAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(UpdateCollectionProtocolAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(UpdateCollectionProtocolAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -52,6 +54,7 @@ public class UpdateCollectionProtocolAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -60,18 +63,18 @@ public class UpdateCollectionProtocolAction extends BaseAction
 
 		try
 		{
-			CollectionProtocol collectionProtocol = CollectionProtocolUtil
+			final CollectionProtocol collectionProtocol = CollectionProtocolUtil
 					.populateCollectionProtocolObjects(request);
 
-			CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) (request
+			final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) (request
 					.getSession()).getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-			HttpSession session = request.getSession();
-			SessionDataBean sessionDataBean = (SessionDataBean) session
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			final HttpSession session = request.getSession();
+			final SessionDataBean sessionDataBean = (SessionDataBean) session
 					.getAttribute(Constants.SESSION_DATA);
-			CollectionProtocolDTO collectionProtocolDTO = AppUtility.getCoolectionProtocolDTO(
-					collectionProtocol, session);
+			final CollectionProtocolDTO collectionProtocolDTO = AppUtility
+					.getCoolectionProtocolDTO(collectionProtocol, session);
 			bizLogic.update(collectionProtocolDTO, null, 0, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
 			if (Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
@@ -82,21 +85,21 @@ public class UpdateCollectionProtocolAction extends BaseAction
 			{
 				target = Constants.SUCCESS;
 			}
-			ActionMessages actionMessages = new ActionMessages();
+			final ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.edit.successOnly", "Collection Protocol"));
-			saveMessages(request, actionMessages);
+			this.saveMessages(request, actionMessages);
 
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
-			logger.debug(exception.getMessage(), exception);
-			ActionErrors actionErrors = new ActionErrors();
+			this.logger.debug(exception.getMessage(), exception);
+			final ActionErrors actionErrors = new ActionErrors();
 
 			if (exception instanceof UserNotAuthorizedException)
 			{
-				UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
-				SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				final UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
+				final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
 				String userName = "";
 
@@ -104,8 +107,8 @@ public class UpdateCollectionProtocolAction extends BaseAction
 				{
 					userName = sessionDataBean.getUserName();
 				}
-				String className = Constants.COLLECTION_PROTOCOL;
-				String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex
+				final String className = Constants.COLLECTION_PROTOCOL;
+				final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex
 						.getPrivilegeName());
 				String baseObject = "";
 				if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
@@ -117,17 +120,17 @@ public class UpdateCollectionProtocolAction extends BaseAction
 					baseObject = className;
 				}
 
-				ActionError error = new ActionError("access.addedit.object.denied", userName,
+				final ActionError error = new ActionError("access.addedit.object.denied", userName,
 						className, decoratedPrivilegeName, baseObject);
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-				saveErrors(request, actionErrors);
+				this.saveErrors(request, actionErrors);
 				target = Constants.FAILURE;
 				return (mapping.findForward(target));
 			}
 
-			actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", exception
-					.getMessage()));
-			saveErrors(request, actionErrors);
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
+					exception.getMessage()));
+			this.saveErrors(request, actionErrors);
 			target = Constants.FAILURE;
 		}
 		return mapping.findForward(target);

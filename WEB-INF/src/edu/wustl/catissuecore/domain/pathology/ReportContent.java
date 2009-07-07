@@ -14,6 +14,11 @@ public class ReportContent extends AbstractDomainObject
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -7892552429390772191L;
+
+	/**
 	 * Data content of surgical pathology report.
 	 */
 	protected String data;
@@ -30,15 +35,17 @@ public class ReportContent extends AbstractDomainObject
 	 * @hibernate.generator-param name="sequence"
 	 *                            value="CATISSUE_REPORT_CONTENT_SEQ"
 	 */
+	@Override
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id
 	 *            sets system generated id
 	 */
+	@Override
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -51,7 +58,7 @@ public class ReportContent extends AbstractDomainObject
 	 */
 	public String getData()
 	{
-		return data;
+		return this.data;
 	}
 
 	/**
@@ -64,12 +71,13 @@ public class ReportContent extends AbstractDomainObject
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public ReportContent()
 	{
 
 	}
+
 	/**
 	 * @param arg0 : arg0
 	 * @throws AssignDataException : AssignDataException
@@ -85,6 +93,7 @@ public class ReportContent extends AbstractDomainObject
 	 * @see
 	 * edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common
 	 * .actionForm.IValueObject)
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
 	public void setAllValues(IValueObject valueObject) throws AssignDataException

@@ -30,6 +30,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
  */
 public class ConflictSCGDataDetailsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -44,24 +45,25 @@ public class ConflictSCGDataDetailsAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		String SCGId = (String) request.getParameter(Constants.ID);
+		final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
+		final String SCGId = request.getParameter(Constants.ID);
 
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		session.setAttribute(Constants.SCG_ID_TO_ASSOCIATE, SCGId);
 
 		//Retrieved the SCG and populated the bean
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), new Long(
-				SCGId));
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
+				new Long(SCGId));
 
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
+		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 		defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(),
-				(Long) specimenCollectionGroup.getId(), specimenCollectionGroupForm);
+				specimenCollectionGroup.getId(), specimenCollectionGroupForm);
 
 		return mapping.findForward(Constants.SUCCESS);
 	}

@@ -48,7 +48,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 */
 	public String getStorageStatus()
 	{
-		return storageStatus;
+		return this.storageStatus;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -84,17 +84,18 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 * @param abstractForm - checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object
 	 * containing the information about the CheckInCheckOutEventParameter.
 	 */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
 			//        	//call to event parameters setallvalue method
 			//        	super.setAllValues(abstractForm);
-			CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
+			final CheckInCheckOutEventParametersForm form = (CheckInCheckOutEventParametersForm) abstractForm;
 			this.storageStatus = form.getStorageStatus();
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

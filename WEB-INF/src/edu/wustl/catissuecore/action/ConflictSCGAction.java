@@ -51,16 +51,17 @@ public class ConflictSCGAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+		final ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
 
-		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
 
 		List reportQueueDataList = new ArrayList();
 		ReportLoaderQueue reportLoaderQueue = null;
-		reportQueueDataList = getReportQueueDataList(reportQueueId);
+		reportQueueDataList = this.getReportQueueDataList(reportQueueId);
 		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
 		{
 			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
@@ -69,7 +70,7 @@ public class ConflictSCGAction extends BaseAction
 		String newConfictedReport = reportLoaderQueue.getReportText();
 		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
 
-		String existingConflictedReport = retrieveExistingReport(reportQueueId);
+		final String existingConflictedReport = this.retrieveExistingReport(reportQueueId);
 		conflictSCGForm.setExistingConflictedReport(existingConflictedReport);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
@@ -84,10 +85,10 @@ public class ConflictSCGAction extends BaseAction
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+		final List reportQueueList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
 				.getName(), Constants.SYSTEM_IDENTIFIER, Long.valueOf(reportQueueId));
 		return reportQueueList;
 	}
@@ -103,27 +104,27 @@ public class ConflictSCGAction extends BaseAction
 			ClassNotFoundException
 	{
 		String existingConflictedReport = "";
-		Long reportId = Long.parseLong(reportQueueId);
+		final Long reportId = Long.parseLong(reportQueueId);
 		Long scgId = null;
 
-		String scgHql = "select rlq.specimenCollectionGroup.id "
+		final String scgHql = "select rlq.specimenCollectionGroup.id "
 				+ " from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue as rlq "
 				+ " where rlq.id= " + reportId;
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		List scgList = (List) reportLoaderQueueBizLogic.executeQuery(scgHql);
+		final List scgList = reportLoaderQueueBizLogic.executeQuery(scgHql);
 		if ((scgList != null) && (scgList).size() > 0)
 		{
 			scgId = (Long) scgList.get(0);
 		}
 
-		String ispReportHql = "select scg.identifiedSurgicalPathologyReport.textContent.data"
+		final String ispReportHql = "select scg.identifiedSurgicalPathologyReport.textContent.data"
 				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg "
 				+ " where scg.id =" + scgId + "";
 
-		List ispReportList = (List) reportLoaderQueueBizLogic.executeQuery(ispReportHql);
+		final List ispReportList = reportLoaderQueueBizLogic.executeQuery(ispReportHql);
 		if ((ispReportList != null) && (ispReportList).size() > 0)
 		{
 			existingConflictedReport = (String) ispReportList.get(0);

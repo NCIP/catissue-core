@@ -51,7 +51,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(ViewSurgicalPathologyReportAction.class);
 
 	/**
@@ -70,23 +70,24 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ViewSurgicalPathologyReportForm viewSPR = (ViewSurgicalPathologyReportForm) form;
+		final ViewSurgicalPathologyReportForm viewSPR = (ViewSurgicalPathologyReportForm) form;
 		String pageOf = viewSPR.getPageOf();
-		String operation = viewSPR.getOperation();
-		String submittedFor = viewSPR.getSubmittedFor();
-		String forwardTo = viewSPR.getForwardTo();
-		String strId = (String) request.getParameter(Constants.SYSTEM_IDENTIFIER);
-		String reportIdStr = (String) request.getParameter("reportId");
+		final String operation = viewSPR.getOperation();
+		final String submittedFor = viewSPR.getSubmittedFor();
+		final String forwardTo = viewSPR.getForwardTo();
+		final String strId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+		String reportIdStr = request.getParameter("reportId");
 		// If reportId is null in request then retrieved from form. For
 		// Review/Quarantine event param. Bug id: 9260
 		if (reportIdStr == null)
 		{
 			reportIdStr = viewSPR.getIdentifiedReportId();
 		}
-		Long reportId = Long.valueOf(reportIdStr);
+		final Long reportId = Long.valueOf(reportIdStr);
 
 		Long id = null;
 		if (strId != null)
@@ -94,22 +95,22 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			id = new Long(strId);
 			viewSPR.setId(id);
 		}
-		String strIdentifier = (String) request.getParameter(Constants.IDENTIFIER);
+		final String strIdentifier = request.getParameter(Constants.IDENTIFIER);
 		Long identifier = null;
 		if (strIdentifier != null)
 		{
 			identifier = new Long(strIdentifier);
 			viewSPR.setId(identifier);
-			retriveFromReportId(identifier, request, viewSPR);
+			this.retriveFromReportId(identifier, request, viewSPR);
 		}
 		if (reportId != null && reportId != 0
 				&& operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 		{
-			retrieveAndSetObject(pageOf, reportId, request, viewSPR);
+			this.retrieveAndSetObject(pageOf, reportId, request, viewSPR);
 		}
-		String aliasName = "";
+		final String aliasName = "";
 		request.setAttribute(Constants.PARTICIPANTIDFORREPORT, viewSPR.getParticipantIdForReport());
-		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), viewSPR
+		viewSPR.setHasAccess(this.isAuthorized(this.getSessionBean(request), viewSPR
 				.getCollectionProtocolId(), aliasName));
 		// If request is from Query to view Deidentfied report
 		if (viewSPR.getIdentifiedReportId() == null || viewSPR.getIdentifiedReportId() == "")
@@ -156,7 +157,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		{
 			request.setAttribute(Constants.ID, id.toString());
 		}
-		String flow = request.getParameter("flow");
+		final String flow = request.getParameter("flow");
 		if (flow != null && flow.equals("viewReport"))
 		{
 			pageOf = "gridViewReport";
@@ -183,39 +184,37 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	private void retrieveAndSetObject(String pageOf, Long reportId, HttpServletRequest request,
 			ViewSurgicalPathologyReportForm viewSPR) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT)
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 
-			Long participantId = getParticipantId(reportId);
-			ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory
+			final Long participantId = this.getParticipantId(reportId);
+			final ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory
 					.getBizLogic(Participant.class.getName());
-			List scgList = bizLogic.getSCGList(participantId);
+			final List scgList = bizLogic.getSCGList(participantId);
 
-			viewSPR.setReportIdList(getReportIdList(scgList));
+			viewSPR.setReportIdList(this.getReportIdList(scgList));
 		}
 
 		if (reportId != null)
 		{
-			IdentifiedSurgicalPathologyReportBizLogic bizLogic =
-				(IdentifiedSurgicalPathologyReportBizLogic) factory
+			final IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
 					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-			SurgicalPathologyReport report = new SurgicalPathologyReport();
+			final SurgicalPathologyReport report = new SurgicalPathologyReport();
 			report.setId(reportId);
 			try
 			{
 				bizLogic.populateUIBean(SurgicalPathologyReport.class.getName(), report.getId(),
 						viewSPR);
-				DeidentifiedSurgicalPathologyReport deidReport =
-					new DeidentifiedSurgicalPathologyReport();
+				final DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
 				deidReport.setId(viewSPR.getDeIdentifiedReportId());
-				List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
+				final List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
 				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.error(ex);
+				this.logger.error(ex);
 			}
 		}
 	}
@@ -227,14 +226,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private List getReportIdList(List scgList)
 	{
-		List < NameValueBean > reportIDList = new ArrayList < NameValueBean >();
+		final List<NameValueBean> reportIDList = new ArrayList<NameValueBean>();
 		Object[] obj = null;
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			obj = (Object[]) scgList.get(i);
 			if (obj[1] != null || (obj[1] != null && !((String) obj[1]).equals("")))
 			{
-				NameValueBean nb = new NameValueBean(obj[1], ((Long) obj[2]).toString());
+				final NameValueBean nb = new NameValueBean(obj[1], ((Long) obj[2]).toString());
 				reportIDList.add(nb);
 			}
 		}
@@ -259,45 +258,38 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		IBizLogic bizLogic = null;
 
 		String witnessFullName = null;
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_REVIEW_SPR))
 		{
 			request.setAttribute(Constants.OPERATION, Constants.REVIEW);
 			viewSPR.setOperation(Constants.REVIEW);
 			bizLogic = factory.getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
-			Object object = bizLogic.retrieve(PathologyReportReviewParameter.class.getName(),
+			final Object object = bizLogic.retrieve(PathologyReportReviewParameter.class.getName(),
 					identifier);
-			PathologyReportReviewParameter pathologyReportReviewParameter =
-				(PathologyReportReviewParameter) object;
+			final PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter) object;
 			viewSPR.setUserComments(pathologyReportReviewParameter.getComment());
-			User user = (User) defaultBizLogic.retrieveAttribute(
-					PathologyReportReviewParameter.class.getName(),
-					pathologyReportReviewParameter
+			final User user = (User) defaultBizLogic.retrieveAttribute(
+					PathologyReportReviewParameter.class.getName(), pathologyReportReviewParameter
 							.getId(), "user");
 			witnessFullName = user.getFirstName() + ", " + user.getLastName() + "'s";
 			viewSPR.setUserName(witnessFullName);
-			SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport) defaultBizLogic
+			final SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport) defaultBizLogic
 					.retrieveAttribute(PathologyReportReviewParameter.class.getName(),
-							pathologyReportReviewParameter.getId(),
-							"surgicalPathologyReport");
+							pathologyReportReviewParameter.getId(), "surgicalPathologyReport");
 			if (surgicalPathologyReport instanceof DeidentifiedSurgicalPathologyReport)
 			{
-				Long identifiedSurgicalPathologyReportId = (Long) defaultBizLogic
-						.retrieveAttribute
-						(DeidentifiedSurgicalPathologyReport.class.getName(),
-								surgicalPathologyReport.getId(),
-								"specimenCollectionGroup." +
-								"identifiedSurgicalPathologyReport.id");
+				final Long identifiedSurgicalPathologyReportId = (Long) defaultBizLogic
+						.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(),
+								surgicalPathologyReport.getId(), "specimenCollectionGroup."
+										+ "identifiedSurgicalPathologyReport.id");
 				defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedSurgicalPathologyReportId, viewSPR);
 			}
 			else
 			{
-				IdentifiedSurgicalPathologyReport
-				identifiedSurgicalPathologyReport =
-					(IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
+				final IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedSurgicalPathologyReport.getId(), viewSPR);
 			}
@@ -307,19 +299,20 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			request.setAttribute(Constants.OPERATION, Constants.QUARANTINE);
 			viewSPR.setOperation(Constants.QUARANTINE);
 			bizLogic = factory.getBizLogic(Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID);
-			Object object = bizLogic.retrieve(QuarantineEventParameter.class.getName(), identifier);
-			QuarantineEventParameter quarantineEventParameter = (QuarantineEventParameter) object;
+			final Object object = bizLogic.retrieve(QuarantineEventParameter.class.getName(),
+					identifier);
+			final QuarantineEventParameter quarantineEventParameter = (QuarantineEventParameter) object;
 			viewSPR.setUserComments(quarantineEventParameter.getComment());
-			User user = (User) defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class
-					.getName(), quarantineEventParameter.getId(), "user");
+			final User user = (User) defaultBizLogic.retrieveAttribute(
+					QuarantineEventParameter.class.getName(), quarantineEventParameter.getId(),
+					"user");
 			witnessFullName = user.getLastName() + ", " + user.getFirstName();
 			viewSPR.setUserName(witnessFullName);
-			Long deIdentifiedSurgicalPathologyReportId = (Long) defaultBizLogic
+			final Long deIdentifiedSurgicalPathologyReportId = (Long) defaultBizLogic
 					.retrieveAttribute(QuarantineEventParameter.class.getName(),
 							quarantineEventParameter.getId(),
-							"deIdentifiedSurgicalPathologyReport." +
-							"specimenCollectionGroup." +
-							"identifiedSurgicalPathologyReport.id");
+							"deIdentifiedSurgicalPathologyReport." + "specimenCollectionGroup."
+									+ "identifiedSurgicalPathologyReport.id");
 			defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
 					deIdentifiedSurgicalPathologyReportId, viewSPR);
 		}
@@ -334,19 +327,18 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private Long getParticipantId(Long identifiedReportId) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IdentifiedSurgicalPathologyReportBizLogic bizLogic =
-			(IdentifiedSurgicalPathologyReportBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IdentifiedSurgicalPathologyReportBizLogic bizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
 				.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 
-		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
-		String[] selectColumnName = {Constants.COLUMN_NAME_SCG_CPR_PARTICIPANT_ID};
-		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {identifiedReportId};
-		String joinCondition = "";
+		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+		final String[] selectColumnName = {Constants.COLUMN_NAME_SCG_CPR_PARTICIPANT_ID};
+		final String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {identifiedReportId};
+		final String joinCondition = "";
 
-		List participantIdList = bizLogic.retrieve(sourceObjectName, selectColumnName,
+		final List participantIdList = bizLogic.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		if (participantIdList != null && participantIdList.size() > 0)
 		{
@@ -366,13 +358,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	{
 		try
 		{
-			SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
+			final SessionDataBean sessionBean = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
 			return sessionBean;
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			this.logger.debug(ex.getMessage(), ex);
 			return null;
 		}
 	}
@@ -391,12 +383,12 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	private boolean isAuthorized(SessionDataBean sessionBean, long identifier, String aliasName)
 			throws Exception
 	{
-		String userName = sessionBean.getUserName();
+		final String userName = sessionBean.getUserName();
 
 		// To get privilegeCache through
 		// Singleton instance of PrivilegeManager, requires User LoginName
-		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
+		final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 		boolean isAuthorized = true;
 		if (sessionBean.isSecurityRequired())
 		{
@@ -426,8 +418,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				if (!hasPrivilegeOnIdentifiedData)
 				{
 					hasPrivilegeOnIdentifiedData = AppUtility.checkForAllCurrentAndFutureCPs(
-							Permissions.REGISTRATION, sessionBean,
-							String.valueOf(identifier));
+							Permissions.REGISTRATION, sessionBean, String.valueOf(identifier));
 				}
 				// boolean hasPrivilegeOnIdentifiedData =
 				// SecurityManager.getInstance

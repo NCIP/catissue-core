@@ -49,33 +49,34 @@ public class FetchReportAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String reportId = request.getParameter("reportId");
+		final String reportId = request.getParameter("reportId");
 
 		StringBuffer xmlData = new StringBuffer();
 		if (reportId != null && !reportId.equals(""))
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic =
-				(IdentifiedSurgicalPathologyReportBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic
+			= (IdentifiedSurgicalPathologyReportBizLogic) factory
 					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 
-			Object object = identifiedReportBizLogic.retrieve(
+			final Object object = identifiedReportBizLogic.retrieve(
 					IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
 			if (object != null)
 			{
-				IdentifiedSurgicalPathologyReport identifiedReport =
-					(IdentifiedSurgicalPathologyReport) object;
+				final IdentifiedSurgicalPathologyReport identifiedReport
+				= (IdentifiedSurgicalPathologyReport) object;
 				if (identifiedReport.getSpecimenCollectionGroup() != null)
 				{
-					xmlData = makeXMLData(xmlData, identifiedReport);
+					xmlData = this.makeXMLData(xmlData, identifiedReport);
 				}
 			}
 		}
 		// Writing to response
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		response.setContentType("text/xml");
 		out.write(xmlData.toString());
 
@@ -92,18 +93,18 @@ public class FetchReportAction extends BaseAction
 	private StringBuffer makeXMLData(StringBuffer xmlData,
 			IdentifiedSurgicalPathologyReport identifiedReport) throws BizLogicException
 	{
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic.retrieveAttribute(
-				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
-				Constants.COLUMN_NAME_SCG);
-		DeidentifiedSurgicalPathologyReport deidReport =
-			(DeidentifiedSurgicalPathologyReport) defaultBizLogic
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic
+				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
+						identifiedReport.getId(), Constants.COLUMN_NAME_SCG);
+		final DeidentifiedSurgicalPathologyReport deidReport
+		= (DeidentifiedSurgicalPathologyReport) defaultBizLogic
 				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
-		Site source = (Site) defaultBizLogic.retrieveAttribute(
+		final Site source = (Site) defaultBizLogic.retrieveAttribute(
 				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
 				Constants.COLUMN_NAME_REPORT_SOURCE);
-		TextContent identifiedReportText = (TextContent) defaultBizLogic.retrieveAttribute(
+		final TextContent identifiedReportText = (TextContent) defaultBizLogic.retrieveAttribute(
 				IdentifiedSurgicalPathologyReport.class.getName(), identifiedReport.getId(),
 				Constants.COLUMN_NAME_TEXT_CONTENT);
 		TextContent deidReportText = null;
@@ -113,8 +114,8 @@ public class FetchReportAction extends BaseAction
 					DeidentifiedSurgicalPathologyReport.class.getName(), deidReport.getId(),
 					Constants.COLUMN_NAME_TEXT_CONTENT);
 		}
-		List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
-		String conceptBeans = getConceptBeans(conceptBeanList);
+		final List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
+		final String conceptBeans = this.getConceptBeans(conceptBeanList);
 
 		xmlData.append("<ReportInfo>");
 
@@ -160,6 +161,7 @@ public class FetchReportAction extends BaseAction
 		return xmlData;
 
 	}
+
 	/**
 	 *
 	 * @param conceptBeanList : conceptBeanList
@@ -168,8 +170,8 @@ public class FetchReportAction extends BaseAction
 	private String getConceptBeans(List conceptBeanList)
 	{
 		String[] onClickMethod = null;
-		String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
-		StringBuffer script = new StringBuffer();
+		final String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
+		final StringBuffer script = new StringBuffer();
 		if (conceptBeanList != null)
 		{
 			ConceptHighLightingBean referentClassificationObj;
@@ -177,7 +179,7 @@ public class FetchReportAction extends BaseAction
 			String conceptName;
 			String startOff;
 			String endOff;
-			Pattern pattern = Pattern.compile("['\"]");
+			final Pattern pattern = Pattern.compile("['\"]");
 			Matcher matcher;
 
 			onClickMethod = new String[conceptBeanList.size()];
@@ -191,10 +193,10 @@ public class FetchReportAction extends BaseAction
 				matcher = pattern.matcher(conceptName);
 				conceptName = matcher.replaceAll("");
 
-				String chkBoxId = "select" + i;
+				final String chkBoxId = "select" + i;
 				onClickMethod[i] = "selectByOffset(document.getElementById('" + chkBoxId + "'),'"
-						+ startOff + "','" + endOff + "','" +
-						colours[i] + "','" + conceptName
+						+ startOff + "','" + endOff + "','"
+						+ colours[i] + "','" + conceptName
 						+ "')";
 				script.append("<ConceptBean>");
 				script.append("<ConceptName>");

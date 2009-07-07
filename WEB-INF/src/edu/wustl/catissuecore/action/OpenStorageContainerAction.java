@@ -1,8 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,6 +21,7 @@ import edu.wustl.common.util.global.Status;
  */
 public class OpenStorageContainerAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -37,21 +36,22 @@ public class OpenStorageContainerAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String operation = request.getParameter("operation");
-		HttpSession session = request.getSession();
-		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+		final String operation = request.getParameter("operation");
+		final HttpSession session = request.getSession();
+		final StorageContainerForm storageContainerForm = (StorageContainerForm) form;
 		StorageContainerBean storageContainerBean = null;
 		String target = Constants.SUCCESS;
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		if ("viewMapTab".equals(pageOf))
 		{
 			target = pageOf;
-			String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
-			String activityStatus = request.getParameter(Status.ACTIVITY_STATUS.toString());
+			final String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+			final String activityStatus = request.getParameter(Status.ACTIVITY_STATUS.toString());
 			request.setAttribute(Constants.SYSTEM_IDENTIFIER, id);
 			request.setAttribute(Status.ACTIVITY_STATUS.toString(), activityStatus);
 		}
@@ -107,11 +107,11 @@ public class OpenStorageContainerAction extends BaseAction
 		}
 		if ("pageOfStorageType".equals(pageOf))
 		{
-			Long storageTypeIdentifier = (Long) request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+			final Long storageTypeIdentifier = (Long) request
+					.getAttribute(Constants.SYSTEM_IDENTIFIER);
 			session.setAttribute("storageTypeIdentifier", storageTypeIdentifier);
 			session.setAttribute("isPageFromStorageType", Constants.YES);
-			session.setAttribute("forwardToHashMap", (HashMap) request
-					.getAttribute("forwardToHashMap"));
+			session.setAttribute("forwardToHashMap", request.getAttribute("forwardToHashMap"));
 		}
 		/*
 		  storageContainerBean.setCheckedButton(storageContainerForm.getCheckedButton());

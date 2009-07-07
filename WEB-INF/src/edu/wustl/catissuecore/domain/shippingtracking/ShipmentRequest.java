@@ -23,7 +23,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -50,7 +50,7 @@ public class ShipmentRequest extends BaseShipment
 	 */
 	public Collection<Specimen> getSpecimenCollection()
 	{
-		return specimenCollection;
+		return this.specimenCollection;
 	}
 
 	/**
@@ -66,6 +66,7 @@ public class ShipmentRequest extends BaseShipment
 	 * gets the message label.
 	 * @return msgLabel the message label.
 	 */
+	@Override
 	public String getMessageLabel()
 	{
 		String msgLabel = "";
@@ -95,7 +96,7 @@ public class ShipmentRequest extends BaseShipment
 	 */
 	public boolean isRequestProcessed()
 	{
-		return requestProcessed;
+		return this.requestProcessed;
 	}
 
 	/**
@@ -131,13 +132,14 @@ public class ShipmentRequest extends BaseShipment
 	 * @param arg0 the object representing the form.
 	 * @throws AssignDataException if some assigning operation fails.
 	 */
+	@Override
 	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		if (arg0 instanceof ShipmentRequestForm)
 		{
-			BaseShipmentForm shipmentForm = (ShipmentRequestForm) arg0;
-			setBasicShipmentRequestProperties(shipmentForm);
-			setShipmentContents(shipmentForm);
+			final BaseShipmentForm shipmentForm = (ShipmentRequestForm) arg0;
+			this.setBasicShipmentRequestProperties(shipmentForm);
+			this.setShipmentContents(shipmentForm);
 		}
 	}
 
@@ -145,18 +147,19 @@ public class ShipmentRequest extends BaseShipment
 	 * sets the shipment contents.
 	 * @param shipmentForm object of BaseShipmentForm class.
 	 */
+	@Override
 	protected void setShipmentContents(BaseShipmentForm shipmentForm)
 	{
-		Collection<StorageContainer> updatedContainerCollection = new HashSet<StorageContainer>();
+		final Collection<StorageContainer> updatedContainerCollection = new HashSet<StorageContainer>();
 		//Call to super class's method to set information related to populate container info
-		populateContainerContents(shipmentForm, updatedContainerCollection);
+		this.populateContainerContents(shipmentForm, updatedContainerCollection);
 		if (!shipmentForm.isAddOperation())
 		{
 			this.containerCollection.clear();
 			this.containerCollection.addAll(updatedContainerCollection);
 		}
 		// Populate the specimenCollection
-		populateSpecimenCollection(shipmentForm);
+		this.populateSpecimenCollection(shipmentForm);
 	}
 
 	/**
@@ -165,11 +168,9 @@ public class ShipmentRequest extends BaseShipment
 	 */
 	private void populateSpecimenCollection(BaseShipmentForm shipmentForm)
 	{
-		int specimenCount = shipmentForm.getSpecimenCounter();
+		final int specimenCount = shipmentForm.getSpecimenCounter();
 		String fieldValue = "";
-		boolean containsSpecimens = false;
 		Specimen specimen = null;
-		int numOfSpecimens = 0;
 		this.specimenCollection.clear();
 		if (specimenCount > 0)
 		{
@@ -180,7 +181,8 @@ public class ShipmentRequest extends BaseShipment
 				if (fieldValue != null && !fieldValue.trim().equals(""))
 				{
 					specimen = new Specimen();
-					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
+					if (shipmentForm.getSpecimenLabelChoice()
+							.equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}
@@ -202,12 +204,12 @@ public class ShipmentRequest extends BaseShipment
 	protected void setBasicShipmentRequestProperties(BaseShipmentForm shipmentForm)
 			throws AssignDataException
 	{
-		if (shipmentForm.getId() != 0l)
+		if (shipmentForm.getId() != 0L)
 		{
 			this.id = shipmentForm.getId();
 		}
 		this.senderComments = shipmentForm.getSenderComments();
-		this.senderSite = createSitObject(shipmentForm.getSenderSiteId());
+		this.senderSite = this.createSitObject(shipmentForm.getSenderSiteId());
 		this.label = shipmentForm.getLabel();
 		if (shipmentForm.getActivityStatus() != null
 				&& !shipmentForm.getActivityStatus().trim().equals(""))
@@ -219,9 +221,9 @@ public class ShipmentRequest extends BaseShipment
 			if (shipmentForm.getSendDate() != null
 					&& shipmentForm.getSendDate().trim().length() != 0)
 			{
-				Calendar calendar = Calendar.getInstance();
+				final Calendar calendar = Calendar.getInstance();
 				Date date;
-				date = Utility.parseDate(shipmentForm.getSendDate(), Utility
+				date = CommonUtilities.parseDate(shipmentForm.getSendDate(), CommonUtilities
 						.datePattern(shipmentForm.getSendDate()));
 				calendar.setTime(date);
 				if (shipmentForm.getSendTimeHour() != null
@@ -239,7 +241,7 @@ public class ShipmentRequest extends BaseShipment
 				this.sendDate = calendar.getTime();
 			}
 		}
-		catch (ParseException e)
+		catch (final ParseException e)
 		{
 			Logger.out.error(e.getMessage());
 			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");

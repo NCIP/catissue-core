@@ -52,7 +52,7 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 	 */
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class PathologicalCaseOrderItem extends NewSpecimenOrderItem
 
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**

@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.common.action.BaseAction;
+
 /**
  *
  * @author renuka_bajpai
@@ -20,6 +21,7 @@ import edu.wustl.common.action.BaseAction;
  */
 public class ComboDataAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -34,22 +36,23 @@ public class ComboDataAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		String limit = request.getParameter("limit");
-		String query = request.getParameter("query");
-		String start = request.getParameter("start");
-		Integer limitFetch = Integer.parseInt(limit);
-		Integer startFetch = Integer.parseInt(start);
+		final String limit = request.getParameter("limit");
+		final String query = request.getParameter("query");
+		final String start = request.getParameter("start");
+		final Integer limitFetch = Integer.parseInt(limit);
+		final Integer startFetch = Integer.parseInt(start);
 
-		ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
-		JSONObject jsonObject = comboDataBizObj.getClinicalDiagnosisData(limitFetch, startFetch,
-				query);
+		final ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
+		final JSONObject jsonObject = comboDataBizObj.getClinicalDiagnosisData(limitFetch,
+				startFetch, query);
 
 		response.setContentType("text/javascript");
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		out.write(jsonObject.toString());
 		return null;
 	}

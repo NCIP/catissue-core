@@ -10,12 +10,16 @@ public class BinaryContent extends ReportContent
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = 2927694650319915989L;
+	/**
 	 * Surgical Pathology report of the current binary data.
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public BinaryContent()
 	{
@@ -30,7 +34,7 @@ public class BinaryContent extends ReportContent
 	 */
 	public SurgicalPathologyReport getSurgicalPathologyReport()
 	{
-		return surgicalPathologyReport;
+		return this.surgicalPathologyReport;
 	}
 
 	/**

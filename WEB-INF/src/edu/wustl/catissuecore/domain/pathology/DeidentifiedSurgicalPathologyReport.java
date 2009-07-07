@@ -16,6 +16,11 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 {
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -4543430140579033813L;
+
+	/**
 	 * Quarantine report flag.
 	 */
 	protected String isQuarantined;
@@ -36,7 +41,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public DeidentifiedSurgicalPathologyReport()
 	{
@@ -53,7 +58,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 */
 	public Collection getConceptReferentCollection()
 	{
-		return conceptReferentCollection;
+		return this.conceptReferentCollection;
 	}
 
 	/**
@@ -71,7 +76,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 */
 	public String getIsQuarantined()
 	{
-		return isQuarantined;
+		return this.isQuarantined;
 	}
 
 	/**
@@ -88,11 +93,11 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 *                lazy="false" cascade="all"
 	 * @hibernate.collection-key column="DEID_REPORT_ID"
 	 * @hibernate.collection-one-to-many
-	 *                                   class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
+	 *  class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
 	 */
 	public Set getQuarantineEventParameterCollection()
 	{
-		return quarantineEventParameterCollection;
+		return this.quarantineEventParameterCollection;
 	}
 
 	/**
@@ -110,15 +115,17 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 *                        class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
 	 *                        column="SCG_ID" not-null="false"
 	 */
+	@Override
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
 	 * @param specimenCollectionGroup
 	 *            sets specimen collection group of the report.
 	 */
+	@Override
 	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;

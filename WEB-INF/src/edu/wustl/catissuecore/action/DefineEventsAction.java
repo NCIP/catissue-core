@@ -37,17 +37,18 @@ public class DefineEventsAction extends BaseAction
 	 *            object of HttpServletResponse
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		CollectionProtocolForm cpForm = (CollectionProtocolForm) form;
+		final CollectionProtocolForm cpForm = (CollectionProtocolForm) form;
 
-		String pageOf = request.getParameter(Constants.PAGE_OF);
-		String operation = request.getParameter("operation");
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String operation = request.getParameter("operation");
 		request.setAttribute("operation", operation);
-		String invokeFunction = request.getParameter("invokeFunction");
+		final String invokeFunction = request.getParameter("invokeFunction");
 		request.setAttribute("invokeFunction", invokeFunction);
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		CollectionProtocolBean cpBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
@@ -57,9 +58,9 @@ public class DefineEventsAction extends BaseAction
 		}
 		if (cpForm.getShortTitle() != null)
 		{
-			populateCollectionProtocolBean(cpForm, cpBean);
+			this.populateCollectionProtocolBean(cpForm, cpBean);
 		}
-		Long cpIdentifier = cpBean.getIdentifier();
+		final Long cpIdentifier = cpBean.getIdentifier();
 		session.setAttribute("CP_IDENTIFIER", cpIdentifier);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, cpBean);
 		return mapping.findForward(pageOf);
@@ -86,7 +87,7 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
 		//For Consent Tab
 		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());
-		Map consentMap = CollectionProtocolUtil.sortConsentMap(cpForm.getConsentValues());//bug 8905
+		final Map consentMap = CollectionProtocolUtil.sortConsentMap(cpForm.getConsentValues());//bug 8905
 		//cpBean.setConsentValues(cpForm.getConsentValues());
 		cpBean.setConsentValues(consentMap);//bug 8905
 		cpBean.setUnsignedConsentURLName(cpForm.getUnsignedConsentURLName());

@@ -73,7 +73,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 */
 	public Integer getFromPositionDimensionOne()
 	{
-		return fromPositionDimensionOne;
+		return this.fromPositionDimensionOne;
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 */
 	public Integer getFromPositionDimensionTwo()
 	{
-		return fromPositionDimensionTwo;
+		return this.fromPositionDimensionTwo;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 */
 	public Integer getToPositionDimensionOne()
 	{
-		return toPositionDimensionOne;
+		return this.toPositionDimensionOne;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 */
 	public Integer getToPositionDimensionTwo()
 	{
-		return toPositionDimensionTwo;
+		return this.toPositionDimensionTwo;
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 */
 	public StorageContainer getToStorageContainer()
 	{
-		return toStorageContainer;
+		return this.toStorageContainer;
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	public edu.wustl.catissuecore.domain.StorageContainer getFromStorageContainer()
 	{
 
-		return fromStorageContainer;
+		return this.fromStorageContainer;
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	public TransferEventParameters(AbstractActionForm abstractForm)
 	{
 		super();
-		setAllValues((IValueObject) abstractForm);
+		this.setAllValues(abstractForm);
 	}
 
 	/**
@@ -220,12 +220,13 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 * @param abstractForm - TransferEventParametersForm An TransferEventParametersForm object
 	 * containing the information about the TransferEventParameters.
 	 * */
+	@Override
 	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
-			TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
-			StorageContainer toObj = new StorageContainer();
+			final TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
+			final StorageContainer toObj = new StorageContainer();
 			if (form.getStContSelection() == 1)
 			{
 				this.toPositionDimensionOne = Integer.valueOf(form.getPositionDimensionOne());
@@ -255,16 +256,18 @@ public class TransferEventParameters extends SpecimenEventParameters
 			}
 			else
 			{
-				StorageContainer fromObj = new StorageContainer();
+				final StorageContainer fromObj = new StorageContainer();
 				fromObj.setId(Long.valueOf(form.getFromStorageContainerId()));
 				this.fromStorageContainer = fromObj;
 
-				this.fromPositionDimensionOne = Integer.valueOf(form.getFromPositionDimensionOne());
-				this.fromPositionDimensionTwo = Integer.valueOf(form.getFromPositionDimensionTwo());
+				this.fromPositionDimensionOne
+				= Integer.valueOf(form.getFromPositionDimensionOne());
+				this.fromPositionDimensionTwo
+				= Integer.valueOf(form.getFromPositionDimensionTwo());
 			}
 			super.setAllValues(form);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

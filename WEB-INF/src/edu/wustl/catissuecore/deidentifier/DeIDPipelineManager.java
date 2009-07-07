@@ -41,18 +41,37 @@ public class DeIDPipelineManager
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
+	/**
+	 * logger.
+	 */
 	private transient Logger logger = Logger.getCommonLogger(DeIDPipelineManager.class);
+	/**
+	 * abbrToHeader.
+	 */
 	protected static HashMap<String, String> abbrToHeader;
-
+	/**
+	 * rejectedExecutionHandler.
+	 */
 	private RejectedExecutionHandler rejectedExecutionHandler;
+	/**
+	 * corePoolSize.
+	 */
 	private int corePoolSize;
+	/**
+	 * maxPoolSize.
+	 */
 	private int maxPoolSize;
+	/**
+	 * keepAliveSeconds.
+	 */
 	private int keepAliveSeconds;
-
+	/**
+	 * deidentifier.
+	 */
 	private AbstractDeidentifier deidentifier;
 
 	/**
-	 * Default constructor of the class
+	 * Default constructor of the class.
 	 * @throws Exception : Exception
 	 */
 	public DeIDPipelineManager() throws Exception
@@ -65,14 +84,15 @@ public class DeIDPipelineManager
 		{
 			logger
 					.error(
-							"Initialization of deidentification process failed or error in main thread",
+							"Initialization of deidentification process" +
+							" failed or error in main thread",
 							ex);
 			throw ex;
 		}
 	}
 
 	/**
-	 * This method is responsible for creating prerequisite environment that is
+	 * This method is responsible for creating prerequisite environment that is.
 	 * required for initialization of the DeID process
 	 * @throws Exception
 	 *             throws exception occured in the initialization process.
@@ -99,7 +119,8 @@ public class DeIDPipelineManager
 		{
 			logger
 					.error("Class not found:"
-							+ CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME
+							+ CaTIESProperties.getValue(CaTIESConstants
+									.DEIDENTIFIER_CLASSNAME
 									+ "\n" + ex));
 			throw ex;
 		}
@@ -107,7 +128,7 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * This method is responsible for managing the overall process of
+	 * This method is responsible for managing the overall process of.
 	 * de-identification
 	 * @throws InterruptedException : InterruptedException
 	 */
@@ -168,7 +189,8 @@ public class DeIDPipelineManager
 			try
 			{
 				CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,
-						CaTIESConstants.CSVLOGGER_DATETIME + CaTIESConstants.CSVLOGGER_SEPARATOR
+						CaTIESConstants.CSVLOGGER_DATETIME
+						+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_STATUS
@@ -187,7 +209,8 @@ public class DeIDPipelineManager
 
 					identifiedReport = getIdentifiedReport((Long) isprIDList.get(i));
 					// instantiate a thread to process the report
-					logger.info("Instantiating thread for report id=" + identifiedReport.getId());
+					logger.info("Instantiating thread for report id="
+							+ identifiedReport.getId());
 					Thread th = new DeidentifierReportThread(identifiedReport, deidentifier);
 					// add thread to thread pool manager
 					deidExecutor.execute(th);
@@ -219,11 +242,14 @@ public class DeIDPipelineManager
 	private IdentifiedSurgicalPathologyReport getIdentifiedReport(Long identifiedReportId)
 			throws Exception
 	{
-		IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) CaCoreAPIService
+		IdentifiedSurgicalPathologyReport identifiedReport
+		= (IdentifiedSurgicalPathologyReport) CaCoreAPIService
 				.getObject(
-						edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport.class,
+						edu.wustl.catissuecore.domain.pathology.
+						IdentifiedSurgicalPathologyReport.class,
 						Constants.SYSTEM_IDENTIFIER, identifiedReportId);
-		String hqlQuery = "select cpr.participant from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr, "
+		String hqlQuery = "select cpr.participant from edu.wustl.catissuecore.domain" +
+				".CollectionProtocolRegistration cpr, "
 				+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg"
 				+ " where scg.id="
 				+ identifiedReport.getSpecimenCollectionGroup().getId()
@@ -238,14 +264,17 @@ public class DeIDPipelineManager
 			hqlQuery = "select elements(p.participantMedicalIdentifierCollection)"
 					+ " from edu.wustl.catissuecore.domain.Participant as p" + " where p.id="
 					+ participant.getId();
-			Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = (List) CaCoreAPIService
+			Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection
+			= (List) CaCoreAPIService
 					.executeQuery(hqlQuery, Participant.class.getName());
 			participant
-					.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+					.setParticipantMedicalIdentifierCollection
+					(participantMedicalIdentifierCollection);
 		}
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 		specimenCollectionGroup.setId(identifiedReport.getSpecimenCollectionGroup().getId());
-		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		CollectionProtocolRegistration collectionProtocolRegistration
+		= new CollectionProtocolRegistration();
 		collectionProtocolRegistration.setParticipant(participant);
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		identifiedReport.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -261,7 +290,7 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * Method to retrieve Identified report for deidentification process
+	 * Method to retrieve Identified report for deidentification process.
 	 * @return object of IdentifiedSurgicalPathologyReport
 	 * @throws Exception
 	 *             generic exception occured while retrieving object of
@@ -269,7 +298,8 @@ public class DeIDPipelineManager
 	 */
 	private List getReportIDList() throws Exception
 	{
-		String hqlQuery = "select id from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport where "
+		String hqlQuery = "select id from edu.wustl.catissuecore" +
+				".domain.pathology.IdentifiedSurgicalPathologyReport where "
 				+ CaTIESConstants.COLUMN_NAME_REPORT_STATUS
 				+ "='"
 				+ CaTIESConstants.PENDING_FOR_DEID + "'";
@@ -279,7 +309,7 @@ public class DeIDPipelineManager
 	}
 
 	/**
-	 * Main method for the DeIDPipeline class
+	 * Main method for the DeIDPipeline class.
 	 * @param args
 	 *            commandline arguments
 	 */
