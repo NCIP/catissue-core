@@ -1291,9 +1291,14 @@ public class AppUtility
 			list = executeSQLQuery(sql.toString());
 		    if (list != null && list.size() > 0)
 			{
-					records = (List) list.get(0);
-					if(records!=null  && records.size()>0){
-						noOfRecords = new Long((String) records.get(0));
+		    	
+		    		records = (List) list.get(0);
+					if(records!=null  && records.size()>0 && !records.isEmpty())
+					{
+						if(!((String)records.get(0)).equals(""))
+						{
+						   noOfRecords = new Long((String) records.get(0));
+						}
 					}
 			}
 		}
