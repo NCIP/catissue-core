@@ -18,21 +18,25 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
- * SpecimenProtocolBizLogic is a class which contains the common moethods requird for 
+ * SpecimenProtocolBizLogic is a class which contains the common moethods requird for
  * Collection Protocol and Distribution Protocol.
  * @author gautam_shetty
  */
 public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 {
-	private transient Logger logger = Logger.getCommonLogger(SpecimenProtocolBizLogic.class);
-    /**
+
+	/**
+	 * Logger object.
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenProtocolBizLogic.class);
+
+	/**
 	 * This method checks for the change in the Activity status of the object. If change is found
 	 *  then it calls the setClosedDate() to update the End date.
 	 * @param newObject Object representing the current data.
@@ -40,56 +44,58 @@ public class SpecimenProtocolBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected void checkForChangedStatus(SpecimenProtocol newObject, SpecimenProtocol oldObject)
 	{
-		logger.debug("newObject.getActivityStatus() : " + newObject.getActivityStatus());
-		logger.debug("oldObject.getActivityStatus()   " + oldObject.getActivityStatus());
-		
-		if(!newObject.getActivityStatus().equals(oldObject.getActivityStatus()))
+		this.logger.debug("newObject.getActivityStatus() : " + newObject.getActivityStatus());
+		this.logger.debug("oldObject.getActivityStatus()   " + oldObject.getActivityStatus());
+
+		if (!newObject.getActivityStatus().equals(oldObject.getActivityStatus()))
 		{
-			setClosedDate(newObject);
+			this.setClosedDate(newObject);
 		}
 	}
-    
-    /**
-	 * @author mandar_deshmukh 
+
+	/**
+	 * @author mandar_deshmukh.
 	 * This method is used for setting the Stop / End date for the Protocol.
 	 * @param protocol The domain object whose date is to be set
 	 */
 	private void setClosedDate(SpecimenProtocol protocol)
 	{
-		String activityStatus =  protocol.getActivityStatus();
-		logger.debug("in setClosedDate of DBZL, ActivityStatus  : "+ activityStatus);
-		if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_CLOSED.toString()))
+		final String activityStatus = protocol.getActivityStatus();
+		this.logger.debug("in setClosedDate of DBZL, ActivityStatus  : " + activityStatus);
+		if (activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
-			Date currentDate = Calendar.getInstance().getTime();
+			final Date currentDate = Calendar.getInstance().getTime();
 			protocol.setEndDate(currentDate);
-			logger.debug("EndDate set");
+			this.logger.debug("EndDate set");
 		}
-		else if(activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_ACTIVE.toString()))
+		else if (activityStatus.equalsIgnoreCase(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
 			protocol.setEndDate(null);
-			logger.debug("EndDate cleared");
+			this.logger.debug("EndDate cleared");
 		}
 	}
-	
+
 	/**
 	 * @param specimenProtocolIdentifier ID of the specimen protocol whose end date is to be searched.
 	 * @param sessionBean Object of SessionDataBean
 	 * @return end date of the specimen protocol referred by the given ID. Empty string if enddate is null.
-	 * @throws DAOException
-	 * @throws ClassNotFoundException 
+	 * @throws BizLogicException throws BizLogicException
 	 */
-	public String getEndDate(long specimenProtocolIdentifier, SessionDataBean sessionBean) throws BizLogicException
+	public String getEndDate(long specimenProtocolIdentifier, SessionDataBean sessionBean)
+			throws BizLogicException
 	{
-		String endDate="";
-        String hqlQuery="select endDate from edu.wustl.catissuecore.domain.SpecimenProtocol where id="+specimenProtocolIdentifier;
-        List endDateList = executeQuery(hqlQuery);
+		String endDate = "";
+		final String hqlQuery = "select endDate from edu.wustl.catissuecore.domain.SpecimenProtocol where id="
+				+ specimenProtocolIdentifier;
+		final List endDateList = this.executeQuery(hqlQuery);
 
-        if(endDateList != null && !endDateList.isEmpty()   )
-        {
-         	Date tmpDate = (Date) endDateList.get(0);
-           	endDate = Utility.parseDateToString(tmpDate,CommonServiceLocator.getInstance().getDatePattern()); 
-        }  
-        
-		return endDate ;	
+		if (endDateList != null && !endDateList.isEmpty())
+		{
+			final Date tmpDate = (Date) endDateList.get(0);
+			endDate = CommonUtilities.parseDateToString(tmpDate, CommonServiceLocator.getInstance()
+					.getDatePattern());
+		}
+
+		return endDate;
 	}
 }

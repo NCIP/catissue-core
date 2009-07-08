@@ -51,14 +51,19 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			throws ApplicationException
 	{
 		List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Set<Long> cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), true);
-		List<NameValueBean> collectionProtocolBeanList = getAndFilterCollectionProtocolBeanList(cpIds);
-		Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
-		Set<Long> cp_Ids = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), false);
-		cpDetailsList = getCollectionPorotocolForSiteIds(sessionDataBean, factory, siteIds, cp_Ids);
-		removeDuplicateCollectionProtoclBeanFromList(cpDetailsList, collectionProtocolBeanList);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Set<Long> cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), true);
+		final List<NameValueBean> collectionProtocolBeanList = this
+				.getAndFilterCollectionProtocolBeanList(cpIds);
+		final Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
+		final Set<Long> cp_Ids = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), false);
+		cpDetailsList = this.getCollectionPorotocolForSiteIds(sessionDataBean, factory, siteIds,
+				cp_Ids);
+		this
+				.removeDuplicateCollectionProtoclBeanFromList(cpDetailsList,
+						collectionProtocolBeanList);
 		return cpDetailsList;
 	}
 
@@ -73,19 +78,19 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			IFactory factory, Set<Long> siteIds, Set<Long> cp_Ids)
 	{
 
-		List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
 		try
 		{
 			if (siteIds != null && !siteIds.isEmpty())
 			{
-				List<NameValueBean> list = new ArrayList<NameValueBean>();
-				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-						sessionDataBean.getUserName());
-				SiteBizLogic siteBizLogic = (SiteBizLogic) factory
+				final List<NameValueBean> list = new ArrayList<NameValueBean>();
+				final PrivilegeCache privilegeCache = PrivilegeManager.getInstance()
+						.getPrivilegeCache(sessionDataBean.getUserName());
+				final SiteBizLogic siteBizLogic = (SiteBizLogic) factory
 						.getBizLogic(Constants.SITE_FORM_ID);
-				for (Long siteId : siteIds)
+				for (final Long siteId : siteIds)
 				{
-					String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
+					final String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
 					if (privilegeCache.hasPrivilege(peName,
 							edu.wustl.common.util.global.Variables.privilegeDetailsMap
 									.get(Constants.EDIT_PROFILE_PRIVILEGE)))
@@ -94,14 +99,14 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 						cpCollection = siteBizLogic.getRelatedCPs(siteId);
 						if (cpCollection != null && !cpCollection.isEmpty())
 						{
-							for (CollectionProtocol cp : cpCollection)
+							for (final CollectionProtocol cp : cpCollection)
 							{
 								if (cp_Ids.contains(cp.getId()))
 								{
 									continue;
 								}
 								boolean isPresent = false;
-								for (NameValueBean nameValueBean : list)
+								for (final NameValueBean nameValueBean : list)
 								{
 									if (nameValueBean.getValue().equalsIgnoreCase(
 											cp.getId().toString()))
@@ -111,7 +116,9 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 									}
 								}
 								if (!isPresent)
+								{
 									list.add(new NameValueBean(cp.getShortTitle(), cp.getId()));
+								}
 							}
 						}
 					}
@@ -119,12 +126,12 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				cpDetailsList.addAll(list);
 			}
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,13 +147,13 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 */
 	private List<NameValueBean> getAndFilterCollectionProtocolBeanList(Set<Long> cpIds)
 	{
-		List<NameValueBean> collectionProtocolBeanList = new Vector<NameValueBean>();
+		final List<NameValueBean> collectionProtocolBeanList = new Vector<NameValueBean>();
 		List<NameValueBean> participantRegistrationBeanList = null;
 		try
 		{
 			IFactory factory = null;
 			factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic) factory
+			final CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic) factory
 					.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			participantRegistrationBeanList = cBizLogic.getCollectionProtocolBeanList();
 			if (cpIds == null)
@@ -157,9 +164,8 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			{
 				for (int counter = 0; counter < participantRegistrationBeanList.size(); counter++)
 				{
-					NameValueBean cpDetails = (NameValueBean) participantRegistrationBeanList
-							.get(counter);
-					Long cpId = Long.parseLong(cpDetails.getValue());
+					final NameValueBean cpDetails = participantRegistrationBeanList.get(counter);
+					final Long cpId = Long.parseLong(cpDetails.getValue());
 
 					if (cpIds.contains(cpId))
 					{
@@ -168,7 +174,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -184,12 +190,12 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	private void removeDuplicateCollectionProtoclBeanFromList(List<NameValueBean> cpDetailsList,
 			List<NameValueBean> collectionProtocolBeanList)
 	{
-		Iterator<NameValueBean> iter = collectionProtocolBeanList.iterator();
+		final Iterator<NameValueBean> iter = collectionProtocolBeanList.iterator();
 		while (iter.hasNext())
 		{
-			NameValueBean cpDetails = (NameValueBean) iter.next();
+			final NameValueBean cpDetails = iter.next();
 			boolean isPresent = false;
-			for (NameValueBean nameValueBean : cpDetailsList)
+			for (final NameValueBean nameValueBean : cpDetailsList)
 			{
 				if (nameValueBean.getValue().equalsIgnoreCase(cpDetails.getValue()))
 				{
@@ -213,10 +219,10 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 */
 
 	public List<CpAndParticipentsBean> getRegisteredParticipantInfoCollection(Long cpId)
-			throws BizLogicException,ApplicationException
+			throws BizLogicException, ApplicationException
 	{
-		List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
-		StringBuffer hql = new StringBuffer();
+		final List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
+		final StringBuffer hql = new StringBuffer();
 		String participantDisplayInfo = null;
 		try
 		{
@@ -233,13 +239,13 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 					.append(Status.ACTIVITY_STATUS_DISABLED.toString()
 							+ "' order by cpr.participant.id");
 
-			List<Object[]> participantList = AppUtility.executeQuery(hql.toString());
+			final List<Object[]> participantList = AppUtility.executeQuery(hql.toString());
 
 			for (int j = 0; j < participantList.size(); j++)
 			{
-				Object[] participantObj = (Object[]) participantList.get(j);
-				participantDisplayInfo = getFormattedParticpantInfo(participantObj);
-				int index = participantDisplayInfo.indexOf(":");
+				final Object[] participantObj = participantList.get(j);
+				participantDisplayInfo = this.getFormattedParticpantInfo(participantObj);
+				final int index = participantDisplayInfo.indexOf(":");
 				Long Id = null;
 				String name = "";
 				//Id = new Long(participantDisplayInfo.substring(0, index));
@@ -249,17 +255,19 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			// TODO Auto-generated catch block
-			throw new ApplicationException(e.getErrorKey(),e,e.getMsgValues());
+			throw new ApplicationException(e.getErrorKey(), e, e.getMsgValues());
 		}
-		catch(Exception e){
+		catch (final Exception e)
+		{
 			e.printStackTrace();
 		}
 		return participantInfoList;
@@ -277,18 +285,22 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		String lastName = null;
 		String firstName = null;
 		String info = null;
-		if(participantObj[0]!=null){
-			info= (String) participantObj[0].toString();
+		if (participantObj[0] != null)
+		{
+			info = participantObj[0].toString();
 		}
-		if(participantObj[1]!=null){
-			lastName = (String) participantObj[1].toString();
+		if (participantObj[1] != null)
+		{
+			lastName = participantObj[1].toString();
 		}
-		if(participantObj[2]!=null){
-			firstName = (String) participantObj[2].toString();
+		if (participantObj[2] != null)
+		{
+			firstName = participantObj[2].toString();
 		}
-		
-		if(participantObj[3]!=null){
-			protocolParticipantId = (String) participantObj[3].toString();
+
+		if (participantObj[3] != null)
+		{
+			protocolParticipantId = participantObj[3].toString();
 		}
 		participantDisplayInfo = "";
 

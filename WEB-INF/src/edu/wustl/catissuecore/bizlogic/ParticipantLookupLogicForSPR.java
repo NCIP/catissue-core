@@ -20,6 +20,7 @@ import edu.wustl.common.lookup.MatchingStatusForSSNPMI;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
+
 /**
  *
  * @author
@@ -81,21 +82,22 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			throw new Exception("Params can not be null");
 		}
 
-		DefaultLookupParameters participantParams = (DefaultLookupParameters) params;
+		final DefaultLookupParameters participantParams = (DefaultLookupParameters) params;
 
 		// Getting the participant object created by user
-		Participant participant = (Participant) participantParams.getObject();
+		final Participant participant = (Participant) participantParams.getObject();
 
 		// if cutoff is greater than total points, throw exception
-		if (cutoffPoints > totalPointsFromProperties)
+		if (this.cutoffPoints > totalPointsFromProperties)
 		{
 			throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
 		}
 
 		// get total points depending on Participant object created by user
-		totalPoints = calculateTotalPoints(participant);
+		this.totalPoints = this.calculateTotalPoints(participant);
 
-		Map<String, Participant> listOfParticipants = participantParams.getListOfParticipants();
+		final Map<String, Participant> listOfParticipants = participantParams
+				.getListOfParticipants();
 
 		// In case List of participants is null or empty, return the Matching
 		// Participant List as null.
@@ -106,7 +108,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 
 		// calling the searchMatchingParticipant to filter the participant list
 		// according to given cutoff value
-		List<DefaultLookupResult> participants = searchMatchingParticipant(participant,
+		final List<DefaultLookupResult> participants = this.searchMatchingParticipant(participant,
 				listOfParticipants);
 
 		return participants;
@@ -162,15 +164,15 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	private List<DefaultLookupResult> searchMatchingParticipant(Participant userParticipant,
 			Map<String, Participant> listOfParticipants) throws Exception
 	{
-		List<DefaultLookupResult> participants = new ArrayList<DefaultLookupResult>();
+		final List<DefaultLookupResult> participants = new ArrayList<DefaultLookupResult>();
 		// Iterates through all the Participants from the list
-		for (Participant existingParticipant : listOfParticipants.values())
+		for (final Participant existingParticipant : listOfParticipants.values())
 		{
-			isSSNTemp = MatchingStatus.NOMATCH;
-			isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
+			this.isSSNTemp = MatchingStatus.NOMATCH;
+			this.isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
 			int weight = 0; // used for calculation of total points.
 			int socialSecurityNumberWeight = 0; // points of social security
-												// number
+			// number
 			int birthDateWeight = 0; // points of birth date
 			// Check for the participant only in case its Activity Status =
 			// active
@@ -179,7 +181,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant
 							.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
 			{
-				if (!isEmptyParticipant(existingParticipant))
+				if (!this.isEmptyParticipant(existingParticipant))
 				{
 					/**
 					 * If user has entered Social Security Number and it is
@@ -191,7 +193,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& existingParticipant.getSocialSecurityNumber() != null
 							&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
 					{
-						socialSecurityNumberWeight = checkSSN(userParticipant
+						socialSecurityNumberWeight = this.checkSSN(userParticipant
 								.getSocialSecurityNumber().trim().toLowerCase(),
 								existingParticipant.getSocialSecurityNumber().trim().toLowerCase());
 						weight = socialSecurityNumberWeight;
@@ -204,7 +206,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 					if (userParticipant.getBirthDate() != null
 							&& existingParticipant.getBirthDate() != null)
 					{
-						birthDateWeight = checkDateOfBirth(userParticipant.getBirthDate(),
+						birthDateWeight = this.checkDateOfBirth(userParticipant.getBirthDate(),
 								existingParticipant.getBirthDate());
 						weight += birthDateWeight;
 					}
@@ -218,8 +220,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& existingParticipant.getLastName() != null
 							&& !existingParticipant.getLastName().trim().equals(""))
 					{
-						weight += checkLastName(userParticipant.getLastName().trim().toLowerCase(),
-								existingParticipant.getLastName().trim().toLowerCase());
+						weight += this.checkLastName(userParticipant.getLastName().trim()
+								.toLowerCase(), existingParticipant.getLastName().trim()
+								.toLowerCase());
 					}
 					/**
 					 * If user has entered First Name and it is present in the
@@ -231,31 +234,31 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& existingParticipant.getFirstName() != null
 							&& !existingParticipant.getFirstName().trim().equals(""))
 					{
-						weight += checkFirstName(userParticipant.getFirstName().trim()
+						weight += this.checkFirstName(userParticipant.getFirstName().trim()
 								.toLowerCase(), existingParticipant.getFirstName().trim()
 								.toLowerCase());
 					}
-					weight += checkParticipantMedicalIdentifier(userParticipant
+					weight += this.checkParticipantMedicalIdentifier(userParticipant
 							.getParticipantMedicalIdentifierCollection(), existingParticipant
 							.getParticipantMedicalIdentifierCollection());
 
 					if (weight == totalPointsFromProperties
-							|| (isSSNPMITemp == MatchingStatusForSSNPMI.EXACT))
+							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.EXACT))
 					{
 						participants.clear();
-						DefaultLookupResult result = new DefaultLookupResult();
-						result.setIsSSNPMI(isSSNPMITemp);
+						final DefaultLookupResult result = new DefaultLookupResult();
+						result.setIsSSNPMI(this.isSSNPMITemp);
 						result.setObject(existingParticipant);
 						result.setWeight(Double.valueOf(weight));
 						participants.add(result);
 						break;
 					}
 					else if (((weight != totalPointsFromProperties) && (weight != 0) && (weight > sprCutOff))
-							|| (isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
-							|| (isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
+							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
+							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
 					{
-						DefaultLookupResult result = new DefaultLookupResult();
-						result.setIsSSNPMI(isSSNPMITemp);
+						final DefaultLookupResult result = new DefaultLookupResult();
+						result.setIsSSNPMI(this.isSSNPMITemp);
 						result.setObject(existingParticipant);
 						result.setWeight(Double.valueOf(weight));
 						participants.add(result);
@@ -278,10 +281,10 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 
 		if (pmiCollection != null && pmiCollection.size() > 0)
 		{
-			ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection.iterator()
-					.next();
-			String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
-			Site site = participantMedicalIdentifier.getSite();
+			final ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection
+					.iterator().next();
+			final String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
+			final Site site = participantMedicalIdentifier.getSite();
 			if (site == null && (mrn == null || mrn.equals("")))
 			{
 				flag = true;
@@ -310,9 +313,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 				&& (existingParticipant.getLastName() == null || existingParticipant.getLastName()
 						.trim().equals("")) && existingParticipant.getBirthDate() == null)
 		{
-			Collection<ParticipantMedicalIdentifier> pmiCollection = existingParticipant
+			final Collection<ParticipantMedicalIdentifier> pmiCollection = existingParticipant
 					.getParticipantMedicalIdentifierCollection();
-			flag = isPMICollectionEmpty(pmiCollection);
+			flag = this.isPMICollectionEmpty(pmiCollection);
 		}
 		return flag;
 	}
@@ -332,19 +335,20 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 
 	private int checkSSN(String userNumber, String existingNumber)
 	{
-		MatchingStatus status = checkNumber(userNumber, existingNumber);
+		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
 
 		switch (status)
 		{
 			case EXACT :
-				isSSNTemp = MatchingStatus.EXACT;
+				this.isSSNTemp = MatchingStatus.EXACT;
 				return pointsForSSNExact;
 			case PARTIAL :
-				isSSNTemp = MatchingStatus.PARTIAL;
+				this.isSSNTemp = MatchingStatus.PARTIAL;
 				return pointsForSSNPartial;
 		}
 		return 0;
 	}
+
 	/**
 	 *
 	 * @param userNumber : userNumber
@@ -353,7 +357,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	 */
 	private int checkPMI(String userNumber, String existingNumber)
 	{
-		MatchingStatus status = checkNumber(userNumber, existingNumber);
+		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
 		switch (status)
 		{
 			case EXACT :
@@ -363,6 +367,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		}
 		return 0;
 	}
+
 	/**
 	 *
 	 * @param userNumber  : userNumber
@@ -485,20 +490,20 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		boolean exactMatchFlag = false;
 		boolean partialMatchFlag = false;
 		boolean noMatchFlag = false;
-		List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
+		final List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
 
 		if (existingParticipantMedicalIdentifier.size() > 0)
 		{
-			for (ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
+			for (final ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
 			{
 				tempExistingParticipantMedicalIdentifier.add(pmi);
 			}
 		}
-		if (!(isPMICollectionEmpty(userParticipantMedicalIdentifier))
-				&& !isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
+		if (!(this.isPMICollectionEmpty(userParticipantMedicalIdentifier))
+				&& !this.isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
 		{
-			int len1 = tempExistingParticipantMedicalIdentifier.size();
-			int len2 = userParticipantMedicalIdentifier.size();
+			final int len1 = tempExistingParticipantMedicalIdentifier.size();
+			final int len2 = userParticipantMedicalIdentifier.size();
 			if (len1 != len2)
 			{
 				partialMatchFlag = true;
@@ -507,27 +512,27 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			}
 			else
 			{
-				for (ParticipantMedicalIdentifier userPMIdentifier : userParticipantMedicalIdentifier)
+				for (final ParticipantMedicalIdentifier userPMIdentifier : userParticipantMedicalIdentifier)
 				{
 					if (userPMIdentifier.getSite() != null
 							&& userPMIdentifier.getSite().getId() != null)
 					{
-						String medicalRecordNo = userPMIdentifier.getMedicalRecordNumber();
-						String SiteId = userPMIdentifier.getSite().getId().toString();
+						final String medicalRecordNo = userPMIdentifier.getMedicalRecordNumber();
+						final String SiteId = userPMIdentifier.getSite().getId().toString();
 						int maxTempPMIW = pointsForPMIPartial;
-						for (ParticipantMedicalIdentifier existingPMIdentifier : tempExistingParticipantMedicalIdentifier)
+						for (final ParticipantMedicalIdentifier existingPMIdentifier : tempExistingParticipantMedicalIdentifier)
 						{
 							if (existingPMIdentifier.getSite() != null
 									&& existingPMIdentifier.getSite().getId() != null)
 							{
-								String existingSiteId = existingPMIdentifier.getSite().getId()
-										.toString();
-								String existingMedicalRecordNo = existingPMIdentifier
+								final String existingSiteId = existingPMIdentifier.getSite()
+										.getId().toString();
+								final String existingMedicalRecordNo = existingPMIdentifier
 										.getMedicalRecordNumber();
 
 								if (existingSiteId.equals(SiteId) && medicalRecordNo != null)
 								{
-									tempParticipantMedicalIdentifierWeight = checkPMI(
+									tempParticipantMedicalIdentifierWeight = this.checkPMI(
 											existingMedicalRecordNo, medicalRecordNo);
 
 									if (maxTempPMIW < tempParticipantMedicalIdentifierWeight)
@@ -568,7 +573,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			exactMatchFlag = false;
 		}
 
-		participantMedicalIdentifierWeight = setIsSSNPMIandPMIWeightMethod(exactMatchFlag,
+		participantMedicalIdentifierWeight = this.setIsSSNPMIandPMIWeightMethod(exactMatchFlag,
 				partialMatchFlag, noMatchFlag);
 		return participantMedicalIdentifierWeight;
 	}
@@ -648,41 +653,41 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		if (exactMatchFlag)
 		{
 			participantMedicalIdentifierWeight = pointsForPMIExact;
-			if (isSSNTemp == MatchingStatus.EXACT)
+			if (this.isSSNTemp == MatchingStatus.EXACT)
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.EXACT;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.EXACT;
 			}
-			else if (isSSNTemp == MatchingStatus.PARTIAL)
+			else if (this.isSSNTemp == MatchingStatus.PARTIAL)
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH;
 			}
-			else if (isSSNTemp == MatchingStatus.NOMATCH)
+			else if (this.isSSNTemp == MatchingStatus.NOMATCH)
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERNULL;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERNULL;
 			}
 		}
 		else if (partialMatchFlag)
 		{
 			participantMedicalIdentifierWeight = pointsForPMIPartial;
-			if (isSSNTemp == MatchingStatus.EXACT)
+			if (this.isSSNTemp == MatchingStatus.EXACT)
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH;
 			}
 			else
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
 			}
 		}
 		else if (noMatchFlag)
 		{
 			participantMedicalIdentifierWeight = 0;
-			if (isSSNTemp == MatchingStatus.EXACT)
+			if (this.isSSNTemp == MatchingStatus.EXACT)
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERNULL;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.ONEMATCHOTHERNULL;
 			}
 			else
 			{
-				isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
+				this.isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
 			}
 		}
 		return participantMedicalIdentifierWeight;

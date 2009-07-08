@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
@@ -29,7 +28,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ComboDataBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(ComboDataBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(ComboDataBizLogic.class);
 
 	/**
 	 * This method would return the Clinical Diagnosis List
@@ -42,18 +41,9 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	{
 		// populating clinical Diagnosis field
 		//		
-		List clinicalDiagnosisList = new ArrayList();
-		String sourceObjectName = PermissibleValueImpl.class.getName();
-		String[] selectColumnName = {"value"};
-		String[] whereColumnName = {"value", "cde.publicId"}; // "storageContainer."
-																// +Constants.
-																// SYSTEM_IDENTIFIER
-		String[] whereColumnCondition = {"like", "="};
-		Object[] whereColumnValue = {"%" + query + "%", "Clinical_Diagnosis_PID"};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-
-		// String hql= "from "+PermissibleValueImpl.class.getName();
-
+		final List clinicalDiagnosisList = new ArrayList();
+		final String sourceObjectName = PermissibleValueImpl.class.getName();
+		final String[] selectColumnName = {"value"};
 		// DAO hibernateDao = DAOFactory.getInstance().getDAO(0);
 		// hibernateDao.openSession(null);
 		//		
@@ -67,25 +57,23 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 
-			IBizLogic bizLogic = new DefaultBizLogic();
-			// List list1 = bizLogic.retrieve(CDE.class.getName(),"publicId",
-			// "Clinical_Diagnosis_PID");
+			new DefaultBizLogic();
 
-			dao = openDAOSession(null);
+			dao = this.openDAOSession(null);
 
-			QueryWhereClause whereClause = new QueryWhereClause(sourceObjectName);
+			final QueryWhereClause whereClause = new QueryWhereClause(sourceObjectName);
 			whereClause.addCondition(new LikeClause("value", "%" + query + "%")).andOpr()
 					.addCondition(new EqualClause("cde.publicId", "Clinical_Diagnosis_PID"));
 
-			List dataList = dao.retrieve(sourceObjectName, selectColumnName, whereClause);
+			final List dataList = dao.retrieve(sourceObjectName, selectColumnName, whereClause);
 
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 
 			// Iterator<String> iterator =
 			// bizLogic.retrieve(sourceObjectName,selectColumnName
 			// ,whereColumnName, whereColumnCondition,whereColumnValue,
 			// joinCondition).iterator();
-			Iterator<String> iterator = dataList.iterator();
+			final Iterator<String> iterator = dataList.iterator();
 
 			// CDEBizLogic cdeBizLogic = (CDEBizLogic)
 			// BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
@@ -94,7 +82,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 
 			while (iterator.hasNext())
 			{
-				String clinicaDiagnosisvalue = iterator.next();
+				final String clinicaDiagnosisvalue = iterator.next();
 				clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,
 						clinicaDiagnosisvalue));
 
@@ -115,13 +103,13 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			// clinicalDiagnosisList);
 
 		}
-		catch (DAOException exp)
+		catch (final DAOException exp)
 		{
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 		return clinicalDiagnosisList;
 	}
@@ -149,10 +137,10 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		{
 			jsonArray = new JSONArray();
 			jsonObject = new JSONObject();
-			List clinicalDiagnosisList = getClinicalDiagnosisList(query);
+			final List clinicalDiagnosisList = this.getClinicalDiagnosisList(query);
 			jsonObject.put("totalCount", new Integer(clinicalDiagnosisList.size()));
-			ListIterator iterator = clinicalDiagnosisList.listIterator(startFetch + 1);
-			Integer total = limitFetch + startFetch;
+			final ListIterator iterator = clinicalDiagnosisList.listIterator(startFetch + 1);
+			final Integer total = limitFetch + startFetch;
 			// 1st record in List has value -1, so startFetch is incremented and
 			// made to fetch data from 2nd element from the List
 			startFetch++;
@@ -161,11 +149,11 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			{
 				if (iterator.hasNext())
 				{
-					NameValueBean nameValueBean = (NameValueBean) iterator.next();
+					final NameValueBean nameValueBean = (NameValueBean) iterator.next();
 					if (nameValueBean.getName().toLowerCase().contains(query.toLowerCase())
 							|| query == null)
 					{
-						JSONObject innerJsonObject = new JSONObject();
+						final JSONObject innerJsonObject = new JSONObject();
 						// nameValueBean = (NameValueBean) iterator.next();
 						innerJsonObject.put("id", nameValueBean.getName());
 						innerJsonObject.put("field", nameValueBean.getValue());
@@ -182,9 +170,9 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			}
 			jsonObject.put("row", jsonArray);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 			System.out.println(e);
 		}

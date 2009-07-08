@@ -105,7 +105,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * gets the shipment object.
 	 * @param identifier of the shipment object.
 	 * @return shipment object.
-	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException if some database operation fails.
 	 */
 	public Shipment getShipmentObject(Long identifier) throws BizLogicException
 	{
@@ -242,8 +242,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * @param obj the object to be updated.
 	 * @param dao the object of DAO class.
 	 * @param sessionDataBean containing the information of the session.
-	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
+	 * @throws BizLogicException if some database operation fails
 	 */
 	@Override
 	protected void postInsert(Object obj, DAO dao,
@@ -282,8 +281,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * @param obj of Object class.
 	 * @param dao the object of DAO class.
 	 * @param sessionDataBean containing the session details.
-	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException thrown if user is not found authorized.
+	 * @throws BizLogicException if some database operation fails.
 	 */
 	protected void preInsert(Object obj, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException

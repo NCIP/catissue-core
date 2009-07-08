@@ -21,26 +21,28 @@ import edu.wustl.dao.exception.DAOException;
 
 public class DepartmentBizLogic extends CatissueDefaultBizLogic
 {
+
 	/**
 	 * 
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// comment by Ashwin
-		Department department = (Department) obj;
+		final Department department = (Department) obj;
 		if (department == null)
 		{
-			String message = ApplicationProperties.getValue("app.department");
-			throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			final String message = ApplicationProperties.getValue("app.department");
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 			// throw new DAOException("domain.object.null.err.msg", new
 			// String[]{"Institution"});
 		}
 
-		Validator validate = new Validator();
-		if (validate.isEmpty(department.getName()))
+		new Validator();
+		if (Validator.isEmpty(department.getName()))
 		{
-			String message = ApplicationProperties.getValue("department.name");
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties.getValue("department.name");
+			throw this.getBizLogicException(null, "errors.item.required", message);
 
 			// throw new DAOException("errors.item.required", new
 			// String[]{message});
@@ -59,13 +61,14 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String sourceObjectName = Department.class.getName();
-			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+			final String sourceObjectName = Department.class.getName();
+			final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause(Constants.NAME, departmentName));
 
-			List departmentList = retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			final List departmentList = this.retrieve(sourceObjectName, selectColumnName,
+					queryWhereClause);
 			Long departmentId = null;
 			if ((departmentList != null) && (departmentList.size() > 0))
 			{
@@ -73,9 +76,10 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 			}
 			return departmentId.toString();
 		}
-		catch (DAOException daoexp)
+		catch (final DAOException daoexp)
 		{
-			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
+			throw this
+					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
 
@@ -87,6 +91,7 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
@@ -98,6 +103,7 @@ public class DepartmentBizLogic extends CatissueDefaultBizLogic
 	 * @param domainObject : domainObject
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return Constants.ADD_EDIT_DEPARTMENT;

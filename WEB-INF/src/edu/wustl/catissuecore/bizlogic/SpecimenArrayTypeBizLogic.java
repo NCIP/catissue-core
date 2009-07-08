@@ -34,7 +34,7 @@ import edu.wustl.dao.exception.DAOException;
 public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayTypeBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayTypeBizLogic.class);
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#insert(java.lang.Object,
@@ -44,13 +44,14 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			AuditManager auditManager = getAuditManager(sessionDataBean);
-			SpecimenArrayType arrayType = (SpecimenArrayType) obj;
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
+			final SpecimenArrayType arrayType = (SpecimenArrayType) obj;
 
 			/**
 			 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of
@@ -72,15 +73,16 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 			dao.insert(arrayType);
 			auditManager.insertAudit(dao, arrayType);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp, daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp, daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
 	}
@@ -95,13 +97,14 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			SpecimenArrayType arrayType = (SpecimenArrayType) obj;
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final SpecimenArrayType arrayType = (SpecimenArrayType) obj;
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			/**
 			 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of
 			 * Api Search, previoulsy it was failing since there was default
@@ -121,78 +124,80 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 			dao.update(arrayType);
 
 			// Audit of update.
-			SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;
+			final SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;
 			auditManager.updateAudit(dao, arrayType.getCapacity(), oldArrayType.getCapacity());
 			auditManager.updateAudit(dao, obj, oldObj);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp, daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp, daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
 	}
 
 	// Added by Ashish
-	 /**
-	  * @param obj : obj
-	  * @param dao : dao
-	  * @param operation : operation
-	  * @throws BizLogicException : BizLogicException
-	  * @return boolean
-	  */
+	/**
+	 * @param obj : obj
+	 * @param dao : dao
+	 * @param operation : operation
+	 * @throws BizLogicException : BizLogicException
+	 * @return boolean
+	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		SpecimenArrayType specimenArrayType = (SpecimenArrayType) obj;
+		final SpecimenArrayType specimenArrayType = (SpecimenArrayType) obj;
 		String message = "";
 		if (specimenArrayType == null)
 		{
-			throw getBizLogicException(null, "domain.object.null.err.msg", "");
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
 			/*
 			 * throw new DAOException("domain.object.null.err.msg", new
 			 * String[]{"Specimen Array Type"});
 			 */
 		}
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 
 		if (specimenArrayType.getActivityStatus() == null)
 		{
 			specimenArrayType.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		}
-		if (validator.isEmpty(specimenArrayType.getName()))
+		if (Validator.isEmpty(specimenArrayType.getName()))
 		{
 			message = ApplicationProperties.getValue("arrayType.name");
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 
 		}
 		// validate specimen class of array type
 		if (!validator.isValidOption(specimenArrayType.getSpecimenClass()))
 		{
 			message = ApplicationProperties.getValue("arrayType.specimenClass");
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 
 		}
 
 		// validate specimen type in array type
-		Collection specimenTypeCollection = specimenArrayType.getSpecimenTypeCollection();
+		final Collection specimenTypeCollection = specimenArrayType.getSpecimenTypeCollection();
 
 		if ((specimenTypeCollection != null) && (specimenTypeCollection.size() > 0))
 		{
-			Iterator arrayTypeIterator = specimenTypeCollection.iterator();
+			final Iterator arrayTypeIterator = specimenTypeCollection.iterator();
 			while (arrayTypeIterator.hasNext())
 			{
-				String temp = (String) arrayTypeIterator.next();
+				final String temp = (String) arrayTypeIterator.next();
 				if (temp != null)
 				{
 					if (!validator.isValidOption(temp))
 					{
 						message = ApplicationProperties.getValue("arrayType.specimenType");
-						throw getBizLogicException(null, "errors.item.selected", message);
+						throw this.getBizLogicException(null, "errors.item.selected", message);
 					}
 				}
 			}
@@ -200,7 +205,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			message = ApplicationProperties.getValue("arrayType.specimenType");
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 
 		}
 
@@ -210,7 +215,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 						.getTwoDimensionCapacity()), 1))
 		{
 			message = ApplicationProperties.getValue("arrayType.capacity");
-			throw getBizLogicException(null, "errors.item.format", message);
+			throw this.getBizLogicException(null, "errors.item.format", message);
 
 		}
 		return true;
@@ -227,6 +232,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
@@ -239,6 +245,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	 * @return String
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY_TYPE;

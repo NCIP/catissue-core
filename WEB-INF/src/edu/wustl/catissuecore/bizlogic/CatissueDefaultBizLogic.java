@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,8 +25,8 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
@@ -39,6 +38,7 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
+
 /**
  * This is a default biz logic class for catissue. All BizLogic classes should extend from this.
  * @author deepti_shelar
@@ -47,7 +47,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class CatissueDefaultBizLogic extends DefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
 
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized
@@ -58,6 +58,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 * @ generic DAOException
 	 */
+	@Override
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -73,15 +74,15 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			//	Get the base object id against which authorization will take place
 			if (domainObject instanceof List)
 			{
-				List list = (List) domainObject;
-				for (Object domainObject2 : list)
+				final List list = (List) domainObject;
+				for (final Object domainObject2 : list)
 				{
-					protectionElementName = getObjectId(dao, domainObject2);
+					protectionElementName = this.getObjectId(dao, domainObject2);
 				}
 			}
 			else
 			{
-				protectionElementName = getObjectId(dao, domainObject);
+				protectionElementName = this.getObjectId(dao, domainObject);
 			}
 			//TODO To revisit this piece of code --> Vishvesh
 			if (Constants.ALLOW_OPERATION.equals(protectionElementName))
@@ -98,12 +99,12 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 
 			if (!isAuthorized)
 			{
-				privilegeName = getPrivilegeName(domainObject);
-				privilegeCache = getPrivilegeCache(sessionDataBean);
+				privilegeName = this.getPrivilegeName(domainObject);
+				privilegeCache = this.getPrivilegeCache(sessionDataBean);
 				if (!protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
 				{
-					String[] prArray = protectionElementName.split("_");
-					String baseObjectId = prArray[0];
+					final String[] prArray = protectionElementName.split("_");
+					final String baseObjectId = prArray[0];
 					String objId = "";
 					for (int i = 1; i < prArray.length; i++)
 					{
@@ -123,18 +124,19 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 			if (!isAuthorized)
 			{
-				BizLogicException exception = AppUtility.getUserNotAuthorizedException(
-						privilegeName, protectionElementName,domainObject.getClass().getSimpleName());
+				final BizLogicException exception = AppUtility.getUserNotAuthorizedException(
+						privilegeName, protectionElementName, domainObject.getClass()
+								.getSimpleName());
 				throw exception;
 			}
 		}
-		catch (SMException exception)
+		catch (final SMException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, exception.getErrorKeyAsString(), exception
+			this.logger.debug(exception.getMessage(), exception);
+			throw this.getBizLogicException(exception, exception.getErrorKeyAsString(), exception
 					.getLogMessage());
 		}
-		
+
 		return isAuthorized;
 	}
 
@@ -146,8 +148,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		if (name != null && name.trim().length() != 0)
 		{
-			String splitter = "\\.";
-			String[] arr = name.split(splitter);
+			final String splitter = "\\.";
+			final String[] arr = name.split(splitter);
 			if (arr != null && arr.length != 0)
 			{
 				return arr[arr.length - 1];
@@ -164,8 +166,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	 */
 	private PrivilegeCache getPrivilegeCache(SessionDataBean sessionDataBean) throws SMException
 	{
-		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-		PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean
+		final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean
 				.getUserName());
 		return privilegeCache;
 	}
@@ -175,14 +177,15 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		JDBCDAO jdbcDAO = null;
 		try
 		{
-			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			final String applicationName = CommonServiceLocator.getInstance().getAppName();
 			jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
 			jdbcDAO.openSession(null);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return jdbcDAO;
 	}
@@ -191,15 +194,16 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			if(jdbcDAO != null)
+			if (jdbcDAO != null)
 			{
 				jdbcDAO.closeSession();
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -209,14 +213,15 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		DAO dao = null;
 		try
 		{
-			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			final String applicationName = CommonServiceLocator.getInstance().getAppName();
 			dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
 			dao.openSession(sessionDataBean);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return dao;
 	}
@@ -225,19 +230,21 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			if(dao != null)
+			if (dao != null)
 			{
 				dao.closeSession();
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
 
+	@Override
 	public boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -247,7 +254,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 
 		List cpIdsList = new ArrayList();
-		Set<Long> cpIds = new HashSet<Long>();
+		final Set<Long> cpIds = new HashSet<Long>();
 
 		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier,
 				sessionDataBean);
@@ -264,19 +271,19 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		try
 		{
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
-			StringBuffer sb = new StringBuffer();
+			final StringBuffer sb = new StringBuffer();
 			sb.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME)
 					.append("_");
 			boolean isPresent = false;
 
-			for (Long cpId : cpIds)
+			for (final Long cpId : cpIds)
 			{
-				String privilegeName = getReadDeniedPrivilegeName();
+				final String privilegeName = this.getReadDeniedPrivilegeName();
 
-				String[] privilegeNames = privilegeName.split(",");
+				final String[] privilegeNames = privilegeName.split(",");
 				if (privilegeNames.length > 1)
 				{
 					if ((privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
@@ -306,14 +313,13 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return true;
 	}
-	
-	
+
 	/**
 	 * refresh the titli search index to reflect the changes in the database.
 	 * @param operation the operation to be performed : "insert", "update" or "delete"
@@ -323,43 +329,44 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		try
 		{
-			Properties prop = new Properties();
-			prop.load(Utility.getCurrClassLoader().getResourceAsStream("titli.properties"));
-			String className = prop.getProperty("titliObjectMetadataImplementor");
-			ObjectMetadataInterface objectMetadataInterface = (ObjectMetadataInterface) Class
+			final Properties prop = new Properties();
+			prop.load(CommonUtilities.getCurrClassLoader().getResourceAsStream("titli.properties"));
+			final String className = prop.getProperty("titliObjectMetadataImplementor");
+			final ObjectMetadataInterface objectMetadataInterface = (ObjectMetadataInterface) Class
 					.forName(className).newInstance();
 			String tableName = objectMetadataInterface.getTableName(obj);
 			if (!tableName.equalsIgnoreCase(""))
 			{
-				String objId = objectMetadataInterface.getUniqueIdentifier(obj);
-				String mainTableName = TitliTableMapper.getInstance().returnMainTable(tableName);
+				final String objId = objectMetadataInterface.getUniqueIdentifier(obj);
+				final String mainTableName = TitliTableMapper.getInstance().returnMainTable(
+						tableName);
 				if (mainTableName != null)
 				{
 					tableName = mainTableName;
 				}
 				if (operation != null)
 				{
-					performOperation(operation, tableName, objId);
+					this.performOperation(operation, tableName, objId);
 				}
 			}
 		}
-		catch (Exception excep)
+		catch (final Exception excep)
 		{
-			logger.error("Titli search index cound not be refreshed for opeartion." + operation,
-					excep);
+			this.logger.error("Titli search index cound not be refreshed for opeartion."
+					+ operation, excep);
 		}
 
 	}
-	
-	public void refreshTitliSearchIndexMultiple(Collection<AbstractDomainObject> objCollection,String operation)
-	throws BizLogicException 
+
+	public void refreshTitliSearchIndexMultiple(Collection<AbstractDomainObject> objCollection,
+			String operation) throws BizLogicException
 	{
-			for (AbstractDomainObject obj : objCollection)
-			{
-				refreshTitliSearchIndexSingle(operation, obj);
-			}
+		for (final AbstractDomainObject obj : objCollection)
+		{
+			this.refreshTitliSearchIndexSingle(operation, obj);
+		}
 	}
-	
+
 	protected void refreshTitliSearchIndex(String operation, Object obj)
 	{
 		try
@@ -368,18 +375,19 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			{
 				if (obj instanceof LinkedHashSet)
 				{
-					refreshTitliSearchIndexMultiple((LinkedHashSet<AbstractDomainObject>) obj,operation);
+					this.refreshTitliSearchIndexMultiple((LinkedHashSet<AbstractDomainObject>) obj,
+							operation);
 				}
 				else
 				{
-					
-					refreshTitliSearchIndexSingle(operation, obj);
+
+					this.refreshTitliSearchIndexSingle(operation, obj);
 				}
-			}	
+			}
 		}
-		catch(BizLogicException bizLogicExp)
+		catch (final BizLogicException bizLogicExp)
 		{
-			
+
 		}
 	}
 
@@ -393,14 +401,14 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	private void performOperation(String operation, String tableName, String objId)
 			throws TitliException
 	{
-		Map<Name, String> uniqueKey = new HashMap<Name, String>();
+		final Map<Name, String> uniqueKey = new HashMap<Name, String>();
 		uniqueKey.put(new Name(Constants.IDENTIFIER), objId);
-		TitliInterface titli = Titli.getInstance();
-		Name dbName = (titli.getDatabases().keySet().toArray(new Name[0]))[0];
-		RecordIdentifier recordIdentifier = new RecordIdentifier(dbName, new Name(tableName),
+		final TitliInterface titli = Titli.getInstance();
+		final Name dbName = (titli.getDatabases().keySet().toArray(new Name[0]))[0];
+		final RecordIdentifier recordIdentifier = new RecordIdentifier(dbName, new Name(tableName),
 				uniqueKey);
 
-		IndexRefresherInterface indexRefresher = titli.getIndexRefresher();
+		final IndexRefresherInterface indexRefresher = titli.getIndexRefresher();
 
 		if (TitliSearchConstants.TITLI_INSERT_OPERATION.equalsIgnoreCase(operation))
 		{
@@ -415,8 +423,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			indexRefresher.delete(recordIdentifier);
 		}
 	}
-	
-	
+
 	/**
 	 *@param objCollection object collection.
 	 *@param dao The dao object.
@@ -428,7 +435,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		super.postInsert(objCollection, dao, sessionDataBean);
-		refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, objCollection);
+		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, objCollection);
 
 	}
 
@@ -445,9 +452,9 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			throws BizLogicException
 	{
 		super.postInsert(obj, dao, sessionDataBean);
-		refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, obj);
+		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_INSERT_OPERATION, obj);
 	}
-	
+
 	/**
 	 * This method gets called after update method.
 	 * Any logic after updating into database can be included here.
@@ -462,9 +469,9 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
-		refreshTitliSearchIndex(TitliSearchConstants.TITLI_UPDATE_OPERATION, currentObj);
+		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_UPDATE_OPERATION, currentObj);
 	}
-	
+
 	/**
 	 * Deletes an object from the database.
 	 * @param obj The object to be deleted.
@@ -475,7 +482,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	public void delete(Object obj) throws BizLogicException
 	{
 		super.delete(obj);
-		refreshTitliSearchIndex(TitliSearchConstants.TITLI_DELETE_OPERATION, obj);
+		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_DELETE_OPERATION, obj);
 	}
 
 }

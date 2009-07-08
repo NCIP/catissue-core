@@ -1,4 +1,3 @@
-
 /**
  * <p>Title: ParticipantMedicalIdentifierBizLogic Class>
  * <p>Description:	ParticipantMedicalIdentifierBizLogic </p>
@@ -17,9 +16,9 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 
-
 public class ParticipantMedicalIdentifierBizLogic extends CatissueDefaultBizLogic
 {
+
 	/**
 	 * @param obj : obj
 	 * @param dao : dao
@@ -27,27 +26,29 @@ public class ParticipantMedicalIdentifierBizLogic extends CatissueDefaultBizLogi
 	 * @return boolean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		//throw new DAOException(ApplicationProperties.getValue("participant.medical.identifier.creation.error"));
-		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) obj;
-		Site site = participantMedicalIdentifier.getSite();
-		Participant participant = participantMedicalIdentifier.getParticipant();
-		String medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
-		if (site==null || site.getId()==null)
+		final ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) obj;
+		final Site site = participantMedicalIdentifier.getSite();
+		final Participant participant = participantMedicalIdentifier.getParticipant();
+		final String medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
+		if (site == null || site.getId() == null)
 		{
-			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
+			throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
-		if (participant==null || participant.getId()==null)
+		if (participant == null || participant.getId() == null)
 		{
-			throw getBizLogicException(null, "participant.medical.identifier.creation.error", "");
+			throw this.getBizLogicException(null, "participant.medical.identifier.creation.error",
+					"");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
-		Validator validate = new Validator();
-		if (validate.isEmpty(medicalRecordNumber))
+		new Validator();
+		if (Validator.isEmpty(medicalRecordNumber))
 		{
-			throw getBizLogicException(null, "errors.participant.extiden.missing", "");
+			throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		return true;

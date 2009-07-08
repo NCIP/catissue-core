@@ -27,7 +27,7 @@ import edu.wustl.security.global.Permissions;
 public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(DeidentifiedSurgicalPathologyReportBizLogic.class);
 
 	/**
@@ -39,30 +39,31 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
+			final DeidentifiedSurgicalPathologyReport deidentifiedReport = (DeidentifiedSurgicalPathologyReport) obj;
 			dao.insert(deidentifiedReport);
 
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) retrieveAttribute(
-					dao, SpecimenCollectionGroup.class, deidentifiedReport
+			final IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) this
+					.retrieveAttribute(dao, SpecimenCollectionGroup.class, deidentifiedReport
 							.getSpecimenCollectionGroup().getId(),
-					"identifiedSurgicalPathologyReport");
+							"identifiedSurgicalPathologyReport");
 			identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 			identifiedSurgicalPathologyReport
 					.setDeIdentifiedSurgicalPathologyReport(deidentifiedReport);
 			dao.update(identifiedSurgicalPathologyReport);
 
-			Set protectionObjects = new HashSet();
+			final Set protectionObjects = new HashSet();
 			protectionObjects.add(deidentifiedReport);
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -104,12 +105,13 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
+			final DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) obj;
 			if (report.getTextContent().getId() == null)
 			{
 				dao.insert(report.getTextContent());
@@ -117,9 +119,9 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 			dao.update(report);
 
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger
+			this.logger
 					.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"
 							+ ex);
 		}
@@ -132,16 +134,16 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 	public Map getAllIdentifiedReports() throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the Deidentified reports from the database
-		List listOfReports = bizLogic.retrieve(sourceObjectName);
-		Map mapOfReports = new HashMap();
+		final List listOfReports = bizLogic.retrieve(sourceObjectName);
+		final Map mapOfReports = new HashMap();
 		for (int i = 0; i < listOfReports.size(); i++)
 		{
-			DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) listOfReports
+			final DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) listOfReports
 					.get(i);
 			mapOfReports.put(report.getId(), report);
 		}
@@ -160,13 +162,13 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 	public DeidentifiedSurgicalPathologyReport getReportById(Long identifier) throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String sourceObjectName = DeidentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the deidentified reports from the database
-		Object object = bizLogic.retrieve(sourceObjectName, identifier);
-		DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) object;
+		final Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		final DeidentifiedSurgicalPathologyReport report = (DeidentifiedSurgicalPathologyReport) object;
 		return report;
 
 	}

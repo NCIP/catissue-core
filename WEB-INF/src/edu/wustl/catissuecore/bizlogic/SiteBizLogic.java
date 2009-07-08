@@ -49,7 +49,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class SiteBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SiteBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SiteBizLogic.class);
 
 	/**
 	 * Saves the storageType object in the database.
@@ -60,19 +60,20 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			Site site = (Site) obj;
+			final Site site = (Site) obj;
 
-			checkStatus(dao, site.getCoordinator(), "Coordinator");
+			this.checkStatus(dao, site.getCoordinator(), "Coordinator");
 
-			Set protectionObjects = new HashSet();
+			final Set protectionObjects = new HashSet();
 
-			setCordinator(dao, site);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			this.setCordinator(dao, site);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			dao.insert(site.getAddress());
 			auditManager.insertAudit(dao, site.getAddress());
 			dao.insert(site);
@@ -83,15 +84,16 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			// insertAuthorizationData(null,
 			// protectionObjects, null);
 
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+			final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 
 			privilegeManager.insertAuthorizationData(null, protectionObjects, null, site
 					.getObjectId());
 		}
-		catch (ApplicationException daoExp)
+		catch (final ApplicationException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -106,26 +108,27 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			Site site = (Site) obj;
-			Site siteOld = (Site) oldObj;
+			final Site site = (Site) obj;
+			final Site siteOld = (Site) oldObj;
 
 			if (!site.getCoordinator().getId().equals(siteOld.getCoordinator().getId()))
 			{
-				checkStatus(dao, site.getCoordinator(), "Coordinator");
+				this.checkStatus(dao, site.getCoordinator(), "Coordinator");
 			}
 
-			setCordinator(dao, site);
+			this.setCordinator(dao, site);
 			// Mandar : 21Aug08 ----start
 			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(site.getActivityStatus()))
 			{
-				if (isSiteOccupied(dao, site))
+				if (this.isSiteOccupied(dao, site))
 				{
-					throw getBizLogicException(null, "cnnot.close.site.with.spec", "");
+					throw this.getBizLogicException(null, "cnnot.close.site.with.spec", "");
 
 				}
 				// else
@@ -136,24 +139,26 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			// Mandar : 21Aug08 ----end
 			dao.update(site.getAddress());
 			dao.update(site);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			// Audit of update.
-			Site oldSite = (Site) oldObj;
+			final Site oldSite = (Site) oldObj;
 			auditManager.updateAudit(dao, site.getAddress(), oldSite.getAddress());
 			auditManager.updateAudit(dao, obj, oldObj);
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
+
 	/**
 	 * @param dao : dao
 	 * @param site : site
@@ -165,24 +170,24 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		boolean result = false;
 		try
 		{
-			String hql = "select specimen from "
+			final String hql = "select specimen from "
 					+ Specimen.class.getName()
 					+ " as specimen where specimen.activityStatus='Active' and specimen.specimenPosition in (select specimenPosition from "
 					+ SpecimenPosition.class.getName()
 					+ " as specimenPosition where specimenPosition.storageContainer in (select sc from "
 					+ StorageContainer.class.getName() + " as sc where sc.site.id =" + site.getId()
 					+ " ) )";
-			List specimenList = executeQuery(hql);
+			final List specimenList = this.executeQuery(hql);
 
 			if (!specimenList.isEmpty())
 			{
 				result = true;
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
-			logger.debug(excp.getMessage(), excp);
-			throw getBizLogicException(null, "error.check.site.fr.spec", "");
+			this.logger.debug(excp.getMessage(), excp);
+			throw this.getBizLogicException(null, "error.check.site.fr.spec", "");
 		}
 
 		return result;
@@ -210,18 +215,20 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Object object = dao.retrieveById(User.class.getName(), site.getCoordinator().getId());
+			final Object object = dao.retrieveById(User.class.getName(), site.getCoordinator()
+					.getId());
 
 			if (object != null)
 			{
-				User user = (User) object;
+				final User user = (User) object;
 				site.setCoordinator(user);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -258,9 +265,10 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 * @return boolean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		Site site = (Site) obj;
+		final Site site = (Site) obj;
 
 		/**
 		 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of Api
@@ -283,21 +291,21 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			message = ApplicationProperties.getValue("app.site");
 
-			throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 		}
-		Validator validator = new Validator();
-		if (validator.isEmpty(site.getName()))
+		final Validator validator = new Validator();
+		if (Validator.isEmpty(site.getName()))
 		{
 			message = ApplicationProperties.getValue("site.name");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
-		if (validator.isEmpty(site.getType()))
+		if (Validator.isEmpty(site.getType()))
 		{
 			message = ApplicationProperties.getValue("site.type");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
 		if (site.getCoordinator() == null || site.getCoordinator().getId() == null
@@ -306,45 +314,45 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			message = ApplicationProperties.getValue("site.coordinator");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
-		if (!validator.isEmpty(site.getEmailAddress())
+		if (!Validator.isEmpty(site.getEmailAddress())
 				&& !validator.isValidEmailAddress(site.getEmailAddress()))
 		{
 			message = ApplicationProperties.getValue("site.emailAddress");
 
-			throw getBizLogicException(null, "errors.item.format", message);
+			throw this.getBizLogicException(null, "errors.item.format", message);
 		}
 
-		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getStreet()))
+		if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getStreet()))
 		{
 			message = ApplicationProperties.getValue("site.street");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
-		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getCity()))
+		if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getCity()))
 		{
 			message = ApplicationProperties.getValue("site.city");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 		if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 		{
-			if (site.getAddress() == null || validator.isEmpty(site.getAddress().getState()))
+			if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getState()))
 			{
 				message = ApplicationProperties.getValue("site.state");
 
-				throw getBizLogicException(null, "errors.item.required", message);
+				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 		}
 
-		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getCountry()))
+		if (site.getAddress() == null || Validator.isEmpty(site.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("site.country");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 		/*
 		 * Commented by Geeta to remove the validation on zip code. if
@@ -362,18 +370,18 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			message = ApplicationProperties.getValue("site.activityStatus");
 
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
 		// END
 
-		List siteList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List siteList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SITE_TYPE, null);
 
 		if (!Validator.isEnumeratedValue(siteList, site.getType()))
 		{
 
-			throw getBizLogicException(null, "type.errMsg", message);
+			throw this.getBizLogicException(null, "type.errMsg", message);
 		}
 		if ((site.getAddress().getState() != null && site.getAddress().getState() != null)
 				&& edu.wustl.catissuecore.util.global.Variables.isStateRequired)
@@ -382,7 +390,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 					Constants.CDE_NAME_STATE_LIST, null), site.getAddress().getState()))
 			{
 
-				throw getBizLogicException(null, "state.errMsg", "");
+				throw this.getBizLogicException(null, "state.errMsg", "");
 			}
 		}
 
@@ -390,7 +398,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 				Constants.CDE_NAME_COUNTRY_LIST, null), site.getAddress().getCountry()))
 		{
 
-			throw getBizLogicException(null, "country.errMsg", "");
+			throw this.getBizLogicException(null, "country.errMsg", "");
 		}
 
 		if (operation.equals(Constants.ADD))
@@ -398,7 +406,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(site.getActivityStatus()))
 			{
 
-				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
 		}
 		else
@@ -407,7 +415,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 					.getActivityStatus()))
 			{
 
-				throw getBizLogicException(null, "activityStatus.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
 
@@ -423,6 +431,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
@@ -435,11 +444,13 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 * @return String
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeName(Object domainObject)
 	{
-		String privilegeName = Variables.privilegeDetailsMap.get(Constants.ADD_EDIT_SITE);
+		final String privilegeName = Variables.privilegeDetailsMap.get(Constants.ADD_EDIT_SITE);
 		return privilegeName;
 	}
+
 	/**
 	 * @param siteId : siteId
 	 * @return Collection
@@ -452,17 +463,17 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		Site site = null;
 		try
 		{
-			dao = openDAOSession(null);
+			dao = this.openDAOSession(null);
 			site = (Site) dao.retrieveById(Site.class.getName(), siteId);
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 
 		if (site == null)

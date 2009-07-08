@@ -70,7 +70,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayBizLogic.class);
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#insert(java.lang.Object,
@@ -80,17 +80,18 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			AuditManager auditManager = getAuditManager(sessionDataBean);
-			SpecimenArray specimenArray = (SpecimenArray) obj;
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
+			final SpecimenArray specimenArray = (SpecimenArray) obj;
 
-			checkStorageContainerAvailablePos(specimenArray, dao, sessionDataBean);
+			this.checkStorageContainerAvailablePos(specimenArray, dao, sessionDataBean);
 
-			doUpdateSpecimenArrayContents(specimenArray, null, dao, sessionDataBean, true);
+			this.doUpdateSpecimenArrayContents(specimenArray, null, dao, sessionDataBean, true);
 
 			dao.insert(specimenArray.getCapacity());
 			auditManager.insertAudit(dao, specimenArray.getCapacity());
@@ -99,7 +100,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			SpecimenArrayContent specimenArrayContent = null;
 			// TODO move this method to HibernateDAOImpl for common use (for
 			// collection insertion)
-			for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
+			for (final Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
 					.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
@@ -108,46 +109,49 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				auditManager.insertAudit(dao, specimenArrayContent);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
+
 	/**
 	 * @param obj : obj
 	 * @param dao : dao
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		SpecimenArray specimenArray = (SpecimenArray) obj;
+		final SpecimenArray specimenArray = (SpecimenArray) obj;
 
 		if (specimenArray.getLocatedAtPosition() != null
 				&& specimenArray.getLocatedAtPosition().getParentContainer() != null)
 		{
 
-			Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+			final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 			// if(specimenArray.getLocatedAtPosition() != null)
 			// {
-			StorageContainerUtil.deleteSinglePositionInContainerMap(
-					(StorageContainer) specimenArray.getLocatedAtPosition().getParentContainer(),
-					containerMap, specimenArray.getLocatedAtPosition().getPositionDimensionOne()
-							.intValue(), specimenArray.getLocatedAtPosition()
-							.getPositionDimensionTwo().intValue());
+			StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray
+					.getLocatedAtPosition().getParentContainer(), containerMap, specimenArray
+					.getLocatedAtPosition().getPositionDimensionOne().intValue(), specimenArray
+					.getLocatedAtPosition().getPositionDimensionTwo().intValue());
 			// }
 
 		}
 		super.postInsert(obj, dao, sessionDataBean);
 
 	}
+
 	/**
 	 * @param dao : dao
 	 * @param currentObj : currentObj
@@ -155,18 +159,19 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException
 
 	{
-		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-		SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
-		SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
+		final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+		final SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
+		final SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
 
 		if (specimenArrayOldObject != null && specimenArrayOldObject.getLocatedAtPosition() != null
 				&& specimenArrayOldObject.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container oldParentCont = (Container) HibernateMetaData
+			final Container oldParentCont = (Container) HibernateMetaData
 					.getProxyObjectImpl(specimenArrayOldObject.getLocatedAtPosition()
 							.getParentContainer());
 			StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap,
@@ -178,8 +183,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				&& specimenArrayCurrentObject.getLocatedAtPosition() != null
 				&& specimenArrayCurrentObject.getLocatedAtPosition().getParentContainer() != null)
 		{
-			Container currentParentCont = (Container) specimenArrayCurrentObject
-					.getLocatedAtPosition().getParentContainer();
+			final Container currentParentCont = specimenArrayCurrentObject.getLocatedAtPosition()
+					.getParentContainer();
 			StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont,
 					containerMap, specimenArrayCurrentObject.getLocatedAtPosition()
 							.getPositionDimensionOne().intValue(), specimenArrayCurrentObject
@@ -189,24 +194,24 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(
 				specimenArrayCurrentObject.getActivityStatus()))
 		{
-			Map disabledConts = getContForDisabledSpecimenArrayFromCache();
+			final Map disabledConts = this.getContForDisabledSpecimenArrayFromCache();
 
-			Set keySet = disabledConts.keySet();
-			Iterator itr = keySet.iterator();
+			final Set keySet = disabledConts.keySet();
+			final Iterator itr = keySet.iterator();
 			while (itr.hasNext())
 			{
-				String Id = (String) itr.next();
-				Map disabledContDetails = (TreeMap) disabledConts.get(Id);
-				String contNameKey = "StorageContName";
+				final String Id = (String) itr.next();
+				final Map disabledContDetails = (TreeMap) disabledConts.get(Id);
+				final String contNameKey = "StorageContName";
 				// String contIdKey = "StorageContIdKey";
-				String pos1Key = "pos1";
-				String pos2Key = "pos2";
+				final String pos1Key = "pos1";
+				final String pos2Key = "pos2";
 
-				StorageContainer cont = new StorageContainer();
+				final StorageContainer cont = new StorageContainer();
 				cont.setId(new Long(Id));
 				cont.setName((String) disabledContDetails.get(contNameKey));
-				int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
-				int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
+				final int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
+				final int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
 
 				StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap, x, y);
 			}
@@ -226,14 +231,15 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 *      @throws BizLogicException : BizLogicException
 	 */
 
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			AuditManager auditManager = getAuditManager(sessionDataBean);
-			SpecimenArray specimenArray = (SpecimenArray) obj;
-			SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
+			final SpecimenArray specimenArray = (SpecimenArray) obj;
+			final SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
 
 			// try
 			// {
@@ -261,8 +267,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (flag)
 			{
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 				// check for all validations on the storage container.
 				// if(specimenArray.getLocatedAtPosition() != null)
@@ -275,17 +281,17 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				// }
 
 			}
-			doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao, sessionDataBean,
-					false);
+			this.doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao,
+					sessionDataBean, false);
 
 			dao.update(specimenArray.getCapacity());
 			dao.update(specimenArray);
 			SpecimenArrayContent specimenArrayContent = null;
 			// SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
-			Collection oldSpecArrayContents = ((SpecimenArray) oldObj)
+			final Collection oldSpecArrayContents = ((SpecimenArray) oldObj)
 					.getSpecimenArrayContentCollection();
 
-			for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
+			for (final Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
 					.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
@@ -311,7 +317,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 
-				if (checkExistSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
+				if (this.checkExistSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
 				{
 					dao.insert(specimenArrayContent);
 					auditManager.insertAudit(dao, specimenArrayContent);
@@ -327,7 +333,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			{
 				Map disabledCont = null;
 
-				disabledCont = getContForDisabledSpecimenArrayFromCache();
+				disabledCont = this.getContForDisabledSpecimenArrayFromCache();
 
 				if (disabledCont == null)
 				{
@@ -344,11 +350,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				if (objectContainer != null)
 				{
 
-					SpecimenArray storageContainer = (SpecimenArray) objectContainer;
-					addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
+					final SpecimenArray storageContainer = (SpecimenArray) objectContainer;
+					this.addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
 				}
 
-				ContainerPosition prevPosition = specimenArray.getLocatedAtPosition();
+				final ContainerPosition prevPosition = specimenArray.getLocatedAtPosition();
 
 				specimenArray.setLocatedAtPosition(null);
 				dao.update(specimenArray);
@@ -360,28 +366,29 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 				try
 				{
-					CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+					final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 							.getInstance();
 					catissueCoreCacheManager.addObjectToCache(
 							Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY,
 							(Serializable) disabledCont);
 				}
-				catch (CacheException e)
+				catch (final CacheException e)
 				{
-					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "cache.exp", "");
+					this.logger.debug(e.getMessage(), e);
+					throw this.getBizLogicException(e, "cache.exp", "");
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
 	}
@@ -399,7 +406,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		boolean isNew = true;
 		SpecimenArrayContent arrayContent = null;
 
-		for (Iterator iter = specArrayContentCollection.iterator(); iter.hasNext();)
+		for (final Iterator iter = specArrayContentCollection.iterator(); iter.hasNext();)
 		{
 			arrayContent = (SpecimenArrayContent) iter.next();
 			if (specimenArrayContent.getId() == null)
@@ -448,9 +455,9 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						.getSpecimenArrayContentCollection();
 			}
 
-			Collection specimenArrayContentCollection = specimenArray
+			final Collection specimenArrayContentCollection = specimenArray
 					.getSpecimenArrayContentCollection();
-			Collection updatedSpecArrayContentCollection = new HashSet();
+			final Collection updatedSpecArrayContentCollection = new HashSet();
 			SpecimenArrayContent specimenArrayContent = null;
 			Specimen specimen = null;
 			// try
@@ -467,8 +474,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			{
 				double quantity = 0.0;
 				// fetch array type to check specimen class
-				Object object = dao.retrieveById(SpecimenArrayType.class.getName(), specimenArray
-						.getSpecimenArrayType().getId());
+				final Object object = dao.retrieveById(SpecimenArrayType.class.getName(),
+						specimenArray.getSpecimenArrayType().getId());
 				SpecimenArrayType arrayType = null;
 
 				if (object != null)
@@ -476,7 +483,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					arrayType = (SpecimenArrayType) object;
 				}
 
-				for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();)
+				for (final Iterator iter = specimenArrayContentCollection.iterator(); iter
+						.hasNext();)
 				{
 					specimenArrayContent = (SpecimenArrayContent) iter.next();
 
@@ -497,14 +505,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					// ApiSearchUtil.setSpecimenArrayContentDefault(
 					// specimenArrayContent);
 					// End:- Change for API Search
-					specimen = getSpecimen(dao, specimenArrayContent);
+					specimen = this.getSpecimen(dao, specimenArrayContent);
 					if (specimen != null)
 					{
 						// check whether array & specimen are compatible on the
 						// basis of class
-						if (!isArrayAndSpecimenCompatibile(arrayType, specimen))
+						if (!this.isArrayAndSpecimenCompatibile(arrayType, specimen))
 						{
-							throw getBizLogicException(null, "spec.not.compatible", "");
+							throw this.getBizLogicException(null, "spec.not.compatible", "");
 						}
 
 						// set quantity object to null when there is no value..
@@ -523,7 +531,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 							if (specimenArrayContent.getInitialQuantity() != null)
 							{
 								quantity = specimenArrayContent.getInitialQuantity().doubleValue();
-								double tempQuantity = quantity;
+								final double tempQuantity = quantity;
 								SpecimenArrayContent oldArrayContent = null;
 								// incase if specimenArray is created from
 								// aliquot page, then skip the Available
@@ -536,7 +544,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 									// and old specimenArrayContent's quantiy.
 									if (oldSpecimenArrayContentCollection != null)
 									{
-										oldArrayContent = checkExistSpecimenArrayContent(
+										oldArrayContent = this.checkExistSpecimenArrayContent(
 												specimenArrayContent,
 												oldSpecimenArrayContentCollection);
 										if (oldArrayContent != null)
@@ -547,9 +555,9 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 										}
 									}
 
-									if (!isAvailableQty(specimen, quantity))
+									if (!this.isAvailableQty(specimen, quantity))
 									{
-										throw getBizLogicException(null,
+										throw this.getBizLogicException(null,
 												"quantity.more.then.distri.quantity", tempQuantity
 														+ ":"
 														+ specimen.getAvailableQuantity()
@@ -560,7 +568,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 							}
 							else
 							{
-								throw getBizLogicException(null, "enter.quantity.mol.spec",
+								throw this.getBizLogicException(null, "enter.quantity.mol.spec",
 										specimen.getLabel());
 							}
 						}
@@ -569,7 +577,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						if (specimenArrayContent.getPositionDimensionOne() == null
 								|| specimenArrayContent.getPositionDimensionTwo() == null)
 						{
-							throw getBizLogicException(null, "array.contentPosition.err.msg", "");
+							throw this.getBizLogicException(null, "array.contentPosition.err.msg",
+									"");
 						}
 						updatedSpecArrayContentCollection.add(specimenArrayContent);
 					}
@@ -579,7 +588,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// There should be at least one valid specimen in array
 			if (updatedSpecArrayContentCollection.isEmpty())
 			{
-				throw getBizLogicException(null, "spec.array.should.contain.atleast.one.spec", "");
+				throw this.getBizLogicException(null, "spec.array.should.contain.atleast.one.spec",
+						"");
 			}
 
 			// In case of update, if specimen is removed from specimen array,
@@ -587,23 +597,25 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// should get added into specimen's available quantity.
 			if (!isInsertOperation)
 			{
-				Iterator itr = oldSpecimenArrayContentCollection.iterator();
+				final Iterator itr = oldSpecimenArrayContentCollection.iterator();
 				while (itr.hasNext())
 				{
-					SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr
+					final SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr
 							.next();
-					SpecimenArrayContent newSpecimenArrayContent = checkExistSpecimenArrayContent(
-							oldSpecimenArrayContent, specimenArrayContentCollection);
+					final SpecimenArrayContent newSpecimenArrayContent = this
+							.checkExistSpecimenArrayContent(oldSpecimenArrayContent,
+									specimenArrayContentCollection);
 					if (newSpecimenArrayContent == null
 							|| newSpecimenArrayContent.getSpecimen().getLabel() == null
 							|| newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
 					{
-						Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);
+						final Specimen oldSpecimen = this.getSpecimen(dao, oldSpecimenArrayContent);
 						if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
 						{
-							Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity();
+							final Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity();
 							Double quantity = oldSpecimen.getAvailableQuantity();
-							double newQuantity = quantity.doubleValue() + oldQuantity.doubleValue();
+							final double newQuantity = quantity.doubleValue()
+									+ oldQuantity.doubleValue();
 							quantity = newQuantity;
 							oldSpecimen.setAvailableQuantity(quantity);
 							dao.update(oldSpecimen);
@@ -614,12 +626,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection);
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
+
 	/**
 	 * @param specimenArray : specimenArray
 	 * @param dao : dao
@@ -633,22 +647,21 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		if (specimenArray.getLocatedAtPosition() != null
 				&& specimenArray.getLocatedAtPosition().getParentContainer() != null)
 		{
-			retriveScId(dao, specimenArray);
-			retriveScName(specimenArray, dao);
-			StorageContainer storageContainerObj = (StorageContainer) specimenArray
+			this.retriveScId(dao, specimenArray);
+			this.retriveScName(specimenArray, dao);
+			final StorageContainer storageContainerObj = (StorageContainer) specimenArray
 					.getLocatedAtPosition().getParentContainer();
 			// check for closed Storage Container
-			checkStatus(dao, storageContainerObj, "Storage Container");
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+			this.checkStatus(dao, storageContainerObj, "Storage Container");
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			// --- check for all validations on the storage container.
 			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
 					specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(),
 					specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(),
 					sessionDataBean, false, null);
-			specimenArray.getLocatedAtPosition()
-					.setParentContainer((Container) storageContainerObj);
+			specimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
 		}
 	}
 
@@ -663,11 +676,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		{
 			if (specimenArray.getLocatedAtPosition().getParentContainer().getId() != null)
 			{
-				StorageContainer storageContainerObj = new StorageContainer();
+				final StorageContainer storageContainerObj = new StorageContainer();
 				storageContainerObj.setId(specimenArray.getLocatedAtPosition().getParentContainer()
 						.getId());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"name"};
+				final String sourceObjectName = StorageContainer.class.getName();
+				final String[] selectColumnName = {"name"};
 				// String[] whereColumnName = {"id"};
 				// //"storageContainer."+edu.wustl
 				// .common.util.global.Constants.SYSTEM_IDENTIFIER
@@ -677,11 +690,12 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				// ().getParentContainer().getId()};
 				// String joinCondition = null;
 
-				QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause("id", specimenArray
 						.getLocatedAtPosition().getParentContainer().getId()));
 
-				List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				final List list = dao
+						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 
 				if (!list.isEmpty())
 				{
@@ -690,10 +704,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -709,11 +724,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 		if (specimen instanceof MolecularSpecimen)
 		{
-			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			final MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
 			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity()
 					.toString());// molecularSpecimen.
-									// getAvailableQuantityInMicrogram
-									// ().doubleValue();
+			// getAvailableQuantityInMicrogram
+			// ().doubleValue();
 			if (quantity > availabeQty)
 			{
 				return false;
@@ -722,16 +737,16 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			{
 				availabeQty = availabeQty - quantity;
 				molecularSpecimen.setAvailableQuantity(new Double(availabeQty));// molecularSpecimen
-																				// .
-																				// setAvailableQuantityInMicrogram
-																				// (
-																				// new
-																				// Double
-																				// (
-																				// availabeQty
-																				// )
-																				// )
-																				// ;
+				// .
+				// setAvailableQuantityInMicrogram
+				// (
+				// new
+				// Double
+				// (
+				// availabeQty
+				// )
+				// )
+				// ;
 			}
 		}
 		return true;
@@ -772,11 +787,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				{
 					return null;
 				}
-				String sourceObjectName = Specimen.class.getName();
-				String whereColumnName = columnName;
-				String whereColumnValue = columnValue;
+				final String sourceObjectName = Specimen.class.getName();
+				final String whereColumnName = columnName;
+				final String whereColumnValue = columnValue;
 
-				List list = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
+				final List list = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
 				if (!list.isEmpty())
 				{
 					specimen = (Specimen) list.get(0);
@@ -785,27 +800,30 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					 * from Proxy Object
 					 */
 					specimen = (Specimen) HibernateMetaData.getProxyObjectImpl(specimen);
-					String activityStatus = specimen.getActivityStatus();
+					final String activityStatus = specimen.getActivityStatus();
 					// Bug: 2872:- User should not able to add close/disable
 					// specimen in Specimen Array.
 					if (!activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 					{
-						throw getBizLogicException(null, "spec.array.spec.invalid", columnValue);
+						throw this.getBizLogicException(null, "spec.array.spec.invalid",
+								columnValue);
 					}
 					// return specimenCollectionGroup;
 				}
 				else
 				{
-					throw getBizLogicException(null, "spec.array.spec.does.nt.exists", columnValue);
+					throw this.getBizLogicException(null, "spec.array.spec.does.nt.exists",
+							columnValue);
 				}
 			}
 			return specimen;
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -820,8 +838,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	private boolean isArrayAndSpecimenCompatibile(SpecimenArrayType arrayType, Specimen specimen)
 	{
 		boolean compatible = false;
-		String arraySpecimenClassName = arrayType.getSpecimenClass();
-		String specSpecimenClassName = getClassName(specimen);
+		final String arraySpecimenClassName = arrayType.getSpecimenClass();
+		final String specSpecimenClassName = this.getClassName(specimen);
 
 		if (arraySpecimenClassName.equals(specSpecimenClassName))
 		{
@@ -869,11 +887,12 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @return boolean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		try
 		{
-			SpecimenArray specimenArray = (SpecimenArray) obj;
+			final SpecimenArray specimenArray = (SpecimenArray) obj;
 
 			/**
 			 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of
@@ -893,10 +912,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// Added by Ashish
 			if (specimenArray == null)
 			{
-				throw getBizLogicException(null, "domain.object.null.err.msg", "Specimen Array");
+				throw this.getBizLogicException(null, "domain.object.null.err.msg",
+						"Specimen Array");
 			}
 
-			Validator validator = new Validator();
+			final Validator validator = new Validator();
 
 			if (specimenArray.getActivityStatus() == null)
 			{
@@ -908,11 +928,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					|| specimenArray.getSpecimenArrayType().getId().longValue() == -1)
 			{
 				message = ApplicationProperties.getValue("array.arrayType");
-				throw getBizLogicException(null, "errors.item.required", message);
+				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 
 			// fetch array type to check specimen class
-			Object object = dao.retrieveById(SpecimenArrayType.class.getName(), specimenArray
+			final Object object = dao.retrieveById(SpecimenArrayType.class.getName(), specimenArray
 					.getSpecimenArrayType().getId());
 			SpecimenArrayType specimenArrayType = null;
 
@@ -923,14 +943,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			else
 			{
 				message = ApplicationProperties.getValue("array.arrayType");
-				throw getBizLogicException(null, "errors.invalid", message);
+				throw this.getBizLogicException(null, "errors.invalid", message);
 			}
 
 			// validate name of array
-			if (validator.isEmpty(specimenArray.getName()))
+			if (Validator.isEmpty(specimenArray.getName()))
 			{
 				message = ApplicationProperties.getValue("array.arrayLabel");
-				throw getBizLogicException(null, "errors.item.required", message);
+				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 
 			// validate storage position
@@ -947,17 +967,17 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			 * .getStorageContainer().getName())))
 			 */
 			if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition()
-					.getParentContainer().getId()), 1) && validator.isEmpty(specimenArray
+					.getParentContainer().getId()), 1) && Validator.isEmpty(specimenArray
 					.getLocatedAtPosition().getParentContainer().getName())))
 			{
 				message = ApplicationProperties.getValue("array.positionInStorageContainer");
-				throw getBizLogicException(null, "errors.item.format", message);
+				throw this.getBizLogicException(null, "errors.item.format", message);
 			}
 
 			if (specimenArray.getLocatedAtPosition() != null
 					&& specimenArray.getLocatedAtPosition().getParentContainer() != null)
 			{
-				retriveScId(dao, specimenArray);
+				this.retriveScId(dao, specimenArray);
 			}
 
 			Integer xPos = null;
@@ -976,8 +996,8 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			{
 				isContainerFull = true;
 				Map containerMapFromCache = null;
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-				isContainerFull = setPositions(specimenArray, isContainerFull,
+				containerMapFromCache = StorageContainerUtil.getContainerMapFromCache();
+				isContainerFull = this.setPositions(specimenArray, isContainerFull,
 						containerMapFromCache);
 				xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
 				yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
@@ -985,11 +1005,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			if (isContainerFull)
 			{
-				throw getBizLogicException(null, "storage.specified.full", "");
+				throw this.getBizLogicException(null, "storage.specified.full", "");
 			}
 			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
-				throw getBizLogicException(null, "errors.item.format", ApplicationProperties
+				throw this.getBizLogicException(null, "errors.item.format", ApplicationProperties
 						.getValue("array.positionInStorageContainer"));
 			}
 
@@ -1000,7 +1020,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 							.valueOf(specimenArray.getCreatedBy().getId())))
 			{
 				message = ApplicationProperties.getValue("array.user");
-				throw getBizLogicException(null, "errors.item.required", message);
+				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 
 			// validate capacity
@@ -1008,38 +1028,38 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					|| specimenArray.getCapacity().getOneDimensionCapacity() == null
 					|| specimenArray.getCapacity().getTwoDimensionCapacity() == null)
 			{
-				throw getBizLogicException(null, "array.capacity.err.msg", "");
+				throw this.getBizLogicException(null, "array.capacity.err.msg", "");
 			}
 
-			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_SPECIMEN_CLASS, null);
-			String specimenClass = specimenArrayType.getSpecimenClass();
+			final String specimenClass = specimenArrayType.getSpecimenClass();
 
-			if (!isValidClassName(specimenClass))
+			if (!this.isValidClassName(specimenClass))
 			{
-				throw getBizLogicException(null, "protocol.class.errMsg", "");
+				throw this.getBizLogicException(null, "protocol.class.errMsg", "");
 			}
 
 			if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 			{
-				throw getBizLogicException(null, "protocol.class.errMsg", "");
+				throw this.getBizLogicException(null, "protocol.class.errMsg", "");
 			}
 
-			Collection specimenTypes = specimenArrayType.getSpecimenTypeCollection();
+			final Collection specimenTypes = specimenArrayType.getSpecimenTypeCollection();
 			if (specimenTypes == null || specimenTypes.isEmpty())
 			{
-				throw getBizLogicException(null, "protocol.type.errMsg", "");
+				throw this.getBizLogicException(null, "protocol.type.errMsg", "");
 			}
 			else
 			{
-				Iterator itr = specimenTypes.iterator();
+				final Iterator itr = specimenTypes.iterator();
 				while (itr.hasNext())
 				{
-					String specimenType = (String) itr.next();
+					final String specimenType = (String) itr.next();
 					if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
 							specimenType))
 					{
-						throw getBizLogicException(null, "protocol.type.errMsg", "");
+						throw this.getBizLogicException(null, "protocol.type.errMsg", "");
 					}
 				}
 			}
@@ -1047,42 +1067,43 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			 * Bug no. 7810 Bug Description : Incompatible specimen gets added
 			 * to the specimen array
 			 */
-			Collection specimenArrayContentCollection = specimenArray
+			final Collection specimenArrayContentCollection = specimenArray
 					.getSpecimenArrayContentCollection();
 			if (!specimenArrayContentCollection.isEmpty())
 			{
-				Iterator iterator = specimenArrayContentCollection.iterator();
+				final Iterator iterator = specimenArrayContentCollection.iterator();
 				while (iterator.hasNext())
 				{
-					SpecimenArrayContent tempSpecimenArrayContent = (SpecimenArrayContent) iterator
+					final SpecimenArrayContent tempSpecimenArrayContent = (SpecimenArrayContent) iterator
 							.next();
-					Specimen tempSpecimen = getSpecimen(dao, tempSpecimenArrayContent);
+					final Specimen tempSpecimen = this.getSpecimen(dao, tempSpecimenArrayContent);
 					if (specimenClass != null && tempSpecimen != null
 							&& !specimenClass.equalsIgnoreCase(tempSpecimen.getClassName()))
 					{
-						message = getMessage(tempSpecimenArrayContent);
-						throw getBizLogicException(null, "class.name.different", message);
+						message = this.getMessage(tempSpecimenArrayContent);
+						throw this.getBizLogicException(null, "class.name.different", message);
 					}
 					if (specimenTypes != null && !specimenTypes.isEmpty() && tempSpecimen != null)
 					{
 						if (!specimenTypes.contains(tempSpecimen.getSpecimenType()))
 						{
-							message = getMessage(tempSpecimenArrayContent);
-							throw getBizLogicException(null, "type.different", message);
+							message = this.getMessage(tempSpecimenArrayContent);
+							throw this.getBizLogicException(null, "type.different", message);
 						}
 					}
 				}
 			}
 			else
 			{
-				throw getBizLogicException(null, "spec.array.null", "");
+				throw this.getBizLogicException(null, "spec.array.null", "");
 			}
 			return true;
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1097,20 +1118,20 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		if (containerMapFromCache != null)
 		{
-			Iterator itr = containerMapFromCache.keySet().iterator();
+			final Iterator itr = containerMapFromCache.keySet().iterator();
 			while (itr.hasNext())
 			{
-				NameValueBean nvb = (NameValueBean) itr.next();
+				final NameValueBean nvb = (NameValueBean) itr.next();
 				if (nvb.getValue().toString().equals(
 						specimenArray.getLocatedAtPosition().getParentContainer().getId()
 								.toString()))
 				{
-					Map tempMap = (Map) containerMapFromCache.get(nvb);
-					Iterator tempIterator = tempMap.keySet().iterator();
-					NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-					List list = (List) tempMap.get(nvb1);
-					NameValueBean nvb2 = (NameValueBean) list.get(0);
-					ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
+					final Map tempMap = (Map) containerMapFromCache.get(nvb);
+					final Iterator tempIterator = tempMap.keySet().iterator();
+					final NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+					final List list = (List) tempMap.get(nvb1);
+					final NameValueBean nvb2 = (NameValueBean) list.get(0);
+					final ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
 					locatedAtPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
 					locatedAtPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
 					isContainerFull = false;
@@ -1137,11 +1158,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					&& specimenArray.getLocatedAtPosition().getParentContainer().getName() != null)
 			{
 
-				StorageContainer storageContainerObj = (StorageContainer) HibernateMetaData
+				final StorageContainer storageContainerObj = (StorageContainer) HibernateMetaData
 						.getProxyObjectImpl(specimenArray.getLocatedAtPosition()
 								.getParentContainer());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"id"};
+				final String sourceObjectName = StorageContainer.class.getName();
+				final String[] selectColumnName = {"id"};
 
 				// String[] whereColumnName = {"name"};
 				// String[] whereColumnCondition = {"="};
@@ -1150,11 +1171,12 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				// ().getParentContainer().getName()};
 				// String joinCondition = null;
 
-				QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause("name", specimenArray
 						.getLocatedAtPosition().getParentContainer().getName()));
 
-				List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				final List list = dao
+						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 
 				if (!list.isEmpty())
 				{
@@ -1164,16 +1186,18 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				else
 				{
 					message = ApplicationProperties.getValue("array.positionInStorageContainer");
-					throw getBizLogicException(null, "errors.invalid", message);
+					throw this.getBizLogicException(null, "errors.invalid", message);
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
+
 	/**
 	 * @param className : className
 	 * @return boolean
@@ -1199,14 +1223,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String sourceObjectName = "CATISSUE_CONTAINER";
-			String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
+			final String sourceObjectName = "CATISSUE_CONTAINER";
+			final String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
 			return AppUtility.getNextUniqueNo(sourceObjectName, selectColumnName);
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -1216,7 +1240,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 */
 	public String getMessage(SpecimenArrayContent tempSpecimenArrayContent)
 	{
-		Specimen specimen = tempSpecimenArrayContent.getSpecimen();
+		final Specimen specimen = tempSpecimenArrayContent.getSpecimen();
 		String msg = " ";
 		if (specimen != null)
 		{
@@ -1244,19 +1268,19 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = null;
 		try
 		{
-			dao = openDAOSession(null);
+			dao = this.openDAOSession(null);
 			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) dao.retrieveById(
 					NewSpecimenArrayOrderItem.class.getName(), orderItemId);
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 
 		return newSpecimenArrayOrderItem;
@@ -1274,11 +1298,12 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		SpecimenArray specimenArray = null;
 		Specimen specimen = null;
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		try
 		{
 			sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
@@ -1300,21 +1325,22 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
 			}
 
-			for (SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+			for (final SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
 			{
-				specimen = getSpecimen(dao, specimenArrayContent);
+				specimen = this.getSpecimen(dao, specimenArrayContent);
 				if (specimen != null)
 				{
-					SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
-					CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+					final SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+					final CollectionProtocolRegistration cpr = scg
+							.getCollectionProtocolRegistration();
 					sb.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
 				}
 			}
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return sb.toString();
@@ -1327,6 +1353,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @return String
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_SPECIMEN_ARRAY;
@@ -1342,6 +1369,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
+	@Override
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -1361,7 +1389,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 			// Get the base object id against which authorization will take
 			// place
-			protectionElementName = getObjectId(dao, domainObject);
+			protectionElementName = this.getObjectId(dao, domainObject);
 			Site site = null;
 			StorageContainer sc = null;
 			// Handle for SERIAL CHECKS, whether user has access to source site
@@ -1371,14 +1399,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				specimenArray = (SpecimenArray) domainObject;
 			}
 
-			Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray
+			final Collection<SpecimenArrayContent> specimenArrayContentCollection = specimenArray
 					.getSpecimenArrayContentCollection();
 
-			for (SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
+			for (final SpecimenArrayContent specimenArrayContent : specimenArrayContentCollection)
 			{
 				try
 				{
-					specimen = getSpecimen(dao, specimenArrayContent);
+					specimen = this.getSpecimen(dao, specimenArrayContent);
 
 					if (specimen == null)
 					{
@@ -1399,11 +1427,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					specimenPosition = specimen.getSpecimenPosition();
 
 					if (specimenPosition != null) // Specimen is NOT Virtually
-													// Located
+					// Located
 					{
 						site = sc.getSite();
-						Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-								.getUserId());
+						final Set<Long> siteIdSet = new UserBizLogic()
+								.getRelatedSiteIds(sessionDataBean.getUserId());
 
 						if (!siteIdSet.contains(site.getId()))
 						{
@@ -1413,22 +1441,22 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						}
 					}
 				}
-				catch (DAOException e)
+				catch (final DAOException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.debug(e.getMessage(), e);
 				}
 			}
 
 			// Get the required privilege name which we would like to check for
 			// the logged in user.
-			String privilegeName = getPrivilegeName(domainObject);
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+			final String privilegeName = this.getPrivilegeName(domainObject);
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
 			// Checking whether the logged in user has the required privilege on
 			// the given protection element
-			String[] prArray = protectionElementName.split("_");
-			String baseObjectId = prArray[0];
+			final String[] prArray = protectionElementName.split("_");
+			final String baseObjectId = prArray[0];
 			String objId = "";
 			for (int i = 1; i < prArray.length; i++)
 			{
@@ -1459,19 +1487,20 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			}
 
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		return isAuthorized;
 	}
+
 	/**
 	 * @return Map
 	 * @throws BizLogicException : BizLogicException
@@ -1479,11 +1508,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
 	{
 
-		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		Map disabledconts = (TreeMap) catissueCoreCacheManager
+		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+				.getInstance();
+		final Map disabledconts = (TreeMap) catissueCoreCacheManager
 				.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
 		return disabledconts;
 	}
+
 	/**
 	 * @param specimenarray : specimenarray
 	 * @param container : container
@@ -1492,11 +1523,11 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container,
 			Map disabledConts)
 	{
-		String contNameKey = "StorageContName";
-		String contIdKey = "StorageContIdKey";
-		String pos1Key = "pos1";
-		String pos2Key = "pos2";
-		Map containerDetails = new TreeMap();
+		final String contNameKey = "StorageContName";
+		final String contIdKey = "StorageContIdKey";
+		final String pos1Key = "pos1";
+		final String pos2Key = "pos2";
+		final Map containerDetails = new TreeMap();
 		containerDetails.put(contNameKey, container.getName());
 		containerDetails.put(contIdKey, container.getId());
 		containerDetails.put(pos1Key, specimenarray.getLocatedAtPosition()

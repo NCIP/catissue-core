@@ -22,6 +22,7 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+
 /**
  * @author
  *
@@ -29,7 +30,8 @@ import edu.wustl.dao.exception.DAOException;
 public class InstitutionBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(InstitutionBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(InstitutionBizLogic.class);
+
 	/**
 	 * @param obj : obj
 	 * @param dao : dao
@@ -37,53 +39,56 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 * @return boolean
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		// comment by Ashwin
-		Institution institution = (Institution) obj;
+		final Institution institution = (Institution) obj;
 		if (institution == null)
 		{
-			 String message = ApplicationProperties.getValue("app.institution");
-			 logger.debug(message);
-			 throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			final String message = ApplicationProperties.getValue("app.institution");
+			this.logger.debug(message);
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
 		}
-		Validator validate = new Validator();
-		if (validate.isEmpty(institution.getName()))
+		new Validator();
+		if (Validator.isEmpty(institution.getName()))
 		{
-			String message = ApplicationProperties.getValue("institution.name");
-			logger.debug(message);
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties.getValue("institution.name");
+			this.logger.debug(message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 			//throw new DAOException("errors.item.required", new String[]{message});
 		}
 		return true;
 	}
 
-    /**
-     * @author Baljeet Singh
-     * This method returns the id of the Institution given the name
-     * @param institutionName : institutionName
-     * @return String
-     * @throws BizLogicException : BizLogicException
-     */
-	public String getLatestInstitution(String institutionName)throws BizLogicException
+	/**
+	 * @author Baljeet Singh
+	 * This method returns the id of the Institution given the name
+	 * @param institutionName : institutionName
+	 * @return String
+	 * @throws BizLogicException : BizLogicException
+	 */
+	public String getLatestInstitution(String institutionName) throws BizLogicException
 	{
 		try
 		{
-			String sourceObjectName = Institution.class.getName();
-			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+			final String sourceObjectName = Institution.class.getName();
+			final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause(Constants.NAME,institutionName));
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(Constants.NAME, institutionName));
 
-			List institutionList = retrieve(sourceObjectName, selectColumnName,queryWhereClause);
+			final List institutionList = this.retrieve(sourceObjectName, selectColumnName,
+					queryWhereClause);
 
-			Long institutionId =(Long)institutionList.get(0);
+			final Long institutionId = (Long) institutionList.get(0);
 			return institutionId.toString();
 		}
-		catch(DAOException daoexp)
+		catch (final DAOException daoexp)
 		{
-			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
+			throw this
+					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
 
@@ -95,6 +100,7 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
@@ -107,9 +113,10 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
-    {
-    	return Constants.ADD_EDIT_INSTITUTION;
-    }
+	{
+		return Constants.ADD_EDIT_INSTITUTION;
+	}
 
 }

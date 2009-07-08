@@ -71,15 +71,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Logger object.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ParticipantBizLogic.class);
-	
-	private List<Long> cprIdList = new ArrayList<Long>();
+	private transient final Logger logger = Logger.getCommonLogger(ParticipantBizLogic.class);
+
+	/**
+	 *  List of cprIds.
+	 */
+	private final List<Long> cprIdList = new ArrayList<Long>();
 
 	/**
 	 * Saves the Participant object in the database.
 	 * @param obj The storageType object to be saved.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 *  @param dao - DAO object
+	 * @param sessionDataBean - The session in which the object is saved.
+	 * @throws BizLogicException throws BizLogicException
 	 */
 	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
@@ -87,9 +91,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Participant participant = (Participant) obj;
+			final Participant participant = (Participant) obj;
 			dao.insert(participant);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, participant);
 			Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
@@ -101,17 +105,17 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (participantMedicalIdentifierCollection.isEmpty())
 			{
 				//add a dummy participant MedicalIdentifier for Query.
-				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+				final ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setMedicalRecordNumber(null);
 				participantMedicalIdentifier.setSite(null);
 				participantMedicalIdentifierCollection.add(participantMedicalIdentifier);
 			}
 
 			//Inserting medical identifiers in the database after setting the participant associated.
-			Iterator it = participantMedicalIdentifierCollection.iterator();
+			final Iterator it = participantMedicalIdentifierCollection.iterator();
 			while (it.hasNext())
 			{
-				ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
+				final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
 						.next();
 				pmIdentifier.setParticipant(participant);
 				dao.insert(pmIdentifier);
@@ -120,84 +124,85 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			//Inserting collection Protocol Registration info in the database after setting the participant associated.
 			//Abhishek Mehta
-			Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
+			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
 
 			if (collectionProtocolRegistrationCollection != null)
 			{
 
-				registerToCPR(dao, sessionDataBean, participant);
+				this.registerToCPR(dao, sessionDataBean, participant);
 			}
 			else
 			{
-				insertAuthData(participant);
+				this.insertAuthData(participant);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
 	}
 
 	/**
-	 * @param participant
-	 * @throws DAOException
+	 * @param participant - Participant object.
+	 * @throws DAOException throws DAOException
 	 */
 	private void insertAuthData(Participant participant) throws DAOException
 	{
-		Set<Participant> protectionObjects = new HashSet<Participant>();
+		final Set<Participant> protectionObjects = new HashSet<Participant>();
 		protectionObjects.add(participant);
 
 	}
 
 	/**
-	 * @param dao
-	 * @param sessionDataBean
-	 * @param participant
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
+	 * @param dao - DAO object.
+	 * @param sessionDataBean - SessionDataBean object
+	 * @param participant - Participant object
+	 * @throws DAOException throws DAOException
 	 */
 	private void registerToCPR(DAO dao, SessionDataBean sessionDataBean, Participant participant)
 			throws BizLogicException
 	{
-		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
-		Collection<CollectionProtocolRegistration> cprCollection = participant.getCollectionProtocolRegistrationCollection();
+		final CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		final Collection<CollectionProtocolRegistration> cprCollection = participant
+				.getCollectionProtocolRegistrationCollection();
 
-		Iterator<CollectionProtocolRegistration> itcprCollection = cprCollection.iterator();
+		final Iterator<CollectionProtocolRegistration> itcprCollection = cprCollection.iterator();
 
 		while (itcprCollection.hasNext())
 		{
-			CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
+			final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
 					.next();
 			cpr.setParticipant(participant);
 			cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			cprBizLogic.insert(cpr, dao, sessionDataBean);
-			cprIdList.add(cpr.getId());
+			this.cprIdList.add(cpr.getId());
 		}
 	}
 
 	/**
-	 * This method gets called after insert method. Any logic after insertnig object in database can be included here.
+	 * This method gets called after insert method. Any logic after insertnig object in 
+	 * database can be included here.
 	 * @param obj The inserted object.
 	 * @param dao the dao object
 	 * @param sessionDataBean session specific data
-	 * @throws DAOException
-	 * @throws UserNotAuthorizedException 
+	 * @throws DAOException throws  DAOException
 	 * */
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		Participant participant = (Participant) obj;
-		Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
+		final Participant participant = (Participant) obj;
+		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
-		updateCache(obj);
+		this.updateCache(obj);
 		super.postInsert(obj, dao, sessionDataBean);
 		// Commented for removing the cp based cache. 
 		/*	
@@ -215,28 +220,29 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method gets called after update method. Any logic after updating into database can be included here.
-	 * @param dao the dao object
+	 * This method gets called after update method. Any logic after updating into 
+	 * database can be included here.
+	 * @param dao the  object
 	 * @param currentObj The object to be updated.
 	 * @param oldObj The old object.
 	 * @param sessionDataBean session specific data
-	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException throws BizLogicException
 	 * */
 	protected void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		Participant participant = (Participant) currentObj;
-		Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
-		updateCache(currentObj);
+		final Participant participant = (Participant) currentObj;
+		final Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
+		this.updateCache(currentObj);
 		//Added updation of Collection Protocol Registration
 		//(Abhishek Mehta)
-		CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+		final CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		//ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
-		Iterator iteratorCPRCollection = cprCollection.iterator();
+		final Iterator iteratorCPRCollection = cprCollection.iterator();
 
-		Participant oldparticipant = (Participant) oldObj;
-		Collection oldCPRCollection = oldparticipant.getCollectionProtocolRegistrationCollection();
+		final Participant oldparticipant = (Participant) oldObj;
+		final Collection oldCPRCollection = oldparticipant
+				.getCollectionProtocolRegistrationCollection();
 
 		Long cpId, participantId;
 		String protocolParticipantId;
@@ -251,7 +257,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
 
-				oldCollectionProtocolRegistration = getCollectionProtocolRegistrationOld(cpId,
+				oldCollectionProtocolRegistration = this.getCollectionProtocolRegistrationOld(cpId,
 						oldCPRCollection);
 				if (oldCollectionProtocolRegistration == null)
 				{
@@ -288,20 +294,20 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Returns CollectionProtocolRegistration object if it exist in collection
-	 * @param collectionProtocolId
-	 * @param collectionProtocolRegistrationCollection
+	 * @param collectionProtocolId - Long 
+	 * @param collectionProtocolRegistrationCollection - Collection of protocol registration.
 	 * @return
 	 */
 	private CollectionProtocolRegistration getCollectionProtocolRegistrationOld(
 			long collectionProtocolId, Collection collectionProtocolRegistrationCollection)
 	{
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
+		final Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
 				.iterator();
 		while (itCollectionProtocolRegistrationCollection.hasNext())
 		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
+			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
 					.next();
-			long cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
+			final long cpId = collectionProtocolRegistration.getCollectionProtocol().getId();
 			if (cpId == collectionProtocolId)
 			{
 				return collectionProtocolRegistration;
@@ -311,20 +317,21 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 *  This method updates the cache for MAP_OF_PARTICIPANTS, should be called in postInsert/postUpdate 
+	 *  This method updates the cache for MAP_OF_PARTICIPANTS,
+	 *  should be called in postInsert/postUpdate.
 	 * @param obj - participant object
 	 */
 	private synchronized void updateCache(Object obj)
 	{
-		Participant participant = (Participant) obj;
-		Participant cloneParticipant = new Participant(participant);
+		final Participant participant = (Participant) obj;
+		final Participant cloneParticipant = new Participant(participant);
 		//getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = null;
 		//Map mapOfParticipantMedicalIdentifierCollection = new HashMap();
 		try
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			HashMap participantMap = (HashMap) catissueCoreCacheManager
+			final HashMap participantMap = (HashMap) catissueCoreCacheManager
 					.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
 			if (cloneParticipant.getActivityStatus().equalsIgnoreCase(
 					Status.ACTIVITY_STATUS_DISABLED.toString()))
@@ -365,9 +372,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				participantMap.put(cloneParticipant.getId(), cloneParticipant);
 			}
 		}
-		catch (CacheException e)
+		catch (final CacheException e)
 		{
-			logger.debug("Exception occured while getting instance of cachemanager");
+			this.logger.debug("Exception occured while getting instance of cachemanager");
 			e.printStackTrace();
 		}
 
@@ -375,17 +382,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Updates the persistent object in the database.
+	 * @param oad - DAO object 
 	 * @param obj The object to be updated.
-	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * @param oldObj - Object 
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws BizLogicException throws BizLogicException
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			Participant participant = (Participant) obj;
-			Participant oldParticipant = (Participant) oldObj;
+			final Participant participant = (Participant) obj;
+			final Participant oldParticipant = (Participant) oldObj;
 
 			/*Collection raceCollection = participant.getRaceCollection();
 			participant.setRaceCollection(null);*/
@@ -394,19 +403,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			dao.update(participant);
 			//insertNewParticipantRaceColl(raceCollection,participant,sessionDataBean,dao);
 			//Audit of Participant.
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.updateAudit(dao, obj, oldObj);
 
-			Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant
+			final Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant
 					.getParticipantMedicalIdentifierCollection();
-			Collection participantMedicalIdentifierCollection = participant
+			final Collection participantMedicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
-			Iterator it = participantMedicalIdentifierCollection.iterator();
+			final Iterator it = participantMedicalIdentifierCollection.iterator();
 
 			//Updating the medical identifiers of the participant
 			while (it.hasNext())
 			{
-				ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
+				final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
 						.next();
 
 				/**
@@ -433,24 +442,26 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 
 				//Audit of ParticipantMedicalIdentifier.
-				ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) getCorrespondingOldObject(
-						oldParticipantMedicalIdentifierCollection, pmIdentifier.getId());
+				final ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) this
+						.getCorrespondingOldObject(oldParticipantMedicalIdentifierCollection,
+								pmIdentifier.getId());
 
 				auditManager.updateAudit(dao, pmIdentifier, oldPmIdentifier);
 			}
 
 			//Updating the Collection Protocol Registration of the participant
 			//(Abhishek Mehta)
-			CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
+			final CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 
-			Collection oldCollectionProtocolRegistrationCollection = oldParticipant
+			final Collection oldCollectionProtocolRegistrationCollection = oldParticipant
 					.getCollectionProtocolRegistrationCollection();
-			Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
+			final Collection cprCollection = participant
+					.getCollectionProtocolRegistrationCollection();
 
-			Iterator itCPRColl = cprCollection.iterator();
+			final Iterator itCPRColl = cprCollection.iterator();
 			while (itCPRColl.hasNext())
 			{
-				CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) itCPRColl
+				final CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) itCPRColl
 						.next();
 
 				ApiSearchUtil.setCollectionProtocolRegistrationDefault(collectionProtReg);
@@ -461,15 +472,16 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					collectionProtReg.setParticipant(participant);
 
 					//Audit of CollectionProtocolRegistration.
-					CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) getCorrespondingOldObject(
-							oldCollectionProtocolRegistrationCollection, collectionProtReg.getId());
+					final CollectionProtocolRegistration oldcollectionProtocolRegistration = (CollectionProtocolRegistration) this
+							.getCorrespondingOldObject(oldCollectionProtocolRegistrationCollection,
+									collectionProtReg.getId());
 
 					if (collectionProtReg.getId() == null) // If Collection Protocol Registration is not happened for given participant
 					{
 						collectionProtReg.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE
 								.toString());
 						cprBizLogic.insert(collectionProtReg, dao, sessionDataBean);
-						cprIdList.add(collectionProtReg.getId());
+						this.cprIdList.add(collectionProtReg.getId());
 						continue;
 					}
 					cprBizLogic.update(dao, collectionProtReg, oldcollectionProtocolRegistration,
@@ -478,54 +490,69 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 
 			//Disable the associate collection protocol registration
-			logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
+			this.logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
-				logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
-				Long participantIDArr[] = {participant.getId()};
+				this.logger.debug("participant.getActivityStatus() "
+						+ participant.getActivityStatus());
+				final Long participantIDArr[] = {participant.getId()};
 
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
 						.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 				bizLogic.disableRelatedObjectsForParticipant(dao, participantIDArr);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
+	/**
+	 * @param raceCollection - collection of race obejct.
+	 * @param dao - DAO objects
+	 * @throws DAOException throws DAOException
+	 */
 	private void deleteOldParticipantRaceColl(Collection raceCollection, DAO dao)
 			throws DAOException
 	{
 		if (raceCollection != null)
 		{
-			Iterator itr = raceCollection.iterator();
+			final Iterator itr = raceCollection.iterator();
 			while (itr.hasNext())
 			{
-				Race race = (Race) itr.next();
+				final Race race = (Race) itr.next();
 				dao.delete(race);
 			}
 		}
 	}
 
+	/**
+	 * @param raceCollection - Collection of race objects.
+	 * @param participant - Participant object.
+	 * @param sessionDataBean - SessionDataBean object
+	 * @param dao - DAO object
+	 * @throws DAOException throws DAOException
+	 * @throws UserNotAuthorizedException throws UserNotAuthorizedException
+	 */
 	private void insertNewParticipantRaceColl(Collection raceCollection, Participant participant,
 			SessionDataBean sessionDataBean, DAO dao) throws DAOException,
 			UserNotAuthorizedException
 	{
 		if (raceCollection != null)
 		{
-			Iterator itr = raceCollection.iterator();
+			final Iterator itr = raceCollection.iterator();
 			while (itr.hasNext())
 			{
-				Race race = (Race) itr.next();
+				final Race race = (Race) itr.next();
 				race.setParticipant(participant);
 				dao.insert(race);
 			}
@@ -548,52 +575,28 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
 		}
 	*/
-	/**
-	 * Assigns the privilege to related objects for Collection Protocol Registration.
-	 * @param dao
-	 * @param privilegeName
-	 * @param longs
-	 * @param userId
-	 * @param roleId
-	 * @param assignToUser
-	 * @throws DAOException
-	 * @throws SMException
-	 */
-	/*	public void assignPrivilegeToRelatedObjectsForCPR(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
-				boolean assignToUser, boolean assignOperation) throws SMException, DAOException
-		{
-			List listOfSubElement = super.getRelatedObjects(dao, CollectionProtocolRegistration.class,
-					new String[]{Constants.PARTICIPANT_IDENTIFIER_IN_CPR + "." + Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER},
-					objectIds);
-			Logger.out.debug(" CPR Ids:" + Utility.getArrayString(objectIds) + " Related Participant Ids:" + listOfSubElement);
-			if (!listOfSubElement.isEmpty())
-			{
-				super.setPrivilege(dao, privilegeName, Participant.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
-						assignOperation);
-			}
-		}*/
 
 	/**
-	 * This method check for duplicate collection protocol registration for given participant
-	 * @param collectionProtocolRegistrationCollection
-	 * @return
+	 * This method check for duplicate collection protocol registration for given participant.
+	 * @param collectionProtocolRegistrationCollection - Coolection of cpr objects
+	 * @return boolean value based on duplicate collection protocol
 	 */
 	private boolean isDuplicateCollectionProtocol(
 			Collection collectionProtocolRegistrationCollection)
 	{
-		Collection newCollectionProtocolRegistrationCollection = new LinkedHashSet();
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
+		final Collection newCollectionProtocolRegistrationCollection = new LinkedHashSet();
+		final Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
 				.iterator();
 		while (itCollectionProtocolRegistrationCollection.hasNext())
 		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
+			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
 					.next();
 			if (collectionProtocolRegistration.getCollectionProtocol() != null
 					&& !collectionProtocolRegistration.equals(""))
 			{
-				long collectionProtocolId = collectionProtocolRegistration.getCollectionProtocol()
-						.getId().longValue();
-				if (isCollectionProtocolExist(newCollectionProtocolRegistrationCollection,
+				final long collectionProtocolId = collectionProtocolRegistration
+						.getCollectionProtocol().getId().longValue();
+				if (this.isCollectionProtocolExist(newCollectionProtocolRegistrationCollection,
 						collectionProtocolId))
 				{
 					return true;
@@ -608,17 +611,23 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		return false;
 	}
 
+	/**
+	 * @param collectionProtocolRegistrationCollection.
+	 * @param collectinProtocolId
+	 * @return boolean value based on existace of CP.
+	 */
 	private boolean isCollectionProtocolExist(Collection collectionProtocolRegistrationCollection,
 			long collectinProtocolId)
 	{
 		boolean isCollectionProtocolExist = false;
-		Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
+		final Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
 				.iterator();
 		while (itCollectionProtocolRegistrationCollection.hasNext())
 		{
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
+			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itCollectionProtocolRegistrationCollection
 					.next();
-			long cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+			final long cpId = collectionProtocolRegistration.getCollectionProtocol().getId()
+					.longValue();
 			if (cpId == collectinProtocolId)
 			{
 				isCollectionProtocolExist = true;
@@ -630,17 +639,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * 
-	 * @param dao
-	 * @param cprId
-	 * @return
-	 * @throws DAOException
-	 * @throws ClassNotFoundException
+	 * @param dao - DAO object.
+	 * @param cprId - Long 
+	 * @return boolean value 
+	 * @throws DAOException throws BizLogicException
 	 */
 	protected boolean isSpecimenExistsForRegistration(DAO dao, Long cprId) throws BizLogicException
 	{
 
-		String hql = " select " + " elements(scg.specimenCollection) " + "from "
+		final String hql = " select " + " elements(scg.specimenCollection) " + "from "
 				+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
 				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg"
 				+ ", edu.wustl.catissuecore.domain.Specimen as s" + " where cpr.id = " + cprId
@@ -648,7 +655,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
 				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
-		List scgList = (List) executeHqlQuery(dao, hql);
+		final List scgList = (List) this.executeHqlQuery(dao, hql);
 		if ((scgList != null) && (scgList).size() > 0)
 		{
 			return true;
@@ -660,10 +667,16 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 	}
 
+	/**
+	 * @param dao - DAO object.
+	 * @param participantId - Long
+	 * @return boolean value
+	 * @throws BizLogicException : BizLogicException
+	 */
 	protected boolean isSpecimenExists(DAO dao, Long participantId) throws BizLogicException
 	{
 
-		String hql = " select" + " elements(scg.specimenCollection) " + "from"
+		final String hql = " select" + " elements(scg.specimenCollection) " + "from"
 				+ " edu.wustl.catissuecore.domain.Participant as p"
 				+ ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
 				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg"
@@ -673,7 +686,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
 				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
-		List specimenList = (List) executeHqlQuery(dao, hql);
+		final List specimenList = (List) this.executeHqlQuery(dao, hql);
 		if ((specimenList != null) && (specimenList).size() > 0)
 		{
 			return true;
@@ -690,20 +703,20 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		Participant participant = (Participant) obj;
-		Validator validator = new Validator();
+		final Participant participant = (Participant) obj;
+		final Validator validator = new Validator();
 		//Added by Ashish Gupta
 
 		String message = "";
 		if (participant == null)
 		{
-			throw getBizLogicException(null, "domain.object.null.err.msg", "Participant");
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", "Participant");
 		}
 
 		String errorKeyForBirthDate = "";
 		String errorKeyForDeathDate = "";
 
-		String birthDate = Utility.parseDateToString(participant.getBirthDate(),
+		final String birthDate = Utility.parseDateToString(participant.getBirthDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		if (!validator.isEmpty(birthDate))
 		{
@@ -711,11 +724,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (errorKeyForBirthDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.birthDate");
-				throw getBizLogicException(null, errorKeyForBirthDate, message);
+				throw this.getBizLogicException(null, errorKeyForBirthDate, message);
 			}
 		}
 
-		String deathDate = Utility.parseDateToString(participant.getDeathDate(),
+		final String deathDate = Utility.parseDateToString(participant.getDeathDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		if (!validator.isEmpty(deathDate))
 		{
@@ -723,7 +736,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (errorKeyForDeathDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.deathDate");
-				throw getBizLogicException(null, errorKeyForDeathDate, message);
+				throw this.getBizLogicException(null, errorKeyForDeathDate, message);
 			}
 		}
 
@@ -731,14 +744,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			if (!validator.isEmpty(deathDate))
 			{
-				throw getBizLogicException(null, "participant.invalid.enddate", "");
+				throw this.getBizLogicException(null, "participant.invalid.enddate", "");
 			}
 		}
 		if ((!validator.isEmpty(birthDate) && !validator.isEmpty(deathDate))
 				&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim()
 						.length() == 0))
 		{
-			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant
+			final boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant
 					.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern()), Utility
 					.parseDateToString(participant.getDeathDate(), CommonServiceLocator
 							.getInstance().getDatePattern()));
@@ -746,7 +759,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (!errorKey1)
 			{
 
-				throw getBizLogicException(null, "participant.invaliddate", "");
+				throw this.getBizLogicException(null, "participant.invaliddate", "");
 			}
 		}
 
@@ -755,52 +768,52 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (!validator.isValidSSN(participant.getSocialSecurityNumber()))
 			{
 				message = ApplicationProperties.getValue("participant.socialSecurityNumber");
-				throw getBizLogicException(null, "errors.invalid", message);
+				throw this.getBizLogicException(null, "errors.invalid", message);
 			}
 		}
 
-		Collection paticipantMedicicalCollection = participant
+		final Collection paticipantMedicicalCollection = participant
 				.getParticipantMedicalIdentifierCollection();
 		if (paticipantMedicicalCollection != null && !paticipantMedicicalCollection.isEmpty())
 		{
-			Iterator itr = paticipantMedicicalCollection.iterator();
+			final Iterator itr = paticipantMedicicalCollection.iterator();
 			while (itr.hasNext())
 			{
-				ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) itr
+				final ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) itr
 						.next();
-				Site site = participantIdentifier.getSite();
-				String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
+				final Site site = participantIdentifier.getSite();
+				final String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
 				if (validator.isEmpty(medicalRecordNo) || site == null || site.getId() == null)
 				{
-					throw getBizLogicException(null, "errors.participant.extiden.missing", "");
+					throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
 				}
 			}
 		}
 
-		Collection collectionProtocolRegistrationCollection = participant
+		final Collection collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
 		if (collectionProtocolRegistrationCollection != null
 				&& !collectionProtocolRegistrationCollection.isEmpty())
 		{
-			Iterator itrCollectionProtocolRegistration = collectionProtocolRegistrationCollection
+			final Iterator itrCollectionProtocolRegistration = collectionProtocolRegistrationCollection
 					.iterator();
 			while (itrCollectionProtocolRegistration.hasNext())
 			{
-				CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itrCollectionProtocolRegistration
+				final CollectionProtocolRegistration collectionProtocolRegistrationIdentifier = (CollectionProtocolRegistration) itrCollectionProtocolRegistration
 						.next();
 				if (collectionProtocolRegistrationIdentifier.getCollectionProtocol() != null
 						&& !collectionProtocolRegistrationIdentifier.equals(""))
 				{
-					long collectionProtocolTitle = collectionProtocolRegistrationIdentifier
+					final long collectionProtocolTitle = collectionProtocolRegistrationIdentifier
 							.getCollectionProtocol().getId().longValue();
-					String collectionProtocolRegistrationDate = Utility.parseDateToString(
+					final String collectionProtocolRegistrationDate = Utility.parseDateToString(
 							collectionProtocolRegistrationIdentifier.getRegistrationDate(),
 							CommonServiceLocator.getInstance().getDatePattern());
-					String errorKey = validator.validateDate(collectionProtocolRegistrationDate,
-							true);
+					final String errorKey = validator.validateDate(
+							collectionProtocolRegistrationDate, true);
 					if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
 					{
-						throw getBizLogicException(null,
+						throw this.getBizLogicException(null,
 								"errors.participant.collectionProtocolRegistration.missing", "");
 					}
 
@@ -811,11 +824,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 								.equalsIgnoreCase(Constants.DISABLED))
 				{
 
-					boolean isSpecimenExist = (boolean) isSpecimenExistsForRegistration(dao,
-							(Long) collectionProtocolRegistrationIdentifier.getId());
+					final boolean isSpecimenExist = (boolean) this.isSpecimenExistsForRegistration(
+							dao, (Long) collectionProtocolRegistrationIdentifier.getId());
 					if (isSpecimenExist)
 					{
-						throw getBizLogicException(null,
+						throw this.getBizLogicException(null,
 								"collectionprotocolregistration.scg.exists", "");
 					}
 
@@ -824,10 +837,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 
-		boolean isDuplicateCollectionProtocol = isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
+		final boolean isDuplicateCollectionProtocol = this
+				.isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
 		if (isDuplicateCollectionProtocol)
 		{
-			throw getBizLogicException(null, "errors.participant.duplicate.collectionProtocol", "");
+			throw this.getBizLogicException(null,
+					"errors.participant.duplicate.collectionProtocol", "");
 		}
 
 		//Validation for Blank Participant 
@@ -884,51 +899,51 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		if (!validator.isEmpty(participant.getVitalStatus()))
 		{
-			List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_VITAL_STATUS, null);
 			if (!Validator.isEnumeratedOrNullValue(vitalStatusList, participant.getVitalStatus()))
 			{
-				throw getBizLogicException(null, "participant.gender.errMsg", "");
+				throw this.getBizLogicException(null, "participant.gender.errMsg", "");
 			}
 		}
 
 		if (!validator.isEmpty(participant.getGender()))
 		{
-			List genderList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List genderList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_GENDER, null);
 
 			if (!Validator.isEnumeratedOrNullValue(genderList, participant.getGender()))
 			{
-				throw getBizLogicException(null, "participant.gender.errMsg", "");
+				throw this.getBizLogicException(null, "participant.gender.errMsg", "");
 			}
 		}
 
 		if (!validator.isEmpty(participant.getSexGenotype()))
 		{
-			List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_GENOTYPE, null);
 			if (!Validator.isEnumeratedOrNullValue(genotypeList, participant.getSexGenotype()))
 			{
-				throw getBizLogicException(null, "participant.genotype.errMsg", "");
+				throw this.getBizLogicException(null, "participant.genotype.errMsg", "");
 			}
 		}
 
-		Collection raceCollection = participant.getRaceCollection();
+		final Collection raceCollection = participant.getRaceCollection();
 		if (raceCollection != null && !raceCollection.isEmpty())
 		{
-			List raceList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List raceList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_RACE, null);
-			Iterator itr = raceCollection.iterator();
+			final Iterator itr = raceCollection.iterator();
 			while (itr.hasNext())
 			{
-				Race race = (Race) itr.next();
+				final Race race = (Race) itr.next();
 				if (race != null)
 				{
-					String race_name = (String) race.getRaceName();
+					final String race_name = (String) race.getRaceName();
 					if (!validator.isEmpty(race_name)
 							&& !Validator.isEnumeratedOrNullValue(raceList, race_name))
 					{
-						throw getBizLogicException(null, "participant.race.errMsg", "");
+						throw this.getBizLogicException(null, "participant.race.errMsg", "");
 					}
 				}
 			}
@@ -936,11 +951,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		if (!validator.isEmpty(participant.getEthnicity()))
 		{
-			List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_ETHNICITY, null);
 			if (!Validator.isEnumeratedOrNullValue(ethnicityList, participant.getEthnicity()))
 			{
-				throw getBizLogicException(null, "participant.ethnicity.errMsg", "");
+				throw this.getBizLogicException(null, "participant.ethnicity.errMsg", "");
 			}
 		}
 
@@ -948,7 +963,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(participant.getActivityStatus()))
 			{
-				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
 		}
 		else
@@ -956,7 +971,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, participant
 					.getActivityStatus()))
 			{
-				throw getBizLogicException(null, "activityStatus.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
 
@@ -964,10 +979,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		if (participant.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 		{
 
-			boolean isSpecimenExist = (boolean) isSpecimenExists(dao, (Long) participant.getId());
+			final boolean isSpecimenExist = (boolean) this.isSpecimenExists(dao, (Long) participant
+					.getId());
 			if (isSpecimenExist)
 			{
-				throw getBizLogicException(null, "participant.specimen.exists", "");
+				throw this.getBizLogicException(null, "participant.specimen.exists", "");
 			}
 
 		}
@@ -975,9 +991,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param participant - participant object 
-	 * @return - List 
-	 * @throws Exception
+	 * @param participant - participant object.
+	 * @param lookupLogic - LookupLogic object
+	 * @return - List of matched participant.
+	 * @throws Exception - throws exception.
 	 */
 	public List getListOfMatchingParticipants(Participant participant, LookupLogic lookupLogic)
 			throws Exception
@@ -987,17 +1004,18 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		// Creating the DefaultLookupParameters object to pass as argument to lookup function
 		// This object contains the Participant with which matching participant are to be found and the cutoff value.
-		DefaultLookupParameters params = new DefaultLookupParameters();
+		final DefaultLookupParameters params = new DefaultLookupParameters();
 		params.setObject(participant);
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
-		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		HashMap<String, Participant> participantMap = (HashMap<String, Participant>) catissueCoreCacheManager
+		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+				.getInstance();
+		final HashMap<String, Participant> participantMap = (HashMap<String, Participant>) catissueCoreCacheManager
 				.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
 		//listOfParticipants.addAll(participantMap.values());
 		params.setListOfParticipants(participantMap);
 		//calling thr lookup function which returns the List of ParticipantResuld objects.
 		//ParticipantResult object contains the matching participant and the probablity.
-		List matchingParticipantList = lookupLogic.lookup(params);
+		final List matchingParticipantList = lookupLogic.lookup(params);
 		return matchingParticipantList;
 
 	}
@@ -1120,71 +1138,83 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		return mapOfParticipants;
 
 	}*/
+
+	/**
+	 * @return Map of all participant.
+	 * @throws BizLogicException throws BizLogicException
+	 */
 	public Map<Long, Participant> getAllParticipants() throws BizLogicException
 	{
 		DAO dao = null;
-		Map<Long, Participant> mapOfParticipants = new HashMap<Long, Participant>();
+		final Map<Long, Participant> mapOfParticipants = new HashMap<Long, Participant>();
 		try
 		{
-			dao = openDAOSession(null);
+			dao = this.openDAOSession(null);
 
-			String participantQueryStr = "from " + Participant.class.getName()
+			final String participantQueryStr = "from " + Participant.class.getName()
 					+ " where activityStatus !='" + Status.ACTIVITY_STATUS_DISABLED.toString()
 					+ "'";
 
-			List<Participant> listOfParticipants = dao.executeQuery(participantQueryStr);
+			final List<Participant> listOfParticipants = dao.executeQuery(participantQueryStr);
 			if (listOfParticipants != null)
 			{
-				Iterator<Participant> participantIterator = listOfParticipants.iterator();
+				final Iterator<Participant> participantIterator = listOfParticipants.iterator();
 				while (participantIterator.hasNext())
 				{
-					Participant participant = (Participant) participantIterator.next();
-					Participant cloneParticipant = new Participant(participant);
-					Long participantId = cloneParticipant.getId();
+					final Participant participant = (Participant) participantIterator.next();
+					final Participant cloneParticipant = new Participant(participant);
+					final Long participantId = cloneParticipant.getId();
 					mapOfParticipants.put(participantId, cloneParticipant);
 				}
 			}
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 		return mapOfParticipants;
 	}
 
 	/**
-	 * This function takes identifier as parameter and returns corresponding Participant
+	 * This function takes identifier as parameter and returns 
+	 * corresponding Participant.
 	 * @return - Participant object
 	 */
 	public Participant getParticipantById(Long identifier) throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = Participant.class.getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String sourceObjectName = Participant.class.getName();
 
 		// getting all the participants from the database 
-		Object object = bizLogic.retrieve(sourceObjectName, identifier);
-		Participant participant = (Participant) object;
+		final Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		final Participant participant = (Participant) object;
 		return participant;
 
 	}
 
+	/**
+	 * @param columnList - List 
+	 * @param partMRNColName - StringBuffer
+	 * @return List column list
+	 * @throws BizLogicException throws BizLogicException
+	 */
 	public List getColumnList(List columnList, StringBuffer partMRNColName)
 			throws BizLogicException
 	{
-		List displayList = new ArrayList();
+		final List displayList = new ArrayList();
 		JDBCDAO jdbcDao = null;
 		try
 		{
-			jdbcDao = openJDBCSession();
+			jdbcDao = this.openJDBCSession();
 			jdbcDao.openSession(null);
-			String sql = "SELECT  columnData.COLUMN_NAME,displayData.DISPLAY_NAME FROM "
+			final String sql = "SELECT  columnData.COLUMN_NAME,displayData.DISPLAY_NAME FROM "
 					+ "CATISSUE_INTERFACE_COLUMN_DATA columnData,CATISSUE_TABLE_RELATION relationData,"
 					+ "CATISSUE_QUERY_TABLE_DATA tableData,CATISSUE_SEARCH_DISPLAY_DATA displayData "
 					+ "where relationData.CHILD_TABLE_ID = columnData.TABLE_ID and "
@@ -1192,20 +1222,20 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					+ "relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID and "
 					+ "columnData.IDENTIFIER = displayData.COL_ID and tableData.ALIAS_NAME = 'Participant'";
 
-			logger.debug("DATA ELEMENT SQL : " + sql);
-			List list = jdbcDao.executeQuery(sql);
-			Iterator iterator1 = columnList.iterator();
+			this.logger.debug("DATA ELEMENT SQL : " + sql);
+			final List list = jdbcDao.executeQuery(sql);
+			final Iterator iterator1 = columnList.iterator();
 
 			while (iterator1.hasNext())
 			{
-				String colName1 = (String) iterator1.next();
-				logger.debug("colName1------------------------" + colName1);
-				Iterator iterator2 = list.iterator();
+				final String colName1 = (String) iterator1.next();
+				this.logger.debug("colName1------------------------" + colName1);
+				final Iterator iterator2 = list.iterator();
 				while (iterator2.hasNext())
 				{
-					List rowList = (List) iterator2.next();
-					String colName2 = (String) rowList.get(0);
-					logger.debug("colName2------------------------" + colName2);
+					final List rowList = (List) iterator2.next();
+					final String colName2 = (String) rowList.get(0);
+					this.logger.debug("colName2------------------------" + colName2);
 					if (colName1.equals(colName2))
 					{
 						if (colName1.equals(Constants.PARTICIPANT_MEDICAL_RECORD_NO))
@@ -1218,41 +1248,47 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			jdbcDao.closeSession();
 		}
-		catch (DAOException exp)
+		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
 		{
-			closeJDBCSession(jdbcDao);
+			this.closeJDBCSession(jdbcDao);
 		}
 
 		return displayList;
 	}
 
+	/**
+	 * @return page row to show.
+	 */
 	public String getPageToShow()
 	{
 		return new String();
 	}
 
+	/**
+	 * @return List of matching objects.
+	 */
 	public List getMatchingObjects()
 	{
 		return new ArrayList();
 	}
 
 	/**
-	 * Executes hql Query and returns the list of associated scg id
+	 * Executes hql Query and returns the list of associated scg id.
 	 * @param participant Participant
-	 * @throws BizLogicException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @return List of SCG 
+	 * @throws BizLogicException DAOException.
 	 */
 	public List getSCGList(Long participantId) throws BizLogicException
 	{
 		DAO dao = null;
 		try
 		{
-			String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "
+			final String scgHql = "select scg.id, scg.surgicalPathologyNumber, scg.identifiedSurgicalPathologyReport.id "
 					+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg, "
 					+ " edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"
 					+ " edu.wustl.catissuecore.domain.Participant as p "
@@ -1261,64 +1297,73 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					+ " and p.id = cpr.participant.id "
 					+ " and scg.id in elements(cpr.specimenCollectionGroupCollection)";
 
-			dao = openDAOSession(null);
+			dao = this.openDAOSession(null);
 			List list = null;
 
 			list = dao.executeQuery(scgHql);
 			return list;
 		}
-		catch (DAOException exp)
+		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 	}
 
 	/**
 	 * Executes hql Query and returns the results.
 	 * @param hql String hql
+	 * @param dao - DAO object
+	 * @return list of objects
 	 * @throws BizLogicException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
 	private List executeHqlQuery(DAO dao, String hql) throws BizLogicException
 	{
 		try
 		{
-			List list = dao.executeQuery(hql);
+			final List list = dao.executeQuery(hql);
 			return list;
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
 
+	/**
+	 * @param userId - Long.
+	 * @return list of CP for users with registration access
+	 * @throws BizLogicException throws BizLogicException
+	 */
 	public List getCPForUserWithRegistrationAcess(long userId) throws BizLogicException
 	{
-		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
-		Set<Long> cpIds = new HashSet<Long>();
+		final List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+		final Set<Long> cpIds = new HashSet<Long>();
 		cpList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession(null);
-			User user = (User) dao.retrieveById(User.class.getName(), userId);
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
-			Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
+			dao = this.openDAOSession(null);
+			final User user = (User) dao.retrieveById(User.class.getName(), userId);
+			final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+			final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
+					.getLoginName());
+			final Collection<CollectionProtocol> cpCollection = user
+					.getAssignedProtocolCollection();
 			if (cpCollection != null && !cpCollection.isEmpty())
 			{
-				for (CollectionProtocol cp : cpCollection)
+				for (final CollectionProtocol cp : cpCollection)
 				{
-					StringBuffer sb = new StringBuffer();
+					final StringBuffer sb = new StringBuffer();
 					sb.append(CollectionProtocol.class.getName()).append("_").append(cp.getId());
-					boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(),
+					final boolean hasPrivilege = privilegeCache.hasPrivilege(sb.toString(),
 							Variables.privilegeDetailsMap.get(Constants.CP_BASED_VIEW_FILTRATION));
 
 					if (hasPrivilege)
@@ -1328,27 +1373,28 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 			}
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-			Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final UserBizLogic userBizLogic = (UserBizLogic) factory
+					.getBizLogic(Constants.USER_FORM_ID);
+			final Set<Long> siteIds = userBizLogic.getRelatedSiteIds(userId);
 
 			if (siteIds != null && !siteIds.isEmpty())
 			{
-				SiteBizLogic siteBizLogic = (SiteBizLogic) factory
+				final SiteBizLogic siteBizLogic = (SiteBizLogic) factory
 						.getBizLogic(Constants.SITE_FORM_ID);
-				for (Long siteId : siteIds)
+				for (final Long siteId : siteIds)
 				{
-					String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
+					final String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
 					if (privilegeCache.hasPrivilege(peName, Variables.privilegeDetailsMap
 							.get(Constants.CP_BASED_VIEW_FILTRATION)))
 					{
-						Collection<CollectionProtocol> cp1Collection = siteBizLogic
+						final Collection<CollectionProtocol> cp1Collection = siteBizLogic
 								.getRelatedCPs(siteId);
 
 						if (cp1Collection != null && !cp1Collection.isEmpty())
 						{
-							List<NameValueBean> list = new ArrayList<NameValueBean>();
-							for (CollectionProtocol cp1 : cp1Collection)
+							final List<NameValueBean> list = new ArrayList<NameValueBean>();
+							for (final CollectionProtocol cp1 : cp1Collection)
 							{
 								if (!cpIds.contains(cp1.getId()))
 								{
@@ -1363,19 +1409,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 
 		return cpList;
@@ -1388,12 +1434,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 */
 	public String getObjectId(DAO dao, Object domainObject)
 	{
-		String objectId = Constants.ADD_GLOBAL_PARTICIPANT;
+		final String objectId = Constants.ADD_GLOBAL_PARTICIPANT;
 
 		if (domainObject instanceof Participant)
 		{
-			Participant participant = (Participant) domainObject;
-			Collection<CollectionProtocolRegistration> cprCollection = participant
+			final Participant participant = (Participant) domainObject;
+			final Collection<CollectionProtocolRegistration> cprCollection = participant
 					.getCollectionProtocolRegistrationCollection();
 			if (cprCollection.isEmpty())
 			{
@@ -1402,13 +1448,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			else
 			{
-				StringBuffer sb = new StringBuffer();
+				final StringBuffer sb = new StringBuffer();
 				boolean isNewCPRPresent = false;
 
 				if (cprCollection != null && !cprCollection.isEmpty())
 				{
 					sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
-					for (CollectionProtocolRegistration cpr : cprCollection)
+					for (final CollectionProtocolRegistration cpr : cprCollection)
 					{
 						if (cpr.getId() == null)
 						{
@@ -1458,9 +1504,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				return true;
 			}
 
-			String privilegeName = getPrivilegeName(domainObject);
-			String protectionElementName = getObjectId(dao, domainObject);
-			PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+			final String privilegeName = this.getPrivilegeName(domainObject);
+			final String protectionElementName = this.getObjectId(dao, domainObject);
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
 			if (protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
@@ -1471,14 +1517,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
 							.getUserId());
 				}
-				catch (DAOException e)
+				catch (final DAOException e)
 				{
-					logger.error(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
 				}
-				Collection<CollectionProtocol> cpCollection = user.getAssignedProtocolCollection();
+				final Collection<CollectionProtocol> cpCollection = user
+						.getAssignedProtocolCollection();
 				if (cpCollection != null && !cpCollection.isEmpty())
 				{
-					for (CollectionProtocol cp : cpCollection)
+					for (final CollectionProtocol cp : cpCollection)
 					{
 						if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
 								+ cp.getId(), privilegeName))
@@ -1501,8 +1548,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				String[] prArray = protectionElementName.split("_");
-				String baseObjectId = prArray[0];
+				final String[] prArray = protectionElementName.split("_");
+				final String baseObjectId = prArray[0];
 				String objId = "";
 				for (int i = 1; i < prArray.length; i++)
 				{
@@ -1525,10 +1572,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				if (!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 				{
-					String protectionElementNames[] = protectionElementName.split("_");
+					final String protectionElementNames[] = protectionElementName.split("_");
 
-					Long cpId = Long.valueOf(protectionElementNames[1]);
-					Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean
+					final Long cpId = Long.valueOf(protectionElementNames[1]);
+					final Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean
 							.getUserId(), false);
 
 					if (cpIdSet.contains(cpId))
@@ -1548,9 +1595,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						protectionElementName, domainObject.getClass().getSimpleName());
 			}
 		}
-		catch (SMException e1)
+		catch (final SMException e1)
 		{
-			logger.debug(e1.getMessage(), e1);
+			this.logger.debug(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
 		return isAuthorized;
@@ -1571,47 +1618,47 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	public boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean)
 	{
-		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean,
-				getReadDeniedPrivilegeName());
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
+				.getReadDeniedPrivilegeName());
 	}
 
 	/**
 	 * Returns a list of Specimen objects with their IDs set as TiTLi 
-	 * needs only instance IDs in order to refresh indexes
-	 * @param the SpecimenCollectionGroup instance
+	 * needs only instance IDs in order to refresh indexes.
+	 * @param scg the SpecimenCollectionGroup instance
 	 * @return list of Specimen objects
-	 * @throws BizLogicException
+	 * @throws BizLogicException throws BizLogicException
 	 */
 	private List<Specimen> getSpecimenCollection(SpecimenCollectionGroup scg)
 			throws BizLogicException
 	{
-		String hql = " select s.id from edu.wustl.catissuecore.domain.Specimen s"
+		final String hql = " select s.id from edu.wustl.catissuecore.domain.Specimen s"
 				+ " where s.specimenCollectionGroup.id=" + scg.getId();
 
 		DAO dao = null;
 
-		List<Specimen> specimens = new ArrayList<Specimen>();
+		final List<Specimen> specimens = new ArrayList<Specimen>();
 		try
 		{
-			dao = openDAOSession(null);
-			List specimenIds = dao.executeQuery(hql);
+			dao = this.openDAOSession(null);
+			final List specimenIds = dao.executeQuery(hql);
 			if (specimenIds != null && (!specimenIds.isEmpty()))
 			{
-				for (Iterator it = specimenIds.iterator(); it.hasNext();)
+				for (final Iterator it = specimenIds.iterator(); it.hasNext();)
 				{
-					Specimen specimen = new Specimen();
+					final Specimen specimen = new Specimen();
 					specimen.setId((Long) it.next());
 					specimens.add(specimen);
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Error occured while retrieving Specimen List", e);
+			this.logger.error("Error occured while retrieving Specimen List", e);
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 		return specimens;
 	}
@@ -1622,43 +1669,45 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			super.refreshTitliSearchIndexSingle(operation, obj);
-			Participant participant = (Participant) obj;
-			Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
+			final Participant participant = (Participant) obj;
+			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
 			if (collectionProtocolRegistrationCollection != null)
 			{
-				Iterator<CollectionProtocolRegistration> itcprCollection = collectionProtocolRegistrationCollection
+				final Iterator<CollectionProtocolRegistration> itcprCollection = collectionProtocolRegistrationCollection
 						.iterator();
 
 				while (itcprCollection.hasNext())
 				{
-					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
+					final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
 							.next();
-					if (cprIdList.contains(cpr.getId()))
+					if (this.cprIdList.contains(cpr.getId()))
 					{
-						Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection = cpr
+						final Collection<SpecimenCollectionGroup> specimenCollectionGroupCollection = cpr
 								.getSpecimenCollectionGroupCollection();
 
 						if (specimenCollectionGroupCollection != null)
 						{
-							Iterator<SpecimenCollectionGroup> itscgCollection = specimenCollectionGroupCollection
+							final Iterator<SpecimenCollectionGroup> itscgCollection = specimenCollectionGroupCollection
 									.iterator();
 							while (itscgCollection.hasNext())
 							{
-								SpecimenCollectionGroup scg = (SpecimenCollectionGroup) itscgCollection
+								final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) itscgCollection
 										.next();
 								super.refreshTitliSearchIndexSingle(operation, scg);
 								// Collection<Specimen> specimenCollection = scg.getSpecimenCollection();
 
 								// Fetch the Specimens in the given SCG explicitly
-								Collection<Specimen> specimenCollection = getSpecimenCollection(scg);
+								final Collection<Specimen> specimenCollection = this
+										.getSpecimenCollection(scg);
 								if (specimenCollection != null)
 								{
-									Iterator<Specimen> itspecimenCollection = specimenCollection
+									final Iterator<Specimen> itspecimenCollection = specimenCollection
 											.iterator();
 									while (itspecimenCollection.hasNext())
 									{
-										Specimen specimen = (Specimen) itspecimenCollection.next();
+										final Specimen specimen = (Specimen) itspecimenCollection
+												.next();
 										super.refreshTitliSearchIndexSingle(operation, specimen);
 									}
 								}
@@ -1669,9 +1718,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (BizLogicException exp)
+		catch (final BizLogicException exp)
 		{
-			logger.debug(exp.getMessage());
+			this.logger.debug(exp.getMessage());
 		}
 	}
 }

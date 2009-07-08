@@ -37,36 +37,37 @@ public class BiohazardBizLogic extends CatissueDefaultBizLogic
 	 * Overriding the parent class's method to validate the enumerated attribute
 	 * values
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		Biohazard hazard = (Biohazard) obj;
+		final Biohazard hazard = (Biohazard) obj;
 		String message = "";
 		// Added by Ashish
 		if (hazard == null)
 		{
 			message = ApplicationProperties.getValue("app.biohazard");
-			throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 		}
 
-		Validator validator = new Validator();
-		if (validator.isEmpty(hazard.getName()))
+		final Validator validator = new Validator();
+		if (Validator.isEmpty(hazard.getName()))
 		{
 			message = ApplicationProperties.getValue("biohazard.name");
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 
-		if (!validator.isValidOption(hazard.getType()) || validator.isEmpty(hazard.getType()))
+		if (!validator.isValidOption(hazard.getType()) || Validator.isEmpty(hazard.getType()))
 		{
 			message = ApplicationProperties.getValue("biohazard.type");
-			throw getBizLogicException(null, "errors.item.required", message);
+			throw this.getBizLogicException(null, "errors.item.required", message);
 
 		}
 		// END
-		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);
 		if (!Validator.isEnumeratedValue(biohazardList, hazard.getType()))
 		{
-			throw getBizLogicException(null, "type.errMsg", "");
+			throw this.getBizLogicException(null, "type.errMsg", "");
 		}
 
 		return true;
@@ -79,6 +80,7 @@ public class BiohazardBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADMIN_PROTECTION_ELEMENT;
@@ -90,6 +92,7 @@ public class BiohazardBizLogic extends CatissueDefaultBizLogic
 	 * 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return edu.wustl.catissuecore.util.global.Constants.ADD_EDIT_BIOHAZARD;

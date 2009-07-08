@@ -29,10 +29,13 @@ import edu.wustl.simplequery.query.ShoppingCart;
 public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(ShoppingCartBizLogic.class);
 	/**
-	 * 
-	 * @param cart : cart
+	 * Logger object. 
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(ShoppingCartBizLogic.class);
+
+	/**
+	 * @param cart : cart 
 	 * @param obj : obj
 	 * @throws BizLogicException : BizLogicException
 	 */
@@ -42,25 +45,28 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 		{
 			if (cart != null && obj != null)
 			{
-				for (int i = 0; i < obj.length; i++)
+				for (final Object element : obj)
 				{
-					Object object = retrieve(Specimen.class.getName(), new Long(obj[i].toString()));
+					final Object object = this.retrieve(Specimen.class.getName(), new Long(element
+							.toString()));
 
 					if (object != null)
 					{
-						Specimen specimen = (Specimen) object;
+						final Specimen specimen = (Specimen) object;
 						cart.add(specimen);
 					}
 				}
 			}
 		}
-		catch (ApplicationException appExp)
+		catch (final ApplicationException appExp)
 		{
-			logger.debug(appExp.getMessage(), appExp);
-			throw getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
+			this.logger.debug(appExp.getMessage(), appExp);
+			throw this
+					.getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
 		}
 
 	}
+
 	/**
 	 * @param cart : cart
 	 * @param obj : obj
@@ -70,17 +76,17 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 	{
 		if (cart != null && obj != null)
 		{
-			for (int i = 0; i < obj.length; i++)
+			for (final Object element : obj)
 			{
-				String str = obj[i].toString();
-				int index = str.indexOf("_") + 1;
+				final String str = element.toString();
+				final int index = str.indexOf("_") + 1;
 				/**
 				 * Name: Vijay Pande Key was not generated properly to remove
 				 * object from map. Objects re stored in the map on the basis of
 				 * the objectId hence id is retrieved from from String and set
 				 * it as key.
 				 */
-				String key = (str.substring(index).trim());
+				final String key = (str.substring(index).trim());
 				cart.remove(key);
 			}
 		}
@@ -112,7 +118,7 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 
 		if (cart != null)
 		{
-			Hashtable table = cart.getCart();
+			final Hashtable table = cart.getCart();
 
 			if (table != null && table.size() != 0)
 			{
@@ -129,16 +135,16 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 
 				shoppingCartList.add(rowList);
 
-				for (int i = 0; i < obj.length; i++)
+				for (final Object element : obj)
 				{
 					rowList = new ArrayList();
 
-					String str = obj[i].toString();
-					int index = str.indexOf("_") + 1;
+					final String str = element.toString();
+					final int index = str.indexOf("_") + 1;
 					// resolved bug# 4385
 					// int index1 = str.indexOf(" |");
-					String key = str.substring(index).trim();
-					Specimen specimen = (Specimen) table.get(key);
+					final String key = str.substring(index).trim();
+					final Specimen specimen = (Specimen) table.get(key);
 
 					rowList.add(String.valueOf(specimen.getId()));
 					rowList.add(specimen.getClassName());

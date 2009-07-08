@@ -1,4 +1,3 @@
-
 /**
  * <p>Title: SpecimenTreeBizLogic Class>
  * <p>Description:	SpecimenTreeBizLogic contains the bizlogic required to display Specimen hierarchy in tree form for ordering system module.</p>
@@ -37,90 +36,91 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements TreeDataInterface
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SpecimenTreeBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenTreeBizLogic.class);
 	/**
 	 * Long containing the id of specimen/specimen Collection group Id.
 	 */
 	private Long id;
-	
+
 	private boolean specimenCollGroup;
+
 	/**
 	 * No-Args Constructor
 	 */
 	public SpecimenTreeBizLogic()
 	{
-		
+
 	}
-	
+
 	/**
 	 * Parametrized Constructor
 	 * @param specimenList
 	 */
-	public SpecimenTreeBizLogic(Long id,boolean specimenCollGroup)
+	public SpecimenTreeBizLogic(Long id, boolean specimenCollGroup)
 	{
 		this.id = id;
 		this.specimenCollGroup = specimenCollGroup;
 	}
-	
-	
-	
+
 	/**
 	 * This function returns the Specimen and its child nodes in vector form for given specimen.
 	 * @param specimenId int
 	 * @return Vector Vector of Specimens
 	 */
-	
-	public Vector getTreeViewData()  
+
+	public Vector getTreeViewData()
 	{
-		Vector  allNodes = new Vector(); 
+		Vector allNodes = new Vector();
 		try
 		{
 			//Retrieve the Specimen instance for that particular id.
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic defaultBizLogic = factory.getBizLogic(-1);
-
-
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic defaultBizLogic = factory.getBizLogic(-1);
 
 			//If specimenId is sent (Incase of biospecimen in orderlist or in defined array)
-			if(specimenCollGroup == false) 
+			if (this.specimenCollGroup == false)
 			{
-				Object object = defaultBizLogic.retrieve(Specimen.class.getName(), id);
+				final Object object = defaultBizLogic.retrieve(Specimen.class.getName(), this.id);
 
 				//The list consists of only one element that is:- specimen instance
-				Specimen specimenObj = (Specimen) object;
-				Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
+				final Specimen specimenObj = (Specimen) object;
+				final Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(
+						Specimen.class.getName(), this.id, "elements(childrenSpecimen)");
 				specimenObj.setChildSpecimenCollection(childColl);
-				allNodes = formTreeNode(specimenObj);
+				allNodes = this.formTreeNode(specimenObj);
 			}
-			else //If specimenCollectiongroupId is sent(Incase of pathological case)
+			else
+			//If specimenCollectiongroupId is sent(Incase of pathological case)
 			{
-				Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), id);
+				final Object object = defaultBizLogic.retrieve(SpecimenCollectionGroup.class
+						.getName(), this.id);
 
 				//The list consists of only one element that is:- specimencollecitongroup instance
-				SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) object;
-				Long scgId = specimenCollGrpObj.getId();
-				Collection specimenSet = (Collection) 
-				defaultBizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scgId,"elements(specimenCollection)");
+				final SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) object;
+				final Long scgId = specimenCollGrpObj.getId();
+				final Collection specimenSet = (Collection) defaultBizLogic.retrieveAttribute(
+						SpecimenCollectionGroup.class.getName(), scgId,
+						"elements(specimenCollection)");
 
 				//Get the list of specimens for this group(SCG)
 				//			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
-				Iterator specimenSetItr = specimenSet.iterator();
-				while(specimenSetItr.hasNext())
+				final Iterator specimenSetItr = specimenSet.iterator();
+				while (specimenSetItr.hasNext())
 				{
-					Specimen specimenObj = (Specimen)specimenSetItr.next();				
-					allNodes = formTreeNode(specimenObj);
+					final Specimen specimenObj = (Specimen) specimenSetItr.next();
+					allNodes = this.formTreeNode(specimenObj);
 				}
 			}
 
 		}
-		catch(BizLogicException exp)
+		catch (final BizLogicException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			this.logger.debug(exp.getMessage(), exp);
 			exp.printStackTrace();
 		}
 		return allNodes;
 	}
-	
+
 	/**
 	 * This function accepts specimen object and sets treenode for each specimen. 
 	 * @param specimenObj
@@ -129,32 +129,35 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 	private Vector formTreeNode(Specimen specimenObj) throws BizLogicException
 	{
 		Collection specimenSet = new HashSet();
-		Vector specimenTreeVector = new Vector();
-		
-		SpecimenTreeNode rootNode = new SpecimenTreeNode();
+		final Vector specimenTreeVector = new Vector();
+
+		final SpecimenTreeNode rootNode = new SpecimenTreeNode();
 		rootNode.setIdentifier(specimenObj.getId());
 		rootNode.setType(specimenObj.getSpecimenType());
 		rootNode.setValue(specimenObj.getLabel());
 		rootNode.setSpecimenClass(specimenObj.getClassName());
-		
+
 		rootNode.setParentIdentifier("0");
 		rootNode.setParentValue("");
-		
+
 		specimenTreeVector.add(rootNode);
-		
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		specimenSet = (Collection) defaultBizLogic .retrieveAttribute(Specimen.class.getName(),specimenObj.getId(),"elements(childCollection)");
+
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		specimenSet = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),
+				specimenObj.getId(), "elements(childCollection)");
 		//specimenObj.setChildrenSpecimen(childColl);
-		
+
 		//Get the list of specimens derived from this specimen.
 		//specimenSet = (Set)specimenObj.getChildrenSpecimen();
-		
+
 		//formSpecimenTree() constructs tree form of specimens and returns the nodes in vector form.
-		Vector allNodes = formSpecimenTree(specimenTreeVector,rootNode,specimenSet);
-		
-		if(allNodes != null)
+		final Vector allNodes = this.formSpecimenTree(specimenTreeVector, rootNode, specimenSet);
+
+		if (allNodes != null)
+		{
 			rootNode.setChildNodes(allNodes);
-				
+		}
+
 		return allNodes;
 	}
 
@@ -164,46 +167,51 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 	 * @param childNodes Vector
 	 * @return Vector
 	 */
-	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes) throws BizLogicException
+	private Vector formSpecimenTree(Vector specimenTreeVector, SpecimenTreeNode parent,
+			Collection childNodes) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic defaultBizLogic = factory.getBizLogic(-1);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic defaultBizLogic = factory.getBizLogic(-1);
 		//If no childNodes present then tree will contain only the root node.
-		if(childNodes == null)
+		if (childNodes == null)
 		{
 			return specimenTreeVector;
 		}
 		//Otherwise
-		Iterator specimenItr = childNodes.iterator();
-		while(specimenItr.hasNext())
+		final Iterator specimenItr = childNodes.iterator();
+		while (specimenItr.hasNext())
 		{
-			Specimen specimen  = (Specimen)specimenItr.next();
-			SpecimenTreeNode treeNode = new SpecimenTreeNode();
-			
+			final Specimen specimen = (Specimen) specimenItr.next();
+			final SpecimenTreeNode treeNode = new SpecimenTreeNode();
+
 			treeNode.setIdentifier(specimen.getId());
 			treeNode.setType(specimen.getSpecimenType());
 			treeNode.setValue(specimen.getLabel());
 			treeNode.setSpecimenClass(specimen.getClassName());
-			
+
 			treeNode.setParentIdentifier(parent.getIdentifier().toString());
 			treeNode.setParentValue(parent.getValue());
-			
+
 			specimenTreeVector.add(treeNode);
-			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)");
+			final Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(
+					Specimen.class.getName(), specimen.getId(), "elements(childrenSpecimen)");
 			specimen.setChildSpecimenCollection(childColl);
-			Vector subChildNodesVector = formSpecimenTree(specimenTreeVector,treeNode,specimen.getChildSpecimenCollection());
-			
-			if(subChildNodesVector != null)
+			final Vector subChildNodesVector = this.formSpecimenTree(specimenTreeVector, treeNode,
+					specimen.getChildSpecimenCollection());
+
+			if (subChildNodesVector != null)
+			{
 				treeNode.setChildNodes(subChildNodesVector);
-			
+			}
+
 		}
 		return specimenTreeVector;
 	}
 
 	public Vector getTreeViewData(SessionDataBean arg0, Map arg1, List arg2)
 	{
-		
+
 		return null;
 	}
-	
+
 }

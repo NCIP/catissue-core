@@ -98,23 +98,25 @@ public class ParticipantLookupLogic implements LookupLogic
 			throw new Exception("Params can not be null");
 		}
 
-		DefaultLookupParameters participantParams = (DefaultLookupParameters) params;
+		final DefaultLookupParameters participantParams = (DefaultLookupParameters) params;
 
 		// Getting the participant object created by user
-		Participant participant = (Participant) participantParams.getObject();
+		final Participant participant = (Participant) participantParams.getObject();
 
 		// if cutoff is greater than total points, throw exception
-		if (cutoffPoints > totalPointsFromProperties)
+		if (this.cutoffPoints > totalPointsFromProperties)
 		{
 			throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
 		}
 
 		// get total points depending on Participant object created by user
-		totalPoints = calculateTotalPoints(participant);
+		this.totalPoints = this.calculateTotalPoints(participant);
 
 		// adjust cutoffPoints as per new total points
-		cutoffPoints = cutoffPointsFromProperties * totalPoints / totalPointsFromProperties;
-		Map<String, Participant> listOfParticipants = participantParams.getListOfParticipants();
+		this.cutoffPoints = cutoffPointsFromProperties * this.totalPoints
+				/ totalPointsFromProperties;
+		final Map<String, Participant> listOfParticipants = participantParams
+				.getListOfParticipants();
 
 		// In case List of participants is null or empty, return the Matching
 		// Participant List as null.
@@ -125,7 +127,7 @@ public class ParticipantLookupLogic implements LookupLogic
 
 		// calling the searchMatchingParticipant to filter the participant list
 		// according to given cutoff value
-		List participants = searchMatchingParticipant(participant, listOfParticipants);
+		final List participants = this.searchMatchingParticipant(participant, listOfParticipants);
 
 		return participants;
 
@@ -170,10 +172,12 @@ public class ParticipantLookupLogic implements LookupLogic
 		if (participant.getRaceCollection() != null
 				&& participant.getRaceCollection().isEmpty() == false)
 		{
-			Iterator<Race> raceIterator = participant.getRaceCollection().iterator();
-			Race race = raceIterator.next();
+			final Iterator<Race> raceIterator = participant.getRaceCollection().iterator();
+			final Race race = raceIterator.next();
 			if (!race.getRaceName().equals("Unknown"))
+			{
 				totalPointsForParticipant += pointsForRaceExact;
+			}
 		}
 		if (participant.getParticipantMedicalIdentifierCollection() != null
 				&& participant.getParticipantMedicalIdentifierCollection().size() > 0)
@@ -204,8 +208,8 @@ public class ParticipantLookupLogic implements LookupLogic
 	private List searchMatchingParticipant(Participant userParticipant,
 			Map<String, Participant> listOfParticipants) throws Exception
 	{
-		List participants = new ArrayList();
-		Iterator itr = listOfParticipants.values().iterator();
+		final List<DefaultLookupResult> participants = new ArrayList<DefaultLookupResult>();
+		final Iterator itr = listOfParticipants.values().iterator();
 
 		/*
 		 * attributes of userParticipant : we are doing this to improve
@@ -217,9 +221,9 @@ public class ParticipantLookupLogic implements LookupLogic
 		String firstNameLowerCase = null;
 		String middleNameLowerCase = null;
 		String gender = null;
-		Date birthDate = userParticipant.getBirthDate();
-		Collection raceCollection = userParticipant.getRaceCollection();
-		Collection PMICollection = userParticipant.getParticipantMedicalIdentifierCollection();
+		final Date birthDate = userParticipant.getBirthDate();
+		final Collection raceCollection = userParticipant.getRaceCollection();
+		userParticipant.getParticipantMedicalIdentifierCollection();
 
 		if (userParticipant.getSocialSecurityNumber() != null)
 		{
@@ -249,12 +253,12 @@ public class ParticipantLookupLogic implements LookupLogic
 		// Iterates through all the Participants from the list
 		while (itr.hasNext())
 		{
-			isSSNOrPMI = false;
+			this.isSSNOrPMI = false;
 			int weight = 0; // used for calculation of total points.
 			int socialSecurityNumberWeight = 0; // points of social security
-												// number
+			// number
 			int birthDateWeight = 0; // points of birth date
-			Participant existingParticipant = (Participant) itr.next();
+			final Participant existingParticipant = (Participant) itr.next();
 
 			// Check for the participant only in case its Activity Status =
 			// active
@@ -273,9 +277,9 @@ public class ParticipantLookupLogic implements LookupLogic
 						&& existingParticipant.getSocialSecurityNumber() != null
 						&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
 				{
-					socialSecurityNumberWeight = checkSSN(userParticipant.getSocialSecurityNumber()
-							.trim().toLowerCase(), existingParticipant.getSocialSecurityNumber()
-							.trim().toLowerCase());
+					socialSecurityNumberWeight = this.checkSSN(userParticipant
+							.getSocialSecurityNumber().trim().toLowerCase(), existingParticipant
+							.getSocialSecurityNumber().trim().toLowerCase());
 					weight = socialSecurityNumberWeight;
 				}
 
@@ -286,7 +290,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 */
 				if (birthDate != null && existingParticipant.getBirthDate() != null)
 				{
-					birthDateWeight = checkDateOfBirth(birthDate, existingParticipant
+					birthDateWeight = this.checkDateOfBirth(birthDate, existingParticipant
 							.getBirthDate());
 					weight += birthDateWeight;
 				}
@@ -300,8 +304,8 @@ public class ParticipantLookupLogic implements LookupLogic
 						&& existingParticipant.getLastName() != null
 						&& !existingParticipant.getLastName().trim().equals(""))
 				{
-					weight += checkLastName(lastNameLowerCase, existingParticipant.getLastName()
-							.trim().toLowerCase());
+					weight += this.checkLastName(lastNameLowerCase, existingParticipant
+							.getLastName().trim().toLowerCase());
 
 				}
 
@@ -314,8 +318,8 @@ public class ParticipantLookupLogic implements LookupLogic
 						&& existingParticipant.getFirstName() != null
 						&& !existingParticipant.getFirstName().trim().equals(""))
 				{
-					weight += checkFirstName(firstNameLowerCase, existingParticipant.getFirstName()
-							.trim().toLowerCase());
+					weight += this.checkFirstName(firstNameLowerCase, existingParticipant
+							.getFirstName().trim().toLowerCase());
 				}
 
 				/**
@@ -343,11 +347,11 @@ public class ParticipantLookupLogic implements LookupLogic
 
 				if (weight == socialSecurityNumberWeight + birthDateWeight)
 				{
-					weight += checkFlipped(firstNameLowerCase, lastNameLowerCase,
+					weight += this.checkFlipped(firstNameLowerCase, lastNameLowerCase,
 							existingParticipant.getFirstName(), existingParticipant.getLastName());
 				}
 
-				weight += checkParticipantMedicalIdentifier(userParticipant
+				weight += this.checkParticipantMedicalIdentifier(userParticipant
 						.getParticipantMedicalIdentifierCollection(), existingParticipant
 						.getParticipantMedicalIdentifierCollection());
 
@@ -355,7 +359,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 * check whether weight will ever reach cutoff, if it will never
 				 * reach the cutoff, skip this participant and take next one.
 				 */
-				int temp = cutoffPoints - pointsForMiddleNameExact - pointsForRaceExact
+				final int temp = this.cutoffPoints - pointsForMiddleNameExact - pointsForRaceExact
 						- pointsForGenderExact;
 
 				if (weight < temp)
@@ -367,7 +371,8 @@ public class ParticipantLookupLogic implements LookupLogic
 				 * check for possible match of middle name
 				 */
 
-				weight += checkMiddleName(middleNameLowerCase, existingParticipant.getMiddleName());
+				weight += this.checkMiddleName(middleNameLowerCase, existingParticipant
+						.getMiddleName());
 
 				/**
 				 * If user has Gender and it is present in the participant from
@@ -376,7 +381,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				if (gender != null && (!gender.equals("Unspecified"))
 						&& existingParticipant.getGender() != null)
 				{
-					weight += checkGender(gender, existingParticipant.getGender());
+					weight += this.checkGender(gender, existingParticipant.getGender());
 				}
 
 				/**
@@ -384,7 +389,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 * from database as well, check for match between the two.
 				 */
 
-				weight += checkRace(raceCollection, existingParticipant.getRaceCollection());
+				weight += this.checkRace(raceCollection, existingParticipant.getRaceCollection());
 
 				/**
 				 * Name: Virender Mehta Description :If user has entered Medical
@@ -396,16 +401,16 @@ public class ParticipantLookupLogic implements LookupLogic
 				// existingParticipant);
 				// If total points are greater than cutoff points, add
 				// participant to the List
-				if (isSSNOrPMI || weight >= cutoffPoints)
+				if (this.isSSNOrPMI || weight >= this.cutoffPoints)
 				{
 
-					DefaultLookupResult result = new DefaultLookupResult();
+					final DefaultLookupResult result = new DefaultLookupResult();
 
 					result.setObject(existingParticipant);
 					participants.add(result);
 					if (participants.size() == 100) // Return when matching
-													// participant list size
-													// becomes 100
+					// participant list size
+					// becomes 100
 					{
 						return participants;
 					}
@@ -430,12 +435,12 @@ public class ParticipantLookupLogic implements LookupLogic
 
 	private int checkSSN(String userNumber, String existingNumber)
 	{
-		MatchingStatus status = checkNumber(userNumber, existingNumber);
+		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
 		// isSSNOrPMI=false;
 		switch (status)
 		{
 			case EXACT :
-				isSSNOrPMI = true;
+				this.isSSNOrPMI = true;
 				return pointsForSSNExact;
 			case PARTIAL :
 				return pointsForSSNPartial;
@@ -447,11 +452,11 @@ public class ParticipantLookupLogic implements LookupLogic
 
 	private int checkPMI(String userNumber, String existingNumber)
 	{
-		MatchingStatus status = checkNumber(userNumber, existingNumber);
+		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
 		switch (status)
 		{
 			case EXACT :
-				isSSNOrPMI = true;
+				this.isSSNOrPMI = true;
 				return pointsForPMIExact;
 			case PARTIAL :
 				return pointsForPMIPartial;
@@ -474,13 +479,13 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			int count = 0; // to count total number of digits mismatched
 			int temp = -1; // temporary variable used for storing value of other
-							// variable
+			// variable
 			boolean areConsecutiveDigitsTransposed = false; // to check whether
-															// consecutive
-															// digits are
-															// transposed
+			// consecutive
+			// digits are
+			// transposed
 			boolean isDifferenceOne = false; // to check whether difference of
-												// two digits is one
+			// two digits is one
 			if (userNumber.length() == existingNumber.length())
 			{
 				for (int i = 0; i < userNumber.length(); i++)
@@ -531,12 +536,12 @@ public class ParticipantLookupLogic implements LookupLogic
 
 	public String modifyMNR(String userNumber)
 	{
-		String specialCharacters[] = {"-", "_"};
-		for (int j = 0; j < specialCharacters.length; j++)
+		final String specialCharacters[] = {"-", "_"};
+		for (final String specialCharacter : specialCharacters)
 		{
-			if (userNumber.indexOf(specialCharacters[j]) >= 0)
+			if (userNumber.indexOf(specialCharacter) >= 0)
 			{
-				userNumber = userNumber.replaceAll(specialCharacters[j], "");
+				userNumber = userNumber.replaceAll(specialCharacter, "");
 			}
 		}
 		return userNumber;
@@ -665,7 +670,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				return pointsForMiddleNameExact;
 			}
 			else if (userName.trim().charAt(0) == existingName.trim().charAt(0)) // partial
-																					// match
+			// match
 			{
 				return pointsForMiddleNamePartial;
 			}
@@ -694,17 +699,19 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			if (userRace.size() == existingRace.size())
 			{
-				Iterator<Race> existingRaceIterator = existingRace.iterator();
-				Iterator<Race> raceIterator = userRace.iterator();
-				Collection<String> raceNameSet = new HashSet<String>();
-				Collection<String> existingRaceNameSet = new HashSet<String>();
+				final Iterator<Race> existingRaceIterator = existingRace.iterator();
+				final Iterator<Race> raceIterator = userRace.iterator();
+				final Collection<String> raceNameSet = new HashSet<String>();
+				final Collection<String> existingRaceNameSet = new HashSet<String>();
 				while (existingRaceIterator.hasNext())
 				{
-					Race existingRaceTemp = existingRaceIterator.next();
-					Race race = raceIterator.next();
+					final Race existingRaceTemp = existingRaceIterator.next();
+					final Race race = raceIterator.next();
 					if (race.getRaceName().equals("Unknown")
 							&& existingRaceTemp.getRaceName().equals("Unknown"))
+					{
 						continue;
+					}
 					existingRaceNameSet.add(existingRaceTemp.getRaceName());
 					raceNameSet.add(race.getRaceName());
 				}
@@ -738,42 +745,42 @@ public class ParticipantLookupLogic implements LookupLogic
 		boolean exactMatchFlag = false;
 		boolean partialMatchFlag = false;
 		boolean noMatchFlag = false;
-		List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
+		final List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
 		if (existingParticipantMedicalIdentifier.size() > 0)
 		{
-			for (ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
+			for (final ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
 			{
 				tempExistingParticipantMedicalIdentifier.add(pmi);
 			}
 		}
-		if (!(isPMICollectionEmpty(userParticipantMedicalIdentifier))
-				&& !isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
+		if (!(this.isPMICollectionEmpty(userParticipantMedicalIdentifier))
+				&& !this.isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
 		{
-			int len1 = tempExistingParticipantMedicalIdentifier.size();
-			int len2 = userParticipantMedicalIdentifier.size();
+			final int len1 = tempExistingParticipantMedicalIdentifier.size();
+			final int len2 = userParticipantMedicalIdentifier.size();
 			if (len1 != len2)
 			{
-				for (ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
+				for (final ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
 				{
 					if (userPMidentifier.getSite() != null
 							&& userPMidentifier.getSite().getId() != null)
 					{
-						String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
-						String siteId = userPMidentifier.getSite().getId().toString();
+						final String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
+						final String siteId = userPMidentifier.getSite().getId().toString();
 						int maxTempPMIW = 0;
-						for (ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
+						for (final ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
 						{
 							if (existingPMidentifier.getSite() != null
 									&& existingPMidentifier.getSite().getId() != null)
 							{
-								String existingSiteId = existingPMidentifier.getSite().getId()
-										.toString();
-								String existingMedicalRecordNo = existingPMidentifier
+								final String existingSiteId = existingPMidentifier.getSite()
+										.getId().toString();
+								final String existingMedicalRecordNo = existingPMidentifier
 										.getMedicalRecordNumber();
 
 								if (existingSiteId.equals(siteId) && medicalRecordNo != null)
 								{
-									tempParticipantMedicalIdentifierWeight = checkPMI(
+									tempParticipantMedicalIdentifierWeight = this.checkPMI(
 											existingMedicalRecordNo, medicalRecordNo);
 									if (maxTempPMIW < tempParticipantMedicalIdentifierWeight)
 									{
@@ -814,27 +821,27 @@ public class ParticipantLookupLogic implements LookupLogic
 			}
 			else
 			{
-				for (ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
+				for (final ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
 				{
 					if (userPMidentifier.getSite() != null
 							&& userPMidentifier.getSite().getId() != null)
 					{
-						String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
-						String siteId = userPMidentifier.getSite().getId().toString();
+						final String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
+						final String siteId = userPMidentifier.getSite().getId().toString();
 						int maxTempPMIW = 0;
-						for (ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
+						for (final ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
 						{
 							if (existingPMidentifier.getSite() != null
 									&& existingPMidentifier.getSite().getId() != null)
 							{
-								String existingSiteId = existingPMidentifier.getSite().getId()
-										.toString();
-								String existingMedicalRecordNo = existingPMidentifier
+								final String existingSiteId = existingPMidentifier.getSite()
+										.getId().toString();
+								final String existingMedicalRecordNo = existingPMidentifier
 										.getMedicalRecordNumber();
 
 								if (existingSiteId.equals(siteId) && medicalRecordNo != null)
 								{
-									tempParticipantMedicalIdentifierWeight = checkPMI(
+									tempParticipantMedicalIdentifierWeight = this.checkPMI(
 											existingMedicalRecordNo, medicalRecordNo);
 									if (maxTempPMIW < tempParticipantMedicalIdentifierWeight)
 									{
@@ -905,7 +912,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			if (exactMatchFlag)
 			{
 				participantMedicalIdentifierWeight = pointsForPMIExact;
-				isSSNOrPMI = true;
+				this.isSSNOrPMI = true;
 			}
 			else if (partialMatchFlag)
 			{
@@ -930,10 +937,10 @@ public class ParticipantLookupLogic implements LookupLogic
 
 		if (pmiCollection != null && pmiCollection.size() > 0)
 		{
-			ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection.iterator()
-					.next();
-			String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
-			Site site = participantMedicalIdentifier.getSite();
+			final ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection
+					.iterator().next();
+			final String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
+			final Site site = participantMedicalIdentifier.getSite();
 			if (site == null && (mrn == null || mrn.equals("")))
 			{
 				flag = true;
@@ -988,10 +995,11 @@ public class ParticipantLookupLogic implements LookupLogic
 			String existingParticipantFirstName, String existingParticipantLastName)
 	{
 		boolean userFirstNameBlank = false; // tells whether first name of user
-											// is empty
+		// is empty
 		boolean userLastNameBlank = false; // tells whether first name of user
-											// is empty
-		int pointsForFirstAndLastPartial = pointsForFirstNamePartial + pointsForLastNamePartial;
+		// is empty
+		final int pointsForFirstAndLastPartial = pointsForFirstNamePartial
+				+ pointsForLastNamePartial;
 
 		if (userFirstName == null || userFirstName.trim().equals(""))
 		{
@@ -1023,7 +1031,7 @@ public class ParticipantLookupLogic implements LookupLogic
 
 			// Check if 2 names exist in either field separated by a space, dash
 			// or comma
-			String split[] = temp.trim().split("[ -,]");
+			final String split[] = temp.trim().split("[ -,]");
 
 			/**
 			 * If first name and last name entered by user in any of First

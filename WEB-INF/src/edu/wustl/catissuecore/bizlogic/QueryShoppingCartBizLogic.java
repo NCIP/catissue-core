@@ -23,7 +23,7 @@ import edu.wustl.dao.exception.DAOException;
 public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(QueryShoppingCartBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(QueryShoppingCartBizLogic.class);
 
 	/**
 	 * @param datafromSelectedList : datafromSelectedList
@@ -31,8 +31,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 */
 	public boolean checkIfHashed(List<String> datafromSelectedList)
 	{
-		boolean dataIsHashed = false;
-		for (String listItem : datafromSelectedList)
+		for (final String listItem : datafromSelectedList)
 		{
 			if (listItem != Constants.HASHED_OUT)
 			{
@@ -41,6 +40,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		return false;
 	}
+
 	/**
 	 * @param cart : cart
 	 * @param dataList : dataList
@@ -65,9 +65,9 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			boolean dataIsHashed = false;
-			for (Integer index : keySet)
+			for (final Integer index : keySet)
 			{
-				dataIsHashed = checkIfHashed(dataList.get(index));
+				dataIsHashed = this.checkIfHashed(dataList.get(index));
 				if ((!(cart.getCart().contains(dataList.get(index)))) && dataIsHashed)
 				{
 					cart.getCart().add(dataList.get(index));
@@ -89,8 +89,8 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 */
 	public int delete(QueryShoppingCart cart, List<Integer> keySet)
 	{
-		List<List<String>> removeList = new ArrayList<List<String>>();
-		for (Integer index : keySet)
+		final List<List<String>> removeList = new ArrayList<List<String>>();
+		for (final Integer index : keySet)
 		{
 			removeList.add(cart.getCart().get(index));
 		}
@@ -113,9 +113,9 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 */
 	public List<List<String>> export(QueryShoppingCart cart, List<Integer> keySet)
 	{
-		List<List<String>> exportList = new ArrayList<List<String>>();
+		final List<List<String>> exportList = new ArrayList<List<String>>();
 		exportList.add(cart.getColumnList());
-		for (Integer index : keySet)
+		for (final Integer index : keySet)
 		{
 			exportList.add(cart.getCart().get(index));
 		}
@@ -137,18 +137,18 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public Set<String> getEntityIdsList(QueryShoppingCart cart, List entityName,
 			List<Integer> chkBoxValues)
 	{
-		Set<String> entityIdsList = new LinkedHashSet<String>();
-		List<Integer> entityIdsColumnIndexList = getIdsColumnIndexList(cart.getCartAttributeList(),
-				entityName);
-		List<List<String>> dataList = cart.getCart();
+		final Set<String> entityIdsList = new LinkedHashSet<String>();
+		final List<Integer> entityIdsColumnIndexList = this.getIdsColumnIndexList(cart
+				.getCartAttributeList(), entityName);
+		final List<List<String>> dataList = cart.getCart();
 		if (chkBoxValues != null)
 		{
-			for (Integer index : chkBoxValues)
+			for (final Integer index : chkBoxValues)
 			{
-				List<String> record = dataList.get(index);
+				final List<String> record = dataList.get(index);
 				for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
 				{
-					String data = record.get(entityIdsColumnIndexList.get(i));
+					final String data = record.get(entityIdsColumnIndexList.get(i));
 
 					if (!(data.equals("")))
 					{
@@ -159,11 +159,11 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			for (List<String> record : dataList)
+			for (final List<String> record : dataList)
 			{
 				for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
 				{
-					String data = record.get(entityIdsColumnIndexList.get(j));
+					final String data = record.get(entityIdsColumnIndexList.get(j));
 					if (!(data.equals("")))
 					{
 						entityIdsList.add(data);
@@ -175,6 +175,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		return entityIdsList;
 
 	}
+
 	/**
 	 *
 	 * @param cart : cart
@@ -186,18 +187,18 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public Set<String> getEntityLabelsList(QueryShoppingCart cart, List entityName,
 			List<Integer> chkBoxValues, String attributeName)
 	{
-		Set<String> entityIdsList = new LinkedHashSet<String>();
-		List<Integer> entityIdsColumnIndexList = getLabelsColumnIndexList(cart
+		final Set<String> entityIdsList = new LinkedHashSet<String>();
+		final List<Integer> entityIdsColumnIndexList = this.getLabelsColumnIndexList(cart
 				.getCartAttributeList(), entityName, attributeName);
-		List<List<String>> dataList = cart.getCart();
+		final List<List<String>> dataList = cart.getCart();
 		if (chkBoxValues != null)
 		{
-			for (Integer index : chkBoxValues)
+			for (final Integer index : chkBoxValues)
 			{
-				List<String> record = dataList.get(index);
+				final List<String> record = dataList.get(index);
 				for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
 				{
-					String data = record.get(entityIdsColumnIndexList.get(i));
+					final String data = record.get(entityIdsColumnIndexList.get(i));
 
 					if (!(data.equals("")))
 					{
@@ -208,11 +209,11 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			for (List<String> record : dataList)
+			for (final List<String> record : dataList)
 			{
 				for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
 				{
-					String data = record.get(entityIdsColumnIndexList.get(j));
+					final String data = record.get(entityIdsColumnIndexList.get(j));
 					if (!(data.equals("")))
 					{
 						entityIdsList.add(data);
@@ -231,15 +232,15 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Set getListOfOrderItem(Set<String> entityIdsList) throws BizLogicException
 	{
-		Set<String> orderIdsList = new LinkedHashSet<String>();
-		DAO dao = openDAOSession(null);
+		final Set<String> orderIdsList = new LinkedHashSet<String>();
+		final DAO dao = this.openDAOSession(null);
 		try
 		{
-			Iterator itr = entityIdsList.iterator();
+			final Iterator itr = entityIdsList.iterator();
 			while (itr.hasNext())
 			{
-				Long specimenId = Long.parseLong(itr.next().toString());
-				if (isSpecimenValidToOrder(dao, specimenId))
+				final Long specimenId = Long.parseLong(itr.next().toString());
+				if (this.isSpecimenValidToOrder(dao, specimenId))
 				{
 					orderIdsList.add(specimenId.toString());
 				}
@@ -247,14 +248,14 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 			}
 
 		}
-		catch (NumberFormatException e)
+		catch (final NumberFormatException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 		return orderIdsList;
 	}
@@ -272,7 +273,8 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		boolean isSpecimenValid = true;
 		try
 		{
-			Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimenId);
+			final Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+					specimenId);
 
 			if (specimen.getCollectionStatus() == null
 					|| !specimen.getCollectionStatus()
@@ -293,10 +295,11 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 				isSpecimenValid = false;
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return isSpecimenValid;
 	}
@@ -313,9 +316,9 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public List<Integer> getIdsColumnIndexList(List<AttributeInterface> cartAttributeList,
 			List entityName)
 	{
-		List<Integer> idIndexList = new ArrayList<Integer>();
+		final List<Integer> idIndexList = new ArrayList<Integer>();
 		int i = 0;
-		for (AttributeInterface attribute : cartAttributeList)
+		for (final AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(Constants.ID))
 					&& (entityName.contains(attribute.getEntity().getName())))
@@ -340,9 +343,9 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public List<Integer> getLabelsColumnIndexList(List<AttributeInterface> cartAttributeList,
 			List entityName, String attributeName)
 	{
-		List<Integer> idIndexList = new ArrayList<Integer>();
+		final List<Integer> idIndexList = new ArrayList<Integer>();
 		int i = 0;
-		for (AttributeInterface attribute : cartAttributeList)
+		for (final AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(attributeName))
 					&& (entityName.contains(attribute.getEntity().getName())))
@@ -372,7 +375,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 
 			for (int i = 0; i < attributeList.size(); i++)
 			{
-				index = (oldAttributeList.indexOf((AttributeInterface) attributeList.get(i)));
+				index = (oldAttributeList.indexOf(attributeList.get(i)));
 				if (index == -1)
 				{
 					indexArray = null;

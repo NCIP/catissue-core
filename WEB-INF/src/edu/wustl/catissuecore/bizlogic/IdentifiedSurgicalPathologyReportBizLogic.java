@@ -27,7 +27,7 @@ import edu.wustl.security.global.Permissions;
 public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(IdentifiedSurgicalPathologyReportBizLogic.class);
 
 	/**
@@ -39,20 +39,22 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
+			final IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
 			dao.insert(report);
-			Set protectionObjects = new HashSet();
+			final Set protectionObjects = new HashSet();
 			protectionObjects.add(report);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -93,12 +95,13 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
+			final IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) obj;
 			if (report.getTextContent().getId() == null)
 			{
 				dao.insert(report.getTextContent());
@@ -106,9 +109,9 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 			dao.update(report);
 
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger
+			this.logger
 					.error("Error occured while updating IdentifiedSurgicalPathologyReport domain object"
 							+ ex);
 		}
@@ -121,16 +124,16 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 	public Map getAllIdentifiedReports() throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the Identified reports from the database
-		List listOfReports = bizLogic.retrieve(sourceObjectName);
-		Map mapOfReports = new HashMap();
+		final List listOfReports = bizLogic.retrieve(sourceObjectName);
+		final Map mapOfReports = new HashMap();
 		for (int i = 0; i < listOfReports.size(); i++)
 		{
-			IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) listOfReports
+			final IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) listOfReports
 					.get(i);
 			mapOfReports.put(report.getId(), report);
 		}
@@ -150,13 +153,13 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 	public IdentifiedSurgicalPathologyReport getReportById(Long identifier) throws Exception
 	{
 		// Initialising instance of IBizLogic
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 		// getting all the identified reports from the database
-		Object object = bizLogic.retrieve(sourceObjectName, identifier);
-		IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) object;
+		final Object object = bizLogic.retrieve(sourceObjectName, identifier);
+		final IdentifiedSurgicalPathologyReport report = (IdentifiedSurgicalPathologyReport) object;
 		return report;
 
 	}
@@ -172,16 +175,18 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 	{
 		return Permissions.REGISTRATION + "," + Permissions.READ_DENIED;
 	}
-    /**
-     * @param objName : objName
-     * @param sessionDataBean : sessionDataBean
-     * @param identifier : identifier
-     * @return boolean
-     */
+
+	/**
+	 * @param objName : objName
+	 * @param sessionDataBean : sessionDataBean
+	 * @param identifier : identifier
+	 * @return boolean
+	 */
+	@Override
 	public boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean)
 	{
-		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean,
-				getReadDeniedPrivilegeName());
+		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
+				.getReadDeniedPrivilegeName());
 	}
 }

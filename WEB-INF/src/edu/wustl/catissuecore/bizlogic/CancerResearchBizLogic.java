@@ -28,21 +28,22 @@ import edu.wustl.dao.exception.DAOException;
 public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 {
 
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) obj;
+		final CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) obj;
 		if (cancerResearchGroup == null)
 		{
-			String message = ApplicationProperties.getValue("app.cancerResearchGroup");
-			throw getBizLogicException(null, "domain.object.null.err.msg", message);
+			final String message = ApplicationProperties.getValue("app.cancerResearchGroup");
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 
 		}
 
-		Validator validate = new Validator();
-		if (validate.isEmpty(cancerResearchGroup.getName()))
+		new Validator();
+		if (Validator.isEmpty(cancerResearchGroup.getName()))
 		{
-			String message = ApplicationProperties.getValue("cancerResearchGroup.name");
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties.getValue("cancerResearchGroup.name");
+			throw this.getBizLogicException(null, "errors.item.required", message);
 			// throw new DAOException("errors.item.required", new
 			// String[]{message});
 		}
@@ -61,13 +62,14 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String sourceObjectName = CancerResearchGroup.class.getName();
-			String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+			final String sourceObjectName = CancerResearchGroup.class.getName();
+			final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause(Constants.NAME, crgName));
 
-			List crgList = retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			final List crgList = this
+					.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 			Long crgId = null;
 			if ((crgList != null) && (crgList.size() > 0))
 			{
@@ -75,9 +77,10 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 			}
 			return crgId.toString();
 		}
-		catch (DAOException daoexp)
+		catch (final DAOException daoexp)
 		{
-			throw getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
+			throw this
+					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
 
@@ -88,6 +91,7 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
@@ -99,6 +103,7 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 	 * 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 

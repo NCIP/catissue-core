@@ -21,7 +21,7 @@ import edu.wustl.dao.exception.DAOException;
 public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(ReportLoaderQueueBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(ReportLoaderQueueBizLogic.class);
 
 	/**
 	 * Saves the ReportLoaderQueue object in the database.
@@ -32,18 +32,20 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
+			final ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
 			dao.insert(reportLoaderQueue);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -54,16 +56,18 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 * @param dao : dao
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void delete(Object obj, DAO dao) throws BizLogicException
 	{
 		try
 		{
 			dao.delete(obj);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -77,18 +81,20 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
+			final ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) obj;
 			dao.update(reportLoaderQueue);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -101,8 +107,8 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 */
 	public ReportLoaderQueue getReportLoaderQueueById(Long identifier) throws Exception
 	{
-		Object object = retrieve(ReportLoaderQueue.class.getName(), identifier);
-		ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) object;
+		final Object object = this.retrieve(ReportLoaderQueue.class.getName(), identifier);
+		final ReportLoaderQueue reportLoaderQueue = (ReportLoaderQueue) object;
 		return reportLoaderQueue;
 	}
 
@@ -124,51 +130,52 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 		/*
 		 * Query to fetch the list of participants:
 		 */
-		String partHql = "select p.id , p.lastName ,p.firstName "
+		final String partHql = "select p.id , p.lastName ,p.firstName "
 				+ " from edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue as rlq, "
 				+ " edu.wustl.catissuecore.domain.Participant as p" + " where rlq.id= "
 				+ reportQueueId + " and p.id in elements(rlq.participantCollection) ";
 
 		// Query query0 = session.createQuery(hql1);
-		List participantList = (List) executeQuery(partHql);
+		final List participantList = this.executeQuery(partHql);
 
 		partcipantListSize = participantList.size();
 		for (int partCount = 0; partCount < partcipantListSize; partCount++)
 		{
-			Object[] participantObj = (Object[]) participantList.get(partCount);
-			Long pid = (Long) participantObj[0];
-			String lastName = (String) participantObj[1];
-			String firtName = (String) participantObj[2];
+			final Object[] participantObj = (Object[]) participantList.get(partCount);
+			final Long pid = (Long) participantObj[0];
+			final String lastName = (String) participantObj[1];
+			final String firtName = (String) participantObj[2];
 
 			displayName = lastName + "," + firtName;
-			setConflictTreeNode(pid.toString(), Constants.PARTICIPANT, displayName, "0", null,
+			this.setConflictTreeNode(pid.toString(), Constants.PARTICIPANT, displayName, "0", null,
 					null, null, treeDataVector);
 
 			/*
 			 * Query to fetch the list of collection protocol:
 			 */
 
-			String cprHql = "select cpr.id , cpr.collectionProtocol.shortTitle"
+			final String cprHql = "select cpr.id , cpr.collectionProtocol.shortTitle"
 					+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr"
 					+ " where cpr.participant.id =" + pid + "";
 
 			// Query query1 = session.createQuery(hql2);
-			List cprList = (List) executeQuery(cprHql);
+			final List cprList = this.executeQuery(cprHql);
 
 			cprListSize = cprList.size();
 			for (int cprCount = 0; cprCount < cprListSize; cprCount++)
 			{
 
-				Object[] cprObj = (Object[]) cprList.get(cprCount);
-				Long cprid = (Long) cprObj[0];
-				String shortTitle = (String) cprObj[1];
+				final Object[] cprObj = (Object[]) cprList.get(cprCount);
+				final Long cprid = (Long) cprObj[0];
+				final String shortTitle = (String) cprObj[1];
 
 				displayName = shortTitle;
 				// Create tree nodes for Collection Protocol
-				setConflictTreeNode(cprid.toString(), Constants.COLLECTION_PROTOCOL, displayName,
-						pid.toString(), Constants.PARTICIPANT, null, null, treeDataVector);
+				this.setConflictTreeNode(cprid.toString(), Constants.COLLECTION_PROTOCOL,
+						displayName, pid.toString(), Constants.PARTICIPANT, null, null,
+						treeDataVector);
 
-				String scgHql = "select scg.id , scg.name , s.name"
+				final String scgHql = "select scg.id , scg.name , s.name"
 						+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr,"
 						+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg ,"
 						+ " edu.wustl.catissuecore.domain.Site as s" +
@@ -179,24 +186,25 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 						+ " or scg.surgicalPathologyNumber='')";
 
 				// Query query2 = session.createQuery(hql3);
-				List scgList = (List) executeQuery(scgHql);
+				final List scgList = this.executeQuery(scgHql);
 
 				scgListSize = scgList.size();
 				for (int scgCount = 0; scgCount < scgListSize; scgCount++)
 				{
 
-					Object[] scgObj = (Object[]) scgList.get(scgCount);
-					String siteNamefromQuery = (String) scgObj[2];
+					final Object[] scgObj = (Object[]) scgList.get(scgCount);
+					final String siteNamefromQuery = (String) scgObj[2];
 
 					if (siteNamefromQuery.equals(siteName))
 					{
-						Long scgid = (Long) scgObj[0];
-						String scgName = (String) scgObj[1];
+						final Long scgid = (Long) scgObj[0];
+						final String scgName = (String) scgObj[1];
 
 						// Create tree nodes for Specimen Collection Group
-						setConflictTreeNode(scgid.toString(), Constants.SPECIMEN_COLLECTION_GROUP,
-								scgName, cprid.toString(), Constants.COLLECTION_PROTOCOL, pid
-										.toString(), Constants.PARTICIPANT, treeDataVector);
+						this.setConflictTreeNode(scgid.toString(),
+								Constants.SPECIMEN_COLLECTION_GROUP, scgName, cprid.toString(),
+								Constants.COLLECTION_PROTOCOL, pid.toString(),
+								Constants.PARTICIPANT, treeDataVector);
 					}
 				}
 
@@ -221,7 +229,7 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 			String parentIdentifier, String parentObjectName, String combinedParentIdentifier,
 			String combinedParentObjectName, Vector vector)
 	{
-		QueryTreeNodeData treeNode = new QueryTreeNodeData();
+		final QueryTreeNodeData treeNode = new QueryTreeNodeData();
 		treeNode.setIdentifier(identifier);
 		treeNode.setObjectName(objectName);
 		treeNode.setDisplayName(displayName);
@@ -240,25 +248,27 @@ public class ReportLoaderQueueBizLogic extends CatissueDefaultBizLogic
 	 *             DAOException
 	 * @return List
 	 */
+	@Override
 	public List executeQuery(String hql) throws BizLogicException
 	{
 		DAO dao = null;
 
 		try
 		{
-			dao = openDAOSession(null);
-			List list = dao.executeQuery(hql);
+			dao = this.openDAOSession(null);
+			final List list = dao.executeQuery(hql);
 			dao.closeSession();
 			return list;
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 	}
 

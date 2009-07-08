@@ -15,6 +15,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
+
 /**
  * @author
  *
@@ -22,7 +23,8 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(RequirementSpecimenBizLogic.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(RequirementSpecimenBizLogic.class);
 
 	/**
 	 * Saves the Specimen object in the database.
@@ -36,18 +38,20 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	 *             Database related Exception
 	 */
 
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			SpecimenRequirement reqSpecimen = (SpecimenRequirement) obj;
+			final SpecimenRequirement reqSpecimen = (SpecimenRequirement) obj;
 			dao.insert(reqSpecimen);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -65,6 +69,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             Database related exception
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		return true;
@@ -96,7 +101,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 			// Patch: 8533_1
 			if (collectionProtocolEvent.getSpecimenRequirementCollection() != null)
 			{
-				Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
+				final Iterator<SpecimenRequirement> srIt = collectionProtocolEvent
 						.getSpecimenRequirementCollection().iterator();
 				Collection<SpecimenRequirement> oldReqspecimenCollection = null;
 				if (oldCollectionProtocolEvent != null)
@@ -106,7 +111,7 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				while (srIt.hasNext())
 				{
-					SpecimenRequirement specimenRequirement = srIt.next();
+					final SpecimenRequirement specimenRequirement = srIt.next();
 					if (specimenRequirement.getCollectionProtocolEvent().getId() == null)
 					{
 						specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
@@ -114,17 +119,18 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 					if (specimenRequirement.getId() == null || specimenRequirement.getId() <= 0)
 					{
 						specimenRequirement.setCollectionProtocolEvent(collectionProtocolEvent);
-						insert(specimenRequirement, dao, sessionDataBean);
+						this.insert(specimenRequirement, dao, sessionDataBean);
 					}
 					else
 					{
 						dao.update(specimenRequirement);
 						if (oldReqspecimenCollection != null)
 						{
-							SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) getCorrespondingOldObject(
-									oldReqspecimenCollection, specimenRequirement.getId());
+							final SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) this
+									.getCorrespondingOldObject(oldReqspecimenCollection,
+											specimenRequirement.getId());
 
-							AuditManager auditManager = getAuditManager(sessionDataBean);
+							final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 							auditManager.updateAudit(dao, specimenRequirement,
 									oldRequirementSpecimen);
 
@@ -135,22 +141,23 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (oldCollectionProtocolEvent != null)
 			{
 				// Specimen delete code
-				Collection<SpecimenRequirement> oldReqSpecimenCollection = oldCollectionProtocolEvent
+				final Collection<SpecimenRequirement> oldReqSpecimenCollection = oldCollectionProtocolEvent
 						.getSpecimenRequirementCollection();
-				Collection<SpecimenRequirement> newReqSpecimenCollection = collectionProtocolEvent
+				final Collection<SpecimenRequirement> newReqSpecimenCollection = collectionProtocolEvent
 						.getSpecimenRequirementCollection();
-				checkSpecimenDelete(dao, oldReqSpecimenCollection, newReqSpecimenCollection);
+				this.checkSpecimenDelete(dao, oldReqSpecimenCollection, newReqSpecimenCollection);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
 	}
@@ -171,22 +178,22 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		SpecimenRequirement oldSpReq = null;
 		SpecimenRequirement newSpReq = null;
-		Iterator<SpecimenRequirement> iterator = oldReqSpecimenCollection.iterator();
+		final Iterator<SpecimenRequirement> iterator = oldReqSpecimenCollection.iterator();
 		while (iterator.hasNext())
 		{
-			oldSpReq = (SpecimenRequirement) iterator.next();
+			oldSpReq = iterator.next();
 			if ("New".equals(oldSpReq.getLineage()))
 			{
-				newSpReq = (SpecimenRequirement) getCorrespondingOldObject(
+				newSpReq = (SpecimenRequirement) this.getCorrespondingOldObject(
 						newReqSpecimenCollection, oldSpReq.getId());
 				if (newSpReq == null)
 				{
-					deleteRequirementSpecimen(dao, oldSpReq);
+					this.deleteRequirementSpecimen(dao, oldSpReq);
 				}
 				else
 				{
-					checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(), newSpReq
-							.getChildSpecimenCollection());
+					this.checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(),
+							newSpReq.getChildSpecimenCollection());
 				}
 			}
 		}
@@ -208,19 +215,19 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		SpecimenRequirement oldSpReq = null;
 		SpecimenRequirement newSpReq = null;
-		Iterator<SpecimenRequirement> iterator = oldReqSpecimenCollection.iterator();
+		final Iterator<SpecimenRequirement> iterator = oldReqSpecimenCollection.iterator();
 		while (iterator.hasNext())
 		{
-			oldSpReq = (SpecimenRequirement) iterator.next();
-			newSpReq = (SpecimenRequirement) getCorrespondingOldObject(newReqSpecimenCollection,
-					oldSpReq.getId());
+			oldSpReq = iterator.next();
+			newSpReq = (SpecimenRequirement) this.getCorrespondingOldObject(
+					newReqSpecimenCollection, oldSpReq.getId());
 			if (newSpReq == null)
 			{
-				deleteRequirementSpecimen(dao, oldSpReq);
+				this.deleteRequirementSpecimen(dao, oldSpReq);
 			}
 			else
 			{
-				checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(), newSpReq
+				this.checkChildSpecimenDelete(dao, oldSpReq.getChildSpecimenCollection(), newSpReq
 						.getChildSpecimenCollection());
 			}
 		}
@@ -240,11 +247,11 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			SpecimenRequirement reqSp = (SpecimenRequirement) dao.retrieveById(
+			final SpecimenRequirement reqSp = (SpecimenRequirement) dao.retrieveById(
 					SpecimenRequirement.class.getName(), spReq.getId());
 			if (reqSp.getParentSpecimen() != null)
 			{
-				Collection<AbstractSpecimen> childCollection = reqSp.getParentSpecimen()
+				final Collection<AbstractSpecimen> childCollection = reqSp.getParentSpecimen()
 						.getChildSpecimenCollection();
 				childCollection.remove(reqSp);
 				reqSp.setSpecimenCharacteristics(null);
@@ -252,10 +259,11 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			dao.delete(reqSp);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}

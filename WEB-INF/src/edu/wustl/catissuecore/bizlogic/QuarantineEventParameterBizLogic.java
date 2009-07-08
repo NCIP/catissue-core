@@ -23,7 +23,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(QuarantineEventParameterBizLogic.class);
 
 	/**
@@ -37,13 +37,14 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 * @throws UserNotAuthorizedException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = (DeidentifiedSurgicalPathologyReport) dao
+			final QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
+			final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = (DeidentifiedSurgicalPathologyReport) dao
 					.retrieveById(DeidentifiedSurgicalPathologyReport.class.getName(),
 							quarantineParam.getDeIdentifiedSurgicalPathologyReport().getId());
 			deidentifiedSurgicalPathologyReport.setIsQuarantined(Constants.QUARANTINE_REQUEST);
@@ -52,11 +53,11 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			dao.update(deidentifiedSurgicalPathologyReport);
 			String className;
 			className = User.class.getName();
-			Object object = dao.retrieveById(className, sessionDataBean.getUserId());
+			final Object object = dao.retrieveById(className, sessionDataBean.getUserId());
 			quarantineParam.setUser((User) object);
 			dao.insert(quarantineParam);
 
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, quarantineParam);
 			// Since QuarantineEventParameter is in PUBLIC_DATA_GROUP protection
 			// objects not required
@@ -69,15 +70,16 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			 * handleSMException(e); }
 			 */
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -90,14 +92,15 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			QuarantineEventParameter oldquarantineParam = (QuarantineEventParameter) oldObj;
-			QuarantineEventParameter newquarantineParam = (QuarantineEventParameter) obj;
-			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = oldquarantineParam
+			final QuarantineEventParameter oldquarantineParam = (QuarantineEventParameter) oldObj;
+			final QuarantineEventParameter newquarantineParam = (QuarantineEventParameter) obj;
+			final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = oldquarantineParam
 					.getDeIdentifiedSurgicalPathologyReport();
 			oldquarantineParam.setStatus(newquarantineParam.getStatus());
 			if (oldquarantineParam.getStatus().equalsIgnoreCase(
@@ -118,9 +121,10 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newquarantineParam);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.error("Error occured while updating object of QuarantineEventParameter" + ex);
+			this.logger.error("Error occured while updating object of QuarantineEventParameter"
+					+ ex);
 		}
 	}
 }

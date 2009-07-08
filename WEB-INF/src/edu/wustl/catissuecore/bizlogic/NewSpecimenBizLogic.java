@@ -36,7 +36,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
@@ -65,11 +64,9 @@ import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -105,7 +102,7 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(NewSpecimenBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(NewSpecimenBizLogic.class);
 	/**
 	 * containerHoldsSpecimenClasses.
 	 */
@@ -117,7 +114,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	protected void preInsert(final Object obj, final DAO dao, final SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		storageContainerIds = new HashSet<String>();
+		this.storageContainerIds = new HashSet<String>();
 	}
 
 	/**
@@ -137,17 +134,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Specimen specimen = (Specimen) obj;
-			setParent(dao, specimen);
-			populateDomainObjectToInsert(dao, sessionDataBean, specimen);
+			final Specimen specimen = (Specimen) obj;
+			this.setParent(dao, specimen);
+			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen);
 			dao.insert(specimen);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, specimen);
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}
@@ -165,7 +162,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		if (parentSpecimen == null)
 		{
-			setSCGToSpecimen(specimen, dao);
+			this.setSCGToSpecimen(specimen, dao);
 		}
 		else
 		{
@@ -177,10 +174,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else if (parentSpecimen.getLabel() != null)
 			{
-				parentSpecimen = getParentSpecimenByLabel(dao, parentSpecimen);
+				parentSpecimen = this.getParentSpecimenByLabel(dao, parentSpecimen);
 			}
 			specimen.setParentSpecimen(parentSpecimen);
-			checkStatus(dao, parentSpecimen, "Specimen");
+			this.checkStatus(dao, parentSpecimen, "Specimen");
 		}
 	}
 
@@ -200,21 +197,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void populateDomainObjectToInsert(DAO dao, SessionDataBean sessionDataBean,
 			Specimen specimen) throws BizLogicException, DAOException, SMException
 	{
-		setSpecimenCreatedOnDate(specimen);
-		setSpecimenParent(specimen, dao);
+		this.setSpecimenCreatedOnDate(specimen);
+		this.setSpecimenParent(specimen, dao);
 		// bug no. 4265
 		if (specimen.getLineage() != null && specimen.getLineage().equalsIgnoreCase("Derived")
 				&& specimen.getDisposeParentSpecimen() == true)
 		{
-			checkParentSpecimenDisposal(sessionDataBean, specimen, dao,
+			this.checkParentSpecimenDisposal(sessionDataBean, specimen, dao,
 					Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
 		}
 		// allocatePositionForSpecimen(specimen);
-		setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
-		setSpecimenAttributes(dao, specimen, sessionDataBean);
-		generateLabel(specimen);
-		generateBarCode(specimen);
-		insertChildSpecimens(specimen, dao, sessionDataBean);
+		this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
+		this.setSpecimenAttributes(dao, specimen, sessionDataBean);
+		this.generateLabel(specimen);
+		this.generateBarCode(specimen);
+		this.insertChildSpecimens(specimen, dao, sessionDataBean);
 	}
 
 	/**
@@ -225,9 +222,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void calculateQuantity(Specimen specimen)
 	{
-		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		Double availableQuantity = parentSpecimen.getAvailableQuantity().doubleValue();
-		DecimalFormat dFormat = new DecimalFormat("#.000");
+		final DecimalFormat dFormat = new DecimalFormat("#.000");
 		availableQuantity = availableQuantity - specimen.getAvailableQuantity();
 		availableQuantity = Double.parseDouble(dFormat.format(availableQuantity));
 		parentSpecimen.setAvailableQuantity(availableQuantity);
@@ -256,7 +253,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setParentSpecimenData(Specimen specimen)
 	{
-		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		// 11177 S
 		if (specimen.getPathologicalStatus() == null
 				|| Constants.DOUBLE_QUOTES.equals(specimen.getPathologicalStatus()))
@@ -266,9 +263,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		//specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus())
 		// ;
 		// 11177 E
-		setParentCharacteristics(parentSpecimen, specimen);
-		setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
-		setParentBioHazard(parentSpecimen, specimen);
+		this.setParentCharacteristics(parentSpecimen, specimen);
+		this.setConsentTierStatus(specimen, parentSpecimen.getConsentTierStatusCollection());
+		this.setParentBioHazard(parentSpecimen, specimen);
 	}
 
 	/**
@@ -279,14 +276,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setParentBioHazard(Specimen parentSpecimen, Specimen specimen)
 	{
-		Set<Biohazard> set = new HashSet<Biohazard>();
-		Collection<Biohazard> biohazardCollection = parentSpecimen.getBiohazardCollection();
+		final Set<Biohazard> set = new HashSet<Biohazard>();
+		final Collection<Biohazard> biohazardCollection = parentSpecimen.getBiohazardCollection();
 		if (biohazardCollection != null)
 		{
-			Iterator<Biohazard> it = biohazardCollection.iterator();
+			final Iterator<Biohazard> it = biohazardCollection.iterator();
 			while (it.hasNext())
 			{
-				Biohazard hazard = (Biohazard) it.next();
+				final Biohazard hazard = (Biohazard) it.next();
 				set.add(hazard);
 			}
 		}
@@ -299,18 +296,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 **/
 	private void setCreatedOnDate(Specimen specimen)
 	{
-		Collection<SpecimenEventParameters> specimenEventsCollection = specimen
+		final Collection<SpecimenEventParameters> specimenEventsCollection = specimen
 				.getSpecimenEventCollection();
 		if (specimenEventsCollection != null)
 		{
-			Iterator<SpecimenEventParameters> specimenEventsCollectionIterator = specimenEventsCollection
+			final Iterator<SpecimenEventParameters> specimenEventsCollectionIterator = specimenEventsCollection
 					.iterator();
 			while (specimenEventsCollectionIterator.hasNext())
 			{
-				Object eventObject = specimenEventsCollectionIterator.next();
+				final Object eventObject = specimenEventsCollectionIterator.next();
 				if (eventObject instanceof CollectionEventParameters)
 				{
-					CollectionEventParameters collEventParam = (CollectionEventParameters) eventObject;
+					final CollectionEventParameters collEventParam = (CollectionEventParameters) eventObject;
 					specimen.setCreatedOn(collEventParam.getTimestamp());
 				}
 			}
@@ -326,15 +323,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
 	{
-		Collection<SpecimenEventParameters> specimenEventColl = new HashSet<SpecimenEventParameters>();
-		User user = new User();
+		final Collection<SpecimenEventParameters> specimenEventColl = new HashSet<SpecimenEventParameters>();
+		final User user = new User();
 		user.setId(sessionDataBean.getUserId());
-		CollectionEventParameters collectionEventParameters = EventsUtil
+		final CollectionEventParameters collectionEventParameters = EventsUtil
 				.populateCollectionEventParameters(user);
 		collectionEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(collectionEventParameters);
 
-		ReceivedEventParameters receivedEventParameters = EventsUtil
+		final ReceivedEventParameters receivedEventParameters = EventsUtil
 				.populateReceivedEventParameters(user);
 		receivedEventParameters.setSpecimen(specimen);
 		specimenEventColl.add(receivedEventParameters);
@@ -359,7 +356,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			obj = new Specimen();
 		}
-		String formatedException = formatException(daoException.getWrapException(), obj, operation);
+		String formatedException = this.formatException(daoException.getWrapException(), obj,
+				operation);
 
 		if (formatedException == null)
 		{
@@ -378,9 +376,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
 			String disposalReason) throws BizLogicException, UserNotAuthorizedException
 	{
-		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen,
-				disposalReason);
-		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+		final DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean,
+				specimen, disposalReason);
+		final SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean, 0);
 		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
@@ -403,9 +401,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
 			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException
 	{
-		DisposalEventParameters disposalEvent = createDisposeEvent(sessionDataBean, specimen,
-				disposalReason);
-		SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+		final DisposalEventParameters disposalEvent = this.createDisposeEvent(sessionDataBean,
+				specimen, disposalReason);
+		final SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
 		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean);
 		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
@@ -421,11 +419,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private DisposalEventParameters createDisposeEvent(SessionDataBean sessionDataBean,
 			AbstractSpecimen specimen, String disposalReason)
 	{
-		DisposalEventParameters disposalEvent = new DisposalEventParameters();
+		final DisposalEventParameters disposalEvent = new DisposalEventParameters();
 		disposalEvent.setSpecimen(specimen);
 		disposalEvent.setReason(disposalReason);
 		disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
-		User user = new User();
+		final User user = new User();
 		user.setId(sessionDataBean.getUserId());
 		disposalEvent.setUser(user);
 		disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
@@ -437,12 +435,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setSpecimenCreatedOnDate(Specimen specimen)
 	{
-		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		if (specimen.getCreatedOn() == null)
 		{
 			if ((specimen.getParentSpecimen() == null))
 			{
-				setCreatedOnDate(specimen);
+				this.setCreatedOnDate(specimen);
 			}
 			else
 			{
@@ -459,7 +457,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setQuantity(Specimen specimen)
 	{
-		Double avQty = specimen.getAvailableQuantity();
+		final Double avQty = specimen.getAvailableQuantity();
 		if (avQty != null && avQty == 0)
 		{
 			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
@@ -470,7 +468,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
-			calculateQuantity(specimen);
+			this.calculateQuantity(specimen);
 		}
 	}
 
@@ -487,20 +485,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+			final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 			if (specimen.getParentSpecimen() == null)
 			{
-				Collection<SpecimenEventParameters> specimenEventColl = specimen
+				final Collection<SpecimenEventParameters> specimenEventColl = specimen
 						.getSpecimenEventCollection();
 				if (sessionDataBean != null
 						&& (specimenEventColl == null || specimenEventColl.isEmpty()))
 				{
-					setDefaultEventsToSpecimen(specimen, sessionDataBean);
+					this.setDefaultEventsToSpecimen(specimen, sessionDataBean);
 				}
 			}
 			else
 			{
-				specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(
+				specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(
 						parentSpecimen, specimen));
 			}
 		}
@@ -522,13 +520,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException, DAOException, SMException
 	{
-		Collection<AbstractSpecimen> childSpecimenCollection = specimen
+		final Collection<AbstractSpecimen> childSpecimenCollection = specimen
 				.getChildSpecimenCollection();
-		Iterator<AbstractSpecimen> it = childSpecimenCollection.iterator();
+		final Iterator<AbstractSpecimen> it = childSpecimenCollection.iterator();
 		while (it.hasNext())
 		{
-			Specimen childSpecimen = (Specimen) it.next();
-			populateDomainObjectToInsert(dao, sessionDataBean, childSpecimen);
+			final Specimen childSpecimen = (Specimen) it.next();
+			this.populateDomainObjectToInsert(dao, sessionDataBean, childSpecimen);
 		}
 	}
 
@@ -547,7 +545,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			SpecimenCharacteristics parentSpecChar = parentSpecimen.getSpecimenCharacteristics();
+			final SpecimenCharacteristics parentSpecChar = parentSpecimen
+					.getSpecimenCharacteristics();
 			if (parentSpecChar != null)
 			{
 				characteristics = new SpecimenCharacteristics();
@@ -572,14 +571,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				try
 				{
-					BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory
+					final BarcodeGenerator spBarcodeGenerator = BarcodeGeneratorFactory
 							.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 					spBarcodeGenerator.setBarcode(specimen);
 				}
-				catch (NameGeneratorException e)
+				catch (final NameGeneratorException e)
 				{
-					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "name.generator.exp", "");
+					this.logger.debug(e.getMessage(), e);
+					throw this.getBizLogicException(e, "name.generator.exp", "");
 				}
 			}
 		}
@@ -598,18 +597,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (extIdntyColl.isEmpty()) // Dummy entry added for query
 			{
-				setEmptyExternalIdentifier(specimen, extIdntyColl);
+				this.setEmptyExternalIdentifier(specimen, extIdntyColl);
 			}
 			else
 			{
-				setSpecimenToExternalIdentifier(specimen, extIdntyColl);
+				this.setSpecimenToExternalIdentifier(specimen, extIdntyColl);
 			}
 		}
 		else
 		{
 			// Dummy entry added for query.
 			extIdntyColl = new HashSet<ExternalIdentifier>();
-			setEmptyExternalIdentifier(specimen, extIdntyColl);
+			this.setEmptyExternalIdentifier(specimen, extIdntyColl);
 			specimen.setExternalIdentifierCollection(extIdntyColl);
 		}
 	}
@@ -626,45 +625,45 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setSpecimenParent(Specimen specimen, DAO dao) throws BizLogicException
 	{
-		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		if (parentSpecimen != null)
 		{
 			specimen.setParentSpecimen(parentSpecimen);
 			parentSpecimen.getChildSpecimenCollection().add(specimen);
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-			setParentSpecimenData(specimen);
+			this.setParentSpecimenData(specimen);
 		}
 		// Bug 11481 S
-		String lineage = specimen.getLineage();
-		CollectionProtocol cp = new CollectionProtocol();
-		Long scgId = specimen.getSpecimenCollectionGroup().getId();
+		final String lineage = specimen.getLineage();
+		final CollectionProtocol cp = new CollectionProtocol();
+		final Long scgId = specimen.getSpecimenCollectionGroup().getId();
 
-		Long colpId = (Long) specimen.getSpecimenCollectionGroup()
+		final Long colpId = (Long) specimen.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-		String activityStatus = specimen.getSpecimenCollectionGroup()
+		final String activityStatus = specimen.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getCollectionProtocol().getActivityStatus();
 		cp.setId(colpId);
 		cp.setActivityStatus(activityStatus);
 
 		if (lineage != null && !lineage.equalsIgnoreCase("New"))
 		{
-			String parentCollStatus = ((Specimen) specimen.getParentSpecimen())
+			final String parentCollStatus = ((Specimen) specimen.getParentSpecimen())
 					.getCollectionStatus();
 			if (!parentCollStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
 			{
-				checkStatus(dao, cp, "Collection Protocol");
+				this.checkStatus(dao, cp, "Collection Protocol");
 			}
 		}
 		else
 		{
 			if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
-				checkStatus(dao, cp, "Collection Protocal");
+				this.checkStatus(dao, cp, "Collection Protocal");
 			}
 		}
 		// Bug 11481 E
 
-		checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
+		this.checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
 	}
 
 	// Bug 11481 S
@@ -728,15 +727,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 			if (parentSpecimenList == null || parentSpecimenList.isEmpty())
 			{
-				throw getBizLogicException(null, "invalid.label.barcode", value);
+				throw this.getBizLogicException(null, "invalid.label.barcode", value);
 
 			}
 			parentSpecimen = (Specimen) parentSpecimenList.get(0);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return parentSpecimen;
 	}
@@ -753,7 +753,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		scg = new SpecimenCollectionGroupBizLogic().retrieveSCG(dao, scg);
 		consentTierStatusCollection = ((SpecimenCollectionGroup) scg)
 				.getConsentTierStatusCollection();
-		setConsentTierStatus(specimen, consentTierStatusCollection);
+		this.setConsentTierStatus(specimen, consentTierStatusCollection);
 		specimen.setSpecimenCollectionGroup(scg);
 	}
 
@@ -774,15 +774,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				if (specimen.getLabel() == null || "".equals(specimen.getLabel()))
 				{
-					LabelGenerator spLblGenerator = LabelGeneratorFactory
+					final LabelGenerator spLblGenerator = LabelGeneratorFactory
 							.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 					spLblGenerator.setLabel(specimen);
 				}
 			}
-			catch (NameGeneratorException e)
+			catch (final NameGeneratorException e)
 			{
-				logger.debug(e.getMessage(), e);
-				throw getBizLogicException(e, "name.generator.exp", "");
+				this.logger.debug(e.getMessage(), e);
+				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
 	}
@@ -796,10 +796,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setSpecimenToExternalIdentifier(Specimen specimen,
 			Collection<ExternalIdentifier> externalIdentifierCollection)
 	{
-		Iterator<ExternalIdentifier> it = externalIdentifierCollection.iterator();
+		final Iterator<ExternalIdentifier> it = externalIdentifierCollection.iterator();
 		while (it.hasNext())
 		{
-			ExternalIdentifier exId = (ExternalIdentifier) it.next();
+			final ExternalIdentifier exId = (ExternalIdentifier) it.next();
 			exId.setSpecimen(specimen);
 		}
 	}
@@ -813,7 +813,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setEmptyExternalIdentifier(Specimen specimen,
 			Collection<ExternalIdentifier> externalIdentifierCollection)
 	{
-		ExternalIdentifier exId = new ExternalIdentifier();
+		final ExternalIdentifier exId = new ExternalIdentifier();
 		exId.setName(null);
 		exId.setValue(null);
 		exId.setSpecimen(specimen);
@@ -837,8 +837,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		Map containerMap = getStorageContainerMap();
-		updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
+		final Map containerMap = this.getStorageContainerMap();
+		this.updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
 		super.postInsert(obj, dao, sessionDataBean);
 	}
 
@@ -859,18 +859,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	protected void postInsert(Collection<AbstractDomainObject> speCollection, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		Iterator<AbstractDomainObject> specimenIterator = speCollection.iterator();
+		final Iterator<AbstractDomainObject> specimenIterator = speCollection.iterator();
 		while (specimenIterator.hasNext())
 		{
-			Specimen specimen = (Specimen) specimenIterator.next();
-			postInsert(specimen, dao, sessionDataBean);
-			Collection childSpecimens = specimen.getChildSpecimenCollection();
+			final Specimen specimen = (Specimen) specimenIterator.next();
+			this.postInsert(specimen, dao, sessionDataBean);
+			final Collection childSpecimens = specimen.getChildSpecimenCollection();
 			if (childSpecimens != null)
 			{
-				postInsert(childSpecimens, dao, sessionDataBean);
+				this.postInsert(childSpecimens, dao, sessionDataBean);
 			}
 		}
-		storageContainerIds.clear();
+		this.storageContainerIds.clear();
 		super.postInsert(speCollection, dao, sessionDataBean);
 	}
 
@@ -884,9 +884,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			containerMap = StorageContainerUtil.getContainerMapFromCache();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return containerMap;
@@ -902,29 +902,29 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void updateChildAttributes(Object currentObj, Object oldObj) throws BizLogicException
 	{
 		JDBCDAO jdbcDao = null;
-		Specimen currentSpecimen = (Specimen) currentObj;
-		Specimen oldSpecimen = (Specimen) oldObj;
-		String type = currentSpecimen.getSpecimenType();
-		String pathologicalStatus = currentSpecimen.getPathologicalStatus();
-		String id = currentSpecimen.getId().toString();
+		final Specimen currentSpecimen = (Specimen) currentObj;
+		final Specimen oldSpecimen = (Specimen) oldObj;
+		final String type = currentSpecimen.getSpecimenType();
+		final String pathologicalStatus = currentSpecimen.getPathologicalStatus();
+		final String id = currentSpecimen.getId().toString();
 		if (!currentSpecimen.getPathologicalStatus().equals(oldSpecimen.getPathologicalStatus())
 				|| !currentSpecimen.getSpecimenType().equals(oldSpecimen.getSpecimenType()))
 		{
 			try
 			{
-				jdbcDao = openJDBCSession();
-				String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type
+				jdbcDao = this.openJDBCSession();
+				final String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type
 						+ "',PATHOLOGICAL_STATUS = '" + pathologicalStatus
 						+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + id + "';";
 				jdbcDao.executeUpdate(queryStr);
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
-				logger.debug("Exception occured while updating aliquots");
+				this.logger.debug("Exception occured while updating aliquots");
 			}
 			finally
 			{
-				closeJDBCSession(jdbcDao);
+				this.closeJDBCSession(jdbcDao);
 			}
 		}
 	}
@@ -948,9 +948,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						.getSpecimenPosition().getPositionDimensionTwo().intValue());
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Exception occured while updating aliquots");
+			this.logger.error("Exception occured while updating aliquots");
 		}
 	}
 
@@ -963,25 +963,25 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	protected String[] getDynamicGroups(AbstractSpecimenCollectionGroup obj)
 			throws BizLogicException
 	{
-		TaskTimeCalculater getDynaGrps = TaskTimeCalculater.startTask("DynamicGroup",
+		final TaskTimeCalculater getDynaGrps = TaskTimeCalculater.startTask("DynamicGroup",
 				NewSpecimenBizLogic.class);
-		String[] dynamicGroups = new String[1];
+		final String[] dynamicGroups = new String[1];
 		try
 		{
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+			final ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 			String name;
 
 			name = CSMGroupLocator.getInstance().getPGName(null, CollectionProtocol.class);
 
 			dynamicGroups[0] = securityManager.getProtectionGroupByName(obj, name);
 
-			logger.debug("Dynamic Group name: " + dynamicGroups[0]);
+			this.logger.debug("Dynamic Group name: " + dynamicGroups[0]);
 			TaskTimeCalculater.endTask(getDynaGrps);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return dynamicGroups;
 	}
@@ -1002,13 +1002,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen,
 			DAO dao) throws BizLogicException, DAOException
 	{
-		Collection holdsSpecimenClassColl = containerHoldsSpecimenClasses.get(container.getId());
+		Collection holdsSpecimenClassColl = this.containerHoldsSpecimenClasses.get(container
+				.getId());
 		if (holdsSpecimenClassColl == null || holdsSpecimenClassColl.isEmpty())
 		{
 			if (container.getHoldsSpecimenClassCollection() == null
 					|| container.getHoldsSpecimenClassCollection().isEmpty())
 			{
-				holdsSpecimenClassColl = (Collection) retrieveAttribute(dao,
+				holdsSpecimenClassColl = (Collection) this.retrieveAttribute(dao,
 						StorageContainer.class, container.getId(),
 						"elements(holdsSpecimenClassCollection)");
 
@@ -1017,30 +1018,32 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				holdsSpecimenClassColl = container.getHoldsSpecimenClassCollection();
 			}
-			containerHoldsSpecimenClasses.put(container.getId(), holdsSpecimenClassColl);
+			this.containerHoldsSpecimenClasses.put(container.getId(), holdsSpecimenClassColl);
 		}
 		if (!holdsSpecimenClassColl.contains(specimen.getClassName()))
 		{
-			throw getBizLogicException(null, "storage.nt.hold.spec", specimen.getClassName());
+			throw this.getBizLogicException(null, "storage.nt.hold.spec", specimen.getClassName());
 		}
-		Collection collectionProtColl = containerHoldsCPs.get(container.getId());
+		Collection collectionProtColl = this.containerHoldsCPs.get(container.getId());
 		if (collectionProtColl == null)
 		{
 			collectionProtColl = container.getCollectionProtocolCollection();
 			if (collectionProtColl == null || collectionProtColl.isEmpty())
 			{
-				collectionProtColl = (Collection) retrieveAttribute(dao, StorageContainer.class,
-						container.getId(), "elements(collectionProtocolCollection)");
+				collectionProtColl = (Collection) this.retrieveAttribute(dao,
+						StorageContainer.class, container.getId(),
+						"elements(collectionProtocolCollection)");
 
 			}
-			containerHoldsCPs.put(container.getId(), collectionProtColl);
+			this.containerHoldsCPs.put(container.getId(), collectionProtColl);
 		}
-		CollectionProtocol protocol = retriveSCGAndCP(specimen, dao);
+		final CollectionProtocol protocol = this.retriveSCGAndCP(specimen, dao);
 		if (collectionProtColl != null && !collectionProtColl.isEmpty())
 		{
-			if (getCorrespondingOldObject(collectionProtColl, protocol.getId()) == null)
+			if (this.getCorrespondingOldObject(collectionProtColl, protocol.getId()) == null)
 			{
-				throw getBizLogicException(null, "spec.nt.held.by.storage", protocol.getTitle());
+				throw this.getBizLogicException(null, "spec.nt.held.by.storage", protocol
+						.getTitle());
 			}
 		}
 
@@ -1067,17 +1070,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		else if (specimen.getId() != null)
 		{
-			scg = (AbstractSpecimenCollectionGroup) retrieveAttribute(dao, Specimen.class, specimen
-					.getId(), "specimenCollectionGroup");
+			scg = (AbstractSpecimenCollectionGroup) this.retrieveAttribute(dao, Specimen.class,
+					specimen.getId(), "specimenCollectionGroup");
 		}
 		if (scg != null)
 		{
-			protocol = (CollectionProtocol) retrieveAttribute(dao, SpecimenCollectionGroup.class,
-					scg.getId(), "collectionProtocolRegistration.collectionProtocol");
+			protocol = (CollectionProtocol) this.retrieveAttribute(dao,
+					SpecimenCollectionGroup.class, scg.getId(),
+					"collectionProtocolRegistration.collectionProtocol");
 		}
 		if (protocol == null)
 		{
-			throw getBizLogicException(null, "cp.nt.found", "");
+			throw this.getBizLogicException(null, "cp.nt.found", "");
 		}
 
 		return protocol;
@@ -1097,30 +1101,32 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String sourceObjectName = Specimen.class.getName();
-			String[] selectedColumn = {"specimenCollectionGroup." + Constants.SYSTEM_IDENTIFIER};
-			String whereColumnName[] = {Constants.SYSTEM_IDENTIFIER};
-			String whereColumnCondition[] = {"="};
-			Object whereColumnValue[] = {specimenID};
-			String joinCondition = Constants.AND_JOIN_CONDITION;
+			final String sourceObjectName = Specimen.class.getName();
+			final String[] selectedColumn = {"specimenCollectionGroup."
+					+ Constants.SYSTEM_IDENTIFIER};
+			final String whereColumnName[] = {Constants.SYSTEM_IDENTIFIER};
+			final String whereColumnCondition[] = {"="};
+			final Object whereColumnValue[] = {specimenID};
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, specimenID));
 
-			List list = dao.retrieve(sourceObjectName, selectedColumn, queryWhereClause);
+			final List list = dao.retrieve(sourceObjectName, selectedColumn, queryWhereClause);
 
 			if (!list.isEmpty())
 			{
-				Long specimenCollectionGroupId = (Long) list.get(0);
-				SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+				final Long specimenCollectionGroupId = (Long) list.get(0);
+				final SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 				specimenCollectionGroup.setId(specimenCollectionGroupId);
 				return specimenCollectionGroup;
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return null;
 	}
@@ -1146,20 +1152,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (obj.getClass().hashCode() == LinkedHashSet.class.hashCode())
 			{
-				updateAnticipatorySpecimens(dao, (LinkedHashSet) obj, sessionDataBean);
+				this.updateAnticipatorySpecimens(dao, (LinkedHashSet) obj, sessionDataBean);
 			}
 			else if (obj instanceof Specimen)
 			{
-				updateSpecimen(dao, obj, oldObj, sessionDataBean);
+				this.updateSpecimen(dao, obj, oldObj, sessionDataBean);
 			}
 			else
 			{
-				throw getBizLogicException(null, "obj.not.instanceof.specimen", "");
+				throw this.getBizLogicException(null, "obj.not.instanceof.specimen", "");
 			}
 		}
-		catch (DAOException doexp)
+		catch (final DAOException doexp)
 		{
-			throw getBizLogicException(doexp, doexp.getErrorKeyName(), doexp.getMsgValues());
+			throw this.getBizLogicException(doexp, doexp.getErrorKeyName(), doexp.getMsgValues());
 		}
 	}
 
@@ -1182,31 +1188,31 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Specimen specimen = (Specimen) obj;
-			Specimen specimenOld = (Specimen) HibernateMetaData.getProxyObjectImpl(oldObj);
+			final Specimen specimen = (Specimen) obj;
+			final Specimen specimenOld = (Specimen) HibernateMetaData.getProxyObjectImpl(oldObj);
 			ApiSearchUtil.setSpecimenDefault(specimen);
-			validateSpecimen(dao, specimen, specimenOld);
-			updateSpecimenData(dao, sessionDataBean, specimen, specimenOld);
-			Specimen persistentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
-					specimenOld.getId());
+			this.validateSpecimen(dao, specimen, specimenOld);
+			this.updateSpecimenData(dao, sessionDataBean, specimen, specimenOld);
+			final Specimen persistentSpecimen = (Specimen) dao.retrieveById(Specimen.class
+					.getName(), specimenOld.getId());
 			// Calculate Quantity
-			calculateAvailableQunatity(specimen, persistentSpecimen);
+			this.calculateAvailableQunatity(specimen, persistentSpecimen);
 			// To assign storage locations to anticipated specimen
 			if (specimenOld.getCollectionStatus().equals("Pending")
 					&& specimen.getCollectionStatus().equals("Collected")
 					&& specimen.getSpecimenPosition() != null)
 			{
-				storageContainerIds.clear();
-				allocatePositionForSpecimen(specimen);
-				setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
+				this.storageContainerIds.clear();
+				this.allocatePositionForSpecimen(specimen);
+				this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
 				persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
 			}
 			// Set Specimen Domain Object
-			createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld,
+			this.createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld,
 					persistentSpecimen);
 			dao.update(persistentSpecimen);
-			updateChildAttributes(specimen, specimenOld);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			this.updateChildAttributes(specimen, specimenOld);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			// Audit of Specimen
 			auditManager.updateAudit(dao, persistentSpecimen, specimenOld);
 
@@ -1215,21 +1221,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					specimenOld.getSpecimenCharacteristics());
 
 			// Disable functionality
-			disableSpecimen(dao, specimen, persistentSpecimen);
+			this.disableSpecimen(dao, specimen, persistentSpecimen);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
-			storageContainerIds.clear();
+			this.storageContainerIds.clear();
 		}
 	}
 
@@ -1237,19 +1244,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 
 	{
-		Map containerMap = getStorageContainerMap();
+		final Map containerMap = this.getStorageContainerMap();
 		if (currentObj.getClass().hashCode() == LinkedHashSet.class.hashCode())
 		{
-			Iterator it = ((LinkedHashSet) currentObj).iterator();
+			final Iterator it = ((LinkedHashSet) currentObj).iterator();
 			while (it.hasNext())
 			{
-				Specimen specimen = (Specimen) it.next();
-				updateStorageLocations((TreeMap) containerMap, specimen);
+				final Specimen specimen = (Specimen) it.next();
+				this.updateStorageLocations((TreeMap) containerMap, specimen);
 			}
 		}
 		else if (currentObj instanceof Specimen)
 		{
-			updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
+			this.updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
 		}
 		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
@@ -1273,12 +1280,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (specimen.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				boolean disposalEventPresent = false;
-				Collection<SpecimenEventParameters> eventCollection = persistentSpecimen
+				final Collection<SpecimenEventParameters> eventCollection = persistentSpecimen
 						.getSpecimenEventCollection();
-				Iterator<SpecimenEventParameters> itr = eventCollection.iterator();
+				final Iterator<SpecimenEventParameters> itr = eventCollection.iterator();
 				while (itr.hasNext())
 				{
-					Object eventObject = itr.next();
+					final Object eventObject = itr.next();
 					if (eventObject instanceof DisposalEventParameters)
 					{
 						disposalEventPresent = true;
@@ -1287,14 +1294,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				if (!disposalEventPresent)
 				{
-					throw getBizLogicException(null,
+					throw this.getBizLogicException(null,
 							"errors.specimen.not.disabled.no.disposalevent", "");
 				}
 
-				setDisableToSubSpecimen(specimen);
-				Long specimenIDArr[] = new Long[Constants.FIRST_COUNT_1];
+				this.setDisableToSubSpecimen(specimen);
+				final Long specimenIDArr[] = new Long[Constants.FIRST_COUNT_1];
 				specimenIDArr[0] = specimen.getId();
-				disableSubSpecimens(dao, specimenIDArr);
+				this.disableSubSpecimens(dao, specimenIDArr);
 			}
 		}
 	}
@@ -1325,11 +1332,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(
 					Constants.WITHDRAW_RESPONSE_NOACTION))
 			{
-				updateConsentWithdrawStatus(specimen, specimenOld, dao, sessionDataBean);
+				this.updateConsentWithdrawStatus(specimen, specimenOld, dao, sessionDataBean);
 			}
 			else if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 			{
-				updateConsentStatus(specimen, dao, specimenOld);
+				this.updateConsentStatus(specimen, dao, specimenOld);
 			}
 			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity() == 0)
 					|| specimen.getCollectionStatus() == null
@@ -1358,10 +1365,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			 */
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -1378,23 +1386,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateSpecimen(DAO dao, Specimen specimen, Specimen specimenOld)
 			throws BizLogicException
 	{
-		if (isStoragePositionChanged(specimenOld, specimen))
+		if (this.isStoragePositionChanged(specimenOld, specimen))
 		{
 			if (specimenOld.getCollectionStatus().equals("Pending")
 					&& specimen.getCollectionStatus().equals("Pending")
 					&& specimen.getSpecimenPosition() != null)
 			{
-				throw getBizLogicException(null, "status.collected", "");
+				throw this.getBizLogicException(null, "status.collected", "");
 			}
-			throw getBizLogicException(null, "position.nt.changed", "");
+			throw this.getBizLogicException(null, "position.nt.changed", "");
 		}
 		if (!specimenOld.getLineage().equals(specimen.getLineage()))
 		{
-			throw getBizLogicException(null, "lineage.nt.changed", "");
+			throw this.getBizLogicException(null, "lineage.nt.changed", "");
 		}
 		if (!specimenOld.getClassName().equals(specimen.getClassName()))
 		{
-			throw getBizLogicException(null, "clzz.nt.changed", "");
+			throw this.getBizLogicException(null, "clzz.nt.changed", "");
 		}
 		/*
 		 * // bug # 7594 if
@@ -1411,16 +1419,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (specimen.isParentChanged())
 		{
 			// Check whether container is moved to one of its sub container.
-			if (isUnderSubSpecimen(specimen, specimen.getParentSpecimen().getId()))
+			if (this.isUnderSubSpecimen(specimen, specimen.getParentSpecimen().getId()))
 			{
-				throw getBizLogicException(null, "errors.specimen.under.subspecimen", "");
+				throw this.getBizLogicException(null, "errors.specimen.under.subspecimen", "");
 			}
-			logger.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
-			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen()
-					.getId(), dao);
+			this.logger.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
+			final SpecimenCollectionGroup scg = this.loadSpecimenCollectionGroup(specimen
+					.getParentSpecimen().getId(), dao);
 			specimen.setSpecimenCollectionGroup(scg);
 		}
-		validateCollectionStatus(specimen);
+		this.validateCollectionStatus(specimen);
 	}
 
 	/**
@@ -1476,15 +1484,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			conc = ((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter();
 			((MolecularSpecimen) persistentSpecimen).setConcentrationInMicrogramPerMicroliter(conc);
 		}
-		String oldStatus = specimenOld.getCollectionStatus();
+		final String oldStatus = specimenOld.getCollectionStatus();
 		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
 		{
-			generateLabel(persistentSpecimen);
-			generateBarCode(persistentSpecimen);
+			this.generateLabel(persistentSpecimen);
+			this.generateBarCode(persistentSpecimen);
 		}
-		addSpecimenEvents(persistentSpecimen, specimen, sessionDataBean, oldStatus);
+		this.addSpecimenEvents(persistentSpecimen, specimen, sessionDataBean, oldStatus);
 
-		setExternalIdentifier(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
+		this.setExternalIdentifier(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
 	}
 
 	private void addSpecimenEvents(Specimen persistentSpecimen, Specimen specimen,
@@ -1493,7 +1501,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (Constants.COLLECTION_STATUS_PENDING.equals(oldStatus)
 				&& Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
 		{
-			SpecimenRequirement reqSpecimen = persistentSpecimen.getSpecimenRequirement();
+			final SpecimenRequirement reqSpecimen = persistentSpecimen.getSpecimenRequirement();
 
 			if (reqSpecimen != null && reqSpecimen.getParentSpecimen() == null)
 			{
@@ -1512,12 +1520,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else if (persistentSpecimen.getParentSpecimen() != null)
 			{
-				persistentSpecimen
-						.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(
-								(Specimen) persistentSpecimen.getParentSpecimen(),
-								persistentSpecimen));
+				persistentSpecimen.setSpecimenEventCollection(this
+						.populateDeriveSpecimenEventCollection((Specimen) persistentSpecimen
+								.getParentSpecimen(), persistentSpecimen));
 			}
-			setSpecimenCreatedOnDate(persistentSpecimen);
+			this.setSpecimenCreatedOnDate(persistentSpecimen);
 		}
 	}
 
@@ -1542,18 +1549,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Collection<ExternalIdentifier> oldExternalIdentifierCollection = specimenOld
+			final Collection<ExternalIdentifier> oldExternalIdentifierCollection = specimenOld
 					.getExternalIdentifierCollection();
-			Collection<ExternalIdentifier> externalIdentifierCollection = specimen
+			final Collection<ExternalIdentifier> externalIdentifierCollection = specimen
 					.getExternalIdentifierCollection();
 			if (externalIdentifierCollection != null)
 			{
-				Iterator<ExternalIdentifier> it = externalIdentifierCollection.iterator();
-				Collection<ExternalIdentifier> perstExIdColl = persistentSpecimen
+				final Iterator<ExternalIdentifier> it = externalIdentifierCollection.iterator();
+				final Collection<ExternalIdentifier> perstExIdColl = persistentSpecimen
 						.getExternalIdentifierCollection();
 				while (it.hasNext())
 				{
-					ExternalIdentifier exId = (ExternalIdentifier) it.next();
+					final ExternalIdentifier exId = (ExternalIdentifier) it.next();
 					ExternalIdentifier persistExId = null;
 					if (exId.getId() == null)
 					{
@@ -1563,14 +1570,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					}
 					else
 					{
-						persistExId = (ExternalIdentifier) getCorrespondingOldObject(perstExIdColl,
-								exId.getId());
+						persistExId = (ExternalIdentifier) this.getCorrespondingOldObject(
+								perstExIdColl, exId.getId());
 						persistExId.setName(exId.getName());
 						persistExId.setValue(exId.getValue());
-						ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(
-								oldExternalIdentifierCollection, exId.getId());
+						final ExternalIdentifier oldExId = (ExternalIdentifier) this
+								.getCorrespondingOldObject(oldExternalIdentifierCollection, exId
+										.getId());
 
-						AuditManager auditManager = getAuditManager(sessionDataBean);
+						final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 						auditManager.updateAudit(dao, exId, oldExId);
 
 					}
@@ -1578,15 +1586,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				persistentSpecimen.setExternalIdentifierCollection(perstExIdColl);
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -1602,15 +1611,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		if (specimen != null)
 		{
-			Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection().iterator();
+			final Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection()
+					.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen childSpecimen = (Specimen) iterator.next();
+				final Specimen childSpecimen = (Specimen) iterator.next();
 				if (parentSpecimenID.longValue() == childSpecimen.getId().longValue())
 				{
 					return true;
 				}
-				if (isUnderSubSpecimen(childSpecimen, parentSpecimenID))
+				if (this.isUnderSubSpecimen(childSpecimen, parentSpecimenID))
 				{
 					return true;
 				}
@@ -1627,12 +1637,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (specimen != null)
 		{
-			Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection().iterator();
+			final Iterator<AbstractSpecimen> iterator = specimen.getChildSpecimenCollection()
+					.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen childSpecimen = (Specimen) iterator.next();
+				final Specimen childSpecimen = (Specimen) iterator.next();
 				childSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-				setDisableToSubSpecimen(childSpecimen);
+				this.setDisableToSubSpecimen(childSpecimen);
 			}
 		}
 	}
@@ -1654,8 +1665,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean)
 			throws BizLogicException, SMException
 	{
-		setSpecimenEvents(specimen, sessionDataBean);
-		setDefaultExternalIdentifiers(specimen);
+		this.setSpecimenEvents(specimen, sessionDataBean);
+		this.setDefaultExternalIdentifiers(specimen);
 		if (specimen.getLineage() == null)
 		{
 			if (specimen.getParentSpecimen() == null)
@@ -1667,7 +1678,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 			}
 		}
-		setQuantity(specimen);
+		this.setQuantity(specimen);
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
 		{
@@ -1682,14 +1693,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setConsentTierStatus(Specimen specimen,
 			Collection<ConsentTierStatus> consentTierStatusCollection)
 	{
-		Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
+		final Collection<ConsentTierStatus> consentTierStatusCollectionForSpecimen = new HashSet<ConsentTierStatus>();
 		if (consentTierStatusCollection != null)
 		{
-			Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
+			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
 			while (itr.hasNext())
 			{
-				ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
-				ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
+				final ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+				final ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
 				consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
 				consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
 				consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
@@ -1708,10 +1719,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setParentSpecimen(DAO dao, Specimen specimen) throws BizLogicException
 	{
-		Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+		final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 		if (specimen.getParentSpecimen() != null)
 		{
-			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(
+			specimen.setSpecimenEventCollection(this.populateDeriveSpecimenEventCollection(
 					parentSpecimen, specimen));
 		}
 	}
@@ -1742,35 +1753,36 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				StorageContainer storageContainerObj = null;
 				if (specimen.getParentSpecimen() != null)
 				{
-					storageContainerObj = chkParentStorageContainer(specimen, storageContainerObj);
+					storageContainerObj = this.chkParentStorageContainer(specimen,
+							storageContainerObj);
 				}
 				if (storageContainerObj == null)
 				{
 					if (specimen.getSpecimenPosition().getStorageContainer().getId() != null)
 					{
-						String sourceObjectName = StorageContainer.class.getName();
+						final String sourceObjectName = StorageContainer.class.getName();
 						storageContainerObj = (StorageContainer) dao.retrieveById(sourceObjectName,
 								specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
 					else
 					{
-						storageContainerObj = setStorageContainerId(dao, specimen);
+						storageContainerObj = this.setStorageContainerId(dao, specimen);
 					}
 					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(
 							storageContainerObj.getActivityStatus()))
 					{
-						throw getBizLogicException(null, "st.colosed", "");
+						throw this.getBizLogicException(null, "st.colosed", "");
 					}
-					chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
-					validateUserForContainer(sessionDataBean, storageContainerObj);
+					this.chkContainerValidForSpecimen(storageContainerObj, specimen, dao);
+					this.validateUserForContainer(sessionDataBean, storageContainerObj);
 				}
 				SpecimenPosition specPos = specimen.getSpecimenPosition();
 				if (specPos.getPositionDimensionOne() == null
 						|| specPos.getPositionDimensionTwo() == null)
 				{
-					LinkedList<Integer> positionValues = StorageContainerUtil
-							.getFirstAvailablePositionsInContainer(storageContainerObj,
-									getStorageContainerMap(), storageContainerIds);
+					final LinkedList<Integer> positionValues = StorageContainerUtil
+							.getFirstAvailablePositionsInContainer(storageContainerObj, this
+									.getStorageContainerMap(), this.storageContainerIds);
 
 					specPos = new SpecimenPosition();
 
@@ -1783,10 +1795,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 				// bug 8294
 				String storageValue = null;
-				Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
-				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-				String containerName = specimen.getSpecimenPosition().getStorageContainer()
+				final Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+				final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+				final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				final String containerName = specimen.getSpecimenPosition().getStorageContainer()
 						.getName();
 				if (containerName != null)
 				{
@@ -1798,12 +1810,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(),
 							pos1, pos2);
 				}
-				if (!storageContainerIds.contains(storageValue))
+				if (!this.storageContainerIds.contains(storageValue))
 				{
-					storageContainerIds.add(storageValue);
+					this.storageContainerIds.add(storageValue);
 				}
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 				storageContainerBizLogic.checkContainer(dao,
 						storageContainerObj.getId().toString(), specimen.getSpecimenPosition()
@@ -1813,10 +1825,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				// specimen.setStorageContainer(storageContainerObj);
 			}
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -1836,37 +1848,37 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			Container parentStorageContainer = null;
-			ContainerPosition cntPos = storageContainerObj.getLocatedAtPosition();
+			final ContainerPosition cntPos = storageContainerObj.getLocatedAtPosition();
 			if (cntPos != null)
 			{
 				parentStorageContainer = cntPos.getParentContainer();
 			}
 			// To get privilegeCache through
 			// Singleton instance of PrivilegeManager, requires User LoginName
-			PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-			PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(sessionDataBean
-					.getUserName());
+			final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+			final PrivilegeCache privilegeCache = privilegeManager
+					.getPrivilegeCache(sessionDataBean.getUserName());
 			if (parentStorageContainer != null)
 			{
-				validateUserForContainer(sessionDataBean, parentStorageContainer);
+				this.validateUserForContainer(sessionDataBean, parentStorageContainer);
 			}
-			Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
-			String storageContainerSecObj = o.getClass().getName() + "_"
+			final Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
+			final String storageContainerSecObj = o.getClass().getName() + "_"
 					+ storageContainerObj.getId();
-			boolean userAuthorize = true;
+			final boolean userAuthorize = true;
 			// Commented by Vishvesh & Ravindra for MSR for C1
 			// privilegeCache.hasPrivilege(storageContainerSecObj,
 			// Permissions.USE);
 
 			if (!userAuthorize)
 			{
-				throw getBizLogicException(null, "user.not.auth.use.storage", storageContainerObj
-						.getName());
+				throw this.getBizLogicException(null, "user.not.auth.use.storage",
+						storageContainerObj.getName());
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 	}
@@ -1881,13 +1893,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private StorageContainer chkParentStorageContainer(Specimen specimen,
 			StorageContainer storageContainerObj)
 	{
-		AbstractSpecimen parent = specimen.getParentSpecimen();
+		final AbstractSpecimen parent = specimen.getParentSpecimen();
 		if (((Specimen) parent).getSpecimenPosition() != null
 				&& ((Specimen) parent).getSpecimenPosition().getStorageContainer() != null)
 		{
-			StorageContainer parentContainer = ((Specimen) parent).getSpecimenPosition()
+			final StorageContainer parentContainer = ((Specimen) parent).getSpecimenPosition()
 					.getStorageContainer();
-			StorageContainer specimenContainer = specimen.getSpecimenPosition()
+			final StorageContainer specimenContainer = specimen.getSpecimenPosition()
 					.getStorageContainer();
 			if (parentContainer.getId().equals(specimenContainer.getId())
 					|| parentContainer.getName().equals(specimenContainer.getName()))
@@ -1912,8 +1924,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String sourceObjectName = StorageContainer.class.getName();
-			List list = dao.retrieve(sourceObjectName, "name", specimen.getSpecimenPosition()
+			final String sourceObjectName = StorageContainer.class.getName();
+			final List list = dao.retrieve(sourceObjectName, "name", specimen.getSpecimenPosition()
 					.getStorageContainer().getName());
 			if (!list.isEmpty())
 			{
@@ -1921,13 +1933,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "incorrect.storage", "");
+				throw this.getBizLogicException(null, "incorrect.storage", "");
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -1945,17 +1958,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	{
 
-		setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
+		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
-			Collection<AbstractSpecimen> specimenCollection = newSpecimen
+			final Collection<AbstractSpecimen> specimenCollection = newSpecimen
 					.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
+			final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen specimen = (Specimen) iterator.next();
+				final Specimen specimen = (Specimen) iterator.next();
 				specimen.setSpecimenCollectionGroup(newSpecimen.getSpecimenCollectionGroup());
-				setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true);
+				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true);
 			}
 		}
 
@@ -1979,10 +1992,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				// bug 8294
 				String storageValue = null;
-				Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
-				Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-				Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-				String containerName = specimen.getSpecimenPosition().getStorageContainer()
+				final Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+				final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+				final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				final String containerName = specimen.getSpecimenPosition().getStorageContainer()
 						.getName();
 
 				if (id != null)
@@ -1995,15 +2008,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					storageValue = StorageContainerUtil.getStorageValueKey(containerName, null,
 							pos1, pos2);
 				}
-				if (!storageContainerIds.contains(storageValue))
+				if (!this.storageContainerIds.contains(storageValue))
 				{
-					storageContainerIds.add(storageValue);
+					this.storageContainerIds.add(storageValue);
 				}
 				else
 				{
-					Object[] arguments = {specimen.getLabel(), containerName, pos1, pos2};
-					String errorMsg = Constants.CONTAINER_ERROR_MSG;
-					throw getBizLogicException(null, "spec.storage.not.free", specimen.getLabel()
+					final Object[] arguments = {specimen.getLabel(), containerName, pos1, pos2};
+					final String errorMsg = Constants.CONTAINER_ERROR_MSG;
+					throw this.getBizLogicException(null, "spec.storage.not.free", specimen
+							.getLabel()
 							+ ":" + containerName + ":" + pos1 + ":" + pos2);
 				}
 			}
@@ -2021,13 +2035,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao,
 			Long specimenCollectionGroupArr[]) throws BizLogicException
 	{
-		logger.debug("disableRelatedObjects NewSpecimenBizLogic");
-		List listOfSpecimenId = super.disableObjects(dao, Specimen.class,
+		this.logger.debug("disableRelatedObjects NewSpecimenBizLogic");
+		final List listOfSpecimenId = super.disableObjects(dao, Specimen.class,
 				"specimenCollectionGroup", "CATISSUE_SPECIMEN", "SPECIMEN_COLLECTION_GROUP_ID",
 				specimenCollectionGroupArr);
 		if (!listOfSpecimenId.isEmpty())
 		{
-			disableSubSpecimens(dao, Utility.toLongArray(listOfSpecimenId));
+			this.disableSubSpecimens(dao, Utility.toLongArray(listOfSpecimenId));
 		}
 	}
 
@@ -2046,14 +2060,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		 * "parentSpecimen", "CATISSUE_ABSTRACT_SPECIMEN", "PARENT_SPECIMEN_ID",
 		 * speIDArr);
 		 */
-		List listOfSubElement = disableObjects(dao, "CATISSUE_SPECIMEN", Specimen.class,
+		final List listOfSubElement = this.disableObjects(dao, "CATISSUE_SPECIMEN", Specimen.class,
 				"parentSpecimen", speIDArr);
 
 		if (listOfSubElement.isEmpty())
 		{
 			return;
 		}
-		disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
+		this.disableSubSpecimens(dao, Utility.toLongArray(listOfSubElement));
 	}
 
 	/**
@@ -2099,27 +2113,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId),
 	 * userId, roleId, assignToUser, assignOperation); } }
 	 *//**
-	 * Todo Remove this method
-	 *
-	 * @param dao
-	 *            DAO object
-	 * @param privilegeName
-	 *            privilegeName
-	 * @param class1
-	 *            Class
-	 * @param speIDArr
-	 *            Array of Specimen Id
-	 * @param roleId
-	 *            Role Identifier
-	 * @param assignToUser
-	 *            boolean true or false
-	 * @param assignOperation
-	 *            boolean
-	 * @throws SMException
-	 *             Security related Exception
-	 * @throws BizLogicException
-	 *             Database related exception
-	 */
+				 * Todo Remove this method
+				 *
+				 * @param dao
+				 *            DAO object
+				 * @param privilegeName
+				 *            privilegeName
+				 * @param class1
+				 *            Class
+				 * @param speIDArr
+				 *            Array of Specimen Id
+				 * @param roleId
+				 *            Role Identifier
+				 * @param assignToUser
+				 *            boolean true or false
+				 * @param assignOperation
+				 *            boolean
+				 * @throws SMException
+				 *             Security related Exception
+				 * @throws BizLogicException
+				 *             Database related exception
+				 */
 	/*
 	 * private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName,
 	 * Class class1, Long[] speIDArr, Long userId, String roleId, boolean
@@ -2157,27 +2171,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * privilegeName, Specimen.class, objectIds, userId, roleId, assignToUser,
 	 * assignOperation); }
 	 *//**
-	 * Todo Remove this method
-	 *
-	 * @param dao
-	 *            DAO object
-	 * @param privilegeName
-	 *            privilegeName
-	 * @param objectIds
-	 *            Array of Passed object Id
-	 * @param userId
-	 *            User Identifier
-	 * @param roleId
-	 *            Role Identifier
-	 * @param assignToUser
-	 *            boolean true or false
-	 * @param assignOperation
-	 *            boolean
-	 * @throws SMException
-	 *             Security related Exception
-	 * @throws BizLogicException
-	 *             Database related exception
-	 */
+				 * Todo Remove this method
+				 *
+				 * @param dao
+				 *            DAO object
+				 * @param privilegeName
+				 *            privilegeName
+				 * @param objectIds
+				 *            Array of Passed object Id
+				 * @param userId
+				 *            User Identifier
+				 * @param roleId
+				 *            Role Identifier
+				 * @param assignToUser
+				 *            boolean true or false
+				 * @param assignOperation
+				 *            boolean
+				 * @throws SMException
+				 *             Security related Exception
+				 * @throws BizLogicException
+				 *             Database related exception
+				 */
 	/*
 	 * public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao,
 	 * String privilegeName, Long[] objectIds, Long userId, String roleId,
@@ -2215,12 +2229,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (obj instanceof Specimen)
 			{
-				Specimen specimen = (Specimen) obj;
+				final Specimen specimen = (Specimen) obj;
 				List collStatusList = null;
-				Long scgId = specimen.getSpecimenCollectionGroup().getId();
-				CollectionProtocol cp = new CollectionProtocol();
+				final Long scgId = specimen.getSpecimenCollectionGroup().getId();
+				final CollectionProtocol cp = new CollectionProtocol();
 
-				String collStatusHQL = "select sp.collectionStatus "
+				final String collStatusHQL = "select sp.collectionStatus "
 						+ "from edu.wustl.catissuecore.domain.Specimen as sp " + "where sp.id = "
 						+ specimen.getId();
 				collStatusList = dao.executeQuery(collStatusHQL);
@@ -2228,12 +2242,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 				if (scgId != null)
 				{
-					AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
+					final AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
 							.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",
 									scgId);
-					Long colpId = (Long) specimenCollectionGroup
+					final Long colpId = (Long) specimenCollectionGroup
 							.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-					String activityStatus = specimenCollectionGroup
+					final String activityStatus = specimenCollectionGroup
 							.getCollectionProtocolRegistration().getCollectionProtocol()
 							.getActivityStatus();
 					cp.setId(colpId);
@@ -2247,7 +2261,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				if (specimen.getParentSpecimen() != null)
 				{
-					String ParentCollectionStatus = ((Specimen) specimen.getParentSpecimen())
+					final String ParentCollectionStatus = ((Specimen) specimen.getParentSpecimen())
 							.getCollectionStatus();
 					if (ParentCollectionStatus != null
 							&& !ParentCollectionStatus
@@ -2259,7 +2273,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 								&& !ParentCollectionStatus
 										.equalsIgnoreCase(Constants.COLLECTION_STATUS_PENDING))
 						{
-							checkStatus(dao, cp, "Collection Protocol");
+							this.checkStatus(dao, cp, "Collection Protocol");
 						}
 
 					}
@@ -2269,7 +2283,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					if (collStatus != null
 							&& !collStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
 					{
-						checkStatus(dao, cp, "Collection Protocol");
+						this.checkStatus(dao, cp, "Collection Protocol");
 					}
 				}
 			}
@@ -2279,7 +2293,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				// bug no. 8081 and 8083
 				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 				{
-					validateLable(obj);
+					this.validateLable(obj);
 
 				}
 				if (operation.equals(Constants.ADD))
@@ -2294,13 +2308,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				result = validateSingleSpecimen((Specimen) obj, dao, operation, false);
+				result = this.validateSingleSpecimen((Specimen) obj, dao, operation, false);
 			}
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return result;
 	}
@@ -2311,26 +2325,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void validateLable(Object obj) throws BizLogicException
 	{
-		Iterator specimenIterator = ((LinkedHashSet) obj).iterator();
+		final Iterator specimenIterator = ((LinkedHashSet) obj).iterator();
 		while (specimenIterator.hasNext())
 		{
-			Specimen temp = (Specimen) specimenIterator.next();
+			final Specimen temp = (Specimen) specimenIterator.next();
 			if ((temp.getLabel() == null || temp.getLabel().equals(""))
 					&& temp.getCollectionStatus().equalsIgnoreCase("Collected"))
 			{
-				throw getBizLogicException(null, "label.mandatory", "");
+				throw this.getBizLogicException(null, "label.mandatory", "");
 			}
-			Collection aliquotsCollection = temp.getChildSpecimenCollection();
+			final Collection aliquotsCollection = temp.getChildSpecimenCollection();
 			if (aliquotsCollection != null)
 			{
-				Iterator aliquotItert = aliquotsCollection.iterator();
+				final Iterator aliquotItert = aliquotsCollection.iterator();
 				while (aliquotItert.hasNext())
 				{
-					Specimen tempAliquot = (Specimen) aliquotItert.next();
+					final Specimen tempAliquot = (Specimen) aliquotItert.next();
 					if ((tempAliquot.getLabel() == null || tempAliquot.getLabel().equals(""))
 							&& tempAliquot.getCollectionStatus().equalsIgnoreCase("Collected"))
 					{
-						throw getBizLogicException(null, "label.mandatory", "");
+						throw this.getBizLogicException(null, "label.mandatory", "");
 					}
 				}
 			}
@@ -2357,20 +2371,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (specimen == null)
 		{
-			throw getBizLogicException(null, "specimen.object.null.err.msg", "Specimen");
+			throw this.getBizLogicException(null, "specimen.object.null.err.msg", "Specimen");
 		}
-		Validator validator = new Validator();
-		validateSpecimenData(specimen, validator);
-		validateStorageContainer(specimen, dao);
-		validateSpecimenEvent(specimen, validator);
-		validateBioHazard(specimen, validator);
-		validateExternalIdentifier(specimen, validator);
-		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
-		validateEnumeratedData(specimen, operation, validator);
-		validateSpecimenCharacterstics(specimen);
+		final Validator validator = new Validator();
+		this.validateSpecimenData(specimen, validator);
+		this.validateStorageContainer(specimen, dao);
+		this.validateSpecimenEvent(specimen, validator);
+		this.validateBioHazard(specimen, validator);
+		this.validateExternalIdentifier(specimen, validator);
+		this.validateFields(specimen, dao, operation, partOfMulipleSpecimen);
+		this.validateEnumeratedData(specimen, operation, validator);
+		this.validateSpecimenCharacterstics(specimen);
 		if (operation.equals(Constants.ADD))
 		{
-			validateDerivedSpecimens(specimen, dao, operation);
+			this.validateDerivedSpecimens(specimen, dao, operation);
 		}
 		// new method call added.
 
@@ -2380,16 +2394,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateDerivedSpecimens(Specimen specimen, DAO dao, String operation)
 			throws BizLogicException
 	{
-		boolean result = false;
-		Collection derivedSpecimens = specimen.getChildSpecimenCollection();
+		final boolean result = false;
+		final Collection derivedSpecimens = specimen.getChildSpecimenCollection();
 		if (derivedSpecimens != null)
 		{
-			Iterator it = derivedSpecimens.iterator();
+			final Iterator it = derivedSpecimens.iterator();
 			// validate derived specimens
 			int i = 0;
 			while (it.hasNext())
 			{
-				Specimen derivedSpecimen = (Specimen) it.next();
+				final Specimen derivedSpecimen = (Specimen) it.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				// 11177 S
@@ -2404,16 +2418,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
 				try
 				{
-					validateSingleSpecimen(derivedSpecimen, dao, operation, false);
+					this.validateSingleSpecimen(derivedSpecimen, dao, operation, false);
 				}
-				catch (BizLogicException exp)
+				catch (final BizLogicException exp)
 				{
-					int j = i + 1;
+					final int j = i + 1;
 					String message = exp.getMessage();
 					message += " (This message is for Derived Specimen " + j
 							+ " of Parent Specimen number )";
-					logger.debug(message, exp);
-					throw getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j)
+					this.logger.debug(message, exp);
+					throw this.getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j)
 							.toString());
 				}
 
@@ -2439,18 +2453,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateEnumeratedData(Specimen specimen, String operation, Validator validator)
 			throws BizLogicException
 	{
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
-		String specimenClass = AppUtility.getSpecimenClassName(specimen);
+		final String specimenClass = AppUtility.getSpecimenClassName(specimen);
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
-			throw getBizLogicException(null, "protocol.class.errMsg", "");
+			throw this.getBizLogicException(null, "protocol.class.errMsg", "");
 		}
 
 		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimen
 				.getSpecimenType()))
 		{
-			throw getBizLogicException(null, "protocol.type.errMsg", "");
+			throw this.getBizLogicException(null, "protocol.type.errMsg", "");
 		}
 		/*
 		 * bug # 7594 if (operation.equals(Constants.EDIT)) { if
@@ -2467,12 +2481,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							.getCollectionStatus())))
 			{
 
-				throw getBizLogicException(null, "specimen.available.errMsg", "");
+				throw this.getBizLogicException(null, "specimen.available.errMsg", "");
 			}
 
 			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(specimen.getActivityStatus()))
 			{
-				throw getBizLogicException(null, "activityStatus.active.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
 			}
 		}
 		else
@@ -2480,17 +2494,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen
 					.getActivityStatus()))
 			{
-				throw getBizLogicException(null, "activityStatus.errMsg", "");
+				throw this.getBizLogicException(null, "activityStatus.errMsg", "");
 			}
 		}
 		if (specimen.getCreatedOn() != null && specimen.getLineage() != null
 				&& !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
 		{
-			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),
+			final String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),
 					CommonServiceLocator.getInstance().getDatePattern());
 			if (!validator.checkDate(tempDate))
 			{
-				throw getBizLogicException(null, "error.invalid.createdOnDate", "");
+				throw this.getBizLogicException(null, "error.invalid.createdOnDate", "");
 			}
 		}
 	}
@@ -2507,14 +2521,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateSpecimenData(Specimen specimen, Validator validator)
 			throws BizLogicException
 	{
-		SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+		final SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
 		if (specimen.getParentSpecimen() == null
 				&& (scg == null || ((scg.getId() == null || scg.getId().equals("-1")) && (scg
 						.getGroupName() == null || scg.getGroupName().equals("")))))
 		{
-			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties
+					.getValue("specimen.specimenCollectionGroup");
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 		/*
 		 * if (!Variables.isSpecimenLabelGeneratorAvl) { if
@@ -2526,13 +2541,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		 */
 		if (validator.isEmpty(specimen.getSpecimenClass()))
 		{
-			String message = ApplicationProperties.getValue("specimen.type");
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties.getValue("specimen.type");
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 		if (validator.isEmpty(specimen.getSpecimenType()))
 		{
-			String message = ApplicationProperties.getValue("specimen.subType");
-			throw getBizLogicException(null, "errors.item.required", message);
+			final String message = ApplicationProperties.getValue("specimen.subType");
+			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
 	}
 
@@ -2544,44 +2559,45 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void validateSpecimenCharacterstics(Specimen specimen) throws BizLogicException
 	{
-		SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
+		final SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
 
 		if (characters == null)
 		{
-			throw getBizLogicException(null, "specimen.characteristics.errMsg", "");
+			throw this.getBizLogicException(null, "specimen.characteristics.errMsg", "");
 
 		}
 		else
 		{
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
-				List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+				final List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_TISSUE_SITE, null);
 				if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
 				{
 					if (specimen.getParentSpecimen() == null)
 					{
-						throw getBizLogicException(null, "protocol.tissueSite.errMsg", "");
+						throw this.getBizLogicException(null, "protocol.tissueSite.errMsg", "");
 					}
 				}
-				List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
+				final List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
 						Constants.CDE_NAME_TISSUE_SIDE, null);
 
 				if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
 				{
 					if (specimen.getParentSpecimen() == null)
 					{
-						throw getBizLogicException(null, "specimen.tissueSide.errMsg", "");
+						throw this.getBizLogicException(null, "specimen.tissueSide.errMsg", "");
 					}
 				}
-				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+				final List pathologicalStatusList = CDEManager.getCDEManager()
+						.getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
 						.getPathologicalStatus()))
 				{
 					if (specimen.getParentSpecimen() == null)
 					{
-						throw getBizLogicException(null, "protocol.pathologyStatus.errMsg", "");
+						throw this
+								.getBizLogicException(null, "protocol.pathologyStatus.errMsg", "");
 					}
 				}
 			}
@@ -2606,11 +2622,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenEventCollection = specimen.getSpecimenEventCollection();
 			if (specimenEventCollection != null && !specimenEventCollection.isEmpty())
 			{
-				Iterator<SpecimenEventParameters> specimenEventCollectionIterator = specimenEventCollection
+				final Iterator<SpecimenEventParameters> specimenEventCollectionIterator = specimenEventCollection
 						.iterator();
 				while (specimenEventCollectionIterator.hasNext())
 				{
-					Object eventObject = specimenEventCollectionIterator.next();
+					final Object eventObject = specimenEventCollectionIterator.next();
 					EventsUtil.validateEventsObject(eventObject, validator);
 				}
 			}
@@ -2619,14 +2635,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if (specimen.getParentSpecimen() == null
 						&& (specimen.getCollectionStatus() == null))
 				{
-					throw getBizLogicException(null, "error.specimen.noevents", "");
+					throw this.getBizLogicException(null, "error.specimen.noevents", "");
 				}
 			}
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -2647,29 +2663,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					&& (specimen.getSpecimenPosition().getStorageContainer().getId() == null && specimen
 							.getSpecimenPosition().getStorageContainer().getName() == null))
 			{
-				String message = ApplicationProperties.getValue("specimen.storageContainer");
-				throw getBizLogicException(null, "errors.invalid", message);
+				final String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw this.getBizLogicException(null, "errors.invalid", message);
 			}
 			if (specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null
 					&& specimen.getSpecimenPosition().getStorageContainer().getName() != null)
 			{
-				StorageContainer storageContainerObj = specimen.getSpecimenPosition()
+				final StorageContainer storageContainerObj = specimen.getSpecimenPosition()
 						.getStorageContainer();
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"id"};
+				final String sourceObjectName = StorageContainer.class.getName();
+				final String[] selectColumnName = {"id"};
 				// String[] whereColumnName = {"name"};
 				// String[] whereColumnCondition = {"="};
 				// Object[] whereColumnValue =
 				// {specimen.getSpecimenPosition().getStorageContainer
 				// ().getName()};
 				// String joinCondition = null;
-				String storageContainerName = specimen.getSpecimenPosition().getStorageContainer()
-						.getName();
+				final String storageContainerName = specimen.getSpecimenPosition()
+						.getStorageContainer().getName();
 
-				QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause("name", storageContainerName));
-				List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				final List list = dao
+						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 
 				if (!list.isEmpty())
 				{
@@ -2678,15 +2695,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					String message = ApplicationProperties.getValue("specimen.storageContainer");
-					throw getBizLogicException(null, "errors.invalid", message);
+					final String message = ApplicationProperties
+							.getValue("specimen.storageContainer");
+					throw this.getBizLogicException(null, "errors.invalid", message);
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -2702,12 +2721,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateExternalIdentifier(Specimen specimen, Validator validator)
 			throws BizLogicException
 	{
-		Collection<ExternalIdentifier> extIdentifierCollection = specimen
+		final Collection<ExternalIdentifier> extIdentifierCollection = specimen
 				.getExternalIdentifierCollection();
 		ExternalIdentifier extIdentifier = null;
 		if (extIdentifierCollection != null && !extIdentifierCollection.isEmpty())
 		{
-			Iterator<ExternalIdentifier> itr = extIdentifierCollection.iterator();
+			final Iterator<ExternalIdentifier> itr = extIdentifierCollection.iterator();
 			while (itr.hasNext())
 			{
 				extIdentifier = (ExternalIdentifier) itr.next();
@@ -2715,14 +2734,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					if (validator.isEmpty(extIdentifier.getName()))
 					{
-						String message = ApplicationProperties.getValue("specimen.msg");
-						throw getBizLogicException(null,
+						final String message = ApplicationProperties.getValue("specimen.msg");
+						throw this.getBizLogicException(null,
 								"errors.specimen.externalIdentifier.missing", message);
 					}
 					if (validator.isEmpty(extIdentifier.getValue()))
 					{
-						String message = ApplicationProperties.getValue("specimen.msg");
-						throw getBizLogicException(null,
+						final String message = ApplicationProperties.getValue("specimen.msg");
+						throw this.getBizLogicException(null,
 								"errors.specimen.externalIdentifier.missing", message);
 					}
 				}
@@ -2741,24 +2760,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void validateBioHazard(Specimen specimen, Validator validator) throws BizLogicException
 	{
-		Collection<Biohazard> bioHazardCollection = specimen.getBiohazardCollection();
+		final Collection<Biohazard> bioHazardCollection = specimen.getBiohazardCollection();
 		Biohazard biohazard = null;
 		if (bioHazardCollection != null && !bioHazardCollection.isEmpty())
 		{
-			Iterator<Biohazard> itr = bioHazardCollection.iterator();
+			final Iterator<Biohazard> itr = bioHazardCollection.iterator();
 			while (itr.hasNext())
 			{
 				biohazard = (Biohazard) itr.next();
 				if (!validator.isValidOption(biohazard.getType()))
 				{
-					String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw getBizLogicException(null, "errors.newSpecimen.biohazard.missing",
+					final String message = ApplicationProperties.getValue("newSpecimen.msg");
+					throw this.getBizLogicException(null, "errors.newSpecimen.biohazard.missing",
 							message);
 				}
 				if (biohazard.getId() == null)
 				{
-					String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw getBizLogicException(null, "errors.newSpecimen.biohazard.missing",
+					final String message = ApplicationProperties.getValue("newSpecimen.msg");
+					throw this.getBizLogicException(null, "errors.newSpecimen.biohazard.missing",
 							message);
 				}
 			}
@@ -2782,49 +2801,50 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			Validator validator = new Validator();
+			final Validator validator = new Validator();
 
 			if (partOfMulipleSpecimen)
 			{
 				if (specimen.getSpecimenCollectionGroup() == null
 						|| validator.isEmpty(specimen.getSpecimenCollectionGroup().getGroupName()))
 				{
-					String quantityString = ApplicationProperties
+					final String quantityString = ApplicationProperties
 							.getValue("specimen.specimenCollectionGroup");
-					throw getBizLogicException(null, "errors.item.required", quantityString);
+					throw this.getBizLogicException(null, "errors.item.required", quantityString);
 				}
-				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+				final List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
 						Constants.NAME, specimen.getSpecimenCollectionGroup().getGroupName());
 				if (spgList.size() == 0)
 				{
-					throw getBizLogicException(null, "errors.item.unknown",
+					throw this.getBizLogicException(null, "errors.item.unknown",
 							"Specimen Collection Group "
 									+ specimen.getSpecimenCollectionGroup().getGroupName());
 				}
 			}
 			if (specimen.getInitialQuantity() == null)
 			{
-				String quantityString = ApplicationProperties.getValue("specimen.quantity");
-				throw getBizLogicException(null, "errors.item.required", quantityString);
+				final String quantityString = ApplicationProperties.getValue("specimen.quantity");
+				throw this.getBizLogicException(null, "errors.item.required", quantityString);
 			}
 
 			if (specimen.getAvailableQuantity() == null)
 			{
-				String quantityString = ApplicationProperties
+				final String quantityString = ApplicationProperties
 						.getValue("specimen.availableQuantity");
-				throw getBizLogicException(null, "errors.item.required", quantityString);
+				throw this.getBizLogicException(null, "errors.item.required", quantityString);
 			}
 			/**
 			 * This method gives first valid storage position to a specimen if
 			 * it is not given If storage position is given it validates the
 			 * storage position
 			 **/
-			StorageContainerUtil.validateStorageLocationForSpecimen(specimen, storageContainerIds);
+			StorageContainerUtil.validateStorageLocationForSpecimen(specimen,
+					this.storageContainerIds);
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}
@@ -2872,10 +2892,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if (oldSpecimen != null && oldSpecimen.getSpecimenPosition() != null
 					&& newSpecimen != null && newSpecimen.getSpecimenPosition() != null)
 			{
-				int oldConatinerPos1 = oldSpecimen.getSpecimenPosition().getPositionDimensionOne();
-				int newConatinerPos1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
-				int oldConatinerPos2 = oldSpecimen.getSpecimenPosition().getPositionDimensionTwo();
-				int newConatinerPos2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+				final int oldConatinerPos1 = oldSpecimen.getSpecimenPosition()
+						.getPositionDimensionOne();
+				final int newConatinerPos1 = newSpecimen.getSpecimenPosition()
+						.getPositionDimensionOne();
+				final int oldConatinerPos2 = oldSpecimen.getSpecimenPosition()
+						.getPositionDimensionTwo();
+				final int newConatinerPos2 = newSpecimen.getSpecimenPosition()
+						.getPositionDimensionTwo();
 
 				if (oldConatinerPos1 == newConatinerPos1 && oldConatinerPos2 == newConatinerPos2)
 				{
@@ -2899,8 +2923,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private Set<AbstractDomainObject> populateDeriveSpecimenEventCollection(
 			Specimen parentSpecimen, Specimen deriveSpecimen)
 	{
-		Set<AbstractDomainObject> deriveEventCollection = new HashSet<AbstractDomainObject>();
-		Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
+		final Set<AbstractDomainObject> deriveEventCollection = new HashSet<AbstractDomainObject>();
+		final Set<SpecimenEventParameters> parentSpecimeneventCollection = (Set<SpecimenEventParameters>) parentSpecimen
 				.getSpecimenEventCollection();
 		SpecimenEventParameters specimenEventParameters = null;
 		SpecimenEventParameters deriveSpecimenEventParameters = null;
@@ -2910,10 +2934,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					&& (deriveSpecimen.getSpecimenEventCollection() == null || deriveSpecimen
 							.getSpecimenEventCollection().isEmpty()))
 			{
-				for (Iterator<SpecimenEventParameters> iter = parentSpecimeneventCollection
-						.iterator(); iter.hasNext();)
+				for (final SpecimenEventParameters specimenEventParameters2 : parentSpecimeneventCollection)
 				{
-					specimenEventParameters = (SpecimenEventParameters) iter.next();
+					specimenEventParameters = (SpecimenEventParameters) specimenEventParameters2;
 					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters
 							.clone();
 					deriveSpecimenEventParameters.setId(null);
@@ -2922,9 +2945,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (CloneNotSupportedException exception)
+		catch (final CloneNotSupportedException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			this.logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return deriveEventCollection;
@@ -2939,13 +2962,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	public int totalNoOfSpecimen(SessionDataBean sessionData)
 	{
-		String sql = "select MAX(IDENTIFIER) from CATISSUE_SPECIMEN";
+		final String sql = "select MAX(IDENTIFIER) from CATISSUE_SPECIMEN";
 		JDBCDAO jdbcDao = null;
 		int noOfRecords = 0;
 		try
 		{
-			jdbcDao = openJDBCSession();
-			List resultList = jdbcDao.executeQuery(sql);
+			jdbcDao = this.openJDBCSession();
+			final List resultList = jdbcDao.executeQuery(sql);
 			String number = (String) ((List) resultList.get(0)).get(0);
 			if (number == null || number.equals(""))
 			{
@@ -2954,9 +2977,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			noOfRecords = Integer.parseInt(number);
 			jdbcDao.closeSession();
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			this.logger.debug(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 
@@ -2977,19 +3000,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String specimenCollGpName = specimen.getSpecimenCollectionGroup().getGroupName();
+			final String specimenCollGpName = specimen.getSpecimenCollectionGroup().getGroupName();
 			if (specimenCollGpName != null && !specimenCollGpName.equals(""))
 			{
-				String[] selectColumnName = {"id"};
+				final String[] selectColumnName = {"id"};
 				// String[] whereColumnName = {"name"};
 				// String[] whereColumnCondition = {"="};
 				// String[] whereColumnValue = {specimenCollGpName};
 
-				QueryWhereClause queryWhereClause = new QueryWhereClause(
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(
 						SpecimenCollectionGroup.class.getName());
 				queryWhereClause.addCondition(new EqualClause("name", specimenCollGpName));
 
-				List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+				final List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
 						selectColumnName, queryWhereClause);
 
 				if (scgList != null && !scgList.isEmpty())
@@ -2998,10 +3021,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -3029,14 +3053,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					Constants.WITHDRAW_RESPONSE_NOACTION))
 			{
 
-				String consentWithdrawOption = specimen.getConsentWithdrawalOption();
-				Collection<ConsentTierStatus> consentTierStatusCollection = specimen
+				final String consentWithdrawOption = specimen.getConsentWithdrawalOption();
+				final Collection<ConsentTierStatus> consentTierStatusCollection = specimen
 						.getConsentTierStatusCollection();
-				Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
+				final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
 				while (itr.hasNext())
 				{
-					ConsentTierStatus status = (ConsentTierStatus) itr.next();
-					long consentTierID = status.getConsentTier().getId().longValue();
+					final ConsentTierStatus status = (ConsentTierStatus) itr.next();
+					final long consentTierID = status.getConsentTier().getId().longValue();
 					if (status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN))
 					{
 
@@ -3047,10 +3071,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -3072,26 +3096,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE))
 		{
-			String applyChangesTo = specimen.getApplyChangesTo();
-			Collection<ConsentTierStatus> consentTierStatusCollection = specimen
+			final String applyChangesTo = specimen.getApplyChangesTo();
+			final Collection<ConsentTierStatus> consentTierStatusCollection = specimen
 					.getConsentTierStatusCollection();
-			Collection<ConsentTierStatus> oldConsentTierStatusCollection = oldSpecimen
+			final Collection<ConsentTierStatus> oldConsentTierStatusCollection = oldSpecimen
 					.getConsentTierStatusCollection();
-			Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
+			final Iterator<ConsentTierStatus> itr = consentTierStatusCollection.iterator();
 			while (itr.hasNext())
 			{
-				ConsentTierStatus status = (ConsentTierStatus) itr.next();
-				long consentTierID = status.getConsentTier().getId().longValue();
-				String statusValue = status.getStatus();
-				Collection childSpecimens = (Collection) retrieveAttribute(dao, Specimen.class,
-						specimen.getId(), "elements(childSpecimenCollection)");
+				final ConsentTierStatus status = (ConsentTierStatus) itr.next();
+				final long consentTierID = status.getConsentTier().getId().longValue();
+				final String statusValue = status.getStatus();
+				final Collection childSpecimens = (Collection) this.retrieveAttribute(dao,
+						Specimen.class, specimen.getId(), "elements(childSpecimenCollection)");
 				if (childSpecimens != null)
 				{
 
-					Iterator childItr = childSpecimens.iterator();
+					final Iterator childItr = childSpecimens.iterator();
 					while (childItr.hasNext())
 					{
-						Specimen childSpecimen = (Specimen) childItr.next();
+						final Specimen childSpecimen = (Specimen) childItr.next();
 						ConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo,
 								consentTierID, statusValue, consentTierStatusCollection,
 								oldConsentTierStatusCollection, dao);
@@ -3120,7 +3144,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			Collection<AbstractDomainObject> newSpecimenCollection, SessionDataBean sessionDataBean)
 			throws BizLogicException, DAOException
 	{
-		updateMultipleSpecimens(dao, newSpecimenCollection, sessionDataBean, true);
+		this.updateMultipleSpecimens(dao, newSpecimenCollection, sessionDataBean, true);
 	}
 
 	/**
@@ -3145,47 +3169,48 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		int childSpecimenCtr = 0;
 		try
 		{
-			dao = openDAOSession(sessionDataBean);
+			dao = this.openDAOSession(sessionDataBean);
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
+				final Specimen newSpecimen = (Specimen) iterator.next();
 				if (newSpecimen.getSpecimenPosition() != null
 						&& newSpecimen.getSpecimenPosition().getStorageContainer() != null
 						&& newSpecimen.getSpecimenPosition().getStorageContainer().getId() == null)
 				{
 					newSpecimen.getSpecimenPosition().setStorageContainer(
-							setStorageContainerId(dao, newSpecimen));
+							this.setStorageContainerId(dao, newSpecimen));
 				}
 			}
 			iterator = newSpecimenCollection.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
-				Specimen specimenDO = updateSingleSpecimen(dao, newSpecimen, sessionDataBean, false);
-				Collection<AbstractSpecimen> childrenSpecimenCollection = newSpecimen
+				final Specimen newSpecimen = (Specimen) iterator.next();
+				final Specimen specimenDO = this.updateSingleSpecimen(dao, newSpecimen,
+						sessionDataBean, false);
+				final Collection<AbstractSpecimen> childrenSpecimenCollection = newSpecimen
 						.getChildSpecimenCollection();
 				if (childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 				{
-					childSpecimenCtr = updateChildSpecimen(sessionDataBean, dao, childSpecimenCtr,
-							specimenDO, childrenSpecimenCollection);
+					childSpecimenCtr = this.updateChildSpecimen(sessionDataBean, dao,
+							childSpecimenCtr, specimenDO, childrenSpecimenCollection);
 				}
 				specimenCtr++;
 			}
 			specimenCtr = 0;
 			dao.commit();
-			postInsert(newSpecimenCollection, dao, sessionDataBean);
+			this.postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
-		catch (ApplicationException exception)
+		catch (final ApplicationException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			this.logger.debug(exception.getMessage(), exception);
 			try
 			{
 				dao.rollback();
 			}
-			catch (DAOException e)
+			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
-				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+				this.logger.debug(e.getMessage(), e);
+				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 
 			/*
@@ -3199,12 +3224,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			 * getBizLogicException(exception, exception., ""+specimenCtr); }
 			 */
 			// bug#12703
-			throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
 		}
 		finally
 		{
-			closeDAOSession(dao);
+			this.closeDAOSession(dao);
 		}
 	}
 
@@ -3229,14 +3254,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			Specimen specimenDO, Collection<AbstractSpecimen> childrenSpecimenCollection)
 			throws BizLogicException
 	{
-		Iterator<AbstractSpecimen> childIterator = childrenSpecimenCollection.iterator();
+		final Iterator<AbstractSpecimen> childIterator = childrenSpecimenCollection.iterator();
 		while (childIterator.hasNext())
 		{
 			childSpecimenCtr++;
-			Specimen childSpecimen = (Specimen) childIterator.next();
+			final Specimen childSpecimen = (Specimen) childIterator.next();
 			childSpecimen.setParentSpecimen(specimenDO);
 			specimenDO.getChildSpecimenCollection().add(childSpecimen);
-			insert(childSpecimen, dao, sessionDataBean);
+			this.insert(childSpecimen, dao, sessionDataBean);
 		}
 		childSpecimenCtr = 0;
 		return childSpecimenCtr;
@@ -3244,23 +3269,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	private void allocateSpecimenPostionsRecursively(Specimen newSpecimen) throws BizLogicException
 	{
-		StorageContainer sc = getStorageContainer(newSpecimen);
+		final StorageContainer sc = this.getStorageContainer(newSpecimen);
 		if (sc != null && sc.getName() != null)
 		{
 			sc.setId(null);
 		}
 
-		allocatePositionForSpecimen(newSpecimen);
+		this.allocatePositionForSpecimen(newSpecimen);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
-			Iterator<AbstractSpecimen> childrenIterator = newSpecimen.getChildSpecimenCollection()
-					.iterator();
+			final Iterator<AbstractSpecimen> childrenIterator = newSpecimen
+					.getChildSpecimenCollection().iterator();
 			while (childrenIterator.hasNext())
 			{
-				Specimen childSpecimen = (Specimen) childrenIterator.next();
+				final Specimen childSpecimen = (Specimen) childrenIterator.next();
 				childSpecimen.setParentSpecimen(newSpecimen);
 				newSpecimen.getChildSpecimenCollection().add(childSpecimen);
-				allocateSpecimenPostionsRecursively(childSpecimen);
+				this.allocateSpecimenPostionsRecursively(childSpecimen);
 			}
 		}
 	}
@@ -3268,7 +3293,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private StorageContainer getStorageContainer(Specimen specimen)
 	{
 		StorageContainer sc = null;
-		SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
+		final SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
 		if (specimenPosition != null)
 		{
 			sc = specimenPosition.getStorageContainer();
@@ -3300,36 +3325,36 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SpecimenCollectionGroup scg = null;
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
+				final Specimen newSpecimen = (Specimen) iterator.next();
 				if (scg == null)
 				{
-					scg = (SpecimenCollectionGroup) retrieveAttribute(dao, Specimen.class,
+					scg = (SpecimenCollectionGroup) this.retrieveAttribute(dao, Specimen.class,
 							newSpecimen.getId(), "specimenCollectionGroup");
 				}
 				newSpecimen.setSpecimenCollectionGroup(scg);
-				allocateSpecimenPostionsRecursively(newSpecimen);
+				this.allocateSpecimenPostionsRecursively(newSpecimen);
 
 			}
 			iterator = newSpecimenCollection.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
-				setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true);
+				final Specimen newSpecimen = (Specimen) iterator.next();
+				this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true);
 			}
 
 			iterator = newSpecimenCollection.iterator();
 			while (iterator.hasNext())
 			{
-				Specimen newSpecimen = (Specimen) iterator.next();
+				final Specimen newSpecimen = (Specimen) iterator.next();
 				// validateCollectionStatus(newSpecimen );
-				updateSingleSpecimen(dao, newSpecimen, sessionDataBean, updateChildrens);
+				this.updateSingleSpecimen(dao, newSpecimen, sessionDataBean, updateChildrens);
 			}
-			postInsert(newSpecimenCollection, dao, sessionDataBean);
+			this.postInsert(newSpecimenCollection, dao, sessionDataBean);
 		}
 
 		finally
 		{
-			storageContainerIds.clear();
+			this.storageContainerIds.clear();
 		}
 	}
 
@@ -3350,18 +3375,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			String lineage = specimenDO.getLineage();
-			Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
-			CollectionProtocol cp = new CollectionProtocol();
+			final String lineage = specimenDO.getLineage();
+			final Long scgId = newSpecimen.getSpecimenCollectionGroup().getId();
+			final CollectionProtocol cp = new CollectionProtocol();
 			// cp = getActivityStatusOfCollectionProtocol(dao, scgId);
 
-			AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
+			final AbstractSpecimenCollectionGroup specimenCollectionGroup = (AbstractSpecimenCollectionGroup) dao
 					.retrieveById("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", scgId);
 			String activityStatus = "";
 			// if(specimenCollectionGroup instanceof SpecimenCollectionGroup)
 			// {
 
-			Long colpId = (Long) specimenCollectionGroup.getCollectionProtocolRegistration()
+			final Long colpId = (Long) specimenCollectionGroup.getCollectionProtocolRegistration()
 					.getCollectionProtocol().getId();
 			activityStatus = specimenCollectionGroup.getCollectionProtocolRegistration()
 					.getCollectionProtocol().getActivityStatus();
@@ -3370,20 +3395,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			cp.setActivityStatus(activityStatus);
 			// }
 			// String activityStatus = cp.getActivityStatus();
-			String oldCollectionStatus = specimenDO.getCollectionStatus();
-			String newCollectionStatus = newSpecimen.getCollectionStatus();
+			final String oldCollectionStatus = specimenDO.getCollectionStatus();
+			final String newCollectionStatus = newSpecimen.getCollectionStatus();
 			if (lineage.equals("New")
 					&& activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 			{
 				if (!oldCollectionStatus.equalsIgnoreCase(newCollectionStatus))
 				{
-					checkStatus(dao, cp, "Collection Protocol");
+					this.checkStatus(dao, cp, "Collection Protocol");
 				}
 			}
 		}
-		catch (DAOException exp)
+		catch (final DAOException exp)
 		{
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
 
@@ -3408,33 +3433,34 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			Specimen specimenDO = null;
-			if (isAuthorized(dao, newSpecimen, sessionDataBean))
+			if (this.isAuthorized(dao, newSpecimen, sessionDataBean))
 			{
-				Object object = dao.retrieveById(Specimen.class.getName(), newSpecimen.getId());
+				final Object object = dao.retrieveById(Specimen.class.getName(), newSpecimen
+						.getId());
 				if (object != null)
 				{
 					specimenDO = (Specimen) object;
 					// Bug 11481 S
-					validateIfCPisClosed(specimenDO, newSpecimen, dao);
+					this.validateIfCPisClosed(specimenDO, newSpecimen, dao);
 					// Bug 11481 E
-					updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
+					this.updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
 					if (updateChildrens)
 					{
-						updateChildrenSpecimens(dao, newSpecimen, specimenDO, sessionDataBean);
+						this.updateChildrenSpecimens(dao, newSpecimen, specimenDO, sessionDataBean);
 					}
 					dao.update(specimenDO);
 				}
 				else
 				{
-					throw getBizLogicException(null, "invalid.label", newSpecimen.getLabel());
+					throw this.getBizLogicException(null, "invalid.label", newSpecimen.getLabel());
 				}
 			}
 			return specimenDO;
 		}
-		catch (DAOException exception)
+		catch (final DAOException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+			this.logger.debug(exception.getMessage(), exception);
+			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
 		}
 
@@ -3455,21 +3481,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		Collection<AbstractSpecimen> childrenSpecimens = specimenDO.getChildSpecimenCollection();
+		final Collection<AbstractSpecimen> childrenSpecimens = specimenDO
+				.getChildSpecimenCollection();
 		if (childrenSpecimens == null || childrenSpecimens.isEmpty())
 		{
 			return;
 		}
-		Iterator<AbstractSpecimen> iterator = childrenSpecimens.iterator();
+		final Iterator<AbstractSpecimen> iterator = childrenSpecimens.iterator();
 		while (iterator.hasNext())
 		{
-			Specimen specimen = (Specimen) iterator.next();
-			Specimen relatedSpecimen = getCorelatedSpecimen(specimen.getId(), specimenVO
+			final Specimen specimen = (Specimen) iterator.next();
+			final Specimen relatedSpecimen = this.getCorelatedSpecimen(specimen.getId(), specimenVO
 					.getChildSpecimenCollection());
 			if (relatedSpecimen != null)
 			{
-				updateSpecimenDomainObject(dao, relatedSpecimen, specimen, sessionDataBean);
-				updateChildrenSpecimens(dao, relatedSpecimen, specimen, sessionDataBean);
+				this.updateSpecimenDomainObject(dao, relatedSpecimen, specimen, sessionDataBean);
+				this.updateChildrenSpecimens(dao, relatedSpecimen, specimen, sessionDataBean);
 			}
 		}
 	}
@@ -3486,10 +3513,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private Specimen getCorelatedSpecimen(Long id, Collection<AbstractSpecimen> specimenCollection)
 			throws BizLogicException
 	{
-		Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
+		final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
 		while (iterator.hasNext())
 		{
-			Specimen specimen = (Specimen) iterator.next();
+			final Specimen specimen = (Specimen) iterator.next();
 			if (specimen.getId().longValue() == id.longValue())
 			{
 				return specimen;
@@ -3513,18 +3540,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			List list = null;
 			// If label generation is off then label is null and it gives error as
 			//"Label is already exists"
-			if(specimen.getLabel()!=null)//bug 13100
+			if (specimen.getLabel() != null)//bug 13100
 			{
-				list = dao.retrieve(Specimen.class.getCanonicalName(), "label", specimen
-						.getLabel());
+				list = dao
+						.retrieve(Specimen.class.getCanonicalName(), "label", specimen.getLabel());
 				if (!list.isEmpty())
 				{
 					for (int i = 0; i < list.size(); i++)
 					{
-						Specimen specimenObject = (Specimen) (list.get(i));
+						final Specimen specimenObject = (Specimen) (list.get(i));
 						if (!specimenObject.getId().equals(specimen.getId()))
 						{
-							throw getBizLogicException(null, "label.already.exits", specimen.getLabel());
+							throw this.getBizLogicException(null, "label.already.exits", specimen
+									.getLabel());
 
 						}
 					}
@@ -3538,21 +3566,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					for (int i = 0; i < list.size(); i++)
 					{
-						Specimen specimenObject = (Specimen) (list.get(i));
+						final Specimen specimenObject = (Specimen) (list.get(i));
 						if (!specimenObject.getId().equals(specimen.getId()))
 						{
-							throw getBizLogicException(null, "barcode.already.exits ", specimen
-									.getBarcode());
+							throw this.getBizLogicException(null, "barcode.already.exits ",
+									specimen.getBarcode());
 
 						}
 					}
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -3575,45 +3604,45 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			specimenVO.setBarcode(null);
 		}
-		checkDuplicateSpecimenFields(specimenVO, dao);
+		this.checkDuplicateSpecimenFields(specimenVO, dao);
 		specimenDO.setLabel(specimenVO.getLabel());
 		specimenDO.setBarcode(specimenVO.getBarcode());
 		specimenDO.setIsAvailable(specimenVO.getIsAvailable());
 		if (specimenVO.getSpecimenPosition() != null
 				&& specimenVO.getSpecimenPosition().getStorageContainer() != null)
 		{
-			setStorageContainer(dao, specimenVO, specimenDO);
+			this.setStorageContainer(dao, specimenVO, specimenDO);
 		}
 		else
 		{
 			specimenDO.setSpecimenPosition(null);
 			// specimenDO.setStorageContainer(null);
 		}
-		calculateAvailableQunatity(specimenVO, specimenDO);
-		String oldStatus = specimenDO.getCollectionStatus();
+		this.calculateAvailableQunatity(specimenVO, specimenDO);
+		final String oldStatus = specimenDO.getCollectionStatus();
 		if (specimenVO.getCollectionStatus() != null)
 		{
 			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
 		}
 		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
 		{
-			generateLabel(specimenDO);
-			generateBarCode(specimenDO);
+			this.generateLabel(specimenDO);
+			this.generateBarCode(specimenDO);
 		}
 		// code for multiple specimen edit
 		if (specimenVO.getCreatedOn() != null)
 		{
 			specimenDO.setCreatedOn(specimenVO.getCreatedOn());
 		}
-		setSpecimenData(dao, specimenVO, specimenDO, sessionDataBean);
+		this.setSpecimenData(dao, specimenVO, specimenDO, sessionDataBean);
 		if (Constants.MOLECULAR.equals(specimenVO.getClassName()))
 		{
-			Double concentration = ((MolecularSpecimen) specimenVO)
+			final Double concentration = ((MolecularSpecimen) specimenVO)
 					.getConcentrationInMicrogramPerMicroliter();
 			((MolecularSpecimen) specimenDO)
 					.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-		addSpecimenEvents(specimenDO, specimenVO, sessionDataBean, oldStatus);
+		this.addSpecimenEvents(specimenDO, specimenVO, sessionDataBean, oldStatus);
 	}
 
 	/**
@@ -3637,10 +3666,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		if (specimenVO.getSpecimenCharacteristics() != null)
 		{
-			SpecimenCharacteristics characteristics = specimenVO.getSpecimenCharacteristics();
+			final SpecimenCharacteristics characteristics = specimenVO.getSpecimenCharacteristics();
 			if (characteristics.getTissueSide() != null || characteristics.getTissueSite() != null)
 			{
-				SpecimenCharacteristics specimenCharacteristics = specimenDO
+				final SpecimenCharacteristics specimenCharacteristics = specimenDO
 						.getSpecimenCharacteristics();
 				if (specimenCharacteristics != null)
 				{
@@ -3660,7 +3689,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			specimenDO.setBiohazardCollection(specimenVO.getBiohazardCollection());
 		}
-		updateExtenalIdentifier(dao, specimenVO, specimenDO, sessionDataBean);
+		this.updateExtenalIdentifier(dao, specimenVO, specimenDO, sessionDataBean);
 	}
 
 	/**
@@ -3681,11 +3710,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (specimenVO.getExternalIdentifierCollection() != null
 				&& !specimenVO.getExternalIdentifierCollection().isEmpty())
 		{
-			Iterator<ExternalIdentifier> itr = specimenVO.getExternalIdentifierCollection()
+			final Iterator<ExternalIdentifier> itr = specimenVO.getExternalIdentifierCollection()
 					.iterator();
 			while (itr.hasNext())
 			{
-				ExternalIdentifier ex = itr.next();
+				final ExternalIdentifier ex = itr.next();
 				ex.setSpecimen(specimenVO);
 				try
 				{
@@ -3695,8 +3724,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					}
 					else
 					{
-						ExternalIdentifier persistetnExt = (ExternalIdentifier) getCorrespondingOldObject(
-								specimenDO.getExternalIdentifierCollection(), ex.getId());
+						final ExternalIdentifier persistetnExt = (ExternalIdentifier) this
+								.getCorrespondingOldObject(specimenDO
+										.getExternalIdentifierCollection(), ex.getId());
 						if ((persistetnExt.getName() != ex.getName())
 								|| (persistetnExt.getValue() != ex.getValue()))
 						{
@@ -3704,20 +3734,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							persistetnExt.setValue(ex.getValue());
 							dao.update(persistetnExt);
 
-							AuditManager auditManager = getAuditManager(sessionDataBean);
+							final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 							auditManager.updateAudit(dao, persistetnExt, ex);
 						}
 					}
 				}
-				catch (DAOException e)
+				catch (final DAOException e)
 				{
-					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, "ext.mult.spec.nt.updated", "");
+					this.logger.debug(e.getMessage(), e);
+					throw this.getBizLogicException(e, "ext.mult.spec.nt.updated", "");
 				}
-				catch (AuditException e)
+				catch (final AuditException e)
 				{
-					logger.debug(e.getMessage(), e);
-					throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+					this.logger.debug(e.getMessage(), e);
+					throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 				}
 			}
 		}
@@ -3737,7 +3767,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (specimenVO.getInitialQuantity() != null)
 		{
-			Double quantity = specimenVO.getInitialQuantity();
+			final Double quantity = specimenVO.getInitialQuantity();
 			Double availableQuantity = null;
 			if (specimenVO.getAvailableQuantity() != specimenDO.getAvailableQuantity()
 					&& specimenVO.getAvailableQuantity() < specimenDO.getInitialQuantity())
@@ -3753,9 +3783,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				availableQuantity = new Double(0);
 				specimenDO.setAvailableQuantity(availableQuantity);
 			}
-			double modifiedInitQty = quantity.doubleValue();
-			double oldInitQty = specimenDO.getInitialQuantity().doubleValue();
-			double differenceQty = modifiedInitQty - oldInitQty;
+			final double modifiedInitQty = quantity.doubleValue();
+			final double oldInitQty = specimenDO.getInitialQuantity().doubleValue();
+			final double differenceQty = modifiedInitQty - oldInitQty;
 			double newAvailQty = 0.0;
 
 			if (differenceQty == 0
@@ -3796,7 +3826,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenDO.setAvailableQuantity(newAvailQty);
 			if (specimenDO.getParentSpecimen() != null)
 			{
-				calculateParentQuantity(specimenDO, differenceQty, newAvailQty);
+				this.calculateParentQuantity(specimenDO, differenceQty, newAvailQty);
 			}
 			if (specimenDO.getChildSpecimenCollection() == null
 					|| specimenDO.getChildSpecimenCollection().isEmpty())
@@ -3838,7 +3868,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (specimenDO.getLineage().equals("Aliquot"))
 		{
 			double parentAvl = 0.0;
-			Specimen parentSpecimen = (Specimen) specimenDO.getParentSpecimen();
+			final Specimen parentSpecimen = (Specimen) specimenDO.getParentSpecimen();
 			if (!specimenDO.getCollectionStatus().equals("Pending"))
 			{
 				parentAvl = parentSpecimen.getAvailableQuantity().doubleValue() - differenceQty;
@@ -3849,7 +3879,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			if (parentAvl < 0)
 			{
-				throw getBizLogicException(null, "insuff.avai.quan", "");
+				throw this.getBizLogicException(null, "insuff.avai.quan", "");
 			}
 			parentSpecimen.setAvailableQuantity(parentAvl);
 		}
@@ -3860,7 +3890,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Map<Long, Collection<CollectionProtocol>> getContainerHoldsCPs()
 	{
-		return containerHoldsCPs;
+		return this.containerHoldsCPs;
 	}
 
 	/**
@@ -3877,7 +3907,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Map<Long, Collection<String>> getContainerHoldsSpecimenClasses()
 	{
-		return containerHoldsSpecimenClasses;
+		return this.containerHoldsSpecimenClasses;
 	}
 
 	/**
@@ -3906,7 +3936,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		SpecimenPosition specPos = specimenDO.getSpecimenPosition();
 		if (specimenVO != null && specimenVO.getSpecimenPosition() != null)
 		{
-			StorageContainer storageContainer = specimenVO.getSpecimenPosition()
+			final StorageContainer storageContainer = specimenVO.getSpecimenPosition()
 					.getStorageContainer();
 
 			if (specPos == null)
@@ -3932,7 +3962,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	public boolean isCpbased()
 	{
-		return cpbased;
+		return this.cpbased;
 	}
 
 	/**
@@ -3959,16 +3989,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 
-		Specimen specimen = (Specimen) domainObj;
-		AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen
+		final Specimen specimen = (Specimen) domainObj;
+		final AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen
 				.getSpecimenCollectionGroup();
-		Object proxySpecimenCollectionGroup = HibernateMetaData
+		final Object proxySpecimenCollectionGroup = HibernateMetaData
 				.getProxyObjectImpl(absspecimenCollectionGroup);
 		if ((proxySpecimenCollectionGroup instanceof CollectionProtocolEvent))
 		{
-			NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
+			final NewSpecimenForm newSpecimenForm = (NewSpecimenForm) uiForm;
 			newSpecimenForm.setForwardTo(Constants.PAGE_OF_SPECIMEN_COLLECTION_REQUIREMENT_GROUP);
-			throw getBizLogicException(null, "req.spec.nt.edited", "");
+			throw this.getBizLogicException(null, "req.spec.nt.edited", "");
 
 		}
 	}
@@ -3990,18 +4020,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		DAO dao = null;
 		try
 		{
-			dao = openDAOSession(sessionData);
-			Specimen specimen = getSpecimenObj(specimenID, dao);
-			getSpecimenInternal(specimen, finalDataList);
+			dao = this.openDAOSession(sessionData);
+			final Specimen specimen = this.getSpecimenObj(specimenID, dao);
+			this.getSpecimenInternal(specimen, finalDataList);
 			specimen.getConsentTierStatusCollection();
 			specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
 					.getConsentTierResponseCollection();
 			return specimen;
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
-			logger.debug(exception.getMessage(), exception);
-			throw getBizLogicException(exception, "failed.spec.details", ""
+			this.logger.debug(exception.getMessage(), exception);
+			throw this.getBizLogicException(exception, "failed.spec.details", ""
 					+ exception.getMessage());
 		}
 		finally
@@ -4010,10 +4040,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				dao.closeSession();
 			}
-			catch (DAOException e)
+			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
-				throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+				this.logger.debug(e.getMessage(), e);
+				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 		}
 	}
@@ -4028,7 +4058,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 
-		List specimenDetailList = new ArrayList();
+		final List specimenDetailList = new ArrayList();
 		specimenDetailList.add(specimen.getLabel());
 		specimenDetailList.add(specimen.getSpecimenType());
 		if (specimen.getSpecimenPosition() == null
@@ -4040,7 +4070,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (specimen.getSpecimenPosition() != null)
 			{
-				String storageLocation = specimen.getSpecimenPosition().getStorageContainer()
+				final String storageLocation = specimen.getSpecimenPosition().getStorageContainer()
 						.getName()
 						+ ": X-Axis-"
 						+ specimen.getSpecimenPosition().getPositionDimensionOne()
@@ -4050,12 +4080,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		specimenDetailList.add(specimen.getClassName());
 		finalDataList.add(specimenDetailList);
-		Collection childrenSpecimen = specimen.getChildSpecimenCollection();
-		Iterator itr = childrenSpecimen.iterator();
+		final Collection childrenSpecimen = specimen.getChildSpecimenCollection();
+		final Iterator itr = childrenSpecimen.iterator();
 		while (itr.hasNext())
 		{
-			Specimen childSpecimen = (Specimen) itr.next();
-			getSpecimenInternal(childSpecimen, finalDataList);
+			final Specimen childSpecimen = (Specimen) itr.next();
+			this.getSpecimenInternal(childSpecimen, finalDataList);
 		}
 
 	}
@@ -4073,17 +4103,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		try
 		{
-			Object object = dao.retrieveById(Specimen.class.getName(), Long.valueOf(specimenID));// new
+			final Object object = dao.retrieveById(Specimen.class.getName(), Long
+					.valueOf(specimenID));// new
 			if (object == null)
 			{
-				throw getBizLogicException(null, "no.spec.returned", "");
+				throw this.getBizLogicException(null, "no.spec.returned", "");
 			}
 			return (Specimen) object;
 		}
-		catch (DAOException exp)
+		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
 	}
@@ -4103,13 +4134,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			try
 			{
-				AbstractSpecimen parentSp = specimen.getParentSpecimen();
-				disposeSpecimen(sessionDataBean, parentSp, dao, disposalReason);
+				final AbstractSpecimen parentSp = specimen.getParentSpecimen();
+				this.disposeSpecimen(sessionDataBean, parentSp, dao, disposalReason);
 			}
-			catch (BizLogicException ex)
+			catch (final BizLogicException ex)
 			{
-				logger.debug(ex.getMessage(), ex);
-				ActionErrors actionErrors = new ActionErrors();
+				this.logger.debug(ex.getMessage(), ex);
+				final ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 						.getMessage()));
 			}
@@ -4135,7 +4166,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (domainObject instanceof LinkedHashSet)
 			{
-				LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+				final LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
 				specimen = (Specimen) linkedHashSet.iterator().next();
 			}
 			else if (domainObject instanceof Specimen)
@@ -4143,7 +4174,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				specimen = (Specimen) domainObject;
 			}
 
-			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+			final SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 
 			String query = null;
 			if (specimen.getParentSpecimen() != null)
@@ -4151,7 +4182,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
 						+ "specimen.label = '" + specimen.getParentSpecimen().getLabel() + "'";
 				list = dao.executeQuery(query);
-				Iterator<Long> itr = list.iterator();
+				final Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
 					cpId = (Long) itr.next();
@@ -4162,7 +4193,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
 						+ "specimen.id = '" + specimen.getId() + "'";
 				list = dao.executeQuery(query);
-				Iterator<Long> itr = list.iterator();
+				final Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
 					cpId = (Long) itr.next();
@@ -4173,14 +4204,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				query = "select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
 						+ "specimenCollectionGroup.id = '" + scg.getId() + "'";
 				list = dao.executeQuery(query);
-				Iterator<Long> itr = list.iterator();
+				final Iterator<Long> itr = list.iterator();
 				while (itr.hasNext())
 				{
 					cpId = (Long) itr.next();
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			Logger.out.debug(e.getMessage(), e);
 		}
@@ -4211,7 +4242,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		if (domainObject instanceof LinkedHashSet)
 		{
-			LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
+			final LinkedHashSet linkedHashSet = (LinkedHashSet) domainObject;
 			specimen = (Specimen) linkedHashSet.iterator().next();
 		}
 		else if (domainObject instanceof Specimen)
@@ -4262,15 +4293,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				if (domainObject instanceof List)
 				{
-					List list = (List) domainObject;
-					for (Object domainObject2 : list)
+					final List list = (List) domainObject;
+					for (final Object domainObject2 : list)
 					{
-						protectionElementName = getObjectId(dao, domainObject2);
+						protectionElementName = this.getObjectId(dao, domainObject2);
 					}
 				}
 				else
 				{
-					protectionElementName = getObjectId(dao, domainObject);
+					protectionElementName = this.getObjectId(dao, domainObject);
 					Site site = null;
 					StorageContainer sc = null;
 					// Handle for SERIAL CHECKS, whether user has access to
@@ -4278,9 +4309,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 					if (domainObject instanceof Specimen)
 					{
-						SpecimenPosition specimenPosition = null;
-						Specimen specimen = (Specimen) domainObject;
-						Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
+						final SpecimenPosition specimenPosition = null;
+						final Specimen specimen = (Specimen) domainObject;
+						final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 						List<Site> list = null;
 						if (specimen.getLineage() != null
 								&& ((Constants.DERIVED_SPECIMEN).equals(specimen.getLineage()) || (Constants.ALIQUOT)
@@ -4309,10 +4340,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 							if (query != null)
 							{
-								list = executeQuery(query);
+								list = this.executeQuery(query);
 								if (list != null)
 								{
-									Iterator<Site> itr = list.iterator();
+									final Iterator<Site> itr = list.iterator();
 									while (itr.hasNext())
 									{
 										site = (Site) itr.next();
@@ -4342,10 +4373,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 								}
 								if (query != null)
 								{
-									list = executeQuery(query);
+									list = this.executeQuery(query);
 									if (list != null)
 									{
-										Iterator<Site> itr = list.iterator();
+										final Iterator<Site> itr = list.iterator();
 										while (itr.hasNext())
 										{
 											site = (Site) itr.next();
@@ -4353,7 +4384,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 									}
 									if (list.isEmpty())
 									{
-										throw getBizLogicException(null,
+										throw this.getBizLogicException(null,
 												"sc.unableToFindContainer", "");
 									}
 								}
@@ -4362,10 +4393,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 						if (site != null) // Specimen is NOT Virtually Located
 						{
-							BizLogicException e = AppUtility.getUserNotAuthorizedException(
+							final BizLogicException e = AppUtility.getUserNotAuthorizedException(
 									Constants.Association, site.getObjectId(), domainObject
 											.getClass().getSimpleName());
-							throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+							throw this.getBizLogicException(e, e.getErrorKeyName(), e
+									.getMsgValues());
 						}
 					}
 				}
@@ -4376,11 +4408,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				// Get the required privilege name which we would like to check
 				// for the logged in user.
-				String privilegeName = getPrivilegeName(domainObject);
-				PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-						sessionDataBean.getUserName());
+				final String privilegeName = this.getPrivilegeName(domainObject);
+				final PrivilegeCache privilegeCache = PrivilegeManager.getInstance()
+						.getPrivilegeCache(sessionDataBean.getUserName());
 
-				String[] privilegeNames = privilegeName.split(",");
+				final String[] privilegeNames = privilegeName.split(",");
 				// Checking whether the logged in user has the required
 				// privilege on the given protection element
 				if (privilegeNames.length > 1)
@@ -4414,9 +4446,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 		return isAuthorized;
@@ -4436,13 +4468,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	private void validateCollectionStatus(Specimen specimen) throws BizLogicException
 	{
-		Specimen parent = (Specimen) specimen.getParentSpecimen();
+		final Specimen parent = (Specimen) specimen.getParentSpecimen();
 
 		if (parent != null
 				&& !Constants.COLLECTION_STATUS_COLLECTED.equals(parent.getCollectionStatus())
 				&& (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus())))
 		{
-			throw getBizLogicException(null, "child.nt.coll", "");
+			throw this.getBizLogicException(null, "child.nt.coll", "");
 		}
 	}
 
@@ -4460,7 +4492,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		if (!Status.ACTIVITY_STATUS_CLOSED.toString().equals(specimen.getActivityStatus()))
 		{
-			disposeSpecimen(sessionDataBean, specimen, dao, disposalReason);
+			this.disposeSpecimen(sessionDataBean, specimen, dao, disposalReason);
 		}
 	}
 
@@ -4471,45 +4503,42 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		try
 		{
-			Specimen specimen = (Specimen) obj;
-			String selectColumnName[] = {"id"};
-			String whereColumnName[] = {"parentSpecimen.id"};
-			String whereColumnCondition[] = {"="};
-			Object whereColumnValue[] = {specimen.getId()};
+			final Specimen specimen = (Specimen) obj;
+			final String selectColumnName[] = {"id"};
+			final String whereColumnName[] = {"parentSpecimen.id"};
+			final String whereColumnCondition[] = {"="};
+			final Object whereColumnValue[] = {specimen.getId()};
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(obj.getClass().getName());
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(obj.getClass().getName());
 			queryWhereClause.addCondition(new EqualClause("parentSpecimen.id", specimen.getId()));
 
-			result = retrieve(obj.getClass().getName(), selectColumnName, queryWhereClause);
+			result = this.retrieve(obj.getClass().getName(), selectColumnName, queryWhereClause);
 
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
 		if (result != null)
 		{
-			Iterator itr = result.iterator();
+			final Iterator itr = result.iterator();
 			while (itr.hasNext())
 			{
-				Object id = (Object) itr.next();
+				final Object id = (Object) itr.next();
 				if (id != null)
 				{
-					String idString = String.valueOf(id);
-					Long idLong = Long.valueOf(idString);// new Long(idString);
-					Specimen childSpecimen = new Specimen();
+					final String idString = String.valueOf(id);
+					final Long idLong = Long.valueOf(idString);// new Long(idString);
+					final Specimen childSpecimen = new Specimen();
 					childSpecimen.setId(idLong);
-					refreshTitliSearchIndexSingle(operation, childSpecimen);
+					this.refreshTitliSearchIndexSingle(operation, childSpecimen);
 				}
 			}
 		}
 	}
 
-	
-
-	
-	}
+}

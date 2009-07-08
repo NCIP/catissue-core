@@ -2,6 +2,7 @@
  * ShipmentReceivingBizLogic - BizLogic for receiving the shipment.
  * @author nilesh_ghone
  */
+
 package edu.wustl.catissuecore.bizlogic.shippingtracking;
 
 import java.util.ArrayList;
@@ -32,13 +33,15 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
+
 /**
  * this class contains the bizlogic for shipment receiving.
  */
 public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 {
+
 	Logger logger = Logger.getCommonLogger(ShipmentReceivingBizLogic.class);
-	
+
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
@@ -49,57 +52,61 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws DAOException if some database operation fails.
 	 * @throws UserNotAuthorizedException if user is not found authenticated.
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		if (!(obj instanceof Shipment))
 		{
 			logger.debug("Invalid object is passed to bizlogic.");
-			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),null,"Object is not the instance of Shipment class.");
+			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"), null,
+					"Object is not the instance of Shipment class.");
 		}
 		Shipment shipment = (Shipment) obj;
 		//Shipment oldShipment = (Shipment) oldObj;
 		try
 		{
-		Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
-		StorageContainerBizLogic containerBizLogic=new StorageContainerBizLogic();
-		boolean shipmentContainer = false;
-		for(StorageContainer storageContainer : containerCollection)
-		{
-			StorageType storageType=storageContainer.getStorageType();
-			if(!shipmentContainer && (storageType!=null) && ((storageType.getName()!=null)
-					&& (storageType.getName().trim()
-							.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+			Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
+			StorageContainerBizLogic containerBizLogic = new StorageContainerBizLogic();
+			boolean shipmentContainer = false;
+			for (StorageContainer storageContainer : containerCollection)
 			{
-				// This is the container created for specimens
-				// Update the specimens and dispose this container
-				processInTransitContainer(dao,sessionDataBean,storageContainer);
+				StorageType storageType = storageContainer.getStorageType();
+				if (!shipmentContainer
+						&& (storageType != null)
+						&& ((storageType.getName() != null) && (storageType.getName().trim()
+								.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+				{
+					// This is the container created for specimens
+					// Update the specimens and dispose this container
+					processInTransitContainer(dao, sessionDataBean, storageContainer);
+				}
+				else
+				{
+					// containers
+					processContainedContainer(dao, sessionDataBean, storageContainer);
+				}
 			}
-			else
-			{
-				// containers
-				processContainedContainer(dao,sessionDataBean,storageContainer);
-			}
-		}
-		shipment.setActivityStatus(Constants.ACTIVITY_STATUS_RECEIVED);
+			shipment.setActivityStatus(Constants.ACTIVITY_STATUS_RECEIVED);
 
-		dao.update(shipment);
+			dao.update(shipment);
 
-		//	Add mailing functionality
-		
+			//	Add mailing functionality
+
 		}
-		catch(DAOException ex)
+		catch (DAOException ex)
 		{
 			logger.debug("DAO related problem occurred", ex);
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
 			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
 		}
-		boolean mailStatus = sendNotification(shipment,sessionDataBean);
+		boolean mailStatus = sendNotification(shipment, sessionDataBean);
 		if (!mailStatus)
 		{
 			logger.debug("failed to send email..");
-//			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
+			//			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
 		}
 	}
+
 	/**
 	 * gets the notification mail.
 	 * @param shipment object of base shipment class.
@@ -109,6 +116,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		return ShipmentMailFormatterUtility.formatShipmentReceivedMailBody((Shipment) shipment);
 	}
+
 	/**
 	 * gets the notification mail subject.
 	 * @param shipment object of BaseShipment class.
@@ -118,6 +126,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		return ShipmentMailFormatterUtility.getShipmentReceivedMailSubject((Shipment) shipment);
 	}
+
 	/**
 	 * processes the container contained within the shipment.
 	 * @param dao the object of DAO class.
@@ -131,55 +140,53 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	private void processContainedContainer(DAO dao, SessionDataBean sessionDataBean,
 			StorageContainer storageContainer) throws BizLogicException, DAOException
 	{
-		if(storageContainer!=null && storageContainer.getActivityStatus() != null)
+		if (storageContainer != null && storageContainer.getActivityStatus() != null)
 		{
 			if (storageContainer.getActivityStatus().equals(Constants.ACCEPT))
 			{
-				if(storageContainer.getLocatedAtPosition()!=null
-						&& storageContainer.getLocatedAtPosition()
-							.getParentContainer()!=null)
+				if (storageContainer.getLocatedAtPosition() != null
+						&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
 				{
-					StorageContainer parentContainer=null;
-					List<StorageContainer> containerList=null;
-					Long parentContianerId=storageContainer
-						.getLocatedAtPosition().getParentContainer().getId();
-					if(parentContianerId!=null)
+					StorageContainer parentContainer = null;
+					List<StorageContainer> containerList = null;
+					Long parentContianerId = storageContainer.getLocatedAtPosition()
+							.getParentContainer().getId();
+					if (parentContianerId != null)
 					{
-						containerList=dao.retrieve(StorageContainer.class.getName(),
+						containerList = dao.retrieve(StorageContainer.class.getName(),
 								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-								storageContainer.getLocatedAtPosition()
-									.getParentContainer().getId());
-						if(containerList!=null && containerList.size()==1)
+								storageContainer.getLocatedAtPosition().getParentContainer()
+										.getId());
+						if (containerList != null && containerList.size() == 1)
 						{
-							parentContainer=containerList.get(0);
+							parentContainer = containerList.get(0);
 						}
 					}
-					else if(storageContainer.getLocatedAtPosition()
-								.getParentContainer().getName()!=null)
+					else if (storageContainer.getLocatedAtPosition().getParentContainer().getName() != null)
 					{
-						containerList=dao.retrieve(StorageContainer.class.getName(),"name",
-								storageContainer.getLocatedAtPosition().getParentContainer().getName());
-						if(containerList!=null && containerList.size()==1)
+						containerList = dao.retrieve(StorageContainer.class.getName(), "name",
+								storageContainer.getLocatedAtPosition().getParentContainer()
+										.getName());
+						if (containerList != null && containerList.size() == 1)
 						{
-							parentContainer=containerList.get(0);
+							parentContainer = containerList.get(0);
 						}
 					}
-					if(parentContainer!=null)
+					if (parentContainer != null)
 					{
-						storageContainer.getLocatedAtPosition()
-							.setParentContainer(parentContainer);
+						storageContainer.getLocatedAtPosition().setParentContainer(parentContainer);
 						storageContainer.setSite(parentContainer.getSite());
 					}
 				}
-				else if(storageContainer.getSite()!=null
-						&& storageContainer.getSite().getId()!=null)
+				else if (storageContainer.getSite() != null
+						&& storageContainer.getSite().getId() != null)
 				{
-					List siteList=dao.retrieve(Site.class.getName(),
+					List siteList = dao.retrieve(Site.class.getName(),
 							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-								storageContainer.getSite().getId());
-					if(siteList!=null && siteList.size()==1)
+							storageContainer.getSite().getId());
+					if (siteList != null && siteList.size() == 1)
 					{
-						storageContainer.setSite((Site)siteList.get(0));
+						storageContainer.setSite((Site) siteList.get(0));
 					}
 					storageContainer.setLocatedAtPosition(null);
 				}
@@ -187,44 +194,48 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				dao.update(storageContainer);
 				//** Sachin Write same logic as SpecimenPostion
 				// Ravi : changes : start
-				if(storageContainer.getLocatedAtPosition()!=null
-						&& storageContainer.getLocatedAtPosition()
-							.getParentContainer()!=null)
+				if (storageContainer.getLocatedAtPosition() != null
+						&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
 				{
 					Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-					StorageContainerUtil.deleteSinglePositionInContainerMap(
-							storageContainer.getLocatedAtPosition().getParentContainer(),containerMap,
-						storageContainer.getLocatedAtPosition().getPositionDimensionOne()
-						.intValue(), storageContainer.getLocatedAtPosition().getPositionDimensionTwo().intValue());
+					StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainer
+							.getLocatedAtPosition().getParentContainer(), containerMap,
+							storageContainer.getLocatedAtPosition().getPositionDimensionOne()
+									.intValue(), storageContainer.getLocatedAtPosition()
+									.getPositionDimensionTwo().intValue());
 				}
 			}
 			else if (storageContainer.getActivityStatus().equals(Constants.REJECT_AND_DESTROY))
 			{
 				// Reject and Destroy - Disable container
-				StorageContainer container=(StorageContainer)dao.retrieve(
+				StorageContainer container = (StorageContainer) dao.retrieve(
 						StorageContainer.class.getName(),
-						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,storageContainer.getId()).get(0);
+						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+						storageContainer.getId()).get(0);
 				container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 				dao.update(container);
 			}
 			//bug 12820
 			else if (Constants.REJECT_AND_RESEND.equals(storageContainer.getActivityStatus()))
 			{
-				StorageContainer container=(StorageContainer)dao.retrieve(
+				StorageContainer container = (StorageContainer) dao.retrieve(
 						StorageContainer.class.getName(),
-						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,storageContainer.getId()).get(0);
+						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+						storageContainer.getId()).get(0);
 				container.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
 				dao.update(container);
 			}
 		}
 		else
 		{
-//			throw new DAOException("storage continer or storage container's activity_status found null.");
+			//			throw new DAOException("storage continer or storage container's activity_status found null.");
 			logger.debug("storage continer or storage container's activity_status found null.");
-			throw new BizLogicException(ErrorKey.getErrorKey("storagecontainer.or.activitystatus.null"),null,"");
+			throw new BizLogicException(ErrorKey
+					.getErrorKey("storagecontainer.or.activitystatus.null"), null, "");
 			//throw AppUtility.getApplicationException(null, "errors.mail.sending.failed", "storage continer or storage container's activity_status found null.");
 		}
 	}
+
 	/**
 	 * processes the container in InTransit state.
 	 * @param dao the object of DAO class.
@@ -236,21 +247,23 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	private void processInTransitContainer(DAO dao, SessionDataBean sessionDataBean,
 			StorageContainer storageContainer) throws DAOException
 	{
-		Collection<SpecimenPosition> spPosCollection=storageContainer.getSpecimenPositionCollection();
+		Collection<SpecimenPosition> spPosCollection = storageContainer
+				.getSpecimenPositionCollection();
 		for (SpecimenPosition specimenPosition : spPosCollection)
 		{
-			SpecimenPosition retrievedSpPos=null;
-			Specimen specimen=null;
-			List<SpecimenPosition> spPosList=dao.retrieve(SpecimenPosition.class.getName()
-					,edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,specimenPosition.getId());
-			if(spPosList!=null && spPosList.size()==1)
+			SpecimenPosition retrievedSpPos = null;
+			Specimen specimen = null;
+			List<SpecimenPosition> spPosList = dao.retrieve(SpecimenPosition.class.getName(),
+					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+					specimenPosition.getId());
+			if (spPosList != null && spPosList.size() == 1)
 			{
-				retrievedSpPos=spPosList.get(0);
-				specimen=retrievedSpPos.getSpecimen();
-				setSpecimenPositionContents(dao,specimen,specimenPosition);
+				retrievedSpPos = spPosList.get(0);
+				specimen = retrievedSpPos.getSpecimen();
+				setSpecimenPositionContents(dao, specimen, specimenPosition);
 				setSpecimenActivityStatus(specimen, specimenPosition);
 			}
-			if(specimen!=null && specimen.getActivityStatus() != null)
+			if (specimen != null && specimen.getActivityStatus() != null)
 			{
 				if (!specimen.getActivityStatus().equals(Constants.REJECT_AND_DESTROY))
 				{
@@ -265,12 +278,12 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 					specimen.setSpecimenPosition(null);
 				}
 				dao.update(specimen);
-				if(specimen.getSpecimenPosition() == null)
+				if (specimen.getSpecimenPosition() == null)
 				{
 					// specimen located virtually or specimen is 'rejected and destroyed'
 					SpecimenPosition specimenPositionTemp = (SpecimenPosition) (dao.retrieve(
-								SpecimenPosition.class.getName(),
-								"specimen.id", specimen.getId())).get(0);
+							SpecimenPosition.class.getName(), "specimen.id", specimen.getId()))
+							.get(0);
 					dao.delete(specimenPositionTemp);
 				}
 				else
@@ -278,39 +291,45 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 					// update specimen position accordingly.
 					dao.update(specimen.getSpecimenPosition());
 					// Update catch - the position is now occupied.
-					updateStorageLocations((TreeMap)StorageContainerUtil
-							.getContainerMapFromCache(),specimen);
+					updateStorageLocations((TreeMap) StorageContainerUtil
+							.getContainerMapFromCache(), specimen);
 				}
 			}
 			else
 			{
 				logger.debug("specimen or specimen's activity_status found null.");
-				throw new DAOException(ErrorKey.getErrorKey("specimen.or.activitystatus.null"),null,"");
-				
+				throw new DAOException(ErrorKey.getErrorKey("specimen.or.activitystatus.null"),
+						null, "");
+
 			}
 		}
 		// disable shipment container.
-		StorageContainer container=(StorageContainer)dao.retrieve(StorageContainer.class.getName(),
-				edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,storageContainer.getId()).get(0);
+		StorageContainer container = (StorageContainer) dao.retrieve(
+				StorageContainer.class.getName(),
+				edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+				storageContainer.getId()).get(0);
 		container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		disposeShipmentContainer(container, dao, sessionDataBean);
 	}
-/**
- * sets the specimen position contents.
- * @param dao the object of DAO class.
- * @param specimen contents to be set.
- * @param specimenPosition position of specimen.
- * @throws DAOException if some database operation fails.
- */
+
+	/**
+	 * sets the specimen position contents.
+	 * @param dao the object of DAO class.
+	 * @param specimen contents to be set.
+	 * @param specimenPosition position of specimen.
+	 * @throws DAOException if some database operation fails.
+	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
 			SpecimenPosition specimenPosition) throws DAOException
 	{
-		List<StorageContainer> containerList=null;
-		StorageContainer container=null;
-		StorageType storageType = specimenPosition.getStorageContainer()!=null ?  specimenPosition.getStorageContainer().getStorageType() : null;
+		List<StorageContainer> containerList = null;
+		StorageContainer container = null;
+		StorageType storageType = specimenPosition.getStorageContainer() != null ? specimenPosition
+				.getStorageContainer().getStorageType() : null;
 
-		if ((storageType!=null) && ((storageType.getName()!=null)
-				&& (storageType.getName().trim().equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+		if ((storageType != null)
+				&& ((storageType.getName() != null) && (storageType.getName().trim()
+						.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
 		{
 			// Storage Location is Virtual.
 			container = null;
@@ -318,23 +337,23 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		else
 		{
 			// Storage Location is either Auto or Manual.
-			if((specimenPosition.getStorageContainer().getName()!=null))
+			if ((specimenPosition.getStorageContainer().getName() != null))
 			{
-				containerList=dao.retrieve(StorageContainer.class.getName(),
-						"name",specimenPosition.getStorageContainer().getName());
+				containerList = dao.retrieve(StorageContainer.class.getName(), "name",
+						specimenPosition.getStorageContainer().getName());
 			}
-			else if(specimenPosition.getStorageContainer().getId()!=null)
+			else if (specimenPosition.getStorageContainer().getId() != null)
 			{
-				containerList=dao.retrieve(StorageContainer.class.getName(),
+				containerList = dao.retrieve(StorageContainer.class.getName(),
 						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-							specimenPosition.getStorageContainer().getId());
+						specimenPosition.getStorageContainer().getId());
 			}
-			if(containerList!=null && containerList.size()==1)
+			if (containerList != null && containerList.size() == 1)
 			{
-				container=containerList.get(0);
+				container = containerList.get(0);
 			}
 		}
-		if(container!=null)
+		if (container != null)
 		{
 			// Storage Location is either Auto or Manual.
 			specimen.getSpecimenPosition().setStorageContainer(container);
@@ -349,6 +368,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			specimen.setSpecimenPosition(null);
 		}
 	}
+
 	/**
 	 * Set the user selected specimen's activity status.
 	 * @param specimen Specimen to update
@@ -358,6 +378,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		specimen.setActivityStatus(specimenPosition.getSpecimen().getActivityStatus());
 	}
+
 	/**
 	 * Dispose/Disable shipment container.
 	 * @param storageContainer container to dispose.
@@ -373,6 +394,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		storageContainer.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		dao.update(storageContainer);
 	}
+
 	/**
 	 * post update method overridden.
 	 * @param dao the object of DAO class.
@@ -382,29 +404,29 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 */
-	protected void postUpdate(DAO dao, Object obj1, Object obj2,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	protected void postUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
-		super.postUpdate(dao, obj1, obj2,
-				sessionDataBean);
-//		if(obj1!=null && obj1 instanceof Shipment)
-//		{
-//			Shipment shipment=(Shipment)obj1;
-//			if(shipment.getShipmentRequest()!=null)
-//			{
-//				ShipmentRequest shipmentRequest=shipment.getShipmentRequest();
-//				shipmentRequest.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
-//				ShipmentRequestBizLogic shipmentRequestBizLogic=new ShipmentRequestBizLogic();
-//				try {
-//					dao.update(shipmentRequest,sessionDataBean,true, false, true);
-//				} catch (DAOException e) {
-//					Logger.out.debug(e.getMessage(),e);
-//					throw new BizLogicException(e.getMessage());
-//				}
-//				//shipmentRequestBizLogic.update(shipmentRequest, Constants.HIBERNATE_DAO);
-//			}
-//		}
+		super.postUpdate(dao, obj1, obj2, sessionDataBean);
+		//		if(obj1!=null && obj1 instanceof Shipment)
+		//		{
+		//			Shipment shipment=(Shipment)obj1;
+		//			if(shipment.getShipmentRequest()!=null)
+		//			{
+		//				ShipmentRequest shipmentRequest=shipment.getShipmentRequest();
+		//				shipmentRequest.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
+		//				ShipmentRequestBizLogic shipmentRequestBizLogic=new ShipmentRequestBizLogic();
+		//				try {
+		//					dao.update(shipmentRequest,sessionDataBean,true, false, true);
+		//				} catch (DAOException e) {
+		//					Logger.out.debug(e.getMessage(),e);
+		//					throw new BizLogicException(e.getMessage());
+		//				}
+		//				//shipmentRequestBizLogic.update(shipmentRequest, Constants.HIBERNATE_DAO);
+		//			}
+		//		}
 	}
+
 	/**
 	 * pre update method.
 	 * @param dao object of DAO class.
@@ -414,22 +436,24 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 */
-	protected void preUpdate(DAO dao, Object obj1, Object obj2,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	protected void preUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
-		if(obj1 instanceof Shipment)
+		if (obj1 instanceof Shipment)
 		{
-			Shipment shipment=(Shipment)obj1;
-			if(shipment.getShipmentRequest()!=null && shipment.getShipmentRequest().getId()!=null)
+			Shipment shipment = (Shipment) obj1;
+			if (shipment.getShipmentRequest() != null
+					&& shipment.getShipmentRequest().getId() != null)
 			{
 				List<ShipmentRequest> requestList;
-				try {
+				try
+				{
 					requestList = dao.retrieve(ShipmentRequest.class.getName(),
-								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-								shipment.getShipmentRequest().getId());
-					if(requestList!=null && requestList.size()==1)
+							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+							shipment.getShipmentRequest().getId());
+					if (requestList != null && requestList.size() == 1)
 					{
-						shipment.setShipmentRequest((ShipmentRequest)requestList.get(0));
+						shipment.setShipmentRequest((ShipmentRequest) requestList.get(0));
 					}
 				}
 				catch (DAOException e)
@@ -441,6 +465,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			}
 		}
 	}
+
 	/**
 	 * Custom method for shipment receiving - used while checking privileges.
 	 * @param dao object of DAO class.
@@ -462,6 +487,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			return null;
 		}
 	}
+
 	/**
 	 * Get available container map in sites for which user have permission.
 	 * @param siteIds user permitted site ids.
@@ -535,14 +561,15 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			if (specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getSpecimenPosition()
-						.getStorageContainer(), containerMap, specimen.getSpecimenPosition().getPositionDimensionOne()
-						.intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue());
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen
+						.getSpecimenPosition().getStorageContainer(), containerMap, specimen
+						.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen
+						.getSpecimenPosition().getPositionDimensionTwo().intValue());
 			}
 		}
 		catch (Exception e)
 		{
-			logger.debug("Exception occured while updating aliquots"+e.getMessage(),e);
+			logger.debug("Exception occured while updating aliquots" + e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}

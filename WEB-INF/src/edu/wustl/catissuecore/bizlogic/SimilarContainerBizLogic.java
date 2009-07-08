@@ -50,7 +50,7 @@ import edu.wustl.dao.exception.DAOException;
 public class SimilarContainerBizLogic extends StorageContainerBizLogic implements TreeDataInterface
 {
 
-	private transient Logger logger = Logger.getCommonLogger(SimilarContainerBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SimilarContainerBizLogic.class);
 
 	/**
 	 * Saves the storageContainer object in the database.
@@ -61,45 +61,46 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		StorageContainer container = (StorageContainer) obj;
+		final StorageContainer container = (StorageContainer) obj;
 		container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 
-		List contList = new ArrayList();
-		int noOfContainers = container.getNoOfContainers().intValue();
-		Map simMap = container.getSimilarContainerMap();
+		final List contList = new ArrayList();
+		final int noOfContainers = container.getNoOfContainers().intValue();
+		final Map simMap = container.getSimilarContainerMap();
 		// --- common values for all similar containers ---
-		loadStorageType(dao, container);
-		logger.debug(simMap);
-		int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
+		this.loadStorageType(dao, container);
+		this.logger.debug(simMap);
+		final int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
 		// int checkButton = 1;
 
 		try
 		{
 			for (int i = 1; i <= noOfContainers; i++)
 			{
-				String simContPrefix = "simCont:" + i + "_";
-				String IdKey = simContPrefix + "Id";
-				String parentContNameKey = simContPrefix + "parentContName";
-				String contName = (String) simMap.get(simContPrefix + "name");
+				final String simContPrefix = "simCont:" + i + "_";
+				final String IdKey = simContPrefix + "Id";
+				final String parentContNameKey = simContPrefix + "parentContName";
+				final String contName = (String) simMap.get(simContPrefix + "name");
 				String barcode = (String) simMap.get(simContPrefix + "barcode");
 
 				if (barcode != null && barcode.equals("")) // this is done
-															// because barcode
-															// is empty string
-															// set by struts
+				// because barcode
+				// is empty string
+				// set by struts
 				{ // but barcode in DB is unique but can be null.
 					barcode = null;
 				}
-				StorageContainer cont = new StorageContainer(container);
+				final StorageContainer cont = new StorageContainer(container);
 				if (checkButton == 1) // site
 				{
-					String siteId = (String) simMap.get(simContPrefix + "siteId");
-					String siteName = (String) simMap.get(simContPrefix + "siteName");
+					final String siteId = (String) simMap.get(simContPrefix + "siteId");
+					final String siteName = (String) simMap.get(simContPrefix + "siteName");
 
-					Site site = new Site();
+					final Site site = new Site();
 
 					/**
 					 * Start: Change for API Search --- Jitendra 06/10/2006 In
@@ -121,19 +122,22 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					site.setId(new Long(siteId));
 					site.setName(siteName);
 					cont.setSite(site);
-					loadSite(dao, cont); // <<----
+					this.loadSite(dao, cont); // <<----
 
 				}
 				else
 				// parentContainer
 				{
 					StorageContainer parentContainer = null;
-					String parentId = (String) simMap.get(simContPrefix + "parentContainerId");
-					String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
-					String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
+					final String parentId = (String) simMap
+							.get(simContPrefix + "parentContainerId");
+					final String posOne = (String) simMap.get(simContPrefix
+							+ "positionDimensionOne");
+					final String posTwo = (String) simMap.get(simContPrefix
+							+ "positionDimensionTwo");
 
-					Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(
-							parentId));
+					final Object object = dao.retrieveById(StorageContainer.class.getName(),
+							new Long(parentId));
 					if (object != null)
 					{
 
@@ -143,8 +147,9 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 					}
 
-					IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 					// check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao,
@@ -181,16 +186,16 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					 */
 
 					// Have to set Site object for parentContainer
-					loadSite(dao, parentContainer); // 17-07-2006
-					loadSiteFromContainerId(dao, parentContainer);
+					this.loadSite(dao, parentContainer); // 17-07-2006
+					this.loadSiteFromContainerId(dao, parentContainer);
 
 					cntPos.setPositionDimensionOne(new Integer(posOne));
 					cntPos.setPositionDimensionTwo(new Integer(posTwo));
 					cntPos.setOccupiedContainer(cont);
 					cont.setLocatedAtPosition(cntPos);
 					cont.setSite(parentContainer.getSite()); // 16-07-2006
-																// chetan
-					logger.debug("^^>> " + parentContainer.getSite());
+					// chetan
+					this.logger.debug("^^>> " + parentContainer.getSite());
 					simMap.put(parentContNameKey, parentContainer.getName());
 				}
 				// StorageContainer cont = new StorageContainer();
@@ -212,10 +217,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				simMap.put(simContPrefix + "name", cont.getName());
 
-				logger.debug("cont.getCollectionProtocol().size() "
+				this.logger.debug("cont.getCollectionProtocol().size() "
 						+ cont.getCollectionProtocolCollection().size());
 				cont.setActivityStatus("Active");
-				AuditManager auditManager = getAuditManager(sessionDataBean);
+				final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 				dao.insert(cont.getCapacity());
 				auditManager.insertAudit(dao, cont.getCapacity());
 
@@ -228,60 +233,67 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				// simMap.put(parentContNameKey,cont.getParent().getName());
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (NameGeneratorException e)
+		catch (final NameGeneratorException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, "utility.error", "");
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, "utility.error", "");
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
+
 	/**
 	 * @param obj : obj
 	 * @param dao : dao
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		StorageContainer container = (StorageContainer) obj;
+		final StorageContainer container = (StorageContainer) obj;
 		try
 		{
-			int noOfContainers = container.getNoOfContainers().intValue();
-			Map simMap = container.getSimilarContainerMap();
-			int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
+			final int noOfContainers = container.getNoOfContainers().intValue();
+			final Map simMap = container.getSimilarContainerMap();
+			final int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
 			for (int i = 1; i <= noOfContainers; i++)
 			{
 
-				String simContPrefix = "simCont:" + i + "_";
-				String contName = (String) simMap.get(simContPrefix + "name");
-				String Id = (String) simMap.get(simContPrefix + "Id");
-				StorageContainer cont = new StorageContainer(container);
+				final String simContPrefix = "simCont:" + i + "_";
+				final String contName = (String) simMap.get(simContPrefix + "name");
+				final String Id = (String) simMap.get(simContPrefix + "Id");
+				final StorageContainer cont = new StorageContainer(container);
 				// Logger.out.info("contName:" + contName);
 
 				cont.setId(new Long(Id));
 				cont.setName(contName); // by falguni ...Container name is
-										// generated via label generator.
+				// generated via label generator.
 				if (checkButton == 2)
 				{
-					String parentId = (String) simMap.get(simContPrefix + "parentContainerId");
-					String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
-					String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
-					String parentContName = (String) simMap.get(simContPrefix + "parentContName");
-					StorageContainer parentContainer = new StorageContainer();
+					final String parentId = (String) simMap
+							.get(simContPrefix + "parentContainerId");
+					final String posOne = (String) simMap.get(simContPrefix
+							+ "positionDimensionOne");
+					final String posTwo = (String) simMap.get(simContPrefix
+							+ "positionDimensionTwo");
+					final String parentContName = (String) simMap.get(simContPrefix
+							+ "parentContName");
+					final StorageContainer parentContainer = new StorageContainer();
 					parentContainer.setId(new Long(parentId));
 					parentContainer.setName(parentContName);
 
-					ContainerPosition cntPos = cont.getLocatedAtPosition();
+					final ContainerPosition cntPos = cont.getLocatedAtPosition();
 
 					cntPos.setPositionDimensionOne(new Integer(posOne));
 					cntPos.setPositionDimensionTwo(new Integer(posTwo));
@@ -292,15 +304,15 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				}
 
-				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 				StorageContainerUtil.addStorageContainerInContainerMap(cont, containerMap);
 
 			}
-			
+
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 		}
 		super.postInsert(obj, dao, sessionDataBean);
 	}
@@ -314,16 +326,17 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 * @throws BizLogicException : BizLogicException
 	 * @return boolean
 	 */
+	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		try
 		{
-			StorageContainer container = (StorageContainer) obj;
-			Map similarContainerMap = container.getSimilarContainerMap();
-			String containerPrefixKey = "simCont:";
-			String parentContainerId = "_parentContainerId";
-			List positionsToBeAllocatedList = new ArrayList();
-			List usedPositionsList = new ArrayList();
+			final StorageContainer container = (StorageContainer) obj;
+			final Map similarContainerMap = container.getSimilarContainerMap();
+			final String containerPrefixKey = "simCont:";
+			final String parentContainerId = "_parentContainerId";
+			final List positionsToBeAllocatedList = new ArrayList();
+			final List usedPositionsList = new ArrayList();
 
 			for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
 			{
@@ -341,22 +354,23 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			{
 				for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
 				{
-					int checkedButtonStatus = Integer.parseInt((String) similarContainerMap
+					final int checkedButtonStatus = Integer.parseInt((String) similarContainerMap
 							.get("checkedButton"));
-					String siteId = (String) similarContainerMap.get("simCont:" + i + "_siteId");
+					final String siteId = (String) similarContainerMap.get("simCont:" + i
+							+ "_siteId");
 					if (checkedButtonStatus == 2 || siteId == null)
 					{
-						String parentContId = (String) similarContainerMap.get("simCont:" + i
+						final String parentContId = (String) similarContainerMap.get("simCont:" + i
 								+ "_parentContainerId");
-						String positionDimensionOne = (String) similarContainerMap.get("simCont:"
-								+ i + "_positionDimensionOne");
-						String positionDimensionTwo = (String) similarContainerMap.get("simCont:"
-								+ i + "_positionDimensionTwo");
+						final String positionDimensionOne = (String) similarContainerMap
+								.get("simCont:" + i + "_positionDimensionOne");
+						final String positionDimensionTwo = (String) similarContainerMap
+								.get("simCont:" + i + "_positionDimensionTwo");
 						if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
 								|| positionDimensionTwo.equals("-1"))
 						{
 
-							throw getBizLogicException(null, "errors.item.required",
+							throw this.getBizLogicException(null, "errors.item.required",
 									ApplicationProperties.getValue("similarcontainers.location"));
 
 						}
@@ -365,17 +379,17 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					{
 						if (siteId.equals("-1"))
 						{
-							throw getBizLogicException(null, "errors.item.required",
+							throw this.getBizLogicException(null, "errors.item.required",
 									ApplicationProperties.getValue("storageContainer.site"));
 						}
 					}
 				}
 			}
 		}
-		catch (ApplicationException exp)
+		catch (final ApplicationException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
-			throw getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return true;
 	}
@@ -389,21 +403,22 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		sb.append(Site.class.getName());
 		try
 		{
 			if (domainObject instanceof StorageContainer)
 			{
-				StorageContainer storageContainer = (StorageContainer) domainObject;
-				Map similarContainerMap = storageContainer.getSimilarContainerMap();
-				Object keys[] = similarContainerMap.keySet().toArray();
-				Set<Long> scIds = new HashSet<Long>();
-				Set<Long> siteIds = new HashSet<Long>();
+				final StorageContainer storageContainer = (StorageContainer) domainObject;
+				final Map similarContainerMap = storageContainer.getSimilarContainerMap();
+				final Object keys[] = similarContainerMap.keySet().toArray();
+				final Set<Long> scIds = new HashSet<Long>();
+				final Set<Long> siteIds = new HashSet<Long>();
 
-				for (Object key : keys)
+				for (final Object key : keys)
 				{
 					if (key.toString().contains("parentContainerId"))
 					{
@@ -415,7 +430,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					}
 				}
 
-				for (Long scId : scIds)
+				for (final Long scId : scIds)
 				{
 					Site site = null;
 					Object object = null;
@@ -424,7 +439,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 					if (object != null)
 					{
-						StorageContainer parentContainer = (StorageContainer) object;
+						final StorageContainer parentContainer = (StorageContainer) object;
 						site = parentContainer.getSite();
 					}
 					if (site != null)
@@ -437,15 +452,15 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					}
 				}
 
-				for (Long siteId : siteIds)
+				for (final Long siteId : siteIds)
 				{
 					sb.append("_" + siteId.toString());
 				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			// throw getBizLogicException(daoExp, "dao.error", "");
 		}
@@ -459,6 +474,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	 * @return String
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return new StorageContainerBizLogic().getPrivilegeKey(domainObject);

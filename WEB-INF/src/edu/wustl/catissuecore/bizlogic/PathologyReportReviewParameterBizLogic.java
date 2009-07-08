@@ -25,7 +25,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(PathologyReportReviewParameterBizLogic.class);
 
 	/**
@@ -37,38 +37,40 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException : BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
 		{
-			PathologyReportReviewParameter reviewParam = (PathologyReportReviewParameter) obj;
+			final PathologyReportReviewParameter reviewParam = (PathologyReportReviewParameter) obj;
 
 			String className;
 			className = User.class.getName();
-			Object object = dao.retrieveById(className, sessionDataBean.getUserId());
+			final Object object = dao.retrieveById(className, sessionDataBean.getUserId());
 			reviewParam.setUser((User) object);
 			String reviewerRole;
-			ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
+			final ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 
-			Role role = securityManager.getUserRole(new Long(sessionDataBean.getCsmUserId())
+			final Role role = securityManager.getUserRole(new Long(sessionDataBean.getCsmUserId())
 					.longValue());
 			reviewerRole = role.getName();
 			reviewParam.setReviewerRole(reviewerRole);
 
 			dao.insert(reviewParam);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, reviewParam);
 
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			this.logger.debug(daoExp.getMessage(), daoExp);
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (SMException ex)
+		catch (final SMException ex)
 		{
-			logger.info("Review Role not found!");
+			this.logger.info("Review Role not found!");
 		}
 		// Since PathologyReportReviewParameter is in PUBLIC_DATA_GROUP
 		// protection objects not required
@@ -78,10 +80,10 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		 * SecurityManager.getInstance(
 		 * this.getClass()).insertAuthorizationData(null, protectionObjects,
 		 * null); } catch (SMException e) { throw handleSMException(e); }
-		 */catch (AuditException e)
+		 */catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -94,21 +96,23 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 	 * @param sessionDataBean
 	 *            The session in which the object is saved.
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 	{
 		try
 		{
-			PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
-			PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
+			final PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
+			final PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
 			oldreviewParam.setStatus(Constants.COMMENT_STATUS_REVIEWED);
 			dao.update(oldreviewParam);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newreviewParam);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.error("Error occured while updating object of PathologyReportReviewParameter"
-					+ ex);
+			this.logger
+					.error("Error occured while updating object of PathologyReportReviewParameter"
+							+ ex);
 		}
 	}
 }

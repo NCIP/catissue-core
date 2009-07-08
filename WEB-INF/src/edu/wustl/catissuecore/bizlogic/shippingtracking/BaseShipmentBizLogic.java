@@ -39,7 +39,6 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
-import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
@@ -57,10 +56,12 @@ import edu.wustl.dao.exception.DAOException;
  */
 public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 {
+
 	/**
 	 * common logger for BaseShipmentBizLogic class.
 	 */
 	Logger logger = Logger.getCommonLogger(BaseShipmentBizLogic.class);
+
 	/**
 	 * Saves the baseShipment object in the database.
 	 * @param obj the user object to be saved.
@@ -69,7 +70,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	@Override
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws BizLogicException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
@@ -77,7 +79,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			if (!(obj instanceof BaseShipment))
 			{
 				logger.debug("Invalid object passed");
-				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),null,"invalid object found in BaseShipmentBizLogic");
+				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),
+						null, "invalid object found in BaseShipmentBizLogic");
 			}
 			BaseShipment baseShipment = (BaseShipment) obj;
 			Long userId = sessionDataBean.getUserId();
@@ -86,13 +89,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			setShipmentSites(dao, baseShipment);
 			List<SpecimenPosition> specimenPositionList = new ArrayList<SpecimenPosition>();
 			List<ContainerPosition> containerPositionList = new ArrayList<ContainerPosition>();
-    		StorageContainer container = saveOrUpdateContainer(baseShipment
+			StorageContainer container = saveOrUpdateContainer(baseShipment
 					.getContainerCollection(), dao, sessionDataBean,
-					edu.wustl.common.util.global.Constants.ADD,
-					specimenPositionList);
-			Collection<StorageContainer> containerCollection = updateContainerDetails(
-					baseShipment.getContainerCollection(), dao,
-					sessionDataBean, true, containerPositionList);
+					edu.wustl.common.util.global.Constants.ADD, specimenPositionList);
+			Collection<StorageContainer> containerCollection = updateContainerDetails(baseShipment
+					.getContainerCollection(), dao, sessionDataBean, true, containerPositionList);
 			if (container != null)
 			{
 				containerCollection.add(container);
@@ -100,24 +101,27 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			baseShipment.getContainerCollection().clear();
 			baseShipment.getContainerCollection().addAll(containerCollection);
 			dao.insert(baseShipment);
-			auditManager.insertAudit(dao,baseShipment);
+			auditManager.insertAudit(dao, baseShipment);
 			boolean mailStatus = sendNotification(baseShipment, sessionDataBean);
 			if (!mailStatus)
 			{
 				logger.debug("failed to send email..");
 			}
-			insertSinglePositionInContainerMap(specimenPositionList,
-					containerPositionList);
+			insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 		}
 		catch (DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
-			throw new BizLogicException(daoException.getErrorKey(),daoException,daoException.getMsgValues());   //DAOException(bizLogicException.getMessage());
-		} catch (AuditException e) {
+			throw new BizLogicException(daoException.getErrorKey(), daoException, daoException
+					.getMsgValues()); //DAOException(bizLogicException.getMessage());
+		}
+		catch (AuditException e)
+		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(),e.getMsgValues());
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
+
 	/**
 	 *  this method updates the container details.
 	 * @param containerCollection collection of StorageContainer objects.
@@ -132,8 +136,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	protected Collection<StorageContainer> updateContainerDetails(
 			Collection<StorageContainer> containerCollection, DAO dao,
 			SessionDataBean sessionDataBean, boolean updateSite,
-			List<ContainerPosition> containerPositionList)
-			throws BizLogicException, DAOException
+			List<ContainerPosition> containerPositionList) throws BizLogicException, DAOException
 	{
 		// Get site to be set for containers part of the shipment
 		Site site = null;
@@ -149,8 +152,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 
 		// StorageContainerBizLogic containerBizLogic=new
 		// StorageContainerBizLogic();
-		Iterator<StorageContainer> containerIterator = containerCollection
-				.iterator();
+		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
 		while (containerIterator.hasNext())
 		{
 			StorageContainer container = containerIterator.next();
@@ -158,22 +160,22 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			// Update containers which have been included in the shipment
 			// Do not update container that was created for keeping specimens
 			// included in the shipment
-			if (container.getStorageType() != null &&
-					container.getStorageType().getName()
-					.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))
+			if (container.getStorageType() != null
+					&& container.getStorageType().getName().equals(
+							Constants.SHIPMENT_CONTAINER_TYPE_NAME))
 			{
 			}
 			else
 			{
 				if (container.getName() != null)
 				{
-					container = getContainerByNameOrBarcode
-						(container.getName(), dao,Constants.CONTAINER_PROPERTY_NAME);
+					container = getContainerByNameOrBarcode(container.getName(), dao,
+							Constants.CONTAINER_PROPERTY_NAME);
 				}
 				else if (container.getBarcode() != null)
 				{
-					container = getContainerByNameOrBarcode
-						(container.getBarcode(),dao,Constants.CONTAINER_PROPERTY_BARCODE);
+					container = getContainerByNameOrBarcode(container.getBarcode(), dao,
+							Constants.CONTAINER_PROPERTY_BARCODE);
 				}
 				if (container != null)
 				{
@@ -181,15 +183,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					{
 						container.setSite(site);
 					}
-					deleteLocatedAtPosition(container,
-							sessionDataBean,dao,
-							containerPositionList);
+					deleteLocatedAtPosition(container, sessionDataBean, dao, containerPositionList);
 					containerObjectsCollection.add(container);
 				}
 			}
 		}
 		return containerObjectsCollection;
 	}
+
 	/**
 	 * gets the container on the basis of either label or barcode.
 	 * @param nameOrBarcode containing the fetch condition.
@@ -198,14 +199,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return container the object of StorageContainer class.
 	 * @throws DAOException if some database operation fails.
 	 */
-	protected StorageContainer getContainerByNameOrBarcode(	String nameOrBarcode,DAO dao,String property)
-				throws DAOException
+	protected StorageContainer getContainerByNameOrBarcode(String nameOrBarcode, DAO dao,
+			String property) throws DAOException
 	{
 		StorageContainer container = null;
 		if (nameOrBarcode != null)
 		{
-			List<StorageContainer> containerListLabel = getContainerByProperty
-								(dao,property,nameOrBarcode);
+			List<StorageContainer> containerListLabel = getContainerByProperty(dao, property,
+					nameOrBarcode);
 			if (containerListLabel != null && containerListLabel.size() > 0)
 			{
 				container = containerListLabel.get(0);
@@ -213,6 +214,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return container;
 	}
+
 	/**
 	 * this method calls the retreive() method to fetch the container.
 	 * @param dao the object of DAO class.
@@ -221,11 +223,12 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return list of storage containers.
 	 * @throws DAOException if some database operation fails.
 	 */
-	protected List<StorageContainer> getContainerByProperty(DAO dao,
-			String propertyName, String propertyValue) throws DAOException
+	protected List<StorageContainer> getContainerByProperty(DAO dao, String propertyName,
+			String propertyValue) throws DAOException
 	{
-		return dao.retrieve(StorageContainer.class.getName(), propertyName,propertyValue);
+		return dao.retrieve(StorageContainer.class.getName(), propertyName, propertyValue);
 	}
+
 	/**
 	 * this method updates the specimen details.
 	 * @param specimenPositionCollection collection of specimen position.
@@ -237,12 +240,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException if asome database operation fails.
 	 */
 	protected void updateSpecimenDetails(Collection<SpecimenPosition> specimenPositionCollection,
-			StorageContainer container, DAO dao,
-			SessionDataBean sessionDataBean, String operation,
+			StorageContainer container, DAO dao, SessionDataBean sessionDataBean, String operation,
 			List<SpecimenPosition> specimenPositionList) throws DAOException
 	{
-		Iterator<SpecimenPosition> specimenPositionIterator = specimenPositionCollection
-				.iterator();
+		Iterator<SpecimenPosition> specimenPositionIterator = specimenPositionCollection.iterator();
 		while (specimenPositionIterator.hasNext())
 		{
 			SpecimenPosition specimenPosition = specimenPositionIterator.next();
@@ -259,14 +260,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				}
 				String choice = "";
 				String labelOrBarcode = "";
-				if (specimenPosition.getSpecimen().getLabel() != null &&
-						!specimenPosition.getSpecimen().getLabel().trim().equals(""))
+				if (specimenPosition.getSpecimen().getLabel() != null
+						&& !specimenPosition.getSpecimen().getLabel().trim().equals(""))
 				{
 					labelOrBarcode = specimenPosition.getSpecimen().getLabel();
 					choice = Constants.SPECIMEN_PROPERTY_LABEL;
 				}
-				else if (specimenPosition.getSpecimen().getBarcode() != null &&
-						!specimenPosition.getSpecimen().getBarcode().trim().equals(""))
+				else if (specimenPosition.getSpecimen().getBarcode() != null
+						&& !specimenPosition.getSpecimen().getBarcode().trim().equals(""))
 				{
 					labelOrBarcode = specimenPosition.getSpecimen().getBarcode();
 					choice = Constants.SPECIMEN_PROPERTY_BARCODE;
@@ -274,7 +275,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 
 				if (labelOrBarcode != null)
 				{
-					specimen = getSpecimenByLabelOrBarcode(labelOrBarcode, dao,	choice);
+					specimen = getSpecimenByLabelOrBarcode(labelOrBarcode, dao, choice);
 				}
 
 				if (deleted)
@@ -286,8 +287,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					try
 					{
 						SpecimenEventParametersBizLogic bizLogic = new SpecimenEventParametersBizLogic();
-						disabledCont = bizLogic
-								.getContForDisabledSpecimenFromCache();
+						disabledCont = bizLogic.getContForDisabledSpecimenFromCache();
 					}
 					catch (Exception e1)
 					{
@@ -300,8 +300,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					}
 					// This specimen has to be deleted hence delete the
 					// specimenPosition object
-					SpecimenPosition prevPosition = specimen
-							.getSpecimenPosition();
+					SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 					specimen.setSpecimenPosition(null);
 					dao.update(specimen);
 					if (prevPosition != null)
@@ -310,7 +309,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					}
 					try
 					{
-						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+								.getInstance();
 						catissueCoreCacheManager
 								.addObjectToCache(
 										edu.wustl.catissuecore.util.global.Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN,
@@ -338,21 +338,22 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						{
 							if (position.getStorageContainer() != null)
 							{
-								StorageType storageType = position
-										.getStorageContainer()
+								StorageType storageType = position.getStorageContainer()
 										.getStorageType();
 								if (storageType != null
-										&& ((storageType.getName() != null)
-												&& !(storageType.getName().trim().equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+										&& ((storageType.getName() != null) && !(storageType
+												.getName().trim()
+												.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
 								{
 									SpecimenPosition tempPosition = new SpecimenPosition();
 									tempPosition.setId(position.getId());
-									tempPosition.setPositionDimensionOne(position.getPositionDimensionOne());
-									tempPosition.setPositionDimensionTwo(position.getPositionDimensionTwo());
-									tempPosition.setStorageContainer(position
-											.getStorageContainer());
-									tempPosition.setSpecimen(position
-											.getSpecimen());
+									tempPosition.setPositionDimensionOne(position
+											.getPositionDimensionOne());
+									tempPosition.setPositionDimensionTwo(position
+											.getPositionDimensionTwo());
+									tempPosition
+											.setStorageContainer(position.getStorageContainer());
+									tempPosition.setSpecimen(position.getSpecimen());
 									specimenPositionList.add(tempPosition);
 								}
 
@@ -368,13 +369,13 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						}
 						else
 						{
-							if (specimenPosition.getSpecimen()
-									.getSpecimenPosition() != null)
+							if (specimenPosition.getSpecimen().getSpecimenPosition() != null)
 							{
 								position = specimen.getSpecimenPosition();
 								if (specimenPosition != null)
 								{
-									position.setPositionDimensionOne(specimenPosition.getPositionDimensionOne());
+									position.setPositionDimensionOne(specimenPosition
+											.getPositionDimensionOne());
 									position.setPositionDimensionTwo(1);
 								}
 							}
@@ -382,24 +383,25 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 
 						position.setSpecimen(specimen);
 						position.setStorageContainer(container);
-						position.setPositionDimensionOne(specimenPosition
-								.getPositionDimensionOne());
-						position.setPositionDimensionTwo(specimenPosition
-								.getPositionDimensionTwo());
+						position
+								.setPositionDimensionOne(specimenPosition.getPositionDimensionOne());
+						position
+								.setPositionDimensionTwo(specimenPosition.getPositionDimensionTwo());
 						dao.update(specimen);
 					}
 				}
 			}
 		}
 	}
+
 	/**
 	 * this method checks whether specimen is present or not.
 	 * @param specimenPositionCollection collection of specimen position.
 	 * @param specimen specimen whose presence is to be checked.
 	 * @return boolean containing the result.
 	 */
-	protected boolean isSpecimenPresent(Collection<SpecimenPosition> specimenPositionCollection
-			,Specimen specimen)
+	protected boolean isSpecimenPresent(Collection<SpecimenPosition> specimenPositionCollection,
+			Specimen specimen)
 	{
 		boolean isPresent = false;
 		if (specimenPositionCollection != null)
@@ -408,8 +410,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			while (spPosIterator.hasNext())
 			{
 				SpecimenPosition specimenPosition = spPosIterator.next();
-				if (specimen.getId() != null && specimen.getId()
-						.equals(specimenPosition.getSpecimen().getId()))
+				if (specimen.getId() != null
+						&& specimen.getId().equals(specimenPosition.getSpecimen().getId()))
 				{
 					isPresent = true;
 				}
@@ -417,6 +419,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return isPresent;
 	}
+
 	/**
 	 * retreives the specimen by label or barcode.
 	 * @param labelOrBarcode to fetch the specimen.
@@ -425,14 +428,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return specimen fetched.
 	 * @throws DAOException if database operation fails.
 	 */
-	protected Specimen getSpecimenByLabelOrBarcode(String labelOrBarcode,DAO dao
-			, String choice) throws DAOException
+	protected Specimen getSpecimenByLabelOrBarcode(String labelOrBarcode, DAO dao, String choice)
+			throws DAOException
 	{
 		Specimen specimen = null;
 		if (labelOrBarcode != null)
 		{
 			// Check for specimen with such label
-			List<Specimen> specimenListLabel = getSpecimenByProperty(dao,choice, labelOrBarcode);
+			List<Specimen> specimenListLabel = getSpecimenByProperty(dao, choice, labelOrBarcode);
 			if (specimenListLabel != null && specimenListLabel.size() > 0)
 			{
 				specimen = specimenListLabel.get(0);
@@ -440,6 +443,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return specimen;
 	}
+
 	/**
 	 * this method calls retreive() method of DAO class to fetch the specimen.
 	 * @param dao the object of DAO class.
@@ -448,10 +452,10 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return the list of the specimen.
 	 * @throws DAOException if some database operation fails.
 	 */
-	protected List<Specimen> getSpecimenByProperty(DAO dao,	String propertyName,
+	protected List<Specimen> getSpecimenByProperty(DAO dao, String propertyName,
 			String propertyValue) throws DAOException
 	{
-		return dao.retrieve(Specimen.class.getName(), propertyName,propertyValue);
+		return dao.retrieve(Specimen.class.getName(), propertyName, propertyValue);
 	}
 
 	/**
@@ -495,18 +499,19 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException if some database operation fails.
 	 * @throws BizLogicException if bizlogic operation fails.
 	 */
-	protected StorageContainer saveOrUpdateContainer(Collection<StorageContainer> containerCollection, DAO dao,
+	protected StorageContainer saveOrUpdateContainer(
+			Collection<StorageContainer> containerCollection, DAO dao,
 			SessionDataBean sessionDataBean, String operation,
-			List<SpecimenPosition> specimenPositionList)
-			throws DAOException, BizLogicException
+			List<SpecimenPosition> specimenPositionList) throws DAOException, BizLogicException
 	{
 		AuditManager auditManager = getAuditManager(sessionDataBean);
 		StorageContainer storageContainer = null;
 		Site site = null;
 		StorageType storageTypeInTransit = null;
-		List<Site> siteList = dao.retrieve(Site.class.getName(), "name",Constants.IN_TRANSIT_SITE_NAME);
-		List<StorageType> storageTypeList = dao.retrieve(StorageType.class.getName(),
-				"name", Constants.SHIPMENT_CONTAINER_TYPE_NAME);
+		List<Site> siteList = dao.retrieve(Site.class.getName(), "name",
+				Constants.IN_TRANSIT_SITE_NAME);
+		List<StorageType> storageTypeList = dao.retrieve(StorageType.class.getName(), "name",
+				Constants.SHIPMENT_CONTAINER_TYPE_NAME);
 		if (siteList != null && siteList.size() == 1)
 		{
 			site = siteList.get(0);
@@ -514,16 +519,18 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			logger.debug("shipment in transit site is empty");
-			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.inTransitSite.empty"),null,"");
+			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.inTransitSite.empty"),
+					null, "");
 		}
-		if(storageTypeList != null && storageTypeList.size() == 1)
+		if (storageTypeList != null && storageTypeList.size() == 1)
 		{
 			storageTypeInTransit = storageTypeList.get(0);
 		}
 		else
 		{
 			logger.debug("shipment storage type is empty");
-			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.storageType.empty"),null,"");
+			throw new BizLogicException(ErrorKey.getErrorKey("error.shipment.storageType.empty"),
+					null, "");
 		}
 		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
 		while (containerIterator.hasNext())
@@ -531,9 +538,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			StorageContainer container = containerIterator.next();
 			StorageType storageType = container.getStorageType();
 			if ((storageType != null)
-					&& ((storageType.getName() != null) && (!storageType
-							.getName().trim().equals("") && (storageType
-							.getName().trim()
+					&& ((storageType.getName() != null) && (!storageType.getName().trim()
+							.equals("") && (storageType.getName().trim()
 							.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME)))))
 			{
 				storageContainer = container;
@@ -543,7 +549,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					container.setStorageType(storageTypeInTransit);
 					container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 					Collection<SpecimenPosition> spPosCollection = container
-						.getSpecimenPositionCollection();
+							.getSpecimenPositionCollection();
 					/**
 					 * Sachin: 1. Get Specimen position from Container 2. Get
 					 * Container position from Container 2. Set Specimen
@@ -560,19 +566,18 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					{
 						dao.insert(container.getCapacity());
 						dao.insert(container);
-						auditManager.insertAudit(dao,container.getCapacity());
-						auditManager.insertAudit(dao,container);
+						auditManager.insertAudit(dao, container.getCapacity());
+						auditManager.insertAudit(dao, container);
 					}
-					else if (operation.trim()
-							.equals(edu.wustl.common.util.global.Constants.EDIT))
+					else if (operation.trim().equals(edu.wustl.common.util.global.Constants.EDIT))
 					{
 						// bug 11410 start
 						StorageContainer containerInTransit = null;
-						List<StorageContainer> containerInTransitList = dao.retrieve
-						(StorageContainer.class.getName(),
-								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, container.getId());
-						if (containerInTransitList != null
-								&& containerInTransitList.size() == 1)
+						List<StorageContainer> containerInTransitList = dao.retrieve(
+								StorageContainer.class.getName(),
+								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+								container.getId());
+						if (containerInTransitList != null && containerInTransitList.size() == 1)
 						{
 							containerInTransit = containerInTransitList.get(0);
 						}
@@ -580,17 +585,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						{
 							dao.insert(container.getCapacity());
 							dao.insert(container);
-							
-							auditManager.insertAudit(dao,container.getCapacity());
-							auditManager.insertAudit(dao,container);
+
+							auditManager.insertAudit(dao, container.getCapacity());
+							auditManager.insertAudit(dao, container);
 						}
 						// bug 11410 end
-						int newOneDimCapacity = container.getCapacity()
-							.getOneDimensionCapacity();
+						int newOneDimCapacity = container.getCapacity().getOneDimensionCapacity();
 						Capacity capacity = null;
-						List<Capacity> capacityList = dao.retrieve
-								(Capacity.class.getName(),
-										edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+						List<Capacity> capacityList = dao.retrieve(Capacity.class.getName(),
+								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
 								container.getCapacity().getId());
 						if (capacityList != null && capacityList.size() == 1)
 						{
@@ -607,15 +610,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					// container if the shipment contains specimens
 					if (container != null)
 					{
-						updateSpecimenDetails(spPosCollection,
-								container, dao,sessionDataBean,
-								operation,specimenPositionList);
+						updateSpecimenDetails(spPosCollection, container, dao, sessionDataBean,
+								operation, specimenPositionList);
 					}
 				}
 				catch (ApplicationException exception)
 				{
-					logger.debug(exception.getMessage(),exception);
-					throw getBizLogicException(exception, exception.getErrorKeyName(), exception.getMsgValues());
+					logger.debug(exception.getMessage(), exception);
+					throw getBizLogicException(exception, exception.getErrorKeyName(), exception
+							.getMsgValues());
 					//throw new BizLogicException(exception.getErrorKey(),exception,exception.getMsgValues()); 
 				}
 			}
@@ -632,140 +635,147 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException if bizlogic operation fails.
 	 */
 	@Override
-	protected boolean validate(Object obj, DAO dao, String operation)throws BizLogicException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		boolean isValid = true;
 		//StringBuffer errorMsg = new StringBuffer();
 		if (!(obj instanceof BaseShipment))
 		{
 			logger.debug("Invalid object passed");
-			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),null,"");	
+			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"), null,
+					"");
 		}
 		BaseShipment baseShipment = (BaseShipment) obj;
 		if (baseShipment == null)
 		{
 			logger.debug("domain object found null in BaseShipmentBizLogic");
-			throw new BizLogicException(ErrorKey.getErrorKey("errors.domain.object.null"),null,"domain object found null in BaseShipmentBizLogic");
+			throw new BizLogicException(ErrorKey.getErrorKey("errors.domain.object.null"), null,
+					"domain object found null in BaseShipmentBizLogic");
 			//throw new DAOException(ApplicationProperties.getValue("errors.domain.object.null"));
 		}
 		Collection containerCollection = baseShipment.getContainerCollection();
 		if (containerCollection == null || containerCollection.isEmpty())
 		{
 			logger.debug("Container collection is found empty");
-			throw new BizLogicException(ErrorKey.getErrorKey("errors.null.empty.container"),null,"Container collection is found empty");
+			throw new BizLogicException(ErrorKey.getErrorKey("errors.null.empty.container"), null,
+					"Container collection is found empty");
 			//throw new DAOException(ApplicationProperties.getValue("errors.null.empty.container"));
 		}
 		try
 		{
-		List siteList = dao.retrieve(Site.class.getName(),
-				edu.wustl.catissuecore.util.global.Constants.SYSTEM_NAME,"In Transit");
-		Site site = null;
-		if (siteList != null && siteList.size() == 1)
-		{
-			site = (Site) siteList.get(0);
-		}
-		Long inTransitSiteId = site.getId();
-		if (containerCollection != null)
-		{
-			Iterator<StorageContainer> containerIterator = containerCollection
-					.iterator();
-			while (containerIterator.hasNext())
+			List siteList = dao.retrieve(Site.class.getName(),
+					edu.wustl.catissuecore.util.global.Constants.SYSTEM_NAME, "In Transit");
+			Site site = null;
+			if (siteList != null && siteList.size() == 1)
 			{
-				StorageContainer container = containerIterator.next();
-				if (container != null)
+				site = (Site) siteList.get(0);
+			}
+			Long inTransitSiteId = site.getId();
+			if (containerCollection != null)
+			{
+				Iterator<StorageContainer> containerIterator = containerCollection.iterator();
+				while (containerIterator.hasNext())
 				{
-					if (container.getName() != null
-							&& !container.getName().equals("")
-							&& !container.getName()
-							.contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
+					StorageContainer container = containerIterator.next();
+					if (container != null)
 					{
-						if (container.getId() == null)
+						if (container.getName() != null
+								&& !container.getName().equals("")
+								&& !container.getName().contains(
+										Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 						{
-							String containerName = "";
-							if (container.getName() != null)
+							if (container.getId() == null)
 							{
-								containerName = container.getName();
-								container = getContainerByNameOrBarcode(
-										container.getName(), dao,
-										Constants.CONTAINER_PROPERTY_NAME);
-							}
-							else
-							{
-								containerName = container.getBarcode();
-								container = getContainerByNameOrBarcode(
-										container.getBarcode(),dao,
-										Constants.CONTAINER_PROPERTY_BARCODE);
-							}
-							if (container != null)
-							{
-								// bug 11410
-								if (edu.wustl.catissuecore.util.global.Constants.ADD.equals(operation))
+								String containerName = "";
+								if (container.getName() != null)
 								{
-									//bug 12820
-									/**
-									 * used in container Reject and Return case
-									 * in this case In transit check is removed.thus the container will remain in In transit site
-									 * and when receiver site accepts it then it will shifted from In transit site to receiver site.
-									 */
-									if(Status.ACTIVITY_STATUS_REJECT.toString().equalsIgnoreCase(container.getActivityStatus()))
+									containerName = container.getName();
+									container = getContainerByNameOrBarcode(container.getName(),
+											dao, Constants.CONTAINER_PROPERTY_NAME);
+								}
+								else
+								{
+									containerName = container.getBarcode();
+									container = getContainerByNameOrBarcode(container.getBarcode(),
+											dao, Constants.CONTAINER_PROPERTY_BARCODE);
+								}
+								if (container != null)
+								{
+									// bug 11410
+									if (edu.wustl.catissuecore.util.global.Constants.ADD
+											.equals(operation))
 									{
-										container.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());									  
-									}
-									else
-									{
-										validateShipmentContainer(baseShipment,container);
+										//bug 12820
+										/**
+										 * used in container Reject and Return case
+										 * in this case In transit check is removed.thus the container will remain in In transit site
+										 * and when receiver site accepts it then it will shifted from In transit site to receiver site.
+										 */
+										if (Status.ACTIVITY_STATUS_REJECT.toString()
+												.equalsIgnoreCase(container.getActivityStatus()))
+										{
+											container
+													.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE
+															.toString());
+										}
+										else
+										{
+											validateShipmentContainer(baseShipment, container);
+										}
 									}
 								}
-							}
-							else
-							{
-								// No container with such name or barcode exists
-								/*errorMsg.append("<li>No Container with name or barcode "
-										+ containerName + " exists\n</li>") ;*/
-								throw getBizLogicException(null, "shipment.NoContainerExists",containerName);
+								else
+								{
+									// No container with such name or barcode exists
+									/*errorMsg.append("<li>No Container with name or barcode "
+											+ containerName + " exists\n</li>") ;*/
+									throw getBizLogicException(null, "shipment.NoContainerExists",
+											containerName);
+								}
 							}
 						}
-					}
-					else if (container.getStorageType() != null
-							&& Constants.SHIPMENT_CONTAINER_TYPE_NAME.equals(container.getStorageType().getName()))
-					{
-						isValid = specimenBelongsToSite(container
-								.getSpecimenPositionCollection(), dao,
-								baseShipment.getSenderSite().getId(), true);
+						else if (container.getStorageType() != null
+								&& Constants.SHIPMENT_CONTAINER_TYPE_NAME.equals(container
+										.getStorageType().getName()))
+						{
+							isValid = specimenBelongsToSite(container
+									.getSpecimenPositionCollection(), dao, baseShipment
+									.getSenderSite().getId(), true);
+						}
 					}
 				}
 			}
+			else
+			{
+				//errorMsg.append("<li>Shipment is empty.</li>") ;//shipment.emptyShipment
+				throw getBizLogicException(null, "shipment.emptyShipment", null);
+			}
+			/*if (errorMsg != null && errorMsg.length() > 0)
+			{
+				logger.debug(errorMsg.toString());
+				throw new BizLogicException(null,null,errorMsg.toString());
+				//throw new DAOException(errorMsg.toString());
+			}*/
 		}
-		else
-		{
-			//errorMsg.append("<li>Shipment is empty.</li>") ;//shipment.emptyShipment
-			throw getBizLogicException(null, "shipment.emptyShipment",null);
-		}
-		/*if (errorMsg != null && errorMsg.length() > 0)
-		{
-			logger.debug(errorMsg.toString());
-			throw new BizLogicException(null,null,errorMsg.toString());
-			//throw new DAOException(errorMsg.toString());
-		}*/
-		}
-		catch(DAOException e)
+		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-			
+
 		}
 		return isValid;
 	}
+
 	/**
 	 * this function validates the container in the shipment.
 	 * @param oldShipment the object of BaseShipment class.
 	 * @param updatedShipment the object of BaseShipment class,updated object.
 	 * @throws DAOException if database operation fails.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException throws BizLogicException
 	 */
 	// bug 11410
-	private void validateContainerInShipment(BaseShipment oldShipment,
-			BaseShipment updatedShipment) throws DAOException, BizLogicException
+	private void validateContainerInShipment(BaseShipment oldShipment, BaseShipment updatedShipment)
+			throws DAOException, BizLogicException
 	{
 		boolean isBelongsToShipment = false;
 		Collection containerCollection = new HashSet();
@@ -782,8 +792,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					StorageContainer containerOld = (StorageContainer) it1.next();
 					if (containerOld != null && containerOld.getId() != null)
 					{
-						if (containerOld.getId().longValue() == container
-								.getId().longValue())
+						if (containerOld.getId().longValue() == container.getId().longValue())
 						{
 							isBelongsToShipment = true;
 							break;
@@ -797,31 +806,32 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 	}
+
 	/**
 	 * validates the shipment container.
 	 * @param baseShipment the object of base shipment class.
 	 * @param container container to be validated.
 	 * @return errorMsg containing the error string if validation fails.
 	 * @throws DAOException if database operation fails.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException throws BizLogicException
 	 */
-	private void validateShipmentContainer(BaseShipment baseShipment,
-			StorageContainer container) throws DAOException, BizLogicException
+	private void validateShipmentContainer(BaseShipment baseShipment, StorageContainer container)
+			throws DAOException, BizLogicException
 	{
 		boolean isValid = true;
-		isValid = containerBelongsToSite(container, baseShipment
-				.getSenderSite().getId());
+		isValid = containerBelongsToSite(container, baseShipment.getSenderSite().getId());
 		//bug 12568
 		if (!isValid)
 		{
-			throw getBizLogicException(null, "shipment.containerValidation", container.getName()+":"+container.getSite().getName());
+			throw getBizLogicException(null, "shipment.containerValidation", container.getName()
+					+ ":" + container.getSite().getName());
 		}
-		else if (container.getName().contains(
-				Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
+		else if (container.getName().contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 		{
 			throw getBizLogicException(null, "shipment.containerValidation", container.getName());
-		}		
+		}
 	}
+
 	/**
 	 * this function validates the site of the user.
 	 * @param dao the object of DAO class.
@@ -831,7 +841,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException if database operation fails.
 	 */
 	// bug 11410 end
-	protected boolean validateUsersSite(DAO dao, Long userId, Long siteId)throws DAOException
+	protected boolean validateUsersSite(DAO dao, Long userId, Long siteId) throws DAOException
 	{
 		boolean isValidUser = false;
 		if (userId != null)
@@ -862,6 +872,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return isValidUser;
 	}
+
 	/**
 	 * validates the specimen belonging to the site.
 	 * @param specimenPositionCollection collection containing specimen position.
@@ -872,8 +883,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException if bizlogic operation fails.
 	 */
 	protected boolean specimenBelongsToSite(
-			Collection<SpecimenPosition> specimenPositionCollection, DAO dao,
-			Long siteId, boolean belongsTo) throws BizLogicException
+			Collection<SpecimenPosition> specimenPositionCollection, DAO dao, Long siteId,
+			boolean belongsTo) throws BizLogicException
 	{
 		StringBuffer errorMsg = new StringBuffer();
 		boolean containerBelongsTo = false;
@@ -883,7 +894,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		{
 			if (specimenPositionCollection != null)
 			{
-				Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection.iterator();
+				Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection
+						.iterator();
 				while (specimenPosIterator.hasNext())
 				{
 					SpecimenPosition position = specimenPosIterator.next();
@@ -892,40 +904,38 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 						Specimen specimen = position.getSpecimen();
 						if (specimen != null)
 						{
-//							if (specimen.getId() != null)
-//							{
-//						This specimen belongs to this shipment, so do not
-//								// validate
-//							}
-							if(specimen.getId()==null)
+							//							if (specimen.getId() != null)
+							//							{
+							//						This specimen belongs to this shipment, so do not
+							//								// validate
+							//							}
+							if (specimen.getId() == null)
 							{
 								String label = "";
 								String choice = "";
-								if (specimen.getLabel() != null
-									&& !specimen.getLabel().equals(""))
+								if (specimen.getLabel() != null && !specimen.getLabel().equals(""))
 								{
 									label = specimen.getLabel();
 									choice = Constants.SPECIMEN_PROPERTY_LABEL;
 								}
 								else if (specimen.getBarcode() != null
-									&& !specimen.getBarcode().equals(""))
+										&& !specimen.getBarcode().equals(""))
 								{
 									label = specimen.getBarcode();
 									choice = Constants.SPECIMEN_PROPERTY_BARCODE;
 								}
-								specimen = getSpecimenByLabelOrBarcode(label, dao,
-									choice);
+								specimen = getSpecimenByLabelOrBarcode(label, dao, choice);
 								if (specimen != null)
 								{
 									if (specimen.getSpecimenPosition() != null)
 									{
-										if (!specimen
-											.getSpecimenPosition()
-											.getStorageContainer()
-											.getName()
-											.contains(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
+										if (!specimen.getSpecimenPosition().getStorageContainer()
+												.getName().contains(
+														Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 										{
-											containerBelongsTo = containerBelongsToSite(specimen.getSpecimenPosition().getStorageContainer(),siteId);
+											containerBelongsTo = containerBelongsToSite(specimen
+													.getSpecimenPosition().getStorageContainer(),
+													siteId);
 										}
 										else
 										{
@@ -935,43 +945,58 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 										{
 											if (belongsTo)
 											{
-												throw getBizLogicException(null, "shipment.specimenContainerValidation", label+":"+specimen.getSpecimenPosition().getStorageContainer().getSite().getName());
+												throw getBizLogicException(null,
+														"shipment.specimenContainerValidation",
+														label
+																+ ":"
+																+ specimen.getSpecimenPosition()
+																		.getStorageContainer()
+																		.getSite().getName());
 											}
 											else
 											{
-												throw getBizLogicException(null, "shipmentRequest.specimenContainerValidation", label+":"+specimen.getSpecimenPosition().getStorageContainer().getSite().getName());
+												throw getBizLogicException(
+														null,
+														"shipmentRequest.specimenContainerValidation",
+														label
+																+ ":"
+																+ specimen.getSpecimenPosition()
+																		.getStorageContainer()
+																		.getSite().getName());
 											}
 										}
 									}
 									else
 									{
 										// Specimen is virtually located
-										throw getBizLogicException(null, "shipment.virtual.specimen", label);
+										throw getBizLogicException(null,
+												"shipment.virtual.specimen", label);
 									}
 								}
 								else
 								{
-// 								No specimen with such name or barcode exists
+									// 								No specimen with such name or barcode exists
 									containerBelongsTo = false;
-									throw getBizLogicException(null, "shipment.NoSpecimenExists", label);
+									throw getBizLogicException(null, "shipment.NoSpecimenExists",
+											label);
 								}
 							}
 						}
 					}
-//					else
-//					{
-//						// SpecimenPosition object is null...
-//						// This is never expected to happen
-//					}
+					//					else
+					//					{
+					//						// SpecimenPosition object is null...
+					//						// This is never expected to happen
+					//					}
 				}
 			}
-//			else
-//			{
-//				// Newly created container but doesnot contain any specimens
-//				// Shud not have been created
-//			}
+			//			else
+			//			{
+			//				// Newly created container but doesnot contain any specimens
+			//				// Shud not have been created
+			//			}
 		}
-		catch(DAOException e)
+		catch (DAOException e)
 		{
 			logger.debug(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
@@ -985,6 +1010,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}*/
 		return containerBelongsTo;
 	}
+
 	/**
 	 * checks whether container belongs to a site.
 	 * @param container object of StorageContainer class.
@@ -992,8 +1018,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return belongs the result of the operation.
 	 * @throws DAOException if some database operation fails.
 	 */
-	protected boolean containerBelongsToSite(StorageContainer container,
-			Long siteId) throws DAOException
+	protected boolean containerBelongsToSite(StorageContainer container, Long siteId)
+			throws DAOException
 	{
 		boolean belongs = false;
 		// Assuming no contianer exists without being associated with any site
@@ -1016,7 +1042,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean containing session details.
 	 * @return Mail notification successful or not.
 	 */
-	protected boolean sendNotification(BaseShipment baseShipment,SessionDataBean sessionDataBean)
+	protected boolean sendNotification(BaseShipment baseShipment, SessionDataBean sessionDataBean)
 	{
 		String[] toUser = getEmailAddressesForMailNotification(baseShipment);
 		String subject = getNotificationMailSubject(baseShipment);
@@ -1029,8 +1055,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param baseShipment object of BaseShipment class.
 	 * @return email addresses to send mail notifications.
 	 */
-	protected abstract String[] getEmailAddressesForMailNotification(
-			BaseShipment baseShipment);
+	protected abstract String[] getEmailAddressesForMailNotification(BaseShipment baseShipment);
 
 	/**
 	 * Sets the contact persons (sender/receiver) details in shipment object.
@@ -1039,7 +1064,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param userId long variable containing userId.
 	 * @throws DAOException if any database operation fails.
 	 */
-	protected void setShipmentContactPersons(DAO dao,BaseShipment baseShipment, Long userId)throws DAOException
+	protected void setShipmentContactPersons(DAO dao, BaseShipment baseShipment, Long userId)
+			throws DAOException
 	{
 		User sender = null;
 		List list = null;
@@ -1055,18 +1081,19 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		baseShipment.setSenderContactPerson(sender);
 		//set receiver contact person
 		//bug 12255
-		List receiverSiteList =null;
+		List receiverSiteList = null;
 		Site receiverSite = null;
 		long siteId = baseShipment.getReceiverSite().getId();
-		if(siteId!=0l)
+		if (siteId != 0l)
 		{
-			receiverSiteList = dao.retrieve(Site.class.getName(), edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,siteId);
-			if (receiverSiteList!=null && !receiverSiteList.isEmpty())
+			receiverSiteList = dao.retrieve(Site.class.getName(),
+					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, siteId);
+			if (receiverSiteList != null && !receiverSiteList.isEmpty())
 			{
 				receiverSite = (Site) receiverSiteList.get(0);
 			}
 			User receiverSiteCoordinator = receiverSite.getCoordinator();
-			baseShipment.setReceiverContactPerson(receiverSiteCoordinator);			
+			baseShipment.setReceiverContactPerson(receiverSiteCoordinator);
 		}
 	}
 
@@ -1076,18 +1103,16 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param baseShipment BaseShipment object to set sender/receiver site details.
 	 * @throws DAOException if any database operation fails.
 	 */
-	protected void setShipmentSites(DAO dao, BaseShipment baseShipment)
-			throws DAOException
+	protected void setShipmentSites(DAO dao, BaseShipment baseShipment) throws DAOException
 	{
 		Site senderSite = null;
 		Site receiverSite = null;
 		List list = null;
-		if (baseShipment.getSenderSite() != null
-				&& baseShipment.getSenderSite().getId() != null)
+		if (baseShipment.getSenderSite() != null && baseShipment.getSenderSite().getId() != null)
 		{
 			list = dao.retrieve(Site.class.getName(),
-					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, baseShipment.getSenderSite()
-							.getId());
+					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, baseShipment
+							.getSenderSite().getId());
 			if (!list.isEmpty())
 			{
 				senderSite = (Site) list.get(0);
@@ -1097,8 +1122,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				&& baseShipment.getReceiverSite().getId() != null)
 		{
 			list = dao.retrieve(Site.class.getName(),
-					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, baseShipment.getReceiverSite()
-							.getId());
+					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, baseShipment
+							.getReceiverSite().getId());
 			if (!list.isEmpty())
 			{
 				receiverSite = (Site) list.get(0);
@@ -1142,14 +1167,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException if any bizlogic operation fails.
 	 */
 	@Override
-	protected void update(DAO dao, Object obj, Object oldObj,
-			SessionDataBean sessionDataBean) throws BizLogicException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+			throws BizLogicException
 	{
 		try
 		{
 			if (!(obj instanceof BaseShipment))
 			{
-				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),null,"");
+				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),
+						null, "");
 				//throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
 			}
 			BaseShipment shipment = (BaseShipment) obj;
@@ -1161,13 +1187,11 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			// Ravi : changes : start
 			List<SpecimenPosition> specimenPositionList = new ArrayList<SpecimenPosition>();
 			List<ContainerPosition> containerPositionList = new ArrayList<ContainerPosition>();
-			StorageContainer container = saveOrUpdateContainer(shipment
-					.getContainerCollection(), dao, sessionDataBean,
-					edu.wustl.common.util.global.Constants.EDIT,
+			StorageContainer container = saveOrUpdateContainer(shipment.getContainerCollection(),
+					dao, sessionDataBean, edu.wustl.common.util.global.Constants.EDIT,
 					specimenPositionList);
-					Collection<StorageContainer> containerCollection = updateContainerDetails(
-					shipment.getContainerCollection(), dao, sessionDataBean,
-					true, containerPositionList);
+			Collection<StorageContainer> containerCollection = updateContainerDetails(shipment
+					.getContainerCollection(), dao, sessionDataBean, true, containerPositionList);
 			if (container != null)
 			{
 				containerCollection.add(container);
@@ -1176,8 +1200,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			shipment.getContainerCollection().addAll(containerCollection);
 			this.validateContainerInShipment(oldShipment, shipment);// bug 11410
 			dao.update(shipment);
-			insertSinglePositionInContainerMap(specimenPositionList,
-					containerPositionList);
+			insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 
 			// Add mailing functionality
 			boolean mailStatus = sendNotification(shipment, sessionDataBean);
@@ -1190,24 +1213,26 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		{
 			logger.debug(daoException.getMessage(), daoException);
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
-			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
+			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException
+					.getMsgValues());
 			//throw new DAOException(bizLogicException.getMessage());
 		}
 	}
+
 	/**
 	 * this method update shipment system properties.
 	 * @param shipment object of BaseShipment class.
 	 * @param oldShipment object of BaseShipment class.
 	 */
-	protected void updateShipmentSystemProperties(BaseShipment shipment,BaseShipment oldShipment)
+	protected void updateShipmentSystemProperties(BaseShipment shipment, BaseShipment oldShipment)
 	{
 		shipment.setCreatedDate(oldShipment.getCreatedDate());
-		if (shipment.getActivityStatus() == null
-				|| shipment.getActivityStatus().trim().equals(""))
+		if (shipment.getActivityStatus() == null || shipment.getActivityStatus().trim().equals(""))
 		{
 			shipment.setActivityStatus(oldShipment.getActivityStatus());
 		}
 	}
+
 	/**
 	 * gets the shipment details.
 	 * @param objectsClassName the class names.
@@ -1220,9 +1245,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return dataList list of objects.
 	 */
 	// selectColumnName consists of comma separated column list.
-	public List<Object[]> getShipmentDetails(String objectsClassName,
-			String selectColumnName, String whereClause,
-			Object[] whereColumnValue, String orderByField, int startIndex,
+	public List<Object[]> getShipmentDetails(String objectsClassName, String selectColumnName,
+			String whereClause, Object[] whereColumnValue, String orderByField, int startIndex,
 			int numOfRecords)
 	{
 		List dataList = null;
@@ -1232,12 +1256,15 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			sqlBuff.append("select " + selectColumnName + " from " + objectsClassName + " " + "shipment " + "where " + whereClause + " order by shipment." + orderByField + " desc");
+			sqlBuff.append("select " + selectColumnName + " from " + objectsClassName + " "
+					+ "shipment " + "where " + whereClause + " order by shipment." + orderByField
+					+ " desc");
 			for (Object object : whereColumnValue)
 			{
 				paramValuesList.add(object);
 			}
-			dataList = ((HibernateDAO)dao).executeQuery(sqlBuff.toString(), startIndex,numOfRecords, paramValuesList);
+			dataList = ((HibernateDAO) dao).executeQuery(sqlBuff.toString(), startIndex,
+					numOfRecords, paramValuesList);
 		}
 		catch (ApplicationException appException)
 		{
@@ -1257,6 +1284,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return dataList;
 	}
+
 	/**
 	 * this function gets the shipment count.
 	 * @param objectsClassName class names.
@@ -1267,9 +1295,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @param numOfRecords integer containing number of records.
 	 * @return recordCount count of records.
 	 */
-	public static int getShipmentsCount(String objectsClassName,
-			String whereClause, Object[] whereColumnValue, String orderByField,
-			int startIndex, int numOfRecords)
+	public static int getShipmentsCount(String objectsClassName, String whereClause,
+			Object[] whereColumnValue, String orderByField, int startIndex, int numOfRecords)
 	{
 		int recordCount = 0;
 		List dataList = null;
@@ -1279,12 +1306,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			sqlBuff.append("select count(shipment) from " + objectsClassName + " " + "shipment where " + whereClause);
+			sqlBuff.append("select count(shipment) from " + objectsClassName + " "
+					+ "shipment where " + whereClause);
 			for (Object object : whereColumnValue)
 			{
 				paramValuesList.add(object);
 			}
-			dataList = ((HibernateDAO)dao).executeQuery(sqlBuff.toString(), startIndex,numOfRecords, paramValuesList);
+			dataList = ((HibernateDAO) dao).executeQuery(sqlBuff.toString(), startIndex,
+					numOfRecords, paramValuesList);
 			if (dataList != null && dataList.size() == 1)
 			{
 				recordCount = (Integer) dataList.get(0);
@@ -1294,7 +1323,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				recordCount = 0;
 			}
 		}
-		catch(ApplicationException excp)
+		catch (ApplicationException excp)
 		{
 			recordCount = 0;
 			excp.printStackTrace();
@@ -1312,6 +1341,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		return recordCount;
 	}
+
 	/**
 	 * this method returns the list of ids of site.
 	 * @param userId site corresponding to user id.
@@ -1323,14 +1353,14 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		List<Long> siteIdsList = new ArrayList<Long>();
-		Collection<Site> siteCollection = getPermittedSitesForUser(userId,
-				isAdmin);
+		Collection<Site> siteCollection = getPermittedSitesForUser(userId, isAdmin);
 		for (Site site : siteCollection)
 		{
 			siteIdsList.add(site.getId());
 		}
 		return siteIdsList;
 	}
+
 	/**
 	 * this method gives the collection of sites.
 	 * @param userId the id of user.
@@ -1338,8 +1368,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @return collection of sites.
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
-	public Collection<Site> getPermittedSitesForUser(Long userId,
-			boolean isAdmin) throws BizLogicException
+	public Collection<Site> getPermittedSitesForUser(Long userId, boolean isAdmin)
+			throws BizLogicException
 	{
 		Collection<Site> siteList = null;
 		if (!isAdmin)
@@ -1351,19 +1381,19 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				User user = (User) userList.get(0);
 				if (user != null && user.getSiteCollection() != null)
 				{
-					siteList = (Collection<Site>) retrieveAttribute(User.class
-							.getName(), user.getId(),
-							"elements(siteCollection)");
+					siteList = (Collection<Site>) retrieveAttribute(User.class.getName(), user
+							.getId(), "elements(siteCollection)");
 				}
 			}
 		}
 		else
 		{
-			siteList = retrieve(Site.class.getName(),
-					Status.ACTIVITY_STATUS.toString(), Status.ACTIVITY_STATUS_ACTIVE.toString());
+			siteList = retrieve(Site.class.getName(), Status.ACTIVITY_STATUS.toString(),
+					Status.ACTIVITY_STATUS_ACTIVE.toString());
 		}
 		return siteList;
 	}
+
 	/**
 	 * executes the query.
 	 * @param queryString the query to execute.
@@ -1371,7 +1401,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws SQLException if query operation fails.
 	 * @throws ApplicationException wrapping the dao exception.
 	 */
-	public List executeSQL(String queryString) throws SQLException,ApplicationException
+	public List executeSQL(String queryString) throws SQLException, ApplicationException
 	{
 		List list = null;
 		DAO dao = AppUtility.openJDBCSession();
@@ -1379,6 +1409,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		AppUtility.closeDAOSession(dao);
 		return list;
 	}
+
 	/**
 	 * deletes the container located at some position.
 	 * @param container the storage container.
@@ -1388,17 +1419,18 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException if some database operation fails.
 	 */
 	protected void deleteLocatedAtPosition(StorageContainer container,
-			SessionDataBean sessionDataBean, DAO dao,
-			List<ContainerPosition> containerPositionList) throws DAOException
+			SessionDataBean sessionDataBean, DAO dao, List<ContainerPosition> containerPositionList)
+			throws DAOException
 	{
 		if (container.getLocatedAtPosition() != null)
 		{
 			Long containerPosId = container.getLocatedAtPosition().getId();
 			if (containerPosId != null)
 			{
-				List<ContainerPosition> containerPosList = (List<ContainerPosition>) dao
-						.retrieve(ContainerPosition.class.getName(),
-								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, containerPosId);
+				List<ContainerPosition> containerPosList = (List<ContainerPosition>) dao.retrieve(
+						ContainerPosition.class.getName(),
+						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+						containerPosId);
 
 				if (containerPositionList != null && containerPosList != null)
 				{
@@ -1410,7 +1442,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 									.getParentContainer();
 							StorageType storageType = parentContainer.getStorageType();
 							if (storageType != null
-									&& ((storageType.getName() != null) && !(storageType.getName().trim().equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+									&& ((storageType.getName() != null) && !(storageType.getName()
+											.trim().equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
 							{
 								containerPositionList.add(containerPos);
 							}
@@ -1456,6 +1489,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			return null;
 		}
 	}
+
 	/**
 	 * To get PrivilegeName for authorization check from
 	 * 'PermissionMapDetails.xml' (non-Javadoc).
@@ -1467,39 +1501,34 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	{
 		return Constants.ADD_EDIT_SHIPMENT;
 	}
-	
-	
-	
+
 	/**
-	 * 
-	 * @param specimenPositionList
-	 * @param containerPositionList
+	 * @param specimenPositionList list of specimenPosition.
+	 * @param containerPositionList list of containerPosition
 	 */
-	public static void  insertSinglePositionInContainerMap(List<SpecimenPosition> specimenPositionList,List<ContainerPosition> containerPositionList){
+	public static void insertSinglePositionInContainerMap(
+			List<SpecimenPosition> specimenPositionList,
+			List<ContainerPosition> containerPositionList)
+	{
 		Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 		if (specimenPositionList != null && !specimenPositionList.isEmpty())
 		{
 			for (SpecimenPosition specimenPosition : specimenPositionList)
 			{
-				StorageContainerUtil.insertSinglePositionInContainerMap(
-						specimenPosition.getStorageContainer(),
-						containerMap, specimenPosition
-								.getPositionDimensionOne().intValue(),
-						specimenPosition.getPositionDimensionTwo()
-								.intValue());
+				StorageContainerUtil.insertSinglePositionInContainerMap(specimenPosition
+						.getStorageContainer(), containerMap, specimenPosition
+						.getPositionDimensionOne().intValue(), specimenPosition
+						.getPositionDimensionTwo().intValue());
 			}
 		}
-		if (containerPositionList != null
-				&& !containerPositionList.isEmpty())
+		if (containerPositionList != null && !containerPositionList.isEmpty())
 		{
 			for (ContainerPosition containerPosition : containerPositionList)
 			{
-				StorageContainerUtil.insertSinglePositionInContainerMap(
-						containerPosition.getParentContainer(),
-						containerMap, containerPosition
-								.getPositionDimensionOne().intValue(),
-						containerPosition.getPositionDimensionTwo()
-								.intValue());
+				StorageContainerUtil.insertSinglePositionInContainerMap(containerPosition
+						.getParentContainer(), containerMap, containerPosition
+						.getPositionDimensionOne().intValue(), containerPosition
+						.getPositionDimensionTwo().intValue());
 			}
 		}
 	}
