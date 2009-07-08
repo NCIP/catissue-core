@@ -18,4 +18,11 @@
             <scope>session</scope>
         </properties>
     </destination>
+    
+    <destination id="queryService">
+        <properties>
+            <source>edu.wustl.query.flex.FlexInterface</source>
+            <scope>session</scope>
+        </properties>
+    </destination>
 </service>
