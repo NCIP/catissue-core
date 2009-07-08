@@ -816,21 +816,47 @@ public class ViewSpecimenSummaryAction extends Action
 	 */
 	private void verifyPrintStatus(ViewSpecimenSummaryForm summaryForm, HttpSession session)
 	{
-		final Set printSpecimenSet = new LinkedHashSet();
-		final List<GenericSpecimen> specimenList = new ArrayList<GenericSpecimen>();
-		specimenList.addAll(summaryForm.getAliquotList());
-		specimenList.addAll(summaryForm.getDerivedList());
-		specimenList.addAll(summaryForm.getSpecimenList());
-		for (final GenericSpecimen pSpecimen : specimenList)
+		final String eventId = summaryForm.getEventId();
+		if (eventId == null
+				|| session.getAttribute( Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP ) == null)
 		{
-			if (pSpecimen.getPrintSpecimen() == true)
+			return;
+		}
+		final Map collectionProtocolEventMap = (Map) session
+				.getAttribute( Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP );
+		final CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+				.get( eventId ); // get nullpointer sometimes
+		final LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
+		final Iterator specItr = specimenMap.values().iterator();
+		final List < GenericSpecimen > allSpcimens = new ArrayList < GenericSpecimen >();
+		allSpcimens.addAll( specimenMap.values() );
+		final Set printSpecimenSet = new HashSet();
+		while (specItr.hasNext())
+		{
+			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
+			final LinkedHashMap < String, GenericSpecimen > aliquots = pSpecimen
+					.getAliquotSpecimenCollection();
+			if (aliquots != null && !aliquots.isEmpty())
 			{
-				printSpecimenSet.add(pSpecimen);
+				allSpcimens.addAll( aliquots.values() );
+			}
+			final LinkedHashMap < String, GenericSpecimen > derivaties = pSpecimen
+					.getDeriveSpecimenCollection();
+			if (derivaties != null && !derivaties.isEmpty())
+			{
+				allSpcimens.addAll( derivaties.values() );
+			}
+		}
+		for (final GenericSpecimen specimen : allSpcimens)
+		{
+			if (specimen.getPrintSpecimen() == true)
+			{
+				printSpecimenSet.add( specimen );
 			}
 		}
 		if (!printSpecimenSet.isEmpty())
 		{
-			summaryForm.setSpecimenPrintList(printSpecimenSet);
+			summaryForm.setSpecimenPrintList( printSpecimenSet );
 		}
 
 	}

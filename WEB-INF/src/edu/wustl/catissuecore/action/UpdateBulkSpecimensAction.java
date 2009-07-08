@@ -53,16 +53,14 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
-
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
+	private transient Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
 	/**
 	 * specimenSummaryForm.
 	 */
 	private ViewSpecimenSummaryForm specimenSummaryForm = null;
-
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -78,7 +76,6 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	 * @return ActionForward : ActionForward
 	 */
 
-	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -219,7 +216,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request,
 					this.specimenSummaryForm, true);
 
-			final ActionErrors actionErrors = new ActionErrors();
+			ActionErrors actionErrors = new ActionErrors();
 
 			// To delegate UserNotAuthorizedException forward
 			if (exception instanceof UserNotAuthorizedException)
@@ -285,11 +282,21 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				while (itr.hasNext())
 				{
 					final Specimen specimen = (Specimen) itr.next();
-					if (specimen.getLabel().equals(gSpecimen.getDisplayName()))
+					String label = gSpecimen.getDisplayName();
+					//label is coming null in case of specimens added through
+					//multiple specimens page.
+					if(label==null)
 					{
-						specimensToPrint.add(specimen);
+						label = gSpecimen.getCorresSpecimen().getLabel();
 					}
-				}
+					if(specimen.getLabel()!=null && label!=null)
+					{
+						if(specimen.getLabel().equals(label))
+						{
+							specimensToPrint.add(specimen);
+						}
+					}
+				}						
 			}
 		}
 		return specimensToPrint;

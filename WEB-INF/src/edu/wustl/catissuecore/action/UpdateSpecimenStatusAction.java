@@ -258,15 +258,30 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				while (itr.hasNext())
 				{
 					final Specimen specimen = (Specimen) itr.next();
-					if (specimen.getLabel().equals(gSpecimen.getDisplayName()))
+					//if label and barcode generation is off then label will be null.
+					// thus added this check
+					//bug 13026
+					if(specimen.getId().toString()!=null && gSpecimen.getId()!= -1)
 					{
-						specimensToPrint.add(specimen);
+						if(specimen.getId().longValue()== gSpecimen.getId())
+						{
+						  specimensToPrint.add(specimen);
+						}
+					}
+					else if(specimen.getLabel()!=null && gSpecimen.getDisplayName()!=null)
+					{
+						if(specimen.getLabel().equals(gSpecimen.getDisplayName()))
+						{
+						  specimensToPrint.add(specimen);
+						}
 					}
 				}
 			}
 		}
 		return specimensToPrint;
 	}
+
+
 
 	/**
 	 *
