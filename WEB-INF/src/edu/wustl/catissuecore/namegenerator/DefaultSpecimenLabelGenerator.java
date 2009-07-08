@@ -22,22 +22,24 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
 
 	/**
-	 * Logger object
+	 * Logger object.
 	 */
-	private static final transient Logger logger = Logger.getCommonLogger(DefaultSpecimenLabelGenerator.class);
+	private static final transient Logger LOGGER = Logger
+			.getCommonLogger(DefaultSpecimenLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
 	protected Long currentLabel;
-	
+
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
-	public DefaultSpecimenLabelGenerator()throws ApplicationException
+	public DefaultSpecimenLabelGenerator() throws ApplicationException
 	{
-	
-			init();
-			// TODO Auto-generated catch block
+
+		this.init();
+		// TODO Auto-generated catch block
 	}
 
 	/**
@@ -46,41 +48,37 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
+	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
 		String databaseConstant = null;
-		try
-		{
-			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
-					Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				databaseConstant = Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
-			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance()
-					.getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				// Modify query for mssqlserver DB.
-				databaseConstant = Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
-			}
-			else
-			{
-				databaseConstant = Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
-			}
 
-			StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant
-					+ ") from CATISSUE_SPECIMEN");
-			if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
-					Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_LABEL_APPEND_STR);
-			}
-			currentLabel = AppUtility.getLastAvailableValue(sql.toString());
-		}
-		catch (Exception ex)
+		if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+				Constants.APPLICATION_NAME).getDataBaseType()))
 		{
-			logger.debug(ex.getMessage(), ex);
+			databaseConstant = Constants.ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
 		}
+		else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance()
+				.getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
+		{
+			// Modify query for mssqlserver DB.
+			databaseConstant = Constants.MSSQLSERVER_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
+		}
+		else
+		{
+			databaseConstant = Constants.MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION;
+		}
+
+		final StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant
+				+ ") from CATISSUE_SPECIMEN");
+		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+				Constants.APPLICATION_NAME).getDataBaseType()))
+		{
+			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_LABEL_APPEND_STR);
+		}
+		this.currentLabel = AppUtility.getLastAvailableValue(sql.toString());
+
 	}
 
 	/**
@@ -90,9 +88,9 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	synchronized void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject)
 	{
-		String parentSpecimenLabel = (String) parentObject.getLabel();
+		final String parentSpecimenLabel = parentObject.getLabel();
 		long aliquotCount = parentObject.getChildSpecimenCollection().size();
-		aliquotCount = aliquotCount(parentObject, aliquotCount);
+		aliquotCount = this.aliquotCount(parentObject, aliquotCount);
 		specimenObject.setLabel(parentSpecimenLabel + "_" + (aliquotCount));
 	}
 
@@ -103,10 +101,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 */
 	protected long aliquotCount(AbstractSpecimen parentObject, long aliquotCount)
 	{
-		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen) itr.next();
+			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getLabel() == null)
 			{
 				aliquotCount--;
@@ -123,8 +121,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject)
 	{
-		currentLabel = currentLabel + 1;
-		specimenObject.setLabel(currentLabel.toString());
+		this.currentLabel = this.currentLabel + 1;
+		specimenObject.setLabel(this.currentLabel.toString());
 	}
 
 	/**
@@ -134,8 +132,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public synchronized void setLabel(Object obj)
 	{
 
-		Specimen objSpecimen = (Specimen) obj;
-		Specimen parentSpecimen = (Specimen) objSpecimen.getParentSpecimen();
+		final Specimen objSpecimen = (Specimen) obj;
+		final Specimen parentSpecimen = (Specimen) objSpecimen.getParentSpecimen();
 		if (objSpecimen.getLabel() != null)
 		{
 			return;
@@ -143,8 +141,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			currentLabel++;
-			objSpecimen.setLabel(currentLabel.toString());
+			this.currentLabel++;
+			objSpecimen.setLabel(this.currentLabel.toString());
 		}
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
@@ -152,18 +150,18 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		}
 		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
+			this.setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
 		}
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection<AbstractSpecimen> specimenCollection = objSpecimen
-			.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
+					.getChildSpecimenCollection();
+			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen) it.next();
-				setLabel(objChildSpecimen);
+				final Specimen objChildSpecimen = (Specimen) it.next();
+				this.setLabel(objChildSpecimen);
 			}
 		}
 	}
@@ -175,11 +173,11 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public synchronized void setLabel(List objSpecimenList)
 	{
 
-		List<Specimen> specimenList = objSpecimenList;
+		final List<Specimen> specimenList = objSpecimenList;
 		for (int index = 0; index < specimenList.size(); index++)
 		{
-			Specimen objSpecimen = (Specimen) specimenList.get(index);
-			setLabel(objSpecimen);
+			final Specimen objSpecimen = specimenList.get(index);
+			this.setLabel(objSpecimen);
 		}
 
 	}
@@ -191,8 +189,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 */
 	public String getLabel(Object obj)
 	{
-		Specimen objSpecimen = (Specimen) obj;
-		setLabel(objSpecimen);
+		final Specimen objSpecimen = (Specimen) obj;
+		this.setLabel(objSpecimen);
 		return (objSpecimen.getLabel());
 	}
 }

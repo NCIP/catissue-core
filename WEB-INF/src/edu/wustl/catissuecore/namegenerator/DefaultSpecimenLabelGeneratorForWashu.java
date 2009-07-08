@@ -23,9 +23,10 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 {
 
 	/**
-	 * Logger object 
+	 * Logger object.
 	 */
-	private static final transient Logger logger = Logger.getCommonLogger(DefaultSpecimenLabelGeneratorForWashu.class);
+	private static final transient Logger LOGGER = Logger
+			.getCommonLogger(DefaultSpecimenLabelGeneratorForWashu.class);
 	/**
 	 * Current label.
 	 */
@@ -40,28 +41,28 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	 */
 	protected long count = 0;
 
-	
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public DefaultSpecimenLabelGeneratorForWashu() throws ApplicationException
 	{
 		try
 		{
-			init();
-			String sql = "select MAX(identifier) from CATISSUE_SPECIMEN";
-			tmpLabel=AppUtility.getLastAvailableValue(sql);
+			this.init();
+			final String sql = "select MAX(identifier) from CATISSUE_SPECIMEN";
+			this.tmpLabel = AppUtility.getLastAvailableValue(sql);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			LOGGER.debug(ex.getMessage(), ex);
 		}
 	}
 
 	/**
 	 * Map for Tree base specimen entry.
 	 */
-	Map<Object,Long> labelCountTreeMap = new HashMap<Object, Long>();
+	Map<Object, Long> labelCountTreeMap = new HashMap<Object, Long>();
 	/**
 	 * Temp for label.
 	 */
@@ -78,27 +79,27 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 
 		if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimenObject.getCollectionStatus()))
 		{
-			labelCountTreeMap = setAliquotLabel(parentObject, specimenObject, prefix,
-					labelCountTreeMap);
+			this.labelCountTreeMap = this.setAliquotLabel(parentObject, specimenObject, prefix,
+					this.labelCountTreeMap);
 		}
 		else
 		{
-			tmpLabelCountTreeMap = setAliquotLabel(parentObject, specimenObject, prefix,
-					tmpLabelCountTreeMap);
+			this.tmpLabelCountTreeMap = this.setAliquotLabel(parentObject, specimenObject, prefix,
+					this.tmpLabelCountTreeMap);
 		}
 	}
 
 	/**
-	 * @param parentObject parent sp obj
-	 * @param specimenObject sp obj
+	 * @param parentObject parent specimen object
+	 * @param specimenObject specimen object
 	 * @param prefix prefix
 	 * @param labelTreeMap map that stores count
 	 * @return  labelTreeMap
 	 */
-	private Map<Object, Long>setAliquotLabel(Specimen parentObject, Specimen specimenObject, String prefix,
-			Map<Object, Long> labelTreeMap)
+	private Map<Object, Long> setAliquotLabel(Specimen parentObject, Specimen specimenObject,
+			String prefix, Map<Object, Long> labelTreeMap)
 	{
-		String parentSpecimenLabel = (String) parentObject.getLabel();
+		final String parentSpecimenLabel = parentObject.getLabel();
 		long aliquotChildCount = 0;
 
 		if (labelTreeMap.containsKey(parentObject.getLabel()))
@@ -128,8 +129,8 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	synchronized Long setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject, Long labelCtr, String prefix)
 	{
-		Long labelControl=labelCtr + 1;
-	
+		final Long labelControl = labelCtr + 1;
+
 		if ((Constants.COLLECTION_STATUS_COLLECTED).equals(specimenObject.getCollectionStatus()))
 		{
 			specimenObject.setLabel(labelControl.toString());
@@ -139,7 +140,7 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 			specimenObject.setLabel(prefix + "_" + labelControl.toString());
 		}
 
-		labelCountTreeMap.put(specimenObject, 0L);
+		this.labelCountTreeMap.put(specimenObject, 0L);
 		return labelControl;
 	}
 
@@ -147,33 +148,37 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	 * Setting Label.
 	 * @param obj Specimen object list
 	 */
+	@Override
 	public synchronized void setLabel(Object obj)
 	{
-		Specimen objSpecimen = (Specimen) obj;
+		final Specimen objSpecimen = (Specimen) obj;
 		if ((Constants.COLLECTION_STATUS_COLLECTED).equals(objSpecimen.getCollectionStatus()))
 		{
-			tmpLabel = generateLabel(objSpecimen, tmpLabel, "");
+			this.tmpLabel = this.generateLabel(objSpecimen, this.tmpLabel, "");
 		}
 		else
 		{
 			if (objSpecimen.getLabel() == null)
 			{
-				tmpLabel = generateLabel(objSpecimen, tmpLabel, objSpecimen.getSpecimenType());
+				this.tmpLabel = this.generateLabel(objSpecimen, this.tmpLabel, objSpecimen
+						.getSpecimenType());
 			}
 		}
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection<AbstractSpecimen> specimenCollection = objSpecimen.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
+					.getChildSpecimenCollection();
+			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen) it.next();
-				setLabel(objChildSpecimen);
+				final Specimen objChildSpecimen = (Specimen) it.next();
+				this.setLabel(objChildSpecimen);
 			}
 		}
 
 	}
+
 	/**
 	 * @param objSpecimen sp obj.
 	 * @param labelCtr label
@@ -182,7 +187,7 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	 */
 	private Long generateLabel(Specimen objSpecimen, Long labelCtr, String prefix)
 	{
-		if (!labelCountTreeMap.containsKey(objSpecimen)
+		if (!this.labelCountTreeMap.containsKey(objSpecimen)
 				&& objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
 			if (objSpecimen.getLabel() == null)
@@ -199,23 +204,23 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 				}
 			}
 
-			labelCountTreeMap.put(objSpecimen.getLabel(), 0L);
-			tmpLabelCountTreeMap.put(objSpecimen.getLabel(), 0L);
+			this.labelCountTreeMap.put(objSpecimen.getLabel(), 0L);
+			this.tmpLabelCountTreeMap.put(objSpecimen.getLabel(), 0L);
 		}
 
-		else if (!labelCountTreeMap.containsKey(objSpecimen)
+		else if (!this.labelCountTreeMap.containsKey(objSpecimen)
 				&& objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
-			setNextAvailableAliquotSpecimenlabel((Specimen) objSpecimen.getParentSpecimen(),
+			this.setNextAvailableAliquotSpecimenlabel((Specimen) objSpecimen.getParentSpecimen(),
 					objSpecimen, prefix);
 		}
 
-		else if (!labelCountTreeMap.containsKey(objSpecimen)
+		else if (!this.labelCountTreeMap.containsKey(objSpecimen)
 				&& objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
 			if (objSpecimen.getLabel() == null)
 			{
-				labelCtr = setNextAvailableDeriveSpecimenlabel((Specimen) objSpecimen
+				labelCtr = this.setNextAvailableDeriveSpecimenlabel((Specimen) objSpecimen
 						.getParentSpecimen(), objSpecimen, labelCtr, prefix);
 			}
 		}
@@ -227,14 +232,15 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	 * Setting Label.
 	 * @param objSpecimenList Specimen object list
 	 */
+	@Override
 	public synchronized void setLabel(List objSpecimenList)
 	{
 
-		List specimenList = objSpecimenList;
+		final List specimenList = objSpecimenList;
 		for (int index = 0; index < specimenList.size(); index++)
 		{
-			Specimen objSpecimen = (Specimen) specimenList.get(index);
-			setLabel(objSpecimen);
+			final Specimen objSpecimen = (Specimen) specimenList.get(index);
+			this.setLabel(objSpecimen);
 		}
 
 	}
@@ -244,10 +250,11 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	 * @param obj Specimen object
 	 * @return label
 	 */
+	@Override
 	public String getLabel(Object obj)
 	{
-		Specimen objSpecimen = (Specimen) obj;
-		setLabel(objSpecimen);
+		final Specimen objSpecimen = (Specimen) obj;
+		this.setLabel(objSpecimen);
 
 		return (objSpecimen.getLabel());
 	}

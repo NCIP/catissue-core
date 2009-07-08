@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.querysuite.metadata;
 
 import java.io.FileInputStream;
@@ -25,39 +26,75 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 
 /**
- * This class adds Tag Values for attributes and Paths 
+ * This class adds Tag Values for attributes and Paths.
  * @author falguni_sachde
  */
 public class UpdateMetadataTagPath
 {
+
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
-	//Logger
+	/**
+	 * Logger.
+	 */
 	private static final org.apache.log4j.Logger LOGGER = LoggerConfig
 			.getConfiguredLogger(UpdateMetadataTagPath.class);
-	
+
+	/**
+	 * Specify ELEMENT_ENTITY_GROUP.
+	 */
 	public static final String ELEMENT_ENTITY_GROUP = "entity-group";
 
+	/**
+	 * Specify ELEMENT_ENTITY.
+	 */
 	public static final String ELEMENT_ENTITY = "entity";
 
+	/**
+	 * Specify ELEMENT_NAME.
+	 */
 	public static final String ELEMENT_NAME = "name";
 
+	/**
+	 * Specify ELEMENT_ATTRIBUTE.
+	 */
 	public static final String ELEMENT_ATTRIBUTE = "attribute";
 
+	/**
+	 * Specify ELEMENT_TAG.
+	 */
 	public static final String ELEMENT_TAG = "tag";
 
+	/**
+	 * Specify ELEMENT_TAG_NAME.
+	 */
 	public static final String ELEMENT_TAG_NAME = "tag-name";
 
+	/**
+	 * Specify ELEMENT_TAG_VALUE.
+	 */
 	public static final String ELEMENT_TAG_VALUE = "tag-value";
 
+	/**
+	 * Specify TAGGED_VALUE_NOT_SEARCHABLE.
+	 */
 	public static final String TAGGED_VALUE_NOT_SEARCHABLE = "NOT_SEARCHABLE";
 
+	/**
+	 * Specify TAGGED_VALUE_NOT_VIEWABLE.
+	 */
 	public static final String TAGGED_VALUE_NOT_VIEWABLE = "NOT_VIEWABLE";
 
+	/**
+	 * Specify TAGGED_VALUE_PRIMARY_KEY.
+	 */
 	public static final String TAGGED_VALUE_PRIMARY_KEY = "PRIMARY_KEY";
 
+	/**
+	 * Specify TAGGED_VALUE_PV_FILTER.
+	 */
 	public static final String TAGGED_VALUE_PV_FILTER = "PV_FILTER";
 
 	/**
@@ -75,11 +112,11 @@ public class UpdateMetadataTagPath
 			}
 
 			//This will add Tagged values to Participant Object
-			String fileName = args[0];
+			final String fileName = args[0];
 			readTaggedValues(fileName);
 			LOGGER.info("UpdateMetadataTagPath finishes");
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			LOGGER.info("error in UpdateMetadataTagPath" + e.getMessage());
 		}
@@ -94,25 +131,27 @@ public class UpdateMetadataTagPath
 	private static void readTaggedValues(String fileName)
 			throws DynamicExtensionsApplicationException, DynamicExtensionsSystemException
 	{
-		SAXReader saxReader = new SAXReader();
+		final SAXReader saxReader = new SAXReader();
 		try
 		{
-			FileInputStream inputStream = new FileInputStream(fileName);
-			Document document = saxReader.read(inputStream);
-			Element rootElement = document.getRootElement();
-			Iterator<Element> rootIterator = rootElement.elementIterator(ELEMENT_ENTITY_GROUP);
+			final FileInputStream inputStream = new FileInputStream(fileName);
+			final Document document = saxReader.read(inputStream);
+			final Element rootElement = document.getRootElement();
+			final Iterator<Element> rootIterator = rootElement
+					.elementIterator(ELEMENT_ENTITY_GROUP);
 			//Element entityGrpEle = null;
-			EntityGroupManagerInterface entityGroupManager = EntityGroupManager.getInstance();
+			final EntityGroupManagerInterface entityGroupManager = EntityGroupManager.getInstance();
 
 			while (rootIterator.hasNext())
 			{
-				Element entityGrpEle = (Element) rootIterator.next();
-				Element grpNameElement = entityGrpEle.element(ELEMENT_NAME);
-				String entityGroupName = grpNameElement.getText();
+				final Element entityGrpEle = rootIterator.next();
+				final Element grpNameElement = entityGrpEle.element(ELEMENT_NAME);
+				final String entityGroupName = grpNameElement.getText();
 
-				Long entitygroupId = EntityManager.getInstance().getEntityGroupId(entityGroupName);
+				final Long entitygroupId = EntityManager.getInstance().getEntityGroupId(
+						entityGroupName);
 
-				EntityGroupInterface entityGroup = entityGroupManager
+				final EntityGroupInterface entityGroup = entityGroupManager
 						.getEntityGroupByName(entityGroupName);
 				if (entityGroup == null)
 				{
@@ -125,16 +164,16 @@ public class UpdateMetadataTagPath
 			}
 			LOGGER.info("=TAGGED VALUES ADDED SUCCESSFULLY!!!");
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			LOGGER.info("=error in readTaggedValues !" + e.getMessage());
 		}
 	}
 
 	/**
-	 * Checks if tag is for NOT SEARCHABLE/NOT_VIEWABLE/PRIMARY KEY/PV_FILTER
-	 * @param key
-	 * @return
+	 * Checks if tag is for NOT SEARCHABLE/NOT_VIEWABLE/PRIMARY KEY/PV_FILTER.
+	 * @param key key
+	 * @return true or false.
 	 */
 	private static boolean checkValidTag(String key)
 	{
@@ -145,23 +184,23 @@ public class UpdateMetadataTagPath
 	/**
 	 * This method reads entities present in the entity group, from the xml.
 	 * @param entityGrpEle xml element for entity group
-	 * @param entityGroup that contains the entities
+	 * @param entityGroupId that contains the entities
 	 * @throws DynamicExtensionsApplicationException if entity does not exist
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsSystemException DynamicExtensions System Exception
 	 */
 	private static void readEntities(Element entityGrpEle, Long entityGroupId)
 			throws DynamicExtensionsApplicationException, DynamicExtensionsSystemException
 	{
 		Element nameElement;
-		Iterator elementIterator = entityGrpEle.elementIterator(ELEMENT_ENTITY);//entity element
+		final Iterator elementIterator = entityGrpEle.elementIterator(ELEMENT_ENTITY);//entity element
 
 		while (elementIterator.hasNext())
 		{
-			Element entityElement = (Element) elementIterator.next();
+			final Element entityElement = (Element) elementIterator.next();
 			nameElement = entityElement.element(ELEMENT_NAME);
-			String entityName = nameElement.getText();
+			final String entityName = nameElement.getText();
 
-			EntityInterface entity = EntityManager.getInstance().getEntityByIdentifier(
+			final EntityInterface entity = EntityManager.getInstance().getEntityByIdentifier(
 					EntityManager.getInstance().getEntityId(entityName, entityGroupId));
 
 			if (entity == null)
@@ -176,14 +215,15 @@ public class UpdateMetadataTagPath
 	}
 
 	/**
-	 * @param entity
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DynamicExtensionsApplicationException
+	 * @param entity entity
+	 * @throws DynamicExtensionsSystemException Dynamic Extensions System Exception
+	 * @throws DynamicExtensionsApplicationException Dynamic Extensions Application Exception
 	 */
 	private static void saveEntity(EntityInterface entity) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException
 	{
-		IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory("dynamicExtention");
+		final IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(
+				"dynamicExtention");
 		DAO dao = null;
 		try
 		{
@@ -193,7 +233,7 @@ public class UpdateMetadataTagPath
 			dao.commit();
 			dao.closeSession();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			throw new RuntimeException("error in saving object!!!!", ex);
 		}
@@ -209,27 +249,28 @@ public class UpdateMetadataTagPath
 			throws DynamicExtensionsApplicationException
 
 	{
-		Iterator<Element> attrItr = entityElement.elementIterator(ELEMENT_ATTRIBUTE);
+		final Iterator<Element> attrItr = entityElement.elementIterator(ELEMENT_ATTRIBUTE);
 		while (attrItr.hasNext())
 		{
-			Element attrElement = attrItr.next();
-			Element attributeName = attrElement.element(ELEMENT_NAME);
-			Iterator<Element> tagItr = attrElement.elementIterator(ELEMENT_TAG);
-			String attrName = attributeName.getText();
+			final Element attrElement = attrItr.next();
+			final Element attributeName = attrElement.element(ELEMENT_NAME);
+			final Iterator<Element> tagItr = attrElement.elementIterator(ELEMENT_TAG);
+			final String attrName = attributeName.getText();
 			while (tagItr.hasNext())
 			{
-				AttributeInterface attribute = entity.getAttributeByName(attrName);
+				final AttributeInterface attribute = entity.getAttributeByName(attrName);
 				LOGGER.info("==" + attrName);
 				if (attribute == null)
 				{
-					throw new DynamicExtensionsApplicationException(ApplicationProperties.getValue(
+					throw new DynamicExtensionsApplicationException
+					(ApplicationProperties.getValue(
 							"attribute.doesNotExist", attrName));
 				}
-				Element tag = (Element) tagItr.next();
-				String tagName = tag.element(ELEMENT_TAG_NAME).getText();
-				String tagValue = tag.element(ELEMENT_TAG_VALUE).getText();
+				final Element tag = tagItr.next();
+				final String tagName = tag.element(ELEMENT_TAG_NAME).getText();
+				final String tagValue = tag.element(ELEMENT_TAG_VALUE).getText();
 				checkValidTag(tagName);
-				TaggedValueInterface taggedValue = getTagValue(attribute, tagName, tagValue);
+				final TaggedValueInterface taggedValue = getTagValue(attribute, tagName, tagValue);
 				if (taggedValue != null)
 				{
 					System.out.println("adding tag value");
@@ -241,6 +282,7 @@ public class UpdateMetadataTagPath
 
 	/**
 	 * Method creates a Tag Value object.
+	 * @param attribute attribute
 	 * @param tagName name of tag
 	 * @param tagValue tag value.
 	 * @return TaggedValueInterface
@@ -251,8 +293,9 @@ public class UpdateMetadataTagPath
 		TaggedValueInterface rettaggedValue = null;
 		if (!attribute.getTaggedValueCollection().isEmpty())
 		{
-			Collection<TaggedValueInterface> taggedValues = attribute.getTaggedValueCollection();
-			for (TaggedValueInterface taggedValue : taggedValues)
+			final Collection<TaggedValueInterface> taggedValues = attribute
+					.getTaggedValueCollection();
+			for (final TaggedValueInterface taggedValue : taggedValues)
 			{
 				if (taggedValue.getKey().equalsIgnoreCase(tagName)
 						&& taggedValue.getValue().equalsIgnoreCase(tagValue))
@@ -275,36 +318,38 @@ public class UpdateMetadataTagPath
 	}
 
 	/**
-	 * @param entity
-	 * @param entityElement
+	 * @param entity entity
+	 * @param entityElement entity Element
 	 */
 	private static void tagValueForEntity(EntityInterface entity, Element entityElement)
 	{
 
-		Iterator<Element> entityTagItr = entityElement.elementIterator(ELEMENT_TAG);
+		final Iterator<Element> entityTagItr = entityElement.elementIterator(ELEMENT_TAG);
 		while (entityTagItr.hasNext())
 		{
 
-			Element entityTag = (Element) entityTagItr.next();
+			final Element entityTag = entityTagItr.next();
 			if (entityTag != null)
 			{
-				String entityTagName = entityTag.element(ELEMENT_TAG_NAME).getText();
-				String entityTagValue = entityTag.element(ELEMENT_TAG_VALUE).getText();
+				final String entityTagName = entityTag.element(ELEMENT_TAG_NAME).getText();
+				final String entityTagValue = entityTag.element(ELEMENT_TAG_VALUE).getText();
 				LOGGER.info(entityTagName + "===" + entityTagValue);
-				TaggedValueInterface taggedValue = createTagValue(entityTagName, entityTagValue);
+				final TaggedValueInterface taggedValue = createTagValue(entityTagName,
+						entityTagValue);
 				entity.addTaggedValue(taggedValue);
 			}
 		}
 	}
 
 	/**
-	 * @param tagName
-	 * @param tagValue
-	 * @return
+	 * @param tagName tag Name
+	 * @param tagValue tag Value
+	 * @return taggedValue
 	 */
 	private static TaggedValueInterface createTagValue(String tagName, String tagValue)
 	{
-		TaggedValueInterface taggedValue = DomainObjectFactory.getInstance().createTaggedValue();
+		final TaggedValueInterface taggedValue = DomainObjectFactory.getInstance()
+				.createTaggedValue();
 		taggedValue.setKey(tagName);
 		taggedValue.setValue(tagValue);
 		return taggedValue;

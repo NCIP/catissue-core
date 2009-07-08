@@ -19,24 +19,33 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class is used to update the constraintProperties of the Associations according to
- * the new model of DE & also update the primaryKey Attribute Collection of the entity
+ * the new model of DE & also update the primaryKey Attribute Collection of the entity.
  * @author pavan_kalantri
  *
  */
 public class UpdateSchemaForConstraintProperties
 {
+
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
-	private static Logger logger = Logger.getCommonLogger(UpdateSchemaForConstraintProperties.class);
-	
+	/**
+	 * Generic logger.
+	 */
+	private static Logger logger = Logger
+			.getCommonLogger(UpdateSchemaForConstraintProperties.class);
+
+	/**
+	 * Specify entity Id Vs Primary Attribute Id map.
+	 */
 	private static Map<Long, Long> entityIdVsPrimaryAttrId = new HashMap<Long, Long>();
 
 	/**
-	 * @param args
-	 * @throws SQLException
-	 * @throws DAOException
+	 * main method.
+	 * @param args arguments.
+	 * @throws SQLException SQL Exception
+	 * @throws DAOException DAO Exception
 	 */
 	public static void main(String[] args) throws SQLException, DAOException
 	{
@@ -46,7 +55,7 @@ public class UpdateSchemaForConstraintProperties
 			updateSchema();
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 			Logger.out.debug("Could not update the metadata For constraint properties", e);
@@ -56,9 +65,9 @@ public class UpdateSchemaForConstraintProperties
 	}
 
 	/**
-	 * It will update the data in the database 
-	 * @throws SQLException
-	 * @throws DAOException
+	 * It will update the data in the database.
+	 * @throws SQLException SQL Exception
+	 * @throws DAOException DAO Exception
 	 */
 	private static void updateSchema() throws SQLException, DAOException
 	{
@@ -79,25 +88,25 @@ public class UpdateSchemaForConstraintProperties
 		System.out
 				.println("UpdateSchemaForConstraintProperties.updateConstraintPropertiesForInheritance()");
 		JDBCDAO jdbcdao = null;
-		String appName = CommonServiceLocator.getInstance().getAppName();
-		IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+		final String appName = CommonServiceLocator.getInstance().getAppName();
+		final IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
 		jdbcdao = daoFactory.getJDBCDAO();
 		jdbcdao.openSession(null);
-		String getEntityIdQuery = "select IDENTIFIER, PARENT_ENTITY_ID from DYEXTN_ENTITY where PARENT_ENTITY_ID is not null";
-		ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
-		String getTablePropertiesQuery = "select CONSTRAINT_NAME from DYEXTN_TABLE_PROPERTIES where ABSTRACT_ENTITY_ID = ";
+		final String getEntityIdQuery = "select IDENTIFIER, PARENT_ENTITY_ID from DYEXTN_ENTITY where PARENT_ENTITY_ID is not null";
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
+		final String getTablePropertiesQuery = "select CONSTRAINT_NAME from DYEXTN_TABLE_PROPERTIES where ABSTRACT_ENTITY_ID = ";
 
-		List<Vector> list = new ArrayList<Vector>();
+		final List<Vector> list = new ArrayList<Vector>();
 		while (resultSet.next())
 		{
 			long entityId = 0;
 			long parentEntityId = 0;
 			String cnstrName = null;
-			Vector vList = new Vector<List>();
+			final Vector vList = new Vector<List>();
 			entityId = resultSet.getLong(1);
 			parentEntityId = resultSet.getLong(2);
 
-			ResultSet rsltSet = jdbcdao.getQueryResultSet(getTablePropertiesQuery + entityId);
+			final ResultSet rsltSet = jdbcdao.getQueryResultSet(getTablePropertiesQuery + entityId);
 			if (rsltSet.next())
 			{
 				cnstrName = rsltSet.getString(1);
@@ -112,12 +121,12 @@ public class UpdateSchemaForConstraintProperties
 		jdbcdao.closeStatement(resultSet);
 		jdbcdao.closeSession();
 
-		for (Vector v : list)
+		for (final Vector v : list)
 		{
 			jdbcdao = daoFactory.getJDBCDAO();
 			jdbcdao.openSession(null);
-			long entityId = Long.parseLong(v.get(0).toString());
-			long parentEntityId = Long.parseLong(v.get(1).toString());
+			final long entityId = Long.parseLong(v.get(0).toString());
+			final long parentEntityId = Long.parseLong(v.get(1).toString());
 			String cnstrName = null;
 
 			if (v.get(2) != null)
@@ -143,20 +152,20 @@ public class UpdateSchemaForConstraintProperties
 	private static void addConstraintProperties(long entityId, long parentEntityId,
 			String cnstrName, JDBCDAO jdbcdao) throws SQLException, DAOException
 	{
-		StringBuffer tableName = new StringBuffer("DYEXTN_CONSTRAINT_PROPERTIES");
-		long cnstrPropId = getNextUniqeId("DYEXTN_DATABASE_PROPERTIES", jdbcdao);
-		String databasePropQuery = "insert into DYEXTN_DATABASE_PROPERTIES(IDENTIFIER) values ("
+		final StringBuffer tableName = new StringBuffer("DYEXTN_CONSTRAINT_PROPERTIES");
+		final long cnstrPropId = getNextUniqeId("DYEXTN_DATABASE_PROPERTIES", jdbcdao);
+		final String databasePropQuery = "insert into DYEXTN_DATABASE_PROPERTIES(IDENTIFIER) values ("
 				+ cnstrPropId + ")";
 
 		jdbcdao.executeUpdate(databasePropQuery);
-		String insertCnstrPropQuery = "insert into " + tableName
+		final String insertCnstrPropQuery = "insert into " + tableName
 				+ " (IDENTIFIER, CONSTRAINT_NAME, ABSTRACT_ENTITY_ID ) values (" + cnstrPropId
 				+ ", '" + cnstrName + "', " + entityId + ")";
 		jdbcdao.executeUpdate(insertCnstrPropQuery);
 
-		long cnstrKeyPropId = getNextUniqeId("DYEXTN_CONSTRAINTKEY_PROP", jdbcdao);
-		long primaryAttributeId = entityIdVsPrimaryAttrId.get(parentEntityId);
-		String cnstrKeyPropQuery = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,PRIMARY_ATTRIBUTE_ID ,SRC_CONSTRAINT_KEY_ID) values("
+		final long cnstrKeyPropId = getNextUniqeId("DYEXTN_CONSTRAINTKEY_PROP", jdbcdao);
+		final long primaryAttributeId = entityIdVsPrimaryAttrId.get(parentEntityId);
+		final String cnstrKeyPropQuery = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,PRIMARY_ATTRIBUTE_ID ,SRC_CONSTRAINT_KEY_ID) values("
 				+ cnstrKeyPropId + "," + primaryAttributeId + "," + cnstrPropId + ")";
 
 		jdbcdao.executeUpdate(cnstrKeyPropQuery);
@@ -172,17 +181,17 @@ public class UpdateSchemaForConstraintProperties
 	 */
 	private static void updateCompositeKeyRelationTable() throws SQLException, DAOException
 	{
-		String query = "select IDENTIFIER from DYEXTN_ABSTRACT_METADATA where NAME like 'id'";
+		final String query = "select IDENTIFIER from DYEXTN_ABSTRACT_METADATA where NAME like 'id'";
 		JDBCDAO jdbcdao = null;
-		List<Long> lstAttribute = new ArrayList<Long>();
-		String appName = CommonServiceLocator.getInstance().getAppName();
-		IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+		final List<Long> lstAttribute = new ArrayList<Long>();
+		final String appName = CommonServiceLocator.getInstance().getAppName();
+		final IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
 		jdbcdao = daoFactory.getJDBCDAO();
 		jdbcdao.openSession(null);
-		ResultSet resultSet = jdbcdao.getQueryResultSet(query);
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(query);
 		while (resultSet.next())
 		{
-			Long attributeId = resultSet.getLong(1);
+			final Long attributeId = resultSet.getLong(1);
 			lstAttribute.add(attributeId);
 		}
 		jdbcdao.closeStatement(resultSet);
@@ -192,10 +201,10 @@ public class UpdateSchemaForConstraintProperties
 		try
 		{
 			JDBCDAO jdbcdao1 = null;
-			IDAOFactory daoFactory1 = DAOConfigFactory.getInstance().getDAOFactory(appName);
+			final IDAOFactory daoFactory1 = DAOConfigFactory.getInstance().getDAOFactory(appName);
 			jdbcdao1 = daoFactory1.getJDBCDAO();
 			jdbcdao1.openSession(null);
-			for (Long attributeId : lstAttribute)
+			for (final Long attributeId : lstAttribute)
 			{
 				entityId = getSrcEntityIdOfAttribute(attributeId, jdbcdao1);
 				entityIdVsPrimaryAttrId.put(entityId, attributeId);
@@ -205,7 +214,7 @@ public class UpdateSchemaForConstraintProperties
 			jdbcdao1.commit();
 			jdbcdao1.closeSession();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -221,7 +230,7 @@ public class UpdateSchemaForConstraintProperties
 	private static void addEntityCompositeKey(long entityId, long attributeId, JDBCDAO jdbcdao)
 			throws DAOException
 	{
-		String query = "insert into dyextn_entiy_composite_key_rel values (" + entityId + ","
+		final String query = "insert into dyextn_entiy_composite_key_rel values (" + entityId + ","
 				+ attributeId + ",0)";
 		jdbcdao.executeUpdate(query);
 	}
@@ -246,18 +255,18 @@ public class UpdateSchemaForConstraintProperties
 		Long primaryAttributeId;
 		String cnstrKeyPropQuery;
 
-		List<Vector> vlist = new ArrayList<Vector>();
+		final List<Vector> vlist = new ArrayList<Vector>();
 		JDBCDAO jdbcdao = null;
 		try
 		{
 
-			String appName = CommonServiceLocator.getInstance().getAppName();
-			IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+			final String appName = CommonServiceLocator.getInstance().getAppName();
+			final IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
 			jdbcdao = daoFactory.getJDBCDAO();
 			jdbcdao.openSession(null);
-			String query = "select * from DYEXTN_CONSTRAINT_PROPERTIES";
+			final String query = "select * from DYEXTN_CONSTRAINT_PROPERTIES";
 
-			ResultSet resultSet = jdbcdao.getQueryResultSet(query);
+			final ResultSet resultSet = jdbcdao.getQueryResultSet(query);
 			while (resultSet.next())
 			{
 				cnstrPropId = resultSet.getLong("IDENTIFIER");
@@ -266,7 +275,7 @@ public class UpdateSchemaForConstraintProperties
 				srcCnstrName = resultSet.getString("SRC_CONSTRAINT_NAME");
 				associationId = resultSet.getLong("ASSOCIATION_ID");
 				categoryAssonId = resultSet.getLong("CATEGORY_ASSOCIATION_ID");
-				Vector v = new Vector();
+				final Vector v = new Vector();
 				v.add(cnstrPropId);
 				v.add(srcEntityKey);
 				v.add(tgtEntityKey);
@@ -288,11 +297,11 @@ public class UpdateSchemaForConstraintProperties
 		try
 		{
 
-			StringBuffer cnstrKeyPropTableName = new StringBuffer("DYEXTN_CONSTRAINTKEY_PROP");
-			String appName = CommonServiceLocator.getInstance().getAppName();
-			IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
+			final StringBuffer cnstrKeyPropTableName = new StringBuffer("DYEXTN_CONSTRAINTKEY_PROP");
+			final String appName = CommonServiceLocator.getInstance().getAppName();
+			final IDAOFactory daoFactory = DAOConfigFactory.getInstance().getDAOFactory(appName);
 
-			for (Vector v : vlist)
+			for (final Vector v : vlist)
 			{
 				jdbcdao1 = daoFactory.getJDBCDAO();
 				jdbcdao1.openSession(null);
@@ -311,7 +320,7 @@ public class UpdateSchemaForConstraintProperties
 					jdbcdao1.closeSession();
 					continue;
 				}
-				String cnstrQuery = "update DYEXTN_CONSTRAINT_PROPERTIES set CONSTRAINT_NAME = '"
+				final String cnstrQuery = "update DYEXTN_CONSTRAINT_PROPERTIES set CONSTRAINT_NAME = '"
 						+ srcCnstrName + "' where IDENTIFIER = " + cnstrPropId;
 				jdbcdao1.executeUpdate(cnstrQuery);
 				if (srcEntityKey != null && tgtEntityKey != null)
@@ -379,7 +388,7 @@ public class UpdateSchemaForConstraintProperties
 			}//FOR loop
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -400,12 +409,12 @@ public class UpdateSchemaForConstraintProperties
 			String srcCnstrName, String srcEntityKey, String tgtEntityKey, Long cnstrPropId)
 			throws DAOException, SQLException
 	{
-		StringBuffer cnstrKeyPropTableName = new StringBuffer("DYEXTN_CONSTRAINTKEY_PROP");
+		final StringBuffer cnstrKeyPropTableName = new StringBuffer("DYEXTN_CONSTRAINTKEY_PROP");
 		Long cnstrKeyPropId;
 		Long entityId;
 		Long primaryAttributeId;
 		String cnstrKeyPropQuery;
-		String cnstrQuery = "update DYEXTN_CONSTRAINT_PROPERTIES set CONSTRAINT_NAME = '"
+		final String cnstrQuery = "update DYEXTN_CONSTRAINT_PROPERTIES set CONSTRAINT_NAME = '"
 				+ srcCnstrName + "' where IDENTIFIER = " + cnstrPropId;
 		jdbcdao1.executeUpdate(cnstrQuery);
 		if (srcEntityKey != null && tgtEntityKey != null)
@@ -472,9 +481,9 @@ public class UpdateSchemaForConstraintProperties
 			throws SQLException, DAOException
 	{
 		Long entityId = null;
-		String getEntityIdQuery = "select TARGET_ENTITY_ID from DYEXTN_ASSOCIATION where IDENTIFIER = "
+		final String getEntityIdQuery = "select TARGET_ENTITY_ID from DYEXTN_ASSOCIATION where IDENTIFIER = "
 				+ associationId;
-		ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
 		if (resultSet.next())
 		{
 			entityId = resultSet.getLong(1);
@@ -494,9 +503,9 @@ public class UpdateSchemaForConstraintProperties
 			throws SQLException, DAOException
 	{
 		Long tgtentityId = null;
-		String getEntityIdQuery = "select ENTITY_ID from dyextn_category_entity where IDENTIFIER = (select IDENTIFIER from dyextn_category_entity where CATEGORY_ASSOCIATION_ID ="
+		final String getEntityIdQuery = "select ENTITY_ID from dyextn_category_entity where IDENTIFIER = (select IDENTIFIER from dyextn_category_entity where CATEGORY_ASSOCIATION_ID ="
 				+ catAssnId + ")";
-		ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
 		if (resultSet.next())
 		{
 			tgtentityId = resultSet.getLong(1);
@@ -517,9 +526,9 @@ public class UpdateSchemaForConstraintProperties
 			throws SQLException, DAOException
 	{
 		Long entityId = null;
-		String getEntityIdQuery = "select ENTIY_ID from DYEXTN_ATTRIBUTE where IDENTIFIER = "
+		final String getEntityIdQuery = "select ENTIY_ID from DYEXTN_ATTRIBUTE where IDENTIFIER = "
 				+ attributeId;
-		ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
 		if (resultSet.next())
 		{
 			entityId = resultSet.getLong(1);
@@ -533,9 +542,9 @@ public class UpdateSchemaForConstraintProperties
 			throws SQLException, DAOException
 	{
 		Long srcentityId = null;
-		String getEntityIdQuery = "select ENTITY_ID from dyextn_category_entity		where IDENTIFIER = (select CATEGORY_ENTIY_ID from dyextn_category_association where IDENTIFIER = "
+		final String getEntityIdQuery = "select ENTITY_ID from dyextn_category_entity		where IDENTIFIER = (select CATEGORY_ENTIY_ID from dyextn_category_association where IDENTIFIER = "
 				+ catAssnId + ")";
-		ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(getEntityIdQuery);
 		if (resultSet.next())
 		{
 			srcentityId = resultSet.getLong(1);
@@ -555,13 +564,13 @@ public class UpdateSchemaForConstraintProperties
 			throws SQLException, DAOException
 	{
 
-		String tableName = "DYEXTN_DATABASE_PROPERTIES";
-		Long columnPropId = getNextUniqeId(tableName, jdbcdao);
-		String query = "insert into " + tableName + " values (" + columnPropId + ",'" + columnName
-				+ "')";
+		final String tableName = "DYEXTN_DATABASE_PROPERTIES";
+		final Long columnPropId = getNextUniqeId(tableName, jdbcdao);
+		final String query = "insert into " + tableName + " values (" + columnPropId + ",'"
+				+ columnName + "')";
 		jdbcdao.executeUpdate(query);
 
-		String cnstrQuery = "insert into DYEXTN_COLUMN_PROPERTIES(IDENTIFIER,CNSTR_KEY_PROP_ID) values ("
+		final String cnstrQuery = "insert into DYEXTN_COLUMN_PROPERTIES(IDENTIFIER,CNSTR_KEY_PROP_ID) values ("
 				+ columnPropId + "," + cnstrPropId + ")";
 		jdbcdao.executeUpdate(cnstrQuery);
 
@@ -579,8 +588,8 @@ public class UpdateSchemaForConstraintProperties
 			DAOException
 	{
 		Long nextAvailableId = null;
-		String query = "select max(IDENTIFIER) from " + tableName;
-		ResultSet resultSet = jdbcdao.getQueryResultSet(query);
+		final String query = "select max(IDENTIFIER) from " + tableName;
+		final ResultSet resultSet = jdbcdao.getQueryResultSet(query);
 		if (resultSet.next())
 		{
 			nextAvailableId = resultSet.getLong(1);

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.io.File;
@@ -11,12 +12,21 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  * This class has functions to read LabelGenerator Properties file.
  * @author abhijit_naik
  */
-public class PropertyHandler
+public final class PropertyHandler
 {
+
 	/**
 	 * Name generator properties.
 	 */
 	private static Properties nameGeneratorProperties = null;
+
+	/**
+	 * private constructor.
+	 */
+	private PropertyHandler()
+	{
+
+	}
 
 	/**
 	 * Load the Properties file.
@@ -25,8 +35,9 @@ public class PropertyHandler
 	 */
 	public static void init(String path) throws Exception
 	{
-		String absolutePath = CommonServiceLocator.getInstance().getPropDirPath() + File.separator + path;
-		InputStream inpurStream = new FileInputStream(new File(absolutePath));
+		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
+				+ File.separator + path;
+		final InputStream inpurStream = new FileInputStream(new File(absolutePath));
 		nameGeneratorProperties = new Properties();
 		nameGeneratorProperties.load(inpurStream);
 	}

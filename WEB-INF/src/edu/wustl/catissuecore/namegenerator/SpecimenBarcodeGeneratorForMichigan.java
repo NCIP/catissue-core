@@ -18,30 +18,37 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeGenerator
 {
+
 	/**
 	 * Logger object.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
+	private transient Logger logger = Logger
+			.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
+
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public SpecimenBarcodeGeneratorForMichigan() throws ApplicationException
 	{
 		super();
 	}
+
 	/**
 	 * This is a init() function it is called from the default constructor of
 	 * Base class. When getInstance of base class called then this init function
-	 * will be called. This method will first check the Datatbase Name and then
-	 * set function name that will convert lable from int to String
+	 * will be called. This method will first check the Database Name and then
+	 * set function name that will convert label from int to String.
+	 * @throws ApplicationException Application Exception
 	 */
+	@Override
 	protected void init() throws ApplicationException
 	{
-			currentBarcode = Long.valueOf(0);
-			String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-			currentBarcode=AppUtility.getLastAvailableValue(sql);			
+		this.currentBarcode = Long.valueOf(0);
+		final String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
+		this.currentBarcode = AppUtility.getLastAvailableValue(sql);
 	}
-	
+
 	/**
 	 * @param input input type
 	 * @param pattern pattern
@@ -49,7 +56,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 */
 	private String format(long input, String pattern)
 	{
-		DecimalFormat df = new DecimalFormat(pattern);
+		final DecimalFormat df = new DecimalFormat(pattern);
 		return df.format(input);
 	}
 
@@ -57,36 +64,41 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 * Set barcode.
 	 * @param obj Specimen obj
 	 */
+	@Override
 	public void setBarcode(Object obj)
 	{
-		Specimen objSpecimen = (Specimen) obj;
+		final Specimen objSpecimen = (Specimen) obj;
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
-			currentBarcode = currentBarcode + 1;
-			String nextNumber = format(currentBarcode, "0000");
-			String barcode = siteName + "_" + nextNumber;
+			final String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
+			this.currentBarcode = this.currentBarcode + 1;
+			final String nextNumber = this.format(this.currentBarcode, "0000");
+			final String barcode = siteName + "_" + nextNumber;
 			objSpecimen.setBarcode(barcode);
 		}
 
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
-			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(), objSpecimen);
+			this.setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),
+					objSpecimen);
 		}
 
 		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(), objSpecimen);
+			this
+					.setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),
+							objSpecimen);
 		}
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection<AbstractSpecimen> specimenCollection = objSpecimen.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
+					.getChildSpecimenCollection();
+			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen) it.next();
-				setBarcode(objChildSpecimen);
+				final Specimen objChildSpecimen = (Specimen) it.next();
+				this.setBarcode(objChildSpecimen);
 			}
 		}
 
@@ -96,12 +108,14 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 * @param parentObject parent obj
 	 * @param specimenObject sp obj
 	 */
+	@Override
 	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject,
 			Specimen specimenObject)
 	{
-		String parentSpecimenBarcode = (String) ((Specimen) parentObject).getBarcode();
-		long aliquotCount = parentObject.getChildSpecimenCollection().size();
-		specimenObject.setBarcode(parentSpecimenBarcode + "_" + (format((aliquotCount + 1), "00")));
+		final String parentSpecimenBarcode = ((Specimen) parentObject).getBarcode();
+		final long aliquotCount = parentObject.getChildSpecimenCollection().size();
+		specimenObject.setBarcode(parentSpecimenBarcode + "_"
+				+ (this.format((aliquotCount + 1), "00")));
 	}
 
 	/**
@@ -109,23 +123,24 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	 * @param parentObject parent obj
 	 * @param specimenObject sp obj
 	 */
+	@Override
 	synchronized void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject,
 			Specimen specimenObject)
 	{
-		String parentSpecimenBarcode = (String) ((Specimen) parentObject).getBarcode();
+		final String parentSpecimenBarcode = ((Specimen) parentObject).getBarcode();
 		long aliquotCount = 0;
 		aliquotCount = parentObject.getChildSpecimenCollection().size();
-		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen) itr.next();
+			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLabel() == null)
 			{
 				aliquotCount--;
 			}
 		}
 		aliquotCount++;
-		specimenObject.setBarcode(parentSpecimenBarcode + "_" + format((aliquotCount), "00"));
+		specimenObject.setBarcode(parentSpecimenBarcode + "_" + this.format((aliquotCount), "00"));
 	}
 
 }

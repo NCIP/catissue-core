@@ -9,7 +9,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This  class which contains the default StorageContainer barcode implementation.
+ * This  class which contains the default StorageContainer bar code implementation.
  * @author falguni_sachde
  *
  */
@@ -17,52 +17,55 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
 
 	/**
-	 * Logger object 
+	 * Logger object.
 	 */
-	private static final transient Logger logger = Logger.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
+	private static final transient Logger LOGGER = Logger
+			.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
 	/**
 	 * Current label.
 	 */
 	protected Long currentBarcode;
-	
+
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public DefaultStorageContainerBarcodeGenerator() throws ApplicationException
 	{
 		super();
-		init();
+		this.init();
 	}
 
 	/**
 	 * This is a init() function it is called from the
 	 * default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
-	 * This method will first check the Datatbase Name and then set function name that will convert
-	 * lable from int to String
+	 * This method will first check the Database Name and then set function name that will convert
+	 * label from int to String
+	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
-		currentBarcode = new Long(0);
-		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
-		currentBarcode=AppUtility.getLastAvailableValue(sql);
+		this.currentBarcode = new Long(0);
+		final String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+		this.currentBarcode = AppUtility.getLastAvailableValue(sql);
 	}
 
 	/**
-	 * Set barcode.
-	 * @param obj SC obj
+	 * Set bar code.
+	 * @param obj SC object
 	 */
 	public void setBarcode(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer) obj;
-		//TODO :Write a logic to generate barcode.
-		String barcode = "";
+		final StorageContainer objStorageContainer = (StorageContainer) obj;
+		//TODO :Write a logic to generate bar code.
+		final String barcode = "";
 		objStorageContainer.setBarcode(barcode);
 
 	}
 
 	/**
-	 * Set barcode.
+	 * Set bar code.
 	 * @param storageContainerList SC objList
 	 */
 	public void setBarcode(List storageContainerList)
@@ -70,8 +73,9 @@ public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 
 		for (int i = 0; i < storageContainerList.size(); i++)
 		{
-			StorageContainer objStorageContainer = (StorageContainer) storageContainerList.get(i);
-			setBarcode(objStorageContainer);
+			final StorageContainer objStorageContainer = (StorageContainer) storageContainerList
+					.get(i);
+			this.setBarcode(objStorageContainer);
 
 		}
 

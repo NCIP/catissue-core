@@ -16,7 +16,7 @@ public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerat
 {
 
 	/**
-	 *@param object obj
+	 *@param object object
 	 *@return null
 	 */
 	public String getLabel(Object object)
@@ -31,14 +31,12 @@ public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerat
 	 */
 	public void setLabel(Object object)
 	{
-		CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) object;
+		final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) object;
 		if (cpr.getProtocolParticipantIdentifier() == null
-				|| Constants.DOUBLE_QUOTES.equals(cpr
-						.getProtocolParticipantIdentifier()))
+				|| Constants.DOUBLE_QUOTES.equals(cpr.getProtocolParticipantIdentifier()))
 		{
-			cpr.setProtocolParticipantIdentifier(cpr
-							.getCollectionProtocol().getId()
-							+ "_" + cpr.getParticipant().getId());
+			cpr.setProtocolParticipantIdentifier(cpr.getCollectionProtocol().getId() + "_"
+					+ cpr.getParticipant().getId());
 		}
 	}
 

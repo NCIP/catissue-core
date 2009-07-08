@@ -17,32 +17,37 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator
 {
+
 	/**
 	 * Logger Object.
 	 */
-	private static final transient  Logger logger = Logger.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
+	private static final transient Logger LOGGER = Logger
+			.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
+
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public SpecimenLabelGeneratorForMichigan() throws ApplicationException
 	{
 		super();
 	}
-	
+
 	/**
 	 * This is a init() function it is called from the default constructor of
 	 * Base class. When getInstance of base class called then this init function
-	 * will be called. This method will first check the Datatbase Name and then
-	 * set function name that will convert lable from int to String
+	 * will be called. This method will first check the Database Name and then
+	 * set function name that will convert label from int to String.
+	 * @throws ApplicationException Application Exception
 	 */
+	@Override
 	protected void init() throws ApplicationException
 	{
-		currentLabel = new Long("0");
-		String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
-		currentLabel=AppUtility.getLastAvailableValue(sql);
+		this.currentLabel = new Long("0");
+		final String sql = "select MAX(LABEL_COUNT) from CATISSUE_SPECIMEN_LABEL_COUNT";
+		this.currentLabel = AppUtility.getLastAvailableValue(sql);
 	}
 
-	
 	/**
 	 * @param input format input type
 	 * @param pattern label pattern
@@ -50,7 +55,7 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 */
 	private String format(long input, String pattern)
 	{
-		DecimalFormat df = new DecimalFormat(pattern);
+		final DecimalFormat df = new DecimalFormat(pattern);
 		return df.format(input);
 	}
 
@@ -59,38 +64,40 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 * @param obj Specimen obj
 	 */
 
+	@Override
 	public void setLabel(Object obj)
 	{
 
-		Specimen objSpecimen = (Specimen) obj;
+		final Specimen objSpecimen = (Specimen) obj;
 
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
-			currentLabel = currentLabel + 1;
-			String nextNumber = format(currentLabel, "0000");
-			String label = siteName + "_" + nextNumber;
+			final String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
+			this.currentLabel = this.currentLabel + 1;
+			final String nextNumber = this.format(this.currentLabel, "0000");
+			final String label = siteName + "_" + nextNumber;
 			objSpecimen.setLabel(label);
 		}
 
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
-			setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(), objSpecimen);
+			this.setNextAvailableAliquotSpecimenlabel(objSpecimen.getParentSpecimen(), objSpecimen);
 		}
 
 		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(), objSpecimen);
+			this.setNextAvailableDeriveSpecimenlabel(objSpecimen.getParentSpecimen(), objSpecimen);
 		}
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection<AbstractSpecimen> specimenCollection = objSpecimen.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
+					.getChildSpecimenCollection();
+			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen) it.next();
-				setLabel(objChildSpecimen);
+				final Specimen objChildSpecimen = (Specimen) it.next();
+				this.setLabel(objChildSpecimen);
 			}
 
 		}
@@ -108,10 +115,11 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			Specimen specimenObject)
 	{
 
-		String parentSpecimenLabel = (String) ((Specimen) parentObject).getLabel();
+		final String parentSpecimenLabel = ((Specimen) parentObject).getLabel();
 
-		long aliquotCount = parentObject.getChildSpecimenCollection().size();
-		specimenObject.setLabel(parentSpecimenLabel + "_" + (format((aliquotCount + 1), "00")));
+		final long aliquotCount = parentObject.getChildSpecimenCollection().size();
+		specimenObject
+				.setLabel(parentSpecimenLabel + "_" + (this.format((aliquotCount + 1), "00")));
 	}
 
 	/**
@@ -123,19 +131,19 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 			Specimen specimenObject)
 	{
 
-		String parentSpecimenLabel = (String) ((Specimen) parentObject).getLabel();
+		final String parentSpecimenLabel = ((Specimen) parentObject).getLabel();
 		long aliquotChildCount = parentObject.getChildSpecimenCollection().size();
-		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen) itr.next();
+			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLabel() == null)
 			{
 				aliquotChildCount--;
 			}
 		}
 		aliquotChildCount++;
-		specimenObject.setLabel(parentSpecimenLabel + "_" + format((aliquotChildCount), "00"));
+		specimenObject.setLabel(parentSpecimenLabel + "_" + this.format((aliquotChildCount), "00"));
 	}
 
 }

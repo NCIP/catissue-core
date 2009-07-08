@@ -22,21 +22,23 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 {
 
 	/**
-	 * logger object
+	 * logger object.
 	 */
-	private static final transient Logger logger = Logger.getCommonLogger(DefaultSpecimenBarcodeGenerator.class);
+	private static final transient Logger LOGGER = Logger
+			.getCommonLogger(DefaultSpecimenBarcodeGenerator.class);
 	/**
 	 * Current Barcode.
 	 */
 	protected Long currentBarcode;
-	
+
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public DefaultSpecimenBarcodeGenerator() throws ApplicationException
 	{
 		super();
-		init();
+		this.init();
 	}
 
 	/**
@@ -44,42 +46,37 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 * When getInstance of base class called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
+	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
 		String databaseConstant = null;
-		try
-		{
-			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
-					Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				databaseConstant = Constants.ORACLE_MAX_BARCODE_COL;
-			}
-			else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance()
-					.getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				databaseConstant = Constants.MSSQLSERVER_MAX_BARCODE_COL;
-			}
-			else
-			{
-				databaseConstant = Constants.MYSQL_MAX_BARCODE_COL;
-			}
 
-			StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant
-					+ ") from CATISSUE_SPECIMEN");
-			// Modify query for mssqlserver DB.
-			if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
-					Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
-			}
-			currentBarcode = AppUtility.getLastAvailableValue(sql.toString());
-		}
-		catch (ApplicationException ex)
+		if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+				Constants.APPLICATION_NAME).getDataBaseType()))
 		{
-			logger.debug(ex.getMessage(), ex);
-			throw new ApplicationException(ex.getErrorKey(),ex,ex.getMessage());
+			databaseConstant = Constants.ORACLE_MAX_BARCODE_COL;
 		}
+		else if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance()
+				.getDAOFactory(Constants.APPLICATION_NAME).getDataBaseType()))
+		{
+			databaseConstant = Constants.MSSQLSERVER_MAX_BARCODE_COL;
+		}
+		else
+		{
+			databaseConstant = Constants.MYSQL_MAX_BARCODE_COL;
+		}
+
+		final StringBuffer sql = new StringBuffer("select MAX(" + databaseConstant
+				+ ") from CATISSUE_SPECIMEN");
+		// Modify query for mssqlserver DB.
+		if (Constants.MSSQLSERVER_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
+				Constants.APPLICATION_NAME).getDataBaseType()))
+		{
+			sql.append(Constants.MSSQLSERVER_QRY_DT_CONVERSION_FOR_BARCODE_APPEND_STR);
+		}
+		this.currentBarcode = AppUtility.getLastAvailableValue(sql.toString());
+
 	}
 
 	/**
@@ -89,9 +86,9 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	synchronized void setNextAvailableAliquotSpecimenBarcode(AbstractSpecimen parentObject,
 			Specimen specimenObject)
 	{
-		String parentSpecimenBarcode = (String) ((Specimen) parentObject).getBarcode();
+		final String parentSpecimenBarcode = ((Specimen) parentObject).getBarcode();
 		long aliquotCount = parentObject.getChildSpecimenCollection().size();
-		aliquotCount = returnAliquotCount(parentObject, aliquotCount);
+		aliquotCount = this.returnAliquotCount(parentObject, aliquotCount);
 		if (parentSpecimenBarcode != null)
 		{
 			specimenObject.setBarcode(parentSpecimenBarcode + "_" + (aliquotCount));
@@ -105,10 +102,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 */
 	protected long returnAliquotCount(AbstractSpecimen parentObject, long aliquotCount)
 	{
-		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen) itr.next();
+			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getBarcode() == null)
 			{
 				aliquotCount--;
@@ -125,8 +122,8 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	synchronized void setNextAvailableDeriveSpecimenBarcode(AbstractSpecimen parentObject,
 			Specimen specimenObject)
 	{
-		currentBarcode = currentBarcode + 1;
-		specimenObject.setBarcode(currentBarcode.toString());
+		this.currentBarcode = this.currentBarcode + 1;
+		specimenObject.setBarcode(this.currentBarcode.toString());
 	}
 
 	/**
@@ -135,31 +132,34 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	 */
 	public synchronized void setBarcode(Object obj)
 	{
-		Specimen objSpecimen = (Specimen) obj;
+		final Specimen objSpecimen = (Specimen) obj;
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			currentBarcode = currentBarcode + 1;
-			objSpecimen.setBarcode(currentBarcode.toString());
+			this.currentBarcode = this.currentBarcode + 1;
+			objSpecimen.setBarcode(this.currentBarcode.toString());
 		}
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
-			setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(), objSpecimen);
+			this.setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),
+					objSpecimen);
 		}
 
 		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(), objSpecimen);
+			this
+					.setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),
+							objSpecimen);
 		}
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
-			Collection<AbstractSpecimen> specimenCollection = objSpecimen
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
 					.getChildSpecimenCollection();
-			Iterator<AbstractSpecimen> it = specimenCollection.iterator();
+			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
 			while (it.hasNext())
 			{
-				Specimen objChildSpecimen = (Specimen) it.next();
-				setBarcode(objChildSpecimen);
+				final Specimen objChildSpecimen = (Specimen) it.next();
+				this.setBarcode(objChildSpecimen);
 			}
 		}
 
@@ -172,11 +172,11 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	public synchronized void setBarcode(List objSpecimenList)
 	{
 
-		List<Specimen> specimenList = objSpecimenList;
+		final List<Specimen> specimenList = objSpecimenList;
 		for (int index = 0; index < specimenList.size(); index++)
 		{
-			Specimen objSpecimen = (Specimen) specimenList.get(index);
-			setBarcode(objSpecimen);
+			final Specimen objSpecimen = specimenList.get(index);
+			this.setBarcode(objSpecimen);
 		}
 	}
 }

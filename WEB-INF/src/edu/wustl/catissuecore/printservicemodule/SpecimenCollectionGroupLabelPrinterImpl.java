@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.printservicemodule;
 
 import java.util.ArrayList;
@@ -17,16 +18,33 @@ import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.User;
 
 /**
- * This class is used to define method for Specimen label printing
+ * This class is used to define method for Specimen label printing.
  * @author falguni_sachde
  */
-public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
+public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter
+{
 
-	private transient Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupLabelPrinterImpl.class);
-	public boolean printLabel(final AbstractDomainObject abstractDomainObject, final String ipAddress,
-			final User userObj, final String printerType, final String printerLocation)
+	/**
+	 * Generic logger.
+	 */
+	private transient Logger logger = Logger
+			.getCommonLogger(SpecimenCollectionGroupLabelPrinterImpl.class);
+
+	/**
+	 * This method prints label.
+	 * @param abstractDomainObject abstract Domain Object
+	 * @param ipAddress IP Address
+	 * @param userObj user Object
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @return true or false status.
+	 */
+	public boolean printLabel(final AbstractDomainObject abstractDomainObject,
+			final String ipAddress, final User userObj, final String printerType,
+			final String printerLocation)
 	{
-		final List listMap = (List) createObjectMap(abstractDomainObject,printerType,printerLocation,ipAddress);
+		final List listMap = this.createObjectMap(abstractDomainObject, printerType,
+				printerLocation, ipAddress);
 
 		try
 		{
@@ -34,55 +52,67 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 			return objParser.callPrintService(listMap);
 
 		}
-		catch(Exception exp)
+		catch (final Exception exp)
 		{
-			logger.info(exp.getMessage(), exp);
+			this.logger.info(exp.getMessage(), exp);
 			return false;
 
 		}
 	}
 
-
-	public boolean printLabel(final List<AbstractDomainObject> abstractDomainObject, final String ipAddress,
-			final User userObj, final String printerType, final String printerLocation)
+	/**
+	 * This method prints label.
+	 * @param abstractDomainObject abstract Domain Object list.
+	 * @param ipAddress IP Address
+	 * @param userObj user Object
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @return true or false status.
+	 */
+	public boolean printLabel(final List<AbstractDomainObject> abstractDomainObject,
+			final String ipAddress, final User userObj, final String printerType,
+			final String printerLocation)
 	{
 		// TODO Auto-generated method stub
 		return false;
-	}	
-	
+	}
+
 	/**
 	 * @param abstractDomainObject Specimen Collection group
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @param ipAddress IP Address
 	 * @return List List of all Specimen including child Specimen
 	 */
-	List createObjectMap(AbstractDomainObject abstractDomainObject,String printerType,String printerLocation,String ipAddress)
+	List createObjectMap(AbstractDomainObject abstractDomainObject, String printerType,
+			String printerLocation, String ipAddress)
 	{
-		List listMap = new ArrayList ();
-		if(abstractDomainObject instanceof SpecimenCollectionGroup)
+		final List listMap = new ArrayList();
+		if (abstractDomainObject instanceof SpecimenCollectionGroup)
 		{
-			final SpecimenCollectionGroup objSCG = (SpecimenCollectionGroup)abstractDomainObject;
+			final SpecimenCollectionGroup objSCG = (SpecimenCollectionGroup) abstractDomainObject;
 			final Collection specimenCollection = objSCG.getSpecimenCollection();
-			Iterator itr = specimenCollection.iterator();
-			ArrayList specimenList = new ArrayList();
-			while(itr.hasNext())
+			final Iterator itr = specimenCollection.iterator();
+			final ArrayList specimenList = new ArrayList();
+			while (itr.hasNext())
 			{
-				Specimen objSpecimen = (Specimen)itr.next();
-				specimenList.add(objSpecimen);					
+				final Specimen objSpecimen = (Specimen) itr.next();
+				specimenList.add(objSpecimen);
 			}
-			//Bug 11509 
-			Collections.sort(specimenList,new IdComparator());
-			for(int cnt=0;cnt < specimenList.size();cnt++)
+			//Bug 11509
+			Collections.sort(specimenList, new IdComparator());
+			for (int cnt = 0; cnt < specimenList.size(); cnt++)
 			{
-				Specimen obj = (Specimen)specimenList.get(cnt);
-				Map<String,String> dataMap = new LinkedHashMap<String,String>();
-				String label= obj.getLabel();
-				String barcode = obj.getBarcode();
-//			
+				final Specimen obj = (Specimen) specimenList.get(cnt);
+				final Map<String, String> dataMap = new LinkedHashMap<String, String>();
+				final String label = obj.getLabel();
+				final String barcode = obj.getBarcode();
 				dataMap.put("class", obj.getClassName());
-				dataMap.put("id",obj.getId().toString());
+				dataMap.put("id", obj.getId().toString());
 				dataMap.put("label", label);
-				dataMap.put("barcode",barcode);
-				dataMap.put("printerType",printerType);
-				dataMap.put("printerLocation",printerLocation);
+				dataMap.put("barcode", barcode);
+				dataMap.put("printerType", printerType);
+				dataMap.put("printerLocation", printerLocation);
 				listMap.add(dataMap);
 			}
 
@@ -90,6 +120,4 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter {
 		return listMap;
 	}
 
-	
-	
 }

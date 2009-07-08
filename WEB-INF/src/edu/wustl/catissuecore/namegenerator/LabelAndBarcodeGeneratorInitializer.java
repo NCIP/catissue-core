@@ -6,22 +6,30 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class initialize  label and barcode generator depending upon configuration.
+ * This class initialize  label and bar code generator depending upon configuration.
  * @author Falguni_Sachde
  *
  */
-public class LabelAndBarcodeGeneratorInitializer
+public final class LabelAndBarcodeGeneratorInitializer
 {
 
 	/**
 	 * Logger object.
 	 */
-	private static final Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(LabelAndBarcodeGeneratorInitializer.class);
 
 	/**
+	 * private constructor.
+	 */
+	private LabelAndBarcodeGeneratorInitializer()
+	{
+
+	}
+
+	/**
 	 * This method reads configuration file and set the conditions
-	 * whether automatic label ,barcode generation configured or not.
+	 * whether automatic label ,bar code generation configured or not.
 	 *
 	 */
 	public static void init()
@@ -31,13 +39,17 @@ public class LabelAndBarcodeGeneratorInitializer
 			setSpcimenLabelBarcodeGentorInstances();
 			setStorageContainerGeneratorInstance();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			LOGGER.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * This method set Storage Container GeneratorInstance.
+	 * @throws NameGeneratorException Name Generator Exception.
+	 */
 	private static void setStorageContainerGeneratorInstance() throws NameGeneratorException
 	{
 		LabelGenerator storageContainerGeneratorInstance;
@@ -58,6 +70,10 @@ public class LabelAndBarcodeGeneratorInitializer
 		}
 	}
 
+	/**
+	 * This method set Specimen Label BarcodeGentor Instances.
+	 * @throws NameGeneratorException Name Generator Exception.
+	 */
 	private static void setSpcimenLabelBarcodeGentorInstances() throws NameGeneratorException
 	{
 		LabelGenerator specimenGeneratorInstance;
@@ -73,7 +89,7 @@ public class LabelAndBarcodeGeneratorInitializer
 			Variables.isSpecimenLabelGeneratorAvl = true;
 		}
 		protocolParticipantIdentifierLabelGeneratorInstance = LabelGeneratorFactory
-				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+		.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
 		if (protocolParticipantIdentifierLabelGeneratorInstance != null)
 		{
 			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;

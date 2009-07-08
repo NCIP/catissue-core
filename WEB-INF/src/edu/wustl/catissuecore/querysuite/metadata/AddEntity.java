@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.querysuite.metadata;
 
 import java.io.IOException;
@@ -9,27 +10,48 @@ import java.util.List;
 
 import edu.wustl.catissuecore.util.global.Constants;
 
-
-
-public class AddEntity 
+/**
+ * AddEntity.
+ *
+ */
+public class AddEntity
 {
+
+	/**
+	 * Connection instance.
+	 */
 	private Connection connection = null;
-	
+
+	/**
+	 * Constructor.
+	 * @param connection Connection object
+	 */
 	AddEntity(Connection connection)
 	{
 		this.connection = connection;
 	}
-	
+
 	/*public static void main(String args[])throws Exception
 	{
 		Connection connection = DBUtil.getConnection();
 		connection.setAutoCommit(true);
 	}*/
-	
-	public void addEntity(List<String> entityList,String tableName,String parentEntity,int inheritanceStrategy,int isAbstract) throws SQLException, IOException
+
+	/**
+	 * This method adds entity.
+	 * @param entityList entity List
+	 * @param tableName table Name
+	 * @param parentEntity parent Entity
+	 * @param inheritanceStrategy inheritance Strategy
+	 * @param isAbstract is Abstract
+	 * @throws SQLException SQL Exception
+	 * @throws IOException IO Exception
+	 */
+	public void addEntity(List<String> entityList, String tableName, String parentEntity,
+			int inheritanceStrategy, int isAbstract) throws SQLException, IOException
 	{
-		Statement stmt = connection.createStatement();
-		for(String entityName : entityList)
+		final Statement stmt = this.connection.createStatement();
+		for (final String entityName : entityList)
 		{
 			//insert statements
 			String sql = "select max(identifier) from dyextn_abstract_metadata";
@@ -37,7 +59,7 @@ public class AddEntity
 			int nextIdOfAbstractMetadata = 0;
 			if (rs.next())
 			{
-				int maxId = rs.getInt(1);
+				final int maxId = rs.getInt(1);
 				nextIdOfAbstractMetadata = maxId + 1;
 			}
 			rs.close();
@@ -46,52 +68,57 @@ public class AddEntity
 			rs = stmt.executeQuery(sql);
 			if (rs.next())
 			{
-				int maxId = rs.getInt(1);
+				final int maxId = rs.getInt(1);
 				nextIdDatabaseproperties = maxId + 1;
 			}
 			rs.close();
-			
-			sql = "INSERT INTO dyextn_abstract_metadata (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
-			+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName
-			+ "',null)";
-			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+
+			sql = "INSERT INTO dyextn_abstract_metadata" +
+				" (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
+					+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName + "',null)";
+			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
-				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_abstract_metadata");
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
+						"dyextn_abstract_metadata");
 			}
-			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-			sql = "INSERT INTO dyextn_abstract_entity values("+ nextIdOfAbstractMetadata + ")";
-			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-		
-			if(parentEntity.equals("NULL"))
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+			sql = "INSERT INTO dyextn_abstract_entity values(" + nextIdOfAbstractMetadata + ")";
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+
+			if (parentEntity.equals("NULL"))
 			{
-				sql = "INSERT INTO dyextn_entity values("
-					+ nextIdOfAbstractMetadata + ",3,"+isAbstract+",NULL,"+inheritanceStrategy+",NULL,NULL,1)";
-					UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
+				sql = "INSERT INTO dyextn_entity values(" + nextIdOfAbstractMetadata + ",3,"
+						+ isAbstract + ",NULL," + inheritanceStrategy + ",NULL,NULL,1)";
+				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 			}
 			else
 			{
-				int parEId = UpdateMetadataUtil.getEntityIdByName(parentEntity, connection.createStatement());
-				sql = "INSERT INTO dyextn_entity values("
-				+ nextIdOfAbstractMetadata + ",3,"+isAbstract+","+parEId+","+inheritanceStrategy+",NULL,NULL,1)";
-				UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
+				final int parEId = UpdateMetadataUtil.getEntityIdByName(parentEntity,
+						this.connection.createStatement());
+				sql = "INSERT INTO dyextn_entity values(" + nextIdOfAbstractMetadata + ",3,"
+						+ isAbstract + ","
+						+ parEId + "," + inheritanceStrategy + ",NULL,NULL,1)";
+				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 			}
-		
+
 			sql = "INSERT INTO dyextn_database_properties(IDENTIFIER,NAME) values("
-			+ nextIdDatabaseproperties + ",'"+tableName+"')";
-			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+					+ nextIdDatabaseproperties + ",'" + tableName + "')";
+			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
-				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
+						"dyextn_database_properties");
 			}
-			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
-		
-			if(Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+
+			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
-				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,"dyextn_database_properties");
+				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
+						"dyextn_database_properties");
 			}
-			
+
 			sql = "INSERT INTO dyextn_table_properties (IDENTIFIER,ABSTRACT_ENTITY_ID) values("
-			+ nextIdDatabaseproperties + "," + nextIdOfAbstractMetadata+")";
-			UpdateMetadataUtil.executeInsertSQL(sql, connection.createStatement());
+					+ nextIdDatabaseproperties + "," + nextIdOfAbstractMetadata + ")";
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 		}
 	}
 }

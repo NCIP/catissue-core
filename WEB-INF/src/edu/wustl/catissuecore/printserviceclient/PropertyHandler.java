@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.printserviceclient;
 
 import java.io.File;
@@ -13,57 +14,67 @@ import edu.wustl.common.util.logger.Logger;
  * @author falguni sachde
  *
  */
-public class PropertyHandler {
+public final class PropertyHandler
+{
 
+	/**
+	 * Generic logger.
+	 */
 	private static Logger logger = Logger.getCommonLogger(PropertyHandler.class);
 	/**
-	 * 
+	 * printimplClass Properties.
 	 */
 	private static Properties printimplClassProperties = null;
 
-
 	/**
-	 * @param path
-	 * @throws Exception
+	 * private constructor.
+	 */
+	private PropertyHandler()
+	{
+
+	}
+	/**
+	 * @param path path.
+	 * @throws Exception Exception
 	 */
 	public static void init(String path) throws Exception
 	{
 		try
 		{
-			String absolutePath=CommonServiceLocator.getInstance().getPropDirPath() +File.separator+path;
-			InputStream inpurStream= new FileInputStream(new File(absolutePath));
+			final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
+					+ File.separator + path;
+			final InputStream inpurStream = new FileInputStream(new File(absolutePath));
 			printimplClassProperties = new Properties();
 			printimplClassProperties.load(inpurStream);
-			
+
 			/*printimplClassProperties = new Properties();
-			
-			printimplClassProperties.load(PropertyHandler.class.getClassLoader().getResourceAsStream(path));*/					
-				
+			printimplClassProperties.
+			load(PropertyHandler.class.getClassLoader().getResourceAsStream(path));*/
+
 		}
-		catch(Exception e)
+		catch (final Exception e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		
-			
+
 	}
-	
+
 	/**
 	 * Description:This method takes the property name as String argument and
-	 * returns the properties value as String. 
-	 * @param propertyName  name of property Key  
+	 * returns the properties value as String.
+	 * @param propertyName  name of property Key
 	 * @return String	property value
-	 * @throws Exception
+	 * @throws Exception Exception
 	 */
 	public static String getValue(String propertyName) throws Exception
 	{
-		
+
 		if (printimplClassProperties == null)
 		{
 			init("PrintServiceImplementor.properties");
 		}
-		return (String)printimplClassProperties.get(propertyName);
+		return (String) printimplClassProperties.get(propertyName);
 
 	}
 }

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.List;
@@ -5,8 +6,6 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
-
 
 /**
  * This  class which contains the default SCG barcode implementation.
@@ -15,10 +14,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 {
+
 	/**
 	 * Current barcode.
 	 */
 	protected Long currentBarcode;
+
 	/**
 	 * Datasource Name.
 	 */
@@ -26,18 +27,19 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	/**
 	 * Default Constructor.
 	 */
-	public DefaultSCGBarcodeGenerator () 
+	public DefaultSCGBarcodeGenerator()
 	{
 		super();
-		try{
-			
-			init();
-		}catch (ApplicationException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			
+		try
+		{
+
+			this.init();
 		}
-		
+		catch (final ApplicationException e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -46,23 +48,24 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * barcode from int to String
+	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
-		currentBarcode = new Long(0);
-		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";
-		currentBarcode=AppUtility.getLastAvailableValue(sql);
+		this.currentBarcode = new Long(0);
+		final String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_SPECIMEN_COLL_GROUP";
+		this.currentBarcode = AppUtility.getLastAvailableValue(sql);
 	}
-	
+
 	/**
 	 * Setting barcode.
 	 * @param obj SCG object
 	 */
 	public void setBarcode(Object obj)
 	{
-		SpecimenCollectionGroup objSpecimenCollectionGroup = (SpecimenCollectionGroup)obj;
+		final SpecimenCollectionGroup objSpecimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		//TODO :Write a logic to generate barcode.
-		String barcode = "";
+		final String barcode = "";
 		objSpecimenCollectionGroup.setBarcode(barcode);
 	}
 
@@ -72,10 +75,10 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 	 */
 	public void setBarcode(List<Object> scgList)
 	{
-		for(int i=0; i< scgList.size(); i++)
+		for (int i = 0; i < scgList.size(); i++)
 		{
-			SpecimenCollectionGroup scgObj = (SpecimenCollectionGroup)scgList.get(i);
-			setBarcode(scgObj);
+			final SpecimenCollectionGroup scgObj = (SpecimenCollectionGroup) scgList.get(i);
+			this.setBarcode(scgObj);
 		}
 	}
 }

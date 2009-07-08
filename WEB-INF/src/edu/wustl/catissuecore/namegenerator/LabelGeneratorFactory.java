@@ -9,17 +9,26 @@ import edu.wustl.common.util.logger.Logger;
  * This is the factory Class to retrieve singleton instance of LabelGenerator.
  * @author Falguni_Sachde
  */
-public class LabelGeneratorFactory
+public final class LabelGeneratorFactory
 {
 
 	/**
 	 * Logger object.
 	 */
-	private static final Logger logger = Logger.getCommonLogger(LabelGeneratorFactory.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(LabelGeneratorFactory.class);
+
+	/**
+	 * Private constructor.
+	 */
+	private LabelGeneratorFactory()
+	{
+
+	}
+
 	/**
 	 * Singleton instance of SpecimenLabelGenerator.
 	 */
-	private static HashMap<String,Object> labelgeneratorMap = new HashMap<String, Object>();
+	private static HashMap<String, Object> labelgeneratorMap = new HashMap<String, Object>();
 
 	/**
 	 * Get singleton instance of SpecimenLabelGenerator.
@@ -35,11 +44,11 @@ public class LabelGeneratorFactory
 		{
 			if (labelgeneratorMap.get(generatorType) == null)
 			{
-				String className = PropertyHandler.getValue(generatorType);
+				final String className = PropertyHandler.getValue(generatorType);
 				if (className != null)
 				{
-					labelgeneratorMap.put
-					(generatorType, Class.forName(className).newInstance());
+					labelgeneratorMap.put(generatorType, Class.forName(className).
+							newInstance());
 				}
 				else
 				{
@@ -48,27 +57,27 @@ public class LabelGeneratorFactory
 			}
 			return (LabelGenerator) labelgeneratorMap.get(generatorType);
 		}
-		catch (IllegalAccessException e)
+		catch (final IllegalAccessException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw new NameGeneratorException
-			("Could not create LabelGenerator instance: "+ e.getMessage());
+			LOGGER.debug(e.getMessage(), e);
+			throw new NameGeneratorException("Could not create LabelGenerator instance: "
+					+ e.getMessage());
 		}
-		catch (InstantiationException e)
+		catch (final InstantiationException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw new NameGeneratorException
-			("Could not create LabelGenerator instance: "+ e.getMessage());
+			LOGGER.debug(e.getMessage(), e);
+			throw new NameGeneratorException("Could not create LabelGenerator instance: "
+					+ e.getMessage());
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
-			throw new NameGeneratorException
-			("Could not create LabelGenerator instance: "+ e.getMessage());
+			LOGGER.debug(e.getMessage(), e);
+			throw new NameGeneratorException("Could not create LabelGenerator instance: "
+					+ e.getMessage());
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			LOGGER.debug(ex.getMessage(), ex);
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

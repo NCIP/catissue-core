@@ -19,8 +19,9 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	/**
 	 * Logger Object.
 	 */
-	private static final transient Logger logger = Logger
+	private static final transient Logger LOGGER = Logger
 			.getCommonLogger(DefaultStorageContainerLabelGenerator.class);
+
 	/**
 	 * Current label.
 	 */
@@ -28,25 +29,27 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public DefaultStorageContainerLabelGenerator() throws ApplicationException
 	{
 		super();
-		init();
+		this.init();
 	}
 
 	/**
 	 * This is a init() function it is called from the
 	 * default constructor of Base class.When getInstance of base class
 	 * called then this init function will be called.
-	 * This method will first check the Datatbase Name and then set function name that will convert
-	 * lable from int to String
+	 * This method will first check the Database Name and then set function name that will convert
+	 * label from int to String
+	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
-		currentLabel = new Long(0);
-		String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
-		currentLabel = AppUtility.getLastAvailableValue(sql);
+		this.currentLabel = new Long(0);
+		final String sql = "select max(IDENTIFIER) as MAX_NAME from CATISSUE_STORAGE_CONTAINER";
+		this.currentLabel = AppUtility.getLastAvailableValue(sql);
 	}
 
 	/**
@@ -55,8 +58,8 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 */
 	public void setLabel(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer) obj;
-		currentLabel = currentLabel + 1;
+		final StorageContainer objStorageContainer = (StorageContainer) obj;
+		this.currentLabel = this.currentLabel + 1;
 		String containerName = "";
 		String maxSiteName = objStorageContainer.getSite().getName();
 		String maxTypeName = objStorageContainer.getStorageType().getName();
@@ -68,7 +71,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		{
 			maxTypeName = maxTypeName.substring(0, 39);
 		}
-		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(currentLabel);
+		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(this.currentLabel);
 		objStorageContainer.setName(containerName);
 	}
 
@@ -80,8 +83,9 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	{
 		for (int i = 0; i < storageContainerList.size(); i++)
 		{
-			StorageContainer objStorageContainer = (StorageContainer) storageContainerList.get(i);
-			setLabel(objStorageContainer);
+			final StorageContainer objStorageContainer = (StorageContainer) storageContainerList
+					.get(i);
+			this.setLabel(objStorageContainer);
 		}
 	}
 
@@ -92,8 +96,8 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	 */
 	public String getLabel(Object obj)
 	{
-		StorageContainer objStorageContainer = (StorageContainer) obj;
-		setLabel(objStorageContainer);
+		final StorageContainer objStorageContainer = (StorageContainer) obj;
+		this.setLabel(objStorageContainer);
 		return (objStorageContainer.getName());
 	}
 }

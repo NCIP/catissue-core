@@ -16,6 +16,7 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 
 	/**
 	 * Default Constructor.
+	 * @throws ApplicationException Application Exception
 	 */
 	public SpecimenLabelGeneratorForIU() throws ApplicationException
 	{
@@ -27,35 +28,36 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 	 * @param parentObject parent obj
 	 * @param specimenObject specimen obj
 	 */
+	@Override
 	synchronized void setNextAvailableAliquotSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject)
 	{
 
-		String parentSpecimenLabel = (String) parentObject.getLabel();
+		String parentSpecimenLabel = parentObject.getLabel();
 		long aliquotChildCount = parentObject.getChildSpecimenCollection().size();
-		Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
+		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
-			Specimen spec = (Specimen) itr.next();
+			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLabel() == null)
 			{
 				aliquotChildCount--;
 			}
 		}
 		StringBuffer buffy = null;
-		StringBuffer prefixBuffy = new StringBuffer();
+		final StringBuffer prefixBuffy = new StringBuffer();
 		String sp = null;
 
 		if (parentSpecimenLabel != null)
 		{
-			parentSpecimenLabel = (String) parentSpecimenLabel;
-			int dash = parentSpecimenLabel.lastIndexOf("-");
+			parentSpecimenLabel = parentSpecimenLabel;
+			final int dash = parentSpecimenLabel.lastIndexOf("-");
 			prefixBuffy.append(parentSpecimenLabel.substring(0, dash + 1));
 			sp = parentSpecimenLabel.substring(dash + 1, dash + 2);
 			buffy = new StringBuffer();
 			buffy.append(prefixBuffy);
 			buffy.append(++aliquotChildCount);
-			buffy.append(determineSerumPlasma(sp, aliquotChildCount));
+			buffy.append(this.determineSerumPlasma(sp, aliquotChildCount));
 			specimenObject.setLabel(buffy.toString());
 		}
 	}
