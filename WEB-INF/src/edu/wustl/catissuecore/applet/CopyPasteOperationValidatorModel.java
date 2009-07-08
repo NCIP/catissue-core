@@ -1,72 +1,71 @@
+
 package edu.wustl.catissuecore.applet;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * <p>This class will contain data which is required for Copy operation validator.</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class CopyPasteOperationValidatorModel implements Serializable {
-	
+public class CopyPasteOperationValidatorModel implements Serializable
+{
+
 	/**
-	 * Specify the serialVersionUID field 
+	 * Specify the serialVersionUID field.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * Specify the selectedCopiedRows field - selected rows for copy operation 
+	 * Specify the selectedCopiedRows field - selected rows for copy operation.
 	 */
 	private List selectedCopiedRows;
 	/**
-	 * Specify the selectedCopiedCols field - selected cols for copy operation 
+	 * Specify the selectedCopiedCols field - selected cols for copy operation.
 	 */
 	private List selectedCopiedCols;
 
 	/**
-	 * Specify the selectedPastedRows field - selected rows for paste operation 
+	 * Specify the selectedPastedRows field - selected rows for paste operation.
 	 */
 	private List selectedPastedRows;
-	
+
 	/**
-	 * Specify the selectedPastedCols field - selected cols for paste operation
+	 * Specify the selectedPastedCols field - selected cols for paste operation.
 	 */
 	private List selectedPastedCols;
 
 	/**
 	 * To hold copied data.
 	 */
-	private HashMap copiedData;	
+	private HashMap copiedData;
 
 	/**
-	 * Specify the ignoredRows field - ignored Rows for paste operation 
+	 * Specify the ignoredRows field - ignored Rows for paste operation.
 	 */
 	private List ignoredRows;
-	
+
 	/**
-	 * Specify the rowCount field - total rows
+	 * Specify the rowCount field - total rows.
 	 */
 	private int rowCount;
-	
+
 	/**
-	 * Specify the columnCount field - total columns
+	 * Specify the columnCount field - total columns.
 	 */
 	private int columnCount;
-	
+
 	/**
-	 * Specify the operation - whether copy or paste
+	 * Specify the operation - whether copy or paste.
 	 */
 	private String operation;
 
-	
 	/**
-	 * Specify page index
+	 * Specify page index.
 	 */
 	private int pageIndexWhenCopied;
-
 
 	/**
 	 * @return Returns the columnCount.
@@ -75,6 +74,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return columnCount;
 	}
+
 	/**
 	 * @param columnCount The columnCount to set.
 	 */
@@ -82,6 +82,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.columnCount = columnCount;
 	}
+
 	/**
 	 * @return Returns the ignoredRows.
 	 */
@@ -89,6 +90,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return ignoredRows;
 	}
+
 	/**
 	 * @param ignoredRows The ignoredRows to set.
 	 */
@@ -96,6 +98,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.ignoredRows = ignoredRows;
 	}
+
 	/**
 	 * @return Returns the operation.
 	 */
@@ -103,6 +106,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return operation;
 	}
+
 	/**
 	 * @param operation The operation to set.
 	 */
@@ -110,6 +114,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.operation = operation;
 	}
+
 	/**
 	 * @return Returns the rowCount.
 	 */
@@ -117,6 +122,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return rowCount;
 	}
+
 	/**
 	 * @param rowCount The rowCount to set.
 	 */
@@ -124,7 +130,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.rowCount = rowCount;
 	}
-	
+
 	/**
 	 * @return Returns the copiedData.
 	 */
@@ -132,6 +138,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return copiedData;
 	}
+
 	/**
 	 * @param copiedData The copiedData to set.
 	 */
@@ -139,6 +146,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.copiedData = copiedData;
 	}
+
 	/**
 	 * @return Returns the selectedCopiedCols.
 	 */
@@ -146,6 +154,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return selectedCopiedCols;
 	}
+
 	/**
 	 * @param selectedCopiedCols The selectedCopiedCols to set.
 	 */
@@ -153,6 +162,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.selectedCopiedCols = selectedCopiedCols;
 	}
+
 	/**
 	 * @return Returns the selectedCopiedRows.
 	 */
@@ -160,6 +170,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return selectedCopiedRows;
 	}
+
 	/**
 	 * @param selectedCopiedRows The selectedCopiedRows to set.
 	 */
@@ -167,6 +178,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.selectedCopiedRows = selectedCopiedRows;
 	}
+
 	/**
 	 * @return Returns the selectedPastedCols.
 	 */
@@ -174,6 +186,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return selectedPastedCols;
 	}
+
 	/**
 	 * @param selectedPastedCols The selectedPastedCols to set.
 	 */
@@ -181,6 +194,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.selectedPastedCols = selectedPastedCols;
 	}
+
 	/**
 	 * @return Returns the selectedPastedRows.
 	 */
@@ -188,6 +202,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return selectedPastedRows;
 	}
+
 	/**
 	 * @param selectedPastedRows The selectedPastedRows to set.
 	 */
@@ -195,8 +210,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.selectedPastedRows = selectedPastedRows;
 	}
-		
-	
+
 	/**
 	 * @return Returns the pageIndexWhenCopied.
 	 */
@@ -204,6 +218,7 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		return pageIndexWhenCopied;
 	}
+
 	/**
 	 * @param pageIndexWhenCopied The pageIndexWhenCopied to set.
 	 */

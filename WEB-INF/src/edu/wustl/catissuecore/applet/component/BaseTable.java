@@ -7,8 +7,9 @@
  * Created on Sep 18, 2006
  */
 /**
- * 
+ *
  */
+
 package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.JTable;
@@ -25,57 +26,64 @@ import javax.swing.table.TableModel;
  * @see javax.swing.JTable
  */
 
-public class BaseTable extends JTable {
+public class BaseTable extends JTable
+{
 
 	/**
-	 * Default Serial Version ID
+	 * Default Serial Version ID.
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Default Constructor 
+	 * Default Constructor.
 	 */
-	public BaseTable() {
+	public BaseTable()
+	{
 		super();
 		initUI();
 	}
 
 	/**
 	 * Constructor with Table model.
-	 * @param tableModel
+	 * @param tableModel : tableModel
 	 */
-	public BaseTable(TableModel tableModel) {
+	public BaseTable(TableModel tableModel)
+	{
 		super(tableModel);
 		initUI();
 	}
 
 	/**
-	 * Constructor with Table model,table column model
+	 * Constructor with Table model,table column model.
 	 * @param tableModel table model
 	 * @param tableColumnModel table column model
 	 */
-	public BaseTable(TableModel tableModel, TableColumnModel tableColumnModel) {
+	public BaseTable(TableModel tableModel, TableColumnModel tableColumnModel)
+	{
 		super(tableModel, tableColumnModel);
 		initUI();
 	}
 
 	/**
-	 * Constructor with Table model,table column model,lise selection model 
+	 * Constructor with Table model,table column model,lise selection model.
 	 * @param tableModel table model
 	 * @param tableColumnModel table column model
 	 * @param listSelectionModel list selection model
 	 */
-	public BaseTable(TableModel tableModel, TableColumnModel tableColumnModel, ListSelectionModel listSelectionModel) {
+	public BaseTable(TableModel tableModel, TableColumnModel tableColumnModel,
+			ListSelectionModel listSelectionModel)
+	{
 		super(tableModel, tableColumnModel, listSelectionModel);
 		initUI();
 	}
 
 	/**
-	 * Initialize UI for table. 
+	 * Initialize UI for table.
 	 */
-	private void initUI() {
+	private void initUI()
+	{
 		getTableHeader().setReorderingAllowed(false);
 		//this.selectionBackground = AppletConstants.CELL_SELECTION_COLOR;
 	}
-	
+
 }

@@ -18,15 +18,15 @@ import java.util.Map;
  * @author Ashwin Gupta
  * @version 1.1
  */
-public interface AppletModelInterface extends Serializable {
+public interface AppletModelInterface extends Serializable
+{
 
 		/**
-		 * map of data which is to be used as communication object between Applet component 
+		 * map of data which is to be used as communication object between Applet component
 		 * & server component.
 		 * @param data map
 		 */
 		void setData(Map data);
-		
 		/**
 		 * Gets data as map which contains objects as value & unique keys to access
 		 * this objects.

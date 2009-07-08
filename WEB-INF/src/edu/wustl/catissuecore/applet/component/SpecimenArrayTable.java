@@ -6,44 +6,43 @@
  * @version 1.1
  * Created on Sep 18, 2006
  */
-/**
- * 
- */
+
+
 package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.table.TableModel;
 
 import edu.wustl.catissuecore.applet.listener.SpecimenArrayTableMouseHandler;
 
-
-
-
 /**
- * <p>This class initializes the fields of SpecimenArrayTable.java</p>
+ * <p>This class initializes the fields of SpecimenArrayTable.java</p>.
  * @author Ashwin Gupta
  * @version 1.1
  */
 
-public class SpecimenArrayTable extends BaseTable {
+public class SpecimenArrayTable extends BaseTable
+{
 
 	/**
-	 * Default Serial Version Id
+	 * Default Serial Version Id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * Constructor with model
+	 * Constructor with model.
 	 * @param tableModel table model
 	 */
-	public SpecimenArrayTable(TableModel tableModel) {
+	public SpecimenArrayTable(TableModel tableModel)
+	{
 		super(tableModel);
 		initUI();
 	}
-	
+
 	/**
-	 * Init UI 
+	 * Init UI.
 	 */
-	private void initUI() {
+	private void initUI()
+	{
 		addMouseListener(new SpecimenArrayTableMouseHandler());
 	}
 }

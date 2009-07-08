@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>This class initializes the fields of BaseCopyPasteValidator.java</p>
+ * <p>This class initializes the fields of BaseCopyPasteValidator.java</p>.
  * @author Ashwin Gupta
  * @version 1.1
  */
@@ -13,17 +13,17 @@ public abstract class BaseCopyPasteValidator implements Serializable
 {
 
 	/**
-	 * Specify the serialVersionUID field 
+	 * Specify the serialVersionUID field.
 	 */
 	private static final long serialVersionUID = 366636337395262535L;
 
 	/**
-	 * Specify the validatorModel field 
+	 * Specify the validatorModel field.
 	 */
 	protected CopyPasteOperationValidatorModel validatorModel;
 
-	/** 
-	 * Default Constructor
+	/**
+	 * Default Constructor.
 	 */
 	public BaseCopyPasteValidator()
 	{
@@ -31,7 +31,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * Constructor with model
+	 * Constructor with model.
 	 * @param validatorModel model
 	 */
 	public BaseCopyPasteValidator(CopyPasteOperationValidatorModel validatorModel)
@@ -40,7 +40,8 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * Perform the base level validations required for copy operation.  
+	 * Perform the base level validations required for copy operation.
+	 * @return String
 	 */
 	public String validate()
 	{
@@ -58,11 +59,13 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * Perform the pre validations required for copy operation.  
-	 * The different validations performed here are 
+	 * Perform the pre validations required for copy operation.
+	 * The different validations performed here are
 	 * 1. Selection of number of rows in a column or number of columns should be contiguous
 	 * 2. Number of rows/columns selected for copy and paste should match
-	 * 3. If a single row/column is selected while paste operation, there should be enough rows/columns as per copied data  
+	 * 3. If a single row/column is selected while paste operation,
+	 *  there should be enough rows/columns as per copied data
+	 *  @return String
 	 */
 	protected String preValidate()
 	{
@@ -87,7 +90,8 @@ public abstract class BaseCopyPasteValidator implements Serializable
 
 		/**
 		 *  -- Number of rows/columns selected for copy and paste should match
-		 *  -- If a single row/column is selected while paste operation, there should be enough rows/columns as per copied data
+		 *  -- If a single row/column is selected while paste operation,
+		 *   there should be enough rows/columns as per copied data
 		 */
 		if (validatorModel.getOperation().equals("paste"))
 		{
@@ -122,7 +126,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * This method checks Selection of number of rows in a column should be contiguous
+	 * This method checks Selection of number of rows in a column should be contiguous.
 	 * @param selectedRows - list
 	 * @return - message
 	 */
@@ -146,8 +150,8 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * This method checks Selection of number of columns should be contiguous
-	 * @param selectedRows - list
+	 * This method checks Selection of number of columns should be contiguous.
+	 * @param selectedCols - list
 	 * @return - message
 	 */
 	private String validateCols(List selectedCols)
@@ -171,7 +175,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * This method checks
+	 * This method checks.
 	 *  -- Number of rows selected for copy and paste should match
 	 *  -- If a single row is selected while paste operation, there should be enough rows as per copied data
 	 *
@@ -202,11 +206,11 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	}
 
 	/**
-	 * This method checks
+	 * This method checks.
 	 *  -- Number of columns selected for copy and paste should match
-	 *  -- If a single column is selected while paste operation, there should be enough columns as per copied data
-	 *
-	 * @param selectedRows - list
+	 *  -- If a single column is selected while paste operation,
+	 *   there should be enough columns as per copied data
+	 * @param selectedCols - list
 	 * @param validatorModel - CopyPasteOperationValidatorModel
 	 * @return - message
 	 */
@@ -234,12 +238,14 @@ public abstract class BaseCopyPasteValidator implements Serializable
 
 	/**
 	 * Perform the actual validations required for copy operation.
-	 * That method must be overridden in subclasses.  
+	 * That method must be overridden in subclasses.
+	 * @return String
 	 */
 	protected abstract String doValidate();
 
 	/**
 	 * Perform the post validations required for copy operation.
+	 * @return String
 	 */
 	protected String postValidate()
 	{

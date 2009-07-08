@@ -6,6 +6,7 @@
  * @version 1.1
  * Created on Sep 15, 2006
  */
+
 package edu.wustl.catissuecore.applet;
 
 import java.io.IOException;
@@ -17,74 +18,83 @@ import java.net.URL;
 
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.common.util.logger.Logger;
-
-public class AppletServerCommunicator implements Serializable {
-
+/**
+ * @author
+ *
+ */
+public class AppletServerCommunicator implements Serializable
+{
+	/**
+	 * logger.
+	 */
 	private static Logger logger = Logger.getCommonLogger(AppletServerCommunicator.class);
 	/**
-	 * Serial version ID
+	 * Serial version ID.
 	 */
 	private static final long serialVersionUID = -5749961403859624336L;
 
-    /**
-     * This method will open an HttpCommunication with the servlet/Server side comp. And returns the AppletModelInterface
-     * 
-     * @param urlString
-     *            The url of server side component (Servlet/Struts Action)
-     * @param appletModelInterface
-     *            The Applet model interface to be sent to server
-     * @return AppletModelInterface
-     * @throws IOException
-     *             If IOException occurs
-     * @throws ClassNotFoundException
-     *             If ClassNotFoundException occurs
-     * @see edu.wustl.catissuecore.appletui.model.AppletModelInterface            
-     */
-    public static AppletModelInterface doAppletServerCommunication(String urlString,AppletModelInterface appletModelInterface) throws IOException,
-            ClassNotFoundException {
-    	
-        URL url = new URL(urlString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        //System.out.println("connection object created");
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
-        //System.out.println("connection.connect() method commented");
-        //connection.connect();
-        ObjectOutputStream outputStream = new ObjectOutputStream(connection
-                .getOutputStream());
-        outputStream.writeObject(appletModelInterface);
-        //System.out.println(" flush() is uncommented");
-        outputStream.flush();
-        outputStream.close();
+	/**
+	 * This method will open an HttpCommunication with the
+	 *  servlet/Server side comp. And returns the AppletModelInterface
+	 *
+	 * @param urlString
+	 *            The url of server side component (Servlet/Struts Action)
+	 * @param appletModelInterface
+	 *            The Applet model interface to be sent to server
+	 * @return AppletModelInterface
+	 * @throws IOException
+	 *             If IOException occurs
+	 * @throws ClassNotFoundException
+	 *             If ClassNotFoundException occurs
+	 * @see edu.wustl.catissuecore.appletui.model.AppletModelInterface
+	 */
+	public static AppletModelInterface doAppletServerCommunication(String urlString,
+			AppletModelInterface appletModelInterface) throws IOException, ClassNotFoundException
+	{
 
-        ObjectInputStream inputStream = null;
-        Object appletObject = null;
-        try
-        {
-            inputStream = new ObjectInputStream(connection.getInputStream());
-            appletObject = inputStream.readObject();
-            appletModelInterface = (AppletModelInterface)appletObject;
-        }
-        catch(IOException e)
-        {
-        	logger.debug(e.getMessage(), e);
-        //	System.out.println(" IO Exception " + e);
-        	e.printStackTrace();
-        }
-        catch(ClassNotFoundException e)
-        {
-        	logger.debug(e.getMessage(), e);
-            e.printStackTrace();
-        }
-        finally
-        {
-        	//System.out.println("Before disconnect in finally");
-        	connection.disconnect();
-        }
-        if(inputStream != null)
-            inputStream.close();
-        
-        //System.out.println("After close() ");
-        return appletModelInterface;
-    }
+		URL url = new URL(urlString);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		//System.out.println("connection object created");
+		connection.setRequestMethod("GET");
+		connection.setDoOutput(true);
+		//System.out.println("connection.connect() method commented");
+		//connection.connect();
+		ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
+		outputStream.writeObject(appletModelInterface);
+		//System.out.println(" flush() is uncommented");
+		outputStream.flush();
+		outputStream.close();
+
+		ObjectInputStream inputStream = null;
+		Object appletObject = null;
+		try
+		{
+			inputStream = new ObjectInputStream(connection.getInputStream());
+			appletObject = inputStream.readObject();
+			appletModelInterface = (AppletModelInterface) appletObject;
+		}
+		catch (IOException e)
+		{
+			logger.debug(e.getMessage(), e);
+			//	System.out.println(" IO Exception " + e);
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e)
+		{
+			logger.debug(e.getMessage(), e);
+			e.printStackTrace();
+		}
+		finally
+		{
+			//System.out.println("Before disconnect in finally");
+			connection.disconnect();
+		}
+		if (inputStream != null)
+		{
+			inputStream.close();
+		}
+
+		//System.out.println("After close() ");
+		return appletModelInterface;
+	}
 }
