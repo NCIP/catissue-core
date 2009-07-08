@@ -60,8 +60,7 @@ public class SpecimenProtocolAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
+	 * @param mapping : mapped to ActionMapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request

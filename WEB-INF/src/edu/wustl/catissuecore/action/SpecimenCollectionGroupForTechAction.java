@@ -39,8 +39,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 	 *            object of ActionMapping
 	 * @param form
 	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
+	 * @param request : HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
 	 * @throws Exception
@@ -120,16 +119,19 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 								.getStudyCalendarEventPoint();
 						if (studyCalendarEventPoint.doubleValue() == 0)
 						{
-							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX,
+									Constants.FALSE);
 						}
 						else
 						{
-							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.TRUE);
+							request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX,
+									Constants.TRUE);
 						}
 					}
 					else
 					{
-						request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX, Constants.FALSE);
+						request.setAttribute(Constants.RESTRICT_SCG_CHECKBOX,
+								Constants.FALSE);
 					}
 				}
 

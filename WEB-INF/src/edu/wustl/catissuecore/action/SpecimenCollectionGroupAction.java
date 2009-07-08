@@ -160,25 +160,25 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		// Participant Identifier
 		// int radioButtonSelected = 1;
 		// Id of Selected Participant or Protocol Participant Identifier
-		String selectedParticipantOrPPIdentifier_id = null;
+		String selectedParticipantOrPPIdentifierId = null;
 		// Radio button for Protocol Participant Identifier or Participant
 		String radioButtonSelectedForType = null;
-		String selectedCollectionProtocol_id = String.valueOf(specimenCollectionGroupForm
+		String selectedCollectionProtocolId = String.valueOf(specimenCollectionGroupForm
 				.getCollectionProtocolId());
-		if (selectedCollectionProtocol_id
+		if (selectedCollectionProtocolId
 				.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
 		{
 			Map forwardToHashMap = (Map) request.getAttribute(Constants.FORWARD_TO_HASHMAP);
 			if (forwardToHashMap != null)
 			{
-				selectedCollectionProtocol_id = forwardToHashMap.get(
+				selectedCollectionProtocolId = forwardToHashMap.get(
 						Constants.COLLECTION_PROTOCOL_ID).toString();
-				selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(
+				selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 						Constants.PARTICIPANT_ID).toString();
 				radioButtonSelectedForType = Constants.PARTICIPANT_ID;
-				if (selectedParticipantOrPPIdentifier_id.equals("0"))
+				if (selectedParticipantOrPPIdentifierId.equals("0"))
 				{
-					selectedParticipantOrPPIdentifier_id = forwardToHashMap.get(
+					selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 							Constants.PARTICIPANT_PROTOCOL_ID).toString();
 					radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
 				}
@@ -191,24 +191,24 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// if (radioButtonSelected == 1)
 			if (specimenCollectionGroupForm.getParticipantId() > 0)
 			{
-				selectedParticipantOrPPIdentifier_id = Long.toString(specimenCollectionGroupForm
+				selectedParticipantOrPPIdentifierId = Long.toString(specimenCollectionGroupForm
 						.getParticipantId());
 				radioButtonSelectedForType = Constants.PARTICIPANT_ID;
 			}
 			else
 			{
-				selectedParticipantOrPPIdentifier_id = specimenCollectionGroupForm
+				selectedParticipantOrPPIdentifierId = specimenCollectionGroupForm
 						.getProtocolParticipantIdentifier();
 				radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
 			}
 		}
 		CollectionProtocolRegistration collectionProtocolRegistration = null;
-		if (selectedParticipantOrPPIdentifier_id != null
-				&& !(selectedParticipantOrPPIdentifier_id.equalsIgnoreCase("0")))
+		if (selectedParticipantOrPPIdentifierId != null
+				&& !(selectedParticipantOrPPIdentifierId.equalsIgnoreCase("0")))
 		{
 			// Get CollectionprotocolRegistration Object
 			collectionProtocolRegistration = getcollectionProtocolRegistrationObj(
-					selectedParticipantOrPPIdentifier_id, selectedCollectionProtocol_id,
+					selectedParticipantOrPPIdentifierId, selectedCollectionProtocolId,
 					radioButtonSelectedForType);
 		}
 		else if (specimenCollectionGroupForm.getId() != 0)
@@ -357,11 +357,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		// Populating the Collection Protocol Events
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),
 				bizLogic, request, specimenCollectionGroupForm);
-		Object CPEObject = null;
+		Object cPEObject = null;
 		if (!operation.equalsIgnoreCase(Constants.ADD)
 				&& !(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
 		{
-			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
+			cPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 					specimenCollectionGroupForm.getCollectionProtocolEventId()));
 		}
 
@@ -371,7 +371,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		{
 			// Added by Vijay Pande. Method is created since code was repeating
 			// for SUBMITTED_FOR= "AddNew" || "Default" value.
-			setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
+			setCalendarEventPoint(cPEObject, request, specimenCollectionGroupForm);
 		}
 
 		// populating clinical Diagnosis field
@@ -437,12 +437,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			if (cprId != null)
 			{
-				Object CPRObject = bizLogic.retrieve(
+				Object cPRObject = bizLogic.retrieve(
 						CollectionProtocolRegistration.class.getName(), cprId);
-				if (CPRObject != null)
+				if (cPRObject != null)
 				{
 					CollectionProtocolRegistration cpr =
-						(CollectionProtocolRegistration) CPRObject;
+						(CollectionProtocolRegistration) cPRObject;
 
 					long cpID = cpr.getCollectionProtocol().getId().longValue();
 					long pID = cpr.getParticipant().getId().longValue();
@@ -511,12 +511,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 					// Load Clinical status for a given study calander event
 					// point
-					CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+					cPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 							new Long(specimenCollectionGroupForm.
 									getCollectionProtocolEventId()));
-					if (isOnChange && CPEObject != null)
+					if (isOnChange && cPEObject != null)
 					{
-						setCalendarEventPoint(CPEObject, request,
+						setCalendarEventPoint(cPEObject, request,
 								specimenCollectionGroupForm);
 					}
 				}
@@ -672,11 +672,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					bizLogic, request, specimenCollectionGroupForm);
 
 			// Load Clinical status for a given study calander event point
-			CPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
+			cPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(), new Long(
 					specimenCollectionGroupForm.getCollectionProtocolEventId()));
-			if (CPEObject != null)
+			if (cPEObject != null)
 			{
-				setCalendarEventPoint(CPEObject, request, specimenCollectionGroupForm);
+				setCalendarEventPoint(cPEObject, request, specimenCollectionGroupForm);
 			}
 
 			logger.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"
@@ -695,12 +695,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		String collectionProtocolTitle = "";
 		String collectionProtocolName = "";
 
-		Object CPObject = bizLogic.retrieve(CollectionProtocol.class.getName(),
+		Object cPObject = bizLogic.retrieve(CollectionProtocol.class.getName(),
 				specimenCollectionGroupForm.getCollectionProtocolId());
 
-		if (CPObject != null)
+		if (cPObject != null)
 		{
-			CollectionProtocol collectionProtocol = (CollectionProtocol) CPObject;
+			CollectionProtocol collectionProtocol = (CollectionProtocol) cPObject;
 			collectionProtocolTitle = collectionProtocol.getTitle();
 			collectionProtocolName = (String) collectionProtocol.getShortTitle();
 			specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
@@ -1104,10 +1104,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			HttpServletRequest request, SpecimenCollectionGroupForm form) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
-		String displayEventFields[] = {"studyCalendarEventPoint", "collectionPointLabel"};
+		String[] displayEventFields = {"studyCalendarEventPoint", "collectionPointLabel"};
 		String valueField = "id";
-		String whereColumnName[] = {"collectionProtocol." + Constants.SYSTEM_IDENTIFIER};
-		String whereColumnCondition[] = {"="};
+		String[] whereColumnName = {"collectionProtocol." + Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {new Long(protocolID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ",";
@@ -1138,11 +1138,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	{
 		// get list of Participant's names
 		String sourceObjectName = ParticipantMedicalIdentifier.class.getName();
-		String displayEventFields[] = {"medicalRecordNumber"};
+		String[] displayEventFields = {"medicalRecordNumber"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		String whereColumnName[] = {"participant." + Constants.SYSTEM_IDENTIFIER,
+		String[] whereColumnName = {"participant." + Constants.SYSTEM_IDENTIFIER,
 				"medicalRecordNumber"};
-		String whereColumnCondition[] = {"=", "is not null"};
+		String[] whereColumnCondition = {"=", "is not null"};
 		Object[] whereColumnValue = {new Long(participantID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
@@ -1166,9 +1166,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String selectColumnName[] = {"participant.id"};
-		String whereColumnName[] = {"protocolParticipantIdentifier"};
-		String whereColumnCondition[] = {"="};
+		String[] selectColumnName = {"participant.id"};
+		String[] whereColumnName = {"protocolParticipantIdentifier"};
+		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {participantProtocolId};
 		List participantList = bizLogic.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue,
@@ -1197,9 +1197,9 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			IBizLogic bizLogic) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String selectColumnName[] = {"protocolParticipantIdentifier"};
-		String whereColumnName[] = {"participant.id", "collectionProtocol.id"};
-		String whereColumnCondition[] = {"=", "="};
+		String[] selectColumnName = {"protocolParticipantIdentifier"};
+		String[] whereColumnName = {"participant.id", "collectionProtocol.id"};
+		String[] whereColumnCondition = {"=", "="};
 		Object[] whereColumnValue = {new Long(participantId), new Long(cpId)};
 		List list = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 				whereColumnCondition, whereColumnValue, Constants.AND_JOIN_CONDITION);
@@ -1271,7 +1271,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	/**
 	 * @param idOfSelectedRadioButton
 	 *            Id for selected radio button.
-	 * @param cp_id
+	 * @param cpId
 	 *            CollectionProtocolID CollectionProtocolID selected by dropdown
 	 * @param indexType
 	 *            i.e Which Radio button is selected participantId or
@@ -1281,7 +1281,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(
-			String idOfSelectedRadioButton, String cp_id, String indexType)
+			String idOfSelectedRadioButton, String cpId, String indexType)
 			throws BizLogicException
 	{
 
@@ -1304,7 +1304,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			val[0] = idOfSelectedRadioButton;
 		}
 
-		val[1] = Long.valueOf(cp_id);
+		val[1] = Long.valueOf(cpId);
 		String[] colCondition = {"=", "="};
 		List collProtRegObj = collectionProtocolRegistrationBizLogic.retrieve(
 				CollectionProtocolRegistration.class.getName(), colName, colCondition, val,
@@ -1457,10 +1457,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			(IdentifiedSurgicalPathologyReportBizLogic) factory
 				.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 		String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
-		String displayEventFields[] = {"id"};
+		String[] displayEventFields = {"id"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
-		String whereColumnName[] = {Constants.COLUMN_NAME_SCG_ID};
-		String whereColumnCondition[] = {"="};
+		String[] whereColumnName = {Constants.COLUMN_NAME_SCG_ID};
+		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {scgId};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";

@@ -34,8 +34,7 @@ public class ShowTreeAction extends BaseAction
 	 *            object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @throws Exception : exception
 	 * @return ActionForward : ActionForward
 	 */
 	@Override

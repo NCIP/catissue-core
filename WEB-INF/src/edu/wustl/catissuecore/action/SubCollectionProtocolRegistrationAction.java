@@ -47,7 +47,6 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -163,7 +162,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		final Object[] whereColVal = {cpId};
 
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic =
+			(CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName,
@@ -198,7 +198,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	{
 
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic =
+			(CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		form.setParticipantID(participantId.longValue());
@@ -268,7 +269,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic =
+			(CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final String sourceObjName = CollectionProtocolRegistration.class.getName();
@@ -319,7 +321,8 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic =
+			(CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final String sourceObjName = CollectionProtocolRegistration.class.getName();

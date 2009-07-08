@@ -32,8 +32,7 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
+	 * @param mapping : object of ActionMapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request

@@ -393,7 +393,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 
 		LinkedHashMap oldDeriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
-		Object keyArr[] = deriveSpecimenMap.keySet().toArray();
+		Object[] keyArr = deriveSpecimenMap.keySet().toArray();
 
 		if (totalNewDeriveSpecimen > 0)
 		{

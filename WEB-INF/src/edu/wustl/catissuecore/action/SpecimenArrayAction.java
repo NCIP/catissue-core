@@ -57,8 +57,7 @@ public class SpecimenArrayAction extends SecureAction
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
+	 * @param mapping : mapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request
@@ -96,14 +95,16 @@ public class SpecimenArrayAction extends SecureAction
 		if (operation.equals(Constants.ADD))
 		{
 			specimenArrayTypeList = specimenArrayBizLogic.getList(
-					SpecimenArrayType.class.getName(), arrayTypeLabelProperty, arrayTypeProperty,
+					SpecimenArrayType.class.getName(),
+					arrayTypeLabelProperty, arrayTypeProperty,
 					true);
 			for (final Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();)
 			{
 				final NameValueBean nameValueBean = (NameValueBean) iter.next();
 				// remove ANY entry from array type list
 				if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE)
-						&& nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+						&& nameValueBean.getName().equalsIgnoreCase
+						(Constants.ARRAY_TYPE_ANY_NAME))
 				{
 					iter.remove();
 					break;
@@ -275,7 +276,8 @@ public class SpecimenArrayAction extends SecureAction
 				 * new String[arrayType.getSpecimenTypeCollection().size()];
 				 */
 				final Collection specimenTypeCollection = (Collection) specimenArrayBizLogic
-						.retrieveAttribute(SpecimenArrayType.class.getName(), arrayType.getId(),
+						.retrieveAttribute(SpecimenArrayType.class.getName(),
+								arrayType.getId(),
 								"elements(specimenTypeCollection)");
 				final String[] specimenTypeArr = new String[specimenTypeCollection.size()];
 				specimenTypeList = new ArrayList();

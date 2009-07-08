@@ -113,7 +113,7 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 			Method method = getMethod(methodName, this.getClass());
 			if (method != null)
 			{
-				Object args[] = {mapping, form, request, response};
+				Object[] args = {mapping, form, request, response};
 				return (ActionForward) method.invoke(this, args);
 			}
 			else

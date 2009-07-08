@@ -152,7 +152,8 @@ public class SubmitCPAction extends BaseAction
 			HttpSession session)
 	{
 		final CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
-		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
+		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap =
+			(Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);

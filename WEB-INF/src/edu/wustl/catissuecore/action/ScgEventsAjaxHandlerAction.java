@@ -57,8 +57,7 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
+	 * @param mapping : object of ActionMapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request
@@ -79,14 +78,16 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		if (scgId != null && !scgId.equals(""))
 		{
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
+			final SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic
+			= (SpecimenCollectionGroupBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 
 			final Object object = specimenCollectionGroupBizLogic.retrieve(
 					SpecimenCollectionGroup.class.getName(), new Long(scgId));
 			if (object != null)
 			{
-				final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
+				final SpecimenCollectionGroup specimenCollectionGroup
+				= (SpecimenCollectionGroup) object;
 				final Collection eventsColl = specimenCollectionGroup
 						.getSpecimenEventParametersCollection();
 				if (eventsColl != null && !eventsColl.isEmpty())
@@ -97,11 +98,13 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 						final Object temp = iter.next();
 						if (temp instanceof CollectionEventParameters)
 						{
-							this.collectionEventParameters = (CollectionEventParameters) temp;
+							this.collectionEventParameters
+							= (CollectionEventParameters) temp;
 						}
 						else if (temp instanceof ReceivedEventParameters)
 						{
-							this.receivedEventParameters = (ReceivedEventParameters) temp;
+							this.receivedEventParameters
+							= (ReceivedEventParameters) temp;
 						}
 
 					}

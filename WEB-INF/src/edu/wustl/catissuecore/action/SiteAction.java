@@ -49,7 +49,7 @@ public class SiteAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 *
+	 * @return ActionForward : ActionForward
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -60,7 +60,6 @@ public class SiteAction extends SecureAction
 	 *            object of HttpServletResponse
 	 * @throws Exception
 	 *             generic exception
-	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,

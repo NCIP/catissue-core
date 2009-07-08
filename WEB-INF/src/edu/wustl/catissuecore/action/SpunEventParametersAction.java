@@ -12,7 +12,6 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class SpunEventParametersAction extends SpecimenEventParametersAction
 {
-
 	/**
 	* @param request object of HttpServletRequest
 	* @param eventParametersForm : eventParametersForm

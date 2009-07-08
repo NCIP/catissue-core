@@ -56,8 +56,7 @@ public class StorageTypeAction extends SecureAction
 	 *            object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @throws Exception : obj of Exception
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
@@ -102,7 +101,8 @@ public class StorageTypeAction extends SecureAction
 			tdClassName = "formRequiredLabel";
 			strStar = "<span class=" + "blue_ar_b" + "><img src="
 					+ "images/uIEnhancementImages/star.gif" + " alt=" + "Mandatory" + " width="
-					+ "6" + " height=" + "6" + " hspace=" + "0" + " vspace=" + "3" + " /></span>";
+					+ "6" + " height=" + "6" + " hspace=" + "0" + " vspace=" +
+					"3" + " /></span>";
 		}
 		request.setAttribute("tdClassName", tdClassName);
 		request.setAttribute("strStar", strStar);

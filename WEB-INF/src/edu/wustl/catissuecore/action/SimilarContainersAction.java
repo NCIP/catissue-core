@@ -60,6 +60,8 @@ public class SimilarContainersAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @throws Exception
+	 *             generic exception
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -68,8 +70,7 @@ public class SimilarContainersAction extends SecureAction
 	 *            object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 *
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
@@ -114,7 +115,8 @@ public class SimilarContainersAction extends SecureAction
 			final Site site = bizLogic.getRelatedSite(parentContId);
 			if (site != null)
 			{
-				request = AppUtility.setCollectionProtocolList(request, site.getId());
+				request = AppUtility.setCollectionProtocolList(request,
+						site.getId());
 			}
 			else
 			{
@@ -250,7 +252,8 @@ public class SimilarContainersAction extends SecureAction
 				final String joinCondition = null;
 
 				final List containerIdList = bizLogic.retrieve(sourceObjectName, selectColumnName,
-						whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+						whereColumnName, whereColumnCondition,
+						whereColumnValue, joinCondition);
 
 				if (!containerIdList.isEmpty())
 				{
@@ -273,7 +276,8 @@ public class SimilarContainersAction extends SecureAction
 						Map containerMapFromCache = null;
 						try
 						{
-							containerMapFromCache = StorageContainerUtil.getContainerMapFromCache();
+							containerMapFromCache = StorageContainerUtil.
+							getContainerMapFromCache();
 						}
 						catch (final CacheException e)
 						{
@@ -560,9 +564,11 @@ public class SimilarContainersAction extends SecureAction
 				initValues[0] = (String) similarContainersForm
 						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_parentContainerId");
 				initValues[1] = (String) similarContainersForm
-						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionOne");
+						.getSimilarContainerMapValue("simCont:" + (i + 1) +
+								"_positionDimensionOne");
 				initValues[2] = (String) similarContainersForm
-						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionTwo");
+						.getSimilarContainerMapValue("simCont:" + (i + 1) +
+								"_positionDimensionTwo");
 				returner.add(initValues);
 			}
 
@@ -574,7 +580,11 @@ public class SimilarContainersAction extends SecureAction
 
 		return mapping.findForward(pageOf);
 	}
-
+	/**
+	 * @param dataMap : dataMap
+	 * @param noOfContainersNeeded : noOfContainersNeeded
+	 * @return boolean
+	 */
 	private boolean checkAvailability(Map dataMap, int noOfContainersNeeded)
 	{
 		int counter = 0;

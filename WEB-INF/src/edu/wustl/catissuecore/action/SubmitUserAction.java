@@ -186,7 +186,8 @@ public class SubmitUserAction extends Action
 			if (formBeanStack != null)
 			{
 
-				final AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
+				final AddNewSessionDataBean addNewSessionDataBean =
+					(AddNewSessionDataBean) formBeanStack
 						.pop();
 
 				if (addNewSessionDataBean != null)
@@ -195,8 +196,10 @@ public class SubmitUserAction extends Action
 							.getAbstractActionForm();
 
 					final String forwardTo = addNewSessionDataBean.getForwardTo();
-					this.logger.debug("forwardTo in CommonAddEditAction--------->" + forwardTo);
-					sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(),
+					this.logger.debug("forwardTo in CommonAddEditAction--------->"
+							+ forwardTo);
+					sessionFormBean.setAddNewObjectIdentifier
+					(addNewSessionDataBean.getAddNewFor(),
 							abstractDomain.getId());
 					sessionFormBean.setMutable(false);
 					if (formBeanStack.isEmpty())
@@ -206,13 +209,15 @@ public class SubmitUserAction extends Action
 						this.logger.debug("SubmittedFor set as Default in"
 								+ " CommonAddEditAction===========");
 
-						this.logger.debug("cleaning FormBeanStack from session*************");
+						this.logger.debug("cleaning FormBeanStack" +
+								" from session*************");
 					}
 					else
 					{
 						request.setAttribute(Constants.SUBMITTED_FOR, "AddNew");
 					}
-					final String formBeanName = CommonUtilities.getFormBeanName(sessionFormBean);
+					final String formBeanName =
+						CommonUtilities.getFormBeanName(sessionFormBean);
 					request.setAttribute(formBeanName, sessionFormBean);
 
 					this.logger.debug("InitiliazeAction operation=========>"
@@ -229,7 +234,8 @@ public class SubmitUserAction extends Action
 					if ((sessionFormBean.getOperation().equals("edit")))
 					{
 						this.logger.debug("Edit object Identifier while AddNew "
-								+ "is from Edit operation==>" + sessionFormBean.getId());
+								+ "is from Edit operation==>" +
+								sessionFormBean.getId());
 						final ActionForward editForward = new ActionForward();
 
 						final String addPath = (mapping.findForward(forwardTo)).getPath();
@@ -259,7 +265,8 @@ public class SubmitUserAction extends Action
 		else if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 		{
 			this.logger
-					.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
+					.debug("SubmittedFor is ForwardTo" +
+							" in CommonAddEditAction...................");
 			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 			request.setAttribute("forwardToHashMap", this.generateForwardToHashMap(abstractForm,
 					abstractDomain));
@@ -427,7 +434,7 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * * This method generates HashMap of data required to be forwarded if Form
+	 * * This method generates HashMap of data required to be forwarded if Form.
 	 * is submitted for Print request
 	 *
 	 * @param abstractForm
@@ -492,7 +499,8 @@ public class SubmitUserAction extends Action
 	private UserDTO getUserDTO(User user, HttpSession session)
 	{
 		final UserDTO userDTO = new UserDTO();
-		final Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
+		final Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap =
+			(Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute("rowIdBeanMapForUserPage");
 		userDTO.setUser(user);
 		userDTO.setUserRowIdBeanMap(userRowIdBeanMap);
@@ -536,7 +544,7 @@ public class SubmitUserAction extends Action
 	}
 
 	/**
-	 * This method will add the success message into ActionMessages object
+	 * This method will add the success message into ActionMessages object.
 	 *
 	 * @param messages
 	 *            ActionMessages

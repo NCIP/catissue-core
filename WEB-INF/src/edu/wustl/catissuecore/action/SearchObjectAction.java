@@ -26,7 +26,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SearchObjectAction extends Action
 {
-
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping

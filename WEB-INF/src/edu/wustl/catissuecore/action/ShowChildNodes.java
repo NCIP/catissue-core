@@ -31,8 +31,7 @@ public class ShowChildNodes extends BaseAction
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
 	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
+	 * @param form : object of ActionForm
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param response

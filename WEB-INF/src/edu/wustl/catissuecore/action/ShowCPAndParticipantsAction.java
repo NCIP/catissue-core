@@ -32,8 +32,7 @@ public class ShowCPAndParticipantsAction extends BaseAction
 	 *            object of ActionForm
 	 * @param request
 	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
+	 * @param response : object of HttpServletResponse
 	 * @throws Exception
 	 *             generic exception
 	 * @return ActionForward : ActionForward

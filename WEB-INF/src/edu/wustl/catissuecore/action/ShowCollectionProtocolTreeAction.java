@@ -37,8 +37,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	 *            object of ActionMapping
 	 * @param form
 	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
+	 * @param request : object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
 	 * @throws Exception

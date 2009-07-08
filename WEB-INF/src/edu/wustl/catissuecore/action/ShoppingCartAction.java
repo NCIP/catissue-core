@@ -123,7 +123,7 @@ public class ShoppingCartAction extends BaseAction
 				// Get the checkbox map values
 				final Map map = advForm.getValues();
 				Logger.out.debug("map of shopping form:" + map);
-				final Object obj[] = map.keySet().toArray();
+				final Object[] obj = map.keySet().toArray();
 
 				if (pageOff != null && pageOff.equals(Constants.PAGE_OF_QUERY_MODULE))
 				{
@@ -209,7 +209,8 @@ public class ShoppingCartAction extends BaseAction
 					{
 						final List selectedRow = (List) paginationDataList.get(index);
 						Logger.out.debug("index selected :" + index);
-						selectedSpecimenIds[index] = selectedRow.get(spreadsheetSpecimenIndex);
+						selectedSpecimenIds[index] =
+							selectedRow.get(spreadsheetSpecimenIndex);
 						Logger.out.debug("specimen id to be added to cart :"
 								+ selectedSpecimenIds[index]);
 					}
@@ -267,7 +268,7 @@ public class ShoppingCartAction extends BaseAction
 				// Extracting map from formbean that gives rows to be deleted
 				final Map map = advForm.getValues();
 				this.logger.debug("map of shopping form:" + map);
-				final Object obj[] = map.keySet().toArray();
+				final Object[] obj = map.keySet().toArray();
 				this.logger.debug("cart in shopping cart action " + cart.getCart());
 				/*
 				 * Deleting the selected rows from Shopping Cart object &
@@ -282,7 +283,7 @@ public class ShoppingCartAction extends BaseAction
 
 				// Extracting map from formbean that gives rows to be exported
 				final Map map = advForm.getValues();
-				final Object obj[] = map.keySet().toArray();
+				final Object[] obj = map.keySet().toArray();
 
 				final List cartList = bizLogic.export(cart, obj, fileName);
 				final String delimiter = Constants.DELIMETER;
@@ -411,7 +412,7 @@ public class ShoppingCartAction extends BaseAction
 			ShoppingCart cart, HttpSession session)
 	{
 		final Map map = advForm.getValues();
-		final Object obj[] = map.keySet().toArray();
+		final Object[] obj = map.keySet().toArray();
 		if (cart != null)
 		{
 			final Hashtable table = cart.getCart();

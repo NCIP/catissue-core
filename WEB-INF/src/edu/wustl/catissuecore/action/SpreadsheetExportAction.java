@@ -55,8 +55,7 @@ public class SpreadsheetExportAction extends BaseAction
 	 *            object of ActionForm
 	 * @param request
 	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
+	 * @param response : response obj
 	 * @throws Exception
 	 *             generic exception
 	 * @return ActionForward : ActionForward

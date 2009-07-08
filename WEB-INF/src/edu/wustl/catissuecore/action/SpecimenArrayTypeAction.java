@@ -80,10 +80,10 @@ public class SpecimenArrayTypeAction extends SecureAction
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-		Map specimen_Type_Class_Map = getSpecimenClassAndType();
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, (List) specimen_Type_Class_Map
+		Map specimenTypeClassMap = getSpecimenClassAndType();
+		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, (List) specimenTypeClassMap
 				.get(specimenClassKey));
-		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, (Map) specimen_Type_Class_Map
+		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, (Map) specimenTypeClassMap
 				.get(specimenTypeKey));
 
 		/*
@@ -137,14 +137,14 @@ public class SpecimenArrayTypeAction extends SecureAction
 			subTypeMap.put(pv.getValue(), specimenTypeList);
 		} // class and values set
 
-		Map specimenClass_TypeMap = new HashMap();
-		specimenClass_TypeMap.put(specimenClassKey, specimenClassList);
-		specimenClass_TypeMap.put(specimenTypeKey, subTypeMap);
-		return specimenClass_TypeMap;
+		Map specimenClassTypeMap = new HashMap();
+		specimenClassTypeMap.put(specimenClassKey, specimenClassList);
+		specimenClassTypeMap.put(specimenTypeKey, subTypeMap);
+		return specimenClassTypeMap;
 	}
 
 	/**
-	 * returns the specimen type list for specific specimen class
+	 * returns the specimen type list for specific specimen class.
 	 *
 	 * @param specimenClassPV
 	 *            specimen class permissible value

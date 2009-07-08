@@ -23,7 +23,6 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SaveProtocolEventDetailsAction extends BaseAction
 {
-
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping

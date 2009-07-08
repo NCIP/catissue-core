@@ -66,9 +66,7 @@ public class StorageContainerAction extends SecureAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 *
-	 * @param mapping
-	 *            object of ActionMapping
+	 * @param mapping : obj of ActionMapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request
@@ -207,7 +205,8 @@ public class StorageContainerAction extends SecureAction
 		}
 		if (containerId != null)
 		{
-			final StorageContainerBizLogic storageContaineriBzLogic = (StorageContainerBizLogic) factory
+			final StorageContainerBizLogic storageContaineriBzLogic =
+				(StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			final String name = StorageContainer.class.getName();
 			final Long long1 = new Long(containerId);
@@ -500,13 +499,15 @@ public class StorageContainerAction extends SecureAction
 				// according to storage type selected.
 				if (operation != null && operation.equals(Constants.ADD))
 				{
-					final StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) factory
+					final StorageTypeBizLogic storageTypebizLogic =
+						(StorageTypeBizLogic) factory
 							.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
 					final long[] defHoldsStorageTypeList = storageTypebizLogic
 							.getDefaultHoldStorageTypeList(type);
 					if (defHoldsStorageTypeList != null)
 					{
-						storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
+						storageContainerForm.setHoldsStorageTypeIds
+						(defHoldsStorageTypeList);
 					}
 
 					final String[] defHoldsSpecimenClassTypeList = storageTypebizLogic
@@ -514,7 +515,8 @@ public class StorageContainerAction extends SecureAction
 					if (defHoldsSpecimenClassTypeList != null)
 					{
 						storageContainerForm
-								.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
+								.setHoldsSpecimenClassTypes
+								(defHoldsSpecimenClassTypeList);
 					}
 
 					final long[] defHoldsSpecimenArrayTypeList = storageTypebizLogic
@@ -522,7 +524,8 @@ public class StorageContainerAction extends SecureAction
 					if (defHoldsSpecimenArrayTypeList != null)
 					{
 						storageContainerForm
-								.setHoldsSpecimenArrTypeIds(defHoldsSpecimenArrayTypeList);
+								.setHoldsSpecimenArrTypeIds
+								(defHoldsSpecimenArrayTypeList);
 					}
 				}
 			}
@@ -632,11 +635,14 @@ public class StorageContainerAction extends SecureAction
 					final Long id = parent.getId();
 					if (cont != null && cont.getLocatedAtPosition() != null)
 					{
-						final Integer pos1 = cont.getLocatedAtPosition().getPositionDimensionOne();
-						final Integer pos2 = cont.getLocatedAtPosition().getPositionDimensionTwo();
+						final Integer pos1 = cont.getLocatedAtPosition().
+						getPositionDimensionOne();
+						final Integer pos2 = cont.getLocatedAtPosition().
+						getPositionDimensionTwo();
 						final String parentContainerName = parent.getName();
 
-						StorageContainerUtil.addPostions(containerMap, id, parentContainerName,
+						StorageContainerUtil.addPostions(containerMap, id,
+								parentContainerName,
 								pos1, pos2);
 					}
 				}

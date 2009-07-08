@@ -55,8 +55,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
 	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
+	 * @param form : actionForm
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param response
@@ -91,7 +90,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			final Map tempAliquotMap = new HashMap();
 			if (specimenArrayAliquotForm.getCheckedButton().equals("1"))
 			{
-				tempAliquotMap.put("label", specimenArrayAliquotForm.getParentSpecimenArrayLabel());
+				tempAliquotMap.put("label", specimenArrayAliquotForm.
+						getParentSpecimenArrayLabel());
 			}
 			else
 			{
@@ -113,7 +113,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			{
 				if (label == null
 						|| !label.trim().equalsIgnoreCase(
-								specimenArrayAliquotForm.getParentSpecimenArrayLabel().trim()))
+								specimenArrayAliquotForm.
+								getParentSpecimenArrayLabel().trim()))
 				{
 					arePropertiesChanged = true;
 				}
@@ -240,7 +241,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 								.getAttribute(Globals.ERROR_KEY);
 						if (errors == null || errors.size() == 0)
 						{
-							this.populateAliquotsStorageLocations(specimenArrayAliquotForm,
+							this.populateAliquotsStorageLocations
+							(specimenArrayAliquotForm,
 									containerMap);
 						}
 					}
@@ -348,7 +350,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
 
 			final Map aliquotMap = form.getSpecimenArrayAliquotMap();
-			final SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) factory
+			final SpecimenArrayAliquotsBizLogic aliquotBizLogic =
+				(SpecimenArrayAliquotsBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
 			final long nextAvailablenumber = aliquotBizLogic
 					.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");

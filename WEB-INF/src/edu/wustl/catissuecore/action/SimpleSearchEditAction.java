@@ -28,14 +28,14 @@ public class SimpleSearchEditAction extends BaseAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
+	 * @param response
+	 *            object of HttpServletResponse
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
 	 *            object of ActionForm
 	 * @param request
 	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
 	 * @throws Exception
 	 *             generic exception
 	 * @return ActionForward : ActionForward

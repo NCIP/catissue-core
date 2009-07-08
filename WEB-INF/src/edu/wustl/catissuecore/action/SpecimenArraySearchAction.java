@@ -158,7 +158,8 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 							key = SpecimenArrayAppletUtil.
 							getArrayMapKey(rowNo, columnNo,
 									columnCount,
-									AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX);
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_CONC_INDEX);
 							value = arrayContent.
 							getConcentrationInMicrogramPerMicroliter()
 									.toString();
@@ -172,7 +173,8 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 						 * ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX); value =
 						 * specimen.getId().toString();
 						 * arrayContentMap.put(key,value);
-						 */}
+						 */
+						}
 
 					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
 							AppletConstants.ARRAY_CONTENT_ATTR_ID_INDEX);
