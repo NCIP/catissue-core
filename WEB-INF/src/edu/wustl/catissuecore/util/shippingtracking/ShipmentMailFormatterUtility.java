@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.util.shippingtracking;
 
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
+
 /**
  *	this is a utility class for shipment mail formatter.
  */
@@ -37,6 +38,7 @@ public class ShipmentMailFormatterUtility
 		//TODO - exact contents required
 		return "Shipment created";
 	}
+
 	/**
 	 * Gets the shipment received mail subject.
 	 * @param shipment created shipment
@@ -46,6 +48,7 @@ public class ShipmentMailFormatterUtility
 	{
 		return "Shipment received";
 	}
+
 	/**
 	 * Gets the shipment received mail body.
 	 * @param shipment created shipment
@@ -55,6 +58,7 @@ public class ShipmentMailFormatterUtility
 	{
 		return "Shipment received";
 	}
+
 	/**
 	 * Gets the shipment request mail body.
 	 * @param shipmentRequest object of ShipmentRequest class.
@@ -75,6 +79,7 @@ public class ShipmentMailFormatterUtility
 	{
 		return "Shipment request created";
 	}
+
 	//bug 12816 start
 	/**
 	 * Gets the shipment request rejected mail body.

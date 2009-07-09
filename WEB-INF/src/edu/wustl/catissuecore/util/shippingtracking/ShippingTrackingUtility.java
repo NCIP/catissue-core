@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.util.shippingtracking;
 
 import java.util.ArrayList;
@@ -13,11 +14,13 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.beans.NameValueBean;
+
 /**
  * this is the utility class for shipping and tracking.
  */
 public class ShippingTrackingUtility
 {
+
 	/**
 	 * creates the transit container.
 	 * @param shipmentForm form containing all values.
@@ -25,25 +28,26 @@ public class ShippingTrackingUtility
 	 */
 	public static StorageContainer createInTransitContainer(BaseShipmentForm shipmentForm)
 	{
-		StorageContainer container=new StorageContainer();
+		final StorageContainer container = new StorageContainer();
 		// Set storage type for the container type being created
-		StorageType storageType=new StorageType();
+		final StorageType storageType = new StorageType();
 		storageType.setName(Constants.SHIPMENT_CONTAINER_TYPE_NAME);
 		container.setStorageType(storageType);
 		//Set site for the container being created
-		Site site=new Site();
+		final Site site = new Site();
 		site.setName(Constants.IN_TRANSIT_SITE_NAME);
 		container.setSite(site);
 		//Set capacity, create a container of dimensions (number of specimens to be stored) X 1
-		Capacity capacity=new Capacity();
+		final Capacity capacity = new Capacity();
 		capacity.setOneDimensionCapacity(shipmentForm.getSpecimenCounter());
 		capacity.setTwoDimensionCapacity(1);
 		container.setCapacity(capacity);
 		container.getHoldsSpecimenArrayTypeCollection();
-		container.setName(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX+shipmentForm.getLabel());
+		container.setName(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX + shipmentForm.getLabel());
 		container.setSpecimenPositionCollection(new HashSet<SpecimenPosition>());
 		return container;
 	}
+
 	/**
 	 * creates the transit container.
 	 * @param containerName string containing the name of the container.
@@ -52,17 +56,17 @@ public class ShippingTrackingUtility
 	//Overload the method createInTransitContainer(BaseShipmentForm shipmentForm)
 	public static StorageContainer createInTransitContainer(String containerName)
 	{
-		StorageContainer container=new StorageContainer();
+		final StorageContainer container = new StorageContainer();
 		// Set storage type for the container type being created
-		StorageType storageType=new StorageType();
+		final StorageType storageType = new StorageType();
 		storageType.setName(Constants.SHIPMENT_CONTAINER_TYPE_NAME);
 		container.setStorageType(storageType);
 		//Set site for the container being created
-		Site site=new Site();
+		final Site site = new Site();
 		site.setName(Constants.IN_TRANSIT_SITE_NAME);
 		container.setSite(site);
 		//Set capacity, create a container of dimensions (number of specimens to be stored) X 1
-		Capacity capacity=new Capacity();
+		final Capacity capacity = new Capacity();
 		//Keep the capacity 1 initially and increment on adding a new specimen
 		capacity.setOneDimensionCapacity(1);
 		capacity.setTwoDimensionCapacity(1);
@@ -71,6 +75,7 @@ public class ShippingTrackingUtility
 		container.setSpecimenPositionCollection(new HashSet<SpecimenPosition>());
 		return container;
 	}
+
 	/**
 	 * gives the transit container.
 	 * @param containerCollection collection of containers.
@@ -78,68 +83,73 @@ public class ShippingTrackingUtility
 	 */
 	public static StorageContainer getInTransitContainer(Collection containerCollection)
 	{
-		StorageContainer container=null;
-		Iterator<StorageContainer> containerIterator=containerCollection.iterator();
-		while(containerIterator.hasNext())
+		StorageContainer container = null;
+		final Iterator<StorageContainer> containerIterator = containerCollection.iterator();
+		while (containerIterator.hasNext())
 		{
-			StorageContainer storageContainer=containerIterator.next();
-			if(storageContainer!=null && storageContainer.getStorageType()!=null
-					&& storageContainer.getStorageType().getName()!=null
+			final StorageContainer storageContainer = containerIterator.next();
+			if (storageContainer != null
+					&& storageContainer.getStorageType() != null
+					&& storageContainer.getStorageType().getName() != null
 					&& storageContainer.getStorageType().getName().equals(
 							Constants.SHIPMENT_CONTAINER_TYPE_NAME))
 			{
-				container=storageContainer;
+				container = storageContainer;
 				break;
 			}
 		}
 		return container;
 	}
+
 	/**
 	 * checks for presence of specimen.
 	 * @param specimenPositionCollection collection of specimen position.
 	 * @param specimenLabel label of specimen to be looked for.
 	 * @return true/false result of the operation.
 	 */
-	public static boolean isSpecimenPresent(Collection<SpecimenPosition> specimenPositionCollection,
-			String specimenLabel)
+	public static boolean isSpecimenPresent(
+			Collection<SpecimenPosition> specimenPositionCollection, String specimenLabel)
 	{
-		boolean isPresent=false;
-		Iterator<SpecimenPosition> specimenPosIterator=specimenPositionCollection.iterator();
-		while(specimenPosIterator.hasNext())
+		boolean isPresent = false;
+		final Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection
+				.iterator();
+		while (specimenPosIterator.hasNext())
 		{
-			SpecimenPosition position=specimenPosIterator.next();
-			if(position!=null && position.getSpecimen()!=null
+			final SpecimenPosition position = specimenPosIterator.next();
+			if (position != null && position.getSpecimen() != null
 					&& position.getSpecimen().getLabel().equals(specimenLabel))
 			{
-				isPresent=true;
+				isPresent = true;
 				break;
 			}
 		}
 		return isPresent;
 	}
+
 	/**
 	 * fetches a container from a collection of containers.
 	 * @param containerCollection collection of StorageContainer objects.
 	 * @param containerName name of the container to be fetched.
 	 * @return the container fetched.
 	 */
-	public static StorageContainer getContainerFromCollection(Collection<StorageContainer> containerCollection,
-			String containerName)
+	public static StorageContainer getContainerFromCollection(
+			Collection<StorageContainer> containerCollection, String containerName)
 	{
-		StorageContainer storageContainer=null;
-		Iterator<StorageContainer> containerIterator=containerCollection.iterator();
-		while(containerIterator.hasNext())
+		StorageContainer storageContainer = null;
+		final Iterator<StorageContainer> containerIterator = containerCollection.iterator();
+		while (containerIterator.hasNext())
 		{
-			StorageContainer container=containerIterator.next();
-			if(container!=null && container.getName()!=null
+			final StorageContainer container = containerIterator.next();
+			if (container != null && container.getName() != null
 					&& container.getName().equals(containerName))
 			{
-				storageContainer=container;
+				storageContainer = container;
 				break;
 			}
 		}
 		return storageContainer;
 	}
+
 	/**
 	 * gets the specimen position from the collection.
 	 * @param specimenPositionCollection collection of specimen position.
@@ -147,23 +157,25 @@ public class ShippingTrackingUtility
 	 * @return specimen position.
 	 */
 	public static SpecimenPosition getSpecimenPositionFromCollection(
-			Collection<SpecimenPosition> specimenPositionCollection,String fieldValue)
+			Collection<SpecimenPosition> specimenPositionCollection, String fieldValue)
 	{
-		SpecimenPosition position=null;
-		Iterator<SpecimenPosition> specimenPosIterator=specimenPositionCollection.iterator();
-		while(specimenPosIterator.hasNext())
+		SpecimenPosition position = null;
+		final Iterator<SpecimenPosition> specimenPosIterator = specimenPositionCollection
+				.iterator();
+		while (specimenPosIterator.hasNext())
 		{
-			SpecimenPosition specimenPosition=specimenPosIterator.next();
-			if(specimenPosition.getSpecimen()!=null
-					&& specimenPosition.getSpecimen().getLabel()!=null
+			final SpecimenPosition specimenPosition = specimenPosIterator.next();
+			if (specimenPosition.getSpecimen() != null
+					&& specimenPosition.getSpecimen().getLabel() != null
 					&& specimenPosition.getSpecimen().getLabel().equals(fieldValue))
 			{
-				position=specimenPosition;
+				position = specimenPosition;
 				break;
 			}
 		}
 		return position;
 	}
+
 	/**
 	 * gets the site list.
 	 * @param permittedSitesForUser collection of sites.
@@ -171,19 +183,20 @@ public class ShippingTrackingUtility
 	 */
 	public static List<NameValueBean> getSitesAsNVBList(Collection<Site> permittedSitesForUser)
 	{
-		List<NameValueBean> siteNVBList=new ArrayList<NameValueBean>();
-		if(permittedSitesForUser!=null && permittedSitesForUser.size()>0)
+		final List<NameValueBean> siteNVBList = new ArrayList<NameValueBean>();
+		if (permittedSitesForUser != null && permittedSitesForUser.size() > 0)
 		{
-			Iterator<Site> siteIterator=permittedSitesForUser.iterator();
-			while(siteIterator.hasNext())
+			final Iterator<Site> siteIterator = permittedSitesForUser.iterator();
+			while (siteIterator.hasNext())
 			{
-				Site site=siteIterator.next();
-				NameValueBean valueBean=new NameValueBean(site.getName(),site.getId());
+				final Site site = siteIterator.next();
+				final NameValueBean valueBean = new NameValueBean(site.getName(), site.getId());
 				siteNVBList.add(valueBean);
 			}
 		}
 		return siteNVBList;
 	}
+
 	/**
 	 * gets the display name.
 	 * @param nvbList collection of NameValueBean objects.
@@ -192,14 +205,14 @@ public class ShippingTrackingUtility
 	 */
 	public static Object getDisplayName(Collection<NameValueBean> nvbList, String value)
 	{
-		String displayName="";
-		if(nvbList!=null && value!=null)
+		String displayName = "";
+		if (nvbList != null && value != null)
 		{
-			for (NameValueBean nvb : nvbList)
+			for (final NameValueBean nvb : nvbList)
 			{
-				if(nvb.getValue().equals(value))
+				if (nvb.getValue().equals(value))
 				{
-					displayName=nvb.getName();
+					displayName = nvb.getName();
 					break;
 				}
 			}
