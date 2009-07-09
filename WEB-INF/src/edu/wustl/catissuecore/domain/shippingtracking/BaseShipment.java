@@ -123,14 +123,14 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment identifier.
-	 * @param id
+	 * @param idParam
 	 *            Shipment Id
 	 * @see #getId()
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long idParam)
 	{
-		this.id = id;
+		this.id = idParam;
 	}
 
 	/**
@@ -146,12 +146,12 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment label.
-	 * @param label label to set.
+	 * @param labelParam label to set.
 	 * @see #getLabel()
 	 */
-	public void setLabel(String label)
+	public void setLabel(String labelParam)
 	{
-		this.label = label;
+		this.label = labelParam;
 	}
 
 	/**
@@ -169,13 +169,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment sender site details.
-	 * @param senderSite
+	 * @param senderSite1
 	 *            Shipment sender site details
 	 * @see #getSenderSite()
 	 */
-	public void setSenderSite(Site senderSite)
+	public void setSenderSite(Site senderSite1)
 	{
-		this.senderSite = senderSite;
+		this.senderSite = senderSite1;
 	}
 
 	/**
@@ -193,13 +193,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment receiver site details.
-	 * @param receiverSite
+	 * @param receiverSiteParam
 	 *            Shipment receiver site details
 	 * @see #getReceiverSite()
 	 */
-	public void setReceiverSite(Site receiverSite)
+	public void setReceiverSite(Site receiverSiteParam)
 	{
-		this.receiverSite = receiverSite;
+		this.receiverSite = receiverSiteParam;
 	}
 
 	/**
@@ -216,12 +216,12 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment sender contact person.
-	 * @param senderContactPerson contact person at the sender side.
+	 * @param senderContactPersonParam contact person at the sender side.
 	 * @see #getSenderContactPerson()
 	 */
-	public void setSenderContactPerson(User senderContactPerson)
+	public void setSenderContactPerson(User senderContactPersonParam)
 	{
-		this.senderContactPerson = senderContactPerson;
+		this.senderContactPerson = senderContactPersonParam;
 	}
 
 	/**
@@ -239,13 +239,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment receiver side contact person details.
-	 * @param receiverContactPerson
+	 * @param receiverContactPersonParam
 	 *            Shipment receiver side contact person details
 	 * @see #getReceiverContactPerson()
 	 */
-	public void setReceiverContactPerson(User receiverContactPerson)
+	public void setReceiverContactPerson(User receiverContactPersonParam)
 	{
-		this.receiverContactPerson = receiverContactPerson;
+		this.receiverContactPerson = receiverContactPersonParam;
 	}
 
 	/**
@@ -262,13 +262,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the Shipment sender's comments.
-	 * @param senderComments
+	 * @param senderCommentsParam
 	 *            Shipment sender's comments
 	 * @see #getSenderComments()
 	 */
-	public void setSenderComments(String senderComments)
+	public void setSenderComments(String senderCommentsParam)
 	{
-		this.senderComments = senderComments;
+		this.senderComments = senderCommentsParam;
 	}
 
 	/**
@@ -285,13 +285,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment receiver comments.
-	 * @param receiverComments
+	 * @param receiverCommentsParam
 	 *            Shipment receiver comments
 	 * @see #getReceiverComments()
 	 */
-	public void setReceiverComments(String receiverComments)
+	public void setReceiverComments(String receiverCommentsParam)
 	{
-		this.receiverComments = receiverComments;
+		this.receiverComments = receiverCommentsParam;
 	}
 
 	/**
@@ -307,13 +307,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the Shipment creation date.
-	 * @param createdDate
+	 * @param createdDateParam
 	 *            date of shipment created.
 	 * @see #getCreatedDate()
 	 */
-	public void setCreatedDate(Date createdDate)
+	public void setCreatedDate(Date createdDateParam)
 	{
-		this.createdDate = createdDate;
+		this.createdDate = createdDateParam;
 	}
 
 	/**
@@ -329,13 +329,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the Shipment send date.
-	 * @param sendDate
+	 * @param sendDateParam
 	 *            Shipment send date
 	 * @see #getSendDate()
 	 */
-	public void setSendDate(Date sendDate)
+	public void setSendDate(Date sendDateParam)
 	{
-		this.sendDate = sendDate;
+		this.sendDate = sendDateParam;
 	}
 
 	/**
@@ -357,12 +357,12 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the shipment containers.
-	 * @param containerCollection collection of Container objects.
+	 * @param containerCollectionParam collection of Container objects.
 	 * @see #getContainerCollection()
 	 */
-	public void setContainerCollection(Collection containerCollection)
+	public void setContainerCollection(Collection containerCollectionParam)
 	{
-		this.containerCollection = containerCollection;
+		this.containerCollection = containerCollectionParam;
 	}
 
 	/**
@@ -379,13 +379,13 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 
 	/**
 	 * Sets the activitystatus of the shipment/request.
-	 * @param activityStatus
+	 * @param activityStatusParam
 	 *            Status of the shipment
 	 * @see edu.wustl.common.bizlogic.IActivityStatus#setActivityStatus(java.lang.String)
 	 */
-	public void setActivityStatus(String activityStatus)
+	public void setActivityStatus(String activityStatusParam)
 	{
-		this.activityStatus = activityStatus;
+		this.activityStatus = activityStatusParam;
 	}
 
 	/**
@@ -466,16 +466,14 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 							&& shipmentForm.getContainerLabelChoice().trim().equals(
 									"ContainerLabel"))
 					{
-						fieldValue
-						= (String) shipmentForm.getContainerDetails("containerLabel_"
+						fieldValue = (String) shipmentForm.getContainerDetails("containerLabel_"
 								+ containerCounter);
 					}
 					else if (shipmentForm.getContainerLabelChoice() != null
 							&& shipmentForm.getContainerLabelChoice().trim().equals(
 									"ContainerBarcode"))
 					{
-						fieldValue
-						= (String) shipmentForm.getSpecimenDetails("containerBarcode_"
+						fieldValue = (String) shipmentForm.getSpecimenDetails("containerBarcode_"
 								+ containerCounter);
 					}
 				}
@@ -509,8 +507,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 			}
 			if (!shipmentForm.isAddOperation() && containerNum > 0)
 			{
-				if (updatedContainerCollection != null
-						 && !updatedContainerCollection.isEmpty())// bug 11410
+				if (updatedContainerCollection != null && !updatedContainerCollection.isEmpty())// bug 11410
 				{
 					this.containerCollection.clear();
 					this.containerCollection.addAll(updatedContainerCollection);
@@ -547,8 +544,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 			}
 			else
 			{
-				container
-				= ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
+				container = ShippingTrackingUtility.getInTransitContainer(this.containerCollection);
 				if (container == null)// bug 11410
 				{
 					container = ShippingTrackingUtility.createInTransitContainer(shipmentForm);
@@ -566,19 +562,16 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 				else
 				{
 					if (shipmentForm.getSpecimenLabelChoice() != null
-							&& shipmentForm.getSpecimenLabelChoice()
-							.trim().equals("SpecimenLabel"))
+							&& shipmentForm.getSpecimenLabelChoice().trim().equals("SpecimenLabel"))
 					{
-						fieldValue
-						= (String) shipmentForm.getSpecimenDetails("specimenLabel_"
+						fieldValue = (String) shipmentForm.getSpecimenDetails("specimenLabel_"
 								+ specimenCounter);
 					}
 					else if (shipmentForm.getSpecimenLabelChoice() != null
 							&& shipmentForm.getSpecimenLabelChoice().trim().equals(
 									"SpecimenBarcode"))
 					{
-						fieldValue
-						= (String) shipmentForm.getSpecimenDetails("specimenBarcode_"
+						fieldValue = (String) shipmentForm.getSpecimenDetails("specimenBarcode_"
 								+ specimenCounter);
 					}
 				}
@@ -588,8 +581,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 					containsSpecimens = true;
 					lblOrBarcodeList.add(fieldValue); // bug 11026
 					specimen = new Specimen();
-					if (shipmentForm.getSpecimenLabelChoice()
-							.equalsIgnoreCase("SpecimenLabel"))
+					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}
@@ -603,8 +595,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 						numOfSpecimens++;
 
 						// Get SpecimenPosition object and set it to specimen
-						final SpecimenPosition specimenPosition
-						= this.createSpecimenPosition(
+						final SpecimenPosition specimenPosition = this.createSpecimenPosition(
 								specimen, container, specimenCounter);
 						specimen.setSpecimenPosition(specimenPosition);
 
@@ -613,35 +604,29 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 					}
 					else
 					{
-						final SpecimenPosition specimenPosFromCollection
-						= ShippingTrackingUtility
+						final SpecimenPosition specimenPosFromCollection = ShippingTrackingUtility
 								.getSpecimenPositionFromCollection(container
-										.getSpecimenPositionCollection()
-										, fieldValue);
+										.getSpecimenPositionCollection(), fieldValue);
 						numOfSpecimens++;
 						if (specimenPosFromCollection == null)
 						{
 							// A new specimen is being added
 							// Get SpecimenPosition object and set it to
 							// specimen
-							final SpecimenPosition specimenPosition
-							= this.createSpecimenPosition(
+							final SpecimenPosition specimenPosition = this.createSpecimenPosition(
 									specimen, container, specimenCounter);
 							specimen.setSpecimenPosition(specimenPosition);
 
 							// Add the SpecimenPostion object to container
-							container.getSpecimenPositionCollection()
-							.add(specimenPosition);
+							container.getSpecimenPositionCollection().add(specimenPosition);
 							updatedSpecimenPosCollection.add(specimenPosition);
 						}
 						else
 						{
 							// This specimen was already present in the shipment
-							specimenPosFromCollection
-							.setPositionDimensionOne(specimenCounter);
+							specimenPosFromCollection.setPositionDimensionOne(specimenCounter);
 							specimen = specimenPosFromCollection.getSpecimen();
-							updatedSpecimenPosCollection
-							.add(specimenPosFromCollection);
+							updatedSpecimenPosCollection.add(specimenPosFromCollection);
 						}
 					}
 				}
@@ -684,8 +669,8 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 					&& position.getSpecimen().getLabel() != null)
 			{
 				final SpecimenPosition specimenPosFromCollection = ShippingTrackingUtility
-						.getSpecimenPositionFromCollection(updatedSpecimenPosCollection
-								, position.getSpecimen().getLabel());
+						.getSpecimenPositionFromCollection(updatedSpecimenPosCollection, position
+								.getSpecimen().getLabel());
 				if (specimenPosFromCollection == null)
 				{
 					position.getSpecimen().setSpecimenPosition(null);
@@ -724,7 +709,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 	protected void setBasicShipmentProperties(BaseShipmentForm shipmentForm)
 			throws AssignDataException
 	{
-		if (shipmentForm.getId() != 0L)
+		if (shipmentForm.getId() != 0l)
 		{
 			this.id = shipmentForm.getId();
 		}

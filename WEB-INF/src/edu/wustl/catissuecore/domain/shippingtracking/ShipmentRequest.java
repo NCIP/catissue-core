@@ -55,11 +55,11 @@ public class ShipmentRequest extends BaseShipment
 
 	/**
 	 * sets the specimen collection.
-	 * @param specimenCollection specimen collection to set.
+	 * @param specimenCollectionParam specimen collection to set.
 	 */
-	public void setSpecimenCollection(Collection<Specimen> specimenCollection)
+	public void setSpecimenCollection(Collection<Specimen> specimenCollectionParam)
 	{
-		this.specimenCollection = specimenCollection;
+		this.specimenCollection = specimenCollectionParam;
 	}
 
 	/**
@@ -101,11 +101,11 @@ public class ShipmentRequest extends BaseShipment
 
 	/**
 	 * Set the request processed or not.
-	 * @param requestProcessed true if shipment created for the request otherwise false
+	 * @param requestProcessedParam true if shipment created for the request otherwise false
 	 */
-	public void setRequestProcessed(boolean requestProcessed)
+	public void setRequestProcessed(boolean requestProcessedParam)
 	{
-		this.requestProcessed = requestProcessed;
+		this.requestProcessed = requestProcessedParam;
 	}
 
 	/**
