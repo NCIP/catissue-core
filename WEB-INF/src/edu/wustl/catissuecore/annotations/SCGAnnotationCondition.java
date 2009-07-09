@@ -23,18 +23,19 @@ public class SCGAnnotationCondition implements ICPCondition
 	/**
 	 * logger Generic Logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SCGAnnotationCondition.class);
+	private transient final Logger logger = Logger.getCommonLogger( SCGAnnotationCondition.class );
+
 	/**
 	 *Returns the list Of collection protocol with which the given scg is registerd 
 	 */
 	public List getCollectionProtocolList(Long entityInstanceId)
 	{
-		List<Long> annotationsList = new ArrayList<Long>();
-		DefaultBizLogic bizLogic = new DefaultBizLogic();
-		List objectList = new ArrayList();
+		final List < Long > annotationsList = new ArrayList < Long >();
+		final DefaultBizLogic bizLogic = new DefaultBizLogic();
+		new ArrayList();
 		try
 		{
-			if (entityInstanceId != null || !entityInstanceId.equals(""))
+			if (entityInstanceId != null || !entityInstanceId.equals( "" ))
 			{
 				/*     objectList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),"id",entityInstanceId);
 				 if(objectList!=null && !objectList.isEmpty())
@@ -46,17 +47,19 @@ public class SCGAnnotationCondition implements ICPCondition
 				     
 				 }*/
 
-				CollectionProtocol collectionProtocol = (CollectionProtocol) bizLogic
-						.retrieveAttribute(SpecimenCollectionGroup.class.getName(),
+				final CollectionProtocol collectionProtocol = (CollectionProtocol) bizLogic
+						.retrieveAttribute( SpecimenCollectionGroup.class.getName(),
 								entityInstanceId,
-								"collectionProtocolRegistration.collectionProtocol");
+								"collectionProtocolRegistration.collectionProtocol" );
 				if (collectionProtocol != null && collectionProtocol.getId() != null)
-					annotationsList.add(collectionProtocol.getId());
+				{
+					annotationsList.add( collectionProtocol.getId() );
+				}
 			}
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug( e.getMessage(), e );
 			e.printStackTrace();
 		}
 

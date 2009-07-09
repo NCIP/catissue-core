@@ -22,50 +22,58 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantAnnotationCondition implements ICPCondition
 {
-	private transient Logger logger = Logger.getCommonLogger(ParticipantAnnotationCondition.class);
-    /**
-     * Returns the list of protocol with which the given participant is registered 
-     * 
-     */
-    public List getCollectionProtocolList(Long entityInstanceId) 
-    {
-     
-        List<Long> annotationsList = new ArrayList<Long>();
-        DefaultBizLogic bizLogic = new DefaultBizLogic();
-        Collection objectList = new HashSet();
-        try
-        {
-            if (entityInstanceId != null || !entityInstanceId.equals(""))
-              /*  objectList = bizLogic.retrieve(Participant.class.getName(),
-                        "id", entityInstanceId);*/
-                objectList = (Collection)bizLogic.retrieveAttribute(Participant.class.getName(),entityInstanceId,"elements(collectionProtocolRegistrationCollection)");
-            if (objectList != null && !objectList.isEmpty())
-            {
 
-               // Participant participant = (Participant) objectList.get(0);
-               /* Iterator it = participant
-                        .getCollectionProtocolRegistrationCollection()
-                        .iterator();*/
-                Iterator it = objectList.iterator();
-                while (it.hasNext())
-                {
-                    CollectionProtocolRegistration cpReg = (CollectionProtocolRegistration) it.next();                    
-                    if (cpReg != null && cpReg.getCollectionProtocol() != null
-                            && cpReg.getCollectionProtocol().getId() != null)
-                        annotationsList.add(cpReg.getCollectionProtocol()
-                                .getId());
+	private transient final Logger logger = Logger
+			.getCommonLogger( ParticipantAnnotationCondition.class );
 
-                }
+	/**
+	 * Returns the list of protocol with which the given participant is registered 
+	 * 
+	 */
+	public List getCollectionProtocolList(Long entityInstanceId)
+	{
 
-            }
-        }
-        catch (BizLogicException e)
-        {
-        	logger.debug(e.getMessage(), e);
-            e.printStackTrace();
-        }
+		final List < Long > annotationsList = new ArrayList < Long >();
+		final DefaultBizLogic bizLogic = new DefaultBizLogic();
+		Collection objectList = new HashSet();
+		try
+		{
+			if (entityInstanceId != null || !entityInstanceId.equals( "" ))
+			{
+				/*  objectList = bizLogic.retrieve(Participant.class.getName(),
+				        "id", entityInstanceId);*/
+				objectList = (Collection) bizLogic.retrieveAttribute( Participant.class.getName(),
+						entityInstanceId, "elements(collectionProtocolRegistrationCollection)" );
+			}
+			if (objectList != null && !objectList.isEmpty())
+			{
 
-        return annotationsList;
-    }
+				// Participant participant = (Participant) objectList.get(0);
+				/* Iterator it = participant
+				         .getCollectionProtocolRegistrationCollection()
+				         .iterator();*/
+				final Iterator it = objectList.iterator();
+				while (it.hasNext())
+				{
+					final CollectionProtocolRegistration cpReg = (CollectionProtocolRegistration) it
+							.next();
+					if (cpReg != null && cpReg.getCollectionProtocol() != null
+							&& cpReg.getCollectionProtocol().getId() != null)
+					{
+						annotationsList.add( cpReg.getCollectionProtocol().getId() );
+					}
+
+				}
+
+			}
+		}
+		catch (final BizLogicException e)
+		{
+			this.logger.debug( e.getMessage(), e );
+			e.printStackTrace();
+		}
+
+		return annotationsList;
+	}
 
 }

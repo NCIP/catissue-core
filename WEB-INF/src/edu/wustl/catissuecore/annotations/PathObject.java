@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 package edu.wustl.catissuecore.annotations;
 
 import java.io.Serializable;
@@ -15,9 +11,6 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 public class PathObject implements Serializable
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	EntityInterface sourceEntity;
 	EntityInterface targetEntity;
@@ -25,8 +18,10 @@ public class PathObject implements Serializable
 	/**
 	 * This method overrides the equals method of the Object Class.
 	 * This method checks whether path has been added between the source entity and target entity.
-	 * @return boolean true if path has been added else false. 
+	 * @param obj - Object
+	 * @return boolean true if path has been added else false.
 	 */
+	@Override
 	public boolean equals(Object obj)
 	{
 
@@ -34,16 +29,17 @@ public class PathObject implements Serializable
 		if (obj instanceof PathObject)
 		{
 
-			PathObject pathObject = (PathObject) obj;
+			final PathObject pathObject = (PathObject) obj;
 			if (pathObject.getSourceEntity() != null && pathObject.getTargetEntity() != null
 					&& pathObject.getSourceEntity().getId() != null
-					&& pathObject.getTargetEntity().getId() != null && sourceEntity != null
-					&& targetEntity != null && sourceEntity.getId() != null
-					&& targetEntity.getId() != null)
+					&& pathObject.getTargetEntity().getId() != null && this.sourceEntity != null
+					&& this.targetEntity != null && this.sourceEntity.getId() != null
+					&& this.targetEntity.getId() != null)
 			{
 
-				if ((sourceEntity.getId().compareTo(pathObject.getSourceEntity().getId()) == 0)
-						&& (targetEntity.getId().compareTo(pathObject.getTargetEntity().getId()) == 0))
+				if (( this.sourceEntity.getId().compareTo( pathObject.getSourceEntity().getId() ) == 0 )
+						&& ( this.targetEntity.getId().compareTo(
+								pathObject.getTargetEntity().getId() ) == 0 ))
 				{
 
 					equals = true;
@@ -58,15 +54,15 @@ public class PathObject implements Serializable
 	 */
 	public EntityInterface getSourceEntity()
 	{
-		return sourceEntity;
+		return this.sourceEntity;
 	}
 
 	/**
-	 * @param sourceEntity the sourceEntity to set
+	 * @param sourceEntityParam the sourceEntity to set
 	 */
-	public void setSourceEntity(EntityInterface sourceEntity)
+	public void setSourceEntity(EntityInterface sourceEntityParam)
 	{
-		this.sourceEntity = sourceEntity;
+		this.sourceEntity = sourceEntityParam;
 	}
 
 	/**
@@ -74,17 +70,20 @@ public class PathObject implements Serializable
 	 */
 	public EntityInterface getTargetEntity()
 	{
-		return targetEntity;
+		return this.targetEntity;
 	}
 
 	/**
-	 * @param targetEntity the targetEntity to set
+	 * @param targetEntityParam the targetEntity to set
 	 */
-	public void setTargetEntity(EntityInterface targetEntity)
+	public void setTargetEntity(EntityInterface targetEntityParam)
 	{
-		this.targetEntity = targetEntity;
+		this.targetEntity = targetEntityParam;
 	}
-
+    /**
+     * @return - int
+     */
+	@Override
 	public int hashCode()
 	{
 

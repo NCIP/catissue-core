@@ -27,71 +27,87 @@ import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
 
 /**
- * 
  * @author falguni_sachde
  *
  */
 public class DECategoryIntegration
 {
+
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
 	private static Logger logger = Logger.getCommonLogger(DECategoryIntegration.class);
+
 	/**
-	 * @param rootCategoryList
+	 * @param rootCategoryList - rootCategoryList
 	 */
 	public static void categoryIntegration(List<HashMap> rootCategoryList)
 	{
 		try
 		{
-			for (HashMap rootCategoryMap : rootCategoryList)
+			for (final HashMap rootCategoryMap : rootCategoryList)
 			{
 
-				CategoryInterface rootCategory = (CategoryInterface) rootCategoryMap.keySet().iterator().next();
-				boolean isEdited = ((Boolean) rootCategoryMap.get(rootCategoryMap.keySet().iterator().next())).booleanValue();
+				final CategoryInterface rootCategory = (CategoryInterface) rootCategoryMap.keySet()
+						.iterator().next();
+				final boolean isEdited = ((Boolean) rootCategoryMap.get(rootCategoryMap.keySet()
+						.iterator().next())).booleanValue();
 				//System.out.println(isEdited+"isEdited ................rootcategoryid ="+rootCategory.getRootCategoryElement().getId());
 
 				if (!isEdited)
 				{
-					//FROM ROOT CATEGORY ENTITY ID 
-					EntityManagerInterface entityManager = EntityManager.getInstance();
-					Container objContainer = (Container) entityManager.getContainerByEntityIdentifier(rootCategory.getRootCategoryElement().getId());
+					//FROM ROOT CATEGORY ENTITY ID
+					final EntityManagerInterface entityManager = EntityManager.getInstance();
+					final Container objContainer = (Container) entityManager
+							.getContainerByEntityIdentifier(rootCategory.getRootCategoryElement()
+									.getId());
 
 					//This container id of rootcategory entity's container ,we requires to make entry in entitymap table
-					Long rootCategoryContainerId = objContainer.getId();
-					Container objEntityContainer = (Container) entityManager.getContainerByEntityIdentifier(rootCategory.getRootCategoryElement()
-							.getEntity().getId());
+					final Long rootCategoryContainerId = objContainer.getId();
+					final Container objEntityContainer = (Container) entityManager
+							.getContainerByEntityIdentifier(rootCategory.getRootCategoryElement()
+									.getEntity().getId());
 
-				
-					DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-					List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(), "containerId", objEntityContainer.getId());
+					final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+					final List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class
+							.getName(), "containerId", objEntityContainer.getId());
 
-					for (EntityMap objEntityMap : entityMapList)
+					for (final EntityMap objEntityMap : entityMapList)
 					{
 						//create new entitymap object
-						EntityMap entityMap = getEntityMap(rootCategoryContainerId, objEntityMap.getStaticEntityId());
+						final EntityMap entityMap = getEntityMap(rootCategoryContainerId,
+								objEntityMap.getStaticEntityId());
 
-						Collection<FormContext> existingFormContexts = AppUtility.getFormContexts(objEntityMap.getId());
+						final Collection<FormContext> existingFormContexts = AppUtility
+								.getFormContexts(objEntityMap.getId());
 
-						Set<FormContext> newFormContexts = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
-						for (FormContext existingFormContext : existingFormContexts)
+						final Set<FormContext> newFormContexts = new HashSet<FormContext>(
+								AppUtility.getFormContexts(entityMap.getId()));
+						for (final FormContext existingFormContext : existingFormContexts)
 						{
-							FormContext newFormContext = new FormContext();
-							newFormContext.setIsInfiniteEntry(existingFormContext.getIsInfiniteEntry());
+							final FormContext newFormContext = new FormContext();
+							newFormContext.setIsInfiniteEntry(existingFormContext
+									.getIsInfiniteEntry());
 							newFormContext.setNoOfEntries(existingFormContext.getNoOfEntries());
-							newFormContext.setStudyFormLabel(existingFormContext.getStudyFormLabel());
+							newFormContext.setStudyFormLabel(existingFormContext
+									.getStudyFormLabel());
 							newFormContext.setEntityMap(entityMap);
-							Collection<EntityMapCondition> existingEntityMapConditions = AppUtility.getEntityMapConditions(existingFormContext.getId());
-							Collection<EntityMapCondition> newEntityMapConditions = AppUtility.getEntityMapConditions(newFormContext.getId());
-							if(!existingEntityMapConditions.isEmpty())
+							final Collection<EntityMapCondition> existingEntityMapConditions = AppUtility
+									.getEntityMapConditions(existingFormContext.getId());
+							final Collection<EntityMapCondition> newEntityMapConditions = AppUtility
+									.getEntityMapConditions(newFormContext.getId());
+							if (!existingEntityMapConditions.isEmpty())
 
 							{
-								for (EntityMapCondition objEntityMapCondition : existingEntityMapConditions)
+								for (final EntityMapCondition objEntityMapCondition : existingEntityMapConditions)
 								{
-									EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
-									objNewEntityMapCondition.setStaticRecordId(objEntityMapCondition.getStaticRecordId());
-									objNewEntityMapCondition.setTypeId(objEntityMapCondition.getTypeId());
+									final EntityMapCondition objNewEntityMapCondition = new EntityMapCondition();
+									objNewEntityMapCondition
+											.setStaticRecordId(objEntityMapCondition
+													.getStaticRecordId());
+									objNewEntityMapCondition.setTypeId(objEntityMapCondition
+											.getTypeId());
 									objNewEntityMapCondition.setFormContext(newFormContext);
 									newEntityMapConditions.add(objNewEntityMapCondition);
 								}
@@ -101,7 +117,7 @@ public class DECategoryIntegration
 
 						}
 						entityMap.setFormContextCollection(newFormContexts);
-						AnnotationBizLogic annotation = new AnnotationBizLogic();
+						final AnnotationBizLogic annotation = new AnnotationBizLogic();
 						annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 						annotation.insert(entityMap, 0);
 
@@ -110,7 +126,7 @@ public class DECategoryIntegration
 			}
 
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			//System.out.println("Exception: " + ex.getMessage());
@@ -119,16 +135,17 @@ public class DECategoryIntegration
 	}
 
 	/**
-	 * @param containerId
-	 * @param staticEntityId
-	 * @return
-	 * @throws DAOException
-	 * @throws DynamicExtensionsSystemException
+	 * @param containerId - containerId
+	 * @param staticEntityId - staticEntityId
+	 * @return - EntityMap
+	 * @throws DAOException - DAOException
+	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
 	 */
-	private static EntityMap getEntityMap(Long containerId, Long staticEntityId) throws DAOException, DynamicExtensionsSystemException
+	private static EntityMap getEntityMap(Long containerId, Long staticEntityId)
+			throws DAOException, DynamicExtensionsSystemException
 	{
 
-		EntityMap entityMap = new EntityMap();
+		final EntityMap entityMap = new EntityMap();
 		entityMap.setContainerId(containerId);
 		entityMap.setCreatedBy("");
 		entityMap.setCreatedDate(new Date());
