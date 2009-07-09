@@ -18,7 +18,7 @@ import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
- * <p>This class initializes the fields of AbstractPasteActionHandler.java</p>
+ * <p>This class initializes the fields of AbstractPasteActionHandler.java</p>.
  * @author Ashwin Gupta
  * @version 1.1
  */
@@ -26,23 +26,27 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 {
 
 	/**
-	 * Table component used in applet 
+	 * Table component used in applet.
 	 */
 	protected JTable table;
-
+	/**
+	 * isValidateSuccess.
+	 */
 	protected boolean isValidateSuccess = true;
-
+	/**
+	 * populateValidatorModel.
+	 */
 	protected boolean populateValidatorModel = true;
 
 	/**
-	 * Default constructor 
+	 * Default constructor.
 	 */
 	public AbstractPasteActionHandler()
 	{
 	}
 
 	/**
-	 * constructor with table to persist table
+	 * constructor with table to persist table.
 	 * @param table table used in applet
 	 */
 	public AbstractPasteActionHandler(JTable table)
@@ -51,7 +55,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	}
 
 	/**
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent).
+	 * @param e : e
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
@@ -61,7 +66,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	}
 
 	/**
-	 * Pre action performed method for paste operation 
+	 * Pre action performed method for paste operation.
+	 * @param e : e
 	 */
 	protected void preActionPerformed(ActionEvent e)
 	{
@@ -70,7 +76,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 
 	/**
 	 * do action performed method for paste operation.
-	 * Other paste listeners should override this method. 
+	 * Other paste listeners should override this method.
+	 * @param e : e
 	 */
 	protected void doActionPerformed(ActionEvent e)
 	{
@@ -86,7 +93,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		populateValidatorModel = true;
 		/*if (table.getModel() instanceof MultipleSpecimenTableModel)
 		{
-			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+			MultipleSpecimenTableModel multipleSpecimenTableModel =
+			 CommonAppletUtil.getMultipleSpecimenTableModel(table);
 			Map checkBoxMap = multipleSpecimenTableModel.getSpecimenCheckBoxMap();
 			int columnsPerPage = multipleSpecimenTableModel.getColumnsPerPage();
 			if (checkBoxMap != null && checkBoxMap.size() > 0)
@@ -97,7 +105,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 				while (itr.hasNext())
 				{
 					String key = (String) itr.next();
-					if (checkBoxMap.get(key) != null && ((Boolean) checkBoxMap.get(key)).booleanValue() == true)
+					if (checkBoxMap.get(key) != null &&
+					 ((Boolean) checkBoxMap.get(key)).booleanValue() == true)
 					{
 						int colNo = Integer.parseInt(key) - 1;
 						selectedCols.add(new Integer(colNo % columnsPerPage));
@@ -107,7 +116,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 				}
 				if (populateValidatorModel == false)
 				{
-					for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
+					for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i
+					 <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
 					{
 						selectedRows.add(new Integer(i));
 					}
@@ -130,7 +140,8 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 
 		}*/
 
-		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
+		CopyPasteOperationValidatorModel validatorModel =
+			CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
 		validatorModel.setOperation(AppletConstants.PASTE_OPERATION);
 		if (populateValidatorModel)
 		{
@@ -146,9 +157,11 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 			for (int i = 0; i < selectedPastedColumns.size(); i++)
 			{
 				int pastedColumn = ((Integer)selectedPastedColumns.get(i)).intValue();
-				SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(pastedColumn).getCellEditor();
+				SpecimenColumnModel scm = (SpecimenColumnModel)
+				 columnModel.getColumn(pastedColumn).getCellEditor();
 				scm.updateComponentValue(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO, "false");
-				SpecimenColumnModel scmRenderer = (SpecimenColumnModel) columnModel.getColumn(pastedColumn).getCellRenderer();
+				SpecimenColumnModel scmRenderer = (SpecimenColumnModel)
+				 columnModel.getColumn(pastedColumn).getCellRenderer();
 				scmRenderer.updateComponent(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO);
 			}
 			SwingUtilities.updateComponentTreeUI(table);
@@ -186,8 +199,13 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 			}
 		}
 	}
-
-	private void populateValidatorModel(CopyPasteOperationValidatorModel validatorModel, int[] selectedRows, int[] selectedColumns)
+	/**
+	 * @param validatorModel : validatorModel
+	 * @param selectedRows : selectedRows
+	 * @param selectedColumns : selectedColumns
+	 */
+	private void populateValidatorModel(CopyPasteOperationValidatorModel validatorModel,
+			int[] selectedRows, int[] selectedColumns)
 	{
 		validatorModel.setSelectedPastedRows(CommonAppletUtil.createListFromArray(selectedRows));
 		validatorModel.setSelectedPastedCols(CommonAppletUtil.createListFromArray(selectedColumns));
@@ -195,7 +213,9 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		validatorModel.setRowCount(table.getRowCount());
 		validatorModel.setColumnCount(getColumnCount());
 	}
-
+	/**
+	 * @param validatorModel : validatorModel
+	 */
 	private void updateUI(CopyPasteOperationValidatorModel validatorModel)
 	{
 		HashMap dataMap = validatorModel.getCopiedData();
@@ -203,7 +223,7 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		int selectedRow = table.getSelectedRow();
 		int selectedCol = table.getSelectedColumn();
 		/**
-		 *  In case of checkbox selection, selected row and selected column 
+		 *  In case of checkbox selection, selected row and selected column
 		 *  should come from selected pasted rows and selected pasted columns respectively.
 		 */
 		if (!populateValidatorModel)
@@ -213,11 +233,16 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		}
 		setUI(validatorModel, dataMap, selectedRow, selectedCol);
 	}
-
-	private void setUI(CopyPasteOperationValidatorModel validatorModel, HashMap dataMap, int selectedRow, int selectedCol)
+	/**
+	 * @param validatorModel : validatorModel
+	 * @param dataMap : dataMap
+	 * @param selectedRow : selectedRow
+	 * @param selectedCol : selectedCol
+	 */
+	private void setUI(CopyPasteOperationValidatorModel validatorModel,
+			HashMap dataMap, int selectedRow, int selectedCol)
 	{
 		// Row at which data is to be set cant be checkbox
-		
 		int tmpSelectedRow = selectedRow;
 		List copiedRows = validatorModel.getSelectedCopiedRows();
 		List copiedCols = validatorModel.getSelectedCopiedCols();
@@ -239,9 +264,10 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 					* Patch ID: Entered_Events_Need_To_Be_Visible_8
 					* See also: 1-5
 					* Description: If SPECIMEN_EVENTS_ROW_NO then dont retrive data in list
-					* will throw a ClassCastException since toolTip is stored as a string and not as List
+					* will throw a ClassCastException since toolTip is stored
+					*  as a string and not as List
 					* finally call doPasteTooltip method
-					*/ 
+					*/
 					if(copiedRow!=AppletConstants.SPECIMEN_EVENTS_ROW_NO)
 					{
 						String key = CommonAppletUtil.getDataKey(copiedRow, copiedCol);
@@ -257,12 +283,11 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		 * Smita Kadam
 		 * Reviewer: Sachin
 		 * Bug ID: 4574
-		 * Patch ID: 4574_2 
+		 * Patch ID: 4574_2
 		 * Description: Tooltip related processing done only for Multiple specimen table
 		 */
 		/*if (table.getModel() instanceof MultipleSpecimenTableModel)
 		{
-			
 			doPasteTooltip(validatorModel,dataMap);
 		}*/
 		/** -- patch ends here -- */
@@ -272,12 +297,12 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	/**
 	 * @param selectedRow selected row
 	 * @param selectedCol selected col
-	 * @param value value
+	 * @param valueList : value
 	 */
 	protected abstract void doPasteData(int selectedRow, int selectedCol, List valueList);
 
 	/**
-	 * This method updates the tool tip of event button on all pasted columns
+	 * This method updates the tool tip of event button on all pasted columns.
 	 * @param validatorModel Copy paste operation validator model
 	 * @param dataMap map where toolTip is present of the coppied columns
 	 */
@@ -287,20 +312,18 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 		List pastedCols = validatorModel.getSelectedPastedCols();
 		Collections.sort(pastedCols);
 		Collections.sort(copiedCols);
-		
 		/**
 		* Patch ID: Entered_Events_Need_To_Be_Visible_7
 		* See also: 1-5
 		* Description: Retrieve toolTip of copied column and paste it to selected pasted column
-		*/ 
+		*/
 		/*for(int copiedColumnCount=0;copiedColumnCount<copiedCols.size();copiedColumnCount++)
 		{
 			int copiedCol = ((Integer) (copiedCols.get(copiedColumnCount))).intValue();
 			int pastedCol = ((Integer) (pastedCols.get(copiedColumnCount))).intValue();
-			
-			String key2 = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO,copiedCol);
+			String key2 = CommonAppletUtil.getDataKey
+			(AppletConstants.SPECIMEN_EVENTS_ROW_NO,copiedCol);
 			String toolTip=(String)dataMap.get(key2);
-			
 			TableColumnModel columnModel = table.getColumnModel();
 			TableColumn tm = columnModel.getColumn(pastedCol);
 			SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
@@ -326,13 +349,16 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	}
 
 	/**
-	 * Post action performed method for paste operation 
+	 * Post action performed method for paste operation.
+	 * @param e : e
 	 */
 	protected void postActionPerformed(ActionEvent e)
 	{
-		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
+		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).
+		getCopyPasteOperationValidatorModel();
 		validatorModel.setOperation("");
-		System.out.println("CopyPasteOperationValidatorModel operation set to : " + validatorModel.getOperation());
+		System.out.println("CopyPasteOperationValidatorModel operation set to : " +
+				validatorModel.getOperation());
 		System.out.println("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 	}
 

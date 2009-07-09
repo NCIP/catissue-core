@@ -17,7 +17,7 @@ import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
- * <p>This class handles common copy operation among objects which have 
+ * <p>This class handles common copy operation among objects which have.
  * copy/paste operation.</p>
  * @author Ashwin Gupta
  * @version 1.1
@@ -26,23 +26,27 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 {
 
 	/**
-	 * Table component used in applet 
+	 * table component used in applet.
 	 */
 	protected JTable table;
-
+	/**
+	 * isValidateSuccess.
+	 */
 	protected boolean isValidateSuccess = true;
-
+	/**
+	 * populateValidatorModel.
+	 */
 	protected boolean populateValidatorModel = true;
 
 	/**
-	 * Default constructor 
+	 * Default constructor.
 	 */
 	public AbstractCopyActionHandler()
 	{
 	}
 
 	/**
-	 * constructor with table to persist table
+	 * constructor with table to persist table.
 	 * @param table table used in applet
 	 */
 	public AbstractCopyActionHandler(JTable table)
@@ -52,6 +56,7 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 
 	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @param e : e
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
@@ -61,7 +66,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	}
 
 	/**
-	 * Pre action performed method for copy operation 
+	 * Pre action performed method for copy operation.
+	 * @param e : e
 	 */
 	protected void preActionPerformed(ActionEvent e)
 	{
@@ -69,7 +75,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 
 	/**
 	 * do action performed method for copy operation.
-	 * Other copy listeners should override this method for specific operations. 
+	 * Other copy listeners should override this method for specific operations.
+	 * @param e : e
 	 */
 	protected void doActionPerformed(ActionEvent e)
 	{
@@ -77,24 +84,25 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	}
 
 	/**
-	 * Post action performed method for copy operation 
+	 * Post action performed method for copy operation.
+	 * @param e : e
 	 */
 	protected void postActionPerformed(ActionEvent e)
 	{
 	}
-
+	/**
+	 * Protected method populateValidatorModel.
+	 */
 	protected void populateValidatorModel()
 	{
-
-		/**
-		 *  Following code is added for checkbox
-		 */
+		//Following code is added for checkbox
 		populateValidatorModel = true;
 		int[] intSelectedRows = null;
 		int[] intSelectedCols = null;
 		/*if (table.getModel() instanceof MultipleSpecimenTableModel)
 		 {
-		 MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+		 MultipleSpecimenTableModel multipleSpecimenTableModel =
+		  CommonAppletUtil.getMultipleSpecimenTableModel(table);
 		 Map checkBoxMap = multipleSpecimenTableModel.getSpecimenCheckBoxMap();
 		 int columnsPerPage = multipleSpecimenTableModel.getColumnsPerPage();
 		 if (checkBoxMap != null && checkBoxMap.size() > 0)
@@ -115,7 +123,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		 }
 		 if (populateValidatorModel == false)
 		 {
-		 for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
+		 for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i
+		  <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
 		 {
 		 selectedRows.add(new Integer(i));
 		 }
@@ -158,9 +167,11 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		 for (int i = 0; i < selectedCopiedColumns.size(); i++)
 		 {
 		 int copiedColumn = ((Integer) selectedCopiedColumns.get(i)).intValue();
-		 SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellEditor();
+		 SpecimenColumnModel scm =
+		  (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellEditor();
 		 scm.updateComponentValue(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO, "false");
-		 SpecimenColumnModel scmRenderer = (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellRenderer();
+		 SpecimenColumnModel scmRenderer =
+		  (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellRenderer();
 		 scmRenderer.updateComponent(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO);
 		 }
 		 SwingUtilities.updateComponentTreeUI(table);
@@ -188,7 +199,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			if (validationMessage.equals(""))
 			{
 				isValidateSuccess = true;
-				CommonAppletUtil.getBaseTableModel(table).setCopyPasteOperationValidatorModel(validatorModel);
+				CommonAppletUtil.getBaseTableModel(table).setCopyPasteOperationValidatorModel(
+						validatorModel);
 			}
 			else
 			{
@@ -205,7 +217,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 * @param selectedRows rows
 	 * @param selectedColumns columns
 	 */
-	private void populateValidatorModel(CopyPasteOperationValidatorModel validatorModel, int[] selectedRows, int[] selectedColumns)
+	private void populateValidatorModel(CopyPasteOperationValidatorModel validatorModel,
+			int[] selectedRows, int[] selectedColumns)
 	{
 		validatorModel.setSelectedCopiedRows(CommonAppletUtil.createListFromArray(selectedRows));
 		validatorModel.setSelectedCopiedCols(CommonAppletUtil.createListFromArray(selectedColumns));
@@ -215,9 +228,12 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		validatorModel.setColumnCount(getColumnCount());
 	}
 
-	/*
+	/**
 	 * This method returns the map holding the selected data.
 	 * The key is represented by the row@column format.
+	 * @param selectedRows : selectedRows
+	 * @param selectedColumns : selectedColumns
+	 * @return HashMap : HashMap
 	 */
 	protected HashMap getSelectedData(int[] selectedRows, int[] selectedColumns)
 	{
@@ -226,8 +242,10 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		{
 			for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
 			{
-				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
-				List valueList = getValueList(selectedRows[rowIndex], selectedColumns[columnIndex]);
+				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex],
+						selectedColumns[columnIndex]);
+				List valueList = getValueList(selectedRows[rowIndex],
+						selectedColumns[columnIndex]);
 				map.put(key, valueList);
 			}
 		}
@@ -236,15 +254,15 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		 * Smita Kadam
 		 * Reviewer: Sachin
 		 * Bug ID: 4574
-		 * Patch ID: 4574_1 
+		 * Patch ID: 4574_1
 		 * Description: Tooltip related processing done only for Multiple specimen table
 		 */
 		/*	if (table.getModel() instanceof MultipleSpecimenTableModel)
 		 {
-		 
 		 for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
 		 {
-		 String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
+		 String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO,
+		  selectedColumns[columnIndex]);
 		 String value = getEventTooltip(selectedColumns[columnIndex]);
 		 map.put(key, value);
 		 }
@@ -260,7 +278,6 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	/*protected String getEventTooltip(int columnIndex)
 	 {
 	 TableColumnModel columnModel = table.getColumnModel();
-	 
 	 TableColumn tm = columnModel.getColumn(columnIndex);
 	 SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
 	 if (scm == null || scm.getToolTipToEventButton()==null)
@@ -270,16 +287,18 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 }*/
 	/** -- patch ends here -- */
 	/**
-	 * @param rowIndex
-	 * @param columnIndex
-	 * @return
+	 * @param rowIndex : rowIndex
+	 * @param columnIndex : columnIndex
+	 * @return List
 	 */
 	protected List getValueList(int rowIndex, int columnIndex)
 	{
 		List valueList = new ArrayList();
 		Object value = table.getValueAt(rowIndex, columnIndex);
 		if (value == null)
+		{
 			value = "";
+		}
 		valueList.add(value.toString());
 		return valueList;
 	}

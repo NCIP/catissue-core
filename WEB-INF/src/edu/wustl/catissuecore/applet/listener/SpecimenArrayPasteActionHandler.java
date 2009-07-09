@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
@@ -13,29 +14,38 @@ import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
- * <p>This class initializes the fields of SpecimenArrayPasteActionHandler.java</p>
+ * <p>This class initializes the fields of SpecimenArrayPasteActionHandler.java</p>.
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler {
+public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
+{
 
 	/**
-	 * constructor with table to persist table
+	 * constructor with table to persist table.
 	 * @param table table used in applet
 	 */
-	public SpecimenArrayPasteActionHandler(JTable table) {
+	public SpecimenArrayPasteActionHandler(JTable table)
+	{
 		super(table);
 	}
-	
+
 	/**
-	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler#doActionPerformed(java.awt.event.ActionEvent)
+	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler
+	 * #doActionPerformed(java.awt.event.ActionEvent).
+	 * @param e : e
 	 */
-	protected void doActionPerformed(ActionEvent e) {
+	protected void doActionPerformed(ActionEvent e)
+	{
 		super.doActionPerformed(e);
 	}
 
 	/**
-	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler#doPasteData(int, int, java.lang.Object)
+	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler.
+	 * #doPasteData(int, int, java.lang.Object)
+	 * @param selectedRow : selectedRow
+	 * @param selectedCol : selectedCol
+	 * @param valueList : values
 	 */
 	protected void doPasteData(int selectedRow, int selectedCol, List valueList)
 	{
@@ -47,45 +57,85 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler 
 				// update model to set copied data
 				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
 				{
-					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),valueList.get(0));
+					model.getSpecimenArrayModelMap().put(
+							SpecimenArrayAppletUtil.
+							getArrayMapKey(selectedRow, selectedCol, model
+									.getColumnCount(),
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_LABEL_INDEX),
+							valueList.get(0));
 				}
 				else
 				{
-					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),valueList.get(0));
+					model.getSpecimenArrayModelMap().put(
+							SpecimenArrayAppletUtil.
+							getArrayMapKey(selectedRow, selectedCol, model
+									.getColumnCount(),
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_BARCODE_INDEX),
+							valueList.get(0));
 				}
 			}
-			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_QUANTITY))
+			else if (model.getCopySelectedOption().equals(
+					AppletConstants.ARRAY_COPY_OPTION_QUANTITY))
 			{
 				String value = (String) valueList.get(0);
 				if (value == null)
 				{
 					value = "";
 				}
-				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX),value);
+				model.getSpecimenArrayModelMap().put(
+						SpecimenArrayAppletUtil.
+						getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(),
+								AppletConstants.
+								ARRAY_CONTENT_ATTR_QUANTITY_INDEX), value);
 				// update quantity text field details
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getQuantityTextField().setText(value);
-				//model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX),valueList.get(1));
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+						.getQuantityTextField().setText(value);
+				//model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.
+				//getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),
+				//AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX),valueList.get(1));
 			}
-			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION))
+			else if (model.getCopySelectedOption().equals(
+					AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION))
 			{
 				String value = (String) valueList.get(0);
 				if (value == null)
 				{
 					value = "";
 				}
-				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),value);
+				model.getSpecimenArrayModelMap().put(
+						SpecimenArrayAppletUtil.
+						getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(),
+								AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
+						value);
 				// update concentration text field details
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getConcentrationTextField().setText(value);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+						.getConcentrationTextField().setText(value);
 			}
 			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_ALL))
 			{
 				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
 				{
-					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),valueList.get(0));
+					model.getSpecimenArrayModelMap().put(
+							SpecimenArrayAppletUtil.
+							getArrayMapKey(selectedRow, selectedCol, model
+									.getColumnCount(),
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_LABEL_INDEX),
+							valueList.get(0));
 				}
 				else
 				{
-					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),valueList.get(0));
+					model.getSpecimenArrayModelMap().put(
+							SpecimenArrayAppletUtil.
+							getArrayMapKey(selectedRow, selectedCol, model
+									.getColumnCount(),
+									AppletConstants.
+									ARRAY_CONTENT_ATTR_BARCODE_INDEX),
+							valueList.get(0));
 				}
 				String valueQuantity = (String) valueList.get(1);
 				if (valueQuantity == null)
@@ -93,44 +143,59 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler 
 					valueQuantity = "";
 				}
 
-				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX),valueQuantity);
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getQuantityTextField().setText(valueQuantity);
-				
+				model.getSpecimenArrayModelMap().put(
+						SpecimenArrayAppletUtil.
+						getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(),
+								AppletConstants.
+								ARRAY_CONTENT_ATTR_QUANTITY_INDEX), valueQuantity);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+						.getQuantityTextField().setText(valueQuantity);
+
 				String valueConc = (String) valueList.get(2);
 				if (valueConc == null)
 				{
 					valueConc = "";
 				}
-				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),valueConc);
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getConcentrationTextField().setText(valueConc);
+				model.getSpecimenArrayModelMap().put(
+						SpecimenArrayAppletUtil.
+						getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(),
+								AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
+						valueConc);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+						.getConcentrationTextField().setText(valueConc);
 			}
-			doPasteDimensions(model,selectedRow,selectedCol);
+			doPasteDimensions(model, selectedRow, selectedCol);
 		}
 	}
-	
+
 	/**
 	 * @return total coumn count
 	 */
 	protected int getColumnCount()
 	{
-		return table.getColumnCount();		
+		return table.getColumnCount();
 	}
-	
+
 	/**
-	 * @param model
-	 * @param selectedRow
-	 * @param selectedCol
+	 * @param model : model
+	 * @param selectedRow : selectedRow
+	 * @param selectedCol : selectedCol
 	 */
-	private void doPasteDimensions(SpecimenArrayTableModel model,int selectedRow, int selectedCol)
+	private void doPasteDimensions(SpecimenArrayTableModel model, int selectedRow, int selectedCol)
 	{
-		String posOneDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
-		String posTwoDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
+		String posOneDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol,
+				model.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
+		String posTwoDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol,
+				model.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
 		Map specimenArrayModelMap = model.getSpecimenArrayModelMap();
 		System.out.println(" In doPasteDimensions() function");
-		if ((specimenArrayModelMap.get(posOneDimKey) == null) || (specimenArrayModelMap.get(posOneDimKey).toString().equals(""))) 
+		if ((specimenArrayModelMap.get(posOneDimKey) == null)
+				|| (specimenArrayModelMap.get(posOneDimKey).toString().equals("")))
 		{
-			model.getSpecimenArrayModelMap().put(posOneDimKey,String.valueOf(selectedRow));
-			model.getSpecimenArrayModelMap().put(posTwoDimKey,String.valueOf(selectedCol));
+			model.getSpecimenArrayModelMap().put(posOneDimKey, String.valueOf(selectedRow));
+			model.getSpecimenArrayModelMap().put(posTwoDimKey, String.valueOf(selectedCol));
 		}
 	}
 }

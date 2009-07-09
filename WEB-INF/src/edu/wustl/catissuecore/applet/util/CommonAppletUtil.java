@@ -22,9 +22,6 @@ import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.model.BaseTabelModel;
 import edu.wustl.common.util.logger.Logger;
 
-
-
-
 /**
  * <p> This util class is used to specify common applet level operations.
  * Here all applet related util methods should reside.</p>
@@ -33,12 +30,15 @@ import edu.wustl.common.util.logger.Logger;
  */
 public final class CommonAppletUtil
 {
-
-	private static Logger logger = Logger.getCommonLogger(CommonAppletUtil.class);
 	/**
-	 * gets the base applet from a given component
+	 * logger.
+	 */
+	private static Logger logger = Logger.getCommonLogger(CommonAppletUtil.class);
+
+	/**
+	 * gets the base applet from a given component.
 	 * @param component component
-	 * @return applet  
+	 * @return applet
 	 */
 	public static JApplet getBaseApplet(Component component)
 	{
@@ -55,10 +55,9 @@ public final class CommonAppletUtil
 
 	/**
 	 * This method calls given javascript function.
-	 *  
-	 * @param component
-	 * @param functionName
-	 * @param parameters
+	 * @param component : component
+	 * @param functionName : functionName
+	 * @param parameters : parameters
 	 */
 	public static void callJavaScriptFunction(Component component, String functionName,
 			Object[] parameters)
@@ -71,39 +70,39 @@ public final class CommonAppletUtil
 			jsObject.call(functionName, parameters);
 		}
 	}
-	
-    /**
-     * Checks that the input String contains only numeric digits.
-     * @param numString The string whose characters are to be checked.
-     * @return Returns false if the String contains any alphabet else returns true. 
-     * */
-    public static boolean isDoubleNumeric(String numString)
-    {
-        try
-        {
-            double doubleValue = Double.parseDouble(numString);
-            if (doubleValue <= 0)
-            {
-                return false;
-            }
-            
-            return true;
-        }
-        catch(NumberFormatException exp)
-        {
-        	logger.debug(exp.getMessage(), exp);
-            return false;
-        }
-    }
 
-    //Mandar : 11Oct06 used to get the model in various handler classes.
 	/**
-	 * This method checks the instance of JTable and its model and then returns the model. 
+	 * Checks that the input String contains only numeric digits.
+	 * @param numString The string whose characters are to be checked.
+	 * @return Returns false if the String contains any alphabet else returns true.
+	 * */
+	public static boolean isDoubleNumeric(String numString)
+	{
+		try
+		{
+			double doubleValue = Double.parseDouble(numString);
+			if (doubleValue <= 0)
+			{
+				return false;
+			}
+
+			return true;
+		}
+		catch (NumberFormatException exp)
+		{
+			logger.debug(exp.getMessage(), exp);
+			return false;
+		}
+	}
+
+	//Mandar : 11Oct06 used to get the model in various handler classes.
+	/**
+	 * This method checks the instance of JTable and its model and then returns the model.
 	 * It is specific to MultipleSpecimen.
-	 * @return MultipleSpecimenTableModel 
+	 * @return MultipleSpecimenTableModel
 	 */
-	/*public static MultipleSpecimenTableModel getMultipleSpecimenTableModel(JTable table) 
-	{	
+	/*public static MultipleSpecimenTableModel getMultipleSpecimenTableModel(JTable table)
+	{
 		if(table != null)
 		{
 			if(table instanceof BaseTable && table.getModel() instanceof MultipleSpecimenTableModel)
@@ -117,66 +116,79 @@ public final class CommonAppletUtil
 
 	/**
 	 * This method checks the instance of JTable and its model and then returns the model.
-	 * @param table base table in applet 
-	 * @return BaseTableModel 
+	 * @param table base table in applet
+	 * @return BaseTableModel
 	 */
-	public static BaseTabelModel getBaseTableModel(JTable table) 
+	public static BaseTabelModel getBaseTableModel(JTable table)
 	{
-		if(table != null)
+		if (table != null)
 		{
-			if(table instanceof BaseTable && table.getModel() instanceof BaseTabelModel)
-				return (BaseTabelModel)table.getModel();
+			if (table instanceof BaseTable && table.getModel() instanceof BaseTabelModel)
+			{
+				return (BaseTabelModel) table.getModel();
+			}
 			else
+			{
 				return null;
+			}
 		}
 		else
+		{
 			return null;
+		}
 	}
-	
-	/*
+
+	/**
 	 * For testing of flow.
+	 * @return boolean
 	 */
 	public static boolean validateCell()
 	{
 		boolean result = true;
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * This method returns an List from int array. 
+	 * This method returns an List from int array.
 	 * @param array int array.
 	 * @return This method returns an List from int array.
 	 */
 	public static List createListFromArray(int[] array)
 	{
 		List list = new ArrayList();
-		if(array != null)
+		if (array != null)
 		{
-			for(int index=0; index<array.length; index++ )
+			for (int index = 0; index < array.length; index++)
 			{
 				list.add(new Integer(array[index]));
 			}
 		}
 		return list;
 	}
-	
-	public static void printArray(int []array)
+	/**
+	 * @param array : array
+	 */
+	public static void printArray(int[] array)
 	{
 		System.out.println("\n------- Printing Array -------\n");
-		for(int i=0;i<array.length;i++)
+		for (int i = 0; i < array.length; i++)
 		{
-			System.out.print("  "+ array[i] );
+			System.out.print("  " + array[i]);
 		}
 		System.out.println("\n-------Printing Array Done ------\n");
 	}
-	
+	/**
+	 * @param row : row
+	 * @param col : col
+	 * @return String
+	 */
 	public static String getDataKey(int row, int col)
 	{
-		return String.valueOf(row)+AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR+String.valueOf(col );	
+		return String.valueOf(row) + AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR
+				+ String.valueOf(col);
 	}
 
-	
 	/**
 	 * This method returns the HashMap of data of selected cells.
 	 * @param table Table to get the selected cells.
@@ -185,8 +197,7 @@ public final class CommonAppletUtil
 	/*public static HashMap getAllDataOnPage(JTable table)
 	{
 		int numberOfColumns = table.getColumnCount();
-		int numberOfRows = table.getRowCount();		
-		
+		int numberOfRows = table.getRowCount();
 		HashMap map = new HashMap();
 		for(int rowIndex=1;rowIndex<AppletConstants.SPECIMEN_COMMENTS_ROW_NO; rowIndex++  )
 		{
@@ -194,13 +205,15 @@ public final class CommonAppletUtil
 			{
 				String key = CommonAppletUtil.getDataKey(rowIndex, columnIndex);
 				//commented to check the values from cell editor
-//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+	//				Object value = table.getValueAt(selectedRows[rowIndex],
+	 * selectedColumns[columnIndex] );
 				//--------
 				TableColumnModel columnModel = table.getColumnModel();
-				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(columnIndex).getCellEditor();
-				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,rowIndex,columnIndex));
+				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.
+				getColumn(columnIndex).getCellEditor();
+				JComponent component = ((JComponent)scm.
+				getTableCellEditorComponent(table,null,true,rowIndex,columnIndex));
 				Object value =scm.getCellEditorValue();
-				
 				getMultipleSpecimenTableModel(table).setValueAt(value,rowIndex,columnIndex);
 				// -------
 				map.put(key,value );
@@ -218,23 +231,27 @@ public final class CommonAppletUtil
 	/*public static HashMap getSelectedData(JTable table)
 	{
 		int[] selectedColumns = table.getSelectedColumns();
-		int[] selectedRows = table.getSelectedRows();		
+		int[] selectedRows = table.getSelectedRows();
 		System.out.println("\n/////////// inside getSelectedData ///////////////////\n");
 		HashMap map = new HashMap();
 		for(int rowIndex=0;rowIndex<selectedRows.length; rowIndex++  )
 		{
 			for(int columnIndex=0; columnIndex<selectedColumns.length; columnIndex++)
 			{
-				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
+				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex],
+				 selectedColumns[columnIndex]);
 				//commented to check the values from cell editor
-//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+	//				Object value = table.getValueAt(selectedRows[rowIndex],
+	 * selectedColumns[columnIndex] );
 				//--------
 				TableColumnModel columnModel = table.getColumnModel();
-				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumns[columnIndex]).getCellEditor();
-				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
+				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.
+				getColumn(selectedColumns[columnIndex]).getCellEditor();
+				JComponent component = ((JComponent)scm.getTableCellEditorComponent(
+				table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
 				Object value =scm.getCellEditorValue();
-				
-				getMultipleSpecimenTableModel(table).setValueAt(value,selectedRows[rowIndex],selectedColumns[columnIndex]);
+				getMultipleSpecimenTableModel(table).setValueAt(value,
+				selectedRows[rowIndex],selectedColumns[columnIndex]);
 				// -------
 				map.put(key,value );
 			}
@@ -243,12 +260,19 @@ public final class CommonAppletUtil
 		System.out.println(map);
 		return map;
 	}*/
-
+	/**
+	 * @return boolean
+	 * @param obj : obj
+	 */
 	public static boolean isNull(Object obj)
 	{
-		if(obj == null)
+		if (obj == null)
+		{
 			return true;
+		}
 		else
+		{
 			return false;
+		}
 	}
 }
