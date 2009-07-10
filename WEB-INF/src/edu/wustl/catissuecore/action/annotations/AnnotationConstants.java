@@ -21,17 +21,18 @@ package edu.wustl.catissuecore.action.annotations;
  */
 public class AnnotationConstants
 {
-/**
- * selectedStaticEntityId.
- */
+
+	/**
+	 * selectedStaticEntityId.
+	 */
 	public static final String SELECTED_STATIC_ENTITYID = "selectedStaticEntityId";
 	/**
 	 * selectedStaticEntityRecordId.
 	 */
 	public static final String SELECTED_STATIC_ENTITY_RECORDID = "selectedStaticEntityRecordId";
-/**
- * selectedStaticRecordId.
- */
+	/**
+	 * selectedStaticRecordId.
+	 */
 	public static final String SELECTED_STATIC_RECORDID = "selectedStaticRecordId";
 	/**
 	 * typeId.
@@ -112,13 +113,11 @@ public class AnnotationConstants
 	/**
 	 * ENTITY_NAME_SPECIMEN_COLLN_GROUP.
 	 */
-	public static final String ENTITY_NAME_SPECIMEN_COLLN_GROUP =
-		"edu.wustl.catissuecore.domain.SpecimenCollectionGroup";
+	public static final String ENTITY_NAME_SPECIMEN_COLLN_GROUP = "edu.wustl.catissuecore.domain.SpecimenCollectionGroup";
 	/**
 	 * ENTITY_NAME_COLLECTION_PROTOCOL.
 	 */
-	public static final String ENTITY_NAME_COLLECTION_PROTOCOL =
-		"edu.wustl.catissuecore.domain.CollectionProtocol";
+	public static final String ENTITY_NAME_COLLECTION_PROTOCOL = "edu.wustl.catissuecore.domain.CollectionProtocol";
 
 	/**
 	 * PARTICIPANT.
@@ -134,9 +133,9 @@ public class AnnotationConstants
 	public static final String SPECIMEN_COLLN_GROUP = "Specimen Collection Group";
 	// public static final String COLLECTION_PROTOCOL_REGISTRATION =
 	// "Collection Protocol Registration";
-/**
- * REQST_PARAM_ENTITY_ID.
- */
+	/**
+	 * REQST_PARAM_ENTITY_ID.
+	 */
 	public static final String REQST_PARAM_ENTITY_ID = "entityId";
 	/**
 	 * REQST_PARAM_ENTITY_RECORD_ID.

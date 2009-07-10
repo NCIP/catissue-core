@@ -37,13 +37,13 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	 * .getCommonLogger(DisplayAnnotationDataEntryPageAction.class);
 	 */
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action
-	 * .ActionMapping, org.apache.struts.action.ActionForm,
-	 * javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse)
+	/**
+	 * @param mapping - mapping
+	 * @param form - ActionForm
+	 * @param request - HttpServletRequest object
+	 * @param response - HttpServletResponse
+	 * @return ActionForward
+	 * @throws Exception - Exception
 	 */
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -63,20 +63,20 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		request.setAttribute("entityId" , request.getParameter("entityId"));
-		request.setAttribute("entityRecordId" , request.getParameter("entityRecordId"));
-		request.setAttribute(Constants.ID , request.getParameter(Constants.ID));
-		request.setAttribute("staticEntityName" , request.getParameter("staticEntityName"));
+		request.setAttribute( "entityId", request.getParameter( "entityId" ) );
+		request.setAttribute( "entityRecordId", request.getParameter( "entityRecordId" ) );
+		request.setAttribute( Constants.ID, request.getParameter( Constants.ID ) );
+		request.setAttribute( "staticEntityName", request.getParameter( "staticEntityName" ) );
 
-		SessionDataBean sessionDataBean = getSessionData(request);
+		final SessionDataBean sessionDataBean = this.getSessionData( request );
 
 		List cpIdsList = new ArrayList();
 		boolean matchingParticipantCase = false;
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(request
-				.getParameter("staticEntityName") , Long.valueOf(request
-				.getParameter("entityRecordId")) , sessionDataBean);
+		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList( request
+				.getParameter( "staticEntityName" ), Long.valueOf( request
+				.getParameter( "entityRecordId" ) ), sessionDataBean );
 		if (cpIdsList.size() > 1
-				&& Participant.class.getName().equals(request.getParameter("staticEntityName")))
+				&& Participant.class.getName().equals( request.getParameter( "staticEntityName" ) ))
 		{
 			matchingParticipantCase = true;
 		}
@@ -84,30 +84,29 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		{
 			if (cpIdsList.size() > 1)
 			{
-				cpIdsList.remove(1);
+				cpIdsList.remove( 1 );
 			}
 		}
 
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-				sessionDataBean.getUserName());
-		StringBuffer sb = new StringBuffer();
+		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+				sessionDataBean.getUserName() );
+		final StringBuffer sb = new StringBuffer();
 		boolean hasPrivilege = false;
-		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
+		sb.append( Constants.COLLECTION_PROTOCOL_CLASS_NAME ).append( "_" );
 		if (!sessionDataBean.isAdmin())
 		{
-			for (Object cpId : cpIdsList)
+			for (final Object cpId : cpIdsList)
 			{
-				hasPrivilege = ( ( privilegeCache.hasPrivilege(sb.toString() + cpId.toString() ,
-						Permissions.REGISTRATION) ) ||
-						( privilegeCache.hasPrivilege(sb.toString()
-						+ cpId.toString() , Permissions.SPECIMEN_PROCESSING) ) );
+				hasPrivilege = ( ( privilegeCache.hasPrivilege( sb.toString() + cpId.toString(),
+						Permissions.REGISTRATION ) ) || ( privilegeCache.hasPrivilege( sb
+						.toString()
+						+ cpId.toString(), Permissions.SPECIMEN_PROCESSING ) ) );
 
 				if (!hasPrivilege)
 				{
 					hasPrivilege = AppUtility.checkForAllCurrentAndFutureCPs(
-							Permissions.REGISTRATION + ","
-							+ Permissions.SPECIMEN_PROCESSING ,
-							sessionDataBean , cpId.toString());
+							Permissions.REGISTRATION + "," + Permissions.SPECIMEN_PROCESSING,
+							sessionDataBean, cpId.toString() );
 				}
 
 				if (matchingParticipantCase && hasPrivilege)
@@ -117,18 +116,18 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 			}
 			if (!hasPrivilege)
 			{
-				ActionErrors errors = new ActionErrors();
-				ActionError error = new ActionError("access.view.action.denied");
-				errors.add(ActionErrors.GLOBAL_ERROR , error);
-				saveErrors(request , errors);
-				return mapping.findForward(Constants.ACCESS_DENIED);
+				final ActionErrors errors = new ActionErrors();
+				final ActionError error = new ActionError( "access.view.action.denied" );
+				errors.add( ActionErrors.GLOBAL_ERROR, error );
+				this.saveErrors( request, errors );
+				return mapping.findForward( Constants.ACCESS_DENIED );
 				// throw new DAOException(
 				// "Access denied ! User does not have privilege to view/edit this information."
 				// );
 			}
 		}
 
-		return mapping.findForward(request.getParameter("pageOf"));
+		return mapping.findForward( request.getParameter( "pageOf" ) );
 	}
 
 	/**
