@@ -33,246 +33,300 @@ import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-
-public class ConceptCoder 
+/**
+ * @author janhavi_hasabnis
+ *
+ */
+public class ConceptCoder
 {
-	private transient Logger logger = Logger.getCommonLogger(ConceptCoder.class);
-	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport, CaTIES_ExporterPR exporterPR, TiesPipe tiesPipe)throws SQLException
+
+	private transient final Logger logger = Logger.getCommonLogger( ConceptCoder.class );
+    /**
+     * @param deidReport - deidReport
+     * @param exporterPRParam - exporterPRParam
+     * @param tiesPipeParam - tiesPipeParam
+     * @throws SQLException - SQLException
+     */
+	public ConceptCoder(DeidentifiedSurgicalPathologyReport deidReport,
+			CaTIES_ExporterPR exporterPRParam, TiesPipe tiesPipeParam) throws SQLException
 	{
-		this.deidPathologyReport=deidReport;
-		this.currentReportText="";
-		if(this.deidPathologyReport.getTextContent()!=null)
+		this.deidPathologyReport = deidReport;
+		this.currentReportText = "";
+		if (this.deidPathologyReport.getTextContent() != null)
 		{
-			TextContent textContent=(TextContent)CaCoreAPIService.getObject(TextContent.class, Constants.SYSTEM_IDENTIFIER,this.deidPathologyReport.getTextContent().getId());
-			this.currentReportText= textContent.getData();
+			final TextContent textContent = (TextContent) CaCoreAPIService.getObject(
+					TextContent.class, Constants.SYSTEM_IDENTIFIER, this.deidPathologyReport
+							.getTextContent().getId() );
+			this.currentReportText = textContent.getData();
 		}
-		this.exporterPR=exporterPR;
-		this.tiesPipe=tiesPipe;
+		this.exporterPR = exporterPRParam;
+		this.tiesPipe = tiesPipeParam;
 	}
-	
-	public void process() throws Exception  // change name to process if this class need not to be a thread, then do not catch exception here, throw it upward 
+/**
+ * @throws Exception - Exception
+ */
+	public void process() throws Exception // change name to process if this class need not to be a thread, then do not catch exception here, throw it upward
 	{
-		Long startTime=new Date().getTime();
+		final Long startTime = new Date().getTime();
 		try
 		{
-			logger.info("Inside Concept coder");
-			processPathologyReport();
-			logger.info("Report is Concept coded by caties");
-			logger.info("Updating Report");
-			updateReport();
-			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
+			this.logger.info( "Inside Concept coder" );
+			this.processPathologyReport();
+			this.logger.info( "Report is Concept coded by caties" );
+			this.logger.info( "Updating Report" );
+			this.updateReport();
+			this.deidPathologyReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
+					.updateObject( this.deidPathologyReport );
 		}
-		catch (Exception ex) 
+		catch (final Exception ex)
 		{
-			Long endTime=new Date().getTime();
-			logger.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
-			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
-			this.deidPathologyReport=(DeidentifiedSurgicalPathologyReport)CaCoreAPIService.updateObject(this.deidPathologyReport);
-			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage()+","+(endTime-startTime));
+			final Long endTime = new Date().getTime();
+			this.logger.error( "Concept coding process failed for report id:"
+					+ this.deidPathologyReport.getId() + " " + ex.getMessage() );
+			this.deidPathologyReport.setReportStatus( CaTIESConstants.CC_PROCESS_FAILED );
+			this.deidPathologyReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
+					.updateObject( this.deidPathologyReport );
+			CSVLogger.info( CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString() + ","
+					+ this.deidPathologyReport.getId() + "," + CaTIESConstants.CC_PROCESS_FAILED
+					+ "," + ex.getMessage() + "," + ( endTime - startTime ) );
 		}
-		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
+		if (!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(
+				CaTIESConstants.CC_PROCESS_FAILED ))
 		{
-			Long endTime=new Date().getTime();
-			logger.info("Report is updated");
-			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully,"+(endTime-startTime));
+			final Long endTime = new Date().getTime();
+			this.logger.info( "Report is updated" );
+			CSVLogger.info( CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString() + ","
+					+ this.deidPathologyReport.getId() + "," + CaTIESConstants.CONCEPT_CODED + ","
+					+ "Report Concept Coded successfully," + ( endTime - startTime ) );
 		}
-		this.deidPathologyReport=null;
-		logger.info("Report is updated");
+		this.deidPathologyReport = null;
+		this.logger.info( "Report is updated" );
 	}
-	
+    /**
+     * @throws Exception - Exception
+     */
 	private void processPathologyReport() throws Exception
 	{
-		this.tiesResponse = executeTiesPipeDirect();
-		disassembleTiesResponse();
-		extractCodesFromChirps();	
+		this.tiesResponse = this.executeTiesPipeDirect();
+		this.disassembleTiesResponse();
+		this.extractCodesFromChirps();
 	}
 
 	/**
 	 * Method executeTiesPipeDirect.
-	 * 
 	 * @return String
-	 * @throws Exception
+	 * @throws Exception - Exception
 	 */
-	private String executeTiesPipeDirect() throws Exception 
+	private String executeTiesPipeDirect() throws Exception
 	{
-		org.jdom.Document requestDocument = new org.jdom.Document(new Element("Report"));
-		requestDocument.getRootElement().setAttribute("name", this.minOID);
-		CDATA cdata = new CDATA(this.currentReportText);
-		Element bodyElement = new Element("Body");
-		bodyElement.addContent(cdata);
-		requestDocument.getRootElement().addContent(bodyElement);
-		String requestAsString = CaTIES_JDomUtils.convertDocumentToString(requestDocument, null);
-		String tiesResponse = this.tiesPipe.processMessage(requestAsString);
-		logger.info("Got ties respose!");
-		logger.debug("Got ties response of length " + tiesResponse.length());
+		final org.jdom.Document requestDocument = new org.jdom.Document( new Element( "Report" ) );
+		requestDocument.getRootElement().setAttribute( "name", this.minOID );
+		final CDATA cdata = new CDATA( this.currentReportText );
+		final Element bodyElement = new Element( "Body" );
+		bodyElement.addContent( cdata );
+		requestDocument.getRootElement().addContent( bodyElement );
+		final String requestAsString = CaTIES_JDomUtils.convertDocumentToString( requestDocument,
+				null );
+		final String tiesResponse = this.tiesPipe.processMessage( requestAsString );
+		this.logger.info( "Got ties respose!" );
+		this.logger.debug( "Got ties response of length " + tiesResponse.length() );
 		return tiesResponse;
 	}
 
-	 /**
-	 * Method updateReport
-	 */
-	 private void updateReport() throws Exception
-	 {
-		logger.info("*********************Inside update report***************");
-		 try 
-		 {
-			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_BI_CONTENT)).equalsIgnoreCase("true"))
-			 {
-				 BinaryContent binaryContent=new BinaryContent();
-				 binaryContent.setData(this.gateXML);
-				 binaryContent.setSurgicalPathologyReport(this.deidPathologyReport);
-				 this.deidPathologyReport.setBinaryContent(binaryContent);
-			 }
-			 if((CaTIESProperties.getValue(CaTIESConstants.CATIES_SAVE_XML_CONTENT)).equalsIgnoreCase("true"))
-			 {
-				 XMLContent xmlContent=new XMLContent();
-				 xmlContent.setData(this.chirpsXML);
-				 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
-				 this.deidPathologyReport.setXmlContent(xmlContent);
-			 }
-			 this.deidPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
+	/**
+	* Method updateReport
+	* @throws Exception - Exception
+	*/
+	private void updateReport() throws Exception
+	{
+		this.logger.info( "*********************Inside update report***************" );
+		try
+		{
+			if (( CaTIESProperties.getValue( CaTIESConstants.CATIES_SAVE_BI_CONTENT ) )
+					.equalsIgnoreCase( "true" ))
+			{
+				final BinaryContent binaryContent = new BinaryContent();
+				binaryContent.setData( this.gateXML );
+				binaryContent.setSurgicalPathologyReport( this.deidPathologyReport );
+				this.deidPathologyReport.setBinaryContent( binaryContent );
+			}
+			if (( CaTIESProperties.getValue( CaTIESConstants.CATIES_SAVE_XML_CONTENT ) )
+					.equalsIgnoreCase( "true" ))
+			{
+				final XMLContent xmlContent = new XMLContent();
+				xmlContent.setData( this.chirpsXML );
+				xmlContent.setSurgicalPathologyReport( this.deidPathologyReport );
+				this.deidPathologyReport.setXmlContent( xmlContent );
+			}
+			this.deidPathologyReport.setReportStatus( CaTIESConstants.CONCEPT_CODED );
 		}
-		 catch (Exception ex) 
-		 {
-			 logger.error("Error occured while updating deidentified pathology report");
-			 throw ex;
-		 }
-	 }
+		catch (final Exception ex)
+		{
+			this.logger.error( "Error occured while updating deidentified pathology report" );
+			throw ex;
+		}
+	}
 
 	/**
 	 * Method extractGateXmlAndChirps.
+	 * @throws Exception - Exception
 	 */
 	private void disassembleTiesResponse() throws Exception
 	{
 		//
 		// Extract Gate XML and CHIRPS
 		//
-		try 
+		try
 		{
-			logger.info("Extracting GATE XML and chirps");
-			SAXBuilder builder = new SAXBuilder();
-			byte[] byteArray = this.tiesResponse.getBytes();
-			if(this.tiesResponse.equalsIgnoreCase(CaTIESConstants.ERROR_GATE))
+			this.logger.info( "Extracting GATE XML and chirps" );
+			final SAXBuilder builder = new SAXBuilder();
+			final byte[] byteArray = this.tiesResponse.getBytes();
+			if (this.tiesResponse.equalsIgnoreCase( CaTIESConstants.ERROR_GATE ))
 			{
-				throw new Exception("Error with GATE library! Unable to connect");
+				throw new Exception( "Error with GATE library! Unable to connect" );
 			}
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
-			org.jdom.Document responseDocument = builder.build(byteArrayInputStream);
-			Element responseRootElement = responseDocument.getRootElement();
+			final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream( byteArray );
+			final org.jdom.Document responseDocument = builder.build( byteArrayInputStream );
+			final Element responseRootElement = responseDocument.getRootElement();
 
-			Element reportCodesElement = responseRootElement.getChild(CaTIESConstants.TAG_REPORTCODES); //"ReportCodes");
+			final Element reportCodesElement = responseRootElement
+					.getChild( CaTIESConstants.TAG_REPORTCODES ); //"ReportCodes");
 			this.reportCodesAccumulator = new CaTIES_ConceptAccumulator();
-			this.reportCodesAccumulator.xmlDeSerialize(reportCodesElement);
+			this.reportCodesAccumulator.xmlDeSerialize( reportCodesElement );
 
-			Collection<ConceptReferent> conceptReferentCollection=xmlDeSerializeLocal(reportCodesElement);
-			this.deidPathologyReport.setConceptReferentCollection(conceptReferentCollection);
-			
-			Element gateXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_GATEXML);  //"GateXML");
-			gateXMLElement = gateXMLElement.getChild(CaTIESConstants.TAG_GATEDOCUMENT);  //"GateDocument");
-			Element chirpsXMLElement = (Element) responseRootElement.getChild(CaTIESConstants.TAG_CHIRPSXML);  //"ChirpsXML");
-			chirpsXMLElement = chirpsXMLElement.getChild(CaTIESConstants.TAG_ENVELOPE);  //"Envelope");
-			Document gateXMLDocument = new Document((Element) gateXMLElement.clone());
-			Document chirpsXMLDocument = new Document((Element) chirpsXMLElement.clone());
-			this.gateXML = CaTIES_JDomUtils.convertDocumentToString(gateXMLDocument, null);
-			this.chirpsXML = CaTIES_JDomUtils.convertDocumentToString(chirpsXMLDocument, null);
-			logger.debug("Got gateXML of length " + this.gateXML.length());
-			logger.debug("Got chirpsXML of length " + this.chirpsXML.length());
+			final Collection < ConceptReferent > conceptReferentCollection = this
+					.xmlDeSerializeLocal( reportCodesElement );
+			this.deidPathologyReport.setConceptReferentCollection( conceptReferentCollection );
+
+			Element gateXMLElement = responseRootElement.getChild( CaTIESConstants.TAG_GATEXML ); //"GateXML");
+			gateXMLElement = gateXMLElement.getChild( CaTIESConstants.TAG_GATEDOCUMENT ); //"GateDocument");
+			Element chirpsXMLElement = responseRootElement.getChild( CaTIESConstants.TAG_CHIRPSXML ); //"ChirpsXML");
+			chirpsXMLElement = chirpsXMLElement.getChild( CaTIESConstants.TAG_ENVELOPE ); //"Envelope");
+			final Document gateXMLDocument = new Document( (Element) gateXMLElement.clone() );
+			final Document chirpsXMLDocument = new Document( (Element) chirpsXMLElement.clone() );
+			this.gateXML = CaTIES_JDomUtils.convertDocumentToString( gateXMLDocument, null );
+			this.chirpsXML = CaTIES_JDomUtils.convertDocumentToString( chirpsXMLDocument, null );
+			this.logger.debug( "Got gateXML of length " + this.gateXML.length() );
+			this.logger.debug( "Got chirpsXML of length " + this.chirpsXML.length() );
 		}
-		catch(JDOMParseException ex)
+		catch (final JDOMParseException ex)
 		{
-			logger.error("Error in disassembleTiesResponse()");
-			logger.error("Error in parsing TIES response. Not in XML format"+ex);
-			throw new Exception("Error in parsing TIES response. Not in XML format");
+			this.logger.error( "Error in disassembleTiesResponse()" );
+			this.logger.error( "Error in parsing TIES response. Not in XML format" + ex );
+			throw new Exception( "Error in parsing TIES response. Not in XML format" );
 		}
-		catch (Exception ex) 
+		catch (final Exception ex)
 		{
-			logger.error("Error in disassembleTiesResponse()");
-			logger.error("Failed to parse the pay load XML."+ex);
+			this.logger.error( "Error in disassembleTiesResponse()" );
+			this.logger.error( "Failed to parse the pay load XML." + ex );
 			this.gateXML = "";
 			this.chirpsXML = "";
-			throw new Exception("Failed to parse the pay load XML");
+			throw new Exception( "Failed to parse the pay load XML" );
 		}
 	}
 
 	/**
 	 * Method extractCodesFromChirps.
 	 */
-	private void extractCodesFromChirps() 
+	private void extractCodesFromChirps()
 	{
 		//
 		// Extract the codes from the CHIRPS
 		//
-		this.exporterPR.setCHIRPsDocument(chirpsXML);
+		this.exporterPR.setCHIRPsDocument( this.chirpsXML );
 		this.exporterPR.execute();
 		this.theCodes = this.exporterPR.getCodesAsString();
-		logger.debug("Got codes of length " + this.theCodes.length());
+		this.logger.debug( "Got codes of length " + this.theCodes.length() );
 	}
-	
-	public Collection<ConceptReferent> xmlDeSerializeLocal(Element conceptSetElement) throws Exception
+/**
+ * @param conceptSetElement - conceptSetElement
+ * @return Collection of ConceptReferent
+ * @throws Exception - Exception
+ */
+	public Collection < ConceptReferent > xmlDeSerializeLocal(Element conceptSetElement)
+			throws Exception
 	{
-		Collection indexedConceptElements = conceptSetElement.getChildren(CaTIESConstants.TAG_INDEXED_CONCEPT);  //"IndexedConcept") ;
-		Map<String, Concept> conceptCodeMap=new HashMap<String, Concept>();
-		Map<String, ConceptReferentClassification> conceptReferrentClassicificationMap=new HashMap<String, ConceptReferentClassification>();
-		Collection<ConceptReferent> conceptReferentSet=new HashSet<ConceptReferent>();
+		final Collection indexedConceptElements = conceptSetElement
+				.getChildren( CaTIESConstants.TAG_INDEXED_CONCEPT ); //"IndexedConcept") ;
+		final Map < String, Concept > conceptCodeMap = new HashMap < String, Concept >();
+		final Map < String, ConceptReferentClassification > conceptReferrentClassicificationMap = new HashMap < String, ConceptReferentClassification >();
+		final Collection < ConceptReferent > conceptReferentSet = new HashSet < ConceptReferent >();
 		try
 		{
-			for (Iterator indexedConceptIterator = indexedConceptElements.iterator(); indexedConceptIterator.hasNext();) 
+			for (final Iterator indexedConceptIterator = indexedConceptElements.iterator(); indexedConceptIterator
+					.hasNext();)
 			{
 				// IndexedConcept
-				Element indexedConceptElement = (Element)indexedConceptIterator.next();
-				
+				final Element indexedConceptElement = (Element) indexedConceptIterator.next();
+
 				// ConceptReferent
-				Element conceptReferentElement = indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT_REFERENT);  //"ConceptReferent") ;
-				ConceptReferent conceptReferentToAdd = new ConceptReferent() ;
-				conceptReferentToAdd.setEndOffset(new Long(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET)));  //"endOffset")));
-				conceptReferentToAdd.setStartOffset(new Long(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET))); //"startOffset")));
-	//			conceptReferentToAdd.setDocumentFragment(conceptReferentElement.getAttributeValue("documentFragment"));
-			    conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER)));  //"isModifier")));
-			    conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED)));  //"isNegated")));
-			    conceptReferentToAdd.setDeIdentifiedSurgicalPathologyReport(this.deidPathologyReport);
-			    
-			    // Concept
-			    Element conceptElement = (Element) indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT);  //"Concept");
-			    Concept conceptToAdd = new Concept();
-				conceptToAdd.setConceptUniqueIdentifier(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_CUI));  //"cui"));
-				conceptToAdd.setName(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));  //"name")) ;
-				SemanticType semanticType=new SemanticType();
-				semanticType.setLabel(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_SEMANTICTYPE));  //"semanticType"));
-				conceptToAdd.setSemanticType(semanticType);
-				conceptToAdd.setConceptReferentCollection(new HashSet());
-				if(conceptCodeMap.get(conceptToAdd.getConceptUniqueIdentifier())!=null)
+				final Element conceptReferentElement = indexedConceptElement
+						.getChild( CaTIESConstants.TAG_CONCEPT_REFERENT ); //"ConceptReferent") ;
+				final ConceptReferent conceptReferentToAdd = new ConceptReferent();
+				conceptReferentToAdd.setEndOffset( new Long( conceptReferentElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET ) ) ); //"endOffset")));
+				conceptReferentToAdd.setStartOffset( new Long( conceptReferentElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET ) ) ); //"startOffset")));
+				//			conceptReferentToAdd.setDocumentFragment(conceptReferentElement.getAttributeValue("documentFragment"));
+				conceptReferentToAdd.setIsModifier( new Boolean( conceptReferentElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER ) ) ); //"isModifier")));
+				conceptReferentToAdd.setIsNegated( new Boolean( conceptReferentElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED ) ) ); //"isNegated")));
+				conceptReferentToAdd
+						.setDeIdentifiedSurgicalPathologyReport( this.deidPathologyReport );
+
+				// Concept
+				final Element conceptElement = indexedConceptElement
+						.getChild( CaTIESConstants.TAG_CONCEPT ); //"Concept");
+				Concept conceptToAdd = new Concept();
+				conceptToAdd.setConceptUniqueIdentifier( conceptElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_CUI ) ); //"cui"));
+				conceptToAdd.setName( conceptElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_NAME ) ); //"name")) ;
+				final SemanticType semanticType = new SemanticType();
+				semanticType.setLabel( conceptElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_SEMANTICTYPE ) ); //"semanticType"));
+				conceptToAdd.setSemanticType( semanticType );
+				conceptToAdd.setConceptReferentCollection( new HashSet() );
+				if (conceptCodeMap.get( conceptToAdd.getConceptUniqueIdentifier() ) != null)
 				{
-					conceptToAdd=conceptCodeMap.get(conceptToAdd.getConceptUniqueIdentifier());		
-				}	
-				(conceptToAdd.getConceptReferentCollection()).add(conceptReferentToAdd);
-				conceptCodeMap.put(conceptToAdd.getConceptUniqueIdentifier().toUpperCase(),conceptToAdd);
-				
+					conceptToAdd = conceptCodeMap.get( conceptToAdd.getConceptUniqueIdentifier() );
+				}
+				( conceptToAdd.getConceptReferentCollection() ).add( conceptReferentToAdd );
+				conceptCodeMap.put( conceptToAdd.getConceptUniqueIdentifier().toUpperCase(),
+						conceptToAdd );
+
 				// ConceptClassification
-				Element conceptClassificationElement = (Element) indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT_CLASSIFICATION);  //"ConceptClassification");
+				final Element conceptClassificationElement = indexedConceptElement
+						.getChild( CaTIESConstants.TAG_CONCEPT_CLASSIFICATION ); //"ConceptClassification");
 				ConceptReferentClassification conceptClassificationToAdd = new ConceptReferentClassification();
-			    conceptClassificationToAdd.setName(conceptClassificationElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));  //"name"));
-			    conceptClassificationToAdd.setConceptReferentCollection(new HashSet());
-			    if(conceptReferrentClassicificationMap.get(conceptClassificationToAdd.getName())!=null)
+				conceptClassificationToAdd.setName( conceptClassificationElement
+						.getAttributeValue( CaTIESConstants.TAG_ATTRIBUTE_NAME ) ); //"name"));
+				conceptClassificationToAdd.setConceptReferentCollection( new HashSet() );
+				if (conceptReferrentClassicificationMap.get( conceptClassificationToAdd.getName() ) != null)
 				{
-			    	conceptClassificationToAdd=conceptReferrentClassicificationMap.get(conceptClassificationToAdd.getName());		
-				}	
-				(conceptClassificationToAdd.getConceptReferentCollection()).add(conceptReferentToAdd);
-				conceptReferrentClassicificationMap.put(conceptClassificationToAdd.getName().toUpperCase(),conceptClassificationToAdd);
-				
-				conceptReferentToAdd.setConcept(conceptToAdd);
-				conceptReferentToAdd.setConceptReferentClassification(conceptClassificationToAdd);
-				conceptReferentSet.add(conceptReferentToAdd);
+					conceptClassificationToAdd = conceptReferrentClassicificationMap
+							.get( conceptClassificationToAdd.getName() );
+				}
+				( conceptClassificationToAdd.getConceptReferentCollection() )
+						.add( conceptReferentToAdd );
+				conceptReferrentClassicificationMap.put( conceptClassificationToAdd.getName()
+						.toUpperCase(), conceptClassificationToAdd );
+
+				conceptReferentToAdd.setConcept( conceptToAdd );
+				conceptReferentToAdd.setConceptReferentClassification( conceptClassificationToAdd );
+				conceptReferentSet.add( conceptReferentToAdd );
 			}
 		}
-		catch (Exception ex) 
+		catch (final Exception ex)
 		{
 			ex.printStackTrace();
-			logger.error("Exception in deserialize"+ex);
+			this.logger.error( "Exception in deserialize" + ex );
 			throw ex;
 		}
 		return conceptReferentSet;
 	}
-	
+
 	/**
 	 * Field tiesPipe.
 	 */
@@ -301,7 +355,7 @@ public class ConceptCoder
 	/**
 	 * Field minOID.
 	 */
-	private String minOID = "";
+	private final String minOID = "";
 
 	/**
 	 * Field currentReportText.
