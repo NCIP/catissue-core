@@ -29,10 +29,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class BulkOperationSubmitAction extends BaseAction
 {
-/**
- * logger
- */
-	private transient Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
+
+	/**
+	 * logger
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
 	/**
 	 * @param mapping
 	 *            object of ActionMapping
@@ -52,14 +53,14 @@ public class BulkOperationSubmitAction extends BaseAction
 	{
 
 		// Get Specimen Ids for which bulk events should be added
-		BulkEventOperationsForm bulkEventOperationsForm = (BulkEventOperationsForm) form;
+		final BulkEventOperationsForm bulkEventOperationsForm = (BulkEventOperationsForm) form;
 		String target = bulkEventOperationsForm.getOperation();
 		if (target == null)
 		{
 			target = Constants.SUCCESS;
 		}
 
-		List < String > specimenIds = new ArrayList < String >(bulkEventOperationsForm
+		final List<String> specimenIds = new ArrayList<String>(bulkEventOperationsForm
 				.getSpecimenIds().keySet());
 		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 
@@ -68,11 +69,11 @@ public class BulkOperationSubmitAction extends BaseAction
 			if (specimenIds != null && specimenIds.size() > 0)
 			{
 				// Insert bulk events
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
 						.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
-				bizlogic.insertEvents(bulkEventOperationsForm.getOperation(),
-						getSessionData(request), specimenIds, bulkEventOperationsForm.getUserId(),
+				bizlogic.insertEvents(bulkEventOperationsForm.getOperation(), this
+						.getSessionData(request), specimenIds, bulkEventOperationsForm.getUserId(),
 						bulkEventOperationsForm.getDateOfEvent(), bulkEventOperationsForm
 								.getTimeInHours(), bulkEventOperationsForm.getTimeInMinutes(),
 						bulkEventOperationsForm.getComments(), bulkEventOperationsForm
@@ -82,28 +83,27 @@ public class BulkOperationSubmitAction extends BaseAction
 				ActionErrors errors = null;
 				if (specimenIds != null && specimenIds.size() > 0)
 				{
-					if (bulkEventOperationsForm.getOperation().
-							equals(Constants.BULK_TRANSFERS))
+					if (bulkEventOperationsForm.getOperation().equals(Constants.BULK_TRANSFERS))
 					{
 						messages = new ActionMessages();
-						messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage(
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"bulk.operations.success", "transfer "));
 					}
 					else
 					{
 						messages = new ActionMessages();
-						messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage(
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"bulk.operations.success", "disposal "));
 					}
 				}
 				else
 				{
 					errors = new ActionErrors();
-					errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionError(
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError(
 							"specimen.cart.size.zero"));
 				}
-				saveMessages(request, messages);
-				saveErrors(request, errors);
+				this.saveMessages(request, messages);
+				this.saveErrors(request, errors);
 			}
 		}
 
@@ -126,14 +126,14 @@ public class BulkOperationSubmitAction extends BaseAction
 		 * errors.add(ActionErrors.GLOBAL_ERROR, error); saveErrors(request,
 		 * errors); }
 		 */
-		catch (BizLogicException excp)
+		catch (final BizLogicException excp)
 		{
-			logger.debug(excp.getCustomizedMsg());
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("errors.item", excp.getCustomizedMsg());
+			this.logger.debug(excp.getCustomizedMsg());
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("errors.item", excp.getCustomizedMsg());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
-			logger.error(excp.getCustomizedMsg());
+			this.saveErrors(request, errors);
+			this.logger.error(excp.getCustomizedMsg());
 		}
 
 		return mapping.findForward(target);

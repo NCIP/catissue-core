@@ -26,8 +26,8 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 
 /**
  * @author renuka_bajpai
@@ -55,41 +55,41 @@ public abstract class BulkOperationAction extends SecureAction
 		List specimenIds = (List) request.getAttribute(Constants.SPECIMEN_ID);
 		if (specimenIds == null || specimenIds.size() == 0)
 		{
-			specimenIds = getSpecimenIds(request);
+			specimenIds = this.getSpecimenIds(request);
 		}
 
 		// Set common request parameters for all events
-		setCommonRequestParameters(request, specimenIds);
+		this.setCommonRequestParameters(request, specimenIds);
 
-		BulkEventOperationsForm eventParametersForm = (BulkEventOperationsForm) form;
+		final BulkEventOperationsForm eventParametersForm = (BulkEventOperationsForm) form;
 		// Set operation
-		String operation = (String) request.getAttribute(Constants.OPERATION);
+		final String operation = (String) request.getAttribute(Constants.OPERATION);
 		eventParametersForm.setOperation(operation);
 
 		// Set current user
-		SessionDataBean sessionData = getSessionData(request);
+		final SessionDataBean sessionData = this.getSessionData(request);
 		if (sessionData != null && sessionData.getUserId() != null)
 		{
-			long userId = sessionData.getUserId().longValue();
+			final long userId = sessionData.getUserId().longValue();
 			eventParametersForm.setUserId(userId);
 		}
 		// set the current Date and Time for the event.
-		Calendar cal = Calendar.getInstance();
-		eventParametersForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(),
+		final Calendar cal = Calendar.getInstance();
+		eventParametersForm.setDateOfEvent(CommonUtilities.parseDateToString(cal.getTime(),
 				CommonServiceLocator.getInstance().getDatePattern()));
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 
 		// Set event specific request params
-		setEventSpecificRequestParameters(eventParametersForm, request, specimenIds);
+		this.setEventSpecificRequestParameters(eventParametersForm, request, specimenIds);
 
 		if (specimenIds == null || specimenIds.size() == 0)
 		{
-			ActionErrors errors = new ActionErrors();
+			final ActionErrors errors = new ActionErrors();
 			ActionError error = null;
 			error = new ActionError("specimen.cart.size.zero");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 			return mapping.findForward(Constants.FAILURE);
 		}
 		if (operation != null)
@@ -116,9 +116,10 @@ public abstract class BulkOperationAction extends SecureAction
 		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 
 		// Set User List
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(Constants.ADD);
 		request.setAttribute(Constants.USERLIST, userCollection);
 
 		// Set Specimen Ids
@@ -137,19 +138,19 @@ public abstract class BulkOperationAction extends SecureAction
 
 		if (specimenIds != null && specimenIds.size() > 0)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			SpecimenEventParametersBizLogic bizlogic = (SpecimenEventParametersBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final SpecimenEventParametersBizLogic bizlogic = (SpecimenEventParametersBizLogic) factory
 					.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
 			System.out.println("");
-			List specimenDataList = bizlogic.getSpecimenDataForBulkOperations(eventParametersForm
-					.getOperation(), specimenIds, getSessionData(request));
+			final List specimenDataList = bizlogic.getSpecimenDataForBulkOperations(
+					eventParametersForm.getOperation(), specimenIds, this.getSessionData(request));
 			List specimenRow = null;
 			String specimenId = null;
 			for (int i = 0; i < specimenDataList.size(); i++)
 			{
 				specimenRow = (List) specimenDataList.get(i);
 				specimenId = specimenRow.get(0).toString();
-				fillFormData(eventParametersForm, specimenRow, specimenId, request);
+				this.fillFormData(eventParametersForm, specimenRow, specimenId, request);
 			}
 		}
 	}
@@ -162,12 +163,12 @@ public abstract class BulkOperationAction extends SecureAction
 	private List getSpecimenIds(HttpServletRequest request)
 	{
 		List specimenIds = new ArrayList();
-		QueryShoppingCart cart = (QueryShoppingCart) request.getSession().getAttribute(
+		final QueryShoppingCart cart = (QueryShoppingCart) request.getSession().getAttribute(
 				Constants.QUERY_SHOPPING_CART);
 		if (cart != null)
 		{
-			QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			specimenIds = new ArrayList < String >(bizLogic.getEntityIdsList(cart, Arrays
+			final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Arrays
 					.asList(Constants.specimenNameArray), null));
 			if (specimenIds == null)
 			{
