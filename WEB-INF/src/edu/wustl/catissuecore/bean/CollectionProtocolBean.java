@@ -1,19 +1,22 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Status;
-
-
+/**
+ *  @author janhavi_hasabnis
+ *
+ */
 public class CollectionProtocolBean implements Serializable
 {
+
 	private static final long serialVersionUID = 1L;
-	
-	private Long identifier =null;
-	
+
+	private Long identifier = null;
+
 	private long[] protocolCoordinatorIds;
 
 	private long principalInvestigatorId;
@@ -27,37 +30,38 @@ public class CollectionProtocolBean implements Serializable
 	private String shortTitle;
 
 	private String startDate;
-	
+
 	protected String endDate;
-	
+
 	private String enrollment;
-	
+
 	private long[] siteIds;
-	
+
 	private boolean isParticiapantReg = false;
-	
-	
+    /**
+     * @return - boolean
+     */
 	public boolean isParticiapantReg()
 	{
-		return isParticiapantReg;
+		return this.isParticiapantReg;
 	}
-
-	
-	public void setParticiapantReg(boolean isParticiapantReg)
+    /**
+     * @param isParticiapantRegParam - isParticiapantRegParam
+     */
+	public void setParticiapantReg(boolean isParticiapantRegParam)
 	{
-		this.isParticiapantReg = isParticiapantReg;
+		this.isParticiapantReg = isParticiapantRegParam;
 	}
-
 
 	/**
 	 * whether Aliquote in same container
 	 */
 	protected boolean aliqoutInSameContainer = false;
-	 /**
-     * Activity Status.
-     */
-    protected String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
-	
+	/**
+	* Activity Status.
+	*/
+	protected String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
+
 	/**
 	 * Unsigned Form Url for the Consents
 	 */
@@ -67,7 +71,7 @@ public class CollectionProtocolBean implements Serializable
 	 * Map for Storing Values of Consent Tiers.
 	 */
 	private Map consentValues = new LinkedHashMap();//bug 8905
-	
+
 	/**
 	 * No of Consent Tier
 	 */
@@ -76,198 +80,259 @@ public class CollectionProtocolBean implements Serializable
 	 * CheckBox for consent is checked or not
 	 */
 	private boolean consentWaived = false;
-	
+
 	private String operation = "Add";
-	
+    /**
+     * @return - array of long
+     */
 	public long[] getProtocolCoordinatorIds()
 	{
-		return protocolCoordinatorIds;
+		return this.protocolCoordinatorIds;
 	}
-	
-	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIds)
+    /**
+     * @param protocolCoordinatorIdsParam - protocolCoordinatorIdsParam
+     */
+	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIdsParam)
 	{
-		this.protocolCoordinatorIds = protocolCoordinatorIds;
+		this.protocolCoordinatorIds = protocolCoordinatorIdsParam;
 	}
-	
+    /**
+     * @return - principalInvestigatorId
+     */
 	public long getPrincipalInvestigatorId()
 	{
-		return principalInvestigatorId;
+		return this.principalInvestigatorId;
 	}
-	
-	public void setPrincipalInvestigatorId(long principalInvestigatorId)
+    /**
+     * @param principalInvestigatorIdParam - principalInvestigatorIdParam
+     */
+	public void setPrincipalInvestigatorId(long principalInvestigatorIdParam)
 	{
-		this.principalInvestigatorId = principalInvestigatorId;
+		this.principalInvestigatorId = principalInvestigatorIdParam;
 	}
-	
+    /**
+     * @return - irbID
+     */
 	public String getIrbID()
 	{
-		return irbID;
+		return this.irbID;
 	}
-	
-	public void setIrbID(String irbID)
+    /**
+     * @param irbIDParam - irbIDParam
+     */
+	public void setIrbID(String irbIDParam)
 	{
-		this.irbID = irbID;
+		this.irbID = irbIDParam;
 	}
-	
+    /**
+     * @return - descriptionURL
+     */
 	public String getDescriptionURL()
 	{
-		return descriptionURL;
+		return this.descriptionURL;
 	}
-	
-	public void setDescriptionURL(String descriptionURL)
+    /**
+     * @param descriptionURLParam - descriptionURLParam
+     */
+	public void setDescriptionURL(String descriptionURLParam)
 	{
-		this.descriptionURL = descriptionURL;
+		this.descriptionURL = descriptionURLParam;
 	}
-	
+    /**
+     * @return - title
+     */
 	public String getTitle()
 	{
-		return title;
+		return this.title;
 	}
-	
-	public void setTitle(String title)
+    /**
+     * @param titleParam - titleParam
+     */
+	public void setTitle(String titleParam)
 	{
-		this.title = title;
+		this.title = titleParam;
 	}
-	
+    /**
+     * @return - shortTitle
+     */
 	public String getShortTitle()
 	{
-		return shortTitle;
+		return this.shortTitle;
 	}
-	
-	public void setShortTitle(String shortTitle)
+    /**
+     * @param shortTitleParam - shortTitleParam
+     */
+	public void setShortTitle(String shortTitleParam)
 	{
-		this.shortTitle = shortTitle;
+		this.shortTitle = shortTitleParam;
 	}
-	
+    /**
+     * @return - startDate
+     */
 	public String getStartDate()
 	{
-		return startDate;
+		return this.startDate;
 	}
-	
-	public void setStartDate(String startDate)
+    /**
+     * @param startDateParam - startDateParam
+     */
+	public void setStartDate(String startDateParam)
 	{
-		this.startDate = startDate;
+		this.startDate = startDateParam;
 	}
-	
+    /**
+     * @return - enrollment
+     */
 	public String getEnrollment()
 	{
-		return enrollment;
+		return this.enrollment;
 	}
-	
-	public void setEnrollment(String enrollment)
+    /**
+     * @param enrollmentParam -enrollmentParam
+     */
+	public void setEnrollment(String enrollmentParam)
 	{
-		this.enrollment = enrollment;
+		this.enrollment = enrollmentParam;
 	}
-	
+    /**
+     * @return - unsignedConsentURLName
+     */
 	public String getUnsignedConsentURLName()
 	{
-		return unsignedConsentURLName;
+		return this.unsignedConsentURLName;
 	}
-	
-	public void setUnsignedConsentURLName(String unsignedConsentURLName)
+    /**
+     * @param unsignedConsentURLNameParam - unsignedConsentURLNameParam
+     */
+	public void setUnsignedConsentURLName(String unsignedConsentURLNameParam)
 	{
-		this.unsignedConsentURLName = unsignedConsentURLName;
+		this.unsignedConsentURLName = unsignedConsentURLNameParam;
 	}
-	
+    /**
+     * @return - consentValues
+     */
 	public Map getConsentValues()
 	{
-		return consentValues;
+		return this.consentValues;
 	}
-	
-	public void setConsentValues(Map consentValues)
+    /**
+     * @param consentValuesParam - consentValuesParam
+     */
+	public void setConsentValues(Map consentValuesParam)
 	{
-		this.consentValues = consentValues;
+		this.consentValues = consentValuesParam;
 	}
-	
+    /**
+     * @return - consentTierCounter
+     */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
-	
-	public void setConsentTierCounter(int consentTierCounter)
+    /**
+     * @param consentTierCounterParam - consentTierCounterParam
+     */
+	public void setConsentTierCounter(int consentTierCounterParam)
 	{
-		this.consentTierCounter = consentTierCounter;
+		this.consentTierCounter = consentTierCounterParam;
 	}
-	
+    /**
+     * @return - consentWaived
+     */
 	public boolean isConsentWaived()
 	{
-		return consentWaived;
+		return this.consentWaived;
 	}
-	
-	public void setConsentWaived(boolean consentWaived)
+    /**
+     * @param consentWaivedParam - consentWaivedParam
+     */
+	public void setConsentWaived(boolean consentWaivedParam)
 	{
-		this.consentWaived = consentWaived;
+		this.consentWaived = consentWaivedParam;
 	}
-
-	
+    /**
+     * @return - identifier
+     */
 	public Long getIdentifier()
 	{
-		return identifier;
+		return this.identifier;
 	}
-
-	
-	public void setIdentifier(Long identifier)
+    /**
+     * @param identifierParam - identifierParam
+     */
+	public void setIdentifier(Long identifierParam)
 	{
-		this.identifier = identifier;
+		this.identifier = identifierParam;
 	}
-
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) 
+    /**
+     * @return - operation
+     */
+	public String getOperation()
 	{
-		this.operation = operation;
+		return this.operation;
 	}
-
-	
+    /**
+     * @param operationParam - operationParam
+     */
+	public void setOperation(String operationParam)
+	{
+		this.operation = operationParam;
+	}
+    /**
+     * @return - activityStatus
+     */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
-
-	
-	public void setActivityStatus(String activityStatus)
+    /**
+     * @param activityStatusParam - activityStatusParam
+     */
+	public void setActivityStatus(String activityStatusParam)
 	{
-		this.activityStatus = activityStatus;
+		this.activityStatus = activityStatusParam;
 	}
-
-	
+    /**
+     * @return - endDate
+     */
 	public String getEndDate()
 	{
-		return endDate;
+		return this.endDate;
 	}
-
-	
-	public void setEndDate(String endDate)
+    /**
+     * @param endDateParam - endDateParam
+     */
+	public void setEndDate(String endDateParam)
 	{
-		this.endDate = endDate;
+		this.endDate = endDateParam;
 	}
-
-	
+    /**
+     * @return - aliqoutInSameContainer
+     */
 	public boolean isAliqoutInSameContainer()
 	{
-		return aliqoutInSameContainer;
+		return this.aliqoutInSameContainer;
 	}
-
-	
-	public void setAliqoutInSameContainer(boolean aliqoutInSameContainer)
+    /**
+     * @param aliqoutInSameContainerParam - aliqoutInSameContainerParam
+     */
+	public void setAliqoutInSameContainer(boolean aliqoutInSameContainerParam)
 	{
-		this.aliqoutInSameContainer = aliqoutInSameContainer;
+		this.aliqoutInSameContainer = aliqoutInSameContainerParam;
 	}
-
-	
+    /**
+     * @return - siteIds
+     */
 	public long[] getSiteIds()
 	{
-		return siteIds;
+		return this.siteIds;
 	}
-
-	
-	public void setSiteIds(long[] siteIds)
+    /**
+     * @param siteIdsParam - siteIdsParam
+     */
+	public void setSiteIds(long[] siteIdsParam)
 	{
-		this.siteIds = siteIds;
+		this.siteIds = siteIdsParam;
 	}
-	
-	
 
 }

@@ -14,87 +14,145 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import edu.wustl.catissuecore.util.global.Constants;
+/**
+ * @author janhavi_hasabnis
+ */
+public class ConsentResponseBean implements Serializable
+{
 
-public class ConsentResponseBean implements Serializable{
-	
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * collection protocol Id
 	 */
 	protected long collectionProtocolID;
-	
+
 	/**
 	 * Signed Consent URL
 	 */
 	protected String signedConsentUrl;
-	
+
 	/**
 	 * Witness name that may be PI
 	 */
 	protected long witnessId;
-	
+
 	/**
 	 * Consent Date, Date on which Consent is Signed
 	 */
 	protected String consentDate;
-	
+
 	/**
 	 * Consent Withdraw status
 	 */
-	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
-	
+	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
+
 	/**
 	 * Consent response
 	 */
-	protected Collection <ConsentBean> consentResponse;
-	
-	public ConsentResponseBean(long collectionProtocolID, String signedConsentUrl , long witnessId, String consentDate , Collection <ConsentBean> consentResponse, String consentWithdrawalOption){
-		this.collectionProtocolID = collectionProtocolID;
-		this.signedConsentUrl = signedConsentUrl;
-		this.witnessId = witnessId;
-		this.consentDate = consentDate;
-		this.consentResponse = consentResponse;
-		this.consentWithdrawalOption = consentWithdrawalOption;
-		
-	}
-	
-	public long getCollectionProtocolID() {
-		return collectionProtocolID;
-	}
-	public void setCollectionProtocolID(long collectionProtocolID) {
-		this.collectionProtocolID = collectionProtocolID;
-	}
-	public String getSignedConsentUrl() {
-		return signedConsentUrl;
-	}
-	public void setSignedConsentUrl(String signedConsentUrl) {
-		this.signedConsentUrl = signedConsentUrl;
-	}
-	public long getWitnessId() {
-		return witnessId;
-	}
-	public void setWitnessId(long witnessId) {
-		this.witnessId = witnessId;
-	}
-	public String getConsentDate() {
-		return consentDate;
-	}
-	public void setConsentDate(String consentDate) {
-		this.consentDate = consentDate;
-	}
-	public Collection <ConsentBean> getConsentResponse() {
-		return consentResponse;
-	}
-	public void setConsentResponse(Collection <ConsentBean> consentResponse) {
-		this.consentResponse = consentResponse;
-	}
+	protected Collection < ConsentBean > consentResponse;
+	/**
+	 * @param collectionProtocolIDParam - collectionProtocolIDParam
+	 * @param signedConsentUrlParam - signedConsentUrlParam
+	 * @param witnessIdParam - witnessIdParam
+	 * @param consentDateParam - consentDateParam
+	 * @param consentResponseParam - consentResponseParam
+	 * @param consentWithdrawalOptionParam - consentWithdrawalOptionParam
+	 */
+	public ConsentResponseBean(long collectionProtocolIDParam, String signedConsentUrlParam, long witnessIdParam,
+			String consentDateParam, Collection < ConsentBean > consentResponseParam,
+			String consentWithdrawalOptionParam)
+	{
+		this.collectionProtocolID = collectionProtocolIDParam;
+		this.signedConsentUrl = signedConsentUrlParam;
+		this.witnessId = witnessIdParam;
+		this.consentDate = consentDateParam;
+		this.consentResponse = consentResponseParam;
+		this.consentWithdrawalOption = consentWithdrawalOptionParam;
 
-	public String getConsentWithdrawalOption() {
-		return consentWithdrawalOption;
 	}
-
-	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
-		this.consentWithdrawalOption = consentWithdrawalOption;
+	/**
+	 * @return - collectionProtocolID
+	 */
+	public long getCollectionProtocolID()
+	{
+		return this.collectionProtocolID;
+	}
+	/**
+	 * @param collectionProtocolIDParam - collectionProtocolIDParam
+	 */
+	public void setCollectionProtocolID(long collectionProtocolIDParam)
+	{
+		this.collectionProtocolID = collectionProtocolIDParam;
+	}
+	/**
+	 * @return - signedConsentUrl
+	 */
+	public String getSignedConsentUrl()
+	{
+		return this.signedConsentUrl;
+	}
+	/**
+	 * @param signedConsentUrlParam - signedConsentUrlParam
+	 */
+	public void setSignedConsentUrl(String signedConsentUrlParam)
+	{
+		this.signedConsentUrl = signedConsentUrlParam;
+	}
+	/**
+	 * @return - witnessId
+	 */
+	public long getWitnessId()
+	{
+		return this.witnessId;
+	}
+	/**
+	 * @param witnessIdParam - witnessIdParam
+	 */
+	public void setWitnessId(long witnessIdParam)
+	{
+		this.witnessId = witnessIdParam;
+	}
+	/**
+	 * @return - consentDate
+	 */
+	public String getConsentDate()
+	{
+		return this.consentDate;
+	}
+	/**
+	 * @param consentDateParam - consentDateParam
+	 */
+	public void setConsentDate(String consentDateParam)
+	{
+		this.consentDate = consentDateParam;
+	}
+	/**
+	 * @return - consentResponse
+	 */
+	public Collection < ConsentBean > getConsentResponse()
+	{
+		return this.consentResponse;
+	}
+    /**
+     * @param consentResponseParam - consentResponseParam
+     */
+	public void setConsentResponse(Collection < ConsentBean > consentResponseParam)
+	{
+		this.consentResponse = consentResponseParam;
+	}
+	/**
+	 * @return - consentWithdrawalOption
+	 */
+	public String getConsentWithdrawalOption()
+	{
+		return this.consentWithdrawalOption;
+	}
+	/**
+	 * @param consentWithdrawalOptionParam - consentWithdrawalOptionParam
+	 */
+	public void setConsentWithdrawalOption(String consentWithdrawalOptionParam)
+	{
+		this.consentWithdrawalOption = consentWithdrawalOptionParam;
 	}
 }

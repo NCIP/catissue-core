@@ -12,17 +12,13 @@ package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.List;
-
-
+/**
+ * @author janhavi_hasabnis
+ */
 public class DefinedArrayRequestBean implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
+
+    private static final long serialVersionUID = 1L;
 	private String noOfItems;
 	/**
 	 * To determine when to enable or disable create array button.
@@ -71,7 +67,7 @@ public class DefinedArrayRequestBean implements Serializable
 	/**
 	 * String containing the name of the user who had requested for the array
 	 */
-	private String userName="";
+	private String userName = "";
 	/**
 	 * String containing the userId who had requested for the array
 	 */
@@ -80,37 +76,38 @@ public class DefinedArrayRequestBean implements Serializable
 	 * If the array is distributed, it will have a distributed item id.
 	 */
 	private String distributedItemId;
-	 /**
-     * String returning the id of the user who created the array
-     * @return userId
-     */
+
+	/**
+	* String returning the id of the user who created the array
+	* @return userId
+	*/
 	public Long getUserId()
 	{
-		return userId;
-	}
-	
-	/**
-	 * @param userId String containing the userId who had requested for the array
-	 */
-	public void setUserId(Long userId)
-	{
-		this.userId = userId;
+		return this.userId;
 	}
 
 	/**
-	 *  @return userName 
+	 * @param userIdParam String containing the userId who had requested for the array
+	 */
+	public void setUserId(Long userIdParam)
+	{
+		this.userId = userIdParam;
+	}
+
+	/**
+	 *  @return userName
 	 */
 	public String getUserName()
 	{
-		return userName;
+		return this.userName;
 	}
-	
+
 	/**
-	 * @param userName String containing the name of the user who requested for the array
+	 * @param userNameParam String containing the name of the user who requested for the array
 	 */
-	public void setUserName(String userName)
+	public void setUserName(String userNameParam)
 	{
-		this.userName = userName;
+		this.userName = userNameParam;
 	}
 
 	/**
@@ -118,15 +115,15 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getArrayId()
 	{
-		return arrayId;
+		return this.arrayId;
 	}
-	
+
 	/**
-	 * @param arrayId the arrayId to set
+	 * @param arrayIdParam the arrayId to set
 	 */
-	public void setArrayId(String arrayId)
+	public void setArrayId(String arrayIdParam)
 	{
-		this.arrayId = arrayId;
+		this.arrayId = arrayIdParam;
 	}
 
 	/**
@@ -134,35 +131,31 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getOrderItemId()
 	{
-		return orderItemId;
+		return this.orderItemId;
 	}
 
-
-	
 	/**
-	 * @param orderItemId String containing the orderItemId of each of the defined arrays
+	 * @param orderItemIdParam String containing the orderItemId of each of the defined arrays
 	 */
-	public void setOrderItemId(String orderItemId)
+	public void setOrderItemId(String orderItemIdParam)
 	{
-		this.orderItemId = orderItemId;
+		this.orderItemId = orderItemIdParam;
 	}
-
 
 	/**
 	 * @return the assignedStatus
 	 */
 	public String getAssignedStatus()
 	{
-		return assignedStatus;
+		return this.assignedStatus;
 	}
 
-	
 	/**
-	 * @param assignedStatus the assignedStatus to set
+	 * @param assignedStatusParam the assignedStatus to set
 	 */
-	public void setAssignedStatus(String assignedStatus)
+	public void setAssignedStatus(String assignedStatusParam)
 	{
-		this.assignedStatus = assignedStatus;
+		this.assignedStatus = assignedStatusParam;
 	}
 
 	/**
@@ -171,52 +164,52 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getArrayClass()
 	{
-		return arrayClass;
+		return this.arrayClass;
 	}
-	
+
 	/**
 	 * Sets the class of the defined array
-	 * @param arrayClass String indicating class of defined array
+	 * @param arrayClassParam String indicating class of defined array
 	 */
-	public void setArrayClass(String arrayClass)
+	public void setArrayClass(String arrayClassParam)
 	{
-		this.arrayClass = arrayClass;
+		this.arrayClass = arrayClassParam;
 	}
-	
+
 	/**
-	 * Returns the name of defined array 
+	 * Returns the name of defined array
 	 * @return arrayName
 	 */
 	public String getArrayName()
 	{
-		return arrayName;
+		return this.arrayName;
 	}
-	
+
 	/**
 	 * Sets the name of defined array
-	 * @param arrayName String containing the name of defined array
+	 * @param arrayNameParam String containing the name of defined array
 	 */
-	public void setArrayName(String arrayName)
+	public void setArrayName(String arrayNameParam)
 	{
-		this.arrayName = arrayName;
+		this.arrayName = arrayNameParam;
 	}
-	
+
 	/**
 	 * Returns the type of Defined array
 	 * @return arrayType
 	 */
 	public String getArrayType()
 	{
-		return arrayType;
+		return this.arrayType;
 	}
-	
+
 	/**
 	 * Sets the type of defined array
-	 * @param arrayType String indicating the type of defined array
+	 * @param arrayTypeParam String indicating the type of defined array
 	 */
-	public void setArrayType(String arrayType)
+	public void setArrayType(String arrayTypeParam)
 	{
-		this.arrayType = arrayType;
+		this.arrayType = arrayTypeParam;
 	}
 
 	/**
@@ -225,16 +218,16 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getOneDimensionCapacity()
 	{
-		return oneDimensionCapacity;
+		return this.oneDimensionCapacity;
 	}
 
 	/**
 	 * Sets the first dimension of defined array
-	 * @param oneDimensionCapacity String indicating the first dimension of defined array
+	 * @param oneDimensionCapacityParam String indicating the first dimension of defined array
 	 */
-	public void setOneDimensionCapacity(String oneDimensionCapacity)
+	public void setOneDimensionCapacity(String oneDimensionCapacityParam)
 	{
-		this.oneDimensionCapacity = oneDimensionCapacity;
+		this.oneDimensionCapacity = oneDimensionCapacityParam;
 	}
 
 	/**
@@ -243,34 +236,34 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getTwoDimensionCapacity()
 	{
-		return twoDimensionCapacity;
+		return this.twoDimensionCapacity;
 	}
 
 	/**
 	 * Sets the second dimension of defined array
-	 * @param twoDimensionCapacity String indicating the second dimension of defined array
+	 * @param twoDimensionCapacityParam String indicating the second dimension of defined array
 	 */
-	public void setTwoDimensionCapacity(String twoDimensionCapacity)
+	public void setTwoDimensionCapacity(String twoDimensionCapacityParam)
 	{
-		this.twoDimensionCapacity = twoDimensionCapacity;
+		this.twoDimensionCapacity = twoDimensionCapacityParam;
 	}
-	
+
 	/**
 	 * Returns the status list for individual defined arrays
 	 * @return arrayStatusList List
 	 */
 	public List getArrayStatusList()
 	{
-		return arrayStatusList;
+		return this.arrayStatusList;
 	}
-	
+
 	/**
 	 * Sets the status list for individual defined arrays
-	 * @param arrayStatusList List
+	 * @param arrayStatusListParam List
 	 */
-	public void setArrayStatusList(List arrayStatusList)
+	public void setArrayStatusList(List arrayStatusListParam)
 	{
-		this.arrayStatusList = arrayStatusList;
+		this.arrayStatusList = arrayStatusListParam;
 	}
 
 	/**
@@ -279,70 +272,64 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	public String getArrayTypeId()
 	{
-		return arrayTypeId;
+		return this.arrayTypeId;
 	}
 
 	/**
 	 * Sets the arrayTypeId in the form
-	 * @param arrayTypeId String indicating the id of array type parameter
+	 * @param arrayTypeIdParam String indicating the id of array type parameter
 	 */
-	public void setArrayTypeId(String arrayTypeId)
+	public void setArrayTypeId(String arrayTypeIdParam)
 	{
-		this.arrayTypeId = arrayTypeId;
+		this.arrayTypeId = arrayTypeIdParam;
 	}
 
-	
 	/**
 	 * @return the createArrayButtonDisabled
 	 */
 	public String isCreateArrayButtonDisabled()
 	{
-		return createArrayButtonDisabled;
+		return this.createArrayButtonDisabled;
 	}
 
-	
 	/**
-	 * @param createArrayButtonDisabled the createArrayButtonDisabled to set
+	 * @param createArrayButtonDisabledParam the createArrayButtonDisabled to set
 	 */
-	public void setCreateArrayButtonDisabled(String createArrayButtonDisabled)
+	public void setCreateArrayButtonDisabled(String createArrayButtonDisabledParam)
 	{
-		this.createArrayButtonDisabled = createArrayButtonDisabled;
+		this.createArrayButtonDisabled = createArrayButtonDisabledParam;
 	}
 
-	
 	/**
 	 * @return the distributedItemId
 	 */
 	public String getDistributedItemId()
 	{
-		return distributedItemId;
+		return this.distributedItemId;
 	}
 
-	
 	/**
-	 * @param distributedItemId the distributedItemId to set
+	 * @param distributedItemIdParam the distributedItemId to set
 	 */
-	public void setDistributedItemId(String distributedItemId)
+	public void setDistributedItemId(String distributedItemIdParam)
 	{
-		this.distributedItemId = distributedItemId;
+		this.distributedItemId = distributedItemIdParam;
 	}
 
-	
 	/**
 	 * @return the noOfItems
 	 */
 	public String getNoOfItems()
 	{
-		return noOfItems;
+		return this.noOfItems;
 	}
 
-	
 	/**
-	 * @param noOfItems the noOfItems to set
+	 * @param noOfItemsParam the noOfItems to set
 	 */
-	public void setNoOfItems(String noOfItems)
+	public void setNoOfItems(String noOfItemsParam)
 	{
-		this.noOfItems = noOfItems;
+		this.noOfItems = noOfItemsParam;
 	}
-	
+
 }

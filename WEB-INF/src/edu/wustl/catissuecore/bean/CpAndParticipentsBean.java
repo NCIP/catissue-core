@@ -1,84 +1,96 @@
+
 package edu.wustl.catissuecore.bean;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-
-
+/**
+ * @author janhavi_hasabnis
+ */
 public class CpAndParticipentsBean implements Externalizable
 {
+
 	private static final long serialVersionUID = 1L;
-	
-	
-    private String name;
-	
+
+	private String name;
+
 	private String value;
-	
-	/*
-	 * Default Constructor
-	 */
+
+/**
+ * Default Constructor
+ */
 	public CpAndParticipentsBean()
 	{
-		
+
 	}
-	
-	public CpAndParticipentsBean(String name, String value)
+    /**
+     * @param nameParam - nameParam
+     * @param valueParam - valueParam
+     */
+	public CpAndParticipentsBean(String nameParam, String valueParam)
 	{
-		this.name = name;
-		this.value = value;
+		this.name = nameParam;
+		this.value = valueParam;
 	}
-	
-	
+
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
-	
 	/**
-	 * @param name The name to set.
+	 * @param nameParam The name to set.
 	 */
-	public void setName(String name)
+	public void setName(String nameParam)
 	{
-//        System.out.println("The name written is:"+name); 
-		this.name = name;
+		//System.out.println("The name written is:"+name);
+		this.name = nameParam;
 	}
 
-	
 	/**
 	 * @return Returns the value.
 	 */
 	public String getValue()
 	{
-		return value;
+		return this.value;
 	}
 
-	
 	/**
-	 * @param value The value to set.
+	 * @param valueParam The value to set.
 	 */
-	public void setValue(String value)
+	public void setValue(String valueParam)
 	{
-		this.value = value;
+		this.value = valueParam;
 	}
-	
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException 
+    /**
+     * @param in - ObjectInput
+     * @throws IOException - IOException
+     * @throws ClassNotFoundException - ClassNotFoundException
+     */
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
-		name=in.readUTF();
+		this.name = in.readUTF();
 	}
- 	
+	/**
+     * @param out - ObjectOutput
+     * @throws IOException - IOException
+     */
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
-		out.writeUTF(name);
-		out.writeUTF(value);
-		
+		out.writeUTF( this.name );
+		out.writeUTF( this.value );
+
 	}
-	
+	/**
+	 * @return String
+	 */
+	@Override
 	public String toString()
 	{
-		return new String("name:" + name.toString() + " value:" + value.toString());
+		return new String( "name:" + this.name.toString() + " value:" + this.value.toString() );
 	}
 }

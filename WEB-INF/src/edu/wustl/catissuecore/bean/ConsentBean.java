@@ -1,25 +1,28 @@
 /**
  * <p>Title: ConsentBean Class>
- * <p>Description:	This class contains attributes to display on SpecimenCollectionGroup.jsp,NewSpecimen.jsp 
+ * <p>Description:	This class contains attributes to display on SpecimenCollectionGroup.jsp,NewSpecimen.jsp
  * and responses at Participant Level,Specimen Collection Group level and Specimen Level.<p>
- *  
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Virender Mehta
  * @version 1.1
  * Created on Nov 25,2006
  */
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
-
+/**
+ * @author janhavi_hasabnis
+ */
 public class ConsentBean implements Serializable
-{	
+{
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The comments is for Id associated with every Consen Tier .
 	 */
-	protected String consentTierID;		
+	protected String consentTierID;
 	/**
 	 * The comments is for Id associated with every Participant response.
 	 */
@@ -47,134 +50,135 @@ public class ConsentBean implements Serializable
 	/**
 	 * The comments associated with Participant Response at Specimen Level.
 	 */
-	protected String specimenLevelResponse;		
+	protected String specimenLevelResponse;
+
 	/**
 	 * @return statement The comment associated with the Consent Tier
-	 */	
-	
+	 */
+
 	public String getStatement()
 	{
-		return statement;
+		return this.statement;
 	}
-	
+
 	/**
-	 * @param statement The comment associated with the Consent Tier
+	 * @param statementParam The comment associated with the Consent Tier
 	 */
-	public void setStatement(String statement) 
+	public void setStatement(String statementParam)
 	{
-		this.statement = statement;
+		this.statement = statementParam;
 	}
 
 	/**
 	 * @return participantResponse The comments associated with Participant Response at CollectionProtocolRegistration
-	 */	
-	public String getParticipantResponse() 
-	{
-		return participantResponse;
-	}
-	
-	/**
-	 * @param participantResponse The comments associated with Participant Response at CollectionProtocolRegistration
 	 */
-	public void setParticipantResponse(String participantResponse)
+	public String getParticipantResponse()
 	{
-		this.participantResponse = participantResponse;
+		return this.participantResponse;
 	}
-	
+
+	/**
+	 * @param participantResponseParam The comments associated with Participant Response at CollectionProtocolRegistration
+	 */
+	public void setParticipantResponse(String participantResponseParam)
+	{
+		this.participantResponse = participantResponseParam;
+	}
+
 	/**
 	 * @return specimenCollectionGroupLevelResponse The comments associated with Participant Response at Specimen Collection Group level
-	 */	
+	 */
 	public String getSpecimenCollectionGroupLevelResponse()
 	{
-		return specimenCollectionGroupLevelResponse;
+		return this.specimenCollectionGroupLevelResponse;
 	}
-	
+
 	/**
-	 * @param specimenCollectionGroupLevelResponse The comments associated with Participant Response at Specimen Collection Group level
+	 * @param specimenCollectionGroupLevelResponseParam The comments associated with Participant Response at Specimen Collection Group level
 	 */
-	public void setSpecimenCollectionGroupLevelResponse(String specimenCollectionGroupLevelResponse) 
+	public void setSpecimenCollectionGroupLevelResponse(String specimenCollectionGroupLevelResponseParam)
 	{
-		this.specimenCollectionGroupLevelResponse = specimenCollectionGroupLevelResponse;
+		this.specimenCollectionGroupLevelResponse = specimenCollectionGroupLevelResponseParam;
 	}
-	
+
 	/**
 	 * @return specimenLevelResponse The comments associated with Participant Response at Specimen Level
-	 */	
-	public String getSpecimenLevelResponse() 
-	{
-		return specimenLevelResponse;
-	}
-	
-	/**
-	 * @param specimenLevelResponse The comments associated with Participant Response at Specimen
 	 */
-	public void setSpecimenLevelResponse(String specimenLevelResponse) 
+	public String getSpecimenLevelResponse()
 	{
-		this.specimenLevelResponse = specimenLevelResponse;
+		return this.specimenLevelResponse;
 	}
-	
+    /**
+     * @param specimenLevelResponseParam - specimenLevelResponseParam
+     */
+	public void setSpecimenLevelResponse(String specimenLevelResponseParam)
+	{
+		this.specimenLevelResponse = specimenLevelResponseParam;
+	}
+
 	/**
 	 * @return consentTierID The Id associate dwith the Consent tier
-	 */	
-	public String getConsentTierID() 
-	{
-		return consentTierID;
-	}
-	
-	/**
-	 * @param consentTierID The Id associated with the Consent tier
 	 */
-	public void setConsentTierID(String consentTierID)
+	public String getConsentTierID()
 	{
-		this.consentTierID = consentTierID;
+		return this.consentTierID;
+	}
+
+	/**
+	 * @param consentTierIDParam The Id associated with the Consent tier
+	 */
+	public void setConsentTierID(String consentTierIDParam)
+	{
+		this.consentTierID = consentTierIDParam;
 	}
 
 	/**
 	 * @return participantResponseID The Id associate dwith the Consent tier response
-	 */	
+	 */
 	public String getParticipantResponseID()
 	{
-		return participantResponseID;
+		return this.participantResponseID;
 	}
 
 	/**
-	 * @param participantResponseID The Id associated with the Consent tier response
+	 * @param participantResponseIDParam The Id associated with the Consent tier response
 	 */
-	public void setParticipantResponseID(String participantResponseID)
+	public void setParticipantResponseID(String participantResponseIDParam)
 	{
-		this.participantResponseID = participantResponseID;
+		this.participantResponseID = participantResponseIDParam;
 	}
 
 	/**
 	 * @return specimenCollectionGroupLevelResponseID The Id associate dwith the Consent tier response
-	 */	
+	 */
 	public String getSpecimenCollectionGroupLevelResponseID()
 	{
-		return specimenCollectionGroupLevelResponseID;
+		return this.specimenCollectionGroupLevelResponseID;
 	}
 
 	/**
-	 * @param specimenCollectionGroupLevelResponseID The Id associated with the Consent tier response
+	 * @param specimenCollectionGroupLevelResponseIDParam The Id associated with the Consent tier response
 	 */
-	public void setSpecimenCollectionGroupLevelResponseID(String specimenCollectionGroupLevelResponseID)
+	public void setSpecimenCollectionGroupLevelResponseID(
+			String specimenCollectionGroupLevelResponseIDParam)
 	{
-		this.specimenCollectionGroupLevelResponseID = specimenCollectionGroupLevelResponseID;
+		this.specimenCollectionGroupLevelResponseID = specimenCollectionGroupLevelResponseIDParam;
 	}
 
 	/**
 	 * @return specimenLevelResponseID The Id associate dwith the Consent tier response
-	 */	
+	 */
 	public String getSpecimenLevelResponseID()
 	{
-		return specimenLevelResponseID;
+		return this.specimenLevelResponseID;
 	}
-	
+
 	/**
-	 * @param specimenLevelResponseID The Id associated with the Consent tier response
+	 * @param specimenLevelResponseIDParam The Id associated with the Consent tier response
 	 */
-	public void setSpecimenLevelResponseID(String specimenLevelResponseID)
+	public void setSpecimenLevelResponseID(String specimenLevelResponseIDParam)
 	{
-		this.specimenLevelResponseID = specimenLevelResponseID;
+		this.specimenLevelResponseID = specimenLevelResponseIDParam;
 	}
 
 }

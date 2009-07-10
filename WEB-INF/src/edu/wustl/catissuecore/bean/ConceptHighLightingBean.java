@@ -7,8 +7,8 @@
  * @version 1.00
  * Created on March 16,2007
  */
-package edu.wustl.catissuecore.bean;
 
+package edu.wustl.catissuecore.bean;
 
 /**
  * @author ashish_gupta
@@ -16,72 +16,73 @@ package edu.wustl.catissuecore.bean;
  */
 public class ConceptHighLightingBean
 {
+
 	private String conceptName;
 	private String startOffsets;
 	private String endOffsets;
 	private String classificationName;
-	
+
 	/**
 	 * @return the classificationName
 	 */
 	public String getClassificationName()
 	{
-		return classificationName;
+		return this.classificationName;
 	}
-	
+
 	/**
-	 * @param classificationName the classificationName to set
+	 * @param classificationNameParam the classificationName to set
 	 */
-	public void setClassificationName(String classificationName)
+	public void setClassificationName(String classificationNameParam)
 	{
-		this.classificationName = classificationName;
+		this.classificationName = classificationNameParam;
 	}
-	
+
 	/**
 	 * @return the conceptName
 	 */
 	public String getConceptName()
 	{
-		return conceptName;
+		return this.conceptName;
 	}
-	
+
 	/**
-	 * @param conceptName the conceptName to set
+	 * @param conceptNameParam the conceptName to set
 	 */
-	public void setConceptName(String conceptName)
+	public void setConceptName(String conceptNameParam)
 	{
-		this.conceptName = conceptName;
+		this.conceptName = conceptNameParam;
 	}
-	
+
 	/**
 	 * @return the endOffsets
 	 */
 	public String getEndOffsets()
 	{
-		return endOffsets;
+		return this.endOffsets;
 	}
-	
+
 	/**
-	 * @param endOffsets the endOffsets to set
+	 * @param endOffsetsParam the endOffsets to set
 	 */
-	public void setEndOffsets(String endOffsets)
+	public void setEndOffsets(String endOffsetsParam)
 	{
-		this.endOffsets = endOffsets;
+		this.endOffsets = endOffsetsParam;
 	}
-	
+
 	/**
 	 * @return the startOffsets
 	 */
 	public String getStartOffsets()
 	{
-		return startOffsets;
+		return this.startOffsets;
 	}
-	
+
 	/**
-	 * @param startOffsets the startOffsets to set
+	 * @param startOffsetsParam the startOffsets to set
 	 */
-	public void setStartOffsets(String startOffsets)
+	public void setStartOffsets(String startOffsetsParam)
 	{
-		this.startOffsets = startOffsets;
+		this.startOffsets = startOffsetsParam;
 	}
 }

@@ -1,17 +1,20 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-
+/**
+ * @author janhavi_hasabnis
+ */
 public class CollectionProtocolEventBean implements Serializable
-{	
-	/**
-	 * 
-	 */
+{
+
+/**
+ *
+ */
 	private static final long serialVersionUID = 8381530294059504778L;
-	
+
 	private String uniqueIdentifier;
 	private Double studyCalenderEventPoint;
 	private String collectionPointLabel;
@@ -23,165 +26,211 @@ public class CollectionProtocolEventBean implements Serializable
 	private String collectedEventComments;
 	private String receivedEventComments;
 	private Map specimenRequirementbeanMap = new LinkedHashMap();
-	private long id=-1;
+	private long id = -1;
 	private long specimenCollRequirementGroupId = -1;
-	
+    /**
+     * @return - studyCalenderEventPoint
+     */
 	public Double getStudyCalenderEventPoint()
 	{
-		return studyCalenderEventPoint;
+		return this.studyCalenderEventPoint;
 	}
-	
-	public void setStudyCalenderEventPoint(Double studyCalenderEventPoint)
+    /**
+     * @param studyCalenderEventPointParam - studyCalenderEventPointParam
+     */
+	public void setStudyCalenderEventPoint(Double studyCalenderEventPointParam)
 	{
-		this.studyCalenderEventPoint = studyCalenderEventPoint;
+		this.studyCalenderEventPoint = studyCalenderEventPointParam;
 	}
-	
+	/**
+	 * @return - collectionPointLabel
+	 */
 	public String getCollectionPointLabel()
 	{
-		return collectionPointLabel;
+		return this.collectionPointLabel;
 	}
-	
-	public void setCollectionPointLabel(String collectionPointLabel)
+	/**
+	 * @param collectionPointLabelParam - collectionPointLabelParam
+	 */
+	public void setCollectionPointLabel(String collectionPointLabelParam)
 	{
-		this.collectionPointLabel = collectionPointLabel;
+		this.collectionPointLabel = collectionPointLabelParam;
 	}
-	
+	/**
+	 * @return - clinicalDiagnosis
+	 */
 	public String getClinicalDiagnosis()
 	{
-		return clinicalDiagnosis;
+		return this.clinicalDiagnosis;
 	}
-	
-	public void setClinicalDiagnosis(String clinicalDiagnosis)
+    /**
+     * @param clinicalDiagnosisParam - clinicalDiagnosisParam
+     */
+	public void setClinicalDiagnosis(String clinicalDiagnosisParam)
 	{
-		this.clinicalDiagnosis = clinicalDiagnosis;
+		this.clinicalDiagnosis = clinicalDiagnosisParam;
 	}
-	
+    /**
+     * @return - clinicalStatus
+     */
 	public String getClinicalStatus()
 	{
-		return clinicalStatus;
+		return this.clinicalStatus;
 	}
-	
-	public void setClinicalStatus(String clinicalStatus)
+	/**
+	 * @param clinicalStatusParam - clinicalStatusParam
+	 */
+	public void setClinicalStatus(String clinicalStatusParam)
 	{
-		this.clinicalStatus = clinicalStatus;
+		this.clinicalStatus = clinicalStatusParam;
 	}
-
-	
+    /**
+     * @return - collectionProcedure
+     */
 	public String getCollectionProcedure()
 	{
-		return collectionProcedure;
+		return this.collectionProcedure;
 	}
-
-	
-	public void setCollectionProcedure(String collectionProcedure)
+	/**
+	 * @param collectionProcedureParam - collectionProcedureParam
+	 */
+	public void setCollectionProcedure(String collectionProcedureParam)
 	{
-		this.collectionProcedure = collectionProcedure;
+		this.collectionProcedure = collectionProcedureParam;
 	}
-
-	
+	/**
+	 * @return - collectionContainer
+	 */
 	public String getCollectionContainer()
 	{
-		return collectionContainer;
+		return this.collectionContainer;
 	}
-
-	
-	public void setCollectionContainer(String collectionContainer)
+	/**
+	 * @param collectionContainerParam - collectionContainerParam
+	 */
+	public void setCollectionContainer(String collectionContainerParam)
 	{
-		this.collectionContainer = collectionContainer;
+		this.collectionContainer = collectionContainerParam;
 	}
-
-	
+	/**
+	 * @return - receivedQuality
+	 */
 	public String getReceivedQuality()
 	{
-		return receivedQuality;
+		return this.receivedQuality;
 	}
-
-	
-	public void setReceivedQuality(String receivedQuality)
+	/**
+	 * @param receivedQualityParam - receivedQualityParam
+	 */
+	public void setReceivedQuality(String receivedQualityParam)
 	{
-		this.receivedQuality = receivedQuality;
+		this.receivedQuality = receivedQualityParam;
 	}
-
-	
+	/**
+	 * @return - collectedEventComments
+	 */
 	public String getCollectedEventComments()
 	{
-		return collectedEventComments;
+		return this.collectedEventComments;
 	}
-
-	
-	public void setCollectedEventComments(String collectedEventComments)
+	/**
+	 * @param collectedEventCommentsParam - collectedEventCommentsParam
+	 */
+	public void setCollectedEventComments(String collectedEventCommentsParam)
 	{
-		this.collectedEventComments = collectedEventComments;
+		this.collectedEventComments = collectedEventCommentsParam;
 	}
-
-	
+	/**
+	 * @return - receivedEventComments
+	 */
 	public String getReceivedEventComments()
 	{
-		return receivedEventComments;
+		return this.receivedEventComments;
 	}
-
-	
-	public void setReceivedEventComments(String receivedEventComments)
+	/**
+	 * @param receivedEventCommentsParam - receivedEventCommentsParam
+	 */
+	public void setReceivedEventComments(String receivedEventCommentsParam)
 	{
-		this.receivedEventComments = receivedEventComments;
+		this.receivedEventComments = receivedEventCommentsParam;
 	}
-
-	
+	/**
+	 * @return - Map
+	 */
 	public Map getSpecimenRequirementbeanMap()
 	{
-		if(specimenRequirementbeanMap==null)
+		if (this.specimenRequirementbeanMap == null)
 		{
-			specimenRequirementbeanMap = new LinkedHashMap();
+			this.specimenRequirementbeanMap = new LinkedHashMap();
 		}
-		return specimenRequirementbeanMap;
+		return this.specimenRequirementbeanMap;
 	}
-
-	
-	public void setSpecimenRequirementbeanMap(Map specimenRequirementbeanMap)
+	/**
+	 * @param specimenRequirementbeanMapParam - specimenRequirementbeanMapParam
+	 */
+	public void setSpecimenRequirementbeanMap(Map specimenRequirementbeanMapParam)
 	{
-		this.specimenRequirementbeanMap = specimenRequirementbeanMap;
+		this.specimenRequirementbeanMap = specimenRequirementbeanMapParam;
 	}
-
+	/**
+	 * @param specimenRequirementBean - specimenRequirementBean
+	 */
 	public void addSpecimenRequirementBean(SpecimenRequirementBean specimenRequirementBean)
 	{
-		if(specimenRequirementbeanMap==null)
+		if (this.specimenRequirementbeanMap == null)
 		{
-			specimenRequirementbeanMap = new LinkedHashMap<String,SpecimenRequirementBean>();
+			this.specimenRequirementbeanMap = new LinkedHashMap < String, SpecimenRequirementBean >();
 		}
-		specimenRequirementbeanMap.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
+		this.specimenRequirementbeanMap.put( specimenRequirementBean.getUniqueIdentifier(),
+				specimenRequirementBean );
 	}
-
-	
+	/**
+	 * @return - uniqueIdentifier
+	 */
 	public String getUniqueIdentifier()
 	{
-		return uniqueIdentifier;
+		return this.uniqueIdentifier;
 	}
-
-	
-	public void setUniqueIdentifier(String uniqueIdentifier)
+	/**
+	 * @param uniqueIdentifierParam - uniqueIdentifierParam
+	 */
+	public void setUniqueIdentifier(String uniqueIdentifierParam)
 	{
-		this.uniqueIdentifier = uniqueIdentifier;
+		this.uniqueIdentifier = uniqueIdentifierParam;
 	}
-	
-		public static long getSerialVersionUID()
+	/**
+	 * @return - serialVersionUID
+	 */
+	public static long getSerialVersionUID()
 	{
 		return serialVersionUID;
 	}
-
-		public long getId() {
-			return id;
-		}
-
-		public void setId(long id) {
-			this.id = id;
-		}
-
-		public long getSpecimenCollRequirementGroupId() {
-			return specimenCollRequirementGroupId;
-		}
-
-		public void setSpecimenCollRequirementGroupId(
-				long specimenCollRequirementGroupId) {
-			this.specimenCollRequirementGroupId = specimenCollRequirementGroupId;
-		}	
+	/**
+	 * @return - id
+	 */
+	public long getId()
+	{
+		return this.id;
+	}
+	/**
+	 * @param idParam - idParam
+	 */
+	public void setId(long idParam)
+	{
+		this.id = idParam;
+	}
+	/**
+	 * @return - specimenCollRequirementGroupId
+	 */
+	public long getSpecimenCollRequirementGroupId()
+	{
+		return this.specimenCollRequirementGroupId;
+	}
+	/**
+	 * @param specimenCollRequirementGroupIdParam - specimenCollRequirementGroupIdParam
+	 */
+	public void setSpecimenCollRequirementGroupId(long specimenCollRequirementGroupIdParam)
+	{
+		this.specimenCollRequirementGroupId = specimenCollRequirementGroupIdParam;
+	}
 }
