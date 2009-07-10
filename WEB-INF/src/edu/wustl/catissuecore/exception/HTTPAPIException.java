@@ -17,21 +17,35 @@ package edu.wustl.catissuecore.exception;
  */
 public class HTTPAPIException extends Exception
 {
+	/**
+	 * httpApiException.
+	 */
 	private Exception httpApiException;
-	
-	public HTTPAPIException() { }
-	
+	/**
+	 * default constructor.
+	 */
+	public HTTPAPIException()
+	{
+	}
+	/**
+	 * @param message : message
+	 */
 	public HTTPAPIException(String message)
 	{
-		this(message,null);
+		this(message, null);
 	}
-	
+	/**
+	 * @param ex : ex
+	 */
 	public HTTPAPIException(Exception ex)
 	{
-		this("",ex);
+		this("", ex);
 	}
-	
-	public HTTPAPIException(String message,Exception ex)
+	/**
+	 * @param message : message
+	 * @param ex : ex
+	 */
+	public HTTPAPIException(String message, Exception ex)
 	{
 		super(message);
 		this.httpApiException = ex;

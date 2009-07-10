@@ -1,9 +1,9 @@
+
 package edu.wustl.catissuecore.caties.util;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -35,36 +34,41 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
-import edu.wustl.dao.exception.DAOException;
-
-public class Utility 
+/**
+ * @author
+ *
+ */
+public class Utility
 {
+
 	/**
-	 * Generic Initialization process for caTIES servers
-	 * @throws Exception
+	 * Generic Initialization process for caTIES servers.
+	 * @throws Exception : Exception
 	 */
-	public static void init()throws Exception
+	public static void init() throws Exception
 	{
 		// Initialization methods
 		String appHome = System.getProperty("user.dir");
-		
+
 		// Configuring logger properties
 		LoggerConfig.configureLogger(appHome);
-		
+
 		// initializing caties property configurator
 		CaTIESProperties.initBundle("caTIES");
 	}
-	
-	
+	/**
+	 * @param configFileName : configFileName
+	 * @return Map
+	 * @throws Exception : Exception
+	 */
 	public static Map initializeReportSectionHeaderMap(String configFileName) throws Exception
 	{
-		HashMap<String,String> abbrToHeader = new LinkedHashMap <String,String>();
+		HashMap<String, String> abbrToHeader = new LinkedHashMap<String, String>();
 		Logger.out.info("Initializing section header map");
 		// Function call to set up section header configuration from SectionHeaderConfig.txt file
-		try 
+		try
 		{
 			// set bufferedReader to read file
 			BufferedReader br = new BufferedReader(new FileReader(configFileName));
@@ -75,185 +79,193 @@ public class Utility
 			String abbr;
 			String priority;
 			// iterate while file EOF
-			while ((line = br.readLine()) != null) 
+			while ((line = br.readLine()) != null)
 			{
-				// sepearete values for section header name, abbreviation of section header and its priority
+				// sepearete values for section header name,
+				//abbreviation of section header and its priority
 				st = new StringTokenizer(line, "|");
 				name = st.nextToken().trim();
 				abbr = st.nextToken().trim();
 				priority = st.nextToken().trim();
-				
+
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);
 			}
 			Logger.out.info("Section Headers set successfully to the map");
 		}
-		catch (IOException ex) 
+		catch (IOException ex)
 		{
-			Logger.out.error("Error in setting Section header Priorities",ex);
+			Logger.out.error("Error in setting Section header Priorities", ex);
 			throw new Exception(ex.getMessage());
 		}
 		return abbrToHeader;
 	}
-	
-	
+
 	/**
-	 * This method takes XML document as an input and convert into pain text format according to its formatting style
+	 * This method takes XML document as an input and convert.
+	 * into pain text format according to its formatting style
 	 * @param doc Document in XML format
 	 * @param format formatted style of text
 	 * @return plain text form of XML document
 	 * @throws Exception exception occured while converting XML content into equivalent plain text format
 	 */
-	
-	public static String convertDocumentToString(final org.jdom.Document doc, final  Format format) throws Exception
+
+	public static String convertDocumentToString(final org.jdom.Document doc, final Format format)
+			throws Exception
 	{
-		String result = "" ;
-		// instnatiate XMLOutputter 
-		XMLOutputter outputDocument = new XMLOutputter() ;
-		if (format != null) 
+		String result = "";
+		// instnatiate XMLOutputter
+		XMLOutputter outputDocument = new XMLOutputter();
+		if (format != null)
 		{
 			// set format to XMLOutputter
-			outputDocument.setFormat(format) ;
+			outputDocument.setFormat(format);
 		}
-		// instantiate ByteArrayOutputStream 
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
+		// instantiate ByteArrayOutputStream
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		// convert doc to byte array
-		outputDocument.output(doc, byteArrayOutputStream) ;
+		outputDocument.output(doc, byteArrayOutputStream);
 		// convert byte array to string
-		result = byteArrayOutputStream.toString() ;
-		
-		return result ;
+		result = byteArrayOutputStream.toString();
+
+		return result;
 	}
-	
+
 	/**
 	 * This method is responsible to extract only report content that contains report section text.
 	 * @param deIDResponse deidentified text from native call
 	 * @param dtdFilename local dtd filename for deidentified text in XML format
 	 * @return returns only report text content
+	 * @param reportTextTagName : reportTextTagName
+	 * @param xPath : xPath
 	 * @throws Exception throws exception occured while etracting report content
 	 */
-	public static String extractReport(String deIDResponse , final String dtdFilename, final String xPath, final String reportTextTagName) throws Exception
+	public static String extractReport(String deIDResponse, final String dtdFilename,
+			final String xPath, final String reportTextTagName) throws Exception
 	{
 
-        String deidSprText = "";
-        try 
-        {
-        	// check for valid deid responce text
-            if (deIDResponse != null && deIDResponse.trim().length() > 0)
-            {
-            	// instantiate SAXBuilder
-                SAXBuilder builder = new SAXBuilder();
-                // set EntityResolver to use local dtd file instead of the one that is specified in the xml document
-                builder.setEntityResolver(new EntityResolver()
-                {
-                    public InputSource resolveEntity(String publicId, String systemId)
-                    {
-                    	// local dtd file name that has to be used
+		String deidSprText = "";
+		try
+		{
+			// check for valid deid responce text
+			if (deIDResponse != null && deIDResponse.trim().length() > 0)
+			{
+				// instantiate SAXBuilder
+				SAXBuilder builder = new SAXBuilder();
+				// set EntityResolver to use local dtd file instead of the one
+				//that is specified in the xml document
+				builder.setEntityResolver(new EntityResolver()
+				{
+
+					public InputSource resolveEntity(String publicId, String systemId)
+					{
+						// local dtd file name that has to be used
 						return new InputSource(dtdFilename);
-                    }
-                });
-   
-                // set default feature values to sax builder
-                builder.setFeature("http://apache.org/xml/features/validation/schema",true);
-                builder.setFeature("http://xml.org/sax/features/namespaces",true);
+					}
+				});
 
-                // convert string to byte array
-                byte[] byteArray = deIDResponse.getBytes();
-                // convert byte array to ByteArrayInputStream
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
-                // create document using ByteArrayInputStream
-                Document deIDResponseDocument = builder.build(byteArrayInputStream);
- 
-                // set XPath to query on XML document
-                XPath xpath = XPath.newInstance(xPath);
-                // fire query on the document
-                List deIdResults = xpath.selectNodes(deIDResponseDocument);
-                Iterator deIdIterator = deIdResults.iterator();
-                // iterate to extract report text
-                while (deIdIterator.hasNext()) 
-                {
-                	// get next element
-                    Element deIdReportElement = (Element) deIdIterator.next();
-                    // get report text
-                    deidSprText = deIdReportElement.getChild(reportTextTagName).getText();
-                }
-            } 
-            else 
-            {
-               Logger.out.info("NO DeID response");
-            }
-        } 
-        catch (JDOMException ex) 
-        {
-        	Logger.out.error("Failed parsing response \n"+deIDResponse+"\n\n\n", ex);
-        	throw ex;
-        }
-        catch(Exception ex)
-        {
-        	Logger.out.error("Failed parsing response \n"+deIDResponse+"\n\n\n", ex);
-        	throw ex;
-        }
-        return deidSprText;
-    }
-	
+				// set default feature values to sax builder
+				builder.setFeature("http://apache.org/xml/features/validation/schema", true);
+				builder.setFeature("http://xml.org/sax/features/namespaces", true);
+
+				// convert string to byte array
+				byte[] byteArray = deIDResponse.getBytes();
+				// convert byte array to ByteArrayInputStream
+				ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+				// create document using ByteArrayInputStream
+				Document deIDResponseDocument = builder.build(byteArrayInputStream);
+
+				// set XPath to query on XML document
+				XPath xpath = XPath.newInstance(xPath);
+				// fire query on the document
+				List deIdResults = xpath.selectNodes(deIDResponseDocument);
+				Iterator deIdIterator = deIdResults.iterator();
+				// iterate to extract report text
+				while (deIdIterator.hasNext())
+				{
+					// get next element
+					Element deIdReportElement = (Element) deIdIterator.next();
+					// get report text
+					deidSprText = deIdReportElement.getChild(reportTextTagName).getText();
+				}
+			}
+			else
+			{
+				Logger.out.info("NO DeID response");
+			}
+		}
+		catch (JDOMException ex)
+		{
+			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
+			throw ex;
+		}
+		return deidSprText;
+	}
+
 	/**
-	 * To retrive the reportLoaderQueueObject
-	 * @param reportQueueId
-	 * @return
+	 * To retrive the reportLoaderQueueObject.
+	 * @param reportQueueId : reportQueueId
+	 * @return ReportLoaderQueue
 	 * @throws BizLogicException BizLogic Exception
-	 * @throws NumberFormatException 
-	 * @throws DAOException
+	 * @throws NumberFormatException : NumberFormatException
 	 */
-	public static ReportLoaderQueue getReportQueueObject(String reportQueueId) throws NumberFormatException, BizLogicException
+	public static ReportLoaderQueue getReportQueueObject(String reportQueueId)
+			throws NumberFormatException, BizLogicException
 	{
-		
-		ReportLoaderQueue reportLoaderQueue =null;
+
+		ReportLoaderQueue reportLoaderQueue = null;
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic)factory.getBizLogic(ReportLoaderQueue.class.getName());
-		Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(), new Long(reportQueueId));
-	    if(object != null)
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+				.getBizLogic(ReportLoaderQueue.class.getName());
+		Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),
+				new Long(reportQueueId));
+		if (object != null)
 		{
 			reportLoaderQueue = (ReportLoaderQueue) object;
 		}
-	    
-	    
-	    return reportLoaderQueue;		
+
+		return reportLoaderQueue;
 	}
-	
+
 	/**
-	 * To retrieve the participant present in the report
-	 * @param reportQueueId
-	 * @return
-	 * @throws Exception
-	 * 
+	 * To retrieve the participant present in the report.
+	 * @param reportQueueId : reportQueueId
+	 * @return Participant
+	 * @throws Exception : Exception
 	 */
-	public static Participant getParticipantFromReportLoaderQueue(String reportQueueId) throws Exception
+	public static Participant getParticipantFromReportLoaderQueue(String reportQueueId)
+			throws Exception
 	{
 		Participant participant = null;
-	
-		Site site =null;
-		ReportLoaderQueue reportLoaderQueue =null;
+
+		Site site = null;
+		ReportLoaderQueue reportLoaderQueue = null;
 		reportLoaderQueue = getReportQueueObject(reportQueueId);
 
 		//retrieve site
 		String siteName = reportLoaderQueue.getSiteName();
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SiteBizLogic siteBizLogic = (SiteBizLogic)factory.getBizLogic(Site.class.getName());
-		List siteList = (List)siteBizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_NAME, siteName);
-		
-		
-		if((siteList!=null) && siteList.size()>0)
+		SiteBizLogic siteBizLogic = (SiteBizLogic) factory.getBizLogic(Site.class.getName());
+		List siteList = (List) siteBizLogic.retrieve(Site.class.getName(), Constants.SYSTEM_NAME,
+				siteName);
+
+		if ((siteList != null) && siteList.size() > 0)
 		{
-			site = (Site)siteList.get(0);
+			site = (Site) siteList.get(0);
 		}
-		
-		
-		//retrive the PID		
-		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(), CaTIESConstants.PID);
-		
-		//Participant Object		
-		 participant = HL7ParserUtil.parserParticipantInformation(pidLine,site);
-			 
+
+		//retrive the PID
+		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(),
+				CaTIESConstants.PID);
+
+		//Participant Object
+		participant = HL7ParserUtil.parserParticipantInformation(pidLine, site);
+
 		return participant;
 	}
 

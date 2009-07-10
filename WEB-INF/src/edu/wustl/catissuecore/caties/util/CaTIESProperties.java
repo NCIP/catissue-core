@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.caties.util;
 
 import java.util.ResourceBundle;
@@ -7,16 +8,16 @@ import java.util.ResourceBundle;
  * @author vijay_pande
  *
  */
-public class CaTIESProperties 
+public class CaTIESProperties
 {
-	
+
 	/**
-	 * ResourceBunder object
+	 * ResourceBunder object.
 	 */
 	private static ResourceBundle bundle;
 
 	/**
-	 * Initialization method to set resourcebundle to the bundle
+	 * Initialization method to set resourcebundle to the bundle.
 	 * @param baseName name of the properties file
 	 */
 	public static void initBundle(String baseName)
@@ -25,7 +26,7 @@ public class CaTIESProperties
 	}
 
 	/**
-	 * Method to get value of property from property file
+	 * Method to get value of property from property file.
 	 * @param theKey key for property
 	 * @return String object containing value for given proprty
 	 */

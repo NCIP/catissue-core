@@ -1,6 +1,6 @@
 /**
- * 
  */
+
 package edu.wustl.catissuecore.dto;
 
 import java.util.HashMap;
@@ -12,67 +12,90 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
-
 /**
  * @author supriya_dankh
  *
  */
 public class UserDTO extends AbstractDomainObject
 {
-  
+	/**
+	 * user.
+	 */
 	private User user;
 	//private List<SiteUserRolePrivilegeBean> siteUserRolePrivilegeBeanList;
-	private Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
-	
+	/**
+	 * userRowIdBeanMap.
+	 */
+	private Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap =
+		new HashMap<String, SiteUserRolePrivilegeBean>();
+	/**
+	 * @return User
+	 */
 	public User getUser()
 	{
 		return user;
 	}
-	
+	/**
+	 * @param user : user
+	 */
 	public void setUser(User user)
 	{
 		this.user = user;
 	}
-
-	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdBeanMap() 
+	/**
+	 * @return Map
+	 */
+	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdBeanMap()
 	{
 		return userRowIdBeanMap;
 	}
-
-	public void setUserRowIdBeanMap(Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap) 
+	/**
+	 * @param userRowIdBeanMap : userRowIdBeanMap
+	 */
+	public void setUserRowIdBeanMap(Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap)
 	{
 		this.userRowIdBeanMap = userRowIdBeanMap;
 	}
 
 	@Override
-	public Long getId() {
+	/**
+	 * @return Long
+	 */
+	public Long getId()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setAllValues(IValueObject valueObject)
-			throws AssignDataException {
+	/**
+	 * @param valueObject : valueObject
+	 * @throws AssignDataException : AssignDataException
+	 */
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void setId(Long identifier) {
+	/**
+	 * @param identifier : identifier
+	 */
+	public void setId(Long identifier)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
 	{
 		return siteUserRolePrivilegeBeanList;
 	}
-	
 	public void setSiteUserRolePrivilegeBeanList(
 			List<SiteUserRolePrivilegeBean> siteUserRolePrivilegeBeanList)
 	{
 		this.siteUserRolePrivilegeBeanList = siteUserRolePrivilegeBeanList;
 	}*/
-	
-	
+
 }
