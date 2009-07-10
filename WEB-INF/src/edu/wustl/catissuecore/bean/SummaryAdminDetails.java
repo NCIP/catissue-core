@@ -1,25 +1,25 @@
 /**
- * 
+ *
  */
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.List;
 
-
 /**
  * @author mandar_deshmukh
- *
  */
 public class SummaryAdminDetails
 {
 
 	/**
-	 * Empty  Constructor 
+	 * Empty  Constructor
 	 */
 	public SummaryAdminDetails()
 	{
 		super();
 	}
+
 	private String regUsers;
 	private String colSites;
 	private String cpTot;
@@ -27,81 +27,104 @@ public class SummaryAdminDetails
 	private String repSites;
 	private String labSites;
 
-	private List <List> adminInfo;
-
-	
+	private List < List > adminInfo;
+	/**
+	 * @return - colSites
+	 */
 	public String getColSites()
 	{
-		return colSites;
+		return this.colSites;
 	}
-	
-	public void setColSites(final String colSites)
+	/**
+	 * @param colSitesParam - colSitesParam
+	 */
+	public void setColSites(final String colSitesParam)
 	{
-		this.colSites = colSites;
+		this.colSites = colSitesParam;
 	}
-	
+	/**
+	 * @return - cpTot
+	 */
 	public String getCpTot()
 	{
-		return cpTot;
+		return this.cpTot;
 	}
-	
+	/**
+	 * @param tot - cpTot
+	 */
 	public void setCpTot(final String tot)
 	{
-		cpTot = tot;
+		this.cpTot = tot;
 	}
-	
+	/**
+	 * @return - dpTot
+	 */
 	public String getDpTot()
 	{
-		return dpTot;
+		return this.dpTot;
 	}
-	
+    /**
+     * @param tot - tot
+     */
 	public void setDpTot(final String tot)
 	{
-		dpTot = tot;
+		this.dpTot = tot;
 	}
-	
+	/**
+	 * @return - String
+	 */
 	public String getLabSites()
 	{
-		return labSites;
+		return this.labSites;
 	}
-	
-	public void setLabSites(final String labSites)
+	/**
+	 * @param labSitesParam - labSitesParam
+	 */
+	public void setLabSites(final String labSitesParam)
 	{
-		this.labSites = labSites;
+		this.labSites = labSitesParam;
 	}
-	
+	/**
+	 * @return - repSites
+	 */
 	public String getRepSites()
 	{
-		return repSites;
+		return this.repSites;
 	}
-	
-	public void setRepSites(final String regSites)
+	/**
+	 * @param regSitesParam - regSitesParam
+	 */
+	public void setRepSites(final String regSitesParam)
 	{
-		this.repSites = regSites;
+		this.repSites = regSitesParam;
 	}
-	
+	/**
+	 * @return - regUsers
+	 */
 	public String getRegUsers()
 	{
-		return regUsers;
+		return this.regUsers;
 	}
-	
-	public void setRegUsers(final String regUsers)
+	/**
+	 * @param regUsersParam - regUsersParam
+	 */
+	public void setRegUsers(final String regUsersParam)
 	{
-		this.regUsers = regUsers;
+		this.regUsers = regUsersParam;
 	}
-	
-	
-	
-	public List<List> getAdminInfo()
+	/**
+	 * @return - List
+	 */
+	public List < List > getAdminInfo()
 	{
-		return adminInfo;
+		return this.adminInfo;
 	}
-
-	
-	public void setAdminInfo(List<List> adminInfo)
+	/**
+	 * @param adminInfoParam - adminInfoParam
+	 */
+	public void setAdminInfo(List < List > adminInfoParam)
 	{
-		this.adminInfo = adminInfo;
+		this.adminInfo = adminInfoParam;
 	}
-	
 
 }

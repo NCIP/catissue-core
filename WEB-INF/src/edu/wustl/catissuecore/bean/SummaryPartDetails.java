@@ -1,52 +1,65 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.Collection;
-
-
+/**
+ * @author janhavi_hasabnis
+ */
 public class SummaryPartDetails
 {
 
 	/**
 	 * Empty constructor
-	 *
 	 */
 	public SummaryPartDetails()
 	{
 		super();
 	}
-	private Collection<Object> pByCDDetails;
-	private Collection<Object> pByCSDetails;
+
+	private Collection < Object > pByCDDetails;
+	private Collection < Object > pByCSDetails;
 	private String totPartCount;
-	
+	/**
+	 * @return - totPartCount
+	 */
 	public String getTotPartCount()
 	{
-		return totPartCount;
+		return this.totPartCount;
 	}
-
-	
-	public void setTotPartCount(final String totPartCount)
+    /**
+     * @param totPartCountParam - totPartCountParam
+     */
+	public void setTotPartCount(final String totPartCountParam)
 	{
-		this.totPartCount = totPartCount;
+		this.totPartCount = totPartCountParam;
 	}
-
-	public Collection<Object> getPByCDDetails()
+    /**
+     * @return - Collection
+     */
+	public Collection < Object > getPByCDDetails()
 	{
-		return pByCDDetails;
+		return this.pByCDDetails;
 	}
-	
-	public void setPByCDDetails(final Collection<Object> byCDDetails)
+	/**
+	 * @param byCDDetails - byCDDetails
+	 */
+	public void setPByCDDetails(final Collection < Object > byCDDetails)
 	{
-		pByCDDetails = byCDDetails;
+		this.pByCDDetails = byCDDetails;
 	}
-	
-	public Collection<Object> getPByCSDetails()
+	/**
+	 * @return - Collection
+	 */
+	public Collection < Object > getPByCSDetails()
 	{
-		return pByCSDetails;
+		return this.pByCSDetails;
 	}
-	
-	public void setPByCSDetails(final Collection<Object> byCSDetails)
+	/**
+	 * @param byCSDetails - byCSDetails
+	 */
+	public void setPByCSDetails(final Collection < Object > byCSDetails)
 	{
-		pByCSDetails = byCSDetails;
+		this.pByCSDetails = byCSDetails;
 	}
 
 }
