@@ -27,36 +27,35 @@ public class ProcessMyListInputAction extends SecureAction
 	 * @param response object of HttpServletResponse class.
 	 * @return forward mapping.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		if (form instanceof BaseShipmentForm)
 		{
-			BaseShipmentForm shipmentForm = (BaseShipmentForm) form;
+			final BaseShipmentForm shipmentForm = (BaseShipmentForm) form;
 			if (request.getSession().getAttribute(
 					edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LABELS_LIST) != null)
 			{
-				List < String > specimenLabels = (List < String >) request.getSession()
+				final List<String> specimenLabels = (List<String>) request.getSession()
 						.getAttribute(
-								edu.wustl.catissuecore.util.global.
-								Constants.SPECIMEN_LABELS_LIST);
+								edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LABELS_LIST);
 				//if(specimenLabels.size()>0)
 				if (!(specimenLabels.isEmpty()))
 				{
-					setSpecimenLabels(shipmentForm, specimenLabels);
+					this.setSpecimenLabels(shipmentForm, specimenLabels);
 				}
 			}
 			if (request.getSession().getAttribute(
 					edu.wustl.catissuecore.util.global.Constants.CONTAINER_NAMES_LIST) != null)
 			{
-				List < String > containerNames = (List < String >) request.getSession()
+				final List<String> containerNames = (List<String>) request.getSession()
 						.getAttribute(
-								edu.wustl.catissuecore.util.global.
-								Constants.CONTAINER_NAMES_LIST);
+								edu.wustl.catissuecore.util.global.Constants.CONTAINER_NAMES_LIST);
 				//if(containerNames.size()>0)
 				if (!(containerNames.isEmpty()))
 				{
-					setContainerNames(shipmentForm, containerNames);
+					this.setContainerNames(shipmentForm, containerNames);
 				}
 			}
 			shipmentForm.setOperation(edu.wustl.catissuecore.util.global.Constants.ADD);
@@ -69,11 +68,11 @@ public class ProcessMyListInputAction extends SecureAction
 	 * @param shipmentForm form in which container names are to be set.
 	 * @param containerNames list of container names.
 	 */
-	private void setContainerNames(BaseShipmentForm shipmentForm, List < String > containerNames)
+	private void setContainerNames(BaseShipmentForm shipmentForm, List<String> containerNames)
 	{
 		shipmentForm.setContainerLabelChoice("ContainerLabel");
 		int containerCounter = 0;
-		for (String containerName : containerNames)
+		for (final String containerName : containerNames)
 		{
 			containerCounter++;
 			shipmentForm.setContainerDetails("containerLabel_" + containerCounter, containerName);
@@ -86,11 +85,11 @@ public class ProcessMyListInputAction extends SecureAction
 	 * @param shipmentForm form in which labels are to be set.
 	 * @param specimenLabels list of labels.
 	 */
-	private void setSpecimenLabels(BaseShipmentForm shipmentForm, List < String > specimenLabels)
+	private void setSpecimenLabels(BaseShipmentForm shipmentForm, List<String> specimenLabels)
 	{
 		shipmentForm.setSpecimenLabelChoice("SpecimenLabel");
 		int specimenCounter = 0;
-		for (String specimenLabel : specimenLabels)
+		for (final String specimenLabel : specimenLabels)
 		{
 			specimenCounter++;
 			shipmentForm.setSpecimenDetails("specimenLabel_" + specimenCounter, specimenLabel);

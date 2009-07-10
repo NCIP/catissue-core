@@ -52,6 +52,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	 * @throws Exception if some problem occurs.
 	 * @return actionforward object.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -68,42 +69,43 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 			operation = ((AbstractActionForm) form).getOperation();
 		}
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
-		ActionErrors actionErrors = new ActionErrors();
+		final ActionErrors actionErrors = new ActionErrors();
 		// Create DAO for passing as an argument to bizlogic's validate
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
+		final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 				edu.wustl.catissuecore.util.global.Constants.APPLICATION_NAME).getDAO();
 		//Create ShipmentRequest Object explicitly
-		ShipmentRequest shipmentRequest = new ShipmentRequest();
+		final ShipmentRequest shipmentRequest = new ShipmentRequest();
 		try
 		{
-			dao.openSession(getSessionData(request));
-			ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) form;
+			dao.openSession(this.getSessionData(request));
+			final ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) form;
 			request.setAttribute("shipmentRequestForm", shipmentRequestForm);
 			// Call ShipmentRequestBizlogic's method to validate the contents of the shipment request
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
 					.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
 			shipmentRequest.setAllValues(shipmentRequestForm);
 			// Check whether user have privilege to create request.
 			//If not throws UserNotAuthorizedException.
-			bizLogic.isAuthorized(dao, shipmentRequest, getSessionData(request));
+			bizLogic.isAuthorized(dao, shipmentRequest, this.getSessionData(request));
 			// Validations.
 			boolean isValid = false;
 			isValid = bizLogic.validate(shipmentRequest, dao, operation);
 			if (isValid)
 			{
-				Collection < ShipmentRequest > shipmentRequestCollection =
-					new HashSet < ShipmentRequest >();
+				final Collection<ShipmentRequest> shipmentRequestCollection = new HashSet<ShipmentRequest>();
 				shipmentRequestCollection.add(shipmentRequest);
-				Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
-				Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
-				String[] specimenLabelArr = new String[shipmentRequestForm.getSpecimenCounter()];
-				String[] containerLabelArr = new String[shipmentRequestForm.getContainerCounter()];
+				final Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
+				final Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
+				final String[] specimenLabelArr = new String[shipmentRequestForm
+						.getSpecimenCounter()];
+				final String[] containerLabelArr = new String[shipmentRequestForm
+						.getContainerCounter()];
 				// for holding receiver site's names
-				String[] recieverSiteNameArr = new String[shipmentRequestCollection.size()];
+				final String[] recieverSiteNameArr = new String[shipmentRequestCollection.size()];
 				int specimenCount = 0;
 				int containerCount = 0;
-				int count = 0;
+				final int count = 0;
 				if (shipmentRequestCollection != null)
 				{
 					// Set specimens label to specimenLabelArr[]
@@ -112,21 +114,17 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 						for (int specimenCounter = 0; specimenCounter < shipmentRequestForm
 								.getSpecimenCounter(); specimenCounter++)
 						{
-							specimenLabelArr[specimenCount++] =
-								(String) shipmentRequestForm
-									.getSpecimenDetails("specimenLabel_"
-											+ (specimenCounter + 1));
+							specimenLabelArr[specimenCount++] = (String) shipmentRequestForm
+									.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
 						}
 					}
 					// Set containers label to containerLabelArr[]
 					if (shipmentRequestForm.getContainerCounter() > 0)
 					{
-						for (int containerCounter = 0;
-						containerCounter < shipmentRequestForm
+						for (int containerCounter = 0; containerCounter < shipmentRequestForm
 								.getContainerCounter(); containerCounter++)
 						{
-							containerLabelArr[containerCount++] =
-								(String) shipmentRequestForm
+							containerLabelArr[containerCount++] = (String) shipmentRequestForm
 									.getContainerDetails("containerLabel_" + (containerCounter + 1));
 						}
 					}
@@ -147,11 +145,11 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 				request.setAttribute("recieverSiteNameArr", recieverSiteNameArr);
 			}
 			// Sets the sender and receiver site list attribute
-			String sourceObjectName = Site.class.getName();
-			String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
-			String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
-			List siteList = bizLogic
-					.getList(sourceObjectName, displayNameFields, valueField, false);
+			final String sourceObjectName = Site.class.getName();
+			final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
+			final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
+			final List siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
+					false);
 			request.setAttribute(Constants.REQUESTERS_SITE_LIST, siteList);
 			request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,
 					"" + shipmentRequestForm.getSenderSiteId()));
@@ -184,7 +182,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 		    Logger.out.error(excp.getMessage(), excp);
 
 		}*/
-		catch (AssignDataException assignDataException)
+		catch (final AssignDataException assignDataException)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
@@ -194,7 +192,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 		{
 			dao.closeSession();
 		}
-		saveErrors(request, actionErrors);
+		this.saveErrors(request, actionErrors);
 		return mapping.findForward(target);
 	}
 
@@ -218,8 +216,8 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	{
 		if (name != null && name.trim().length() != 0)
 		{
-			String splitter = "\\.";
-			String[] arr = name.split(splitter);
+			final String splitter = "\\.";
+			final String[] arr = name.split(splitter);
 			if (arr != null && arr.length != 0)
 			{
 				return arr[arr.length - 1];

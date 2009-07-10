@@ -26,13 +26,14 @@ public class RejectShipmentRequestAction extends IncomingShipmentRequestAction
 	 * @return forward mapping.
 	 * @throws Exception if some operation fails
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//ActionForward actionForward = super.executeSecureAction(mapping, form, request, response);
 		if (request.getAttribute("shipmentRequestForm") != null)
 		{
-			ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) request
+			final ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) request
 					.getAttribute("shipmentRequestForm");
 			shipmentRequestForm.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
 			if (form instanceof ShipmentRequestForm)

@@ -29,14 +29,15 @@ public class ShipmentFromRequestAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some operation fails.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Object obj = request.getAttribute("shipmentRequestForm");
+		final Object obj = request.getAttribute("shipmentRequestForm");
 		if (obj != null && obj instanceof ShipmentRequestForm)
 		{
-			ShipmentRequestForm requestForm = (ShipmentRequestForm) obj;
-			ShipmentForm shipmentForm = createShipmentForm(requestForm);
+			final ShipmentRequestForm requestForm = (ShipmentRequestForm) obj;
+			final ShipmentForm shipmentForm = this.createShipmentForm(requestForm);
 			Long loggedInUserId = 0l;
 			if (request.getSession().getAttribute(
 					edu.wustl.catissuecore.util.global.Constants.SESSION_DATA) != null)
@@ -61,7 +62,7 @@ public class ShipmentFromRequestAction extends SecureAction
 	 */
 	private ShipmentForm createShipmentForm(ShipmentRequestForm requestForm)
 	{
-		ShipmentForm shipmentForm = new ShipmentForm();
+		final ShipmentForm shipmentForm = new ShipmentForm();
 		shipmentForm.setSpecimenCounter(requestForm.getSpecimenCounter());
 		shipmentForm.setSpecimenDetailsMap(requestForm.getSpecimenDetailsMap());
 		shipmentForm.setSpecimenLabelChoice("SpecimenLabel");

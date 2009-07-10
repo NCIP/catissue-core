@@ -23,18 +23,16 @@ public class ShipmentReceivedAction extends ProcessShipmentAction
 	 * @param activityStatus status to be checked for.
 	 * @return mapping to which request is to be forwarded.
 	 */
+	@Override
 	protected String getForwardTo(String activityStatus)
 	{
-		String forwardTo = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 		if (activityStatus != null && !activityStatus.trim().equals("")
 				&& activityStatus.equals(Constants.ACTIVITY_STATUS_IN_TRANSIT))
 		{
-			forwardTo = Constants.VIEW_SHIPMENT;
 		}
 		else if (activityStatus != null && !activityStatus.trim().equals("")
 				&& activityStatus.equals(Constants.ACTIVITY_STATUS_RECEIVED))
 		{
-			forwardTo = Constants.ACCEPT_OR_REJECT_SHIPMENT;
 		}
 		return null;
 	}

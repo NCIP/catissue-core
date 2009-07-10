@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,11 +9,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.common.action.SecureAction;
+
 /**
  * this class implements the action for print summary of shipment.
  */
 public class PrintSummaryAction extends SecureAction
 {
+
 	/**
 	 * the method implements the print summary action.
 	 * @param mapping object of ActionMapping class.

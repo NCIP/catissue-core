@@ -41,6 +41,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 	 * @param response object of HttpServletResponse class.
 	 * @return forward mapping.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -56,25 +57,25 @@ public class AddEditShipmentRequestAction extends SecureAction
 			operation = ((AbstractActionForm) form).getOperation();
 		}
 		request.setAttribute(edu.wustl.common.util.global.Constants.OPERATION, operation);
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
-		Collection < ShipmentRequest > shipmentReqCollection = (Collection < ShipmentRequest >) request
+		final ActionErrors errors = new ActionErrors();
+		final ActionMessages messages = new ActionMessages();
+		final Collection<ShipmentRequest> shipmentReqCollection = (Collection<ShipmentRequest>) request
 				.getSession().getAttribute("shipmentRequestCollection");
 		try
 		{
 			//Call ShipmentRequestBizlogic's method to validate the contents of the shipment request
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
 					.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
-			Iterator < ShipmentRequest > shipmentReqIterator = shipmentReqCollection.iterator();
+			final Iterator<ShipmentRequest> shipmentReqIterator = shipmentReqCollection.iterator();
 			while (shipmentReqIterator.hasNext())
 			{
-				ShipmentRequest shipmentRequest = shipmentReqIterator.next();
+				final ShipmentRequest shipmentRequest = shipmentReqIterator.next();
 				if (request != null)
 				{
 					if (operation.equals(edu.wustl.common.util.global.Constants.ADD))
 					{
-						bizLogic.insert(shipmentRequest, getSessionData(request), 0);
+						bizLogic.insert(shipmentRequest, this.getSessionData(request), 0);
 						/* If the request is drafted,
 						 * displays drafted request in 'Edit' mode.
 						 */
@@ -86,12 +87,11 @@ public class AddEditShipmentRequestAction extends SecureAction
 									edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
 									shipmentRequest.getId());
 							target = Constants.ACTIVITY_STATUS_DRAFTED;
-							messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage(
+							messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 									"object.drafted.successOnly", "Shipment Request"));
 						}
 					}
-					else if (operation.
-							equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
+					else if (operation.equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
 					{
 						DAO dao = null;
 						ShipmentRequest shipmentReqOld = null;
@@ -101,13 +101,13 @@ public class AddEditShipmentRequestAction extends SecureAction
 							shipmentReqOld = (ShipmentRequest) dao.retrieveById(Class.forName(
 									ShipmentRequest.class.getName()).getName(), Long
 									.valueOf(Constants.SHIPMENT_REQUEST_FORM_ID));
-							bizLogic.update(shipmentRequest, shipmentReqOld, 0,
-									getSessionData(request));
-							messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("object."
+							bizLogic.update(shipmentRequest, shipmentReqOld, 0, this
+									.getSessionData(request));
+							messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object."
 									+ operation + ".success", "Shipment Request(s)", "site(s)."));
 
 						}
-						catch (Exception ex)
+						catch (final Exception ex)
 						{
 							ex.printStackTrace();
 						}
@@ -117,7 +117,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 							{
 								AppUtility.closeDAOSession(dao);
 							}
-							catch (ApplicationException e)
+							catch (final ApplicationException e)
 							{
 								e.printStackTrace();
 							}
@@ -127,11 +127,11 @@ public class AddEditShipmentRequestAction extends SecureAction
 			}
 			// if draftedRequestId having value, indicates request generated from drafted request.
 			// Mark the drafted request status as 'Closed'.
-			String draftedRequestId = request.getParameter("draftedRequestId");
+			final String draftedRequestId = request.getParameter("draftedRequestId");
 			if (draftedRequestId != null && !draftedRequestId.trim().equals(""))
 			{
-				bizLogic.closeDraftedRequest(Long.parseLong(draftedRequestId),
-						getSessionData(request), 0);
+				bizLogic.closeDraftedRequest(Long.parseLong(draftedRequestId), this
+						.getSessionData(request), 0);
 			}
 		}
 		//		catch (UserNotAuthorizedException authorizedException)
@@ -140,7 +140,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 		//new ActionError(authorizedException.getMessage()));
 		//		}
 		//to be verified...
-		catch (ApplicationException ex)
+		catch (final ApplicationException ex)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ex.getFormattedMessage()));
 		}
@@ -154,11 +154,11 @@ public class AddEditShipmentRequestAction extends SecureAction
 		if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
 				&& !(target.equals(Constants.ACTIVITY_STATUS_DRAFTED)))
 		{
-			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("object." + operation
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("object." + operation
 					+ ".success", "Shipment Request(s)", "site(s)."));
 		}
-		saveMessages(request, messages);
-		saveErrors(request, errors);
+		this.saveMessages(request, messages);
+		this.saveErrors(request, errors);
 		if (errors.size() > 0)
 		{
 			return mapping.getInputForward();
@@ -171,6 +171,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 	 * @param request current request object.
 	 * @return SessionDataBean object.
 	 */
+	@Override
 	public SessionDataBean getSessionData(HttpServletRequest request)
 	{
 		SessionDataBean sessionData = null;

@@ -30,7 +30,7 @@ public abstract class ProcessShipmentAction extends SecureAction
 	 */
 	protected void openInEdit(HttpServletRequest request, Shipment shipment)
 	{
-		ShipmentForm shipmentForm = new ShipmentForm();
+		final ShipmentForm shipmentForm = new ShipmentForm();
 		shipmentForm.setAllValues(shipment);
 		shipmentForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
 		request.setAttribute("shipmentForm", shipmentForm);
@@ -45,23 +45,24 @@ public abstract class ProcessShipmentAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String forwardTo = "";
 		//Getting the ShipmentId parameter from the form
-		String outgoingShipmentId = request
+		final String outgoingShipmentId = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
 		if (outgoingShipmentId != null)
 		{
-			Long shipmentId = Long.parseLong(outgoingShipmentId);
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_FORM_ID);
-			Shipment shipment = ((ShipmentBizLogic) bizLogic).getShipmentObject(shipmentId);
+			final Long shipmentId = Long.parseLong(outgoingShipmentId);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_FORM_ID);
+			final Shipment shipment = ((ShipmentBizLogic) bizLogic).getShipmentObject(shipmentId);
 			if (shipment != null)
 			{
-				openInEdit(request, shipment);
-				forwardTo = getForwardTo(shipment.getActivityStatus());
+				this.openInEdit(request, shipment);
+				forwardTo = this.getForwardTo(shipment.getActivityStatus());
 			}
 		}
 		return mapping.findForward(forwardTo);

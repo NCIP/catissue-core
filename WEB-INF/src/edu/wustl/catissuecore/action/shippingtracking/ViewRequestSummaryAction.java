@@ -52,6 +52,7 @@ public class ViewRequestSummaryAction extends SecureAction
 	 *            object of HttpServletResponse class.
 	 * @return forward mapping.
 	  */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -68,7 +69,7 @@ public class ViewRequestSummaryAction extends SecureAction
 			operation = ((AbstractActionForm) form).getOperation();
 		}
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
-		ActionErrors actionErrors = new ActionErrors();
+		final ActionErrors actionErrors = new ActionErrors();
 		// Create DAO for passing as an argument to bizlogic's validate
 		DAO dao = null;
 		// Create ShipmentRequest Object explicitly
@@ -76,7 +77,7 @@ public class ViewRequestSummaryAction extends SecureAction
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) form;
+			final ShipmentRequestForm shipmentRequestForm = (ShipmentRequestForm) form;
 			if (form == null)
 			{
 				form = (ShipmentRequestForm) request.getAttribute("shipmentRequestForm");
@@ -84,17 +85,16 @@ public class ViewRequestSummaryAction extends SecureAction
 			request.setAttribute("shipmentRequestForm", shipmentRequestForm);
 			// Call ShipmentRequestBizlogic's method to validate the contents of
 			// the shipment request
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
 					.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
 			if (operation != null
 					&& operation.equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
 			{
 				if (shipmentRequestForm.getId() != 0l)
 				{
-					List shipmentRequestList = dao.retrieve(ShipmentRequest.class.getName(),
-							edu.wustl.catissuecore.util.global.
-							Constants.SYSTEM_IDENTIFIER,
+					final List shipmentRequestList = dao.retrieve(ShipmentRequest.class.getName(),
+							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
 							shipmentRequestForm.getId());
 					if (shipmentRequestList != null && shipmentRequestList.size() == 1)
 					{
@@ -105,27 +105,28 @@ public class ViewRequestSummaryAction extends SecureAction
 			shipmentRequest.setAllValues(shipmentRequestForm);
 			// Check whether user have privilege to create request.
 			// If not throws UserNotAuthorizedException.
-			bizLogic.isAuthorized(dao, shipmentRequest, getSessionData(request));
+			bizLogic.isAuthorized(dao, shipmentRequest, this.getSessionData(request));
 			// Validations.
 			boolean isValid = false;
 			isValid = bizLogic.validate(shipmentRequest, dao, operation);
 			if (isValid)
 			{
-				Collection < ShipmentRequest > shipmentRequestCollection = bizLogic
+				final Collection<ShipmentRequest> shipmentRequestCollection = bizLogic
 						.createRequestObjects(shipmentRequest, dao, operation);
-				Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
-				Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
-				String[] specimenLabelArr = new String[shipmentRequestForm.getSpecimenCounter()];
-				String[] containerLabelArr = new String[shipmentRequestForm.getContainerCounter()];
+				final Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
+				final Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
+				final String[] specimenLabelArr = new String[shipmentRequestForm
+						.getSpecimenCounter()];
+				final String[] containerLabelArr = new String[shipmentRequestForm
+						.getContainerCounter()];
 				// for holding reciever site's names
-				String[] recieverSiteNameArr = new String[shipmentRequestCollection.size()];
+				final String[] recieverSiteNameArr = new String[shipmentRequestCollection.size()];
 				int specimenCount = 0;
 				int containerCount = 0;
 				int count = 0;
 				if (shipmentRequestCollection != null)
 				{
-					Iterator < ShipmentRequest > shipmentRequestIterator
-					= shipmentRequestCollection
+					final Iterator<ShipmentRequest> shipmentRequestIterator = shipmentRequestCollection
 							.iterator();
 					ShipmentRequest shipmentRequestObject = shipmentRequestIterator.next();
 					ShipmentRequestForm shipmentReqFormTemp = new ShipmentRequestForm();
@@ -135,30 +136,23 @@ public class ViewRequestSummaryAction extends SecureAction
 						for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
 								.getSpecimenCounter(); specimenCounter++)
 						{
-							specimenLabelArr[specimenCount++] =
-								(String) shipmentReqFormTemp
-									.getSpecimenDetails("specimenLabel_"
-											+ (specimenCounter + 1));
+							specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
+									.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
 						}
 					}
 					if (shipmentReqFormTemp.getContainerCounter() > 0)
 					{
-						for (int containerCounter = 0;
-						containerCounter < shipmentReqFormTemp
+						for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
 								.getContainerCounter(); containerCounter++)
 						{
-							containerLabelArr[containerCount++] =
-								(String) shipmentReqFormTemp
-									.getContainerDetails("containerLabel_"
-											+ (containerCounter + 1));
+							containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
+									.getContainerDetails("containerLabel_" + (containerCounter + 1));
 						}
 					}
 					specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
 					containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
 					// adding reciever site's names to the array
-					recieverSiteNameArr[count] =
-						(String) shipmentRequestObject.getReceiverSite()
-							.getName();
+					recieverSiteNameArr[count] = shipmentRequestObject.getReceiverSite().getName();
 					count++;
 					shipmentReqFormTemp = new ShipmentRequestForm();
 					shipmentReqFormTemp.reset(mapping, request);
@@ -168,20 +162,17 @@ public class ViewRequestSummaryAction extends SecureAction
 						shipmentReqFormTemp = new ShipmentRequestForm();
 						shipmentReqFormTemp.setAllValues(shipmentRequestObject);
 						specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
-						containerCountArr[count] =
-							shipmentReqFormTemp.getContainerCounter();
+						containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
 						// adding reciever site's names to the array
-						recieverSiteNameArr[count] = (String) shipmentRequestObject
-								.getReceiverSite().getName();
+						recieverSiteNameArr[count] = shipmentRequestObject.getReceiverSite()
+								.getName();
 						count++;
 						if (shipmentReqFormTemp.getSpecimenCounter() > 0)
 						{
-							for (int specimenCounter = 0;
-							specimenCounter < shipmentReqFormTemp
+							for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
 									.getSpecimenCounter(); specimenCounter++)
 							{
-								specimenLabelArr[specimenCount++] =
-									(String) shipmentReqFormTemp
+								specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
 										.getSpecimenDetails("specimenLabel_"
 												+ (specimenCounter + 1));
 							}
@@ -191,8 +182,7 @@ public class ViewRequestSummaryAction extends SecureAction
 							for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
 									.getContainerCounter(); containerCounter++)
 							{
-								containerLabelArr[containerCount++] =
-									(String) shipmentReqFormTemp
+								containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
 										.getContainerDetails("containerLabel_"
 												+ (containerCounter + 1));
 							}
@@ -210,21 +200,21 @@ public class ViewRequestSummaryAction extends SecureAction
 				request.setAttribute("recieverSiteNameArr", recieverSiteNameArr);
 			}
 			// Sets the sender and reciever site list attribute
-			String sourceObjectName = Site.class.getName();
-			String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
-			String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
-			List siteList = bizLogic
-					.getList(sourceObjectName, displayNameFields, valueField, false);
+			final String sourceObjectName = Site.class.getName();
+			final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
+			final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
+			final List siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
+					false);
 			request.setAttribute(Constants.REQUESTERS_SITE_LIST, siteList);
 			request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,
 					"" + shipmentRequestForm.getSenderSiteId()));
 		}
-		catch (ApplicationException appException)
+		catch (final ApplicationException appException)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
 					.getMessage()));// bug 12568
-			logger.debug(appException.getMessage(), appException);
+			this.logger.debug(appException.getMessage(), appException);
 		}
 		// catch (UserNotAuthorizedException excp)
 		// {
@@ -264,13 +254,13 @@ public class ViewRequestSummaryAction extends SecureAction
 			{
 				AppUtility.closeDAOSession(dao);
 			}
-			catch (ApplicationException exception)
+			catch (final ApplicationException exception)
 			{
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
 						exception.getMessage()));
 			}
 		}
-		saveErrors(request, actionErrors);
+		this.saveErrors(request, actionErrors);
 		return mapping.findForward(target);
 	}
 
@@ -297,8 +287,8 @@ public class ViewRequestSummaryAction extends SecureAction
 	{
 		if (name != null && name.trim().length() != 0)
 		{
-			String splitter = "\\.";
-			String[] arr = name.split(splitter);
+			final String splitter = "\\.";
+			final String[] arr = name.split(splitter);
 			if (arr != null && arr.length != 0)
 			{
 				return arr[arr.length - 1];

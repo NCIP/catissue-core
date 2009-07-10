@@ -36,8 +36,8 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 
 /**
  * class for base shipment action.
@@ -54,12 +54,13 @@ public class BaseShipmentAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String operation = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
-		Long shipmentId = (Long) request
+		final Long shipmentId = (Long) request
 				.getAttribute(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER);
 		if (operation == null || operation.trim().equals(""))
 		{
@@ -74,9 +75,9 @@ public class BaseShipmentAction extends SecureAction
 		List senderSiteList = null;
 		List receiverSiteList = null;
 		IBizLogic bizLogic = null;
-		SessionDataBean sessionDataBean = getSessionData(request);
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		bizLogic = factory.getBizLogic(Constants.SHIPMENT_FORM_ID);
 		Long userId = null;
 		boolean isAdmin = false;
@@ -128,7 +129,7 @@ public class BaseShipmentAction extends SecureAction
 				if (shipmentForm.getSendDate() == null)
 				{
 					// date Format added by geeta
-					shipmentForm.setSendDate(Utility.parseDateToString(cal.getTime(),
+					shipmentForm.setSendDate(CommonUtilities.parseDateToString(cal.getTime(),
 							CommonServiceLocator.getInstance().getDatePattern()));
 				}
 				if (shipmentForm.getSendTimeHour() == null)
@@ -147,7 +148,7 @@ public class BaseShipmentAction extends SecureAction
 
 		if (userId != null)
 		{
-			senderSiteList = getSitesAsNVBList(((ShipmentBizLogic) bizLogic)
+			senderSiteList = this.getSitesAsNVBList(((ShipmentBizLogic) bizLogic)
 					.getPermittedSitesForUser(userId, isAdmin));
 		}
 		//Sets the sender and reciever site list attribute
@@ -155,9 +156,9 @@ public class BaseShipmentAction extends SecureAction
 		//final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
 		//final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
 		//Collection<NameValueBean> siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, false);
-		Collection < NameValueBean > siteList = this.getNVBRepositorySites();//bug 12247
-		siteList = removeInTransitSite(siteList);
-		receiverSiteList = getReceiverSiteList(siteList);
+		Collection<NameValueBean> siteList = this.getNVBRepositorySites();//bug 12247
+		siteList = this.removeInTransitSite(siteList);
+		receiverSiteList = this.getReceiverSiteList(siteList);
 		if (isAdmin)
 		{
 			receiverSiteList = senderSiteList;
@@ -177,7 +178,7 @@ public class BaseShipmentAction extends SecureAction
 		{
 			if (shipmentForm.getSenderSiteId() != 0l)
 			{
-				Object senderSiteName = ShippingTrackingUtility.getDisplayName(siteList, ""
+				final Object senderSiteName = ShippingTrackingUtility.getDisplayName(siteList, ""
 						+ shipmentForm.getSenderSiteId());
 				request.setAttribute("senderSiteName", senderSiteName);
 				//bug 11026
@@ -188,7 +189,7 @@ public class BaseShipmentAction extends SecureAction
 			}
 			if (shipmentForm.getReceiverSiteId() != 0l)
 			{
-				Object receiverSiteName = ShippingTrackingUtility.getDisplayName(siteList, ""
+				final Object receiverSiteName = ShippingTrackingUtility.getDisplayName(siteList, ""
 						+ shipmentForm.getReceiverSiteId());
 				request.setAttribute("receiverSiteName", receiverSiteName);
 				//bug 11026
@@ -214,13 +215,13 @@ public class BaseShipmentAction extends SecureAction
 		{
 			request.setAttribute("initialSiteSelected", "");
 		}
-		Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		// date format added by geeta
-		request.setAttribute("initialShippingDate", Utility.parseDateToString(new Date(),
+		request.setAttribute("initialShippingDate", CommonUtilities.parseDateToString(new Date(),
 				CommonServiceLocator.getInstance().getDatePattern()));
-		request.setAttribute("initialShippingHour", "" + calendar.get(calendar.HOUR_OF_DAY));
-		request.setAttribute("initialShippingmMinute", "" + calendar.get(calendar.MINUTE));
+		request.setAttribute("initialShippingHour", "" + calendar.get(Calendar.HOUR_OF_DAY));
+		request.setAttribute("initialShippingmMinute", "" + calendar.get(Calendar.MINUTE));
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
 
@@ -229,10 +230,10 @@ public class BaseShipmentAction extends SecureAction
 	 * @param siteList collection of name value bean for sites.
 	 * @return list of sites of receiver.
 	 */
-	private List getReceiverSiteList(final Collection < NameValueBean > siteList)
+	private List getReceiverSiteList(final Collection<NameValueBean> siteList)
 	{
-		List < NameValueBean > receiverSiteList = new ArrayList < NameValueBean >();
-		for (NameValueBean bean : siteList)
+		final List<NameValueBean> receiverSiteList = new ArrayList<NameValueBean>();
+		for (final NameValueBean bean : siteList)
 		{
 			//To add all sites in receiver's Site
 			//if(!senderSiteList.contains(bean))
@@ -248,13 +249,13 @@ public class BaseShipmentAction extends SecureAction
 	 * @param siteList collection of name value bean for site.
 	 * @return updated collection of NameValueBean.
 	 */
-	private Collection < NameValueBean > removeInTransitSite(Collection < NameValueBean > siteList)
+	private Collection<NameValueBean> removeInTransitSite(Collection<NameValueBean> siteList)
 	{
-		List < NameValueBean > updateedSiteList = new ArrayList < NameValueBean >();
-		Iterator < NameValueBean > siteIterator = siteList.iterator();
+		final List<NameValueBean> updateedSiteList = new ArrayList<NameValueBean>();
+		final Iterator<NameValueBean> siteIterator = siteList.iterator();
 		while (siteIterator.hasNext())
 		{
-			NameValueBean siteNVB = siteIterator.next();
+			final NameValueBean siteNVB = siteIterator.next();
 			if (siteNVB != null && siteNVB.getName() != null
 					&& !siteNVB.getName().trim().equals(Constants.IN_TRANSIT_SITE_NAME))
 			{
@@ -280,18 +281,18 @@ public class BaseShipmentAction extends SecureAction
 	 * @param permittedSitesForUser collection of permitted sites.
 	 * @return list of NameValueBean objects.
 	 */
-	private List < NameValueBean > getSitesAsNVBList(Collection < Site > permittedSitesForUser)
+	private List<NameValueBean> getSitesAsNVBList(Collection<Site> permittedSitesForUser)
 	{
-		List < NameValueBean > siteNVBList = new ArrayList < NameValueBean >();
+		final List<NameValueBean> siteNVBList = new ArrayList<NameValueBean>();
 		if (permittedSitesForUser != null && !permittedSitesForUser.isEmpty())
 		{
-			Iterator < Site > siteIterator = permittedSitesForUser.iterator();
+			final Iterator<Site> siteIterator = permittedSitesForUser.iterator();
 			while (siteIterator.hasNext())
 			{
-				Site site = siteIterator.next();
+				final Site site = siteIterator.next();
 				if (site.getType().equalsIgnoreCase("Repository"))//bug 12247
 				{
-					NameValueBean valueBean = new NameValueBean(site.getName(), site.getId());
+					final NameValueBean valueBean = new NameValueBean(site.getName(), site.getId());
 					siteNVBList.add(valueBean);
 				}
 			}
@@ -306,25 +307,25 @@ public class BaseShipmentAction extends SecureAction
 	 * @return List : List < NameValueBean >
 	 * @throws BizLogicException : BizLogicException
 	 */
-	private List < NameValueBean > getNVBRepositorySites() throws BizLogicException
+	private List<NameValueBean> getNVBRepositorySites() throws BizLogicException
 	{
 
-		List < NameValueBean > siteNVBList = new ArrayList < NameValueBean >();
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory
+		final List<NameValueBean> siteNVBList = new ArrayList<NameValueBean>();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory
 				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
 
-		List list = bizLogic.retrieve(Site.class.getName(), new String[]{"id", "name"},
+		final List list = bizLogic.retrieve(Site.class.getName(), new String[]{"id", "name"},
 				new String[]{"type"}, new String[]{"="}, new String[]{"Repository"}, null);
 		if (list != null && !list.isEmpty())
 		{
 			for (int i = 0; i < list.size(); i++)
 			{
-				Object[] returnedOject = (Object[]) list.get(i);
-				Site site = new Site();
+				final Object[] returnedOject = (Object[]) list.get(i);
+				final Site site = new Site();
 				site.setId((Long) returnedOject[0]);
 				site.setName((String) returnedOject[1]);
-				NameValueBean valueBean = new NameValueBean(site.getName(), site.getId());
+				final NameValueBean valueBean = new NameValueBean(site.getName(), site.getId());
 				siteNVBList.add(valueBean);
 			}
 		}
@@ -343,8 +344,8 @@ public class BaseShipmentAction extends SecureAction
 		User sender = null;
 		if (userId != null)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory
 					.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
 			list = bizLogic.retrieve(User.class.getName(),
 					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER, userId);
@@ -366,10 +367,10 @@ public class BaseShipmentAction extends SecureAction
 	{
 		Site receiverSite = null;
 		List list = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory
 				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
-		long siteId = shipmentForm.getReceiverSiteId();
+		final long siteId = shipmentForm.getReceiverSiteId();
 		if (siteId != 0l)
 		{
 			list = bizLogic.retrieve(Site.class.getName(),
@@ -378,12 +379,12 @@ public class BaseShipmentAction extends SecureAction
 			{
 				receiverSite = (Site) list.get(0);
 			}
-			User receiverSiteCoordinator = receiverSite.getCoordinator();
-			StringBuffer stbuff = new StringBuffer();
+			final User receiverSiteCoordinator = receiverSite.getCoordinator();
+			final StringBuffer stbuff = new StringBuffer();
 			stbuff.append(receiverSiteCoordinator.getFirstName());
 			stbuff.append(" ");
 			stbuff.append(receiverSiteCoordinator.getLastName());
-			String coordinatorName = stbuff.toString();
+			final String coordinatorName = stbuff.toString();
 			shipmentForm.setReceiverSiteCoordinator(coordinatorName);
 			shipmentForm.setReceiverSiteCoordinatorPhone(receiverSiteCoordinator.getAddress()
 					.getPhoneNumber());
@@ -397,10 +398,10 @@ public class BaseShipmentAction extends SecureAction
 	 */
 	private void setSenderInfoInForm(User sender, BaseShipmentForm shipmentForm)
 	{
-		String senderName = sender.getFirstName() + " " + sender.getLastName();
+		final String senderName = sender.getFirstName() + " " + sender.getLastName();
 		shipmentForm.setSenderName(senderName);
 		shipmentForm.setSenderEmail(sender.getEmailAddress());
-		Address address = sender.getAddress();
+		final Address address = sender.getAddress();
 		shipmentForm.setSenderPhone(address.getPhoneNumber());
 	}
 
@@ -414,14 +415,14 @@ public class BaseShipmentAction extends SecureAction
 			throws BizLogicException
 	{
 		List list = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory
 				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
 		list = bizLogic.retrieve(Shipment.class.getName(), new String[]{"barcode"},
 				new String[]{"id"}, new String[]{"="}, new Long[]{identifier}, null);
 		if (list != null && !list.isEmpty())
 		{
-			String barcode = ((String) list.get(0));
+			final String barcode = ((String) list.get(0));
 			if (shipmentForm instanceof ShipmentForm)
 			{
 				((ShipmentForm) shipmentForm).setBarcode(barcode);
@@ -441,9 +442,9 @@ public class BaseShipmentAction extends SecureAction
 		List list = null;
 		String fieldValue = "";
 		String optionForQuery = "";
-		List < String > lblOrBarcodes = new ArrayList < String >();
-		List < Specimen > specimenL = new ArrayList < Specimen >();
-		String option = shipmentForm.getSpecimenLabelChoice();
+		List<String> lblOrBarcodes = new ArrayList<String>();
+		final List<Specimen> specimenL = new ArrayList<Specimen>();
+		final String option = shipmentForm.getSpecimenLabelChoice();
 		if ("SpecimenLabel".equals(option))
 		{
 			optionForQuery = Constants.SPECIMEN_PROPERTY_LABEL;
@@ -455,13 +456,13 @@ public class BaseShipmentAction extends SecureAction
 		//bug 12220 start
 		if (shipmentForm instanceof ShipmentRequestForm)
 		{
-			Map < String , String > specimenMap = shipmentForm.getSpecimenDetailsMap();
-			Set keySet = specimenMap.keySet();
-			Iterator it = keySet.iterator();
+			final Map<String, String> specimenMap = shipmentForm.getSpecimenDetailsMap();
+			final Set keySet = specimenMap.keySet();
+			final Iterator it = keySet.iterator();
 			while (it.hasNext())
 			{
-				String specimenLblKey = (String) it.next();
-				String[] specimenLabelChoice = specimenLblKey.split("_");
+				final String specimenLblKey = (String) it.next();
+				final String[] specimenLabelChoice = specimenLblKey.split("_");
 				if (specimenLabelChoice.length > 1)
 				{
 					if (option.equalsIgnoreCase(specimenLabelChoice[0]))
@@ -480,10 +481,10 @@ public class BaseShipmentAction extends SecureAction
 
 		if (lblOrBarcodes != null && !lblOrBarcodes.isEmpty())
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory
 					.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
-			for (String lbl : lblOrBarcodes)
+			for (final String lbl : lblOrBarcodes)
 			{
 				list = bizLogic.retrieve(Specimen.class.getName(), new String[]{"id", "label",
 						"barcode"}, new String[]{optionForQuery}, new String[]{"="},
@@ -491,8 +492,8 @@ public class BaseShipmentAction extends SecureAction
 				//list = bizLogic.retrieve(Specimen.class.getName(),option,lbl);
 				if (list != null && !list.isEmpty())
 				{
-					Object[] returnedOject = (Object[]) list.get(0);
-					Specimen specimen = new Specimen();
+					final Object[] returnedOject = (Object[]) list.get(0);
+					final Specimen specimen = new Specimen();
 					specimen.setId((Long) returnedOject[0]);
 					specimen.setLabel((String) returnedOject[1]);
 					specimen.setBarcode((String) returnedOject[2]);
@@ -521,9 +522,9 @@ public class BaseShipmentAction extends SecureAction
 		List list = null;
 		String fieldValue = "";
 		String optionForQuery = "";
-		List < StorageContainer > containerL = new ArrayList < StorageContainer >();
-		List < String > lblOrBarcodes = new ArrayList < String >();
-		String option = shipmentForm.getContainerLabelChoice();
+		final List<StorageContainer> containerL = new ArrayList<StorageContainer>();
+		List<String> lblOrBarcodes = new ArrayList<String>();
+		final String option = shipmentForm.getContainerLabelChoice();
 		if ("ContainerLabel".equals(option))
 		{
 			optionForQuery = Constants.CONTAINER_PROPERTY_NAME;
@@ -535,13 +536,13 @@ public class BaseShipmentAction extends SecureAction
 		//bug 12220 start
 		if (shipmentForm instanceof ShipmentRequestForm)
 		{
-			Map < String , String > conatinerMap = shipmentForm.getContainerDetailsMap();
-			Set keySet = conatinerMap.keySet();
-			Iterator it = keySet.iterator();
+			final Map<String, String> conatinerMap = shipmentForm.getContainerDetailsMap();
+			final Set keySet = conatinerMap.keySet();
+			final Iterator it = keySet.iterator();
 			while (it.hasNext())
 			{
-				String containerLblKey = (String) it.next();
-				String[] containerLabelChoice = containerLblKey.split("_");
+				final String containerLblKey = (String) it.next();
+				final String[] containerLabelChoice = containerLblKey.split("_");
 				if (containerLabelChoice.length > 1)
 				{
 					if (option.equalsIgnoreCase(containerLabelChoice[0]))
@@ -559,10 +560,10 @@ public class BaseShipmentAction extends SecureAction
 		}
 		if (lblOrBarcodes != null && !lblOrBarcodes.isEmpty())
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory
 					.getBizLogic(edu.wustl.catissuecore.util.global.Constants.DEFAULT_BIZ_LOGIC);
-			for (String lbl : lblOrBarcodes)
+			for (final String lbl : lblOrBarcodes)
 			{
 				list = bizLogic.retrieve(StorageContainer.class.getName(), new String[]{"id",
 						"name", "barcode"}, new String[]{optionForQuery}, new String[]{"="},
@@ -570,8 +571,8 @@ public class BaseShipmentAction extends SecureAction
 				//list = bizLogic.retrieve(Specimen.class.getName(),option,lbl);
 				if (list != null && !list.isEmpty())
 				{
-					Object[] returnedOject = (Object[]) list.get(0);
-					StorageContainer sContainer = new StorageContainer();
+					final Object[] returnedOject = (Object[]) list.get(0);
+					final StorageContainer sContainer = new StorageContainer();
 					sContainer.setId((Long) returnedOject[0]);
 					sContainer.setName((String) returnedOject[1]);
 					sContainer.setBarcode((String) returnedOject[2]);

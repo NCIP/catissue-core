@@ -30,7 +30,7 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 	 */
 	protected void populateUIBean(HttpServletRequest request, ShipmentRequest shipmentRequest)
 	{
-		ShipmentRequestForm shipmentRequestForm = new ShipmentRequestForm();
+		final ShipmentRequestForm shipmentRequestForm = new ShipmentRequestForm();
 		shipmentRequestForm.setAllValues(shipmentRequest);
 		shipmentRequestForm.setOperation(edu.wustl.catissuecore.util.global.Constants.EDIT);
 		request.setAttribute("shipmentRequestForm", shipmentRequestForm);
@@ -45,6 +45,7 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -59,19 +60,19 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 					.getAttribute(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER))
 					.toString();
 		}
-		String operation = request
+		final String operation = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
 		if (requestIdString != null)
 		{
-			Long requestId = Long.parseLong(requestIdString);
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
-			ShipmentRequest shipmentRequest = ((ShipmentRequestBizLogic) bizLogic)
+			final Long requestId = Long.parseLong(requestIdString);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
+			final ShipmentRequest shipmentRequest = ((ShipmentRequestBizLogic) bizLogic)
 					.getShipmentRequestObject(requestId);
 			if (shipmentRequest != null)
 			{
-				populateUIBean(request, shipmentRequest);
-				forwardTo = getForwardTo(shipmentRequest.getActivityStatus(), operation);
+				this.populateUIBean(request, shipmentRequest);
+				forwardTo = this.getForwardTo(shipmentRequest.getActivityStatus(), operation);
 			}
 		}
 		return mapping.findForward(forwardTo);
