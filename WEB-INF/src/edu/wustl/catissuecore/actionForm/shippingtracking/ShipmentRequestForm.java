@@ -35,7 +35,7 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Returns the id assigned to form bean.
@@ -51,13 +51,14 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	 * this method sets all the values.
 	 * @param arg0 domain object to set.
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject arg0)
 	{
 		if (arg0 instanceof ShipmentRequest)
 		{
-			ShipmentRequest shipmentRequest = (ShipmentRequest) arg0;
-			populateBasicShipmentProperties(shipmentRequest);
-			populateShipmentRequestContents(shipmentRequest);
+			final ShipmentRequest shipmentRequest = (ShipmentRequest) arg0;
+			this.populateBasicShipmentProperties(shipmentRequest);
+			this.populateShipmentRequestContents(shipmentRequest);
 		}
 	}
 
@@ -67,8 +68,8 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	 */
 	protected void populateShipmentRequestContents(ShipmentRequest shipmentRequest)
 	{
-		populateContentContainers(shipmentRequest);
-		populateContentSpecimens(shipmentRequest);
+		this.populateContentContainers(shipmentRequest);
+		this.populateContentSpecimens(shipmentRequest);
 	}
 
 	/**
@@ -81,17 +82,17 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		this.specimenCounter = 0;
 		if (shipmentRequest.getSpecimenCollection() != null)
 		{
-			Iterator < Specimen > specimenIterator = shipmentRequest.getSpecimenCollection()
+			final Iterator<Specimen> specimenIterator = shipmentRequest.getSpecimenCollection()
 					.iterator();
 			while (specimenIterator.hasNext())
 			{
-				Specimen specimen = specimenIterator.next();
+				final Specimen specimen = specimenIterator.next();
 				if (specimen != null && specimen.getLabel() != null)
 				{
 					this.specimenCounter++;
-					this.specimenDetailsMap.put("specimenLabel_" + specimenCounter, specimen
+					this.specimenDetailsMap.put("specimenLabel_" + this.specimenCounter, specimen
 							.getLabel());
-					this.specimenDetailsMap.put("specimenBarcode_" + specimenCounter, specimen
+					this.specimenDetailsMap.put("specimenBarcode_" + this.specimenCounter, specimen
 							.getBarcode());
 				}
 			}
@@ -108,18 +109,18 @@ public class ShipmentRequestForm extends BaseShipmentForm
 		this.containerCounter = 0;
 		if (shipmentRequest.getContainerCollection() != null)
 		{
-			Iterator < StorageContainer > containerIterator = shipmentRequest
+			final Iterator<StorageContainer> containerIterator = shipmentRequest
 					.getContainerCollection().iterator();
 			while (containerIterator.hasNext())
 			{
-				StorageContainer container = containerIterator.next();
+				final StorageContainer container = containerIterator.next();
 				if (container != null && container.getName() != null)
 				{
 					this.containerCounter++;
-					this.containerDetailsMap.put("containerLabel_" + containerCounter, container
-							.getName());
-					this.containerDetailsMap.put("containerBarcode_" + containerCounter, container
-							.getBarcode());
+					this.containerDetailsMap.put("containerLabel_" + this.containerCounter,
+							container.getName());
+					this.containerDetailsMap.put("containerBarcode_" + this.containerCounter,
+							container.getBarcode());
 				}
 			}
 		}
@@ -131,11 +132,12 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	 * @param request HttpServletRequest object.
 	 * @return errors object of ActionErrors class.
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		validateBasicShipmentRequestInfo(errors);
-		validateShipmentContentDetails(errors);
+		final ActionErrors errors = new ActionErrors();
+		this.validateBasicShipmentRequestInfo(errors);
+		this.validateShipmentContentDetails(errors);
 		return errors;
 	}
 
@@ -157,10 +159,10 @@ public class ShipmentRequestForm extends BaseShipmentForm
 	 */
 	protected void validateBasicShipmentRequestInfo(ActionErrors errors)
 	{
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 
-		String dateErrorString = validator.validateDate(this.sendDate, false);
-		if (validator.isEmpty(this.label))
+		final String dateErrorString = validator.validateDate(this.sendDate, false);
+		if (Validator.isEmpty(this.label))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("shipment.label")));

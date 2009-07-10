@@ -21,17 +21,21 @@ public class ShipmentReceivingForm extends ShipmentForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5353240406627212866L;
+	/**
 	 * Serializable class requires Serial version id.
 	 */
 	//private static long serialVersionUID = 1L;
 	/**
 	 * specimens in shipment.
 	 */
-	protected List < Specimen > specimenCollection = new ArrayList < Specimen >();
+	protected List<Specimen> specimenCollection = new ArrayList<Specimen>();
 	/**
 	 * container in shipment.
 	 */
-	protected List < StorageContainer > containerCollection = new ArrayList < StorageContainer >();
+	protected List<StorageContainer> containerCollection = new ArrayList<StorageContainer>();
 	/**
 	 * Sender site.
 	 */
@@ -56,16 +60,16 @@ public class ShipmentReceivingForm extends ShipmentForm
 	/**
 	 * @return specimens contained in shipment.
 	 */
-	public List < Specimen > getSpecimenCollection()
+	public List<Specimen> getSpecimenCollection()
 	{
-		return specimenCollection;
+		return this.specimenCollection;
 	}
 
 	/**
 	 * @param specimenCollection specimens in shipment.
 	 */
 
-	public void setSpecimenCollection(List < Specimen > specimenCollection)
+	public void setSpecimenCollection(List<Specimen> specimenCollection)
 	{
 		this.specimenCollection = specimenCollection;
 	}
@@ -73,15 +77,15 @@ public class ShipmentReceivingForm extends ShipmentForm
 	/**
 	 * @return containers contained in shipment.
 	 */
-	public List < StorageContainer > getContainerCollection()
+	public List<StorageContainer> getContainerCollection()
 	{
-		return containerCollection;
+		return this.containerCollection;
 	}
 
 	/**
 	 * @param containerCollection containers in shipment.
 	 */
-	public void setContainerCollection(List < StorageContainer > containerCollection)
+	public void setContainerCollection(List<StorageContainer> containerCollection)
 	{
 		this.containerCollection = containerCollection;
 	}
@@ -90,15 +94,17 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * Get shipment sender site name.
 	 * @return senderSiteName Shipment sender site name.
 	 */
+	@Override
 	public String getSenderSiteName()
 	{
-		return senderSiteName;
+		return this.senderSiteName;
 	}
 
 	/**
 	 * Set shipment sender site name.
 	 * @param senderSiteName Shipment sender site name.
 	 */
+	@Override
 	public void setSenderSiteName(String senderSiteName)
 	{
 		this.senderSiteName = senderSiteName;
@@ -108,15 +114,17 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * Get shipment receiver site name.
 	 * @return receiverSiteName Shipment receiver site name.
 	 */
+	@Override
 	public String getReceiverSiteName()
 	{
-		return receiverSiteName;
+		return this.receiverSiteName;
 	}
 
 	/**
 	 * Set shipment receiver site name.
 	 * @param receiverSiteName Shipment receiver site name.
 	 */
+	@Override
 	public void setReceiverSiteName(String receiverSiteName)
 	{
 		this.receiverSiteName = receiverSiteName;
@@ -128,7 +136,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 */
 	public String getSenderContactPersonName()
 	{
-		return senderContactPersonName;
+		return this.senderContactPersonName;
 	}
 
 	/**
@@ -146,7 +154,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 */
 	public String getReceiverContactPersonName()
 	{
-		return receiverContactPersonName;
+		return this.receiverContactPersonName;
 	}
 
 	/**
@@ -164,7 +172,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 */
 	public String getFromPage()
 	{
-		return fromPage;
+		return this.fromPage;
 	}
 
 	/**
@@ -212,7 +220,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	{
 		super.setAllValues(arg0);
 		// Set details - sender, receiver, senderSite, receiverSite.
-		setSendingDetails(arg0);
+		this.setSendingDetails(arg0);
 	}
 
 	/**
@@ -226,7 +234,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 		// make sure that orderList is not null
 		if (this.specimenCollection == null)
 		{
-			this.specimenCollection = new ArrayList < Specimen >();
+			this.specimenCollection = new ArrayList<Specimen>();
 		}
 		// indexes do not come in order, populate empty spots
 		while (index >= this.specimenCollection.size())
@@ -234,7 +242,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 			this.specimenCollection.add(new Specimen());
 		}
 		// return the requested item
-		return (Specimen) specimenCollection.get(index);
+		return this.specimenCollection.get(index);
 	}
 
 	/**
@@ -248,7 +256,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 		// make sure that orderList is not null
 		if (this.containerCollection == null)
 		{
-			this.containerCollection = new ArrayList < StorageContainer >();
+			this.containerCollection = new ArrayList<StorageContainer>();
 		}
 		// indexes do not come in order, populate empty spots
 		while (index >= this.containerCollection.size())
@@ -256,7 +264,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 			this.containerCollection.add(new StorageContainer());
 		}
 		// return the requested item
-		return (StorageContainer) containerCollection.get(index);
+		return this.containerCollection.get(index);
 	}
 
 	/**
@@ -267,7 +275,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	{
 		if (arg0 instanceof Shipment)
 		{
-			Shipment shipment = (Shipment) arg0;
+			final Shipment shipment = (Shipment) arg0;
 			if (shipment.getSenderSite() != null)
 			{
 				this.senderSiteName = shipment.getSenderSite().getName();
@@ -313,15 +321,16 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * this method populates the shipment content details.
 	 * @param shipment object of baseshipment class.
 	 */
+	@Override
 	protected void populateShipmentContentsDetails(BaseShipment shipment)
 	{
 		if (shipment.getContainerCollection() != null)
 		{
-			Iterator < StorageContainer > containerIterator = shipment.getContainerCollection()
+			final Iterator<StorageContainer> containerIterator = shipment.getContainerCollection()
 					.iterator();
 			while (containerIterator.hasNext())
 			{
-				StorageContainer container = containerIterator.next();
+				final StorageContainer container = containerIterator.next();
 				if (container.getStorageType() != null
 						&& !container.getStorageType().getName().equals(
 								Constants.SHIPMENT_CONTAINER_TYPE_NAME))
@@ -330,7 +339,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 				}
 				else
 				{
-					populateSpecimenDetails(container.getSpecimenPositionCollection());
+					this.populateSpecimenDetails(container.getSpecimenPositionCollection());
 				}
 			}
 		}
@@ -340,13 +349,13 @@ public class ShipmentReceivingForm extends ShipmentForm
 	 * this method populates the specimen details.
 	 * @param specimenPositionCollection the collection containing the position of specimen.
 	 */
-	private void populateSpecimenDetails(Collection < SpecimenPosition > specimenPositionCollection)
+	private void populateSpecimenDetails(Collection<SpecimenPosition> specimenPositionCollection)
 	{
-		Iterator < SpecimenPosition > spPosIterator = specimenPositionCollection.iterator();
+		final Iterator<SpecimenPosition> spPosIterator = specimenPositionCollection.iterator();
 		while (spPosIterator.hasNext())
 		{
-			SpecimenPosition position = spPosIterator.next();
-			specimenCollection.add(position.getSpecimen());
+			final SpecimenPosition position = spPosIterator.next();
+			this.specimenCollection.add(position.getSpecimen());
 		}
 	}
 }

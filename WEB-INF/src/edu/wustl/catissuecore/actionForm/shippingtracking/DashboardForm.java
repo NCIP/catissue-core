@@ -20,16 +20,80 @@ public class DashboardForm extends ActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7193695200162617786L;
+
+	/**
 	 * integer containing records per page on the dashboard.
 	 */
 	protected int recordsPerPage = 0;
+
+	protected int incomingShipmentsTotalRecords = 0;
+
+	protected int outgoingShipmentsTotalRecords = 0;
+
+	protected int incomingShipmentReqsTotalRecords = 0;
+
+	protected int outgoingShipmentReqsTotalRecords = 0;
+
+	public int getIncomingShipmentsTotalRecords()
+	{
+		return this.incomingShipmentsTotalRecords;
+	}
+
+	public void setIncomingShipmentsTotalRecords(int incomingShipmentsTotalRecords)
+	{
+		this.incomingShipmentsTotalRecords = incomingShipmentsTotalRecords;
+	}
+
+	public int getOutgoingShipmentsTotalRecords()
+	{
+		return this.outgoingShipmentsTotalRecords;
+	}
+
+	public void setOutgoingShipmentsTotalRecords(int outgoingShipmentsTotalRecords)
+	{
+		this.outgoingShipmentsTotalRecords = outgoingShipmentsTotalRecords;
+	}
+
+	public int getIncomingShipmentReqsTotalRecords()
+	{
+		return this.incomingShipmentReqsTotalRecords;
+	}
+
+	public void setIncomingShipmentReqsTotalRecords(int incomingShipmentReqsTotalRecords)
+	{
+		this.incomingShipmentReqsTotalRecords = incomingShipmentReqsTotalRecords;
+	}
+
+	public int getOutgoingShipmentReqsTotalRecords()
+	{
+		return this.outgoingShipmentReqsTotalRecords;
+	}
+
+	public void setOutgoingShipmentReqsTotalRecords(int outgoingShipmentReqsTotalRecords)
+	{
+		this.outgoingShipmentReqsTotalRecords = outgoingShipmentReqsTotalRecords;
+	}
+
+	public int getTotalRecords()
+	{
+		return this.incomingShipmentsTotalRecords;
+	}
+
+	public void setTotalRecords(int totalRecords)
+	{
+		this.incomingShipmentsTotalRecords = totalRecords;
+	}
+
 	/**
 	 * sets the records per page of the dashboard.
 	 * @return recordsPerPage.
 	 */
 	public int getRecordsPerPage()
 	{
-		return recordsPerPage;
+		return this.recordsPerPage;
 	}
 
 	/**

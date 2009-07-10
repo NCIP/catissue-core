@@ -7,7 +7,9 @@
  * @version 1.00
  * Created on July 16, 2008
  */
+
 package edu.wustl.catissuecore.actionForm.shippingtracking;
+
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -19,10 +21,11 @@ import edu.wustl.common.util.XMLPropertyHandler;
  **/
 public class ShipmentForm extends BaseShipmentForm
 {
+
 	/**
 	 * variable containing id of the shipment request.
 	 */
-	protected long shipmentRequestId=0;
+	protected long shipmentRequestId = 0;
 	/**
 	 * Serializable class requires Serial version id.
 	 */
@@ -32,6 +35,7 @@ public class ShipmentForm extends BaseShipmentForm
 	 * Shipment/Container Bar code.
 	 */
 	private String barcode;
+
 	/**
 	 * Gets the shipment barcode.
 	 * @return the bar code
@@ -39,20 +43,23 @@ public class ShipmentForm extends BaseShipmentForm
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
+
 	/**
 	 * The string to determine if barcode field is editable.
 	 */
 	private String isBarcodeEditable = XMLPropertyHandler.getValue(Constants.IS_BARCODE_EDITABLE);
+
 	/**
 	 * checks the editable property of the barcode.
 	 * @return isBarcodeEditable representing the string containing the editable check.
 	 */
 	public String getIsBarcodeEditable()
 	{
-		return isBarcodeEditable;
+		return this.isBarcodeEditable;
 	}
+
 	/**
 	 * sets the barcode editable check.
 	 * @param isBarcodeEditable string containing the check on editable property.
@@ -81,15 +88,17 @@ public class ShipmentForm extends BaseShipmentForm
 	{
 		return Constants.SHIPMENT_FORM_ID;
 	}
+
 	/**
-     * Resets the values of all the fields.
-     * Is called by the overridden reset method defined in ActionForm.
-     * */
+	 * Resets the values of all the fields.
+	 * Is called by the overridden reset method defined in ActionForm.
+	 * */
 	@Override
 	protected void reset()
 	{
 		this.barcode = null;
 	}
+
 	/**
 	 * this method overrides the corresponding method in the base class.
 	 * @param abstractDomainObject the domain object.
@@ -98,24 +107,27 @@ public class ShipmentForm extends BaseShipmentForm
 	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
 		super.setAllValues(abstractDomainObject);
-		if(abstractDomainObject instanceof Shipment)
+		if (abstractDomainObject instanceof Shipment)
 		{
-			Shipment shipment=(Shipment)abstractDomainObject;
-			this.barcode=shipment.getBarcode();
-			if(shipment.getShipmentRequest()!=null && shipment.getShipmentRequest().getId()!=null)
+			final Shipment shipment = (Shipment) abstractDomainObject;
+			this.barcode = shipment.getBarcode();
+			if (shipment.getShipmentRequest() != null
+					&& shipment.getShipmentRequest().getId() != null)
 			{
-				this.shipmentRequestId=shipment.getShipmentRequest().getId();
+				this.shipmentRequestId = shipment.getShipmentRequest().getId();
 			}
 		}
 	}
+
 	/**
 	 * gets the shipment request id.
 	 * @return shipmentRequestId the id of shipment request.
 	 */
 	public long getShipmentRequestId()
 	{
-		return shipmentRequestId;
+		return this.shipmentRequestId;
 	}
+
 	/**
 	 * sets the shipment request id.
 	 * @param shipmentRequestId the id to set.
