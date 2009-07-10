@@ -2,58 +2,64 @@ package edu.wustl.catissuecore.vo;
 
 import java.util.List;
 
-
 /**
  * @author rahul_ner
  *
  */
-public class ArrayDistributionReportEntry {
-	
+public class ArrayDistributionReportEntry
+{
+
 	List arrayInfo;
-	
+
 	List specimenEntries;
-	
+
 	List gridInfo;
 
 	/**
 	 * @return Returns the arrayInfo.
 	 */
-	public List getArrayInfo() {
-		return arrayInfo;
+	public List getArrayInfo()
+	{
+		return this.arrayInfo;
 	}
 
 	/**
-	 * @param arrayInfo The arrayInfo to set.
+	 * @param arrayInfoParam The arrayInfo to set.
 	 */
-	public void setArrayInfo(List arrayInfo) {
-		this.arrayInfo = arrayInfo;
+	public void setArrayInfo(List arrayInfoParam)
+	{
+		this.arrayInfo = arrayInfoParam;
 	}
 
 	/**
 	 * @return Returns the gridInfo.
 	 */
-	public List getGridInfo() {
-		return gridInfo;
+	public List getGridInfo()
+	{
+		return this.gridInfo;
 	}
 
 	/**
-	 * @param gridInfo The gridInfo to set.
+	 * @param gridInfoParam The gridInfo to set.
 	 */
-	public void setGridInfo(List gridInfo) {
-		this.gridInfo = gridInfo;
+	public void setGridInfo(List gridInfoParam)
+	{
+		this.gridInfo = gridInfoParam;
 	}
 
 	/**
 	 * @return Returns the specimenEntries.
 	 */
-	public List getSpecimenEntries() {
-		return specimenEntries;
+	public List getSpecimenEntries()
+	{
+		return this.specimenEntries;
 	}
 
 	/**
-	 * @param specimenEntries The specimenEntries to set.
+	 * @param specimenEntriesParam The specimenEntries to set.
 	 */
-	public void setSpecimenEntries(List specimenEntries) {
-		this.specimenEntries = specimenEntries;
+	public void setSpecimenEntries(List specimenEntriesParam)
+	{
+		this.specimenEntries = specimenEntriesParam;
 	}
 }
