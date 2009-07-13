@@ -61,7 +61,7 @@ A Tag to display specimen details
 
 <tag>
 <name>genericSpecimenDetails</name>
-<tagclass>edu.wustl.catissuecore.tag.GenericSpecimenDetailsTag</tagclass>
+<tagclass>edu.wustl.catissuecore.tag.SpecimenDetailsNewFormat</tagclass>
 <bodycontent>empty</bodycontent>
 <info>
 A Tag to display generic specimen details
