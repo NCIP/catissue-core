@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import java.io.File;
@@ -22,13 +23,14 @@ import edu.wustl.common.util.logger.LoggerConfig;
  */
 public class FilePoller implements Observable
 {
-	/**
-	 * logger Logger - Generic logger.
-	 */
+
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
+	/**
+	 * logger Logger - Generic logger.
+	 */
 	private static Logger logger = Logger.getCommonLogger(FilePoller.class);
 
 	/**
@@ -53,29 +55,32 @@ public class FilePoller implements Observable
 			Utility.init();
 			// initializing SiteInfoHandler to read site names from site configuration file
 			SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
-			XMLPropertyHandler.init(CaTIESProperties.getValue(CaTIESConstants.XML_PROPERTY_FILENAME));
+			XMLPropertyHandler.init(CaTIESProperties
+					.getValue(CaTIESConstants.XML_PROPERTY_FILENAME));
 			// Configuring CSV logger
 			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
 			//Initializing caCoreAPI instance
 			CaCoreAPIService.initialize();
-			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, CaTIESConstants.CSVLOGGER_DATETIME +
-				CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_FILENAME +
-				CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_REPORTQUEUE +
-				CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_STATUS +
-				CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_MESSAGE +
-				CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
+			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, CaTIESConstants.CSVLOGGER_DATETIME
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_FILENAME
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR
+					+ CaTIESConstants.CSVLOGGER_REPORTQUEUE
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_STATUS
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_MESSAGE
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR
+					+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 			// for empty row after heading
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "");
 
-			Observer obr = new ReportProcessor();
+			final Observer obr = new ReportProcessor();
 			// registering poller to the object obr
 			poller.register(obr);
 			//start thread ReportLoaderQueueProcessor
-			ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
+			final ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
 			// Starts ReportLoaderQueueProcessor thread
 			queueProcessor.start();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error occured while inializing File Poller ", ex);
 			return;
@@ -83,18 +88,19 @@ public class FilePoller implements Observable
 		try
 		{
 			// Create new directories if does not exists
-			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR));
+			ReportLoaderUtil.createDir(CaTIESProperties
+					.getValue(CaTIESConstants.PROCESSED_FILE_DIR));
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR));
 			// Thread for stopping file poller server
-			Thread stopThread = new StopServer(CaTIESConstants.FILE_POLLER_PORT);
+			final Thread stopThread = new StopServer(CaTIESConstants.FILE_POLLER_PORT);
 			stopThread.start();
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
 			logger.error("Error while creating directories ", ex);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while creating directories ", ex);
 		}
@@ -111,13 +117,13 @@ public class FilePoller implements Observable
 					// this invokes ReportProcessor thread
 					poller.obr.notifyEvent(files);
 				}
-				logger.info("Report Loader Server is going to sleep for " +
-					CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
-				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(
-						CaTIESConstants.POLLER_SLEEPTIME)));
+				logger.info("Report Loader Server is going to sleep for "
+				+ CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
+				Thread.sleep(Long.parseLong(CaTIESProperties
+						.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while initializing parser manager ", ex);
 		}
@@ -139,7 +145,7 @@ public class FilePoller implements Observable
 	 */
 	public Observer getObr()
 	{
-		return obr;
+		return this.obr;
 	}
 
 	/**

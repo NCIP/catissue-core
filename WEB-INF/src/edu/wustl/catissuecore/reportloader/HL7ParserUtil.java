@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.Collection;
@@ -25,13 +26,21 @@ import edu.wustl.common.util.logger.Logger;
  *
  */
 
-public class HL7ParserUtil
+public final class HL7ParserUtil
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	private static Logger logger = Logger.getCommonLogger(HL7ParserUtil.class);
 
+	/**
+	 * private constructor.
+	 */
+	private HL7ParserUtil()
+	{
+
+	}
 	/**
 	 * Method to validate report map.
 	 * @param reportMap report map representing map of different pathology reports
@@ -42,20 +51,20 @@ public class HL7ParserUtil
 		boolean isValid = false;
 		try
 		{
-			if (reportMap.containsKey(CaTIESConstants.PID) &&
-					reportMap.get(CaTIESConstants.PID) != null)
+			if (reportMap.containsKey(CaTIESConstants.PID)
+					&& reportMap.get(CaTIESConstants.PID) != null)
 			{
 				// if site is not null then check for section
-				if (reportMap.containsKey(CaTIESConstants.OBR) &&
-						reportMap.get(CaTIESConstants.OBR) != null)
+				if (reportMap.containsKey(CaTIESConstants.OBR)
+						&& reportMap.get(CaTIESConstants.OBR) != null)
 				{
-					if (reportMap.containsKey(CaTIESConstants.OBX) &&
-							reportMap.get(CaTIESConstants.OBX) != null)
+					if (reportMap.containsKey(CaTIESConstants.OBX)
+							&& reportMap.get(CaTIESConstants.OBX) != null)
 					{
-						String surgicalPathologyNumber = HL7ParserUtil.
-							getSurgicalPathologyNumber(HL7ParserUtil.
-								getReportDataFromReportMap(reportMap,
-										CaTIESConstants.OBR));
+						final String surgicalPathologyNumber = HL7ParserUtil
+								.getSurgicalPathologyNumber(HL7ParserUtil
+									.getReportDataFromReportMap(reportMap,
+											CaTIESConstants.OBR));
 
 						if (!(surgicalPathologyNumber == null ||
 								surgicalPathologyNumber.equals("")))
@@ -66,7 +75,7 @@ public class HL7ParserUtil
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -80,11 +89,11 @@ public class HL7ParserUtil
 	*/
 	public static String getReportText(Map<String, Set> reportMap)
 	{
-		StringBuffer reportTxt = new StringBuffer();
+		final StringBuffer reportTxt = new StringBuffer();
 		Collection<Set> collection = null;
 		collection = reportMap.values();
 		Iterator itr = null;
-		Iterator<Set> iterator = collection.iterator();
+		final Iterator<Set> iterator = collection.iterator();
 		while (iterator.hasNext())
 		{
 			itr = iterator.next().iterator();
@@ -108,7 +117,7 @@ public class HL7ParserUtil
 			String newObrLine = obrLine.replace('|', '~');
 			newObrLine = newObrLine.replaceAll("~", "|~~");
 
-			StringTokenizer strTokenizer = new StringTokenizer(newObrLine, "|");
+			final StringTokenizer strTokenizer = new StringTokenizer(newObrLine, "|");
 
 			for (int x = 0; strTokenizer.hasMoreTokens(); x++)
 			{
@@ -124,13 +133,13 @@ public class HL7ParserUtil
 				//	Accession number is now called as Surgical Pathology Number
 				if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX)
 				{
-					StringTokenizer st2 = new StringTokenizer(field, "^");
-					String accNum = st2.nextToken();
+					final StringTokenizer st2 = new StringTokenizer(field, "^");
+					final String accNum = st2.nextToken();
 					return accNum;
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Error while parsing the report map", e);
 		}
@@ -146,7 +155,7 @@ public class HL7ParserUtil
 	public static Participant parserParticipantInformation(String pidLine, Site site)
 	{
 		logger.info("Parsing participant information");
-		Participant participant = new Participant();
+		final Participant participant = new Participant();
 		try
 		{
 			participant.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
@@ -155,7 +164,7 @@ public class HL7ParserUtil
 			String field = null;
 			String newPidLine = pidLine.replace('|', '~');
 			newPidLine = newPidLine.replaceAll("~", "|~~");
-			StringTokenizer strTokenizer = new StringTokenizer(newPidLine, "|");
+			final StringTokenizer strTokenizer = new StringTokenizer(newPidLine, "|");
 			for (int x = 0; strTokenizer.hasMoreTokens(); x++)
 			{
 				// 	CAN NOT USE STRINGBUFFER FOR FIELD
@@ -171,16 +180,16 @@ public class HL7ParserUtil
 				// Token for Participant medical record number
 				if (x == CaTIESConstants.PARTICIPANT_MEDICAL_RECORD_INDEX) // Getting MRN
 				{
-					StringTokenizer st2 = new StringTokenizer(field, "^^^");
-					String mrn = st2.nextToken();
+					final StringTokenizer st2 = new StringTokenizer(field, "^^^");
+					final String mrn = st2.nextToken();
 					medicalIdentification = new ParticipantMedicalIdentifier();
 					medicalIdentification.setMedicalRecordNumber(mrn);
 					//set site
 					// Site is set at the end of this function
-					medicalIdentificationCollection =
-						participant.getParticipantMedicalIdentifierCollection();
-					if (medicalIdentificationCollection != null &&
-							medicalIdentificationCollection.size() > 0)
+					medicalIdentificationCollection = participant
+							.getParticipantMedicalIdentifierCollection();
+					if (medicalIdentificationCollection != null
+							&& medicalIdentificationCollection.size() > 0)
 					{
 						// add MRI to set
 						medicalIdentificationCollection.add(medicalIdentification);
@@ -191,14 +200,15 @@ public class HL7ParserUtil
 						medicalIdentificationCollection =
 							new HashSet<ParticipantMedicalIdentifier>();
 						medicalIdentificationCollection.add(medicalIdentification);
-						participant.setParticipantMedicalIdentifierCollection(
-								medicalIdentificationCollection);
+						participant
+								.setParticipantMedicalIdentifierCollection
+								(medicalIdentificationCollection);
 					}
 				}
 				// token for participant name
 				if (x == CaTIESConstants.PARTICIPANT_NAME_INDEX)
 				{
-					StringTokenizer st2 = new StringTokenizer(field, "^");
+					final StringTokenizer st2 = new StringTokenizer(field, "^");
 					String mname = null;
 					// Last name
 					if (st2.hasMoreTokens())
@@ -223,13 +233,13 @@ public class HL7ParserUtil
 				// token for participant date of birth
 				if (x == CaTIESConstants.PARTICIPANT_DATEOFBIRTH_INDEX)
 				{
-					String year = field.substring(0, 4);
-					String month = field.substring(4, 6);
-					String day = field.substring(6, 8);
+					final String year = field.substring(0, 4);
+					final String month = field.substring(4, 6);
+					final String day = field.substring(6, 8);
 
-					GregorianCalendar gregorianCal = new GregorianCalendar(
-							Integer.parseInt(year), Integer.parseInt(month) - 1,
-							Integer.parseInt(day));
+					final GregorianCalendar gregorianCal = new GregorianCalendar(Integer
+							.parseInt(year),
+							Integer.parseInt(month) - 1, Integer.parseInt(day));
 
 					participant.setBirthDate(gregorianCal.getTime());
 				}
@@ -259,12 +269,12 @@ public class HL7ParserUtil
 				}
 			}
 			//code of setSitetoParticipant function to avoid sepearte function call
-			Collection<ParticipantMedicalIdentifier> collection =
-				participant.getParticipantMedicalIdentifierCollection();
+			final Collection<ParticipantMedicalIdentifier> collection = participant
+					.getParticipantMedicalIdentifierCollection();
 			ParticipantMedicalIdentifier medicalId = null;
 			if (collection != null)
 			{
-				Iterator<ParticipantMedicalIdentifier> iterator = collection.iterator();
+				final Iterator<ParticipantMedicalIdentifier> iterator = collection.iterator();
 				while (iterator.hasNext())
 				{
 					medicalId = iterator.next();
@@ -273,7 +283,7 @@ public class HL7ParserUtil
 			}
 			logger.info("Participant Object Created ");
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -297,9 +307,9 @@ public class HL7ParserUtil
 		String line = "";
 		reportMap = new HashMap<String, Set>();
 		//create reportMap using reportText
-		for (int i = 0; i < lines.length; i++)
+		for (final String line2 : lines)
 		{
-			line = lines[i];
+			line = line2;
 			strTokenizer = new StringTokenizer(line, "|");
 			if (strTokenizer.hasMoreTokens())
 			{
@@ -368,7 +378,7 @@ public class HL7ParserUtil
 				{
 					if (field != null && field.length() > 0)
 					{
-						StringTokenizer st2 = new StringTokenizer(field, "^^^");
+						final StringTokenizer st2 = new StringTokenizer(field, "^^^");
 						if (st2.hasMoreTokens())
 						{
 							st2.nextToken();
@@ -386,7 +396,7 @@ public class HL7ParserUtil
 						//site configuration file
 						siteName = SiteInfoHandler.getSiteName(siteName);
 					}
-					catch (Exception ex)
+					catch (final Exception ex)
 					{
 						logger.error("Site name not found in config file: " + siteName);
 					}
@@ -397,15 +407,15 @@ public class HL7ParserUtil
 								Constants.NAME, siteName);
 						if (siteObj == null)
 						{
-							logger.error("Site name " + siteName + " not found in" +
-									" the database!");
+							logger.error("Site name " + siteName + " not found in"
+									+ " the database!");
 						}
 					}
 					break;
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -421,10 +431,10 @@ public class HL7ParserUtil
 	protected static String getReportDataFromReportMap(Map<String, Set> reportMap, String key)
 	{
 		String returnValue = null;
-		Set tempSet = reportMap.get(key);
+		final Set tempSet = reportMap.get(key);
 		if (tempSet != null && tempSet.size() > 0)
 		{
-			Iterator iterator = tempSet.iterator();
+			final Iterator iterator = tempSet.iterator();
 			returnValue = (String) iterator.next();
 		}
 		return returnValue;

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 /**
@@ -7,6 +8,7 @@ package edu.wustl.catissuecore.reportloader;
 
 public interface Observer
 {
+
 	/**
 	 * @param obj object
 	 */

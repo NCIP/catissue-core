@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -10,6 +11,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public final class ParserManager
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -49,20 +51,20 @@ public final class ParserManager
 		{
 			parser = (Parser) Class.forName(CaTIESConstants.PARSER_CLASS).newInstance();
 		}
-		catch (InstantiationException e)
+		catch (final InstantiationException e)
 		{
-			logger.error("InstantiationException while instantiating class " +
-					CaTIESConstants.PARSER_CLASS, e);
+			logger.error("InstantiationException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS, e);
 		}
-		catch (IllegalAccessException e)
+		catch (final IllegalAccessException e)
 		{
-			logger.error("IllegalAccessException while instantiating class " +
-					CaTIESConstants.PARSER_CLASS, e);
+			logger.error("IllegalAccessException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS, e);
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.error("ClassNotFoundException while instantiating class " +
-					CaTIESConstants.PARSER_CLASS, e);
+			logger.error("ClassNotFoundException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS, e);
 		}
 		return parser;
 	}

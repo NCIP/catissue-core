@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.HashMap;
@@ -5,21 +6,30 @@ import java.util.HashMap;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
-public interface Parser 
+/**
+ *
+ * interface for Parse.
+ *
+ */
+public interface Parser
 {
+
 	/**
 	 * @param fileName name of the file
-	 * @throws Exception while parsing the report  
+	 * @throws Exception while parsing the report
 	 */
-	public void parse(String fileName)throws Exception;
-	
+	void parse(String fileName) throws Exception;
+
 	/**
-	 * 
-	 * @param participant
-	 * @param reportText
-	 * @param specimenCollectionGroup
-	 * @throws Exception
+	 * Parse string.
+	 * @param participant Participant object
+	 * @param reportText report Text
+	 * @param specimenCollectionGroup specimen Collection Group
+	 * @param abbrToHeader abbrToHeader
+	 * @throws Exception Exception while parsing the string.
 	 */
-	public void parseString(Participant participant,String reportText, SpecimenCollectionGroup specimenCollectionGroup, HashMap<String,String> abbrToHeader)throws Exception;
-	
+	void parseString(Participant participant, String reportText,
+			SpecimenCollectionGroup specimenCollectionGroup, HashMap<String, String> abbrToHeader)
+			throws Exception;
+
 }

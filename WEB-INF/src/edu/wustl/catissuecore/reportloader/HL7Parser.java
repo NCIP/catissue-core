@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
@@ -31,6 +33,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class HL7Parser implements Parser
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -39,57 +42,57 @@ public class HL7Parser implements Parser
 	/**
 	 * Points for exact SSN.
 	 */
-	private static final int POINTS_FOR_SSN_EXACT = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_SSN_EXACT));
+	private static final int POINTS_FOR_SSN_EXACT = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_SSN_EXACT));
 
 	/**
 	 * Points for exact PMI.
 	 */
-	private static final int POINTS_FOR_PMI_EXACT = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_PMI_EXACT));
+	private static final int POINTS_FOR_PMI_EXACT = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_PMI_EXACT));
 
 	/**
 	 * Points for exact Date Of Birth.
 	 */
-	private static final int POINTS_FOR_DOB_EXACT = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_DOB_EXACT));
+	private static final int POINTS_FOR_DOB_EXACT = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_DOB_EXACT));
 
 	/**
 	 * Points for exact Last Name.
 	 */
-	private static final int POINTS_FOR_LASTNAME_EXACT = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_LAST_NAME_EXACT));
+	private static final int POINTS_FOR_LASTNAME_EXACT = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_LAST_NAME_EXACT));
 
 	/**
 	 * Points for exact First Name.
 	 */
-	private static final int POINTS_FOR_FIRSTNAME_EXACT = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_FIRST_NAME_EXACT));
+	private static final int POINTS_FOR_FIRSTNAME_EXACT = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_FIRST_NAME_EXACT));
 
 	/**
 	 * Total Points.
 	 */
-	private static final int TOTAL_POINTS_FROM_PROPERTIES = POINTS_FOR_FIRSTNAME_EXACT +
-	POINTS_FOR_LASTNAME_EXACT + POINTS_FOR_DOB_EXACT + POINTS_FOR_SSN_EXACT
+	private static final int TOTAL_POINTS_FROM_PROPERTIES = POINTS_FOR_FIRSTNAME_EXACT
+			+ POINTS_FOR_LASTNAME_EXACT + POINTS_FOR_DOB_EXACT + POINTS_FOR_SSN_EXACT
 			+ POINTS_FOR_PMI_EXACT;
 
 	/**
 	 * Points of Threshold 1.
 	 */
-	private static final int POINTS_FOR_THRESHOLD1 = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_THRESHOLD1));
+	private static final int POINTS_FOR_THRESHOLD1 = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_THRESHOLD1));
 
 	/**
 	 * Points of Threshold 2.
 	 */
-	private static final int POINTS_FOR_THRESHOLD2 = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_THRESHOLD2));
+	private static final int POINTS_FOR_THRESHOLD2 = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_THRESHOLD2));
 
 	/**
 	 * Cut Off points.
 	 */
-	private static final int SPR_CUT_OFF = Integer.parseInt(
-			XMLPropertyHandler.getValue(Constants.SPR_CUT_OFF));
+	private static final int SPR_CUT_OFF = Integer.parseInt(XMLPropertyHandler
+			.getValue(Constants.SPR_CUT_OFF));
 
 	/**
 	 * This method processes the map structure of a report in a HL7 file.
@@ -111,10 +114,10 @@ public class HL7Parser implements Parser
 		try
 		{
 			//participant = parserParticipantInformation(line);
-			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.
-					getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
-			spn = HL7ParserUtil.getSurgicalPathologyNumber(HL7ParserUtil.
-					getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
+			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(
+					reportMap, CaTIESConstants.PID));
+			spn = HL7ParserUtil.getSurgicalPathologyNumber(HL7ParserUtil
+					.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
 			report = IdentifiedReportGenerator.getIdentifiedReport(reportMap, abbrToHeader);
 			if (report != null)
 			{
@@ -134,7 +137,7 @@ public class HL7Parser implements Parser
 				reportLoader.process();
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while parsing the report map", ex);
 		}
@@ -157,18 +160,18 @@ public class HL7Parser implements Parser
 			reportMap = HL7ParserUtil.getReportMap(reportText);
 			if (participant == null)
 			{
-				Long startTime = new Date().getTime();
-				String status = validateAndSaveReportMap(reportMap);
-				Long endTime = new Date().getTime();
-				CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, new Date().
-						toString() + ",,," + status + "," + (endTime - startTime));
+				final Long startTime = new Date().getTime();
+				final String status = validateAndSaveReportMap(reportMap);
+				final Long endTime = new Date().getTime();
+				CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, new Date().toString() + ",,,"
+						+ status + "," + (endTime - startTime));
 			}
 			else
 			{
-				process(participant, reportMap, scg, abbrToHeader);
+				this.process(participant, reportMap, scg, abbrToHeader);
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while creating report map ", ex);
 		}
@@ -209,9 +212,8 @@ public class HL7Parser implements Parser
 				{
 					token = strTokenizer.nextToken();
 					// MSH or FTS are the starting point of individual report
-					if (token.equals(CaTIESConstants.PID) ||
-							token.equals(CaTIESConstants.OBR) ||
-								token.equals(CaTIESConstants.OBX))
+					if (token.equals(CaTIESConstants.PID) || token.equals(CaTIESConstants.OBR)
+							|| token.equals(CaTIESConstants.OBX))
 					{
 						HL7ParserUtil.addToReportMap(reportMap, token, line);
 					}
@@ -224,10 +226,17 @@ public class HL7Parser implements Parser
 							status = validateAndSaveReportMap(reportMap);
 							endTime = new Date().getTime();
 							counter++;
-							CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,
-								new Date().toString() + "," + fileName + "," +
-								counter + "," + status + ",," +
-								(endTime - startTime));
+							CSVLogger.
+							info(CaTIESConstants.LOGGER_FILE_POLLER, new Date()
+									.toString()
+									+ ","
+									+ fileName
+									+ ","
+									+ counter
+									+ ","
+									+ status
+									+ ",,"
+									+ (endTime - startTime));
 
 							logger.info("Report is added to queue. Current Count is="
 									+ counter);
@@ -245,11 +254,11 @@ public class HL7Parser implements Parser
 			}
 			fileParseEndTime = new Date().getTime();
 			logger.info("Parsing File " + fileName + ": Finished at " + new Date().toString());
-			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "Total " + counter +
-				" reports are added to report queue from file " + fileName + " Time " +
-				"reuired for parsing:" + (fileParseEndTime - fileParseStartTime));
+			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "Total " + counter
+					+ " reports are added to report queue from file " + fileName + " Time "
+					+ "reuired for parsing:" + (fileParseEndTime - fileParseStartTime));
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while reading HL7 file ", ex);
 		}
@@ -262,11 +271,11 @@ public class HL7Parser implements Parser
 				bufferedReader.close();
 				fileReader.close();
 			}
-			catch (IOException ex)
+			catch (final IOException ex)
 			{
 				logger.error("Error while closing file handle ", ex);
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
 				logger.error("Error while closing file handle ", ex);
 			}
@@ -287,17 +296,17 @@ public class HL7Parser implements Parser
 		String status = null;
 		String siteName = null;
 		String participantName = null;
-		String surgicalPathologyNumber = HL7ParserUtil.getSurgicalPathologyNumber(
-				HL7ParserUtil.getReportDataFromReportMap(reportMap,
-				CaTIESConstants.OBR));
+		final String surgicalPathologyNumber = HL7ParserUtil
+				.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap,
+						CaTIESConstants.OBR));
 		// parse site information
 		Site site = null;
 		try
 		{
-			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.
-					getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
+			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(
+					reportMap, CaTIESConstants.PID));
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while parsing Site information", ex);
 		}
@@ -318,11 +327,13 @@ public class HL7Parser implements Parser
 					status = CaTIESConstants.NEW;
 
 					// Creating participant object from report text
-					Participant participant = HL7ParserUtil.parserParticipantInformation(
-							HL7ParserUtil.getReportDataFromReportMap(reportMap,
-							CaTIESConstants.PID), site);
-					participantName = participant.getLastName() + "," +
-						participant.getFirstName();
+					final Participant participant = HL7ParserUtil.parserParticipantInformation(
+							HL7ParserUtil
+								.getReportDataFromReportMap(reportMap,
+										CaTIESConstants.PID),
+							site);
+					participantName = participant.getLastName()
+					+ "," + participant.getFirstName();
 
 					logger.info("Checking for Matching SCG");
 					//	check for matching scg here
@@ -330,47 +341,56 @@ public class HL7Parser implements Parser
 					logger.info("-------------" + surgicalPathologyNumber);
 					scg = ReportLoaderUtil.getExactMatchingSCG(site, surgicalPathologyNumber);
 
-					if ((participant.getSocialSecurityNumber() == null ||
-							participant.getSocialSecurityNumber().trim().equals(""))
-						&& (participant.getFirstName() == null ||
-								participant.getFirstName().trim().equals(""))
-						&& (participant.getLastName() == null ||
-								participant.getLastName().trim().equals(""))
-						&& participant.getBirthDate() == null
-						&& participant.getParticipantMedicalIdentifierCollection() == null)
+					if ((participant.getSocialSecurityNumber() == null || participant
+							.getSocialSecurityNumber().trim().equals(""))
+							&& (participant.getFirstName() == null ||
+									participant.getFirstName()
+									.trim().equals(""))
+							&& (participant.getLastName() == null ||
+									participant.getLastName()
+									.trim().equals(""))
+							&& participant.getBirthDate() == null
+							&& participant.
+							getParticipantMedicalIdentifierCollection() == null)
 					{
 						queue = getQueueForAllFieldsEmpty(scg, participant, status);
 					}
 					else
 					{
-						defaultLookUPResultList =
-							CaCoreAPIService.getParticipantMatchingObects(participant);
+						defaultLookUPResultList = CaCoreAPIService
+								.getParticipantMatchingObects(participant);
 
 						if ((defaultLookUPResultList != null) &&
 								!defaultLookUPResultList.isEmpty())
 						{
 							queue = getQueueForNotEmptyAmbiguityList(scg,
-									defaultLookUPResultList, participant,
-									status, site);
+									defaultLookUPResultList,
+									participant, status, site);
 						}
 						else
 						{
 							logger.info("No matching participant found");
 							if (scg == null)
 							{
-								logger.info("Creating new one no scg with same spr is found--Action1");
-								participantList = createPartcipant(participant, status);
+								logger
+									.info("Creating new one no scg with" +
+										" same spr is found--Action1");
+								participantList = createPartcipant(participant,
+										status);
 								queue.setParticipantCollection(participantList);
 								queue.setStatus(CaTIESConstants.NEW);
 							}
 							else
 							{
-								logger.info("Conflict resolver scg with same spr is found-Action4");
-								Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
+								logger.info("Conflict resolver scg with" +
+										" same spr is found-Action4");
+								final Participant scgParticipant = ReportLoaderUtil
+										.getParticipant(scg.getId());
 								participantList = new HashSet<Participant>();
 								participantList.add(scgParticipant);
 								queue.setParticipantCollection(participantList);
-								queue.setStatus(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
+								queue.setStatus(CaTIESConstants.
+										STATUS_PARTICIPANT_CONFLICT);
 							}
 						}
 					}
@@ -383,7 +403,7 @@ public class HL7Parser implements Parser
 					queue.setStatus(status);
 				}
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
 				logger.error("Error occured while creating participant", ex);
 				status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
@@ -391,9 +411,9 @@ public class HL7Parser implements Parser
 			}
 		}
 
-		IdentifiedSurgicalPathologyReport report = IdentifiedReportGenerator.
-			extractOBRSegment(HL7ParserUtil.getReportDataFromReportMap(reportMap,
-				CaTIESConstants.OBR));
+		final IdentifiedSurgicalPathologyReport report = IdentifiedReportGenerator
+				.extractOBRSegment(HL7ParserUtil.getReportDataFromReportMap(reportMap,
+						CaTIESConstants.OBR));
 		reportText = HL7ParserUtil.getReportText(reportMap);
 
 		// Save report to report queue
@@ -410,9 +430,9 @@ public class HL7Parser implements Parser
 	 * @param site Site.
 	 * @return ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForNotEmptyAmbiguityList(SpecimenCollectionGroup
-			scg, List<DefaultLookupResult> defaultLookUPResultList, Participant
-			participant, String status, Site site)
+	private static ReportLoaderQueue getQueueForNotEmptyAmbiguityList(SpecimenCollectionGroup scg,
+			List<DefaultLookupResult> defaultLookUPResultList, Participant participant,
+			String status, Site site)
 	{
 		ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
@@ -423,10 +443,10 @@ public class HL7Parser implements Parser
 			logger.info("defaultLookUPResultListsize ***********" + defaultLookUPResultList.size());
 			for (int count = 0; count < defaultLookUPResultList.size(); count++)
 			{
-				DefaultLookupResult defaultLookupResult = defaultLookUPResultList.get(count);
-				logger.info("*********existing participant weight =" +
-						defaultLookupResult.getWeight());
-				MatchingStatusForSSNPMI isSSNPMITemp = defaultLookupResult.getIsSSNPMI();
+				final DefaultLookupResult defaultLookupResult = defaultLookUPResultList.get(count);
+				logger.info("*********existing participant weight ="
+						+ defaultLookupResult.getWeight());
+				final MatchingStatusForSSNPMI isSSNPMITemp = defaultLookupResult.getIsSSNPMI();
 				if (isSSNPMITemp == MatchingStatusForSSNPMI.EXACT)
 				{
 					isSSNPMI = MatchingStatusForSSNPMI.EXACT;
@@ -447,8 +467,8 @@ public class HL7Parser implements Parser
 					isOneMatchOtherNull = true;
 				}
 			}
-			if ((isSSNPMI != MatchingStatusForSSNPMI.EXACT) &&
-					(isSSNPMI != MatchingStatusForSSNPMI.NOMATCH))
+			if ((isSSNPMI != MatchingStatusForSSNPMI.EXACT)
+					&& (isSSNPMI != MatchingStatusForSSNPMI.NOMATCH))
 			{
 				if (isOneMatchOtherNull)
 				{
@@ -459,10 +479,10 @@ public class HL7Parser implements Parser
 					isSSNPMI = MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH;
 				}
 			}
-			queue = getQueueForAllCases(scg, defaultLookUPResultList, participant,
-					status, site, isSSNPMI, oneMatchOtherNullCounter);
+			queue = getQueueForAllCases(scg, defaultLookUPResultList, participant, status, site,
+					isSSNPMI, oneMatchOtherNullCounter);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -480,34 +500,34 @@ public class HL7Parser implements Parser
 	 * @return ReportLoaderQueue
 	 */
 	private static ReportLoaderQueue getQueueForAllCases(SpecimenCollectionGroup scg,
-			List<DefaultLookupResult> defaultLookUPResultList, Participant
-			participant, String status, Site site, MatchingStatusForSSNPMI
-			isSSNPMI, int oneMatchOtherNullCounter)
+			List<DefaultLookupResult> defaultLookUPResultList, Participant participant,
+			String status, Site site, MatchingStatusForSSNPMI isSSNPMI, int oneMatchOtherNullCounter)
 	{
 		ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
-		{	if ((isSSNPMI == MatchingStatusForSSNPMI.EXACT)
-				|| ((isSSNPMI == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL) &&
-						(oneMatchOtherNullCounter == 1)))
+		{
+			if ((isSSNPMI == MatchingStatusForSSNPMI.EXACT)
+					|| ((isSSNPMI == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL)
+							&& (oneMatchOtherNullCounter == 1)))
 			{
 				queue = getQueueForSSNandPMIExactMatch(scg, defaultLookUPResultList, status, site);
 			}
 
 			else if ((isSSNPMI == MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
-				|| ((isSSNPMI == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL) &&
-						(oneMatchOtherNullCounter > 1)))
+					|| ((isSSNPMI == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL)
+							&& (oneMatchOtherNullCounter > 1)))
 			{
 				queue = getQueueForSSNPMIPartial(defaultLookUPResultList, status);
 			}
 			else if (isSSNPMI == MatchingStatusForSSNPMI.NOMATCH)
 			{
-				double participantWeight = defaultLookUPResultList.get(0).getWeight();
-				double totalPoint = TOTAL_POINTS_FROM_PROPERTIES;
+				final double participantWeight = defaultLookUPResultList.get(0).getWeight();
+				final double totalPoint = TOTAL_POINTS_FROM_PROPERTIES;
 				if (defaultLookUPResultList.size() == 1 && totalPoint == participantWeight)
 				{
 					// Method for All fields except scg are exact matched.
 					queue = getQueueForAllFieldsExactMatched(scg,
-							defaultLookUPResultList, status, site);
+							defaultLookUPResultList, status,site);
 				}
 				else
 				{
@@ -515,20 +535,18 @@ public class HL7Parser implements Parser
 					if (scg == null)
 					{
 						// scg doesn't match exactly.
-						queue = getQueueForNotExactMatched(scg,
-								defaultLookUPResultList, participant,
-								status, site);
+						queue = getQueueForNotExactMatched(scg, defaultLookUPResultList,
+								participant, status, site);
 					}
 					else
-					{
-						// scg is exact matched.
+					{   // scg is exact matched.
 						queue = getQueueForSCGExactMatch(scg,
 								defaultLookUPResultList, status);
 					}
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -543,37 +561,39 @@ public class HL7Parser implements Parser
 	 * @param site Site
 	 * @return ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForSSNandPMIExactMatch(SpecimenCollectionGroup
-			scg, List<DefaultLookupResult> defaultLookUPResultList,	String status,
-			Site site)
+	private static ReportLoaderQueue getQueueForSSNandPMIExactMatch(SpecimenCollectionGroup scg,
+			List<DefaultLookupResult> defaultLookUPResultList, String status, Site site)
 	{
-		Set<Participant> participantList = new HashSet<Participant>();
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final Set<Participant> participantList = new HashSet<Participant>();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
-			Participant existingParticipant = (Participant) defaultLookUPResultList.get(0).getObject();
+			final Participant existingParticipant = (Participant) defaultLookUPResultList.get(0)
+					.getObject();
 			boolean flagForPartialSCG = false;
 			if (scg == null)
 			{
-				flagForPartialSCG = ReportLoaderUtil.isPartialMatchingSCG(
-						existingParticipant, site);
+				flagForPartialSCG = ReportLoaderUtil
+						.isPartialMatchingSCG(existingParticipant, site);
 				if (flagForPartialSCG)
 				{
 					logger.info("********SSN and PMI are Exact matched OR one of them is Exact"
-						+ "matched and other is null and SCG partial match---Action-4");
+							+ "matched and other is null" +
+									" and SCG partial match---Action-4");
 					status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 				}
 				else
 				{
 					logger.info("********SSN and PMI are Exact matched OR one of them is Exact"
-						+ "matched and other is null and SCG mismatch---Action-2");
+							+ "matched and other is null and SCG mismatch---Action-2");
 					status = CaTIESConstants.NEW;
 				}
 			}
 			else
 			{
 				logger.info("********SSN and PMI are Exact matched OR one of them is"
-				+ "Exact matched and other is null and SCG exact match---Action-3");
+						+ "Exact matched and other" +
+								" is null and SCG exact match---Action-3");
 				status = CaTIESConstants.NEW;
 			}
 			logger.info("********Use existing participant --");
@@ -581,7 +601,7 @@ public class HL7Parser implements Parser
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -594,22 +614,24 @@ public class HL7Parser implements Parser
 	 * @param status String
 	 * @return ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForSSNPMIPartial(List<DefaultLookupResult>
-		defaultLookUPResultList, String status)
+	private static ReportLoaderQueue getQueueForSSNPMIPartial(
+			List<DefaultLookupResult> defaultLookUPResultList, String status)
 	{
-		logger.info("********Between SSN and PMI one matches and other mismatches OR " +
-		"Between SSN and PMI one matches and other null and more than 1 participants -Action4");
+		logger
+				.info("********Between SSN and PMI one matches and other mismatches OR "
+						+ "Between SSN and PMI one matches and other null and" +
+								" more than 1 participants -Action4");
 
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
-			Set<Participant> participantList = ReportLoaderUtil.getParticipantList(
-					defaultLookUPResultList);
+			final Set<Participant> participantList = ReportLoaderUtil
+					.getParticipantList(defaultLookUPResultList);
 			status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -652,26 +674,26 @@ public class HL7Parser implements Parser
 	 * @param site Site
 	 * @return ReportLoaderQueue ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForNotExactMatched(SpecimenCollectionGroup
-			scg, List<DefaultLookupResult> defaultLookUPResultList, Participant
-			participant, String status, Site site)
+	private static ReportLoaderQueue getQueueForNotExactMatched(SpecimenCollectionGroup scg,
+			List<DefaultLookupResult> defaultLookUPResultList, Participant participant,
+			String status, Site site)
 	{
 		ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
 			Set<Participant> participantList = new HashSet<Participant>();
 			logger.info("Matching Participant found " + defaultLookUPResultList.size());
-			Set<Participant> PListBasedOnWt = new HashSet<Participant>();
+			Set<Participant> pListBasedOnWt = new HashSet<Participant>();
 
-			double lowerWtLimit = SPR_CUT_OFF;
-			double upperWtLimit = POINTS_FOR_THRESHOLD2;
-			boolean lowerWtLimitFlag = false;
-			boolean upperWtLimitFlag = true;
+			final double lowerWtLimit = SPR_CUT_OFF;
+			final double upperWtLimit = POINTS_FOR_THRESHOLD2;
+			final boolean lowerWtLimitFlag = false;
+			final boolean upperWtLimitFlag = true;
 
-			PListBasedOnWt = getPListForGivenWt(defaultLookUPResultList, lowerWtLimit,
+			pListBasedOnWt = getPListForGivenWt(defaultLookUPResultList, lowerWtLimit,
 					upperWtLimit, lowerWtLimitFlag, upperWtLimitFlag, site);
 
-			if (defaultLookUPResultList.size() == PListBasedOnWt.size())
+			if (defaultLookUPResultList.size() == pListBasedOnWt.size())
 			{
 				/*	Logger.out.info("********-140<weight<0 and  -Action1");
 					Logger.out.info("********Creating new participant");
@@ -689,7 +711,7 @@ public class HL7Parser implements Parser
 				queue = getQueueForAllFieldsPositiveWeight(defaultLookUPResultList, status, site);
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -703,11 +725,10 @@ public class HL7Parser implements Parser
 	 * @return ReportLoaderQueue ReportLoaderQueue
 	 */
 	private static ReportLoaderQueue getQueueForAllFieldsPositiveWeight(
-			List<DefaultLookupResult> defaultLookUPResultList, String status,
-			Site site)
+			List<DefaultLookupResult> defaultLookUPResultList, String status, Site site)
 	{
 		Set<Participant> participantList = new HashSet<Participant>();
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
 			double lowerWtLimit;
@@ -718,51 +739,37 @@ public class HL7Parser implements Parser
 			upperWtLimit = 0;
 			lowerWtLimitFlag = true;
 			upperWtLimitFlag = false;
-			Set<Participant> PListBasedOnWt2 = getPListForGivenWt(
-					defaultLookUPResultList, lowerWtLimit, upperWtLimit,
-					lowerWtLimitFlag, upperWtLimitFlag, site);
-
-			if (PListBasedOnWt2 != null && !PListBasedOnWt2.isEmpty())
+			final Set<Participant> pListBasedOnWt2 = getPListForGivenWt(defaultLookUPResultList,
+					lowerWtLimit, upperWtLimit, lowerWtLimitFlag, upperWtLimitFlag, site);
+			if (pListBasedOnWt2 != null && !pListBasedOnWt2.isEmpty())
 			{
-				if (PListBasedOnWt2.size() == 1)
+				if (pListBasedOnWt2.size() == 1)
 				{
-		//Changes as per New requirement from John Reber
-		//			 flagForPartialSCG = ReportLoaderUtil.isPartialMatchingSCG(PListBasedOnWt2.iterator().next(), site);
-		//			 if(flagForPartialSCG)
-		//			 {
-		//				 Logger.out.info("********one Participant weight>59 partially match and SCG no match -Action-4");
-		//				 //only one participant should be in the list
-		//				 participantList = ReportLoaderUtil.getParticipantList(defaultLookUPResultList);
-		//				 status=CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
-		//			 }
-		//			 else
-		//			{
-					logger.info("********one Participant weight>59 partially match" +
-							" and SCG mis match -Action-2");
-					participantList = PListBasedOnWt2;
+					logger.info("********one Participant weight>59 partially match"
+							+ " and SCG mis match -Action-2");
+					participantList = pListBasedOnWt2;
 					status = CaTIESConstants.NEW;
-		//			}
 				}
 				else
 				{
-					logger.info("********Participant weight>59 more than one " +
-							"partially match and SCG mis or no match");
-					participantList = ReportLoaderUtil.getParticipantList(
-							defaultLookUPResultList);
+					logger.info("********Participant weight>59 more than one "
+							+ "partially match and SCG mis or no match");
+					participantList = ReportLoaderUtil.
+					getParticipantList(defaultLookUPResultList);
 					status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 				}
 			}
 			else
 			{
-				logger.info("********Participant 60>weight>0 partially match and SCG" +
-						" mis or no match -Action-4");
+				logger.info("********Participant 60>weight>0 partially match and SCG"
+						+ " mis or no match -Action-4");
 				participantList = ReportLoaderUtil.getParticipantList(defaultLookUPResultList);
 				status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 			}
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -776,38 +783,37 @@ public class HL7Parser implements Parser
 	 * @param scg SpecimenCollectionGroup
 	 * @return ReportLoaderQueue ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForSCGExactMatch(SpecimenCollectionGroup
-			scg, List<DefaultLookupResult> defaultLookUPResultList,
-			String status)
+	private static ReportLoaderQueue getQueueForSCGExactMatch(SpecimenCollectionGroup scg,
+			List<DefaultLookupResult> defaultLookUPResultList, String status)
 	{
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
-			Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
-			Set<Participant> participantList = new HashSet<Participant>();
-			Set<Participant> PListBasedOnWt = new HashSet<Participant>();
+			final Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
+			final Set<Participant> participantList = new HashSet<Participant>();
+			final Set<Participant> pListBasedOnWt = new HashSet<Participant>();
 			double participantWt = 0;
 
-			for (DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
+			for (final DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
 			{
 				participantWt = defaultLookupResult.getWeight();
 				if (participantWt >= POINTS_FOR_THRESHOLD1)
 				{
-					PListBasedOnWt.add((Participant) defaultLookupResult.getObject());
+					pListBasedOnWt.add((Participant) defaultLookupResult.getObject());
 				}
 			}
 			logger.info("********" + scgParticipant.getId() + "  " + scgParticipant.getFirstName());
 
-			if (contains(PListBasedOnWt, scgParticipant))
+			if (contains(pListBasedOnWt, scgParticipant))
 			{
-				logger.info("********Participant weight>59 partially match and SCG " +
-						"exact match-Action3");
+				logger.info("********Participant weight>59 partially match and SCG "
+						+ "exact match-Action3");
 				status = CaTIESConstants.NEW;
 			}
 			else
 			{
-				logger.info("********Participant weight<60 partially match and SCG " +
-						"exact match-Action4");
+				logger.info("********Participant weight<60 partially match and SCG "
+						+ "exact match-Action4");
 				status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 			}
 			participantList.clear();
@@ -815,7 +821,7 @@ public class HL7Parser implements Parser
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -830,22 +836,22 @@ public class HL7Parser implements Parser
 	 * @param scg SpecimenCollectionGroup
 	 * @return ReportLoaderQueue ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForAllFieldsExactMatched(
-			SpecimenCollectionGroup scg, List<DefaultLookupResult>
-			defaultLookUPResultList, String status, Site site)
+	private static ReportLoaderQueue getQueueForAllFieldsExactMatched(SpecimenCollectionGroup scg,
+			List<DefaultLookupResult> defaultLookUPResultList, String status, Site site)
 	{
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
-			Participant existingParticipant = (Participant) defaultLookUPResultList.get(0).getObject();
+			final Participant existingParticipant = (Participant) defaultLookUPResultList.get(0)
+					.getObject();
 			logger.info("Matching participant found. Using existing participant");
-			Set<Participant> participantList = new HashSet<Participant>();
+			final Set<Participant> participantList = new HashSet<Participant>();
 			participantList.add(existingParticipant);
 			boolean flagForPartialSCG = false;
 			if (scg == null)
 			{
-				flagForPartialSCG = ReportLoaderUtil.isPartialMatchingSCG(
-						existingParticipant, site);
+				flagForPartialSCG = ReportLoaderUtil
+						.isPartialMatchingSCG(existingParticipant, site);
 				if (flagForPartialSCG)
 				{
 					logger.info("********Participant Exact match and SCG partial match");
@@ -859,13 +865,13 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				logger.info("********Participant Exact match and SCG exact match");
+				logger.info("*******Participant Exact match and SCG exact match");
 				status = CaTIESConstants.NEW;
 			}
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -879,10 +885,10 @@ public class HL7Parser implements Parser
 	 * @param scg SpecimenCollectionGroup
 	 * @return ReportLoaderQueue ReportLoaderQueue
 	 */
-	private static ReportLoaderQueue getQueueForAllFieldsEmpty(
-			SpecimenCollectionGroup scg, Participant participant, String status)
+	private static ReportLoaderQueue getQueueForAllFieldsEmpty(SpecimenCollectionGroup scg,
+			Participant participant, String status)
 	{
-		ReportLoaderQueue queue = new ReportLoaderQueue();
+		final ReportLoaderQueue queue = new ReportLoaderQueue();
 		try
 		{
 			Set<Participant> participantList = null;
@@ -895,7 +901,7 @@ public class HL7Parser implements Parser
 			else
 			{
 				logger.info("******** UI Participant has null fields and SCG exact match");
-				Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
+				final Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
 				participantList = new HashSet<Participant>();
 				participantList.add(scgParticipant);
 				status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
@@ -903,7 +909,7 @@ public class HL7Parser implements Parser
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -930,7 +936,7 @@ public class HL7Parser implements Parser
 			participantList = new HashSet<Participant>();
 			participantList.add(participant);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Error while creating participant", e);
 			status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
@@ -949,63 +955,60 @@ public class HL7Parser implements Parser
 	 * @param site Site
 	 * @return Set of Participant
 	 */
-	private static Set<Participant> getPListForGivenWt(List<DefaultLookupResult>
-		defaultLookUPResultList, double lowerWtLimit, double upperWtLimit,
-			boolean lowerWtLimitFlag, boolean upperWtLimitFlag, Site site)
+	private static Set<Participant> getPListForGivenWt(
+			List<DefaultLookupResult> defaultLookUPResultList, double lowerWtLimit,
+			double upperWtLimit, boolean lowerWtLimitFlag, boolean upperWtLimitFlag, Site site)
 	{
 		double participantWt = 0;
-		Set<Participant> PListBasedOnWt = new HashSet<Participant>();
+		Set<Participant> pListBasedOnWt = new HashSet<Participant>();
 		try
 		{
 			if (defaultLookUPResultList != null && !defaultLookUPResultList.isEmpty())
 			{
 				if (lowerWtLimitFlag && !upperWtLimitFlag)
 				{
-					for (DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
+					for (final DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
 					{
 						participantWt = defaultLookupResult.getWeight();
 						if (participantWt > lowerWtLimit)
 						{
-							PListBasedOnWt.add((Participant) defaultLookupResult.
-									getObject());
+							pListBasedOnWt.add((Participant) defaultLookupResult.getObject());
 						}
 					}
 				}
 				else if (!lowerWtLimitFlag && upperWtLimitFlag)
 				{
-					for (DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
+					for (final DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
 					{
 						participantWt = defaultLookupResult.getWeight();
 						if (participantWt < upperWtLimit)
 						{
-							PListBasedOnWt.add((Participant) defaultLookupResult.
-									getObject());
+							pListBasedOnWt.add((Participant) defaultLookupResult.getObject());
 						}
 					}
 				}
 				else if (lowerWtLimitFlag && upperWtLimitFlag)
 				{
-					for (DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
+					for (final DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
 					{
 						participantWt = defaultLookupResult.getWeight();
 						if (participantWt > lowerWtLimit && participantWt < upperWtLimit)
 						{
-							PListBasedOnWt.add((Participant) defaultLookupResult.
-									getObject());
+							pListBasedOnWt.add((Participant) defaultLookupResult.getObject());
 						}
 					}
 				}
 				else
 				{
-					PListBasedOnWt = new HashSet<Participant>();
+					pListBasedOnWt = new HashSet<Participant>();
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
-		return PListBasedOnWt;
+		return pListBasedOnWt;
 	}
 
 	/**
@@ -1030,7 +1033,7 @@ public class HL7Parser implements Parser
 			// if no any error status is set means it should be set to NEW
 			if (queue.getStatus() == null)
 			{
-				String status = CaTIESConstants.NEW;
+				final String status = CaTIESConstants.NEW;
 				queue.setStatus(status);
 			}
 			queue.setSpecimenCollectionGroup(scg);
@@ -1041,7 +1044,7 @@ public class HL7Parser implements Parser
 			queue.setReportLoadedDate(new Date());
 			queue = (ReportLoaderQueue) CaCoreAPIService.createObject(queue);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error while creating queue", ex);
 		}
@@ -1056,10 +1059,10 @@ public class HL7Parser implements Parser
 	private static boolean contains(Set<Participant> participantList, Participant participant)
 	{
 		boolean isContains = false;
-		Iterator<Participant> itr = participantList.iterator();
+		final Iterator<Participant> itr = participantList.iterator();
 		while (itr.hasNext())
 		{
-			Participant tempP = itr.next();
+			final Participant tempP = itr.next();
 			logger.info("********" + tempP.getId() + "  " + tempP.getFirstName());
 			if ((participant.getId().longValue()) == (tempP.getId().longValue()))
 			{

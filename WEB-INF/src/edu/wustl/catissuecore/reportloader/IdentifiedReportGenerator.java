@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.GregorianCalendar;
@@ -7,11 +8,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
@@ -20,23 +21,31 @@ import edu.wustl.common.util.logger.Logger;
  * @author sagar_baldwa
  */
 
-public class IdentifiedReportGenerator
+public final class IdentifiedReportGenerator
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	private static Logger logger = Logger.getCommonLogger(IdentifiedReportGenerator.class);
 
 	/**
+	 * private constructor.
+	 */
+	private IdentifiedReportGenerator()
+	{
+
+	}
+	/**
 	 * @param reportMap Map of String, Set
 	 * @param abbrToHeader HashMap of String, String
 	 * @return IdentifiedSurgicalPathologyReport
 	 */
-	public static IdentifiedSurgicalPathologyReport getIdentifiedReport(
-			Map<String, Set> reportMap, Map<String, String> abbrToHeader)
+	public static IdentifiedSurgicalPathologyReport getIdentifiedReport(Map<String, Set> reportMap,
+			Map<String, String> abbrToHeader)
 	{
 		ReportSection reportSection = null;
-		TextContent textContent = new TextContent();
+		final TextContent textContent = new TextContent();
 		Set<ReportSection> reportSectionSet = null;
 		IdentifiedSurgicalPathologyReport report = null;
 		reportSectionSet = new HashSet<ReportSection>();
@@ -46,7 +55,8 @@ public class IdentifiedReportGenerator
 
 		try
 		{
-			String obrLine = HL7ParserUtil.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR);
+			final String obrLine = HL7ParserUtil.getReportDataFromReportMap(reportMap,
+					CaTIESConstants.OBR);
 			report = extractOBRSegment(obrLine);
 			reportSet = getReportSectionDataFromReportMap(reportMap, CaTIESConstants.OBX);
 			if (reportSet != null && reportSet.size() > 0)
@@ -64,12 +74,10 @@ public class IdentifiedReportGenerator
 				}
 			}
 			// synthesize report text
-			textContent.setData(IdentifiedReportGenerator.synthesizeSPRText(
-					reportSectionSet, abbrToHeader));
+			textContent.setData(IdentifiedReportGenerator.synthesizeSPRText(reportSectionSet,
+					abbrToHeader));
 			//for oracle
-			//if(Variables.databaseName.equalsIgnoreCase(Constants.ORACLE_DATABASE))
-			//{
-			for (ReportSection tempReportSection : reportSectionSet)
+			for (final ReportSection tempReportSection : reportSectionSet)
 			{
 				if (tempReportSection.getDocumentFragment().length() > 3900)
 				{
@@ -79,7 +87,6 @@ public class IdentifiedReportGenerator
 					logger.info("*****************trim completed");
 				}
 			}
-			//}
 			// set textContent to report
 			report.setTextContent(textContent);
 			textContent.setSurgicalPathologyReport(report);
@@ -89,7 +96,7 @@ public class IdentifiedReportGenerator
 			}
 			logger.info("Report created");
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -104,7 +111,7 @@ public class IdentifiedReportGenerator
 	*/
 	private static Set getReportSectionDataFromReportMap(Map<String, Set> reportMap, String key)
 	{
-		Set tempSet = reportMap.get(key);
+		final Set tempSet = reportMap.get(key);
 		return tempSet;
 	}
 
@@ -115,12 +122,12 @@ public class IdentifiedReportGenerator
 	 */
 	private static ReportSection extractOBXSegment(String obxLine)
 	{
-		ReportSection section = new ReportSection();
+		final ReportSection section = new ReportSection();
 		try
 		{
 			String newObxLine = obxLine.replace('|', '~');
 			newObxLine = newObxLine.replaceAll("~", "|~~");
-			StringTokenizer strTokenizer = new StringTokenizer(newObxLine, "|");
+			final StringTokenizer strTokenizer = new StringTokenizer(newObxLine, "|");
 			for (int x = 0; strTokenizer.hasMoreTokens(); x++)
 			{
 				String field = strTokenizer.nextToken();
@@ -152,7 +159,7 @@ public class IdentifiedReportGenerator
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}
@@ -166,7 +173,7 @@ public class IdentifiedReportGenerator
 	*/
 	protected static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
 	{
-		IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
+		final IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
 		try
 		{
 			String newObrLine = obrLine.replace('|', '~');
@@ -174,7 +181,7 @@ public class IdentifiedReportGenerator
 			//set default values to report
 			report.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 			report.setIsFlagForReview(Boolean.FALSE);
-			StringTokenizer strTokenizer = new StringTokenizer(newObrLine, "|");
+			final StringTokenizer strTokenizer = new StringTokenizer(newObrLine, "|");
 			// iterate over token to create report
 			for (int x = 0; strTokenizer.hasMoreTokens(); x++)
 			{
@@ -187,34 +194,29 @@ public class IdentifiedReportGenerator
 				{
 					field = field.replaceAll("~~", "");
 				}
-				// token for accession number
 				if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX)
 				{
-					StringTokenizer st2 = new StringTokenizer(field, "^");
-					String accNum = st2.nextToken();
-					//Field removed from SurgicalPathologyReport and
-					//Assigned to SCG as SurgicalPathologyNumber
-					//report.setAccessionNumber(accNum);
+					final StringTokenizer st2 = new StringTokenizer(field, "^");
+					st2.nextToken();
 				}
 				// report collection date and time
 				if (x == CaTIESConstants.REPORT_DATE_INDEX)
 				{
-					String year = field.substring(0, 4);
-					String month = field.substring(4, 6);
-					String day = field.substring(6, 8);
-					String hours = field.substring(8, 10);
-					String seconds = field.substring(10, 12);
+					final String year = field.substring(0, 4);
+					final String month = field.substring(4, 6);
+					final String day = field.substring(6, 8);
+					final String hours = field.substring(8, 10);
+					final String seconds = field.substring(10, 12);
 
-					GregorianCalendar gregorianCalen = new GregorianCalendar(
-							Integer.parseInt(year), Integer.parseInt(month) - 1,
-							Integer.parseInt(day), Integer.parseInt(hours),
-							Integer.parseInt(seconds));
-
+					final GregorianCalendar gregorianCalen = new GregorianCalendar(Integer
+							.parseInt(year),
+							Integer.parseInt(month) - 1, Integer.parseInt(day),
+							Integer.parseInt(hours), Integer.parseInt(seconds));
 					report.setCollectionDateTime(gregorianCalen.getTime());
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Error while parsing the report map", e);
 		}
@@ -234,7 +236,7 @@ public class IdentifiedReportGenerator
 		try
 		{
 			//Get report sections for report
-			HashMap<String, String> nameToText = new HashMap<String, String>();
+			final HashMap<String, String> nameToText = new HashMap<String, String>();
 			if (reportSectionSet == null)
 			{
 				logger.info("NULL report section collection found in synthesizeSPRText method");
@@ -242,29 +244,29 @@ public class IdentifiedReportGenerator
 			else
 			{
 				logger.info("Synthesizing report");
-				for (ReportSection rs : reportSectionSet)
+				for (final ReportSection rs : reportSectionSet)
 				{
-					String abbr = rs.getName();
-					String text = rs.getDocumentFragment();
+					final String abbr = rs.getName();
+					final String text = rs.getDocumentFragment();
 					//add abbreviation and report text to hash map
 					nameToText.put(abbr, text);
 				}
 			}
-			for (String key : abbrToHeader.keySet())
+			for (final String key : abbrToHeader.keySet())
 			{
 				if (nameToText.containsKey(key))
 				{
 					// get full section header name from its abbreviation
-					String sectionHeader = (String) abbrToHeader.get(key);
+					final String sectionHeader = abbrToHeader.get(key);
 					//if the key is present in the report section collection map then
 					//format the section header and section text
-					String sectionText = nameToText.get(key);
+					final String sectionText = nameToText.get(key);
 					// format for section header and section text
 					docText += "\n\n[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n";
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp);
 		}

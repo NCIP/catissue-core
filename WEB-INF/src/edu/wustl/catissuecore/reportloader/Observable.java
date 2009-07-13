@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.reportloader;
 
 /**
@@ -7,9 +8,10 @@ package edu.wustl.catissuecore.reportloader;
 
 public interface Observable
 {
+
 	/**
 	 * Method to register the object with observer.
 	 * @param obr object to register
 	 */
-	void register(Observer  obr);
+	void register(Observer obr);
 }
