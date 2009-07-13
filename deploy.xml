@@ -3751,6 +3751,7 @@ Thanking You,
 			<!--<transaction  src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_dropColumn.sql"/>-->
 			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_createSeq.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_resetDESequences.sql" />
+			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
