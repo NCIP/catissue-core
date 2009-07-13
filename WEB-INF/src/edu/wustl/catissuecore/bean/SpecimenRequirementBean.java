@@ -418,7 +418,32 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		aliquotSpecimenCollection.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
 	}
 
+	public long getCollectionEventId()
+	{
+		return collectionEventId;
+	}
+
+
 	
+	public void setCollectionEventId(long collectionEventId)
+	{
+		this.collectionEventId = collectionEventId;
+	}
+
+
+	
+	public long getCollectionEventSpecimenId()
+	{
+		return collectionEventSpecimenId;
+	}
+
+
+	
+	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
+	{
+		this.collectionEventSpecimenId = collectionEventSpecimenId;
+	}
+
 	
 	public LinkedHashMap getDeriveSpecimenCollection()
 	{
@@ -468,33 +493,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 
 	
-	public long getCollectionEventId()
-	{
-		return collectionEventId;
-	}
-
-
 	
-	public void setCollectionEventId(long collectionEventId)
-	{
-		this.collectionEventId = collectionEventId;
-	}
-
-
-	
-	public long getCollectionEventSpecimenId()
-	{
-		return collectionEventSpecimenId;
-	}
-
-
-	
-	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
-	{
-		this.collectionEventSpecimenId = collectionEventSpecimenId;
-	}
-
-
 	
 	public long getCollectionEventUserId()
 	{

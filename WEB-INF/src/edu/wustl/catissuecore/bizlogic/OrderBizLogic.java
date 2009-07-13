@@ -1134,12 +1134,35 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	public List getRelatedSiteIds(HibernateDAO dao, Long userId, PrivilegeCache privilegeCache)
 			throws BizLogicException
 	{
-		final List siteCollWithDistriPri = new ArrayList();
+		List siteCollWithDistriPri = new ArrayList();
+		try
+		{
+			final User user = (User) dao.retrieveById(User.class.getName(), userId);
+			getSiteIds(privilegeCache,siteCollWithDistriPri, user);
+		}
+		
+		catch (final DAOException e)
+		{
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		return (List) siteCollWithDistriPri;
+	}
+
+	/**
+	 * Method called to get all the site ids.
+	 * @param privilegeCache
+	 * @param user
+	 * @return
+	 * @throws BizLogicException
+	 */
+	private void getSiteIds(PrivilegeCache privilegeCache,List siteCollWithDistriPri,
+			 final User user)
+			throws BizLogicException
+	{
 		String objectId = "";
 		try
 		{
-
-			final User user = (User) dao.retrieveById(User.class.getName(), userId);
 			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
 				final Collection<Site> siteCollection = user.getSiteCollection();
@@ -1158,20 +1181,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 				}
 			}
-
 		}
 		catch (final SMException e)
 		{
 			this.logger.debug(e.getMessage(), e);
 			throw this.getBizLogicException(e, "sm.priv.error", objectId);
 		}
-		catch (final DAOException e)
-		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-		return (List) siteCollWithDistriPri;
 	}
+
 
 	/**
 	 *
@@ -1265,35 +1282,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 
 		final List siteCollWithDistriPri = new ArrayList();
-		String objectId = "";
-		try
-		{
-			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
-			{
-
-				final Collection<Site> siteCollection = user.getSiteCollection();
-				final Iterator siteCollectionItr = siteCollection.iterator();
-				while (siteCollectionItr.hasNext())
-				{
-					final Site site = (Site) siteCollectionItr.next();
-					objectId = Constants.SITE_CLASS_NAME + "_" + site.getId();
-
-					final boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
-							Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
-					if (isAuthorized)
-					{
-						siteCollWithDistriPri.add(site.getId());
-					}
-
-				}
-			}
-		}
-		catch (final SMException e)
-		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, "sm.priv.error", objectId);
-		}
-
+		getSiteIds(privilegeCache, siteCollWithDistriPri,
+					 user);
+		
 		return (List) siteCollWithDistriPri;
 
 	}

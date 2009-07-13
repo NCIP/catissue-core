@@ -62,33 +62,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 		this.setAllValues(form);
 	}
 
-	/**
-	 * Returns the concentration of liquid molecular specimen measured
-	 * in microgram per microlitre.
-	 * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double"
-	 * column="CONCENTRATION" length="50"
-	 * @return the concentration of liquid molecular specimen measured
-	 * in microgram per microlitre.
-	 * directly collected from participant or created from another specimen.
-	 * @see #setConcentrationInMicrogramPerMicroLiter(Double)
-	 */
-	public Double getConcentrationInMicrogramPerMicroliter()
-	{
-		return this.concentrationInMicrogramPerMicroliter;
-	}
-
-	/**
-	 * Sets the concentration of liquid molecular specimen measured
-	 * in microgram per microlitter.
-	 * @param concentrationInMicrogramPerMicroliter the concentration of
-	 * liquid molecular specimen measuredin microgram per microlitter.
-	 * @see #getConcentrationInMicrogramPerMicroLiter()
-	 */
-	public void setConcentrationInMicrogramPerMicroliter(
-			Double concentrationInMicrogramPerMicroliter)
-	{
-		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
-	}
+	
 
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
@@ -128,5 +102,33 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 		super();
 		this.concentrationInMicrogramPerMicroliter
 		= molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
+	}
+	
+	/**
+	 * Returns the concentration of liquid molecular specimen measured
+	 * in microgram per microlitre.
+	 * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double"
+	 * column="CONCENTRATION" length="50"
+	 * @return the concentration of liquid molecular specimen measured
+	 * in microgram per microlitre.
+	 * directly collected from participant or created from another specimen.
+	 * @see #setConcentrationInMicrogramPerMicroLiter(Double)
+	 */
+	public Double getConcentrationInMicrogramPerMicroliter()
+	{
+		return this.concentrationInMicrogramPerMicroliter;
+	}
+
+	/**
+	 * Sets the concentration of liquid molecular specimen measured
+	 * in microgram per microlitter.
+	 * @param concentrationInMicrogramPerMicroliter the concentration of
+	 * liquid molecular specimen measuredin microgram per microlitter.
+	 * @see #getConcentrationInMicrogramPerMicroLiter()
+	 */
+	public void setConcentrationInMicrogramPerMicroliter(
+			Double concentrationInMicrogramPerMicroliter)
+	{
+		this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
 	}
 }
