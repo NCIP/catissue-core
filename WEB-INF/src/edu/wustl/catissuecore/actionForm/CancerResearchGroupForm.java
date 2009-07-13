@@ -37,8 +37,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ClinicalStudyRegistrationForm.class);
+	private static Logger logger = Logger.getCommonLogger(CancerResearchGroupForm.class);
 
 	/**
 	 * Name of the CancerResearchGroup.

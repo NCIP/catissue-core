@@ -119,7 +119,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public CollectionProtocolRegistrationForm()
 	{
-		//reset();
+
 	}
 
 	/**

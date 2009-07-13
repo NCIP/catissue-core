@@ -142,34 +142,6 @@ public class Participant extends AbstractDomainObject
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 
 	/**
-	 * HashSet containing clinical Study Registration.
-	 */
-	protected Collection clinicalStudyRegistrationCollection = new HashSet();
-
-	/**
-	* Returns collection registrations of this participant.
-	* @return collection of registrations of this participant.
-	* @hibernate.set name="clinicalStudyRegistrationCollection" table="CATISSUE_CLINICAL_STUDY_REG"
-	* @hibernate.collection-key column="PARTICIPANT_ID" lazy="true"
-	* @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ClinicalStudyRegistration"
-	* @see setRegistrationCollection(Collection)
-	*/
-	public Collection getClinicalStudyRegistrationCollection()
-	{
-		return this.clinicalStudyRegistrationCollection;
-	}
-
-	/**
-	 * Set ClinicalStudyRegistration Collection.
-	 * @param clinicalStudyRegistrationCollection Collection.
-	 */
-	public void setClinicalStudyRegistrationCollection(
-			Collection clinicalStudyRegistrationCollection)
-	{
-		this.clinicalStudyRegistrationCollection = clinicalStudyRegistrationCollection;
-	}
-
-	/**
 	 * Default Constructor.
 	 */
 	public Participant()
@@ -208,9 +180,6 @@ public class Participant extends AbstractDomainObject
 		this.deathDate = participant.getDeathDate();
 		this.vitalStatus = participant.getVitalStatus();
 		this.collectionProtocolRegistrationCollection = null;
-		this.clinicalStudyRegistrationCollection = null;
-		this.collectionProtocolRegistrationCollection = null;
-		this.clinicalStudyRegistrationCollection = null;
 		final Collection<Race> raceCollection = new ArrayList<Race>();
 		final Iterator<Race> raceItr = participant.getRaceCollection().iterator();
 		while (raceItr.hasNext())
