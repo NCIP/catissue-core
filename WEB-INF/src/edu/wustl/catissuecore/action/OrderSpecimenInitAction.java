@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +20,12 @@ import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -94,7 +93,7 @@ public class OrderSpecimenInitAction extends BaseAction
 				final Set setPV = specimenClassCDE.getPermissibleValues();
 
 				specimenClassList = new ArrayList();
-				final Map subTypeMap = this.getSubTypeMap(setPV, specimenClassList);
+				final Map subTypeMap = AppUtility.getSubTypeMap(setPV, specimenClassList);
 
 				// sets the Class list
 				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -142,42 +141,7 @@ public class OrderSpecimenInitAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	/**
-	 *
-	 * @param setPV : setPV
-	 * @param specimenClassList : specimenClassList
-	 * @return Map : Map
-	 */
-	private Map getSubTypeMap(Set setPV, List specimenClassList)
-	{
-		final Iterator itr = setPV.iterator();
 
-		final Map subTypeMap = new HashMap();
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
-		{
-			final List innerList = new ArrayList();
-			final Object obj = itr.next();
-			final PermissibleValue pv = (PermissibleValue) obj;
-			final String tmpStr = pv.getValue();
-			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			final Set list1 = pv.getSubPermissibleValues();
-			final Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			while (itr1.hasNext())
-			{
-				final Object obj1 = itr1.next();
-				final PermissibleValue pv1 = (PermissibleValue) obj1;
-				// set specimen type
-				final String tmpInnerStr = pv1.getValue();
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-			subTypeMap.put(pv.getValue(), innerList);
-		}
-		return subTypeMap;
-	}
 
 	/** function for getting protocol name.
 	 * @param request HttpServletRequest object

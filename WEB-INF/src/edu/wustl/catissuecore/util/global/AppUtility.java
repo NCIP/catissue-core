@@ -3209,4 +3209,43 @@ public class AppUtility
 		}
 		return isNumber;
 	}
+	
+	
+	/**
+	 *
+	 * @param setPV : setPV
+	 * @param specimenClassList : specimenClassList
+	 * @return Map : Map
+	 */
+	public static Map getSubTypeMap(Set setPV, List specimenClassList)
+	{
+		final Iterator itr = setPV.iterator();
+
+		final Map subTypeMap = new HashMap();
+		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+
+		while (itr.hasNext())
+		{
+			final List innerList = new ArrayList();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
+			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
+
+			final Set list1 = pv.getSubPermissibleValues();
+			final Iterator itr1 = list1.iterator();
+			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+			while (itr1.hasNext())
+			{
+				final Object obj1 = itr1.next();
+				final PermissibleValue pv1 = (PermissibleValue) obj1;
+				// set specimen type
+				final String tmpInnerStr = pv1.getValue();
+				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
+			}
+			subTypeMap.put(pv.getValue(), innerList);
+		}
+		return subTypeMap;
+	}
+	
 }

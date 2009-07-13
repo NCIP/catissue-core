@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -130,34 +131,9 @@ public class OrderPathologyCaseAction extends BaseAction
 		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
 				Constants.CDE_NAME_SPECIMEN_CLASS);
 		final Set setPV = specimenClassCDE.getPermissibleValues();
-		final Iterator itr = setPV.iterator();
-
 		specimenClassList = new ArrayList();
-		final Map subTypeMap = new HashMap();
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
-		{
-			final List innerList = new ArrayList();
-			final Object obj = itr.next();
-			final PermissibleValue pv = (PermissibleValue) obj;
-			final String tmpStr = pv.getValue();
-			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			final Set list1 = pv.getSubPermissibleValues();
-			final Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			while (itr1.hasNext())
-			{
-				final Object obj1 = itr1.next();
-				final PermissibleValue pv1 = (PermissibleValue) obj1;
-				// set specimen type
-				final String tmpInnerStr = pv1.getValue();
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-			subTypeMap.put(pv.getValue(), innerList);
-		} // class and values set
-
+	
+		final Map subTypeMap = AppUtility.getSubTypeMap(setPV, specimenClassList);
 		// specimenClassList.remove(1);
 
 		// sets the Class list
