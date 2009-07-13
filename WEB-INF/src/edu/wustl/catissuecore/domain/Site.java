@@ -19,6 +19,8 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -117,8 +119,9 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public Site(AbstractActionForm abstractForm)
+	public Site(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -282,9 +285,10 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	/**
 	 * This function Copies the data from an SiteForm object to a Site object.
 	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -322,6 +326,8 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "Site.java :");
 		}
 	}
 

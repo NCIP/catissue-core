@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -96,8 +98,9 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public CollectionEventParameters(AbstractActionForm abstractForm)
+	public CollectionEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -107,9 +110,10 @@ public class CollectionEventParameters extends SpecimenEventParameters
 	 * This function Copies the data from an CollectionEventParameters object.
 	 * @param abstractForm CollectionEventParametersForm An CollectionEventParametersForm
 	 * object containing the information about the CollectionEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -132,6 +136,8 @@ public class CollectionEventParameters extends SpecimenEventParameters
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "CollectionEventParameters.java :");
 		}
 	}
 

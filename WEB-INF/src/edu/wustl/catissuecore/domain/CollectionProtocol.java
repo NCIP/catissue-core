@@ -25,6 +25,8 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.KeyComparator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -194,7 +196,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * @param form
 	 *            This is abstract action form
 	 */
-	public CollectionProtocol(AbstractActionForm form)
+	public CollectionProtocol(AbstractActionForm form)throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -333,9 +335,10 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * CollectionProtocol object.
 	 * @param abstractForm An CollectionProtocolForm object containing the information
 	 * about the CollectionProtocol.
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -410,6 +413,8 @@ public class CollectionProtocol extends SpecimenProtocol
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "CollectionProtocol.java :");
 		}
 	}
 

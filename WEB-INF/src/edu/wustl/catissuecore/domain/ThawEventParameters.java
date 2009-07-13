@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.ThawEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -45,8 +47,9 @@ public class ThawEventParameters extends SpecimenEventParameters implements java
 	/**
 	 *  Parameterised constructor.
 	 * @param abstractForm of AbstractActionForm type.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public ThawEventParameters(AbstractActionForm abstractForm)
+	public ThawEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -56,9 +59,10 @@ public class ThawEventParameters extends SpecimenEventParameters implements java
 	 * This function Copies the data from an ThawEventParameters object.
 	 * @param abstractForm - ThawEventParametersForm An ThawEventParametersForm object
 	 * containing the information about the ThawEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -69,6 +73,8 @@ public class ThawEventParameters extends SpecimenEventParameters implements java
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "ThawEventParameters.java :");
 		}
 	}
 }

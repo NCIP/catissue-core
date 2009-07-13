@@ -12,6 +12,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.FixedEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -93,8 +95,9 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	/**
 	 *  Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public FixedEventParameters(AbstractActionForm abstractForm)
+	public FixedEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -104,9 +107,10 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	 * This function Copies the data from an FixedEventParametersForm object to a FixedEventParameters object.
 	 * @param abstractForm An FixedEventParametersForm object containing the
 	 * information about the FixedEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -123,6 +127,8 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "EmbeddedEventParameters.java :");
 		}
 	}
 }

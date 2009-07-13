@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -187,8 +189,9 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm of AbstractActionForm type.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -199,9 +202,10 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 * object to a TissueSpecimenReviewEventParameters object.
 	 * @param abstractForm - tissueSpecimenReviewEventParametersForm AnTissueSpecimenReviewEventParametersForm
 	 * object containing the information about the TissueSpecimenReviewEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		final String nullString = null;
 		try
@@ -246,6 +250,8 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "TissueSpecimenReviewEventParameters.java :");
 		}
 	}
 }

@@ -14,6 +14,8 @@ import java.io.Serializable;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -45,8 +47,9 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 	/**
 	 * Parameterized Constructor.
 	 * @param form AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public FluidSpecimenRequirement(AbstractActionForm form)
+	public FluidSpecimenRequirement(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -55,9 +58,10 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
 	 * @param abstractForm An SiteForm object containing the information about the site.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -66,6 +70,8 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "FluidSpecimenRequirement.java :");
 		}
 	}
 

@@ -18,6 +18,8 @@ import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -80,8 +82,9 @@ public class Biohazard extends AbstractDomainObject
 	/**
 	 * Parameterized constructor.
 	 * @param form AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public Biohazard(AbstractActionForm form)
+	public Biohazard(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -219,9 +222,11 @@ public class Biohazard extends AbstractDomainObject
 	/**
 	 * This function Copies the data from an BiohazardForm object to a Biohazard object.
 	 * @param abstractForm - siteForm An SiteForm object containing the information about the site.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) 
+	throws AssignDataException
 	{
 		try
 		{
@@ -233,6 +238,8 @@ public class Biohazard extends AbstractDomainObject
 		catch (final Exception excp)
 		{
 			logger.error(excp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "Biohazard.java :");
 		}
 	}
 

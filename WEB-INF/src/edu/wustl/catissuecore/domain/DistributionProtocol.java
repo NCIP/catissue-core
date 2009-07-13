@@ -21,6 +21,8 @@ import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -70,8 +72,9 @@ public class DistributionProtocol extends SpecimenProtocol
 	/**
 	 * Parameterized Constructor.
 	 * @param form AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public DistributionProtocol(AbstractActionForm form)
+	public DistributionProtocol(AbstractActionForm form)throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -130,9 +133,10 @@ public class DistributionProtocol extends SpecimenProtocol
 	* This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
 	* @param abstractForm An CollectionProtocolForm object containing the
 	* information about the CollectionProtocol.
+	* @throws AssignDataException : AssignDataException
 	* */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -151,6 +155,8 @@ public class DistributionProtocol extends SpecimenProtocol
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "DisposalEventParameters.java :");
 		}
 	}
 

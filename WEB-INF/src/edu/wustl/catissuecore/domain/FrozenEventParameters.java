@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.FrozenEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -72,8 +74,9 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public FrozenEventParameters(AbstractActionForm abstractForm)
+	public FrozenEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -84,9 +87,10 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	 * FrozenEventParameters object.
 	 * @param abstractForm An FrozenEventParametersForm object
 	 * containing the information about the frozenEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -97,6 +101,8 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "FrozenEventParameters.java :");
 		}
 	}
 }

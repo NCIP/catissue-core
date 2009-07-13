@@ -29,7 +29,9 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
@@ -178,8 +180,9 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * Parameterized Constructor.
 	 * @param form AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public Participant(AbstractActionForm form)
+	public Participant(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -593,9 +596,10 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
 	 * @param abstractForm - A StorageTypeForm object containing the information about the StorageType.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		final String nullString = null;
 		try
@@ -711,6 +715,8 @@ public class Participant extends AbstractDomainObject
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "Participant.java :");
 		}
 	}
 

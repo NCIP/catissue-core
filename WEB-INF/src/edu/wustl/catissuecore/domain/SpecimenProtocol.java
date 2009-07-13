@@ -16,6 +16,8 @@ import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
@@ -289,9 +291,10 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * Set All Values in Form.
 	 * @param abstractForm IValueObject.
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm)throws AssignDataException
 	{
 		logger.debug("SpecimenProtocol: setAllValues ");
 		try
@@ -327,6 +330,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "SpecimenProtocol.java :");
 		}
 	}
 }

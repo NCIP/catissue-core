@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -76,8 +78,9 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	/**
 	 * Parameterized constructor.
 	 * @param abstractForm AbstractActionForm.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -88,13 +91,15 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	 * object to a FluidSpecimenReviewEventParameters object.
 	 * @param abstractForm An FluidSpecimenReviewEventParametersForm object
 	 * containing the information about the fluidSpecimenReviewEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
-			final FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
+			final FluidSpecimenReviewEventParametersForm form =
+				(FluidSpecimenReviewEventParametersForm) abstractForm;
 			logger.debug("############DomainObject################## : ");
 			logger.debug(form.getCellCount());
 			logger.debug("############################## ");
@@ -107,6 +112,8 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "FluidSpecimenReviewEventParameters.java :");
 		}
 	}
 }

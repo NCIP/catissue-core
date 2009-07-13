@@ -19,6 +19,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
@@ -255,6 +256,8 @@ public class ClinicalStudyRegistration extends AbstractDomainObject implements S
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "ClinicalStudyRegistration.java :");
 		}
 
 	}

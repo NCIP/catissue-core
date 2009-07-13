@@ -14,6 +14,8 @@ import java.io.Serializable;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -44,8 +46,9 @@ public class TissueSpecimen extends Specimen implements Serializable
 	/**
 	 * Parameterized Constructor.
 	 * @param form of AbstractActionForm type.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public TissueSpecimen(AbstractActionForm form)
+	public TissueSpecimen(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -54,9 +57,10 @@ public class TissueSpecimen extends Specimen implements Serializable
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
 	 * @param abstractForm - An IValueObject object containing the information about the site.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -65,6 +69,8 @@ public class TissueSpecimen extends Specimen implements Serializable
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "TissueSpecimen.java :");
 		}
 	}
 

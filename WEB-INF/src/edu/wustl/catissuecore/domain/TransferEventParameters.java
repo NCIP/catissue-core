@@ -13,6 +13,8 @@ import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -207,8 +209,9 @@ public class TransferEventParameters extends SpecimenEventParameters
 	/**
 	 * Parameterised constructor.
 	 * @param abstractForm of AbstractActionForm type.
+	 * @throws AssignDataException : AssignDataException
 	 */
-	public TransferEventParameters(AbstractActionForm abstractForm)
+	public TransferEventParameters(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -219,9 +222,10 @@ public class TransferEventParameters extends SpecimenEventParameters
 	 * TransferEventParameters object.
 	 * @param abstractForm - TransferEventParametersForm An TransferEventParametersForm object
 	 * containing the information about the TransferEventParameters.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -270,6 +274,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "TransferEventParameters.java :");
 		}
 	}
 }

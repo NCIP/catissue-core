@@ -26,6 +26,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
@@ -179,7 +181,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * This Constructor Copies the data from an UserForm object to a User object.
 	 * @param uform - user An UserForm object containing the information about the user.
 	 */
-	public User(UserForm uform)
+	public User(UserForm uform) throws AssignDataException
 	{
 		this();
 		this.setAllValues(uform);
@@ -609,9 +611,10 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	/**
 	 * This function Copies the data from an UserForm object to a User object.
 	 * @param abstractForm - user An UserForm object containing the information about the user.
+	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm)
+	public void setAllValues(IValueObject abstractForm)throws AssignDataException
 	{
 		try
 		{
@@ -762,6 +765,8 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "User.java :");
 		}
 	}
 

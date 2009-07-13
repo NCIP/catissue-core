@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -168,6 +169,7 @@ public class StorageType extends ContainerType
 	 * Set all values.
 	 * @throws AssignDataException AssignDataException.
 	 * @param abstractForm of IValueObject type.
+	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
@@ -248,6 +250,8 @@ public class StorageType extends ContainerType
 		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
+			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
+			throw new AssignDataException(errorKey, null, "Specimen.java :");
 		}
 	}
 
