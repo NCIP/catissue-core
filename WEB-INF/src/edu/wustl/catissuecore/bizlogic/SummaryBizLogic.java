@@ -153,37 +153,15 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @return Vector of type and count name value bean
 	 * @throws DAOException
 	 */
-	private List getSpecimenTypeDetailsCount(final String specimenType) throws DAOException,
-			ClassNotFoundException
+	private List getSpecimenTypeDetailsCount(final String specimenType) throws  BizLogicException
+		
 	{
 		final String sql = "select absspec.SPECIMEN_TYPE,COUNT(*) from CATISSUE_SPECIMEN specimen "
 				+ "join catissue_abstract_specimen absspec on specimen.identifier=absspec.identifier "
 				+ "and specimen.COLLECTION_STATUS='Collected' and specimen" + DISABLED
 				+ " and absspec.SPECIMEN_CLASS = '" + specimenType
 				+ "'group by absspec.SPECIMEN_TYPE " + DESC_ORDER;
-		List<NameValueBean> nameValuePairs = null;
-		try
-		{
-			final List list = jdbcDAO.executeQuery(sql);
-			nameValuePairs = new ArrayList<NameValueBean>();
-			if (!list.isEmpty())
-			{
-				// Creating name value beans.
-				for (int i = 0; i < list.size(); i++)
-				{
-					final List detailList = (List) list.get(i);
-					final NameValueBean nameValueBean = new NameValueBean();
-					nameValueBean.setName(detailList.get(0));
-					nameValueBean.setValue(detailList.get(1));
-					logger.debug(i + " : " + nameValueBean.toString());
-					nameValuePairs.add(nameValueBean);
-				}
-			}
-		}
-		catch (final DAOException e)
-		{
-			logger.error(e.getMessage(), e);
-		}
+		List<NameValueBean> nameValuePairs = getNameValuePairs(sql);
 		return nameValuePairs;
 	}
 
@@ -364,7 +342,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
 	 */
-	private List getPathStatsWiseCount() throws DAOException, ClassNotFoundException
+	private List getPathStatsWiseCount() throws  BizLogicException
 	{
 		final String sql = "select PATHOLOGICAL_STATUS,count(*) from catissue_abstract_specimen abs,"
 				+ " catissue_specimen sp where abs.identifier = sp.identifier and sp.COLLECTION_STATUS "
@@ -381,7 +359,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
 	 */
-	private List getTSiteWiseCount() throws DAOException, ClassNotFoundException
+	private List getTSiteWiseCount() throws  BizLogicException
 	{
 		final String sql = "SELECT TISSUE_SITE, COUNT(B.IDENTIFIER) FROM CATISSUE_SPECIMEN_CHAR A, "
 				+ "CATISSUE_ABSTRACT_SPECIMEN B, CATISSUE_SPECIMEN C WHERE "
@@ -397,7 +375,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
 	 */
-	private List getPbyCD() throws DAOException, ClassNotFoundException
+	private List getPbyCD() throws  BizLogicException
 	{
 		final String sql = "SELECT CLINICAL_DIAGNOSIS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE"
@@ -417,7 +395,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
 	 */
-	private List getPbyCS() throws DAOException, ClassNotFoundException
+	private List getPbyCS() throws  BizLogicException
 	{
 		final String sql = "SELECT CLINICAL_STATUS, COUNT(distinct C.PARTICIPANT_ID) FROM CATISSUE_ABS_SPECI_COLL_GROUP A,"
 				+ " CATISSUE_SPECIMEN_COLL_GROUP B, CATISSUE_COLL_PROT_REG C, CATISSUE_PARTICIPANT D WHERE "
@@ -438,13 +416,25 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
 	 */
-	private List executeSQL(final String sql) throws DAOException, ClassNotFoundException
+	private List executeSQL(final String sql) throws BizLogicException
 	{
-		List<NameValueBean> nameValuePairs = null;
+		List<NameValueBean> nameValuePairs = getNameValuePairs(sql);
+		return nameValuePairs;
+	}
+
+	/**
+	 * This method will be called to get list of name value pairs.
+	 * @param sql
+	 * @return NameValueBeans
+	 * @throws BizLogicException 
+	 */
+	private List<NameValueBean> getNameValuePairs(final String sql) throws BizLogicException
+	{
+	
+		List<NameValueBean> nameValuePairs = new ArrayList<NameValueBean>();
 		try
 		{
 			final List list = jdbcDAO.executeQuery(sql);
-			nameValuePairs = new ArrayList<NameValueBean>();
 			if (!list.isEmpty())
 			{
 				// Creating name value beans.
@@ -462,6 +452,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			logger.error(e.getMessage(), e);
+			throw new BizLogicException(e.getErrorKey(),e, e.getMsgValues());
 		}
 		return nameValuePairs;
 	}

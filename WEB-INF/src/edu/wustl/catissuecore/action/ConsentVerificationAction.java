@@ -37,7 +37,7 @@ import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -46,8 +46,6 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -168,24 +166,16 @@ public class ConsentVerificationAction extends BaseAction
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String initialURLValue = "";
-		String initialWitnessValue = "";
 		String initialSignedConsentDateValue = "";
+		String initialWitnessValue = "";
+		
+		CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil.getCollectionProtRegistration(specimen);
 
-		final Long specimenId = specimen.getId();
-		final String colProtHql = "select scg.collectionProtocolRegistration"
-				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
-				+ " edu.wustl.catissuecore.domain.Specimen as spec "
-				+ " where spec.specimenCollectionGroup.id=scg.id and spec.id=" + specimenId;
-
-		final List collectionProtocolRegistrationList = AppUtility.executeQuery(colProtHql);
-		CollectionProtocolRegistration collectionProtocolRegistration = null;
-		if (collectionProtocolRegistrationList != null)
+		if (collectionProtocolRegistration.getConsentSignatureDate() == null)
 		{
-			collectionProtocolRegistration
-			= (CollectionProtocolRegistration) collectionProtocolRegistrationList
-					.get(0);
+			initialSignedConsentDateValue = Constants.NULL;
 		}
-
+		
 		if (collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 		{
 			initialURLValue = Constants.NULL;
@@ -202,10 +192,7 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			initialWitnessValue = Constants.NULL;
 		}
-		if (collectionProtocolRegistration.getConsentSignatureDate() == null)
-		{
-			initialSignedConsentDateValue = Constants.NULL;
-		}
+		
 		final List cprObjectList = new ArrayList();
 		cprObjectList.add(collectionProtocolRegistration);
 		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
@@ -224,64 +211,16 @@ public class ConsentVerificationAction extends BaseAction
 		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;
 		// Getting WitnessName,Consent Date,Signed Url using
 		// collectionProtocolRegistration object
-		String witnessName = "";
-		String getConsentDate = "";
-		String getSignedConsentURL = "";
-		User witness = cprObject.getConsentWitness();
-		if (witness == null)
-		{
-			if (initialWitnessValue.equals(Constants.NULL))
-			{
-				witnessName = "";
-			}
-			else
-			{
-				witnessName = Constants.HASHED_OUT;
-			}
-			dForm.setWitnessName(witnessName);
-		}
-		else
-		{
-			witness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
-					.getName(), cprObject.getId(), "consentWitness");
-			final String witnessFullName = witness.getLastName() + ", " + witness.getFirstName();
-			dForm.setWitnessName(witnessFullName);
-		}
-		if (cprObject.getConsentSignatureDate() == null)
-		{
-			if (initialSignedConsentDateValue.equals(Constants.NULL))
-			{
-				getConsentDate = "";
-			}
-			else
-			{
-				getConsentDate = Constants.HASHED_OUT;
-			}
-		}
-		else
-		{
-			getConsentDate = CommonUtilities.parseDateToString(cprObject.getConsentSignatureDate(),
-					CommonServiceLocator.getInstance().getDatePattern());
-		}
-
-		if (cprObject.getSignedConsentDocumentURL() == null)
-		{
-			if (initialURLValue.equals(Constants.NULL))
-			{
-				getSignedConsentURL = "";
-			}
-			else
-			{
-				getSignedConsentURL = Constants.HASHED_OUT;
-			}
-		}
-		else
-		{
-			getSignedConsentURL = CommonUtilities.toString(cprObject.getSignedConsentDocumentURL());
-		}
-		// Setting WitnessName,ConsentDate and Signed Consent Url
-		dForm.setConsentDate(getConsentDate);
-		dForm.setSignedConsentUrl(getSignedConsentURL);
+		String witnessName = ConsentUtil.getWitnessName( bizLogic, initialWitnessValue,
+				cprObject);
+		String consentDate  = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
+				cprObject);
+    	String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
+	
+    	// Setting WitnessName,ConsentDate and Signed Consent Url
+    	dForm.setWitnessName(witnessName);
+    	dForm.setConsentDate(consentDate);
+		dForm.setSignedConsentUrl(signedConsentURL);
 
 		// Getting ConsentResponse collection for CPR level
 		// Resolved lazy ---
@@ -312,9 +251,9 @@ public class ConsentVerificationAction extends BaseAction
 				barcodeLabelAttribute[0] =
 					witnessName;
 				barcodeLabelAttribute[1] =
-					getConsentDate;
+					consentDate;
 				barcodeLabelAttribute[2] =
-					getSignedConsentURL;
+					signedConsentURL;
 				barcodeLabelAttribute[3] =
 					Integer.toString(this.consentTierCounter);
 				barcodeLabelAttribute[4] =

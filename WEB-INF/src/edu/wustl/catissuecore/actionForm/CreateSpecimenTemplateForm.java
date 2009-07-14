@@ -201,26 +201,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		this.tissueSite = tissueSite;
 	}
 
-	public String getTissueSide()
-	{
-		return tissueSide;
-	}
-
-	public void setTissueSide(String tissueSide)
-	{
-		this.tissueSide = tissueSide;
-	}
-
-	public String getPathologicalStatus()
-	{
-		return pathologicalStatus;
-	}
-
-	public void setPathologicalStatus(String pathologicalStatus)
-	{
-		this.pathologicalStatus = pathologicalStatus;
-	}
-
+	
 	public String getConcentration()
 	{
 		return concentration;
@@ -488,6 +469,25 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	public void setStorageLocationForAliquotSpecimen(String storageLocationForAliquotSpecimen)
 	{
 		this.storageLocationForAliquotSpecimen = storageLocationForAliquotSpecimen;
+	}
+	public String getTissueSide()
+	{
+		return tissueSide;
+	}
+
+	public void setTissueSide(String tissueSide)
+	{
+		this.tissueSide = tissueSide;
+	}
+
+	public String getPathologicalStatus()
+	{
+		return pathologicalStatus;
+	}
+
+	public void setPathologicalStatus(String pathologicalStatus)
+	{
+		this.pathologicalStatus = pathologicalStatus;
 	}
 
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)

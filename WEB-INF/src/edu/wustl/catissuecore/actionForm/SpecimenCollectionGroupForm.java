@@ -1014,56 +1014,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.consentDate = consentDate;
 	}
 
-	/**
-	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
-	 */
-	public String getSignedConsentUrl()
-	{
-		return signedConsentUrl;
-	}
-
-	/**
-	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
-	 */
-	public void setSignedConsentUrl(String signedConsentUrl)
-	{
-		this.signedConsentUrl = signedConsentUrl;
-	}
-
-	/**
-	 * @return witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
-	 */
-	public String getWitnessName()
-	{
-		return witnessName;
-	}
-
-	/**
-	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
-	 */
-	public void setWitnessName(String witnessName)
-	{
-		this.witnessName = witnessName;
-	}
-
-	/**
-	 * It returns status of button(return,discard,reset)
-	 * @return withdrawlButtonStatus
-	 */
-	public String getWithdrawlButtonStatus()
-	{
-		return withdrawlButtonStatus;
-	}
-
-	/**
-	 * It returns status of button(return,discard,reset)
-	 * @param withdrawlButtonStatus return,discard,reset
-	 */
-	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
-	{
-		this.withdrawlButtonStatus = withdrawlButtonStatus;
-	}
-
+	
 	/**
 	 * @return applyChangesTo
 	 */
@@ -1609,4 +1560,55 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
 	}
+	
+	/**
+	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */
+	public String getSignedConsentUrl()
+	{
+		return signedConsentUrl;
+	}
+
+	/**
+	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */
+	public void setSignedConsentUrl(String signedConsentUrl)
+	{
+		this.signedConsentUrl = signedConsentUrl;
+	}
+
+	/**
+	 * @return witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */
+	public String getWitnessName()
+	{
+		return witnessName;
+	}
+
+	/**
+	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */
+	public void setWitnessName(String witnessName)
+	{
+		this.witnessName = witnessName;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @return withdrawlButtonStatus
+	 */
+	public String getWithdrawlButtonStatus()
+	{
+		return withdrawlButtonStatus;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @param withdrawlButtonStatus return,discard,reset
+	 */
+	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
+	{
+		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+
 }

@@ -43,6 +43,8 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -816,4 +818,125 @@ public final class ConsentUtil
         }				
 //		bug 8905		
 	}
+	
+	/**
+	 * This method called to get collection protocol registration.
+	 * @param specimen
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public static CollectionProtocolRegistration getCollectionProtRegistration(Specimen specimen)
+	throws ApplicationException 
+	{
+		Long specimenId = (Long) specimen.getId();
+		String colProtHql = "select scg.collectionProtocolRegistration"
+				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
+				+ " edu.wustl.catissuecore.domain.Specimen as spec "
+				+ " where spec.specimenCollectionGroup.id=scg.id and spec.id=" + specimenId;
+
+		List collectionProtocolRegistrationList = AppUtility.executeQuery(colProtHql);
+		CollectionProtocolRegistration collectionProtocolRegistration = null;
+		if (collectionProtocolRegistrationList != null)
+		{
+			collectionProtocolRegistration =
+				(CollectionProtocolRegistration) collectionProtocolRegistrationList
+					.get(0);
+		}
+		return collectionProtocolRegistration;
+	}
+	
+	/**
+	 * This method is called to get signedConsent url.
+	 * @param initialURLValue
+	 * @param cprObject
+	 * @return
+	 */
+	public static String getSignedConsentURL(String initialURLValue,
+			final CollectionProtocolRegistration cprObject)
+	{
+		String signedConsentURL = "";
+		if (cprObject.getSignedConsentDocumentURL() == null)
+		{
+			if (initialURLValue.equals(Constants.NULL))
+			{
+				signedConsentURL = "";
+			}
+			else
+			{
+				signedConsentURL = Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			signedConsentURL = CommonUtilities.toString(cprObject.getSignedConsentDocumentURL());
+		}
+		return signedConsentURL;
+	}
+
+	/**
+	 * This method is called to get consent date.
+	 * @param initialSignedConsentDateValue
+	 * @param cprObject
+	 * @return
+	 */
+	public static String getConsentDate(String initialSignedConsentDateValue,
+			final CollectionProtocolRegistration cprObject)
+	{
+		String consentDate = "";
+		if (cprObject.getConsentSignatureDate() == null)
+		{
+			if (initialSignedConsentDateValue.equals(Constants.NULL))
+			{
+				consentDate = "";
+			}
+			else
+			{
+				consentDate = Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			consentDate = CommonUtilities.parseDateToString(cprObject.getConsentSignatureDate(),
+					CommonServiceLocator.getInstance().getDatePattern());
+		}
+		return consentDate;
+	}
+
+	/**
+	 * This method is called to get witness name.
+	 * @param dForm
+	 * @param bizLogic
+	 * @param initialWitnessValue
+	 * @param cprObject
+	 * @param witnessName
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public static String getWitnessName(IBizLogic bizLogic, String initialWitnessValue,
+			final CollectionProtocolRegistration cprObject)
+			throws BizLogicException
+	{
+		String witnessName = "";
+		User witness = cprObject.getConsentWitness();
+		if (witness == null)
+		{
+			if (initialWitnessValue.equals(Constants.NULL))
+			{
+				witnessName = "";
+			}
+			else
+			{
+				witnessName = Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			witness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
+					.getName(), cprObject.getId(), "consentWitness");
+			witnessName = witness.getLastName() + ", " + witness.getFirstName();
+			
+		}
+		return witnessName;
+	}
+
 }

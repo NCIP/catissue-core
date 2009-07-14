@@ -43,7 +43,7 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -373,20 +373,7 @@ public class DistributionAction extends SecureAction
 		String initialWitnessValue = "";
 		String initialSignedConsentDateValue = "";
 
-		Long specimenId = (Long) specimen.getId();
-		String colProtHql = "select scg.collectionProtocolRegistration"
-				+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
-				+ " edu.wustl.catissuecore.domain.Specimen as spec "
-				+ " where spec.specimenCollectionGroup.id=scg.id and spec.id=" + specimenId;
-
-		List collectionProtocolRegistrationList = AppUtility.executeQuery(colProtHql);
-		CollectionProtocolRegistration collectionProtocolRegistration = null;
-		if (collectionProtocolRegistrationList != null)
-		{
-			collectionProtocolRegistration =
-				(CollectionProtocolRegistration) collectionProtocolRegistrationList
-					.get(0);
-		}
+		CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil.getCollectionProtRegistration(specimen);
 
 		if (collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 		{
@@ -398,8 +385,7 @@ public class DistributionAction extends SecureAction
 			consentWitness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
 					.getName(), collectionProtocolRegistration.getId(), "consentWitness");
 		}
-		// Resolved Lazy ---- User consentWitness=
-		// collectionProtocolRegistration.getConsentWitness();
+		
 		if (consentWitness == null)
 		{
 			initialWitnessValue = Constants.NULL;
@@ -414,10 +400,9 @@ public class DistributionAction extends SecureAction
 				Constants.SESSION_DATA);
 		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
 		String userName = Utility.toString(sessionDataBean.getUserName());
-		List collProtObject = null;
 		try
 		{
-			collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,
+			caCoreAppServicesDelegator.delegateSearchFilter(userName,
 					cprObjectList);
 		}
 		catch (Exception e)
@@ -426,75 +411,16 @@ public class DistributionAction extends SecureAction
 			e.printStackTrace();
 		}
 		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;// (
-		// CollectionProtocolRegistration
-		// )
-		// collProtObject
-		// .
-		// get
-		// (
-		// 0
-		// )
-		// ;
-		// Getting WitnessName,Consent Date,Signed Url using
-		// collectionProtocolRegistration object
-		String witnessName = "";
-		String getConsentDate = "";
-		String getSignedConsentURL = "";
-		User witness = cprObject.getConsentWitness();
-		if (witness == null)
-		{
-			if (initialWitnessValue.equals(Constants.NULL))
-			{
-				witnessName = initialWitnessValue;
-			}
-			else
-			{
-				witnessName = Constants.HASHED_OUT;
-			}
-			dForm.setWitnessName(witnessName);
-		}
-		else
-		{
-			witness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
-					.getName(), cprObject.getId(), "consentWitness");
-			String witnessFullName = witness.getLastName() + ", " + witness.getFirstName();
-			dForm.setWitnessName(witnessFullName);
-		}
-		if (cprObject.getConsentSignatureDate() == null)
-		{
-			if (initialSignedConsentDateValue.equals(Constants.NULL))
-			{
-				getConsentDate = "";
-			}
-			else
-			{
-				getConsentDate = Constants.HASHED_OUT;
-			}
-		}
-		else
-		{
-			getConsentDate = Utility.parseDateToString(cprObject.getConsentSignatureDate(),
-					CommonServiceLocator.getInstance().getDatePattern());
-		}
-
-		if (cprObject.getSignedConsentDocumentURL() == null)
-		{
-			if (initialURLValue.equals(Constants.NULL))
-			{
-				getSignedConsentURL = "";
-			}
-			else
-			{
-				getSignedConsentURL = Constants.HASHED_OUT;
-			}
-		}
-		else
-		{
-			getSignedConsentURL = Utility.toString(cprObject.getSignedConsentDocumentURL());
-		}
+		String witnessName = ConsentUtil.getWitnessName( bizLogic, initialWitnessValue,
+				cprObject);
+		String consentDate  = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
+				cprObject);
+    	String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
+    	
 		// Setting WitnessName,ConsentDate and Signed Consent Url
-		dForm.setConsentDate(getConsentDate);
-		dForm.setSignedConsentUrl(getSignedConsentURL);
+    	dForm.setWitnessName(witnessName);
+		dForm.setConsentDate(consentDate);
+		dForm.setSignedConsentUrl(signedConsentURL);
 
 		// Getting ConsentResponse collection for CPR level
 		// Resolved lazy ---
@@ -523,8 +449,8 @@ public class DistributionAction extends SecureAction
 			{
 				String[] barcodeLabelAttribute = new String[5];
 				barcodeLabelAttribute[0] = witnessName;
-				barcodeLabelAttribute[1] = getConsentDate;
-				barcodeLabelAttribute[2] = getSignedConsentURL;
+				barcodeLabelAttribute[1] = consentDate;
+				barcodeLabelAttribute[2] = signedConsentURL;
 				barcodeLabelAttribute[3] = Integer.toString(consentTierCounter);
 				barcodeLabelAttribute[4] = barcodeLable;
 				listOfMap.add(tempMap);
@@ -532,6 +458,8 @@ public class DistributionAction extends SecureAction
 			}
 		}
 	}
+
+	
 
 	// Consent tracking (Virender Mehta)
 	/**

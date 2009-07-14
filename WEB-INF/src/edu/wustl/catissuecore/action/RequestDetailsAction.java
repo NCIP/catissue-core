@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -45,7 +44,6 @@ import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
@@ -58,33 +56,25 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.SMException;
-import edu.wustl.security.global.Permissions;
 import edu.wustl.security.manager.SecurityManagerFactory;
-import edu.wustl.security.privilege.PrivilegeCache;
-import edu.wustl.security.privilege.PrivilegeManager;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
@@ -861,6 +851,7 @@ public class RequestDetailsAction extends BaseAction
 	{
 		final PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) specimenOrderItem;
 		boolean isDerived = false;
+		boolean isNotTissueBlock = false;
 		arrayDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup()
 				.getSurgicalPathologyNumber());
 		final Collection childrenSpecimenList = pathologicalCaseOrderItem
@@ -872,47 +863,19 @@ public class RequestDetailsAction extends BaseAction
 		{
 			isDerived = true;
 		}
-		List totalChildrenSpecimenColl = null;
-		List childrenSpecimenListToDisplay = null;
-		final Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
-		while (childrenSpecimenListIterator.hasNext())
+		if (pathologicalCaseOrderItem.getSpecimenClass() != null
+				&& pathologicalCaseOrderItem.getSpecimenType() != null
+				&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
+				&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
 		{
-			final Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			final List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen
-					.getChildSpecimenCollection());
-			List finalChildrenSpecimenCollection = null;
-			if (pathologicalCaseOrderItem.getSpecimenClass() != null
-					&& pathologicalCaseOrderItem.getSpecimenType() != null
-					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
-					&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
-			{ // "Derived"
-				finalChildrenSpecimenCollection = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
-								pathologicalCaseOrderItem.getSpecimenClass(),
-								pathologicalCaseOrderItem.getSpecimenType());
-				isDerived = true;
-			}
-			else
-			{ // "Block" . Specimen class = "Tissue" , Specimen Type = "Block".
-				finalChildrenSpecimenCollection = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
-								"Block");
-			}
-			if (finalChildrenSpecimenCollection != null)
-			{
-				final Iterator finalChildrenSpecimenCollectionIterator = finalChildrenSpecimenCollection
-						.iterator();
-				while (finalChildrenSpecimenCollectionIterator.hasNext())
-				{
-					totalChildrenSpecimenColl.add((finalChildrenSpecimenCollectionIterator.next()));
-				}
-			}
+			isNotTissueBlock = true;
+			isDerived = true;
 		}
-		if (totalChildrenSpecimenColl == null)
-		{
-			totalChildrenSpecimenColl = new ArrayList();
-		}
-		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+		List totalChildrenSpecimenColl = 
+			getTotalChildspecimens(pathologicalCaseOrderItem,isNotTissueBlock,childrenSpecimenList);
+		
+		
+		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		arrayDetailsBean.setSpecimenCollGroupId(pathologicalCaseOrderItem
@@ -1194,6 +1157,7 @@ public class RequestDetailsAction extends BaseAction
 			int finalSpecimenListId)
 	{
 		boolean isDerived = false;
+		boolean isNotTissueBlock = false;
 		requestDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup()
 				.getSurgicalPathologyNumber());
 
@@ -1206,53 +1170,26 @@ public class RequestDetailsAction extends BaseAction
 		{
 			isDerived = true;
 		}
-		final Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
-		final List totalChildrenSpecimenColl = new ArrayList();
-		List childrenSpecimenListToDisplay = new ArrayList();
-		while (childrenSpecimenListIterator.hasNext())
+		
+		if (pathologicalCaseOrderItem.getSpecimenClass() != null
+				&& pathologicalCaseOrderItem.getSpecimenType() != null
+				&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
+				&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
 		{
-			final Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
-			final List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen
-					.getChildSpecimenCollection());
-			List finalChildrenSpecimenCollection = null;
-			if (pathologicalCaseOrderItem.getSpecimenClass() != null
-					&& pathologicalCaseOrderItem.getSpecimenType() != null
-					&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
-					&& !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
-			{
-				// "Derived"
-				finalChildrenSpecimenCollection = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
-								pathologicalCaseOrderItem.getSpecimenClass(),
-								pathologicalCaseOrderItem.getSpecimenType());
-				isDerived = true;
-			}
-			else
-			{
-				// "Block" . Specimen class = "Tissue" , Specimen Type =
-				// "Block".
-				finalChildrenSpecimenCollection = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
-								"Block");
-			}
-			if (finalChildrenSpecimenCollection != null)
-			{
-				final Iterator finalChildrenSpecimenCollectionIterator = finalChildrenSpecimenCollection
-						.iterator();
-				while (finalChildrenSpecimenCollectionIterator.hasNext())
-				{
-					totalChildrenSpecimenColl.add((finalChildrenSpecimenCollectionIterator.next()));
-				}
-			}
+			isNotTissueBlock = true;
+			isDerived = true;
 		}
+		
+		final List totalChildrenSpecimenColl = 
+			getTotalChildspecimens(pathologicalCaseOrderItem,isNotTissueBlock, childrenSpecimenList);
+			
 		// removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
 		// To display the available quantity of the selected specimen from
 		// RequestFor dropdown.
 		// request.getSession().setAttribute("finalSpecimenList"+
 		// finalSpecimenListId, totalChildrenSpecimenColl);
-
-		childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
@@ -1289,6 +1226,46 @@ public class RequestDetailsAction extends BaseAction
 		requestDetailsBean.setOrderItemId(pathologicalCaseOrderItem.getId().toString());
 
 		return requestDetailsBean;
+	}
+
+	/**
+	 * This method will be called to get all the child specimens
+	 * @param pathologicalCaseOrderItem
+	 * @param isNotTissueBlock
+	 * @param childrenSpecimenList
+	 * @return
+	 */
+	private List getTotalChildspecimens(
+			PathologicalCaseOrderItem pathologicalCaseOrderItem,
+			boolean isNotTissueBlock, final Collection childrenSpecimenList)
+	{
+		final Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
+		List totalChildrenSpecimens = new ArrayList();
+		while (childrenSpecimenListIterator.hasNext())
+		{
+			final Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
+			final List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen
+					.getChildSpecimenCollection());
+		
+			if (isNotTissueBlock)
+			{
+				// "Derived"
+				totalChildrenSpecimens = OrderingSystemUtil
+						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
+								pathologicalCaseOrderItem.getSpecimenClass(),
+								pathologicalCaseOrderItem.getSpecimenType());
+			}
+			else
+			{
+				// "Block" . Specimen class = "Tissue" , Specimen Type =
+				// "Block".
+				totalChildrenSpecimens = OrderingSystemUtil
+						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
+								"Block");
+			}
+	
+		}
+		return totalChildrenSpecimens;
 	}
 
 	/**
