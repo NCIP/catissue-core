@@ -254,7 +254,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			this.saveToken(request);
 			if (request.getParameter("pageOf") != null)
 			{
-				return mapping.findForward("multipleSpWithMenuFaliure");
+				return mapping.findForward(request.getParameter("pageOf"));
 			}
 			return mapping.findForward(Constants.FAILURE);
 		}

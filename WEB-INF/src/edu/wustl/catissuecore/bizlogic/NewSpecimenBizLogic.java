@@ -4309,7 +4309,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 					if (domainObject instanceof Specimen)
 					{
-						final SpecimenPosition specimenPosition = null;
+						SpecimenPosition specimenPosition = null;
 						final Specimen specimen = (Specimen) domainObject;
 						final Specimen parentSpecimen = (Specimen) specimen.getParentSpecimen();
 						List<Site> list = null;
@@ -4363,13 +4363,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							{
 								if (sc.getId() != null)
 								{
-									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "
+									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as storageContainer where "
 											+ " storageContainer.id = " + sc.getId();
 								}
 								else
 								{
-									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as specimen where "
-											+ " storageContainer.name = " + sc.getName();
+									query = "select storageContainer.site from edu.wustl.catissuecore.domain.StorageContainer as storageContainer where "
+											+ " storageContainer.name = '" + sc.getName() +"'";
 								}
 								if (query != null)
 								{
@@ -4391,14 +4391,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							}
 						}
 
-						if (site != null) // Specimen is NOT Virtually Located
+							//bug 13094 start
+						specimenPosition = specimen.getSpecimenPosition();
+						if (specimenPosition != null) // Specimen is NOT Virtually Located
 						{
-							final BizLogicException e = AppUtility.getUserNotAuthorizedException(
-									Constants.Association, site.getObjectId(), domainObject
-											.getClass().getSimpleName());
-							throw this.getBizLogicException(e, e.getErrorKeyName(), e
-									.getMsgValues());
+							Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+									.getUserId());
+							if (!siteIdSet.contains(site.getId()))
+							{
+								BizLogicException e = AppUtility.getUserNotAuthorizedException(
+										Constants.Association, site.getObjectId(), domainObject
+												.getClass().getSimpleName());
+								throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+							}
 						}
+						//bug 13094 end
 					}
 				}
 

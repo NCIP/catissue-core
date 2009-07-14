@@ -831,7 +831,9 @@ public class ViewSpecimenSummaryAction extends Action
 		final List < GenericSpecimen > allSpcimens = new ArrayList < GenericSpecimen >();
 		allSpcimens.addAll( specimenMap.values() );
 		final Set printSpecimenSet = new HashSet();
-		while (specItr.hasNext())
+		//bug 13157
+		getSpecimenList(specimenMap, allSpcimens);
+		/*while (specItr.hasNext())
 		{
 			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
 			final LinkedHashMap < String, GenericSpecimen > aliquots = pSpecimen
@@ -846,7 +848,7 @@ public class ViewSpecimenSummaryAction extends Action
 			{
 				allSpcimens.addAll( derivaties.values() );
 			}
-		}
+		}*/
 		for (final GenericSpecimen specimen : allSpcimens)
 		{
 			if (specimen.getPrintSpecimen() == true)
@@ -890,7 +892,30 @@ public class ViewSpecimenSummaryAction extends Action
 			}
 		}
 	}
-
+	private Collection getSpecimenList(LinkedHashMap specimenMap, List<GenericSpecimen> allSpcimens)
+	{
+		if(specimenMap != null) 
+		{
+			Iterator<GenericSpecimen> specItr = specimenMap.values().iterator();
+			while(specItr.hasNext())
+			{
+				GenericSpecimen pSpecimen=(GenericSpecimen)specItr.next();
+				LinkedHashMap<String, GenericSpecimen> aliquots = pSpecimen.getAliquotSpecimenCollection();
+				if(aliquots!=null && !aliquots.isEmpty())
+				{
+					allSpcimens.addAll(aliquots.values());
+					getSpecimenList(aliquots, allSpcimens);
+				}
+				LinkedHashMap<String, GenericSpecimen> derivaties = pSpecimen.getDeriveSpecimenCollection();
+				if(derivaties!=null && !derivaties.isEmpty())
+				{
+					allSpcimens.addAll(derivaties.values());
+					getSpecimenList(derivaties, allSpcimens);
+				}						
+			}
+		}
+		return allSpcimens;
+	}
 	/**
 	 * @param request
 	 *            : request
