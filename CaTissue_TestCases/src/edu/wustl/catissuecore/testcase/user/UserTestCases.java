@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.user;
 
 import org.junit.Test;
 
@@ -8,6 +8,9 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 
 public class UserTestCases extends CaTissueSuiteBaseTest
 {

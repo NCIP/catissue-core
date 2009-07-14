@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.testcase;
 
 import org.junit.Before;
 
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.struts.MockStrutsTestCase;

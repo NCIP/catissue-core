@@ -1,5 +1,5 @@
 
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.Collection;
 import java.util.Date;
@@ -16,6 +16,10 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
+import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.MapDataParser;

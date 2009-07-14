@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +8,9 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.exception.DAOException;
@@ -63,7 +66,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Edit.
 	 */
 	@Test
-	public void testDistributionProtocolEdit()
+	public void testDistributionProtocolSearch()
 	{
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
@@ -108,24 +111,139 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 			verifyActionErrors(errorNames);
 		}
 		
-        /*Distribution Protocol search action to generate DistributionProtocol form*/
-		setRequestPathInfo("/DistributionProtocolSearch");
-		addRequestParameter("id", "" + distributionProtocol.getId());
-     	actionPerform();
-		verifyForward("pageOfDistributionProtocol");
-		verifyNoActionErrors();
-
-		/*Edit Action*/
-		distributionProtocol.setTitle("dp1_"+UniqueKeyGeneratorUtil.getUniqueKey());
-		distributionProtocol.setShortTitle("dp1_"+UniqueKeyGeneratorUtil.getUniqueKey());
-		addRequestParameter("title",distributionProtocol.getTitle());
-		addRequestParameter("shortTitle",distributionProtocol.getShortTitle());
-		setRequestPathInfo("/DistributionProtocolEdit");
-		addRequestParameter("operation", "edit");
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-		
-		TestCaseUtility.setNameObjectMap("DistributionProtocol",distributionProtocol);
+  
 	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolEdit()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithEmptyTitle()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithEmptyShortTitle()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidPI()
+	{
+		//TODO
+		fail("Need to write test case");
+	
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidSpecimenClass()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidSpecimenType()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidTissueSite()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidPathStatus()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolAddWithInvalidQuantity()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtocolBizLogicAddWithNullObject()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtoclBizLogicAddWithNullName()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtoclBizLogicAddWithNullPI()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtoclBizLogicAddWithNullTitle()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	/**
+	 */
+	@Test
+	public void testDistributionProtoclBizLogicAddWithNullShortTitle()
+	{
+		//TODO
+		fail("Need to write test case");
+
+	}
+	
+
 }

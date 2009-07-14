@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +28,11 @@ public class TestCaseUtility
 	public static void setNameObjectMap(String ObjName, Object object)
 	{
 		objectMap.put(ObjName, object);
+	} 
+	
+	public static void removeObjectFromMap(String ObjName)
+	{
+		objectMap.remove(ObjName);
 	} 
 	
 }

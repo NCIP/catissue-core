@@ -1,12 +1,8 @@
-package edu.wustl.catissuecore.testcase;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+package edu.wustl.catissuecore.testcase.login;
 import org.junit.Test;
 
-import edu.wustl.catissuecore.actionForm.InstitutionForm;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.common.beans.SessionDataBean;
 /**
 *

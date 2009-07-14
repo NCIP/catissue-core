@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,27 +14,27 @@ public class DataSourceFinder
 	/**
 	 * String containing database type
 	 */
-	static String databaseType = null;
+	public static String databaseType = null;
 	/**
 	 * String containing database name
 	 */
-	static String databaseName = null;
+	public static String databaseName = null;
 	/**
 	 * String containing database username
 	 */
-	static String databaseUser = null;
+	public static String databaseUser = null;
 	/**
 	 * String containing database password
 	 */
-	static String databasePassword = null;
+	public static String databasePassword = null;
 	/**
 	 * String containing database host name
 	 */
-	static String databaseHost = null;
+	public static String databaseHost = null;
 	/**
 	 * String containing port no. at which the service is running
 	 */
-	static int port;
+	public static int port;
 	
 	public static void setAllValues() 
 	{

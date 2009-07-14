@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
+import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 
@@ -159,135 +163,133 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		//add Biohazard object to objectMap
 		TestCaseUtility.setNameObjectMap("ToxicBiohazard",biohazard);
 	}
+	
+	
 	/**
 	 * Test Biohazard Edit.
 	 */
-//	@Test
-//	public void testBioHazardEdit()
-//	{
-//		/*Simple Search Action*/
-//		setRequestPathInfo("/SimpleSearch");
-//		RequestParameterUtility.setEditBioHazardParams(this);
-//		actionPerform();
-//				
-//		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
-//		DefaultBizLogic bizLogic = new DefaultBizLogic();
-//		List<Biohazard> biohazardList = null;
-//		try 
-//		{
-//			biohazardList = bizLogic.retrieve("Biohazard");
-//		}
-//		catch (BizLogicException e) 
-//		{
-//			e.printStackTrace();
-//			System.out.println("BiohazardTestCases.testBioHazardEdit(): "+e.getMessage());
-//			fail(e.getMessage());
-//		}
-//		
-//		if(biohazardList.size() > 1)
-//		{
-//		    verifyForward("success");
-//		    verifyNoActionErrors();
-//		}
-//		else if(biohazardList.size() == 1)
-//		{
-//			verifyForwardPath("/SearchObject.do?pageOf=pageOfBioHazard&operation=search&id=" + biohazard.getId());
-//			verifyNoActionErrors();
-//		}
-//		else
-//		{
-//			verifyForward("failure");
-//			//verify action errors
-//			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-//			verifyActionErrors(errorNames);
-//		}
-//				
-//		/*Biohazard search action to generate Biohazard form*/
-//		setRequestPathInfo("/BiohazardSearch");
-//		addRequestParameter("id", "" + biohazard.getId());
-//		addRequestParameter("type", "Infectious");
-//     	actionPerform();
-//		verifyForward("pageOfBioHazard");
-//		verifyNoActionErrors();
-//
-//		/*Edit Action*/
-//		biohazard.setName("Biohazard1_" + UniqueKeyGeneratorUtil.getUniqueKey());
-//		addRequestParameter("name",biohazard.getName());
-//		setRequestPathInfo("/BiohazardEdit");
-//		addRequestParameter("operation", "edit");
-//		actionPerform();
-//		verifyForward("success");
-//		verifyNoActionErrors();
-//		
-//		TestCaseUtility.setNameObjectMap("Biohazard",biohazard);
-//	}
-//	/**
-//	 * Add Biohazard without specifying mandatory Parameters as name and type.
-//	 * Negative test case.
-//	 */
-//	@Test
-//	public void testAddBioHazardAddWithoutMandatoryParams()
-//	{
-//		addRequestParameter("name", "");
-//		addRequestParameter("type", "");
-//		addRequestParameter("operation", "add");
-//		setRequestPathInfo("/BiohazardAdd");
-//		actionPerform();
-//		verifyForward("failure");
-//		//verify action errors
-//		String errorNames[] = new String[]{"errors.item.required","errors.item.selected"};
-//		verifyActionErrors(errorNames);	
-//	}
-//	/**
-//	 * Edit Biohazard without specifying mandatory Parameters as name and type.
-//	 * Negative test case.
-//	 */
-//	@Test
-//	public void testEditBioHazardEditWithoutMandatoryParams()
-//	{
-//		setRequestPathInfo("/SimpleSearch");
-//		RequestParameterUtility.setEditBioHazardParams(this);
-//		actionPerform();
-//				
-//		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
-//		DefaultBizLogic bizLogic = new DefaultBizLogic();
-//		List<Biohazard> biohazardList = null;
-//		try 
-//		{
-//			biohazardList = bizLogic.retrieve("Biohazard");
-//		}
-//		catch (BizLogicException e) 
-//		{
-//			e.printStackTrace();
-//			System.out.println("BiohazardTestCases.testBioHazardEdit(): "+e.getMessage());
-//			fail(e.getMessage());
-//		}
-//		
-//		if(biohazardList.size() > 1)
-//		{
-//		    verifyForward("success");
-//		    verifyNoActionErrors();
-//		}
-//		else if(biohazardList.size() == 1)
-//		{
-//			verifyForwardPath("/SearchObject.do?pageOf=pageOfBioHazard&operation=search&id=" + biohazard.getId());
-//			verifyNoActionErrors();
-//		}
-//		else
-//		{
-//			verifyForward("failure");
-//			//verify action errors
-//			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-//			verifyActionErrors(errorNames);
-//		}
-//		addRequestParameter("name", "");
-//		addRequestParameter("type", "");
-//		addRequestParameter("operation", "edit");
-//		setRequestPathInfo("/BiohazardEdit");
-//		actionPerform();
-//		verifyForward("failure");
-//		//verify action errors
-//		String errorNames[] = new String[]{"errors.item.required","errors.item.selected"};
-//		verifyActionErrors(errorNames);	
-//	}
+	@Test
+	public void testBioHazardSearch()
+	{
+		/*Simple Search Action*/
+		setRequestPathInfo("/SimpleSearch");
+		RequestParameterUtility.setEditBioHazardParams(this);
+		actionPerform();
+				
+		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+		List<Biohazard> biohazardList = null;
+		try 
+		{
+			biohazardList = bizLogic.retrieve("Biohazard");
+		}
+		catch (BizLogicException e) 
+		{
+			e.printStackTrace();
+			System.out.println("BiohazardTestCases.testBioHazardEdit(): "+e.getMessage());
+			fail(e.getMessage());
+		}
+		
+		if(biohazardList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		else if(biohazardList.size() == 1)
+		{
+			verifyForwardPath("/SearchObject.do?pageOf=pageOfBioHazard&operation=search&id=" + biohazard.getId());
+			verifyNoActionErrors();
+		}
+		else
+		{
+			verifyForward("failure");
+			//verify action errors
+			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
+			verifyActionErrors(errorNames);
+		}
+				
+	}
+	/**
+	 * Add Biohazard without specifying mandatory Parameters as name and type.
+	 * Negative test case.
+	 */
+	@Test
+	public void testAddBioHazardAddWithoutMandatoryParams()
+	{
+		addRequestParameter("name", "");
+		addRequestParameter("type", "");
+		addRequestParameter("operation", "add");
+		setRequestPathInfo("/BiohazardAdd");
+		actionPerform();
+		verifyForward("failure");
+		//verify action errors
+		String errorNames[] = new String[]{"errors.item.required","errors.item.selected"};
+		verifyActionErrors(errorNames);	
+	}
+	
+	/**
+	 * Test Biohazard Edit.
+	 */
+	@Test
+	public void testBioHazardEdit()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	 * Edit Biohazard without specifying mandatory Parameters as name and type.
+	 * Negative test case.
+	 */
+	@Test
+	public void testEditBioHazardEditWithoutMandatoryParams()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	/**
+	*/
+	@Test
+	public void testBiohazardAddWithInvalidType()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	/**
+	*/
+	@Test
+	public void testBioHazardBizLogicAddWithNullObject()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
+	/**
+	*/
+	@Test
+	public void testBiohazardBizLogicAddWithNullName()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
+	/**
+	*/
+	@Test
+	public void testBiohazardBizLogicAddWithNullType()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
+	/**
+	*/
+	@Test
+	public void testBiohazardBizLogicAddWithInvalidType()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+
 }

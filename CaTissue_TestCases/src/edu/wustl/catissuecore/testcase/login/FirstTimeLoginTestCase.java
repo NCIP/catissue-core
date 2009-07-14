@@ -1,21 +1,22 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.login;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 public class FirstTimeLoginTestCase extends CaTissueSuiteBaseTest 
 {
 	/**
-	 * Test Department Add.
+	 * Test First Time Login.
 	 */
 	@Test
 	public void testFirstTimeLogin()
 	{
 		setRequestPathInfo("/Login");
-		addRequestParameter("loginName", "new@user.com");
+		addRequestParameter("loginName", "admin@admin.com");
 		addRequestParameter("password", "Login123");
 		//addRequestParameter("operation", "edit");
 		actionPerform();
@@ -45,7 +46,7 @@ public class FirstTimeLoginTestCase extends CaTissueSuiteBaseTest
 		addRequestParameter("confirmNewPassword", "Test123");
 		//addRequestParameter("access","denied");
 		actionPerform();
-		
+		verifyForward("success");
 		
 		System.out.println("----"+getActualForward());
 	}

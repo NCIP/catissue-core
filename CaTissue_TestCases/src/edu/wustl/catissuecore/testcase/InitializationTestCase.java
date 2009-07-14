@@ -16,6 +16,8 @@ import org.junit.Test;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import oracle.jdbc.pool.OracleDataSource;
 
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
+import edu.wustl.catissuecore.testcase.util.DataSourceFinder;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;

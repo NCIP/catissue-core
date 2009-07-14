@@ -1,9 +1,11 @@
 
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.util;
 
 import java.util.List;
 
+import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -17,6 +19,7 @@ import servletunit.struts.MockStrutsTestCase;
 public class RequestParameterUtility
 {
 
+	
 	public static void setAddSiteParams(MockStrutsTestCase testcase)
 	{
 		testcase.addRequestParameter("name", "Site_" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -61,6 +64,23 @@ public class RequestParameterUtility
 		testcase.addRequestParameter("operation", "search");
 	}
 
+	public static StorageTypeForm createStorageTypeForm(MockStrutsTestCase testcase, String typeName
+			,int oneCapacity,int twoCapacity,String oneLabel,String twoLabel,String temp,String activityStatus)
+	{
+		StorageTypeForm storageTypeForm = new StorageTypeForm();
+		storageTypeForm.setType(typeName);
+		storageTypeForm.setOneDimensionCapacity(oneCapacity);
+		storageTypeForm.setTwoDimensionCapacity(twoCapacity);
+		storageTypeForm.setOneDimensionLabel(oneLabel);
+		storageTypeForm.setTwoDimensionLabel(twoLabel);
+		storageTypeForm.setDefaultTemperature(temp);
+		storageTypeForm.setActivityStatus(activityStatus);
+		storageTypeForm.setOperation("add");
+		return storageTypeForm;
+	}
+	
+	
+	
 	/**
 	 * Set the request parameter for adding Specimen Requirement
 	 */

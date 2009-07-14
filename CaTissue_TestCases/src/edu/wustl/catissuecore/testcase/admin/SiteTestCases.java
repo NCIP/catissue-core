@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
@@ -8,6 +8,10 @@ import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
+import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.QueryWhereClause;
@@ -192,10 +196,106 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
+	* 
+	*/
+	@Test
+	public void testSiteAddWithEmptyName()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteAddWithEmptyType()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteAddWithEmptyCoordinator()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteAddWithEmptyEmailAddress()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullObject()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullName()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullType()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullCoordinator()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullAddress()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	/**
+	* 
+	*/
+	@Test
+	public void testSiteBizLogicAddWithNullEmailAddress()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+		
+	
+	/**
 	 * Test Site Edit.
 	 */
 	@Test
-	public void testSiteEdit()
+	public void testSiteSearch()
 	{
 		setRequestPathInfo("/SimpleSearch");
 		RequestParameterUtility.setEditSiteParams(this);
@@ -254,72 +354,25 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
+	 * Edit Site
+	 * 
+	 */
+	@Test
+	public void testSiteEdit()
+	{
+		//TODO
+		fail("Need to write test case");
+	}
+	
+	/**
 	 * Edit Site without specifying mandatory Parameters.
 	 * Negative test case.
 	 */
 	@Test
 	public void testSiteEditEmptySiteParams()
 	{
-		setRequestPathInfo("/SimpleSearch");
-		RequestParameterUtility.setEditSiteParams(this);
-		actionPerform();
-				
-		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
-		DefaultBizLogic bizLogic = new DefaultBizLogic(); 
-		List<Site> siteList = null;
-		try 
-		{
-			siteList = bizLogic.retrieve("Site");
-		}
-		catch (BizLogicException e) 
-		{
-			e.printStackTrace();
-			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
-			fail(e.getMessage());
-		}
-		
-		if(siteList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else if(siteList.size() == 1)
-		{
-			verifyForwardPath("/SearchObject.do?pageOf=pageOfSite&operation=search&id=" + site.getId());
-			verifyNoActionErrors();
-		}
-		else
-		{
-			verifyForward("failure");
-			
-			//verify action errors
-			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-    		verifyActionErrors(errorNames);
-		}
-		
-		//Site action.Generates SiteForm
-		setRequestPathInfo("/SiteSearch");
-		addRequestParameter("id", "" + site.getId());
-		actionPerform();
-		verifyForward("pageOfSite");
-        verifyNoActionErrors();
-		
-		//edit function
-        addRequestParameter("name","");
-        addRequestParameter("type","");
-		addRequestParameter("street","");
-		addRequestParameter("state","");
-		addRequestParameter("country","");
-		addRequestParameter("city","");
-		addRequestParameter("activityStatus","");
-		setRequestPathInfo("/SiteEdit");
-		addRequestParameter("operation", "edit");
-		actionPerform();
-		verifyForward("failure");
-		//verify action errors
-		String errorNames[] = new String[]{"errors.item.required","errors.item.required","errors.item.required"
-				,"errors.item.required","errors.item.required","errors.item.required","errors.item.required"};
-		verifyActionErrors(errorNames);	
+		//TODO
+		fail("Need to write test case");
 	}
 	/**
 	 * Add multiple sites and check whether sites are added or not. 

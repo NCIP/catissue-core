@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Ant Script to setup configuration files for test cases-->
 
-<project name="struts_testcases" default="init_struts_testcases" >
+<project name="caTissue JUnit Test cases" default="run_junit_nightlyBuild" >
 <import file="build.xml"/>	
      <taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -42,7 +42,7 @@
 			</fileset>
 		</path>
 
-    <target name="init_struts_testcases">
+    <target name="init_junit_testcases">
         <copy file="${ApplicationSecurityConfig.file.path}" todir="${catissue.test}" overwrite="true"/>
         <replace dir="${catissue.test}">
         	<include name="ApplicationSecurityConfig.xml" />
@@ -68,7 +68,11 @@
     	          </replace>	
     	     </then>
     	 </if>
-    	                    
+    	 
+    	<replace dir="${catissue.test}">
+			<include name="catissuecore.hibernate.cfg.xml"/>
+				<replacefilter token="JTATransactionFactory" value="JDBCTransactionFactory"/>
+		</replace>
     	<copy file="${login-conf.file.path}" tofile="${catissue.test}/test_login.conf" overwrite="true"/>
     	 <if>
     	   <equals arg1="${database.type}" arg2="mysql"/>
@@ -102,7 +106,7 @@
 	<!-- =================================================================== -->
 	
 	
-	<target name="compile_struts_junit_testCases" depends="init_struts_testcases,compile">
+	<target name="compile_junit_testcases" depends="init_junit_testcases,compile">
 		 
 		<echo>Compiling the test classes : </echo>
 		<delete dir="${cat.test.classes.dir}" />
@@ -126,54 +130,13 @@
 	</target>
 	
 	
-	<target name="instrument_struts_testCases" depends="compile">
-			<echo>Instrumenting the application classes : </echo>
 	
-			<!--
-				Remove the coverage data file.
-			-->
-				<delete file="${cat.cobertura.dir}/strutscoverage.ser"/>
-				
-				<delete dir="${cat.instrumented.dir}" />
-				<mkdir dir="${cat.instrumented.dir}" /> 
-				
-				<!--
-					Instrument the application classes, writing the
-					instrumented classes into ${build.instrumented.dir}.
-				-->
-
-				<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
-					
-					<classpath refid="cobertura.classpath" />
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="**/*.jar"/>
-						</fileset>
-					</classpath>
-					<!--
-						The following line causes instrument to ignore any
-						source line containing a reference to log4j, for the
-						purposes of coverage reporting.
-					-->
-					<ignore regex="org.apache.log4j.*" />
-
-					<fileset dir="${target.dir}">
-						<!--
-							Instrument all the application classes, but
-							don't instrument the test classes.
-						-->
-						<include name="**/*.class" />
-						
-					</fileset>
-				</cobertura-instrument>
-		</target>
-
-	<target name="run_struts_junitTestCases" depends="compile_struts_junit_testCases">
+	<target name="run_junit_testcases" depends="compile_junit_testcases">
 	        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
 			
 			
-			<junit printsummary="yes" fork="yes" forkmode="perTest" haltonfailure="yes"  maxmemory="1024m">
+			<junit printsummary="yes" fork="yes" haltonfailure="no">
 				
 				<jvmarg value="-Xms128m"/>
 				<jvmarg value="-Xmx1024m"/>       
@@ -223,18 +186,59 @@
 			</junit>
 		</target>
 	
-		<target name="run_struts_nightlyBuild"  depends="run_struts_junitTestCases">
+		<target name="run_junit_nightlyBuild" depends="run_junit_testcases">
 			<echo> Generating struts nightly build reports :::</echo>
-			<junitreport todir="${base.dir}/Nightly_Build_Struts_Report">
-				<fileset dir="${base.dir}/Nightly_Build_Struts_Report">
-					<include name="TEST-*.xml" />
-				</fileset>
-				<report todir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
-			</junitreport>
+						<junitreport todir="${base.dir}/Nightly_Build_Struts_Report">
+							<fileset dir="${base.dir}/Nightly_Build_Struts_Report">
+								<include name="TEST-*.xml" />
+							</fileset>
+							<report todir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+						</junitreport>
 		</target>
 	
-	
-		<target name="struts_coverage_report">
+	<target name="instrument_junit_testcases">
+				<echo>Instrumenting the application classes : </echo>
+		
+				<!--
+					Remove the coverage data file.
+				-->
+					<delete file="${cat.cobertura.dir}/strutscoverage.ser"/>
+					
+					<delete dir="${cat.instrumented.dir}" />
+					<mkdir dir="${cat.instrumented.dir}" /> 
+					
+					<!--
+						Instrument the application classes, writing the
+						instrumented classes into ${build.instrumented.dir}.
+					-->
+
+					<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
+						
+						<classpath refid="cobertura.classpath" />
+						<classpath>
+							<fileset dir="${lib.dir}">
+								<include name="**/*.jar"/>
+							</fileset>
+						</classpath>
+						<!--
+							The following line causes instrument to ignore any
+							source line containing a reference to log4j, for the
+							purposes of coverage reporting.
+						-->
+						<ignore regex="org.apache.log4j.*" />
+
+						<fileset dir="${target.dir}">
+							<!--
+								Instrument all the application classes, but
+								don't instrument the test classes.
+							-->
+							<include name="**/*.class" />
+							
+						</fileset>
+					</cobertura-instrument>
+			</target>
+
+		<target name="code_coverage_report">
 			<echo> Generating coverage reports :</echo>
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"/>
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"/>
@@ -261,11 +265,11 @@
 			</cobertura-report>
 		</target>
 	
-	<target name="struts_junit_coverage_reports">
+	<target name="run_testcases_with_coveragereport">
 	
-		<antcall target="instrument_struts_testCases"/>
-		<antcall target="run_struts_junitTestCases"/>
-		<antcall target="struts_coverage_report"/>
+		<antcall target="instrument_junit_testcases"/>
+		<antcall target="run_junit_testcases"/>
+		<antcall target="code_coverage_report"/>
 		
 	</target>
 		

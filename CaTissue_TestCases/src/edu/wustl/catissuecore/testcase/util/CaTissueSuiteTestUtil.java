@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase;
+package edu.wustl.catissuecore.testcase.util;
 
 import edu.wustl.common.beans.SessionDataBean;
 /**
