@@ -16,7 +16,7 @@ import edu.wustl.common.exception.AssignDataException;
  * @author supriya_dankh
  *
  */
-public class UserDTO extends AbstractDomainObject
+public class UserDTO
 {
 	/**
 	 * user.
@@ -57,38 +57,7 @@ public class UserDTO extends AbstractDomainObject
 		this.userRowIdBeanMap = userRowIdBeanMap;
 	}
 
-	@Override
-	/**
-	 * @return Long
-	 */
-	public Long getId()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	/**
-	 * @param valueObject : valueObject
-	 * @throws AssignDataException : AssignDataException
-	 */
-	public void setAllValues(IValueObject valueObject) throws AssignDataException
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	/**
-	 * @param identifier : identifier
-	 */
-	public void setId(Long identifier)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
+    /*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
 	{
 		return siteUserRolePrivilegeBeanList;
 	}
