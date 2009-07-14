@@ -10,9 +10,7 @@
 package edu.wustl.catissuecore.domain.shippingtracking;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.BaseShipmentForm;
@@ -23,7 +21,6 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -42,7 +39,7 @@ public class ShipmentRequest extends BaseShipment
 	/**
 	 * represents the collection ofspecimens.
 	 */
-	public Collection<Specimen> specimenCollection = new HashSet<Specimen>();
+	private Collection<Specimen> specimenCollection = new HashSet<Specimen>();
 
 	/**
 	 * gets the specimen collection.
@@ -181,8 +178,8 @@ public class ShipmentRequest extends BaseShipment
 				if (fieldValue != null && !fieldValue.trim().equals(""))
 				{
 					specimen = new Specimen();
-					if (shipmentForm.getSpecimenLabelChoice()
-							.equalsIgnoreCase("SpecimenLabel"))
+					if (shipmentForm.getSpecimenLabelChoice().
+							equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}
@@ -218,28 +215,7 @@ public class ShipmentRequest extends BaseShipment
 		}
 		try
 		{
-			if (shipmentForm.getSendDate() != null
-					&& shipmentForm.getSendDate().trim().length() != 0)
-			{
-				final Calendar calendar = Calendar.getInstance();
-				Date date;
-				date = CommonUtilities.parseDate(shipmentForm.getSendDate(), CommonUtilities
-						.datePattern(shipmentForm.getSendDate()));
-				calendar.setTime(date);
-				if (shipmentForm.getSendTimeHour() != null
-						&& !shipmentForm.getSendTimeHour().trim().equals(""))
-				{
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shipmentForm
-							.getSendTimeHour()));
-				}
-				if (shipmentForm.getSendTimeMinutes() != null
-						&& !shipmentForm.getSendTimeMinutes().trim().equals(""))
-				{
-					calendar.set(Calendar.MINUTE, Integer.parseInt(shipmentForm
-							.getSendTimeMinutes()));
-				}
-				this.sendDate = calendar.getTime();
-			}
+			this.setShipmentDateProperty(shipmentForm);
 		}
 		catch (final ParseException e)
 		{

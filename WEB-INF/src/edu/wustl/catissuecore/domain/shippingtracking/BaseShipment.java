@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain.shippingtracking;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -709,7 +710,7 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 	protected void setBasicShipmentProperties(BaseShipmentForm shipmentForm)
 			throws AssignDataException
 	{
-		if (shipmentForm.getId() != 0l)
+		if (shipmentForm.getId() != 0L)
 		{
 			this.id = shipmentForm.getId();
 		}
@@ -719,36 +720,44 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 		this.receiverSite = this.createSitObject(shipmentForm.getReceiverSiteId());
 		try
 		{
-			if (shipmentForm.getSendDate() != null
-					&& shipmentForm.getSendDate().trim().length() != 0)
-			{
-				final Calendar calendar = Calendar.getInstance();
-				Date date;
-				date = CommonUtilities.parseDate(shipmentForm.getSendDate(), CommonUtilities
-						.datePattern(shipmentForm.getSendDate()));
-				calendar.setTime(date);
-				if (shipmentForm.getSendTimeHour() != null
-						&& !shipmentForm.getSendTimeHour().trim().equals(""))
-				{
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shipmentForm
-							.getSendTimeHour()));
-				}
-				if (shipmentForm.getSendTimeMinutes() != null
-						&& !shipmentForm.getSendTimeMinutes().trim().equals(""))
-				{
-					calendar.set(Calendar.MINUTE, Integer.parseInt(shipmentForm
-							.getSendTimeMinutes()));
-				}
-				this.sendDate = calendar.getTime();
-			}
+			this.setShipmentDateProperty(shipmentForm);
 			// this.sendDate=Utility.parseDate(shipmentForm.getSendDate());
 		}
-		catch (final Exception e)
+		catch (final ParseException e)
 		{
 			Logger.out.error(e.getMessage());
 			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");
 		}
 
+	}
+
+	/**
+	 * This Method sets Shipment date Property.
+	 * @param shipmentForm shipment Form
+	 * @throws ParseException Parse Exception
+	 */
+	protected void setShipmentDateProperty(BaseShipmentForm shipmentForm) throws ParseException
+	{
+		if (shipmentForm.getSendDate() != null && shipmentForm.getSendDate().trim().length() != 0)
+		{
+			final Calendar calendar = Calendar.getInstance();
+			Date date;
+			date = CommonUtilities.parseDate(shipmentForm.getSendDate(), CommonUtilities
+					.datePattern(shipmentForm.getSendDate()));
+			calendar.setTime(date);
+			if (shipmentForm.getSendTimeHour() != null
+					&& !shipmentForm.getSendTimeHour().trim().equals(""))
+			{
+				calendar
+						.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shipmentForm.getSendTimeHour()));
+			}
+			if (shipmentForm.getSendTimeMinutes() != null
+					&& !shipmentForm.getSendTimeMinutes().trim().equals(""))
+			{
+				calendar.set(Calendar.MINUTE, Integer.parseInt(shipmentForm.getSendTimeMinutes()));
+			}
+			this.sendDate = calendar.getTime();
+		}
 	}
 
 	/**

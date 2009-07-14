@@ -31,7 +31,7 @@ public class TreeNodeDataAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
+	private transient Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
 	/**
 	 * finalDataListVector.
 	 */
@@ -39,18 +39,12 @@ public class TreeNodeDataAction extends BaseAction
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
-	 * @return ActionForward : ActionForward
+	 * @param mapping object of Action Mapping
+	 * @param request object of HttpServlet Request
+	 * @param form object of ActionForm
+	 * @param response object of HttpServletResponse
+	 * @throws Exception Generic exception
+	 * @return ActionForward  ActionForward
 	 */
 
 	@Override
@@ -58,9 +52,8 @@ public class TreeNodeDataAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		// Map columnIdsMap = new HashMap();
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
-		this.logger.debug("pageOf in treeview........" + pageOf);
+		this.logger.debug("pageOf in treeview......." + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		final String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
@@ -149,7 +142,7 @@ public class TreeNodeDataAction extends BaseAction
 			{
 				final StorageContainerTreeNode node = (StorageContainerTreeNode) itr.next();
 				final boolean contains = finalDataListVector.contains(node.getValue());
-				if (contains == false)
+				if (!contains)
 				{
 					finalDataListVector.add(node);
 				}

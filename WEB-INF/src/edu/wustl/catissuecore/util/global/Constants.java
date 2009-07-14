@@ -1054,7 +1054,7 @@ public class Constants
 	        "21",
 	        "22",
 	        "23"
-	        
+
 	};
 
 	
@@ -1120,7 +1120,7 @@ public class Constants
 			"58",
 			"59"
 	};
-	
+
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
 	public static final String UNIT_CC = "cell count";
