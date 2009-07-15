@@ -4391,12 +4391,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							}
 						}
 
-							//bug 13094 start
-						specimenPosition = specimen.getSpecimenPosition();
-						if (specimenPosition != null) // Specimen is NOT Virtually Located
+						//bug 13094 start
+						if (site != null) // Specimen is NOT Virtually Located
 						{
-							Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-									.getUserId());
+							Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean.getUserId());
 							if (!siteIdSet.contains(site.getId()))
 							{
 								BizLogicException e = AppUtility.getUserNotAuthorizedException(
