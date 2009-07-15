@@ -7,7 +7,6 @@ package edu.wustl.catissuecore.bizlogic.shippingtracking;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * this class contains the bizlogic for shipment receiving.
@@ -41,17 +39,80 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 {
 
 	Logger logger = Logger.getCommonLogger(ShipmentReceivingBizLogic.class);
+	/**
+	 * Overridden method
+	 * @param obj - shipment object
+	 * @param dao - DAO
+	 * @param operation - operation
+	 * @return boolean
+	 * @throws BizLogicException - BizLogicException
+	 * bug 12806
+	 */
+	@Override
+	protected boolean validate(Object obj, DAO dao, String operation)throws BizLogicException
+	{
+		super.validate(obj, dao, operation);
+		boolean isValid = true;
+		Shipment shipment = (Shipment) obj;
+		isValid = validateDuplicateSpecimenPositionsInShipment(shipment);
+		return isValid;
+	}
+	/**
+	 * bug 12806
+	 * This method validates storage positions of specimens.
+	 * Checks whether specimens have given duplicate storage positions.
+	 * @param shipment - shipment
+	 * @return boolean
+	 * @throws BizLogicException - BizLogicException
+	 */
+	private boolean validateDuplicateSpecimenPositionsInShipment(Shipment shipment) throws BizLogicException
+	{
+		boolean isValid = true;
+		Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
+		for (StorageContainer storageContainer : containerCollection)
+		{
+			StorageType storageType = storageContainer.getStorageType();
+			if (storageType != null
+					&& ((storageType.getName() != null) && (Constants.SHIPMENT_CONTAINER_TYPE_NAME
+							.equals(storageType.getName().trim()))))
+			{
+				Collection<SpecimenPosition> spPosCollection = storageContainer
+				.getSpecimenPositionCollection();
+				if(spPosCollection.size()>1)
+				{
+					Iterator<SpecimenPosition> it = spPosCollection.iterator();
+					List<String> specimenPosList = new ArrayList<String>();
+					while(it.hasNext())
+					{
+						SpecimenPosition pos = it.next();
+						if(pos!=null)
+						{
+							StorageContainer st = pos.getStorageContainer();
+							String storageValue = StorageContainerUtil.getStorageValueKey( st.getName(), null, pos.getPositionDimensionOne(), pos.getPositionDimensionTwo());
+							if(!specimenPosList.contains(storageValue))
+							{
+								specimenPosList.add(storageValue);
+							}
+							else
+							{
+								throw getBizLogicException(null, "shipment.samePositionForSpecimens",null);
+							}
+						}
+					}
+				}
+			}
 
+		}
+		return isValid;
+	}
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param dao The object of DAO class.
 	 * @param oldObj The old object.
 	 * @param sessionDataBean The session in which the object is saved.
-	 * @throws DAOException 
-	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException if user is not found authenticated.
-	 */
+	 * @throws BizLogicException - BizLogicException
+    */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -132,10 +193,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param dao the object of DAO class.
 	 * @param sessionDataBean containing the session details.
 	 * @param storageContainer the container to be processed.
-	 * @throws DAOException 
-	 * @throws DAOException 
+	 * @throws BizLogicException - BizLogicException
 	 * @throws DAOException if some database error occurs.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 */
 	private void processContainedContainer(DAO dao, SessionDataBean sessionDataBean,
 			StorageContainer storageContainer) throws BizLogicException, DAOException
@@ -242,14 +301,14 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param sessionDataBean containing the session details.
 	 * @param storageContainer object of StorageContainer class to be processed.
 	 * @throws DAOException if some database operation fails.
-	 * @throws UserNotAuthorizedException if user is found un auhorized.
+	 * @throws BizLogicException - BizLogicException
 	 */
 	private void processInTransitContainer(DAO dao, SessionDataBean sessionDataBean,
-			StorageContainer storageContainer) throws DAOException
+			StorageContainer storageContainer) throws DAOException, BizLogicException
 	{
 		Collection<SpecimenPosition> spPosCollection = storageContainer
 				.getSpecimenPositionCollection();
-		for (SpecimenPosition specimenPosition : spPosCollection)
+	   for (SpecimenPosition specimenPosition : spPosCollection)
 		{
 			SpecimenPosition retrievedSpPos = null;
 			Specimen specimen = null;
@@ -318,9 +377,10 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param specimen contents to be set.
 	 * @param specimenPosition position of specimen.
 	 * @throws DAOException if some database operation fails.
+	 * @throws BizLogicException - BizLogicException
 	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
-			SpecimenPosition specimenPosition) throws DAOException
+			SpecimenPosition specimenPosition) throws DAOException, BizLogicException
 	{
 		List<StorageContainer> containerList = null;
 		StorageContainer container = null;
@@ -355,12 +415,24 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		}
 		if (container != null)
 		{
+			//bug 12806
+			/**
+			 * Added isAvailable check to validate specimen position.
+			 */
+			boolean isAvailable = StorageContainerUtil.isPostionAvaialble( container.getId().toString(), container.getName().toString(), specimenPosition.getPositionDimensionOne().toString(), specimenPosition.getPositionDimensionTwo().toString());
 			// Storage Location is either Auto or Manual.
-			specimen.getSpecimenPosition().setStorageContainer(container);
-			specimen.getSpecimenPosition().setPositionDimensionOne(
-					specimenPosition.getPositionDimensionOne());
-			specimen.getSpecimenPosition().setPositionDimensionTwo(
-					specimenPosition.getPositionDimensionTwo());
+			if(isAvailable)
+			{
+				specimen.getSpecimenPosition().setStorageContainer(container);
+				specimen.getSpecimenPosition().setPositionDimensionOne(
+						specimenPosition.getPositionDimensionOne());
+				specimen.getSpecimenPosition().setPositionDimensionTwo(
+						specimenPosition.getPositionDimensionTwo());
+			}
+			else
+			{
+				throw getBizLogicException(null, "shipment.samePositionForSpecimens",null);
+			}
 		}
 		else
 		{
@@ -384,10 +456,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param storageContainer container to dispose.
 	 * @param dao object of DAO class.
 	 * @param sessionDataBean containing session details.
-	 * @throws DAOException 
 	 * @throws DAOException if some database error occurs.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
-	 */
+    */
 	private void disposeShipmentContainer(StorageContainer storageContainer, DAO dao,
 			SessionDataBean sessionDataBean) throws DAOException
 	{
@@ -402,7 +472,6 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param obj2 old object.
 	 * @param sessionDataBean containing the session details.
 	 * @throws BizLogicException if some bizlogic operation fails.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 */
 	protected void postUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -434,7 +503,6 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param obj2 the old object.
 	 * @param sessionDataBean containing the session details.
 	 * @throws BizLogicException if some bizlogic operation fails.
-	 * @throws UserNotAuthorizedException if user is not found authorized.
 	 */
 	protected void preUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
