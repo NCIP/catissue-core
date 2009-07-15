@@ -137,9 +137,22 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public Set<String> getEntityIdsList(QueryShoppingCart cart, List entityName,
 			List<Integer> chkBoxValues)
 	{
-		final Set<String> entityIdsList = new LinkedHashSet<String>();
 		final List<Integer> entityIdsColumnIndexList = this.getIdsColumnIndexList(cart
 				.getCartAttributeList(), entityName);
+		return getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
+	}
+
+	/**
+	 * This method gets Entity list.
+	 * @param cart QueryShoppingCart object
+	 * @param chkBoxValues list of chkBoxValues
+	 * @param entityIdsColumnIndexList list of entity IdsColumn Index.
+	 * @return entityIdsList
+	 */
+	private Set<String> getEntityList(QueryShoppingCart cart, List<Integer> chkBoxValues,
+			final List<Integer> entityIdsColumnIndexList)
+	{
+		final Set<String> entityIdsList = new LinkedHashSet<String>();
 		final List<List<String>> dataList = cart.getCart();
 		if (chkBoxValues != null)
 		{
@@ -173,7 +186,6 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 
 		return entityIdsList;
-
 	}
 
 	/**
@@ -187,48 +199,16 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	public Set<String> getEntityLabelsList(QueryShoppingCart cart, List entityName,
 			List<Integer> chkBoxValues, String attributeName)
 	{
-		final Set<String> entityIdsList = new LinkedHashSet<String>();
 		final List<Integer> entityIdsColumnIndexList = this.getLabelsColumnIndexList(cart
 				.getCartAttributeList(), entityName, attributeName);
-		final List<List<String>> dataList = cart.getCart();
-		if (chkBoxValues != null)
-		{
-			for (final Integer index : chkBoxValues)
-			{
-				final List<String> record = dataList.get(index);
-				for (int i = 0; i < entityIdsColumnIndexList.size(); i++)
-				{
-					final String data = record.get(entityIdsColumnIndexList.get(i));
-
-					if (!(data.equals("")))
-					{
-						entityIdsList.add(data);
-					}
-				}
-			}
-		}
-		else
-		{
-			for (final List<String> record : dataList)
-			{
-				for (int j = 0; j < entityIdsColumnIndexList.size(); j++)
-				{
-					final String data = record.get(entityIdsColumnIndexList.get(j));
-					if (!(data.equals("")))
-					{
-						entityIdsList.add(data);
-					}
-				}
-			}
-		}
-
-		return entityIdsList;
+		return getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
 
 	}
 
 	/**
 	 * @param entityIdsList : entityIdsList
 	 * @return Set
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	public Set getListOfOrderItem(Set<String> entityIdsList) throws BizLogicException
 	{

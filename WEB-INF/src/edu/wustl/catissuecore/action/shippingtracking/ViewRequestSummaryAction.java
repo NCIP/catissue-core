@@ -57,18 +57,18 @@ public class ViewRequestSummaryAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		String target = edu.wustl.catissuecore.util.global.Constants.SUCCESS;
-		String operation = request
+		String operationToPerform = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
-		if (operation == null || operation.equals(""))
+		if (operationToPerform == null || operationToPerform.equals(""))
 		{
-			operation = (String) request
+			operationToPerform = (String) request
 					.getAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION);
 		}
-		if (operation == null || operation.equals(""))
+		if (operationToPerform == null || operationToPerform.equals(""))
 		{
-			operation = ((AbstractActionForm) form).getOperation();
+			operationToPerform = ((AbstractActionForm) form).getOperation();
 		}
-		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
+		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operationToPerform);
 		final ActionErrors actionErrors = new ActionErrors();
 		// Create DAO for passing as an argument to bizlogic's validate
 		DAO dao = null;
@@ -88,8 +88,8 @@ public class ViewRequestSummaryAction extends SecureAction
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final ShipmentRequestBizLogic bizLogic = (ShipmentRequestBizLogic) factory
 					.getBizLogic(Constants.SHIPMENT_REQUEST_FORM_ID);
-			if (operation != null
-					&& operation.equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
+			if (operationToPerform != null
+					&& operationToPerform.equals(edu.wustl.catissuecore.util.global.Constants.EDIT))
 			{
 				if (shipmentRequestForm.getId() != 0l)
 				{
@@ -108,11 +108,11 @@ public class ViewRequestSummaryAction extends SecureAction
 			bizLogic.isAuthorized(dao, shipmentRequest, this.getSessionData(request));
 			// Validations.
 			boolean isValid = false;
-			isValid = bizLogic.validate(shipmentRequest, dao, operation);
+			isValid = bizLogic.validate(shipmentRequest, dao, operationToPerform);
 			if (isValid)
 			{
 				final Collection<ShipmentRequest> shipmentRequestCollection = bizLogic
-						.createRequestObjects(shipmentRequest, dao, operation);
+						.createRequestObjects(shipmentRequest, dao, operationToPerform);
 				final Integer[] specimenCountArr = new Integer[shipmentRequestCollection.size()];
 				final Integer[] containerCountArr = new Integer[shipmentRequestCollection.size()];
 				final String[] specimenLabelArr = new String[shipmentRequestForm
@@ -201,53 +201,21 @@ public class ViewRequestSummaryAction extends SecureAction
 			}
 			// Sets the sender and reciever site list attribute
 			final String sourceObjectName = Site.class.getName();
-			final String[] displayNameFields = {edu.wustl.catissuecore.util.global.Constants.NAME};
+			final String[] displayNameField = {edu.wustl.catissuecore.util.global.Constants.NAME};
 			final String valueField = edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER;
-			final List siteList = bizLogic.getList(sourceObjectName, displayNameFields, valueField,
+			final List siteList = bizLogic.getList(sourceObjectName, displayNameField, valueField,
 					false);
 			request.setAttribute(Constants.REQUESTERS_SITE_LIST, siteList);
 			request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,
 					"" + shipmentRequestForm.getSenderSiteId()));
 		}
-		catch (final ApplicationException appException)
+		catch (final ApplicationException appExcep)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
-					.getMessage()));// bug 12568
-			this.logger.debug(appException.getMessage(), appException);
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appExcep
+					.getMessage()));
+			this.logger.debug(appExcep.getMessage(), appExcep);
 		}
-		// catch (UserNotAuthorizedException excp)
-		// {
-		// //ActionErrors errors = new ActionErrors();
-		// SessionDataBean sessionDataBean = getSessionData(request);
-		// String userName = "";
-		// if(sessionDataBean != null)
-		// {
-		// userName = sessionDataBean.getUserName();
-		// }
-		// String className =
-		// getActualClassName(shipmentRequest.getClass().getName());
-		// String decoratedPrivilegeName =
-		// Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
-		// String baseObject = "";
-		// if (excp.getBaseObject() != null &&
-		// excp.getBaseObject().trim().length() != 0)
-		// {
-		// baseObject = excp.getBaseObject();
-		// }
-		// else
-		// {
-		// baseObject = className;
-		// }
-		// ActionError error = new ActionError("access.addedit.object.denied",
-		// userName, className,decoratedPrivilegeName,baseObject);
-		// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-		// //saveErrors(request, errors);
-		// target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-		// Logger.out.error(excp.getMessage(), excp);
-		// //return mapping.getInputForward();
-		// //return mapping.findForward(Constants.FAILURE);
-		// }
 		finally
 		{
 			try

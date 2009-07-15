@@ -20,7 +20,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
@@ -33,12 +32,11 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.CommonConstants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.util.DAOConstants;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * Manipulate ShipmentRequest information into the database using Hibernate.
@@ -59,6 +57,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	 * @return true or false based on validation results.
 	 * @throws BizLogicException if database operation fails.
 	 */
+	@Override
 	public boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		boolean isValid = true;
@@ -71,7 +70,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"), null,
 					"object is not the instance of ShipMent request class");
 		}
-		ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
+		final ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
 		if (shipmentRequest == null)
 		{
 			//throw new DAOException(ApplicationProperties.getValue("errors.domain.object.null"));
@@ -93,7 +92,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				if (shipmentRequest.getContainerCollection() != null
 						&& shipmentRequest.getContainerCollection().size() > 0)
 				{
-					Iterator<StorageContainer> containerIterator = shipmentRequest
+					final Iterator<StorageContainer> containerIterator = shipmentRequest
 							.getContainerCollection().iterator();
 					while (containerIterator.hasNext())
 					{
@@ -105,37 +104,38 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 									&& !container.getName().trim().equals(""))
 							{
 								containerName = container.getName();
-								container = getContainerByNameOrBarcode(container.getName(), dao,
-										Constants.CONTAINER_PROPERTY_NAME);
+								container = this.getContainerByNameOrBarcode(container.getName(),
+										dao, Constants.CONTAINER_PROPERTY_NAME);
 							}
 							else if (container.getBarcode() != null
 									&& !container.getBarcode().trim().equals(""))
 							{
 								containerName = container.getBarcode();
-								container = getContainerByNameOrBarcode(container.getBarcode(),
-										dao, Constants.CONTAINER_PROPERTY_BARCODE);
+								container = this.getContainerByNameOrBarcode(
+										container.getBarcode(), dao,
+										Constants.CONTAINER_PROPERTY_BARCODE);
 							}
 							if (container != null)
 							{
-								isValid = containerBelongsToSite(container, shipmentRequest
+								isValid = this.containerBelongsToSite(container, shipmentRequest
 										.getSenderSite().getId());
 								if (isValid)
 								{
-									throw getBizLogicException(null,
+									throw this.getBizLogicException(null,
 											"shipment.container.RequestingSite", containerName);
 
 								}
 								else if (container.getName().contains(
 										Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX))
 								{
-									throw getBizLogicException(null,
+									throw this.getBizLogicException(null,
 											"shipment.containerInShipment", containerName);
 								}
 							}
 							else
 							{
 								//No container with such name or barcode exists
-								throw getBizLogicException(null, "shipment.NoContainerExists",
+								throw this.getBizLogicException(null, "shipment.NoContainerExists",
 										containerName);
 							}
 						}
@@ -150,8 +150,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				if (shipmentRequest.getSpecimenCollection() != null
 						&& shipmentRequest.getSpecimenCollection().size() > 0)
 				{
-					Iterator<Specimen> specimenIterator = shipmentRequest.getSpecimenCollection()
-							.iterator();
+					final Iterator<Specimen> specimenIterator = shipmentRequest
+							.getSpecimenCollection().iterator();
 					while (specimenIterator.hasNext())
 					{
 						Specimen specimen = specimenIterator.next();
@@ -162,42 +162,44 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 									&& !specimen.getLabel().trim().equals(""))
 							{
 								specimenName = specimen.getLabel();
-								specimen = getSpecimenByLabelOrBarcode(specimenName, dao,
+								specimen = this.getSpecimenByLabelOrBarcode(specimenName, dao,
 										Constants.SPECIMEN_PROPERTY_LABEL);
 							}
 							else if (specimen.getBarcode() != null
 									&& !specimen.getBarcode().trim().equals(""))
 							{
 								specimenName = specimen.getBarcode();
-								specimen = getSpecimenByLabelOrBarcode(specimenName, dao,
+								specimen = this.getSpecimenByLabelOrBarcode(specimenName, dao,
 										Constants.SPECIMEN_PROPERTY_BARCODE);
 							}
 							if (specimen != null)
 							{
-								isValid = specimenBelongsToSite(specimen, shipmentRequest
+								isValid = this.specimenBelongsToSite(specimen, shipmentRequest
 										.getSenderSite().getId());
-								isBelongsToInTransit = specimenBelongsToInTransitSite(specimen);
-								isSpecimenLocatedVirtual = specimenBelongsToVirtualSite(specimen);
+								isBelongsToInTransit = this
+										.specimenBelongsToInTransitSite(specimen);
+								isSpecimenLocatedVirtual = this
+										.specimenBelongsToVirtualSite(specimen);
 								if (isValid && !isBelongsToInTransit)
 								{
-									throw getBizLogicException(null,
+									throw this.getBizLogicException(null,
 											"shipment.specimenInRequestingSite", specimenName);
 								}
 								else if (isBelongsToInTransit)
 								{
-									throw getBizLogicException(null, "shipment.specimenInShipment",
-											specimenName);
+									throw this.getBizLogicException(null,
+											"shipment.specimenInShipment", specimenName);
 								}
 								else if (isSpecimenLocatedVirtual)
 								{
-									throw getBizLogicException(null, "shipment.virtual.specimen",
-											specimenName);
+									throw this.getBizLogicException(null,
+											"shipment.virtual.specimen", specimenName);
 								}
 							}
 							else
 							{
 								//No container with such name or barcode exists
-								throw getBizLogicException(null, "shipment.NoSpecimenExists",
+								throw this.getBizLogicException(null, "shipment.NoSpecimenExists",
 										specimenName);
 							}
 						}
@@ -209,7 +211,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				}
 				if (isEmptyContainerCollection && isEmptySpecimenCollection)
 				{
-					throw getBizLogicException(null, "shipment.noSpecimenInRequest", null);
+					throw this.getBizLogicException(null, "shipment.noSpecimenInRequest", null);
 				}
 				/*if(errorMsg!=null && errorMsg.length()>0)
 				{
@@ -218,11 +220,11 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				}*/
 			}
 		}
-		catch (DAOException ex)
+		catch (final DAOException ex)
 		{
 			logger.debug(ex.getMessage(), ex);
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,errorMsg.toString());
-			throw getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
+			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		return true;
 	}
@@ -299,6 +301,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	 * @param sessionDataBean The session details.
 	 * @throws BizLogicException throws BizLogicException
 	 */
+	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -311,7 +314,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),
 						null, "Invalid object passed");
 			}
-			ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
+			final ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
 			// Check if Saving Draft, In saving draft case no receiver site is required,
 			//because it is not actual request.
 			if (!shipmentRequest.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DRAFTED))
@@ -326,8 +329,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				else if (shipmentRequest.getSpecimenCollection() != null
 						&& shipmentRequest.getSpecimenCollection().size() > 0)
 				{
-					receiverSiteId = ((Specimen) shipmentRequest.getSpecimenCollection().iterator()
-							.next()).getSpecimenPosition().getStorageContainer().getSite().getId();
+					receiverSiteId = (shipmentRequest.getSpecimenCollection().iterator().next())
+							.getSpecimenPosition().getStorageContainer().getSite().getId();
 				}
 				Site site = null;
 				if (receiverSiteId != null)
@@ -341,28 +344,28 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			{
 				shipmentRequest.setReceiverSite(shipmentRequest.getSenderSite());
 			}
-			setShipmentSystemProperties(shipmentRequest);
-			setShipmentContactPersons(dao, shipmentRequest, sessionDataBean.getUserId());
-			setShipmentSites(dao, shipmentRequest);
-			Collection<StorageContainer> containerCollection = updateContainerDetails(
+			this.setShipmentSystemProperties(shipmentRequest);
+			this.setShipmentContactPersons(dao, shipmentRequest, sessionDataBean.getUserId());
+			this.setShipmentSites(dao, shipmentRequest);
+			final Collection<StorageContainer> containerCollection = this.updateContainerDetails(
 					shipmentRequest.getContainerCollection(), dao, sessionDataBean, false, null);
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getContainerCollection().clear();
 			shipmentRequest.getContainerCollection().addAll(containerCollection);
 			// Do not update site of containers included in the shipment request
-			Collection<Specimen> specimenCollection = updateSpecimenCollection(shipmentRequest
-					.getSpecimenCollection(), dao, sessionDataBean);
+			final Collection<Specimen> specimenCollection = this.updateSpecimenCollection(
+					shipmentRequest.getSpecimenCollection(), dao, sessionDataBean);
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getSpecimenCollection().clear();
 			shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
 			dao.insert(shipmentRequest);
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, shipmentRequest);
 			// Check if Saving Draft, In saving draft case, mail notification not required.
 			if (!shipmentRequest.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DRAFTED))
 			{
 				//Add mailing functionality
-				boolean mailStatus = sendNotification(shipmentRequest, sessionDataBean);
+				final boolean mailStatus = this.sendNotification(shipmentRequest, sessionDataBean);
 				if (!mailStatus)
 				{
 					logger.debug("failed to send email");
@@ -370,18 +373,18 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				}
 			}
 		}
-		catch (DAOException daoException)
+		catch (final DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
 			//			throw new DAOException(bizLogicException.getMessage());
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
-			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException
-					.getMsgValues());
+			throw this.getBizLogicException(daoException, daoException.getErrorKeyName(),
+					daoException.getMsgValues());
 		}
-		catch (AuditException e)
+		catch (final AuditException e)
 		{
 			logger.debug(e.getMessage(), e);
-			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -389,6 +392,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	 * Set shipment properties.
 	 * @param shipment BaseShipment object.
 	 */
+	@Override
 	protected void setShipmentSystemProperties(BaseShipment shipment)
 	{
 		shipment.setCreatedDate(new Date());
@@ -418,20 +422,20 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		// Collection to return which will contain the container objects retirved from the DB
-		Collection<Specimen> specimenObjectsCollection = new HashSet<Specimen>();
+		final Collection<Specimen> specimenObjectsCollection = new HashSet<Specimen>();
 		//StorageContainerBizLogic containerBizLogic=new StorageContainerBizLogic();
-		Iterator<Specimen> specimenIterator = specimenCollection.iterator();
+		final Iterator<Specimen> specimenIterator = specimenCollection.iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = specimenIterator.next();
 			if (specimen.getLabel() != null)
 			{
-				specimen = getSpecimenByLabelOrBarcode(specimen.getLabel(), dao,
+				specimen = this.getSpecimenByLabelOrBarcode(specimen.getLabel(), dao,
 						Constants.SPECIMEN_PROPERTY_LABEL);
 			}
 			else
 			{
-				specimen = getSpecimenByLabelOrBarcode(specimen.getBarcode(), dao,
+				specimen = this.getSpecimenByLabelOrBarcode(specimen.getBarcode(), dao,
 						Constants.SPECIMEN_PROPERTY_BARCODE);
 			}
 			//Add statements for storage type too
@@ -450,32 +454,32 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public Collection<ShipmentRequest> createRequestObjects(ShipmentRequest shipmentRequest,
 			DAO dao, String operation) throws DAOException
 	{
-		Collection<ShipmentRequest> requestCollection = new HashSet<ShipmentRequest>();
-		Map<Long, Site> siteMap = getUniqueSiteMap(shipmentRequest, dao);
+		final Collection<ShipmentRequest> requestCollection = new HashSet<ShipmentRequest>();
+		final Map<Long, Site> siteMap = this.getUniqueSiteMap(shipmentRequest, dao);
 		//if(siteMap.size()>0)
 		if (!(siteMap.isEmpty()))
 		{
-			Collection<StorageContainer> containerCollection = new HashSet<StorageContainer>();
-			Collection<Specimen> specimenCollection = new HashSet<Specimen>();
-			for (Long siteId : siteMap.keySet())
+			final Collection<StorageContainer> containerCollection = new HashSet<StorageContainer>();
+			final Collection<Specimen> specimenCollection = new HashSet<Specimen>();
+			for (final Long siteId : siteMap.keySet())
 			{
-				Site site = siteMap.get(siteId);
-				Iterator<StorageContainer> containerIterator = shipmentRequest
+				final Site site = siteMap.get(siteId);
+				final Iterator<StorageContainer> containerIterator = shipmentRequest
 						.getContainerCollection().iterator();
 				while (containerIterator.hasNext())
 				{
-					StorageContainer container = containerIterator.next();
+					final StorageContainer container = containerIterator.next();
 					if (container.getSite() != null && container.getSite().getId() != null
 							&& container.getSite().getId().equals(siteId))
 					{
 						containerCollection.add(container);
 					}
 				}
-				Iterator<Specimen> specimenIterator = shipmentRequest.getSpecimenCollection()
+				final Iterator<Specimen> specimenIterator = shipmentRequest.getSpecimenCollection()
 						.iterator();
 				while (specimenIterator.hasNext())
 				{
-					Specimen specimen = specimenIterator.next();
+					final Specimen specimen = specimenIterator.next();
 					if (specimen != null && specimen.getSpecimenPosition() != null
 							&& specimen.getSpecimenPosition().getStorageContainer() != null)
 					{
@@ -489,7 +493,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 				//if(containerCollection.size()>0 || specimenCollection.size()>0)
 				if (!(containerCollection.isEmpty()) || !(specimenCollection.isEmpty()))
 				{
-					ShipmentRequest request = createShipmentRequest(shipmentRequest,
+					final ShipmentRequest request = this.createShipmentRequest(shipmentRequest,
 							containerCollection, specimenCollection, site);
 					requestCollection.add(request);
 					containerCollection.clear();
@@ -512,13 +516,13 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			Collection<StorageContainer> containerCollection,
 			Collection<Specimen> specimenCollection, Site site)
 	{
-		ShipmentRequest shiRequest = new ShipmentRequest();
+		final ShipmentRequest shiRequest = new ShipmentRequest();
 		shiRequest.setSenderComments(shipmentRequest.getSenderComments());
 		shiRequest.setSenderSite(shipmentRequest.getSenderSite());
 		shiRequest.setSendDate(shipmentRequest.getSendDate());
 		shiRequest.setLabel(shipmentRequest.getLabel());
 		shiRequest.setReceiverSite(site);
-		setShipmentSystemProperties(shiRequest);
+		this.setShipmentSystemProperties(shiRequest);
 		shiRequest.setSenderContactPerson(shipmentRequest.getSenderContactPerson());
 		shiRequest.setReceiverContactPerson(shipmentRequest.getReceiverContactPerson());
 		shiRequest.getContainerCollection().clear();
@@ -538,27 +542,28 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	private Map<Long, Site> getUniqueSiteMap(ShipmentRequest shipmentRequest, DAO dao)
 			throws DAOException
 	{
-		Map<Long, Site> siteMap = new HashMap<Long, Site>();
-		Collection<StorageContainer> containerObjectsCollection = new HashSet<StorageContainer>();
-		Collection<StorageContainer> containerCollection = shipmentRequest.getContainerCollection();
-		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
+		final Map<Long, Site> siteMap = new HashMap<Long, Site>();
+		final Collection<StorageContainer> containerObjectsCollection = new HashSet<StorageContainer>();
+		final Collection<StorageContainer> containerCollection = shipmentRequest
+				.getContainerCollection();
+		final Iterator<StorageContainer> containerIterator = containerCollection.iterator();
 		while (containerIterator.hasNext())
 		{
 			StorageContainer container = containerIterator.next();
 			//Get site for containers
 			if (container.getName() != null && !container.getName().trim().equals(""))
 			{
-				container = getContainerByNameOrBarcode(container.getName(), dao,
+				container = this.getContainerByNameOrBarcode(container.getName(), dao,
 						Constants.CONTAINER_PROPERTY_NAME);
 			}
 			else if (container.getBarcode() != null && !container.getBarcode().trim().equals(""))
 			{
-				container = getContainerByNameOrBarcode(container.getBarcode(), dao,
+				container = this.getContainerByNameOrBarcode(container.getBarcode(), dao,
 						Constants.CONTAINER_PROPERTY_BARCODE);
 			}
 			if (container != null)
 			{
-				Site site = container.getSite();
+				final Site site = container.getSite();
 				if (site != null)
 				{
 					siteMap.put(site.getId(), site);
@@ -568,27 +573,27 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		shipmentRequest.getContainerCollection().clear();
 		shipmentRequest.getContainerCollection().addAll(containerObjectsCollection);
-		Collection<Specimen> specimenObjectsCollection = new HashSet<Specimen>();
-		Collection<Specimen> specimenCollection = shipmentRequest.getSpecimenCollection();
-		Iterator<Specimen> specimenIterator = specimenCollection.iterator();
+		final Collection<Specimen> specimenObjectsCollection = new HashSet<Specimen>();
+		final Collection<Specimen> specimenCollection = shipmentRequest.getSpecimenCollection();
+		final Iterator<Specimen> specimenIterator = specimenCollection.iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = specimenIterator.next();
 			//Get site for containers
 			if (specimen.getLabel() != null && !specimen.getLabel().trim().equals(""))
 			{
-				specimen = getSpecimenByLabelOrBarcode(specimen.getLabel(), dao,
+				specimen = this.getSpecimenByLabelOrBarcode(specimen.getLabel(), dao,
 						Constants.SPECIMEN_PROPERTY_LABEL);
 			}
 			else if (specimen.getBarcode() != null && !specimen.getBarcode().trim().equals(""))
 			{
-				specimen = getSpecimenByLabelOrBarcode(specimen.getBarcode(), dao,
+				specimen = this.getSpecimenByLabelOrBarcode(specimen.getBarcode(), dao,
 						Constants.SPECIMEN_PROPERTY_BARCODE);
 			}
 			if (specimen != null && specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null)
 			{
-				Site site = specimen.getSpecimenPosition().getStorageContainer().getSite();
+				final Site site = specimen.getSpecimenPosition().getStorageContainer().getSite();
 				if (site != null)
 				{
 					siteMap.put(site.getId(), site);
@@ -666,8 +671,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	@Override
 	protected String[] getEmailAddressesForMailNotification(BaseShipment baseShipment)
 	{
-		ShipmentRequest shipmentRequest = (ShipmentRequest) baseShipment;
-		String[] toUser = new String[2];
+		final ShipmentRequest shipmentRequest = (ShipmentRequest) baseShipment;
+		final String[] toUser = new String[2];
 		toUser[0] = shipmentRequest.getSenderContactPerson().getEmailAddress();
 		toUser[1] = shipmentRequest.getReceiverSite().getEmailAddress();
 		return toUser;
@@ -689,10 +694,11 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			String orderByField, Long[] siteId, int startIndex, int numOfRecords,
 			String additionalWhereClause) throws BizLogicException
 	{
-		StringBuffer whereClause = new StringBuffer();
-		for (int counter = 0; counter < siteId.length; counter++)
+		final StringBuffer whereClause = new StringBuffer();
+		for (final Long element : siteId)
 		{
-			whereClause.append(DAOConstants.OR_JOIN_CONDITION + " shipment." + columnName + "=? ");
+			whereClause.append(CommonConstants.OR_JOIN_CONDITION + " shipment." + columnName
+					+ "=? ");
 		}
 		if (additionalWhereClause != null && additionalWhereClause.length() > 0)
 		{
@@ -700,7 +706,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 
 		List<Object[]> shipmentsList = null;
-		shipmentsList = getShipmentDetails(ShipmentRequest.class.getName(), selectColumnName,
+		shipmentsList = this.getShipmentDetails(ShipmentRequest.class.getName(), selectColumnName,
 				whereClause.substring(2), siteId, orderByField, startIndex, numOfRecords);
 		return shipmentsList;
 	}
@@ -715,40 +721,22 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public ShipmentRequest getShipmentRequestObject(long identifier) throws BizLogicException
 	{
 		ShipmentRequest shipmentRequest = null;
-		List shipmentList = retrieve(ShipmentRequest.class.getName(), "id", identifier);
+		final List shipmentList = this.retrieve(ShipmentRequest.class.getName(), "id", identifier);
 		shipmentRequest = (ShipmentRequest) shipmentList.get(0);
 
 		//Retrieve specimenCollection which has been lazily initialized
-		Collection<Specimen> specimenCollection = (Collection<Specimen>) retrieveAttribute(
-				ShipmentRequest.class.getName(), identifier, "elements(specimenCollection)");
+		final Collection<Specimen> specimenCollection = (Collection<Specimen>) this
+				.retrieveAttribute(ShipmentRequest.class.getName(), identifier,
+						"elements(specimenCollection)");
 		shipmentRequest.getSpecimenCollection().clear();
 		shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
 		//Retrieve containerCollection which has been lazy initialed
-		Collection<StorageContainer> containerCollection = (Collection<StorageContainer>) retrieveAttribute(
-				ShipmentRequest.class.getName(), identifier, "elements(containerCollection)");
+		final Collection<StorageContainer> containerCollection = (Collection<StorageContainer>) this
+				.retrieveAttribute(ShipmentRequest.class.getName(), identifier,
+						"elements(containerCollection)");
 		shipmentRequest.getContainerCollection().clear();
 		shipmentRequest.getContainerCollection().addAll(containerCollection);
-		//Get SpecimenPositionCollection for every container which has been lazily initialled.
-		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
-		while (containerIterator.hasNext())
-		{
-			StorageContainer container = containerIterator.next();
-			Collection<SpecimenPosition> spPosCollection = (Collection<SpecimenPosition>) retrieve(
-					SpecimenPosition.class.getName(), "storageContainer.id", container.getId());
-			Collection<SpecimenPosition> spPosObjCollection = new HashSet<SpecimenPosition>();
-			Iterator<SpecimenPosition> spPosIterator = spPosCollection.iterator();
-			while (spPosIterator.hasNext())
-			{
-				SpecimenPosition specimenPosition = spPosIterator.next();
-				Specimen specimen = (Specimen) retrieveAttribute(SpecimenPosition.class.getName(),
-						specimenPosition.getId(), "specimen");
-				specimenPosition.setSpecimen(specimen);
-				specimenPosition.setStorageContainer(container);
-				spPosObjCollection.add(specimenPosition);
-			}
-			container.setSpecimenPositionCollection(new HashSet<SpecimenPosition>());
-			container.getSpecimenPositionCollection().addAll(spPosObjCollection);
-		}
+		this.getSpecimenPositionCollection(containerCollection);
 		return shipmentRequest;
 	}
 
@@ -765,16 +753,13 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public int getShipmentRequestsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
-		String[] whereColumnName = new String[siteId.length];
-		String[] whereColumnCondition = new String[siteId.length];
-		Object[] whereColumnValue = new Object[siteId.length];
 		String whereClause = "";
-		for (int counter = 0; counter < siteId.length; counter++)
+		for (final Long element : siteId)
 		{
-			whereClause += DAOConstants.OR_JOIN_CONDITION + " shipment." + columnName + "=? ";
+			whereClause += CommonConstants.OR_JOIN_CONDITION + " shipment." + columnName + "=? ";
 		}
 		whereClause = whereClause.substring(2);
-		int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClause, siteId,
+		final int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClause, siteId,
 				orderByField, startIndex, numOfRecords);
 		return count;
 	}
@@ -787,6 +772,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	 * @param sessionDataBean The session details
 	 * @throws BizLogicException throws BizLogicException
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -794,46 +780,46 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		{
 			if (!(obj instanceof ShipmentRequest))
 			{
-				//				throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
+				//throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
 				throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"),
 						null, "object is not instance of ShipmentRequest class");
 			}
-			ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
+			final ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
 			//Do not update site of containers included in the shipment request
-			Collection<StorageContainer> containerCollection = updateContainerDetails(
+			final Collection<StorageContainer> containerCollection = this.updateContainerDetails(
 					shipmentRequest.getContainerCollection(), dao, sessionDataBean, false, null);
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getContainerCollection().clear();
 			shipmentRequest.getContainerCollection().addAll(containerCollection);
 			//			Do not update site of containers included in the shipment request
-			Collection<Specimen> specimenCollection = updateSpecimenCollection(shipmentRequest
-					.getSpecimenCollection(), dao, sessionDataBean);
+			final Collection<Specimen> specimenCollection = this.updateSpecimenCollection(
+					shipmentRequest.getSpecimenCollection(), dao, sessionDataBean);
 			//Set the collection containing the container objects to the shipment object
 			shipmentRequest.getSpecimenCollection().clear();
 			shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
 			//bug 12557
 			if (oldObj != null)
 			{
-				updateShipmentSystemProperties(shipmentRequest, (ShipmentRequest) oldObj);
+				this.updateShipmentSystemProperties(shipmentRequest, (ShipmentRequest) oldObj);
 			}
-			setShipmentContactPersons(dao, shipmentRequest, sessionDataBean.getUserId());
-			setShipmentSites(dao, shipmentRequest);
+			this.setShipmentContactPersons(dao, shipmentRequest, sessionDataBean.getUserId());
+			this.setShipmentSites(dao, shipmentRequest);
 			dao.update(shipmentRequest);
 			//Add mailing functionality
-			boolean mailStatus = sendNotification(shipmentRequest, sessionDataBean);
+			final boolean mailStatus = this.sendNotification(shipmentRequest, sessionDataBean);
 			if (!mailStatus)
 			{
 				logger.debug("failed to send email");
 				//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
 			}
 		}
-		catch (DAOException daoException)
+		catch (final DAOException daoException)
 		{
 			logger.debug(daoException.getMessage(), daoException);
 			//throw new DAOException(bizLogicException.getMessage());
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
-			throw getBizLogicException(daoException, daoException.getErrorKeyName(), daoException
-					.getMsgValues());
+			throw this.getBizLogicException(daoException, daoException.getErrorKeyName(),
+					daoException.getMsgValues());
 		}
 	}
 
@@ -843,10 +829,11 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	 * @param domainObject representing the shipment request object.
 	 * @return site name with site id.
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
-		ShipmentRequest shipmentRequest = (ShipmentRequest) domainObject;
-		StringBuffer tempString = new StringBuffer();
+		final ShipmentRequest shipmentRequest = (ShipmentRequest) domainObject;
+		final StringBuffer tempString = new StringBuffer();
 		if (shipmentRequest.getActivityStatus() != null
 				&& shipmentRequest.getActivityStatus().equals(Constants.ACTIVITY_STATUS_REJECTED))
 		{
@@ -880,16 +867,16 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public void closeDraftedRequest(long requestId, SessionDataBean sessionDataBean, int daoType)
 			throws ApplicationException
 	{
-		ShipmentRequest shipmentRequest = getShipmentRequestObject(requestId);
+		final ShipmentRequest shipmentRequest = this.getShipmentRequestObject(requestId);
 		shipmentRequest.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
-		DAO dao = AppUtility.openDAOSession(null);
+		final DAO dao = AppUtility.openDAOSession(null);
 		try
 		{
 			dao.openSession(sessionDataBean);
 			dao.update(shipmentRequest);
 			dao.commit();
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();

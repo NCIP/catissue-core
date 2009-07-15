@@ -1733,7 +1733,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	/**
 	 * This function finds out all the registerd participants for a particular
 	 * collection protocol.
-	 * 
+	 *
 	 * @return List of ParticipantRegInfo
 	 * @throws BizLogicException
 	 * @throws ClassNotFoundException
@@ -1741,41 +1741,37 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	public List getAllParticipantRegistrationInfo() throws BizLogicException
 	{
 		final List participantRegistrationInfoList = new Vector();
-
 		// Getting all the CollectionProtocol those do not have activaityStatus
 		// as 'Disabled'.
-		String hql = "select cp.id ,cp.title, cp.shortTitle from "
-				+ CollectionProtocol.class.getName() + " as cp where  cp.activityStatus != '"
-				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and  (cp." + Constants.CP_TYPE
-				+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
+		String hql = getHql();
 		DAO dao = null;
 		try
 		{
 			dao = this.openDAOSession(null);
-
 			final List list = dao.executeQuery(hql);
-			logger.info("list size -----------:" + list.size());
-
-			// Iterating over each Collection Protocol and finding out all its
-			// registerd participant
+			logger.info("list size -------------:" + list.size());
+			// Iterating over each Collection Protocol and finding out all its registerd participant
 			if (list != null)
 			{
 				for (int i = 0; i < list.size(); i++)
 				{
 					// Getitng participants for a particular CP.
-					final Object[] obj = (Object[]) list.get(i);
-					final Long cpId = (Long) obj[0];
-					final String cpTitle = (String) obj[1];
-					final String cpShortTitle = (String) obj[2];
+					final Object[] object = (Object[]) list.get(i);
+					final Long cpId = (Long) object[0];
+					final String cpTitle = (String) object[1];
+					final String cpShortTitle = (String) object[2];
 
 					// Getting all active participant registered with CP
 					hql = "select p.id, cpr.protocolParticipantIdentifier from "
 							+ CollectionProtocolRegistration.class.getName()
-							+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = "
+							+ " as cpr right outer join cpr.participant as p"
+							+ " where cpr.participant.id = p.id" +
+									" and cpr.collectionProtocol.id = "
 							+ cpId + " and cpr.activityStatus != '"
 							+ Status.ACTIVITY_STATUS_DISABLED.toString()
 							+ "' and p.activityStatus != '"
-							+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by p.id";
+							+ Status.ACTIVITY_STATUS_DISABLED.toString()
+							+ "' order by p.id";
 
 					final List participantList = dao.executeQuery(hql);
 
@@ -1824,6 +1820,19 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			this.closeDAOSession(dao);
 		}
 		return participantRegistrationInfoList;
+	}
+
+	/**
+	 * @return
+	 */
+	private String getHql()
+	{
+		String hql = "select cp.id ,cp.title, cp.shortTitle from "
+				+ CollectionProtocol.class.getName()
+				+ " as cp where  cp.activityStatus != '"
+				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and  (cp." + Constants.CP_TYPE
+				+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
+		return hql;
 	}
 
 	// Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- start
@@ -2208,10 +2217,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	}
 
 	/**
-	 * This method is as as a part of removing the cp based cache.This will 
-	 * returns all the CPs from the database 
-	 * @return
-	 * @throws BizLogicException
+	 * This method is as a part of removing the cp based cache.
+	 * @return This will returns all the CPs from the database.
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	public List<NameValueBean> getCollectionProtocolBeanList() throws BizLogicException
 	{
@@ -2219,15 +2227,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 
 		// Getting all the CollectionProtocol those do not have activaityStatus
 		// as 'Disabled'.
-		final String hql = "select cp.id ,cp.title, cp.shortTitle from "
-				+ CollectionProtocol.class.getName() + " as cp where  cp.activityStatus != '"
-				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and  (cp." + Constants.CP_TYPE
-				+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
+		final String hql = getHql();
 		DAO dao = null;
 		try
 		{
 			dao = this.openDAOSession(null);
-
 			final List list = dao.executeQuery(hql);
 			logger.info("list size -----------:" + list.size());
 

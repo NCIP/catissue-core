@@ -154,34 +154,6 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 			request.setAttribute("senderSiteName", ShippingTrackingUtility.getDisplayName(siteList,
 					"" + shipmentRequestForm.getSenderSiteId()));
 		}
-		/*catch (UserNotAuthorizedException excp)
-		{
-		    //ActionErrors errors = new ActionErrors();
-		    SessionDataBean sessionDataBean = getSessionData(request);
-		    String userName = "";
-		    if(sessionDataBean != null)
-			{
-			    userName = sessionDataBean.getUserName();
-			}
-		    String className = getActualClassName(shipmentRequest.getClass().getName());
-		    String decoratedPrivilegeName = Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName());
-		    String baseObject = "";
-		    if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
-		    {
-		        baseObject = excp.getBaseObject();
-		    }
-		    else
-		    {
-		        baseObject = className;
-		    }
-		    ActionError error = new ActionError("access.addedit.object.denied",
-		    	userName, className,decoratedPrivilegeName,baseObject);
-		    actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-			//saveErrors(request, errors);
-			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
-		    Logger.out.error(excp.getMessage(), excp);
-
-		}*/
 		catch (final AssignDataException assignDataException)
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;

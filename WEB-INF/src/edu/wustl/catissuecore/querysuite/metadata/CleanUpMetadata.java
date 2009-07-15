@@ -38,13 +38,13 @@ public class CleanUpMetadata
 		StringTokenizer st;
 		String intermediatePath;
 		String nextToken;
-		final List<String> deletePaths = new ArrayList<String>();
-		final List<String> deleteSQLList = new ArrayList<String>();
+		List<String> deletePaths = new ArrayList<String>();
+		List<String> deleteSQLList = new ArrayList<String>();
 
-		final String sql = "Select INTERMEDIATE_PATH from PATH";
+		String sql = "Select INTERMEDIATE_PATH from PATH";
 
-		final Statement stmt = connection.createStatement();
-		final ResultSet rs = stmt.executeQuery(sql);
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
 
 		while (rs.next())
 		{
@@ -54,12 +54,12 @@ public class CleanUpMetadata
 			while (st.hasMoreTokens())
 			{
 				nextToken = st.nextToken();
-				final int associationId = Integer.valueOf(nextToken);
-				final String sql1 = "Select ASSOCIATION_ID" +
+				int associationId = Integer.valueOf(nextToken);
+				String sql1 = "Select ASSOCIATION_ID" +
 						" from intra_model_association where ASSOCIATION_ID = "
 						+ associationId;
-				final Statement stmt1 = connection.createStatement();
-				final ResultSet rs1 = stmt1.executeQuery(sql1);
+				Statement stmt1 = connection.createStatement();
+				ResultSet rs1 = stmt1.executeQuery(sql1);
 
 				if (rs1.next())
 				{
@@ -74,7 +74,7 @@ public class CleanUpMetadata
 				}
 			}
 		}
-		for (final String deletePath : deletePaths)
+		for (String deletePath : deletePaths)
 		{
 			deleteSQLList.add("delete from PATH where INTERMEDIATE_PATH = '" + deletePath + "'");
 		}
