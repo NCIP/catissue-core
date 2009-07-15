@@ -73,10 +73,10 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
+		catch (final AuditException auditExp)
 		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(auditExp.getMessage(), auditExp);
+			throw this.getBizLogicException(auditExp, auditExp.getErrorKeyName(), auditExp.getMsgValues());
 		}
 	}
 

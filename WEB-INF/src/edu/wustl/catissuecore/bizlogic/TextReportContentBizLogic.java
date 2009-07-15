@@ -45,17 +45,18 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 			dao.insert(textContent);
 			auditManager.insertAudit(dao, textContent);
 		}
+		catch (final AuditException e)
+		{
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
 		catch (final DAOException daoExp)
 		{
 			this.logger.debug(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 
 	/**

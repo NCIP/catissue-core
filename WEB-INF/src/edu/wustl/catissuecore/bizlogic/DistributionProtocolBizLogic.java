@@ -98,10 +98,10 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
+		catch (final AuditException auditException)
 		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(auditException.getMessage(), auditException);
+			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(), auditException.getMsgValues());
 		}
 
 	}

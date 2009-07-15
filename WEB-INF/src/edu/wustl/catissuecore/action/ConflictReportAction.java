@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +28,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author renuka_bajpai
@@ -37,56 +37,28 @@ import edu.wustl.common.factory.IFactory;
 public class ConflictReportAction extends BaseAction
 {
 
-	/**
-	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
-	 * @return ActionForward : ActionForward
-	 */
-	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		final ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
-
-		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
-
-		List reportQueueDataList = new ArrayList();
-		ReportLoaderQueue reportLoaderQueue = null;
-		reportQueueDataList = this.getReportQueueDataList(reportQueueId);
-		if ((reportQueueDataList != null) && (reportQueueDataList).size() > 0)
-		{
-			reportLoaderQueue = (ReportLoaderQueue) reportQueueDataList.get(0);
-		}
-
-		String newConfictedReport = reportLoaderQueue.getReportText();
-
-		//retrieved the identified report
-		newConfictedReport = ViewSPRUtil.getSynthesizedText(newConfictedReport);
+		ConflictSCGForm conflictSCGForm = (ConflictSCGForm) form;
+		String reportQueueId = (String) request.getParameter(Constants.REPORT_ID);
+		String newConfictedReport = ViewSPRUtil.getSynthesizedTextForReportQueue(reportQueueId);
 		conflictSCGForm.setNewConflictedReport(newConfictedReport);
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	/**To retrieve the list of report loader Queue.
-	 * @param reportQueueId : reportQueueId
-	 * @return List : List
-	 * @throws BizLogicException : BizLogicException
+	/**To retrieve the list of report loader Queue
+	 * @param reportQueueId
+	 * @return
+	 * @throws DAOException
 	 */
 	private List getReportQueueDataList(String reportQueueId) throws BizLogicException
 	{
 
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		final List reportQueueList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+		List reportQueueList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
 				.getName(), Constants.SYSTEM_IDENTIFIER, new Long(reportQueueId));
 		return reportQueueList;
 	}
