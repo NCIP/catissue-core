@@ -315,46 +315,7 @@ public class StorageContainerBean implements Serializable
 		this.twoDimensionCapacity = twoDimensionCapacity;
 	}
 
-	/**
-	 * Returns the label of dimension one.
-	 * @return String the label of dimension one.
-	 * @see #setOneDimensionLabel(String)
-	 */
-	public String getOneDimensionLabel()
-	{
-		return this.oneDimensionLabel;
-	}
-
-	/**
-	 * Sets the label of dimension one.
-	 * @param oneDimensionLabel the label of dimension one to be set.
-	 * @see #getOneDimensionLabel()
-	 */
-	public void setOneDimensionLabel(String oneDimensionLabel)
-	{
-		this.oneDimensionLabel = oneDimensionLabel;
-	}
-
-	/**
-	 * Returns the label of dimension two.
-	 * @return String the label of dimension two.
-	 * @see #setTwoDimensionLabel(String)
-	 */
-	public String getTwoDimensionLabel()
-	{
-		return this.twoDimensionLabel;
-	}
-
-	/**
-	 * Sets the label of dimension two.
-	 * @param twoDimensionLabel the label of dimension two to be set.
-	 * @see #getTwoDimensionLabel()
-	 */
-	public void setTwoDimensionLabel(String twoDimensionLabel)
-	{
-		this.twoDimensionLabel = twoDimensionLabel;
-	}
-
+	
 	/**
 	 * Returns an id which refers to Parent Container of this container.
 	 * @return long An id which refers to Parent Container of this container.
@@ -412,26 +373,28 @@ public class StorageContainerBean implements Serializable
 	}
 
 
+	
+
 	/**
-	 * Returns an name which refers to the site of the container if it is parent container.
-	 * @return String An name which refers to the site of the container if it is parent container.
-	 * @see #setSiteName(String)
+	 * Returns the label of dimension two.
+	 * @return String the label of dimension two.
+	 * @see #setTwoDimensionLabel(String)
 	 */
-	public String getSiteName()
+	public String getTwoDimensionLabel()
 	{
-		return siteName;
+		return this.twoDimensionLabel;
 	}
 
 	/**
-	 * Sets an name which refers to the site of the container if it is parent container.
-	 * @param siteName An name which refers to the site of the container if it is parent container.
-	 * @see #getSiteName()
+	 * Sets the label of dimension two.
+	 * @param twoDimensionLabel the label of dimension two to be set.
+	 * @see #getTwoDimensionLabel()
 	 */
-	public void setSiteName(String siteName)
+	public void setTwoDimensionLabel(String twoDimensionLabel)
 	{
-		this.siteName = siteName;
+		this.twoDimensionLabel = twoDimensionLabel;
 	}
-	
+
 	
 	public void setId(long id)
 	{
@@ -494,70 +457,6 @@ public class StorageContainerBean implements Serializable
 	
 
 	/**
-	 * @return Returns the noOfContainers.
-	 */
-	public int getNoOfContainers()
-	{
-		return noOfContainers;
-	}
-
-	/**
-	 * @param noOfContainers The noOfContainers to set.
-	 */
-	public void setNoOfContainers(int noOfContainers)
-	{
-		this.noOfContainers = noOfContainers;
-	}
-
-	/**
-	 * @return Returns the startNumber.
-	 */
-	public String getStartNumber()
-	{
-		return startNumber;
-	}
-
-	/**
-	 * @param startNumber The startNumber to set.
-	 */
-	public void setStartNumber(String startNumber)
-	{
-		this.startNumber = startNumber;
-	}
-
-	/**
-	 * @return Returns the barcode.
-	 */
-	public String getBarcode()
-	{
-		return barcode;
-	}
-
-	/**
-	 * @param barcode The barcode to set.
-	 */
-	public void setBarcode(String barcode)
-	{
-		this.barcode = barcode;
-	}
-
-	/**
-	 * @return Returns the key.
-	 */
-	public String getKey()
-	{
-		return key;
-	}
-
-	/**
-	 * @param key The key to set.
-	 */
-	public void setKey(String key)
-	{
-		this.key = key;
-	}
-
-	/**
 	 * @return Returns the checkedButton.
 	 */
 	public int getCheckedButton()
@@ -590,72 +489,62 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * Gets the Container Name
-	 * @return container Name
+	 * Returns an name which refers to the site of the container if it is parent container.
+	 * @return String An name which refers to the site of the container if it is parent container.
+	 * @see #setSiteName(String)
 	 */
-	public String getContainerName()
+	public String getSiteName()
 	{
-		return this.containerName;
+		return siteName;
+	}
+
+	
+	/**
+	 * Sets an name which refers to the site of the container if it is parent container.
+	 * @param siteName An name which refers to the site of the container if it is parent container.
+	 * @see #getSiteName()
+	 */
+	public void setSiteName(String siteName)
+	{
+		this.siteName = siteName;
+	}
+	
+	/**
+	 * Returns the label of dimension one.
+	 * @return String the label of dimension one.
+	 * @see #setOneDimensionLabel(String)
+	 */
+	public String getOneDimensionLabel()
+	{
+		return this.oneDimensionLabel;
 	}
 
 	/**
-	 * sets the name of the container
-	 * @param containerName container Name to set
+	 * Sets the label of dimension one.
+	 * @param oneDimensionLabel the label of dimension one to be set.
+	 * @see #getOneDimensionLabel()
 	 */
-	public void setContainerName(String containerName)
+	public void setOneDimensionLabel(String oneDimensionLabel)
 	{
-		this.containerName = containerName;
+		this.oneDimensionLabel = oneDimensionLabel;
+	}
+	
+	/**
+	 * @return Returns the barcode.
+	 */
+	public String getBarcode()
+	{
+		return barcode;
 	}
 
 	/**
-	 * @return Returns the positionDimensionOne.
+	 * @param barcode The barcode to set.
 	 */
-	public int getPositionDimensionOne()
+	public void setBarcode(String barcode)
 	{
-		return positionDimensionOne;
+		this.barcode = barcode;
 	}
 
-	/**
-	 * @param positionDimensionOne The positionDimensionOne to set.
-	 */
-	public void setPositionDimensionOne(int positionDimensionOne)
-	{
-		this.positionDimensionOne = positionDimensionOne;
-	}
-
-	/**
-	 * @return Returns the positionDimensionTwo.
-	 */
-	public int getPositionDimensionTwo()
-	{
-		return positionDimensionTwo;
-	}
-
-	/**
-	 * @param positionDimensionTwo The positionDimensionTwo to set.
-	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo)
-	{
-		this.positionDimensionTwo = positionDimensionTwo;
-	}
-
-	/**
-	 * getitng collection Ids that this container can hold
-	 * @return collection Id's array
-	 */
-	public long[] getCollectionIds()
-	{
-		return this.collectionIds;
-	}
-
-	/**
-	 * setitng the Collection Id array
-	 * @param collectionIds - array of collection Ids to set
-	 */
-	public void setCollectionIds(long[] collectionIds)
-	{
-		this.collectionIds = collectionIds;
-	}
 
 	/**
 	 * getting Specimen class Type Ids that this container can hold 
@@ -676,6 +565,37 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
+	 * @return Returns the key.
+	 */
+	public String getKey()
+	{
+		return key;
+	}
+
+	/**
+	 * @param key The key to set.
+	 */
+	public void setKey(String key)
+	{
+		this.key = key;
+	}
+
+	/**
+	 * @return Returns the positionDimensionTwo.
+	 */
+	public int getPositionDimensionTwo()
+	{
+		return positionDimensionTwo;
+	}
+
+	/**
+	 * @param positionDimensionTwo The positionDimensionTwo to set.
+	 */
+	public void setPositionDimensionTwo(int positionDimensionTwo)
+	{
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
+	/**
 	 * getitng StorageType Id's that this container can hold
 	 * @return StorageType Id' array
 	 */
@@ -693,7 +613,23 @@ public class StorageContainerBean implements Serializable
 		this.holdsStorageTypeIds = holdsStorageTypeIds;
 	}
 
-	
+	/**
+	 * getitng collection Ids that this container can hold
+	 * @return collection Id's array
+	 */
+	public long[] getCollectionIds()
+	{
+		return this.collectionIds;
+	}
+
+	/**
+	 * setitng the Collection Id array
+	 * @param collectionIds - array of collection Ids to set
+	 */
+	public void setCollectionIds(long[] collectionIds)
+	{
+		this.collectionIds = collectionIds;
+	}
 	/**
      * Sets the Specimen Array Type Holds List.
      * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
@@ -746,6 +682,74 @@ public class StorageContainerBean implements Serializable
 		similarContainersMap.put(key, value);
 	}
 
+	/**
+	 * Gets the Container Name
+	 * @return container Name
+	 */
+	public String getContainerName()
+	{
+		return this.containerName;
+	}
+
+	/**
+	 * sets the name of the container
+	 * @param containerName container Name to set
+	 */
+	public void setContainerName(String containerName)
+	{
+		this.containerName = containerName;
+	}
+
+	/**
+	 * @return Returns the positionDimensionOne.
+	 */
+	public int getPositionDimensionOne()
+	{
+		return positionDimensionOne;
+	}
+
+	/**
+	 * @param positionDimensionOne The positionDimensionOne to set.
+	 */
+	public void setPositionDimensionOne(int positionDimensionOne)
+	{
+		this.positionDimensionOne = positionDimensionOne;
+	}
+
+
+	/**
+	 * @return Returns the noOfContainers.
+	 */
+	public int getNoOfContainers()
+	{
+		return noOfContainers;
+	}
+
+	/**
+	 * @param noOfContainers The noOfContainers to set.
+	 */
+	public void setNoOfContainers(int noOfContainers)
+	{
+		this.noOfContainers = noOfContainers;
+	}
+
+	/**
+	 * @return Returns the startNumber.
+	 */
+	public String getStartNumber()
+	{
+		return startNumber;
+	}
+
+	/**
+	 * @param startNumber The startNumber to set.
+	 */
+	public void setStartNumber(String startNumber)
+	{
+		this.startNumber = startNumber;
+	}
+
+	
 	/**
 	 * Returns the object to which this map maps the specified key.
 	 * @param key the required key.

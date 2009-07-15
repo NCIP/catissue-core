@@ -1214,38 +1214,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.collectionEventTimeInMinutes = collectionEventTimeInMinutes;
 	}
 
-	/**
-	 * @return the collectionEventUserId
-	 */
-	public long getCollectionEventUserId()
-	{
-		return collectionEventUserId;
-	}
-
-	/**
-	 * @param collectionEventUserId the collectionEventUserId to set
-	 */
-	public void setCollectionEventUserId(long collectionEventUserId)
-	{
-		this.collectionEventUserId = collectionEventUserId;
-	}
-
-	/**
-	 * @return the receivedEventComments
-	 */
-	public String getReceivedEventComments()
-	{
-		return receivedEventComments;
-	}
-
-	/**
-	 * @param receivedEventComments the receivedEventComments to set
-	 */
-	public void setReceivedEventComments(String receivedEventComments)
-	{
-		this.receivedEventComments = receivedEventComments;
-	}
-
+	
 	/**
 	 * @return the receivedEventDateOfEvent
 	 */
@@ -1325,6 +1294,39 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		this.receivedEventTimeInHours = receivedEventTimeInHours;
 	}
+	
+	/**
+	 * @return the collectionEventUserId
+	 */
+	public long getCollectionEventUserId()
+	{
+		return collectionEventUserId;
+	}
+
+	/**
+	 * @param collectionEventUserId the collectionEventUserId to set
+	 */
+	public void setCollectionEventUserId(long collectionEventUserId)
+	{
+		this.collectionEventUserId = collectionEventUserId;
+	}
+
+	/**
+	 * @return the receivedEventComments
+	 */
+	public String getReceivedEventComments()
+	{
+		return receivedEventComments;
+	}
+
+	/**
+	 * @param receivedEventComments the receivedEventComments to set
+	 */
+	public void setReceivedEventComments(String receivedEventComments)
+	{
+		this.receivedEventComments = receivedEventComments;
+	}
+
 
 	/**
 	 * @return the receivedEventTimeInMinutes

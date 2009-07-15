@@ -293,29 +293,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	}
 
 	
-	public String getCollectionEventCollectionProcedure()
-	{
-		return collectionEventCollectionProcedure;
-	}
-
 	
-	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
-	{
-		this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
-	}
-
-	
-	public String getCollectionEventContainer()
-	{
-		return collectionEventContainer;
-	}
-
-	
-	public void setCollectionEventContainer(String collectionEventContainer)
-	{
-		this.collectionEventContainer = collectionEventContainer;
-	}
-
 	
 	public String getReceivedEventReceivedQuality()
 	{
@@ -745,5 +723,27 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		
 	}
 
+	public String getCollectionEventCollectionProcedure()
+	{
+		return collectionEventCollectionProcedure;
+	}
+
 	
+	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
+	{
+		this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
+	}
+
+	
+	public String getCollectionEventContainer()
+	{
+		return collectionEventContainer;
+	}
+
+	
+	public void setCollectionEventContainer(String collectionEventContainer)
+	{
+		this.collectionEventContainer = collectionEventContainer;
+	}
+
 }

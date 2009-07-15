@@ -491,46 +491,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.typeId = typeId;
 	}
 
-	/**
-	 * Sets an name which refers to the type of the storage.
-	 * @param typeName An id which refers to the type of the storage.
-	 * @see #getTypeName()
-	 */
-	public void setTypeName(String typeName)
-	{
-		this.typeName = typeName;
-	}
-
-	/**
-	 * Returns an name which refers to the type of the storage.
-	 * @return An name which refers to the type of the storage.
-	 * @see #setTypeName(String)
-	 */
-	public String getTypeName()
-	{
-		return this.typeName;
-	}
-
-	/**
-	* Returns the default temperature of the storage container.
-	* @return double the default temperature of the storage container to be set.
-	* @see #setDefaultTemperature(double)
-	*/
-	public String getDefaultTemperature()
-	{
-		return this.defaultTemperature;
-	}
-
-	/**
-	 * Sets the default temperature of the storage container.
-	 * @param defaultTemperature the default temperature of the storage container to be set.
-	 * @see #getDefaultTemperature()
-	 */
-	public void setDefaultTemperature(String defaultTemperature)
-	{
-		this.defaultTemperature = defaultTemperature;
-	}
-
+	
 	/**
 	 * Returns the capacity of dimension one.
 	 * @return int the capacity of dimension one.
@@ -1153,7 +1114,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 						ApplicationProperties.getValue("storageContainer.temperature")));
 			}
 
-			//VALIDATIONS FOR DIMENSION 1.
+			//VALIDATIONS FOR 1 DIMENSION of container
 			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -1167,8 +1128,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 							ApplicationProperties.getValue("storageContainer.oneDimension")));
 				}
 			}
-
-			//Validations for dimension 2
+			//Validations for 2 dimension of container.
 			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity))
 					&& (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
 			{
@@ -1343,26 +1303,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		return nextForwardTo;
 	}
 
-	public void setNextForwardTo(String nextForwardTo)
-	{
-		this.nextForwardTo = nextForwardTo;
-	}
-
-	public String getPrintCheckbox()
-	{
-		return printCheckbox;
-	}
-
-	public void setPrintCheckbox(String printCheckbox)
-	{
-		this.printCheckbox = printCheckbox;
-	}
-
-	public String getPrinterLocation()
-	{
-		return printerLocation;
-	}
-
+	
 	public void setPrinterLocation(String printerLocation)
 	{
 		this.printerLocation = printerLocation;
@@ -1393,4 +1334,65 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
 	}
+	/**
+	 * Sets an name which refers to the type of the storage.
+	 * @param typeName An id which refers to the type of the storage.
+	 * @see #getTypeName()
+	 */
+	public void setTypeName(String typeName)
+	{
+		this.typeName = typeName;
+	}
+
+	/**
+	 * Returns an name which refers to the type of the storage.
+	 * @return An name which refers to the type of the storage.
+	 * @see #setTypeName(String)
+	 */
+	public String getTypeName()
+	{
+		return this.typeName;
+	}
+
+	/**
+	* Returns the default temperature of the storage container.
+	* @return double the default temperature of the storage container to be set.
+	* @see #setDefaultTemperature(double)
+	*/
+	public String getDefaultTemperature()
+	{
+		return this.defaultTemperature;
+	}
+
+	/**
+	 * Sets the default temperature of the storage container.
+	 * @param defaultTemperature the default temperature of the storage container to be set.
+	 * @see #getDefaultTemperature()
+	 */
+	public void setDefaultTemperature(String defaultTemperature)
+	{
+		this.defaultTemperature = defaultTemperature;
+	}
+	
+	public void setNextForwardTo(String nextForwardTo)
+	{
+		this.nextForwardTo = nextForwardTo;
+	}
+
+	public String getPrintCheckbox()
+	{
+		return printCheckbox;
+	}
+
+	public void setPrintCheckbox(String printCheckbox)
+	{
+		this.printCheckbox = printCheckbox;
+	}
+
+	public String getPrinterLocation()
+	{
+		return printerLocation;
+	}
+
+
 }

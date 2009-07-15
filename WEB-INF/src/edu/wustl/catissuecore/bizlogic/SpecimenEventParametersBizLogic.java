@@ -464,29 +464,29 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			if (specimenEventParametersObject instanceof DisposalEventParameters)
 			{
 
-				final DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
-				final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 				if (disposalEventParameters.getSpecimen() != null)
 				{
 
-					final Map disabledConts = this.getContForDisabledSpecimenFromCache();
+					Map disabledConts = this.getContForDisabledSpecimenFromCache();
 
-					final Set keySet = disabledConts.keySet();
-					final Iterator itr = keySet.iterator();
+					Set keySet = disabledConts.keySet();
+					Iterator itr = keySet.iterator();
 					while (itr.hasNext())
 					{
-						final String Id = (String) itr.next();
-						final Map disabledContDetails = (TreeMap) disabledConts.get(Id);
-						final String contNameKey = "StorageContName";
+						String Id = (String) itr.next();
+						Map disabledContDetails = (TreeMap) disabledConts.get(Id);
+						String contNameKey = "StorageContName";
 						//String contIdKey = "StorageContIdKey";
-						final String pos1Key = "pos1";
-						final String pos2Key = "pos2";
+						String pos1Key = "pos1";
+						String pos2Key = "pos2";
 
-						final StorageContainer cont = new StorageContainer();
+						StorageContainer cont = new StorageContainer();
 						cont.setId(new Long(Id));
 						cont.setName((String) disabledContDetails.get(contNameKey));
-						final int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
-						final int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
+						int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
+						int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
 						StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap,
 								x, y);
 					}

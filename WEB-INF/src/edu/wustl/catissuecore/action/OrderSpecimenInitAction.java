@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,12 +18,10 @@ import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
-import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.cde.CDE;
-import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -77,29 +73,7 @@ public class OrderSpecimenInitAction extends BaseAction
 			{
 				request.setAttribute("specimen", specimen);
 
-				//Setting specimen class list
-				List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_SPECIMEN_CLASS, null);
-				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
-				//Setting the specimen type list
-				final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_SPECIMEN_TYPE, null);
-				request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-
-				// Get the Specimen class and type from the cde
-				final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
-						Constants.CDE_NAME_SPECIMEN_CLASS);
-				final Set setPV = specimenClassCDE.getPermissibleValues();
-
-				specimenClassList = new ArrayList();
-				final Map subTypeMap = AppUtility.getSubTypeMap(setPV, specimenClassList);
-
-				// sets the Class list
-				request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
-				// set the map to subtype
-				request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+				OrderingSystemUtil.setSpecimenTypeAndClass(request);
 
 				//default checked on existing specimen
 				spec.setTypeOfSpecimen("existingSpecimen");
@@ -140,6 +114,10 @@ public class OrderSpecimenInitAction extends BaseAction
 		}
 		return mapping.findForward(target);
 	}
+
+
+
+	
 
 
 

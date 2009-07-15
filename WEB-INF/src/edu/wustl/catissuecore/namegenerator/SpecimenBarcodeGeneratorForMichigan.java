@@ -67,41 +67,20 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	@Override
 	public void setBarcode(Object obj)
 	{
-		final Specimen objSpecimen = (Specimen) obj;
-		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
-		{
-			final String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
-			this.currentBarcode = this.currentBarcode + 1;
-			final String nextNumber = this.format(this.currentBarcode, "0000");
-			final String barcode = siteName + "_" + nextNumber;
-			objSpecimen.setBarcode(barcode);
-		}
-
-		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
-		{
-			this.setNextAvailableAliquotSpecimenBarcode(objSpecimen.getParentSpecimen(),
-					objSpecimen);
-		}
-
-		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
-		{
-			this
-					.setNextAvailableDeriveSpecimenBarcode(objSpecimen.getParentSpecimen(),
-							objSpecimen);
-		}
-
-		if (objSpecimen.getChildSpecimenCollection().size() > 0)
-		{
-			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
-					.getChildSpecimenCollection();
-			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
-			while (it.hasNext())
-			{
-				final Specimen objChildSpecimen = (Specimen) it.next();
-				this.setBarcode(objChildSpecimen);
-			}
-		}
-
+		super.setBarcode(obj);
+	}
+	
+	/**
+	 * This method will be called to get the barcode.
+	 * @return
+	 */
+	protected String getBarcode(Specimen objSpecimen)
+	{
+		final String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
+		this.currentBarcode = this.currentBarcode + 1;
+		final String nextNumber = this.format(this.currentBarcode, "0000");
+		final String barcode = siteName + "_" + nextNumber;
+		return  barcode;
 	}
 
 	/**

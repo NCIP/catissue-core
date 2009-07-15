@@ -710,59 +710,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					if (form.isAddOperation())
 					{
-						if (this.specimenPosition == null
-								|| this.specimenPosition.storageContainer == null)
-						{
-							this.specimenPosition = new SpecimenPosition();
-							this.specimenPosition.storageContainer = new StorageContainer();
-						}
-						if (form.getStContSelection() == 1)
-						{
-							//	this.storageContainer = null;
-							this.specimenPosition = null;
-						}
-						if (form.getStContSelection() == 2)
-						{
-							final long stContainerId = Long.parseLong(form.getStorageContainer());
-							this.specimenPosition.storageContainer.setId(stContainerId);
-							if (this.specimenPosition == null)
-							{
-								this.specimenPosition = new SpecimenPosition();
-							}
-							this.specimenPosition.positionDimensionOne = Integer.valueOf(form
-									.getPositionDimensionOne());
-							this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
-									.getPositionDimensionTwo());
-							this.specimenPosition.specimen = this;
-
-							//this.specimenPosition.storageContainer = this.storageContainer;
-						}
-						else if (form.getStContSelection() == 3)
-						{
-							this.specimenPosition.storageContainer.setName(form
-									.getSelectedContainerName());
-							if (form.getPos1() != null
-									&& !form.getPos1().trim().equals("")
-									&& form.getPos2() != null
-									&& !form.getPos2().trim().equals(""))
-							{
-								if (this.specimenPosition == null)
-								{
-									this.specimenPosition
-									= new SpecimenPosition();
-								}
-								this.specimenPosition.positionDimensionOne
-								= Integer.valueOf(form
-										.getPos1());
-								this.specimenPosition.positionDimensionTwo
-								= Integer.valueOf(form
-										.getPos2());
-								this.specimenPosition.specimen = this;
-								//this.specimenPosition.storageContainer
-								//= this.storageContainer;
-							}
-
-						}
+						setSpecimenPosition(form);
 					}
 					else
 					{
@@ -947,50 +895,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					//setting the value of storage container
 					if (form.isAddOperation())
 					{
-						if (this.specimenPosition == null
-								|| this.specimenPosition.storageContainer == null)
-						{
-							this.specimenPosition = new SpecimenPosition();
-							this.specimenPosition.storageContainer
-							= new StorageContainer();
-						}
-						if (form.getStContSelection() == 1)
-						{
-							//	this.storageContainer = null;
-							this.specimenPosition = null;
-						}
-						if (form.getStContSelection() == 2)
-						{
-							this.specimenPosition.storageContainer.setId(Long.valueOf(form
-									.getStorageContainer()));
-							this.specimenPosition.positionDimensionOne
-							= Integer.valueOf(form
-									.getPositionDimensionOne());
-							this.specimenPosition.positionDimensionTwo
-							= Integer.valueOf(form
-									.getPositionDimensionTwo());
-							this.specimenPosition.specimen = this;
-							//this.specimenPosition.storageContainer = this.storageContainer;
-						}
-						else if (form.getStContSelection() == 3)
-						{
-							this.specimenPosition.storageContainer.setName(form
-									.getSelectedContainerName());
-							if (form.getPos1() != null
-									&& !form.getPos1().trim().equals("")
-									&& form.getPos2() != null
-									&& !form.getPos2().trim().equals(""))
-							{
-								this.specimenPosition.positionDimensionOne
-								= Integer.valueOf(form
-										.getPos1());
-								this.specimenPosition.positionDimensionTwo
-								= Integer.valueOf(form
-										.getPos2());
-								this.specimenPosition.specimen = this;
-								//this.specimenPosition.storageContainer = this.storageContainer;
-							}
-						}
+						setSpecimenPosition(form);
 					}
 				}
 			}
@@ -1011,6 +916,68 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();
 			// ----- Mandar : ---23-jan-07 For bug 3464.
 			this.applyChangesTo = form.getApplyChangesTo();
+		}
+	}
+
+	
+	/**
+	 * This method will be called to set the specimen position.
+	 * @param form
+	 */
+	private void setSpecimenPosition(final SpecimenForm form)
+	{
+		if (this.specimenPosition == null
+				|| this.specimenPosition.storageContainer == null)
+		{
+			this.specimenPosition = new SpecimenPosition();
+			this.specimenPosition.storageContainer = new StorageContainer();
+		}
+		if (form.getStContSelection() == 1)
+		{
+			//	this.storageContainer = null;
+			this.specimenPosition = null;
+		}
+		if (form.getStContSelection() == 2)
+		{
+			final long stContainerId = Long.parseLong(form.getStorageContainer());
+			this.specimenPosition.storageContainer.setId(stContainerId);
+			/*if (this.specimenPosition == null)
+			{
+				this.specimenPosition = new SpecimenPosition();
+			}*/
+			this.specimenPosition.positionDimensionOne = Integer.valueOf(form
+					.getPositionDimensionOne());
+			this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
+					.getPositionDimensionTwo());
+			this.specimenPosition.specimen = this;
+
+			//this.specimenPosition.storageContainer = this.storageContainer;
+		}
+		else if (form.getStContSelection() == 3)
+		{
+			this.specimenPosition.storageContainer.setName(form
+					.getSelectedContainerName());
+			if (form.getPos1() != null
+					&& !form.getPos1().trim().equals("")
+					&& form.getPos2() != null
+					&& !form.getPos2().trim().equals(""))
+			{
+				/*if (this.specimenPosition == null)
+				{
+					this.specimenPosition
+					= new SpecimenPosition();
+				}*/
+				this.specimenPosition.positionDimensionOne
+				= Integer.valueOf(form
+						.getPos1());
+				this.specimenPosition.positionDimensionTwo
+				= Integer.valueOf(form
+						.getPos2());
+				this.specimenPosition.specimen = this;
+				//this.specimenPosition.storageContainer
+				//= this.storageContainer;
+			}
+
 		}
 	}
 

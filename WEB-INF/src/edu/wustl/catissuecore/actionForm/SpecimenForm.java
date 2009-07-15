@@ -489,37 +489,7 @@ public class SpecimenForm extends AbstractActionForm
 		return -1;
 	}
 
-	/**
-	 * @return Returns the containerId.
-	 */
-	public String getContainerId()
-	{
-		return containerId;
-	}
-
-	/**
-	 * @param containerId The containerId to set.
-	 */
-	public void setContainerId(String containerId)
-	{
-		this.containerId = containerId;
-	}
-
-	/**
-	 * @return Returns the pos1.
-	 */
-	public String getPos1()
-	{
-		return pos1;
-	}
-
-	/**
-	 * @param pos1 The pos1 to set.
-	 */
-	public void setPos1(String pos1)
-	{
-		this.pos1 = pos1;
-	}
+	
 
 	/**
 	 * @return Returns the pos2.
@@ -1222,6 +1192,37 @@ public class SpecimenForm extends AbstractActionForm
 		return isBarcodeEditable;
 	}
 
+	/**
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return containerId;
+	}
+
+	/**
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+
+	/**
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return pos1;
+	}
+
+	/**
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
 	/** 
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable
 	 */

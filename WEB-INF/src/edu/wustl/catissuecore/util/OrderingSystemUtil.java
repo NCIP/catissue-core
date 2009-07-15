@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.OrderDetails;
@@ -21,9 +24,11 @@ import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.cde.CDE;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.util.HibernateMetaData;
@@ -433,5 +438,36 @@ public final class OrderingSystemUtil
 			specimenQuantityUnit = Constants.UNIT_GM;
 		}
 		return specimenQuantityUnit;
+	}
+	
+	
+	public static void setSpecimenTypeAndClass(HttpServletRequest request)
+	{
+		//Setting specimen class list
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+
+		//Setting the specimen type list
+		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+
+		// Get the Specimen class and type from the cde
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+
+		specimenClassList = new ArrayList();
+		final Map subTypeMap = AppUtility.getSubTypeMap(setPV, specimenClassList);
+
+		// sets the Class list
+		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+
+		// set the map to subtype
+		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+		
+			
+		
 	}
 }

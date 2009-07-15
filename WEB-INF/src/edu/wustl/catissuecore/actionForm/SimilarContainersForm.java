@@ -567,14 +567,7 @@ public class SimilarContainersForm extends AbstractActionForm
 				}
 			}
 
-			//			validations for temperature
-			if (!validator.isEmpty(defaultTemperature)
-					&& (!validator.isDouble(defaultTemperature, false)))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-						ApplicationProperties.getValue("storageContainer.temperature")));
-			}
-
+			
 			//			VALIDATIONS FOR DIMENSION 1.
 			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
 			{
@@ -597,6 +590,15 @@ public class SimilarContainersForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageContainer.twoDimension")));
 			}
+			
+//			validations for temperature
+			if (!validator.isEmpty(defaultTemperature)
+					&& (!validator.isDouble(defaultTemperature, false)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("storageContainer.temperature")));
+			}
+
 		}
 		catch (Exception excp)
 		{
