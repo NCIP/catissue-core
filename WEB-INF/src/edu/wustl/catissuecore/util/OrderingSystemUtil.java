@@ -17,7 +17,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
@@ -466,8 +468,26 @@ public final class OrderingSystemUtil
 
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
+	}
+	
+	public static List getDefinedArraysList(final HttpSession session) 
+	{
 		
-			
-		
+		final List defineArraysList = new ArrayList();
+		defineArraysList.add(new NameValueBean("None", "None"));
+
+		if (session.getAttribute("DefineArrayFormObjects") != null)
+		{
+			final List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
+			final Iterator arrayListItr = arrayList.iterator();
+			while (arrayListItr.hasNext())
+			{
+				final DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr
+						.next();
+				defineArraysList.add(new NameValueBean(defineArrayFormObj
+						.getArrayName(), defineArrayFormObj.getArrayName()));
+			}
+		}
+		return defineArraysList;
 	}
 }
