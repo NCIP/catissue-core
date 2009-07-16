@@ -68,7 +68,8 @@ public class ViewRequestSummaryAction extends SecureAction
 		{
 			operationToPerform = ((AbstractActionForm) form).getOperation();
 		}
-		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operationToPerform);
+		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION,
+				operationToPerform);
 		final ActionErrors actionErrors = new ActionErrors();
 		// Create DAO for passing as an argument to bizlogic's validate
 		DAO dao = null;
@@ -131,24 +132,10 @@ public class ViewRequestSummaryAction extends SecureAction
 					ShipmentRequest shipmentRequestObject = shipmentRequestIterator.next();
 					ShipmentRequestForm shipmentReqFormTemp = new ShipmentRequestForm();
 					shipmentReqFormTemp.setAllValues(shipmentRequestObject);
-					if (shipmentReqFormTemp.getSpecimenCounter() > 0)
-					{
-						for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
-								.getSpecimenCounter(); specimenCounter++)
-						{
-							specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
-									.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
-						}
-					}
-					if (shipmentReqFormTemp.getContainerCounter() > 0)
-					{
-						for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
-								.getContainerCounter(); containerCounter++)
-						{
-							containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
-									.getContainerDetails("containerLabel_" + (containerCounter + 1));
-						}
-					}
+					specimenCount = getSpecimenCounter(specimenLabelArr, specimenCount,
+							shipmentReqFormTemp);
+					containerCount = getContainerCount(containerLabelArr, containerCount,
+							shipmentReqFormTemp);
 					specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
 					containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
 					// adding reciever site's names to the array
@@ -167,26 +154,10 @@ public class ViewRequestSummaryAction extends SecureAction
 						recieverSiteNameArr[count] = shipmentRequestObject.getReceiverSite()
 								.getName();
 						count++;
-						if (shipmentReqFormTemp.getSpecimenCounter() > 0)
-						{
-							for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
-									.getSpecimenCounter(); specimenCounter++)
-							{
-								specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
-										.getSpecimenDetails("specimenLabel_"
-												+ (specimenCounter + 1));
-							}
-						}
-						if (shipmentReqFormTemp.getContainerCounter() > 0)
-						{
-							for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
-									.getContainerCounter(); containerCounter++)
-							{
-								containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
-										.getContainerDetails("containerLabel_"
-												+ (containerCounter + 1));
-							}
-						}
+						specimenCount = getSpecimenCounter(specimenLabelArr, specimenCount,
+								shipmentReqFormTemp);
+						containerCount = getContainerCount(containerLabelArr, containerCount,
+								shipmentReqFormTemp);
 						shipmentReqFormTemp.reset(mapping, request);
 					}
 				}
@@ -230,6 +201,50 @@ public class ViewRequestSummaryAction extends SecureAction
 		}
 		this.saveErrors(request, actionErrors);
 		return mapping.findForward(target);
+	}
+
+	/**
+	 * This method gets container count.
+	 * @param containerLabelArr container Label Array.
+	 * @param containerCount container Count
+	 * @param shipmentReqFormTemp ShipmentRequestForm
+	 * @return containerCount
+	 */
+	private int getContainerCount(final String[] containerLabelArr, int containerCount,
+			ShipmentRequestForm shipmentReqFormTemp)
+	{
+		if (shipmentReqFormTemp.getContainerCounter() > 0)
+		{
+			for (int containerCounter = 0; containerCounter < shipmentReqFormTemp
+					.getContainerCounter(); containerCounter++)
+			{
+				containerLabelArr[containerCount++] = (String) shipmentReqFormTemp
+						.getContainerDetails("containerLabel_" + (containerCounter + 1));
+			}
+		}
+		return containerCount;
+	}
+
+	/**
+	 * This method gets Specimen Counter.
+	 * @param specimenLabelArr specimen Label Array.
+	 * @param specimenCount specimen Count
+	 * @param shipmentReqFormTemp Shipment Request Form
+	 * @return specimen Count
+	 */
+	private int getSpecimenCounter(final String[] specimenLabelArr, int specimenCount,
+			ShipmentRequestForm shipmentReqFormTemp)
+	{
+		if (shipmentReqFormTemp.getSpecimenCounter() > 0)
+		{
+			for (int specimenCounter = 0; specimenCounter < shipmentReqFormTemp
+					.getSpecimenCounter(); specimenCounter++)
+			{
+				specimenLabelArr[specimenCount++] = (String) shipmentReqFormTemp
+						.getSpecimenDetails("specimenLabel_" + (specimenCounter + 1));
+			}
+		}
+		return specimenCount;
 	}
 
 	/**

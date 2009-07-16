@@ -2696,27 +2696,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		final int posOneCapacity = parent.getCapacity().getOneDimensionCapacity().intValue();
 		final int posTwoCapacity = parent.getCapacity().getTwoDimensionCapacity().intValue();
 
-		final int positionDimensionOne = current.getLocatedAtPosition().getPositionDimensionOne()
-				.intValue();
-		final int positionDimensionTwo = current.getLocatedAtPosition().getPositionDimensionTwo()
-				.intValue();
-
-		this.logger.debug("validatePosition C : " + positionDimensionOne + " : "
-				+ positionDimensionTwo);
-		this.logger.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
-
-		if ((positionDimensionOne > posOneCapacity) || (positionDimensionTwo > posTwoCapacity))
-		{
-			this.logger.debug("validatePosition false");
-			return false;
-		}
-		this.logger.debug("validatePosition true");
-		return true;
+		return validatePosition( posOneCapacity, posTwoCapacity, current);
 	}
 
 	/**
 	 * @param posOneCapacity - int.
-	 * @param posTwoCapacity - int 
+	 * @param posTwoCapacity - int
 	 * @param current - StorageContainer object
 	 * @return boolean value
 	 */

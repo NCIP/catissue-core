@@ -169,18 +169,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	}
 
 	/**
-	 * checks the authorization for execution.
-	 * @param arg0 HttpServletRequest object.
-	 * @return boolean result of check.
-	 * @throws Exception if some problem occurs.
-	 */
-	protected boolean isAuthorizedToExecute(HttpServletRequest arg0) throws Exception
-	{
-		return true;
-	}
-
-	/**
-	 * parses the string to get the class name.
+	 * This method parses the string to get the class name.
 	 * @param name string to be parsed.
 	 * @return actual class name.
 	 */
@@ -196,5 +185,15 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 			}
 		}
 		return name;
+	}
+	/**
+	 * This method checks the authorization for execution.
+	 * @param arg0 HttpServletRequest object.
+	 * @return boolean result of check.
+	 * @throws Exception if some problem occurs.
+	 */
+	protected boolean isAuthorizedToExecute(HttpServletRequest arg0) throws Exception
+	{
+		return true;
 	}
 }

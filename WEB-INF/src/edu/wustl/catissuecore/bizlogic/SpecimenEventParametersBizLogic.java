@@ -551,22 +551,22 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.updateAudit(dao, obj, oldObj);
 		}
-		catch (final DAOException daoExp)
+		catch (final DAOException daoExption)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.debug(daoExption.getMessage(), daoExption);
 			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+					.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption.getMsgValues());
 		}
-		catch (final AuditException e)
+		catch (final AuditException auditException)
 		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.debug(auditException.getMessage(), auditException);
+			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(), auditException.getMsgValues());
 		}
 
 	}
 
 	/**
-	 * Overriding the parent class's method to validate the enumerated attribute values
+	 * Overriding the parent class's method to validate the enumerated attribute values.
 	 */
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException

@@ -455,10 +455,11 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dynEntitiesList
-	 * @param cpIdList
-	 * @return
-	 * @throws DynamicExtensionsApplicationException
+	 * This method gets Annotation Ids Based On Condition.
+	 * @param dynEntitiesList dynEntities List
+	 * @param cpIdList cpId List
+	 * @return dynEntitiesIdList
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	public List getAnnotationIdsBasedOnCondition(List dynEntitiesList, List cpIdList)
 			throws BizLogicException
@@ -469,16 +470,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			final Iterator dynEntitiesIterator = dynEntitiesList.iterator();
 			while (dynEntitiesIterator.hasNext())
 			{
-				final EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
-
-				final Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap
+				EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
+				Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap
 						.getId());
-				final Iterator<FormContext> formContextIter = formContexts.iterator();
+				Iterator<FormContext> formContextIter = formContexts.iterator();
 				while (formContextIter.hasNext())
 				{
-					final FormContext formContext = formContextIter.next();
-
-					final Collection<EntityMapCondition> entityMapConditions = AppUtility
+					FormContext formContext = formContextIter.next();
+					Collection<EntityMapCondition> entityMapConditions = AppUtility
 							.getEntityMapConditions(formContext.getId());
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
@@ -487,7 +486,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 					{
 						if (entityMapConditions != null && !entityMapConditions.isEmpty())
 						{
-							final boolean check = this.checkStaticRecId(entityMapConditions,
+							boolean check = this.checkStaticRecId(entityMapConditions,
 									cpIdList);
 							if (check)
 							{
