@@ -86,13 +86,13 @@ public class DomainObjectListAction extends SecureAction
 		}
 
 		// Returns the page number to be shown.
-		final int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
+		final int pageNumber = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
 		// Gets the session of this request.
 		final HttpSession session = request.getSession();
 
 		// The start index in the list of users to be approved/rejected.
-		int startIndex = Constants.ZERO;
+		int startIndx = Constants.ZERO;
 
 		/**
 		 * Name: Prafull Description: Query performance issue. Instead of saving
@@ -115,12 +115,12 @@ public class DomainObjectListAction extends SecureAction
 			recordsPerPage = Integer.parseInt(session.getAttribute(Constants.RESULTS_PER_PAGE)
 					.toString());
 		}
-		int endIndex = recordsPerPage;
+		int endIndx = recordsPerPage;
 
 		final IDomainObjectFactory domainObjectFactory = AbstractFactoryConfig.getInstance()
 				.getDomainObjectFactory();
 
-		if (pageNum == Constants.START_PAGE)
+		if (pageNumber == Constants.START_PAGE)
 		{
 			// If start page is to be shown retrieve the list from the database.
 			if (abstractForm.getFormId() == Constants.APPROVE_USER_FORM_ID)
@@ -141,7 +141,7 @@ public class DomainObjectListAction extends SecureAction
 
 			if (recordsPerPage > list.size())
 			{
-				endIndex = list.size();
+				endIndx = list.size();
 			}
 
 			// Save the list of users in the sesson.
@@ -154,31 +154,31 @@ public class DomainObjectListAction extends SecureAction
 			if (recordsPerPage != Integer.MAX_VALUE)
 			{
 				// Set the start index of the users in the list.
-				startIndex = (pageNum - 1) * recordsPerPage;
+				startIndx = (pageNumber - 1) * recordsPerPage;
 
 				// Set the end index of the users in the list.
-				endIndex = startIndex + recordsPerPage;
+				endIndx = startIndx + recordsPerPage;
 
-				if (endIndex > list.size())
+				if (endIndx > list.size())
 				{
-					endIndex = list.size();
+					endIndx = list.size();
 				}
 			}
 			else
 			{
-				startIndex = 0;
-				endIndex = list.size();
+				startIndx = 0;
+				endIndx = list.size();
 			}
 		}
 
 		// Gets the list of users to be shown on the page.
-		showList = list.subList(startIndex, endIndex);
+		showList = list.subList(startIndx, endIndx);
 
 		// Saves the list of users to be shown on the page in the request.
 		request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST, showList);
 
 		// Saves the page number in the request.
-		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
+		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNumber));
 
 		// Saves the total number of results in the request.
 		session.setAttribute(Constants.TOTAL_RESULTS, Integer.toString(list.size()));
@@ -196,7 +196,7 @@ public class DomainObjectListAction extends SecureAction
 
 		request.setAttribute("userDetailsLink", userDetailsLink);
 		request.setAttribute("RESULT_PERPAGE_OPTIONS", RESULT_PERPAGE_OPTIONS);
-		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("pageNum", pageNumber);
 		request.setAttribute("totalResults", totalResults);
 		request.setAttribute("numResultsPerPage", numResultsPerPage);
 		request.setAttribute("problemDetailsLink", problemDetailsLink);

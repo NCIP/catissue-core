@@ -73,24 +73,10 @@ public class OrderPathologyCaseAction extends BaseAction
 			this.setClassAndTypeInList(request);
 			this.setSiteAndStatus(request, pathology);
 
-			final List orderToListArrayCollection = new ArrayList();
-			orderToListArrayCollection.add(new NameValueBean("None", "None"));
-
-			if (session.getAttribute("DefineArrayFormObjects") != null)
-			{
-				final List arrayList = (ArrayList) session.getAttribute("DefineArrayFormObjects");
-				final Iterator arrayListItr = arrayList.iterator();
-				while (arrayListItr.hasNext())
-				{
-					final DefineArrayForm defineArrayFormObj = (DefineArrayForm) arrayListItr
-							.next();
-					orderToListArrayCollection.add(new NameValueBean(defineArrayFormObj
-							.getArrayName(), defineArrayFormObj.getArrayName()));
-				}
-			}
+			final List defineArraysList = OrderingSystemUtil.getDefinedArraysList(session);
 			// Add the collection in request scope to be used in the
 			// OrderItem.jsp
-			request.setAttribute(Constants.ORDERTO_LIST_ARRAY, orderToListArrayCollection);
+			request.setAttribute(Constants.ORDERTO_LIST_ARRAY, defineArraysList);
 
 			request.setAttribute("typeOf", "pathologyCase");
 			request.setAttribute("OrderPathologyCaseForm", pathology);
@@ -102,6 +88,8 @@ public class OrderPathologyCaseAction extends BaseAction
 		}
 		return mapping.findForward(target);
 	}
+
+	
 
 	/**
 	 * function for setting the class and type.

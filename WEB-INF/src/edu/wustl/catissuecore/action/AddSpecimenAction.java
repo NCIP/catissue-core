@@ -24,14 +24,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -173,7 +168,7 @@ public class AddSpecimenAction extends SecureAction
 	/**
 	 * @param form : form
 	 * @return String : String
-	 */
+	 *//*
 	protected String getObjectId(AbstractActionForm form)
 	{
 		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
@@ -195,5 +190,5 @@ public class AddSpecimenAction extends SecureAction
 		return null;
 
 	}
-
+*/
 }

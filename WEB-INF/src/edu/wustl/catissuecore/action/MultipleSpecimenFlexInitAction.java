@@ -183,7 +183,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 *
 	 * @param form : form
 	 * @return String : String
-	 */
+	 *//*
 
 	protected String getObjectId(AbstractActionForm form)
 	{
@@ -205,5 +205,5 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		return null;
 
-	}
+	}*/
 }

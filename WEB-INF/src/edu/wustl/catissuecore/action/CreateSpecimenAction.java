@@ -948,7 +948,7 @@ public class CreateSpecimenAction extends SecureAction
 	 * @return String : String
 	 */
 
-	protected String getObjectId(AbstractActionForm form)
+	/*protected String getObjectId(AbstractActionForm form)
 	{
 		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		SpecimenCollectionGroup specimenCollectionGroup = null;
@@ -967,5 +967,5 @@ public class CreateSpecimenAction extends SecureAction
 			}
 		}
 		return null;
-	}
+	}*/
 }

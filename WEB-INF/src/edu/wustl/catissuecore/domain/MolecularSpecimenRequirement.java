@@ -65,9 +65,9 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	
 
 	/**
-	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
-	 * @param abstractForm An SiteForm object containing the information about the site.
-	 * @throws AssignDataException : AssignDataException
+	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimenRequirement bean
+	 * @param abstractForm An SiteForm object.
+	 * @throws AssignDataException :DataException
 	 * */
 	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
@@ -76,6 +76,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 		{
 			super.setAllValues(abstractForm);
 			final SpecimenForm form = (SpecimenForm) abstractForm;
+			//check for concentration.
 			if (Constants.DOUBLE_QUOTES.equals(form.getConcentration()))
 			{
 				logger.debug("Concentration is " + form.getConcentration());
@@ -85,9 +86,9 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 				this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
 			}
 		}
-		catch (final Exception excp)
+		catch (Exception exception)
 		{
-			logger.error(excp.getMessage());
+			logger.error(exception.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "MolecularSpecimenRequirement.java :");
 		}

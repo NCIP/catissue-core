@@ -368,7 +368,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 						break;
 					}
 
-					if ((values.get(disSiteKey)) == null || !isSameSite())
+					if ((values.get(disSiteKey)) == null || !isSiteSimiliar())
 					{
 						errors.add("values", new ActionError("errors.same.distributionSite"));
 						values.clear();
@@ -472,22 +472,22 @@ public class OrderSpecimenForm extends AbstractActionForm
 	/**
 	 * @return
 	 */
-	private boolean isSameSite()
+	private boolean isSiteSimiliar()
 	{
-		boolean isSameSite = true;
+		boolean isSiteSimiliar = true;
 		if (values != null && values.size() != 0)
 		{
 			for (int i = 0; i < selectedItems.length; i++)
 			{
 				String cnt = selectedItems[i];
-				String disSite = (String) values.get("OrderSpecimenBean:" + cnt
+				String distributionSite = (String) values.get("OrderSpecimenBean:" + cnt
 						+ "_distributionSite");
 				for (int j = 0; j < selectedItems.length; j++)
 				{
 					String count = selectedItems[j];
 					String disSiteInner = (String) values.get("OrderSpecimenBean:" + count
 							+ "_distributionSite");
-					if (!disSiteInner.equals(disSite))
+					if (!disSiteInner.equals(distributionSite))
 					{
 						return false;
 					}
@@ -496,7 +496,7 @@ public class OrderSpecimenForm extends AbstractActionForm
 
 		}
 
-		return isSameSite;
+		return isSiteSimiliar;
 	}
 
 	/**

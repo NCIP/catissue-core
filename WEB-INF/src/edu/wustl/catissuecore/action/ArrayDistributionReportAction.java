@@ -63,26 +63,26 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		final ConfigureResultViewForm configForm = (ConfigureResultViewForm) form;
 
 		// Retrieve the distribution ID which is set in CommonAddEdit Action
-		Long distributionId = (Long) request.getAttribute(Constants.DISTRIBUTION_ID);
+		Long distriId = (Long) request.getAttribute(Constants.DISTRIBUTION_ID);
 
 		// retrieve from configuration form if it is null
-		if (distributionId == null)
+		if (distriId == null)
 		{
-			distributionId = configForm.getDistributionId();
+			distriId = configForm.getDistributionId();
 		}
 
 		// retireve the distribution id from forward to hasmap
 		final Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null && forwardToHashMap.get("distributionId") != null)
 		{
-			distributionId = (Long) forwardToHashMap.get("distributionId");
+			distriId = (Long) forwardToHashMap.get("distributionId");
 		}
 		/*
 		 * Retrieve from request attribute if it null.
 		 */
-		if (distributionId == null)
+		if (distriId == null)
 		{
-			distributionId = (Long) request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+			distriId = (Long) request.getAttribute(Constants.SYSTEM_IDENTIFIER);
 		}
 
 		/*
@@ -90,18 +90,18 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		 * set in Distribution page incase the Report buttonis clicked from
 		 * Distribution Edit page
 		 */
-		if (distributionId == null)
+		if (distriId == null)
 		{
-			distributionId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+			distriId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		}
 
 		// Set it in configuration form if it is not null
-		if (distributionId != null)
+		if (distriId != null)
 		{
-			configForm.setDistributionId(distributionId);
+			configForm.setDistributionId(distriId);
 		}
 
-		final Distribution dist = this.getDistribution(distributionId,
+		final Distribution dist = this.getDistribution(distriId,
 				this.getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 

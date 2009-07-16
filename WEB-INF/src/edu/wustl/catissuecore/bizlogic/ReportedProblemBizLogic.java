@@ -114,20 +114,20 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 
 			dao.update(obj);
 
-			// Audit.
+			// Called audit manager to audit updates. 
 			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.updateAudit(dao, obj, oldObj);
+		}
+		catch (final AuditException auditException)
+		{
+			this.logger.debug(auditException.getMessage(), auditException);
+			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(), auditException.getMsgValues());
 		}
 		catch (final DAOException daoExp)
 		{
 			this.logger.debug(daoExp.getMessage(), daoExp);
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			this.logger.debug(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 }

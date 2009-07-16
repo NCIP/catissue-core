@@ -550,9 +550,7 @@ public class NewSpecimenAction extends SecureAction
 		 * specimens
 		 */
 		if (operation.equals(Constants.ADD))
-		{
 			populateEventsFromScg(specimenCollectionGroup, specimenForm);
-		}
 		Object scgForm = request.getAttribute("scgForm");
 		if (scgForm != null)
 		{
@@ -611,22 +609,7 @@ public class NewSpecimenAction extends SecureAction
 						&& !specimenForm.getClassName().equals("")
 						&& !specimenForm.getClassName().equals("-1"))
 				{
-					// Logger.out.debug(
-					// "before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^"
-					// );
-					String[] selectColumnName =
-					{"collectionProtocolRegistration.collectionProtocol.id"};
-					String[] whereColumnName = {"name"};
-					String[] whereColumnCondition = {"="};
-					String[] whereColumnValue =
-					{specimenForm.getSpecimenCollectionGroupName()};
-					List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class
-							.getName(), selectColumnName, whereColumnName,
-							whereColumnCondition,
-							whereColumnValue, null);
-					// Logger.out.debug(
-					// "after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^"
-					// );
+					List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),bizLogic);
 					if (spCollGroupList != null && !spCollGroupList.isEmpty())
 					{
 						// Object []spCollGroup = (Object[]) spCollGroupList
@@ -757,14 +740,9 @@ public class NewSpecimenAction extends SecureAction
 					if ((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP || specimenForm
 							.getStContSelection() == 2))
 					{
-						String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-						String[] whereColumnName = {"name"};
-						String[] whereColumnCondition = {"="};
-						String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
-						List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class
-								.getName(), selectColumnName, whereColumnName,
-								whereColumnCondition, whereColumnValue, null);
-
+										
+						List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),bizLogic);
+						
 						if (spCollGroupList != null && !spCollGroupList.isEmpty())
 						{
 
@@ -1554,5 +1532,26 @@ public class NewSpecimenAction extends SecureAction
 		}
 		return null;
 
+	}
+	
+	
+	private List getSpCollGroupList(String scgName,NewSpecimenBizLogic bizLogic) throws BizLogicException
+	{
+		String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
+		String[] whereColumnName = {"name"};
+		String[] whereColumnCondition = {"="};
+		String[] whereColumnValue = {scgName};
+		List spCollGroupList=null;
+		try
+		{
+			spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+					whereColumnCondition, whereColumnValue, null);
+		}
+		catch (BizLogicException e)
+		{
+			logger.error(e.getMessage(), e);
+			throw new BizLogicException(e.getErrorKey(),e,e.getMsgValues());
+		}
+		return spCollGroupList;
 	}
 }
