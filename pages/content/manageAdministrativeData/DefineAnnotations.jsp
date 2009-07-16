@@ -103,7 +103,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 				<%  if(link!=null && link.equals("editCondn"))   {%>
 					if(document.getElementById('optionSelect')!=null)
 					document.getElementById('optionSelect').disabled=true;
-					<%}else{%>
+					<%}else if(link==null && Constants.EDIT.equals(strDEOperation)){%>
 				initializeGridForGroups("<%=groupsXML%>");
 				initializeGridForEntities();
 				<%}%>

@@ -83,7 +83,10 @@ function showDerived(object,element)
 			var availableQuantity_object = document.getElementById("availQuantUnitSpanId_"+counter);
 			var requestQuantity_object = document.getElementById("dervQuantUnitSpanId_"+counter);
 			requestQuantity_object.innerHTML=availableQuantity_object.innerHTML;
+			if(document.OrderSpecimen.unitRequestedQuantity[counter] != null)
+			{
 			document.OrderSpecimen.unitRequestedQuantity[counter].value=requestQuantity_object.innerHTML;
+			}
 		}
 	}
 	if(element=="derivedSpecimen")

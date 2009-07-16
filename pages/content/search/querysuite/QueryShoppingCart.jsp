@@ -155,6 +155,8 @@ function onSubmit()
 function setCheckBoxState()
 		{	
 			var chkBox = document.getElementById('checkAll1');
+			if(chkBox != null)
+			{
 			chkBox.checked = true;
 			rowCount = mygrid.getRowsNum();
         	for(i=1;i<=rowCount;i++)
@@ -163,6 +165,7 @@ function setCheckBoxState()
 					if(cl.isCheckbox())
 					cl.setChecked(true);
 				}
+			}
 		
 		}
 

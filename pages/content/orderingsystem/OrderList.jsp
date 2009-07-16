@@ -40,7 +40,10 @@ String enable="false";
 		var tbodyElement = document.getElementById(tbodyId);
 			
 		var rows = new Array();
+		if(tbodyElement != null)
+		{
 		rows = tbodyElement.rows;
+		}
 			
 		for(var i=0;i<rows.length;i++)
 		{

@@ -15,8 +15,8 @@ function selectTab(operation)
 {
 	var treeFrame = document.getElementById('SCTreeView');	
 	var addEditTabRow = document.getElementById('addEditTabRow');
+	var tableDiv = document.getElementById("tableDiv");
 	var cellSpace="<td  width=4% class=td_tab_bg><img src=images/spacer.gif alt=spacer width=50 height=1></td>";
-   
     if(operation == "add" && selectedTabName != "viewMapTab" && treeFrame == null)
     {
 		var cellAddImage="<td  valign=bottom><link><img src=images/uIEnhancementImages/tab_add_selected.jpg alt=Add width=57 height=22 /></link></td>";
@@ -42,9 +42,12 @@ function selectTab(operation)
 		var cellViewImage="<td valign=bottom><img src=images/uIEnhancementImages/view_map.gif alt=View Map width=76 height=22 border=0 /></td>";	
 
 	}
+	var addTable ="<table width='100%' border='0' cellpadding='0' cellspacing='0'>";
+	var addRow =  "<tr id='addEditTabRow'>";
     var addCell= "<td width=90% valign=bottom class=td_tab_bg>&nbsp;</td>";
-
-	addEditTabRow.innerHTML=cellSpace+cellAddImage+cellEditImage+cellViewImage+addCell;
+	var endRow = "</tr>";
+	var endTable = "</table>";
+	tableDiv.innerHTML=addTable+addRow+cellSpace+cellAddImage+cellEditImage+cellViewImage+addCell+endRow+endTable;
 }
 function switchToAddTab()
 {
@@ -115,7 +118,9 @@ else
 	</td>
   </tr>
   <tr>
-      <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <td class="tablepadding">
+<div id="tableDiv">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr id="addEditTabRow">
         <td  width="4%"class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 		<logic:equal parameter="operation"	value='add'>
@@ -134,7 +139,9 @@ else
 		<td valign="bottom"><a href="#"><img src="images/uIEnhancementImages/view_map.gif" alt="View Map" width="76" height="22" border="0" /></a></td>
 		</logic:equal>
 		<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
-      </tr></table>
+      </tr>
+</table>
+</div>
 	 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
         <tr>
           <td colspan="2" align="left" width="100%" class="bottomtd"></td>

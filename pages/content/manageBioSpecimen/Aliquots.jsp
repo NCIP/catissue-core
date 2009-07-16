@@ -725,6 +725,8 @@ function applyFirstToAll(object)
 
 		//}
 }
+<logic:notEqual name="pageOf" value="${requestScope.PAGEOF_ALIQUOT}">
 showPriterTypeLocation();
+</logic:notEqual>
 </script>
 <!------------------New code--------------->
