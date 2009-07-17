@@ -28,22 +28,38 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage Container Add.
 	 */
 	@Test
+	public void testSetUtility()
+	{
+		StorageType storageType = new StorageType();
+		storageType.setName("srType_1247811042027");
+		storageType.setId(300L);
+		TestCaseUtility.setNameObjectMap("StorageType", storageType);
+		
+		Site s = new Site();
+		s.setId(1L);
+		TestCaseUtility.setNameObjectMap("Site", s);
+	}
+	/**
+	 * Test Storage Container Add.
+	 */
+	@Test
 	public void testStorageContainerAdd()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
-		addRequestParameter("typeName", storageType.getName());
-		addRequestParameter("typeId", "" + storageType.getId());
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
 		
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
-		addRequestParameter("siteName", ""+site.getName());
-		addRequestParameter("siteId", ""+site.getId() );
 		
-		addRequestParameter("noOfContainers", "1");
-		addRequestParameter("oneDimensionCapacity", "25");
-		addRequestParameter("twoDimensionCapacity", "25");
-		addRequestParameter("oneDimensionLabel", "row");
-		addRequestParameter("twoDimensionLabel", "col");
-		addRequestParameter("defaultTemperature", "29");
+		storageContainerForm.setSiteId(site.getId());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(25);
+		storageContainerForm.setTwoDimensionCapacity(25);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+		
 		/*addRequestParameter("holdsSpecimenClassTypes", "Cell");
 		addRequestParameter("specimenOrArrayType", "SpecimenArray");*/
 		String[] holdsSpecimenClassCollection = new String[4];
@@ -51,15 +67,15 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		holdsSpecimenClassCollection[1]="Tissue";
 		holdsSpecimenClassCollection[2]="Molecular";
 		holdsSpecimenClassCollection[3]="Cell";
-		addRequestParameter("specimenOrArrayType", "Specimen");
-		addRequestParameter("holdsSpecimenClassTypes", holdsSpecimenClassCollection);
 		
-		addRequestParameter("activityStatus","Active");
-		addRequestParameter("isFull","False");
-		
-		addRequestParameter("containerName","container_Janu_parent_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		addRequestParameter("operation", "add");
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+		storageContainerForm.setIsFull("False");
+		storageContainerForm.setOperation("add");
+		//addRequestParameter("containerName","container_Janu_parent_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
@@ -84,43 +100,78 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);	    
 	}
 	//bug 11546
-	/*@Test
-	public void testAddChildContainer()
+	@Test
+	public void testAddFreezerContainer()
 	{
-		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
-		addRequestParameter("typeName", storageType.getName());
-		addRequestParameter("typeId", "" + storageType.getId());
 		
-		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
-		addRequestParameter("siteName", ""+site.getName());
-		addRequestParameter("siteId", ""+site.getId() );
-		
-		addRequestParameter("noOfContainers", "1");
-		addRequestParameter("oneDimensionCapacity", "5");
-		addRequestParameter("twoDimensionCapacity", "5");
-		addRequestParameter("oneDimensionLabel", "row");
-		addRequestParameter("twoDimensionLabel", "col");
-		addRequestParameter("defaultTemperature", "29");
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(5);
+		storageContainerForm.setTwoDimensionCapacity(5);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+
 		String[] holdsSpecimenClassCollection = new String[4];
 		holdsSpecimenClassCollection[0]="Fluid";
 		holdsSpecimenClassCollection[1]="Tissue";
 		holdsSpecimenClassCollection[2]="Molecular";
 		holdsSpecimenClassCollection[3]="Cell";
-		addRequestParameter("specimenOrArrayType", "Specimen");
-		addRequestParameter("holdsSpecimenClassTypes", holdsSpecimenClassCollection);
-		addRequestParameter("parentContainerSelected","Container (Manual)");
-		addRequestParameter("containerId",storageContainer.getId().toString());
-		addRequestParameter("pos1", "2");
-		addRequestParameter("pos2", "2");		
-		addRequestParameter("containerName","container_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		addRequestParameter("operation", "add");		
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+		
+		storageContainerForm.setParentContainerSelected("Container (Manual)");
+		storageContainerForm.setContainerId(parentStorageContainer.getId().toString());
+		storageContainerForm.setPos1("1");
+		storageContainerForm.setPos2("1");
+		storageContainerForm.setOperation("add");	
 		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();	
-	
-	}*/
+	}
+	@Test
+	public void testAddChildContainerWithInvalidParentContainer()
+	{
+		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
+		
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(5);
+		storageContainerForm.setTwoDimensionCapacity(5);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+
+		String[] holdsSpecimenClassCollection = new String[4];
+		holdsSpecimenClassCollection[0]="Fluid";
+		holdsSpecimenClassCollection[1]="Tissue";
+		holdsSpecimenClassCollection[2]="Molecular";
+		holdsSpecimenClassCollection[3]="Cell";
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+		
+		storageContainerForm.setParentContainerSelected("Container (Manual)");
+		storageContainerForm.setContainerId(parentStorageContainer.getId().toString());
+		storageContainerForm.setPos1("1");
+		storageContainerForm.setPos2("1");
+		storageContainerForm.setOperation("add");	
+		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();	
+	}
 	
 	/**
 	 * Test Storage Container Edit.

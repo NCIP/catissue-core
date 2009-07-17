@@ -312,7 +312,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
 		storageType.setCapacity(capacity);
 
-		TestCaseUtility.setNameObjectMap("Box_10_10_StorageType", storageType);
+		TestCaseUtility.setNameObjectMap("Box_StorageType", storageType);
 
 	
 	}
@@ -326,7 +326,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		
 
 		// Adding Box of 2*2 Freezer which holds Box of 10*10.
-		StorageType boxStorageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_10_10_StorageType");
+		StorageType boxStorageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
 
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
 				"Freezer_2_2_" + UniqueKeyGeneratorUtil.getUniqueKey(),2,2,"Dim11","Dim22","29","Active");
@@ -357,7 +357,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		capacity2.setTwoDimensionCapacity(form2.getTwoDimensionCapacity());
 		storageType2.setCapacity(capacity2);
 
-		TestCaseUtility.setNameObjectMap("Freezer_2_2_StorageType", storageType2);
+		TestCaseUtility.setNameObjectMap("Freezer_StorageType", storageType2);
 
 	}
 	

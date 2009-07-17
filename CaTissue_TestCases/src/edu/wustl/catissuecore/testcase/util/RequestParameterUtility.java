@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -79,7 +80,7 @@ public class RequestParameterUtility
 		return storageTypeForm;
 	}
 	
-	
+
 	
 	/**
 	 * Set the request parameter for adding Specimen Requirement

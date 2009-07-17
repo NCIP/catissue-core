@@ -35,4 +35,7 @@ public class CaTissueSuiteTestUtil
 	 * JNDI name for context url.
 	 */
 	public static final String CONTEXT_URL = "http://localhost:8080/catissuecore";
+	
+	public static final String FREEZER_STORAGETYPE="FREEZER_STORAGETYPE";
+	public static final String BOX_STORAGETYPE="BOX_STORAGETYPE";
 }
