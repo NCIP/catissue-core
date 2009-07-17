@@ -1421,10 +1421,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 * Patch ID: 1-2
 			 * See also: 1
 			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
-			 * Following method is provided to verify whether the email address is already present in the system or not. 
+			 * Following method is provided to verify whether the email address is already present in the system or not.
 			 */
-			if (operation.equals(Constants.ADD)
-					&& !(this.isUniqueEmailAddress(user.getEmailAddress(), dao)))
+			if (!(this.isUniqueEmailAddress(user.getEmailAddress(), dao)))
 			{
 				String arguments[] = null;
 				arguments = new String[]{"User",
