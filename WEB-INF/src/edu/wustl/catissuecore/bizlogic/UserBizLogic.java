@@ -1423,7 +1423,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
 			 * Following method is provided to verify whether the email address is already present in the system or not.
 			 */
-			if (!(this.isUniqueEmailAddress(user.getEmailAddress(), dao)))
+			if (!(this.isUniqueEmailAddress(user.getEmailAddress(),user.getId(), dao,operation)))
 			{
 				String arguments[] = null;
 				arguments = new String[]{"User",
@@ -1786,14 +1786,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 * @return isUnique boolean value to indicate presence of similar email address
 	 * @throws BizLogicException database exception
 	 */
-	private boolean isUniqueEmailAddress(String emailAddress, DAO dao) throws BizLogicException
+	private boolean isUniqueEmailAddress(String emailAddress,Long userId, DAO dao,String operation) throws BizLogicException
 	{
 		boolean isUnique = true;
-
 		try
 		{
 			final String sourceObjectName = User.class.getName();
-			final String[] selectColumnName = new String[]{"id"};
+			final String[] selectColumnName = new String[]{"id","emailAddress"};
 
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause("emailAddress", emailAddress));
@@ -1803,8 +1802,23 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			if (userList.size() > 0)
 			{
-				isUnique = false;
+			  Object[] objects = (Object[])userList.get(0);
+			  
+			  if(operation.equalsIgnoreCase(Constants.ADD))
+			  {
+				  isUnique = false;  
+			  }
+			  else
+			  {
+				  if(emailAddress.equals((String)objects[1]) && !userId.equals((Long)objects[0]))
+				  {
+					  isUnique = false;  
+				  }
+			  }
+			  
 			}
+			
+			
 		}
 		catch (final DAOException daoExp)
 		{
