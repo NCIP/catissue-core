@@ -238,7 +238,7 @@ public class AddCuratedPath
 						"edu.wustl.catissuecore.domain.MolecularSpecimen");
 		this.entityList
 				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup" +
+						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
 						"edu.wustl.catissuecore.domain.TissueSpecimen");
 
 		this.entityList

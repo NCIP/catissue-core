@@ -1881,7 +1881,7 @@
 
 	<target name="update_metadata_for_model_changes_mysql">
 		<echo message="Updating DE Metadata for model changes (mysql)....." />
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m" failonerror="true">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
 			<classpath>
@@ -1904,7 +1904,7 @@
 
 	<target name="update_metadata_for_model_changes_oracle">
 		<echo message="Updating DE Metadata for model changes (oracle)....." />
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m" failonerror="true">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
 			<classpath>
@@ -3894,8 +3894,8 @@ Thanking You,
 	
 	<target name="update_metadata_for_tagged_values" depends="commondbconfig">
 		<echo message="Updating Tagged Values....." />
-			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadataTagPath" fork="true" maxmemory="1024M">
-				<arg value="${base.dir}/WEB-INF/src/taggedvalues.xml" />
+			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadataTagPath" fork="true" maxmemory="1024M" failonerror="true">
+				<arg value="${base.dir}/taggedvalues.xml" />
 				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 				<classpath refid="temp.classpath" />
 					<classpath>
