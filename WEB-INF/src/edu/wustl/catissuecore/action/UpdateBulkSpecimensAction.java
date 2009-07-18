@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -247,9 +248,18 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				this.saveErrors(request, actionErrors);
 				return (mapping.findForward("multipleSpWithMenuFaliure"));
 			}
-			exception.printStackTrace();
-			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
-					exception.getMessage()));
+			else if(exception instanceof ApplicationException)
+			{
+				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
+						((ApplicationException)exception).getCustomizedMsg()));
+			}
+			else
+			{
+				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
+						exception.getMessage()));
+			}
+			
+			logger.info(exception.getMessage(), exception);
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			if (request.getParameter("pageOf") != null)
@@ -424,8 +434,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		genericSpecimen.setCheckedSpecimen(specimenDataBean.getCheckedSpecimen());
 		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());
 		specimenDataBean.setCorresSpecimen(specimen);
-
-		specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
+		
+		//specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
 		specimen.setAvailableQuantity(specimen.getInitialQuantity());
 		if (specimenDataBean.getSpecimenEventCollection() != null
 				&& !specimenDataBean.getSpecimenEventCollection().isEmpty())
@@ -437,9 +447,16 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				= (SpecimenEventParameters) iterator
 						.next();
 				specimenEventParameters.setSpecimen(specimen);
-
+				specimenEventParameters.setId(null);
 			}
 		}
+		
+		Collection<ExternalIdentifier> externalIdentifierColl = specimenDataBean.getExternalIdentifierCollection();
+		 Iterator<ExternalIdentifier> externalIdentifierCollItr = externalIdentifierColl.iterator();
+		  while (externalIdentifierCollItr.hasNext()) {
+			  ExternalIdentifier externalIdentifier  = (ExternalIdentifier) externalIdentifierCollItr.next();
+			  externalIdentifier.setId(null);
+		  }
 
 	}
 
