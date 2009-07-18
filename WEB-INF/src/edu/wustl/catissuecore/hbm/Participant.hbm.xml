@@ -183,26 +183,6 @@
               />
         </set>
 
-<!--  
- 		<set
-            name="clinicalStudyRegistrationCollection"
-            table="CATISSUE_CLINICAL_STUDY_REG"
-            lazy="true"
-            inverse="false"
-            cascade="none"
-            sort="unsorted"
-        >
-
-              <key
-                  column="PARTICIPANT_ID"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.ClinicalStudyRegistration"
-              />
-        </set>
-  -->
-
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-Participant.xml
