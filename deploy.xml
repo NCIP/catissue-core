@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTissue Suite-->
 
-<project name="caTissue Suite v1.1P3. Installation" default="deploy_app">
+<project name="caTissue Suite v1.1P4. Installation" default="deploy_app">
 
 	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -1163,7 +1163,7 @@
 
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql">
-		<echo message="Initializing MySQL Database for caTissue Suite v1.1P3. Application..." />
+		<echo message="Initializing MySQL Database for caTissue Suite v1.1P4. Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />
@@ -1329,7 +1329,7 @@
 </target>
 
 	<target name="deploy_db_oracle">
-		<echo message="Initializing Oracle Database for caTissue Suite v1.1P3. Application..." />
+		<echo message="Initializing Oracle Database for caTissue Suite v1.1P4. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
@@ -1571,55 +1571,60 @@
 	</target>
 	-->
 	<!--upgrade all from Suite1.1 to to 1.1p Includes upgrade app and upgrade db-->
-	<!--<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p"> -->
+	<!--<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p4"> -->
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 	
-	<target name="upgrade_db" depends="upgrade_from_Suite1.1_to_1.1p">
+	<target name="upgrade_db" depends="upgrade_from_Suite1.1_to_1.1p4">
 	</target>
-	<target name="upgrade_from_Suite1.1_to_1.1p">
+	<target name="upgrade_from_Suite1.1_to_1.1p4">
 		        <if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p" />
-					<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
+					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p2" />
+					<!--<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />-->
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
-						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p" />
-						<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p3" />
+						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p2" />
+						<!--<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />-->
+					 
 					</then>
 				</elseif>
 				<else>
 					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 				</else>
 			</if>
-			<antcall target="upgrade_category_entity_names">
+		
+		<antcall target="upgrade_db_from_p2_to_p4"/>
+			<!--<antcall target="upgrade_category_entity_names">
 			</antcall>
 			<antcall target="update_metadata_for_model_changes">
 					<param name="isUpgrade" value="true"/>
-					<param name="buildVersion" value="1.1top3"/>
+					<param name="buildVersion" value="1.1top4"/>
 			</antcall>
-			<antcall target="update_metadata_for_tagged_values"/>
+			<antcall target="update_metadata_for_tagged_values"/>-->
 	</target>
 	
-	<!--Target for Application and Database Upgrade from caTissue p2 to p3-->
-	<target name="upgrade_all_from_p2_to_p3" depends="upgrade_app, upgrade_db_from_p2_to_p3">
+	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
+	<target name="upgrade_all_from_p2_to_p4">
+	
+		<antcall target="upgrade_app"/>
+		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 	
-	<target name="upgrade_db_from_p2_to_p3">
+	<target name="upgrade_db_from_p2_to_p4">
 		
 			        <if>
 					<equals arg1="mysql" arg2="${database.type}" />
 					<then>
-						<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p3" />
-							
+						<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />
 					</then>
 					<elseif>
 						<equals arg1="oracle" arg2="${database.type}" />
 						<then>
-							<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p3" />
+							<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />
 						</then>
 					</elseif>
 					<else>
@@ -1630,7 +1635,7 @@
 				</antcall>
 				<antcall target="update_metadata_for_model_changes">
 					<param name="isUpgrade" value="true"/>
-					<param name="buildVersion" value="p2top3"/>
+					<param name="buildVersion" value="p2top4"/>
 				</antcall>
 				<antcall target="update_metadata_for_tagged_values"/>
 		</target>
@@ -1638,7 +1643,7 @@
 	
 
 	<!-- Removing unnecessary PE Mysql-->
-	<target name="upgrade_mysql_from_Suite1.1_to_1.1p">
+	<target name="upgrade_mysql_from_Suite1.1_to_1.1p2">
 		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
@@ -1654,7 +1659,7 @@
 	</target>
 	
 	<!-- Removing unnecessary PE Oracle-->
-	<target name="upgrade_oracle_from_Suite1.1_to_1.1p">
+	<target name="upgrade_oracle_from_Suite1.1_to_1.1p2">
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
@@ -1669,8 +1674,8 @@
 			</sql>
    </target>
 
-	<!-- Upgrading from Suite1.1 p2 to p3 - MySQL -->
-	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p3">
+	<!-- Upgrading from Suite1.1 p2 to p4 - MySQL -->
+	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading MySQL Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
@@ -1685,8 +1690,8 @@
 		<antcall target="upgrade_metadata_for_constraintproperties" />
 	</target>
 	
-	<!-- Upgrading from Suite1.1 p2 to p3 - Oracle -->
-	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p3">
+	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
+	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading Oracle Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -3159,7 +3164,7 @@ Thanking You,
 	<!--MsSQLServer Database Creation -->
 	<target name="deploy_db_mssqlserver">
 
-		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1P3. Application..." />
+		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1p4. Application..." />
 
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="@@schema@@" value="${database.schemaname}" />
