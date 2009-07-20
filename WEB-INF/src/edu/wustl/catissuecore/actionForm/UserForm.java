@@ -876,7 +876,10 @@ public class UserForm extends AbstractActionForm
 			chkNames(errors, validator, "user.lastName", lastName);
 			chkNames(errors, validator, "user.firstName", firstName);
 			chkEmpty(errors, validator, "user.city", city);
+			if(edu.wustl.catissuecore.util.global.Variables.isStateRequired)
+			{
 			chkValOpt(errors, validator, "user.state", state);
+			}
 			chkValOpt(errors, validator, "user.country", country);
 			chkValOpt(errors, validator, "user.institution", String.valueOf(institutionId));
 			chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));
