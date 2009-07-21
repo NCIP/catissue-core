@@ -33,6 +33,7 @@
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
 		cdeName = request.getParameter(Constants.CDE_NAME);
 	}
+	session.setAttribute("PageForTree",pageOf) ;
 %>
 
 <head>
@@ -131,7 +132,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 		var flag=1;
 		for(var i=0;i<rowList.length-1;i++)
 		{
-			var childList=rowList[i].split(",");
+			var childList=rowList[i].split("~");
 			if(flag==1)
 			{
 				flag=flag+1;

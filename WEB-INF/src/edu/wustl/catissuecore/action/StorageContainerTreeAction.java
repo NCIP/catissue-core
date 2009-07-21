@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -14,28 +13,25 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
-import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
  */
-public class TreeNodeDataAction extends BaseAction
+public class StorageContainerTreeAction extends BaseAction
 {
 
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TreeNodeDataAction.class);
-	/**
-	 * finalDataListVector.
-	 */
-	Vector finalDataListVector = null;
+	private transient Logger logger = Logger.getCommonLogger(StorageContainerTreeAction.class);
+	
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -51,7 +47,10 @@ public class TreeNodeDataAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-
+		/**
+		 * finalDataListVector.
+		 */
+		Vector finalDataListVector = null;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		this.logger.debug("pageOf in treeview......." + pageOf);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -114,10 +113,10 @@ public class TreeNodeDataAction extends BaseAction
 			}
 			if (dataList != null)
 			{
-				this.finalDataListVector = new Vector();
+				finalDataListVector = new Vector();
 			}
-			this.createTreeNodeVector(dataList, this.finalDataListVector);
-			request.setAttribute(Constants.TREE_DATA, this.finalDataListVector);
+			finalDataListVector = AppUtility.createTreeNodeVector(dataList, finalDataListVector);
+			request.setAttribute(Constants.TREE_DATA, finalDataListVector);
 
 		}
 		catch (final Exception exp)
@@ -133,7 +132,7 @@ public class TreeNodeDataAction extends BaseAction
 	 * @param datalist : datalist
 	 * @param finalDataListVector : finalDataListVector
 	 */
-	void createTreeNodeVector(List datalist, Vector finalDataListVector)
+	/*void createTreeNodeVector(List datalist, Vector finalDataListVector)
 	{
 		if (datalist != null && datalist.size() != 0)
 		{
@@ -155,6 +154,6 @@ public class TreeNodeDataAction extends BaseAction
 		{
 			return;
 		}
-	}
+	}*/
 
 }

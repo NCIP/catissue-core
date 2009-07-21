@@ -14,6 +14,7 @@
 	String treeNodeIDToBeReloaded= null;
 	String storageContainerID = null;
 	String position = null;
+	String title="caTissue Suite v1.1" ;
 	String propertyName = null, cdeName=null;
 	String height = "100%",width="100%";
 	if(reload!=null && reload.equals("true"))
@@ -25,17 +26,20 @@
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 		position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
+		title = title + " Page Of Specimen " ;
 	}
 	else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
 		cdeName = request.getParameter(Constants.CDE_NAME);
+		title = title + " Tissue Site Page " ;
 	}
+	session.setAttribute("PageForTree",pageOf);
 %>
 
 <head>
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
+	<title><%=title%></title>
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
@@ -70,6 +74,16 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 	</table>
 
 	<script language="javascript">
+	function tondblclick(id)
+	{
+		var activityStatus=tree.getUserData(id,'activityStatus');
+		if(activityStatus=="Closed")
+		{
+			var txtProperty =parent.opener.document.getElementById("tissueSite");	
+			txtProperty.value =id;
+			top.window.close() ;
+		}
+	};
 	
 	function expand(id,mode)
 	{
@@ -123,7 +137,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 		var flag=1;
 		for(var i=0;i<rowList.length-1;i++)
 		{
-			var childList=rowList[i].split(",");
+			var childList=rowList[i].split("~");
 			if(flag==1)
 			{
 				flag=flag+1;
@@ -178,6 +192,7 @@ window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 			tree.setImagePath("dhtml_comp/imgs/");
 			tree.setOnClickHandler(tonclick);
 			tree.setOnOpenHandler(expand);
+			tree.setOnDblClickHandler(tondblclick);
 
 			<%		 	//Iterating over the tree-vector and inserting into the dhtmlx-tree one by one
 						Vector treeData = (Vector)request.getAttribute("treeData");

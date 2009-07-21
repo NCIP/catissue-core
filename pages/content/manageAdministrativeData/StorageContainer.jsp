@@ -595,7 +595,7 @@ function vieMapTabSelected(){
 }
 function refresh_tree()
 {	
-	window.parent.frames['SCTreeView'].location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
+	window.parent.frames['SCTreeView'].location="<%=Constants.STORAGE_CONTAINER_TREE_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>=${requestScope.storageContainerIdentifier}";
 }
 
 function parentContainerTypeChanged(element)

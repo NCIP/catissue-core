@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,6 +99,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -3247,5 +3249,33 @@ public class AppUtility
 		}
 		return subTypeMap;
 	}
-	
+	/**
+	 * This is a recursive method to make the final-vector for DHTML tree of
+	 * storage containers and Tissue site.
+	 * @param datalist : datalist
+	 * @param finalDataListVector : finalDataListVector
+	 */
+	public static Vector<StorageContainerTreeNode> createTreeNodeVector(List datalist, Vector<StorageContainerTreeNode> finalDataListVector)
+	{
+		if (datalist != null && datalist.size() != 0)
+		{
+			final Iterator itr = datalist.iterator();
+			while (itr.hasNext())
+			{
+				final StorageContainerTreeNode node = (StorageContainerTreeNode) itr.next();
+				final boolean contains = finalDataListVector.contains(node.getValue());
+				if (contains == false)
+				{
+					finalDataListVector.add(node);
+				}
+				final List childNodeVector = node.getChildNodes();
+				createTreeNodeVector(childNodeVector, finalDataListVector);
+			}
+			return finalDataListVector ;
+		}
+		else
+		{
+			return finalDataListVector;
+		}
+	}
 }

@@ -64,7 +64,7 @@ function closeFramedWindow()
 }
 function refresh_tree(nodeId)
 {	
-	window.parent.<%=Constants.APPLET_VIEW_FRAME%>.location="<%=Constants.TREE_NODE_DATA_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
+	window.parent.<%=Constants.APPLET_VIEW_FRAME%>.location="<%=Constants.STORAGE_CONTAINER_TREE_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
 }
 
 

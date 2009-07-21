@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -47,11 +48,13 @@ public class ShowChildNodes extends BaseAction
 		final PrintWriter out = response.getWriter();
 		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
+		HttpSession session = request.getSession() ;
+		String pageOf = (String)session.getAttribute("PageForTree") ;
 		final String nodeName = request.getParameter(Constants.NODE_NAME);
 		final Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
 		final String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
 		final StorageContainerBizLogic sc = new StorageContainerBizLogic();
-		containerNodeVector = sc.getStorageContainers(identifier, nodeName, parentId);
+		containerNodeVector = sc.getStorageContainers(identifier, nodeName, parentId,pageOf);
 		response.setContentType("text/xml");
 		xmlData = this.makeXMLData(containerNodeVector, xmlData);
 		out.print(xmlData.toString());
@@ -75,15 +78,15 @@ public class ShowChildNodes extends BaseAction
 		{
 			final StorageContainerTreeNode childNode = childItr.next();
 			xmlData.append(childNode.getIdentifier());
-			xmlData.append(",");
+			xmlData.append("~");
 			xmlData.append(((TreeNodeImpl) childNode.getParentNode()).getIdentifier());
-			xmlData.append(",");
+			xmlData.append("~");
 			xmlData.append(((TreeNodeImpl) childNode.getParentNode()).getValue());
-			xmlData.append(",");
+			xmlData.append("~");
 			xmlData.append(childNode.getActivityStatus());
-			xmlData.append(",");
+			xmlData.append("~");
 			xmlData.append(childNode.getValue());
-			xmlData.append(",");
+			xmlData.append("~");
 			xmlData.append(childNode.getChildNodes());
 			xmlData.append("#");
 		}

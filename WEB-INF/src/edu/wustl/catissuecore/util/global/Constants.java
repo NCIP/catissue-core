@@ -550,8 +550,8 @@ public class Constants
 	
 	//Query Results view Actions
 	public static final String TREE_VIEW_ACTION = "TreeView.do";
-	//-- TreeNodeDataAction added for DHTMLX tree grid view of storage container
-	public static final String TREE_NODE_DATA_ACTION = "TreeNodeData.do";
+	//-- StorageContainerTreeAction added for DHTMLX tree grid view of storage container
+	public static final String STORAGE_CONTAINER_TREE_ACTION = "StorageContainerTree.do";
 	public static final String DATA_VIEW_FRAME_ACTION = "SpreadsheetView.do";
 	public static final String SIMPLE_QUERY_INTERFACE_URL = "SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17";
 	

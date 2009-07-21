@@ -1432,7 +1432,7 @@
 										/>
 									<span class="black_ar">
 					<%
-							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
+							String url = "TissueSiteTree.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 					%>					<a href="#"																						onclick="NewWindow('<%=url%>','tissuesite','360','525','no');return							false">
 											<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" border="0"/></a></span></td>
 								

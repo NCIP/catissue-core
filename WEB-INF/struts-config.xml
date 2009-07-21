@@ -3678,9 +3678,9 @@ PUBLIC
 			<forward name="success" path=".catissuecore.queryResultsTreeViewDef" />
 		</action>
 		
-<!-- TreeNodeDataAction added for DHTMLX tree grid view of storage container -->
-		<action path="/TreeNodeData"
-			type="edu.wustl.catissuecore.action.TreeNodeDataAction">
+<!-- StorageContainerTreeAction added for DHTMLX tree grid view of storage container -->
+		<action path="/StorageContainerTree"
+			type="edu.wustl.catissuecore.action.StorageContainerTreeAction">
 			<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef" />
 			<forward name="pageOfStorageContainer" path=".catissuecore.storageContainerTreeDef"/>
 		</action>
@@ -5598,6 +5598,13 @@ PUBLIC
 			<forward name="pageOfMultipleSpWithoutMenu" path="/pages/AnticipatorySpecimens.jsp" />			
 	   </action>
 	   
+	   <action path="/TissueSiteTree"
+	   			type="edu.wustl.catissuecore.action.TissueSiteTreeAction"
+	   			validate="false"
+	   			scope="request"
+	   >
+	   		<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef"></forward>
+	   </action>
 	   
 	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>					
 
