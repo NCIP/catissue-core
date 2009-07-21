@@ -327,7 +327,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				 <tr>
 					
 				<!-- activitystatus -->	
-				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				
 					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
 					<td align="left" class="black_ar"><bean:message key="site.activityStatus" /></td> 
@@ -341,7 +340,6 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							/>
 					</td>
 				
-				</logic:equal>
 					<!-- collectionstatus -->
 					<td align="center" nowrap><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>            
 					<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionStatus" /></td>
