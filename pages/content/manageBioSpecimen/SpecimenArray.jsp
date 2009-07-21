@@ -198,10 +198,11 @@ function checkStotagePosition()
 						
 					</logic:notEqual>
 				</logic:equal>
-							
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>" >				
 				<logic:notEqual name="specimenArrayForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 					<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 				</logic:notEqual>
+				</logic:equal>
 				</td>
 				
                 <td align="left" valign="top">&nbsp;</td>
