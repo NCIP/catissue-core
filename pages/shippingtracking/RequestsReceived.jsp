@@ -23,12 +23,15 @@
 														</c:set>
 														<jsp:useBean id="receivedReqsLinkURL" type="java.lang.String"/>
 														<c:if test="${reqReceivedCurrentPageNo == receivedReqsPageCounter}">
-																<c:out value="${outgoingShipPageCounter}"/> |
+																<c:out value="${receivedReqsPageCounter}"/> |
 														</c:if>
 														<c:if test="${reqReceivedCurrentPageNo != receivedReqsPageCounter}">
 															<a class="dataPagingLink" href="<%=receivedReqsLinkURL%>"> 
-																<c:out value="${receivedReqsPageCounter}"/> |
+																<c:out value="${receivedReqsPageCounter}"/> 
 															</a>
+															<c:if test="${receivedReqsPageCounter != reqReceivedTotalPages}">
+																|
+														</c:if>
 														</c:if>
 													</c:forEach>
 							</td>

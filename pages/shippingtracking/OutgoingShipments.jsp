@@ -23,12 +23,16 @@
 												</c:set>
 												<jsp:useBean id="outgoingShipLinkURL" type="java.lang.String"/>
 												<c:if test="${outgoingShipCurrentPageNo == outgoingShipPageCounter}">
-													<c:out value="${outgoingShipPageCounter}"/> |
+													<c:out value="${outgoingShipPageCounter}"/> 
 												</c:if>
 												<c:if test="${outgoingShipCurrentPageNo != outgoingShipPageCounter}">
 													<a class="dataPagingLink" href="<%=outgoingShipLinkURL%>"> 
-														<c:out value="${outgoingShipPageCounter}"/> |
+														<c:out value="${outgoingShipPageCounter}"/> 
 													</a>
+												</c:if>
+
+													<c:if test="${outgoingShipPageCounter != outgoingShipTotalPages}">
+													 |
 												</c:if>
 											</c:forEach>
 							</td>
