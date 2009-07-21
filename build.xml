@@ -424,7 +424,7 @@
 			<include name="caGrid-1.0-ServiceSecurityProvider-common.jar" /> 
 			<include name="jboss-common-jdbc-wrapper.jar"/>
 			<include name="mysql-connector-java-3.1.13-bin.jar"/>
-			<include name="ojdbc14.jar"/>
+			<!--<include name="ojdbc14.jar"/>--> 
 			<include name="boot.jar" /> 
 			<include name="c3p0-0.9.0.jar" /> 
 			<include name="catissuecore-client.jar" /> 
