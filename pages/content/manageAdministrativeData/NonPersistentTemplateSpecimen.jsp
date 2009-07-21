@@ -75,7 +75,7 @@
 									/>
 									<span class="black_ar">
 				<%
-					String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
+					String url = "TissueSiteTree.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 				%>
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis"></a></span></td>
