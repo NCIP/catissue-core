@@ -229,22 +229,13 @@
 							<td width="4%" class="td_tab_bg">
 								<img src="images/spacer.gif" alt="spacer" width="50" height="1">
 							</td>
+							
 							<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
-							<td valign="bottom">
-								<a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg" border="0" alt="Edit" width="59" height="22"/></a>
-							</td>
-							<td valign="bottom">
-								<img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" />
-							</td>
-							<td valign="bottom">
-								<a href="Aliquots.do?pageOf=pageOfAliquot"><img border="0" src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" /></a>
-							</td>
-							<td valign="bottom">
-								<a href="QuickEvents.do?operation=add"><img border="0" src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" /></a>
-							</td>
-							<td align="left" valign="bottom" class="td_color_bfdcf3" >
-								<a href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img border="0" src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" /></a>
-							</td>
+							<td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0"alt="Edit" width="59" height="22" /></html:link></td>
+							<td valign="bottom"><img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" border="0" /></td>
+							 <td valign="bottom"><html:link page="/Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" /></html:link></td>
+							<td valign="bottom"><html:link page="/QuickEvents.do?operation=add"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" border="0"/></html:link></td>
+							<td align="left" valign="bottom" class="td_color_bfdcf3" ><html:link page="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" border="0" /></html:link></td>
 							</logic:notEqual>
 
 							<logic:equal name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">

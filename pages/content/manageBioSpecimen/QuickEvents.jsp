@@ -96,21 +96,11 @@ session.setAttribute("EventOrigin", "QuickEvents");
 						<td width="4%" class="td_tab_bg" >
 							<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1">
 						</td>
-						<td valign="bottom">
-							<a href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0"alt="Edit" width="59" height="22" /></a>
-						</td>
-						<td valign="bottom">
-							<a href="CreateSpecimen.do?operation=add&pageOf=pageOfDeriveSpecimen&virtualLocated=true"><img src="images/uIEnhancementImages/tab_derive2.gif" alt="Derive" width="56" height="22" /></a>
-						</td>
-						<td valign="bottom">
-							<a href="Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22"></a>
-						</td>
-						<td valign="bottom">
-							<img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22">
-						</td>
-						<td align="left" valign="bottom" class="td_color_bfdcf3" >
-							<a href="MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" /></a>
-						</td>
+		                    <td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0"alt="Edit" width="59" height="22" /></html:link></td>
+							<td valign="bottom"><html:link page="/CreateSpecimen.do?operation=add&pageOf=pageOfDeriveSpecimen&virtualLocated=true"><img src="images/uIEnhancementImages/tab_derive2.gif" alt="Derive" width="56" height="22" border="0" /></html:link></td>
+							 <td valign="bottom"><html:link page="/Aliquots.do?pageOf=pageOfAliquot"><img src="images/uIEnhancementImages/tab_aliquot2.gif" alt="Aliquot" width="66" height="22" /></html:link></td>
+							<td valign="bottom"><img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22" border="0"/></td>
+							<td align="left" valign="bottom" class="td_color_bfdcf3" ><html:link page="/MultipleSpecimenFlexInitAction.do?pageOf=pageOfMultipleSpWithMenu"><img src="images/uIEnhancementImages/tab_multiple2.gif" alt="Multiple" width="66" height="22" border="0" /></html:link></td>
 						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 					</tr>
 				</table>
