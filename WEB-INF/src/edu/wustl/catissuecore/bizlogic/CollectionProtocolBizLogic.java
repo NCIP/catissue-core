@@ -1233,17 +1233,25 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 */
 	private void validateCPTitle(CollectionProtocol protocol) throws BizLogicException
 	{
-		final JDBCDAO jdbcDao = this.openJDBCSession();
+		JDBCDAO jdbcDao = this.openJDBCSession();
 
-		final String queryStr = "select title from catissue_specimen_protocol where title = '"
+		 String queryStr = "select title from catissue_specimen_protocol where title = '"
 				+ protocol.getTitle() + "'";
 		try
 		{
 			final List<String> titleList = jdbcDao.executeQuery(queryStr);
-			if (!titleList.isEmpty())
+			if (titleList != null &&  !titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
 				throw this.getBizLogicException(null, "collprot.title.exists", "");
+			}
+			queryStr = "select short_title from catissue_specimen_protocol where short_title = '"
+				+ protocol.getShortTitle() + "'";
+			List<String> shortTitleList = jdbcDao.executeQuery(queryStr);
+			if (shortTitleList != null && !shortTitleList.isEmpty())
+			{
+				logger.debug("Collection Protocol with the same Short Title already exists");
+				throw this.getBizLogicException(null, "collprot.short.title.exists", "");
 			}
 		}
 		catch (final DAOException e1)
@@ -1254,6 +1262,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		finally
 		{
 			this.closeJDBCSession(jdbcDao);
+			jdbcDao = null;
 		}
 	}
 
