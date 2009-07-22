@@ -3668,7 +3668,7 @@ PUBLIC
 			<forward name="pageOfMultipleSpecimen" path=".catissuecore.storageLocationViewDef"/>	
 			<forward name="pageOfTissueSite" path=".catissuecore.queryResultsTreeViewDef"/>			
 			<forward name="pageOfSpecimenTree" path=".catissuecore.requestDetailsTreeViewDef" />
-			<forward name="pageOfStorageContainer" path="/TreeNodeData.do?pageOf=pageOfStorageContainer" />				
+			<forward name="pageOfStorageContainer" path="/StorageContainerTree.do?pageOf=pageOfStorageContainer" />				
 		</action>
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">
