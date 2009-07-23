@@ -1205,6 +1205,7 @@
 			 <param name="isUpgrade" value="false"/>
 		</antcall>	
 		<antcall target="update_metadata_for_CA_model_changes" />
+		<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
 	</target>
 	<target name="insert_entity_group_metadata_mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1390,7 +1391,7 @@
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
     	<antcall target="reset_sequences" />
-
+		<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
 	</target>
 
 	<target name="insertQueryMetadata">
@@ -1583,13 +1584,14 @@
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p2" />
 					<!--<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />-->
+					<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
 						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p2" />
 						<!--<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />-->
-					 
+					 	<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
 					</then>
 				</elseif>
 				<else>
@@ -1605,6 +1607,7 @@
 					<param name="buildVersion" value="1.1top4"/>
 			</antcall>
 			<antcall target="update_metadata_for_tagged_values"/>-->
+			 <antcall target="upgrade_saved_queries" /> 
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
@@ -1706,6 +1709,34 @@
 		<antcall target="upgrade_metadata_for_constraintproperties" />
    </target>
 	
+	<!-- Upgrading from Suite1.1 p3 to p4 - MySQL -->
+	<target name="upgrade_mysql_from_Suite1.1_p3to_1.1p4">
+		<echo message="Upgrading MySQL Database. Modifying Audit table for query audit enhancements.These are used for RecentQueries feature." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1p3to_1.1p4.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+	
+	<!-- Upgrading from Suite1.1 p3 to p4 - Oracle -->
+	<target name="upgrade_oracle_from_Suite1.1_p3to_1.1p4">
+		<echo message="Upgrading Oracle Database.Modifying Audit table for query audit enhancements.These are used for RecentQueries feature." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1p3to_1.1p4.sql" />
+	   		<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+   </target>
+   
 	<!--MySQL Database Upgradation -->
 	<!--
 	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
@@ -3914,4 +3945,27 @@ Thanking You,
 			</java>
 		<delete dir="${temp.dir}" />
 	</target>
+	
+	<!-- This target is used to upgrade the saved queries of rc4 -->
+		<target name="upgrade_saved_queries" >
+			<echo message="Upgrading saved queries...."/>
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+			<copy file="${base.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+			<antcall target="replacecfgfiles" />
+			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="ApplicationSecurityConfig.xml" />
+				<replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
+			</replace>
+			<java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
+				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<classpath refid="temp.classpath" />
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+				<arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
+			</java>
+			 <delete dir="${temp.dir}" /> 
+		</target>
 </project>
