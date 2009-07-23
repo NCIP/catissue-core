@@ -34,6 +34,8 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
+import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
+import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -109,6 +111,27 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				this.logger.debug("failed to send email..");
 			}
 			insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
+			//bug 13387 start
+			/**
+			 * Previously this code was written in postInsert() method in ShipmentBizLogic.java
+			 * But in AbstractBizLogic commit was done after insert() and update of shipmentRequest
+			 * was done after that thus shipmentRequest was not updated to DB.
+			 */
+			if (obj != null && obj instanceof Shipment)
+			{
+				//shipmentRequest is null while creating shipment.
+				//shipmentRequest is not null while creating shipment from request.
+				if (((Shipment) obj).getShipmentRequest() != null)
+				{
+					final ShipmentRequest shipmentRequest = ((Shipment) obj).getShipmentRequest();
+					shipmentRequest.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
+					shipmentRequest.setRequestProcessed(Boolean.TRUE);
+					final ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();				
+					shipmentRequestBizLogic.update(dao, shipmentRequest, null, sessionDataBean);//bug 12557			
+
+				}
+			}
+			//bug 13387 end
 		}
 		catch (final DAOException daoException)
 		{

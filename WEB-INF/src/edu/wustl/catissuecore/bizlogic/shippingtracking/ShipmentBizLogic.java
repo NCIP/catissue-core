@@ -206,18 +206,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		if (obj != null && obj instanceof Shipment)
-		{
-			if (((Shipment) obj).getShipmentRequest() != null)
-			{
-				final ShipmentRequest shipmentRequest = ((Shipment) obj).getShipmentRequest();
-				shipmentRequest.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
-				shipmentRequest.setRequestProcessed(Boolean.TRUE);
-				final ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();
-				shipmentRequestBizLogic.update(dao, shipmentRequest, null, sessionDataBean);//bug 12557
-			}
-		}
-		super.postInsert(obj, dao, sessionDataBean);
+			super.postInsert( obj, dao, sessionDataBean );
 	}
 
 	/**
