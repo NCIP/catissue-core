@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.codec.language.Metaphone;
+
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -92,7 +94,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final Participant participant = (Participant) obj;
+			//update metaPhoneInformartion
+			
+			Metaphone metaPhoneObj = new Metaphone();
+			String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
+			participant.setMetaPhoneCode(lNameMetaPhone);
+			
 			dao.insert(participant);
+			
 			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.insertAudit(dao, participant);
 			Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
@@ -202,7 +211,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		final Participant participant = (Participant) obj;
 		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
-		this.updateCache(obj);
+		
+		//this.updateCache(obj);
 		super.postInsert(obj, dao, sessionDataBean);
 		// Commented for removing the cp based cache. 
 		/*	
@@ -216,8 +226,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						collectionProtocolRegistration.getParticipant().getId().longValue(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
 			}
 		*/
-
+		
+		
+		
 	}
+	
+	
+	
+	
 
 	/**
 	 * This method gets called after update method. Any logic after updating into 
@@ -233,9 +249,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	{
 		final Participant participant = (Participant) currentObj;
 		final Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
-		this.updateCache(currentObj);
+		// removed participant cache
+		//this.updateCache(currentObj);
+		
 		//Added updation of Collection Protocol Registration
 		//(Abhishek Mehta)
+		
 		final CollectionProtocolRegistrationBizLogic cprBizLogic = new CollectionProtocolRegistrationBizLogic();
 		//ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		final Iterator iteratorCPRCollection = cprCollection.iterator();
@@ -400,6 +419,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			participant.setRaceCollection(null);*/
 
 			//deleteOldParticipantRaceColl(oldParticipant.getRaceCollection(),dao);
+			
+			String lnameMetaPhone=null;
+			Metaphone metaPhoneObj = new Metaphone();
+			String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
+		 	participant.setMetaPhoneCode(lNameMetaPhone);
+			
+			
 			dao.update(participant);
 			//insertNewParticipantRaceColl(raceCollection,participant,sessionDataBean,dao);
 			//Audit of Participant.
@@ -999,22 +1025,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	public List getListOfMatchingParticipants(Participant participant, LookupLogic lookupLogic)
 			throws Exception
 	{
-		// getting the instance of ParticipantLookupLogic class
-		//	LookupLogic participantLookupLogic = (LookupLogic) Utility.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
-
-		// Creating the DefaultLookupParameters object to pass as argument to lookup function
-		// This object contains the Participant with which matching participant are to be found and the cutoff value.
 		final DefaultLookupParameters params = new DefaultLookupParameters();
 		params.setObject(participant);
-		// getting instance of catissueCoreCacheManager and getting participantMap from cache
-		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-				.getInstance();
-		final HashMap<String, Participant> participantMap = (HashMap<String, Participant>) catissueCoreCacheManager
-				.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-		//listOfParticipants.addAll(participantMap.values());
-		params.setListOfParticipants(participantMap);
-		//calling thr lookup function which returns the List of ParticipantResuld objects.
-		//ParticipantResult object contains the matching participant and the probablity.
 		final List matchingParticipantList = lookupLogic.lookup(params);
 		return matchingParticipantList;
 
