@@ -7,10 +7,8 @@ package edu.wustl.catissuecore.util.listener;
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
@@ -23,8 +21,6 @@ import titli.model.util.TitliResultGroup;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
-import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
@@ -238,18 +234,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		
 		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
+		//removed participant cache
+		//ParticipantBizLogic bizlogic = (ParticipantBizLogic)factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		//Map participantMap = bizlogic.getAllParticipants();
 
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic)factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		Map participantMap = bizlogic.getAllParticipants();
-
-		CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		List participantRegInfoList = cBizLogic.getAllParticipantRegistrationInfo();
+		 //CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		//List participantRegInfoList = cBizLogic.getAllParticipantRegistrationInfo();
 		try
 		{
 			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
+			//catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_STORAGE_CONTAINERS,(TreeMap)storageContainersMap);
-			catissueCoreCacheManager.addObjectToCache(Constants.LIST_OF_REGISTRATION_INFO,(Vector)participantRegInfoList);
+			//catissueCoreCacheManager.addObjectToCache(Constants.LIST_OF_REGISTRATION_INFO,(Vector)participantRegInfoList);
 		}
 		catch (CacheException e)
 		{
