@@ -142,6 +142,15 @@
             column="VITAL_STATUS"
             length="50"
         />
+        
+         <property
+            name="metaPhoneCode"
+            type="string"
+            update="true"
+            insert="true"
+            column="LNAME_METAPHONE"
+            length="50"
+        />
 
         <set
             name="participantMedicalIdentifierCollection"
