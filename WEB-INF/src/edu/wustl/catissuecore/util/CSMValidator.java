@@ -111,7 +111,7 @@ public class CSMValidator implements IValidator {
 			} 
 			else if (tqMetadata.getTermType().equals(TermType.DSInterval)) 
 			{
-				if(!ageString.equals(edu.wustl.query.util.global.Constants.PHI_AGE))
+				if(!ageString.equals(edu.wustl.query.util.global.AQConstants.PHI_AGE))
 				{
 				    age = Long.parseLong(ageString);
 				
@@ -133,7 +133,7 @@ public class CSMValidator implements IValidator {
 					}
 					if (Math.abs(age) > 89)
 					{
-						row.set(tqMetadata.getColumnIndex() - 1, edu.wustl.query.util.global.Constants.PHI_AGE);
+						row.set(tqMetadata.getColumnIndex() - 1, edu.wustl.query.util.global.AQConstants.PHI_AGE);
 					}
 				}
 			}
