@@ -1,13 +1,17 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.language.Metaphone;
 
@@ -15,15 +19,25 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.lookup.LookupParameters;
 import edu.wustl.common.lookup.MatchingStatus;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.patientLookUp.domain.PatientInformation;
+import edu.wustl.patientLookUp.lookUpServiceBizLogic.PatientInfoLookUpService;
+import edu.wustl.patientLookUp.queryExecutor.IQueryExecutor;
+import edu.wustl.patientLookUp.queryExecutor.SQLQueryExecutorImpl;
+import edu.wustl.patientLookUp.util.PatientLookupException;
 
 /**
  * @author santosh_chandak This class is for finding out the matching
@@ -115,22 +129,164 @@ public class ParticipantLookupLogic implements LookupLogic
 		// adjust cutoffPoints as per new total points
 		this.cutoffPoints = cutoffPointsFromProperties * this.totalPoints
 				/ totalPointsFromProperties;
-		final Map<String, Participant> listOfParticipants = participantParams
-				.getListOfParticipants();
+		
+		PatientInformation patientInformation = new PatientInformation();
+		patientInformation.setLastName(participant.getLastName());
+		patientInformation.setFirstName(participant.getFirstName());
+		patientInformation.setMiddleName(participant.getMiddleName());
+		String ssn= participant.getSocialSecurityNumber();
+	    if(ssn!=null){
+	    	String ssnValue[]=ssn.split("-");
+	    	ssn=ssnValue[0];
+	    	ssn+=ssnValue[1];
+	    	ssn+=ssnValue[2];
+	    }
+		patientInformation.setSsn(ssn);
+		
+		patientInformation.setDob(participant.getBirthDate());
+		patientInformation.setGender(participant.getGender());
 
-		// In case List of participants is null or empty, return the Matching
-		// Participant List as null.
-		if (listOfParticipants == null || listOfParticipants.isEmpty() == true)
+		Collection<String> participantInfoMedicalIdentifierCollection = new HashSet<String>();
+
+		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
+				.getParticipantMedicalIdentifierCollection();
+		if (participantMedicalIdentifierCollection != null)
 		{
-			return null;
+			Iterator<ParticipantMedicalIdentifier> itr = participantMedicalIdentifierCollection.iterator();
+			while (itr.hasNext())
+			{
+				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) itr
+						.next();
+				participantInfoMedicalIdentifierCollection.add(participantMedicalIdentifier
+						.getMedicalRecordNumber());
+			}
 		}
+		patientInformation
+				.setParticipantMedicalIdentifierCollection(participantInfoMedicalIdentifierCollection);
 
-		// calling the searchMatchingParticipant to filter the participant list
-		// according to given cutoff value
-		final List participants = this.searchMatchingParticipant(participant, listOfParticipants);
+		Collection<String> participantInfoRaceCollection = new HashSet<String>();
 
+		Collection<Race> participantRaceCollection = participant.getRaceCollection();
+		if (participantRaceCollection != null)
+		{
+			Iterator<Race> itr = participantRaceCollection.iterator();
+			while (itr.hasNext())
+			{
+				Race race = (Race) itr.next();
+				if (race != null)
+				{
+					//participantInfoRaceCollection.add((String)itr.next());
+					participantInfoRaceCollection.add(race.getRaceName());
+				}
+			}
+		}
+		patientInformation.setRaceCollection(participantInfoRaceCollection);
+		List<DefaultLookupResult> participants = searchMatchingParticipant(patientInformation);
 		return participants;
 
+	}
+
+	/**
+	 * @param patientInformation
+	 * @return
+	 * @throws PatientLookupException
+	 * @throws ParseException
+	 * @throws ApplicationException
+	 */
+	protected List<DefaultLookupResult> searchMatchingParticipant(PatientInformation patientInformation) throws PatientLookupException,ParseException,ApplicationException
+	{
+		List<DefaultLookupResult> matchingParticipantsList=new ArrayList<DefaultLookupResult>();
+		PatientInfoLookUpService patientLookupObj = new PatientInfoLookUpService();
+		JDBCDAO jdbcDAO =AppUtility.openJDBCSession();
+		IQueryExecutor queryExecutor = new SQLQueryExecutorImpl(jdbcDAO);
+		List<PatientInformation> patientInfoList = patientLookupObj.patientLookupService(patientInformation,
+				queryExecutor, cutoffPoints, 100);
+
+		
+		if (patientInfoList != null && patientInfoList.size() > 0)
+		{
+			for (int i = 0; i < patientInfoList.size(); i++)
+			{
+				patientInformation = (PatientInformation) patientInfoList.get(i);
+				DefaultLookupResult result = new DefaultLookupResult();
+				Participant partcipantNew = new Participant();
+				partcipantNew.setId(new Long(patientInformation.getUpi()));
+
+				partcipantNew.setLastName(patientInformation.getLastName());
+				partcipantNew.setFirstName(patientInformation.getFirstName());
+				partcipantNew.setMiddleName(patientInformation.getMiddleName());
+				
+				partcipantNew.setBirthDate(patientInformation.getDob());
+				
+				partcipantNew.setGender(patientInformation.getGender());
+				
+				partcipantNew.setActivityStatus("Active");
+				if (patientInformation.getSsn() != null && patientInformation.getSsn() != "")
+				{
+					String ssn=getSSN(patientInformation.getSsn());
+					partcipantNew.setSocialSecurityNumber(ssn);
+				}
+			   Collection<String> participantInfoMedicalIdentifierCollection = patientInformation.getParticipantMedicalIdentifierCollection();
+				Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollectionNew=new LinkedHashSet<ParticipantMedicalIdentifier>(); 
+				if (participantInfoMedicalIdentifierCollection != null && participantInfoMedicalIdentifierCollection.size()>0)
+				{
+					Iterator<String> iterator = participantInfoMedicalIdentifierCollection.iterator();
+					while (iterator.hasNext())
+					{
+						String mrn = (String) iterator.next();
+						String siteId= (String) iterator.next();
+						Site site = new Site();
+						site.setId(Long.valueOf(siteId));
+						ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+						participantMedicalIdentifier.setMedicalRecordNumber(mrn);
+						participantMedicalIdentifier.setSite(site);
+						participantMedicalIdentifierCollectionNew.add(participantMedicalIdentifier);
+					}
+				}
+				partcipantNew.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollectionNew);
+				result.setObject(partcipantNew);
+				matchingParticipantsList.add(result);
+			}
+		}
+		AppUtility.closeJDBCSession(jdbcDAO);
+
+		return matchingParticipantsList;
+	}
+
+	/**This method will return the ssn value in format xxx-xx-xxxx
+	 * @param ssn
+	 * @return
+	 */
+	protected String getSSN(String ssn)
+	{
+		String ssnA = "";
+		String ssnB = "";
+		String ssnC = "";
+		boolean result = false;
+
+		Pattern pattern = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
+		Matcher mat = pattern.matcher(ssn);
+		result = mat.matches();
+		if (result)
+		{
+			return ssn;
+		}
+		if (ssn.length() >= 9)
+		{
+			ssnA = ssn.substring(0, 3);
+			ssnB = ssn.substring(3, 5);
+			ssnC = ssn.substring(5, 9);
+		}
+		else if (ssn.length() >= 4)
+		{
+			ssnC = ssn.substring(0, 3);
+		}
+		else
+		{
+			return ssn;
+		}
+		ssn = ssnA + "-" + ssnB + "-" + ssnC;
+		return ssn;
 	}
 
 	/**
@@ -185,898 +341,5 @@ public class ParticipantLookupLogic implements LookupLogic
 			totalPointsForParticipant += pointsForPMIExact;
 		}
 		return totalPointsForParticipant;
-	}
-
-	/**
-	 * This function searches the participant which has matching probablity more
-	 * than cutoff. The different criterias considered for finding a possible
-	 * match are 1. Social Security Number 2. Date Of Birth 3. Last Name 4.
-	 * Middle Name 5. First Name 6. Race 7. Gender Points are given to complete
-	 * or partial match of these parameters. If the total of all these points
-	 * exceeds the cut-off points, tha participant is considered as a match for
-	 * the given participant. List of all such participants is returned by this
-	 * function.
-	 * 
-	 * @param userParticipant
-	 *            - participant with which comparision is to be done.
-	 * @param listOfParticipants
-	 *            - List of all participants which has atleast one matching
-	 *            parameter.
-	 * @return list - List of matching Participants.
-	 * @throws Exception : Exception
-	 */
-	private List searchMatchingParticipant(Participant userParticipant,
-			Map<String, Participant> listOfParticipants) throws Exception
-	{
-		final List<DefaultLookupResult> participants = new ArrayList<DefaultLookupResult>();
-		final Iterator itr = listOfParticipants.values().iterator();
-
-		/*
-		 * attributes of userParticipant : we are doing this to improve
-		 * performanceThis way, these methods are called only twice for the
-		 * userParticipant, irrespective of the number of existingParticipants
-		 */
-		String SSNLowerCase = null;
-		String lastNameLowerCase = null;
-		String firstNameLowerCase = null;
-		String middleNameLowerCase = null;
-		String gender = null;
-		final Date birthDate = userParticipant.getBirthDate();
-		final Collection raceCollection = userParticipant.getRaceCollection();
-		userParticipant.getParticipantMedicalIdentifierCollection();
-
-		if (userParticipant.getSocialSecurityNumber() != null)
-		{
-			SSNLowerCase = userParticipant.getSocialSecurityNumber().trim().toLowerCase();
-		}
-
-		if (userParticipant.getLastName() != null)
-		{
-			lastNameLowerCase = userParticipant.getLastName().trim().toLowerCase();
-		}
-
-		if (userParticipant.getFirstName() != null)
-		{
-			firstNameLowerCase = userParticipant.getFirstName().trim().toLowerCase();
-		}
-
-		if (userParticipant.getMiddleName() != null)
-		{
-			middleNameLowerCase = userParticipant.getMiddleName().trim().toLowerCase();
-		}
-
-		if (userParticipant.getGender() != null)
-		{
-			gender = userParticipant.getGender();
-		}
-
-		// Iterates through all the Participants from the list
-		while (itr.hasNext())
-		{
-			this.isSSNOrPMI = false;
-			int weight = 0; // used for calculation of total points.
-			int socialSecurityNumberWeight = 0; // points of social security
-			// number
-			int birthDateWeight = 0; // points of birth date
-			final Participant existingParticipant = (Participant) itr.next();
-
-			// Check for the participant only in case its Activity Status =
-			// active
-			if (existingParticipant.getActivityStatus() != null
-					&& (existingParticipant.getActivityStatus().equals(
-							Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant
-							.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
-			{
-
-				/**
-				 * If user has entered Social Security Number and it is present
-				 * in the participant from database as well, check for match
-				 * between the two.
-				 */
-				if (SSNLowerCase != null && !SSNLowerCase.equals("")
-						&& existingParticipant.getSocialSecurityNumber() != null
-						&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
-				{
-					socialSecurityNumberWeight = this.checkSSN(userParticipant
-							.getSocialSecurityNumber().trim().toLowerCase(), existingParticipant
-							.getSocialSecurityNumber().trim().toLowerCase());
-					weight = socialSecurityNumberWeight;
-				}
-
-				/**
-				 * If user has entered Date of Birth and it is present in the
-				 * participant from database as well, check for match between
-				 * the two.
-				 */
-				if (birthDate != null && existingParticipant.getBirthDate() != null)
-				{
-					birthDateWeight = this.checkDateOfBirth(birthDate, existingParticipant
-							.getBirthDate());
-					weight += birthDateWeight;
-				}
-
-				/**
-				 * If user has entered Last Name and it is present in the
-				 * participant from database as well, check for match between
-				 * the two.
-				 */
-				if (lastNameLowerCase != null && !lastNameLowerCase.equals("")
-						&& existingParticipant.getLastName() != null
-						&& !existingParticipant.getLastName().trim().equals(""))
-				{
-					weight += this.checkLastName(lastNameLowerCase, existingParticipant
-							.getLastName().trim().toLowerCase());
-
-				}
-
-				/**
-				 * If user has entered First Name and it is present in the
-				 * participant from database as well, check for match between
-				 * the two.
-				 */
-				if (firstNameLowerCase != null && !firstNameLowerCase.equals("")
-						&& existingParticipant.getFirstName() != null
-						&& !existingParticipant.getFirstName().trim().equals(""))
-				{
-					weight += this.checkFirstName(firstNameLowerCase, existingParticipant
-							.getFirstName().trim().toLowerCase());
-				}
-
-				/**
-				 * Bonus points are given in case user entered LastName,
-				 * FirstName, DOB match completely with the respective fields of
-				 * participant from database.
-				 */
-				if (weight - socialSecurityNumberWeight == pointsForLastNameExact
-						+ pointsForFirstNameExact + pointsForDOBExact)
-				{
-					weight += bonusPoints;
-				}
-
-				/**
-				 * The first and last names are first parsed to determine if
-				 * multiple names exist in either field separated by a space,
-				 * dash or comma. If so they are split and placed in the
-				 * appropriate fields. We also do a flip of the first and last
-				 * names and try that because sometimes people don’t enter them
-				 * correctly (put last name in first name field and vice-versa).
-				 * This check is applied only when none of name or surname of
-				 * user entered participant completely or partially matches with
-				 * name and surname.
-				 */
-
-				if (weight == socialSecurityNumberWeight + birthDateWeight)
-				{
-					weight += this.checkFlipped(firstNameLowerCase, lastNameLowerCase,
-							existingParticipant.getFirstName(), existingParticipant.getLastName());
-				}
-
-				weight += this.checkParticipantMedicalIdentifier(userParticipant
-						.getParticipantMedicalIdentifierCollection(), existingParticipant
-						.getParticipantMedicalIdentifierCollection());
-
-				/**
-				 * check whether weight will ever reach cutoff, if it will never
-				 * reach the cutoff, skip this participant and take next one.
-				 */
-				final int temp = this.cutoffPoints - pointsForMiddleNameExact - pointsForRaceExact
-						- pointsForGenderExact;
-
-				if (weight < temp)
-				{
-					continue;
-				}
-
-				/**
-				 * check for possible match of middle name
-				 */
-
-				weight += this.checkMiddleName(middleNameLowerCase, existingParticipant
-						.getMiddleName());
-
-				/**
-				 * If user has Gender and it is present in the participant from
-				 * database as well, check for match between the two.
-				 */
-				if (gender != null && (!gender.equals("Unspecified"))
-						&& existingParticipant.getGender() != null)
-				{
-					weight += this.checkGender(gender, existingParticipant.getGender());
-				}
-
-				/**
-				 * If user has entered Race and it is present in the participant
-				 * from database as well, check for match between the two.
-				 */
-
-				weight += this.checkRace(raceCollection, existingParticipant.getRaceCollection());
-
-				/**
-				 * Name: Virender Mehta Description :If user has entered Medical
-				 * Recoded No and it is present in the participant from database
-				 * as well, check for match between the two.
-				 */
-				// weight += checkParticipantMedicalIdentifier(userParticipant.
-				// getParticipantMedicalIdentifierCollection(),
-				// existingParticipant);
-				// If total points are greater than cutoff points, add
-				// participant to the List
-				if (this.isSSNOrPMI || weight >= this.cutoffPoints)
-				{
-
-					final DefaultLookupResult result = new DefaultLookupResult();
-
-					result.setObject(existingParticipant);
-					participants.add(result);
-					if (participants.size() == 100) // Return when matching
-					// participant list size
-					// becomes 100
-					{
-						return participants;
-					}
-				}
-			}
-		}
-
-		return participants;
-	}
-
-	/**
-	 * This function compares the two Social Security Numbers. The criteria used
-	 * for partial match is --> Mismatch of single digit with difference = 1 or
-	 * any consecutive pair of digits are transposed it is considered a partial
-	 * match. Only one occurrence of either of these is considered.
-	 * @param userNumber
-	 *            - Social Security Number of user
-	 * @param existingNumber
-	 *            - Social Security Number of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-
-	private int checkSSN(String userNumber, String existingNumber)
-	{
-		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
-		// isSSNOrPMI=false;
-		switch (status)
-		{
-			case EXACT :
-				this.isSSNOrPMI = true;
-				return pointsForSSNExact;
-			case PARTIAL :
-				return pointsForSSNPartial;
-			case NOMATCH :
-				return 0;
-		}
-		return 0;
-	}
-
-	private int checkPMI(String userNumber, String existingNumber)
-	{
-		final MatchingStatus status = this.checkNumber(userNumber, existingNumber);
-		switch (status)
-		{
-			case EXACT :
-				this.isSSNOrPMI = true;
-				return pointsForPMIExact;
-			case PARTIAL :
-				return pointsForPMIPartial;
-			case NOMATCH :
-				return 0;
-		}
-		return 0;
-	}
-
-	private MatchingStatus checkNumber(String userNumber, String existingNumber)
-	{
-		// isSSNOrPMI=false;
-		// complete match
-		if (existingNumber.equals(userNumber))
-		{
-			return MatchingStatus.EXACT;
-		}
-		else
-		// partial match
-		{
-			int count = 0; // to count total number of digits mismatched
-			int temp = -1; // temporary variable used for storing value of other
-			// variable
-			boolean areConsecutiveDigitsTransposed = false; // to check whether
-			// consecutive
-			// digits are
-			// transposed
-			boolean isDifferenceOne = false; // to check whether difference of
-			// two digits is one
-			if (userNumber.length() == existingNumber.length())
-			{
-				for (int i = 0; i < userNumber.length(); i++)
-				{
-					if (userNumber.charAt(i) != existingNumber.charAt(i))
-					{
-						if (temp == -1)
-						{
-							if (isDifferenceOne == false
-									&& Math.abs(userNumber.charAt(i) - existingNumber.charAt(i)) == 1)
-							{
-								isDifferenceOne = true;
-							}
-							temp = i;
-
-						}
-						count++;
-						if (count == 2 && i == temp + 1)
-						{
-							if (userNumber.charAt(i - 1) == existingNumber.charAt(i)
-									&& userNumber.charAt(i) == existingNumber.charAt(i - 1))
-							{
-								areConsecutiveDigitsTransposed = true;
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-				}
-
-			}
-			/**
-			 * Mismatch of single digit with difference = 1 or any consecutive
-			 * pair of digits are transposed it is considered a partial match.
-			 * Only one occurrence of either of these is considered.
-			 */
-			if (count == 1 && isDifferenceOne == true || areConsecutiveDigitsTransposed == true
-					&& count == 2)
-			{
-				return MatchingStatus.PARTIAL;
-			}
-
-		}
-		return MatchingStatus.NOMATCH;
-	}
-
-	public String modifyMNR(String userNumber)
-	{
-		final String specialCharacters[] = {"-", "_"};
-		for (final String specialCharacter : specialCharacters)
-		{
-			if (userNumber.indexOf(specialCharacter) >= 0)
-			{
-				userNumber = userNumber.replaceAll(specialCharacter, "");
-			}
-		}
-		return userNumber;
-	}
-
-	/**
-	 * This function compares the two Date Of Births. The criteria used for
-	 * partial match is --> If the year and month are equal or day and year are
-	 * equal or if the month and day are equal and the year is off by no more
-	 * than 2 years.
-	 * 
-	 * @param userBirthDate
-	 *            - Birth Date of user
-	 * @param existingBirthDate
-	 *            - Birth Date of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-
-	private int checkDateOfBirth(Date userBirthDate, Date existingBirthDate)
-	{
-		// complete match
-		if (userBirthDate.compareTo(existingBirthDate) == 0)
-		{
-			return pointsForDOBExact;
-		}
-		// partial match
-		else if ((userBirthDate.getMonth() == existingBirthDate.getMonth() && userBirthDate
-				.getYear() == existingBirthDate.getYear())
-				|| (userBirthDate.getDate() == existingBirthDate.getDate() && userBirthDate
-						.getMonth() == existingBirthDate.getMonth())
-				&& (Math.abs(userBirthDate.getYear() - existingBirthDate.getYear()) <= 2)
-				|| (userBirthDate.getDate() == existingBirthDate.getDate() && userBirthDate
-						.getYear() == existingBirthDate.getYear()))
-		{
-			return pointsForDOBPartial;
-		}
-		return 0;
-	}
-
-	/**
-	 * This function compares the two Last Names. The criteria used for partial
-	 * match is --> If the first 5 characters of the last name match then it is
-	 * considered a partial match. We also do a metaphone match on the last
-	 * name. Metaphone is a standard algorithm that is applied to names to match
-	 * those that sound alike. If the metaphone matches it is also considered
-	 * partial.
-	 * 
-	 * @param userLastName
-	 *            - Last Name of user
-	 * @param existingLastName
-	 *            - Last Name of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-	private int checkLastName(String userLastName, String existingLastName)
-	{
-		// complete match
-		if (userLastName.compareTo(existingLastName) == 0)
-		{
-			return pointsForLastNameExact;
-		}
-		// partial match --> Checks whether first 5 digits or metaphones of two
-		// last names are equal
-		else if (userLastName.regionMatches(true, 0, existingLastName, 0,
-				matchCharactersForLastName)
-				|| (new Metaphone()).isMetaphoneEqual(userLastName, existingLastName))
-		{
-			return pointsForLastNamePartial;
-		}
-		return 0;
-	}
-
-	/**
-	 * This function compares the two First Names. The criteria used for partial
-	 * match is --> If the first character matches, it is considered a partial
-	 * match
-	 * 
-	 * @param userName
-	 *            - First Name of user
-	 * @param existingName
-	 *            - First Name of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-	private int checkFirstName(String userName, String existingName)
-	{
-		// complete match
-		if (userName.compareTo(existingName) == 0)
-		{
-			return pointsForFirstNameExact;
-		}
-		else if (userName.charAt(0) == existingName.charAt(0)) // partial match
-		{
-			return pointsForFirstNamePartial;
-		}
-
-		return 0;
-	}
-
-	/**
-	 * This function compares the two Middle Names. The criteria used for
-	 * partial match is --> If the first character matches, or if one has it and
-	 * other does not it is considered a partial match.
-	 * 
-	 * @param userName
-	 *            - Middle Name of user
-	 * @param existingName
-	 *            - Middle Name of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-	private int checkMiddleName(String userName, String existingName)
-	{
-		boolean userNameBlank = false;
-		boolean existingNameBlank = false;
-		if (userName == null || userName.trim().equals(""))
-		{
-			userNameBlank = true;
-		}
-		if (existingName == null || existingName.trim().equals(""))
-		{
-			existingNameBlank = true;
-		}
-		if (userNameBlank == false && existingNameBlank == false)
-		{
-			// complete match
-			if (userName.trim().compareTo(existingName.trim()) == 0)
-			{
-				return pointsForMiddleNameExact;
-			}
-			else if (userName.trim().charAt(0) == existingName.trim().charAt(0)) // partial
-			// match
-			{
-				return pointsForMiddleNamePartial;
-			}
-		}
-
-		return 0;
-	}
-
-	/**
-	 * This function compares the two Races. The criteria used for partial match
-	 * is --> A partial is considered if one is missing and the other is there.
-	 * (eg, missing from the input data but in the database or viceversa).
-	 * 
-	 * @param userRace
-	 *            - Race of user
-	 * @param existingRace
-	 *            - Race of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-
-	private int checkRace(Collection<Race> userRace, Collection<Race> existingRace)
-	{
-		// complete match
-		if (userRace != null && userRace.isEmpty() == false && existingRace != null
-				&& existingRace.isEmpty() == false)
-		{
-			if (userRace.size() == existingRace.size())
-			{
-				final Iterator<Race> existingRaceIterator = existingRace.iterator();
-				final Iterator<Race> raceIterator = userRace.iterator();
-				final Collection<String> raceNameSet = new HashSet<String>();
-				final Collection<String> existingRaceNameSet = new HashSet<String>();
-				while (existingRaceIterator.hasNext())
-				{
-					final Race existingRaceTemp = existingRaceIterator.next();
-					final Race race = raceIterator.next();
-					if (race.getRaceName().equals("Unknown")
-							&& existingRaceTemp.getRaceName().equals("Unknown"))
-					{
-						continue;
-					}
-					existingRaceNameSet.add(existingRaceTemp.getRaceName());
-					raceNameSet.add(race.getRaceName());
-				}
-				if (existingRaceNameSet.size() != 0 && raceNameSet.size() != 0
-						&& existingRaceNameSet.containsAll(raceNameSet))
-				{
-					return pointsForRaceExact;
-				}
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * Name : Vipin Bansal This function compares the two
-	 * ParticipantMedicalIdentifier. The criteria used for partial match is -->
-	 * A partial is considered if one is missing and the other is there. (eg,
-	 * missing from the input data but in the database or vice versa).
-	 * @param userParticipantMedicalIdentifier : userParticipantMedicalIdentifier,
-	 * @param existingParticipantMedicalIdentifier
-	 *            - Race of Participant from database
-	 * @return int - points for complete, partial or no match
-	 */
-
-	private int checkParticipantMedicalIdentifier(
-			final Collection<ParticipantMedicalIdentifier> userParticipantMedicalIdentifier,
-			final Collection<ParticipantMedicalIdentifier> existingParticipantMedicalIdentifier)
-	{
-		int participantMedicalIdentifierWeight = 0;
-		int tempParticipantMedicalIdentifierWeight = 0;
-		boolean exactMatchFlag = false;
-		boolean partialMatchFlag = false;
-		boolean noMatchFlag = false;
-		final List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
-		if (existingParticipantMedicalIdentifier.size() > 0)
-		{
-			for (final ParticipantMedicalIdentifier pmi : existingParticipantMedicalIdentifier)
-			{
-				tempExistingParticipantMedicalIdentifier.add(pmi);
-			}
-		}
-		if (!(this.isPMICollectionEmpty(userParticipantMedicalIdentifier))
-				&& !this.isPMICollectionEmpty(tempExistingParticipantMedicalIdentifier))
-		{
-			final int len1 = tempExistingParticipantMedicalIdentifier.size();
-			final int len2 = userParticipantMedicalIdentifier.size();
-			if (len1 != len2)
-			{
-				for (final ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
-				{
-					if (userPMidentifier.getSite() != null
-							&& userPMidentifier.getSite().getId() != null)
-					{
-						final String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
-						final String siteId = userPMidentifier.getSite().getId().toString();
-						int maxTempPMIW = 0;
-						for (final ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
-						{
-							if (existingPMidentifier.getSite() != null
-									&& existingPMidentifier.getSite().getId() != null)
-							{
-								final String existingSiteId = existingPMidentifier.getSite()
-										.getId().toString();
-								final String existingMedicalRecordNo = existingPMidentifier
-										.getMedicalRecordNumber();
-
-								if (existingSiteId.equals(siteId) && medicalRecordNo != null)
-								{
-									tempParticipantMedicalIdentifierWeight = this.checkPMI(
-											existingMedicalRecordNo, medicalRecordNo);
-									if (maxTempPMIW < tempParticipantMedicalIdentifierWeight)
-									{
-										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
-									}
-									if (tempParticipantMedicalIdentifierWeight == pointsForPMIExact)
-									{
-										tempExistingParticipantMedicalIdentifier
-												.remove(existingPMidentifier);
-										break;
-									}
-								}
-							}
-						}
-						if (maxTempPMIW > 0)
-						{
-							noMatchFlag = false;
-							partialMatchFlag = true;
-							exactMatchFlag = false;
-							if (maxTempPMIW == pointsForPMIExact)
-							{
-								break;
-							}
-							else
-							{
-								continue;
-							}
-						}
-						else
-						{
-							noMatchFlag = true;
-							partialMatchFlag = false;
-							exactMatchFlag = false;
-							continue;
-						}
-					}
-				}
-			}
-			else
-			{
-				for (final ParticipantMedicalIdentifier userPMidentifier : userParticipantMedicalIdentifier)
-				{
-					if (userPMidentifier.getSite() != null
-							&& userPMidentifier.getSite().getId() != null)
-					{
-						final String medicalRecordNo = userPMidentifier.getMedicalRecordNumber();
-						final String siteId = userPMidentifier.getSite().getId().toString();
-						int maxTempPMIW = 0;
-						for (final ParticipantMedicalIdentifier existingPMidentifier : tempExistingParticipantMedicalIdentifier)
-						{
-							if (existingPMidentifier.getSite() != null
-									&& existingPMidentifier.getSite().getId() != null)
-							{
-								final String existingSiteId = existingPMidentifier.getSite()
-										.getId().toString();
-								final String existingMedicalRecordNo = existingPMidentifier
-										.getMedicalRecordNumber();
-
-								if (existingSiteId.equals(siteId) && medicalRecordNo != null)
-								{
-									tempParticipantMedicalIdentifierWeight = this.checkPMI(
-											existingMedicalRecordNo, medicalRecordNo);
-									if (maxTempPMIW < tempParticipantMedicalIdentifierWeight)
-									{
-										maxTempPMIW = tempParticipantMedicalIdentifierWeight;
-									}
-									if (tempParticipantMedicalIdentifierWeight == pointsForPMIExact)
-									{
-										tempExistingParticipantMedicalIdentifier
-												.remove(existingPMidentifier);
-										break;
-									}
-								}
-							}
-						}
-						if (maxTempPMIW == pointsForPMIPartial)
-						{
-							noMatchFlag = false;
-							partialMatchFlag = true;
-							exactMatchFlag = false;
-							if (exactMatchFlag)
-							{
-								break;
-							}
-							else
-							{
-								continue;
-							}
-
-						}
-						else if (maxTempPMIW == pointsForPMIExact)
-						{
-							if (noMatchFlag || partialMatchFlag)
-							{
-								noMatchFlag = false;
-								partialMatchFlag = true;
-								exactMatchFlag = false;
-								break;
-							}
-							else
-							{
-								exactMatchFlag = true;
-								partialMatchFlag = false;
-								noMatchFlag = false;
-								continue;
-							}
-						}
-						else if (maxTempPMIW == 0)
-						{
-							if (exactMatchFlag || partialMatchFlag)
-							{
-								noMatchFlag = false;
-								partialMatchFlag = true;
-								exactMatchFlag = false;
-								break;
-							}
-							else
-							{
-								exactMatchFlag = false;
-								partialMatchFlag = false;
-								noMatchFlag = true;
-								continue;
-							}
-						}
-					}
-				}
-			}
-
-			if (exactMatchFlag)
-			{
-				participantMedicalIdentifierWeight = pointsForPMIExact;
-				this.isSSNOrPMI = true;
-			}
-			else if (partialMatchFlag)
-			{
-				participantMedicalIdentifierWeight = pointsForPMIPartial;
-			}
-			else if (noMatchFlag)
-			{
-				participantMedicalIdentifierWeight = 0;
-			}
-		}
-		else
-		{
-			participantMedicalIdentifierWeight = 0;
-		}
-
-		return participantMedicalIdentifierWeight;
-	}
-
-	private boolean isPMICollectionEmpty(Collection<ParticipantMedicalIdentifier> pmiCollection)
-	{
-		boolean flag = false;
-
-		if (pmiCollection != null && pmiCollection.size() > 0)
-		{
-			final ParticipantMedicalIdentifier participantMedicalIdentifier = pmiCollection
-					.iterator().next();
-			final String mrn = participantMedicalIdentifier.getMedicalRecordNumber();
-			final Site site = participantMedicalIdentifier.getSite();
-			if (site == null && (mrn == null || mrn.equals("")))
-			{
-				flag = true;
-			}
-		}
-		else
-		{
-			flag = true;
-		}
-		return flag;
-	}
-
-	/**
-	 * This function compares the two Genders.
-	 * 
-	 * @param userGender
-	 *            - Gender of user
-	 * @param existingGender
-	 *            - Gender of Participant from database
-	 * @return int - points for complete or no match
-	 */
-	private int checkGender(String userGender, String existingGender)
-	{
-		if (userGender.equals(existingGender))
-		{
-			return pointsForGenderExact;
-		}
-		return 0;
-	}
-
-	/**
-	 * This function checks whether first name and last name are flipped. The
-	 * criteria used for partial match is --> The first and last names are first
-	 * parsed to determine if multiple names exist in either field separated by
-	 * a space, dash or comma. If so they are split and placed in the
-	 * appropriate fields. We also do a flip of the first and last names and try
-	 * that because sometimes people don’t enter them correctly (put last name
-	 * in first name field and viceversa).
-	 * 
-	 * @param userFirstName
-	 *            - First Name of user
-	 * @param userLastName
-	 *            - Last Name of user
-	 * @param existingParticipantFirstName
-	 *            - First Name of Existing Participant
-	 * @param existingParticipantLastName
-	 *            - Last Name of existing Participant
-	 * @return int - points for complete, partial or no match
-	 */
-
-	private int checkFlipped(String userFirstName, String userLastName,
-			String existingParticipantFirstName, String existingParticipantLastName)
-	{
-		boolean userFirstNameBlank = false; // tells whether first name of user
-		// is empty
-		boolean userLastNameBlank = false; // tells whether first name of user
-		// is empty
-		final int pointsForFirstAndLastPartial = pointsForFirstNamePartial
-				+ pointsForLastNamePartial;
-
-		if (userFirstName == null || userFirstName.trim().equals(""))
-		{
-			userFirstNameBlank = true;
-		}
-		if (userLastName == null || userLastName.trim().equals(""))
-		{
-			userLastNameBlank = true;
-		}
-
-		if (existingParticipantFirstName != null)
-		{
-			existingParticipantFirstName = existingParticipantFirstName.trim();
-		}
-		if (existingParticipantLastName != null)
-		{
-			existingParticipantLastName = existingParticipantLastName.trim();
-		}
-
-		if (userFirstNameBlank == true && userLastNameBlank == false || userFirstNameBlank == false
-				&& userLastNameBlank == true)
-		{
-			String temp = userFirstName;
-			// temp points to the String which is not blank
-			if (userFirstNameBlank == true)
-			{
-				temp = userLastName;
-			}
-
-			// Check if 2 names exist in either field separated by a space, dash
-			// or comma
-			final String split[] = temp.trim().split("[ -,]");
-
-			/**
-			 * If first name and last name entered by user in any of First
-			 * Name/Last name matches with First Name and Last name of existing
-			 * participant or vice versa, points are given as sum of points for
-			 * partial match of first name and partial match of Last Name
-			 */
-
-			if (split != null && split.length == 2)
-			{
-				if ((split[0].trim().equalsIgnoreCase(existingParticipantLastName) && split[1]
-						.trim().equalsIgnoreCase(existingParticipantFirstName))
-						|| (split[1].trim().equalsIgnoreCase(existingParticipantLastName) && split[0]
-								.trim().equalsIgnoreCase(existingParticipantFirstName)))
-				{
-					return pointsForFirstAndLastPartial;
-				}
-
-			}
-		}
-
-		// check whether first name and last name are flipped
-		if (userFirstNameBlank == false
-				&& userFirstName.trim().equalsIgnoreCase(existingParticipantLastName)
-				&& userLastNameBlank == false
-				&& userLastName.trim().equalsIgnoreCase(existingParticipantFirstName))
-		{
-			return pointsForFirstAndLastPartial;
-		}
-
-		// check if user's first name matches with last name of existing
-		// participant
-		if (userFirstNameBlank == false
-				&& userFirstName.trim().equalsIgnoreCase(existingParticipantLastName))
-		{
-			return pointsForFirstNamePartial;
-		}
-
-		// check if user's last name matches with first name of existing
-		// participant
-		if (userLastNameBlank == false
-				&& userLastName.trim().equalsIgnoreCase(existingParticipantFirstName))
-		{
-			return pointsForLastNamePartial;
-		}
-		return 0;
 	}
 }
