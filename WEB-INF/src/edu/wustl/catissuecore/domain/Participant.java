@@ -141,6 +141,21 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 
+    protected String metaPhoneCode;
+	
+	
+	
+	public String getMetaPhoneCode()
+	{
+		return metaPhoneCode;
+	}
+
+	
+	public void setMetaPhoneCode(String metaPhoneCode)
+	{
+		this.metaPhoneCode = metaPhoneCode;
+	}
+
 	/**
 	 * Default Constructor.
 	 */
