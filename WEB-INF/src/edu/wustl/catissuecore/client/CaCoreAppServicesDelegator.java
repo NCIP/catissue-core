@@ -434,7 +434,7 @@ public class CaCoreAppServicesDelegator
     				identifier = sac.getSpecimen().getId();
     			}
     			accessPrivilegeMap = cacheManager.getAccessPrivilegeMap(objectName,identifier, sessionDataBean, cache);
-    			isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.IS_READ_DENIED);
+    			isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.AQConstants.IS_READ_DENIED);
     			isCheckPermissionCalled = true;
     		}
 		    
@@ -444,7 +444,7 @@ public class CaCoreAppServicesDelegator
             if(!isCheckPermissionCalled)
             {
             	accessPrivilegeMap = cacheManager.getAccessPrivilegeMap(objectName,identifier, sessionDataBean, cache);
-            	isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.IS_READ_DENIED);
+            	isReadDenied = accessPrivilegeMap.get(edu.wustl.query.util.global.AQConstants.IS_READ_DENIED);
             }
             /**
 		     *  In case of no READ_DENIED privilege, check for privilege on identified data.
@@ -457,7 +457,7 @@ public class CaCoreAppServicesDelegator
 		         * call remove identified data
 		         * If has no read privilege on identified data, set the identified attributes as NULL.
 		    	**/
-				hasPHIAccess = accessPrivilegeMap.get(edu.wustl.query.util.global.Constants.HAS_PHI_ACCESS);
+				hasPHIAccess = accessPrivilegeMap.get(edu.wustl.query.util.global.AQConstants.HAS_PHI_ACCESS);
 				if(!hasPHIAccess)
 				{
 					removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean,classList);
