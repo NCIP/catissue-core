@@ -1197,7 +1197,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		if (operation.equals(Constants.ADD))
 		{
 
-			this.validateCPTitle(protocol);
+			this.validateCPTitle(protocol, dao);
 			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(protocol.getActivityStatus()))
 			{
 
@@ -1231,23 +1231,23 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param protocol Collection protocol
 	 * @throws BizLogicException
 	 */
-	private void validateCPTitle(CollectionProtocol protocol) throws BizLogicException
+	private void validateCPTitle(CollectionProtocol protocol, DAO dao) throws BizLogicException
 	{
-		JDBCDAO jdbcDao = this.openJDBCSession();
-
-		 String queryStr = "select title from catissue_specimen_protocol where title = '"
+		//JDBCDAO jdbcDao = this.openJDBCSession();
+		System.err.println("asdas");
+		 String queryStr = "select cp.title from CollectionProtocol as cp where cp.title = '"
 				+ protocol.getTitle() + "'";
 		try
 		{
-			final List<String> titleList = jdbcDao.executeQuery(queryStr);
+			final List<String> titleList = dao.executeQuery(queryStr);
 			if (titleList != null &&  !titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
 				throw this.getBizLogicException(null, "collprot.title.exists", "");
 			}
-			queryStr = "select short_title from catissue_specimen_protocol where short_title = '"
+			queryStr = "select cp.shortTitle from CollectionProtocol as cp where cp.shortTitle = '"
 				+ protocol.getShortTitle() + "'";
-			List<String> shortTitleList = jdbcDao.executeQuery(queryStr);
+			List<String> shortTitleList = dao.executeQuery(queryStr);
 			if (shortTitleList != null && !shortTitleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Short Title already exists");
@@ -1259,11 +1259,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			logger.debug(e1.getMessage(), e1);
 			throw this.getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
-		finally
+		/*finally
 		{
 			this.closeJDBCSession(jdbcDao);
 			jdbcDao = null;
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
