@@ -195,7 +195,7 @@ create table CATISSUE_SPECIMEN_PROTOCOL (
    IDENTIFIER number(19,0) not null ,
    PRINCIPAL_INVESTIGATOR_ID number(19,0),
    TITLE varchar(255) not null unique,
-   SHORT_TITLE varchar(255) not null unique,
+   SHORT_TITLE varchar(255),
    IRB_IDENTIFIER varchar(255),
    START_DATE date,
    END_DATE date,

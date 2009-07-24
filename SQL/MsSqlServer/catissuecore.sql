@@ -319,7 +319,7 @@ create table CATISSUE_SPECIMEN_PROTOCOL (
    IDENTIFIER numeric(20) not null identity,
    PRINCIPAL_INVESTIGATOR_ID bigint,
    TITLE varchar(255) not null unique,
-   SHORT_TITLE varchar(255) not null unique,
+   SHORT_TITLE varchar(255),
    IRB_IDENTIFIER varchar(255),
    START_DATE smalldatetime,
    END_DATE smalldatetime,
