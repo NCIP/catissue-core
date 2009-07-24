@@ -107,6 +107,8 @@ else
 }
 
 </script>
+<c:set var="editScr" value="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer&specimenOrArrayType=${storageContainerForm.specimenOrArrayType}"/>
+<jsp:useBean id="editScr" type="java.lang.String"/>
 <table width="100%"  border="0" cellpadding="0" cellspacing="0" class="maintable">
     <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -166,7 +168,7 @@ else
 								pcnt=pcnt+2;
 								//-->
 								</SCRIPT>
-								<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
+								<iframe name="StorageContainerView"	id="StorageContainerView" src="<%=editScr%>" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
 								</iframe>
 								</logic:equal>
