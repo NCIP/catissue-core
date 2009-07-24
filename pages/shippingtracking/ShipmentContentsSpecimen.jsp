@@ -94,7 +94,6 @@
 		}
 	}
 </script>
-
 <html:hidden property="specimenCounter" styleId="specimenCounter"/>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 	<tr class="addl_table_head">
@@ -104,7 +103,7 @@
 	</tr>
 	<tr class="addl_table_head">
     	<td height="25" colspan="3" align="left" valign="middle" class="tr_bg_border">
-    		<logic:notEqual name="operation" value='view'>
+    		<c:if test="${operation=='add' or operation=='edit'}">
 				<bean:message key="createShipment.specimen.labelchoicequestion" bundle="msg.shippingtracking"/> &nbsp;&nbsp;
 				<html:radio property="specimenLabelChoice" styleId="SpecimenLabel" value="SpecimenLabel" onclick="changeSpecimenLabelChoice(this)"/> <bean:message key="createShipment.specimen.label" bundle="msg.shippingtracking"/>
 				<html:radio property="specimenLabelChoice" styleId="SpecimenBarcode" value="SpecimenBarcode" onclick="changeSpecimenLabelChoice(this)"/> <bean:message key="createShipment.name" bundle="msg.shippingtracking"/>
@@ -116,16 +115,16 @@
 								spLabelRadio.checked=true;
 						}
 				</script>
-			</logic:notEqual>	
+			</c:if>	
 			<logic:equal name="operation" value='view'>
 				<html:hidden property="specimenLabelChoice" styleId="specimenLabelChoice"/>
 			</logic:equal>
     	</td>
 	</tr>
     <tr class="addl_table_head">
-		<logic:notEqual name="operation" value='view'>
+		<c:if test="${operation=='add' or operation=='edit'}">
 	    	<td align="left" valign="middle" class="black_ar"><b class="black_ar_s"><bean:message key="shipment.contentsSelect" bundle="msg.shippingtracking"/>&nbsp;&nbsp; </b></td>
-		</logic:notEqual>
+		</c:if>
 		<td height="25" align="left" valign="middle" class="black_ar"><b class="black_ar_s"> <bean:message key="shipment.contentsLabelOrBarcode" bundle="msg.shippingtracking"/> </b></td>
 		<td width="25%" align="left" valign="middle" class="black_ar">&nbsp;</td>
     </tr>
@@ -148,8 +147,8 @@
 	<tbody id="specimenRowsContainer">
     <c:forEach var="specimenNumber" begin="1" end="${noOfSpecimens}">
     	<tr>
-    		<logic:notEqual name="operation" value='view'>
-			    <td align="left" valign="top" class="black_ar">
+		<c:if test="${operation=='add' or operation=='edit'}">
+		       <td align="left" valign="top" class="black_ar">
 			    		<c:set var="checkBoxName">specimenDetails(specimenCheckbox_<c:out value="${specimenNumber}"/>)</c:set>
 						<jsp:useBean id="checkBoxName" type="java.lang.String"/>
 						
@@ -158,7 +157,8 @@
 						
 			    		<html:checkbox  styleId="<%=checkBoxId%>" property="<%=checkBoxName%>"/>
 			   	</td>
-			</logic:notEqual> 
+			</c:if>
+			
 		    <td height="30" align="left" valign="top">
 		    	<label>	
 		    		<c:set var="labelName">specimenDetails(specimenLabel_<c:out value="${specimenNumber}"/>)</c:set>
@@ -166,11 +166,18 @@
 					
 					<c:set var="labelId">specimenLabel_<c:out value="${specimenNumber}"/></c:set>
 					<jsp:useBean id="labelId" type="java.lang.String"/>
-					
-		    		<html:text styleClass="black_ar" size="30" styleId="<%=labelId%>" property="<%=labelName%>" onkeydown="return addMoreRows(this,event,'specimenRowsContainer','specimenCounter')"/>	    	
+
+					<logic:notEqual name="operation" value='viewNonEditable'>
+					<html:text styleClass="black_ar" size="30" styleId="<%=labelId%>" property="<%=labelName%>" onkeydown="return addMoreRows(this,event,'specimenRowsContainer','specimenCounter')"/>
+					</logic:notEqual>
+					<logic:equal name="operation" value='viewNonEditable'>
+		    		<html:text styleClass="black_ar" size="30" readonly="true" styleId="<%=labelId%>" property="<%=labelName%>" onkeydown="return addMoreRows(this,event,'specimenRowsContainer','specimenCounter')"/>
+					</logic:equal>
 			    </label>
 			</td>
-		    <td align="left" valign="top">
+			
+			<td align="left" valign="top">
+			
 		    	<c:if test="${operation=='edit' or operation=='view'}">
 		    		<label>	
 			    		<c:set var="specimenBarcodeName">specimenDetails(specimenBarcode_<c:out value="${specimenNumber}"/>)</c:set>
@@ -178,10 +185,13 @@
 						
 						<c:set var="specimenBarcodeId">specimenBarcode_<c:out value="${specimenNumber}"/></c:set>
 						<jsp:useBean id="specimenBarcodeId" type="java.lang.String"/>
-						
-			    		<html:text styleClass="black_ar" size="30" styleId="<%=specimenBarcodeId%>" property="<%=specimenBarcodeName%>" onkeydown="return addMoreRows(this,event,'specimenRowsContainer','specimenCounter')"/>	    	
+
+						<logic:notEqual name="operation" value='viewNonEditable'>
+			    		<html:text styleClass="black_ar" size="30" styleId="<%=specimenBarcodeId%>" property="<%=specimenBarcodeName%>" onkeydown="return addMoreRows(this,event,'specimenRowsContainer','specimenCounter')"/>
+						</logic:notEqual>
 				    </label>
-		    	</c:if>
+		    	 </c:if>
+				
 				<c:if test="${operation!='edit'}">	
 					&nbsp;
 				</c:if>
@@ -191,7 +201,7 @@
     </tbody>
     </table>
 	<!-- End of iterate for each specimen -->
-	<logic:notEqual name="operation" value='view'>
+	<c:if test="${operation=='add' or operation=='edit'}">
 		<table cellpadding="3">
 		    <tr>
 			    <td height="40" colspan="4" >
@@ -205,4 +215,4 @@
 			    </td>
 		    </tr>
 		</table>
-	</logic:notEqual>
+	 </c:if>

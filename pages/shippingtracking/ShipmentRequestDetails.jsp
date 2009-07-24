@@ -24,20 +24,25 @@
                     		<c:out value="${shipmentRequestForm.label}"/>
                     		<html:hidden styleId="label" property="label"/>
                     	</logic:equal>
-						<logic:notEqual name="operation" value="view">
+						<logic:equal name="operation" value="viewNonEditable">
+						 	<c:out value="${shipmentRequestForm.label}"/>
+                    		<html:hidden styleId="label" property="label"/>
+                    	</logic:equal>
+
+						 <c:if test="${operation=='add' or operation=='edit'}">
 							<html:text styleClass="black_ar" size="29" styleId="label" property="label"/>
-						</logic:notEqual>
+						</c:if>
                     </td>
                     <td align="left" valign="top">&nbsp;</td>
                     <td align="left" valign="top"><img src="images/shippingtracking/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="shipment.request.requesterSite" bundle="msg.shippingtracking"/>
                     </td>
                     <td align="left" valign="top" class="black_ar"><label>
-                    	<logic:equal name="operation" value="view">
-	                    	<c:out value="${requestScope.senderSiteName}"/>
+                    	 <c:if test="${operation=='view' or operation=='viewNonEditable'}">
+						   	<c:out value="${requestScope.senderSiteName}"/>
 	                    	<html:hidden styleId="senderSiteId" property="senderSiteId"/>
-	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">		   
+	                    </c:if>	
+						<c:if test="${operation=='add' or operation=='edit'}">   
 							<c:set var="senderSiteId" value="${shipmentRequestForm.senderSiteId}"/>
 							<c:set var="initialSiteSelected" value="${requestScope.initialSiteSelected}"/>
 							<jsp:useBean id="initialSiteSelected" type="java.lang.String"/>
@@ -69,14 +74,14 @@
 										styleClass="black_ar"
 										staticField="false" size="27" />
 							</logic:empty>
-						 </logic:notEqual>
+						 </c:if>
                     </label></td>
                   </tr>
                   <tr>
                     <td align="center" valign="top" class="black_ar"><span class="blue_ar_b"><img src="images/shippingtracking/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></span></td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="shipment.sendDate" bundle="msg.shippingtracking"/></td>
                     <td align="left" valign="top" class="black_ar"><label>
-                    	<logic:notEqual name="operation" value="view">
+                    	  <c:if test="${operation=='add' or operation=='edit'}">  
 	                    	<%
 							 if(shipmentDate!=null && shipmentDate.trim().length() > 0)
 							{
@@ -174,14 +179,14 @@
 	
 				                
 				   &nbsp;<bean:message key="shipment.send.time.minute" bundle="msg.shippingtracking"/></span>
-				  		</logic:notEqual>
-				  		<logic:equal name="operation" value="view">
+				  		</c:if>
+				  		 <c:if test="${operation=='view' or operation=='viewNonEditable'}">
 				  			<html:hidden styleId="sendDate" property="sendDate"/>
 				  			<html:hidden styleId="sendTimeHour" property="sendTimeHour"/>
 				  			<html:hidden styleId="sendTimeMinutes" property="sendTimeMinutes"/>
 				  			<c:set var="sendDate"><c:out value="${shipmentRequestForm.sendDate}"/> <c:out value="${shipmentRequestForm.sendTimeHour}"/>:<c:out value="${shipmentRequestForm.sendTimeMinutes}"/></c:set>
 				  			<c:out value="${sendDate}"/>
-						</logic:equal>
+						</c:if>
                     </label></td>
                     <td width="20" align="left" valign="top">&nbsp;</td>
                     <td align="left" valign="top"><span class="blue_ar_b"></span></td>
@@ -192,13 +197,13 @@
                     <td align="center" valign="top" class="black_ar"><span class="blue_ar_b">&nbsp;</span></td>
                     <td align="left" valign="top" nowrap class="black_ar"><bean:message key="shipment.senderComments" bundle="msg.shippingtracking"/></td>
                     <td align="left" valign="top" class="black_ar">
-                    	<logic:equal name="operation" value="view">
+				    	 <c:if test="${operation=='view' or operation=='viewNonEditable'}">
                     		<html:hidden styleId="senderComments" property="senderComments"/>
 	                    	<c:out value="${shipmentRequestForm.senderComments}"/>
-	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">
+	                    </c:if>
+	                    <c:if test="${operation=='add' or operation=='edit'}"> 
 	                    	<html:textarea styleClass="black_ar" rows="2" cols="50" styleId="senderComments" property="senderComments"/>
-	                    </logic:notEqual>
+	                    </c:if>
 					</td>
                     <td align="left" valign="top">&nbsp;</td>
                     <td align="left" valign="top">&nbsp;</td>

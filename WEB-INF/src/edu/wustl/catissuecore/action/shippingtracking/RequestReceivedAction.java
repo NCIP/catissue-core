@@ -41,9 +41,11 @@ public class RequestReceivedAction extends ProcessShipmentRequestsAction
 				forwardTo = Constants.VIEW_SHIPMENT_REQUEST;
 			}
 		}
-		else if (activityStatus.equals(Status.ACTIVITY_STATUS_REJECT.toString()))
+		//bug 12814
+		else if (activityStatus.equals("Rejected") || activityStatus.equals("Processed"))
 		{
-			forwardTo = Constants.VIEW_SHIPMENT_REQUEST;
+			forwardTo = Constants.VIEW_NONEDITABLE_SHIPMENT_REQUEST;
+			//forwardTo = Constants.VIEW_SHIPMENT_REQUEST;
 		}
 		return forwardTo;
 	}

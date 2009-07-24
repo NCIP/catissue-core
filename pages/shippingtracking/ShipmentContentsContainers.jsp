@@ -117,7 +117,7 @@
 	</tr>
 	<tr class="addl_table_head">
     	<td height="25" colspan="3" align="left" valign="middle" class="tr_bg_border">
-			<logic:notEqual name="operation" value='view'>
+			<c:if test="${operation=='add' or operation=='edit'}">
 				<bean:message key="createShipment.container.labelchoicequestion" bundle="msg.shippingtracking"/> &nbsp;&nbsp;
 				<html:radio property="containerLabelChoice" styleId="ContainerLabel" value="ContainerLabel" onclick="changeContainerLabelChoice(this)"/> <bean:message key="createShipment.container.name" bundle="msg.shippingtracking"/>
 				<html:radio property="containerLabelChoice" styleId="ContainerBarcode" value="ContainerBarcode" onclick="changeContainerLabelChoice(this)"/> <bean:message key="createShipment.name" bundle="msg.shippingtracking"/>
@@ -129,16 +129,16 @@
 								contLabelRadio.checked=true;
 						}
 				</script>
-			</logic:notEqual>
+			</c:if>
 			<logic:equal name="operation" value='view'>
 				<html:hidden property="containerLabelChoice" styleId="specimenLabelChoice"/>
 			</logic:equal>
     	</td>
 	</tr>
 	<tr class="addl_table_head">
-		<logic:notEqual name="operation" value='view'>
+		 <c:if test="${operation=='add' or operation=='edit'}">
 			<td align="left" valign="middle" class="black_ar"><b class="black_ar_s"><bean:message key="shipment.contentsSelect" bundle="msg.shippingtracking"/>&nbsp;&nbsp; </b></td>
-		</logic:notEqual>
+		</c:if>
 		<td height="25" align="left" valign="middle" class="black_ar"><b class="black_ar_s"> <bean:message key="shipment.contentsNameOrBarcode" bundle="msg.shippingtracking"/> </b></td>
 		<td width="25%" align="left" valign="middle" class="black_ar">&nbsp;</td>
 	</tr>
@@ -161,7 +161,7 @@
 		<tbody id="containerRowsContainer">
 		    <c:forEach var="containerNumber" begin="1" end="${noOfContainers}">
 		    	<tr>
-		    		<logic:notEqual name="operation" value='view'>
+		    		<c:if test="${operation=='add' or operation=='edit'}">
 					    <td align="left" valign="top" class="black_ar">
 					    		<c:set var="containerCheckBoxName">containerDetails(containerCheckbox_<c:out value="${containerNumber}"/>)</c:set>
 								<jsp:useBean id="containerCheckBoxName" type="java.lang.String"/>
@@ -171,7 +171,8 @@
 								
 					    		<html:checkbox  styleId="<%=containerCheckBoxId%>" property="<%=containerCheckBoxName%>"/>
 					   	</td>
-					</logic:notEqual> 
+                       </c:if>
+					
 				    <td height="30" align="left" valign="top">
 				    	<label>	
 				    		<c:set var="containerLabelName">containerDetails(containerLabel_<c:out value="${containerNumber}"/>)</c:set>
@@ -179,8 +180,14 @@
 							
 							<c:set var="containerLabelId">containerLabel_<c:out value="${containerNumber}"/></c:set>
 							<jsp:useBean id="containerLabelId" type="java.lang.String"/>
+
+							<logic:notEqual name="operation" value='viewNonEditable'>					
+				    		<html:text styleClass="black_ar" size="30" styleId="<%=containerLabelId%>" property="<%=containerLabelName%>" onkeydown="return addMoreRows(this,event,'containerRowsContainer','containerCounter')"/>
+							</logic:notEqual>
 							
-				    		<html:text styleClass="black_ar" size="30" styleId="<%=containerLabelId%>" property="<%=containerLabelName%>" onkeydown="return addMoreRows(this,event,'containerRowsContainer','containerCounter')"/>	    	
+							<logic:equal name="operation" value='viewNonEditable'>
+							<html:text styleClass="black_ar" size="30" readonly="true" styleId="<%=containerLabelId%>" property="<%=containerLabelName%>" onkeydown="return addMoreRows(this,event,'containerRowsContainer','containerCounter')"/>
+							</logic:equal>
 					    </label>
 					</td>
 				    <td align="left" valign="top">
@@ -192,7 +199,9 @@
 								<c:set var="containerBarcodeId">containerBarcode_<c:out value="${containerNumber}"/></c:set>
 								<jsp:useBean id="containerBarcodeId" type="java.lang.String"/>
 								
-								<html:text styleClass="black_ar" size="30" styleId="<%=containerBarcodeId%>" property="<%=containerBarcodeName%>" onkeydown="return addMoreRows(this,event,'containerRowsContainer','containerCounter')"/>	    	
+								<logic:notEqual name="operation" value='viewNonEditable'>	
+								<html:text styleClass="black_ar" size="30" styleId="<%=containerBarcodeId%>" property="<%=containerBarcodeName%>" onkeydown="return addMoreRows(this,event,'containerRowsContainer','containerCounter')"/>
+								</logic:notEqual>
 							</label>
 						</c:if>
 						<c:if test="${operation!='edit'}">	
@@ -204,7 +213,7 @@
 	    </tbody>
     </table>
 	<!-- End of iterate for each container -->
-	<logic:notEqual name="operation" value='view'>
+	<c:if test="${operation=='add' or operation=='edit'}">
 		<table cellpadding="3">
 			<tr>
 				<td height="40" colspan="4" class="addMoreContainer">			
@@ -218,4 +227,4 @@
 				</td>
 			</tr>
 		</table>
-	</logic:notEqual>
+	 </c:if>

@@ -1996,6 +1996,7 @@ PUBLIC
 			scope="request">
 			<forward name="createShipmentForRequest" path="/ShipmentFromRequest.do?operation=add&amp;pageOf=pageOfShipment"/>
 			<forward name="viewShipmentRequest" path="/ShipmentRequestAction.do?operation=view&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="viewNonEditableShipmentRequest" path="/ShipmentRequestAction.do?operation=viewNonEditable&amp;pageOf=pageOfShipmentRequest"/>
 			<forward name="failure" path="/ShowDashboardAction.do"/>
 		</action>
 		

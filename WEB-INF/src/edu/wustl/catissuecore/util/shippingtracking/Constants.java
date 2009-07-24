@@ -70,6 +70,7 @@ public class Constants
 	public static final String ACCEPT_OR_REJECT_SHIPMENT = "acceptOrRejectShipment";
 	public static final String CREATE_SHIPMENT_FOR_REQUEST = "createShipmentForRequest";
 	public static final String VIEW_SHIPMENT_REQUEST = "viewShipmentRequest";
+	public static final String VIEW_NONEDITABLE_SHIPMENT_REQUEST = "viewNonEditableShipmentRequest";
 	public static final String EDIT_SHIPMENT_REQUEST = "editShipmentRequest";
 	public static final String CREATE_SHIPMENT = "createShipment";
 	public static final String CREATE_SHIPMENT_REQUEST = "createShipmentRequest";

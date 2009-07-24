@@ -86,9 +86,14 @@ public class BaseShipmentAction extends SecureAction
 			userId = sessionDataBean.getUserId();
 			isAdmin = sessionDataBean.isAdmin();
 		}
+		//bug 12814
+		/**
+		 * Added new operation - viewNonEditable for shipment request having status processed or rejected.
+		 */
 		if (operation != null
 				&& (operation.trim().equals(edu.wustl.catissuecore.util.global.Constants.EDIT) || (operation
-						.trim().equals(Constants.VIEW))))
+						.trim().equals(Constants.VIEW))) || operation.trim().equals("viewNonEditable"))
+						
 		{
 			String pageOf = request.getParameter(edu.wustl.common.util.global.Constants.PAGEOF);
 			if (pageOf == null || pageOf.trim().equals(""))
@@ -173,7 +178,8 @@ public class BaseShipmentAction extends SecureAction
 		//Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST,
 				edu.wustl.catissuecore.util.global.Constants.HOUR_ARRAY);
-		if (operation != null && operation.equals("view")
+		//bug 12814
+		if (operation != null && (operation.equals("view") || operation.trim().equals("viewNonEditable"))
 				&& shipmentForm instanceof BaseShipmentForm)
 		{
 			if (shipmentForm.getSenderSiteId() != 0l)
