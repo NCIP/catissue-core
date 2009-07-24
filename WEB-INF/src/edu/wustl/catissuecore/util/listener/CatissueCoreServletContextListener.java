@@ -230,7 +230,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 */
 	public void initCatissueCache() throws DAOException, Exception, ClassNotFoundException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		/*IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		
 		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
@@ -252,7 +252,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			System.out.println("exception  "+ e.getMessage());
 			logger.debug("Exception occured while creating instance of CatissueCoreCacheManager");
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	/**

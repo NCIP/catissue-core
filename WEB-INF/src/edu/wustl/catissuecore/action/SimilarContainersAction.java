@@ -17,8 +17,6 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.ehcache.CacheException;
-
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -29,11 +27,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -272,59 +271,26 @@ public class SimilarContainersAction extends SecureAction
 							|| similarContainersForm.getPos2() == null
 							|| similarContainersForm.getPos2().equals(""))
 					{
-						isContainerFull = true;
-						Map containerMapFromCache = null;
-						try
+						Container container = new Container();
+						container.setId(similarContainersForm.getParentContainerId());
+						Position position = bizLogic.getFirstAvailablePositionInContainer(container);
+						if(position!=null)
 						{
-							containerMapFromCache = StorageContainerUtil.
-							getContainerMapFromCache();
+							similarContainersForm.setPos1(position.getXPos()+"");
+							similarContainersForm.setPos2(position.getYPos()+"");
+							
 						}
-						catch (final CacheException e)
+						else
 						{
-							this.logger.debug(e.getMessage(), e);
-							e.printStackTrace();
-						}
-
-						if (containerMapFromCache != null)
-						{
-							final Iterator itr = containerMapFromCache.keySet().iterator();
-							while (itr.hasNext())
-							{
-								nvb = (NameValueBean) itr.next();
-								if (nvb.getValue().toString().equals(
-										"" + similarContainersForm.getParentContainerId()))
-								{
-
-									final Map tempMap = (Map) containerMapFromCache.get(nvb);
-									final Iterator tempIterator = tempMap.keySet().iterator();
-									final NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-
-									final List yList = (List) tempMap.get(nvb1);
-									final NameValueBean nvb2 = (NameValueBean) yList.get(0);
-
-									similarContainersForm.setPos1(nvb1.getValue());
-									similarContainersForm.setPos2(nvb2.getValue());
-									isContainerFull = false;
-									break;
-								}
-
-							}
-						}
-
-						if (isContainerFull)
-						{
-							ActionErrors errors = (ActionErrors) request
-									.getAttribute(Globals.ERROR_KEY);
+							ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 							if (errors == null || errors.size() == 0)
 							{
 								errors = new ActionErrors();
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-										"errors.item.format", ApplicationProperties
-												.getValue("storageContainer.parentContainerFull")));
-								this.saveErrors(request, errors);
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+										.getValue("storageContainer.parentContainerFull")));
+								saveErrors(request, errors);
 								return (mapping.findForward(Constants.PAGE_OF_STORAGE_CONTAINER));
-							}
-
+							}							
 						}
 					}
 

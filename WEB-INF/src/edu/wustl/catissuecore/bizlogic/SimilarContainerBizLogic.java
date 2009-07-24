@@ -303,10 +303,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					// cont.setParent(parentContainer); // <<----
 
 				}
-
-				final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				StorageContainerUtil.addStorageContainerInContainerMap(cont, containerMap);
-
 			}
 
 		}
@@ -344,12 +340,12 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 						containerPrefixKey, positionsToBeAllocatedList, usedPositionsList, i,
 						parentContainerId);
 			}
-			for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
+			/*for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
 			{
 				StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(
 						positionsToBeAllocatedList.get(i), similarContainerMap, usedPositionsList,
 						containerPrefixKey, parentContainerId);
-			}
+			}*/
 			if (container.getNoOfContainers().intValue() > 1 && similarContainerMap.size() > 0)
 			{
 				for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)

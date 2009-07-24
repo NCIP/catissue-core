@@ -35,11 +35,10 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
@@ -132,22 +131,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		final SpecimenArray specimenArray = (SpecimenArray) obj;
-
-		if (specimenArray.getLocatedAtPosition() != null
-				&& specimenArray.getLocatedAtPosition().getParentContainer() != null)
-		{
-
-			final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-			// if(specimenArray.getLocatedAtPosition() != null)
-			// {
-			StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray
-					.getLocatedAtPosition().getParentContainer(), containerMap, specimenArray
-					.getLocatedAtPosition().getPositionDimensionOne().intValue(), specimenArray
-					.getLocatedAtPosition().getPositionDimensionTwo().intValue());
-			// }
-
-		}
 		super.postInsert(obj, dao, sessionDataBean);
 
 	}
@@ -164,7 +147,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 
 	{
-		final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 		final SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
 		final SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
 
@@ -174,10 +156,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			final Container oldParentCont = (Container) HibernateMetaData
 					.getProxyObjectImpl(specimenArrayOldObject.getLocatedAtPosition()
 							.getParentContainer());
-			StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap,
-					specimenArrayOldObject.getLocatedAtPosition().getPositionDimensionOne()
-							.intValue(), specimenArrayOldObject.getLocatedAtPosition()
-							.getPositionDimensionTwo().intValue());
 		}
 		if (specimenArrayCurrentObject != null
 				&& specimenArrayCurrentObject.getLocatedAtPosition() != null
@@ -185,10 +163,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		{
 			final Container currentParentCont = specimenArrayCurrentObject.getLocatedAtPosition()
 					.getParentContainer();
-			StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont,
-					containerMap, specimenArrayCurrentObject.getLocatedAtPosition()
-							.getPositionDimensionOne().intValue(), specimenArrayCurrentObject
-							.getLocatedAtPosition().getPositionDimensionTwo().intValue());
 		}
 
 		if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(
@@ -210,10 +184,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				final StorageContainer cont = new StorageContainer();
 				cont.setId(new Long(Id));
 				cont.setName((String) disabledContDetails.get(contNameKey));
-				final int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
-				final int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
-
-				StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap, x, y);
 			}
 
 		}
@@ -994,20 +964,30 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			 */
 			if (xPos == null || yPos == null)
 			{
-				isContainerFull = true;
-				Map containerMapFromCache = null;
-				containerMapFromCache = StorageContainerUtil.getContainerMapFromCache();
-				isContainerFull = this.setPositions(specimenArray, isContainerFull,
-						containerMapFromCache);
-				xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
-				yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
+				{
+					final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+					if (specimenArray.getLocatedAtPosition().getParentContainer() != null)
+					{
+						final Position position = scBizLogic
+								.getFirstAvailablePositionInContainer(specimenArray
+										.getLocatedAtPosition().getParentContainer());
+						if (position != null)
+						{
+							final ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
+							locatedAtPos.setPositionDimensionOne(position.getXPos());
+							locatedAtPos.setPositionDimensionTwo(position.getYPos());
+						}
+						else
+						{
+							throw this.getBizLogicException(null, "storage.specified.full", "");
+						}
+						xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
+						yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
+					}
+				}
 			}
 
-			if (isContainerFull)
-			{
-				throw this.getBizLogicException(null, "storage.specified.full", "");
-			}
-			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+			if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
 				throw this.getBizLogicException(null, "errors.item.format", ApplicationProperties
 						.getValue("array.positionInStorageContainer"));
@@ -1107,42 +1087,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	/**
-	 * @param specimenArray : specimenArray
-	 * @param isContainerFull : isContainerFull
-	 * @param containerMapFromCache : containerMapFromCache
-	 * @return boolean
-	 */
-	private boolean setPositions(SpecimenArray specimenArray, boolean isContainerFull,
-			Map containerMapFromCache)
-	{
-		if (containerMapFromCache != null)
-		{
-			final Iterator itr = containerMapFromCache.keySet().iterator();
-			while (itr.hasNext())
-			{
-				final NameValueBean nvb = (NameValueBean) itr.next();
-				if (nvb.getValue().toString().equals(
-						specimenArray.getLocatedAtPosition().getParentContainer().getId()
-								.toString()))
-				{
-					final Map tempMap = (Map) containerMapFromCache.get(nvb);
-					final Iterator tempIterator = tempMap.keySet().iterator();
-					final NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-					final List list = (List) tempMap.get(nvb1);
-					final NameValueBean nvb2 = (NameValueBean) list.get(0);
-					final ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
-					locatedAtPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
-					locatedAtPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-					isContainerFull = false;
-					break;
-				}
-
-			}
-		}
-		return isContainerFull;
-	}
-
+	
 	/**
 	 * @param dao : dao
 	 * @param specimenArray : specimenArray

@@ -37,7 +37,6 @@ import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
@@ -110,7 +109,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			{
 				this.logger.debug("failed to send email..");
 			}
-			insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
+			//insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 			//bug 13387 start
 			/**
 			 * Previously this code was written in postInsert() method in ShipmentBizLogic.java
@@ -1235,7 +1234,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			shipment.getContainerCollection().addAll(containerCollection);
 			this.validateContainerInShipment(oldShipment, shipment);// bug 11410
 			dao.update(shipment);
-			insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
+			//insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
 
 			// Add mailing functionality
 			final boolean mailStatus = this.sendNotification(shipment, sessionDataBean);
@@ -1536,37 +1535,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return Constants.ADD_EDIT_SHIPMENT;
-	}
-
-	/**
-	 * @param specimenPositionList list of specimenPosition.
-	 * @param containerPositionList list of containerPosition
-	 */
-	public static void insertSinglePositionInContainerMap(
-			List<SpecimenPosition> specimenPositionList,
-			List<ContainerPosition> containerPositionList)
-	{
-		final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-		if (specimenPositionList != null && !specimenPositionList.isEmpty())
-		{
-			for (final SpecimenPosition specimenPosition : specimenPositionList)
-			{
-				StorageContainerUtil.insertSinglePositionInContainerMap(specimenPosition
-						.getStorageContainer(), containerMap, specimenPosition
-						.getPositionDimensionOne().intValue(), specimenPosition
-						.getPositionDimensionTwo().intValue());
-			}
-		}
-		if (containerPositionList != null && !containerPositionList.isEmpty())
-		{
-			for (final ContainerPosition containerPosition : containerPositionList)
-			{
-				StorageContainerUtil.insertSinglePositionInContainerMap(containerPosition
-						.getParentContainer(), containerMap, containerPosition
-						.getPositionDimensionOne().intValue(), containerPosition
-						.getPositionDimensionTwo().intValue());
-			}
-		}
 	}
 
 	/**

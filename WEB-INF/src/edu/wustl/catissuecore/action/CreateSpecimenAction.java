@@ -512,7 +512,7 @@ public class CreateSpecimenAction extends SecureAction
 	 * @throws ApplicationException
 	 *             : ApplicationException
 	 */
-	TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
+	private TreeMap getContainerMap(String specimenId, String className, DefaultBizLogic dao,
 			StorageContainerBizLogic scbizLogic, String exceedingMaxLimit,
 			HttpServletRequest request) throws ApplicationException
 	{

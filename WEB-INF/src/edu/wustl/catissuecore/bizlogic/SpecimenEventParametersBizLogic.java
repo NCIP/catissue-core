@@ -38,11 +38,10 @@ import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
@@ -434,38 +433,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		final SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 		try
 		{
-			if (specimenEventParametersObject instanceof TransferEventParameters)
-			{
-				final TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
-
-				final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-
-				if (transferEventParameters.getFromStorageContainer() != null)
-				{
-					final StorageContainer storageContainerFrom = (StorageContainer) dao
-							.retrieveById(StorageContainer.class.getName(), transferEventParameters
-									.getFromStorageContainer().getId());
-					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom,
-							containerMap, transferEventParameters.getFromPositionDimensionOne()
-									.intValue(), transferEventParameters
-									.getFromPositionDimensionTwo().intValue());
-
-				}
-
-				final StorageContainer storageContainerTo = (StorageContainer) dao.retrieveById(
-						StorageContainer.class.getName(), transferEventParameters
-								.getToStorageContainer().getId());
-				StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainerTo,
-						containerMap, transferEventParameters.getToPositionDimensionOne()
-								.intValue(), transferEventParameters.getToPositionDimensionTwo()
-								.intValue());
-
-			}
 			if (specimenEventParametersObject instanceof DisposalEventParameters)
 			{
 
 				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
-				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 				if (disposalEventParameters.getSpecimen() != null)
 				{
 
@@ -485,10 +456,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						StorageContainer cont = new StorageContainer();
 						cont.setId(new Long(Id));
 						cont.setName((String) disabledContDetails.get(contNameKey));
-						int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
-						int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
-						StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap,
-								x, y);
 					}
 				}
 
@@ -827,19 +794,22 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					if (yPos == null || xPos == null)
 					{
 						isContainerFull = true;
-						Map containerMapFromCache = null;
-						containerMapFromCache = StorageContainerUtil.getContainerMapFromCache();
-						isContainerFull = this.setPositions(numberOfEvent, parameter,
-								storageContainerObj, isContainerFull, containerMapFromCache);
+						final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+						final Position position = scBizLogic
+								.getFirstAvailablePositionInContainer(storageContainerObj);
+						if (position != null)
+						{
+							parameter.setToPositionDimensionOne(position.getXPos());
+							parameter.setToPositionDimensionTwo(position.getYPos());
+						}
+						else
+						{
+							throw this.getBizLogicException(null, "storage.specified.full", "");
+						}
 						xPos = parameter.getToPositionDimensionOne();
 						yPos = parameter.getToPositionDimensionTwo();
 					}
-					if (isContainerFull)
-					{
-
-						throw this.getBizLogicException(null, "storage.con.full", "");
-					}
-					else if (xPos == null || yPos == null || xPos.intValue() < 0
+					if (xPos == null || yPos == null || xPos.intValue() < 0
 							|| yPos.intValue() < 0)
 					{
 
@@ -907,99 +877,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	/**
-	 * @param numberOfEvent - int.
-	 * @param parameter - TransferEventParameters object
-	 * @param storageContainerObj - StorageContainer object
-	 * @param isContainerFull - boolean value
-	 * @param containerMapFromCache - Map of containers for cache
-	 * @return boolean based on set positions
-	 */
-	private boolean setPositions(int numberOfEvent, TransferEventParameters parameter,
-			StorageContainer storageContainerObj, boolean isContainerFull, Map containerMapFromCache)
-	{
-		List list;
-		if (containerMapFromCache != null)
-		{
-			final Iterator itr = containerMapFromCache.keySet().iterator();
-			while (itr.hasNext())
-			{
-				final NameValueBean nvb = (NameValueBean) itr.next();
-				if (nvb.getValue().toString().equals(storageContainerObj.getId().toString()))
-				{
-					final Map tempMap = (Map) containerMapFromCache.get(nvb);
-					final Iterator tempIterator = tempMap.keySet().iterator();
-					while (tempIterator.hasNext())
-					{
-						final NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-						list = (List) tempMap.get(nvb1);
-						NameValueBean nvb2;
-						//To get the next available location for this event number assuming the pervious ones were allocated to previous events in the list
-						if (numberOfEvent >= list.size())
-						{
-							numberOfEvent = numberOfEvent - list.size();
-							continue;
-						}
-						nvb2 = (NameValueBean) list.get(numberOfEvent);
-						parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
-						parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
-						isContainerFull = false;
-						break;
-					}
-					break;
-				}
-			}
-		}
-		return isContainerFull;
-	}
-
-	/**
-	 * @param eventParameter - SpecimenEventParameters object.
-	 * @throws BizLogicException throws BizLogicException
-	 */
-	private void validateTransferEventParameters(SpecimenEventParameters eventParameter)
-			throws BizLogicException
-	{
-		final TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-		final Object object = this.retrieve(TransferEventParameters.class.getName(), parameter
-				.getId());
-		if (object != null)
-		{
-			final TransferEventParameters parameterCopy = (TransferEventParameters) object;
-			final String positionDimensionOne = parameterCopy.getToPositionDimensionOne()
-					.toString();
-			final String positionDimensionTwo = parameterCopy.getToPositionDimensionTwo()
-					.toString();
-			final String storageContainer = parameterCopy.getToStorageContainer().getId()
-					.toString();
-
-			if (!positionDimensionOne.equals(parameter.getToPositionDimensionOne().toString())
-					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo()
-							.toString())
-					|| !storageContainer.equals(parameter.getToStorageContainer().getId()
-							.toString()))
-			{
-				throw this.getBizLogicException(null, "events.toPosition.errMsg", "");
-			}
-		}
-	}
-
-	/**
-	 * @param specimen - Specimen object.
-	 */
-	private void setDisableToSubSpecimen(Specimen specimen)
-	{
-		if (specimen != null)
-		{
-			final Iterator iterator = specimen.getChildSpecimenCollection().iterator();
-			while (iterator.hasNext())
-			{
-				final Specimen childSpecimen = (Specimen) iterator.next();
-				childSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-				this.setDisableToSubSpecimen(childSpecimen);
-			}
-		}
-	}
 
 	/**
 	 * @param dao - DAO object.

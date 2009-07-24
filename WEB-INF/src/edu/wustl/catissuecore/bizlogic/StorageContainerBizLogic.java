@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -57,7 +58,6 @@ import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
 import edu.wustl.common.util.NameValueBeanRelevanceComparator;
-import edu.wustl.common.util.NameValueBeanValueComparator;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
@@ -99,6 +99,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 */
 	private static final int containersMaxLimit = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.CONTAINERS_MAX_LIMIT));
+	private static final String TYPE_CONTAINER = "container";
+	private static final String TYPE_SPECIMEN = "specimen";
+	private static final String TYPE_SPECIMEN_ARRAY = "specimen_array";
+	private static final boolean IS_CP_UNIQUE = true;
+	private static final boolean IS_SPCLASS_UNIQUE = true;
+	private static final boolean IS_CP_NONUNIQUE = false;
+	private static final boolean IS_SPCLASS_NONUNIQUE = false;
 
 	/**
 	 * Saves the storageContainer object in the database.
@@ -460,18 +467,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		final StorageContainer container = (StorageContainer) obj;
-		try
-		{
-
-			final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-			StorageContainerUtil.addStorageContainerInContainerMap(container, containerMap);
-
-		}
-		catch (final Exception e)
-		{
-			this.logger.debug(e.getMessage(), e);
-		}
 		super.postInsert(obj, dao, sessionDataBean);
 	}
 
@@ -699,8 +694,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			if (oldContainerDimOne.intValue() > newContainerDimOne.intValue()
 					|| oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
 			{
-				final boolean canReduceDimension = StorageContainerUtil.checkCanReduceDimension(
-						oldContainer, container);
+				final boolean canReduceDimension = this.canReduceDimension(dao, oldContainer
+						.getId(), newContainerDimOne, newContainerDimTwo);
 				if (!canReduceDimension)
 				{
 					throw this.getBizLogicException(null, "errors.storageContainer.cannotReduce",
@@ -937,16 +932,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		try
 		{
-			final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
 			final StorageContainer currentContainer = (StorageContainer) currentObj;
 			final StorageContainer oldContainer = (StorageContainer) oldObj;
-
-			// if name gets change then update the cache with new key
-			if (!currentContainer.getName().equals(oldContainer.getName()))
-			{
-				StorageContainerUtil
-						.updateNameInCache(containerMap, currentContainer, oldContainer);
-			}
 
 			// If capacity of container gets increased then insert all the new
 			// positions in map ..........
@@ -954,35 +941,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			final int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
 			final int yOld = oldContainer.getCapacity().getTwoDimensionCapacity().intValue();
 			final int yNew = currentContainer.getCapacity().getTwoDimensionCapacity().intValue();
-			if (xNew != xOld || yNew != yOld)
-			{
-				StorageContainerUtil.updateStoragePositions(containerMap, currentContainer,
-						oldContainer);
-
-			}
-			// finish
-			if (oldContainer != null && oldContainer.getLocatedAtPosition() != null
-					&& oldContainer.getLocatedAtPosition().getParentContainer() != null)
-			{
-				final StorageContainer oldParentCont = (StorageContainer) HibernateMetaData
-						.getProxyObjectImpl(oldContainer.getLocatedAtPosition()
-								.getParentContainer());
-				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont,
-						containerMap, oldContainer.getLocatedAtPosition().getPositionDimensionOne()
-								.intValue(), oldContainer.getLocatedAtPosition()
-								.getPositionDimensionTwo().intValue());
-			}
-			if (currentContainer != null && currentContainer.getLocatedAtPosition() != null
-					&& currentContainer.getLocatedAtPosition().getParentContainer() != null)
-			{
-				final StorageContainer currentParentCont = (StorageContainer) currentContainer
-						.getLocatedAtPosition().getParentContainer();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont,
-						containerMap, currentContainer.getLocatedAtPosition()
-								.getPositionDimensionOne().intValue(), currentContainer
-								.getLocatedAtPosition().getPositionDimensionTwo().intValue());
-			}
-
+			
 			if (currentContainer.getActivityStatus().equals(
 					Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
@@ -1025,8 +984,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						cntPos.setOccupiedContainer(cont);
 						cont.setLocatedAtPosition(cntPos);
 					}
-
-					StorageContainerUtil.removeStorageContainerInContainerMap(cont, containerMap);
 				}
 
 			}
@@ -2917,8 +2874,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							new EqualClause("locatedAtPosition.positionDimensionTwo", current
 									.getLocatedAtPosition().getPositionDimensionTwo())).andOpr()
 					.addCondition(
-							new EqualClause("locatedAtPosition.parentContainer", current
-									.getLocatedAtPosition().getParentContainer()));
+							new EqualClause("locatedAtPosition.parentContainer.id", current
+									.getLocatedAtPosition().getParentContainer().getId()));
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 			this.logger.debug("current.getParentContainer() :"
@@ -3400,52 +3357,16 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 				if (xPos == null || yPos == null)
 				{
-					isContainerFull = true;
-					Map containerMapFromCache = null;
-					try
+					final Container cont = container.getLocatedAtPosition().getParentContainer();
+					final Position position = this.getFirstAvailablePositionInContainer(cont);
+					if (position != null)
 					{
-						containerMapFromCache = (TreeMap) StorageContainerUtil
-								.getContainerMapFromCache();
+						final ContainerPosition cntPos = container.getLocatedAtPosition();
+						cntPos.setPositionDimensionOne(position.getXPos());
+						cntPos.setPositionDimensionTwo(position.getYPos());
+						cntPos.setOccupiedContainer(container);
 					}
-					catch (final CacheException e)
-					{
-						this.logger.debug(e.getMessage(), e);
-						e.printStackTrace();
-					}
-
-					if (containerMapFromCache != null)
-					{
-						final Iterator itr = containerMapFromCache.keySet().iterator();
-						while (itr.hasNext())
-						{
-							final NameValueBean nvb = (NameValueBean) itr.next();
-							if (container.getLocatedAtPosition() != null
-									&& container.getLocatedAtPosition().getParentContainer() != null
-									&& nvb.getValue().toString().equals(
-											container.getLocatedAtPosition().getParentContainer()
-													.getId().toString()))
-							{
-
-								final Map tempMap = (Map) containerMapFromCache.get(nvb);
-								final Iterator tempIterator = tempMap.keySet().iterator();;
-								final NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-
-								final List list = (List) tempMap.get(nvb1);
-								final NameValueBean nvb2 = (NameValueBean) list.get(0);
-
-								final ContainerPosition cntPos = container.getLocatedAtPosition();
-
-								cntPos.setPositionDimensionOne(new Integer(nvb1.getValue()));
-								cntPos.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-								cntPos.setOccupiedContainer(container);
-								isContainerFull = false;
-								break;
-							}
-
-						}
-					}
-
-					if (isContainerFull)
+					else
 					{
 						throw this.getBizLogicException(null, "storage.specified.full", "");
 					}
@@ -3524,6 +3445,145 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 
 	}
+	/**
+	 * This function returns the first available position in a container which can be allocated. 
+	 * If container is full, returns null
+	 * @param container : Container for which available position is to be searched
+	 * @return Position
+	 * @throws BizLogicException
+	 */
+	public Position getFirstAvailablePositionInContainer(Container container)
+	throws BizLogicException
+	{
+		JDBCDAO jdbcDAO = null;
+		Position position = null;
+		try 
+		{
+			jdbcDAO = this.openJDBCSession();
+			Integer xPos;
+			Integer yPos;
+
+			final Capacity scCapacity = container.getCapacity();
+			String dim1, dim2;
+			if (scCapacity == null) 
+			{
+				final StringBuilder query = new StringBuilder();
+				query
+						.append("select c.one_dimension_capacity ,c.two_dimension_capacity ");
+				query
+						.append("from catissue_capacity c where c.identifier = (select capacity_id from catissue_container where identifier=");
+				query.append(container.getId());
+				query.append(")");
+				final List l = jdbcDAO.executeQuery(query.toString());
+				dim1 = (String) this.getResultSetData(l, 0, 0);
+				dim2 = (String) this.getResultSetData(l, 0, 1);
+			}
+			else
+			{
+				dim1 = scCapacity.getOneDimensionCapacity() + "";
+				dim2 = scCapacity.getTwoDimensionCapacity() + "";
+			}
+			final Map positionMap = this.getAvailablePositionMapForContainer(
+					String.valueOf(container.getId()), 0, dim1, dim2, jdbcDAO);
+			if (positionMap != null) 
+			{
+				final Iterator containerPosIterator = positionMap.keySet()
+						.iterator();
+				boolean positionAllottedFlag = false;
+				while (containerPosIterator.hasNext() && !positionAllottedFlag) 
+				{
+					NameValueBean nvb = (NameValueBean) containerPosIterator
+							.next();
+					xPos = Integer.valueOf(nvb.getValue());
+					final List yposValues = (List) positionMap.get(nvb);
+					final Iterator yposIterator = yposValues.iterator();
+
+					while (yposIterator.hasNext()) 
+					{
+						nvb = (NameValueBean) yposIterator.next();
+						yPos = Integer.valueOf(nvb.getValue());
+						position = new Position();
+						position.setXPos(xPos);
+						position.setYPos(yPos);
+						positionAllottedFlag = true;
+						break;
+					}
+				}
+			}
+		} catch (final DAOException d) 
+		{
+			d.printStackTrace();
+			throw new BizLogicException(d);
+		} finally 
+		{
+			this.closeJDBCSession(jdbcDAO);
+		}
+		return position;
+	}
+	/**
+	 * Returns a list of storage containers. Each index corresponds to the entry:<br>
+	 * 		[id, name, one_dimension_capacity, two_dimension_capacity ...]
+	 * @param holdsType - The type that the containers can 
+	 * hold (Specimen/SpecimenArray/Container)
+	 * @param cpId - Collection Protocol Id
+	 * @param spClass - Specimen Class
+	 * @param aliquotCount - Number of aliquotes that the fetched containers 
+	 * should minimally support. A value of <b>0</b> specifies that there's
+	 * no such restriction
+	 * @param containerTypeId 
+	 * @param specimenArrayTypeId 
+	 * @param exceedingLimit 
+	 * @return a list of storage containers
+	 * @throws DAOException
+	 */
+	private List getStorageContainerList(String holdsType, final Long cpId, final String spClass,
+			int aliquotCount, final SessionDataBean sessionData, Long containerTypeId,
+			Long specimenArrayTypeId, String exceedingLimit, JDBCDAO dao) throws BizLogicException,
+			DAOException
+	{
+		
+		final List containers = new ArrayList();
+		try
+		{
+			final String queries[] = this
+					.getStorageContainerQueries(holdsType, cpId, spClass, aliquotCount,
+							sessionData, containerTypeId, specimenArrayTypeId, exceedingLimit);
+
+			int remainingContainersNeeded = containersMaxLimit;
+
+			// iteratively run each query, and break if the required number of containers are found
+			for (int i = 0; i < queries.length; i++)
+			{
+				this.logger.debug(String.format("Firing query: query%d", i));
+				System.out.println(queries[i]);
+				final List resultList = dao.executeQuery(queries[i]);
+
+				if (resultList == null || resultList.size() == 0)
+				{
+					// skip to the next query, if any
+					continue;
+				}
+
+				if (resultList.size() >= remainingContainersNeeded)
+				{
+					containers.addAll(resultList.subList(0, remainingContainersNeeded));
+					System.out.println("sad");
+					break;
+				}
+				containers.addAll(resultList);
+				remainingContainersNeeded = containersMaxLimit - resultList.size();
+			}
+		}
+
+		finally
+		{
+			//dao.closeSession();
+		}
+		Logger.out.debug(String.format("%s:%s:%d", this.getClass().getSimpleName(),
+				"getStorageContainers() number of containers fetched", containers.size()));
+		return containers;
+	}
+
 
 	// TODO Write the proper business logic to return an appropriate list of
 	// containers.
@@ -3563,18 +3623,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		return returnList;
 	}
 
-	/**
-	 * This functions returns a double dimensional boolean array which tells the
-	 * availablity of storage positions of particular container. True -
-	 * Available. False - Not Available.
-	 * @param containerId - The container id.
-	 * @param dimX - int
-	 * @param dimY - int
-	 * @return Returns a double dimensional boolean array of position
-	 *         availablity.
-	 * @throws BizLogicException throws BizLogicException
-	 */
-	public boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY)
+
+	/*public boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY)
 			throws BizLogicException
 	{
 		final boolean[][] positions = new boolean[dimX][dimY];
@@ -3624,12 +3674,86 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		return positions;
 	}
+*/
+	/**
+	 * This functions returns a double dimensional boolean array which tells the
+	 * availablity of storage positions of particular container. True -
+	 * Available. False - Not Available.
+	 * @param containerId - The container id.
+	 * @param dimX - int
+	 * @param dimY - int
+	 * @param JDBCDAO dao  to be used for fetching data
+	 * @return Returns a double dimensional boolean array of position
+	 *         availablity.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY,
+			JDBCDAO dao) throws BizLogicException
+	{
+		final boolean[][] positions = new boolean[dimX][dimY];
+		try
+		{
 
+			for (int i = 0; i < dimX; i++)
+			{
+				for (int j = 0; j < dimY; j++)
+				{
+					positions[i][j] = true;
+				}
+			}
+
+			final StringBuilder storageContainerQuery = new StringBuilder();
+			storageContainerQuery
+					.append("select ap.position_dimension_one, ap.position_dimension_two ");
+			storageContainerQuery
+					.append(" from catissue_abstract_position ap join catissue_container_position cp on cp.identifier=ap.identifier ");
+			storageContainerQuery.append(" and cp.parent_container_id=" + containerId);
+			List list = dao.executeQuery(storageContainerQuery.toString());
+			
+			this.setPositions(positions, list);
+
+			final StringBuilder specimenQuery = new StringBuilder();
+			specimenQuery.append(" select ap.position_dimension_one, ap.position_dimension_two ");
+			specimenQuery
+					.append(" from catissue_abstract_position ap join catissue_specimen_position sp on sp.identifier=ap.identifier ");
+			specimenQuery.append(" and sp.container_id=");
+			specimenQuery.append(containerId);
+			list = dao.executeQuery(specimenQuery.toString());
+			this.setPositions(positions, list);
+		}
+		catch (final DAOException e)
+		{
+			throw new BizLogicException(e);
+		}
+		return positions;
+	}
 	/**
 	 * @param positions - boolean array of position.
 	 * @param list - list of objects
 	 */
-	private void setPositions(boolean[][] positions, List list)
+	/**
+	 * @param positions
+	 * @param list
+	 */
+	private void setPositions(boolean[][] positions, List resultSet)
+	{
+		if (resultSet != null)
+		{
+			int x, y;
+			for (int i = 0; i < resultSet.size(); i++)
+			{
+				final List columnList = (List) resultSet.get(i);
+				if ((columnList != null) && (columnList.size() == 2))
+				{
+					x = Integer.parseInt((String) columnList.get(0));
+					y = Integer.parseInt((String) columnList.get(1));
+					positions[x][y] = false;
+				}
+			}
+		}
+
+	}
+	/*private void setPositions(boolean[][] positions, List list)
 	{
 		if (!list.isEmpty())
 		{
@@ -3645,19 +3769,60 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			}
 		}
 	}
-
+*/
 	/**
-	 * This functions returns a double dimensional boolean array which tells the
-	 * availablity of storage positions of particular container. True -
-	 * Available. False - Not Available.
 	 * @param containerId
-	 *            The container identifier.
-	 * @return Returns a double dimensional boolean array of position
-	 *         availablity.
-	 * @throws BizLogicException throws BizLogicException
+	 * @param aliquotCount
+	 * @param positionDimensionOne
+	 * @param positionDimensionTwo
+	 * @param dao
+	 * @return Map
 	 */
-
 	public Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
+			String positionDimensionOne, String positionDimensionTwo, JDBCDAO dao)
+			throws BizLogicException
+	{
+		final Map map = new TreeMap();
+		int count = 0;
+		// Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
+		// if (!container.isFull().booleanValue())
+		// {
+		final int dimX = Integer.parseInt(positionDimensionOne) + 1;
+		final int dimY = Integer.parseInt(positionDimensionTwo) + 1;
+
+		final boolean[][] availablePosistions = this.getAvailablePositionsForContainer(containerId,
+				dimX, dimY, dao);
+
+		for (int x = 1; x < availablePosistions.length; x++)
+		{
+
+			final List list = new ArrayList();
+
+			for (int y = 1; y < availablePosistions[x].length; y++)
+			{
+				if (availablePosistions[x][y])
+				{
+					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					count++;
+				}
+			}
+
+			if (!list.isEmpty())
+			{
+				final Integer xObj = new Integer(x);
+				final NameValueBean nvb = new NameValueBean(xObj, xObj);
+				map.put(nvb, list);
+			}
+		}
+		// }
+		// Logger.out.info("Map :"+map);
+		if (count < aliquotCount)
+		{
+			return new TreeMap();
+		}
+		return map;
+	}
+	/*public Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
 			String positionDimensionOne, String positionDimensionTwo) throws BizLogicException
 	{
 		final Map map = new TreeMap();
@@ -3698,49 +3863,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		return map;
 	}
-
-	/**
-	 * This functions returns a map of allocated containers vs. their respective
-	 * free locations.
-	 * @return Returns a map of allocated containers vs. their respective free
-	 *         locations.
-	 * @throws BizLogicException throws BizLogicException
-	 */
-	public Map getAllocatedContainerMap() throws BizLogicException
-	{
-		/*
-		 * A code snippet inside the commented block should actually be replaced
-		 * by the code to get the allocated containers of specific collection
-		 * protocol
-		 */
-		// List list = retrieve(StorageContainer.class.getName());
-		final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "name",
-				"capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
-		final List list = this.retrieve(StorageContainer.class.getName(), selectColumnName);
-		final Map containerMap = new TreeMap();
-		this.logger.info("===================== list size:" + list.size());
-		final Iterator itr = list.iterator();
-		while (itr.hasNext())
-		{
-			final Object containerList[] = (Object[]) itr.next();
-			// Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getId());
-			final Map positionMap = this.getAvailablePositionMapForContainer(String
-					.valueOf(containerList[0]), 0, containerList[2].toString(), containerList[3]
-					.toString());
-
-			if (!positionMap.isEmpty())
-			{
-				// Logger.out.info("---------"+container.getName()+"------"+container.getId());
-				final NameValueBean nvb = new NameValueBean(containerList[1], containerList[0]);
-				containerMap.put(nvb, positionMap);
-
-			}
-		}
-
-		return containerMap;
-	}
-
-	/**
+*/
+		/**
 	 * @param dao - DAO object.
 	 * @param container - StorageContainer object
 	 * @throws BizLogicException throws BizLogicException
@@ -3778,124 +3902,21 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public TreeMap getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit,
-			String selectedContainerName, SessionDataBean sessionDataBean) throws BizLogicException
+			String selectedContainerName, SessionDataBean sessionDataBean)
+			throws BizLogicException, DAOException
 	{
-		long start = 0;
-		long end = 0;
-		final TreeMap containerMap = new TreeMap();
-		JDBCDAO jdbcdao = null;
-		DAO dao = null;
-		try
-		{
-
-			jdbcdao = this.openJDBCSession();
-
-			start = System.currentTimeMillis();
-			final String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
-					+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 "
-					+ "WHERE t4.STORAGE_TYPE_ID = '"
-					+ type_id
-					+ "' OR t4.STORAGE_TYPE_ID='1' and t4.STORAGE_CONTAINER_ID not in (select IDENTIFIER from catissue_storage_container where site_id in (select IDENTIFIER from catissue_site s1 where s1.ACTIVITY_STATUS='Closed'))) AND "
-					+ "t1.ACTIVITY_STATUS='"
-					+ Status.ACTIVITY_STATUS_ACTIVE.toString()
-					+ "' order by IDENTIFIER";
-
-			this.logger.debug("Storage Container query......................" + queryStr);
-			List list = new ArrayList();
-
-			list = jdbcdao.executeQuery(queryStr);
-
-			end = System.currentTimeMillis();
-			System.out.println("Time taken for executing query : " + (end - start));
-
-			Map containerMapFromCache = null;
-			final Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-					.getUserId());
-
-			try
-			{
-				containerMapFromCache = StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (final Exception e1)
-			{
-				this.logger.debug(e1.getMessage(), e1);
-				e1.printStackTrace();
-			}
-			boolean flag = true;
-			if (containerMapFromCache != null)
-			{
-				int i = 1;
-				final Iterator itr = list.iterator();
-				dao = this.openDAOSession(null);
-				while (itr.hasNext())
-				{
-					final List list1 = (List) itr.next();
-					final String Id = (String) list1.get(0);
-
-					final Long siteId = this.getSiteIdForStorageContainerId(Long.valueOf(Id), dao);
-					if (!sessionDataBean.isAdmin())
-					{
-						if (!siteIds.contains(siteId))
-						{
-							continue;
-						}
-					}
-
-					final String name = (String) list1.get(1);
-					final NameValueBean nvb = new NameValueBean(name, Id, new Long(Id));
-					if (selectedContainerName != null && flag)
-					{
-						if (!name.equalsIgnoreCase(selectedContainerName.trim()))
-						{
-							continue;
-						}
-						flag = false;
-					}
-
-					try
-					{
-						final Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
-
-						if (positionMap != null && !positionMap.isEmpty())
-						{
-							final Map positionMap1 = this.deepCopyMap(positionMap);
-							// NameValueBean nvb = new NameValueBean(Name, Id);
-							if (i > containersMaxLimit)
-							{
-								exceedingMaxLimit = "true";
-								break;
-							}
-							else
-							{
-								containerMap.put(nvb, positionMap1);
-							}
-							i++;
-						}
-					}
-
-					catch (final Exception e)
-					{
-						this.logger.info("Error while getting map from cache");
-						e.printStackTrace();
-					}
-
-				}
-			}
-
-			return containerMap;
-
-		}
-		catch (final DAOException ex)
-		{
-			this.logger.debug(ex.getMessage(), ex);
-			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
-		}
-		finally
-		{
-			this.closeJDBCSession(jdbcdao);
-			this.closeDAOSession(dao);
-		}
-
+		final Long startTime = System.currentTimeMillis();
+		final JDBCDAO jdbcDAO = this.openJDBCSession();
+		System.out.println("Tet");
+		final List containerList = this.getStorageContainerList(TYPE_CONTAINER, null, null, 0,
+				sessionDataBean, type_id, null, null, jdbcDAO);
+		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+		final Long endTime = System.currentTimeMillis();
+		System.out.println("Test");
+		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+				+ ((endTime - startTime) / 1000));
+		jdbcDAO.closeSession();
+		return tm;
 	}
 
 	/* temp function end */
@@ -3938,85 +3959,19 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			throws BizLogicException, DAOException
 	{
 
-		final NameValueBeanRelevanceComparator comparator = new NameValueBeanRelevanceComparator();
-		this.logger
-				.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
-		final TreeMap containerMap = new TreeMap(comparator);
-		final List list = this.getRelevantContainerList(cpId, specimenClass, jdbcDAO);
-		this.logger.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:"
-				+ list.size());
-		Map containerMapFromCache = null;
-		try
-		{
-			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-		}
-		catch (final Exception e1)
-		{
-			this.logger.debug(e1.getMessage(), e1);
-			e1.printStackTrace();
-		}
+		final Long startTime = System.currentTimeMillis();
 
-		if (containerMapFromCache != null)
-		{
-			final DAO dao = this.openDAOSession(null);
-			int i = 1;
-			int relevenceCounter = 1;
-			final Iterator itr = list.iterator();
-			while (itr.hasNext())
-			{
-				final List list1 = (List) itr.next();
-				final String Id = (String) list1.get(1);
-				final String Name = (String) list1.get(2);
-				this.logger.debug("Id :" + Id + "name:" + Name);
-				final NameValueBean nvb = new NameValueBean(Name, Id, new Long(relevenceCounter));
-				final Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
-				if (positionMap != null && !positionMap.isEmpty())
-				{
-					final StorageContainer sc = new StorageContainer();
-					sc.setId(new Long(Id));
-					boolean hasAccess = true;
-
-					hasAccess = this.validateContainerAccess(dao, sc, sessionData, cpId);
-
-					if (!hasAccess)
-					{
-						continue;
-					}
-
-					if (i > containersMaxLimit)
-					{
-						this.logger.info("CONTAINERS_MAX_LIMIT reached");
-						exceedingMaxLimit = new String("true");
-						break;
-					}
-					else
-					{
-						if (aliquotCount > 0)
-						{
-							final long count = this.countPositionsInMap(positionMap);
-							if (count >= aliquotCount)
-							{
-								containerMap.put(nvb, positionMap);
-							}
-						}
-						else
-						{
-							containerMap.put(nvb, positionMap);
-						}
-					}
-					i++;
-				}
-				relevenceCounter++;
-			}
-			this.closeDAOSession(dao);
-			this.logger.info("getAllocatedContaienrMapForSpecimen()----Size of containerMap:"
-					+ containerMap.size());
-		}
-		this.logger.info("exceedingMaxLimit----------" + exceedingMaxLimit);
-
-		return containerMap;
-
+		final List containerList = this.getStorageContainerList(TYPE_SPECIMEN, cpId, specimenClass,
+				aliquotCount, sessionData, null, null, null, jdbcDAO);
+		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+		final Long endTime = System.currentTimeMillis();
+		System.out.println("Test");
+		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+				+ ((endTime - startTime) / 1000));
+		return tm;
 	}
+
+
 
 	/**
 	 * @param dao - DAO object.
@@ -4059,107 +4014,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		return false;
 	}
-
-	/**
-	 * This function gets the list of container in order of there relvance.
-	 * @param cpId
-	 *            collection protocol Id
-	 * @param specimenClass
-	 *            class of the specimen
-	 * @param jdbcDAO  JDBCDAO object
-	 * @return list of containers in order of there relevence.
-	 * @throws BizLogicException
-	 * @author Vaishali
-	 */
-	public List getRelevantContainerList(long cpId, String specimenClass, JDBCDAO jdbcDAO)
-			throws BizLogicException
-	{
-		final List list = new ArrayList();
-		final String[] queryArray = new String[6];
-		// category # 1
-		// Gets all container which stores just specified collection protocol
-		// and specified specimen class
-		final String equalToOne = " = 1 ";
-		final String greaterThanOne = " > 1 ";
-
-		final String equalToFour = " = 4 ";
-		final String notEqualToFour = " !=4 ";
-		final String endQry = " and t1.IDENTIFIER = t6.STORAGE_CONTAINER_ID  and t1.IDENTIFIER = t7.IDENTIFIER"
-				+ " group by t6.STORAGE_CONTAINER_ID, t1.NAME " + " order by co asc ";
-
-		final String cpRestrictionCountQuery = "(select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
-		final String specimenClassRestrictionQuery = "(select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
-		// Vijay main query and default restriction query is updated according
-		// to bug id#8076
-		final String mainQuery = " SELECT count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 , CATISSUE_STORAGE_CONTAINER t7 "
-				+ " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
-				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '"
-				+ cpId
-				+ "')"
-				+ " AND t1.ACTIVITY_STATUS='Active'"
-				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3"
-				+ " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass
-				+ "')"
-				+ " AND t1.ACTIVITY_STATUS='Active' AND t1.IDENTIFIER=t7.IDENTIFIER	AND t7.SITE_ID NOT IN (SELECT IDENTIFIER FROM CATISSUE_SITE WHERE ACTIVITY_STATUS='Closed')";
-		final String defaultRestrictionQuery = " SELECT  count(*) co, t6.STORAGE_CONTAINER_ID, t1.NAME FROM CATISSUE_CONTAINER t1 , CATISSUE_STOR_CONT_SPEC_CLASS t6 , CATISSUE_STORAGE_CONTAINER t7 "
-				+ " WHERE t1.IDENTIFIER NOT IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2)"
-				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3"
-				+ " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass
-				+ "') "
-				+ " AND t1.ACTIVITY_STATUS='Active' AND t7.SITE_ID NOT IN (SELECT IDENTIFIER FROM CATISSUE_SITE WHERE ACTIVITY_STATUS='Closed')";
-
-		final String queryStr1 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne
-				+ " and " + specimenClassRestrictionQuery + equalToOne + endQry;
-		// category # 2
-		// Gets all containers which holds just specified container and any
-		// specimen class
-		final String queryStr2 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne
-				+ " and " + specimenClassRestrictionQuery + greaterThanOne + endQry;
-
-		// catgory # 3
-		// Gets all the containers which holds other than specified collection
-		// protocol and only specified specimen class
-		final String queryStr3 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne
-				+ " and " + specimenClassRestrictionQuery + equalToOne + endQry;
-
-		// catgory # 4
-		// Gets all the containers which holds specified cp and other than
-		// specified collection protocol and specified specimen class and other
-		// than specified specimen class
-		final String queryStr4 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne
-				+ " and " + specimenClassRestrictionQuery + greaterThanOne + endQry;
-
-		// catgory # 5
-		// Gets all the containers which holds any collection protocol and
-		// specified specimen class and other than specified specimen class
-
-		final String queryStr5 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery
-				+ notEqualToFour + endQry;
-		// catgory # 6
-		// Gets all the containers which holds any collection protocol and any
-		// specimen class
-		final String queryStr6 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery
-				+ equalToFour + endQry;
-
-		queryArray[0] = queryStr1;
-		queryArray[1] = queryStr2;
-		queryArray[2] = queryStr3;
-		queryArray[3] = queryStr4;
-		queryArray[4] = queryStr5;
-		queryArray[5] = queryStr6;
-
-		for (int i = 0; i < 6; i++)
-		{
-			this.logger.debug("Storage Container query......................" + queryArray[i]);
-			System.out.println("Storage Container query......................" + queryArray[i]);
-			final List queryResultList = this.executeStorageContQuery(queryArray[i], jdbcDAO);
-			list.addAll(queryResultList);
-		}
-		return list;
-	}
-
 	/**
 	 * This function executes the query 
 	 * @param query - String.
@@ -4204,100 +4058,19 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			int noOfAliqoutes, SessionDataBean sessionData, String exceedingMaxLimit)
 			throws BizLogicException
 	{
-
-		final NameValueBeanValueComparator contComp = new NameValueBeanValueComparator();
-		final TreeMap containerMap = new TreeMap(contComp);
-
 		JDBCDAO jdbcDAO = null;
-		DAO dao = null;
 		try
 		{
+			final Long startTime = System.currentTimeMillis();
 			jdbcDAO = this.openJDBCSession();
+			final List containerList = this.getStorageContainerList(TYPE_SPECIMEN_ARRAY, null,
+					null, 0, sessionData, null, specimen_array_type_id, null, jdbcDAO);
+			final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+			final Long endTime = System.currentTimeMillis();
 
-			String includeAllIdQueryStr = " OR t4.SPECIMEN_ARRAY_TYPE_ID = '"
-					+ Constants.ARRAY_TYPE_ALL_ID + "'";
-
-			if (!(new Validator().isValidOption(String.valueOf(specimen_array_type_id))))
-			{
-				includeAllIdQueryStr = "";
-			}
-			final String queryStr = "select t1.IDENTIFIER,t1.name from CATISSUE_CONTAINER t1,CATISSUE_STORAGE_CONTAINER t2 "
-					+ "where t1.IDENTIFIER IN (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4 "
-					+ "where t4.SPECIMEN_ARRAY_TYPE_ID = '"
-					+ specimen_array_type_id
-					+ "'"
-					+ includeAllIdQueryStr + ") and t1.IDENTIFIER = t2.IDENTIFIER";
-
-			this.logger.debug("SPECIMEN ARRAY QUERY ......................" + queryStr);
-			List list = new ArrayList();
-
-			final Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionData.getUserId());
-			list = jdbcDAO.executeQuery(queryStr);
-
-			this.logger.info("Size of list:" + list.size());
-			Map containerMapFromCache = null;
-			try
-			{
-				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (final Exception e1)
-			{
-				this.logger.debug(e1.getMessage(), e1);
-				e1.printStackTrace();
-			}
-
-			if (containerMapFromCache != null)
-			{
-				int i = 1;
-				final Iterator itr = list.iterator();
-
-				dao = this.openDAOSession(null);
-				while (itr.hasNext())
-				{
-					final List list1 = (List) itr.next();
-					final String Id = (String) list1.get(0);
-
-					final Long siteId = this.getSiteIdForStorageContainerId(Long.valueOf(Id), dao);
-					if (!sessionData.isAdmin())
-					{
-						if (!siteIds.contains(siteId))
-						{
-							continue;
-						}
-					}
-
-					final String Name = (String) list1.get(1);
-					final NameValueBean nvb = new NameValueBean(Name, Id);
-					final Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
-					if (positionMap != null && !positionMap.isEmpty())
-					{
-						// deep copy is required due to cache updation by reference
-						final Map positionMap1 = this.deepCopyMap(positionMap);
-						// NameValueBean nvb = new NameValueBean(Name, Id);
-						final StorageContainer sc = new StorageContainer();
-						sc.setId(new Long(Id));
-						/*
-						 * boolean hasAccess = true; try { hasAccess =
-						 * validateContainerAccess(sc, sessionData); } catch
-						 * (SMException sme) { sme.printStackTrace(); throw
-						 * handleSMException(sme); } if (!hasAccess) continue;
-						 */
-						if (i > containersMaxLimit)
-						{
-							exceedingMaxLimit = "true";
-							break;
-						}
-						else
-						{
-							containerMap.put(nvb, positionMap1);
-						}
-						i++;
-					}
-
-				}
-			}
-
-			return containerMap;
+			System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+					+ ((endTime - startTime) / 1000));
+			return tm;
 
 		}
 		catch (final DAOException daoExp)
@@ -4309,7 +4082,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		finally
 		{
 			this.closeJDBCSession(jdbcDAO);
-			this.closeDAOSession(dao);
 		}
 	}
 
@@ -5020,6 +4792,582 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			System.out.println(ex);
 		}
 		return count ;
+	}
+	/**
+	 * Returns a map of allocated containers vs. their respective
+	 * postition maps, for the given containers
+	 * 
+	 * @return Returns a map of allocated containers vs. their respective free
+	 *         locations.
+	 * @throws DAOException
+	 */
+	private Map getAllocDetailsForContainers(List containerList, JDBCDAO jdbcDao)
+			throws BizLogicException
+	{
+		this.logger.info("No of containers:" + containerList.size());
+
+		final Map containerMap = new TreeMap(new NameValueBeanRelevanceComparator());
+		long relevance = 1;
+		for (final Iterator itr = containerList.listIterator(); itr.hasNext(); relevance++)
+		{
+			//Object container[] = (Object[]) itr.next();
+			final ArrayList container = (ArrayList) itr.next();
+			final Map positionMap = this.getAvailablePositionMapForContainer(String
+					.valueOf(container.get(0)), 0, String.valueOf(container.get(2)), String
+					.valueOf(container.get(3)), jdbcDao);
+			System.out.println();
+			if (!positionMap.isEmpty())
+			{
+				final NameValueBean nvb = new NameValueBean(container.get(1), container.get(0),
+						relevance);
+				containerMap.put(nvb, positionMap);
+			}
+		}
+
+		return containerMap;
+	}
+
+	/**
+	 * Generic method to return queries for Specimen/Specimen Array/Containers
+	 * @param holdsType
+	 * @param cpId
+	 * @param spClass
+	 * @param aliquotCount
+	 * @param sessionData
+	 * @param containerTypeId
+	 * @param specimen_array_type_id
+	 * @param exceedingLimit
+	 * @return
+	 */
+	private String[] getStorageContainerQueries(String holdsType, Long cpId, String spClass,
+			Integer aliquotCount, SessionDataBean sessionData, Long containerTypeId,
+			Long specimen_array_type_id, String exceedingLimit)
+	{
+		if (holdsType.equals(TYPE_CONTAINER))
+		{
+			return this.getStorageContainerForContainerQuery(containerTypeId, sessionData);
+		}
+		else if (holdsType.equals(TYPE_SPECIMEN_ARRAY))
+		{
+			return this.getStorageContainerForSpecimenArrQuery(specimen_array_type_id, sessionData);
+		}
+		else if (holdsType.equals(TYPE_SPECIMEN))
+		{
+			return this.getStorageContainerForSpecimenQuery(cpId, spClass, aliquotCount,
+					sessionData);
+		}
+
+		return new String[]{};
+	}
+
+	/**
+	 * Gets the query for Specimen Array
+	 * @param specimen_array_type_id
+	 * @param aliquotCount
+	 * @param sessionData
+	 * @param exceedingLimit
+	 * @return
+	 */
+	private String[] getStorageContainerForSpecimenArrQuery(long specimen_array_type_id,
+			SessionDataBean sessionData)
+	{
+		String includeAllIdQueryStr = " OR t4.SPECIMEN_ARRAY_TYPE_ID = '"
+				+ Constants.ARRAY_TYPE_ALL_ID + "'";
+
+		if (!(new Validator().isValidOption(String.valueOf(specimen_array_type_id))))
+		{
+			includeAllIdQueryStr = "";
+		}
+		final StringBuilder sb = new StringBuilder();
+		sb
+				.append("SELECT t1.IDENTIFIER,t1.name,c.one_dimension_capacity , c.two_dimension_capacity ");
+		sb
+				.append(" from CATISSUE_CONTAINER t1 join catissue_capacity c on t1.capacity_id=c.identifier ");
+		sb.append(" join CATISSUE_STORAGE_CONTAINER t2 on t2.identifier=t1.identifier ");
+		sb.append(" join catissue_site S on S.identifier = t2.SITE_ID");
+		sb.append(" where t2.IDENTIFIER IN ");
+		sb
+				.append(" (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4  where t4.SPECIMEN_ARRAY_TYPE_ID = '");
+		sb.append(specimen_array_type_id);
+		sb.append("'");
+		sb.append(includeAllIdQueryStr);
+		sb.append(") ");
+		if (!sessionData.isAdmin())
+		{
+			sb.append(" and t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
+					+ sessionData.getUserId() + ")");
+		}
+
+		return new String[]{sb.toString()};
+	}
+
+	/**
+	 * Gets the query array for Container
+	 */
+	private String[] getStorageContainerForContainerQuery(long type_id, SessionDataBean sessionData)
+	{
+		final StringBuilder sb = new StringBuilder();
+		sb
+				.append("SELECT cont.IDENTIFIER, cont.NAME, cap.ONE_DIMENSION_CAPACITY, cap.TWO_DIMENSION_CAPACITY ");
+		sb.append("FROM CATISSUE_CAPACITY cap JOIN CATISSUE_CONTAINER cont ");
+		sb.append("	on cap.IDENTIFIER = cont.CAPACITY_ID where  ");
+		sb.append(" cont.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID ");
+		sb.append("  FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 ");
+		sb.append("WHERE t4.STORAGE_TYPE_ID = '" + type_id);
+		sb.append("' OR t4.STORAGE_TYPE_ID='1' and t4.STORAGE_CONTAINER_ID in ");
+		sb.append(" (select SC.IDENTIFIER from CATISSUE_STORAGE_CONTAINER SC ");
+		sb
+				.append(" join CATISSUE_SITE S on sc.site_id=S.IDENTIFIER and S.ACTIVITY_STATUS!='Closed' ");
+		if (!sessionData.isAdmin())
+		{
+			sb.append(" and S.IDENTIFIER in(SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
+					+ sessionData.getUserId() + ")");
+		}
+		sb.append("))");
+		sb.append("AND cont.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE);
+		sb.append("' order by IDENTIFIER");
+		return new String[]{sb.toString()};
+	}
+
+	/**
+	 * Gets the query array for Specimen Storage Containers
+	 * @param cpId
+	 * @param spClass
+	 * @param aliquotCount
+	 * @param sessionData
+	 * @return
+	 */
+	private String[] getStorageContainerForSpecimenQuery(Long cpId, String spClass,
+			int aliquotCount, SessionDataBean sessionData)
+	{
+		// Containers allowing Only this CP and Specimen Class
+		final String q0 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), IS_CP_UNIQUE, IS_SPCLASS_UNIQUE);
+		// Containers allowing Only this CP but other Specimen Classes also
+		final String q1 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), IS_CP_UNIQUE, IS_SPCLASS_NONUNIQUE);
+		// Containers allowing Other CPs also but just this Specimen Class
+		final String q2 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), IS_CP_NONUNIQUE, IS_SPCLASS_UNIQUE);
+		// Containers allowing Others CPs also and other Specimen Classes too
+		final String q3 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), IS_CP_NONUNIQUE, IS_SPCLASS_NONUNIQUE);
+		//Containers allowing any CP and other Specimen Classes too
+		final String q4 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), null, IS_SPCLASS_NONUNIQUE);
+		//Containers allowing any CP and any Specimen Class
+		final String q5 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), null, null);
+		return new String[]{q0, q1, q2, q3, q4, q5};
+	}
+
+	/**
+	 * Forms a Query to get the Storage Container list
+	 * @param cpId - Collection Protocol Id
+	 * @param spClass - Specimen Class
+	 * @param aliquotCount - Number of aliquotes that the fetched containers 
+	 * should minimally support. A value of <b>0</b> specifies that there's
+	 * no such restriction
+	 * @param siteId - Site Id
+	 * @return query string
+	 */
+	private String createSCQuery(final Long cpId, final String spClass, int aliquotCount,
+			final Long userId, final boolean isAdmin, final Boolean isCPUnique,
+			final Boolean isSPClassUnique)
+	{
+		final StringBuilder sb = new StringBuilder();
+		System.out.println("jhj");
+		System.out.println("test");
+		sb
+				.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*) AS AVAILABLE_SLOTS ");
+		sb
+				.append(" FROM"
+						+ " (SELECT D.IDENTIFIER,D.NAME,F.ONE_DIMENSION_CAPACITY, F.TWO_DIMENSION_CAPACITY,(F.ONE_DIMENSION_CAPACITY * F.TWO_DIMENSION_CAPACITY) AS CAPACITY");
+		sb
+				.append(" FROM CATISSUE_CAPACITY F JOIN CATISSUE_CONTAINER D  ON F.IDENTIFIER = D.CAPACITY_ID");
+		sb
+				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON D.IDENTIFIER = K.CONTAINER_ID ");
+		sb.append(" JOIN CATISSUE_STORAGE_CONTAINER C ON D.IDENTIFIER = C.IDENTIFIER ");
+		sb.append(" JOIN CATISSUE_SITE L ON C.SITE_ID = L.IDENTIFIER ");
+		if (isCPUnique != null) //DO not join on CP if there is no restriction on CP. i.e isCPUnique=null 
+		{
+			sb
+					.append(" JOIN CATISSUE_ST_CONT_COLL_PROT_REL A ON A.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+		}
+		if (isSPClassUnique != null) //DO not join on SP CLS if there is no restriction on SP CLS. i.e isSPClassUnique=null
+		{
+			sb
+					.append(" JOIN CATISSUE_STOR_CONT_SPEC_CLASS B ON B.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+		}
+		sb.append(" WHERE ");
+		if (isCPUnique != null)
+		{
+			sb.append(" A.COLLECTION_PROTOCOL_ID = ");
+			sb.append(cpId);
+			sb.append(" AND ");
+		}
+		if (isSPClassUnique != null)
+		{
+			sb.append("  B.SPECIMEN_CLASS = '");
+			sb.append(spClass);
+			sb.append("'");
+			sb.append(" AND ");
+		}
+		if (!isAdmin)
+		{
+			sb.append(" C.SITE_ID IN (SELECT M.SITE_ID FROM  ");
+			sb.append(" CATISSUE_SITE_USERS M WHERE M.USER_ID = ");
+			sb.append(userId);
+			sb.append(" ) ");
+			sb.append(" AND ");
+		}
+		sb.append("  L.ACTIVITY_STATUS = 'Active' and D.CONT_FULL=0 "); //Added cont_full condition by Preeti
+		sb.append(") VIEW1  ");
+		sb.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
+		sb.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
+		sb.append(" VIEW1.TWO_DIMENSION_CAPACITY, ");
+		sb.append(" VIEW1.CAPACITY ");
+		if (aliquotCount > 0)
+		{
+			sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >=  ");
+			sb.append(aliquotCount);
+		}
+		else
+		{
+			sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) > 0  ");
+		}
+		sb.append(" AND VIEW1.IDENTIFIER IN ");
+		sb.append(" ( ");
+		sb.append(this.getStorageContainerCPQuery(isCPUnique));
+		sb.append(" ) ");
+		sb.append(" AND VIEW1.IDENTIFIER IN ");
+		sb.append(" ( ");
+		sb.append(this.getStorageContainerSPClassQuery(isSPClassUnique));
+		sb.append(" ) ");
+		sb.append(" ORDER BY VIEW1.IDENTIFIER ");
+
+		Logger.out.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
+				"createSCQuery() query ", sb));
+
+		return sb.toString();
+	}
+
+	/**
+	 * Gets the restriction query for Containers for Collection Protocol
+	 * @param isUnique - Specifies the kind of restriction where:
+	 * <li><strong>true</strong> implies that the container should allow only one CP</li>
+	 * <li><strong>false</strong> implies that the container allows more than one CPs</li>
+	 * @return the query string
+	 */
+	private String getStorageContainerCPQuery(Boolean isUnique)
+	{
+		final String SC_CP_TABLE_NAME = "CATISSUE_ST_CONT_COLL_PROT_REL";
+		if (isUnique == null) //No restrictions on CP. Any CP condition
+		{
+			final StringBuilder sb = new StringBuilder();
+			sb.append("SELECT CONT.IDENTIFIER ");
+			sb.append("from CATISSUE_CONTAINER CONT ");
+			sb.append("WHERE CONT.IDENTIFIER NOT IN ");
+			sb.append(" (SELECT t2.STORAGE_CONTAINER_ID FROM " + SC_CP_TABLE_NAME + " t2) ");
+			return sb.toString();
+		}
+		else
+		{
+			return this.getSCBaseRestrictionQuery(SC_CP_TABLE_NAME, isUnique);
+		}
+	}
+
+	/**
+	 * Generates the base container restriction string 
+	 * This allows for selection of Containers that allow Single/Multiple CPs,
+	 * as well as Containers that allow Single/Multiple Specimen Classes
+	 * @param tableName - the table name to apply the restriction on
+	 * @param isUnique - specifies the multiplicity of the restriction
+	 * @return the base query string
+	 */
+	private String getSCBaseRestrictionQuery(String tableName, boolean isUnique)
+	{
+		final StringBuilder sb = new StringBuilder();
+		sb.append(" SELECT AA.STORAGE_CONTAINER_ID ");
+		sb.append(" FROM ");
+		sb.append(tableName);
+		sb.append(" AA GROUP BY AA.STORAGE_CONTAINER_ID ");
+		sb.append(" HAVING COUNT(AA.STORAGE_CONTAINER_ID) ");
+		if (isUnique)
+		{
+			sb.append(" = 1 ");
+		}
+		else
+		{
+			sb.append(" >1 ");
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Gets the restriction query for Containers for Specimen Class
+	 * @param isUnique - Specifies the kind of restriction where:
+	 * <li><strong>true</strong> implies that the container should allow only one type of Specimen</li>
+	 * <li><strong>false</strong> implies that the container allows more than type of Specimens</li>
+	 * @return the query string
+	 */
+	private String getStorageContainerSPClassQuery(Boolean isUnique)
+	{
+		final String SC_SPCLS_TABLE_NAME = "CATISSUE_STOR_CONT_SPEC_CLASS";
+		System.out.println();
+		if (isUnique == null) //No restrictions on CP. Any CP condition
+		{
+			final StringBuilder sb = new StringBuilder();
+			sb.append("SELECT SPEC.IDENTIFIER ");
+			sb.append("FROM CATISSUE_SPECIMEN SPEC ");
+			sb.append("WHERE SPEC.IDENTIFIER NOT IN ");
+			sb.append(" (SELECT t2.SPECIMEN_CLASS FROM " + SC_SPCLS_TABLE_NAME + " t2) ");
+			System.out.println("here");
+			return sb.toString();
+		}
+		else
+		{
+			return this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_CLASS", isUnique);
+		}
+	}
+
+	public boolean isContainerFull(String containerId, String containerName)
+			throws BizLogicException
+	{
+
+		/*System.out.println();
+		query.append("select cont.id from " + Container.class.getName() + " as cont ");
+		query.append("where cont.id= " + containerId);
+		query
+				.append(" and ((cont.capacity.oneDimensionCapacity * cont.capacity.twoDimensionCapacity) = ");
+		query.append(" (select count(*) from " + SpecimenPosition.class.getName());
+		query.append(" as specPos where specPos.storageContainer.id=" + containerId + ")");
+		query
+				.append(" or (cont.capacity.oneDimensionCapacity * cont.capacity.twoDimensionCapacity) = ");
+		query.append(" (select count(*) from " + ContainerPosition.class.getName());
+		query.append(" as contPos where contPos.parentContainer.id=" + containerId + "))");
+		List contList = executeQuery(query.toString());
+		if ((contList != null) && (contList.size() > 0))
+		{*/
+		final JDBCDAO jdbcDAO = this.openJDBCSession();
+		final Long freePositions = this.getCountofFreeLocationOfContainer(jdbcDAO, containerId,
+				containerName);
+		this.closeJDBCSession(jdbcDAO);
+		if (freePositions == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+
+	public boolean canReduceDimension(DAO dao, Long storageContainerId, Integer dimOne,
+			Integer dimTwo) throws DAOException
+	{
+		if (!this.isSpecimenAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
+		{
+			if (!this.isContainerAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
+			{
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	private boolean isContainerAssignedWithinDimensions(DAO dao, Long storageContainerId,
+			Integer dimOne, Integer dimTwo) throws DAOException
+	{
+		final StringBuilder contQuery = new StringBuilder();
+		System.out.println();
+		contQuery.append("from ContainerPosition cp ");
+		contQuery.append("where cp.parentContainer.id =");
+		contQuery.append(storageContainerId);
+		contQuery.append(" and (cp.positionDimensionOne>");
+		contQuery.append(dimOne);
+		contQuery.append(" or cp.positionDimensionTwo>");
+		contQuery.append(dimOne);
+		contQuery.append(")");
+		final List contList = dao.executeQuery(contQuery.toString());
+		if ((contList != null) && (contList.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isSpecimenAssignedWithinDimensions(DAO dao, Long storageContainerId,
+			Integer dimOne, Integer dimTwo) throws DAOException
+	{
+		final StringBuilder specQuery = new StringBuilder();
+		System.out.println();
+		specQuery.append("from SpecimenPosition sp ");
+		specQuery.append("where sp.storageContainer.id =");
+		specQuery.append(storageContainerId);
+		specQuery.append(" and (sp.positionDimensionOne>");
+		specQuery.append(dimOne);
+		specQuery.append(" or sp.positionDimensionTwo>");
+		specQuery.append(dimOne);
+		specQuery.append(")");
+		final List list = dao.executeQuery(specQuery.toString());
+		if ((list != null) && (list.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public Long getCountofFreeLocationOfContainer(JDBCDAO jdbcDAO, String containerId,
+			String storageContainerName) throws BizLogicException
+	{
+		long freeLocations = 0;
+		final StringBuilder totalCapacityQuery = new StringBuilder();
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			containerId = this.getContainerId(jdbcDAO, storageContainerName);
+		}
+
+		query
+				.append("select (capacity.one_dimension_capacity * capacity.two_dimension_capacity -view1.specLocations-view2.contLocns)");
+		query
+				.append("from catissue_container as cont join catissue_capacity as capacity on cont.capacity_id=capacity.identifier,");
+		query
+				.append("(select count(*) as specLocations from catissue_specimen_position sp where container_id = "
+						+ containerId + ") view1,");
+		query
+				.append("(select count(*) as contLocns from catissue_container_position cp where cp.parent_container_id="
+						+ containerId + ") view2 ");
+		query.append("where cont.identifier = " + containerId);
+		try
+		{
+			final List results = jdbcDAO.executeQuery(query.toString());
+			final Object result = this.getResultSetData(results, 0, 0);
+			if ((result != null) && (result instanceof String))
+			{
+				try
+				{
+					freeLocations = Long.valueOf((String) result);
+				}
+				catch (final NumberFormatException e)
+				{
+					freeLocations = 0;
+				}
+			}
+		}
+		catch (final DAOException e1)
+		{
+			System.out.println();
+			e1.printStackTrace();
+			throw new BizLogicException(e1);
+		}
+
+		return freeLocations;
+	}
+
+	private String getContainerId(JDBCDAO jdbcDAO, String containerName) throws BizLogicException
+	{
+		final StringBuilder query = new StringBuilder();
+		query.append("select identifier from catissue_container cont ");
+		query.append("where cont.name='" + containerName + "'");
+		if (jdbcDAO != null)
+		{
+			try
+			{
+				final List results = jdbcDAO.executeQuery(query.toString());
+				final Object result = this.getResultSetData(results, 0, 0);
+				if ((result != null) && (result instanceof String))
+				{
+					return (String) result;
+				}
+			}
+			catch (final DAOException daoExp)
+			{
+				throw new BizLogicException(daoExp);
+			}
+		}
+		return null;
+	}
+
+	private Object getResultSetData(List resultSet, int rowNumber, int columnNumber)
+	{
+		//Get 0th row and 0th column of the resultset
+		if ((resultSet != null) && (resultSet.size() > rowNumber))
+		{
+			final List columnList = (List) resultSet.get(rowNumber);
+			if ((columnList != null) && (columnList.size() > columnNumber))
+			{
+				return columnList.get(columnNumber);
+			}
+		}
+		return null;
+	}
+
+	public boolean isPositionAvailable(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws BizLogicException
+	{
+		if (!this.isSpecimenAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+		{
+			if (!this.isContainerAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+			{
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	private boolean isContainerAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws BizLogicException
+	{
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			query.append("select id from " + ContainerPosition.class.getName()
+					+ " contPos where contPos.parentContainer.name='" + containerName + "'");
+		}
+		else
+		{
+			query.append("select id from " + ContainerPosition.class.getName()
+					+ " contPos where contPos.parentContainer.id=" + containerId);
+		}
+
+		query.append(" and contPos.positionDimensionOne=" + pos1
+				+ " and contPos.positionDimensionTwo=" + pos2);
+		final List allocatedList = this.executeQuery(query.toString());
+
+		if ((allocatedList != null) && (allocatedList.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isSpecimenAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws BizLogicException
+	{
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			query.append("select id from " + SpecimenPosition.class.getName()
+					+ " specPos where specPos.storageContainer.name='" + containerName + "'");
+		}
+		else
+		{
+			query.append("select id from " + SpecimenPosition.class.getName()
+					+ " specPos where specPos.storageContainer.id=" + containerId);
+		}
+		query.append(" and specPos.positionDimensionOne=" + pos1
+				+ "  and specPos.positionDimensionTwo=" + pos2);
+		final List allocatedList = this.executeQuery(query.toString());
+		if ((allocatedList != null) && (allocatedList.size() > 0))
+		{
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -49,6 +50,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.JDBCDAO;
 
 /**
  * @author renuka_bajpai
@@ -295,25 +297,44 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		final List<GenericSpecimen> derivedList = specimenSummaryForm.getDerivedList();
 		final List<String> allocatedPositions = new ArrayList<String>();
 		int freeSizeofContainer = 0;
-		for (final GenericSpecimen spec : specimenList)
+		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+		JDBCDAO jdbcDao = null;
+		try
 		{
-			final String conName = spec.getSelectedContainerName();
-			final String conId = spec.getContainerId();
+			jdbcDao = AppUtility.openJDBCSession();
+
+			for (final GenericSpecimen spec : specimenList)
+			{
+				freeSizeofContainer = scBizLogic.getCountofFreeLocationOfContainer(jdbcDao,
+						spec.getContainerId(), spec.getSelectedContainerName()).intValue();
+				//freeSizeofContainer = StorageContainerUtil.getCountofFreeLocationOfContainer(conId, conName);
+
+			}
+
+			int tempContainerSize = this.checkList(specimenList, allocatedPositions,
+					freeSizeofContainer, scBizLogic, jdbcDao);
+			tempContainerSize = this.checkList(aliquotList, allocatedPositions, tempContainerSize,
+					scBizLogic, jdbcDao);
+			this.checkList(derivedList, allocatedPositions, tempContainerSize, scBizLogic, jdbcDao);
+		}
+		catch (final Exception e)
+		{
+			this.logger.debug(e.getMessage(), e);
+			e.printStackTrace();
+			throw new BizLogicException(null, e, e.getMessage());
+		}
+		finally
+		{
 			try
 			{
-				freeSizeofContainer = StorageContainerUtil.getCountofFreeLocationOfContainer(conId,
-						conName);
+				AppUtility.closeJDBCSession(jdbcDao);
 			}
-			catch (final Exception e)
+			catch (final ApplicationException e)
 			{
-				this.logger.debug(e.getMessage(), e);
 				e.printStackTrace();
+				throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 			}
 		}
-		int tempContainerSize = this.checkList(specimenList, allocatedPositions,
-				freeSizeofContainer);
-		tempContainerSize = this.checkList(aliquotList, allocatedPositions, tempContainerSize);
-		this.checkList(derivedList, allocatedPositions, tempContainerSize);
 	}
 
 	/**
@@ -324,7 +345,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	 * @return int : int
 	 */
 	public int checkList(List<GenericSpecimen> gs, List<String> allocatedPositions,
-			int containerSize)
+			int containerSize, StorageContainerBizLogic scBizLogic, JDBCDAO jdbcDAO)
+			throws BizLogicException
 	{
 		for (final GenericSpecimen spec : gs)
 		{
@@ -334,7 +356,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			final String key = containerName + ":" + positionOne + "," + positionTwo;
 			if (positionOne != "" && positionTwo != "")
 			{
-				if (!(StorageContainerUtil.isPostionAvaialble(spec.getContainerId(), spec
+				if (!(scBizLogic.isPositionAvailable(jdbcDAO, spec.getContainerId(), spec
 						.getSelectedContainerName(), positionOne, positionTwo))
 						|| allocatedPositions.contains(key))
 				{

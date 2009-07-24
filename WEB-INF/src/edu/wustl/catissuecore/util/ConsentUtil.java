@@ -223,20 +223,6 @@ public final class ConsentUtil
 	{
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 		specimen.setIsAvailable(Boolean.FALSE);
-
-		if(specimen.getSpecimenPosition() != null && specimen.getSpecimenPosition().getStorageContainer() !=null)		// locations cleared
-		{
-			Map containerMap = null;
-			try
-			{
-				containerMap = StorageContainerUtil.getContainerMapFromCache();
-			}
-			catch (Exception e)
-			{
-				logger.error(e);
-			}
-			StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getSpecimenPosition().getStorageContainer(),containerMap,specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen.getSpecimenPosition().getPositionDimensionTwo().intValue()    );
-		}
 		specimen.setSpecimenPosition(null);
 		//			specimen.setPositionDimensionOne(null);
 		//			specimen.setPositionDimensionTwo(null);

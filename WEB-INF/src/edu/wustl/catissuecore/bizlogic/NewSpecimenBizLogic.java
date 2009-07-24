@@ -19,11 +19,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -62,6 +60,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
+import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -822,8 +821,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * To be remove
-	 *
 	 * @param obj
 	 *            Domain object
 	 *@param dao
@@ -838,8 +835,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		final Map containerMap = this.getStorageContainerMap();
-		this.updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
 		super.postInsert(obj, dao, sessionDataBean);
 	}
 
@@ -875,25 +870,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		super.postInsert(speCollection, dao, sessionDataBean);
 	}
 
-	/**
-	 * @return containerMap Map of containers
-	 */
-	private Map getStorageContainerMap()
-	{
-		Map containerMap = null;
-		try
-		{
-			containerMap = StorageContainerUtil.getContainerMapFromCache();
-		}
-		catch (final Exception e)
-		{
-			this.logger.debug(e.getMessage(), e);
-			e.printStackTrace();
-		}
-		return containerMap;
-	}
-
-	/**
+		/**
 	 * @param currentObj
 	 *            Current Object
 	 * @param oldObj
@@ -927,31 +904,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				this.closeJDBCSession(jdbcDao);
 			}
-		}
-	}
-
-	/**
-	 * @param containerMap
-	 *            Map of containers
-	 * @param specimen
-	 *            Current Specimen
-	 */
-	void updateStorageLocations(TreeMap containerMap, Specimen specimen)
-	{
-		try
-		{
-			if (specimen.getSpecimenPosition() != null
-					&& specimen.getSpecimenPosition().getStorageContainer() != null)
-			{
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen
-						.getSpecimenPosition().getStorageContainer(), containerMap, specimen
-						.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen
-						.getSpecimenPosition().getPositionDimensionTwo().intValue());
-			}
-		}
-		catch (final Exception e)
-		{
-			this.logger.error("Exception occured while updating aliquots");
 		}
 	}
 
@@ -1245,20 +1197,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 
 	{
-		final Map containerMap = this.getStorageContainerMap();
-		if (currentObj.getClass().hashCode() == LinkedHashSet.class.hashCode())
-		{
-			final Iterator it = ((LinkedHashSet) currentObj).iterator();
-			while (it.hasNext())
-			{
-				final Specimen specimen = (Specimen) it.next();
-				this.updateStorageLocations((TreeMap) containerMap, specimen);
-			}
-		}
-		else if (currentObj instanceof Specimen)
-		{
-			this.updateStorageLocations((TreeMap) containerMap, (Specimen) currentObj);
-		}
 		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
@@ -1781,14 +1719,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if (specPos.getPositionDimensionOne() == null
 						|| specPos.getPositionDimensionTwo() == null)
 				{
-					final LinkedList<Integer> positionValues = StorageContainerUtil
-							.getFirstAvailablePositionsInContainer(storageContainerObj, this
-									.getStorageContainerMap(), this.storageContainerIds);
+					final Position position = StorageContainerUtil
+					.getFirstAvailablePositionsInContainer(storageContainerObj,
+							this.storageContainerIds);
 
 					specPos = new SpecimenPosition();
-
-					specPos.setPositionDimensionOne(positionValues.get(0));
-					specPos.setPositionDimensionTwo(positionValues.get(1));
+					specPos.setPositionDimensionOne(position.getXPos());
+					specPos.setPositionDimensionTwo(position.getYPos());
 				}
 				specPos.setSpecimen(specimen);
 				specPos.setStorageContainer(storageContainerObj);
@@ -2839,7 +2776,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			 * it is not given If storage position is given it validates the
 			 * storage position
 			 **/
-			StorageContainerUtil.validateStorageLocationForSpecimen(specimen,
+			StorageContainerUtil.validateStorageLocationForSpecimen(specimen, dao,
 					this.storageContainerIds);
 		}
 		catch (final ApplicationException exp)

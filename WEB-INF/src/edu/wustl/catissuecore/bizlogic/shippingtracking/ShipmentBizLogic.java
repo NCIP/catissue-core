@@ -12,14 +12,11 @@ package edu.wustl.catissuecore.bizlogic.shippingtracking;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.shippingtracking.BaseShipment;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -276,16 +273,4 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		this.preInsert(obj1, dao, sessionDataBean);
 	}
 
-	/**
-	 * updates the cache memory.
-	 * @param storageContainerFrom object of StorageContainer class.
-	 * @param specimen object of Specimen class.
-	 */
-	public void updateCache(StorageContainer storageContainerFrom, Specimen specimen)
-	{
-		final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-		StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap,
-				specimen.getSpecimenPosition().getPositionDimensionOne().intValue(), specimen
-						.getSpecimenPosition().getPositionDimensionTwo().intValue());
-	}
 }

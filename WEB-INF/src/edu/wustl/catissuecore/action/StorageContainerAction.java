@@ -205,12 +205,9 @@ public class StorageContainerAction extends SecureAction
 		}
 		if (containerId != null)
 		{
-			final StorageContainerBizLogic storageContaineriBzLogic =
-				(StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			final String name = StorageContainer.class.getName();
 			final Long long1 = new Long(containerId);
-			final StorageType storageType = (StorageType) storageContaineriBzLogic
+			final StorageType storageType = (StorageType) bizLogic
 					.retrieveAttribute(name, long1, "storageType");
 			final Long typeId = storageType.getId();
 			final long start = System.currentTimeMillis();
@@ -228,8 +225,8 @@ public class StorageContainerAction extends SecureAction
 		if (operation.equals(Constants.EDIT))
 		{
 
-			if (StorageContainerUtil.chkContainerFull(new Long(storageContainerForm.getId())
-					.toString(), storageContainerForm.getContainerName()))
+			if (bizLogic.isContainerFull(storageContainerForm.getId() + "", storageContainerForm
+					.getContainerName()))
 			{
 				storageContainerForm.setIsFull("true");
 			}
@@ -621,7 +618,7 @@ public class StorageContainerAction extends SecureAction
 		{
 			final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
-			final Object object = bizLogic.retrieve(StorageContainer.class.getName(),
+			/*final Object object = bizLogic.retrieve(StorageContainer.class.getName(),
 					storageContainerForm.getId());
 			if (object != null)
 			{
@@ -646,7 +643,7 @@ public class StorageContainerAction extends SecureAction
 								pos1, pos2);
 					}
 				}
-			}
+			}*/
 			if (storageContainerForm.getParentContainerId() != -1)
 			{
 				startingPoints[0] = new Long(storageContainerForm.getParentContainerId())

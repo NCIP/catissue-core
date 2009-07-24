@@ -510,17 +510,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 
 				final String contId = (String) aliquotMap.get(containerIdKey);
 				final String contName = (String) aliquotMap.get(storageContainerNameKey);
-				final String posOne = (String) aliquotMap.get(posDim1Key);
-				final String posTwo = (String) aliquotMap.get(posDim2Key);
 
 				final StorageContainer storageContainer = new StorageContainer();
 				storageContainer.setId(new Long(contId));
 				storageContainer.setName(contName);
-
-				final Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainer,
-						containerMap, new Integer(posOne).intValue(), new Integer(posTwo)
-								.intValue());
 			}
 		}
 		catch (final Exception e)
