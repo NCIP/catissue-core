@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.tree.StorageContainerTreeNode;
@@ -46,17 +47,25 @@ public class ShowChildNodes extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final PrintWriter out = response.getWriter();
-		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
+		Vector<StorageContainerTreeNode> treeNodeDataVector = new Vector<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
 		HttpSession session = request.getSession() ;
 		String pageOf = (String)session.getAttribute("PageForTree") ;
 		final String nodeName = request.getParameter(Constants.NODE_NAME);
 		final Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
 		final String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
-		final StorageContainerBizLogic sc = new StorageContainerBizLogic();
-		containerNodeVector = sc.getStorageContainers(identifier, nodeName, parentId,pageOf);
+		if(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
+		{
+			treeNodeDataVector = AppUtility.getTissueSiteNodes(identifier, nodeName, parentId) ;
+		}
+		else
+		{
+			final StorageContainerBizLogic sc = new StorageContainerBizLogic();
+			treeNodeDataVector = sc.getStorageContainers(identifier, nodeName, parentId);
+		}
+		
 		response.setContentType("text/xml");
-		xmlData = this.makeXMLData(containerNodeVector, xmlData);
+		xmlData = this.makeXMLData(treeNodeDataVector, xmlData);
 		out.print(xmlData.toString());
 		return null;
 	}

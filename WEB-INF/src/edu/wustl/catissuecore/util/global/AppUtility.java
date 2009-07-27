@@ -3278,4 +3278,184 @@ public class AppUtility
 			return finalDataListVector;
 		}
 	}
+	/**
+	 * @param identifier
+	 *            Identifier of the container or site node.
+	 * @param nodeName
+	 *            Name of the site or container
+	 * @param parentId
+	 *            parent identifier of the selected node
+	 * @return tissueSiteNodeVector This vector contains all the containers
+	 * @throws ApplicationException throws ApplicationException.
+	 * @Description This method will retrieve all the Tissue Sites under the
+	 *              selected node
+	 */
+	public static Vector<StorageContainerTreeNode> getTissueSiteNodes(Long identifier, String nodeName,
+			String parentId) throws ApplicationException
+	{
+		JDBCDAO dao = null;
+		Vector<StorageContainerTreeNode> tissueSiteNodeVector = new Vector<StorageContainerTreeNode>();
+		try 
+		{
+			dao = openJDBCSession();
+			List resultList = new ArrayList();
+			
+			final String sql = createSql(identifier, parentId);
+			resultList = dao.executeQuery(sql);
+			
+			String tissueSiteName = null;
+			Long nodeIdentifier;
+			Long tissueParentId;
+			Long childCount;
+			String activityStatus = null;
+
+			final Iterator iterator = resultList.iterator();
+			while (iterator.hasNext())
+			{
+				final List rowList = (List) iterator.next();
+				nodeIdentifier = Long.valueOf((String) rowList.get(0));
+				tissueSiteName = (String) rowList.get(1);
+				String parId = (String) rowList.get(2);
+				activityStatus = Status.ACTIVITY_STATUS_CLOSED.toString() ;
+				if((parId==null) ||("".equals(parId)))
+				{
+					parId ="1" ; 
+				}
+				tissueParentId = Long.valueOf(parId);
+				childCount = Long.valueOf(getChildCount(nodeIdentifier,dao));
+				if(childCount > 0)
+				{
+					activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString() ;
+				}
+				tissueSiteNodeVector = getTreeNodeDataVector(tissueSiteNodeVector,nodeIdentifier,tissueSiteName,
+															activityStatus,childCount,tissueParentId,nodeName);
+			}
+			if (tissueSiteNodeVector.isEmpty())
+			{
+				final StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
+						identifier, nodeName, nodeName, activityStatus);
+				tissueSiteNodeVector.add(containerNode);
+			}
+		}
+		catch (final DAOException daoExp)
+		{
+			logger.debug(daoExp.getMessage(), daoExp);
+			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
+		}
+		finally
+		{
+			closeJDBCSession(dao);
+		}		
+		return tissueSiteNodeVector ;
+	}
+	/**
+	 * This method creates the new node required for DHTML tree node.
+	 * @param TreeNodeDataVector Vector which stores the created node.
+	 * @return TreeNodeDataVector by adding the new parent and child node
+	 */
+	
+	 public static Vector<StorageContainerTreeNode> getTreeNodeDataVector(Vector<StorageContainerTreeNode> treeNodeDataVector,
+	  										Long childNodeId, String childNodeName, String activityStatus, 
+											Long childCount,Long parentNodeId,String parentNodeName)
+	 {
+	 	final String dummyNodeName = Constants.DUMMY_NODE_NAME ;
+	 	StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
+						childNodeId, childNodeName, childNodeName, activityStatus);
+		final StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(
+						parentNodeId, parentNodeName, parentNodeName, activityStatus);
+
+		if (childCount != null && childCount > 0)
+		{
+			final StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(
+						childNodeId, dummyNodeName, dummyNodeName,
+						activityStatus);
+			dummyContainerNode.setParentNode(containerNode);
+			containerNode.getChildNodes().add(dummyContainerNode);
+		}
+
+		if (treeNodeDataVector.contains(containerNode))
+		{
+			containerNode = (StorageContainerTreeNode) treeNodeDataVector
+					.get(treeNodeDataVector.indexOf(containerNode));
+		}
+		else
+		{
+			treeNodeDataVector.add(containerNode);
+		}
+		containerNode.setParentNode(parneContainerNode);
+		parneContainerNode.getChildNodes().add(containerNode);
+		
+		return treeNodeDataVector ;
+	}
+	 
+	/**
+	 * @param identifier
+	 *            Identifier of the container or site node
+	 * @param parentId
+	 *            Parent identifier of the selected node
+	 * @return String sql This method with return the sql depending on the node
+	 *         clicked (i.e parent Node or child node)
+	 */
+	
+	public static String createSql(Long identifier, String parentId)
+	{
+		String sql ="" ;
+		
+		if (Constants.ZERO_ID.equals(parentId))
+		{
+			sql = " SELECT IDENTIFIER, VALUE, PARENT_IDENTIFIER " +
+				  " FROM CATISSUE_PERMISSIBLE_VALUE INNER JOIN CATISSUE_CDE " +
+				  "	WHERE CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID = CATISSUE_CDE.PUBLIC_ID " +
+				  "	AND CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID LIKE '%Tissue_Site_PID%'" ;
+		}
+		else
+		{
+			sql = " SELECT CA.IDENTIFIER , CA.VALUE, CA.PARENT_IDENTIFIER " +
+				  "	FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1 " +
+				  "	WHERE CA1.IDENTIFIER   = CA.IDENTIFIER " +
+				  "	AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER " +
+				  "	AND CA1.PARENT_IDENTIFIER  ='" + identifier + "'" ;
+		}
+		return sql ;
+	}
+	
+	/**
+	 * This method is defined for counting the child of the Tissue Site.
+	 * @param identifier identifier of the container node whose child count is going to be done. 
+	 * @param dao JDBCDAO object for excuting the sql query.
+	 * @return child count of the container identifier
+	 */
+	
+	public static long getChildCount(Long identifier,JDBCDAO dao) throws ApplicationException
+	{
+		long count =  0 ;
+		String sql= " SELECT COUNT(CA1.PARENT_IDENTIFIER)" +
+					" FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1" +
+					" WHERE CA1.IDENTIFIER   = CA.IDENTIFIER" +
+					" AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER" +
+					" AND CA1.PARENT_IDENTIFIER ='"+ identifier + "'" + 
+					" GROUP BY CA1.PARENT_IDENTIFIER" ;
+		
+		try
+		{
+			List resList = dao.executeQuery(sql);
+			if(!(resList.isEmpty()))
+			{
+				final Iterator iterator = resList.iterator();
+				while (iterator.hasNext())
+				{
+					final List rowList = (List) iterator.next();
+					count = Long.parseLong((String) rowList.get(0)) ;
+				}
+			}
+		}
+		catch(DAOException daoExp)
+		{
+			logger.debug(daoExp.getMessage(), daoExp);
+			// TODO Auto-generated catch block
+			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
+		}
+		return count ;
+	}
+	 
 }

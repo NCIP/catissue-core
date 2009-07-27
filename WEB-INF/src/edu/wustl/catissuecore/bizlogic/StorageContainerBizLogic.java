@@ -2197,21 +2197,21 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 *              selected node
 	 */
 	public Vector<StorageContainerTreeNode> getStorageContainers(Long identifier, String nodeName,
-			String parentId,String pageOf) throws BizLogicException
+			String parentId) throws BizLogicException
 	{
 		JDBCDAO dao = null;
-		final Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
+		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
 		try
 		{
 			dao = this.openJDBCSession();
 			List resultList = new ArrayList();
-			if (Constants.ZERO_ID.equals(parentId) && (!(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))))
+			if (Constants.ZERO_ID.equals(parentId))
 			{
 				resultList = this.getContainersForSite(identifier, dao);//Bug 11694
 			}
 			else
 			{
-				final String sql = this.createSql(identifier, parentId,pageOf);
+				final String sql = this.createSql(identifier, parentId);
 				resultList = dao.executeQuery(sql);
 			}
 			final String dummyNodeName = Constants.DUMMY_NODE_NAME;
@@ -2225,57 +2225,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			while (iterator.hasNext())
 			{
 				final List rowList = (List) iterator.next();
-				if(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
-				{
-					nodeIdentifier = Long.valueOf((String) rowList.get(0));
-					containerName = (String) rowList.get(1);
-					String parId = (String) rowList.get(2);
-					activityStatus = "Closed" ;
-					if((parId==null) ||("".equals(parId)))
-					{
-						parId ="1" ; 
-					}
-					parentContainerId = Long.valueOf(parId);
-					childCount = Long.valueOf(this.getChildCount(nodeIdentifier,dao));
-					if(childCount > 0)
-					{
-						activityStatus = "Active" ;
-					}
-				}
-				else
-				{
-					nodeIdentifier = Long.valueOf((String) rowList.get(0));
-					containerName = (String) rowList.get(1);
-					activityStatus = (String) rowList.get(2);
-					parentContainerId = Long.valueOf((String) rowList.get(3));
-					childCount = Long.valueOf((String) rowList.get(4));
-				}
-
-				StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
-						nodeIdentifier, containerName, containerName, activityStatus);
-				final StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(
-						parentContainerId, nodeName, nodeName, activityStatus);
-
-				if (childCount != null && childCount > 0)
-				{
-					final StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(
-							Long.valueOf((String) rowList.get(0)), dummyNodeName, dummyNodeName,
-							activityStatus);
-					dummyContainerNode.setParentNode(containerNode);
-					containerNode.getChildNodes().add(dummyContainerNode);
-				}
-
-				if (containerNodeVector.contains(containerNode))
-				{
-					containerNode = (StorageContainerTreeNode) containerNodeVector
-							.get(containerNodeVector.indexOf(containerNode));
-				}
-				else
-				{
-					containerNodeVector.add(containerNode);
-				}
-				containerNode.setParentNode(parneContainerNode);
-				parneContainerNode.getChildNodes().add(containerNode);
+				nodeIdentifier = Long.valueOf((String) rowList.get(0));
+				containerName = (String) rowList.get(1);
+				activityStatus = (String) rowList.get(2);
+				parentContainerId = Long.valueOf((String) rowList.get(3));
+				childCount = Long.valueOf((String) rowList.get(4));
+				
+				containerNodeVector = AppUtility.getTreeNodeDataVector(containerNodeVector, nodeIdentifier, containerName,
+															activityStatus,	childCount, parentContainerId, nodeName);
 			}
 			if (containerNodeVector.isEmpty())
 			{
@@ -2314,30 +2271,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @return String sql This method with return the sql depending on the node
 	 *         clicked (i.e parent Node or child node)
 	 */
-	private String createSql(Long identifier, String parentId,String pageOf)
+	private String createSql(Long identifier, String parentId)
 	{
-		String sql ="" ;
-		if(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
-		{
-			if (Constants.ZERO_ID.equals(parentId))
-			{
-				sql = " SELECT IDENTIFIER, VALUE, PARENT_IDENTIFIER " +
-					  " FROM CATISSUE_PERMISSIBLE_VALUE INNER JOIN CATISSUE_CDE " +
-					  "	WHERE CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID = CATISSUE_CDE.PUBLIC_ID " +
-					  "	AND CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID LIKE '%Tissue_Site_PID%'" ;
-			}
-			else
-			{
-				sql = " SELECT CA.IDENTIFIER , CA.VALUE, CA.PARENT_IDENTIFIER " +
-					  "	FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1 " +
-					  "	WHERE CA1.IDENTIFIER   = CA.IDENTIFIER " +
-					  "	AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER " +
-					  "	AND CA1.PARENT_IDENTIFIER  ='" + identifier + "'" ;
-			}
-		}
-		else
-		{
-			sql = "SELECT cn.IDENTIFIER, cn.name, cn.activity_status, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
+		String sql = "SELECT cn.IDENTIFIER, cn.name, cn.activity_status, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
 				+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
 				+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
 				+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
@@ -2346,7 +2282,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ identifier
 				+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME, cn.activity_status, pos.PARENT_CONTAINER_ID"
 				+ " ORDER BY cn.IDENTIFIER ";
-		}
+		
 		return sql;
 	}
 
@@ -4757,41 +4693,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 
 		return cpNameValueList;
-	}
-	/**
-	 * This method is defined for counting the child of the Tissue Site.
-	 * @param identifier identifier of the container node whose child count is going to be done. 
-	 * @param dao JDBCDAO object for excuting the sql query.
-	 * @return child count of the container identifier
-	 */
-	protected long getChildCount(Long identifier,JDBCDAO dao)
-	{
-		long count =  0 ;
-		String sql= " SELECT COUNT(CA1.PARENT_IDENTIFIER)" +
-					" FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1" +
-					" WHERE CA1.IDENTIFIER   = CA.IDENTIFIER" +
-					" AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER" +
-					" AND CA1.PARENT_IDENTIFIER ='"+ identifier + "'" + 
-					" GROUP BY CA1.PARENT_IDENTIFIER" ;
-		
-		try
-		{
-			List resList = dao.executeQuery(sql);
-			if(!(resList.isEmpty()))
-			{
-				final Iterator iterator = resList.iterator();
-				while (iterator.hasNext())
-				{
-					final List rowList = (List) iterator.next();
-					count = Long.parseLong((String) rowList.get(0)) ;
-				}
-			}
-		}
-		catch(Exception ex)
-		{
-			System.out.println(ex);
-		}
-		return count ;
 	}
 	/**
 	 * Returns a map of allocated containers vs. their respective
