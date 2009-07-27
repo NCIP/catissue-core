@@ -81,6 +81,7 @@
 		<mapping resource="edu/common/dynamicextensions/hbm/DESQLAudit.hbm.xml"/>
       	<mapping resource="edu/common/dynamicextensions/hbm/FormControlNotes.hbm.xml"/>
       	<mapping resource="edu/common/dynamicextensions/hbm/databaseproperties/ConstraintKeyProperties.hbm.xml"/>
+      	<mapping resource="edu/common/dynamicextensions/hbm/Formula.hbm.xml"/>
    
     </session-factory>
     
