@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -235,7 +236,8 @@ public class StorageContainerAction extends SecureAction
 					new Long(storageContainerForm.getTypeId()));
 			storagetypeList.add(nvb);
 			request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
-			this.SetParentStorageCOntainersForEdit(containerMap, storageContainerForm, request);
+			this.setParentStorageContainersForEdit(containerMap, storageContainerForm, request);
+			
 			// request =
 			// Utility.setCollectionProtocolList(request,storageContainerForm
 			// .getSiteId());
@@ -606,7 +608,7 @@ public class StorageContainerAction extends SecureAction
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private void SetParentStorageCOntainersForEdit(TreeMap containerMap,
+	private void setParentStorageContainersForEdit(TreeMap containerMap,
 			StorageContainerForm storageContainerForm, HttpServletRequest request)
 			throws BizLogicException
 	{
@@ -618,32 +620,7 @@ public class StorageContainerAction extends SecureAction
 		{
 			final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
-			/*final Object object = bizLogic.retrieve(StorageContainer.class.getName(),
-					storageContainerForm.getId());
-			if (object != null)
-			{
-				final StorageContainer cont = (StorageContainer) object;
-
-				final Container parent = (Container) bizLogic.retrieveAttribute(
-						StorageContainer.class.getName(), cont.getId(),
-						"locatedAtPosition.parentContainer");
-				if (parent != null)
-				{
-					final Long id = parent.getId();
-					if (cont != null && cont.getLocatedAtPosition() != null)
-					{
-						final Integer pos1 = cont.getLocatedAtPosition().
-						getPositionDimensionOne();
-						final Integer pos2 = cont.getLocatedAtPosition().
-						getPositionDimensionTwo();
-						final String parentContainerName = parent.getName();
-
-						StorageContainerUtil.addPostions(containerMap, id,
-								parentContainerName,
-								pos1, pos2);
-					}
-				}
-			}*/
+			
 			if (storageContainerForm.getParentContainerId() != -1)
 			{
 				startingPoints[0] = new Long(storageContainerForm.getParentContainerId())
@@ -681,6 +658,34 @@ public class StorageContainerAction extends SecureAction
 
 		}
 		request.setAttribute("initValues", initialValues);
+		addAllocatedPositionToMap(containerMap,storageContainerForm.getParentContainerId(),storageContainerForm.getPositionDimensionOne(),storageContainerForm.getPositionDimensionTwo(),bizLogic);
+	}
+	/**
+	 * 
+	 * @param containerMap
+	 * @param parentContainerId
+	 * @throws BizLogicException 
+	 */
+	private void addAllocatedPositionToMap(TreeMap containerMap,long parentContainerId, int xPos, int yPos, IBizLogic bizLogic) throws BizLogicException 
+	{
+		Long relevanceCnt = 1L;
+		if((parentContainerId!=0)&&(xPos!=0)&&(yPos!=0))
+		{
+			String parentContainerName = (String)bizLogic.retrieveAttribute(StorageContainer.class, parentContainerId, "name");
+			Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt));
+			if(positionMap==null)
+			{
+				positionMap=new TreeMap(); 
+			}
+			List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
+			if(list==null)
+			{
+				list=new ArrayList();
+			}
+			list.add(new NameValueBean(yPos,yPos));
+			positionMap.put(new NameValueBean(xPos,xPos),list);
+			containerMap.put(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt),positionMap);
+		}
 	}
 
 	/**
