@@ -1785,21 +1785,21 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					+ "SELECT "
 					+ "t7. IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, "
 					+ "t7.ACTIVITY_STATUS, t7. PARENT_IDENTIFIER, "
-					+ "t7.PARENT_CONTAINER_NAME, t6.NAME AS  PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS "
+					+ "t7.PARENT_CONTAINER_NAME, t6.NAME   PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS "
 					+ "FROM "
 					+ "( "
 					+ "select "
-					+ "t10. IDENTIFIER AS IDENTIFIER, t10.CONTAINER_NAME AS CONTAINER_NAME, t10.SITE_ID AS SITE_ID, "
-					+ "T10. ACTIVITY_STATUS AS ACTIVITY_STATUS, t10.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
-					+ "t10.PARENT_IDENTIFIER AS PARENT_IDENTIFIER, t10.PARENT_CONTAINER_NAME AS PARENT_CONTAINER_NAME, "
-					+ "t22. STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T10.PARENT_ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "
+					+ "t10. IDENTIFIER  IDENTIFIER, t10.CONTAINER_NAME  CONTAINER_NAME, t10.SITE_ID  SITE_ID, "
+					+ "T10. ACTIVITY_STATUS  ACTIVITY_STATUS, t10.STORAGE_TYPE_ID  STORAGE_TYPE_ID, "
+					+ "t10.PARENT_IDENTIFIER  PARENT_IDENTIFIER, t10.PARENT_CONTAINER_NAME  PARENT_CONTAINER_NAME, "
+					+ "t22. STORAGE_TYPE_ID  PARENT_STORAGE_TYPE_ID, T10.PARENT_ACTIVITY_STATUS   PARENT_ACTIVITY_STATUS "
 					+ "from "
 					+ "( "
 					+ "select "
-					+ "t1. IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, "
-					+ "T1. ACTIVITY_STATUS AS ACTIVITY_STATUS, t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
-					+ "t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.NAME AS PARENT_CONTAINER_NAME, "
-					+ "T2.ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "
+					+ "t1. IDENTIFIER  IDENTIFIER, t1.NAME  CONTAINER_NAME, t11.SITE_ID  SITE_ID, "
+					+ "T1. ACTIVITY_STATUS  ACTIVITY_STATUS, t11.STORAGE_TYPE_ID  STORAGE_TYPE_ID, "
+					+ "t2.IDENTIFIER  PARENT_IDENTIFIER, t2.NAME  PARENT_CONTAINER_NAME, "
+					+ "T2.ACTIVITY_STATUS   PARENT_ACTIVITY_STATUS "
 					+ "from "
 					+ "CATISSUE_STORAGE_CONTAINER t11,CATISSUE_CONTAINER t1 LEFT OUTER JOIN "
 					+ "CATISSUE_CONTAINER t2 "
@@ -4873,10 +4873,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb
-				.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*) AS AVAILABLE_SLOTS ");
+				.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*)  AVAILABLE_SLOTS ");
 		sb
 				.append(" FROM"
-						+ " (SELECT D.IDENTIFIER,D.NAME,F.ONE_DIMENSION_CAPACITY, F.TWO_DIMENSION_CAPACITY,(F.ONE_DIMENSION_CAPACITY * F.TWO_DIMENSION_CAPACITY) AS CAPACITY");
+						+ " (SELECT D.IDENTIFIER,D.NAME,F.ONE_DIMENSION_CAPACITY, F.TWO_DIMENSION_CAPACITY,(F.ONE_DIMENSION_CAPACITY * F.TWO_DIMENSION_CAPACITY)  CAPACITY");
 		sb
 				.append(" FROM CATISSUE_CAPACITY F JOIN CATISSUE_CONTAINER D  ON F.IDENTIFIER = D.CAPACITY_ID");
 		sb
@@ -5124,14 +5124,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		query
 				.append("select (capacity.one_dimension_capacity * capacity.two_dimension_capacity -view1.specLocations-view2.contLocns)");
 		query
-				.append("from catissue_container as cont join catissue_capacity as capacity on cont.capacity_id=capacity.identifier,");
+				.append(" from catissue_container  cont join catissue_capacity  capacity on cont.capacity_id=capacity.identifier,");
 		query
-				.append("(select count(*) as specLocations from catissue_specimen_position sp where container_id = "
+				.append(" (select count(*)  specLocations from catissue_specimen_position sp where container_id = "
 						+ containerId + ") view1,");
 		query
-				.append("(select count(*) as contLocns from catissue_container_position cp where cp.parent_container_id="
+				.append(" (select count(*)  contLocns from catissue_container_position cp where cp.parent_container_id="
 						+ containerId + ") view2 ");
-		query.append("where cont.identifier = " + containerId);
+		query.append(" where cont.identifier = " + containerId);
 		try
 		{
 			final List results = jdbcDAO.executeQuery(query.toString());
