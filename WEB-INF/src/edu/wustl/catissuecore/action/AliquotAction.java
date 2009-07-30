@@ -938,6 +938,12 @@ public class AliquotAction extends SecureAction
 		// SpecimenCharacteristics chars= null;
 		form.setClassName(specimen.getClassName());
 		form.setType(specimen.getSpecimenType());
+		//bug 12954 start
+		if(specimen.getLabel()!=null)
+		{
+		  form.setSpecimenLabel( specimen.getLabel() );
+		}
+		//bug 12954 end
 		final SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
 		form.setTissueSite(chars.getTissueSite());
 		form.setTissueSide(chars.getTissueSide());
