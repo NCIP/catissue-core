@@ -2799,4 +2799,5 @@ public class Constants
 	public static final String TREE_APPLET_NAME = "treeApplet";
 
 	public static final String MAXIMUM_RECORDS_FOR_TITLI_RESULTS = "titli.result.maximumRecords";
+	public static final String IDP_ENABLED="idp.enabled";
 }

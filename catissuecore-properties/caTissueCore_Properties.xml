@@ -547,4 +547,8 @@
 		<name>titli.result.maximumRecords</name>
 		<value>1000</value>
 	</property>
+	<property>
+		<name>idp.enabled</name>
+		<value>@@IDP-ENABLED@@</value>
+	</property>
 </properties>

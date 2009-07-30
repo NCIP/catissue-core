@@ -140,6 +140,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			//added to set printer related information
 			String absolutePath=CommonServiceLocator.getInstance().getPropDirPath() +File.separator+"PrintServiceImplementor.properties";
 			Variables.setPrinterInfo(absolutePath);
+			System.setProperty("app.propertiesDir",CommonServiceLocator.getInstance().getPropDirPath());
 
 		/*Class.forName(DBUtil.class.getName());
 		Variables.databaseName=HibernateMetaData.getDataBaseName();
