@@ -675,6 +675,7 @@
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
+			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />	
 		</replace>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
@@ -786,14 +787,15 @@
 						tofile="${jboss.home.dir}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>
 		</target>
 
-		<!--Target for fresh deployment of caTissue application-->
-	<target name="deploy_app">
+	<target name="pre_initialization">
 		<antcall target="clean_server" />
-		<antcall target="assert" />
+		<!--<antcall target="assert" />-->
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
+	</target>
+	<target name="db_configuration">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -813,37 +815,51 @@
 				</then>
 			</elseif>
 		</if>
-		<!--Start of Integrating the Advance Query Module  -->
-						<echo>Integrating the  Advance Query Module</echo>
-						<antcall target="unzip_aq_installable" />		
-						<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">			
-							<property name="parent.base.dir" value="${base.dir}" />	
-							<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-							<property name="war.dir" value="catissuecore"/>
-							<property name="datasource" value="${catissue.datasource}" />
-							<property name="database.type" value="${database.type}" />
-							<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-							<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-						</ant> 
-		<!--End of Integrating the Advance Query Module  -->
+	</target>
+	<target name="app_configuration">
 		<!-- configure titli.properties -->
 		 <antcall target="configure_titli" >
 		 	<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
 		</antcall>
-
-		<antcall target="de_integrate_app" />
-		<antcall target="build_war" />
-		<antcall target="copy_files" />
-		<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
-           <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
-           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-        </replace>
-		<antcall target="send_mail" />
-		<antcall target="config_jboss_files" />
-		<delete dir="${temp.dir}" />
+   </target>
+	<!--Start of Integrating the Advance Query Module  -->
+	<target name="integrate_advanced_query">
+		<echo>Integrating the  Advance Query Module</echo>
+			<antcall target="unzip_aq_installable" />		
+			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">			
+				<property name="parent.base.dir" value="${base.dir}" />	
+				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+				<property name="war.dir" value="catissuecore"/>
+				<property name="datasource" value="${catissue.datasource}" />
+				<property name="database.type" value="${database.type}" />
+				<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
+				<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
+			</ant> 
 	</target>
-
+	<!--End of Integrating the Advance Query Module  -->
+	<target name="jboss_configuration">
+		<antcall target="copy_files" />
+			<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
+	           <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
+	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
+	        </replace>
+		<antcall target="config_jboss_files" />
+	</target>	
+	
+		<!--Target for fresh deployment of caTissue application-->
+	<target name="deploy_app">
+			<antcall target="pre_initialization" />
+			<antcall target="db_configuration" />
+			<antcall target="integrate_advanced_query"/>
+			<antcall target="app_configuration"/>
+			<antcall target="de_integrate_app" />
+			<antcall target="build_war" />
+			<antcall target="jboss_configuration" />
+			<antcall target="send_mail" />
+			<delete dir="${temp.dir}" />
+		</target>
+	
 	<target name="de_check_prerequisite">
 		<!-- Check dynamicextensions.zip file exists or not in base directory. -->
 		<available file="${base.dir}/dynamicextensions.zip" property="file.exists" value="false" />
