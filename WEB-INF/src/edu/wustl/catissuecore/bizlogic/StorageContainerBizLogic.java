@@ -3491,7 +3491,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			for (int i = 0; i < queries.length; i++)
 			{
 				this.logger.debug(String.format("Firing query: query%d", i));
-				System.out.println(queries[i]);
+				logger.debug(queries[i]);
 				final List resultList = dao.executeQuery(queries[i]);
 
 				if (resultList == null || resultList.size() == 0)
@@ -3503,7 +3503,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				if (resultList.size() >= remainingContainersNeeded)
 				{
 					containers.addAll(resultList.subList(0, remainingContainersNeeded));
-					System.out.println("sad");
 					break;
 				}
 				containers.addAll(resultList);
@@ -3843,12 +3842,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		final Long startTime = System.currentTimeMillis();
 		final JDBCDAO jdbcDAO = this.openJDBCSession();
-		System.out.println("Tet");
 		final List containerList = this.getStorageContainerList(TYPE_CONTAINER, null, null, 0,
 				sessionDataBean, type_id, null, null, jdbcDAO);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
 		final Long endTime = System.currentTimeMillis();
-		System.out.println("Test");
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
 				+ ((endTime - startTime) / 1000));
 		jdbcDAO.closeSession();
@@ -3901,7 +3898,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				aliquotCount, sessionData, null, null, null, jdbcDAO);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
 		final Long endTime = System.currentTimeMillis();
-		System.out.println("Test");
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
 				+ ((endTime - startTime) / 1000));
 		return tm;
@@ -4716,7 +4712,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			final Map positionMap = this.getAvailablePositionMapForContainer(String
 					.valueOf(container.get(0)), 0, String.valueOf(container.get(2)), String
 					.valueOf(container.get(3)), jdbcDao);
-			System.out.println();
 			if (!positionMap.isEmpty())
 			{
 				final NameValueBean nvb = new NameValueBean(container.get(1), container.get(0),
@@ -4877,8 +4872,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			final Boolean isSPClassUnique)
 	{
 		final StringBuilder sb = new StringBuilder();
-		System.out.println("jhj");
-		System.out.println("test");
 		sb
 				.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*) AS AVAILABLE_SLOTS ");
 		sb
@@ -5015,7 +5008,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	private String getStorageContainerSPClassQuery(Boolean isUnique)
 	{
 		final String SC_SPCLS_TABLE_NAME = "CATISSUE_STOR_CONT_SPEC_CLASS";
-		System.out.println();
 		if (isUnique == null) //No restrictions on CP. Any CP condition
 		{
 			final StringBuilder sb = new StringBuilder();
@@ -5023,7 +5015,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			sb.append("FROM CATISSUE_SPECIMEN SPEC ");
 			sb.append("WHERE SPEC.IDENTIFIER NOT IN ");
 			sb.append(" (SELECT t2.SPECIMEN_CLASS FROM " + SC_SPCLS_TABLE_NAME + " t2) ");
-			System.out.println("here");
 			return sb.toString();
 		}
 		else
@@ -5083,7 +5074,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			Integer dimOne, Integer dimTwo) throws DAOException
 	{
 		final StringBuilder contQuery = new StringBuilder();
-		System.out.println();
 		contQuery.append("from ContainerPosition cp ");
 		contQuery.append("where cp.parentContainer.id =");
 		contQuery.append(storageContainerId);
@@ -5104,7 +5094,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			Integer dimOne, Integer dimTwo) throws DAOException
 	{
 		final StringBuilder specQuery = new StringBuilder();
-		System.out.println();
 		specQuery.append("from SpecimenPosition sp ");
 		specQuery.append("where sp.storageContainer.id =");
 		specQuery.append(storageContainerId);
@@ -5161,7 +5150,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		catch (final DAOException e1)
 		{
-			System.out.println();
 			e1.printStackTrace();
 			throw new BizLogicException(e1);
 		}
