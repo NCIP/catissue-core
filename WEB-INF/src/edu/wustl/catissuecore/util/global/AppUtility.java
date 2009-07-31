@@ -83,6 +83,7 @@ import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.CSMValidator;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.beans.NameValueBean;
@@ -99,7 +100,6 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -3299,7 +3299,7 @@ public class AppUtility
 		{
 			dao = openJDBCSession();
 			List resultList = new ArrayList();
-			
+			System.out.println("");
 			final String sql = createSql(identifier, parentId);
 			resultList = dao.executeQuery(sql);
 			
@@ -3400,18 +3400,18 @@ public class AppUtility
 	public static String createSql(Long identifier, String parentId)
 	{
 		String sql ="" ;
-		
+						
 		if (Constants.ZERO_ID.equals(parentId))
 		{
 			sql = " SELECT IDENTIFIER, VALUE, PARENT_IDENTIFIER " +
-				  " FROM CATISSUE_PERMISSIBLE_VALUE INNER JOIN CATISSUE_CDE " +
+				  " FROM CATISSUE_PERMISSIBLE_VALUE ,CATISSUE_CDE " +
 				  "	WHERE CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID = CATISSUE_CDE.PUBLIC_ID " +
 				  "	AND CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID LIKE '%Tissue_Site_PID%'" ;
 		}
 		else
 		{
 			sql = " SELECT CA.IDENTIFIER , CA.VALUE, CA.PARENT_IDENTIFIER " +
-				  "	FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1 " +
+				  "	FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1 " +
 				  "	WHERE CA1.IDENTIFIER   = CA.IDENTIFIER " +
 				  "	AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER " +
 				  "	AND CA1.PARENT_IDENTIFIER  ='" + identifier + "'" ;
@@ -3430,7 +3430,7 @@ public class AppUtility
 	{
 		long count =  0 ;
 		String sql= " SELECT COUNT(CA1.PARENT_IDENTIFIER)" +
-					" FROM CATISSUE_PERMISSIBLE_VALUE CA INNER JOIN CATISSUE_PERMISSIBLE_VALUE CA1" +
+					" FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1" +
 					" WHERE CA1.IDENTIFIER   = CA.IDENTIFIER" +
 					" AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER" +
 					" AND CA1.PARENT_IDENTIFIER ='"+ identifier + "'" + 
