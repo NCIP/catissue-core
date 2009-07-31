@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.common.tree.StorageContainerTreeNode"%>
+<%@ page import="edu.wustl.catissuecore.tree.StorageContainerTreeNode"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.global.Status"%>
 <script src="jss/ajax.js"></script>	   

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.tree.QueryTreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;

@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
+<%@ page import="edu.wustl.catissuecore.tree.QueryTreeNodeData"%>
 
 <html>
 <head>

@@ -18,14 +18,14 @@ import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.tree.SpecimenTreeNode;
+import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.tree.SpecimenTreeNode;
-import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**

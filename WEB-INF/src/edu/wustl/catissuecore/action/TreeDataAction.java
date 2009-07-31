@@ -26,10 +26,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.CDEBizLogic;
-import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -76,14 +75,14 @@ public class TreeDataAction extends BaseAction
 
 			// Map containerMap = new HashMap(), containerRelationMap = new
 			// HashMap();
-			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
+			/*if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();
 				final CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
 				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
 			}
-			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+			else*/ if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))

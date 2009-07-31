@@ -17,9 +17,9 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.tree.QueryTreeNodeData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.tree.QueryTreeNodeData;
 
 /**
  * This action is for getting the Tree For Events and Specimens collected Under

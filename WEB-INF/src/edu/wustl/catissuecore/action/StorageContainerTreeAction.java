@@ -6,19 +6,17 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
-import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -69,13 +67,13 @@ public class StorageContainerTreeAction extends BaseAction
 			final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 			request.setAttribute(Constants.STORAGE_CONTAINER_POSITION, position);
 		}
-		else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
+		/*else if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 		{
 			final HttpSession session = request.getSession();
 			final String cdeName = (String) session.getAttribute(Constants.CDE_NAME);
 			session.removeAttribute(Constants.CDE_NAME);
 			request.setAttribute(Constants.CDE_NAME, cdeName);
-		}
+		}*/
 
 		try
 		{
@@ -90,14 +88,14 @@ public class StorageContainerTreeAction extends BaseAction
 			TreeDataInterface bizLogic = new StorageContainerBizLogic();
 			List dataList = new Vector();
 			// List disableSpecimenIdsList = new ArrayList();
-			if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
+			/*if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
 			{
 				bizLogic = new CDEBizLogic();
 				final CDEBizLogic cdeBizLogic = (CDEBizLogic) bizLogic;
 				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
-			}
-			else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+			}else*/
+			 if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))

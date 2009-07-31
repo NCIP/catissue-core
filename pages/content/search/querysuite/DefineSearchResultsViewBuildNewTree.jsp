@@ -1,7 +1,7 @@
 
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
+<%@ page import="edu.wustl.catissuecore.tree.QueryTreeNodeData"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 

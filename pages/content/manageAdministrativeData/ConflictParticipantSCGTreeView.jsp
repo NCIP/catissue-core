@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
+<%@ page import="edu.wustl.catissuecore.tree.QueryTreeNodeData"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.caties.util.CaTIESConstants"%>
 <%@ page import="java.util.*"%>

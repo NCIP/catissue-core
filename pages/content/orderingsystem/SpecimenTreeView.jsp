@@ -1,6 +1,6 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.common.tree.SpecimenTreeNode"%>
+<%@ page import="edu.wustl.catissuecore.tree.SpecimenTreeNode"%>
 
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
