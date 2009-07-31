@@ -171,16 +171,25 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					&& specimenSummaryForm.getForwardTo().equals(
 							Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 			{
-				final HashSet specimenprintCollection = this.getSpecimensToPrint((Long) obj,
-						sessionDataBean);
-
-				final Iterator iter = specimenprintCollection.iterator();
-				final List specimenIdList = new ArrayList();
-				while (iter.hasNext())
+			    //bug 13164 start
+				if(request.getParameter( Constants.IS_SCG_SUBMIT )!=null && (request.getParameter( Constants.IS_SCG_SUBMIT ).equals( Constants.SCG_SUBMIT )))
 				{
-					specimenIdList.add(((Specimen) iter.next()).getId());
+					final HashSet specimenprintCollection = this.getSpecimensToPrint((Long) obj,
+							sessionDataBean);
+
+					final Iterator iter = specimenprintCollection.iterator();
+					List specimenIdList = new ArrayList();
+					while (iter.hasNext())
+					{
+						specimenIdList.add(((Specimen) iter.next()).getId());
+					}
+					request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenIdList);
 				}
-				request.setAttribute("specimenIdList", specimenIdList);
+				else
+				{			
+				   request.setAttribute(Constants.SPECIMEN_ID_LIST, getSpecimenIdList(specimenSummaryForm));
+				}
+				//bug 13164 end
 				this.saveToken(request);
 				// bug 12141 start
 				if (specimenSummaryForm.getPrintCheckbox() != null
@@ -236,6 +245,20 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			return mapping.findForward(Constants.FAILURE);
 		}
 
+	}
+	private List getSpecimenIdList(ViewSpecimenSummaryForm specimenSummaryForm)
+	{
+		List specimenIdList = new ArrayList();
+		String eventId = specimenSummaryForm.getEventId();
+		List < GenericSpecimen > genericSpecimensList = new ArrayList < GenericSpecimen >();
+		genericSpecimensList.addAll( specimenSummaryForm.getSpecimenList() );
+		genericSpecimensList.addAll( specimenSummaryForm.getAliquotList() );
+		genericSpecimensList.addAll( specimenSummaryForm.getDerivedList() );
+		for(GenericSpecimen gSpecimen : genericSpecimensList)
+		{
+			specimenIdList.add( gSpecimen.getId() );
+		}
+		return specimenIdList;
 	}
 
 	/**

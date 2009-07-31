@@ -240,18 +240,48 @@ function updateField(type,i,isDis,valueToSet)
 		} while (chkCount > 0 && !isPrintChecked);
 	}
 	//bug 11169 end
-	function pageSubmit() {
+function pageSubmit() {
 		checkPrintStatusOfAllSpecimens();
-		var url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+		<%
+		String isSCGSubmit = request.getAttribute( Constants.IS_SCG_SUBMIT ).toString();
+		%> 
+		var url;
+		<%if(isSCGSubmit!=null)
+		{%>
+		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&isSCGSubmit=<%=isSCGSubmit%>';
+		  <%}
+		  else
+		  {%>
+		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+		 <% }
+		 %>
 		//bug 12656 
 		<% if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
-		{%>
-              url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
-		<%}%>
+		{
+		  if(isSCGSubmit!=null)
+		  {%>
+              url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
+		<%}
+		  else
+		  {%>
+		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
+		 <% }
+		 }%>
+		
 			
-<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
-			 url = 	'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
-			<%}%>
+<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {
+			
+			 if(isSCGSubmit!=null)
+			  {%>
+			      url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
+			<%}
+			  else
+			  {%>
+			  url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
+			 <% }
+			 }%>
+			
+			
 			//var printFlag = document.getElementById("printCheckbox");
 			if(isPrintChecked)			
 			{
@@ -268,6 +298,7 @@ function updateField(type,i,isDis,valueToSet)
 			}
 			
 		}
+		
 		
 		function onAddToCart()
 		{

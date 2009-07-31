@@ -85,6 +85,20 @@ public class ViewSpecimenSummaryAction extends Action
 			// summaryForm.setLastSelectedSpecimenId(summaryForm.
 			// getSelectedSpecimenId());
 			// Mandar : 5Aug08 ----------- start
+			//bug 13164 start
+			String forwardToValue = request.getParameter( Constants.FORWARD_TO );
+			if(forwardToValue!=null)
+			{
+				if(Constants.CP_CHILD_SUBMIT.equals( forwardToValue ))
+				{
+					request.setAttribute( Constants.IS_SCG_SUBMIT, Constants.SPECIMEN_SUBMIT );
+				}
+				else
+				{
+					request.setAttribute( Constants.IS_SCG_SUBMIT, Constants.SCG_SUBMIT );
+				}
+			}
+			//bug 13164 end
 			final String sid = request.getParameter("sid");
 			if (sid != null)
 			{

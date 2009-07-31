@@ -1965,6 +1965,9 @@ public class Constants
 	public static final String USER_NAME = "userName";
 	public static final String EVENT_DATE = "eventDate";
 	public static final String PAGE_OF = "pageOf";
+	public static final String IS_SCG_SUBMIT = "isSCGSubmit";
+	public static final String SPECIMEN_SUBMIT = "specimenSubmit";
+	public static final String SCG_SUBMIT = "SCGSubmit";
 	/**
 	 * Patch ID: for Future SCG_15
 	 * Description: The following constants are used as id for future scg in tree
