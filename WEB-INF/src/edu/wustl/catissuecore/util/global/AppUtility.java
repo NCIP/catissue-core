@@ -1743,7 +1743,12 @@ public class AppUtility
 		}
 		return specimen;
 	}
-
+    /**
+     * @param dataList - dataList
+     * @return - String
+     */
+	//Added null check as label was coming null when label generation is off.
+	//bug 13487
 	public static String getmyData(List dataList)
 	{
 		String myData = "[";
@@ -1757,10 +1762,26 @@ public class AppUtility
 				myData = myData + "\"";
 				for (j = 0; j < (row.size() - 1); j++)
 				{
-					myData = myData + AppUtility.toNewGridFormat(row.get(j)).toString();
+					Object obj = AppUtility.toNewGridFormat(row.get(j));
+					if(obj!=null)
+					{
+						myData = myData + obj.toString();						
+					}
+					else
+					{
+						myData = myData + "";
+					}
 					myData = myData + ",";
 				}
-				myData = myData + AppUtility.toNewGridFormat(row.get(j)).toString();
+				Object obj = AppUtility.toNewGridFormat(row.get(j));
+				if(obj!=null)
+				{
+					myData = myData + obj.toString();					
+				}
+				else
+				{
+					myData = myData + "";
+				}
 				myData = myData + "\"";
 				myData = myData + ",";
 			}
@@ -1770,10 +1791,27 @@ public class AppUtility
 			myData = myData + "\"";
 			for (j = 0; j < (row.size() - 1); j++)
 			{
-				myData = myData + AppUtility.toNewGridFormat(row.get(j)).toString();
+				Object obj = AppUtility.toNewGridFormat(row.get(j));
+				if(obj!=null)
+				{
+					myData = myData + obj.toString();					
+				}
+				else
+				{
+					myData = myData + "";
+				}
 				myData = myData + ",";
+				
 			}
-			myData = myData + AppUtility.toNewGridFormat(row.get(j)).toString();
+			Object obj = AppUtility.toNewGridFormat(row.get(j));
+			if(obj!=null)
+			{
+				myData = myData + obj.toString();				
+			}
+			else
+			{
+				myData = myData + "";
+			}
 			myData = myData + "\"";
 		}
 		myData = myData + "]";
