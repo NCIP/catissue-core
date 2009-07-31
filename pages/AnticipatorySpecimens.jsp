@@ -243,7 +243,11 @@ function updateField(type,i,isDis,valueToSet)
 function pageSubmit() {
 		checkPrintStatusOfAllSpecimens();
 		<%
-		String isSCGSubmit = request.getAttribute( Constants.IS_SCG_SUBMIT ).toString();
+		   String isSCGSubmit = null;
+		   if( request.getAttribute( Constants.IS_SCG_SUBMIT )!=null)
+           {
+	         isSCGSubmit = request.getAttribute( Constants.IS_SCG_SUBMIT ).toString();
+	       }
 		%> 
 		var url;
 		<%if(isSCGSubmit!=null)
@@ -273,43 +277,36 @@ function pageSubmit() {
 			
 			 if(isSCGSubmit!=null)
 			  {%>
-			      url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
-			<%}
+			      url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>
+	';
+<%}
 			  else
 			  {%>
-			  url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
-			 <% }
+	url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
+<% }
 			 }%>
-			
-			
-			//var printFlag = document.getElementById("printCheckbox");
-			if(isPrintChecked)			
-			{
-				//changes added to work in Mozilla
-				document.getElementsByName("printCheckbox")[0].value = true;
-				document.forms[0].action = url + '&printflag=1';
-				document.forms[0].submit();						
-			}
-			else
-			{
-				document.getElementsByName("printCheckbox")[0].value = false;
-				document.forms[0].action =url+'&printflag=0'; 
-				document.forms[0].submit();
-			}
-			
+	//var printFlag = document.getElementById("printCheckbox");
+		if (isPrintChecked) {
+			//changes added to work in Mozilla
+			document.getElementsByName("printCheckbox")[0].value = true;
+			document.forms[0].action = url + '&printflag=1';
+			document.forms[0].submit();
+		} else {
+			document.getElementsByName("printCheckbox")[0].value = false;
+			document.forms[0].action = url + '&printflag=0';
+			document.forms[0].submit();
 		}
-		
-		
-		function onAddToCart()
-		{
-				document.forms[0].forwardTo.value="addMltipleSpecimenToCart";
-				pageSubmit();
-			
-		}
-		function onParentRadioBtnClick()
-		{
-			var url = 'GenericSpecimenSummary.do';
-			<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
+
+	}
+
+	function onAddToCart() {
+		document.forms[0].forwardTo.value = "addMltipleSpecimenToCart";
+		pageSubmit();
+
+	}
+	function onParentRadioBtnClick() {
+		var url = 'GenericSpecimenSummary.do';
+<%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>';
 			<%}%>
 			document.forms[0].action =url;
