@@ -1599,15 +1599,15 @@
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p2" />
-					<!--<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />-->
-					<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
+					<!--<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />
+					<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" /> -->
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
 						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p2" />
-						<!--<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />-->
-					 	<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
+						<!--<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />
+					 	<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />-->
 					</then>
 				</elseif>
 				<else>
@@ -1622,8 +1622,8 @@
 					<param name="isUpgrade" value="true"/>
 					<param name="buildVersion" value="1.1top4"/>
 			</antcall>
-			<antcall target="update_metadata_for_tagged_values"/>-->
-			 <antcall target="upgrade_saved_queries" /> 
+			<antcall target="update_metadata_for_tagged_values"/>
+			 <antcall target="upgrade_saved_queries" /> -->
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
@@ -1658,6 +1658,7 @@
 				</antcall>
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
+		 		<antcall target="upgrade_saved_queries" /> 
 		</target>
 		
 	
@@ -1709,6 +1710,7 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
+		<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
 	</target>
 	
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
@@ -1726,6 +1728,7 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
+		<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
    </target>
 	
 	<!-- Upgrading from Suite1.1 p3 to p4 - MySQL -->
