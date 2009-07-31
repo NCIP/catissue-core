@@ -277,8 +277,7 @@ function pageSubmit() {
 			
 			 if(isSCGSubmit!=null)
 			  {%>
-			      url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>
-	';
+  url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
 <%}
 			  else
 			  {%>
