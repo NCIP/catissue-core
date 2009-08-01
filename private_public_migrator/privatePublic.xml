@@ -15,6 +15,8 @@
 	<property name="classes.dir" value="./classes" />
 	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 	<tstamp>
 		<format property="TODAY" pattern="ddMMyyyy_hhmmss" />
 	</tstamp>
@@ -30,6 +32,7 @@
 	<property name="drop.oracle.public.db" value="sqlplus ${publicSystemUserName}/${publicSystemPassword}@${publicDBTNSName} @.//sql//drop_public_db_oracle.sql" />
 	<property name="create.oracle.public.db" value="imp ${publicSystemUserName}/${publicSystemPassword}@${publicDBTNSName} fromuser=${stagingDBUserName} touser=${publicDBUserName} file=public_${TODAY}.dmp" />
 	<property name="create.oracle.public.dump" value="exp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} owner=${stagingDBUserName} file=public_${TODAY}.dmp" />
+	<property name="configure.masking" value="${privateDBUserName}/${privateDBPassword}@${privateDBName}"/>
 	
 	<property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} &lt;./sql/drop_public_db_mysql.sql" />
 	<property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&lt;publicdump_${TODAY}.sql" />
@@ -89,7 +92,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<target name="compile">
 		<javac destdir="${classes.dir}" includes="**/*.java" includeAntRuntime="false">
 			<src path="${basedir}"/>
@@ -100,7 +103,65 @@
 			</classpath>
 		</javac>
 	</target>
+	<target name="configureMasking" depends="dropTempTable">
+			<echo message="${configure.masking}" />
+			<if>
+					<equals arg1="${databaseType}" arg2="mysql" />
+					<then>
+						<sql onerror="stop" keepformat="true"
+							driver="${mysql.driver.string}"
+							url="jdbc:mysql://${privateDBHost}:${privateDBPort}/${stagingDBName}"
+							userid="${stagingDBUserName}"
+							password="${stagingDBPassword}" >
+								<classpath refid="cp1"/>
+								<transaction   src="${basedir}/sql/mask.sql"/>
+							</sql> 
+					</then>
+			</if>
+			<if>
+				<equals arg1="${databaseType}" arg2="oracle" />
+				<then>
+					<sql onerror="stop" keepformat="true"
+	                    driver="oracle.jdbc.driver.OracleDriver"
+	                    url="jdbc:oracle:thin:@${privateDBHost}:${privateDBPort}:${privateDBName}"
+	                    userid="${privateDBUserName}"
+	                    password="${privateDBPassword}" >
+	                        <classpath refid="cp1"/>
+	                        <transaction   src="${basedir}/sql/mask.sql"/>
+	                </sql> 
+				</then>
+			</if>
+	</target>
 
+		<target name="dropTempTable">
+			<echo message="dropTempTable" />
+			<if>
+				<equals arg1="${databaseType}" arg2="mysql" />
+				<then>
+					<sql onerror="stop" keepformat="true" delimiter="/"
+						driver="${mysql.driver.string}"
+						url="jdbc:mysql://${publicDBHost}:${publicDBPort}/${publicDBName}"
+						userid="${publicDBUserName}"
+						password="${publicDBPassword}" >
+							<classpath refid="cp1"/>
+							<transaction   src="${basedir}/sql/mask_proc.sql"/>
+					</sql> 
+				</then>
+			</if>
+			<if>
+				<equals arg1="${databaseType}" arg2="oracle" />
+				<then>
+	          	  <sql onerror="stop" keepformat="true" delimiter="/"
+	                driver="oracle.jdbc.driver.OracleDriver" 
+	                url="jdbc:oracle:thin:@${publicDBHost}:${publicDBPort}:${publicDBName}" 
+	                userid="${publicDBUserName}" 
+	                password="${publicDBPassword}" >
+	            		<classpath refid="cp1"/>
+	              		<transaction   src="${basedir}/sql/mask_proc.sql"/>
+	        	  </sql>
+			   </then>
+			</if>
+		</target>	
 	<path id="cp1">
 		<fileset dir="${basedir}/lib">
 			<include name="**/*.jar"/>
@@ -108,15 +169,25 @@
 	</path>
 
 	<target name="migrate" depends="compile" > 
-		<java classname="PrivateToPublicMigrator" maxmemory="1024m" fork="true">
+		<java classname="edu.wustl.catissuecore.privatepublicmigrator.PrivateToPublicMigrator" maxmemory="1024m" fork="true">
 			<classpath>
 				<pathelement location="${classes.dir}"/>
 				<pathelement location="."/>
 			</classpath>
 			<classpath refid="cp1"/>
 		</java>
+		<antcall target="dropTempTable"/>
 	</target>
 
+	<target name="maskData" depends="compile,dropTempTable" >
+			<java classname="edu.wustl.catissuecore.privatepublicmigrator.MaskData" maxmemory="1024m" fork="true">
+				<classpath>
+					<pathelement location="${classes.dir}"/>
+					<pathelement location="."/>
+				</classpath>
+				<classpath refid="cp1"/>
+			</java>
+	</target>
 	<target name="replaceToken" >
 		<copy file="./conf/hibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />

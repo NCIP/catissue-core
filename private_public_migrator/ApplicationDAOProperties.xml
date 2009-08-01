@@ -10,7 +10,7 @@
 			</DefaultDAO>
 	
 			<JDBCDAO>
-				<DBPropertyFile name ="MySQLDAOProperties.xml"/>
+				<DBPropertyFile name ="OracleDAOProperties.xml"/>
 			</JDBCDAO>
 			
 	
@@ -27,7 +27,7 @@
 			</DefaultDAO>
 		
 			<JDBCDAO>
-				<DBPropertyFile name ="MySQLDAOProperties.xml"/>
+				<DBPropertyFile name ="OracleDAOProperties.xml"/>
 			</JDBCDAO>
 			
 		</DAOFactory>
