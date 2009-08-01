@@ -1702,6 +1702,7 @@
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1P2.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1720,6 +1721,7 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1P2.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />			
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
 	   		<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -2758,7 +2760,8 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/createnewtable.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/alterqueries.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/addconstraints.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />			
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -2775,7 +2778,8 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/createnewtable.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/alterqueries.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/addconstraints.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />						
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/update_dyextn_abstract_metadata_tabel.sql" />
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
