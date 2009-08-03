@@ -1,32 +1,40 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%
 			String operation = request.getParameter("operation");
 			
 
 %>
-<form id="thisform" name="thisform"  METHOD="GET" >
-	<p>&nbsp;</p>
-	<p><table summary="" cellpadding="5" cellspacing="0" border="0" width="620" height="160">
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
+
+<tr>
+<td class="tablepadding">
+	<form id="thisform" name="thisform"  METHOD="GET" >	
+	<p>
+	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" class="whitetable_bg">		 
+		<tr><td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				  <tr>
+					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
+				  </tr>
+			</table>
+		</td></tr>
 		<tr>
-			<td align="justify" colspan="2" height="20" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; font-weight:bold; padding-left:0.6em; background-color:#5C5C5C; color:#FFFFFF;">Warning!</td>
+			<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;Message</span></td>
 		</tr>
 
 		<tr>
-			<td align="justify" colspan="2" height="50" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; padding-left:0.6em; background-color:#F4F4F5; color:#000000;">Please note that creating or editing a dynamic extension will create or alter tables in the caTissue database.</td>
+			<td align="justify" colspan="2" height="50" >&nbsp;<bean:message key="de.message.disable" /></td>
 		</tr>
-
 		<tr>
-			<td align="justify" colspan="2" height="60" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; padding-left:0.6em; background-color:#F4F4F5; color:#000000;">As a good database administration practice, we suggest that you take a backup of the database before creating any new Dynamic Extensions or editing the existing Dynamic Extensions.</td>
-		</tr>
-
-		<tr>
-			<td align="right" height="*" width="50%" bgcolor="#F4F4F5">
+			<td align="center" height="*" width="50%" class="buttonbg">
 				<input  type="button" class="actionButton" value="Back"  onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'" />
-			</td>
-			<td align="left" height="*" width="50%" bgcolor="#F4F4F5">
-				<input type="button" class="actionButton" value="Next" onClick="document.location.href='DefineAnnotations.do?op=<%=operation%>'" />
 			</td>
 		</tr>
 	</table>
 	</p>
 </form> 
+</td>
+</tr>
+</table>
