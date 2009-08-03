@@ -521,7 +521,14 @@
 		<name>isLastNameNull</name>
 		<value>true</value>
 	</property>
-	
+	<property>
+		<name>session.time.out</name>
+		<value>@@SESSION-TIME-OUT@@</value>
+	</property>
+	<property>
+		<name>app.additional.info</name>
+		<value>@@APP-ADDITIONAL-INFO@@</value>
+	</property>
 	<!-- Property to specify whether barcode field is editable or not-->
 	<property>
 		<name>barcode.isEditable</name>

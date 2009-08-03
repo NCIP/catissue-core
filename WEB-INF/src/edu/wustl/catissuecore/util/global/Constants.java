@@ -2064,6 +2064,8 @@ public class Constants
 	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
 	//Bug ID 4794: Field for advance time to warn a user about session expiry
 	public static final String SESSION_EXPIRY_WARNING_ADVANCE_TIME = "session.expiry.warning.advanceTime";
+	//Bug 12735: Field for sessiom time out
+	public static final String SESSION_TIME_OUT ="session.time.out";
   //	Constants required in RequestDetailsPage
 	public static final String SUBMIT_REQUEST_DETAILS_ACTION="SubmitRequestDetails.do";
 	public static final String REQUEST_HEADER_OBJECT = "requestHeaderObject";
@@ -2803,4 +2805,5 @@ public class Constants
 
 	public static final String MAXIMUM_RECORDS_FOR_TITLI_RESULTS = "titli.result.maximumRecords";
 	public static final String IDP_ENABLED="idp.enabled";
+	public static final String APP_ADDITIONAL_INFO = "app.additional.info";
 }

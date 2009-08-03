@@ -675,7 +675,9 @@
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
-			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />	
+			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
+			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
+			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
 		</replace>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
