@@ -2310,7 +2310,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				+ "cn.ACTIVITY_STATUS!='Disabled' AND site_id=" + identifier;
 		try
 		{
-			dao.openSession(null);
+			if(dao==null)
+			{
+				dao.openSession(null);
+			}
 			storageContainerList = dao.executeQuery(query);
 			final Iterator iterator = storageContainerList.iterator();
 			while (iterator.hasNext())
@@ -2364,7 +2367,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				final Long childCount = Long.valueOf((String) rowList.get(1));
 				childCountMap.put(id, childCount);
 			}
-			dao.closeSession();
+			//dao.closeSession();
 
 			final Iterator parentContainerIterator = parentIds.iterator();
 			/**
@@ -4793,6 +4796,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			sb.append(" and t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
 					+ sessionData.getUserId() + ")");
 		}
+		sb.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE +"' and t1.CONT_FULL=0 ");
+		sb.append(" order by IDENTIFIER");
 
 		return new String[]{sb.toString()};
 	}
@@ -4821,7 +4826,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		sb.append("))");
 		sb.append("AND cont.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE);
-		sb.append("' order by IDENTIFIER");
+		sb.append("' and cont.CONT_FULL=0 order by IDENTIFIER");
 		return new String[]{sb.toString()};
 	}
 
