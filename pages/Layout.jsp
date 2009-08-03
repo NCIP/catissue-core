@@ -44,7 +44,14 @@
 				
 			if(request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
 			{
+				//timeOut = request.getSession().getMaxInactiveInterval();
+				String timeOutToSet = XMLPropertyHandler
+				.getValue(Constants.SESSION_TIME_OUT);
+				if(timeOutToSet != null)
+				{
+				request.getSession().setMaxInactiveInterval(Integer.parseInt(timeOutToSet)*60);
 				timeOut = request.getSession().getMaxInactiveInterval();
+				}
 			}
 		%>
 
