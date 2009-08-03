@@ -131,7 +131,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			
 //			Added By geeta 
 			InitialiseVariablesForDFCI();
-			
+			initialiseVariableForAppInfo();
 			initCatissueCache();
 			initEntityCache();
 			Utility.initializePrivilegesMap();
@@ -441,6 +441,16 @@ public void InitialiseVariablesForEdinburgh(){
 		if(Constants.FALSE.equals(XMLPropertyHandler.getValue(Constants.IS_LAST_NAME_NULL)))
 		{	
 			Variables.isLastNameNull = false;
+		}
+	}
+	/**
+	 * app info initialize
+	 */
+	public void initialiseVariableForAppInfo()
+	{
+		if(XMLPropertyHandler.getValue(Constants.APP_ADDITIONAL_INFO) != null)
+		{
+			Variables.applicationAdditionInfo = XMLPropertyHandler.getValue(Constants.APP_ADDITIONAL_INFO);
 		}
 	}
 }

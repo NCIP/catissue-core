@@ -39,6 +39,7 @@ public class Variables
     public static String databaseDriver=new String();
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
+    public static String applicationAdditionInfo = new String();
     public static int maximumTreeNodeLimit;
     public static int maximumTreeNodeLimitForChildNode;
     public static boolean isSpecimenLabelGeneratorAvl = false;
@@ -66,6 +67,8 @@ public class Variables
     public static boolean isRaceRemove = false;
     
     public static boolean isEthnicityRemove = false;
+    
+    public static int sessionTimeOut;
     
   //  public static String dateFormat ="";
     

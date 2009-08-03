@@ -217,7 +217,7 @@ table#browserDetailsContainer
 										%> <bean:message key="app.welcomeNote"
 									arg0="<%=ApplicationProperties.getValue("app.name")%>"
 									arg1="<%=ApplicationProperties.getValue("app.version")%>"
-									arg2="<%=Variables.applicationCvsTag%>" /></TD>
+									arg2="<%=Variables.applicationAdditionInfo%>" /></TD>
 							</tr>
 						</logic:notEmpty></td>
 

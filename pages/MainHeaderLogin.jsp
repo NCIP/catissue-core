@@ -17,7 +17,7 @@
 					key="app.welcomeNote"
 					arg0="<%=ApplicationProperties.getValue("app.name")%>"
 					arg1="<%=ApplicationProperties.getValue("app.version")%>"
-					arg2="<%=Variables.applicationCvsTag%>" /> </span></td>
+					arg2="<%=Variables.applicationAdditionInfo%>" /> </span></td>
 				<td width="50%" align="right" valign="top">
 				<a
 					href="Home.do?operation=add" class="white"> <img
