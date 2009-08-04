@@ -121,6 +121,9 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 				.getReceivedEventReceivedQuality());
 		collectionProtocolEventBean.setCollectionProcedure(protocolEventDetailsForm
 				.getCollectionEventCollectionProcedure());
+		
+		collectionProtocolEventBean.setLabelFormat(protocolEventDetailsForm.getLabelFormat());
+		
 	}
 
 }

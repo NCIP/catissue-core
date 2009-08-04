@@ -426,6 +426,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
 		}
 		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
+		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
 
 	}
 

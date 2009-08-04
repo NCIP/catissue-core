@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.common.util.global.Status;
 /**
  *  @author janhavi_hasabnis
@@ -334,5 +335,122 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.siteIds = siteIdsParam;
 	}
+	
+	/**
+	 * parentCollectionProtocol.
+	 * @return parentCollectionProtocol.
+	 */
+	public CollectionProtocol getParentCollectionProtocol()
+	{
+		return parentCollectionProtocol;
+	}
+
+	/**
+	 * sequenceNumber.
+	 * @return sequenceNumber.
+	 */
+	public Integer getSequenceNumber() 
+	{
+		return sequenceNumber;
+	}
+
+	/**
+	 * type .
+	 * @return type.
+	 */
+	public String getType()
+	{
+		return type;
+	}
+
+	/**
+	 * studyCalendarEventPoint.
+	 * @return studyCalendarEventPoint.
+	 */
+	public Double getStudyCalendarEventPoint() 
+	{
+		return studyCalendarEventPoint;
+	}
+
+	/**
+	 * parentCollectionProtocol.
+	 * @param parentCollectionProtocol parentCollectionProtocol.
+	 */
+	public void setParentCollectionProtocol(
+			CollectionProtocol parentCollectionProtocol) 
+	{
+		this.parentCollectionProtocol = parentCollectionProtocol;
+	}
+
+	/**
+	 * sequenceNumber.
+	 * @param sequenceNumber sequenceNumber.
+	 */
+	public void setSequenceNumber(Integer sequenceNumber) 
+	{
+		this.sequenceNumber = sequenceNumber;
+	}
+
+	/**
+	 * type.
+	 * @param type type.
+	 */
+	public void setType(String type) 
+	{
+		this.type = type;
+	}
+
+	/**
+	 * setStudyCalendarEventPoint .
+	 * @param studyCalendarEventPoint studyCalendarEventPoint.
+	 */
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) 
+	{
+		this.studyCalendarEventPoint = studyCalendarEventPoint;
+	}
+
+	/**
+	 * Parent Collection Protocol.
+	 */
+	protected CollectionProtocol parentCollectionProtocol;
+
+	/**
+	 * Sequence Number.
+	 */
+	protected Integer sequenceNumber;
+	/**
+	 * Collection Protocol type - Arm, Cycle, Phase.
+	 */
+	protected String type;
+
+	/**
+	 * Defines the relative time point in days.
+	 */
+	protected Double studyCalendarEventPoint;
+	
+	
+	/**
+	 * Parent collection protocol Identifier.
+	 */
+	protected Long parentCollectionProtocolId;
+
+	/**
+	 * This method will be called to get parentCollectionProtocolId.
+	 * @return parentCollectionProtocolId.
+	 */
+	public Long getParentCollectionProtocolId() 
+	{
+		return parentCollectionProtocolId;
+	}
+
+	/**
+	 * This method will be called to set parentCollectionProtocolId.
+	 * @param parentCollectionProtocolId parentCollectionProtocolId.
+	 */
+	public void setParentCollectionProtocolId(Long parentCollectionProtocolId) 
+	{
+		this.parentCollectionProtocolId = parentCollectionProtocolId;
+	}
+	
 
 }

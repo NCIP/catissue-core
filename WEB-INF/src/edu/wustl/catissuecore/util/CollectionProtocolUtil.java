@@ -124,6 +124,16 @@ public class CollectionProtocolUtil
 		{
 			collectionProtocolBean.setParticiapantReg(true);
 		}
+		
+		collectionProtocolBean.setType(collectionProtocol.getType());
+		collectionProtocolBean.setSequenceNumber(collectionProtocol.getSequenceNumber());
+		collectionProtocolBean.setStudyCalendarEventPoint(collectionProtocol.getStudyCalendarEventPoint());
+		
+		if(collectionProtocol.getParentCollectionProtocol() != null)
+		{
+			collectionProtocolBean.setParentCollectionProtocolId(collectionProtocol.getParentCollectionProtocol().getId());
+		}
+		
 		return collectionProtocolBean;
 	}
 
@@ -192,6 +202,8 @@ public class CollectionProtocolUtil
 		eventBean.setSpecimenRequirementbeanMap(
 				getSpecimensMap(collectionProtocolEvent.getSpecimenRequirementCollection(), 
 						eventBean.getUniqueIdentifier()) );
+		
+		eventBean.setLabelFormat(collectionProtocolEvent.getLabelFormat());
 
 		return eventBean;
 	}
@@ -361,7 +373,7 @@ public class CollectionProtocolUtil
 		setSpecimenEventParameters(reqSpecimen,speRequirementBean );
 		
 		setAliquotAndDerivedColl(reqSpecimen, parentName, speRequirementBean);
-	
+		speRequirementBean.setLabelFormat(reqSpecimen.getLabelFormat());
 		return speRequirementBean;
 	}
 
@@ -384,6 +396,7 @@ public class CollectionProtocolUtil
 		
 		speRequirementBean.setSpecimenCharsId(reqSpecimen.getSpecimenCharacteristics().getId().longValue());
 		speRequirementBean.setPathologicalStatus(reqSpecimen.getPathologicalStatus());
+		
 		if(MOLECULAR_SPECIMEN_CLASS.equals(reqSpecimen.getClassName()))
 		{
 			Double concentration = ((MolecularSpecimenRequirement)reqSpecimen).getConcentrationInMicrogramPerMicroliter();
@@ -724,6 +737,41 @@ public class CollectionProtocolUtil
 		collectionProtocol.setUnsignedConsentDocumentURL(cpBean
 				.getUnsignedConsentURLName());
 		collectionProtocol.setIrbIdentifier(cpBean.getIrbID());
+		
+		collectionProtocol.setType(cpBean.getType());
+		collectionProtocol.setSequenceNumber(cpBean.getSequenceNumber());
+		collectionProtocol.setStudyCalendarEventPoint(cpBean.getStudyCalendarEventPoint());
+		
+		if(cpBean.getParentCollectionProtocolId() != null && cpBean.getParentCollectionProtocolId() != 0 && !"".equals(cpBean.getParentCollectionProtocolId()))
+		{
+		 collectionProtocol.setParentCollectionProtocol(getParentCollectionProtocol(cpBean.getParentCollectionProtocolId()));
+		}
+		
+		
+		return collectionProtocol;
+	}
+
+	/**
+	 * This method will be called to return the CollectionProtocol.
+	 * @param parentCollectionProtocolId : parentCollectionProtocolId.
+	 * @return the collectionProtocol.
+	 * @throws ApplicationException ApplicationException.
+	 */
+	public static CollectionProtocol getParentCollectionProtocol(Long parentCollectionProtocolId) throws ApplicationException
+	{
+		CollectionProtocol collectionProtocol = null;
+		DAO dao = null;
+		try 
+		{
+			dao = AppUtility.openDAOSession(null);
+			collectionProtocol = (CollectionProtocol)dao.retrieveById(CollectionProtocol.class.getName(), parentCollectionProtocolId);
+			
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		
 		return collectionProtocol;
 	}
 
@@ -810,6 +858,8 @@ public class CollectionProtocolUtil
 		}
 		
 		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
+		collectionProtocolEvent.setLabelFormat(cpEventBean.getLabelFormat());
+		
 		return collectionProtocolEvent;
 	}
 
@@ -995,6 +1045,7 @@ public class CollectionProtocolUtil
 		}
 		reqSpecimen.setStorageType(storageType);
 		reqSpecimen.setSpecimenClass(specimenRequirementBean.getClassName());
+		reqSpecimen.setLabelFormat(specimenRequirementBean.getLabelFormat());
 		return reqSpecimen;
 	}
 	

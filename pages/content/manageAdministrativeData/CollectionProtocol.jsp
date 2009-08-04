@@ -75,6 +75,12 @@ function updateCPTree()
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="id" />
 					    <html:hidden property="redirectTo"/>
+						
+						<html:hidden property="sequenceNumber" />
+						<html:hidden property="type" />
+						<html:hidden property="studyCalendarEventPoint" />
+						<html:hidden property="parentCollectionProtocolId" />
+
                       <tr>
                         <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.principalinvestigator" /> </td>

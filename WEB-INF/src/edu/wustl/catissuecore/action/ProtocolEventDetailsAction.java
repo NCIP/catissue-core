@@ -216,6 +216,8 @@ public class ProtocolEventDetailsAction extends BaseAction
 		protocolEventDetailsForm.setCollectionEventCollectionProcedure(collectionProtocolEventBean
 				.getCollectionProcedure());
 		protocolEventDetailsForm.setCollectionProtocolEventkey(collectionProtocolEventKey);
+		
+		protocolEventDetailsForm.setLabelFormat(collectionProtocolEventBean.getLabelFormat());
 
 	}
 

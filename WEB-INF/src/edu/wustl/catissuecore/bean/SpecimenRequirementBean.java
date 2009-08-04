@@ -746,4 +746,25 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.collectionEventContainer = collectionEventContainer;
 	}
 
+	
+	/**
+	 * For SCG labeling,this will be exposed through API and not in the model.
+	 */
+	private String labelFormat;
+
+    /**
+	 * For SCG labeling,this will be exposed through API and not in the model.
+	 */
+	public String getLabelFormat()
+	{
+		return labelFormat;
+	}
+    /**
+	 * For SCG labeling,this will be exposed through API and not in the model.
+	 */
+	public void setLabelFormat(String labelFormat)
+	{
+		this.labelFormat = labelFormat;
+	}
+	
 }

@@ -409,6 +409,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setConsentValues(collectionProtocolBean.getConsentValues());
 		collectionProtocolForm.setUnsignedConsentURLName(collectionProtocolBean
 				.getUnsignedConsentURLName());
+		
+		collectionProtocolForm.setSequenceNumber(collectionProtocolBean.getSequenceNumber());
+		collectionProtocolForm.setType(collectionProtocolBean.getType());
+		collectionProtocolForm.setStudyCalendarEventPoint(collectionProtocolBean.getStudyCalendarEventPoint());
+		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean.getParentCollectionProtocolId());
+		
 		return (mapping.findForward(pageOf));
 	}
 

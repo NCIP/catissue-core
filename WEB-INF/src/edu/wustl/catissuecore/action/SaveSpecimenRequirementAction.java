@@ -215,6 +215,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				.getReceivedEventReceivedQuality());
 		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm
 				.getCollectionEventCollectionProcedure());
+		
+		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
 	}
 	/**
 	 *

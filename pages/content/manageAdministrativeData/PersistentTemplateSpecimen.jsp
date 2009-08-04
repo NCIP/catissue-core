@@ -2,6 +2,7 @@
 		<td class="cp_tabtable">
 			<br>
 				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
+					<html:hidden property="labelFormat" />	
 					<tr>
                       <td colspan="3" align="left">
 						 <table width="100%" border="0" cellpadding="3" cellspacing="0">
