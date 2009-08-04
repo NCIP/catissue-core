@@ -22,6 +22,19 @@ import edu.wustl.dao.exception.DAOException;
  */
 public interface TreeDataInterface
 {
+	/**
+	 * @return treeData .
+	 * @throws DAOException
+	 */
     public abstract Vector getTreeViewData() throws DAOException;
+    /**
+     * Called to get TreeView data.
+     * @param sessionData session data
+     * @param map map
+     * @param list list of data.
+     * @return
+     * @throws DAOException DAOException
+     * @throws ClassNotFoundException ClassNotFoundException
+     */
     public abstract Vector getTreeViewData(SessionDataBean sessionData,Map map,List list) throws DAOException,ClassNotFoundException;
 }
