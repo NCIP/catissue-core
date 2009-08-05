@@ -31,7 +31,9 @@ import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.dao.DAO;
@@ -159,6 +161,12 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
 					assignDataException.getMessage()));
+		}
+		catch (final ApplicationException appException)//Bug 13489
+		{
+			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
+					.getMessage()));			
 		}
 		finally
 		{
