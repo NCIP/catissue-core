@@ -1997,6 +1997,7 @@ PUBLIC
 			<forward name="createShipmentForRequest" path="/ShipmentFromRequest.do?operation=add&amp;pageOf=pageOfShipment"/>
 			<forward name="viewShipmentRequest" path="/ShipmentRequestAction.do?operation=view&amp;pageOf=pageOfShipmentRequest"/>
 			<forward name="viewNonEditableShipmentRequest" path="/ShipmentRequestAction.do?operation=viewNonEditable&amp;pageOf=pageOfShipmentRequest"/>
+			<forward name="editShipmentRequest" path="/ShipmentRequestAction.do?operation=edit&amp;pageOf=pageOfShipmentRequest"/>
 			<forward name="failure" path="/ShowDashboardAction.do"/>
 		</action>
 		
@@ -2640,6 +2641,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSite" path=".catissuecore.siteDef" />
 			<forward name="pageOfAddForSC" path="/pages/content/manageAdministrativeData/Site.jsp" />
+			<forward name="pageOfShipmentReceived" path=".shippingTracking.shipmentReceiving" />
 			<forward name="failure" path=".catissuecore.siteDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
@@ -4192,6 +4194,7 @@ PUBLIC
 			scope="request">
 			<forward name="storageType" path="/StorageType.do?operation=add&amp;pageOf=pageOfAddForSC&amp;menuSelected=6" />
 			<forward name="site" path="/Site.do?operation=add&amp;pageOf=pageOfAddForSC&amp;menuSelected=5" />
+			<forward name="siteshipmentreceived" path="/Site.do?operation=add&amp;pageOf=pageOfShipmentReceived&amp;menuSelected=5" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 

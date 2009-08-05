@@ -47,6 +47,11 @@ public class RequestReceivedAction extends ProcessShipmentRequestsAction
 			forwardTo = Constants.VIEW_NONEDITABLE_SHIPMENT_REQUEST;
 			//forwardTo = Constants.VIEW_SHIPMENT_REQUEST;
 		}
+		//Bug 13551
+		else if(activityStatus.equals("Drafted"))
+		{
+			forwardTo = Constants.EDIT_SHIPMENT_REQUEST;
+		}
 		return forwardTo;
 	}
 
