@@ -521,13 +521,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExption)
 		{
 			this.logger.debug(daoExption.getMessage(), daoExption);
-			throw this
-					.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption.getMsgValues());
+			throw this.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption
+					.getMsgValues());
 		}
 		catch (final AuditException auditException)
 		{
 			this.logger.debug(auditException.getMessage(), auditException);
-			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(), auditException.getMsgValues());
+			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
+					auditException.getMsgValues());
 		}
 
 	}
@@ -809,8 +810,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						xPos = parameter.getToPositionDimensionOne();
 						yPos = parameter.getToPositionDimensionTwo();
 					}
-					if (xPos == null || yPos == null || xPos.intValue() < 0
-							|| yPos.intValue() < 0)
+					if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 					{
 
 						throw this.getBizLogicException(null, "errors.item.format",
@@ -876,7 +876,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-
 
 	/**
 	 * @param dao - DAO object.
@@ -1069,25 +1068,69 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		String objectId = "";
+		Long cpId = null;
+		List<Long> list = null;
 		try
 		{
-
-			//TODO Optimize This code with HQL
+				//TODO Optimize This code with HQL
+			/*	if (domainObject instanceof SpecimenEventParameters)
+				{
+					SpecimenCollectionGroup scg = null;
+					final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
+					
+					AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
+			
+					specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
+					final Specimen specimen1 = (Specimen) specimen;
+					scg = specimen1.getSpecimenCollectionGroup();
+			
+					final CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+					final CollectionProtocol cp = cpr.getCollectionProtocol();
+					objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+					dao.delete(specimen);
+				}
+				*/
+			
+		
 			if (domainObject instanceof SpecimenEventParameters)
 			{
-				SpecimenCollectionGroup scg = null;
 				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
-				AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
-
-				specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
-				final Specimen specimen1 = (Specimen) specimen;
-				scg = specimen1.getSpecimenCollectionGroup();
-
-				final CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-				final CollectionProtocol cp = cpr.getCollectionProtocol();
-				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
-
+				AbstractSpecimen specimen =  specimenEventParameters.getSpecimen();
+			
+				// bug 13455 start 
+				if (cpId == null)
+				{
+					String query = null;
+					if (specimen.getParentSpecimen() != null)
+					{
+						query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+								+ "specimen.label = '"
+								+ specimen.getParentSpecimen().getLabel()
+								+ "'";
+						list = dao.executeQuery(query);
+						final Iterator<Long> itr = list.iterator();
+						while (itr.hasNext())
+						{
+							cpId = (Long) itr.next();
+						}
+					}
+					else if (cpId == null && specimen.getId() != null)
+					{
+						query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
+								+ "specimen.id = '" + specimen.getId() + "'";
+						list = dao.executeQuery(query);
+						final Iterator<Long> itr = list.iterator();
+						while (itr.hasNext())
+						{
+							cpId = (Long) itr.next();
+						}
+					}
+				}
+			
+				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
 			}
+		
+
 		}
 		catch (final DAOException e)
 		{
@@ -1252,40 +1295,53 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 		final SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
 		AbstractSpecimen specimen = spe.getSpecimen();
-
+        List<Long> list=null;
+        Long siteId=null;
 		try
 		{
-
-			specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
-			final Specimen specimen1 = (Specimen) specimen;
-			specimenPosition = specimen1.getSpecimenPosition();
-
-			if (specimenPosition != null) // Specimen is NOT Virtually Located
-			{
-				final StorageContainer sc = specimenPosition.getStorageContainer();
-				final Site site = sc.getSite();
-
-				final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-						.getUserId());
-
-				if (!siteIdSet.contains(site.getId()))
+		/*	
+				specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
+				final Specimen specimen1 = (Specimen) specimen;
+				specimenPosition = specimen1.getSpecimenPosition();
+				if (specimenPosition != null) // Specimen is NOT Virtually Located
 				{
-					//bug 11611 and 11659 start
-					//UserNotAuthorizedException ex = 
-					throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
-							.getObjectId(), domainObject.getClass().getSimpleName());
-					/*if(ex.getBaseObject()==null)
+					final StorageContainer sc = specimenPosition.getStorageContainer();
+					final Site site = sc.getSite();
+	
+					final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+							.getUserId());
+	
+					if (!siteIdSet.contains(site.getId()))
 					{
-						ex.setBaseObject("Specimen");
+						//bug 11611 and 11659 start
+						
+						throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
+								.getObjectId(), domainObject.getClass().getSimpleName());
+								//bug 11611 and 11659 end
 					}
-					throw getBizLogicException(ex, "dao.error", "");*/
-					//bug 11611 and 11659 end
 				}
+		 */
+			
+			 	// bug id #13455 start 
+			String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+				+ "specimen.id = '" + specimen.getId() + "'";
+			list = dao.executeQuery(query);
+			final Iterator<Long> itr = list.iterator();
+			while (itr.hasNext())
+			{
+				siteId = (Long) itr.next();
+			}
+			final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+					.getUserId());
+
+			if (!siteIdSet.contains(siteId))
+			{
+				throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
+						.getObjectId(), domainObject.getClass().getSimpleName());
 			}
 		}
 		catch (final DAOException e)
 		{
-
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
