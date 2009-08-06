@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -3297,7 +3298,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				if (xPos == null || yPos == null)
 				{
 					final Container cont = container.getLocatedAtPosition().getParentContainer();
-					final Position position = this.getFirstAvailablePositionInContainer(cont);
+					final Position position = this.getFirstAvailablePositionInContainer(cont,dao);
 					if (position != null)
 					{
 						final ContainerPosition cntPos = container.getLocatedAtPosition();
@@ -3391,39 +3392,19 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @return Position
 	 * @throws BizLogicException
 	 */
-	public Position getFirstAvailablePositionInContainer(Container container)
+	public Position getFirstAvailablePositionInContainer(Container container,DAO dao)
 	throws BizLogicException
 	{
-		JDBCDAO jdbcDAO = null;
+		
 		Position position = null;
 		try 
 		{
-			jdbcDAO = this.openJDBCSession();
 			Integer xPos;
 			Integer yPos;
 
-			final Capacity scCapacity = container.getCapacity();
-			String dim1, dim2;
-			if (scCapacity == null) 
-			{
-				final StringBuilder query = new StringBuilder();
-				query
-						.append("select c.one_dimension_capacity ,c.two_dimension_capacity ");
-				query
-						.append("from catissue_capacity c where c.identifier = (select capacity_id from catissue_container where identifier=");
-				query.append(container.getId());
-				query.append(")");
-				final List l = jdbcDAO.executeQuery(query.toString());
-				dim1 = (String) this.getResultSetData(l, 0, 0);
-				dim2 = (String) this.getResultSetData(l, 0, 1);
-			}
-			else
-			{
-				dim1 = scCapacity.getOneDimensionCapacity() + "";
-				dim2 = scCapacity.getTwoDimensionCapacity() + "";
-			}
+			final Capacity scCapacity = getContainerCapacity(container, dao);
 			final Map positionMap = this.getAvailablePositionMapForContainer(
-					String.valueOf(container.getId()), 0, dim1, dim2, jdbcDAO);
+					String.valueOf(container.getId()), 0, scCapacity.getOneDimensionCapacity(), scCapacity.getTwoDimensionCapacity(), dao);
 			if (positionMap != null) 
 			{
 				final Iterator containerPosIterator = positionMap.keySet()
@@ -3452,13 +3433,92 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		} catch (final DAOException d) 
 		{
 			d.printStackTrace();
+			System.out.println();
 			throw new BizLogicException(d);
-		} finally 
-		{
-			this.closeJDBCSession(jdbcDAO);
 		}
 		return position;
 	}
+	
+	public Position getFirstAvailablePositionInContainer(Container container,DAO dao,HashSet<String> allocatedPositions)
+	throws BizLogicException
+	{
+		Position position = null;
+		try 
+		{
+			Integer xPos;
+			Integer yPos;
+			String containerValue = null;
+			Capacity capacity = getContainerCapacity(container, dao);
+			final Map positionMap = this.getAvailablePositionMapForContainer(
+					String.valueOf(container.getId()), 0, capacity.getOneDimensionCapacity(), capacity.getTwoDimensionCapacity(), dao);
+			if (positionMap != null) 
+			{
+				final Iterator containerPosIterator = positionMap.keySet()
+						.iterator();
+				boolean positionAllottedFlag = false;
+				while (containerPosIterator.hasNext() && !positionAllottedFlag) 
+				{
+					NameValueBean nvb = (NameValueBean) containerPosIterator
+							.next();
+					xPos = Integer.valueOf(nvb.getValue());
+					final List yposValues = (List) positionMap.get(nvb);
+					final Iterator yposIterator = yposValues.iterator();
+
+					while (yposIterator.hasNext()) 
+					{
+						nvb = (NameValueBean) yposIterator.next();
+						yPos = Integer.valueOf(nvb.getValue());
+						Long containerId = container.getId();
+						
+						if (container.getName() != null)
+						{
+							containerValue = StorageContainerUtil.getStorageValueKey(container
+									.getName(), null, xPos, yPos);
+						}
+						else
+						{
+							containerValue = StorageContainerUtil.getStorageValueKey(null, containerId
+									.toString(), xPos, yPos);
+						}
+						if (!allocatedPositions.contains(containerValue))
+						{
+							positionAllottedFlag = true;
+							position = new Position();
+							position.setXPos(xPos);
+							position.setYPos(yPos);
+							break;
+						}
+					}
+				}
+			}
+		} catch (final DAOException d) 
+		{
+			d.printStackTrace();
+			System.out.println();
+			throw new BizLogicException(d);
+		}
+		return position;
+	}
+	private Capacity getContainerCapacity(Container container,DAO dao) throws DAOException 
+	{
+		Capacity scCapacity = container.getCapacity();
+		String dim1, dim2;
+		if (scCapacity == null) 
+		{
+			scCapacity = new Capacity(); 
+			String[] selectColumnName = new String[]{"capacity.oneDimensionCapacity","capacity.twoDimensionCapacity"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(StorageContainer.class.getName());
+			queryWhereClause.addCondition(new EqualClause("id", container.getId()));
+			final List list= dao.retrieve(StorageContainer.class.getName(), selectColumnName, queryWhereClause);
+			Object[] returnValues =(Object[])list.get(0);
+			scCapacity.setOneDimensionCapacity((Integer)returnValues[0]);
+			scCapacity.setTwoDimensionCapacity((Integer)returnValues[1]);
+		}
+		return scCapacity;
+		
+		
+	}
+
 	/**
 	 * Returns a list of storage containers. Each index corresponds to the entry:<br>
 	 * 		[id, name, one_dimension_capacity, two_dimension_capacity ...]
@@ -3477,10 +3537,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 */
 	private List getStorageContainerList(String holdsType, final Long cpId, final String spClass,
 			int aliquotCount, final SessionDataBean sessionData, Long containerTypeId,
-			Long specimenArrayTypeId, String exceedingLimit, JDBCDAO dao) throws BizLogicException,
+			Long specimenArrayTypeId, String exceedingLimit) throws BizLogicException,
 			DAOException
 	{
-		
+		final JDBCDAO dao = this.openJDBCSession();
+
 		final List containers = new ArrayList();
 		try
 		{
@@ -3515,7 +3576,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		finally
 		{
-			//dao.closeSession();
+			dao.closeSession();
 		}
 		Logger.out.debug(String.format("%s:%s:%d", this.getClass().getSimpleName(),
 				"getStorageContainers() number of containers fetched", containers.size()));
@@ -3626,7 +3687,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY,
-			JDBCDAO dao) throws BizLogicException
+			DAO dao) throws BizLogicException
 	{
 		final boolean[][] positions = new boolean[dimX][dimY];
 		try
@@ -3640,27 +3701,39 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 			}
 
-			final StringBuilder storageContainerQuery = new StringBuilder();
+			/*final StringBuilder storageContainerQuery = new StringBuilder();
 			storageContainerQuery
 					.append("select ap.position_dimension_one, ap.position_dimension_two ");
 			storageContainerQuery
 					.append(" from catissue_abstract_position ap join catissue_container_position cp on cp.identifier=ap.identifier ");
 			storageContainerQuery.append(" and cp.parent_container_id=" + containerId);
 			List list = dao.executeQuery(storageContainerQuery.toString());
-			
+			*/
+			//System.out.print("f");
+			String[] selectColumnName = new String[]{"positionDimensionOne","positionDimensionTwo"};
+			//System.out.print("c");
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenPosition.class.getName());
+			queryWhereClause.addCondition(new EqualClause("storageContainer.id", containerId));
+			final List list= dao.retrieve(SpecimenPosition.class.getName(), selectColumnName, queryWhereClause);
 			this.setPositions(positions, list);
 
-			final StringBuilder specimenQuery = new StringBuilder();
+			/*final StringBuilder specimenQuery = new StringBuilder();
 			specimenQuery.append(" select ap.position_dimension_one, ap.position_dimension_two ");
 			specimenQuery
 					.append(" from catissue_abstract_position ap join catissue_specimen_position sp on sp.identifier=ap.identifier ");
 			specimenQuery.append(" and sp.container_id=");
 			specimenQuery.append(containerId);
-			list = dao.executeQuery(specimenQuery.toString());
-			this.setPositions(positions, list);
+			list = dao.executeQuery(specimenQuery.toString());*/
+			
+			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class.getName());
+			queryWhereClause2.addCondition(new EqualClause("parentContainer.id", containerId));
+			final List list2= dao.retrieve(ContainerPosition.class.getName(), selectColumnName, queryWhereClause2);
+			this.setPositions(positions, list2);
 		}
 		catch (final DAOException e)
 		{
+			e.printStackTrace();
+			
 			throw new BizLogicException(e);
 		}
 		return positions;
@@ -3677,14 +3750,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		if (resultSet != null)
 		{
+//			System.out.print("asd");
 			int x, y;
 			for (int i = 0; i < resultSet.size(); i++)
 			{
-				final List columnList = (List) resultSet.get(i);
-				if ((columnList != null) && (columnList.size() == 2))
+				final Object[] columnList = (Object[]) resultSet.get(i);
+				if ((columnList != null) && (columnList.length == 2))
 				{
-					x = Integer.parseInt((String) columnList.get(0));
-					y = Integer.parseInt((String) columnList.get(1));
+					x = (Integer)columnList[0];
+					y = (Integer)columnList[1];
 					positions[x][y] = false;
 				}
 			}
@@ -3717,7 +3791,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @return Map
 	 */
 	public Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
-			String positionDimensionOne, String positionDimensionTwo, JDBCDAO dao)
+			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
 			throws BizLogicException
 	{
 		final Map map = new TreeMap();
@@ -3725,8 +3799,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		// Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
 		// if (!container.isFull().booleanValue())
 		// {
-		final int dimX = Integer.parseInt(positionDimensionOne) + 1;
-		final int dimY = Integer.parseInt(positionDimensionTwo) + 1;
+		final int dimX = positionDimensionOne + 1;
+		final int dimY = positionDimensionTwo + 1;
 
 		final boolean[][] availablePosistions = this.getAvailablePositionsForContainer(containerId,
 				dimX, dimY, dao);
@@ -3840,18 +3914,16 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public TreeMap getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit,
-			String selectedContainerName, SessionDataBean sessionDataBean)
+			String selectedContainerName, SessionDataBean sessionDataBean,DAO dao)
 			throws BizLogicException, DAOException
 	{
 		final Long startTime = System.currentTimeMillis();
-		final JDBCDAO jdbcDAO = this.openJDBCSession();
 		final List containerList = this.getStorageContainerList(TYPE_CONTAINER, null, null, 0,
-				sessionDataBean, type_id, null, null, jdbcDAO);
-		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+				sessionDataBean, type_id, null, null);
+		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList,dao);
 		final Long endTime = System.currentTimeMillis();
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
 				+ ((endTime - startTime) / 1000));
-		jdbcDAO.closeSession();
 		return tm;
 	}
 
@@ -3891,15 +3963,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws DAOException throws DAOException
 	 */
 	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass,
-			int aliquotCount, String exceedingMaxLimit, SessionDataBean sessionData, JDBCDAO jdbcDAO)
+			int aliquotCount, String exceedingMaxLimit, SessionDataBean sessionData, DAO dao)
 			throws BizLogicException, DAOException
 	{
 
 		final Long startTime = System.currentTimeMillis();
 
 		final List containerList = this.getStorageContainerList(TYPE_SPECIMEN, cpId, specimenClass,
-				aliquotCount, sessionData, null, null, null, jdbcDAO);
-		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+				aliquotCount, sessionData, null, null, null);
+		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
 				+ ((endTime - startTime) / 1000));
@@ -3990,17 +4062,16 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
 	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id,
-			int noOfAliqoutes, SessionDataBean sessionData, String exceedingMaxLimit)
+			int noOfAliqoutes, SessionDataBean sessionData, String exceedingMaxLimit,DAO dao)
 			throws BizLogicException
 	{
 		JDBCDAO jdbcDAO = null;
 		try
 		{
 			final Long startTime = System.currentTimeMillis();
-			jdbcDAO = this.openJDBCSession();
 			final List containerList = this.getStorageContainerList(TYPE_SPECIMEN_ARRAY, null,
-					null, 0, sessionData, null, specimen_array_type_id, null, jdbcDAO);
-			final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, jdbcDAO);
+					null, 0, sessionData, null, specimen_array_type_id, null);
+			final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 			final Long endTime = System.currentTimeMillis();
 
 			System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
@@ -4014,10 +4085,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		finally
-		{
-			this.closeJDBCSession(jdbcDAO);
-		}
+
 	}
 
 	// --------------Code for Map Mandar: 04-Sep-06 start
@@ -4571,53 +4639,18 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		return Constants.ADD_EDIT_STORAGE_CONTAINER;
 	}
 
-	/**Gives the Site Object related to given container
-	 * @param containerId - Long
-	 * @return Site object
-	 * @throws BizLogicException throws BizLogicException
-	 */
-	public Site getRelatedSite(Long containerId) throws BizLogicException
-	{
-		Site site = null;
-		DAO dao = null;
-		try
-		{
-			if (containerId >= 1)
-			{
-				dao = this.openDAOSession(null);
-				StorageContainer storageContainer = null;
-				storageContainer = (StorageContainer) dao.retrieveById(StorageContainer.class
-						.getName(), containerId);
-
-				if (storageContainer != null)
-				{
-					site = storageContainer.getSite();
-				}
-			}
-		}
-		catch (final DAOException e)
-		{
-			this.logger.debug(e.getMessage(), e);
-		}
-		finally
-		{
-			this.closeDAOSession(dao);
-		}
-		return site;
-	}
+	
 
 	/**
 	 * Gives the Site Object related to given container whose name is given.
 	 * @param containerName - String 
 	 * @return Site - site object
 	 */
-	public Site getRelatedSiteForManual(String containerName) throws BizLogicException
+	public Site getRelatedSiteForManual(String containerName,DAO dao) throws BizLogicException
 	{
 		Site site = null;
-		DAO dao = null;
 		try
 		{
-			dao = this.openDAOSession(null);
 			if (containerName != null && !("").equals(containerName))
 			{
 
@@ -4646,10 +4679,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			this.logger.debug(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-		finally
-		{
-			this.closeDAOSession(dao);
-		}
+		
 		return site;
 	}
 
@@ -4701,7 +4731,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 *         locations.
 	 * @throws DAOException
 	 */
-	private Map getAllocDetailsForContainers(List containerList, JDBCDAO jdbcDao)
+	private Map getAllocDetailsForContainers(List containerList, DAO dao)
 			throws BizLogicException
 	{
 		this.logger.info("No of containers:" + containerList.size());
@@ -4713,8 +4743,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			//Object container[] = (Object[]) itr.next();
 			final ArrayList container = (ArrayList) itr.next();
 			final Map positionMap = this.getAvailablePositionMapForContainer(String
-					.valueOf(container.get(0)), 0, String.valueOf(container.get(2)), String
-					.valueOf(container.get(3)), jdbcDao);
+					.valueOf(container.get(0)), 0, Integer.parseInt(String.valueOf(container.get(2))), Integer.parseInt(String.valueOf(container.get(3))), dao);
 			if (!positionMap.isEmpty())
 			{
 				final NameValueBean nvb = new NameValueBean(container.get(1), container.get(0),
@@ -4886,17 +4915,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				.append(" FROM CATISSUE_CAPACITY F JOIN CATISSUE_CONTAINER D  ON F.IDENTIFIER = D.CAPACITY_ID");
 		sb
 				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON D.IDENTIFIER = K.CONTAINER_ID ");
-		sb.append(" JOIN CATISSUE_STORAGE_CONTAINER C ON D.IDENTIFIER = C.IDENTIFIER ");
-		sb.append(" JOIN CATISSUE_SITE L ON C.SITE_ID = L.IDENTIFIER ");
+		sb.append(" LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER C ON D.IDENTIFIER = C.IDENTIFIER ");
+		sb.append(" LEFT OUTER JOIN CATISSUE_SITE L ON C.SITE_ID = L.IDENTIFIER ");
 		if (isCPUnique != null) //DO not join on CP if there is no restriction on CP. i.e isCPUnique=null 
 		{
 			sb
-					.append(" JOIN CATISSUE_ST_CONT_COLL_PROT_REL A ON A.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+					.append(" LEFT OUTER JOIN CATISSUE_ST_CONT_COLL_PROT_REL A ON A.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
 		}
 		if (isSPClassUnique != null) //DO not join on SP CLS if there is no restriction on SP CLS. i.e isSPClassUnique=null
 		{
 			sb
-					.append(" JOIN CATISSUE_STOR_CONT_SPEC_CLASS B ON B.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+					.append(" LEFT OUTER JOIN CATISSUE_STOR_CONT_SPEC_CLASS B ON B.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
 		}
 		sb.append(" WHERE ");
 		if (isCPUnique != null)
@@ -5263,5 +5292,33 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		return false;
 	}
+	/**Gives the Site Object related to given container
+	 * @param containerId - Long
+	 * @return Site object
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public  Site getRelatedSite(Long containerId,DAO dao) throws BizLogicException
+	{
+		Site site = null;
+		try
+		{
+			if (containerId >= 1)
+			{
+				StorageContainer storageContainer = null;
+				storageContainer = (StorageContainer) dao.retrieveById(StorageContainer.class
+						.getName(), containerId);
 
+				if (storageContainer != null)
+				{
+					site = storageContainer.getSite();
+				}
+			}
+		}
+		catch (final DAOException e)
+		{
+			logger.debug(e.getMessage(), e);
+		}
+
+		return site;
+	}
 }

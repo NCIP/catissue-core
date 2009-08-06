@@ -1401,7 +1401,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 							.get(Constants.CP_BASED_VIEW_FILTRATION)))
 					{
 						final Collection<CollectionProtocol> cp1Collection = siteBizLogic
-								.getRelatedCPs(siteId);
+								.getRelatedCPs(siteId,dao);
 
 						if (cp1Collection != null && !cp1Collection.isEmpty())
 						{

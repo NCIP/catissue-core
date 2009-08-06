@@ -970,7 +970,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					{
 						final Position position = scBizLogic
 								.getFirstAvailablePositionInContainer(specimenArray
-										.getLocatedAtPosition().getParentContainer());
+										.getLocatedAtPosition().getParentContainer(),dao);
 						if (position != null)
 						{
 							final ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();

@@ -208,6 +208,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (final Exception exception)
 		{
+			exception.printStackTrace();
 			this.logger.debug(exception.getMessage(), exception);
 			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,

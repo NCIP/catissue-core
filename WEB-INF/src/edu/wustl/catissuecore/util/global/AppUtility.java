@@ -2599,7 +2599,7 @@ public class AppUtility
 	 */
 
 	public static HttpServletRequest setCollectionProtocolList(HttpServletRequest request,
-			Long siteId) throws ApplicationException
+			Long siteId,DAO dao) throws ApplicationException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		SiteBizLogic siteBizLogic = (SiteBizLogic) factory.getBizLogic(Constants.SITE_FORM_ID);
@@ -2610,7 +2610,7 @@ public class AppUtility
 		}
 		else
 		{
-			cpCollection = siteBizLogic.getRelatedCPs(siteId);
+			cpCollection = siteBizLogic.getRelatedCPs(siteId,dao);
 		}
 		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
 		Map<Long, String> cpTitleMap = new HashMap<Long, String>();

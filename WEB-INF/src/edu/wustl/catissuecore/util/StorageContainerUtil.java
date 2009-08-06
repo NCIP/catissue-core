@@ -113,38 +113,13 @@ public final class StorageContainerUtil
 	}
 
 	public static Position getFirstAvailablePositionsInContainer(StorageContainer storageContainer,
-			HashSet<String> allocatedPositions) throws ApplicationException
+			HashSet<String> allocatedPositions,DAO dao) throws ApplicationException
 	{
 		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		Position position = null;
-		boolean positionFound = false;
-		while (!positionFound)
+		Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer, dao, allocatedPositions);
+		if(position==null)
 		{
-			position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer);
-			if (position != null)
-			{
-				String containerValue = null;
-				Long containerId = storageContainer.getId();
-				if (storageContainer.getName() != null)
-				{
-					containerValue = StorageContainerUtil.getStorageValueKey(storageContainer
-							.getName(), null, position.getXPos(), position.getYPos());
-				}
-				else
-				{
-					containerValue = StorageContainerUtil.getStorageValueKey(null, containerId
-							.toString(), position.getXPos(), position.getYPos());
-				}
-				if (!allocatedPositions.contains(containerValue))
-				{
-					positionFound = true;
-					break;
-				}
-			}
-			else
-			{
 				throw AppUtility.getApplicationException(null, "storage.full", "");
-			}
 		}
 		return position;
 	}
@@ -180,7 +155,7 @@ public final class StorageContainerUtil
 			{
 				
 				StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-				Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer);
+				Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer,dao);
 					if(position!=null)
 					{
 						xPos = position.getXPos();
@@ -469,7 +444,7 @@ public final class StorageContainerUtil
 	 * @throws DAOException
 	 */
 	public static List setInitialValue(SpecimenArrayBizLogic specimenArrayBizLogic,
-			SpecimenArrayForm specimenArrayForm, TreeMap containerMap) throws ApplicationException
+			SpecimenArrayForm specimenArrayForm, TreeMap containerMap,DAO dao) throws ApplicationException
 	{
 		List initialValues = null;
 		String[] startingPoints = new String[]{"-1", "-1", "-1"};
@@ -483,9 +458,10 @@ public final class StorageContainerUtil
 			String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
-			List containerList = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),
-					selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
-					joinCondition);
+			QueryWhereClause queryWhereClause  = new QueryWhereClause(StorageContainer.class.getName());
+			queryWhereClause.addCondition(new EqualClause("id",Long.valueOf(startingPoints[0])));
+			List containerList = dao.retrieve(StorageContainer.class.getName(),
+					selectColumnName, queryWhereClause);
 			if ((containerList != null) && (!containerList.isEmpty()))
 			{
 				containerName = (String) containerList.get(0);
@@ -515,7 +491,7 @@ public final class StorageContainerUtil
 	 * @throws ApplicationException 
 	 */
 	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
-			List usedPositionsList, String spKey, String scId) throws ApplicationException
+			List usedPositionsList, String spKey, String scId,DAO dao) throws ApplicationException
 	{
 		int specimenNumber = ((Integer) object).intValue();
 		String specimenKey = spKey;
@@ -531,7 +507,7 @@ public final class StorageContainerUtil
 		Container container = new Container();
 		container.setId(Long.valueOf(containerID));
 		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		Position position = scBizLogic.getFirstAvailablePositionInContainer(container);
+		Position position = scBizLogic.getFirstAvailablePositionInContainer(container,dao);
 		if (position != null) {
 			aliquotMap.put(containerIdKey, containerID);
 			aliquotMap.put(posDim1Key, position.getXPos());
@@ -654,4 +630,5 @@ public final class StorageContainerUtil
 		}
 		return storageValue.toString();
 	}
+	
 }

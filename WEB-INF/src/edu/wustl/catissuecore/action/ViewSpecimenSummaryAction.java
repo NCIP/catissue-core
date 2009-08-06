@@ -43,7 +43,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -943,10 +943,13 @@ public class ViewSpecimenSummaryAction extends Action
 	private void getAvailablePosition(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ApplicationException
 	{
-		JDBCDAO jdbcDAO = null;
+		DAO dao = null;
+		
 		try
 		{
-			jdbcDAO = AppUtility.openJDBCSession();
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+			.getAttribute(Constants.SESSION_DATA);
+			dao= AppUtility.openDAOSession(sessionData);
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
 			final HttpSession session = request.getSession();
@@ -966,12 +969,11 @@ public class ViewSpecimenSummaryAction extends Action
 			final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			final String exceedingMaxLimit = new String();
-			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-					.getAttribute(Constants.SESSION_DATA);
+			
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
 			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,
-					exceedingMaxLimit, sessionData, jdbcDAO);
+					exceedingMaxLimit, sessionData, dao);
 			/*
 			 * String containerName = ((NameValueBean)
 			 * (containerMap.keySet().iterator().next())) .getName();
@@ -999,7 +1001,7 @@ public class ViewSpecimenSummaryAction extends Action
 		}
 		finally
 		{
-			AppUtility.closeJDBCSession(jdbcDAO);
+			AppUtility.closeDAOSession(dao);
 		}
 
 	}

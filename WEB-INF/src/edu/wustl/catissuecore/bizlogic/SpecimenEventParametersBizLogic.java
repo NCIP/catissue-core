@@ -20,8 +20,6 @@ import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
@@ -787,17 +785,17 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 					Integer xPos = parameter.getToPositionDimensionOne();
 					Integer yPos = parameter.getToPositionDimensionTwo();
-					boolean isContainerFull = false;
+					
 					/**
 					 *  Following code is added to set the x and y dimension in case only storage container is given 
 					 *  and x and y positions are not given 
 					 */
 					if (yPos == null || xPos == null)
 					{
-						isContainerFull = true;
+					
 						final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 						final Position position = scBizLogic
-								.getFirstAvailablePositionInContainer(storageContainerObj);
+								.getFirstAvailablePositionInContainer(storageContainerObj,dao);
 						if (position != null)
 						{
 							parameter.setToPositionDimensionOne(position.getXPos());

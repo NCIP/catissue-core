@@ -35,13 +35,12 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
-import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -105,164 +104,187 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		request.setAttribute("storContId", Constants.STORAGE_CONTAINER_ID);
 		request.setAttribute("add", Constants.ADD);
 
-
-		if (transferEventParametersForm.getOperation().equals(Constants.ADD))
+		SessionDataBean sessionData = (SessionDataBean) request.getSession()
+		.getAttribute(Constants.SESSION_DATA);
+		DAO dao = AppUtility.openDAOSession(sessionData);
+		try
 		{
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-			String identifier = (String) request.getAttribute(Constants.SPECIMEN_ID);
-			if (identifier == null)
-			{
-				identifier = (String) request.getParameter(Constants.SPECIMEN_ID);
-			}
+			if (transferEventParametersForm.getOperation()
+					.equals(Constants.ADD)) {
 
-			logger.debug("\t\t*******************************SpecimenID : " + identifier);
-			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
+				String identifier = (String) request
+						.getAttribute(Constants.SPECIMEN_ID);
+				if (identifier == null) {
+					identifier = (String) request
+							.getParameter(Constants.SPECIMEN_ID);
+				}
 
-			// ---- chetan 15-06-06 ----
+				logger.debug("\t\t*******************************SpecimenID : "
+						+ identifier);
+				Object object = dao.retrieveById(Specimen.class.getName(),
+						new Long(identifier));
 
-			// -------------------------
+				// ---- chetan 15-06-06 ----
 
-			if (object != null)
-			{
-				JDBCDAO jdbcDAO = null;
-				try
-				{
-					jdbcDAO = AppUtility.openJDBCSession();
-					Specimen specimen = (Specimen) object;
+				// -------------------------
 
-					String positionOne = null;
-					String positionTwo = null;
-					String storageContainerID = null;
-					String fromPositionData = "virtual Location";
+				if (object != null) {
 
-					// Ashish - 7/6/06 - Retriving Storage container for
-					// performance improvement.
-					String sourceObjectName = Specimen.class.getName();
-					Long id = specimen.getId();
-					String attributeName = "specimenPosition.storageContainer";
-					StorageContainer stContainer =
-						(StorageContainer) bizLogic.retrieveAttribute(
-							sourceObjectName, id, attributeName);
+					try {
 
-					if (stContainer != null)
-					{
-						if (specimen != null && specimen.getSpecimenPosition() != null
-								&& specimen.getSpecimenPosition().
-								getPositionDimensionOne() != null
-								&& specimen.getSpecimenPosition().
-								getPositionDimensionTwo() != null)
+						Specimen specimen = (Specimen) object;
+
+						String positionOne = null;
+						String positionTwo = null;
+						String storageContainerID = null;
+						String fromPositionData = "virtual Location";
+
+						// Ashish - 7/6/06 - Retriving Storage container for
+						// performance improvement.
+						// String sourceObjectName = Specimen.class.getName();
+						Long id = specimen.getId();
+						String attributeName = "specimenPosition.storageContainer";
+						List stContainerList = (List) dao
+								.retrieveAttribute(Specimen.class, "id", id,
+										attributeName);
+						if((stContainerList!=null)&&(stContainerList.size()>0))
 						{
-							positionOne = specimen.getSpecimenPosition().
-							getPositionDimensionOne()
-									.toString();
-							positionTwo = specimen.getSpecimenPosition().
-							getPositionDimensionTwo()
-									.toString();
-							// StorageContainer container =
-							// specimen.getStorageContainer();
-							storageContainerID = stContainer.getId().toString();
-							fromPositionData = stContainer.getName()
-							+ ":" + " Pos(" + positionOne
-									+ "," + positionTwo + ")";
+							StorageContainer stContainer = (StorageContainer) stContainerList
+									.get(0);
+							if (stContainer != null) 
+							{
+								if (specimen != null
+										&& specimen.getSpecimenPosition() != null
+										&& specimen.getSpecimenPosition()
+												.getPositionDimensionOne() != null
+										&& specimen.getSpecimenPosition()
+												.getPositionDimensionTwo() != null) {
+									positionOne = specimen
+											.getSpecimenPosition()
+											.getPositionDimensionOne()
+											.toString();
+									positionTwo = specimen
+											.getSpecimenPosition()
+											.getPositionDimensionTwo()
+											.toString();
+									// StorageContainer container =
+									// specimen.getStorageContainer();
+									storageContainerID = stContainer.getId()
+											.toString();
+									fromPositionData = stContainer.getName()
+											+ ":" + " Pos(" + positionOne + ","
+											+ positionTwo + ")";
+								}
+							}
 						}
-					}
-					// The fromPositionData(storageContainer Info) of specimen
-					// of this event.
-					transferEventParametersForm.setFromPositionData(fromPositionData);
+						// The fromPositionData(storageContainer Info) of
+						// specimen
+						// of this event.
+						transferEventParametersForm
+								.setFromPositionData(fromPositionData);
 
-					// POSITION 1
-					request.setAttribute(Constants.POS_ONE, positionOne);
+						// POSITION 1
+						request.setAttribute(Constants.POS_ONE, positionOne);
 
-					// POSITION 2
-					request.setAttribute(Constants.POS_TWO, positionTwo);
+						// POSITION 2
+						request.setAttribute(Constants.POS_TWO, positionTwo);
 
-					// storagecontainer info
-					request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
+						// storagecontainer info
+						request.setAttribute(Constants.STORAGE_CONTAINER_ID,
+								storageContainerID);
 
-					// Ashish --- 5th June 07 --- retriving cp object when lazy
-					// = true. for performance improvement
-					Long collectionProtocolId = getCollectionProtocolId
-					(specimen.getId(), bizLogic);
-					long cpId = collectionProtocolId.longValue();
-					// long cpId = specimen.getSpecimenCollectionGroup().
-					// getCollectionProtocolRegistration()
-					// .getCollectionProtocol().getId().longValue();
+						// Ashish --- 5th June 07 --- retriving cp object when
+						// lazy
+						// = true. for performance improvement
+						Long collectionProtocolId = getCollectionProtocolId(specimen
+								.getId());
+						long cpId = collectionProtocolId.longValue();
+						// long cpId = specimen.getSpecimenCollectionGroup().
+						// getCollectionProtocolRegistration()
+						// .getCollectionProtocol().getId().longValue();
 
-					String className = specimen.getClassName();
+						String className = specimen.getClassName();
 
-					logger.info("COllection Protocol Id :" + cpId);
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-					request.setAttribute(Constants.SPECIMEN_CLASS_NAME, className);
-					logger.info("Spcimen Class:" + className);
+						logger.info("COllection Protocol Id :" + cpId);
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,
+								cpId + "");
+						request.setAttribute(Constants.SPECIMEN_CLASS_NAME,
+								className);
+						logger.info("Spcimen Class:" + className);
 
-					SessionDataBean sessionData = (SessionDataBean) request.getSession()
-							.getAttribute(Constants.SESSION_DATA);
-
-					containerMap = scbizLogic.
-					getAllocatedContaienrMapForSpecimen(cpId, className,
-							0, exceedingMaxLimit, sessionData, jdbcDAO);
-					initialValues = setInitialValue(request, transferEventParametersForm,
-							containerMap);
+						containerMap = scbizLogic
+								.getAllocatedContaienrMapForSpecimen(cpId,
+										className, 0, exceedingMaxLimit,
+										sessionData, dao);
+						initialValues = setInitialValue(request,
+								transferEventParametersForm, containerMap);
+					} catch (DAOException daoException) {
+						throw AppUtility.getApplicationException(daoException,
+								daoException.getErrorKeyName(), daoException
+										.getMsgValues());
+					} 
 				}
-				catch (DAOException daoException)
-				{
-					throw AppUtility.getApplicationException(daoException, daoException
-							.getErrorKeyName(), daoException.getMsgValues());
+			} // operation=add
+			else {
+
+				Integer id = new Integer(transferEventParametersForm
+						.getStorageContainer());
+				String parentContainerName = "";
+
+				Object object = dao.retrieveById(StorageContainer.class
+						.getName(), new Long(transferEventParametersForm
+						.getStorageContainer()));
+				if (object != null) {
+					StorageContainer container = (StorageContainer) object;
+					parentContainerName = container.getName();
+
 				}
-				finally
-				{
-					AppUtility.closeJDBCSession(jdbcDAO);
+				Integer pos1 = new Integer(transferEventParametersForm
+						.getPositionDimensionOne());
+				Integer pos2 = new Integer(transferEventParametersForm
+						.getPositionDimensionTwo());
+
+				List pos2List = new ArrayList();
+				pos2List.add(new NameValueBean(pos2, pos2));
+
+				Map pos1Map = new TreeMap();
+				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
+				containerMap.put(new NameValueBean(parentContainerName, id),
+						pos1Map);
+
+				String[] startingPoints = new String[] { "-1", "-1", "-1" };
+				if (transferEventParametersForm.getStorageContainer() != null
+						&& !transferEventParametersForm.getStorageContainer()
+								.equals("-1")) {
+					startingPoints[0] = transferEventParametersForm
+							.getStorageContainer();
+
 				}
-			}
-		} // operation=add
-		else
-		{
-
-			Integer id = new Integer(transferEventParametersForm.getStorageContainer());
-			String parentContainerName = "";
-
-			Object object = scbizLogic.retrieve(StorageContainer.class.getName(), new Long(
-					transferEventParametersForm.getStorageContainer()));
-			if (object != null)
-			{
-				StorageContainer container = (StorageContainer) object;
-				parentContainerName = container.getName();
-
-			}
-			Integer pos1 = new Integer(transferEventParametersForm.getPositionDimensionOne());
-			Integer pos2 = new Integer(transferEventParametersForm.getPositionDimensionTwo());
-
-			List pos2List = new ArrayList();
-			pos2List.add(new NameValueBean(pos2, pos2));
-
-			Map pos1Map = new TreeMap();
-			pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
-			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
-
-			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			if (transferEventParametersForm.getStorageContainer() != null
-					&& !transferEventParametersForm.getStorageContainer().equals("-1"))
-			{
-				startingPoints[0] = transferEventParametersForm.getStorageContainer();
+				if (transferEventParametersForm.getPositionDimensionOne() != null
+						&& !transferEventParametersForm
+								.getPositionDimensionOne().equals("-1")) {
+					startingPoints[1] = transferEventParametersForm
+							.getPositionDimensionOne();
+				}
+				if (transferEventParametersForm.getPositionDimensionTwo() != null
+						&& !transferEventParametersForm
+								.getPositionDimensionTwo().equals("-1")) {
+					startingPoints[2] = transferEventParametersForm
+							.getPositionDimensionTwo();
+				}
+				initialValues = new ArrayList();
+				logger.info("Starting points[0]" + startingPoints[0]);
+				logger.info("Starting points[1]" + startingPoints[1]);
+				logger.info("Starting points[2]" + startingPoints[2]);
+				initialValues.add(startingPoints);
 
 			}
-			if (transferEventParametersForm.getPositionDimensionOne() != null
-					&& !transferEventParametersForm.getPositionDimensionOne().equals("-1"))
-			{
-				startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
-			}
-			if (transferEventParametersForm.getPositionDimensionTwo() != null
-					&& !transferEventParametersForm.getPositionDimensionTwo().equals("-1"))
-			{
-				startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo();
-			}
-			initialValues = new ArrayList();
-			logger.info("Starting points[0]" + startingPoints[0]);
-			logger.info("Starting points[1]" + startingPoints[1]);
-			logger.info("Starting points[2]" + startingPoints[2]);
-			initialValues.add(startingPoints);
-
 		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+	
 		request.setAttribute("initValues", initialValues);
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute("dataMap", containerMap);
@@ -397,7 +419,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	 * @return Long : Long
 	 * @throws ApplicationException : ApplicationException
 	 */
-	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic)
+	private Long getCollectionProtocolId(Long specimenId)
 			throws ApplicationException
 	{
 		// Changed by Falguni.

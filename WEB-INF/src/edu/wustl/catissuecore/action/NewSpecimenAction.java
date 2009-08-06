@@ -78,7 +78,9 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
 
@@ -111,6 +113,8 @@ public class NewSpecimenAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
 		// Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
 		List < NameValueBean > storagePositionList = AppUtility.getStoragePositionTypeList();
@@ -371,8 +375,7 @@ public class NewSpecimenAction extends SecureAction
 			specimenID = String.valueOf(specimenForm.getId());
 			// List added for grid
 			List specimenDetails = new ArrayList();
-			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
+			
 			Specimen specimen = bizLogic.getSpecimen(specimenID, specimenDetails, sessionData);
 			// Added by Falguni=To set Specimen label in Form.
 			/*
@@ -575,15 +578,14 @@ public class NewSpecimenAction extends SecureAction
 		TreeMap containerMap = new TreeMap();
 		List initialValues = null;
 
-		JDBCDAO jdbcDAO = null;
+		DAO dao = null;
 		try
 		{
-			jdbcDAO = AppUtility.openJDBCSession();
+			dao = AppUtility.openDAOSession(sessionData);
 
 			if (operation.equals(Constants.ADD))
 			{
-				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
-						Constants.SESSION_DATA);
+				
 				if (specimenForm.getLabel() == null || specimenForm.getLabel().equals(""))
 				{
 					// int totalNoOfSpecimen =
@@ -609,7 +611,7 @@ public class NewSpecimenAction extends SecureAction
 						&& !specimenForm.getClassName().equals("")
 						&& !specimenForm.getClassName().equals("-1"))
 				{
-					List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),bizLogic);
+					List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),dao);
 					if (spCollGroupList != null && !spCollGroupList.isEmpty())
 					{
 						// Object []spCollGroup = (Object[]) spCollGroupList
@@ -628,11 +630,10 @@ public class NewSpecimenAction extends SecureAction
 							// Logger.out.debug(
 							// "calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---"
 							// );
-							sessionData = (SessionDataBean) request.getSession().getAttribute(
-									Constants.SESSION_DATA);
+							
 							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 									spClass, 0, exceedingMaxLimit,
-									sessionData, jdbcDAO);
+									sessionData, dao);
 							// Logger.out.debug(
 							// "exceedingMaxLimit in action for Boolean:"
 							// +exceedingMaxLimit);
@@ -692,7 +693,7 @@ public class NewSpecimenAction extends SecureAction
 					Object object = null;
 					if (id > 0)
 					{
-						object = bizLogic.retrieve(StorageContainer.class.getName(), new Long(
+						object = dao.retrieveById(StorageContainer.class.getName(), new Long(
 								specimenForm.getStorageContainer()));
 					}
 					if (object != null)
@@ -741,7 +742,7 @@ public class NewSpecimenAction extends SecureAction
 							.getStContSelection() == 2))
 					{
 										
-						List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),bizLogic);
+						List spCollGroupList = getSpCollGroupList(specimenForm.getSpecimenCollectionGroupName(),dao);
 						
 						if (spCollGroupList != null && !spCollGroupList.isEmpty())
 						{
@@ -754,15 +755,12 @@ public class NewSpecimenAction extends SecureAction
 							{
 								specimenForm.setVirtuallyLocated(false);
 							}
-							SessionDataBean sessionData = (SessionDataBean) request.getSession()
-									.getAttribute(Constants.SESSION_DATA);
+							
 
-							sessionData = (SessionDataBean) request.getSession().getAttribute(
-									Constants.SESSION_DATA);
 							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 									spClass, 0,
 									exceedingMaxLimit, sessionData,
-									jdbcDAO);
+									dao);
 
 							Logger.out
 									.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
@@ -850,7 +848,7 @@ public class NewSpecimenAction extends SecureAction
 			}
 
 			// set associated identified report id
-			Long reportId = getAssociatedIdentifiedReportId(specimenForm.getId());
+			Long reportId = this.getAssociatedIdentifiedReportId(specimenForm.getId());
 			if (reportId == null)
 			{
 				reportId = new Long(-1);
@@ -876,7 +874,7 @@ public class NewSpecimenAction extends SecureAction
 		}
 		finally
 		{
-			AppUtility.closeJDBCSession(jdbcDAO);
+			AppUtility.closeDAOSession(dao);
 		}
 	}
 
@@ -1535,22 +1533,24 @@ public class NewSpecimenAction extends SecureAction
 	}
 	
 	
-	private List getSpCollGroupList(String scgName,NewSpecimenBizLogic bizLogic) throws BizLogicException
+	private List getSpCollGroupList(String scgName,DAO dao) throws BizLogicException
 	{
 		String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-		String[] whereColumnName = {"name"};
-		String[] whereColumnCondition = {"="};
-		String[] whereColumnValue = {scgName};
-		List spCollGroupList=null;
+		List spCollGroupList = null;
 		try
 		{
-			spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
-					whereColumnCondition, whereColumnValue, null);
+			QueryWhereClause queryWhereClause = new QueryWhereClause(
+					SpecimenCollectionGroup.class.getName());
+			queryWhereClause.addCondition(new EqualClause("name", scgName));
+			
+
+			spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class
+					.getName(), selectColumnName, queryWhereClause);
 		}
-		catch (BizLogicException e)
+		catch (DAOException e)
 		{
 			logger.error(e.getMessage(), e);
-			throw new BizLogicException(e.getErrorKey(),e,e.getMsgValues());
+			throw new BizLogicException(e);
 		}
 		return spCollGroupList;
 	}

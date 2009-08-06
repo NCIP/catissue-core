@@ -81,7 +81,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			{
 				StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(
 						positionsToBeAllocatedList.get(i), aliquotMap, usedPositionsList,
-						specimenKey, storageContainerId);
+						specimenKey, storageContainerId,dao);
 			}
 			for (int i = 1; i <= specimenArray.getAliquotCount(); i++)
 			{

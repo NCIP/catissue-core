@@ -19,6 +19,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
@@ -108,10 +109,10 @@ public class SpecimenAutoStorageContainer {
 			throws ApplicationException 
 {
 
-		JDBCDAO jdbcDAO = null;
+		DAO dao = null;
 		try
 		{
-			jdbcDAO = AppUtility.openJDBCSession();
+			dao = AppUtility.openDAOSession(sessionDataBean);
 
 			Set<String> keySet = autoSpecimenMap.keySet();
 			if (!keySet.isEmpty())
@@ -123,7 +124,7 @@ public class SpecimenAutoStorageContainer {
 					String key = keySetIterator.next();
 					LinkedList<GenericSpecimen> specimenList =
 						autoSpecimenMap.get(key);
-					setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId,jdbcDAO);
+					setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId,dao);
 				}
 			}
 		}
@@ -133,12 +134,12 @@ public class SpecimenAutoStorageContainer {
 		}
 		finally
 		{
-			AppUtility.closeJDBCSession(jdbcDAO);
+			AppUtility.closeDAOSession(dao);
 		}
 	}
 	
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
-			String className, SessionDataBean bean, Long collectionProtocolId ,JDBCDAO jdbcDAO) throws ApplicationException
+			String className, SessionDataBean bean, Long collectionProtocolId ,DAO dao) throws ApplicationException
 	{
 		
 			Map containerMap;
@@ -148,7 +149,7 @@ public class SpecimenAutoStorageContainer {
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 				containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
-						collectionProtocolId.longValue(), className, 0, "false", bean, jdbcDAO);
+						collectionProtocolId.longValue(), className, 0, "false", bean, dao);
 				populateStorageLocations(specimenDataBeanList,
 						collectionProtocolId.longValue(), containerMap, bean, className);
 

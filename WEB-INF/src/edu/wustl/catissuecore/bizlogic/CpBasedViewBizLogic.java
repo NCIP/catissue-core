@@ -21,6 +21,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -96,30 +97,35 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 									.get(Constants.EDIT_PROFILE_PRIVILEGE)))
 					{
 						Collection<CollectionProtocol> cpCollection;
-						cpCollection = siteBizLogic.getRelatedCPs(siteId);
-						if (cpCollection != null && !cpCollection.isEmpty())
+						DAO dao = null;
+						try
 						{
-							for (final CollectionProtocol cp : cpCollection)
-							{
-								if (cp_Ids.contains(cp.getId()))
-								{
-									continue;
-								}
-								boolean isPresent = false;
-								for (final NameValueBean nameValueBean : list)
-								{
-									if (nameValueBean.getValue().equalsIgnoreCase(
-											cp.getId().toString()))
-									{
-										isPresent = true;
-										break;
+							dao = openDAOSession(sessionDataBean);
+							cpCollection = siteBizLogic.getRelatedCPs(siteId,dao);
+							if (cpCollection != null && !cpCollection.isEmpty()) {
+								for (final CollectionProtocol cp : cpCollection) {
+									if (cp_Ids.contains(cp.getId())) {
+										continue;
+									}
+									boolean isPresent = false;
+									for (final NameValueBean nameValueBean : list) {
+										if (nameValueBean.getValue()
+												.equalsIgnoreCase(
+														cp.getId().toString())) {
+											isPresent = true;
+											break;
+										}
+									}
+									if (!isPresent) {
+										list.add(new NameValueBean(cp
+												.getShortTitle(), cp.getId()));
 									}
 								}
-								if (!isPresent)
-								{
-									list.add(new NameValueBean(cp.getShortTitle(), cp.getId()));
-								}
 							}
+						}
+						finally
+						{
+							closeDAOSession(dao);
 						}
 					}
 				}

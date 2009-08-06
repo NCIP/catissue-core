@@ -1721,7 +1721,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					final Position position = StorageContainerUtil
 					.getFirstAvailablePositionsInContainer(storageContainerObj,
-							this.storageContainerIds);
+							this.storageContainerIds,dao);
 
 					specPos = new SpecimenPosition();
 					specPos.setPositionDimensionOne(position.getXPos());
@@ -3222,7 +3222,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				final Specimen childSpecimen = (Specimen) childrenIterator.next();
 				childSpecimen.setParentSpecimen(newSpecimen);
-				newSpecimen.getChildSpecimenCollection().add(childSpecimen);
+				//newSpecimen.getChildSpecimenCollection().add(childSpecimen);
 				this.allocateSpecimenPostionsRecursively(childSpecimen);
 			}
 		}

@@ -456,14 +456,14 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	 * @return Collection
 	 * @throws BizLogicException : BizLogicException
 	 */
-	public Collection<CollectionProtocol> getRelatedCPs(Long siteId) throws BizLogicException
+	public Collection<CollectionProtocol> getRelatedCPs(Long siteId,DAO dao) throws BizLogicException
 	{
 
-		DAO dao = null;
+		
 		Site site = null;
 		try
 		{
-			dao = this.openDAOSession(null);
+		
 			site = (Site) dao.retrieveById(Site.class.getName(), siteId);
 		}
 		catch (final DAOException e)
@@ -471,10 +471,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			this.logger.debug(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-		finally
-		{
-			this.closeDAOSession(dao);
-		}
+		
 
 		if (site == null)
 		{
