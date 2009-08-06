@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.ehcache.CacheException;
+
 import org.apache.commons.codec.language.Metaphone;
 
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;

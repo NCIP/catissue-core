@@ -9,16 +9,15 @@ package edu.wustl.catissuecore.security;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.idp.IdPManager;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
-import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 
 
 

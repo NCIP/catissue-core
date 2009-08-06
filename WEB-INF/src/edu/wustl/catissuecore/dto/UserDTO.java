@@ -8,9 +8,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
-import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.AssignDataException;
 
 /**
  * @author supriya_dankh

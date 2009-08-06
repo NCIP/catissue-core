@@ -21,11 +21,11 @@ import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.simplequery.bizlogic.QueryBizLogic;
-import edu.wustl.simplequery.query.Operator;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.common.vo.HTMLField;
 import edu.wustl.common.vo.SearchFieldData;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.simplequery.bizlogic.QueryBizLogic;
+import edu.wustl.simplequery.query.Operator;
 
 /**
  * @author aniruddha_phadnis

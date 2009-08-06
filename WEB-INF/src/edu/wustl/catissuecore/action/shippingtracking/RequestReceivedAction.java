@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action.shippingtracking;
 
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
-import edu.wustl.common.util.global.Status;
 
 /**
  * this class implements the requests received action.

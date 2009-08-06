@@ -4,13 +4,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.codec.language.Metaphone;
 
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 

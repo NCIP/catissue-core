@@ -20,7 +20,6 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 

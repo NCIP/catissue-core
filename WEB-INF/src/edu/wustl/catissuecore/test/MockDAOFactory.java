@@ -6,7 +6,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOFactory;
-import edu.wustl.dao.util.DAOConstants;
 
 /**
  * This is a mock class for DAOFactory.This class returns mock for  HibernateDAO & JDBC DAO interface.

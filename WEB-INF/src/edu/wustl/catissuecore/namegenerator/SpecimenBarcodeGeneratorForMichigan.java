@@ -2,13 +2,11 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 

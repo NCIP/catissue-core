@@ -40,7 +40,6 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
