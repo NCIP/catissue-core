@@ -2806,4 +2806,5 @@ public class Constants
 	public static final String MAXIMUM_RECORDS_FOR_TITLI_RESULTS = "titli.result.maximumRecords";
 	public static final String IDP_ENABLED="idp.enabled";
 	public static final String APP_ADDITIONAL_INFO = "app.additional.info";
+	public static final String MAX_RECORDS_PER_CACORE_QUERY_ALLOWED = "maxRecordsPercaCOREQueryAllowed";
 }

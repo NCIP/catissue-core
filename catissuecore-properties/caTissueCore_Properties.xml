@@ -558,4 +558,9 @@
 		<name>idp.enabled</name>
 		<value>@@IDP-ENABLED@@</value>
 	</property>
+		<!--  property to set max record per query for caCORE API-->
+	<property>
+		<name>maxRecordsPercaCOREQueryAllowed</name>
+		<value>10000</value>
+	</property>
 </properties>

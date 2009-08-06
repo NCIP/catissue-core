@@ -36,6 +36,9 @@ public class CaTissueTestSuite
 		suite.addTestSuite(MSRSuperAdminTestCases.class);
 		suite.addTestSuite(ScientistRoleTestCases.class);
 		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
+		suite.addTestSuite(ScientistRoleCaGridTestCases.class);
+		suite.addTestSuite(AdminRoleCaGridTestCases.class);
+
 	/*	suite.addTestSuite(SupervisorRoleTestCases.class);
 		suite.addTestSuite(TechnicianRoleTestCases.class);	
 		suite.addTestSuite(ScientistRoleTestCases.class);*/

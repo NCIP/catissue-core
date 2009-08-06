@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.client;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -76,6 +77,21 @@ public class CaCoreAppServicesDelegator
 {
 
 	private transient Logger logger = Logger.getCommonLogger(CaCoreAppServicesDelegator.class);
+	
+	private static List<Class> classList = new ArrayList<Class>();
+	static
+	{
+		classList.add(Participant.class);
+		classList.add(SpecimenCollectionGroup.class);
+		classList.add(Specimen.class);
+		classList.add(CollectionProtocolRegistration.class);
+		classList.add(IdentifiedSurgicalPathologyReport.class);
+		classList.add(DeidentifiedSurgicalPathologyReport.class);
+		classList.add(ParticipantMedicalIdentifier.class);
+		classList.add(SpecimenEventParameters.class);
+		classList.add(SpecimenArrayContent.class);
+	}
+	
 	/**
 	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application
 	 * @param userName userName of the User to connect to caTISSUE Core Application
@@ -252,16 +268,6 @@ public class CaCoreAppServicesDelegator
 		User validUser = AppUtility.getUser(userName);
 		String reviewerRole = null;
 		
-		List<Class> classList = new ArrayList<Class>();
-	    classList.add(Participant.class);
-	    classList.add(SpecimenCollectionGroup.class);
-	    classList.add(Specimen.class);
-	    classList.add(CollectionProtocolRegistration.class);
-	    classList.add(IdentifiedSurgicalPathologyReport.class);
-	    classList.add(DeidentifiedSurgicalPathologyReport.class);
-	    classList.add(ParticipantMedicalIdentifier.class);
-	    classList.add(SpecimenEventParameters.class);
-	    classList.add(SpecimenArrayContent.class);
 	    
 		ISecurityManager securityManager = SecurityManagerFactory.getSecurityManager();
 		try
@@ -287,7 +293,7 @@ public class CaCoreAppServicesDelegator
 			try
 			{
 				jdbcDAO = AppUtility.openJDBCSession();
-				filteredObjects = filterObjects(userName, nonDisbaledObjectList,classList,jdbcDAO);
+				filteredObjects = filterObjects(userName, nonDisbaledObjectList,jdbcDAO);
 			}
 			catch (Exception exp)
 			{
@@ -361,7 +367,7 @@ public class CaCoreAppServicesDelegator
 	 * @return The filtered list of objects according to the privilege of the user.
 	 * @throws Exception 
 	 */
-	private List filterObjects(String userName, List objectList, List classList,JDBCDAO jdbcDao) throws Exception
+	private List filterObjects(String userName, List objectList,JDBCDAO jdbcDao) throws Exception
 	{
 	    Logger.out.debug("In Filter Objects ......" );
 	    
@@ -460,7 +466,7 @@ public class CaCoreAppServicesDelegator
 				hasPHIAccess = accessPrivilegeMap.get(edu.wustl.query.util.global.AQConstants.HAS_PHI_ACCESS);
 				if(!hasPHIAccess)
 				{
-					removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean,classList);
+					removeIdentifiedDataFromObject(abstractDomainObject,objectName,identifier,sessionDataBean);
 				}
 		    	filteredObjects.add(abstractDomainObject);
 			    Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
@@ -473,7 +479,7 @@ public class CaCoreAppServicesDelegator
 	}
 
 	private void removeIdentifiedDataFromObject(Object abstractDomainObject, String objectName,
-			Long identifier, SessionDataBean sessionDataBean,List classList) throws BizLogicException
+			Long identifier, SessionDataBean sessionDataBean) throws BizLogicException
 			{
 		Class classObject = abstractDomainObject.getClass();
 		if(classObject.getSuperclass().equals(SpecimenEventParameters.class)||
@@ -521,45 +527,9 @@ public class CaCoreAppServicesDelegator
 		{
 			removeSpecimenArrayContentIdentifiedData(abstractDomainObject);
 		}
-			}
-
-	/**
-	 * Returns the alias name of the domain object passed.   
-	 * @param object The domain object whose alias name is to be found. 
-	 * @return the alias name of the domain object passed.
-	 * @throws ClassNotFoundException
-	 * @throws BizLogicException 
-	 * @throws DAOException 
-	 * @throws DAOException
-	 */
-	/*private String getAliasName(Object object) throws ClassNotFoundException, BizLogicException,
-			DAOException
-	{
-		Class className = object.getClass();
-		String domainObjectClassName = edu.wustl.common.util.Utility.parseClassName(className
-				.getName());
-		String domainClassName = domainObjectClassName;
-		//String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
-		logger.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + domainClassName);
-		try
-		{
-			className = Class.forName("edu.wustl.catissuecore.domain." + domainClassName);
-		}
-		catch (ClassNotFoundException ex)
-		{
-			logger
-					.error("ClassNotFoundException in CaCoreAppServicesDelegator.getAliasName() method");
-			className = Class.forName(object.getClass().getName());
-		}
-		String tableName = HibernateMetaData.getTableName(className);
-
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		QueryBizLogic bizLogic = (QueryBizLogic) factory
-				.getBizLogic(edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID);
-		String aliasName = bizLogic.getAliasName(Constants.TABLE_NAME_COLUMN, tableName);
-		return aliasName;
 	}
-*/
+
+	
 	/**
      * Removes the identified data from Participant object.
      * @param object The Particpant object.
@@ -576,19 +546,25 @@ public class CaCoreAppServicesDelegator
 	    
 	    Collection<ParticipantMedicalIdentifier> pmiCollection 
 	    				= participant.getParticipantMedicalIdentifierCollection();
-	    for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
+	    if (pmiCollection != null)
 	    {
-	        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
-	        removePMIIdentifiedData(participantMedId);
-	    }
+		    for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
+		    {
+		        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
+		        removePMIIdentifiedData(participantMedId);
+		    }
+	    }  
 	    
 	    Collection<CollectionProtocolRegistration> cpCollection 
 	    				= participant.getCollectionProtocolRegistrationCollection();
-	    for (Iterator<CollectionProtocolRegistration> iterator=cpCollection.iterator();iterator.hasNext();)
+	    if (cpCollection != null)
 	    {
-	        CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) iterator.next();
-	        removeCollectionProtocolRegistrationIdentifiedData(collectionProtReg);
-	    }
+		    for (Iterator<CollectionProtocolRegistration> iterator=cpCollection.iterator();iterator.hasNext();)
+		    {
+		        CollectionProtocolRegistration collectionProtReg = (CollectionProtocolRegistration) iterator.next();
+		        removeCollectionProtocolRegistrationIdentifiedData(collectionProtReg);
+		    }
+	    }    
 	}
     /**
      * Removes the identified data from SpecimenCollectionGroup object.
@@ -599,14 +575,22 @@ public class CaCoreAppServicesDelegator
 	{
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
 	    specimenCollGrp.setSurgicalPathologyNumber(null);
-		removeCollectionProtocolRegistrationIdentifiedData(specimenCollGrp.getCollectionProtocolRegistration());
-		Collection<SpecimenEventParameters> spEvent = specimenCollGrp.getSpecimenEventParametersCollection();
-	    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
-	    while(eveItr.hasNext())
-	    {
-	    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
-	    	removeSpecimenEventParameters(spEventParam);
-	    }
+		CollectionProtocolRegistration cpr = specimenCollGrp.getCollectionProtocolRegistration();
+		if (cpr != null)
+		{
+			removeCollectionProtocolRegistrationIdentifiedData(cpr);
+		}
+		Collection<SpecimenEventParameters> spEvent = specimenCollGrp
+				.getSpecimenEventParametersCollection();
+		if (spEvent != null)
+		{
+			Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+			while (eveItr.hasNext())
+			{
+				SpecimenEventParameters spEventParam = (SpecimenEventParameters) eveItr.next();
+				removeSpecimenEventParameters(spEventParam);
+			}
+		}
 	}
 	/**
      * Removes the identified data from Specimen object.
@@ -616,15 +600,22 @@ public class CaCoreAppServicesDelegator
 	private void removeSpecimenIdentifiedData(Object object)
 	{
 	    Specimen specimen = (Specimen) object;
-	    specimen.setCreatedOn(null);    
-	    removeSpecimenCollectionGroupIdentifiedData(specimen.getSpecimenCollectionGroup());
-	    Collection<SpecimenEventParameters> spEvent = specimen.getSpecimenEventCollection();
-	    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
-	    while(eveItr.hasNext())
-	    {
-	    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
-	    	removeSpecimenEventParameters(spEventParam);
-	    }
+	    specimen.setCreatedOn(null);   
+		SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+		if (scg != null)
+		{
+			removeSpecimenCollectionGroupIdentifiedData(scg);
+		}
+		Collection<SpecimenEventParameters> spEvent = specimen.getSpecimenEventCollection();
+		if (spEvent != null)
+		{
+			Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+			while (eveItr.hasNext())
+			{
+				SpecimenEventParameters spEventParam = (SpecimenEventParameters) eveItr.next();
+				removeSpecimenEventParameters(spEventParam);
+			}
+		}
 	}
 
 	/**
@@ -852,7 +843,11 @@ public class CaCoreAppServicesDelegator
     private void removeSpecimenArrayContentIdentifiedData(Object object)
     {
     	SpecimenArrayContent specimenArrayContent=(SpecimenArrayContent)object;
-    	removeSpecimenIdentifiedData(specimenArrayContent.getSpecimen());
+    	Specimen specimen = specimenArrayContent.getSpecimen();
+		if (specimen != null)
+		{
+			removeSpecimenIdentifiedData(specimen);
+		}
     }
     
     /**
@@ -1012,9 +1007,109 @@ public class CaCoreAppServicesDelegator
 		{
 			AppUtility.closeJDBCSession(jdbcDAO);
 		}
-		/*String sqlForQueryLog = "insert into catissue_audit_event_query_log(IDENTIFIER,QUERY_DETAILS) values ('"
-		 + no + "','" + sqlQuery1 + "')";
-		 jdbcDAO.executeUpdate(sqlForQueryLog);*/
-
 	}
+	
+	/**
+	 * Iterate over the object array 
+	 * Crate the target object and set appropriate attributes value
+	 * @param targetClassName
+	 * @param fields
+	 * @param rows
+	 * @return
+	 * @throws Exception
+	 */
+	public List createTargetObjectList(String targetClassName,List<Field> fields,List rows) throws Exception
+	{
+		List returnList = new ArrayList();
+		try
+		{
+			boolean isParticipantMedicalIdentifier = false;
+			boolean isSpecimenArrayContent = false;
+			boolean isSpecimenEventParameters = false;
+			Class targetClass = Class.forName(targetClassName);
+
+			/**
+			 * Special cases to set parent associated object
+			 */
+			if(targetClassName.equals(ParticipantMedicalIdentifier.class.getName()))
+			{
+				isParticipantMedicalIdentifier = true;
+			}
+			else if(targetClassName.equals(SpecimenArrayContent.class.getName()))
+			{
+				isSpecimenArrayContent = true;
+			}
+			else
+			{
+				if (targetClass.getSuperclass().equals(SpecimenEventParameters.class)
+						|| targetClass.getSuperclass().equals(ReviewEventParameters.class))
+				{
+					isSpecimenEventParameters = true;
+				}
+				
+			}
+			for(int i=0;i<rows.size();i++)
+			{
+				Object[] row = (Object[])rows.get(i);
+				Object temp = targetClass.newInstance();
+				int j=0;
+				for(j=0;j<fields.size();j++)
+				{
+					Field field = fields.get(j);
+					field.setAccessible(true);
+					field.set(temp, row[j]);
+				}
+				if(isParticipantMedicalIdentifier)
+				{
+					Long participantIdentifier = (Long)row[j];
+					Participant p = new Participant();
+					p.setId(participantIdentifier);
+					((ParticipantMedicalIdentifier)temp).setParticipant(p);
+				}
+				else if(isSpecimenArrayContent)
+				{
+					Long specimenIdentifier = (Long)row[j];
+					Specimen specimen = new Specimen();
+					specimen.setId(specimenIdentifier);
+					((SpecimenArrayContent)temp).setSpecimen(specimen);
+				}
+				else if(isSpecimenEventParameters)
+				{
+					Long scjIdentifier = (Long)row[j++];
+					if(scjIdentifier!=null)
+					{
+						SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+						scg.setId(scjIdentifier);
+						((SpecimenEventParameters)temp).setSpecimenCollectionGroup(scg);
+					}	
+					Long specimenIdentifier = (Long)row[j];
+					if(specimenIdentifier!=null)
+					{
+						Specimen specimen = new Specimen();
+						specimen.setId(specimenIdentifier);
+						((SpecimenEventParameters)temp).setSpecimen(specimen);
+					}	
+				}
+				
+				returnList.add(temp);
+			}	
+			
+		}	
+		catch(ClassCastException e)
+		{
+			Logger.out.error(e.getMessage(), e);
+			returnList=rows;
+		}
+		return returnList;
+	}
+	
+	/**
+	 * Get Max records allowed per query from caTissueCore_properties.xml
+	 * @return
+	 */
+	public Integer getAllowedMaxRecordsPerQuery()
+	{
+		return Integer.valueOf(XMLPropertyHandler.getValue(Constants.MAX_RECORDS_PER_CACORE_QUERY_ALLOWED));
+	}
+
 }
