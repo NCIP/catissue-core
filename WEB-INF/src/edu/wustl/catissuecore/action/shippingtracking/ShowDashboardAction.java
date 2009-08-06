@@ -82,12 +82,16 @@ public class ShowDashboardAction extends SecureAction
 						getTotalRecordsAndPagesForShipment( dashboardForm, bizLogic, recordsPerPage, loggedInUserSiteId, request );
 						if (!sessionDataBean.isAdmin())
 						{
+							//incoming shipment requests
 							this.setRequestsReceivedInfo(request, requestBizLogic,
-									loggedInUserSiteId, recordsPerPage,dashboardForm);
+									loggedInUserSiteId, recordsPerPage,dashboardForm,sessionDataBean.isAdmin());
+							//incoming shipments
 							this.setShipmentsReceivedInfo(request, bizLogic, loggedInUserSiteId,
 									recordsPerPage,dashboardForm);
+							//Outgoing Shipments
 							this.setOutgoingShipmentsInfo(request, bizLogic, loggedInUserSiteId,
 									recordsPerPage,dashboardForm);
+							//Outgoing Shipment Requests
 							this.setRequestsSentInfo(request, requestBizLogic, loggedInUserSiteId,
 									recordsPerPage,dashboardForm);
 						}
@@ -96,7 +100,7 @@ public class ShowDashboardAction extends SecureAction
 							this.setShipmentsReceivedInfo(request, bizLogic, loggedInUserSiteId,
 									recordsPerPage,dashboardForm);
 							this.setRequestsReceivedInfo(request, requestBizLogic,
-									loggedInUserSiteId, recordsPerPage,dashboardForm);
+									loggedInUserSiteId, recordsPerPage,dashboardForm,sessionDataBean.isAdmin());
 						}
 						//bug 12809 end
 						request.setAttribute("identifierFieldIndex", 0);
@@ -620,7 +624,7 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 	 * @throws BizLogicException if some bizlogic error occurs.
 	 */
 	private void setRequestsReceivedInfo(HttpServletRequest request,
-			ShipmentRequestBizLogic bizLogic, Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm)
+			ShipmentRequestBizLogic bizLogic, Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm,boolean isAdmin)
 			throws BizLogicException
 	{
 		final List<String> requestsReceivedHeader = this.getRequestsReceivedHeader();
@@ -647,7 +651,7 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 		currentPageNo = indexValues[2];
 		// Pass the siteiID array of logged in user
 		requestsReceivedList = this.getRequestsReceivedList(bizLogic, loggedInUserSiteId,
-				startIndex, numOfRecords);
+				startIndex, numOfRecords,isAdmin);
 		recordsPerPage = numOfRecords;
 		this.setPagenationInfoToSession(request, "reqReceivedCurrentPageNo", currentPageNo,
 				"reqReceivedTotalRecords", dashboardForm.getIncomingShipmentReqsTotalRecords(), "reqReceivedTotalPages", dashboardForm.getIncomingShipmentReqsTotalPages(),
@@ -690,13 +694,28 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private List<Object[]> getRequestsReceivedList(ShipmentRequestBizLogic bizLogic,
-			Long[] loggedInUserSiteIds, int startIndex, int numOfRecords) throws BizLogicException
+			Long[] loggedInUserSiteIds, int startIndex, int numOfRecords,boolean isAdmin) throws BizLogicException
 	{
 		final String selectColumnName = "shipment.id, shipment.senderContactPerson.lastName, shipment.label, shipment.senderSite.name, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
-		return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
-				loggedInUserSiteIds, startIndex, numOfRecords,
-				"AND shipment.senderSite <> shipment.receiverSite");
+		//bug 13572 start
+		/**
+		 * If last where clause is added to query, then query will not return proper results
+		 * in case of super admin.But in case of site admin query will return proper results.
+		 */
+		if(isAdmin)
+		{
+			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
+					loggedInUserSiteIds, startIndex, numOfRecords,"");
+		}
+		else
+		{
+			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
+					loggedInUserSiteIds, startIndex, numOfRecords,
+			"AND shipment.senderSite <> shipment.receiverSite");
+		}
+		//bug 13572 end
 	}
+		
 
 	/**
 	 * gets the requests received header.
