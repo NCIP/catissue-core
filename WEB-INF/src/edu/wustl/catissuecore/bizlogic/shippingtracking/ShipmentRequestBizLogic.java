@@ -695,19 +695,23 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			String additionalWhereClause) throws BizLogicException
 	{
 		final StringBuffer whereClause = new StringBuffer();
-		for (final Long element : siteId)
-		{
-			whereClause.append(CommonConstants.OR_JOIN_CONDITION + " shipment." + columnName
-					+ "=? ");
-		}
 		if (additionalWhereClause != null && additionalWhereClause.length() > 0)
 		{
-			whereClause.append(" " + additionalWhereClause);
+			whereClause.append(additionalWhereClause);
+			whereClause.append(" (");
 		}
-
+		for (final Long element : siteId)
+		{
+			whereClause.append(" shipment." + columnName
+					+ "=? " + CommonConstants.OR_JOIN_CONDITION);
+		}
+		String whereClauseString = whereClause.toString();
+		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
+		whereClauseString = whereClauseString + ")";
+		
 		List<Object[]> shipmentsList = null;
 		shipmentsList = this.getShipmentDetails(ShipmentRequest.class.getName(), selectColumnName,
-				whereClause.substring(2), siteId, orderByField, startIndex, numOfRecords);
+				whereClauseString, siteId, orderByField, startIndex, numOfRecords);
 		return shipmentsList;
 	}
 
@@ -753,13 +757,21 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public int getShipmentRequestsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
-		String whereClause = "";
+		StringBuffer whereClause = new StringBuffer();
+			whereClause.append(" shipment.activityStatus != '"
+					+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
+			whereClause.append(" (");
+		
 		for (final Long element : siteId)
 		{
-			whereClause += CommonConstants.OR_JOIN_CONDITION + " shipment." + columnName + "=? ";
+			whereClause.append(" shipment." + columnName
+					+ "=? " + CommonConstants.OR_JOIN_CONDITION);
 		}
-		whereClause = whereClause.substring(2);
-		final int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClause, siteId,
+		String whereClauseString = whereClause.toString();
+		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
+		whereClauseString = whereClauseString + ")";
+		
+		final int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClauseString, siteId,
 				orderByField, startIndex, numOfRecords);
 		return count;
 	}
@@ -872,7 +884,6 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		final DAO dao = AppUtility.openDAOSession(null);
 		try
 		{
-			dao.openSession(sessionDataBean);
 			dao.update(shipmentRequest);
 			dao.commit();
 		}

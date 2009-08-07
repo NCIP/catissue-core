@@ -360,8 +360,8 @@ public class ShowDashboardAction extends SecureAction
 	{
 		final String selectColumnName = "shipment.id,shipment.senderContactPerson.lastName, shipment.label, shipment.receiverSite.name, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
 		return bizLogic.getShipmentRequests(selectColumnName, "senderSite.id", "createdDate",
-				loggedInUserSiteId, startIndex, numOfRecords, "AND shipment.activityStatus <> '"
-						+ Status.ACTIVITY_STATUS_CLOSED.toString() + "'");
+				loggedInUserSiteId, startIndex, numOfRecords, " shipment.activityStatus <> '"
+						+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
 	}
 
 	/**
@@ -705,13 +705,14 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 		if(isAdmin)
 		{
 			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
-					loggedInUserSiteIds, startIndex, numOfRecords,"");
+					loggedInUserSiteIds, startIndex, numOfRecords," shipment.activityStatus != '"
+						+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
 		}
 		else
 		{
 			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
 					loggedInUserSiteIds, startIndex, numOfRecords,
-			"AND shipment.senderSite <> shipment.receiverSite");
+			" shipment.senderSite <> shipment.receiverSite AND ");
 		}
 		//bug 13572 end
 	}
