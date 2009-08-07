@@ -68,6 +68,7 @@ import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.dao.ProtectionElementSearchCriteria;
+import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
 /**
  * UserBizLogic is used to add user information into the database using Hibernate.
@@ -957,22 +958,38 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 
-				// Set protectionObjects = new HashSet();
-				// protectionObjects.add(user);
-
 				if (userRowIdMap != null && !userRowIdMap.isEmpty())
 				{
 					this.updateUserDetails(user, userRowIdMap);
 				}
+
 				final Vector authorizationData = new Vector();
 				final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 
 				this.insertCPSitePrivileges(user, authorizationData, userRowIdMap);
-				privilegeManager.insertAuthorizationData(authorizationData, null, null, user
-						.getObjectId());
 
-				// privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap), 
-				//		protectionObjects, null, user.getObjectId());
+				boolean flag = true;
+
+				final Set protectionObjects = new HashSet();
+				protectionObjects.add(user);
+				final PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+				try
+				{
+					final ProtectionElement protectionElement = privilegeUtility
+						.getUserProvisioningManager().getProtectionElement(
+							User.class.getName() + "_" + user.getId().toString());
+				}
+				catch (final CSObjectNotFoundException e)
+				{
+					flag = false;
+					privilegeManager.insertAuthorizationData(authorizationData, protectionObjects,
+							null, user.getObjectId());
+				}
+				if (flag)
+				{
+					privilegeManager.insertAuthorizationData(authorizationData, null, null, user
+							.getObjectId());
+				}
 
 				dao.update(user.getAddress());
 
@@ -1423,7 +1440,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
 			 * Following method is provided to verify whether the email address is already present in the system or not.
 			 */
-			if (!(this.isUniqueEmailAddress(user.getEmailAddress(),user.getId(), dao,operation)))
+			if (!(this.isUniqueEmailAddress(user.getEmailAddress(), user.getId(), dao, operation)))
 			{
 				String arguments[] = null;
 				arguments = new String[]{"User",
@@ -1786,13 +1803,14 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 * @return isUnique boolean value to indicate presence of similar email address
 	 * @throws BizLogicException database exception
 	 */
-	private boolean isUniqueEmailAddress(String emailAddress,Long userId, DAO dao,String operation) throws BizLogicException
+	private boolean isUniqueEmailAddress(String emailAddress, Long userId, DAO dao, String operation)
+			throws BizLogicException
 	{
 		boolean isUnique = true;
 		try
 		{
 			final String sourceObjectName = User.class.getName();
-			final String[] selectColumnName = new String[]{"id","emailAddress"};
+			final String[] selectColumnName = new String[]{"id", "emailAddress"};
 
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause("emailAddress", emailAddress));
@@ -1802,23 +1820,23 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			if (userList.size() > 0)
 			{
-			  Object[] objects = (Object[])userList.get(0);
-			  
-			  if(operation.equalsIgnoreCase(Constants.ADD))
-			  {
-				  isUnique = false;  
-			  }
-			  else
-			  {
-				  if(emailAddress.equals((String)objects[1]) && !userId.equals((Long)objects[0]))
-				  {
-					  isUnique = false;  
-				  }
-			  }
-			  
+				final Object[] objects = (Object[]) userList.get(0);
+
+				if (operation.equalsIgnoreCase(Constants.ADD))
+				{
+					isUnique = false;
+				}
+				else
+				{
+					if (emailAddress.equals((String) objects[1])
+							&& !userId.equals((Long) objects[0]))
+					{
+						isUnique = false;
+					}
+				}
+
 			}
-			
-			
+
 		}
 		catch (final DAOException daoExp)
 		{
