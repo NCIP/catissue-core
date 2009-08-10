@@ -1176,5 +1176,31 @@ public class CaCoreAppServicesDelegator
 		return Integer.valueOf(XMLPropertyHandler
 				.getValue(Constants.MAX_RECORDS_PER_CACORE_QUERY_ALLOWED));
 	}
+	
+	/**
+     * register participant   
+     * @param domainObject
+     * @param cpid
+     * @param userName
+     * @return
+     * @throws Exception
+     */
+    public Object delegateRegisterParticipant(Object domainObject, Long cpid,
+            String userName)  throws Exception
+    {
+        try
+        {
+            checkNullObject(domainObject, "Domain Object");
+            ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
+            participantBizLogic.registerParticipant(domainObject, cpid, userName);            
+            logger.info(" Domain Object has been successfully registered " + domainObject);
+        }
+        catch (Exception e)
+        {
+            logger.error("Delegate Add-->" + e.getMessage());
+            throw e;
+        }
+        return domainObject;
+    }
 
 }
