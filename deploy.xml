@@ -1705,6 +1705,7 @@
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1P2.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/EMPI_Alter_table.sql" />		
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1724,6 +1725,7 @@
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1P2.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />			
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/EMPI_Alter_table.sql" />			   				
 	   		<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -4072,5 +4074,5 @@ Thanking You,
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
 		</java>
-	</target>	
+	</target>
 </project>
