@@ -3495,5 +3495,48 @@ public class AppUtility
 		}
 		return count ;
 	}
+	
+    /**
+     * 
+     * 
+     * @param userName
+     * @return
+     * @throws ApplicationException
+     */
+    public static SessionDataBean getSessionDataBean(String userName) throws BizLogicException
+    {
+        SessionDataBean sessionDataBean = null;
+
+        if (Variables.sessionDataMap.containsKey(userName))
+        {
+            sessionDataBean = Variables.sessionDataMap.get(userName);
+        }
+        else
+        {
+            User user = null;
+            sessionDataBean = new SessionDataBean();
+            sessionDataBean.setUserName(userName);
+
+            sessionDataBean.setAdmin(false);
+            try
+            {
+                user = getUser(userName);
+            }
+            catch (ApplicationException e)
+            {
+                throw new BizLogicException(e.getErrorKey(), e, e
+                        .getMsgValues());
+            }
+            if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+            {
+                sessionDataBean.setAdmin(true);
+            }
+
+            sessionDataBean.setUserId(user.getId());
+            Variables.sessionDataMap.put(userName, sessionDataBean);
+        }
+
+        return sessionDataBean;
+    }	
 	 
 }
