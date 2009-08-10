@@ -3411,23 +3411,20 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			if (positionMap != null)
 			{
 				final Iterator containerPosIterator = positionMap.keySet().iterator();
-				boolean positionAllottedFlag = false;
-				while (containerPosIterator.hasNext() && !positionAllottedFlag)
+				if(containerPosIterator.hasNext())
 				{
 					NameValueBean nvb = (NameValueBean) containerPosIterator.next();
 					xPos = Integer.valueOf(nvb.getValue());
 					final List yposValues = (List) positionMap.get(nvb);
 					final Iterator yposIterator = yposValues.iterator();
 
-					while (yposIterator.hasNext())
+					if(yposIterator.hasNext())
 					{
 						nvb = (NameValueBean) yposIterator.next();
 						yPos = Integer.valueOf(nvb.getValue());
 						position = new Position();
 						position.setXPos(xPos);
 						position.setYPos(yPos);
-						positionAllottedFlag = true;
-						break;
 					}
 				}
 			}

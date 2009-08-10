@@ -4471,33 +4471,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			if (cpId == null)//bug 13082 and 13261 end
 			{
-
-				String query = null;
-				if (specimen.getParentSpecimen() != null)
-				{
-					query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
-						+ "specimen.label = '" + specimen.getParentSpecimen().getLabel() + "'";
-					list = dao.executeQuery(query);
-					final Iterator<Long> itr = list.iterator();
-					while (itr.hasNext())
-					{
-						cpId = (Long) itr.next();
-					}
-				}
-				else if (cpId == null && specimen.getId() != null)
-				{
-					query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
-							+ "specimen.id = '" + specimen.getId() + "'";
-					list = dao.executeQuery(query);
-					final Iterator<Long> itr = list.iterator();
-					while (itr.hasNext())
-					{
-						cpId = (Long) itr.next();
-					}
-				}
+				cpId = getCPId(dao, cpId, specimen);
 				if (cpId == null && scg.getId() != null)
 				{
-					query = "select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
+					String query = "select specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as specimenCollectionGroup where "
 							+ "specimenCollectionGroup.id = '" + scg.getId() + "'";
 					list = dao.executeQuery(query);
 					final Iterator<Long> itr = list.iterator();
@@ -4902,5 +4879,35 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw new BizLogicException(e);
 		}
 		return aliquotChildCount;
+	}
+	public Long getCPId(DAO dao, Long cpId, AbstractSpecimen specimen)
+	throws DAOException 
+	{
+		List<Long> list;
+		String query = null;
+		if (specimen.getParentSpecimen() != null) 
+		{
+			query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+					+ "specimen.label = '"
+					+ specimen.getParentSpecimen().getLabel() + "'";
+			list = dao.executeQuery(query);
+			final Iterator<Long> itr = list.iterator();
+			while (itr.hasNext()) 
+			{
+				cpId = (Long) itr.next();
+			}
+		}
+		else if (cpId == null && specimen.getId() != null) 
+		{
+			query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
+					+ "specimen.id = '" + specimen.getId() + "'";
+			list = dao.executeQuery(query);
+			final Iterator<Long> itr = list.iterator();
+			while (itr.hasNext()) 
+			{
+				cpId = (Long) itr.next();
+			}
+		}
+		return cpId;
 	}
 }

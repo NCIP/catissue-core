@@ -1063,33 +1063,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
 	@Override
-	public String getObjectId(DAO dao, Object domainObject)
+	public String getObjectId(DAO dao, Object domainObject) throws BizLogicException
 	{
 		String objectId = "";
 		Long cpId = null;
 		List<Long> list = null;
 		try
 		{
-				//TODO Optimize This code with HQL
-			/*	if (domainObject instanceof SpecimenEventParameters)
-				{
-					SpecimenCollectionGroup scg = null;
-					final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
-					
-					AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
-			
-					specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
-					final Specimen specimen1 = (Specimen) specimen;
-					scg = specimen1.getSpecimenCollectionGroup();
-			
-					final CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-					final CollectionProtocol cp = cpr.getCollectionProtocol();
-					objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
-					dao.delete(specimen);
-				}
-				*/
-			
-		
 			if (domainObject instanceof SpecimenEventParameters)
 			{
 				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
@@ -1098,44 +1078,24 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				// bug 13455 start 
 				if (cpId == null)
 				{
-					String query = null;
-					if (specimen.getParentSpecimen() != null)
-					{
-						query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
-								+ "specimen.label = '"
-								+ specimen.getParentSpecimen().getLabel()
-								+ "'";
-						list = dao.executeQuery(query);
-						final Iterator<Long> itr = list.iterator();
-						while (itr.hasNext())
-						{
-							cpId = (Long) itr.next();
-						}
-					}
-					else if (cpId == null && specimen.getId() != null)
-					{
-						query = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id  from edu.wustl.catissuecore.domain.Specimen as specimen where "
-								+ "specimen.id = '" + specimen.getId() + "'";
-						list = dao.executeQuery(query);
-						final Iterator<Long> itr = list.iterator();
-						while (itr.hasNext())
-						{
-							cpId = (Long) itr.next();
-						}
-					}
+					final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+					cpId = newSpecimenBizLogic.getCPId(dao, cpId, specimen);
 				}
 			
 				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
 			}
-		
-
 		}
 		catch (final DAOException e)
 		{
 			this.logger.debug(e.getMessage(), e);
+			throw new BizLogicException(e);
 		}
 		return objectId;
 	}
+
+
 
 	/**
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
