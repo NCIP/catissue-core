@@ -143,7 +143,7 @@ public class Participant extends AbstractDomainObject
 
     protected String metaPhoneCode;
 	
-	
+    protected String empiId=null;
 	
 	public String getMetaPhoneCode()
 	{
@@ -576,6 +576,17 @@ public class Participant extends AbstractDomainObject
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
+	
+    
+    public String getEmpiId()
+    {
+        return empiId;
+    }
+
+    public void setEmpiId(String empiId) 
+    {
+        this.empiId = empiId;
+    }
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
