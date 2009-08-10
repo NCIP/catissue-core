@@ -523,7 +523,8 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				while(itr.hasNext())
 				{
 					IdentifiedSurgicalPathologyReport ispr = (IdentifiedSurgicalPathologyReport)itr.next();
-					if(ispr.getCollectionDateTime()!=null || ispr.getTextContent().getData()!= null||
+					System.out.println("IdentifiedSurgicalPathologyReport : "+ ispr);
+					if(ispr.getCollectionDateTime()!=null || ispr.getTextContent()!= null||
 							ispr.getId()!=null || ispr.getActivityStatus()!=null)
 					{
 						fail("IdentifiedSurgicalPathologyReport PHI data is visible to scientist");

@@ -183,28 +183,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (parentSpecimen.getId() != null)
 			{
-				/*parentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen
-						.getParentSpecimen().getId());*/
-				final String sourceObjectName = Specimen.class.getName();
-				final String[] selectColumnName = {"activityStatus", "createdOn",
-					"specimenCollectionGroup.id", "specimenCollectionGroup.activityStatus",
-					"label", "pathologicalStatus", "specimenCharacteristics.id",
-					"availableQuantity", "collectionStatus"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("id", parentSpecimen.getId()));
-				final List list = dao
-						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-				if (list.size() != 0)
-				{
-					retrieveParentSpecimenDetailsFromId(dao, parentSpecimen, list);
-				}
-				else
-				{
-					throw this.getBizLogicException(null, "invalid.parent.specimen.identifier",
-							parentSpecimen.getId().toString());
-				}
-				parentSpecimen = this.retrieveParentSpecimenCollectionTypeData
-								(dao, parentSpecimen);
+
+				parentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen
+						.getParentSpecimen().getId());
 			}
 			else if (parentSpecimen.getLabel() != null)
 			{
