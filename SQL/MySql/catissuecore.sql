@@ -429,6 +429,7 @@ create table CATISSUE_PARTICIPANT (
    FIRST_NAME varchar(255),
    MIDDLE_NAME varchar(255),
    BIRTH_DATE date,
+   EMPI_ID varchar(50),
    GENDER varchar(20),
    GENOTYPE varchar(50),
    ETHNICITY varchar(50),
