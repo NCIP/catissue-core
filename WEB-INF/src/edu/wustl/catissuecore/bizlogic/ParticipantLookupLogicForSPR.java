@@ -11,6 +11,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
@@ -96,8 +98,15 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		// get total points depending on Participant object created by user
 		this.totalPoints = this.calculateTotalPoints(participant);
 
-		final Map<String, Participant> listOfParticipants = participantParams
-				.getListOfParticipants();
+		//final Map<String, Participant> listOfParticipants = participantParams.getListOfParticipants();
+
+		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		ParticipantBizLogic bizlogic = (ParticipantBizLogic) factory
+				.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+
+		final Map<String, Participant> listOfParticipants = bizlogic.getAllParticipants(participant);
+		
+		//final Map<Long, Participant> listOfParticipants = bizlogic.getAllParticipants();
 
 		// In case List of participants is null or empty, return the Matching
 		// Participant List as null.
@@ -105,12 +114,10 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		{
 			return null;
 		}
-
 		// calling the searchMatchingParticipant to filter the participant list
 		// according to given cutoff value
 		final List<DefaultLookupResult> participants = this.searchMatchingParticipant(participant,
 				listOfParticipants);
-
 		return participants;
 	}
 
