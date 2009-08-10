@@ -142,28 +142,10 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 			String orderByField, Long[] siteId, int startIndex, int numOfRecords)
 			throws BizLogicException
 	{
-		final StringBuffer whereClause = new StringBuffer();
-		whereClause.append(" shipment.activityStatus!='"
-				+ Constants.ACTIVITY_STATUS_RECEIVED + "' "+CommonConstants.AND_JOIN_CONDITION +" (");
-		for (final Long element : siteId)
-		{
-			//			whereClause += Constants.OR_JOIN_CONDITION + " shipment."
-			//					+ columnName + "=? ";
-			whereClause.append(" shipment." + columnName
-					+ "=? "+CommonConstants.OR_JOIN_CONDITION );
-		}
-		//		whereClause = whereClause + Constants.AND_JOIN_CONDITION
-		//				+ " shipment.activityStatus!='"
-		//				+ Constants.ACTIVITY_STATUS_RECEIVED + "' ";
-		/*whereClause.append(CommonConstants.AND_JOIN_CONDITION + " shipment.activityStatus!='"
-				+ Constants.ACTIVITY_STATUS_RECEIVED + "' ");*/
-		String whereClauseString = whereClause.toString();
-		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
-		whereClauseString = whereClauseString + ")";
+		String whereClauseString = getWhereClauseForShipment(siteId,columnName);	
 		List<Object[]> shipmentsList = null;
 		shipmentsList = this.getShipmentDetails(Shipment.class.getName(), selectColumnName,
 				whereClauseString, siteId, orderByField, startIndex, numOfRecords);
-
 		return shipmentsList;
 	}
 
@@ -180,6 +162,19 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	public int getShipmentsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
+		String whereClauseString = getWhereClauseForShipment(siteId,columnName);		
+		final int count = getShipmentsCount(Shipment.class.getName(), whereClauseString, siteId,
+				orderByField, startIndex, numOfRecords);
+		return count;
+	}
+	
+	/**
+	 * @param siteId - denotes the site id.
+	 * @param columnName - column name to be looked for.
+	 * @return whereClause
+	 */
+	private String getWhereClauseForShipment(Long[] siteId,String columnName)
+	{
 		final StringBuffer whereClause = new StringBuffer();
 		whereClause.append(" shipment.activityStatus!='"
 				+ Constants.ACTIVITY_STATUS_RECEIVED + "' "+CommonConstants.AND_JOIN_CONDITION +" (");
@@ -191,9 +186,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		String whereClauseString = whereClause.toString();
 		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
 		whereClauseString = whereClauseString + ")";
-		final int count = getShipmentsCount(Shipment.class.getName(), whereClauseString, siteId,
-				orderByField, startIndex, numOfRecords);
-		return count;
+		return whereClauseString;
 	}
 
 	/**

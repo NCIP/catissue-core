@@ -1743,6 +1743,41 @@ public class AppUtility
 		}
 		return specimen;
 	}
+	/**
+	 * @param row - List
+	 * @param myData - myData
+	 * @return String
+	 */
+	private static String getDataFromRow(List row,String myData)
+	{
+		int j;
+		myData = myData + "\"";
+		for (j = 0; j < (row.size() - 1); j++)
+		{
+			Object obj = AppUtility.toNewGridFormat(row.get(j));
+			if(obj!=null)
+			{
+				myData = myData + obj.toString();						
+			}
+			else
+			{
+				myData = myData + "";
+			}
+			myData = myData + ",";
+		}
+		Object obj = AppUtility.toNewGridFormat(row.get(j));
+		if(obj!=null)
+		{
+			myData = myData + obj.toString();					
+		}
+		else
+		{
+			myData = myData + "";
+		}
+		myData = myData + "\"";
+		myData = myData + ",";
+		return myData;
+	}
     /**
      * @param dataList - dataList
      * @return - String
@@ -1758,61 +1793,11 @@ public class AppUtility
 			for (i = 0; i < (dataList.size() - 1); i++)
 			{
 				List row = (List) dataList.get(i);
-				int j;
-				myData = myData + "\"";
-				for (j = 0; j < (row.size() - 1); j++)
-				{
-					Object obj = AppUtility.toNewGridFormat(row.get(j));
-					if(obj!=null)
-					{
-						myData = myData + obj.toString();						
-					}
-					else
-					{
-						myData = myData + "";
-					}
-					myData = myData + ",";
-				}
-				Object obj = AppUtility.toNewGridFormat(row.get(j));
-				if(obj!=null)
-				{
-					myData = myData + obj.toString();					
-				}
-				else
-				{
-					myData = myData + "";
-				}
-				myData = myData + "\"";
-				myData = myData + ",";
+				myData = getDataFromRow(row,myData);
 			}
 
 			List row = (List) dataList.get(i);
-			int j;
-			myData = myData + "\"";
-			for (j = 0; j < (row.size() - 1); j++)
-			{
-				Object obj = AppUtility.toNewGridFormat(row.get(j));
-				if(obj!=null)
-				{
-					myData = myData + obj.toString();					
-				}
-				else
-				{
-					myData = myData + "";
-				}
-				myData = myData + ",";
-				
-			}
-			Object obj = AppUtility.toNewGridFormat(row.get(j));
-			if(obj!=null)
-			{
-				myData = myData + obj.toString();				
-			}
-			else
-			{
-				myData = myData + "";
-			}
-			myData = myData + "\"";
+			myData = getDataFromRow(row,myData);
 		}
 		myData = myData + "]";
 		return myData;
