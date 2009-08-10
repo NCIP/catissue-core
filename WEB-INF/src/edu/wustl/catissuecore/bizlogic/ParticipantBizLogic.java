@@ -1203,6 +1203,124 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		return mapOfParticipants;
 	}
 
+	
+	
+	
+	/**
+	 * This method will return the participant records based on MRN,SSN and last name. 
+	 * @return Map of all participant.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public Map<String, Participant> getAllParticipants(Participant userParticipant)
+			throws BizLogicException
+	{
+		final Map<String, Participant> mapOfParticipants = new HashMap<String, Participant>();
+		List<ParticipantMedicalIdentifier> listOfParticipantsMedId = null;
+		List<Participant> listOfParticipants = null;
+		Participant participant = null;
+		Participant cloneParticipant = null;
+		ParticipantMedicalIdentifier participantMedIdObj = null;
+		DAO dao = null;
+		String participantQueryStr = null;
+		String medicalRecordNumber = null;
+		String siteId = null;
+		try
+		{
+			dao = this.openDAOSession(null);
+			if (userParticipant.getParticipantMedicalIdentifierCollection() != null
+					&& userParticipant.getParticipantMedicalIdentifierCollection().size() > 0)
+			{
+				Iterator<ParticipantMedicalIdentifier> iterator = userParticipant
+						.getParticipantMedicalIdentifierCollection().iterator();
+				while (iterator.hasNext())
+				{
+					ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) iterator
+							.next();
+					medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
+					siteId = String.valueOf(participantMedicalIdentifier.getSite().getId());
+					if (medicalRecordNumber != null && siteId != null)
+					{
+						participantQueryStr = "from "
+								+ ParticipantMedicalIdentifier.class.getName()
+								+ " as participantMedId"
+								+ " where participantMedId.medicalRecordNumber ='"
+								+ medicalRecordNumber + "'" + " and participantMedId.site.id='"
+								+ siteId + "'";
+						listOfParticipantsMedId = dao.executeQuery(participantQueryStr);
+						if (listOfParticipantsMedId != null && !listOfParticipantsMedId.isEmpty())
+						{
+							Iterator<ParticipantMedicalIdentifier> participantIterator = listOfParticipantsMedId
+									.iterator();
+							while (participantIterator.hasNext())
+							{
+								participantMedIdObj = (ParticipantMedicalIdentifier) participantIterator
+										.next();
+								participant = participantMedIdObj.getParticipant();
+								cloneParticipant = new Participant(participant);
+								Long participantId = cloneParticipant.getId();
+								mapOfParticipants.put(String.valueOf(participantId),
+										cloneParticipant);
+							}
+						}
+					}
+				}
+			}
+			if (userParticipant.getSocialSecurityNumber() != null
+					&& userParticipant.getSocialSecurityNumber() != "")
+			{
+				participantQueryStr = "from " + Participant.class.getName() + " as participant"
+						+ " where participant.socialSecurityNumber ='"
+						+ userParticipant.getSocialSecurityNumber() + "'";
+				listOfParticipants = dao.executeQuery(participantQueryStr);
+				populateParticipantMap(mapOfParticipants, listOfParticipants);
+			}
+			if (userParticipant.getLastName() != null && userParticipant.getLastName() != "")
+			{
+				participantQueryStr = "from " + Participant.class.getName() + " as participant"
+						+ " where participant.lastName  like '" + userParticipant.getLastName()
+						+ "%'";
+				listOfParticipants = dao.executeQuery(participantQueryStr);
+				populateParticipantMap(mapOfParticipants, listOfParticipants);
+			}
+
+		}
+		catch (final DAOException e)
+		{
+			this.logger.debug(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		finally
+		{
+			this.closeDAOSession(dao);
+		}
+		return mapOfParticipants;
+	}
+
+	/**
+	 * This method populate the map with participant objects.
+	 * @param mapOfParticipants : Map of participants.
+	 * @param listOfParticipants : list of participants.
+	 */
+	private void populateParticipantMap(Map<String, Participant> mapOfParticipants,
+			List<Participant> listOfParticipants)
+	{
+		Participant participant = null;
+		Participant cloneParticipant = null;
+		if (listOfParticipants != null)
+		{
+			Iterator<Participant> participantIterator = listOfParticipants.iterator();
+			while (participantIterator.hasNext())
+			{
+				participant = (Participant) participantIterator.next();
+				cloneParticipant = new Participant(participant);
+				Long participantId = cloneParticipant.getId();
+				mapOfParticipants.put(String.valueOf(participantId), cloneParticipant);
+			}
+		}
+	}
+	
+	
+	
 	/**
 	 * This function takes identifier as parameter and returns 
 	 * corresponding Participant.
