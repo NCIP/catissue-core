@@ -4861,4 +4861,46 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 	}
+	/**
+	 * @param specId
+	 *            : specId
+	 * @return long : long
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 */
+	public synchronized long getTotalNoOfAliquotSpecimen(Long specId, DAO dao)
+			throws BizLogicException {
+		long aliquotChildCount = 0;
+		try {
+			final String[] selectColumnName = { "id" };
+			/*
+			 * final String[] whereColumnName = { "parentSpecimen.id",
+			 * "lineage", "collectionStatus" }; final String[]
+			 * whereColumnCondition = { "=", "=", "=" }; final Object[]
+			 * whereColumnValue = { specId, "Aliquot", "Collected" }; final
+			 * String joinCondition = Constants.AND_JOIN_CONDITION;
+			 */
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(
+					Specimen.class.getName());
+			queryWhereClause.addCondition(new EqualClause("parentSpecimen.id",
+					specId));
+			queryWhereClause.andOpr();
+			queryWhereClause
+					.addCondition(new EqualClause("lineage", "Aliquot"));
+			queryWhereClause.andOpr();
+			queryWhereClause.addCondition(new EqualClause("collectionStatus",
+					"Collected"));
+			final List AliquotChildList = dao.retrieve(
+					Specimen.class.getName(), selectColumnName,
+					queryWhereClause);
+			if (AliquotChildList != null && !AliquotChildList.isEmpty()) {
+				aliquotChildCount = AliquotChildList.size();
+			}
+
+		} catch (final DAOException e) {
+			e.printStackTrace();
+			throw new BizLogicException(e);
+		}
+		return aliquotChildCount;
+	}
 }

@@ -3554,14 +3554,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							sessionData, containerTypeId, specimenArrayTypeId, exceedingLimit);
 
 			int remainingContainersNeeded = containersMaxLimit;
-
+			
 			// iteratively run each query, and break if the required number of containers are found
 			for (int i = 0; i < queries.length; i++)
 			{
 				this.logger.debug(String.format("Firing query: query%d", i));
 				this.logger.debug(queries[i]);
 				final List resultList = dao.executeQuery(queries[i]);
-
 				if (resultList == null || resultList.size() == 0)
 				{
 					// skip to the next query, if any
@@ -3580,7 +3579,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		finally
 		{
-			dao.closeSession();
+			closeJDBCSession(dao);
 		}
 		Logger.out.debug(String.format("%s:%s:%d", this.getClass().getSimpleName(),
 				"getStorageContainers() number of containers fetched", containers.size()));
@@ -5016,14 +5015,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) > 0  ");
 		}
-		sb.append(" AND VIEW1.IDENTIFIER IN ");
-		sb.append(" ( ");
+	
 		sb.append(this.getStorageContainerCPQuery(isCPUnique));
-		sb.append(" ) ");
-		sb.append(" AND VIEW1.IDENTIFIER IN ");
-		sb.append(" ( ");
+		
+		
 		sb.append(this.getStorageContainerSPClassQuery(isSPClassUnique));
-		sb.append(" ) ");
+		
 		sb.append(" ORDER BY VIEW1.IDENTIFIER ");
 
 		Logger.out.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
@@ -5041,14 +5038,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 */
 	private String getStorageContainerCPQuery(Boolean isUnique)
 	{
+		
 		final String SC_CP_TABLE_NAME = "CATISSUE_ST_CONT_COLL_PROT_REL";
 		if (isUnique == null) //No restrictions on CP. Any CP condition
 		{
 			final StringBuilder sb = new StringBuilder();
-			sb.append("SELECT CONT.IDENTIFIER ");
-			sb.append("from CATISSUE_CONTAINER CONT ");
-			sb.append("WHERE CONT.IDENTIFIER NOT IN ");
-			sb.append(" (SELECT t2.STORAGE_CONTAINER_ID FROM " + SC_CP_TABLE_NAME + " t2) ");
+			sb.append(" AND VIEW1.IDENTIFIER NOT IN ");
+			sb.append(" ( ");
+			sb.append(" SELECT t2.STORAGE_CONTAINER_ID FROM " + SC_CP_TABLE_NAME + " t2 ");
+			sb.append(" ) ");
 			return sb.toString();
 		}
 		else
@@ -5068,11 +5066,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	private String getSCBaseRestrictionQuery(String tableName, boolean isUnique)
 	{
 		final StringBuilder sb = new StringBuilder();
-		sb.append(" SELECT AA.STORAGE_CONTAINER_ID ");
+		sb.append(" AND  ");
+		sb.append(" (( ");
+		sb.append(" SELECT COUNT(*) ");
 		sb.append(" FROM ");
 		sb.append(tableName);
-		sb.append(" AA GROUP BY AA.STORAGE_CONTAINER_ID ");
-		sb.append(" HAVING COUNT(AA.STORAGE_CONTAINER_ID) ");
+		sb.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER )");
 		if (isUnique)
 		{
 			sb.append(" = 1 ");
@@ -5081,6 +5080,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			sb.append(" >1 ");
 		}
+		sb.append(" ) ");
 		return sb.toString();
 	}
 
@@ -5097,10 +5097,13 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		if (isUnique == null) //No restrictions on CP. Any CP condition
 		{
 			final StringBuilder sb = new StringBuilder();
-			sb.append("SELECT SPEC.IDENTIFIER ");
-			sb.append("FROM CATISSUE_SPECIMEN SPEC ");
-			sb.append("WHERE SPEC.IDENTIFIER NOT IN ");
-			sb.append(" (SELECT t2.SPECIMEN_CLASS FROM " + SC_SPCLS_TABLE_NAME + " t2) ");
+			sb.append(" AND ");
+			sb.append(" ( ");
+			sb.append(" SELECT COUNT(*) FROM ");
+			sb.append(SC_SPCLS_TABLE_NAME);
+			sb.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER " );
+			sb.append(" ) " );
+			sb.append(" =4 " );	//No restriction on specimen class means it can store any of the 4 specimen classes
 			return sb.toString();
 		}
 		else

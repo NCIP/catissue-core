@@ -414,13 +414,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 *             If fails to retrieveById any of the required entity.
 	 */
 	public SpecimenCollectionGroup getSCGFromId(Long scgId, SessionDataBean bean,
-			boolean retrieveAssociates) throws BizLogicException
+			boolean retrieveAssociates,DAO dao) throws BizLogicException
 	{
-		DAO dao = null;
 		try
 		{
-			dao = this.openDAOSession(bean);
-
 			final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), scgId);
 
 			if (object == null)
@@ -439,10 +436,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.logger.debug(exception.getMessage(), exception);
 			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
-		}
-		finally
-		{
-			this.closeDAOSession(dao);
 		}
 	}
 

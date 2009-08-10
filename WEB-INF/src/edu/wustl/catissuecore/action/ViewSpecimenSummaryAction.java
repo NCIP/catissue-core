@@ -77,6 +77,7 @@ public class ViewSpecimenSummaryAction extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		
 		String target = Constants.SUCCESS;
 		final ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 		try
@@ -248,7 +249,7 @@ public class ViewSpecimenSummaryAction extends Action
 				// request.setAttribute(Constants.PAGE_OF,pageOf);
 				return mapping.findForward(target);
 			}
-
+			
 			return mapping.findForward(target);
 		}
 		catch (final Exception exception)

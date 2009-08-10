@@ -49,6 +49,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 
 /**
@@ -81,9 +82,12 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
+		DAO dao = null;
 		final ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 		try
 		{
+			dao = AppUtility.openDAOSession(sessionDataBean);
 			final String eventId = specimenSummaryForm.getEventId();
 
 			final HttpSession session = request.getSession();
@@ -91,9 +95,6 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			final LinkedHashSet specimenDomainCollection = this
 					.getSpecimensToSave(eventId, session);
-
-			final SessionDataBean sessionDataBean = (SessionDataBean) session
-					.getAttribute(Constants.SESSION_DATA);
 
 			//bizLogic.updaupdateAnticipatorySpecimens(specimenDomainCollection,
 			// sessionDataBean);
@@ -143,7 +144,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				else
 				{
 					final HashSet specimenCollection = this.getSpecimensToPrint((Long) obj,
-							sessionDataBean);
+							sessionDataBean,dao);
 					// bug 11169
 					// Set specimenprintCollection =
 					// specimenSummaryForm.getSpecimenPrintList();
@@ -174,7 +175,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				if(request.getParameter( Constants.IS_SCG_SUBMIT )!=null && (request.getParameter( Constants.IS_SCG_SUBMIT ).equals( Constants.SCG_SUBMIT )))
 				{
 					final HashSet specimenprintCollection = this.getSpecimensToPrint((Long) obj,
-							sessionDataBean);
+							sessionDataBean,dao);
 
 					final Iterator iter = specimenprintCollection.iterator();
 					List specimenIdList = new ArrayList();
@@ -244,7 +245,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			return mapping.findForward(Constants.FAILURE);
 		}
-
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
 	}
 	private List getSpecimenIdList(ViewSpecimenSummaryForm specimenSummaryForm)
 	{
@@ -705,12 +709,12 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	 * @return HashSet : HashSet
 	 * @throws BizLogicException : BizLogicException
 	 */
-	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean)
+	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean,DAO dao)
 			throws BizLogicException
 	{
 
 		final SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true);
+		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true,dao);
 		final HashSet specimenCollection = new HashSet(objSCG.getSpecimenCollection());
 
 		return specimenCollection;

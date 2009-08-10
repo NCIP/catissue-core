@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.GenericSpecimenVO;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -37,12 +38,14 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -87,70 +90,75 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		SpecimenAutoStorageContainer autoStorageContainer;
-		this.asignedPositonSet = new HashSet();
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
+		DAO dao = null;
 		String target = Constants.SUCCESS;
-		boolean isFromSpecimenEditPage = false;
-		final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
-		final HttpSession session = request.getSession();
-		Long id = specimenCollectionGroupForm.getId();
-
-		Long specimenId = null;
-
-		final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
-		if (forwardToHashMap != null)
+		try
 		{
-			id = (Long) forwardToHashMap.get("specimenCollectionGroupId");
-
-			if (id != null)
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			this.asignedPositonSet = new HashSet();
+			boolean isFromSpecimenEditPage = false;
+			final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
+			final HttpSession session = request.getSession();
+			Long id = specimenCollectionGroupForm.getId();
+			Long specimenId = null;
+			SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer();
+			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+			if (forwardToHashMap != null)
 			{
-				specimenCollectionGroupForm.setId(id);
+				id = (Long) forwardToHashMap.get("specimenCollectionGroupId");
+	
+				if (id != null)
+				{
+					specimenCollectionGroupForm.setId(id);
+				}
+	
+				specimenId = (Long) forwardToHashMap.get("specimenId");
+				if (specimenId != null)
+				{
+					session.setAttribute(Constants.SPECIMENFORM, specimenId);
+					isFromSpecimenEditPage = true;
+				}
+	
 			}
-
-			specimenId = (Long) forwardToHashMap.get("specimenId");
-			if (specimenId != null)
+			final SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
+			session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
+			final SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(id,
+					sessionDataBean, true,dao);
+			if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(
+					Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
-				session.setAttribute(Constants.SPECIMENFORM, specimenId);
-				isFromSpecimenEditPage = true;
+				target = Status.ACTIVITY_STATUS_DISABLED.toString();
 			}
-
+			this.cpId = specimencollectionGroup.getCollectionProtocolRegistration()
+					.getCollectionProtocol().getId();
+	
+			if (!isFromSpecimenEditPage)
+			{
+				this.addSCGSpecimensToSession(session, specimencollectionGroup,autoStorageContainer,dao);
+			}
+			else
+			{
+				final Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
+				this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, session,autoStorageContainer,dao);
+			}
+			request.setAttribute("RequestType",
+					ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
+			autoStorageContainer.setCollectionProtocol(this.cpId);
+			
+			autoStorageContainer.setSpecimenStoragePositions(sessionDataBean);
+			if (request.getParameter("target") != null)
+			{
+				target = request.getParameter("target");
+			}
+	
+			autoStorageContainer.fillAllocatedPositionSet(this.asignedPositonSet);
+			session.setAttribute("asignedPositonSet", this.asignedPositonSet);
 		}
-		final SessionDataBean bean = (SessionDataBean) session.getAttribute(Constants.SESSION_DATA);
-		final SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
-		autoStorageContainer = new SpecimenAutoStorageContainer();
-
-		target = Constants.SUCCESS;
-		session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
-		final SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(id,
-				bean, true);
-		if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(
-				Status.ACTIVITY_STATUS_DISABLED.toString()))
+		finally
 		{
-			target = Status.ACTIVITY_STATUS_DISABLED.toString();
+			AppUtility.closeDAOSession(dao);
 		}
-		this.cpId = specimencollectionGroup.getCollectionProtocolRegistration()
-				.getCollectionProtocol().getId();
-
-		if (!isFromSpecimenEditPage)
-		{
-			this.addSCGSpecimensToSession(session, specimencollectionGroup,autoStorageContainer);
-		}
-		else
-		{
-			final Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
-			this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, session,autoStorageContainer);
-		}
-		request.setAttribute("RequestType",
-				ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
-		autoStorageContainer.setCollectionProtocol(this.cpId);
-		autoStorageContainer.setSpecimenStoragePositions(bean);
-		if (request.getParameter("target") != null)
-		{
-			target = request.getParameter("target");
-		}
-
-		autoStorageContainer.fillAllocatedPositionSet(this.asignedPositonSet);
-		session.setAttribute("asignedPositonSet", this.asignedPositonSet);
 		return mapping.findForward(target);
 	}
 
@@ -161,7 +169,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private void addSCGSpecimensToSession(HttpSession session,
-			SpecimenCollectionGroup specimencollectionGroup,SpecimenAutoStorageContainer autoStorageContainer) throws DAOException, BizLogicException
+			SpecimenCollectionGroup specimencollectionGroup,SpecimenAutoStorageContainer autoStorageContainer,DAO dao) throws DAOException, BizLogicException
 	{
 		final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap
 		= new LinkedHashMap<String, CollectionProtocolEventBean>();
@@ -185,13 +193,14 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		Collections.sort(specimenList, spIdComp);
 
 		final Iterator itr2 = specimenList.iterator();
+		NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
 		while (itr2.hasNext())
 		{
 			final Specimen specimen = (Specimen) itr2.next();
 			if (specimen.getChildSpecimenCollection() != null)
 			{
-				final long lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimen
-						.getId());
+				final long lastAliquotNo = specBizLogic.getTotalNoOfAliquotSpecimen(specimen
+						.getId(),dao);
 				final LinkedList<Specimen> childList = new LinkedList(specimen
 						.getChildSpecimenCollection());
 				Collections.sort(childList, spIdComp);
@@ -519,12 +528,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @throws DAOException : DAOException
 	 * @throws BizLogicException : BizLogicException
 	 */
-	private void addSpecimensToSession(HttpSession session, Long specimenId, List specimenList,SpecimenAutoStorageContainer autoStorageContainer)
+	private void addSpecimensToSession(HttpSession session, Long specimenId, List specimenList,SpecimenAutoStorageContainer autoStorageContainer,DAO dao)
 			throws DAOException, BizLogicException
 	{
 		final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap
 		= new LinkedHashMap<String, CollectionProtocolEventBean>();
-
+		NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
 		final CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 
 		eventBean.setUniqueIdentifier(String.valueOf(specimenId.longValue()));
@@ -535,7 +544,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		Collections.sort(specimenList, spIdComp);
 
 		// List specList = new LinkedList();
-		long lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimenId);
+		long lastAliquotNo =specBizLogic.getTotalNoOfAliquotSpecimen(specimenId,dao);
 		this.setLabelInSpecimen(specimenId, specimenList, lastAliquotNo);
 
 		final Iterator itr2 = specimenList.iterator();
@@ -544,7 +553,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			final Specimen specimen = (Specimen) itr2.next();
 			if (specimen.getChildSpecimenCollection() != null)
 			{
-				lastAliquotNo = new AliquotAction().getTotalNoOfAliquotSpecimen(specimen.getId());
+				lastAliquotNo = specBizLogic.getTotalNoOfAliquotSpecimen(specimen.getId(),dao);
 				final LinkedList<Specimen> childList = new LinkedList(specimen
 						.getChildSpecimenCollection());
 				Collections.sort(childList, spIdComp);
@@ -570,7 +579,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private void getSpcimensToShowOnSummary(long specimenId, Collection scgSpecimenList,
-			HttpSession session,SpecimenAutoStorageContainer autoStorageContainer) throws DAOException, BizLogicException
+			HttpSession session,SpecimenAutoStorageContainer autoStorageContainer,DAO dao) throws DAOException, BizLogicException
 	{
 		final List<Specimen> specimenList = new ArrayList<Specimen>();
 		// Collection scgSpecimenList =
@@ -595,7 +604,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 				}
 			}
 		}
-		this.addSpecimensToSession(session, specimenId, specimenList,autoStorageContainer);
+		this.addSpecimensToSession(session, specimenId, specimenList,autoStorageContainer,dao);
 	}
 
 	/**
