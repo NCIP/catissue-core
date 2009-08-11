@@ -3524,4 +3524,41 @@ public class AppUtility
         return sessionDataBean;
     }	
 	 
+    
+    /**This method will return the ssn value in format xxx-xx-xxxx
+	 * @param ssn
+	 * @return
+	 */
+	public static String getSSN(String ssn)
+	{
+		String ssnA = "";
+		String ssnB = "";
+		String ssnC = "";
+		boolean result = false;
+
+		Pattern pattern = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
+		Matcher mat = pattern.matcher(ssn);
+		result = mat.matches();
+		if (result)
+		{
+			return ssn;
+		}
+		if (ssn.length() >= 9)
+		{
+			ssnA = ssn.substring(0, 3);
+			ssnB = ssn.substring(3, 5);
+			ssnC = ssn.substring(5, 9);
+		}
+		else if (ssn.length() >= 4)
+		{
+			ssnC = ssn.substring(0, 3);
+		}
+		else
+		{
+			return ssn;
+		}
+		ssn = ssnA + "-" + ssnB + "-" + ssnC;
+		return ssn;
+	}
+
 }
