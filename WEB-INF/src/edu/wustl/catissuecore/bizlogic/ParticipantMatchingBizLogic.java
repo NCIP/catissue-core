@@ -150,9 +150,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 					tempMRNStr.append((mrn.charAt(j)));
 				}
 			}
-			System.out
-					.println(" The MRN value  ****************************************************************"
-							+ tempMRNStr.toString());
 			participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 					+ " as participantMedId" + " where participantMedId.medicalRecordNumber ='"
 					+ tempMRNStr.toString() + "'" + " and participantMedId.site.id='" + siteId
@@ -188,9 +185,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			{
 				charArray[i] = ++charArray[i];
 				tempMRNStr.append(charArray);
-				System.out
-						.println(" The MRN value  **********************************************************"
-								+ tempMRNStr.toString());
 				participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 						+ " as participantMedId" + " where "
 						+ " participantMedId.medicalRecordNumber ='"
@@ -206,9 +200,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			{
 				charArray[i] = --charArray[i];
 				tempMRNStr.append(charArray);
-				System.out
-						.println(" The MRN value  **********************************************************"
-								+ tempMRNStr.toString());
 				participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 						+ " as participantMedId" + " where"
 						+ " participantMedId.medicalRecordNumber ='"
@@ -284,9 +275,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 			String tempSSN=AppUtility.getSSN(tempssnStr.toString());
-			System.out
-					.println(" The SSN value  ***********************************************************"
-							+ tempssnStr.toString() + " -------" + tempSSN);
 			participantQueryStr = "from " + Participant.class.getName()
 								+ " as participant where "
 								+ " participant.socialSecurityNumber ='"
@@ -323,9 +311,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				charArray[i] = ++charArray[i];
 				tempssnStr.append(charArray);
 				String tempSSN=AppUtility.getSSN(tempssnStr.toString());
-				System.out
-						.println(" The SSN value  ***************************************************************"
-								+ tempssnStr.toString()+ "-------" + tempSSN);
 				participantQueryStr = "from " + Participant.class.getName() + " as participant"
 						+ " where participant.socialSecurityNumber ='"
 						+ tempSSN + "'";
@@ -339,9 +324,6 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				charArray[i] = --charArray[i];
 				tempssnStr.append(charArray);
 				String tempSSN=AppUtility.getSSN(tempssnStr.toString());
-				System.out
-						.println(" The SSN value  **************************************************************"
-								+ tempssnStr.toString() +" ------- " + tempSSN);
 				participantQueryStr = "from " + Participant.class.getName() + " as participant"
 						+ " where participant.socialSecurityNumber ='"
 						+ tempssnStr.toString()
