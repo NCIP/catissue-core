@@ -11,8 +11,6 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
@@ -28,6 +26,10 @@ import edu.wustl.common.util.global.Status;
  * @author
  *
  */
+/**
+ * @author geeta_jaggal
+ *
+ */
 public class ParticipantLookupLogicForSPR implements LookupLogic
 {
 
@@ -37,32 +39,78 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	 */
 	private static final int pointsForSSNExact = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_SSN_EXACT));
+
+	/**
+	* points for SSN partial.
+	*/
 	private static final int pointsForSSNPartial = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_SSN_PARTIAL));
+	/**
+	 *  PMI exact points.
+	 */
 	private static final int pointsForPMIExact = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_PMI_EXACT));
+	/**
+	 * PMI partial points.
+	 */
 	private static final int pointsForPMIPartial = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_PMI_PARTIAL));
+	/**
+	 * DOB exact points.
+	 */
 	private static final int pointsForDOBExact = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_DOB_EXACT));
+	/**
+	 * DOB partial points.
+	 */
 	private static final int pointsForDOBPartial = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_DOB_PARTIAL));
+	/**
+	 * Last name exact pts.
+	 */
 	private static final int pointsForLastNameExact = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_LAST_NAME_EXACT));
+	/**
+	 * Last name partail pts.
+	 */
 	private static final int pointsForLastNamePartial = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_LAST_NAME_PARTIAL));
+	/**
+	 * first name exact pts.
+	 */
 	private static final int pointsForFirstNameExact = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_FIRST_NAME_EXACT));
+	/**
+	 * First name partial pts.
+	 */
 	private static final int pointsForFirstNamePartial = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_FIRST_NAME_PARTIAL));
+	/**
+	 * Points from properties file.
+	 */
 	private static final int totalPointsFromProperties = pointsForFirstNameExact
 			+ pointsForLastNameExact + pointsForDOBExact + pointsForSSNExact + pointsForPMIExact;
+	/**
+	 * SPR cutOff pts.
+	 */
 	private static final int sprCutOff = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_CUT_OFF));
 
+	/**
+	 * Calculated cutOff pts.
+	 */
 	private int cutoffPoints;
+	/**
+	 * Calculated total pts based on SPR participant values.
+	 */
 	private int totalPoints;
+	/**
+	 *  Matching status variable.
+	 */
 	private MatchingStatus isSSNTemp = MatchingStatus.NOMATCH;
+	/**
+	 * Matching status variable.
+	 */
 	private MatchingStatusForSSNPMI isSSNPMITemp = MatchingStatusForSSNPMI.NOMATCH;
 
 	/**
@@ -73,7 +121,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	 * matching participants.
 	 * @throws Exception : Exception
 	 * @param params
-	 *            - LookupParameters
+	 *            - LookupParameters :LookupParameters
 	 * @return list - List of matching Participants.
 	 */
 	public List<DefaultLookupResult> lookup(LookupParameters params) throws Exception
@@ -98,19 +146,12 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		// get total points depending on Participant object created by user
 		this.totalPoints = this.calculateTotalPoints(participant);
 
-		//final Map<String, Participant> listOfParticipants = participantParams.getListOfParticipants();
-
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic) factory
-				.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-
-		final Map<String, Participant> listOfParticipants = bizlogic.getAllParticipants(participant);
-		
-		//final Map<Long, Participant> listOfParticipants = bizlogic.getAllParticipants();
+		final Map<String, Participant> listOfParticipants = new ParticipantMatchingBizLogic()
+				.getAllParticipants(participant);
 
 		// In case List of participants is null or empty, return the Matching
 		// Participant List as null.
-		if (listOfParticipants == null || listOfParticipants.isEmpty() == true)
+		if (listOfParticipants == null || listOfParticipants.isEmpty())
 		{
 			return null;
 		}
@@ -122,7 +163,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	}
 
 	/**
-	 * This function calculates the total based on values entered by user
+	 * This function calculates the total based on values entered by user.
 	 *
 	 * @param participant
 	 *            - participant object
@@ -185,8 +226,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			// active
 			if (existingParticipant.getActivityStatus() != null
 					&& (existingParticipant.getActivityStatus().equals(
-							Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant
-							.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
+							Status.ACTIVITY_STATUS_ACTIVE.toString())
+							|| existingParticipant.getActivityStatus()
+							.equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
 			{
 				if (!this.isEmptyParticipant(existingParticipant))
 				{
@@ -196,13 +238,16 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 					 * for match between the two.
 					 */
 					if (userParticipant.getSocialSecurityNumber() != null
-							&& !userParticipant.getSocialSecurityNumber().trim().equals("")
+							&& !userParticipant.getSocialSecurityNumber()
+							.trim().equals("")
 							&& existingParticipant.getSocialSecurityNumber() != null
-							&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
+							&& !existingParticipant.getSocialSecurityNumber()
+							.trim().equals(""))
 					{
 						socialSecurityNumberWeight = this.checkSSN(userParticipant
 								.getSocialSecurityNumber().trim().toLowerCase(),
-								existingParticipant.getSocialSecurityNumber().trim().toLowerCase());
+								existingParticipant.getSocialSecurityNumber()
+								.trim().toLowerCase());
 						weight = socialSecurityNumberWeight;
 					}
 					/**
@@ -213,7 +258,8 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 					if (userParticipant.getBirthDate() != null
 							&& existingParticipant.getBirthDate() != null)
 					{
-						birthDateWeight = this.checkDateOfBirth(userParticipant.getBirthDate(),
+						birthDateWeight = this.checkDateOfBirth(
+								userParticipant.getBirthDate(),
 								existingParticipant.getBirthDate());
 						weight += birthDateWeight;
 					}
@@ -227,8 +273,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& existingParticipant.getLastName() != null
 							&& !existingParticipant.getLastName().trim().equals(""))
 					{
-						weight += this.checkLastName(userParticipant.getLastName().trim()
-								.toLowerCase(), existingParticipant.getLastName().trim()
+						weight += this.checkLastName(userParticipant.getLastName()
+								.trim().toLowerCase(),
+								existingParticipant.getLastName().trim()
 								.toLowerCase());
 					}
 					/**
@@ -242,7 +289,8 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& !existingParticipant.getFirstName().trim().equals(""))
 					{
 						weight += this.checkFirstName(userParticipant.getFirstName().trim()
-								.toLowerCase(), existingParticipant.getFirstName().trim()
+								.toLowerCase(),
+								 existingParticipant.getFirstName().trim()
 								.toLowerCase());
 					}
 					weight += this.checkParticipantMedicalIdentifier(userParticipant
@@ -260,9 +308,12 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 						participants.add(result);
 						break;
 					}
-					else if (((weight != totalPointsFromProperties) && (weight != 0) && (weight > sprCutOff))
-							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
-							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
+					else if (((weight != totalPointsFromProperties)
+							&& (weight != 0) && (weight > sprCutOff))
+							|| (this.isSSNPMITemp ==
+									MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
+							|| (this.isSSNPMITemp ==
+									MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
 					{
 						final DefaultLookupResult result = new DefaultLookupResult();
 						result.setIsSSNPMI(this.isSSNPMITemp);
@@ -277,7 +328,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	}
 
 	/**
-	 * Checks whether PMI collection is empty or not
+	 * Checks whether PMI collection is empty or not.
 	 *
 	 * @param pmiCollection : pmiCollection
 	 * @return boolean - PMICollection is empty or not.
@@ -352,6 +403,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			case PARTIAL :
 				this.isSSNTemp = MatchingStatus.PARTIAL;
 				return pointsForSSNPartial;
+			default :
 		}
 		return 0;
 	}
@@ -371,6 +423,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 				return pointsForPMIExact;
 			case PARTIAL :
 				return pointsForPMIPartial;
+			default :
 		}
 		return 0;
 	}
@@ -497,7 +550,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		boolean exactMatchFlag = false;
 		boolean partialMatchFlag = false;
 		boolean noMatchFlag = false;
-		final List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
+		final List<ParticipantMedicalIdentifier>
+			tempExistingParticipantMedicalIdentifier =
+				new ArrayList<ParticipantMedicalIdentifier>();
 
 		if (existingParticipantMedicalIdentifier.size() > 0)
 		{
@@ -525,7 +580,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& userPMIdentifier.getSite().getId() != null)
 					{
 						final String medicalRecordNo = userPMIdentifier.getMedicalRecordNumber();
-						final String SiteId = userPMIdentifier.getSite().getId().toString();
+						final String siteId = userPMIdentifier.getSite().getId().toString();
 						int maxTempPMIW = pointsForPMIPartial;
 						for (final ParticipantMedicalIdentifier existingPMIdentifier : tempExistingParticipantMedicalIdentifier)
 						{
@@ -537,7 +592,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 								final String existingMedicalRecordNo = existingPMIdentifier
 										.getMedicalRecordNumber();
 
-								if (existingSiteId.equals(SiteId) && medicalRecordNo != null)
+								if (existingSiteId.equals(siteId) && medicalRecordNo != null)
 								{
 									tempParticipantMedicalIdentifierWeight = this.checkPMI(
 											existingMedicalRecordNo, medicalRecordNo);
