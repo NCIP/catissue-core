@@ -66,23 +66,8 @@
 			model.filteredCollection = specimenColl;
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
 			specimenColl = new ArrayCollection();
-			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);		
-			metadataManager.init(mspParameter.mode);
-						
-			metadataManager.addEventListener("initCompleteEvent",init);
-			if(mspParameter.showParentSelection == "true")
-			{
-				showParentSelection = true;
-			}
-			else
-			{
-				if(mspParameter.showParentSelection == "false")
-				{
-					showParentSelection = false;
-				}
-			}
+			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);
 
-			
 		}
 		
 		private function init(event:Event):void
@@ -477,6 +462,21 @@
    		private function handleInitMultipleSp(event:ResultEvent) : void
    		{
    			specimenDataBean = event.result as SpecimenData;
+
+   			metadataManager.init(mspParameter.mode);
+						
+			metadataManager.addEventListener("initCompleteEvent",init);
+			if(mspParameter.showParentSelection == "true")
+			{
+				showParentSelection = true;
+			}
+			else
+			{
+				if(mspParameter.showParentSelection == "false")
+				{
+					showParentSelection = false;
+				}
+			}
    		}
    		
    		private function getAlternateColor(index:int):uint 
