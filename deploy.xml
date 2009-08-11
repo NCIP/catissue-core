@@ -1223,7 +1223,6 @@
 			 <param name="isUpgrade" value="false"/>
 		</antcall>	
 		<antcall target="update_metadata_for_CA_model_changes" />
-		<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
 	</target>
 	<target name="insert_entity_group_metadata_mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1409,7 +1408,6 @@
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
     	<antcall target="reset_sequences" />
-		<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
 	</target>
 
 	<target name="insertQueryMetadata">
@@ -1594,38 +1592,24 @@
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 	
-	<target name="upgrade_db" depends="upgrade_from_Suite1.1_to_1.1p4">
-	</target>
-	<target name="upgrade_from_Suite1.1_to_1.1p4">
-		        <if>
-				<equals arg1="mysql" arg2="${database.type}" />
+	<target name="upgrade_db">
+		<echo message="Upgrading Database v1.1 to v1.1p4" />
+	   <if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_mysql_from_v1.1_to_v1.1p2" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_mysql_from_Suite1.1_to_1.1p2" />
-					<!--<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />
-					<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" /> -->
+					<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
 				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
-					<then>
-						<antcall target="upgrade_oracle_from_Suite1.1_to_1.1p2" />
-						<!--<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />
-					 	<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />-->
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-				</else>
-			</if>
-		
-		<antcall target="upgrade_db_from_p2_to_p4"/>
-			<!--<antcall target="upgrade_category_entity_names">
-			</antcall>
-			<antcall target="update_metadata_for_model_changes">
-					<param name="isUpgrade" value="true"/>
-					<param name="buildVersion" value="1.1top4"/>
-			</antcall>
-			<antcall target="update_metadata_for_tagged_values"/>
-			 <antcall target="upgrade_saved_queries" /> -->
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
@@ -1636,16 +1620,16 @@
 	</target>
 	
 	<target name="upgrade_db_from_p2_to_p4">
-		
+		<echo message="Upgrading Database v1.1p2 to v1.1p4" />
 			        <if>
 					<equals arg1="mysql" arg2="${database.type}" />
 					<then>
-						<antcall target="upgrade_mysql_from_Suite1.1_p2to_1.1p4" />
+						<antcall target="upgrade_mysql_from_v1.1p2_to_v1.1p4" />
 					</then>
 					<elseif>
 						<equals arg1="oracle" arg2="${database.type}" />
 						<then>
-							<antcall target="upgrade_oracle_from_Suite1.1_p2to_1.1p4" />
+							<antcall target="upgrade_oracle_from_v1.1p2_to_v1.1p4" />
 						</then>
 					</elseif>
 					<else>
@@ -1660,18 +1644,16 @@
 				</antcall>
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
-		 		<antcall target="upgrade_saved_queries" /> 
+				<antcall target="upgrade_saved_queries" /> 
 		</target>
 		
 	
 
 	<!-- Removing unnecessary PE Mysql-->
-	<target name="upgrade_mysql_from_Suite1.1_to_1.1p2">
+	<target name="upgrade_mysql_from_v1.1_to_v1.1p2">
 		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Common/upgrade_catissue_schema.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1_to_v1.1p2.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1682,13 +1664,11 @@
 	</target>
 	
 	<!-- Removing unnecessary PE Oracle-->
-	<target name="upgrade_oracle_from_Suite1.1_to_1.1p2">
+	<target name="upgrade_oracle_from_v1.1_to_v1.1p2">
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
-				    <transaction src="${dbupgrade.sql.dir}/Common/upgrade_catissue_schema.sql" />
-					<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/Upgrade_DE_Schema.sql" />
-			   		<transaction>commit;</transaction>
+					<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1_to_v1.1p2.sql" />
+				    <transaction>commit;</transaction>
 					<classpath>
 						<fileset dir="${lib.dir}">
 							<include name="*.jar" />
@@ -1698,14 +1678,12 @@
    </target>
 
 	<!-- Upgrading from Suite1.1 p2 to p4 - MySQL -->
-	<target name="upgrade_mysql_from_Suite1.1_p2to_1.1p4">
+	<target name="upgrade_mysql_from_v1.1p2_to_v1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading MySQL Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1P2.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p2_to_v1.1p4.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/EMPI_Alter_table.sql" />		
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1714,19 +1692,16 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
-		<antcall target="upgrade_mysql_from_Suite1.1_p3to_1.1p4" />
 	</target>
 	
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
-	<target name="upgrade_oracle_from_Suite1.1_p2to_1.1p4">
+	<target name="upgrade_oracle_from_v1.1p2_to_v1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
 		<echo message="Upgrading Oracle Database. Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1P2.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />			
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/EMPI_Alter_table.sql" />			   				
-	   		<transaction>commit;</transaction>
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1p2_to_v1.1p4.sql" />
+			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -1734,124 +1709,8 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
-		<antcall target="upgrade_oracle_from_Suite1.1_p3to_1.1p4" />
-   </target>
+   </target>	
 	
-	<!-- Upgrading from Suite1.1 p3 to p4 - MySQL -->
-	<target name="upgrade_mysql_from_Suite1.1_p3to_1.1p4">
-		<echo message="Upgrading MySQL Database. Modifying Audit table for query audit enhancements.These are used for RecentQueries feature." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_suite_1.1p3to_1.1p4.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-	
-	<!-- Upgrading from Suite1.1 p3 to p4 - Oracle -->
-	<target name="upgrade_oracle_from_Suite1.1_p3to_1.1p4">
-		<echo message="Upgrading Oracle Database.Modifying Audit table for query audit enhancements.These are used for RecentQueries feature." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_suite_1.1p3to_1.1p4.sql" />
-	   		<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-   </target>
-   
-	<!--MySQL Database Upgradation -->
-	<!--
-	<target name="upgrade_mysql_from_Suite1.0_to_1.1">
-		<echo message="Upgrading MySQL Database for caTISSUE Suite Application ..." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_Suite_1.0_to_1.1.sql" />
-			<transaction>commit;</transaction>
-
-			<transaction src="${dbupgrade.sql.dir}/MySql/query_Suite1.0_to_Suite1.1.sql" />
-     		<transaction>commit;</transaction>
-			
-			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_deleteStorageContainerPE.sql" />
-			<transaction>commit;</transaction>
-			
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-
-		<antcall target="insert_entity_group_metadata_mysql" />
-		<antcall target="upgrade_db_demodel_mysql" />
-
-	</target>
-
-	<target name="upgrade_db_mysql">
-		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="update_metadata_for_model_changes" />
-	</target>
-
--->
-	<!--Oracle Database Upgradation -->
-<!--
-	<target name="upgrade_oracle_from_Suite1.0_to_1.1">
-		<echo message="Upgrading Oracle Database for caTISSUE Suite Application ..." />
-
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">
-				<transaction src="${dbupgrade.sql.dir}/Oracle/rename_constraint.sql" />
-		   		<transaction>commit/</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-		</sql>
-
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_Suite_1.0_to_1.1.sql" />
-			<transaction>commit;</transaction>
-
-			<transaction src="${dbupgrade.sql.dir}/Oracle/query_Suite1.0_to_Suite1.1.sql" />
-	   		<transaction>commit;</transaction>
-
-			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_deleteStorageContainerPE.sql" />
-			<transaction>commit;</transaction>
-			
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	
-		<antcall target="drop_and_create_sequences" />
-		<antcall target="insert_entity_group_metadata_oracle" />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/query_Suite1.0_to_Suite1.1_seqChange.sql" />
-	   		<transaction>commit/</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-		<antcall target="upgrade_db_demodel_oracle" />
-		<antcall target="alter_CA_model_Tables" />
-    	<antcall target="reset_sequences" />
-	</target>
-
-
-	<target name="upgrade_db_oracle">
-		<antcall target="upgrade_from_Suite1.0_to_1.1" />
-		<antcall target="update_metadata_for_model_changes" />
-	</target>
-
--->
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -2765,7 +2624,6 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/alterqueries.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/addconstraints.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/update_dyextn_abstract_metadata_tabel.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -2783,7 +2641,6 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/alterqueries.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/addconstraints.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/update_dyextn_abstract_metadata_tabel.sql" />
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -3750,12 +3607,12 @@ Thanking You,
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="upgrade_meatadata_for_constraintproperties_mysql" />
+				<antcall target="upgrade_metadata_for_constraintproperties_mysql" />
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_meatadata_for_constraintproperties_oracle" />
+					<antcall target="upgrade_metadata_for_constraintproperties_oracle" />
 				</then>
 			</elseif>
 			<else>
@@ -3764,11 +3621,10 @@ Thanking You,
 		</if>			
 	</target>
 
-	<target name="upgrade_meatadata_for_constraintproperties_mysql">
+	<target name="upgrade_metadata_for_constraintproperties_mysql">
 		<echo message="Updating DE Model changes..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
-			<transaction src="${dbupgrade.sql.dir}/MySql/upgrade_cnstrProp_createTable.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/upgrade_cnstrProp_alterTable.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/upgrade_metadata_cnstrProp.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -3790,11 +3646,10 @@ Thanking You,
 		</java>
 	</target>
 
-	<target name="upgrade_meatadata_for_constraintproperties_oracle">
+	<target name="upgrade_metadata_for_constraintproperties_oracle">
 		<echo message="Updating DE Model changes..." />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_createTable.sql" />
-			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_alterTable.sql" />
+		<!--<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_metadata_cnstrProp.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -3813,7 +3668,7 @@ Thanking You,
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
-		</java>
+		</java>-->
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
 
 			<!--<transaction  src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_dropColumn.sql"/>-->
@@ -4001,41 +3856,30 @@ Thanking You,
 			</java>
 			 <delete dir="${temp.dir}" /> 
 		</target>
-
-
-
-		<target name="update_metaPhone_data_for_participant">
-			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-	 	    <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-			<if>
-				<equals arg1="mysql" arg2="${database.type}" />
-				<then>
-					<antcall target="update_metaPhoneData_for_participant_mysql" />
-				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
-					<then>
-						<antcall target="update_metaPhoneData_for_participant_oracle" />
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-				</else>
-			</if>
-			<delete dir="${temp.dir}" />
-	</target>
 	
+	<target name="update_metaPhone_data_for_participant">
+				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		 	    <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+				<if>
+					<equals arg1="mysql" arg2="${database.type}" />
+					<then>
+						<antcall target="update_metaPhoneData_for_participant_mysql" />
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" />
+						<then>
+							<antcall target="update_metaPhoneData_for_participant_oracle" />
+						</then>
+					</elseif>
+					<else>
+						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+					</else>
+				</if>
+				<delete dir="${temp.dir}" />
+		</target>
+
    <target name="update_metaPhoneData_for_participant_mysql">
-		<echo message="Altering the participant table for metaPhone information (oracle) ..... " />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${dbupgrade.sql.dir}/MySql/metaPhoneData_For_Participant.sql" />
-			<transaction>commit;</transaction>
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>		
+		   	
 		<echo message="Updating metaPhone information for participant last name (mysql)....." />
 		<java classname="UpdateParticipantMetaPhoneInfo"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -4052,16 +3896,7 @@ Thanking You,
 
 	
 	<target name="update_metaPhoneData_for_participant_oracle">
-		<echo message="Altering the participant table for metaPhone information (oracle) ..... " />
-		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-					<transaction src="${dbupgrade.sql.dir}/Oracle/metaPhoneData_For_Participant.sql" />
-					<transaction>commit;</transaction>
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-					</classpath>
-		</sql>
+		
 		<echo message="Updating metaPhone information for participant last name (oracle)....." />
 		<java classname="UpdateParticipantMetaPhoneInfo"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -4074,5 +3909,5 @@ Thanking You,
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
 		</java>
-	</target>
+	</target>	
 </project>

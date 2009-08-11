@@ -1,3 +1,14 @@
+
+/*DE constraint properties, create table.*/
+
+create table DYEXTN_ENTIY_COMPOSITE_KEY_REL (ENTITY_ID number(19,0) not null, ATTRIBUTE_ID number(19,0) not null, INSERTION_ORDER number(10,0) not null, primary key (ENTITY_ID, INSERTION_ORDER));
+
+create table DYEXTN_CONSTRAINTKEY_PROP (IDENTIFIER number(19,0) not null, PRIMARY_ATTRIBUTE_ID number(19,0), SRC_CONSTRAINT_KEY_ID number(19,0), TGT_CONSTRAINT_KEY_ID number(19,0), primary key (IDENTIFIER));
+
+
+/*DE constraint properties, alter table.*/
+
+
 alter table DYEXTN_COLUMN_PROPERTIES add CNSTR_KEY_PROP_ID number(19,0);
 
 alter table DYEXTN_CONSTRAINTKEY_PROP add constraint FK80C9511D6B558E0E foreign key (SRC_CONSTRAINT_KEY_ID) references DYEXTN_CONSTRAINT_PROPERTIES;

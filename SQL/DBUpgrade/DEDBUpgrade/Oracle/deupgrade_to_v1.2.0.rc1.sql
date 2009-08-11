@@ -22,3 +22,25 @@ ALTER TABLE DYEXTN_CATEGORY_ATTRIBUTE add constraint FKEF3B77585C7C8694E foreign
 ALTER TABLE DYEXTN_CATEGORY_ATTRIBUTE add constraint FK7A0DA606B41D885B234 foreign key (CAL_DEPENDENT_CATEGORY_ATTR_ID) references DYEXTN_CATEGORY_ATTRIBUTE (IDENTIFIER);
 ALTER TABLE DYEXTN_CONTAINER ADD (PARENT_CONTAINER_ID number(19,0));
 ALTER TABLE DYEXTN_LIST_BOX ADD(USE_AUTOCOMPLETE NUMBER(1,0));
+
+
+
+
+/*DE metadata .*/
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_EventParameters'
+where name = 'edu.wustl.catissuecore.domain.EventParameters';
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEventDetails'
+where name = 'edu.wustl.catissuecore.domain.AuditEventDetails';
+
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEvent'
+where name = 'edu.wustl.catissuecore.domain.AuditEvent';
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEventLog'
+where name = 'edu.wustl.catissuecore.domain.AuditEventLog';

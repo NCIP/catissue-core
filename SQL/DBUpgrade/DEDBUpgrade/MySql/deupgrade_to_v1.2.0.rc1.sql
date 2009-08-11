@@ -27,3 +27,25 @@ ALTER TABLE DYEXTN_CATEGORY_ATTRIBUTE add constraint FK7A0DA606B41D885B234 forei
 ALTER TABLE DYEXTN_CONTAINER ADD (PARENT_CONTAINER_ID bigint(19));
 
 ALTER TABLE DYEXTN_LIST_BOX ADD(USE_AUTOCOMPLETE bit(1));
+
+
+
+/*DE metadata .*/
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_EventParameters'
+where name = 'edu.wustl.catissuecore.domain.EventParameters';
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEventDetails'
+where name = 'edu.wustl.catissuecore.domain.AuditEventDetails';
+
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEvent'
+where name = 'edu.wustl.catissuecore.domain.AuditEvent';
+
+update DYEXTN_ABSTRACT_METADATA 
+set name = 'Deprecated_AuditEventLog'
+where name = 'edu.wustl.catissuecore.domain.AuditEventLog';
+
