@@ -253,7 +253,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
 
 					}
-					Map disabledCont = null;
+					/*Map disabledCont = null;
 					try
 					{
 						disabledCont = this.getContForDisabledSpecimenFromCache();
@@ -266,7 +266,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					if (disabledCont == null)
 					{
 						disabledCont = new TreeMap();
-					}
+					}*/
 					/**
 					 * Name: Virender Mehta
 					 * Reviewer: Sachin
@@ -284,7 +284,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					{
 
 						final StorageContainer storageContainer = (StorageContainer) objectContainer;
-						this.addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
+						//this.addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
 					final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 					specimen.setSpecimenPosition(null);
@@ -301,7 +301,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					{
 						dao.delete(prevPosition);
 					}
-					try
+					/*try
 					{
 						final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 								.getInstance();
@@ -312,7 +312,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					catch (final CacheException e)
 					{
 						this.logger.debug(e.getMessage(), e);
-					}
+					}*/
 
 				}
 
@@ -395,7 +395,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		//For bulk operations
-		if (obj instanceof List)
+		/*if (obj instanceof List)
 		{
 			final List events = (List) obj;
 			for (int i = 0; i < events.size(); i++)
@@ -418,15 +418,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			this.postInsertPerEvent(obj, dao);
-		}
+		}*/
 		super.postInsert(obj, dao, sessionDataBean);
 	}
 
-	/**
-	 * @param obj - Object.
-	 * @param dao - DAO object
-	 */
-	private void postInsertPerEvent(Object obj, DAO dao)
+	/*private void postInsertPerEvent(Object obj, DAO dao)
 	{
 		final SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 		try
@@ -463,7 +459,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			this.logger.debug(e.getMessage(), e);
 		}
-	}
+	}*/
 
 	/**
 	 * Updates the persistent object in the database.

@@ -783,7 +783,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 						dao.delete(prevPosition);
 					}
 
-					try
+					/*try
 					{
 						final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 								.getInstance();
@@ -793,7 +793,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					catch (final CacheException e)
 					{
 						this.logger.debug(e.getMessage(), e);
-					}
+					}*/
 
 				}
 				else
@@ -933,7 +933,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		try
 		{
-			final StorageContainer currentContainer = (StorageContainer) currentObj;
+			/*final StorageContainer currentContainer = (StorageContainer) currentObj;
 			final StorageContainer oldContainer = (StorageContainer) oldObj;
 
 			// If capacity of container gets increased then insert all the new
@@ -988,7 +988,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 
 			}
-
+*/
 			super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 
 		}
