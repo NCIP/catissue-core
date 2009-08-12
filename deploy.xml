@@ -35,6 +35,9 @@
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 	<property name="mssqlserver.driver.string" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+	<!-- Added for eMPI integration -->
+	<property name="db2.driver.string" value="com.ibm.db2.jcc.DB2Driver" />
+	<!-- end -->
 
 	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
 	<property name="oracle.lib" value="ojdbc14.jar" />
@@ -678,6 +681,16 @@
 			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
 			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
+
+
+		<!-- added by Geeta .For eMPI integration -->
+			<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
+			<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
+			<replacefilter token="@@empiDBUserPassword@@" value="${empi.database.password}" />
+			<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
+			<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
+		<!-- END -->
+
 		</replace>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
