@@ -7,16 +7,12 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Container;
@@ -34,7 +30,6 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -147,7 +142,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean) throws BizLogicException
 
 	{
-		final SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
+		/*final SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
 		final SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
 
 		if (specimenArrayOldObject != null && specimenArrayOldObject.getLocatedAtPosition() != null
@@ -186,7 +181,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				cont.setName((String) disabledContDetails.get(contNameKey));
 			}
 
-		}
+		}*/
 		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 	}
 
@@ -301,15 +296,15 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			if (Status.ACTIVITY_STATUS_DISABLED.toString()
 					.equals(specimenArray.getActivityStatus()))
 			{
-				Map disabledCont = null;
+			/*	Map disabledCont = null;
 
 				disabledCont = this.getContForDisabledSpecimenArrayFromCache();
 
 				if (disabledCont == null)
 				{
 					disabledCont = new TreeMap();
-				}
-				Object objectContainer = null;
+				}*/
+			/*	Object objectContainer = null;
 				if (specimenArray.getLocatedAtPosition() != null
 						&& specimenArray.getLocatedAtPosition().getOccupiedContainer() != null
 						&& specimenArray.getLocatedAtPosition().getOccupiedContainer().getId() != null)
@@ -322,7 +317,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 					final SpecimenArray storageContainer = (SpecimenArray) objectContainer;
 					this.addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
-				}
+				}*/
 
 				final ContainerPosition prevPosition = specimenArray.getLocatedAtPosition();
 
@@ -334,7 +329,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					dao.delete(prevPosition);
 				}
 
-				try
+				/*try
 				{
 					final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 							.getInstance();
@@ -346,7 +341,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				{
 					this.logger.debug(e.getMessage(), e);
 					throw this.getBizLogicException(e, "cache.exp", "");
-				}
+				}*/
 			}
 		}
 		catch (final DAOException daoExp)
@@ -1446,10 +1441,10 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		return isAuthorized;
 	}
 
-	/**
+/*	*//**
 	 * @return Map
 	 * @throws BizLogicException : BizLogicException
-	 */
+	 *//*
 	public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
 	{
 
@@ -1458,13 +1453,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		final Map disabledconts = (TreeMap) catissueCoreCacheManager
 				.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
 		return disabledconts;
-	}
+	}*/
 
 	/**
 	 * @param specimenarray : specimenarray
 	 * @param container : container
 	 * @param disabledConts : disabledConts
-	 */
+	 *//*
 	private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container,
 			Map disabledConts)
 	{
@@ -1482,6 +1477,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 
 		disabledConts.put(specimenarray.getId().toString(), containerDetails);
 
-	}
+	}*/
 
 }
