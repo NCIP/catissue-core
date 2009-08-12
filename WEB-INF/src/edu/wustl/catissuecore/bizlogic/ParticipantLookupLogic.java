@@ -83,7 +83,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	private int cutoffPoints;
 	private int totalPoints;
 	private boolean isSSNOrPMI = false;
-
+	private int maxNoOfParticipantsToReturn;
 	/**
 	 * This function first retrieves all the participants present in the
 	 * PARTICIPANT table. Then it checks for possible match of given participant
@@ -110,17 +110,16 @@ public class ParticipantLookupLogic implements LookupLogic
 		final Participant participant = (Participant) participantParams.getObject();
 
 		// if cutoff is greater than total points, throw exception
-		if (this.cutoffPoints > totalPointsFromProperties)
-		{
-			throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
-		}
-
+		//if (this.cutoffPoints > totalPointsFromProperties)
+		//{
+			//throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
+		//}
 		// get total points depending on Participant object created by user
-		this.totalPoints = this.calculateTotalPoints(participant);
-
+		this.cutoffPoints = Integer.valueOf(XMLPropertyHandler.getValue(Constants.CUTTOFFPOINTS));
+		this.maxNoOfParticipantsToReturn= Integer.valueOf(XMLPropertyHandler.getValue(Constants.MAX_NO_OF_PARTICIPANTS_TO_RETURN));
+		
 		// adjust cutoffPoints as per new total points
-		this.cutoffPoints = cutoffPointsFromProperties * this.totalPoints
-				/ totalPointsFromProperties;
+		//this.cutoffPoints = cutoffPointsFromProperties * this.totalPoints/ totalPointsFromProperties;
 		
 		PatientInformation patientInformation = new PatientInformation();
 		patientInformation.setLastName(participant.getLastName());
@@ -151,6 +150,7 @@ public class ParticipantLookupLogic implements LookupLogic
 						.next();
 				participantInfoMedicalIdentifierCollection.add(participantMedicalIdentifier
 						.getMedicalRecordNumber());
+				participantInfoMedicalIdentifierCollection.add(String.valueOf(participantMedicalIdentifier.getSite().getId()));
 			}
 		}
 		patientInformation
@@ -192,7 +192,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		JDBCDAO jdbcDAO =AppUtility.openJDBCSession();
 		IQueryExecutor queryExecutor = new SQLQueryExecutorImpl(jdbcDAO);
 		List<PatientInformation> patientInfoList = patientLookupObj.patientLookupService(patientInformation,
-				queryExecutor, cutoffPoints, 100);
+				queryExecutor, cutoffPoints, maxNoOfParticipantsToReturn);
 
 		
 		if (patientInfoList != null && patientInfoList.size() > 0)
