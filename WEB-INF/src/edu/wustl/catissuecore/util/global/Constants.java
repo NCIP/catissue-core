@@ -2807,4 +2807,14 @@ public class Constants
 	public static final String IDP_ENABLED="idp.enabled";
 	public static final String APP_ADDITIONAL_INFO = "app.additional.info";
 	public static final String MAX_RECORDS_PER_CACORE_QUERY_ALLOWED = "maxRecordsPercaCOREQueryAllowed";
+	
+	public static final String MAX_NO_OF_PARTICIPANTS_TO_RETURN = "maxNoOfParticipantToReturn";
+	public static final String CUTTOFFPOINTS = "cutoffPoints";
+	
+	// Added by Geeta for eMPI
+	public static final String EMPIDBURL = "empi.DBURL";
+	public static final String EMPIDBUSERNAME= "empi.DBUserName";
+	public static final String EMPIDBUSERPASSWORD = "empi.DBUserPassword";
+	public static final String EMPIDBSCHEMA = "empi.DBSchema";
+	public static final String EMPIDBDRIVERNAME = "empi.DBDriverName";
 }
