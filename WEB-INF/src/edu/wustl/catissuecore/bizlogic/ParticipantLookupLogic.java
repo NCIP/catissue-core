@@ -137,7 +137,7 @@ public class ParticipantLookupLogic implements LookupLogic
 		patientInformation.setDob(participant.getBirthDate());
 		patientInformation.setGender(participant.getGender());
 
-		Collection<String> participantInfoMedicalIdentifierCollection = new HashSet<String>();
+		Collection<String> participantInfoMedicalIdentifierCollection = new ArrayList<String>();
 
 		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
 				.getParticipantMedicalIdentifierCollection();
