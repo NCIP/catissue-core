@@ -917,13 +917,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	public List getListOfMatchingParticipants(Participant participant, LookupLogic lookupLogic)
 			throws Exception
 	{
-		Long currentTime = System.currentTimeMillis();
 		final DefaultLookupParameters params = new DefaultLookupParameters();
 		params.setObject(participant);
 		final List matchingParticipantList = lookupLogic.lookup(params);
-		System.out
-				.println(" Time take to execute **************************************************** "
-						+ (System.currentTimeMillis() - currentTime));
 		return matchingParticipantList;
 
 	}
