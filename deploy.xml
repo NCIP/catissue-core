@@ -1622,6 +1622,10 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
+		<antcall target="update_metadata_for_model_changes">
+			<param name="isUpgrade" value="true"/>
+			<param name="buildVersion" value="1.1_to_p2"/>
+		</antcall>
 	<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 	

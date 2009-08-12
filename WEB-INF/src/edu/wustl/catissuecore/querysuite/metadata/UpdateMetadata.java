@@ -113,20 +113,13 @@ public class UpdateMetadata
 			DB_SPECIFIC_COMPARE_OPERATOR = UpdateMetadataUtil.getDBCompareModifier();
 			if (IS_UPGRADE.equals("true"))
 			{
-				if (BUILD_VERSION.equalsIgnoreCase("1.1top3"))
+				if (BUILD_VERSION != null && BUILD_VERSION.equals("p2top4"))
 				{
-					updateFromRC4toP3();
+					updateFromP2toP4();
 				}
-				else if (BUILD_VERSION != null && BUILD_VERSION.equals("p2top3"))
+				else if (BUILD_VERSION != null && BUILD_VERSION.equals("1.1_to_p2"))
 				{
-					updateFromP2toP3();
-				}
-				else
-				//if 1.1 to p2
-				{
-					final AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(
-							connection);
-					addAttribute.addAttribute();
+					updateRc4ToP2();
 				}
 			}
 			else
@@ -140,7 +133,7 @@ public class UpdateMetadata
 				deletePermissibleValue();
 				addPermissibleValue();
 				cleanUpMetadata();
-				updateFromRC4toP3();
+				updateFromRC4toP4();
 			}
 		}
 		finally
@@ -160,6 +153,12 @@ public class UpdateMetadata
 		}
 	}
 
+	private static void updateRc4ToP2() throws SQLException, IOException {
+		final AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(
+				connection);
+		addAttribute.addAttribute();
+	}
+
 	/**
 	 * Updating metadata changes from P2 to P3.
 	 * Following changes done:
@@ -168,7 +167,7 @@ public class UpdateMetadata
 	 * @throws SQLException SQL Exception
 	 * @throws IOException IO Exception
 	 */
-	private static void updateFromP2toP3() throws SQLException, IOException
+	private static void updateFromP2toP4() throws SQLException, IOException
 	{
 		//bug 11336 start
 		final AddPath pathObject = new AddPath();
@@ -188,11 +187,10 @@ public class UpdateMetadata
 	 * @throws SQLException SQL Exception
 	 * @throws IOException IO Exception
 	 */
-	private static void updateFromRC4toP3() throws SQLException, IOException
+	private static void updateFromRC4toP4() throws SQLException, IOException
 	{
-		updateFromP2toP3();
-		final AddAttributesForUpgrade addAttribute = new AddAttributesForUpgrade(connection);
-		addAttribute.addAttribute();
+		updateRc4ToP2();
+		updateFromP2toP4();
 	}
 
 	/**
