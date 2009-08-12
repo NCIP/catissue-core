@@ -3648,7 +3648,7 @@ Thanking You,
 
 	<target name="upgrade_metadata_for_constraintproperties_oracle">
 		<echo message="Updating DE Model changes..." />
-		<!--<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/upgrade_metadata_cnstrProp.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -3668,7 +3668,7 @@ Thanking You,
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
-		</java>-->
+		</java>
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
 
 			<!--<transaction  src="${dbupgrade.sql.dir}/Oracle/upgrade_cnstrProp_dropColumn.sql"/>-->
