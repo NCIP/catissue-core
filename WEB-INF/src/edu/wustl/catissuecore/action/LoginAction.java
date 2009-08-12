@@ -32,6 +32,7 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * <p>
@@ -109,12 +110,8 @@ public class LoginAction extends Action
 						loginName, password);
 				if (loginOK)
 				{
-					/*
-					 * PrivilegeCache privilegeCache =
-					 * PrivilegeManager.getInstance()
-					 * .getPrivilegeCache(loginName);
-					 */
-
+					
+					PrivilegeManager.getInstance().getPrivilegeCache(loginName);
 					this.logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 					final HttpSession session = request.getSession(true);
 
