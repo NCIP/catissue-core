@@ -203,6 +203,16 @@
 		<value>5</value>
 	</property>
 	
+	<property>
+		<name>maxNoOfParticipantToReturn</name>
+		<value>100</value>
+	</property>
+	
+	<property>
+		<name>cutoffPoints</name>
+		<value>20</value>
+	</property>
+	
 	 <!-- Constants for LookUp algo end -->
 	 <!-- start-->
 	 <property>
@@ -563,4 +573,31 @@
 		<name>maxRecordsPercaCOREQueryAllowed</name>
 		<value>10000</value>
 	</property>
+	
+	<!--  Added by Geeta for EMPI integration -->
+	<property>
+		<name>empi.DBURL</name>
+		<value>@@empiDBURL@@</value>
+	</property>
+	
+	<property>
+		<name>empi.DBDriverName</name>
+		<value>@@empiDBDriverName@@</value>
+	</property>
+	
+	<property>
+		<name>empi.DBUserName</name>
+		<value>@@empiDBUserName@@</value>
+	</property>
+	
+	<property>
+		<name>empi.DBUserPassword</name>
+		<value>@@empiDBUserPassword@@</value>
+	</property>
+	
+	<property>
+		<name>empi.DBSchema</name>
+		<value>@@empiDBSchema@@</value>
+	</property>
+	
 </properties>
