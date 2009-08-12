@@ -41,7 +41,7 @@
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
 
 	<!-- flex related properties -->
-<property name="FLEX_HOME" value="D:/flex_sdk_3"/>
+<property name="FLEX_HOME" value="E:/Flex SDK 2"/>
     <property name="FLEX_APP_ROOT" value="flexclient"/>
 	<property name="flex.dir" value="${base.dir}/WEB-INF/flex" />
 	<!-- flex related properties finish -->
@@ -560,6 +560,7 @@
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
+		<copy file="idp_deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<!--copy file="log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
