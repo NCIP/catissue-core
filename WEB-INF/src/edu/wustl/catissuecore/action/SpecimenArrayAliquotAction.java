@@ -320,68 +320,75 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		else
 		{
-			final SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);
+			final SpecimenArray specimenArray = (SpecimenArray) specimenArrayList
+					.get(0);
 			/**
 			 * Name : Virender Reviewer: Prafull Retriving
 			 * specimenArrayTypeObject replaced SpecimenArrayType arrayType =
 			 * specimenArray.getSpecimenArrayType();
 			 */
-			if (Status.ACTIVITY_STATUS_DISABLED.toString()
-					.equals(specimenArray.getActivityStatus()))
-			{
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(
+					specimenArray.getActivityStatus())) {
 				final ActionErrors errors = this.getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"errors.specimenArrayAliquots.disabled", "Parent Specimen Array"));
+						"errors.specimenArrayAliquots.disabled",
+						"Parent Specimen Array"));
 				this.saveErrors(request, errors);
 				return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 				// throw BizLogicException(
 				// "Fail to create Aliquots, Parent SpecimenArray" + " " +
 				// ApplicationProperties.getValue("error.object.disabled"));
 			}
-			final SpecimenArrayType arrayType = (SpecimenArrayType) dao.retrieveAttribute(
-					SpecimenArray.class,"id", specimenArray.getId(), "specimenArrayType");
-			form.setSpecimenArrayType(arrayType.getName());
-			form.setSpecimenClass(arrayType.getSpecimenClass());
+			final List arrayTypeList = (List) dao.retrieveAttribute(
+					SpecimenArray.class, "id", specimenArray.getId(),
+					"specimenArrayType");
+			if ((arrayTypeList != null) && (arrayTypeList.size() > 0)) {
+				final SpecimenArrayType arrayType =(SpecimenArrayType) arrayTypeList.get(0);
+				form.setSpecimenArrayType(arrayType.getName());
+				form.setSpecimenClass(arrayType.getSpecimenClass());
 
-			/**
-			 * Name: Virender Mehta Reviewer: Prafull Retrive Child Specimen
-			 * Collection from parent Specimen String[] specimenTypeArr = new
-			 * String[arrayType.getSpecimenTypeCollection().size()];
-			 */
-			final Collection specimenTypeCollection = (Collection) dao.retrieveAttribute(
-					SpecimenArrayType.class, "id",arrayType.getId(),
-					"elements(specimenTypeCollection)");
-			// String[] specimenTypeArr = new
-			// String[specimenTypeCollection.size()];
+				/**
+				 * Name: Virender Mehta Reviewer: Prafull Retrive Child Specimen
+				 * Collection from parent Specimen String[] specimenTypeArr =
+				 * new String[arrayType.getSpecimenTypeCollection().size()];
+				 */
+				final Collection specimenTypeCollection = (Collection) dao
+						.retrieveAttribute(SpecimenArrayType.class, "id",
+								arrayType.getId(),
+								"elements(specimenTypeCollection)");
+				// String[] specimenTypeArr = new
+				// String[specimenTypeCollection.size()];
 
-			final List specimenTypeList = this.setSpecimenTypes(specimenTypeCollection, form);
-			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+				final List specimenTypeList = this.setSpecimenTypes(
+						specimenTypeCollection, form);
+				request.setAttribute(Constants.SPECIMEN_TYPE_LIST,
+						specimenTypeList);
 
-			request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
+				request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType
+						.getId());
 
-			final Map aliquotMap = form.getSpecimenArrayAliquotMap();
-			
-			final SpecimenArrayAliquotsBizLogic aliquotBizLogic =
-				(SpecimenArrayAliquotsBizLogic) AbstractFactoryConfig.getInstance().getBizLogicFactory()
-					.getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
-			final long nextAvailablenumber = aliquotBizLogic
-					.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
+				final Map aliquotMap = form.getSpecimenArrayAliquotMap();
 
-			/**
-			 * Putting the default label values in the AliquotMap
-			 */
-			for (int i = 1; i <= aliquotCount; i++)
-			{
+				final SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) AbstractFactoryConfig
+						.getInstance().getBizLogicFactory().getBizLogic(
+								Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
+				final long nextAvailablenumber = aliquotBizLogic
+						.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
 
-				final String labelKey = "SpecimenArray:" + i + "_label";
-				final String aliquotLabel = specimenArrayLabel + "_"
-						+ (nextAvailablenumber + i - 1);
-				aliquotMap.put(labelKey, aliquotLabel);
+				/**
+				 * Putting the default label values in the AliquotMap
+				 */
+				for (int i = 1; i <= aliquotCount; i++) {
+
+					final String labelKey = "SpecimenArray:" + i + "_label";
+					final String aliquotLabel = specimenArrayLabel + "_"
+							+ (nextAvailablenumber + i - 1);
+					aliquotMap.put(labelKey, aliquotLabel);
+				}
+
+				form.setSpecimenArrayAliquotMap(aliquotMap);
+				form.setSpecimenArrayId("" + specimenArray.getId());
 			}
-
-			form.setSpecimenArrayAliquotMap(aliquotMap);
-			form.setSpecimenArrayId("" + specimenArray.getId());
-
 		}
 
 		return Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT;

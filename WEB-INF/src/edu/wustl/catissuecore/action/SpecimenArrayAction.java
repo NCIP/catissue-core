@@ -239,6 +239,8 @@ public class SpecimenArrayAction extends SecureAction
 				initialValues = StorageContainerUtil.setInitialValue(
 						specimenArrayBizLogic, specimenArrayForm, containerMap,dao);
 			}
+			Long storageContainerId = Long.valueOf(specimenArrayForm.getStorageContainer());
+			StorageContainerUtil.addAllocatedPositionToMap(containerMap,storageContainerId,specimenArrayForm.getPositionDimensionOne(),specimenArrayForm.getPositionDimensionTwo(),dao);
 			request.setAttribute("initValues", initialValues);
 			if (specimenTypeList == null) {
 				// In case of search & edit operation

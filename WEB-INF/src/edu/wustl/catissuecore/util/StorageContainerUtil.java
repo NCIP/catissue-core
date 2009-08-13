@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -448,12 +449,12 @@ public final class StorageContainerUtil
 	{
 		List initialValues = null;
 		String[] startingPoints = new String[]{"-1", "-1", "-1"};
-		String containerName = null;
+		//String containerName = null;
 		if (specimenArrayForm.getStorageContainer() != null
 				&& !specimenArrayForm.getStorageContainer().equals("-1"))
 		{
 			startingPoints[0] = specimenArrayForm.getStorageContainer();
-			String[] selectColumnName = {"name"};
+			/*String[] selectColumnName = {"name"};
 			String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
 			String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
@@ -464,8 +465,8 @@ public final class StorageContainerUtil
 					selectColumnName, queryWhereClause);
 			if ((containerList != null) && (!containerList.isEmpty()))
 			{
-				containerName = (String) containerList.get(0);
-			}
+				//containerName = (String) containerList.get(0);
+			}*/
 		}
 		if (specimenArrayForm.getPositionDimensionOne() != -1)
 		{
@@ -630,5 +631,44 @@ public final class StorageContainerUtil
 		}
 		return storageValue.toString();
 	}
-	
+	/**
+	 * 
+	 * @param containerMap
+	 * @param containerId
+	 * @throws BizLogicException 
+	 */
+	public static void addAllocatedPositionToMap(TreeMap containerMap,long containerId, int xPos, int yPos, DAO dao) throws BizLogicException 
+	{
+		Long relevanceCnt = 1L;
+		if((containerId!=0)&&(xPos!=0)&&(yPos!=0))
+		{
+			List parentContainerNameList;
+			try 
+			{
+				parentContainerNameList = (List)dao.retrieveAttribute(StorageContainer.class, "id" ,containerId, "name");
+				if((parentContainerNameList!=null)&&(parentContainerNameList.size()>0))
+				{
+					String parentContainerName = (String)parentContainerNameList.get(0); 
+					Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,containerId,relevanceCnt));
+					if(positionMap==null)
+					{
+						positionMap=new TreeMap(); 
+					}
+					List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
+					if(list==null)
+					{
+						list=new ArrayList();
+					}
+					list.add(new NameValueBean(yPos,yPos));
+					positionMap.put(new NameValueBean(xPos,xPos),list);
+					containerMap.put(new NameValueBean(parentContainerName,containerId,relevanceCnt),positionMap);
+				}
+			}
+			catch (DAOException e) 
+			{
+				e.printStackTrace();
+				throw new BizLogicException(e);
+			}
+		}
+	}
 }

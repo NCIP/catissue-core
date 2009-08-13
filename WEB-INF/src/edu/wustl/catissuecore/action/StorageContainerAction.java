@@ -679,7 +679,7 @@ public class StorageContainerAction extends SecureAction
 			}
 			
 			request.setAttribute("initValues", initialValues);
-			addAllocatedPositionToMap(containerMap,storageContainerForm.getParentContainerId(),storageContainerForm.getPositionDimensionOne(),storageContainerForm.getPositionDimensionTwo(),dao);
+			StorageContainerUtil.addAllocatedPositionToMap(containerMap,storageContainerForm.getParentContainerId(),storageContainerForm.getPositionDimensionOne(),storageContainerForm.getPositionDimensionTwo(),dao);
 		}
 		catch(DAOException e)
 		{
@@ -687,47 +687,7 @@ public class StorageContainerAction extends SecureAction
 			throw new BizLogicException(e);
 		}
 	}
-	/**
-	 * 
-	 * @param containerMap
-	 * @param parentContainerId
-	 * @throws BizLogicException 
-	 */
-	private void addAllocatedPositionToMap(TreeMap containerMap,long parentContainerId, int xPos, int yPos, DAO dao) throws BizLogicException 
-	{
-		Long relevanceCnt = 1L;
-		if((parentContainerId!=0)&&(xPos!=0)&&(yPos!=0))
-		{
-			
-			List parentContainerNameList;
-			try 
-			{
-				parentContainerNameList = (List)dao.retrieveAttribute(StorageContainer.class, "id" ,parentContainerId, "name");
-				if((parentContainerNameList!=null)&&(parentContainerNameList.size()>0))
-				{
-					String parentContainerName = (String)parentContainerNameList.get(0); 
-					Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt));
-					if(positionMap==null)
-					{
-						positionMap=new TreeMap(); 
-					}
-					List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
-					if(list==null)
-					{
-						list=new ArrayList();
-					}
-					list.add(new NameValueBean(yPos,yPos));
-					positionMap.put(new NameValueBean(xPos,xPos),list);
-					containerMap.put(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt),positionMap);
-				}
-			}
-			catch (DAOException e) 
-			{
-				e.printStackTrace();
-				throw new BizLogicException(e);
-			}
-		}
-	}
+	
 
 	/**
 	 * @param request
