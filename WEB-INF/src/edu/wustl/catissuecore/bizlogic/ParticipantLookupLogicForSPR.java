@@ -146,7 +146,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		// get total points depending on Participant object created by user
 		this.totalPoints = this.calculateTotalPoints(participant);
 
-		final Map<String, Participant> listOfParticipants = new ParticipantMatchingBizLogic()
+		final Map<Long, Participant> listOfParticipants = new ParticipantMatchingBizLogic()
 				.getAllParticipants(participant);
 
 		// In case List of participants is null or empty, return the Matching
@@ -210,7 +210,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 	 * @throws Exception : Exception
 	 */
 	private List<DefaultLookupResult> searchMatchingParticipant(Participant userParticipant,
-			Map<String, Participant> listOfParticipants) throws Exception
+			Map<Long, Participant> listOfParticipants) throws Exception
 	{
 		final List<DefaultLookupResult> participants = new ArrayList<DefaultLookupResult>();
 		// Iterates through all the Participants from the list
