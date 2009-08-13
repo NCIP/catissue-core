@@ -38,10 +38,10 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @return Map of all participant.
 	 * @throws BizLogicException : BizLogicException
 	 */
-	public Map<String, Participant> getAllParticipants(Participant userParticipant)
+	public Map<Long, Participant> getAllParticipants(Participant userParticipant)
 			throws BizLogicException
 	{
-		final Map<String, Participant> mapOfParticipants = new HashMap<String, Participant>();
+		final Map<Long, Participant> mapOfParticipants = new HashMap<Long, Participant>();
 		DAO dao = null;
 		Metaphone metaPhoneObj = new Metaphone();
 		try
@@ -86,7 +86,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param partiMedIdCollection : Collection of ParticipantMedicalIdentifier objects
 	 * @throws DAOException : DAOException
 	 */
-	private void getParticipantsForMRN(DAO dao, Map<String, Participant> mapOfParticipants,
+	private void getParticipantsForMRN(DAO dao, Map<Long, Participant> mapOfParticipants,
 			Collection<ParticipantMedicalIdentifier> partiMedIdCollection) throws DAOException
 	{
 		String participantQueryStr = null;
@@ -129,7 +129,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param siteId : site id
 	 * @throws DAOException : DAOException
 	 */
-	private void fuzzyMatchOnMRN1(DAO dao, Map<String, Participant> mapOfParticipants, String mrn,
+	private void fuzzyMatchOnMRN1(DAO dao, Map<Long, Participant> mapOfParticipants, String mrn,
 			String siteId) throws DAOException
 	{
 		StringBuffer tempMRNStr = new StringBuffer();
@@ -169,7 +169,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param siteId : site id.
 	 * @throws DAOException :  DAOException.
 	 */
-	private void fuzzyMatchOnMRN2(DAO dao, Map<String, Participant> mapOfParticipants, String mrn,
+	private void fuzzyMatchOnMRN2(DAO dao, Map<Long, Participant> mapOfParticipants, String mrn,
 			String siteId) throws DAOException
 	{
 		char[] charArray = null;
@@ -223,7 +223,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param ssn : ssn value.
 	 * @throws DAOException : DAOException
 	 */
-	private void getParticipantsForSSN(DAO dao, Map<String, Participant> mapOfParticipants,
+	private void getParticipantsForSSN(DAO dao, Map<Long, Participant> mapOfParticipants,
 			String ssn) throws DAOException
 	{
 		String participantQueryStr = null;
@@ -253,7 +253,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param ssn : ssn value.
 	 * @throws DAOException : DAOException
 	 */
-	private void fuzzyMatchOnSSN1(DAO dao, Map<String, Participant> mapOfParticipants, String ssn)
+	private void fuzzyMatchOnSSN1(DAO dao, Map<Long, Participant> mapOfParticipants, String ssn)
 			throws DAOException
 	{
 		List<Participant> listOfParticipants = null;
@@ -294,7 +294,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param ssn : ssn value.
 	 * @throws DAOException : DAOException
 	 */
-	private void fuzzyMatchOnSSN2(DAO dao, Map<String, Participant> mapOfParticipants, String ssn)
+	private void fuzzyMatchOnSSN2(DAO dao, Map<Long, Participant> mapOfParticipants, String ssn)
 			throws DAOException
 	{
 		List<Participant> listOfParticipants = null;
@@ -343,7 +343,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param lastName : last name.
 	 * @throws DAOException : DAOException
 	 */
-	private void getParticipantsForLName(DAO dao, Map<String, Participant> mapOfParticipants,
+	private void getParticipantsForLName(DAO dao, Map<Long, Participant> mapOfParticipants,
 			String lastName) throws DAOException
 	{
 		String participantQueryStr = null;
@@ -362,7 +362,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException :DAOException
 	 */
 	private void getParticipantsForLNameMetaPhone(DAO dao,
-			Map<String, Participant> mapOfParticipants, String metaPhoneCode) throws DAOException
+			Map<Long, Participant> mapOfParticipants, String metaPhoneCode) throws DAOException
 	{
 		String participantQueryStr = null;
 		List<Participant> listOfParticipants = null;
@@ -377,7 +377,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param mapOfParticipants : Map of participants.
 	 * @param listOfParticipants : list of participants.
 	 */
-	private void populateParticipantMap(Map<String, Participant> mapOfParticipants,
+	private void populateParticipantMap(Map<Long, Participant> mapOfParticipants,
 			List<Participant> listOfParticipants)
 	{
 		Participant participant = null;
@@ -387,8 +387,11 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			while (participantIterator.hasNext())
 			{
 				participant = (Participant) participantIterator.next();
-				Long participantId = participant.getId();
-				mapOfParticipants.put(String.valueOf(participantId), participant);
+				final Participant cloneParticipant = new Participant(participant);
+				final Long participantId = cloneParticipant.getId();
+				mapOfParticipants.put(participantId, cloneParticipant);
+				//Long participantId = participant.getId();
+				//mapOfParticipants.put(String.valueOf(participantId), participant);
 			}
 		}
 	}
@@ -399,7 +402,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param mapOfParticipants : map of participants.
 	 * @param listOfParticipantsMedId : list of ParticipantMedicalIdentifier object,
 	 */
-	private void populateParticipantMapForMRN(Map<String, Participant> mapOfParticipants,
+	private void populateParticipantMapForMRN(Map<Long, Participant> mapOfParticipants,
 			List<ParticipantMedicalIdentifier> listOfParticipantsMedId)
 	{
 		Participant participant = null;
@@ -412,8 +415,11 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			{
 				participantMedIdObj = (ParticipantMedicalIdentifier) participantIterator.next();
 				participant = participantMedIdObj.getParticipant();
-				Long participantId = participant.getId();
-				mapOfParticipants.put(String.valueOf(participantId), participant);
+				final Participant cloneParticipant = new Participant(participant);
+				final Long participantId = cloneParticipant.getId();
+				mapOfParticipants.put(participantId, cloneParticipant);
+				//Long participantId = participant.getId();
+				//mapOfParticipants.put(participantId, participant);
 			}
 		}
 	}
