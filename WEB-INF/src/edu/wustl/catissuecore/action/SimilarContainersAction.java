@@ -358,14 +358,18 @@ public class SimilarContainersAction extends SecureAction
 					if (containerObject != null) {
 						final StorageContainer container = (StorageContainer) containerObject;
 
-						final Site site = (Site) dao.retrieveAttribute(
+						final List siteList = (List) dao.retrieveAttribute(
 								StorageContainer.class, "id" , container
 										.getId(), "site");//container.getSite();
-						similarContainersForm.setSiteName(site.getName());
-						siteName = site.getName();
-						siteId = site.getId().longValue();
-						this.logger.debug("Site Name :"
-								+ similarContainersForm.getSiteName());
+						if((siteList!=null)&&(siteList.size()>0))
+						{
+							final Site site = (Site)siteList.get(0);
+							similarContainersForm.setSiteName(site.getName());
+							siteName = site.getName();
+							siteId = site.getId().longValue();
+							this.logger.debug("Site Name :"
+									+ similarContainersForm.getSiteName());
+						}
 					}
 				}
 			}
