@@ -703,21 +703,23 @@ public class StorageContainerAction extends SecureAction
 			try 
 			{
 				parentContainerNameList = (List)dao.retrieveAttribute(StorageContainer.class, "id" ,parentContainerId, "name");
-			
-				String parentContainerName = (String)parentContainerNameList.get(0); 
-				Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt));
-				if(positionMap==null)
+				if((parentContainerNameList!=null)&&(parentContainerNameList.size()>0))
 				{
-					positionMap=new TreeMap(); 
+					String parentContainerName = (String)parentContainerNameList.get(0); 
+					Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt));
+					if(positionMap==null)
+					{
+						positionMap=new TreeMap(); 
+					}
+					List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
+					if(list==null)
+					{
+						list=new ArrayList();
+					}
+					list.add(new NameValueBean(yPos,yPos));
+					positionMap.put(new NameValueBean(xPos,xPos),list);
+					containerMap.put(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt),positionMap);
 				}
-				List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
-				if(list==null)
-				{
-					list=new ArrayList();
-				}
-				list.add(new NameValueBean(yPos,yPos));
-				positionMap.put(new NameValueBean(xPos,xPos),list);
-				containerMap.put(new NameValueBean(parentContainerName,parentContainerId,relevanceCnt),positionMap);
 			}
 			catch (DAOException e) 
 			{
