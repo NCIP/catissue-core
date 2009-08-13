@@ -2907,16 +2907,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			if (absScg != null)
 			{
 				//Collection consentTierStatusCollection = new HashSet();
-				final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
-						dao, SpecimenCollectionGroup.class, absScg.getId(),
-						"elements(consentTierStatusCollection)");
-				if (consentTierStatusCollection != null)
+				if(absScg.getConsentTierStatusCollection() == null ||
+						absScg.getConsentTierStatusCollection().size() == 0)
 				{
+					final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
+							dao, SpecimenCollectionGroup.class, absScg.getId(),
+							"elements(consentTierStatusCollection)");
 					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
-				}
-				else
-				{
-					throw this.getBizLogicException(null, "failed.ret.scg.consent.tier", "");
 				}
 			}
 			return absScg;

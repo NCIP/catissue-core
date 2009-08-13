@@ -916,6 +916,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private Specimen getParentSpecimenByLabel(DAO dao, Specimen parentSpecimen)
 			throws BizLogicException
 	{
+		List parentSpecimenList = null;
 		try
 		{
 			String value = parentSpecimen.getLabel();
@@ -925,8 +926,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				column = "barcode";
 				value = parentSpecimen.getBarcode();
 			}
-			//parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
-			final String sourceObjectName = Specimen.class.getName();
+			parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
+			if (parentSpecimenList == null || parentSpecimenList.isEmpty())
+			{
+				throw this.getBizLogicException(null, "invalid.label.barcode", value);
+
+			}
+			parentSpecimen = (Specimen) parentSpecimenList.get(0);
+			/*final String sourceObjectName = Specimen.class.getName();
 			final String[] selectColumnName = {"activityStatus", "createdOn",
 					"specimenCollectionGroup.id", "specimenCollectionGroup.activityStatus", "id",
 					"pathologicalStatus", "specimenCharacteristics.id", "availableQuantity",
@@ -946,7 +953,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				throw this.getBizLogicException(null, "invalid.label.barcode", value);
 			}
-			parentSpecimen = this.retrieveParentSpecimenCollectionTypeData(dao, parentSpecimen);
+			parentSpecimen = this.retrieveParentSpecimenCollectionTypeData(dao, parentSpecimen);*/
 		}
 		catch (final DAOException daoExp)
 		{
