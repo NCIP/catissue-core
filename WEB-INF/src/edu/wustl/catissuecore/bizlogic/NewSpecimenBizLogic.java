@@ -559,7 +559,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				specimen, disposalReason);
 		final SpecimenEventParametersBizLogic specimenEventParametersBizLogic =
 			new SpecimenEventParametersBizLogic();
-		specimenEventParametersBizLogic.insert(disposalEvent, sessionDataBean);
+		specimenEventParametersBizLogic.insert(disposalEvent, dao, sessionDataBean);
 		((Specimen) specimen).setIsAvailable(Boolean.FALSE);
 		specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 	}
