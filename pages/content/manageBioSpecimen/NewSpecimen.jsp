@@ -1546,16 +1546,16 @@
 								</td>
 								<td align="left" class="black_ar">
 					<%
-						boolean concentrationDisabled = true;
-						if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+						//boolean concentrationDisabled = true;
+						if(form.getClassName().equals("Molecular") && Constants.ALIQUOT.equals(form.getLineage()))
 						{
-								concentrationDisabled = false;
+								//concentrationDisabled = false;
 								// Fix for bug #9950
-								// readOnlyForAll = true;	
+								readOnlyForAll = true;	
 						}
 					%>
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right"
-							     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
+							     		readonly="<%=readOnlyForAll%>" disabled="false"/>
 										<bean:message key="specimen.concentrationUnit"/>
 								</td>
 							</tr>
