@@ -214,19 +214,25 @@ public class StorageContainerAction extends SecureAction
 						.println("Time taken for getAllocatedMapForCOntainer:"
 								+ (end - start));
 			}
-			if (containerId != null) {
+			if (containerId != null) 
+			{
 				final Long id = new Long(containerId);
-				final StorageType storageType = (StorageType) dao
+				final List storageTypeList =  dao
 						.retrieveAttribute(StorageContainer.class, "id", id,
 								"storageType");
-				final Long typeId = storageType.getId();
-				final long start = System.currentTimeMillis();
-				containerMap = bizLogic.getAllocatedContaienrMapForContainer(
-						typeId, exceedingMaxLimit, null, sessionDataBean, dao);
-				final long end = System.currentTimeMillis();
-				System.out
-						.println("Time taken for getAllocatedMapForCOntainer:"
-								+ (end - start));
+				if((storageTypeList!=null)&&(storageTypeList.size()>0))
+				{
+					final StorageType storageType = (StorageType)storageTypeList.get(0);
+					final Long typeId = storageType.getId();
+					final long start = System.currentTimeMillis();
+					containerMap = bizLogic.getAllocatedContaienrMapForContainer(
+							typeId, exceedingMaxLimit, null, sessionDataBean, dao);
+					final long end = System.currentTimeMillis();
+					System.out
+							.println("Time taken for getAllocatedMapForCOntainer:"
+									+ (end - start));
+
+				}
 			}
 
 			if (operation.equals(Constants.ADD)) {

@@ -139,7 +139,7 @@ public final class ConsentUtil
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,scg.getId(),"elements(specimenCollection)"); 
+		List specimenCollection =dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,scg.getId(),"elements(specimenCollection)");
 		Collection updatedSpecimenCollection = new HashSet();
 		if(specimenCollection != null)
 		{
@@ -301,9 +301,10 @@ public final class ConsentUtil
 		{
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-			Long specimenId = (Long)specimen.getId();	
-			Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimenId, "elements(childSpecimenCollection)");
-
+			Long specimenId = (Long)specimen.getId();
+			
+			List childSpecimens = dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimenId, "elements(childSpecimenCollection)");
+			
 			//Collection childSpecimens = specimen.getChildrenSpecimen();
 			if(childSpecimens!=null)
 			{	
@@ -349,7 +350,8 @@ public final class ConsentUtil
 		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, parentSpecimen.getId(), "elements(consentTierStatusCollection)"); 
+		
+		List parentStatusCollection = dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, parentSpecimen.getId(), "elements(consentTierStatusCollection)");
 		
 		if(parentStatusCollection != null)
 		{
@@ -417,7 +419,8 @@ public final class ConsentUtil
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getId(),"elements(specimenCollection)");  
+	
+		List specimenCollection = dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getId(),"elements(specimenCollection)");
 		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
@@ -715,12 +718,16 @@ public final class ConsentUtil
     		Collection partiResponseCollection,String statusResponse, String statusResponseId)
 	   {
 	    	//Map tempMap = new HashMap();
+    	
     	    Map tempMap = new LinkedHashMap();//8905
     	    Map returnMap = null;
     	    Set sortedStatusSet = new LinkedHashSet();
 	    	List sortStatus = new ArrayList();
 	    	//bug 8905
-	    	sortStatus.addAll(statusResponseCollection);
+	    	if(statusResponseCollection!=null)
+	    	{
+	    		sortStatus.addAll(statusResponseCollection);
+	    	}
 	    	Collections.sort(sortStatus,new IdComparator());
 	    	sortedStatusSet.addAll(sortStatus);
 //	    	bug 8905

@@ -1576,13 +1576,9 @@ public class AppUtility
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return specimenCollectionGroupObject
 	 */
-	public static SpecimenCollectionGroup getSCGObj(String scg_id) throws ApplicationException
+	public static SpecimenCollectionGroup getSCGObj(String scg_id,DAO dao) throws ApplicationException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic) factory
-				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-
-		Object object = specimenCollectionBizLogic.retrieve(
+		Object object = dao.retrieveById(
 				SpecimenCollectionGroup.class.getName(), Long.valueOf(scg_id));
 		SpecimenCollectionGroup specimenCollectionGroupObject = null;
 		if (object != null)

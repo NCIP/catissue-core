@@ -4287,13 +4287,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 * @return Specimen
 	 */
-	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData)
+	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData,DAO dao)
 			throws BizLogicException
 	{
-		DAO dao = null;
+		
 		try
 		{
-			dao = this.openDAOSession(sessionData);
 			final Specimen specimen = this.getSpecimenObj(specimenID, dao);
 			this.getSpecimenInternal(specimen, finalDataList);
 			specimen.getConsentTierStatusCollection();
@@ -4307,18 +4306,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(exception, "failed.spec.details", " "
 					+ exception.getMessage());
 		}
-		finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (final DAOException e)
-			{
-				this.logger.debug(e.getMessage(), e);
-				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-			}
-		}
+		
 	}
 
 	/**
