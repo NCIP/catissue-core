@@ -2851,7 +2851,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						registration.setId((Long) valArr[0]);
 						registration.setCollectionProtocol(collectionProtocol);
 						final String activityStatus = (String) valArr[2];
-						absScg = new SpecimenCollectionGroup();
+						absScg = (SpecimenCollectionGroup)scg;
 						absScg.setId(scg.getId());
 						absScg.setActivityStatus(activityStatus);
 						absScg.setCollectionProtocolRegistration(registration);
@@ -2883,7 +2883,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					{
 						final Long identifier = (Long) valArr[0];
 						final String activityStatus = (String) valArr[1];
-						absScg = new SpecimenCollectionGroup();
+						absScg = (SpecimenCollectionGroup)scg;
 						absScg.setName(scg.getGroupName());
 						absScg.setId(identifier);
 						absScg.setActivityStatus(activityStatus);
