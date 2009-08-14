@@ -4747,6 +4747,7 @@ PUBLIC
 		<forward name="printDeriveSpecimen" path="/printDeriveSpecimen.do" />
 		<forward name="newSpecimenEdit" path="/QuerySpecimenSearch.do?operation=search&amp;pageOf=pageOfNewSpecimenCPQuery&amp;id=0" />
 		<forward name="addSpecimenToCart" path="/AddDeriveSpecimenToCart.do?pageOf=pageOfNewSpecimenCPQuery" />
+		<forward name="orderDetails" path="/RequestDetails.do" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
