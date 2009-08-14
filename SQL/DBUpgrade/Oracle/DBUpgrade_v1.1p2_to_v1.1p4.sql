@@ -24,3 +24,7 @@ ALTER TABLE CATISSUE_PARTICIPANT ADD LNAME_METAPHONE varchar2(50);
 /*EMPI Alter table changes.(Shital)*/
 
 ALTER TABLE catissue_participant ADD EMPI_ID varchar2(50);
+
+-- This query is specific to p2 production dump and for NACC neuropathology form.
+-- On other P2/rc4 dump, this query mey get fail. 
+update DYEXTN_CATEGORY_ENTITY set REL_ATTR_CAT_ENTITY_ID = 3651 where identifier = 3699;
