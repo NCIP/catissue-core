@@ -1875,7 +1875,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		final String hql = "select cp.id ,cp.title, cp.shortTitle from "
 				+ CollectionProtocol.class.getName() + " as cp where  cp.activityStatus != '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' and  (cp." + Constants.CP_TYPE
-				+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null)";
+				+ "= '" + Constants.PARENT_CP_TYPE + "' or cp.type = null or cp.type = '')";
 		return hql;
 	}
 
