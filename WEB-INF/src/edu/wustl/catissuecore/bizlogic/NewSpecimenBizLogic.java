@@ -182,10 +182,29 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			if (parentSpecimen.getId() != null)
-			{
-
-				parentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen
-						.getParentSpecimen().getId());
+			{				
+				/*parentSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen
+						.getParentSpecimen().getId());*/
+				final String sourceObjectName = Specimen.class.getName();
+				final String[] selectColumnName = {"activityStatus", "createdOn",
+					"specimenCollectionGroup.id", "specimenCollectionGroup.activityStatus",
+					"label", "pathologicalStatus", "specimenCharacteristics.id",
+					"availableQuantity", "collectionStatus"};
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new EqualClause("id", parentSpecimen.getId()));
+				final List list = dao
+						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				if (list.size() != 0)
+				{
+					retrieveParentSpecimenDetailsFromId(dao, parentSpecimen, list);
+				}
+				else
+				{
+					throw this.getBizLogicException(null, "invalid.parent.specimen.identifier",
+							parentSpecimen.getId().toString());
+				}
+				parentSpecimen = this.retrieveParentSpecimenCollectionTypeData
+								(dao, parentSpecimen);
 			}
 			else if (parentSpecimen.getLabel() != null)
 			{
@@ -212,8 +231,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			parentSpecimen.setActivityStatus((String) valArr[0]);
 			parentSpecimen.setCreatedOn((Date) valArr[1]);
 
-			final SpecimenCollectionGroup specimenCollectionGroup =
-				new SpecimenCollectionGroup();
+			SpecimenCollectionGroup specimenCollectionGroup = null;
+			if(parentSpecimen.getSpecimenCollectionGroup() != null)
+				specimenCollectionGroup = parentSpecimen.getSpecimenCollectionGroup();
+			else
+				specimenCollectionGroup = new SpecimenCollectionGroup();
 			specimenCollectionGroup.setId((Long) valArr[2]);
 			specimenCollectionGroup.setActivityStatus((String) valArr[3]);
 			parentSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -255,9 +277,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			final Object[] valArr = (Object[]) list.get(0);
 			if (valArr != null)
 			{
-				final SpecimenPosition position = new SpecimenPosition();
+				SpecimenPosition position = null;
+				if(parentSpecimen.getSpecimenPosition() != null)
+					position = parentSpecimen.getSpecimenPosition();
+				else
+					position = new SpecimenPosition();
 				position.setId((Long) valArr[0]);
-				final StorageContainer storageContainer = new StorageContainer();
+				
+				StorageContainer storageContainer = null;
+				if(position.getStorageContainer() != null)
+					storageContainer = parentSpecimen.getSpecimenPosition().getStorageContainer();
+				else
+					storageContainer = new StorageContainer();
 				storageContainer.setId((Long) valArr[1]);
 				storageContainer.setName((String) valArr[2]);
 				position.setStorageContainer(storageContainer);
@@ -926,14 +957,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				column = "barcode";
 				value = parentSpecimen.getBarcode();
 			}
-			parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
+			/*parentSpecimenList = dao.retrieve(Specimen.class.getName(), column, value);
 			if (parentSpecimenList == null || parentSpecimenList.isEmpty())
 			{
 				throw this.getBizLogicException(null, "invalid.label.barcode", value);
 
 			}
-			parentSpecimen = (Specimen) parentSpecimenList.get(0);
-			/*final String sourceObjectName = Specimen.class.getName();
+			parentSpecimen = (Specimen) parentSpecimenList.get(0);*/
+			final String sourceObjectName = Specimen.class.getName();
 			final String[] selectColumnName = {"activityStatus", "createdOn",
 					"specimenCollectionGroup.id", "specimenCollectionGroup.activityStatus", "id",
 					"pathologicalStatus", "specimenCharacteristics.id", "availableQuantity",
@@ -953,7 +984,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				throw this.getBizLogicException(null, "invalid.label.barcode", value);
 			}
-			parentSpecimen = this.retrieveParentSpecimenCollectionTypeData(dao, parentSpecimen);*/
+			parentSpecimen = this.retrieveParentSpecimenCollectionTypeData(dao, parentSpecimen);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -1950,6 +1981,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					{
 						storageContainerObj = retreieveStorageContainerOfSpecimen(
 								dao, specimen, storageContainerObj);
+						if(storageContainerObj == null)
+						{
+							storageContainerObj = specimen.getSpecimenPosition().
+														getStorageContainer();
+						}
 					}
 					else
 					{

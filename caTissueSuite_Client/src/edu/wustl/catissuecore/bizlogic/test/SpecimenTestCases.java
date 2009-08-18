@@ -1862,12 +1862,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			specimenObj.setCollectionStatus("Collected");
 			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 
-			TissueSpecimen parentSpecimen = new TissueSpecimen();
-			parentSpecimen.setId(specimenObj.getId());
-			parentSpecimen = (TissueSpecimen) appService.search(TissueSpecimen.class, parentSpecimen).iterator().next();
-
 			TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-			childSpecimen1.setParentSpecimen(parentSpecimen);
+			childSpecimen1.setParentSpecimen(specimenObj);
 			childSpecimen1.setLineage("Aliquot");
 			childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);

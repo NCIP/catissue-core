@@ -128,7 +128,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
 				}
 			}
-			/*final String sourceObjectName = CollectionProtocolEvent.class.getName();
+			final String sourceObjectName = CollectionProtocolEvent.class.getName();
 			final String[] selectColumnName = {"activityStatus", "collectionProtocol.id",
 					"collectionProtocol.activityStatus"};
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
@@ -142,7 +142,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final Object[] valArr = (Object[]) list.get(0);
 				if (valArr != null)
 				{
-					cpe = new CollectionProtocolEvent();
+					if(specimenCollectionGroup.getCollectionProtocolEvent() != null)
+						cpe = (CollectionProtocolEvent) specimenCollectionGroup.getCollectionProtocolEvent();
+					else
+						cpe = new CollectionProtocolEvent();
 					cpe.setId(specimenCollectionGroup.getCollectionProtocolEvent().getId());
 					cpe.setActivityStatus((String) valArr[0]);
 
@@ -151,11 +154,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					collectionProtocol.setActivityStatus((String) valArr[2]);
 					cpe.setCollectionProtocol(collectionProtocol);
 				}
-			}*/
+			}
 
-			final Object collectionProtocolEventObj = dao.retrieveById(
+			/*final Object collectionProtocolEventObj = dao.retrieveById(
 					CollectionProtocolEvent.class.getName(), specimenCollectionGroup
-							.getCollectionProtocolEvent().getId());
+							.getCollectionProtocolEvent().getId());*/
 			Collection specimenCollection = null;
 			final Long userId = AppUtility.getUserID(dao, sessionDataBean);
 			if (Constants.REPORT_LOADER_SCG.equals(specimenCollectionGroup.getBarcode())
@@ -166,9 +169,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			this.setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 
-			if (collectionProtocolEventObj != null)
+			if (cpe != null)
 			{
-				final CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
+				//final CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
 				// check for closed CollectionProtocol
 				this.checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 				specimenCollectionGroup.setCollectionProtocolEvent(cpe);
