@@ -103,19 +103,19 @@
 			</classpath>
 		</javac>
 	</target>
-	<target name="configureMasking" depends="dropTempTable">
+	<target name="runAdditionalMasking">
 			<echo message="${configure.masking}" />
 			<if>
 					<equals arg1="${databaseType}" arg2="mysql" />
 					<then>
 						<sql onerror="stop" keepformat="true"
 							driver="${mysql.driver.string}"
-							url="jdbc:mysql://${privateDBHost}:${privateDBPort}/${stagingDBName}"
-							userid="${stagingDBUserName}"
-							password="${stagingDBPassword}" >
+							url="jdbc:mysql://${param1}:${param2}/${param3}"
+							userid="${param4}"
+							password="${param5}">
 								<classpath refid="cp1"/>
 								<transaction   src="${basedir}/sql/mask.sql"/>
-							</sql> 
+						</sql> 
 					</then>
 			</if>
 			<if>
@@ -123,9 +123,9 @@
 				<then>
 					<sql onerror="stop" keepformat="true"
 	                    driver="oracle.jdbc.driver.OracleDriver"
-	                    url="jdbc:oracle:thin:@${privateDBHost}:${privateDBPort}:${privateDBName}"
-	                    userid="${privateDBUserName}"
-	                    password="${privateDBPassword}" >
+		                url="jdbc:oracle:thin:@${param1}:${param2}:${param3}" 
+		                userid="${param4}" 
+		                password="${param5}">
 	                        <classpath refid="cp1"/>
 	                        <transaction   src="${basedir}/sql/mask.sql"/>
 	                </sql> 
@@ -140,9 +140,9 @@
 				<then>
 					<sql onerror="stop" keepformat="true" delimiter="/"
 						driver="${mysql.driver.string}"
-						url="jdbc:mysql://${publicDBHost}:${publicDBPort}/${publicDBName}"
-						userid="${publicDBUserName}"
-						password="${publicDBPassword}" >
+						url="jdbc:mysql://${param1}:${param2}/${param3}"
+						userid="${param4}"
+						password="${param5}" >
 							<classpath refid="cp1"/>
 							<transaction   src="${basedir}/sql/mask_proc.sql"/>
 					</sql> 
@@ -153,9 +153,9 @@
 				<then>
 	          	  <sql onerror="stop" keepformat="true" delimiter="/"
 	                driver="oracle.jdbc.driver.OracleDriver" 
-	                url="jdbc:oracle:thin:@${publicDBHost}:${publicDBPort}:${publicDBName}" 
-	                userid="${publicDBUserName}" 
-	                password="${publicDBPassword}" >
+	                url="jdbc:oracle:thin:@${param1}:${param2}:${param3}" 
+	                userid="${param4}" 
+	                password="${param5}" >
 	            		<classpath refid="cp1"/>
 	              		<transaction   src="${basedir}/sql/mask_proc.sql"/>
 	        	  </sql>
@@ -176,10 +176,23 @@
 			</classpath>
 			<classpath refid="cp1"/>
 		</java>
-		<antcall target="dropTempTable"/>
+		<antcall target="dropTempTable">
+			<param name="param1" value="${publicDBHost}"/>
+			<param name="param2" value="${publicDBPort}"/>
+			<param name="param3" value="${publicDBName}"/>
+			<param name="param4" value="${publicDBUserName}"/>
+			<param name="param5" value="${publicDBPassword}"/>
+		</antcall>
+		<antcall target="runAdditionalMasking">
+			<param name="param1" value="${publicDBHost}"/>
+			<param name="param2" value="${publicDBPort}"/>
+			<param name="param3" value="${publicDBName}"/>
+			<param name="param4" value="${publicDBUserName}"/>
+			<param name="param5" value="${publicDBPassword}"/>
+		</antcall>
 	</target>
 
-	<target name="maskData" depends="compile,dropTempTable" >
+	<target name="maskData" depends="compile" >
 			<java classname="edu.wustl.catissuecore.privatepublicmigrator.MaskData" maxmemory="1024m" fork="true">
 				<classpath>
 					<pathelement location="${classes.dir}"/>
@@ -187,7 +200,22 @@
 				</classpath>
 				<classpath refid="cp1"/>
 			</java>
+		<antcall target="dropTempTable">
+			<param name="param1" value="${stagingDBHost}"/>
+			<param name="param2" value="${stagingDBPort}"/>
+			<param name="param3" value="${stagingDBName}"/>
+			<param name="param4" value="${stagingDBUserName}"/>
+			<param name="param5" value="${stagingDBPassword}"/>
+		</antcall>
+		<antcall target="runAdditionalMasking">
+			<param name="param1" value="${stagingDBHost}"/>
+			<param name="param2" value="${stagingDBPort}"/>
+			<param name="param3" value="${stagingDBName}"/>
+			<param name="param4" value="${stagingDBUserName}"/>
+			<param name="param5" value="${stagingDBPassword}"/>
+		</antcall>
 	</target>
+	
 	<target name="replaceToken" >
 		<copy file="./conf/hibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
@@ -197,7 +225,7 @@
 			<then>
 				<replace dir="${classes.dir}">
 						<replacefilter token="@@JDBC_DRIVER@@" value="com.mysql.jdbc.Driver" />
-						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:mysql://${privateDBHost}:${privateDBPort}/${stagingDBName}" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:mysql://${stagingDBHost}:${stagingDBPort}/${stagingDBName}" />
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
 				</replace>
@@ -209,7 +237,7 @@
 			</then>
 		</if>
 		
-		<mkdir dir="${basedir}/sql"/>
+		
 		<if>
 			<equals arg1="${databaseType}" arg2="oracle"/>
 			
@@ -217,7 +245,7 @@
 				<replace dir="${classes.dir}">
 						<replacefilter token="org.hibernate.dialect.MySQLDialect" value="org.hibernate.dialect.Oracle9Dialect" />
 						<replacefilter token="@@JDBC_DRIVER@@" value="oracle.jdbc.driver.OracleDriver" />
-						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${privateDBHost}:${privateDBPort}:${stagingDBName}" />
+						<replacefilter token="@@CONNECTION_URL@@" value="jdbc:oracle:thin:@${stagingDBHost}:${stagingDBPort}:${stagingDBName}" />
 						<replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}" />
 						<replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}" />
 				</replace>
