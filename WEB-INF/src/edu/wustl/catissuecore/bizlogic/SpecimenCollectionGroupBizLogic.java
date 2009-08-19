@@ -2821,114 +2821,102 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @return SpecimenCollectionGroup
 	 * @throws BizLogicException : BizLogicException
 	 */
+	//bug 13776 start
 	public SpecimenCollectionGroup retrieveSCG(DAO dao, AbstractSpecimenCollectionGroup scg)
 			throws BizLogicException
 	{
 		try
 		{
-			final List scgList = null;
-			SpecimenCollectionGroup absScg = null;
+			SpecimenCollectionGroup absScg =  null;
+			String sourceObjectName = SpecimenCollectionGroup.class.getName();
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			if (scg.getId() != null)
 			{
-				//absScg = (SpecimenCollectionGroup) dao.retrieve(
-				//SpecimenCollectionGroup.class.getName(),scg.getId());
-				final String sourceObjectName = SpecimenCollectionGroup.class.getName();
-				final String[] selectColumnName = {"collectionProtocolRegistration.id",
-					"collectionProtocolRegistration.collectionProtocol.id", "activityStatus",
-					"collectionProtocolRegistration.collectionProtocol.activityStatus"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("id", scg.getId()));
-				final List list = dao
-						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-				if (list.size() != 0)
-				{
-					final Object[] valArr = (Object[]) list.get(0);
-					if (valArr != null)
-					{
-						final CollectionProtocol collectionProtocol =
-								new CollectionProtocol();
-						collectionProtocol.setId((Long) valArr[1]);
-						collectionProtocol.setActivityStatus((String) valArr[3]);
-						final CollectionProtocolRegistration registration =
-								new CollectionProtocolRegistration();
-						registration.setId((Long) valArr[0]);
-						registration.setCollectionProtocol(collectionProtocol);
-						final String activityStatus = (String) valArr[2];
-						absScg = (SpecimenCollectionGroup)scg;
-						absScg.setId(scg.getId());
-						absScg.setActivityStatus(activityStatus);
-						absScg.setCollectionProtocolRegistration(registration);
-					}
-				}
-				else
-				{
-					absScg = (SpecimenCollectionGroup) scg;
-					absScg.setId(scg.getId());
-				}
+				queryWhereClause.addCondition(new EqualClause("id", scg.getId()));				
 			}
 			else if (scg.getGroupName() != null)
 			{
-				//scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-				//Constants.NAME, scg.getGroupName());
-				final String sourceObjectName = SpecimenCollectionGroup.class.getName();
-				final String[] selectColumnName = {"id", "activityStatus",
-					"collectionProtocolRegistration.id",
-					"collectionProtocolRegistration.collectionProtocol.id",
-					"collectionProtocolRegistration.collectionProtocol.activityStatus"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause("name", scg.getGroupName()));
-				final List list = dao
-						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-				if (list.size() != 0)
-				{
-					final Object[] valArr = (Object[]) list.get(0);
-					if (valArr != null)
-					{
-						final Long identifier = (Long) valArr[0];
-						final String activityStatus = (String) valArr[1];
-						absScg = (SpecimenCollectionGroup)scg;
-						absScg.setName(scg.getGroupName());
-						absScg.setId(identifier);
-						absScg.setActivityStatus(activityStatus);
-						final CollectionProtocol collectionProtocol =
-								new CollectionProtocol();
-						collectionProtocol.setId((Long) valArr[2]);
-						collectionProtocol.setActivityStatus((String) valArr[4]);
-						final CollectionProtocolRegistration registration =
-								new CollectionProtocolRegistration();
-						registration.setId((Long) valArr[3]);
-						registration.setCollectionProtocol(collectionProtocol);
-						absScg.setCollectionProtocolRegistration(registration);
-					}
-				}
-				else
-				{
-					absScg = (SpecimenCollectionGroup) scg;
-					absScg.setId(scg.getId());
-				}
 			}
-			if (absScg != null)
-			{
-				//Collection consentTierStatusCollection = new HashSet();
-				if(absScg.getConsentTierStatusCollection() == null ||
-						absScg.getConsentTierStatusCollection().size() == 0)
-				{
-					final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
-							dao, SpecimenCollectionGroup.class, absScg.getId(),
-							"elements(consentTierStatusCollection)");
-					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
-				}
-			}
+			List dataList = this.getSCGFromDB( queryWhereClause, dao );
+			absScg = this.initSCG(dataList,dao,scg);		
 			return absScg;
 		}
 		catch (final DAOException daoExp)
 		{
 			this.logger.debug(daoExp.getMessage(), daoExp);
-			throw this
-				.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
+	/**
+	 * This method is used to retrieve SCG using ID or name. 
+	 * @param queryWhereClause - where clause
+	 * @param dao - dao
+	 * @return List of result
+	 * @throws DAOException - DAOException
+	 */
+	private List getSCGFromDB(QueryWhereClause queryWhereClause,DAO dao) throws DAOException
+	{
+		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		final String[] selectColumnName = {"id", "activityStatus",
+				"collectionProtocolRegistration.id",
+				"collectionProtocolRegistration.collectionProtocol.id",
+				"collectionProtocolRegistration.collectionProtocol.activityStatus"};
+		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		return list;		
+	}
+	/**
+	 * This method is used to set attributes to SCG.
+	 * @param dataList - dataList
+	 * @param dao - dao
+	 * @param scg - scg
+	 * @return SCG obj
+	 * @throws BizLogicException - BizLogicException
+	 */
+	private SpecimenCollectionGroup initSCG(List dataList,DAO dao,AbstractSpecimenCollectionGroup scg) throws BizLogicException
+	{
+		SpecimenCollectionGroup absScg = null;
+		if (dataList.size() != 0)
+		{
+			final Object[] valArr = (Object[]) dataList.get(0);
+			if (valArr != null && valArr.length==5)
+			{
+				final Long identifier = (Long) valArr[0];
+				final String activityStatus = (String) valArr[1];
+				final CollectionProtocolRegistration registration =
+					new CollectionProtocolRegistration();
+				registration.setId((Long) valArr[2]);
+				final CollectionProtocol collectionProtocol = new CollectionProtocol();
+				collectionProtocol.setId((Long) valArr[3]);		
+				collectionProtocol.setActivityStatus((String) valArr[4]);
 
+				final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
+						dao, SpecimenCollectionGroup.class, identifier,
+				"elements(consentTierStatusCollection)");
+				absScg = (SpecimenCollectionGroup)scg;
+				absScg.setName(scg.getGroupName());
+				absScg.setId(identifier);
+				absScg.setActivityStatus(activityStatus);
+				if(consentTierStatusCollection!=null && !consentTierStatusCollection.isEmpty())
+				{
+					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
+				}
+				else
+				{
+					absScg.setConsentTierStatusCollection(absScg.getConsentTierStatusCollection());
+				}
+				registration.setCollectionProtocol(collectionProtocol);
+				absScg.setCollectionProtocolRegistration(registration);
+			}
+		}
+		else
+		{
+			absScg = (SpecimenCollectionGroup) scg;
+			absScg.setId(scg.getId());
+		}
+		return absScg;
+	}
+	//bug 13776 end
 	/**
 	 * @param participantId : participantId
 	 * @param collectionProtocolId : collectionProtocolId
