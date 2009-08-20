@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
@@ -44,7 +42,6 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -3542,7 +3539,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			Long specimenArrayTypeId, String exceedingLimit) throws BizLogicException, DAOException
 	{
 		final JDBCDAO dao = this.openJDBCSession();
-
 		final List containers = new ArrayList();
 		try
 		{
@@ -3557,7 +3553,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			{
 				this.logger.debug(String.format("Firing query: query%d", i));
 				this.logger.debug(queries[i]);
+				
 				final List resultList = dao.executeQuery(queries[i]);
+				
 				if (resultList == null || resultList.size() == 0)
 				{
 					// skip to the next query, if any
@@ -4886,13 +4884,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	{
 		final StringBuilder sb = new StringBuilder();
 		sb
-				.append("SELECT cont.IDENTIFIER, cont.NAME, cap.ONE_DIMENSION_CAPACITY, cap.TWO_DIMENSION_CAPACITY ");
-		sb.append("FROM CATISSUE_CAPACITY cap JOIN CATISSUE_CONTAINER cont ");
-		sb.append("	on cap.IDENTIFIER = cont.CAPACITY_ID where  ");
-		sb.append(" cont.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID ");
-		sb.append("  FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 ");
-		sb.append("WHERE t4.STORAGE_TYPE_ID = '" + type_id);
-		sb.append("' OR t4.STORAGE_TYPE_ID='1' and t4.STORAGE_CONTAINER_ID in ");
+				.append("SELECT VIEW1.IDENTIFIER, VIEW1.NAME, VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY FROM  ");
+		sb.append("(SELECT cont.IDENTIFIER, cont.NAME, cap.ONE_DIMENSION_CAPACITY, cap.TWO_DIMENSION_CAPACITY, (cap.ONE_DIMENSION_CAPACITY * cap.TWO_DIMENSION_CAPACITY)  CAPACITY ");
+		sb.append("	FROM CATISSUE_CAPACITY cap JOIN CATISSUE_CONTAINER cont   on cap.IDENTIFIER = cont.CAPACITY_ID  ");
+		sb.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON cont.IDENTIFIER = K.CONTAINER_ID ");
+		sb.append("  LEFT OUTER JOIN CATISSUE_CONTAINER_POSITION L ON cont.IDENTIFIER = L.PARENT_CONTAINER_ID ");
+		sb.append(" WHERE cont.IDENTIFIER IN ");
+		sb.append(" (SELECT t4.STORAGE_CONTAINER_ID   FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 ");
+		sb.append(" WHERE (t4.STORAGE_TYPE_ID = '" + type_id );
+		sb.append("' OR t4.STORAGE_TYPE_ID='1') and t4.STORAGE_CONTAINER_ID in ");
 		sb.append(" (select SC.IDENTIFIER from CATISSUE_STORAGE_CONTAINER SC ");
 		sb
 				.append(" join CATISSUE_SITE S on sc.site_id=S.IDENTIFIER and S.ACTIVITY_STATUS!='Closed' ");
@@ -4901,9 +4901,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			sb.append(" and S.IDENTIFIER in(SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
 					+ sessionData.getUserId() + ")");
 		}
-		sb.append("))");
-		sb.append("AND cont.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE);
-		sb.append("' and cont.CONT_FULL=0 order by IDENTIFIER");
+		sb.append(")) ");
+		sb.append(" AND cont.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE);
+		sb.append("' and cont.CONT_FULL=0 ) VIEW1 ");
+		sb.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY "); 
+		sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0 ");
+		sb.append(" ORDER BY VIEW1.IDENTIFIER");
 		return new String[]{sb.toString()};
 	}
 
