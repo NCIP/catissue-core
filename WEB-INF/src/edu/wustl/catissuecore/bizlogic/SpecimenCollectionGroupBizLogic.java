@@ -236,13 +236,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		Collection<AbstractDomainObject> cloneSpecimenCollection = null;
 		try
 		{
-			Collection<SpecimenRequirement> reqSpecimenCollection = cpe
-					.getSpecimenRequirementCollection();
-			if (reqSpecimenCollection == null || reqSpecimenCollection.isEmpty())
+			Collection<SpecimenRequirement> reqSpecimenCollection = 
+					(Collection) this.retrieveAttribute(dao,
+					CollectionProtocolEvent.class, cpe.getId(),
+					"elements(specimenRequirementCollection)");
+			if (reqSpecimenCollection != null || !reqSpecimenCollection.isEmpty())
 			{
-				reqSpecimenCollection = (Collection) this.retrieveAttribute(dao,
-						CollectionProtocolEvent.class, cpe.getId(),
-						"elements(specimenRequirementCollection)");
+				cpe.setSpecimenRequirementCollection(reqSpecimenCollection);
 			}
 			final List<SpecimenRequirement> reqSpecimenList = new LinkedList<SpecimenRequirement>(
 					reqSpecimenCollection);
