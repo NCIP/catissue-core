@@ -2157,7 +2157,7 @@ PUBLIC
 			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add" />
-			
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>
 			</action>
 			
 			<action path="/PrintSpecimenAdd"
@@ -2169,6 +2169,7 @@ PUBLIC
 			<forward name="cpChildSubmit" path="/AnticipatorySpecimenView.do?target=pageOfMultipleSpWithMenu" />
 			<forward name="createNew" path="/CreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimen" />
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add" />
+			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>
 		</action>
 		<action path="/CPQueryPrintDeriveSpecimen"
 			type="edu.wustl.catissuecore.action.PrintAction"

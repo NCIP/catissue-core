@@ -149,6 +149,13 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				{
 					parentSpecimenLabel = (String) obj;
 				}
+				else
+				{
+					if(forwardToHashMap.get(Constants.SPECIMEN_LABEL)!=null)
+					{
+					  parentSpecimenLabel = forwardToHashMap.get(Constants.SPECIMEN_LABEL).toString();
+					}
+				}
 
 				return parentSpecimenLabel;
 			}
