@@ -3507,19 +3507,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 
-			/*
-			 * String errorMsg = "Failed to save. "; if (specimenCtr != 0) {
-			 * errorMsg = "specimen number " + specimenCtr +
-			 * " cannot be saved. "; if (childSpecimenCtr != 0) { errorMsg =
-			 * "Cannot insert child specimen " + childSpecimenCtr +
-			 * ", of specimen " + specimenCtr + ". "; throw
-			 * getBizLogicException(exception, "child.nt.saved",
-			 * childSpecimenCtr+":"+specimenCtr); } throw
-			 * getBizLogicException(exception, exception., ""+specimenCtr); }
-			 */
-			// bug#12703
-			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
-					.getMsgValues());
+			String errMsg = getErrorMessage(exception,newSpecimenCollection,"bulkUpdateSpecimens");
+			throw new BizLogicException(exception.getErrorKey(),
+					exception,exception.getMsgValues(),errMsg);
 		}
 		finally
 		{
