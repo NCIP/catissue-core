@@ -53,6 +53,7 @@ import edu.common.dynamicextensions.util.global.DEConstants.Cardinality;
 import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -389,11 +390,10 @@ public class AnnotationUtil
 	private static boolean isPathAdded(Long staticEntityId, Long dynamicEntityId, JDBCDAO jdbcDAO)
 	{
 		boolean ispathAdded = false;
+		ResultSet resultSet = null;
 		try
 		{
 			PreparedStatement preparedStatement = null;
-			ResultSet resultSet = null;
-
 			final String checkForPathQuery = "select path_id from path where FIRST_ENTITY_ID = ? and LAST_ENTITY_ID = ?";
 			preparedStatement = jdbcDAO.getPreparedStatement(checkForPathQuery);
 			preparedStatement.setLong(1, staticEntityId);
@@ -408,19 +408,28 @@ public class AnnotationUtil
 					break;
 				}
 			}
-
-			System.out.println("ispathAdded  ----- " + ispathAdded);
-
 		}
-		catch (final DAOException e)
+		catch (final DAOException daoEx)
 		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
+			logger.debug(daoEx.getMessage(), daoEx);
+			daoEx.printStackTrace();
 		}
-		catch (final SQLException e)
+		catch (final SQLException sqlEx)
 		{
-			logger.debug(e.getMessage(), e);
-			e.printStackTrace();
+			logger.debug(sqlEx.getMessage(), sqlEx);
+			sqlEx.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				jdbcDAO.closeStatement(resultSet);
+			}
+			catch (final ApplicationException appException)
+			{
+				logger.error(appException.getLogMessage(), appException);
+				appException.printStackTrace();
+			}
 		}
 
 		return ispathAdded;
