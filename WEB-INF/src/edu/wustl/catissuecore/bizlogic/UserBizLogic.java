@@ -976,8 +976,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				try
 				{
 					final ProtectionElement protectionElement = privilegeUtility
-						.getUserProvisioningManager().getProtectionElement(
-							User.class.getName() + "_" + user.getId().toString());
+							.getUserProvisioningManager().getProtectionElement(
+									User.class.getName() + "_" + user.getId().toString());
 				}
 				catch (final CSObjectNotFoundException e)
 				{

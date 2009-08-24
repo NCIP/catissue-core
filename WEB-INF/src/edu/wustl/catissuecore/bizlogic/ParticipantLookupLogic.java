@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -23,7 +21,6 @@ import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.lookup.LookupParameters;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.patientLookUp.domain.PatientInformation;
 import edu.wustl.patientLookUp.lookUpServiceBizLogic.PatientInfoLookUpService;
@@ -82,8 +79,9 @@ public class ParticipantLookupLogic implements LookupLogic
 			+ pointsForSSNExact + pointsForGenderExact + pointsForRaceExact + pointsForPMIExact;
 	private int cutoffPoints;
 	private int totalPoints;
-	private boolean isSSNOrPMI = false;
+	private final boolean isSSNOrPMI = false;
 	private int maxNoOfParticipantsToReturn;
+
 	/**
 	 * This function first retrieves all the participants present in the
 	 * PARTICIPANT table. Then it checks for possible match of given participant
@@ -112,59 +110,62 @@ public class ParticipantLookupLogic implements LookupLogic
 		// if cutoff is greater than total points, throw exception
 		//if (this.cutoffPoints > totalPointsFromProperties)
 		//{
-			//throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
+		//throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
 		//}
 		// get total points depending on Participant object created by user
 		this.cutoffPoints = Integer.valueOf(XMLPropertyHandler.getValue(Constants.CUTTOFFPOINTS));
-		this.maxNoOfParticipantsToReturn= Integer.valueOf(XMLPropertyHandler.getValue(Constants.MAX_NO_OF_PARTICIPANTS_TO_RETURN));
-		
+		this.maxNoOfParticipantsToReturn = Integer.valueOf(XMLPropertyHandler
+				.getValue(Constants.MAX_NO_OF_PARTICIPANTS_TO_RETURN));
+
 		// adjust cutoffPoints as per new total points
 		//this.cutoffPoints = cutoffPointsFromProperties * this.totalPoints/ totalPointsFromProperties;
-		
-		PatientInformation patientInformation = new PatientInformation();
+
+		final PatientInformation patientInformation = new PatientInformation();
 		patientInformation.setLastName(participant.getLastName());
 		patientInformation.setFirstName(participant.getFirstName());
 		patientInformation.setMiddleName(participant.getMiddleName());
-		String ssn= participant.getSocialSecurityNumber();
-	    if(ssn!=null){
-	    	String ssnValue[]=ssn.split("-");
-	    	ssn=ssnValue[0];
-	    	ssn+=ssnValue[1];
-	    	ssn+=ssnValue[2];
-	    }
+		String ssn = participant.getSocialSecurityNumber();
+		if (ssn != null)
+		{
+			final String ssnValue[] = ssn.split("-");
+			ssn = ssnValue[0];
+			ssn += ssnValue[1];
+			ssn += ssnValue[2];
+		}
 		patientInformation.setSsn(ssn);
-		
+
 		patientInformation.setDob(participant.getBirthDate());
 		patientInformation.setGender(participant.getGender());
 
-		Collection<String> participantInfoMedicalIdentifierCollection = new ArrayList<String>();
+		final Collection<String> participantInfoMedicalIdentifierCollection = new ArrayList<String>();
 
-		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
+		final Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
 				.getParticipantMedicalIdentifierCollection();
 		if (participantMedicalIdentifierCollection != null)
 		{
-			Iterator<ParticipantMedicalIdentifier> itr = participantMedicalIdentifierCollection.iterator();
+			final Iterator<ParticipantMedicalIdentifier> itr = participantMedicalIdentifierCollection
+					.iterator();
 			while (itr.hasNext())
 			{
-				ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) itr
-						.next();
+				final ParticipantMedicalIdentifier participantMedicalIdentifier = itr.next();
 				participantInfoMedicalIdentifierCollection.add(participantMedicalIdentifier
 						.getMedicalRecordNumber());
-				participantInfoMedicalIdentifierCollection.add(String.valueOf(participantMedicalIdentifier.getSite().getId()));
+				participantInfoMedicalIdentifierCollection.add(String
+						.valueOf(participantMedicalIdentifier.getSite().getId()));
 			}
 		}
 		patientInformation
 				.setParticipantMedicalIdentifierCollection(participantInfoMedicalIdentifierCollection);
 
-		Collection<String> participantInfoRaceCollection = new HashSet<String>();
+		final Collection<String> participantInfoRaceCollection = new HashSet<String>();
 
-		Collection<Race> participantRaceCollection = participant.getRaceCollection();
+		final Collection<Race> participantRaceCollection = participant.getRaceCollection();
 		if (participantRaceCollection != null)
 		{
-			Iterator<Race> itr = participantRaceCollection.iterator();
+			final Iterator<Race> itr = participantRaceCollection.iterator();
 			while (itr.hasNext())
 			{
-				Race race = (Race) itr.next();
+				final Race race = itr.next();
 				if (race != null)
 				{
 					//participantInfoRaceCollection.add((String)itr.next());
@@ -173,7 +174,8 @@ public class ParticipantLookupLogic implements LookupLogic
 			}
 		}
 		patientInformation.setRaceCollection(participantInfoRaceCollection);
-		List<DefaultLookupResult> participants = searchMatchingParticipant(patientInformation);
+		final List<DefaultLookupResult> participants = this
+				.searchMatchingParticipant(patientInformation);
 		return participants;
 
 	}
@@ -185,57 +187,63 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @throws ParseException
 	 * @throws ApplicationException
 	 */
-	protected List<DefaultLookupResult> searchMatchingParticipant(PatientInformation patientInformation) throws PatientLookupException,ParseException,ApplicationException
+	protected List<DefaultLookupResult> searchMatchingParticipant(
+			PatientInformation patientInformation) throws PatientLookupException, ParseException,
+			ApplicationException
 	{
-		List<DefaultLookupResult> matchingParticipantsList=new ArrayList<DefaultLookupResult>();
-		PatientInfoLookUpService patientLookupObj = new PatientInfoLookUpService();
-		JDBCDAO jdbcDAO =AppUtility.openJDBCSession();
-		IQueryExecutor queryExecutor = new SQLQueryExecutorImpl(jdbcDAO);
-		List<PatientInformation> patientInfoList = patientLookupObj.patientLookupService(patientInformation,
-				queryExecutor, cutoffPoints, maxNoOfParticipantsToReturn);
+		final List<DefaultLookupResult> matchingParticipantsList = new ArrayList<DefaultLookupResult>();
+		final PatientInfoLookUpService patientLookupObj = new PatientInfoLookUpService();
+		final JDBCDAO jdbcDAO = AppUtility.openJDBCSession();
+		final IQueryExecutor queryExecutor = new SQLQueryExecutorImpl(jdbcDAO);
+		final List<PatientInformation> patientInfoList = patientLookupObj.patientLookupService(
+				patientInformation, queryExecutor, this.cutoffPoints,
+				this.maxNoOfParticipantsToReturn);
 
-		
 		if (patientInfoList != null && patientInfoList.size() > 0)
 		{
 			for (int i = 0; i < patientInfoList.size(); i++)
 			{
-				patientInformation = (PatientInformation) patientInfoList.get(i);
-				DefaultLookupResult result = new DefaultLookupResult();
-				Participant partcipantNew = new Participant();
+				patientInformation = patientInfoList.get(i);
+				final DefaultLookupResult result = new DefaultLookupResult();
+				final Participant partcipantNew = new Participant();
 				partcipantNew.setId(new Long(patientInformation.getUpi()));
 
 				partcipantNew.setLastName(patientInformation.getLastName());
 				partcipantNew.setFirstName(patientInformation.getFirstName());
 				partcipantNew.setMiddleName(patientInformation.getMiddleName());
-				
+
 				partcipantNew.setBirthDate(patientInformation.getDob());
-				
+
 				partcipantNew.setGender(patientInformation.getGender());
-				
+
 				partcipantNew.setActivityStatus("Active");
 				if (patientInformation.getSsn() != null && patientInformation.getSsn() != "")
 				{
-					String ssn=AppUtility.getSSN(patientInformation.getSsn());
+					final String ssn = AppUtility.getSSN(patientInformation.getSsn());
 					partcipantNew.setSocialSecurityNumber(ssn);
 				}
-			   Collection<String> participantInfoMedicalIdentifierCollection = patientInformation.getParticipantMedicalIdentifierCollection();
-				Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollectionNew=new LinkedHashSet<ParticipantMedicalIdentifier>(); 
-				if (participantInfoMedicalIdentifierCollection != null && participantInfoMedicalIdentifierCollection.size()>0)
+				final Collection<String> participantInfoMedicalIdentifierCollection = patientInformation
+						.getParticipantMedicalIdentifierCollection();
+				final Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollectionNew = new LinkedHashSet<ParticipantMedicalIdentifier>();
+				if (participantInfoMedicalIdentifierCollection != null
+						&& participantInfoMedicalIdentifierCollection.size() > 0)
 				{
-					Iterator<String> iterator = participantInfoMedicalIdentifierCollection.iterator();
+					final Iterator<String> iterator = participantInfoMedicalIdentifierCollection
+							.iterator();
 					while (iterator.hasNext())
 					{
-						String mrn = (String) iterator.next();
-						String siteId= (String) iterator.next();
-						Site site = new Site();
+						final String mrn = iterator.next();
+						final String siteId = iterator.next();
+						final Site site = new Site();
 						site.setId(Long.valueOf(siteId));
-						ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
+						final ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 						participantMedicalIdentifier.setMedicalRecordNumber(mrn);
 						participantMedicalIdentifier.setSite(site);
 						participantMedicalIdentifierCollectionNew.add(participantMedicalIdentifier);
 					}
 				}
-				partcipantNew.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollectionNew);
+				partcipantNew
+						.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollectionNew);
 				result.setObject(partcipantNew);
 				matchingParticipantsList.add(result);
 			}
@@ -245,7 +253,6 @@ public class ParticipantLookupLogic implements LookupLogic
 		return matchingParticipantsList;
 	}
 
-	
 	/**
 	 * This function calculates the total based on values entered by user
 	 * 

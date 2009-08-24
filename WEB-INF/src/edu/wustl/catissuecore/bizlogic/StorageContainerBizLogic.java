@@ -985,7 +985,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 
 			}
-*/
+			*/
 			super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
 
 		}
@@ -3408,14 +3408,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			if (positionMap != null)
 			{
 				final Iterator containerPosIterator = positionMap.keySet().iterator();
-				if(containerPosIterator.hasNext())
+				if (containerPosIterator.hasNext())
 				{
 					NameValueBean nvb = (NameValueBean) containerPosIterator.next();
 					xPos = Integer.valueOf(nvb.getValue());
 					final List yposValues = (List) positionMap.get(nvb);
 					final Iterator yposIterator = yposValues.iterator();
 
-					if(yposIterator.hasNext())
+					if (yposIterator.hasNext())
 					{
 						nvb = (NameValueBean) yposIterator.next();
 						yPos = Integer.valueOf(nvb.getValue());
@@ -3547,15 +3547,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 							sessionData, containerTypeId, specimenArrayTypeId, exceedingLimit);
 
 			int remainingContainersNeeded = containersMaxLimit;
-			
+
 			// iteratively run each query, and break if the required number of containers are found
 			for (int i = 0; i < queries.length; i++)
 			{
 				this.logger.debug(String.format("Firing query: query%d", i));
 				this.logger.debug(queries[i]);
-				
+
 				final List resultList = dao.executeQuery(queries[i]);
-				
+
 				if (resultList == null || resultList.size() == 0)
 				{
 					// skip to the next query, if any
@@ -3574,7 +3574,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		finally
 		{
-			closeJDBCSession(dao);
+			this.closeJDBCSession(dao);
 		}
 		Logger.out.debug(String.format("%s:%s:%d", this.getClass().getSimpleName(),
 				"getStorageContainers() number of containers fetched", containers.size()));
@@ -4342,7 +4342,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			this.logger.debug(daoExp.getMessage(), daoExp);
 			throw this
-				.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 
@@ -4376,7 +4376,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			this.logger.debug(daoExp.getMessage(), daoExp);
 			throw this
-				.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return activityStatus;
 	}
@@ -4885,13 +4885,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		final StringBuilder sb = new StringBuilder();
 		sb
 				.append("SELECT VIEW1.IDENTIFIER, VIEW1.NAME, VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY FROM  ");
-		sb.append("(SELECT cont.IDENTIFIER, cont.NAME, cap.ONE_DIMENSION_CAPACITY, cap.TWO_DIMENSION_CAPACITY, (cap.ONE_DIMENSION_CAPACITY * cap.TWO_DIMENSION_CAPACITY)  CAPACITY ");
-		sb.append("	FROM CATISSUE_CAPACITY cap JOIN CATISSUE_CONTAINER cont   on cap.IDENTIFIER = cont.CAPACITY_ID  ");
-		sb.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON cont.IDENTIFIER = K.CONTAINER_ID ");
-		sb.append("  LEFT OUTER JOIN CATISSUE_CONTAINER_POSITION L ON cont.IDENTIFIER = L.PARENT_CONTAINER_ID ");
+		sb
+				.append("(SELECT cont.IDENTIFIER, cont.NAME, cap.ONE_DIMENSION_CAPACITY, cap.TWO_DIMENSION_CAPACITY, (cap.ONE_DIMENSION_CAPACITY * cap.TWO_DIMENSION_CAPACITY)  CAPACITY ");
+		sb
+				.append("	FROM CATISSUE_CAPACITY cap JOIN CATISSUE_CONTAINER cont   on cap.IDENTIFIER = cont.CAPACITY_ID  ");
+		sb
+				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON cont.IDENTIFIER = K.CONTAINER_ID ");
+		sb
+				.append("  LEFT OUTER JOIN CATISSUE_CONTAINER_POSITION L ON cont.IDENTIFIER = L.PARENT_CONTAINER_ID ");
 		sb.append(" WHERE cont.IDENTIFIER IN ");
 		sb.append(" (SELECT t4.STORAGE_CONTAINER_ID   FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 ");
-		sb.append(" WHERE (t4.STORAGE_TYPE_ID = '" + type_id );
+		sb.append(" WHERE (t4.STORAGE_TYPE_ID = '" + type_id);
 		sb.append("' OR t4.STORAGE_TYPE_ID='1') and t4.STORAGE_CONTAINER_ID in ");
 		sb.append(" (select SC.IDENTIFIER from CATISSUE_STORAGE_CONTAINER SC ");
 		sb
@@ -4904,7 +4908,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		sb.append(")) ");
 		sb.append(" AND cont.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE);
 		sb.append("' and cont.CONT_FULL=0 ) VIEW1 ");
-		sb.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY "); 
+		sb
+				.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY ");
 		sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0 ");
 		sb.append(" ORDER BY VIEW1.IDENTIFIER");
 		return new String[]{sb.toString()};
@@ -5015,12 +5020,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) > 0  ");
 		}
-	
+
 		sb.append(this.getStorageContainerCPQuery(isCPUnique));
-		
-		
+
 		sb.append(this.getStorageContainerSPClassQuery(isSPClassUnique));
-		
+
 		sb.append(" ORDER BY VIEW1.IDENTIFIER ");
 
 		Logger.out.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
@@ -5038,7 +5042,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 */
 	private String getStorageContainerCPQuery(Boolean isUnique)
 	{
-		
+
 		final String SC_CP_TABLE_NAME = "CATISSUE_ST_CONT_COLL_PROT_REL";
 		if (isUnique == null) //No restrictions on CP. Any CP condition
 		{
@@ -5101,9 +5105,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			sb.append(" ( ");
 			sb.append(" SELECT COUNT(*) FROM ");
 			sb.append(SC_SPCLS_TABLE_NAME);
-			sb.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER " );
-			sb.append(" ) " );
-			sb.append(" =4 " );	//No restriction on specimen class means it can store any of the 4 specimen classes
+			sb.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
+			sb.append(" ) ");
+			sb.append(" =4 "); //No restriction on specimen class means it can store any of the 4 specimen classes
 			return sb.toString();
 		}
 		else

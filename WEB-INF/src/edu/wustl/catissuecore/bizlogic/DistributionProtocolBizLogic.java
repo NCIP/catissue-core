@@ -101,7 +101,8 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		catch (final AuditException auditException)
 		{
 			this.logger.debug(auditException.getMessage(), auditException);
-			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(), auditException.getMsgValues());
+			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
+					auditException.getMsgValues());
 		}
 
 	}

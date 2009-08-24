@@ -56,7 +56,7 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		
+
 	}
 
 	/**

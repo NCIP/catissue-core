@@ -43,27 +43,27 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	{
 		final Map<Long, Participant> mapOfParticipants = new HashMap<Long, Participant>();
 		DAO dao = null;
-		Metaphone metaPhoneObj = new Metaphone();
+		final Metaphone metaPhoneObj = new Metaphone();
 		try
 		{
 			dao = this.openDAOSession(null);
 			if (userParticipant.getParticipantMedicalIdentifierCollection() != null
 					&& userParticipant.getParticipantMedicalIdentifierCollection().size() > 0)
 			{
-				getParticipantsForMRN(dao, mapOfParticipants, userParticipant
+				this.getParticipantsForMRN(dao, mapOfParticipants, userParticipant
 						.getParticipantMedicalIdentifierCollection());
 			}
 			if (userParticipant.getSocialSecurityNumber() != null
 					&& userParticipant.getSocialSecurityNumber() != "")
 			{
-				getParticipantsForSSN(dao, mapOfParticipants, userParticipant
+				this.getParticipantsForSSN(dao, mapOfParticipants, userParticipant
 						.getSocialSecurityNumber());
 			}
 			if (userParticipant.getLastName() != null && userParticipant.getLastName() != "")
 			{
-				getParticipantsForLName(dao, mapOfParticipants, userParticipant.getLastName());
-				String metaPhoneCode = metaPhoneObj.metaphone(userParticipant.getLastName());
-				getParticipantsForLNameMetaPhone(dao, mapOfParticipants, metaPhoneCode);
+				this.getParticipantsForLName(dao, mapOfParticipants, userParticipant.getLastName());
+				final String metaPhoneCode = metaPhoneObj.metaphone(userParticipant.getLastName());
+				this.getParticipantsForLNameMetaPhone(dao, mapOfParticipants, metaPhoneCode);
 			}
 
 		}
@@ -93,29 +93,25 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		String medicalRecordNumber = null;
 		String siteId = null;
 		List<ParticipantMedicalIdentifier> listOfParticipantsMedId = null;
-		Iterator<ParticipantMedicalIdentifier> iterator = partiMedIdCollection.iterator();
+		final Iterator<ParticipantMedicalIdentifier> iterator = partiMedIdCollection.iterator();
 		while (iterator.hasNext())
 		{
-			ParticipantMedicalIdentifier participantMedicalIdentifier =
-				(ParticipantMedicalIdentifier) iterator
-					.next();
+			final ParticipantMedicalIdentifier participantMedicalIdentifier = iterator.next();
 			medicalRecordNumber = participantMedicalIdentifier.getMedicalRecordNumber();
 			siteId = String.valueOf(participantMedicalIdentifier.getSite().getId());
 			if (medicalRecordNumber != null && siteId != null)
 			{
 				participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 						+ " as participantMedId" + " where "
-						+ " participantMedId.medicalRecordNumber ='"
-						+ medicalRecordNumber + "'"
-						+ " and participantMedId.site.id='" + siteId
-						+ "'";
+						+ " participantMedId.medicalRecordNumber ='" + medicalRecordNumber + "'"
+						+ " and participantMedId.site.id='" + siteId + "'";
 				// query for MRN exact match ...
 				listOfParticipantsMedId = dao.executeQuery(participantQueryStr);
-				populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
+				this.populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
 				// perform the fuzzy match.Generate the different combinations of
 				//MRN value and fetch the records from DB for that MRN.
-				fuzzyMatchOnMRN1(dao, mapOfParticipants, medicalRecordNumber, siteId);
-				fuzzyMatchOnMRN2(dao, mapOfParticipants, medicalRecordNumber, siteId);
+				this.fuzzyMatchOnMRN1(dao, mapOfParticipants, medicalRecordNumber, siteId);
+				this.fuzzyMatchOnMRN2(dao, mapOfParticipants, medicalRecordNumber, siteId);
 			}
 		}
 	}
@@ -132,7 +128,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	private void fuzzyMatchOnMRN1(DAO dao, Map<Long, Participant> mapOfParticipants, String mrn,
 			String siteId) throws DAOException
 	{
-		StringBuffer tempMRNStr = new StringBuffer();
+		final StringBuffer tempMRNStr = new StringBuffer();
 		String participantQueryStr = null;
 		List<ParticipantMedicalIdentifier> listOfParticipantsMedId = null;
 		for (int i = 0; i < mrn.length() - 1; i++)
@@ -155,7 +151,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 					+ tempMRNStr.toString() + "'" + " and participantMedId.site.id='" + siteId
 					+ "'";
 			listOfParticipantsMedId = dao.executeQuery(participantQueryStr);
-			populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
+			this.populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
 			tempMRNStr.delete(0, tempMRNStr.length());
 		}
 	}
@@ -187,12 +183,10 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				tempMRNStr.append(charArray);
 				participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 						+ " as participantMedId" + " where "
-						+ " participantMedId.medicalRecordNumber ='"
-						+ tempMRNStr.toString() + "'"
-						+ " and participantMedId.site.id='" + siteId
-						+ "'";
+						+ " participantMedId.medicalRecordNumber ='" + tempMRNStr.toString() + "'"
+						+ " and participantMedId.site.id='" + siteId + "'";
 				listOfParticipantsMedId = dao.executeQuery(participantQueryStr);
-				populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
+				this.populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
 				charArray[i] = --charArray[i];
 			}
 			tempMRNStr = tempMRNStr.delete(0, tempMRNStr.length());
@@ -202,12 +196,10 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				tempMRNStr.append(charArray);
 				participantQueryStr = "from " + ParticipantMedicalIdentifier.class.getName()
 						+ " as participantMedId" + " where"
-						+ " participantMedId.medicalRecordNumber ='"
-						+ tempMRNStr.toString() + "'"
-						+ " and participantMedId.site.id='" + siteId
-						+ "'";
+						+ " participantMedId.medicalRecordNumber ='" + tempMRNStr.toString() + "'"
+						+ " and participantMedId.site.id='" + siteId + "'";
 				listOfParticipantsMedId = dao.executeQuery(participantQueryStr);
-				populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
+				this.populateParticipantMapForMRN(mapOfParticipants, listOfParticipantsMedId);
 				charArray[i] = ++charArray[i];
 			}
 			tempMRNStr = tempMRNStr.delete(0, tempMRNStr.length());
@@ -223,8 +215,8 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 	 * @param ssn : ssn value.
 	 * @throws DAOException : DAOException
 	 */
-	private void getParticipantsForSSN(DAO dao, Map<Long, Participant> mapOfParticipants,
-			String ssn) throws DAOException
+	private void getParticipantsForSSN(DAO dao, Map<Long, Participant> mapOfParticipants, String ssn)
+			throws DAOException
 	{
 		String participantQueryStr = null;
 		List<Participant> listOfParticipants = null;
@@ -232,17 +224,18 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 				+ " where participant.socialSecurityNumber ='" + ssn + "'";
 		// Fetch teh SSN exact match records from DB .
 		listOfParticipants = dao.executeQuery(participantQueryStr);
-		populateParticipantMap(mapOfParticipants, listOfParticipants);
+		this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 		// perform the fuzzy match.Generate the different
 		//combinations of MRN value and fetch the records from DB for that MRN.
-		if(ssn!=null){
-	    	String ssnValue[]=ssn.split("-");
-	    	ssn=ssnValue[0];
-	    	ssn+=ssnValue[1];
-	    	ssn+=ssnValue[2];
+		if (ssn != null)
+		{
+			final String ssnValue[] = ssn.split("-");
+			ssn = ssnValue[0];
+			ssn += ssnValue[1];
+			ssn += ssnValue[2];
 		}
-		fuzzyMatchOnSSN1(dao, mapOfParticipants, ssn);
-		fuzzyMatchOnSSN2(dao, mapOfParticipants, ssn);
+		this.fuzzyMatchOnSSN1(dao, mapOfParticipants, ssn);
+		this.fuzzyMatchOnSSN2(dao, mapOfParticipants, ssn);
 	}
 
 	/**
@@ -257,7 +250,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			throws DAOException
 	{
 		List<Participant> listOfParticipants = null;
-		StringBuffer tempssnStr = new StringBuffer();
+		final StringBuffer tempssnStr = new StringBuffer();
 		String participantQueryStr = null;
 		for (int i = 0; i < ssn.length() - 1; i++)
 		{
@@ -274,13 +267,11 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 					tempssnStr.append((ssn.charAt(j)));
 				}
 			}
-			String tempSSN=AppUtility.getSSN(tempssnStr.toString());
-			participantQueryStr = "from " + Participant.class.getName()
-								+ " as participant where "
-								+ " participant.socialSecurityNumber ='"
-								+ tempSSN + "'";
+			final String tempSSN = AppUtility.getSSN(tempssnStr.toString());
+			participantQueryStr = "from " + Participant.class.getName() + " as participant where "
+					+ " participant.socialSecurityNumber ='" + tempSSN + "'";
 			listOfParticipants = dao.executeQuery(participantQueryStr);
-			populateParticipantMap(mapOfParticipants, listOfParticipants);
+			this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 			tempssnStr.delete(0, tempssnStr.length());
 		}
 
@@ -310,12 +301,11 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			{
 				charArray[i] = ++charArray[i];
 				tempssnStr.append(charArray);
-				String tempSSN=AppUtility.getSSN(tempssnStr.toString());
+				final String tempSSN = AppUtility.getSSN(tempssnStr.toString());
 				participantQueryStr = "from " + Participant.class.getName() + " as participant"
-						+ " where participant.socialSecurityNumber ='"
-						+ tempSSN + "'";
+						+ " where participant.socialSecurityNumber ='" + tempSSN + "'";
 				listOfParticipants = dao.executeQuery(participantQueryStr);
-				populateParticipantMap(mapOfParticipants, listOfParticipants);
+				this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 				charArray[i] = --charArray[i];
 			}
 			tempssnStr = tempssnStr.delete(0, tempssnStr.length());
@@ -323,13 +313,12 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 			{
 				charArray[i] = --charArray[i];
 				tempssnStr.append(charArray);
-				String tempSSN=AppUtility.getSSN(tempssnStr.toString());
+				AppUtility.getSSN(tempssnStr.toString());
 				participantQueryStr = "from " + Participant.class.getName() + " as participant"
-						+ " where participant.socialSecurityNumber ='"
-						+ tempssnStr.toString()
+						+ " where participant.socialSecurityNumber ='" + tempssnStr.toString()
 						+ "'";
 				listOfParticipants = dao.executeQuery(participantQueryStr);
-				populateParticipantMap(mapOfParticipants, listOfParticipants);
+				this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 				charArray[i] = ++charArray[i];
 			}
 			tempssnStr = tempssnStr.delete(0, tempssnStr.length());
@@ -351,7 +340,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		participantQueryStr = "from " + Participant.class.getName() + " as participant"
 				+ " where participant.lastName  like '" + lastName + "%'";
 		listOfParticipants = dao.executeQuery(participantQueryStr);
-		populateParticipantMap(mapOfParticipants, listOfParticipants);
+		this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 	}
 
 	/**
@@ -369,7 +358,7 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		participantQueryStr = "from " + Participant.class.getName() + " as participant"
 				+ " where participant.metaPhoneCode ='" + metaPhoneCode + "'";
 		listOfParticipants = dao.executeQuery(participantQueryStr);
-		populateParticipantMap(mapOfParticipants, listOfParticipants);
+		this.populateParticipantMap(mapOfParticipants, listOfParticipants);
 	}
 
 	/**
@@ -383,10 +372,10 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		Participant participant = null;
 		if (listOfParticipants != null)
 		{
-			Iterator<Participant> participantIterator = listOfParticipants.iterator();
+			final Iterator<Participant> participantIterator = listOfParticipants.iterator();
 			while (participantIterator.hasNext())
 			{
-				participant = (Participant) participantIterator.next();
+				participant = participantIterator.next();
 				final Participant cloneParticipant = new Participant(participant);
 				final Long participantId = cloneParticipant.getId();
 				mapOfParticipants.put(participantId, cloneParticipant);
@@ -409,11 +398,11 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		ParticipantMedicalIdentifier participantMedIdObj = null;
 		if (listOfParticipantsMedId != null && !listOfParticipantsMedId.isEmpty())
 		{
-			Iterator<ParticipantMedicalIdentifier> participantIterator = listOfParticipantsMedId
+			final Iterator<ParticipantMedicalIdentifier> participantIterator = listOfParticipantsMedId
 					.iterator();
 			while (participantIterator.hasNext())
 			{
-				participantMedIdObj = (ParticipantMedicalIdentifier) participantIterator.next();
+				participantMedIdObj = participantIterator.next();
 				participant = participantMedIdObj.getParticipant();
 				final Participant cloneParticipant = new Participant(participant);
 				final Long participantId = cloneParticipant.getId();

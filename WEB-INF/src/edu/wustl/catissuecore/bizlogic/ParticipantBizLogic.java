@@ -107,8 +107,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final Participant participant = (Participant) obj;
 			//update metaPhoneInformartion
 
-			Metaphone metaPhoneObj = new Metaphone();
-			String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
+			final Metaphone metaPhoneObj = new Metaphone();
+			final String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
 			participant.setMetaPhoneCode(lNameMetaPhone);
 
 			dao.insert(participant);
@@ -274,7 +274,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					cprBizLogic.postUpdate(dao,collectionProtocolRegistration,oldCPRegistration,
+					cprBizLogic.postUpdate(dao, collectionProtocolRegistration, oldCPRegistration,
 							sessionDataBean);
 				}
 			}
@@ -357,9 +357,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			final Participant participant = (Participant) obj;
 			final Participant oldParticipant = (Participant) oldObj;
-			String lnameMetaPhone = null;
-			Metaphone metaPhoneObj = new Metaphone();
-			String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
+			final String lnameMetaPhone = null;
+			final Metaphone metaPhoneObj = new Metaphone();
+			final String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
 			participant.setMetaPhoneCode(lNameMetaPhone);
 
 			dao.update(participant);
@@ -671,8 +671,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * Overriding the parent class's method to
 	 * validate the enumerated attribute values.
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation)
-		throws BizLogicException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		final Participant participant = (Participant) obj;
 		final Validator validator = new Validator();
@@ -723,9 +722,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						.length() == 0))
 		{
 			final boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant
-					.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern()),
-					Utility.parseDateToString(participant.getDeathDate(),
-					CommonServiceLocator.getInstance().getDatePattern()));
+					.getBirthDate(), CommonServiceLocator.getInstance().getDatePattern()), Utility
+					.parseDateToString(participant.getDeathDate(), CommonServiceLocator
+							.getInstance().getDatePattern()));
 
 			if (!errorKey1)
 			{
@@ -1520,14 +1519,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	public void registerParticipant(Object object, Long cpid, String userName)
 			throws ApplicationException
 	{
-		Participant participant = (Participant) object;
+		final Participant participant = (Participant) object;
 		try
 		{
 			String operation = Constants.ADD;
 			List resultList = new ArrayList<Long>();
 			if (participant.getEmpiId() != null)
 			{
-				String[] selectColumnName = {"id"};
+				final String[] selectColumnName = {"id"};
 				QueryWhereClause queryWhereClause = new QueryWhereClause(Participant.class
 						.getName());
 				queryWhereClause.addCondition(new EqualClause("empiId", participant.getEmpiId()));
@@ -1550,10 +1549,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			if (resultList == null || resultList.isEmpty())
 			{
-				addEditParticipant(participant, cpid, userName, operation);
+				this.addEditParticipant(participant, cpid, userName, operation);
 			}
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
 			throw new BizLogicException(e);
 		}
@@ -1571,23 +1570,23 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	private void addEditParticipant(Participant participant, Long cpid, String userName,
 			String operation) throws BizLogicException, ApplicationException
 	{
-		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		final CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setActivityStatus(Constants.ACTIVITY_STATUS_VALUES[1]);
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		final CollectionProtocol collectionProtocol = new CollectionProtocol();
 		collectionProtocol.setId(cpid);
 		cpr.setCollectionProtocol(collectionProtocol);
 		cpr.setParticipant(participant);
-		Collection<CollectionProtocolRegistration> colProtoRegColn = new HashSet<CollectionProtocolRegistration>();
+		final Collection<CollectionProtocolRegistration> colProtoRegColn = new HashSet<CollectionProtocolRegistration>();
 		colProtoRegColn.add(cpr);
 		cpr.setRegistrationDate(new Date());
 		participant.setCollectionProtocolRegistrationCollection(colProtoRegColn);
 		if (operation.equals(Constants.ADD))
 		{
-			insert(participant, AppUtility.getSessionDataBean(userName));
+			this.insert(participant, AppUtility.getSessionDataBean(userName));
 		}
 		else
 		{
-			updateParticipant(userName, participant);
+			this.updateParticipant(userName, participant);
 		}
 	}
 
@@ -1602,16 +1601,16 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		HibernateDAO hibernateDao = null;
 		try
 		{
-			String appName = getAppName();
+			final String appName = this.getAppName();
 			hibernateDao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(appName)
 					.getDAO();
 			hibernateDao.openSession(null);
 			AbstractDomainObject abstractDomainOld;
 			abstractDomainOld = (AbstractDomainObject) hibernateDao.retrieveById(Participant.class
 					.getName(), participant.getId());
-			update(participant, abstractDomainOld, AppUtility.getSessionDataBean(userName));
+			this.update(participant, abstractDomainOld, AppUtility.getSessionDataBean(userName));
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
 			throw new BizLogicException(ErrorKey.getErrorKey("common.errors.item"), e,
 					"Error while opening the session");
@@ -1622,7 +1621,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			{
 				hibernateDao.closeSession();
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("common.errors.item"), e,
 						"Failed while updating ");

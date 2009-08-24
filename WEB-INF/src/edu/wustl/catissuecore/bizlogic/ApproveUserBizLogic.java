@@ -14,7 +14,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -56,11 +55,12 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient Logger logger = Logger.getCommonLogger(ApproveUserBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(ApproveUserBizLogic.class);
 
 	/**
 	 * Overrides the insert method of DefaultBizLogic.
 	 */
+	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -76,7 +76,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		{
 			user = (User) obj;
 		}
-		UserBizLogic objUserBizlogic = new UserBizLogic();
+		final UserBizLogic objUserBizlogic = new UserBizLogic();
 		objUserBizlogic.validate(user, dao, Constants.EDIT);
 		/**
 		 * Start: Change for API Search --- Jitendra 06/10/2006 In Case of Api
@@ -93,7 +93,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		ApiSearchUtil.setUserDefault(user);
 		// End:- Change for API Search
 
-		gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
+		final gov.nih.nci.security.authorization.domainobjects.User csmUser = new gov.nih.nci.security.authorization.domainobjects.User();
 
 		try
 		{
@@ -101,7 +101,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			// If the activity status is Active, create a csm user.
 			if (Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
 			{
-				approveUser(obj, csmUser, dao, sessionDataBean);
+				this.approveUser(obj, csmUser, dao, sessionDataBean);
 			}
 			else
 			{
@@ -109,13 +109,13 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			}
 
 			// Audit of User Update during approving user.
-			User oldUser = (User) oldObj;
+			final User oldUser = (User) oldObj;
 
-			AuditManager auditManager = getAuditManager(sessionDataBean);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			auditManager.updateAudit(dao, user.getAddress(), oldUser.getAddress());
 			auditManager.updateAudit(dao, obj, oldObj);
 
-			EmailHandler emailHandler = new EmailHandler();
+			final EmailHandler emailHandler = new EmailHandler();
 
 			// If user is approved send approval and login details emails to the
 			// user and administrator.
@@ -132,12 +132,12 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 				emailHandler.sendRejectionEmail(user);
 			}
 		}
-		catch (Exception exp)
+		catch (final Exception exp)
 		{
 
-			logger.debug(exp.getMessage(), exp);
+			this.logger.debug(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
-			ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
 			throw new BizLogicException(errorKey, exp, "");
 		}
 	}
@@ -182,7 +182,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		csmUser.setEmailId(user.getEmailAddress());
 		csmUser.setStartDate(Calendar.getInstance().getTime());
 
-		String generatedPassword = PasswordManager.generatePassword();
+		final String generatedPassword = PasswordManager.generatePassword();
 
 		if (user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
@@ -209,14 +209,14 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 
 		user.setCsmUserId(csmUser.getUserId());
 
-		Password password = new Password(PasswordManager.encrypt(generatedPassword), user);
+		final Password password = new Password(PasswordManager.encrypt(generatedPassword), user);
 		user.getPasswordCollection().add(password);
 
 		Logger.out.debug("password stored in passwore table");
 
-		PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+		final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 
-		Set protectionObjects = new HashSet();
+		final Set protectionObjects = new HashSet();
 		protectionObjects.add(user);
 
 		if (userRowIdMap != null && !userRowIdMap.isEmpty())
@@ -224,7 +224,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			new UserBizLogic().updateUserDetails(user, userRowIdMap);
 		}
 
-		privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap),
+		privilegeManager.insertAuthorizationData(this.getAuthorizationData(user, userRowIdMap),
 				protectionObjects, null, user.getObjectId());
 
 		// SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
@@ -244,14 +244,13 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	private Vector getAuthorizationData(AbstractDomainObject obj,
 			Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws SMException
 	{
-		Vector authorizationData = new Vector();
-		Set group = new HashSet();
+		final Vector authorizationData = new Vector();
+		final Set group = new HashSet();
 		SecurityDataBean userGroupRoleProtectionGroupBean;
 		String protectionGroupName;
-		Collection coordinators;
-		User aUser = (User) obj;
-		String userId = String.valueOf(aUser.getCsmUserId());
-		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManagerFactory
+		final User aUser = (User) obj;
+		final String userId = String.valueOf(aUser.getCsmUserId());
+		final gov.nih.nci.security.authorization.domainobjects.User user = SecurityManagerFactory
 				.getSecurityManager().getUserById(userId);
 		Logger.out.debug(" User: " + user.getLoginName());
 		group.add(user);
@@ -281,6 +280,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * 
 	 * @return the list of users according to the column name and value passed.
 	 */
+	@Override
 	public List retrieve(String className, String colName, Object colValue)
 			throws BizLogicException
 	{
@@ -289,29 +289,6 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		// {
 		// Get the caTISSUE user.
 		userList = super.retrieve(className, colName, colValue);
-
-		edu.wustl.catissuecore.domain.User appUser = null;
-		if (!userList.isEmpty())
-		{
-			appUser = (edu.wustl.catissuecore.domain.User) userList.get(0);
-
-			// if (appUser.getCsmUserId() != null)
-			// {
-			// //Get the role of the user.
-			// Role role =
-			// SecurityManager.getInstance(ApproveUserBizLogic.class)
-			// .getUserRole(appUser.getCsmUserId().longValue());
-			// if (role != null)
-			// {
-			// appUser.setRoleId(role.getId().toString());
-			// }
-			// }
-		}
-		// }
-		// catch (SMException smExp)
-		// {
-		// throw handleSMException(smExp);
-		// }
 
 		return userList;
 	}
@@ -323,6 +300,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
 	 *      java.lang.Object)
 	 */
+	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return new UserBizLogic().getObjectId(dao, domainObject);
@@ -334,6 +312,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * 
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
+	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return Constants.ADD_EDIT_USER;
@@ -347,18 +326,19 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.dao.DAO,
 	 *      java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
+	@Override
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		boolean isAuthorized = false;
-		isAuthorized = checkUser(domainObject, sessionDataBean);
+		isAuthorized = this.checkUser(domainObject, sessionDataBean);
 		if (isAuthorized)
 		{
 			return true;
 		}
 
-		String privilegeName = getPrivilegeName(domainObject);
-		String protectionElementName = getObjectId(dao, domainObject);
+		final String privilegeName = this.getPrivilegeName(domainObject);
+		final String protectionElementName = this.getObjectId(dao, domainObject);
 
 		return AppUtility.returnIsAuthorized(sessionDataBean, privilegeName, protectionElementName);
 

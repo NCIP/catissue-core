@@ -139,7 +139,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	{
 		final List<Integer> entityIdsColumnIndexList = this.getIdsColumnIndexList(cart
 				.getCartAttributeList(), entityName);
-		return getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
+		return this.getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 	{
 		final List<Integer> entityIdsColumnIndexList = this.getLabelsColumnIndexList(cart
 				.getCartAttributeList(), entityName, attributeName);
-		return getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
+		return this.getEntityList(cart, chkBoxValues, entityIdsColumnIndexList);
 
 	}
 

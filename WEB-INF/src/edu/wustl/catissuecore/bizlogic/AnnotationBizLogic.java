@@ -470,14 +470,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			final Iterator dynEntitiesIterator = dynEntitiesList.iterator();
 			while (dynEntitiesIterator.hasNext())
 			{
-				EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
-				Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap
+				final EntityMap entityMap = (EntityMap) dynEntitiesIterator.next();
+				final Collection<FormContext> formContexts = AppUtility.getFormContexts(entityMap
 						.getId());
-				Iterator<FormContext> formContextIter = formContexts.iterator();
+				final Iterator<FormContext> formContextIter = formContexts.iterator();
 				while (formContextIter.hasNext())
 				{
-					FormContext formContext = formContextIter.next();
-					Collection<EntityMapCondition> entityMapConditions = AppUtility
+					final FormContext formContext = formContextIter.next();
+					final Collection<EntityMapCondition> entityMapConditions = AppUtility
 							.getEntityMapConditions(formContext.getId());
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
@@ -486,7 +486,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 					{
 						if (entityMapConditions != null && !entityMapConditions.isEmpty())
 						{
-							boolean check = this.checkStaticRecId(entityMapConditions,
+							final boolean check = this.checkStaticRecId(entityMapConditions,
 									cpIdList);
 							if (check)
 							{

@@ -81,7 +81,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			{
 				StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(
 						positionsToBeAllocatedList.get(i), aliquotMap, usedPositionsList,
-						specimenKey, storageContainerId,dao);
+						specimenKey, storageContainerId, dao);
 			}
 			for (int i = 1; i <= specimenArray.getAliquotCount(); i++)
 			{
@@ -504,8 +504,6 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			for (int i = 1; i <= specimenArrayAliquot.getAliquotCount(); i++)
 			{
 				final String containerIdKey = specimenKey + i + "_StorageContainer_id";
-				final String posDim1Key = specimenKey + i + "_positionDimensionOne";
-				final String posDim2Key = specimenKey + i + "_positionDimensionTwo";
 				final String storageContainerNameKey = specimenKey + i + "_StorageContainer_name";
 
 				final String contId = (String) aliquotMap.get(containerIdKey);
@@ -601,5 +599,11 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		final SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 				.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 		return specimenArrayBizLogic.isAuthorized(dao, domainObject, sessionDataBean);
+	}
+
+	@Override
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
+	{
+		return super.validate(obj, dao, operation);
 	}
 }

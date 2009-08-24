@@ -1134,13 +1134,13 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	public List getRelatedSiteIds(HibernateDAO dao, Long userId, PrivilegeCache privilegeCache)
 			throws BizLogicException
 	{
-		List siteCollWithDistriPri = new ArrayList();
+		final List siteCollWithDistriPri = new ArrayList();
 		try
 		{
 			final User user = (User) dao.retrieveById(User.class.getName(), userId);
-			getSiteIds(privilegeCache,siteCollWithDistriPri, user);
+			this.getSiteIds(privilegeCache, siteCollWithDistriPri, user);
 		}
-		
+
 		catch (final DAOException e)
 		{
 			this.logger.debug(e.getMessage(), e);
@@ -1156,9 +1156,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 * @return
 	 * @throws BizLogicException
 	 */
-	private void getSiteIds(PrivilegeCache privilegeCache,List siteCollWithDistriPri,
-			 final User user)
-			throws BizLogicException
+	private void getSiteIds(PrivilegeCache privilegeCache, List siteCollWithDistriPri,
+			final User user) throws BizLogicException
 	{
 		String objectId = "";
 		try
@@ -1188,7 +1187,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e, "sm.priv.error", objectId);
 		}
 	}
-
 
 	/**
 	 *
@@ -1282,9 +1280,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 
 		final List siteCollWithDistriPri = new ArrayList();
-		getSiteIds(privilegeCache, siteCollWithDistriPri,
-					 user);
-		
+		this.getSiteIds(privilegeCache, siteCollWithDistriPri, user);
+
 		return (List) siteCollWithDistriPri;
 
 	}
@@ -1923,7 +1920,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 
 	}
-	
+
 	/**
 	 * 	 * This method loads the title as Name and id as value of distribution
 		 * protocol from database and return the namevalue bean of ditribution
@@ -2013,7 +2010,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 
-				hasDistributionPrivilege = checkDistributionPrivilege(sessionDataBean,
+				hasDistributionPrivilege = this.checkDistributionPrivilege(sessionDataBean,
 						siteIds, cpIds);
 
 				if (hasDistributionPrivilege)
@@ -2033,7 +2030,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 		return distributionProtocolList;
 	}
-	
+
 	/**
 	 *
 	 * @param sessionDataBean : sessionDataBean
@@ -2079,6 +2076,5 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		return hasDistributionPrivilege;
 	}
-	
 
 }

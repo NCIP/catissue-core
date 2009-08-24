@@ -226,9 +226,8 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 			// active
 			if (existingParticipant.getActivityStatus() != null
 					&& (existingParticipant.getActivityStatus().equals(
-							Status.ACTIVITY_STATUS_ACTIVE.toString())
-							|| existingParticipant.getActivityStatus()
-							.equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
+							Status.ACTIVITY_STATUS_ACTIVE.toString()) || existingParticipant
+							.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString())))
 			{
 				if (!this.isEmptyParticipant(existingParticipant))
 				{
@@ -238,16 +237,13 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 					 * for match between the two.
 					 */
 					if (userParticipant.getSocialSecurityNumber() != null
-							&& !userParticipant.getSocialSecurityNumber()
-							.trim().equals("")
+							&& !userParticipant.getSocialSecurityNumber().trim().equals("")
 							&& existingParticipant.getSocialSecurityNumber() != null
-							&& !existingParticipant.getSocialSecurityNumber()
-							.trim().equals(""))
+							&& !existingParticipant.getSocialSecurityNumber().trim().equals(""))
 					{
 						socialSecurityNumberWeight = this.checkSSN(userParticipant
 								.getSocialSecurityNumber().trim().toLowerCase(),
-								existingParticipant.getSocialSecurityNumber()
-								.trim().toLowerCase());
+								existingParticipant.getSocialSecurityNumber().trim().toLowerCase());
 						weight = socialSecurityNumberWeight;
 					}
 					/**
@@ -258,8 +254,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 					if (userParticipant.getBirthDate() != null
 							&& existingParticipant.getBirthDate() != null)
 					{
-						birthDateWeight = this.checkDateOfBirth(
-								userParticipant.getBirthDate(),
+						birthDateWeight = this.checkDateOfBirth(userParticipant.getBirthDate(),
 								existingParticipant.getBirthDate());
 						weight += birthDateWeight;
 					}
@@ -273,9 +268,8 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& existingParticipant.getLastName() != null
 							&& !existingParticipant.getLastName().trim().equals(""))
 					{
-						weight += this.checkLastName(userParticipant.getLastName()
-								.trim().toLowerCase(),
-								existingParticipant.getLastName().trim()
+						weight += this.checkLastName(userParticipant.getLastName().trim()
+								.toLowerCase(), existingParticipant.getLastName().trim()
 								.toLowerCase());
 					}
 					/**
@@ -289,8 +283,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 							&& !existingParticipant.getFirstName().trim().equals(""))
 					{
 						weight += this.checkFirstName(userParticipant.getFirstName().trim()
-								.toLowerCase(),
-								 existingParticipant.getFirstName().trim()
+								.toLowerCase(), existingParticipant.getFirstName().trim()
 								.toLowerCase());
 					}
 					weight += this.checkParticipantMedicalIdentifier(userParticipant
@@ -308,12 +301,9 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 						participants.add(result);
 						break;
 					}
-					else if (((weight != totalPointsFromProperties)
-							&& (weight != 0) && (weight > sprCutOff))
-							|| (this.isSSNPMITemp ==
-									MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
-							|| (this.isSSNPMITemp ==
-									MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
+					else if (((weight != totalPointsFromProperties) && (weight != 0) && (weight > sprCutOff))
+							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERMISMATCH)
+							|| (this.isSSNPMITemp == MatchingStatusForSSNPMI.ONEMATCHOTHERNULL))
 					{
 						final DefaultLookupResult result = new DefaultLookupResult();
 						result.setIsSSNPMI(this.isSSNPMITemp);
@@ -550,9 +540,7 @@ public class ParticipantLookupLogicForSPR implements LookupLogic
 		boolean exactMatchFlag = false;
 		boolean partialMatchFlag = false;
 		boolean noMatchFlag = false;
-		final List<ParticipantMedicalIdentifier>
-			tempExistingParticipantMedicalIdentifier =
-				new ArrayList<ParticipantMedicalIdentifier>();
+		final List<ParticipantMedicalIdentifier> tempExistingParticipantMedicalIdentifier = new ArrayList<ParticipantMedicalIdentifier>();
 
 		if (existingParticipantMedicalIdentifier.size() > 0)
 		{

@@ -100,32 +100,36 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 						DAO dao = null;
 						try
 						{
-							dao = openDAOSession(sessionDataBean);
-							cpCollection = siteBizLogic.getRelatedCPs(siteId,dao);
-							if (cpCollection != null && !cpCollection.isEmpty()) {
-								for (final CollectionProtocol cp : cpCollection) {
-									if (cp_Ids.contains(cp.getId())) {
+							dao = this.openDAOSession(sessionDataBean);
+							cpCollection = siteBizLogic.getRelatedCPs(siteId, dao);
+							if (cpCollection != null && !cpCollection.isEmpty())
+							{
+								for (final CollectionProtocol cp : cpCollection)
+								{
+									if (cp_Ids.contains(cp.getId()))
+									{
 										continue;
 									}
 									boolean isPresent = false;
-									for (final NameValueBean nameValueBean : list) {
-										if (nameValueBean.getValue()
-												.equalsIgnoreCase(
-														cp.getId().toString())) {
+									for (final NameValueBean nameValueBean : list)
+									{
+										if (nameValueBean.getValue().equalsIgnoreCase(
+												cp.getId().toString()))
+										{
 											isPresent = true;
 											break;
 										}
 									}
-									if (!isPresent) {
-										list.add(new NameValueBean(cp
-												.getShortTitle(), cp.getId()));
+									if (!isPresent)
+									{
+										list.add(new NameValueBean(cp.getShortTitle(), cp.getId()));
 									}
 								}
 							}
 						}
 						finally
 						{
-							closeDAOSession(dao);
+							this.closeDAOSession(dao);
 						}
 					}
 				}

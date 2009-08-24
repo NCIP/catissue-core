@@ -15,7 +15,6 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -296,28 +295,28 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			if (Status.ACTIVITY_STATUS_DISABLED.toString()
 					.equals(specimenArray.getActivityStatus()))
 			{
-			/*	Map disabledCont = null;
+				/*	Map disabledCont = null;
 
-				disabledCont = this.getContForDisabledSpecimenArrayFromCache();
+					disabledCont = this.getContForDisabledSpecimenArrayFromCache();
 
-				if (disabledCont == null)
-				{
-					disabledCont = new TreeMap();
-				}*/
-			/*	Object objectContainer = null;
-				if (specimenArray.getLocatedAtPosition() != null
-						&& specimenArray.getLocatedAtPosition().getOccupiedContainer() != null
-						&& specimenArray.getLocatedAtPosition().getOccupiedContainer().getId() != null)
-				{
-					objectContainer = dao.retrieveById(StorageContainer.class.getName(),
-							specimenArray.getLocatedAtPosition().getOccupiedContainer().getId());
-				}
-				if (objectContainer != null)
-				{
+					if (disabledCont == null)
+					{
+						disabledCont = new TreeMap();
+					}*/
+				/*	Object objectContainer = null;
+					if (specimenArray.getLocatedAtPosition() != null
+							&& specimenArray.getLocatedAtPosition().getOccupiedContainer() != null
+							&& specimenArray.getLocatedAtPosition().getOccupiedContainer().getId() != null)
+					{
+						objectContainer = dao.retrieveById(StorageContainer.class.getName(),
+								specimenArray.getLocatedAtPosition().getOccupiedContainer().getId());
+					}
+					if (objectContainer != null)
+					{
 
-					final SpecimenArray storageContainer = (SpecimenArray) objectContainer;
-					this.addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
-				}*/
+						final SpecimenArray storageContainer = (SpecimenArray) objectContainer;
+						this.addEntriesInDisabledMap(specimenArray, storageContainer, disabledCont);
+					}*/
 
 				final ContainerPosition prevPosition = specimenArray.getLocatedAtPosition();
 
@@ -952,7 +951,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				xPos = specimenArray.getLocatedAtPosition().getPositionDimensionOne();
 				yPos = specimenArray.getLocatedAtPosition().getPositionDimensionTwo();
 			}
-			boolean isContainerFull = false;
 			/**
 			 * Following code is added to set the x and y dimension in case only
 			 * storage container is given and x and y positions are not given
@@ -963,12 +961,12 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 					if (specimenArray.getLocatedAtPosition().getParentContainer() != null)
 					{
-						final Position position = scBizLogic
-								.getFirstAvailablePositionInContainer(specimenArray
-										.getLocatedAtPosition().getParentContainer(),dao);
+						final Position position = scBizLogic.getFirstAvailablePositionInContainer(
+								specimenArray.getLocatedAtPosition().getParentContainer(), dao);
 						if (position != null)
 						{
-							final ContainerPosition locatedAtPos = specimenArray.getLocatedAtPosition();
+							final ContainerPosition locatedAtPos = specimenArray
+									.getLocatedAtPosition();
 							locatedAtPos.setPositionDimensionOne(position.getXPos());
 							locatedAtPos.setPositionDimensionTwo(position.getYPos());
 						}
@@ -1082,7 +1080,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	
 	/**
 	 * @param dao : dao
 	 * @param specimenArray : specimenArray
@@ -1441,42 +1438,44 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		return isAuthorized;
 	}
 
-/*	*//**
-	 * @return Map
-	 * @throws BizLogicException : BizLogicException
-	 *//*
-	public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
-	{
+	/*	*//**
+			 * @return Map
+			 * @throws BizLogicException : BizLogicException
+			 */
+	/*
+		public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
+		{
 
-		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-				.getInstance();
-		final Map disabledconts = (TreeMap) catissueCoreCacheManager
-				.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
-		return disabledconts;
-	}*/
+			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+					.getInstance();
+			final Map disabledconts = (TreeMap) catissueCoreCacheManager
+					.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
+			return disabledconts;
+		}*/
 
 	/**
 	 * @param specimenarray : specimenarray
 	 * @param container : container
 	 * @param disabledConts : disabledConts
-	 *//*
-	private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container,
-			Map disabledConts)
-	{
-		final String contNameKey = "StorageContName";
-		final String contIdKey = "StorageContIdKey";
-		final String pos1Key = "pos1";
-		final String pos2Key = "pos2";
-		final Map containerDetails = new TreeMap();
-		containerDetails.put(contNameKey, container.getName());
-		containerDetails.put(contIdKey, container.getId());
-		containerDetails.put(pos1Key, specimenarray.getLocatedAtPosition()
-				.getPositionDimensionOne());
-		containerDetails.put(pos2Key, specimenarray.getLocatedAtPosition()
-				.getPositionDimensionTwo());
+	 */
+	/*
+		private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container,
+				Map disabledConts)
+		{
+			final String contNameKey = "StorageContName";
+			final String contIdKey = "StorageContIdKey";
+			final String pos1Key = "pos1";
+			final String pos2Key = "pos2";
+			final Map containerDetails = new TreeMap();
+			containerDetails.put(contNameKey, container.getName());
+			containerDetails.put(contIdKey, container.getId());
+			containerDetails.put(pos1Key, specimenarray.getLocatedAtPosition()
+					.getPositionDimensionOne());
+			containerDetails.put(pos2Key, specimenarray.getLocatedAtPosition()
+					.getPositionDimensionTwo());
 
-		disabledConts.put(specimenarray.getId().toString(), containerDetails);
+			disabledConts.put(specimenarray.getId().toString(), containerDetails);
 
-	}*/
+		}*/
 
 }

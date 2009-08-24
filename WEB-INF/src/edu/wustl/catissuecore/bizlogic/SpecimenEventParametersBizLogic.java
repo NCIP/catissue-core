@@ -7,7 +7,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -282,9 +280,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					}
 					if (objectContainer != null)
 					{
-
-						final StorageContainer storageContainer = (StorageContainer) objectContainer;
-						//this.addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
 					final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 					specimen.setSpecimenPosition(null);
@@ -781,17 +776,17 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 					Integer xPos = parameter.getToPositionDimensionOne();
 					Integer yPos = parameter.getToPositionDimensionTwo();
-					
+
 					/**
 					 *  Following code is added to set the x and y dimension in case only storage container is given 
 					 *  and x and y positions are not given 
 					 */
 					if (yPos == null || xPos == null)
 					{
-					
+
 						final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-						final Position position = scBizLogic
-								.getFirstAvailablePositionInContainer(storageContainerObj,dao);
+						final Position position = scBizLogic.getFirstAvailablePositionInContainer(
+								storageContainerObj, dao);
 						if (position != null)
 						{
 							parameter.setToPositionDimensionOne(position.getXPos());
@@ -1063,23 +1058,23 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		String objectId = "";
 		Long cpId = null;
-		List<Long> list = null;
 		try
 		{
 			if (domainObject instanceof SpecimenEventParameters)
 			{
 				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) domainObject;
-				AbstractSpecimen specimen =  specimenEventParameters.getSpecimen();
-			
+				final AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
+
 				// bug 13455 start 
 				if (cpId == null)
 				{
-					final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
 					final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+							.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 					cpId = newSpecimenBizLogic.getCPId(dao, cpId, specimen);
 				}
-			
+
 				objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
 			}
 		}
@@ -1090,8 +1085,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		return objectId;
 	}
-
-
 
 	/**
 	 * To get PrivilegeName for authorization check from 'PermissionMapDetails.xml'
@@ -1245,45 +1238,43 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	private void checkPrivilegeOnSourceSite(DAO dao, Object domainObject,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
-		SpecimenPosition specimenPosition = null;
-
 		final SpecimenEventParameters spe = (SpecimenEventParameters) domainObject;
-		AbstractSpecimen specimen = spe.getSpecimen();
-        List<Long> list=null;
-        Long siteId=null;
+		final AbstractSpecimen specimen = spe.getSpecimen();
+		List<Long> list = null;
+		Long siteId = null;
 		try
 		{
-		/*	
-				specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
-				final Specimen specimen1 = (Specimen) specimen;
-				specimenPosition = specimen1.getSpecimenPosition();
-				if (specimenPosition != null) // Specimen is NOT Virtually Located
-				{
-					final StorageContainer sc = specimenPosition.getStorageContainer();
-					final Site site = sc.getSite();
-	
-					final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-							.getUserId());
-	
-					if (!siteIdSet.contains(site.getId()))
+			/*	
+					specimen = (Specimen) dao.retrieveById(Specimen.class.getName(), specimen.getId());
+					final Specimen specimen1 = (Specimen) specimen;
+					specimenPosition = specimen1.getSpecimenPosition();
+					if (specimenPosition != null) // Specimen is NOT Virtually Located
 					{
-						//bug 11611 and 11659 start
-						
-						throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
-								.getObjectId(), domainObject.getClass().getSimpleName());
-								//bug 11611 and 11659 end
-					}
-				}
-		 */
+						final StorageContainer sc = specimenPosition.getStorageContainer();
+						final Site site = sc.getSite();
 			
-			 	// bug id #13455 start 
-			String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
-				+ "specimen.id = '" + specimen.getId() + "'";
+						final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+								.getUserId());
+			
+						if (!siteIdSet.contains(site.getId()))
+						{
+							//bug 11611 and 11659 start
+							
+							throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
+									.getObjectId(), domainObject.getClass().getSimpleName());
+									//bug 11611 and 11659 end
+						}
+					}
+			 */
+
+			// bug id #13455 start 
+			final String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+					+ "specimen.id = '" + specimen.getId() + "'";
 			list = dao.executeQuery(query);
 			final Iterator<Long> itr = list.iterator();
 			while (itr.hasNext())
 			{
-				siteId = (Long) itr.next();
+				siteId = itr.next();
 			}
 			final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
 					.getUserId());
