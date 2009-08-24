@@ -236,7 +236,8 @@
 				}
 				else
 				{
-					<%								
+					<%	
+					forwardToPrintPath = "PrintSpecimenEdit";	
 				    if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				   {
 				  	    forwardToPrintPath = "CPQueryPrintSpecimenEdit";
@@ -1547,11 +1548,16 @@
 								<td align="left" class="black_ar">
 					<%
 						//boolean concentrationDisabled = true;
-						if(form.getClassName().equals("Molecular") && Constants.ALIQUOT.equals(form.getLineage()))
+						/*if(form.getClassName().equals("Molecular") && Constants.ALIQUOT.equals(form.getLineage()))
 						{
 								//concentrationDisabled = false;
 								// Fix for bug #9950
 								readOnlyForAll = true;	
+						}*/
+						readOnlyForAll = true;
+						if(form.getClassName().equals("Molecular")&& !Constants.ALIQUOT.equals(form.getLineage()))
+						{
+							readOnlyForAll = false;
 						}
 					%>
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right"
