@@ -64,8 +64,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		final CollectionProtocolRegistrationForm collectionProtocolRegistrationForm
-		= (CollectionProtocolRegistrationForm) form;
+		final CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) form;
 
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
@@ -91,8 +90,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			final CollectionProtocolRegistrationForm cpform
-			= (CollectionProtocolRegistrationForm) form;
+			final CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm) form;
 			cpform.setId(0);
 			/*
 			 * setting the PPI of the main COllection protocol Registration if
@@ -123,12 +121,10 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 
 					cpform.setRegistrationDate(request.getParameter(Constants.REG_DATE));
 				}
-				if (cpform.getRegistrationDate() == null
-						|| cpform.getRegistrationDate().equals(""))
+				if (cpform.getRegistrationDate() == null || cpform.getRegistrationDate().equals(""))
 				{
 					cpform.setRegistrationDate(CommonUtilities.parseDateToString(Calendar
-							.getInstance().getTime()
-							, CommonServiceLocator.getInstance()
+							.getInstance().getTime(), CommonServiceLocator.getInstance()
 							.getDatePattern()));
 
 				}
@@ -162,8 +158,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 		final Object[] whereColVal = {cpId};
 
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic =
-			(CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final List list = bizLogic.retrieve(sourceObjName, selectColName, whereColName,
@@ -198,8 +193,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	{
 
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic =
-			(CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		form.setParticipantID(participantId.longValue());
@@ -269,8 +263,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic =
-			(CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final String sourceObjName = CollectionProtocolRegistration.class.getName();
@@ -321,8 +314,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 			CollectionProtocolRegistrationForm form) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final CollectionProtocolRegistrationBizLogic bizLogic =
-			(CollectionProtocolRegistrationBizLogic) factory
+		final CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
 		final String sourceObjName = CollectionProtocolRegistration.class.getName();

@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -76,7 +76,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getDurationInMinutes()
 	{
-		return durationInMinutes;
+		return this.durationInMinutes;
 	}
 
 	/**
@@ -94,6 +94,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return SPUN_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.SPUN_EVENT_PARAMETERS_FORM_ID;
@@ -103,17 +104,19 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	* Populates all the fields from the domain object to the form bean.
 	* @param abstractDomain An AbstractDomain Object  
 	*/
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		try
 		{
 			super.setAllValues(abstractDomain);
-			SpunEventParameters spunEventParametersObject = (SpunEventParameters) abstractDomain;
-			this.gravityForce = Utility.toString(spunEventParametersObject.getGravityForce());
-			this.durationInMinutes = Utility.toString(spunEventParametersObject
+			final SpunEventParameters spunEventParametersObject = (SpunEventParameters) abstractDomain;
+			this.gravityForce = CommonUtilities.toString(spunEventParametersObject
+					.getGravityForce());
+			this.durationInMinutes = CommonUtilities.toString(spunEventParametersObject
 					.getDurationInMinutes());
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -125,22 +128,23 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
-			if (!gravityForce.equals(""))
+			if (!this.gravityForce.equals(""))
 			{
-				if (!validator.isDouble(gravityForce))
+				if (!validator.isDouble(this.gravityForce))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid.gforge",
 							ApplicationProperties.getValue("spuneventparameters.gforce")));
 				}
 
-				if (Double.parseDouble(gravityForce) <= 0)
+				if (Double.parseDouble(this.gravityForce) <= 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.capacity.greaterThan0", ApplicationProperties
@@ -148,25 +152,26 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 				}
 			}
 
-			if (!durationInMinutes.equals(""))
+			if (!this.durationInMinutes.equals(""))
 			{
-				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes))
+				if (this.durationInMinutes.contains(".")
+						|| !validator.isNumeric(this.durationInMinutes))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.invalid.durationinminutes", ApplicationProperties
 									.getValue("spuneventparameters.durationinminutes")));
 				}
 
-				if (Integer.parseInt(durationInMinutes) < 0)
+				if (Integer.parseInt(this.durationInMinutes) < 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.capacity.greaterThan0", ApplicationProperties
 									.getValue("spuneventparameters.durationinminutes")));
 				}
 			}
-			logger.info("durationInMinutes: " + durationInMinutes);
+			logger.info("durationInMinutes: " + this.durationInMinutes);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -176,6 +181,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//	 	super.reset();
@@ -188,7 +194,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getGravityForce()
 	{
-		return gravityForce;
+		return this.gravityForce;
 	}
 
 	/**

@@ -38,6 +38,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 {
 
 	Logger logger = Logger.getCommonLogger(ShipmentReceivingBizLogic.class);
+
 	/**
 	 * Overridden method
 	 * @param obj - shipment object
@@ -48,7 +49,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * bug 12806
 	 */
 	@Override
-	protected boolean validate(Object obj, DAO dao, String operation)throws BizLogicException
+	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		super.validate(obj, dao, operation);
 		boolean isValid = true;
@@ -56,6 +57,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		isValid = this.validateDuplicateSpecimenPositionsInShipment(shipment);
 		return isValid;
 	}
+
 	/**
 	 * bug 12806
 	 * This method validates storage positions of specimens.
@@ -64,37 +66,41 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @return boolean
 	 * @throws BizLogicException - BizLogicException
 	 */
-	private boolean validateDuplicateSpecimenPositionsInShipment(Shipment shipment) throws BizLogicException
+	private boolean validateDuplicateSpecimenPositionsInShipment(Shipment shipment)
+			throws BizLogicException
 	{
-		boolean isValid = true;
-		Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
-		for (StorageContainer storageContainer : containerCollection)
+		final boolean isValid = true;
+		final Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
+		for (final StorageContainer storageContainer : containerCollection)
 		{
-			StorageType storageType = storageContainer.getStorageType();
+			final StorageType storageType = storageContainer.getStorageType();
 			if (storageType != null
 					&& ((storageType.getName() != null) && (Constants.SHIPMENT_CONTAINER_TYPE_NAME
 							.equals(storageType.getName().trim()))))
 			{
-				Collection<SpecimenPosition> spPosCollection = storageContainer
-				.getSpecimenPositionCollection();
-				if(spPosCollection.size()>1)
+				final Collection<SpecimenPosition> spPosCollection = storageContainer
+						.getSpecimenPositionCollection();
+				if (spPosCollection.size() > 1)
 				{
-					Iterator<SpecimenPosition> it = spPosCollection.iterator();
-					List<String> specimenPosList = new ArrayList<String>();
-					while(it.hasNext())
+					final Iterator<SpecimenPosition> it = spPosCollection.iterator();
+					final List<String> specimenPosList = new ArrayList<String>();
+					while (it.hasNext())
 					{
-						SpecimenPosition pos = it.next();
-						if(pos!=null)
+						final SpecimenPosition pos = it.next();
+						if (pos != null)
 						{
-							StorageContainer st = pos.getStorageContainer();
-							String storageValue = StorageContainerUtil.getStorageValueKey( st.getName(), null, pos.getPositionDimensionOne(), pos.getPositionDimensionTwo());
-							if(!specimenPosList.contains(storageValue))
+							final StorageContainer st = pos.getStorageContainer();
+							final String storageValue = StorageContainerUtil.getStorageValueKey(st
+									.getName(), null, pos.getPositionDimensionOne(), pos
+									.getPositionDimensionTwo());
+							if (!specimenPosList.contains(storageValue))
 							{
 								specimenPosList.add(storageValue);
 							}
 							else
 							{
-								throw getBizLogicException(null, "shipment.samePositionForSpecimens",null);
+								throw this.getBizLogicException(null,
+										"shipment.samePositionForSpecimens", null);
 							}
 						}
 					}
@@ -104,6 +110,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		}
 		return isValid;
 	}
+
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
@@ -111,14 +118,14 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param oldObj The old object.
 	 * @param sessionDataBean The session in which the object is saved.
 	 * @throws BizLogicException - BizLogicException
-    */
+	*/
 	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		if (!(obj instanceof Shipment))
 		{
-			logger.debug("Invalid object is passed to bizlogic.");
+			this.logger.debug("Invalid object is passed to bizlogic.");
 			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"), null,
 					"Object is not the instance of Shipment class.");
 		}
@@ -126,10 +133,11 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		//Shipment oldShipment = (Shipment) oldObj;
 		try
 		{
-			final Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
-			
-			boolean shipmentContainer = false;
-			for (StorageContainer storageContainer : containerCollection)
+			final Collection<StorageContainer> containerCollection = shipment
+					.getContainerCollection();
+
+			final boolean shipmentContainer = false;
+			for (final StorageContainer storageContainer : containerCollection)
 			{
 				final StorageType storageType = storageContainer.getStorageType();
 				if (!shipmentContainer
@@ -160,7 +168,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
 			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
 		}
-		final boolean mailStatus = sendNotification(shipment, sessionDataBean);
+		final boolean mailStatus = this.sendNotification(shipment, sessionDataBean);
 		if (!mailStatus)
 		{
 			this.logger.debug("failed to send email..");
@@ -278,7 +286,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		else
 		{
 			//			throw new DAOException("storage continer or storage container's activity_status found null.");
-			this.logger.debug("storage continer or storage container's activity_status found null.");
+			this.logger
+					.debug("storage continer or storage container's activity_status found null.");
 			throw new BizLogicException(ErrorKey
 					.getErrorKey("storagecontainer.or.activitystatus.null"), null, "");
 			//throw AppUtility.getApplicationException(null, "errors.mail.sending.failed", "storage continer or storage container's activity_status found null.");
@@ -298,7 +307,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		final Collection<SpecimenPosition> spPosCollection = storageContainer
 				.getSpecimenPositionCollection();
-	   for (SpecimenPosition specimenPosition : spPosCollection)
+		for (final SpecimenPosition specimenPosition : spPosCollection)
 		{
 			SpecimenPosition retrievedSpPos = null;
 			Specimen specimen = null;
@@ -372,8 +381,9 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		List<StorageContainer> containerList = null;
 		StorageContainer container = null;
-		final StorageType storageType = specimenPosition.getStorageContainer() != null ? specimenPosition
-				.getStorageContainer().getStorageType() : null;
+		final StorageType storageType = specimenPosition.getStorageContainer() != null
+				? specimenPosition.getStorageContainer().getStorageType()
+				: null;
 
 		if ((storageType != null)
 				&& ((storageType.getName() != null) && (storageType.getName().trim()
@@ -411,19 +421,19 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 					.toString(), container.getName().toString(), specimenPosition
 					.getPositionDimensionOne().toString(), specimenPosition
 					.getPositionDimensionTwo().toString());*/
-			StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-			JDBCDAO jdbcdao = openJDBCSession();
-			String  containerId = "";
-			if(container.getId()!=null)
+			final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+			final JDBCDAO jdbcdao = this.openJDBCSession();
+			String containerId = "";
+			if (container.getId() != null)
 			{
-				containerId =container.getId().toString();
+				containerId = container.getId().toString();
 			}
-			final boolean isAvailable =  scBizLogic.isPositionAvailable(jdbcdao, containerId, container.getName(), specimenPosition
-					.getPositionDimensionOne().toString(), specimenPosition
-					.getPositionDimensionTwo().toString());
+			final boolean isAvailable = scBizLogic.isPositionAvailable(jdbcdao, containerId,
+					container.getName(), specimenPosition.getPositionDimensionOne().toString(),
+					specimenPosition.getPositionDimensionTwo().toString());
 			// Storage Location is either Auto or Manual.
-			closeJDBCSession(jdbcdao);
-			if(isAvailable)
+			this.closeJDBCSession(jdbcdao);
+			if (isAvailable)
 			{
 				specimen.getSpecimenPosition().setStorageContainer(container);
 				specimen.getSpecimenPosition().setPositionDimensionOne(
@@ -433,7 +443,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			}
 			else
 			{
-				throw getBizLogicException(null, "shipment.samePositionForSpecimens",null);
+				throw this.getBizLogicException(null, "shipment.samePositionForSpecimens", null);
 			}
 		}
 		else
@@ -459,7 +469,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param dao object of DAO class.
 	 * @param sessionDataBean containing session details.
 	 * @throws DAOException if some database error occurs.
-    */
+	*/
 	private void disposeShipmentContainer(StorageContainer storageContainer, DAO dao,
 			SessionDataBean sessionDataBean) throws DAOException
 	{
@@ -474,7 +484,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param obj2 old object.
 	 * @param sessionDataBean containing the session details.
 	 * @throws BizLogicException if some bizlogic operation fails.
-	 */@Override
+	 */
+	@Override
 	protected void postUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -489,7 +500,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @param sessionDataBean containing the session details.
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
-	 @Override
+	@Override
 	protected void preUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -507,7 +518,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 							shipment.getShipmentRequest().getId());
 					if (requestList != null && requestList.size() == 1)
 					{
-						shipment.setShipmentRequest((ShipmentRequest) requestList.get(0));
+						shipment.setShipmentRequest(requestList.get(0));
 					}
 				}
 				catch (final DAOException e)

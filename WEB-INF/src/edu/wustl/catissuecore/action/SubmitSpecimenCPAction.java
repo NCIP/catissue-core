@@ -101,8 +101,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 			{
 
 				final HttpSession session = request.getSession();
-				final CollectionProtocolBean collectionProtocolBean
-				= (CollectionProtocolBean) session
+				final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 						.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
 				if (ViewSpecimenSummaryForm.UPDATE_USER_ACTION.equals(this.specimenSummaryForm
@@ -113,8 +112,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 					if (collectionProtocolBean != null
 							&& collectionProtocolBean.getActivityStatus() != null)
 					{
-						ViewSpecimenSummaryForm
-						.setCollectionProtocolStatus(collectionProtocolBean
+						ViewSpecimenSummaryForm.setCollectionProtocolStatus(collectionProtocolBean
 								.getActivityStatus());
 					}
 					return mapping.findForward("updateCP");
@@ -303,8 +301,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 					final Long scgId = parentSpeciemn.getSpecimenCollectionGroup().getId();
 					final IFactory factory = AbstractFactoryConfig.getInstance()
 							.getBizLogicFactory();
-					final IBizLogic iBizLogic
-					= factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+					final IBizLogic iBizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					final Object object = iBizLogic.retrieve(SpecimenCollectionGroup.class
 							.getName(), scgId);
 					specimen.setSpecimenCollectionGroup((SpecimenCollectionGroup) object);
@@ -449,8 +446,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 			final HashSet speEventParamSet = new HashSet();
 			while (iterator.hasNext())
 			{
-				final SpecimenEventParameters specimenEventParameters
-				= (SpecimenEventParameters) iterator
+				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) iterator
 						.next();
 				if (specimenEventParameters.getUser() != null)
 				{

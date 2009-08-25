@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -28,8 +27,8 @@ public class StorageContainerTreeAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(StorageContainerTreeAction.class);
-	
+	private transient final Logger logger = Logger
+			.getCommonLogger(StorageContainerTreeAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -85,7 +84,7 @@ public class StorageContainerTreeAction extends BaseAction
 				request.setAttribute(Constants.TREE_NODE_ID, treeNodeIDToBeReloaded);
 				request.setAttribute(Constants.RELOAD, reload);
 			}
-			TreeDataInterface bizLogic = new StorageContainerBizLogic();
+			new StorageContainerBizLogic();
 			List dataList = new Vector();
 			// List disableSpecimenIdsList = new ArrayList();
 			/*if (pageOf.equals(Constants.PAGE_OF_TISSUE_SITE))
@@ -95,7 +94,7 @@ public class StorageContainerTreeAction extends BaseAction
 				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
 			}else*/
-			 if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+			if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))

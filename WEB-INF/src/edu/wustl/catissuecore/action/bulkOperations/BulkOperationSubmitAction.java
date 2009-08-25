@@ -34,6 +34,7 @@ public class BulkOperationSubmitAction extends BaseAction
 	 * logger
 	 */
 	private transient final Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
+
 	/**
 	 * @param mapping
 	 *            object of ActionMapping

@@ -49,8 +49,7 @@ public class ConflictParticipantDataDetailsAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		final ConflictParticipantDataDetailsForm conflictParticipantDataDetailsForm
-		= (ConflictParticipantDataDetailsForm) form;
+		final ConflictParticipantDataDetailsForm conflictParticipantDataDetailsForm = (ConflictParticipantDataDetailsForm) form;
 		final String participantId = request.getParameter(Constants.ID);
 
 		final HttpSession session = request.getSession();

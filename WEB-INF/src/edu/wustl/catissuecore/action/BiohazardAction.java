@@ -41,17 +41,18 @@ public class BiohazardAction extends SecureAction
 	 * @throws Exception generic exception
 	 * @return ActionForward : ActionForward
 	 * */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
-		BiohazardForm biohazardForm = (BiohazardForm) form;
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String operation = request.getParameter(Constants.OPERATION);
+		final BiohazardForm biohazardForm = (BiohazardForm) form;
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		biohazardForm.setOperation(operation);
 		biohazardForm.setSubmittedFor(submittedFor);
 
-		String biohazard_Type_List = Constants.BIOHAZARD_TYPE_LIST;
+		final String biohazard_Type_List = Constants.BIOHAZARD_TYPE_LIST;
 		String formName;
 
 		request.setAttribute("operationAdd", Constants.ADD);
@@ -71,10 +72,10 @@ public class BiohazardAction extends SecureAction
 		request.setAttribute("formName", formName);
 
 		//Sets the operation attribute to be used in the Add/Edit Institute Page.
-		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 }

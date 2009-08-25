@@ -165,7 +165,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 		{
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
-					.getMessage()));			
+					.getMessage()));
 		}
 		finally
 		{
@@ -193,6 +193,7 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 		}
 		return name;
 	}
+
 	/**
 	 * This method checks the authorization for execution.
 	 * @param arg0 HttpServletRequest object.

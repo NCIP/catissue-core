@@ -31,6 +31,7 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
@@ -39,8 +40,7 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		String formName, specimenId = null;
 
 		boolean readOnlyValue;
-		FrozenEventParametersForm frozenEventParametersForm =
-			(FrozenEventParametersForm) eventParametersForm;
+		final FrozenEventParametersForm frozenEventParametersForm = (FrozenEventParametersForm) eventParametersForm;
 		if (frozenEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.FROZEN_EVENT_PARAMETERS_EDIT_ACTION;
@@ -53,13 +53,13 @@ public class FrozenEventParametersAction extends SpecimenEventParametersAction
 		}
 		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);
 		request.setAttribute("specimenId", specimenId);
 		//set array of methods
-		List methodList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List methodList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_METHOD, null);
 		request.setAttribute("methodList", methodList);
 		//request.setAttribute("frozenEventParametersAddAction",

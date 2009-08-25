@@ -35,6 +35,7 @@ public final class ReportLoaderUtil
 	{
 
 	}
+
 	/**
 	 * This method gets Participant List.
 	 * @param defaultLookUPResultList default Look UP ResultList.
@@ -52,8 +53,7 @@ public final class ReportLoaderUtil
 			// prepare list of participant object out of DefaultLookupResult List
 			for (int i = 0; i < defaultLookUPResultList.size(); i++)
 			{
-				final DefaultLookupResult participantResult =
-					(DefaultLookupResult) defaultLookUPResultList
+				final DefaultLookupResult participantResult = (DefaultLookupResult) defaultLookUPResultList
 						.get(i);
 				result.add((Participant) participantResult.getObject());
 			}

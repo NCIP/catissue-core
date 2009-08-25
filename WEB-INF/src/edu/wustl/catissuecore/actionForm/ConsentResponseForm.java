@@ -87,8 +87,10 @@ public class ConsentResponseForm extends AbstractActionForm
 	*/
 	public void setConsentResponseValue(String key, Object value)
 	{
-		if (isMutable())
-			consentResponseValues.put(key, value);
+		if (this.isMutable())
+		{
+			this.consentResponseValues.put(key, value);
+		}
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class ConsentResponseForm extends AbstractActionForm
 	 */
 	public Object getConsentResponseValue(String key)
 	{
-		return consentResponseValues.get(key);
+		return this.consentResponseValues.get(key);
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class ConsentResponseForm extends AbstractActionForm
 	 */
 	public Collection getAllConsentResponseValue()
 	{
-		return consentResponseValues.values();
+		return this.consentResponseValues.values();
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class ConsentResponseForm extends AbstractActionForm
 	 */
 	public Map getConsentResponseValues()
 	{
-		return consentResponseValues;
+		return this.consentResponseValues;
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	public void setConsentTierCounter(int consentTierCounter)
@@ -137,7 +139,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public long getCollectionProtocolID()
 	{
-		return collectionProtocolID;
+		return this.collectionProtocolID;
 	}
 
 	public void setCollectionProtocolID(long collectionProtocolID)
@@ -147,7 +149,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public String getSignedConsentUrl()
 	{
-		return signedConsentUrl;
+		return this.signedConsentUrl;
 	}
 
 	public void setSignedConsentUrl(String signedConsentUrl)
@@ -157,7 +159,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public long getWitnessId()
 	{
-		return witnessId;
+		return this.witnessId;
 	}
 
 	public void setWitnessId(long witnessId)
@@ -167,7 +169,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public String getConsentDate()
 	{
-		return consentDate;
+		return this.consentDate;
 	}
 
 	public void setConsentDate(String consentDate)
@@ -181,9 +183,9 @@ public class ConsentResponseForm extends AbstractActionForm
 	 */
 	public Collection getConsentTiers()
 	{
-		Collection consentTiersList = new ArrayList();
+		final Collection consentTiersList = new ArrayList();
 		String[] strArray = null;
-		int noOfConsents = this.getConsentTierCounter();
+		final int noOfConsents = this.getConsentTierCounter();
 		for (int consentCounter = 0; consentCounter < noOfConsents; consentCounter++)
 		{
 			strArray = new String[4];
@@ -210,7 +212,7 @@ public class ConsentResponseForm extends AbstractActionForm
 
 	public String getWithdrawlButtonStatus()
 	{
-		return withdrawlButtonStatus;
+		return this.withdrawlButtonStatus;
 	}
 
 	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)

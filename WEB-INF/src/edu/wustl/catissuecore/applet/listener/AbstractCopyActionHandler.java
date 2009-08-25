@@ -60,9 +60,9 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
-		preActionPerformed(e);
-		doActionPerformed(e);
-		postActionPerformed(e);
+		this.preActionPerformed(e);
+		this.doActionPerformed(e);
+		this.postActionPerformed(e);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	protected void doActionPerformed(ActionEvent e)
 	{
-		populateValidatorModel();
+		this.populateValidatorModel();
 	}
 
 	/**
@@ -90,73 +90,24 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	protected void postActionPerformed(ActionEvent e)
 	{
 	}
+
 	/**
 	 * Protected method populateValidatorModel.
 	 */
 	protected void populateValidatorModel()
 	{
 		//Following code is added for checkbox
-		populateValidatorModel = true;
-		int[] intSelectedRows = null;
-		int[] intSelectedCols = null;
-		/*if (table.getModel() instanceof MultipleSpecimenTableModel)
-		 {
-		 MultipleSpecimenTableModel multipleSpecimenTableModel =
-		  CommonAppletUtil.getMultipleSpecimenTableModel(table);
-		 Map checkBoxMap = multipleSpecimenTableModel.getSpecimenCheckBoxMap();
-		 int columnsPerPage = multipleSpecimenTableModel.getColumnsPerPage();
-		 if (checkBoxMap != null && checkBoxMap.size() > 0)
-		 {
-		 List selectedRows = new ArrayList();
-		 List selectedCols = new ArrayList();
-		 Iterator itr = checkBoxMap.keySet().iterator();
-		 while (itr.hasNext())
-		 {
-		 String key = (String) itr.next();
-		 if (checkBoxMap.get(key) != null && ((Boolean) checkBoxMap.get(key)).booleanValue() == true)
-		 {
-		 int colNo = Integer.parseInt(key) - 1;
-		 selectedCols.add(new Integer(colNo % columnsPerPage));
-		 checkBoxMap.put(key, new Boolean(false));
-		 populateValidatorModel = false;
-		 }
-		 }
-		 if (populateValidatorModel == false)
-		 {
-		 for (int i = AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO; i
-		  <= AppletConstants.SPECIMEN_DERIVE_ROW_NO; i++)
-		 {
-		 selectedRows.add(new Integer(i));
-		 }
-		 Collections.sort(selectedCols);
+		this.populateValidatorModel = true;
+		final CopyPasteOperationValidatorModel validatorModel = new CopyPasteOperationValidatorModel();
 
-		 intSelectedRows = new int[selectedRows.size()];
-		 for (int i = 0; i < selectedRows.size(); i++)
-		 {
-		 intSelectedRows[i] = ((Integer) selectedRows.get(i)).intValue();
-		 }
-		 intSelectedCols = new int[selectedCols.size()];
-		 for (int i = 0; i < selectedCols.size(); i++)
-		 {
-		 intSelectedCols[i] = ((Integer) selectedCols.get(i)).intValue();
-		 }
-
-		 }
-
-		 }
-
-		 }*/
-
-		CopyPasteOperationValidatorModel validatorModel = new CopyPasteOperationValidatorModel();
-
-		if (populateValidatorModel)
+		if (this.populateValidatorModel)
 		{
 
-			int[] selectedColumns = table.getSelectedColumns();
-			int[] selectedRows = table.getSelectedRows();
+			final int[] selectedColumns = this.table.getSelectedColumns();
+			final int[] selectedRows = this.table.getSelectedRows();
 
 			// poulate validator model
-			populateValidatorModel(validatorModel, selectedRows, selectedColumns);
+			this.populateValidatorModel(validatorModel, selectedRows, selectedColumns);
 
 		}
 		/*else
@@ -180,9 +131,9 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		BaseCopyPasteValidator validator = null;
 		String validationMessage = null;
 
-		if (table != null)
+		if (this.table != null)
 		{
-			if (table.getModel() instanceof SpecimenArrayTableModel)
+			if (this.table.getModel() instanceof SpecimenArrayTableModel)
 			{
 				validator = new SpecimenArrayCopyPasteValidator(validatorModel);
 			}
@@ -198,16 +149,17 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			validationMessage = validator.validate();
 			if (validationMessage.equals(""))
 			{
-				isValidateSuccess = true;
-				CommonAppletUtil.getBaseTableModel(table).setCopyPasteOperationValidatorModel(
+				this.isValidateSuccess = true;
+				CommonAppletUtil.getBaseTableModel(this.table).setCopyPasteOperationValidatorModel(
 						validatorModel);
 			}
 			else
 			{
-				isValidateSuccess = false;
+				this.isValidateSuccess = false;
 				System.out.println(" validationMessage:: " + validationMessage);
-				Object[] paramArray = {validationMessage};
-				CommonAppletUtil.callJavaScriptFunction(table, getJSMethodName(), paramArray);
+				final Object[] paramArray = {validationMessage};
+				CommonAppletUtil.callJavaScriptFunction(this.table, this.getJSMethodName(),
+						paramArray);
 			}
 		}
 	}
@@ -223,9 +175,9 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		validatorModel.setSelectedCopiedRows(CommonAppletUtil.createListFromArray(selectedRows));
 		validatorModel.setSelectedCopiedCols(CommonAppletUtil.createListFromArray(selectedColumns));
 		validatorModel.setOperation(AppletConstants.COPY_OPERATION);
-		validatorModel.setCopiedData(getSelectedData(selectedRows, selectedColumns));
-		validatorModel.setRowCount(table.getRowCount());
-		validatorModel.setColumnCount(getColumnCount());
+		validatorModel.setCopiedData(this.getSelectedData(selectedRows, selectedColumns));
+		validatorModel.setRowCount(this.table.getRowCount());
+		validatorModel.setColumnCount(this.getColumnCount());
 	}
 
 	/**
@@ -237,15 +189,13 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	protected HashMap getSelectedData(int[] selectedRows, int[] selectedColumns)
 	{
-		HashMap map = new HashMap();
-		for (int rowIndex = 0; rowIndex < selectedRows.length; rowIndex++)
+		final HashMap map = new HashMap();
+		for (final int selectedRow : selectedRows)
 		{
-			for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
+			for (final int selectedColumn : selectedColumns)
 			{
-				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex],
-						selectedColumns[columnIndex]);
-				List valueList = getValueList(selectedRows[rowIndex],
-						selectedColumns[columnIndex]);
+				final String key = CommonAppletUtil.getDataKey(selectedRow, selectedColumn);
+				final List valueList = this.getValueList(selectedRow, selectedColumn);
 				map.put(key, valueList);
 			}
 		}
@@ -293,8 +243,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	protected List getValueList(int rowIndex, int columnIndex)
 	{
-		List valueList = new ArrayList();
-		Object value = table.getValueAt(rowIndex, columnIndex);
+		final List valueList = new ArrayList();
+		Object value = this.table.getValueAt(rowIndex, columnIndex);
 		if (value == null)
 		{
 			value = "";

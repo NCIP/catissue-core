@@ -3,12 +3,14 @@ package edu.wustl.catissuecore.deidentifier;
 
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+
 /**
  * @author
  *
  */
 public class DeidentifierFactory
 {
+
 	/**
 	 * @return AbstractDeidentifier
 	 * @throws ClassNotFoundException : ClassNotFoundException
@@ -20,9 +22,9 @@ public class DeidentifierFactory
 	{
 		AbstractDeidentifier deidentifier = null;
 
-		Class<AbstractDeidentifier> deidentifierClass = (Class<AbstractDeidentifier>) Class
+		final Class<AbstractDeidentifier> deidentifierClass = (Class<AbstractDeidentifier>) Class
 				.forName(CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME));
-		deidentifier = (AbstractDeidentifier) deidentifierClass.newInstance();
+		deidentifier = deidentifierClass.newInstance();
 
 		return deidentifier;
 	}

@@ -191,8 +191,7 @@ public class DirectDistributeInitAction extends BaseAction
 			final SpecimenPosition specimenPosition = specimen.getSpecimenPosition();
 			if (specimenPosition != null)
 			{
-				if (!siteIdsList.contains(specimenPosition
-						.getStorageContainer().getSite().getId()))
+				if (!siteIdsList.contains(specimenPosition.getStorageContainer().getSite().getId()))
 				{
 					isValidToDistribute = false;
 					break;
@@ -291,30 +290,23 @@ public class DirectDistributeInitAction extends BaseAction
 		{
 			while (pathologyReportsIter.hasNext())
 			{
-				final SurgicalPathologyReport surgPathReports
-				= (SurgicalPathologyReport) pathologyReportsIter
+				final SurgicalPathologyReport surgPathReports = (SurgicalPathologyReport) pathologyReportsIter
 						.next();
-				final SpecimenCollectionGroup specimenCollectionGroup
-				= (SpecimenCollectionGroup) surgPathReports
+				final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) surgPathReports
 						.getSpecimenCollectionGroup();
 
 				if (specimenCollectionGroup != null)
 				{
 
-					final Long cpId
-					= specimenCollectionGroup.getCollectionProtocolRegistration()
+					final Long cpId = specimenCollectionGroup.getCollectionProtocolRegistration()
 							.getCollectionProtocol().getId();
-					final String objectId
-					= Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
-					boolean isAuthorized
-					= privilegeCache.hasPrivilege(objectId,
-							Variables.privilegeDetailsMap
-							.get(Constants.DISTRIBUTE_SPECIMENS));
+					final String objectId = Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cpId;
+					boolean isAuthorized = privilegeCache.hasPrivilege(objectId,
+							Variables.privilegeDetailsMap.get(Constants.DISTRIBUTE_SPECIMENS));
 					if (!isAuthorized)
 					{
 						isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(
-								Permissions.DISTRIBUTION
-								, sessionDataBean, cpId.toString());
+								Permissions.DISTRIBUTION, sessionDataBean, cpId.toString());
 					}
 
 					if (!isAuthorized)
@@ -422,8 +414,7 @@ public class DirectDistributeInitAction extends BaseAction
 		int counter = 0;
 		while (pathologyReportsIter.hasNext())
 		{
-			final SurgicalPathologyReport surgPathReports
-			= (SurgicalPathologyReport) pathologyReportsIter
+			final SurgicalPathologyReport surgPathReports = (SurgicalPathologyReport) pathologyReportsIter
 					.next();
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_specimenId", surgPathReports
 					.getId().toString());
@@ -435,27 +426,19 @@ public class DirectDistributeInitAction extends BaseAction
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_specimenCollectionGroup",
 					surgPathReports.getSpecimenCollectionGroup().getId().toString());
 			pathologyMap
-					.put("OrderSpecimenBean:" + counter +
-							"_collectionProtocol", surgPathReports
-							.getSpecimenCollectionGroup()
-							.getCollectionProtocolRegistration()
+					.put("OrderSpecimenBean:" + counter + "_collectionProtocol", surgPathReports
+							.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
 							.getCollectionProtocol().getTitle());
 
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_isDerived", "true");
 			pathologyMap.put("OrderSpecimenBean:" + counter + "_specimenClass", "Tissue");
 			pathologyMap
-					.put("OrderSpecimenBean:"
-							+ counter + "_specimenType", "Fixed Tissue Block");
-			pathologyMap.put("OrderSpecimenBean:"
-					+ counter + "_unitRequestedQuantity", "count");
-			pathologyMap.put("OrderSpecimenBean:"
-					+ counter + "_typeOfItem", "pathologyCase");
-			pathologyMap.put("OrderSpecimenBean:"
-					+ counter + "_arrayName", "None");
-			pathologyMap.put("OrderSpecimenBean:"
-					+ counter + "_pathologicalStatus", "");
-			pathologyMap.put("OrderSpecimenBean:"
-					+ counter + "_tissueSite", "");
+					.put("OrderSpecimenBean:" + counter + "_specimenType", "Fixed Tissue Block");
+			pathologyMap.put("OrderSpecimenBean:" + counter + "_unitRequestedQuantity", "count");
+			pathologyMap.put("OrderSpecimenBean:" + counter + "_typeOfItem", "pathologyCase");
+			pathologyMap.put("OrderSpecimenBean:" + counter + "_arrayName", "None");
+			pathologyMap.put("OrderSpecimenBean:" + counter + "_pathologicalStatus", "");
+			pathologyMap.put("OrderSpecimenBean:" + counter + "_tissueSite", "");
 			counter++;
 
 		}

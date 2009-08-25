@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.annotations;
 
 import java.io.Serializable;
@@ -37,9 +38,9 @@ public class PathObject implements Serializable
 					&& this.targetEntity.getId() != null)
 			{
 
-				if (( this.sourceEntity.getId().compareTo( pathObject.getSourceEntity().getId() ) == 0 )
-						&& ( this.targetEntity.getId().compareTo(
-								pathObject.getTargetEntity().getId() ) == 0 ))
+				if ((this.sourceEntity.getId().compareTo(pathObject.getSourceEntity().getId()) == 0)
+						&& (this.targetEntity.getId().compareTo(
+								pathObject.getTargetEntity().getId()) == 0))
 				{
 
 					equals = true;
@@ -80,9 +81,10 @@ public class PathObject implements Serializable
 	{
 		this.targetEntity = targetEntityParam;
 	}
-    /**
-     * @return - int
-     */
+
+	/**
+	 * @return - int
+	 */
 	@Override
 	public int hashCode()
 	{

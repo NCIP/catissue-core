@@ -37,14 +37,14 @@ abstract public class QueryShoppingCartAction extends BaseAction
 	protected void setCartView(HttpServletRequest request, QueryShoppingCart cart)
 	{
 		String isSpecimenIdPresent = Constants.FALSE;
-		String isContainerPresent = Constants.FALSE;
 		if (cart != null)
 		{
-			List < AttributeInterface > cartAttributeList = cart.getCartAttributeList();
+			final List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 			if (cartAttributeList != null)
 			{
-				List < String > orderableEntityNameList = Arrays.asList(Constants.entityNameArray);
-				for (AttributeInterface attribute : cartAttributeList)
+				final List<String> orderableEntityNameList = Arrays
+						.asList(Constants.entityNameArray);
+				for (final AttributeInterface attribute : cartAttributeList)
 				{
 					if ((attribute.getName().equals(Constants.ID))
 							&& ((orderableEntityNameList))
@@ -56,8 +56,7 @@ abstract public class QueryShoppingCartAction extends BaseAction
 								attribute.getEntity().getName()))
 						{
 							request
-									.setAttribute(Constants.
-											IS_SPECIMENARRAY_PRESENT,
+									.setAttribute(Constants.IS_SPECIMENARRAY_PRESENT,
 											Constants.TRUE);
 						}
 					}
@@ -65,9 +64,7 @@ abstract public class QueryShoppingCartAction extends BaseAction
 							&& attribute.getEntity().getName().equals(
 									StorageContainer.class.getName()))
 					{
-						isContainerPresent = Constants.TRUE;
-						request.setAttribute(Constants.IS_CONTAINER_PRESENT,
-								Constants.TRUE);
+						request.setAttribute(Constants.IS_CONTAINER_PRESENT, Constants.TRUE);
 					}
 				}
 				request.setAttribute(Constants.IS_SPECIMENID_PRESENT, isSpecimenIdPresent);
@@ -90,25 +87,26 @@ abstract public class QueryShoppingCartAction extends BaseAction
 	 */
 	protected Integer getIndex(Object obj)
 	{
-		String str = obj.toString();
-		StringTokenizer strTokens = new StringTokenizer(str, Constants.UNDERSCORE);
+		final String str = obj.toString();
+		final StringTokenizer strTokens = new StringTokenizer(str, Constants.UNDERSCORE);
 		strTokens.nextToken();
-		int index = Integer.parseInt(strTokens.nextToken());
+		final int index = Integer.parseInt(strTokens.nextToken());
 		return new Integer(index);
 	}
+
 	/**
 	 *
 	 * @param searchForm : searchForm
 	 * @return List < Integer > : List < Integer >
 	 */
-	protected List < Integer > getCheckboxValues(AdvanceSearchForm searchForm)
+	protected List<Integer> getCheckboxValues(AdvanceSearchForm searchForm)
 	{
-		Map map = searchForm.getValues();
-		Set chkBoxValuesSet = map.keySet();
-		List < Integer > chkBoxValues = new ArrayList < Integer >();
-		for (Object checkedValue : chkBoxValuesSet)
+		final Map map = searchForm.getValues();
+		final Set chkBoxValuesSet = map.keySet();
+		final List<Integer> chkBoxValues = new ArrayList<Integer>();
+		for (final Object checkedValue : chkBoxValuesSet)
 		{
-			chkBoxValues.add(getIndex(checkedValue));
+			chkBoxValues.add(this.getIndex(checkedValue));
 		}
 		// Sorting indices so that the order is retained
 		Collections.sort(chkBoxValues);

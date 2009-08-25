@@ -41,7 +41,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	 * logger.
 	 */
 	private transient final Logger logger = Logger
-			.getCommonLogger( LoadDynamicExtentionsDataEntryPageAction.class );
+			.getCommonLogger(LoadDynamicExtentionsDataEntryPageAction.class);
 
 	/**
 	 * @param mapping - mapping
@@ -69,15 +69,15 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm) form;
-		this.updateCache( request, annotationDataEntryForm );
+		this.updateCache(request, annotationDataEntryForm);
 
 		// Set as request attribute
-		final String dynExtDataEntryURL = this.getDynamicExtensionsDataEntryURL( request,
-				annotationDataEntryForm );
-		request.setAttribute( AnnotationConstants.DYNAMIC_EXTN_DATA_ENTRY_URL_ATTRIB,
-				dynExtDataEntryURL );
-		request.setAttribute( Constants.OPERATION, "DefineDynExtDataForAnnotations" );
-		return mapping.findForward( Constants.SUCCESS );
+		final String dynExtDataEntryURL = this.getDynamicExtensionsDataEntryURL(request,
+				annotationDataEntryForm);
+		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_DATA_ENTRY_URL_ATTRIB,
+				dynExtDataEntryURL);
+		request.setAttribute(Constants.OPERATION, "DefineDynExtDataForAnnotations");
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
@@ -97,13 +97,13 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		// CatissueCoreCacheManager cacheManager =
 		// CatissueCoreCacheManager.getInstance();
 		final HttpSession session = request.getSession();
-		final Long entityMapId = this.getEntityMapId( AppUtility.toLong( staticEntityId ),
-				AppUtility.toLong( dynEntContainerId ) );
-		session.setAttribute( AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId );
-		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID, annotationDataEntryForm
-				.getSelectedStaticEntityId() );
-		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,
-				annotationDataEntryForm.getSelectedStaticEntityRecordId() );
+		final Long entityMapId = this.getEntityMapId(AppUtility.toLong(staticEntityId), AppUtility
+				.toLong(dynEntContainerId));
+		session.setAttribute(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, annotationDataEntryForm
+				.getSelectedStaticEntityId());
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,
+				annotationDataEntryForm.getSelectedStaticEntityRecordId());
 	}
 
 	/**
@@ -119,10 +119,10 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		if (staticEntityId != null)
 		{
 			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			final List < EntityMap > entityMapsForStaticEntity = annotationBizLogic
-					.getListOfDynamicEntities( staticEntityId );
-			final EntityMap entityMap = this.getEntityMapForSelectedDE( dynamicEntityContainerId,
-					entityMapsForStaticEntity );
+			final List<EntityMap> entityMapsForStaticEntity = annotationBizLogic
+					.getListOfDynamicEntities(staticEntityId);
+			final EntityMap entityMap = this.getEntityMapForSelectedDE(dynamicEntityContainerId,
+					entityMapsForStaticEntity);
 			if (entityMap != null)
 			{
 				return entityMap.getId();
@@ -137,16 +137,16 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	 * @return EntityMap : EntityMap
 	 */
 	private EntityMap getEntityMapForSelectedDE(Long deContainerId,
-			List < EntityMap > entityMapsForStaticEntity)
+			List<EntityMap> entityMapsForStaticEntity)
 	{
-		if (( deContainerId != null ) && ( entityMapsForStaticEntity != null ))
+		if ((deContainerId != null) && (entityMapsForStaticEntity != null))
 		{
 			EntityMap entityMap = null;
-			final Iterator < EntityMap > entityMapIter = entityMapsForStaticEntity.iterator();
+			final Iterator<EntityMap> entityMapIter = entityMapsForStaticEntity.iterator();
 			while (entityMapIter.hasNext())
 			{
 				entityMap = entityMapIter.next();
-				if (( entityMap != null ) && ( entityMap.getContainerId() != null ))
+				if ((entityMap != null) && (entityMap.getContainerId() != null))
 				{
 					if (entityMap.getContainerId().longValue() == deContainerId.longValue())
 					// If matches the specified DE container id
@@ -170,7 +170,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		String dynExtDataEntryURL = request.getContextPath()
 				+ WebUIManager.getLoadDataEntryFormActionURL();
 		final SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
-				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA );
+				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 		final String userId = sessionbean.getUserId().toString();
 		String isAuthenticatedUser = "false";
 		if (userId != null)
@@ -179,21 +179,21 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		}
 
 		// Append container id
-		this.logger.info( "Load data entry page for Dynamic Extension Entity ["
-				+ annotationDataEntryForm.getSelectedAnnotation() + "]" );
+		this.logger.info("Load data entry page for Dynamic Extension Entity ["
+				+ annotationDataEntryForm.getSelectedAnnotation() + "]");
 		dynExtDataEntryURL = dynExtDataEntryURL + "&"
 				+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
 				+ annotationDataEntryForm.getSelectedAnnotation();
-		if (request.getParameter( "recordId" ) != null)
+		if (request.getParameter("recordId") != null)
 		{
-			this.logger.info( "Loading details of record id [" + request.getParameter( "recordId" )
-					+ "]" );
+			this.logger.info("Loading details of record id [" + request.getParameter("recordId")
+					+ "]");
 			dynExtDataEntryURL = dynExtDataEntryURL + "&"
 					+ WebUIManagerConstants.RECORD_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter( "recordId" );
+					+ request.getParameter("recordId");
 		}
-		final String operation = request.getParameter( "operation" );
-		final String selectedAnnotation = request.getParameter( "selectedAnnotation" );
+		final String operation = request.getParameter("operation");
+		final String selectedAnnotation = request.getParameter("selectedAnnotation");
 		final String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY
 				+ "?" + "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
 		// append callback url

@@ -77,13 +77,11 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			Integer iEventCount = new Integer(1);
 			final Collection collectionProtocolEventBeanCollection = collectionProtocolEventMap
 					.values();
-			final Iterator collectionProtocolEventBeanCollectionItr
-			= collectionProtocolEventBeanCollection
+			final Iterator collectionProtocolEventBeanCollectionItr = collectionProtocolEventBeanCollection
 					.iterator();
 			while (collectionProtocolEventBeanCollectionItr.hasNext())
 			{
-				final CollectionProtocolEventBean collectionProtocolEventBean
-				= (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
+				final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 						.next();
 				final String objectName = collectionProtocolEventBean.getCollectionPointLabel()
 						+ Constants.CLASS;
@@ -106,16 +104,13 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				{
 					final Collection specimenRequirementBeanCollection = SpecimenRequirementMap
 							.values();
-					final Iterator specimenRequirementBeanCollectionItr
-					= specimenRequirementBeanCollection
+					final Iterator specimenRequirementBeanCollectionItr = specimenRequirementBeanCollection
 							.iterator();
 					while (specimenRequirementBeanCollectionItr.hasNext())
 					{
-						final SpecimenRequirementBean specimenRequirementBean
-						= (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
+						final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
 								.next();
-						this.createSpecimenNode(objectName, identifier
-								, specimenRequirementBean,
+						this.createSpecimenNode(objectName, identifier, specimenRequirementBean,
 								treeData, operation);
 					}
 				}
@@ -167,8 +162,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			parentObjectname = objectName;
 			while (aliquotsCollectionItr.hasNext())
 			{
-				final SpecimenRequirementBean specimenRequirementBean1
-				= (SpecimenRequirementBean) aliquotsCollectionItr
+				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
 						.next();
 
 				displayName = Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
@@ -185,8 +179,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			parentObjectname = objectName;
 			while (deriveSpecimenCollectionItr.hasNext())
 			{
-				final SpecimenRequirementBean specimenRequirementBean1
-				= (SpecimenRequirementBean) deriveSpecimenCollectionItr
+				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
 				displayName = Constants.DERIVED_SPECIMEN

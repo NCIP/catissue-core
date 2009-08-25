@@ -31,11 +31,13 @@ public class ConflictSCGForm extends AbstractActionForm
 	 */
 	protected String newConflictedReport = "";
 
+	@Override
 	public int getFormId()
 	{
 		return 0;
 	}
 
+	@Override
 	protected void reset()
 	{
 
@@ -51,7 +53,7 @@ public class ConflictSCGForm extends AbstractActionForm
 	 */
 	public String getExistingConflictedReport()
 	{
-		return existingConflictedReport;
+		return this.existingConflictedReport;
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class ConflictSCGForm extends AbstractActionForm
 	 */
 	public String getNewConflictedReport()
 	{
-		return newConflictedReport;
+		return this.newConflictedReport;
 	}
 
 	/**

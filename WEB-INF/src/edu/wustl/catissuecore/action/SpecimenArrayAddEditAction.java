@@ -30,10 +30,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenArrayAddEditAction extends CommonAddEditAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayAddEditAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(SpecimenArrayAddEditAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -48,24 +51,27 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
 
-		Map arrayContentMap = (Map) request.getSession().getAttribute(
+		final Map arrayContentMap = (Map) request.getSession().getAttribute(
 				Constants.SPECIMEN_ARRAY_CONTENT_KEY);
 		if (arrayContentMap != null)
 		{
 			try
 			{
-				MapDataParser mapDataParser = new MapDataParser("edu.wustl.catissuecore.domain");
-				Collection specimenArrayContentList = mapDataParser.generateData(arrayContentMap);
-				AbstractActionForm abstractForm = (AbstractActionForm) form;
+				final MapDataParser mapDataParser = new MapDataParser(
+						"edu.wustl.catissuecore.domain");
+				final Collection specimenArrayContentList = mapDataParser
+						.generateData(arrayContentMap);
+				final AbstractActionForm abstractForm = (AbstractActionForm) form;
 
 				if (abstractForm instanceof SpecimenArrayForm)
 				{
-					SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
+					final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
 					specimenArrayForm.setSpecArrayContentCollection(specimenArrayContentList);
 				}
 				/*
@@ -79,9 +85,9 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 				 * }
 				 */
 			}
-			catch (Exception exception)
+			catch (final Exception exception)
 			{
-				logger.debug(exception.getMessage(), exception);
+				this.logger.debug(exception.getMessage(), exception);
 				exception.printStackTrace();
 			}
 		}

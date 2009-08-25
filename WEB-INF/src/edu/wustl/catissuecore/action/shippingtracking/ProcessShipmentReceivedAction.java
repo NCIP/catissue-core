@@ -63,10 +63,10 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 			catch (final ApplicationException e)
 			{
 				this.logger.debug(e.getMessage(), e);
-				ActionErrors actionErrors = new ActionErrors();
-				ActionError actionError = new ActionError("errors.item",e.getCustomizedMsg());
+				final ActionErrors actionErrors = new ActionErrors();
+				final ActionError actionError = new ActionError("errors.item", e.getCustomizedMsg());
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
-				saveErrors(request, actionErrors);
+				this.saveErrors(request, actionErrors);
 				forward = mapping.findForward(Constants.FAILURE);
 				e.printStackTrace();
 			}

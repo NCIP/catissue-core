@@ -62,8 +62,6 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 		this.setAllValues(form);
 	}
 
-	
-
 	/**
 	 * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimenRequirement bean
 	 * @param abstractForm An SiteForm object.
@@ -86,7 +84,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 				this.concentrationInMicrogramPerMicroliter = new Double(form.getConcentration());
 			}
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
 			logger.error(exception.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
@@ -101,10 +99,9 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	public MolecularSpecimenRequirement(MolecularSpecimenRequirement molecularRequirementSpecimen)
 	{
 		super();
-		this.concentrationInMicrogramPerMicroliter
-		= molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
+		this.concentrationInMicrogramPerMicroliter = molecularRequirementSpecimen.concentrationInMicrogramPerMicroliter;
 	}
-	
+
 	/**
 	 * Returns the concentration of liquid molecular specimen measured
 	 * in microgram per microlitre.

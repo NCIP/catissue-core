@@ -153,15 +153,16 @@ public class AppUtility
 
 	public static Set getSpecimenClassCDE()
 	{
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
 		return setPV;
 	}
 
 	/* Method returns the storage position list */
 	public static List getStoragePositionTypeList()
 	{
-		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
 
 		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_VIRTUAL,
 				Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE));
@@ -175,7 +176,7 @@ public class AppUtility
 
 	public static List getStoragePositionTypeListForTransferEvent()
 	{
-		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
 
 		storagePositionTypeList.add(new NameValueBean(Constants.STORAGE_TYPE_POSITION_AUTO,
 				Constants.STORAGE_TYPE_POSITION_AUTO_VALUE_FOR_TRANSFER_EVENT));
@@ -187,15 +188,15 @@ public class AppUtility
 
 	public static List getSpecimenClassList()
 	{
-		List specimenClassList = new ArrayList();
-		Set setPV = getSpecimenClassCDE();
-		Iterator itr = setPV.iterator();
+		final List specimenClassList = new ArrayList();
+		final Set setPV = getSpecimenClassCDE();
+		final Iterator itr = setPV.iterator();
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		while (itr.hasNext())
 		{
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 		}
 		return specimenClassList;
@@ -204,23 +205,23 @@ public class AppUtility
 
 	public static Map getSpecimenTypeMap()
 	{
-		Set setPV = getSpecimenClassCDE();
-		Iterator itr = setPV.iterator();
-		Map subTypeMap = new HashMap();
+		final Set setPV = getSpecimenClassCDE();
+		final Iterator itr = setPV.iterator();
+		final Map subTypeMap = new HashMap();
 		while (itr.hasNext())
 		{
-			List<NameValueBean> innerList = new ArrayList<NameValueBean>();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			Set list1 = pv.getSubPermissibleValues();
-			Iterator itr1 = list1.iterator();
+			final List<NameValueBean> innerList = new ArrayList<NameValueBean>();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final Set list1 = pv.getSubPermissibleValues();
+			final Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			while (itr1.hasNext())
 			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
+				final Object obj1 = itr1.next();
+				final PermissibleValue pv1 = (PermissibleValue) obj1;
 				// Setting Specimen Type
-				String tmpInnerStr = pv1.getValue();
+				final String tmpInnerStr = pv1.getValue();
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			subTypeMap.put(pv.getValue(), innerList);
@@ -231,8 +232,8 @@ public class AppUtility
 	public static List getSpecimenTypes(String specimenClass)
 	{
 
-		Map specimenTypeMap = getSpecimenTypeMap();
-		List typeList = (List) specimenTypeMap.get(specimenClass);
+		final Map specimenTypeMap = getSpecimenTypeMap();
+		final List typeList = (List) specimenTypeMap.get(specimenClass);
 		return typeList;
 	}
 
@@ -416,18 +417,19 @@ public class AppUtility
 
 	public static List getSpecimenClassTypes()
 	{
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Iterator itr = setPV.iterator();
 
-		List specimenClassTypeList = new ArrayList();
+		final List specimenClassTypeList = new ArrayList();
 
 		while (itr.hasNext())
 		{
 
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
 			specimenClassTypeList.add(tmpStr);
 
 		} // class and values set
@@ -444,11 +446,11 @@ public class AppUtility
 	public static List getStorageTypeList(List list, boolean includeAny)
 	{
 		NameValueBean typeAny = null;
-		List storageTypeList = new ArrayList();
-		Iterator typeItr = list.iterator();
+		final List storageTypeList = new ArrayList();
+		final Iterator typeItr = list.iterator();
 		while (typeItr.hasNext())
 		{
-			StorageType type = (StorageType) typeItr.next();
+			final StorageType type = (StorageType) typeItr.next();
 			if (type.getId().longValue() == 1)
 			{
 				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
@@ -482,19 +484,20 @@ public class AppUtility
 
 	public static List getSpecimenClassTypeListWithAny()
 	{
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Iterator itr = setPV.iterator();
 
-		List specimenClassTypeList = new ArrayList();
+		final List specimenClassTypeList = new ArrayList();
 		specimenClassTypeList.add(new NameValueBean("--All--", "-1"));
 
 		while (itr.hasNext())
 		{
 			// List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
 			logger.info("specimen class:" + tmpStr);
 			specimenClassTypeList.add(new NameValueBean(tmpStr, tmpStr));
 
@@ -511,12 +514,12 @@ public class AppUtility
 	 */
 	public static List getCollectionProtocolList(List list)
 	{
-		List collectionProtocolList = new ArrayList();
+		final List collectionProtocolList = new ArrayList();
 
-		Iterator cpItr = list.iterator();
+		final Iterator cpItr = list.iterator();
 		while (cpItr.hasNext())
 		{
-			CollectionProtocol cp = (CollectionProtocol) cpItr.next();
+			final CollectionProtocol cp = (CollectionProtocol) cpItr.next();
 			collectionProtocolList.add(new NameValueBean(cp.getTitle(), cp.getId()));
 		}
 		Collections.sort(collectionProtocolList);
@@ -532,12 +535,12 @@ public class AppUtility
 	public static List getSpecimenArrayTypeList(List list)
 	{
 		NameValueBean typeAny = null;
-		List spArrayTypeList = new ArrayList();
-		Iterator typeItr = list.iterator();
+		final List spArrayTypeList = new ArrayList();
+		final Iterator typeItr = list.iterator();
 
 		while (typeItr.hasNext())
 		{
-			SpecimenArrayType type = (SpecimenArrayType) typeItr.next();
+			final SpecimenArrayType type = (SpecimenArrayType) typeItr.next();
 			if (type.getId().longValue() == 2)
 			{
 				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
@@ -637,16 +640,16 @@ public class AppUtility
 	{
 		try
 		{
-			SimpleDateFormat dateformat = new SimpleDateFormat(pattern);
-			Date givenDate = dateformat.parse(date);
-			Calendar calendar = Calendar.getInstance();
+			final SimpleDateFormat dateformat = new SimpleDateFormat(pattern);
+			final Date givenDate = dateformat.parse(date);
+			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(givenDate);
 			return calendar;
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error(e);
-			Calendar calendar = Calendar.getInstance();
+			final Calendar calendar = Calendar.getInstance();
 			return calendar;
 		}
 	}
@@ -683,8 +686,8 @@ public class AppUtility
 		// System.out.println(AppUtility.getMonth(dt, pt) + "/" +
 		// AppUtility.getDay(dt, pt) + "/"
 		// + AppUtility.getYear(dt, pt));
-		ArrayList<String> attributeValuesInProperOrder = getAttributeValuesInProperOrder("date",
-				"13-02-2006", "12-02-2006");
+		final ArrayList<String> attributeValuesInProperOrder = getAttributeValuesInProperOrder(
+				"date", "13-02-2006", "12-02-2006");
 		System.out.println(attributeValuesInProperOrder);
 	}
 
@@ -696,15 +699,15 @@ public class AppUtility
 	 */
 	public static List getListForCDE(String cdeName)
 	{
-		CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
-		List valueList = new ArrayList();
+		final CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
+		final List valueList = new ArrayList();
 
 		if (cde != null)
 		{
-			Iterator iterator = cde.getPermissibleValues().iterator();
+			final Iterator iterator = cde.getPermissibleValues().iterator();
 			while (iterator.hasNext())
 			{
-				PermissibleValue permissibleValue = (PermissibleValue) iterator.next();
+				final PermissibleValue permissibleValue = (PermissibleValue) iterator.next();
 
 				valueList.addAll(loadPermissibleValue(permissibleValue));
 			}
@@ -723,15 +726,15 @@ public class AppUtility
 	 */
 	private static List loadPermissibleValue(PermissibleValue permissibleValue)
 	{
-		List pvList = new ArrayList();
-		String value = permissibleValue.getValue();
+		final List pvList = new ArrayList();
+		final String value = permissibleValue.getValue();
 		pvList.add(value);
 
-		Iterator iterator = permissibleValue.getSubPermissibleValues().iterator();
+		final Iterator iterator = permissibleValue.getSubPermissibleValues().iterator();
 		while (iterator.hasNext())
 		{
-			PermissibleValue subPermissibleValue = (PermissibleValue) iterator.next();
-			List subPVList = loadPermissibleValue(subPermissibleValue);
+			final PermissibleValue subPermissibleValue = (PermissibleValue) iterator.next();
+			final List subPVList = loadPermissibleValue(subPermissibleValue);
 			pvList.addAll(subPVList);
 		}
 		return pvList;
@@ -752,16 +755,16 @@ public class AppUtility
 		obj = Utility.toGridFormat(obj);
 		if (obj instanceof String)
 		{
-			String objString = (String) obj;
-			StringBuffer tokenedString = new StringBuffer();
+			final String objString = (String) obj;
+			final StringBuffer tokenedString = new StringBuffer();
 
-			StringTokenizer tokenString = new StringTokenizer(objString, ",");
+			final StringTokenizer tokenString = new StringTokenizer(objString, ",");
 
 			while (tokenString.hasMoreTokens())
 			{
 				tokenedString.append(tokenString.nextToken() + " ");
 			}
-			String gridFormattedStr = new String(tokenedString);
+			final String gridFormattedStr = new String(tokenedString);
 			obj = gridFormattedStr;
 		}
 
@@ -778,7 +781,7 @@ public class AppUtility
 	 */
 	public static List<NameValueBean> responceList(String addeditOperation)
 	{
-		List<NameValueBean> listOfResponces = new ArrayList<NameValueBean>();
+		final List<NameValueBean> listOfResponces = new ArrayList<NameValueBean>();
 		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED, Constants.NOT_SPECIFIED));
 		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES, Constants.BOOLEAN_YES));
 		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO, Constants.BOOLEAN_NO));
@@ -827,7 +830,7 @@ public class AppUtility
 		{
 			obj = toNewGridFormat(obj);
 
-			QueryResultObjectData queryResultObjectData = hyperlinkColumnMap.get(index);
+			final QueryResultObjectData queryResultObjectData = hyperlinkColumnMap.get(index);
 			/** 
 			 * row contains '##' means the user is not authorized to see the page in edit mode 
 			 * thus column is not shown as hyperlink.  
@@ -838,7 +841,9 @@ public class AppUtility
 				// hyperlink.
 				{
 					if (obj == null || obj.equals(""))
+					{
 						obj = "NA";
+					}
 
 					/**
 					 * Name : Prafull Bug ID: 4223 Patch ID: 4223_1 Description:
@@ -846,8 +851,8 @@ public class AppUtility
 					 * password Added PageOf Attribute as request parameter in the
 					 * link.
 					 */
-					String aliasName = queryResultObjectData.getAliasName();
-					String link = "SimpleSearchEdit.do?"
+					final String aliasName = queryResultObjectData.getAliasName();
+					final String link = "SimpleSearchEdit.do?"
 							+ edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "="
 							+ aliasName + "&"
 							+ edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER + "="
@@ -857,10 +862,10 @@ public class AppUtility
 					 * bug ID: 4225 Patch id: 4225_1 Description : Passing a
 					 * different name to the popup window
 					 */
-					String onclickStr = " onclick=javascript:NewWindow('" + link
+					final String onclickStr = " onclick=javascript:NewWindow('" + link
 							+ "','simpleSearch','800','600','yes') ";
-					String hrefTag = "<a class='normalLink' href='#'" + onclickStr + ">" + obj
-							+ "</a>";
+					final String hrefTag = "<a class='normalLink' href='#'" + onclickStr + ">"
+							+ obj + "</a>";
 					// String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
 					obj = hrefTag;
 				}
@@ -880,7 +885,7 @@ public class AppUtility
 
 		for (int col = 1; col < columnNames.size(); col++)
 		{
-			String columnName = (String) columnNames.get(col);
+			final String columnName = (String) columnNames.get(col);
 			colWidth = colWidth + "," + getColumnWidth(columnName);
 		}
 		return colWidth;
@@ -919,10 +924,10 @@ public class AppUtility
 	 */
 	public static List tissueSiteList() throws BizLogicException
 	{
-		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		CDEBizLogic cdeBizLogic = (CDEBizLogic) factory.getBizLogic(Constants.CDE_FORM_ID);
-		List tissueList = new ArrayList();
+		final CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final CDEBizLogic cdeBizLogic = (CDEBizLogic) factory.getBizLogic(Constants.CDE_FORM_ID);
+		final List tissueList = new ArrayList();
 		// set first index as --select-- option to display in combo.
 		tissueList.add(new NameValueBean(Constants.SELECT_OPTION, ""
 				+ Constants.SELECT_OPTION_VALUE));
@@ -952,16 +957,16 @@ public class AppUtility
 	public static boolean validateSpecimenTypeClass(String specimenClass, String specimenType)
 			throws ApplicationException
 	{
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		if (specimenClass == null || !Validator.isEnumeratedValue(specimenClassList, specimenClass))
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.class.errMsg");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("protocol.class.errMsg");
 			throw new DAOException(errorKey, null, "");
 		}
 		if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass), specimenType))
 		{
-			ErrorKey errorKey = ErrorKey.getErrorKey("protocol.type.errMsg");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("protocol.type.errMsg");
 			throw new DAOException(errorKey, null, "");
 		}
 		/* Patch ends here */
@@ -977,7 +982,7 @@ public class AppUtility
 	 */
 	public static List getListFromCDE(String listType)
 	{
-		List CDEList = CDEManager.getCDEManager().getPermissibleValueList(listType, null);
+		final List CDEList = CDEManager.getCDEManager().getPermissibleValueList(listType, null);
 		return CDEList;
 	}
 
@@ -999,7 +1004,7 @@ public class AppUtility
 	 */
 	public static String getToolTipText(NewSpecimenForm specimenForm) throws ApplicationException
 	{
-		StringBuffer toolTipText = new StringBuffer("");
+		final StringBuffer toolTipText = new StringBuffer("");
 
 		if (specimenForm != null)
 		{
@@ -1043,16 +1048,16 @@ public class AppUtility
 	 */
 	public static String getUserNameById(Long userId) throws BizLogicException, DAOException
 	{
-		String className = User.class.getName();
-		String colName = edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER;
-		String colValue = userId.toString();
+		final String className = User.class.getName();
+		final String colName = edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER;
+		final String colValue = userId.toString();
 		String userName = "";
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic bizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
-		List userList = bizLogic.retrieve(className, colName, colValue);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic bizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
+		final List userList = bizLogic.retrieve(className, colName, colValue);
 		if (userList != null && userList.size() > 0)
 		{
-			User user = (User) userList.get(0);
+			final User user = (User) userList.get(0);
 			userName = user.getLastName();
 			userName += ", ";
 			userName += user.getFirstName();
@@ -1067,7 +1072,7 @@ public class AppUtility
 	public static void setEventsFromScg(ActionForm form,
 			SpecimenCollectionGroupForm specimenCollectionGroupForm)
 	{
-		NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
+		final NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
 
 		newSpecimenForm.setCollectionEventId(specimenCollectionGroupForm.getCollectionEventId());
 		newSpecimenForm.setCollectionEventSpecimenId(specimenCollectionGroupForm
@@ -1118,12 +1123,12 @@ public class AppUtility
 	public static SpecimenCollectionGroup getSpecimenCollectionGroup(
 			String specimenCollectionGroupId) throws ApplicationException
 	{
-		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		final String sourceObjectName = SpecimenCollectionGroup.class.getName();
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) factory
 				.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		Object object = scgbizLogic.retrieve(sourceObjectName, Long
+		final Object object = scgbizLogic.retrieve(sourceObjectName, Long
 				.valueOf(specimenCollectionGroupId));
 		SpecimenCollectionGroup specimenCollectionGroup = null;
 		if (object != null)
@@ -1137,17 +1142,17 @@ public class AppUtility
 	public static String getSCGId(String scgName) throws Exception
 	{
 		String scgId = Utility.toString(null);
-		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String[] selectColumnName = new String[]{"id"};
-		String[] whereColumnName = new String[]{"name"};
-		String[] whereColumnCondition = new String[]{"="};
-		Object[] whereColumnValue = new String[]{scgName};
-		String joinCondition = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SpecimenCollectionGroupBizLogic scgBizLogic = (SpecimenCollectionGroupBizLogic) factory
+		final String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		final String[] selectColumnName = new String[]{"id"};
+		final String[] whereColumnName = new String[]{"name"};
+		final String[] whereColumnCondition = new String[]{"="};
+		final Object[] whereColumnValue = new String[]{scgName};
+		final String joinCondition = null;
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final SpecimenCollectionGroupBizLogic scgBizLogic = (SpecimenCollectionGroupBizLogic) factory
 				.getBizLogic(SpecimenCollectionGroup.class.getName());
-		List scgList = scgBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
-				whereColumnCondition, whereColumnValue, joinCondition);
+		final List scgList = scgBizLogic.retrieve(sourceObjectName, selectColumnName,
+				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		if (scgList.size() > 0)
 		{
 			scgId = Utility.toString((Long) scgList.get(0));
@@ -1178,12 +1183,12 @@ public class AppUtility
 	 */
 	public static long[] getobjectIds(Collection domainObjectCollection)
 	{
-		long ids[] = new long[domainObjectCollection.size()];
+		final long ids[] = new long[domainObjectCollection.size()];
 		int i = 0;
-		Iterator it = domainObjectCollection.iterator();
+		final Iterator it = domainObjectCollection.iterator();
 		while (it.hasNext())
 		{
-			AbstractDomainObject domainObject = (AbstractDomainObject) it.next();
+			final AbstractDomainObject domainObject = (AbstractDomainObject) it.next();
 			ids[i] = domainObject.getId().longValue();
 			i++;
 		}
@@ -1204,35 +1209,33 @@ public class AppUtility
 	{
 		List paginationDataList;
 		querySessionData.setRecordsPerPage(recordsPerPage);
-		int startIndex = recordsPerPage * (pageNum - 1);
-		QueryBizLogic qBizLogic = new QueryBizLogic();
-		PagenatedResultData pagenatedResultData = qBizLogic.execute(sessionData, querySessionData,
-				startIndex);
+		final int startIndex = recordsPerPage * (pageNum - 1);
+		final QueryBizLogic qBizLogic = new QueryBizLogic();
+		final PagenatedResultData pagenatedResultData = qBizLogic.execute(sessionData,
+				querySessionData, startIndex);
 		paginationDataList = pagenatedResultData.getResult();
-		String isSimpleSearch = (String) request.getSession().getAttribute(
+		final String isSimpleSearch = (String) request.getSession().getAttribute(
 				Constants.IS_SIMPLE_SEARCH);
 		if (isSimpleSearch == null || (!isSimpleSearch.equalsIgnoreCase(Constants.TRUE)))
 		{
-			Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData
+			final Map<Long, QueryResultObjectDataBean> queryResultObjectDataBeanMap = querySessionData
 					.getQueryResultObjectDataMap();
 			if (queryResultObjectDataBeanMap != null)
 			{
-				for (Iterator<Long> beanMapIterator = queryResultObjectDataBeanMap.keySet()
-						.iterator(); beanMapIterator.hasNext();)
+				for (final Long id : queryResultObjectDataBeanMap.keySet())
 				{
-					Long id = beanMapIterator.next();
-					QueryResultObjectDataBean bean = queryResultObjectDataBeanMap.get(id);
+					final QueryResultObjectDataBean bean = queryResultObjectDataBeanMap.get(id);
 					if (bean.isClobeType())
 					{
-						List<String> columnsList = (List<String>) request.getSession()
+						final List<String> columnsList = (List<String>) request.getSession()
 								.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-						QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
-						Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic
+						final QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
+						final Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic
 								.updateSpreadSheetColumnList(columnsList,
 										queryResultObjectDataBeanMap);
 						//	QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
-						Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic.updateDataList(
-								paginationDataList, fileTypeIndexMainEntityIndexMap);
+						final Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic
+								.updateDataList(paginationDataList, fileTypeIndexMainEntityIndexMap);
 						request.getSession().setAttribute(Constants.ENTITY_IDS_MAP,
 								exportMetataDataMap.get(Constants.ENTITY_IDS_MAP));
 						request.getSession().setAttribute(Constants.EXPORT_DATA_LIST,
@@ -1257,11 +1260,11 @@ public class AppUtility
 	 */
 	public static List<Object[]> executeQuery(String hql) throws ApplicationException
 	{
-		IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
+		final IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
 				Constants.APPLICATION_NAME);
-		DAO dao = daofactory.getDAO();
+		final DAO dao = daofactory.getDAO();
 		dao.openSession(null);
-		List list = dao.executeQuery(hql);
+		final List list = dao.executeQuery(hql);
 		dao.closeSession();
 		return list;
 	}
@@ -1278,8 +1281,8 @@ public class AppUtility
 	 */
 	public static List executeSQLQuery(String sql) throws ApplicationException
 	{
-		JDBCDAO jdbcDAO = openJDBCSession();
-		List list = jdbcDAO.executeQuery(sql);
+		final JDBCDAO jdbcDAO = openJDBCSession();
+		final List list = jdbcDAO.executeQuery(sql);
 		return list;
 	}
 
@@ -1291,24 +1294,24 @@ public class AppUtility
 		try
 		{
 			list = executeSQLQuery(sql.toString());
-		    if (list != null && list.size() > 0)
+			if (list != null && list.size() > 0)
 			{
-		    	
-		    		records = (List) list.get(0);
-					if(records!=null  && records.size()>0 && !records.isEmpty())
+
+				records = (List) list.get(0);
+				if (records != null && records.size() > 0 && !records.isEmpty())
+				{
+					if (!((String) records.get(0)).equals(""))
 					{
-						if(!((String)records.get(0)).equals(""))
-						{
-						   noOfRecords = new Long((String) records.get(0));
-						}
+						noOfRecords = new Long((String) records.get(0));
 					}
+				}
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			// TODO Auto-generated catch block
 			throw new ApplicationException(e.getErrorKey(), e, e.getMessage());
@@ -1324,23 +1327,23 @@ public class AppUtility
 	{
 		try
 		{
-			IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
+			final IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
 					Constants.APPLICATION_NAME);
-			JDBCDAO dao = daofactory.getJDBCDAO();
+			final JDBCDAO dao = daofactory.getJDBCDAO();
 			dao.openSession(null);
 			logger.debug("SQL************" + sql);
-			AbstractQueryExecutor queryExecutor = edu.wustl.query.util.global.Utility
+			final AbstractQueryExecutor queryExecutor = edu.wustl.query.util.global.Utility
 					.getQueryExecutor();
-			PagenatedResultData pagenatedResultData = queryExecutor.getQueryResultList(sql, null,
-					sessionDataBean, isSecureExecute, hasConditionOnIdentifiedField,
+			final PagenatedResultData pagenatedResultData = queryExecutor.getQueryResultList(sql,
+					null, sessionDataBean, isSecureExecute, hasConditionOnIdentifiedField,
 					queryResultObjectDataMap, startIndex, totoalRecords);
 			dao.closeSession();
 			return pagenatedResultData;
 		}
-		catch (SMException exception)
+		catch (final SMException exception)
 		{
 			logger.debug("Security Exception:", exception);
-			ErrorKey errorKey = ErrorKey.getErrorKey("sm.operation.error");
+			final ErrorKey errorKey = ErrorKey.getErrorKey("sm.operation.error");
 			throw new DAOException(errorKey, exception, "");
 		}
 	}
@@ -1376,7 +1379,7 @@ public class AppUtility
 	 */
 	public static String getTooltip(String title)
 	{
-		String tooltip = title.replaceAll("'", Constants.SINGLE_QUOTE_ESCAPE_SEQUENCE); // escape sequence
+		final String tooltip = title.replaceAll("'", Constants.SINGLE_QUOTE_ESCAPE_SEQUENCE); // escape sequence
 		// for '
 		return tooltip;
 	}
@@ -1392,7 +1395,7 @@ public class AppUtility
 	 */
 	public static boolean isQuarantined(Long reportId) throws ApplicationException
 	{
-		String hqlString = "select ispr.deIdentifiedSurgicalPathologyReport.id "
+		final String hqlString = "select ispr.deIdentifiedSurgicalPathologyReport.id "
 				+ " from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport as ispr, "
 				+ " edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport as deidReport"
 				+ " where ispr.id = " + reportId
@@ -1400,7 +1403,7 @@ public class AppUtility
 				+ " and ispr.deIdentifiedSurgicalPathologyReport.isQuarantined='"
 				+ Constants.QUARANTINE_REQUEST + "'";
 
-		List reportIDList = AppUtility.executeQuery(hqlString);
+		final List reportIDList = AppUtility.executeQuery(hqlString);
 		if (reportIDList != null && reportIDList.size() > 0)
 		{
 			return true;
@@ -1425,21 +1428,21 @@ public class AppUtility
 	{
 		String v1 = value1;
 		String v2 = value2;
-		ArrayList<String> attributeValues = new ArrayList<String>();
+		final ArrayList<String> attributeValues = new ArrayList<String>();
 		if (dataType.equalsIgnoreCase(EntityManagerConstantsInterface.DATE_ATTRIBUTE_TYPE))
 		{
-			SimpleDateFormat df = new SimpleDateFormat(pattern);
+			final SimpleDateFormat df = new SimpleDateFormat(pattern);
 			try
 			{
-				Date date1 = df.parse(value1);
-				Date date2 = df.parse(value2);
+				final Date date1 = df.parse(value1);
+				final Date date2 = df.parse(value2);
 				if (date1.after(date2))
 				{
 					v1 = value2;
 					v2 = value1;
 				}
 			}
-			catch (ParseException e)
+			catch (final ParseException e)
 			{
 				logger
 						.error("Can not parse the given date in getAttributeValuesInProperOrder() method :"
@@ -1491,7 +1494,7 @@ public class AppUtility
 	 */
 	public static Date getNewDateByAdditionOfDays(Date date, int daysToBeAdded)
 	{
-		Calendar calendar = new GregorianCalendar();
+		final Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		calendar.add(calendar.DAY_OF_MONTH, daysToBeAdded);
 		return calendar.getTime();
@@ -1509,18 +1512,18 @@ public class AppUtility
 		Long userID = sessionDataBean.getUserId();
 		if (userID == null)
 		{
-			String sourceObjectName = User.class.getName();
-			String[] selectColumnName = new String[]{edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
+			final String sourceObjectName = User.class.getName();
+			final String[] selectColumnName = new String[]{edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
 			//String[] whereColumnName = new String[]{Constants.LOGINNAME};
 			//String[] whereColumnCondition = new String[]{"="};
 			//String[] whereColumnValue = new String[]{sessionDataBean.getUserName()};
 			//String joinCondition = "";
 
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause(Constants.LOGINNAME, sessionDataBean
 					.getUserName()));
 
-			List userIDList = (List) dao.retrieve(sourceObjectName, selectColumnName,
+			final List userIDList = (List) dao.retrieve(sourceObjectName, selectColumnName,
 					queryWhereClause);
 			if (userIDList != null && userIDList.size() > 0)
 			{
@@ -1540,14 +1543,16 @@ public class AppUtility
 	public static String getCommaSeparatedIds(Collection orderItemIds)
 	{
 		int counter = 1;
-		Iterator orderItemIdsIterator = orderItemIds.iterator();
+		final Iterator orderItemIdsIterator = orderItemIds.iterator();
 		String ids = "";
 
 		while (orderItemIdsIterator.hasNext())
 		{
 			ids = ids + orderItemIdsIterator.next();
 			if (counter < orderItemIds.size())
+			{
 				ids = ids + ",";
+			}
 			counter++;
 		}
 		return ids;
@@ -1561,13 +1566,13 @@ public class AppUtility
 	public static CollectionProtocolRegistration getcprObj(String cpr_id)
 			throws ApplicationException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 
-		Object object = collectionProtocolRegistrationBizLogic.retrieve(
+		final Object object = collectionProtocolRegistrationBizLogic.retrieve(
 				CollectionProtocolRegistration.class.getName(), Long.valueOf(cpr_id));
-		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration) object;
+		final CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration) object;
 		return collectionProtocolRegistrationObject;
 	}
 
@@ -1576,10 +1581,11 @@ public class AppUtility
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return specimenCollectionGroupObject
 	 */
-	public static SpecimenCollectionGroup getSCGObj(String scg_id,DAO dao) throws ApplicationException
+	public static SpecimenCollectionGroup getSCGObj(String scg_id, DAO dao)
+			throws ApplicationException
 	{
-		Object object = dao.retrieveById(
-				SpecimenCollectionGroup.class.getName(), Long.valueOf(scg_id));
+		final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), Long
+				.valueOf(scg_id));
 		SpecimenCollectionGroup specimenCollectionGroupObject = null;
 		if (object != null)
 		{
@@ -1598,15 +1604,16 @@ public class AppUtility
 			throws ApplicationException
 	{
 		long collectionEventUserId = 0;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(operation);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(operation);
 		request.setAttribute(Constants.USERLIST, userCollection);
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 		if (sessionData != null)
 		{
-			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+			final String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
 			collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
 		}
 		return collectionEventUserId;
@@ -1621,19 +1628,19 @@ public class AppUtility
 	public static int getNextUniqueNo(String sourceObjectName, String[] selectColumnName)
 			throws ApplicationException
 	{
-		JDBCDAO jdbcDAO = openJDBCSession();
-		List list = jdbcDAO.retrieve(sourceObjectName, selectColumnName);
+		final JDBCDAO jdbcDAO = openJDBCSession();
+		final List list = jdbcDAO.retrieve(sourceObjectName, selectColumnName);
 		closeJDBCSession(jdbcDAO);
 
 		if (!list.isEmpty())
 		{
-			List columnList = (List) list.get(0);
+			final List columnList = (List) list.get(0);
 			if (!columnList.isEmpty())
 			{
-				String str = (String) columnList.get(0);
+				final String str = (String) columnList.get(0);
 				if (!str.equals(""))
 				{
-					int no = Integer.parseInt(str);
+					final int no = Integer.parseInt(str);
 					return no + 1;
 				}
 			}
@@ -1668,18 +1675,18 @@ public class AppUtility
 	 */
 	public static String getResponseString(HttpServletRequest request, String responseString)
 	{
-		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		final ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 		logger.info("Errors:" + errors);
 		if (errors != null || errors.size() != 0)
 		{
-			Iterator iterator = errors.get();
+			final Iterator iterator = errors.get();
 			while (iterator.hasNext())
 			{
-				ActionError next = (ActionError) iterator.next();
-				Object[] values = next.getValues();
-				for (int j = 0; j < values.length; j++)
+				final ActionError next = (ActionError) iterator.next();
+				final Object[] values = next.getValues();
+				for (final Object value : values)
 				{
-					responseString = (String) values[j];
+					responseString = (String) value;
 				}
 			}
 		}
@@ -1725,13 +1732,13 @@ public class AppUtility
 		{
 			dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME).getDAO();
 			dao.openSession(null);
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
 					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			specimen = newSpecimenBizLogic.getSpecimenObj(specimenId, dao);
 			dao.closeSession();
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			// TODO Auto-generated catch block
 			logger.debug(e.getMessage(), e);
@@ -1739,21 +1746,22 @@ public class AppUtility
 		}
 		return specimen;
 	}
+
 	/**
 	 * @param row - List
 	 * @param myData - myData
 	 * @return String
 	 */
-	private static String getDataFromRow(List row,String myData)
+	private static String getDataFromRow(List row, String myData)
 	{
 		int j;
 		myData = myData + "\"";
 		for (j = 0; j < (row.size() - 1); j++)
 		{
-			Object obj = AppUtility.toNewGridFormat(row.get(j));
-			if(obj!=null)
+			final Object obj = AppUtility.toNewGridFormat(row.get(j));
+			if (obj != null)
 			{
-				myData = myData + obj.toString();						
+				myData = myData + obj.toString();
 			}
 			else
 			{
@@ -1761,10 +1769,10 @@ public class AppUtility
 			}
 			myData = myData + ",";
 		}
-		Object obj = AppUtility.toNewGridFormat(row.get(j));
-		if(obj!=null)
+		final Object obj = AppUtility.toNewGridFormat(row.get(j));
+		if (obj != null)
 		{
-			myData = myData + obj.toString();					
+			myData = myData + obj.toString();
 		}
 		else
 		{
@@ -1774,10 +1782,11 @@ public class AppUtility
 		myData = myData + ",";
 		return myData;
 	}
-    /**
-     * @param dataList - dataList
-     * @return - String
-     */
+
+	/**
+	 * @param dataList - dataList
+	 * @return - String
+	 */
 	//Added null check as label was coming null when label generation is off.
 	//bug 13487
 	public static String getmyData(List dataList)
@@ -1788,12 +1797,12 @@ public class AppUtility
 		{
 			for (i = 0; i < (dataList.size() - 1); i++)
 			{
-				List row = (List) dataList.get(i);
-				myData = getDataFromRow(row,myData);
+				final List row = (List) dataList.get(i);
+				myData = getDataFromRow(row, myData);
 			}
 
-			List row = (List) dataList.get(i);
-			myData = getDataFromRow(row,myData);
+			final List row = (List) dataList.get(i);
+			myData = getDataFromRow(row, myData);
 		}
 		myData = myData + "]";
 		return myData;
@@ -1845,7 +1854,7 @@ public class AppUtility
 
 	public static String getcolTypes(List dataList)
 	{
-		StringBuffer colTypes = new StringBuffer();
+		final StringBuffer colTypes = new StringBuffer();
 		colTypes.append("\"");
 		colTypes.append(Variables.prepareColTypes(dataList));
 		colTypes.append("\"");
@@ -1867,7 +1876,7 @@ public class AppUtility
 		int heightOfGrid = 100;
 		if (dataList != null)
 		{
-			int noOfRows = dataList.size();
+			final int noOfRows = dataList.size();
 			heightOfGrid = (noOfRows + 2) * 20;
 			if (heightOfGrid > 240)
 			{
@@ -1904,18 +1913,18 @@ public class AppUtility
 	 */
 	public static User getUser(String loginName) throws ApplicationException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
-		String[] whereColumnName = {"activityStatus", "loginName"};
-		String[] whereColumnCondition = {"=", "="};
-		String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
+		final String[] whereColumnName = {"activityStatus", "loginName"};
+		final String[] whereColumnCondition = {"=", "="};
+		final String[] whereColumnValue = {Status.ACTIVITY_STATUS_ACTIVE.toString(), loginName};
 
-		List users = userBizLogic.retrieve(User.class.getName(), whereColumnName,
+		final List users = userBizLogic.retrieve(User.class.getName(), whereColumnName,
 				whereColumnCondition, whereColumnValue, Constants.AND_JOIN_CONDITION);
 
 		if (!users.isEmpty())
 		{
-			User validUser = (User) users.get(0);
+			final User validUser = (User) users.get(0);
 			return validUser;
 		}
 		return null;
@@ -1923,7 +1932,7 @@ public class AppUtility
 
 	public static List getParentContainerTypeList()
 	{
-		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
 
 		storagePositionTypeList.add(new NameValueBean(Constants.SITE, Constants.SITE));
 		storagePositionTypeList
@@ -1945,13 +1954,14 @@ public class AppUtility
 		try
 		{
 			dao = openDAOSession(null);
-			Set<Long> cpIds = new HashSet<Long>();
-			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
+			final Set<Long> cpIds = new HashSet<Long>();
+			final User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
+					.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
 
 			if (cpCollection != null && !cpCollection.isEmpty())
 			{
-				for (CollectionProtocol cp : cpCollection)
+				for (final CollectionProtocol cp : cpCollection)
 				{
 					cpIds.add(cp.getId());
 				}
@@ -1962,7 +1972,7 @@ public class AppUtility
 				return false;
 			}
 
-			String privilegeNames[] = privilegeName.split(",");
+			final String privilegeNames[] = privilegeName.split(",");
 			Collection<Site> siteCollection = null;
 			if (cpId != null && cpId.trim().length() != 0)
 			{
@@ -1971,27 +1981,27 @@ public class AppUtility
 			}
 			else
 			{
-				Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+				final Set<Long> siteIds = new UserBizLogic().getRelatedSiteIds(sessionDataBean
 						.getUserId());
 				if (siteIds != null && !siteIds.isEmpty())
 				{
 					siteCollection = new ArrayList<Site>();
-					for (Long siteId : siteIds)
+					for (final Long siteId : siteIds)
 					{
-						Site site = new Site();
+						final Site site = new Site();
 						site.setId(siteId);
 						siteCollection.add(site);
 					}
 				}
 			}
-			Set<Long> idSet = new HashSet<Long>();
+			final Set<Long> idSet = new HashSet<Long>();
 
 			if (siteCollection == null)
 			{
 				return false;
 			}
 
-			for (Site site : siteCollection)
+			for (final Site site : siteCollection)
 			{
 				idSet.add(site.getId());
 			}
@@ -2007,7 +2017,7 @@ public class AppUtility
 					logger.debug(e.getMessage(), e);
 				}
 			}*/
-			for (Long id : idSet)
+			for (final Long id : idSet)
 			{
 				if (privilegeNames.length > 1)
 				{
@@ -2035,7 +2045,7 @@ public class AppUtility
 			}
 
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
 		}
@@ -2045,7 +2055,7 @@ public class AppUtility
 			{
 				dao.closeSession();
 			}
-			catch (DAOException e)
+			catch (final DAOException e)
 			{
 				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
@@ -2060,21 +2070,21 @@ public class AppUtility
 	 */
 	public static Map splitBeanData(SiteUserRolePrivilegeBean siteUserRolePrivBean)
 	{
-		Map<String, SiteUserRolePrivilegeBean> rowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+		final Map<String, SiteUserRolePrivilegeBean> rowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 
-		SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = siteUserRolePrivBean;
+		final SiteUserRolePrivilegeBean siteUserRolePrivilegeBean = siteUserRolePrivBean;
 
-		List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
+		final List<Site> siteList = siteUserRolePrivilegeBean.getSiteList();
 
-		NameValueBean role = siteUserRolePrivilegeBean.getRole();
-		List<NameValueBean> sitePrivileges = new ArrayList<NameValueBean>();
-		List<NameValueBean> cpPrivileges = new ArrayList<NameValueBean>();
-		Set<String> sitePriv = getSitePrivileges();
-		Set<String> cpPriv = getCPPrivileges();
+		final NameValueBean role = siteUserRolePrivilegeBean.getRole();
+		final List<NameValueBean> sitePrivileges = new ArrayList<NameValueBean>();
+		final List<NameValueBean> cpPrivileges = new ArrayList<NameValueBean>();
+		final Set<String> sitePriv = getSitePrivileges();
+		final Set<String> cpPriv = getCPPrivileges();
 
-		List<NameValueBean> allPrivileges = siteUserRolePrivilegeBean.getPrivileges();
+		final List<NameValueBean> allPrivileges = siteUserRolePrivilegeBean.getPrivileges();
 
-		for (NameValueBean nmv : allPrivileges)
+		for (final NameValueBean nmv : allPrivileges)
 		{
 			if (sitePriv.contains(nmv.getName()))
 			{
@@ -2086,8 +2096,8 @@ public class AppUtility
 			}
 		}
 
-		SiteUserRolePrivilegeBean bean1 = new SiteUserRolePrivilegeBean();
-		SiteUserRolePrivilegeBean bean2 = new SiteUserRolePrivilegeBean();
+		final SiteUserRolePrivilegeBean bean1 = new SiteUserRolePrivilegeBean();
+		final SiteUserRolePrivilegeBean bean2 = new SiteUserRolePrivilegeBean();
 
 		bean1.setSiteList(siteList);
 		bean1.setRole(role);
@@ -2110,10 +2120,10 @@ public class AppUtility
 
 	public static Set getSitePrivileges()
 	{
-		List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap
+		final List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap
 				.get("SITE");
-		Set<String> sitePrivileges = new HashSet<String>();
-		for (NameValueBean nmv : list)
+		final Set<String> sitePrivileges = new HashSet<String>();
+		for (final NameValueBean nmv : list)
 		{
 			sitePrivileges.add(nmv.getName());
 		}
@@ -2122,10 +2132,10 @@ public class AppUtility
 
 	public static Set getCPPrivileges()
 	{
-		List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap
+		final List<NameValueBean> list = edu.wustl.common.util.global.Variables.privilegeGroupingMap
 				.get("CP");
-		Set<String> cpPrivileges = new HashSet<String>();
-		for (NameValueBean nmv : list)
+		final Set<String> cpPrivileges = new HashSet<String>();
+		for (final NameValueBean nmv : list)
 		{
 			cpPrivileges.add(nmv.getName());
 		}
@@ -2135,7 +2145,7 @@ public class AppUtility
 	public static void processDeletedPrivileges(SiteUserRolePrivilegeBean siteUserRolePrivilegeBean)
 			throws ApplicationException
 	{
-		SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
+		final SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
 		String groupName = null;
 		String pgName = null;
 
@@ -2147,13 +2157,13 @@ public class AppUtility
 						.getCollectionProtocol().getId());
 				return;
 			}
-			Site site = bean.getSiteList().get(0);
-			User user = bean.getUser();
-			CollectionProtocol cp = bean.getCollectionProtocol();
-			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+			final Site site = bean.getSiteList().get(0);
+			final User user = bean.getUser();
+			final CollectionProtocol cp = bean.getCollectionProtocol();
+			final PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 
-			List<Group> grpList = new ArrayList<Group>();
-			List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+			final List<Group> grpList = new ArrayList<Group>();
+			final List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
 
 			if (bean.getCollectionProtocol() != null)
 			{
@@ -2179,17 +2189,17 @@ public class AppUtility
 			removePrivilageCache(groupName, pgName, user);
 
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
 			logger.debug(e.getMessage(), e);
 			handleSMException(e);
 		}
-		catch (CSTransactionException e)
+		catch (final CSTransactionException e)
 		{
 			logger.debug(e.getMessage(), e);
 			throw getApplicationException(e, "utility.error", "");
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
 			logger.debug(e.getMessage(), e);
 			throw getApplicationException(e, "clz.not.found.error", "");
@@ -2202,9 +2212,9 @@ public class AppUtility
 		Group group = new Group();
 		List<Group> grpList = new ArrayList<Group>();
 		List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
-		PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+		final PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 		group.setGroupName(groupName);
-		GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
+		final GroupSearchCriteria groupSearchCriteria = new GroupSearchCriteria(group);
 
 		grpList = privilegeUtility.getUserProvisioningManager().getObjects(groupSearchCriteria);
 
@@ -2215,7 +2225,7 @@ public class AppUtility
 
 		ProtectionGroup pg = new ProtectionGroup();
 		pg.setProtectionGroupName(pgName);
-		ProtectionGroupSearchCriteria pgSearchCriteria = new ProtectionGroupSearchCriteria(pg);
+		final ProtectionGroupSearchCriteria pgSearchCriteria = new ProtectionGroupSearchCriteria(pg);
 		pgList = privilegeUtility.getUserProvisioningManager().getObjects(pgSearchCriteria);
 
 		if (pgList != null && !pgList.isEmpty())
@@ -2236,7 +2246,7 @@ public class AppUtility
 	public static BizLogicException handleSMException(SMException e)
 	{
 		logger.debug(e.getLogMessage());
-		ErrorKey errorKey = ErrorKey.getErrorKey(e.getErrorKeyAsString());
+		final ErrorKey errorKey = ErrorKey.getErrorKey(e.getErrorKeyAsString());
 		return new BizLogicException(errorKey, e, e.getLogMessage());
 	}
 
@@ -2246,16 +2256,16 @@ public class AppUtility
 	{
 		try
 		{
-			SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
+			final SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
 			String groupName = null;
 			String pgName = null;
-			User user = bean.getUser();
+			final User user = bean.getUser();
 
-			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+			final PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 
-			List<Group> grpList = new ArrayList<Group>();
+			final List<Group> grpList = new ArrayList<Group>();
 
-			List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
+			final List<ProtectionGroup> pgList = new ArrayList<ProtectionGroup>();
 
 			groupName = Constants.getCPUserGroupName(cpId, user.getCsmUserId());
 
@@ -2263,12 +2273,12 @@ public class AppUtility
 
 			removePrivilageCache(groupName, pgName, user);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (CSTransactionException e)
+		catch (final CSTransactionException e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
@@ -2284,8 +2294,8 @@ public class AppUtility
 	public static CollectionProtocolDTO getCoolectionProtocolDTO(
 			CollectionProtocol collectionProtocol, HttpSession session)
 	{
-		CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
-		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
+		final CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
+		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
 				.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 		collectionProtocolDTO.setCollectionProtocol(collectionProtocol);
 		collectionProtocolDTO.setRowIdBeanMap(rowIdBeanMap);
@@ -2295,10 +2305,10 @@ public class AppUtility
 	/*
 		//bug 11611 and 11659 start
 		*//**
-			 * @param privilegeName - privilege name
-			 * @param protectionElementName - protection element name
-			 * @return UserNotAuthorizedException - exception if user is not authorized
-			 */
+				 * @param privilegeName - privilege name
+				 * @param protectionElementName - protection element name
+				 * @return UserNotAuthorizedException - exception if user is not authorized
+				 */
 	/*
 		public static UserNotAuthorizedException getUserNotAuthorizedException(String privilegeName,
 				String protectionElementName)
@@ -2323,8 +2333,8 @@ public class AppUtility
 	public static BizLogicException getUserNotAuthorizedException(String privilegeName,
 			String protectionElementName)
 	{
-		BizLogicException ex = getUserNotAuthorizedException(privilegeName, protectionElementName,
-				null);
+		final BizLogicException ex = getUserNotAuthorizedException(privilegeName,
+				protectionElementName, null);
 		return ex;
 	}
 
@@ -2345,15 +2355,16 @@ public class AppUtility
 				&& (protectionElementName.contains("Site") || protectionElementName
 						.contains("CollectionProtocol")))
 		{
-			String[] arr = protectionElementName.split("_");
-			String[] nameArr = arr[0].split("\\.");
-			String baseObject = nameArr[nameArr.length - 1];
+			final String[] arr = protectionElementName.split("_");
+			final String[] nameArr = arr[0].split("\\.");
+			final String baseObject = nameArr[nameArr.length - 1];
 			baseObjectUpdated = baseObject;
 			baseObjectId = arr[1];
 		}
 
-		String className = getActualClassName(baseObjectUpdated);
-		String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(privilegeName);
+		final String className = getActualClassName(baseObjectUpdated);
+		final String decoratedPrivilegeName = AppUtility
+				.getDisplayLabelForUnderscore(privilegeName);
 
 		if (!(baseObjectUpdated != null && baseObjectUpdated.trim().length() != 0))
 		{
@@ -2370,7 +2381,7 @@ public class AppUtility
 		list.add(baseObjectUpdated);
 
 		String message = ApplicationProperties.getValue("access.addedit.object.denied", list);*/
-		ErrorKey errorKey = ErrorKey.getErrorKey("access.addedit.object.denied");
+		final ErrorKey errorKey = ErrorKey.getErrorKey("access.addedit.object.denied");
 		return new BizLogicException(errorKey, null, domainObjName + ":" + decoratedPrivilegeName
 				+ ":" + baseObjectUpdated);
 	}
@@ -2383,8 +2394,8 @@ public class AppUtility
 	{
 		if (name != null && name.trim().length() != 0)
 		{
-			String splitter = "\\.";
-			String[] arr = name.split(splitter);
+			final String splitter = "\\.";
+			final String[] arr = name.split(splitter);
 			if (arr != null && arr.length != 0)
 			{
 				return arr[arr.length - 1];
@@ -2403,7 +2414,7 @@ public class AppUtility
 		}
 
 		List cpIdsList = new ArrayList();
-		Set<Long> cpIds = new HashSet<Long>();
+		final Set<Long> cpIds = new HashSet<Long>();
 
 		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(objName, identifier,
 				sessionDataBean);
@@ -2425,7 +2436,7 @@ public class AppUtility
 				return hasPrivilegeToViewMatchingParticipant(cpIdsList, sessionDataBean,
 						privilegeName);
 			}
-			catch (ApplicationException e)
+			catch (final ApplicationException e)
 			{
 				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
@@ -2446,11 +2457,11 @@ public class AppUtility
 			privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
-			StringBuffer sb = new StringBuffer();
+			final StringBuffer sb = new StringBuffer();
 			sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
 			boolean isPresent = false;
 
-			for (Long cpId : cpIds)
+			for (final Long cpId : cpIds)
 			{
 				isPresent = returnHasPrivilege(sessionDataBean, privilegeName, privilegeCache, sb,
 						cpId);
@@ -2461,7 +2472,7 @@ public class AppUtility
 				}
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
@@ -2472,13 +2483,13 @@ public class AppUtility
 	private static boolean hasPrivilegeToViewMatchingParticipant(List cpIdsList,
 			SessionDataBean sessionDataBean, String privilegeName) throws ApplicationException
 	{
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 				sessionDataBean.getUserName());
-		StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer();
 		sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME).append("_");
 		boolean isPresent = false;
 
-		for (Object cpId : cpIdsList)
+		for (final Object cpId : cpIdsList)
 		{
 			isPresent = returnHasPrivilege(sessionDataBean, privilegeName, privilegeCache, sb, cpId);
 
@@ -2500,19 +2511,20 @@ public class AppUtility
 		try
 		{
 			dao = openDAOSession(null);
-			Set<Long> cpIds = new HashSet<Long>();
-			User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean.getUserId());
+			final Set<Long> cpIds = new HashSet<Long>();
+			final User user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
+					.getUserId());
 			cpCollection = user.getAssignedProtocolCollection();
 
 			if (cpCollection != null && !cpCollection.isEmpty())
 			{
-				for (CollectionProtocol cp : cpCollection)
+				for (final CollectionProtocol cp : cpCollection)
 				{
 					cpIds.add(cp.getId());
 				}
 			}
 
-			String[] privilegeNames = privilegeName.split(",");
+			final String[] privilegeNames = privilegeName.split(",");
 			if (privilegeNames.length > 1)
 			{
 				isPresent = privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
@@ -2551,7 +2563,7 @@ public class AppUtility
 				}
 			}
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.debug(e.getMessage(), e);
 		}
@@ -2561,7 +2573,7 @@ public class AppUtility
 			{
 				closeDAOSession(dao);
 			}
-			catch (ApplicationException e)
+			catch (final ApplicationException e)
 			{
 				logger.debug(e.getMessage(), e);
 				e.printStackTrace();
@@ -2580,10 +2592,11 @@ public class AppUtility
 	 */
 
 	public static HttpServletRequest setCollectionProtocolList(HttpServletRequest request,
-			Long siteId,DAO dao) throws ApplicationException
+			Long siteId, DAO dao) throws ApplicationException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SiteBizLogic siteBizLogic = (SiteBizLogic) factory.getBizLogic(Constants.SITE_FORM_ID);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final SiteBizLogic siteBizLogic = (SiteBizLogic) factory
+				.getBizLogic(Constants.SITE_FORM_ID);
 		Collection<CollectionProtocol> cpCollection = null;
 		if (siteId <= 0)
 		{
@@ -2591,13 +2604,13 @@ public class AppUtility
 		}
 		else
 		{
-			cpCollection = siteBizLogic.getRelatedCPs(siteId,dao);
+			cpCollection = siteBizLogic.getRelatedCPs(siteId, dao);
 		}
-		List<NameValueBean> cpList = new ArrayList<NameValueBean>();
-		Map<Long, String> cpTitleMap = new HashMap<Long, String>();
+		final List<NameValueBean> cpList = new ArrayList<NameValueBean>();
+		final Map<Long, String> cpTitleMap = new HashMap<Long, String>();
 		if (cpCollection != null && !cpCollection.isEmpty())
 		{
-			for (CollectionProtocol cp : cpCollection)
+			for (final CollectionProtocol cp : cpCollection)
 			{
 				cpList.add(new NameValueBean(cp.getShortTitle(), cp.getId()));
 				cpTitleMap.put(cp.getId(), cp.getTitle());
@@ -2620,7 +2633,7 @@ public class AppUtility
 	{
 		if (roleName.startsWith("0"))
 		{
-			PrivilegeUtility privilegeUtility = new PrivilegeUtility();
+			final PrivilegeUtility privilegeUtility = new PrivilegeUtility();
 			Role role = null;
 			try
 			{
@@ -2632,7 +2645,7 @@ public class AppUtility
 							role.getId().toString());
 				}
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
 				logger.debug(e.getMessage(), e);
 			}
@@ -2659,8 +2672,8 @@ public class AppUtility
 
 			if (protectionElementName != null)
 			{
-				String[] prArray = protectionElementName.split(Constants.UNDERSCORE);
-				String baseObjectId = prArray[0];
+				final String[] prArray = protectionElementName.split(Constants.UNDERSCORE);
+				final String baseObjectId = prArray[0];
 				String objId = null;
 				boolean isAuthorized1 = false;
 
@@ -2681,7 +2694,7 @@ public class AppUtility
 				isAuthorized = false;
 			}
 		}
-		catch (SMException e)
+		catch (final SMException e)
 		{
 			logger.debug(e.getMessage(), e);
 			handleSMException(e);
@@ -2704,7 +2717,7 @@ public class AppUtility
 			return true;
 		}
 
-		PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 				sessionDataBean.getUserName());
 		//Checking whether the logged in user has the required privilege on the given protection element
 		isAuthorized = privilegeCache.hasPrivilege(protectionElementName, privilegeName);
@@ -2716,11 +2729,11 @@ public class AppUtility
 		else
 		// Check for ALL CURRENT & FUTURE CASE
 		{
-			String protectionElementNames[] = protectionElementName.split("_");
+			final String protectionElementNames[] = protectionElementName.split("_");
 
-			Long cpId = Long.valueOf(protectionElementNames[1]);
-			Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(),
-					false);
+			final Long cpId = Long.valueOf(protectionElementNames[1]);
+			final Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean
+					.getUserId(), false);
 
 			if (cpIdSet.contains(cpId))
 			{
@@ -2739,10 +2752,11 @@ public class AppUtility
 			String protectionElementName, String privilegeName) throws BizLogicException
 	{
 		boolean isAuthorized = false;
-		String protectionElementNames[] = protectionElementName.split("_");
+		final String protectionElementNames[] = protectionElementName.split("_");
 
-		Long cpId = Long.valueOf(protectionElementNames[1]);
-		Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(), false);
+		final Long cpId = Long.valueOf(protectionElementNames[1]);
+		final Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean.getUserId(),
+				false);
 
 		if (cpIdSet.contains(cpId))
 		{
@@ -2782,15 +2796,15 @@ public class AppUtility
 			String whereColumnName, String appName) throws ApplicationException
 	{
 		Object identifier = null;
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+		final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 		defaultBizLogic.setAppName(appName);
-		String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
-		String[] whereColName = {whereColumnName};
-		Object[] whereColValue = {whereColumnValue};
-		String[] whereColCondition = {Constants.EQUALS};
-		String joinCondition = Constants.AND_JOIN_CONDITION;
-		List identifierList = defaultBizLogic.retrieve(selectObjName, selectColName, whereColName,
-				whereColCondition, whereColValue, joinCondition);
+		final String[] selectColName = {edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColName = {whereColumnName};
+		final Object[] whereColValue = {whereColumnValue};
+		final String[] whereColCondition = {Constants.EQUALS};
+		final String joinCondition = Constants.AND_JOIN_CONDITION;
+		final List identifierList = defaultBizLogic.retrieve(selectObjName, selectColName,
+				whereColName, whereColCondition, whereColValue, joinCondition);
 		if (identifierList != null && !identifierList.isEmpty())
 		{
 			identifier = identifierList.get(0);
@@ -2809,11 +2823,11 @@ public class AppUtility
 	{
 		// Map for storing containers corresponding to entitiesIds
 		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		String[] colName = {Constants.NAME};
-		Collection<NameValueBean> entityGrpBeanColl = entityManager.getAllEntityGroupBeans();
-		Set<Long> entityGroupIds = new HashSet<Long>();
-		for (NameValueBean entityGrpBean : entityGrpBeanColl)
+		final EntityManagerInterface entityManager = EntityManager.getInstance();
+		final String[] colName = {Constants.NAME};
+		final Collection<NameValueBean> entityGrpBeanColl = entityManager.getAllEntityGroupBeans();
+		final Set<Long> entityGroupIds = new HashSet<Long>();
+		for (final NameValueBean entityGrpBean : entityGrpBeanColl)
 		{
 			entityGroupIds.add(Long.parseLong(entityGrpBean.getValue()));
 		}
@@ -2831,18 +2845,19 @@ public class AppUtility
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		// Map for storing containers corresponding to entitiesIds
-		Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
+		final Map<Long, Long> entityIdsVsContId = new HashMap<Long, Long>();
+		final EntityManagerInterface entityManager = EntityManager.getInstance();
+		final DefaultBizLogic defaultBizLogic = edu.common.dynamicextensions.bizlogic.BizLogicFactory
 				.getDefaultBizLogic();
-		for (Long entityGroupId : entityGroupIds)
+		for (final Long entityGroupId : entityGroupIds)
 		{
-			Collection<Long> entityIds = entityManager.getAllEntityIdsForEntityGroup(entityGroupId);
+			final Collection<Long> entityIds = entityManager
+					.getAllEntityIdsForEntityGroup(entityGroupId);
 			if (entityIds != null && !entityIds.isEmpty())
 			{
-				for (Long entityId : entityIds)
+				for (final Long entityId : entityIds)
 				{
-					Long containerId = entityManager.getContainerIdFromEntityId(entityId);
+					final Long containerId = entityManager.getContainerIdFromEntityId(entityId);
 					if (containerId != null)
 					{
 						entityIdsVsContId.put(entityId, containerId);
@@ -2850,15 +2865,17 @@ public class AppUtility
 				}
 			}
 		}
-		String[] colName = {Constants.NAME};
-		List<String> formNameColl = defaultBizLogic.retrieve(Category.class.getName(), colName);
-		for (String formName : formNameColl)
+		final String[] colName = {Constants.NAME};
+		final List<String> formNameColl = defaultBizLogic.retrieve(Category.class.getName(),
+				colName);
+		for (final String formName : formNameColl)
 		{
-			Long rootCategoryEntityId = entityManager
+			final Long rootCategoryEntityId = entityManager
 					.getRootCategoryEntityIdByCategoryName(formName);
 			if (rootCategoryEntityId != null)
 			{
-				Long containerId = entityManager.getContainerIdFromEntityId(rootCategoryEntityId);
+				final Long containerId = entityManager
+						.getContainerIdFromEntityId(rootCategoryEntityId);
 				if (containerId != null)
 				{
 					entityIdsVsContId.put(rootCategoryEntityId, containerId);
@@ -2878,7 +2895,7 @@ public class AppUtility
 	public static EntityMapCondition getEntityMapCondition(FormContext formContext,
 			Long conditionObjectId, Long typeId)
 	{
-		EntityMapCondition entityMapCond = new EntityMapCondition();
+		final EntityMapCondition entityMapCond = new EntityMapCondition();
 		entityMapCond.setTypeId(((Long) typeId));
 		entityMapCond.setStaticRecordId((conditionObjectId));
 		entityMapCond.setFormContext(formContext);
@@ -2896,24 +2913,24 @@ public class AppUtility
 			boolean editAlreadyPresentCondition) throws DynamicExtensionsSystemException,
 			ApplicationException
 	{
-		Collection<FormContext> formContextColl = new HashSet<FormContext>(
+		final Collection<FormContext> formContextColl = new HashSet<FormContext>(
 				getFormContexts(entityMap.getId()));
 		if (formContextColl != null)
 		{
-			for (FormContext formContext : formContextColl)
+			for (final FormContext formContext : formContextColl)
 			{
-				Collection<EntityMapCondition> entityMapCondColl = getEntityMapConditions(formContext
+				final Collection<EntityMapCondition> entityMapCondColl = getEntityMapConditions(formContext
 						.getId());
 
 				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
 				{
-					EntityMapCondition entityMapCondition = AppUtility.getEntityMapCondition(
+					final EntityMapCondition entityMapCondition = AppUtility.getEntityMapCondition(
 							formContext, conditionObjectId, typeId);
 					entityMapCondColl.add(entityMapCondition);
 				}
 				else if (editAlreadyPresentCondition)
 				{
-					for (EntityMapCondition entityMapCondition : entityMapCondColl)
+					for (final EntityMapCondition entityMapCondition : entityMapCondColl)
 					{
 						entityMapCondition.setTypeId(typeId);
 						entityMapCondition.setStaticRecordId(conditionObjectId);
@@ -2936,23 +2953,23 @@ public class AppUtility
 	public static void editConditions(EntityMap entityMap, Long typeId)
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
-		Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility
+		final Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility
 				.getFormContexts(entityMap.getId()));
-		DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
+		final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 				DynamicExtensionDAO.getInstance().getAppName()).getDAO();
 		try
 		{
 			dao.openSession(null);
 			if (formContextColl != null)
 			{
-				for (FormContext formContext : formContextColl)
+				for (final FormContext formContext : formContextColl)
 				{
-					Collection<EntityMapCondition> entityMapCondColl = AppUtility
+					final Collection<EntityMapCondition> entityMapCondColl = AppUtility
 							.getEntityMapConditions(formContext.getId());
 
 					if (!entityMapCondColl.isEmpty() || entityMapCondColl.size() > 0)
 					{
-						for (EntityMapCondition entityMapCond : entityMapCondColl)
+						for (final EntityMapCondition entityMapCond : entityMapCondColl)
 						{
 							dao.delete(entityMapCond);
 						}
@@ -2960,7 +2977,7 @@ public class AppUtility
 				}
 			}
 		}
-		catch (DAOException exception)
+		catch (final DAOException exception)
 		{
 			exception.printStackTrace();
 			throw exception;
@@ -2982,7 +2999,7 @@ public class AppUtility
 
 	{
 		Collection<FormContext> formContextColl = null;
-		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 		bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 
 		try
@@ -2991,7 +3008,7 @@ public class AppUtility
 					.executeQuery("from FormContext formContext where formContext.entityMap.id = "
 							+ entityMapId));
 		}
-		catch (BizLogicException e)
+		catch (final BizLogicException e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();
@@ -3012,7 +3029,7 @@ public class AppUtility
 		try
 		{
 
-			AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+			final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 			bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
 			entityMapConditions = new HashSet(
 					bizLogic
@@ -3020,7 +3037,7 @@ public class AppUtility
 									+ formContextId));
 
 		}
-		catch (BizLogicException exp)
+		catch (final BizLogicException exp)
 		{
 			logger.error("Bizlogic  : exp : " + exp);
 			exp.printStackTrace();
@@ -3037,7 +3054,7 @@ public class AppUtility
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		Collection<EntityMapRecord> entityMapRecords = null;
-		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 
 		entityMapRecords = new HashSet(
 				bizLogic
@@ -3081,7 +3098,7 @@ public class AppUtility
 				isValidDatePattern = false;
 			}
 		}
-		catch (Exception exp)
+		catch (final Exception exp)
 		{
 			logger.error("IsValidDatePattern : exp : " + exp);
 			return false;
@@ -3097,8 +3114,8 @@ public class AppUtility
 	 */
 	public static String getDisplayLabelForUnderscore(String objectName)
 	{
-		StringBuffer formatedStr = new StringBuffer();
-		String[] tokens = objectName.split("_");
+		final StringBuffer formatedStr = new StringBuffer();
+		final String[] tokens = objectName.split("_");
 		for (int i = 0; i < tokens.length; i++)
 		{
 			if (!TextConstants.EMPTY_STRING.equals(tokens[i]))
@@ -3143,11 +3160,11 @@ public class AppUtility
 		JDBCDAO jdbcDAO = null;
 		try
 		{
-			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			final String applicationName = CommonServiceLocator.getInstance().getAppName();
 			jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getJDBCDAO();
 			jdbcDAO.openSession(null);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp
@@ -3165,7 +3182,7 @@ public class AppUtility
 				jdbcDAO.closeSession();
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -3178,11 +3195,11 @@ public class AppUtility
 		DAO dao = null;
 		try
 		{
-			String applicationName = CommonServiceLocator.getInstance().getAppName();
+			final String applicationName = CommonServiceLocator.getInstance().getAppName();
 			dao = DAOConfigFactory.getInstance().getDAOFactory(applicationName).getDAO();
 			dao.openSession(sessionDataBean);
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -3199,7 +3216,7 @@ public class AppUtility
 				dao.closeSession();
 			}
 		}
-		catch (DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -3214,7 +3231,7 @@ public class AppUtility
 	 */
 	public static boolean isNumeric(String sText)
 	{
-		String validChars = "0123456789.E";
+		final String validChars = "0123456789.E";
 		System.out.println(validChars);
 		boolean isNumber = true;
 		Character charTemp;
@@ -3230,8 +3247,7 @@ public class AppUtility
 		}
 		return isNumber;
 	}
-	
-	
+
 	/**
 	 *
 	 * @param setPV : setPV
@@ -3268,13 +3284,15 @@ public class AppUtility
 		}
 		return subTypeMap;
 	}
+
 	/**
 	 * This is a recursive method to make the final-vector for DHTML tree of
 	 * storage containers and Tissue site.
 	 * @param datalist : datalist
 	 * @param finalDataListVector : finalDataListVector
 	 */
-	public static Vector<StorageContainerTreeNode> createTreeNodeVector(List datalist, Vector<StorageContainerTreeNode> finalDataListVector)
+	public static Vector<StorageContainerTreeNode> createTreeNodeVector(List datalist,
+			Vector<StorageContainerTreeNode> finalDataListVector)
 	{
 		if (datalist != null && datalist.size() != 0)
 		{
@@ -3290,13 +3308,14 @@ public class AppUtility
 				final List childNodeVector = node.getChildNodes();
 				createTreeNodeVector(childNodeVector, finalDataListVector);
 			}
-			return finalDataListVector ;
+			return finalDataListVector;
 		}
 		else
 		{
 			return finalDataListVector;
 		}
 	}
+
 	/**
 	 * @param identifier
 	 *            Identifier of the container or site node.
@@ -3309,19 +3328,19 @@ public class AppUtility
 	 * @Description This method will retrieve all the Tissue Sites under the
 	 *              selected node
 	 */
-	public static Vector<StorageContainerTreeNode> getTissueSiteNodes(Long identifier, String nodeName,
-			String parentId) throws ApplicationException
+	public static Vector<StorageContainerTreeNode> getTissueSiteNodes(Long identifier,
+			String nodeName, String parentId) throws ApplicationException
 	{
 		JDBCDAO dao = null;
 		Vector<StorageContainerTreeNode> tissueSiteNodeVector = new Vector<StorageContainerTreeNode>();
-		try 
+		try
 		{
 			dao = openJDBCSession();
 			List resultList = new ArrayList();
 			System.out.println("");
 			final String sql = createSql(identifier, parentId);
 			resultList = dao.executeQuery(sql);
-			
+
 			String tissueSiteName = null;
 			Long nodeIdentifier;
 			Long tissueParentId;
@@ -3335,19 +3354,19 @@ public class AppUtility
 				nodeIdentifier = Long.valueOf((String) rowList.get(0));
 				tissueSiteName = (String) rowList.get(1);
 				String parId = (String) rowList.get(2);
-				activityStatus = Status.ACTIVITY_STATUS_CLOSED.toString() ;
-				if((parId==null) ||("".equals(parId)))
+				activityStatus = Status.ACTIVITY_STATUS_CLOSED.toString();
+				if ((parId == null) || ("".equals(parId)))
 				{
-					parId ="1" ; 
+					parId = "1";
 				}
 				tissueParentId = Long.valueOf(parId);
-				childCount = Long.valueOf(getChildCount(nodeIdentifier,dao));
-				if(childCount > 0)
+				childCount = Long.valueOf(getChildCount(nodeIdentifier, dao));
+				if (childCount > 0)
 				{
-					activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString() ;
+					activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 				}
-				tissueSiteNodeVector = getTreeNodeDataVector(tissueSiteNodeVector,nodeIdentifier,tissueSiteName,
-															activityStatus,childCount,tissueParentId,nodeName);
+				tissueSiteNodeVector = getTreeNodeDataVector(tissueSiteNodeVector, nodeIdentifier,
+						tissueSiteName, activityStatus, childCount, tissueParentId, nodeName);
 			}
 			if (tissueSiteNodeVector.isEmpty())
 			{
@@ -3364,38 +3383,39 @@ public class AppUtility
 		finally
 		{
 			closeJDBCSession(dao);
-		}		
-		return tissueSiteNodeVector ;
+		}
+		return tissueSiteNodeVector;
 	}
+
 	/**
 	 * This method creates the new node required for DHTML tree node.
 	 * @param TreeNodeDataVector Vector which stores the created node.
 	 * @return TreeNodeDataVector by adding the new parent and child node
 	 */
-	
-	 public static Vector<StorageContainerTreeNode> getTreeNodeDataVector(Vector<StorageContainerTreeNode> treeNodeDataVector,
-	  										Long childNodeId, String childNodeName, String activityStatus, 
-											Long childCount,Long parentNodeId,String parentNodeName)
-	 {
-	 	final String dummyNodeName = Constants.DUMMY_NODE_NAME ;
-	 	StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
-						childNodeId, childNodeName, childNodeName, activityStatus);
+
+	public static Vector<StorageContainerTreeNode> getTreeNodeDataVector(
+			Vector<StorageContainerTreeNode> treeNodeDataVector, Long childNodeId,
+			String childNodeName, String activityStatus, Long childCount, Long parentNodeId,
+			String parentNodeName)
+	{
+		final String dummyNodeName = Constants.DUMMY_NODE_NAME;
+		StorageContainerTreeNode containerNode = new StorageContainerTreeNode(childNodeId,
+				childNodeName, childNodeName, activityStatus);
 		final StorageContainerTreeNode parneContainerNode = new StorageContainerTreeNode(
-						parentNodeId, parentNodeName, parentNodeName, activityStatus);
+				parentNodeId, parentNodeName, parentNodeName, activityStatus);
 
 		if (childCount != null && childCount > 0)
 		{
 			final StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(
-						childNodeId, dummyNodeName, dummyNodeName,
-						activityStatus);
+					childNodeId, dummyNodeName, dummyNodeName, activityStatus);
 			dummyContainerNode.setParentNode(containerNode);
 			containerNode.getChildNodes().add(dummyContainerNode);
 		}
 
 		if (treeNodeDataVector.contains(containerNode))
 		{
-			containerNode = (StorageContainerTreeNode) treeNodeDataVector
-					.get(treeNodeDataVector.indexOf(containerNode));
+			containerNode = (StorageContainerTreeNode) treeNodeDataVector.get(treeNodeDataVector
+					.indexOf(containerNode));
 		}
 		else
 		{
@@ -3403,10 +3423,10 @@ public class AppUtility
 		}
 		containerNode.setParentNode(parneContainerNode);
 		parneContainerNode.getChildNodes().add(containerNode);
-		
-		return treeNodeDataVector ;
+
+		return treeNodeDataVector;
 	}
-	 
+
 	/**
 	 * @param identifier
 	 *            Identifier of the container or site node
@@ -3415,113 +3435,111 @@ public class AppUtility
 	 * @return String sql This method with return the sql depending on the node
 	 *         clicked (i.e parent Node or child node)
 	 */
-	
+
 	public static String createSql(Long identifier, String parentId)
 	{
-		String sql ="" ;
-						
+		String sql = "";
+
 		if (Constants.ZERO_ID.equals(parentId))
 		{
-			sql = " SELECT IDENTIFIER, VALUE, PARENT_IDENTIFIER " +
-				  " FROM CATISSUE_PERMISSIBLE_VALUE ,CATISSUE_CDE " +
-				  "	WHERE CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID = CATISSUE_CDE.PUBLIC_ID " +
-				  "	AND CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID LIKE '%Tissue_Site_PID%'" ;
+			sql = " SELECT IDENTIFIER, VALUE, PARENT_IDENTIFIER "
+					+ " FROM CATISSUE_PERMISSIBLE_VALUE ,CATISSUE_CDE "
+					+ "	WHERE CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID = CATISSUE_CDE.PUBLIC_ID "
+					+ "	AND CATISSUE_PERMISSIBLE_VALUE.PUBLIC_ID LIKE '%Tissue_Site_PID%'";
 		}
 		else
 		{
-			sql = " SELECT CA.IDENTIFIER , CA.VALUE, CA.PARENT_IDENTIFIER " +
-				  "	FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1 " +
-				  "	WHERE CA1.IDENTIFIER   = CA.IDENTIFIER " +
-				  "	AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER " +
-				  "	AND CA1.PARENT_IDENTIFIER  ='" + identifier + "'" ;
+			sql = " SELECT CA.IDENTIFIER , CA.VALUE, CA.PARENT_IDENTIFIER "
+					+ "	FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1 "
+					+ "	WHERE CA1.IDENTIFIER   = CA.IDENTIFIER "
+					+ "	AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER "
+					+ "	AND CA1.PARENT_IDENTIFIER  ='" + identifier + "'";
 		}
-		return sql ;
+		return sql;
 	}
-	
+
 	/**
 	 * This method is defined for counting the child of the Tissue Site.
 	 * @param identifier identifier of the container node whose child count is going to be done. 
 	 * @param dao JDBCDAO object for excuting the sql query.
 	 * @return child count of the container identifier
 	 */
-	
-	public static long getChildCount(Long identifier,JDBCDAO dao) throws ApplicationException
+
+	public static long getChildCount(Long identifier, JDBCDAO dao) throws ApplicationException
 	{
-		long count =  0 ;
-		String sql= " SELECT COUNT(CA1.PARENT_IDENTIFIER)" +
-					" FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1" +
-					" WHERE CA1.IDENTIFIER   = CA.IDENTIFIER" +
-					" AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER" +
-					" AND CA1.PARENT_IDENTIFIER ='"+ identifier + "'" + 
-					" GROUP BY CA1.PARENT_IDENTIFIER" ;
-		
+		long count = 0;
+		final String sql = " SELECT COUNT(CA1.PARENT_IDENTIFIER)"
+				+ " FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1"
+				+ " WHERE CA1.IDENTIFIER   = CA.IDENTIFIER"
+				+ " AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER"
+				+ " AND CA1.PARENT_IDENTIFIER ='" + identifier + "'"
+				+ " GROUP BY CA1.PARENT_IDENTIFIER";
+
 		try
 		{
-			List resList = dao.executeQuery(sql);
-			if(!(resList.isEmpty()))
+			final List resList = dao.executeQuery(sql);
+			if (!(resList.isEmpty()))
 			{
 				final Iterator iterator = resList.iterator();
 				while (iterator.hasNext())
 				{
 					final List rowList = (List) iterator.next();
-					count = Long.parseLong((String) rowList.get(0)) ;
+					count = Long.parseLong((String) rowList.get(0));
 				}
 			}
 		}
-		catch(DAOException daoExp)
+		catch (final DAOException daoExp)
 		{
 			logger.debug(daoExp.getMessage(), daoExp);
 			// TODO Auto-generated catch block
 			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
-		return count ;
+		return count;
 	}
-	
-    /**
-     * 
-     * 
-     * @param userName
-     * @return
-     * @throws ApplicationException
-     */
-    public static SessionDataBean getSessionDataBean(String userName) throws BizLogicException
-    {
-        SessionDataBean sessionDataBean = null;
 
-        if (Variables.sessionDataMap.containsKey(userName))
-        {
-            sessionDataBean = Variables.sessionDataMap.get(userName);
-        }
-        else
-        {
-            User user = null;
-            sessionDataBean = new SessionDataBean();
-            sessionDataBean.setUserName(userName);
+	/**
+	 * 
+	 * 
+	 * @param userName
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public static SessionDataBean getSessionDataBean(String userName) throws BizLogicException
+	{
+		SessionDataBean sessionDataBean = null;
 
-            sessionDataBean.setAdmin(false);
-            try
-            {
-                user = getUser(userName);
-            }
-            catch (ApplicationException e)
-            {
-                throw new BizLogicException(e.getErrorKey(), e, e
-                        .getMsgValues());
-            }
-            if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
-            {
-                sessionDataBean.setAdmin(true);
-            }
+		if (Variables.sessionDataMap.containsKey(userName))
+		{
+			sessionDataBean = Variables.sessionDataMap.get(userName);
+		}
+		else
+		{
+			User user = null;
+			sessionDataBean = new SessionDataBean();
+			sessionDataBean.setUserName(userName);
 
-            sessionDataBean.setUserId(user.getId());
-            Variables.sessionDataMap.put(userName, sessionDataBean);
-        }
+			sessionDataBean.setAdmin(false);
+			try
+			{
+				user = getUser(userName);
+			}
+			catch (final ApplicationException e)
+			{
+				throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
+			}
+			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+			{
+				sessionDataBean.setAdmin(true);
+			}
 
-        return sessionDataBean;
-    }	
-	 
-    
-    /**This method will return the ssn value in format xxx-xx-xxxx
+			sessionDataBean.setUserId(user.getId());
+			Variables.sessionDataMap.put(userName, sessionDataBean);
+		}
+
+		return sessionDataBean;
+	}
+
+	/**This method will return the ssn value in format xxx-xx-xxxx
 	 * @param ssn
 	 * @return
 	 */
@@ -3532,8 +3550,9 @@ public class AppUtility
 		String ssnC = "";
 		boolean result = false;
 
-		Pattern pattern = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}", Pattern.CASE_INSENSITIVE);
-		Matcher mat = pattern.matcher(ssn);
+		final Pattern pattern = Pattern.compile("[0-9]{3}-[0-9]{2}-[0-9]{4}",
+				Pattern.CASE_INSENSITIVE);
+		final Matcher mat = pattern.matcher(ssn);
 		result = mat.matches();
 		if (result)
 		{

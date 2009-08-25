@@ -27,20 +27,22 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class TissueSpecimenReviewEventParametersAction extends SpecimenEventParametersAction
 {
+
 	/**
 	* @param request object of HttpServletRequest
 	* @param eventParametersForm : eventParametersForm
 	* @throws Exception : Exception
 	*/
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
+		String formName;
 
 		boolean readOnlyValue;
-		TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm =
+		final TissueSpecimenReviewEventParametersForm tissueSpecimenReviewEventParametersForm =
 			(TissueSpecimenReviewEventParametersForm) eventParametersForm;
 		if (tissueSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
@@ -50,18 +52,16 @@ public class TissueSpecimenReviewEventParametersAction extends SpecimenEventPara
 		else
 		{
 			formName = Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);
 
 		//		set array of histological quality
-		List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_HISTOLOGICAL_QUALITY, null);
 		request.setAttribute("histologicalQualityList", histologicalQualityList);
 	}
-
 }

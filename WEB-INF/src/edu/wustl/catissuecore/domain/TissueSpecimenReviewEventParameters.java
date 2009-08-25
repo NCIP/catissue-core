@@ -191,7 +191,8 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	 * @param abstractForm of AbstractActionForm type.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm) throws AssignDataException
+	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+			throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -210,8 +211,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 		final String nullString = null;
 		try
 		{
-			final TissueSpecimenReviewEventParametersForm form
-			= (TissueSpecimenReviewEventParametersForm) abstractForm;
+			final TissueSpecimenReviewEventParametersForm form = (TissueSpecimenReviewEventParametersForm) abstractForm;
 
 			if (form.getNeoplasticCellularityPercentage() != null
 					&& form.getNeoplasticCellularityPercentage().trim().length() > 0)
@@ -251,7 +251,8 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 		{
 			logger.error(excp.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey, null, "TissueSpecimenReviewEventParameters.java :");
+			throw new AssignDataException(errorKey, null,
+					"TissueSpecimenReviewEventParameters.java :");
 		}
 	}
 }

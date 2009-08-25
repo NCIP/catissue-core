@@ -38,20 +38,21 @@ public class InstitutionAction extends SecureAction
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		request.setAttribute("operationAdd", Constants.ADD);
 		request.setAttribute("operationEdit", Constants.EDIT);
 
-		InstitutionForm institutionForm = (InstitutionForm) form;
+		final InstitutionForm institutionForm = (InstitutionForm) form;
 		institutionForm.setOperation(operation);
 		//Sets the operation attribute to be used in the Add/Edit Institution Page.
 		String formName = Constants.INSTITUTION_ADD_ACTION;
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		institutionForm.setSubmittedFor(submittedFor);
 
 		if (operation.equals(Constants.EDIT))
@@ -66,6 +67,6 @@ public class InstitutionAction extends SecureAction
 
 		}
 		request.setAttribute("formName", formName);
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 }

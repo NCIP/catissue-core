@@ -29,13 +29,13 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		DisposalEventParametersForm disposalEventParametersForm =
-			(DisposalEventParametersForm) eventParametersForm;
+		final DisposalEventParametersForm disposalEventParametersForm = (DisposalEventParametersForm) eventParametersForm;
 		if (disposalEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION;
@@ -47,7 +47,7 @@ public class DisposalEventParametersAction extends SpecimenEventParametersAction
 			readOnlyValue = false;
 		}
 		// String changeAction = "setFormAction('" + formName + "');";
-		String deleteAction = "deleteObject('" + formName + "?disposal=true" + "','"
+		final String deleteAction = "deleteObject('" + formName + "?disposal=true" + "','"
 				+ Constants.BIO_SPECIMEN + "')";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);

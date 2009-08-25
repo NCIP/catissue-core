@@ -35,9 +35,9 @@ import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -129,6 +129,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * @return DISTRIBUTION_FORM_ID return distribution form id
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.DISTRIBUTION_FORM_ID;
@@ -145,17 +146,18 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 
 		final Distribution distObj = (Distribution) abstractDomain;
 
-		this.comments = Utility.toString(distObj.getComment());
+		this.comments = CommonUtilities.toString(distObj.getComment());
 		this.setId(distObj.getId().longValue());
 
 		final Calendar calender = Calendar.getInstance();
 		if (distObj.getTimestamp() != null)
 		{
 			calender.setTime(distObj.getTimestamp());
-			this.timeInHours = Utility.toString(Integer
-					.toString(calender.get(Calendar.HOUR_OF_DAY)));
-			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = Utility.parseDateToString(distObj.getTimestamp(),
+			this.timeInHours = CommonUtilities.toString(Integer.toString(calender
+					.get(Calendar.HOUR_OF_DAY)));
+			this.timeInMinutes = CommonUtilities.toString(Integer.toString(calender
+					.get(Calendar.MINUTE)));
+			this.dateOfEvent = CommonUtilities.parseDateToString(distObj.getTimestamp(),
 					CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.userId = distObj.getDistributedBy().getId().longValue();
@@ -167,7 +169,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 
 		this.distributionProtocolId = String.valueOf(distObj.getDistributionProtocol().getId());
 		this.toSite = String.valueOf(distObj.getToSite().getId());
-		this.setActivityStatus(Utility.toString(distObj.getActivityStatus()));
+		this.setActivityStatus(CommonUtilities.toString(distObj.getActivityStatus()));
 		logger.debug("this.activityStatus " + this.getActivityStatus());
 
 		if (distObj.getDistributedItemCollection().size() != 0)
@@ -185,14 +187,14 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				else
 				{
 					this.distributionType = Integer.valueOf(Constants.SPECIMEN_DISTRIBUTION_TYPE);
-					populateMapForSpecimen(distObj.getDistributedItemCollection());
+					this.populateMapForSpecimen(distObj.getDistributedItemCollection());
 				}
 
 			}
 
 		}
 
-		logger.debug("Display Map Values" + values);
+		logger.debug("Display Map Values" + this.values);
 
 		//At least one row should be displayed in ADD MORE therefore
 		/*		if(counter == 0)
@@ -237,7 +239,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	{
 		if (distItemCol != null)
 		{
-			values = new HashMap();
+			this.values = new HashMap();
 
 			final Iterator itr = distItemCol.iterator();
 			int cnt = 1;
@@ -259,16 +261,16 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				final Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
 
-				values.put(key1, Utility.toString(dItem.getId()));
-				values.put(key2, Utility.toString(specimen.getId()));
-				values.put(key3, quantity);
-				values.put(key9, getAvailableQty(specimen));
-				values.put(key10, quantity);
-				values.put(key12, specimen.getBarcode());
-				values.put(key13, specimen.getLabel());
+				this.values.put(key1, CommonUtilities.toString(dItem.getId()));
+				this.values.put(key2, CommonUtilities.toString(specimen.getId()));
+				this.values.put(key3, quantity);
+				this.values.put(key9, this.getAvailableQty(specimen));
+				this.values.put(key10, quantity);
+				this.values.put(key12, specimen.getBarcode());
+				this.values.put(key13, specimen.getLabel());
 				cnt++;
 			}
-			counter = distItemCol.size();
+			this.counter = distItemCol.size();
 		}
 	}
 
@@ -278,44 +280,45 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		//resolved bug# 4352
 		//ActionErrors errors = super.validate(mapping, request);
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 		logger.debug("Inside validate function");
 		try
 		{
 			MultipleSpecimenValidationUtil.validateDate(errors, validator, this.userId,
 					this.dateOfEvent, this.timeInHours, this.timeInMinutes);
-			if (specimenId == -1L)
+			if (this.specimenId == -1L)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						"Specimen Id"));
 			}
 			// Mandar 10-apr-06 : bugid :353 
 			// Error messages should be in the same sequence as the sequence of fields on the page.
-			if (!validator.isValidOption(distributionProtocolId))
+			if (!validator.isValidOption(this.distributionProtocolId))
 			{
 				logger.debug("dist prot");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("distribution.protocol")));
 			}
-			if (!validator.isValidOption("" + userId))
+			if (!validator.isValidOption("" + this.userId))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("distribution.distributedBy")));
 			}
 
 			//  date validation according to bug id  722 and 730
-			final String errorKey = validator.validateDate(dateOfEvent, true);
+			final String errorKey = validator.validateDate(this.dateOfEvent, true);
 			if (errorKey.trim().length() > 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
 						ApplicationProperties.getValue("eventparameters.dateofevent")));
 			}
-			if (validator.isEmpty(toSite) || toSite.equalsIgnoreCase("undefined"))
+			if (Validator.isEmpty(this.toSite) || this.toSite.equalsIgnoreCase("undefined"))
 			{
 				logger.debug("to site");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
@@ -333,7 +336,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 			while (itr.hasNext())
 			{
 				final String key = (String) itr.next();
-				final String value = (String) values.get(key);
+				final String value = (String) this.values.get(key);
 
 				if (key.indexOf("Specimen_id") != -1 && !validator.isValidOption(value))
 				{
@@ -360,7 +363,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 				//}  if  quantity
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -373,7 +376,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public long getSpecimenId()
 	{
-		return specimenId;
+		return this.specimenId;
 	}
 
 	/**
@@ -389,7 +392,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -405,7 +408,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getDateOfEvent()
 	{
-		return dateOfEvent;
+		return this.dateOfEvent;
 	}
 
 	/**
@@ -421,7 +424,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getTimeInHours()
 	{
-		return timeInHours;
+		return this.timeInHours;
 	}
 
 	/**
@@ -437,7 +440,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getTimeInMinutes()
 	{
-		return timeInMinutes;
+		return this.timeInMinutes;
 	}
 
 	/**
@@ -453,7 +456,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public long getUserId()
 	{
-		return userId;
+		return this.userId;
 	}
 
 	/**
@@ -469,7 +472,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getDistributionProtocolId()
 	{
-		return distributionProtocolId;
+		return this.distributionProtocolId;
 	}
 
 	/**
@@ -499,7 +502,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public int getCounter()
 	{
-		return counter;
+		return this.counter;
 	}
 
 	/**
@@ -515,7 +518,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getToSite()
 	{
-		return toSite;
+		return this.toSite;
 	}
 
 	/**
@@ -533,9 +536,9 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public void setValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -547,7 +550,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Object getValue(final String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -563,13 +566,14 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//        super.reset();
@@ -585,7 +589,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public boolean isIdChange()
 	{
-		return idChange;
+		return this.idChange;
 	}
 
 	/**
@@ -601,7 +605,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public int getRowNo()
 	{
-		return rowNo;
+		return this.rowNo;
 	}
 
 	/**
@@ -751,19 +755,20 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjId - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(final String addNewFor, final Long addObjId)
 	{
 		if ("distributionProtocolId".equals(addNewFor))
 		{
-			setDistributionProtocolId(addObjId.toString());
+			this.setDistributionProtocolId(addObjId.toString());
 		}
 		else if ("userId".equals(addNewFor))
 		{
-			setUserId(addObjId.longValue());
+			this.setUserId(addObjId.longValue());
 		}
 		else if ("toSite".equals(addNewFor))
 		{
-			setToSite(addObjId.toString());
+			this.setToSite(addObjId.toString());
 		}
 	}
 
@@ -772,7 +777,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Integer getDistributionBasedOn()
 	{
-		return distributionBasedOn;
+		return this.distributionBasedOn;
 	}
 
 	/**
@@ -788,7 +793,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Integer getDistributionType()
 	{
-		return distributionType;
+		return this.distributionType;
 	}
 
 	/**
@@ -807,7 +812,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public int getOuterCounter()
 	{
-		return outerCounter;
+		return this.outerCounter;
 	}
 
 	/**
@@ -824,7 +829,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getConsentDate()
 	{
-		return consentDate;
+		return this.consentDate;
 	}
 
 	/**
@@ -840,7 +845,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	/**
@@ -856,7 +861,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getSignedConsentUrl()
 	{
-		return signedConsentUrl;
+		return this.signedConsentUrl;
 	}
 
 	/**
@@ -872,7 +877,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public String getWitnessName()
 	{
-		return witnessName;
+		return this.witnessName;
 	}
 
 	/**
@@ -888,7 +893,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Map getConsentResponseForDistributionValues()
 	{
-		return consentResponseForDistributionValues;
+		return this.consentResponseForDistributionValues;
 	}
 
 	/**
@@ -905,9 +910,9 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public void setConsentResponseForDistributionValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			consentResponseForDistributionValues.put(key, value);
+			this.consentResponseForDistributionValues.put(key, value);
 		}
 	}
 
@@ -917,7 +922,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Object getConsentResponseForDistributionValue(final String key)
 	{
-		return consentResponseForDistributionValues.get(key);
+		return this.consentResponseForDistributionValues.get(key);
 	}
 
 	/**
@@ -925,7 +930,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	 */
 	public Collection getAllConsentResponseForDistributionValue()
 	{
-		return consentResponseForDistributionValues.values();
+		return this.consentResponseForDistributionValues.values();
 	}
 
 	/**

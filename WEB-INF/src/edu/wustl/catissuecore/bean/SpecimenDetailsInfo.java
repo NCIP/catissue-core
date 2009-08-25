@@ -1,13 +1,14 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.List;
-
 
 /**
  * @author mandar_deshmukh
  *
  */
-public interface SpecimenDetailsInfo {
+public interface SpecimenDetailsInfo
+{
 
 	String getSelectedSpecimenId();
 
@@ -22,9 +23,9 @@ public interface SpecimenDetailsInfo {
 	boolean getShowbarCode();
 
 	boolean getShowLabel();
-	
+
 	boolean getShowParentStorage();
-	
+
 	boolean isMultipleSpEditMode();
 
 }

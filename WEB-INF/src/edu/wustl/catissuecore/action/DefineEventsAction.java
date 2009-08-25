@@ -91,12 +91,12 @@ public class DefineEventsAction extends BaseAction
 		//cpBean.setConsentValues(cpForm.getConsentValues());
 		cpBean.setConsentValues(consentMap);//bug 8905
 		cpBean.setUnsignedConsentURLName(cpForm.getUnsignedConsentURLName());
-		
+
 		cpBean.setStudyCalendarEventPoint(cpForm.getStudyCalendarEventPoint());
 		cpBean.setType(cpForm.getType());
 		cpBean.setSequenceNumber(cpForm.getSequenceNumber());
 		cpBean.setParentCollectionProtocolId(cpForm.getParentCollectionProtocolId());
-		
+
 	}
 
 }

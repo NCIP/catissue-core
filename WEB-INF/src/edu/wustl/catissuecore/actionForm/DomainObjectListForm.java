@@ -58,7 +58,7 @@ public class DomainObjectListForm extends AbstractActionForm
 	{
 		if (!value.equals("on"))
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 
 	}
@@ -70,7 +70,7 @@ public class DomainObjectListForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class DomainObjectListForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -98,16 +98,17 @@ public class DomainObjectListForm extends AbstractActionForm
 	 */
 	public DomainObjectListForm()
 	{
-		reset();
+		this.reset();
 	}
 
 	/**
 	 * Resets all the values.
 	 */
+	@Override
 	protected void reset()
 	{
-		comments = null;
-		values = new HashMap();
+		this.comments = null;
+		this.values = new HashMap();
 	}
 
 	/**
@@ -116,13 +117,14 @@ public class DomainObjectListForm extends AbstractActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractForm#getFormId()
 	 * @return APPROVE_USER_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.APPROVE_USER_FORM_ID;
@@ -142,19 +144,20 @@ public class DomainObjectListForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 
 		try
 		{
-			if (values.size() == 0 && (!this.getOperation().equals(Constants.USER_DETAILS)))
+			if (this.values.size() == 0 && (!this.getOperation().equals(Constants.USER_DETAILS)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"errors.approveUser.required", this.getOperation()));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

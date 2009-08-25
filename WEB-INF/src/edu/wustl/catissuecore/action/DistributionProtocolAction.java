@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -34,10 +35,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionProtocolAction extends SpecimenProtocolAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DistributionProtocolAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(DistributionProtocolAction.class);
 
 	/**
 	 * Overrides the execute method of Action class.
@@ -49,19 +52,19 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
 	 * */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
+		final DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
 
 		if (distributionProtocolForm.getStartDate() == null)
 		{
-			distributionProtocolForm.setStartDate(edu.wustl.common.util.Utility.parseDateToString(
-					Calendar.getInstance().getTime(), CommonServiceLocator.getInstance()
-							.getDatePattern()));
+			distributionProtocolForm.setStartDate(CommonUtilities.parseDateToString(Calendar
+					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		//List of keys used in map of ActionForm
-		List key = new ArrayList();
+		final List key = new ArrayList();
 		key.add("DistributionSpecimenRequirement:i_specimenClass");
 		key.add("DistributionSpecimenRequirement:i_specimenType");
 		key.add("DistributionSpecimenRequirement:i_tissueSite");
@@ -69,24 +72,24 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		key.add("DistributionSpecimenRequirement:i_quantity");
 
 		//Gets the map from ActionForm
-		Map map = distributionProtocolForm.getValues();
+		final Map map = distributionProtocolForm.getValues();
 
 		//Calling DeleteRow of BaseAction class
 		MapDataParser.deleteRow(key, map, request.getParameter("status"));
 
 		// ----------For Add new
-		String reqPath = request.getParameter(Constants.REQ_PATH);
+		final String reqPath = request.getParameter(Constants.REQ_PATH);
 		if (reqPath != null)
 		{
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		}
-		logger.debug("DP Action reqPath : ---- " + reqPath);
+		this.logger.debug("DP Action reqPath : ---- " + reqPath);
 
 		// Mandar : code for Addnew Coordinator data 24-Jan-06
-		String coordinatorID = (String) request.getAttribute(Constants.ADD_NEW_USER_ID);
+		final String coordinatorID = (String) request.getAttribute(Constants.ADD_NEW_USER_ID);
 		if (coordinatorID != null && coordinatorID.trim().length() > 0)
 		{
-			logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "
+			this.logger.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "
 					+ coordinatorID);
 			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID));
 		}

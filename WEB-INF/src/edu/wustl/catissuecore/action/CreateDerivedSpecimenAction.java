@@ -45,15 +45,16 @@ public class CreateDerivedSpecimenAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		HttpSession session = request.getSession();
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session
+		final HttpSession session = request.getSession();
+		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) session
 				.getAttribute("REQUEST_DETAILS_FORM");
-		String rowNumber = request.getParameter("rowNumber");
-		String specimenId = request.getParameter("specimenId");
-		String beanName = request.getParameter("bean");
+		final String rowNumber = request.getParameter("rowNumber");
+		final String specimenId = request.getParameter("specimenId");
+		final String beanName = request.getParameter("bean");
 
 		String parentSpecimenLabelKey = "";
 		String requestedClassKey = "";
@@ -69,11 +70,10 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		//whether request is from request details page or defined array page
 		if (specimenId != null)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 					.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-			Specimen specimen = (Specimen) orderBizLogic.getSpecimenObject(Long
-					.parseLong(specimenId));
+			final Specimen specimen = orderBizLogic.getSpecimenObject(Long.parseLong(specimenId));
 			parentSpecimenLabel = specimen.getLabel();
 			requestedClass = specimen.getClassName();
 			requestedType = specimen.getSpecimenType();
@@ -99,7 +99,7 @@ public class CreateDerivedSpecimenAction extends BaseAction
 				requestedQtyKey = "RequestDetailsBean:" + rowNumber + "_requestedQty";
 				parentSpecimenIdKey = "RequestDetailsBean:" + rowNumber + "_specimenId";
 			}
-			Map valuesMap = requestDetailsForm.getValues();
+			final Map valuesMap = requestDetailsForm.getValues();
 			parentSpecimenLabel = (String) valuesMap.get(parentSpecimenLabelKey);
 			requestedClass = (String) valuesMap.get(requestedClassKey);
 			requestedType = (String) valuesMap.get(requestedTypeKey);
@@ -109,7 +109,7 @@ public class CreateDerivedSpecimenAction extends BaseAction
 		}
 
 		//Create Specimen Form to populate.
-		CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
 		//Setting the values in CreateSpecimenForm
 		createSpecimenForm.setParentSpecimenId(parentSpecimenId);
 		createSpecimenForm.setParentSpecimenLabel(parentSpecimenLabel);

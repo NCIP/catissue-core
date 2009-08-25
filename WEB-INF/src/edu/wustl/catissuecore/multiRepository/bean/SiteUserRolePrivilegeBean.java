@@ -69,7 +69,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public CollectionProtocol getCollectionProtocol()
 	{
-		return collectionProtocol;
+		return this.collectionProtocol;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public List<NameValueBean> getPrivileges()
 	{
-		return privileges;
+		return this.privileges;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public NameValueBean getRole()
 	{
-		return role;
+		return this.role;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public List<Site> getSiteList()
 	{
-		return siteList;
+		return this.siteList;
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public User getUser()
 	{
-		return user;
+		return this.user;
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public boolean isAllCPChecked()
 	{
-		return isAllCPChecked;
+		return this.isAllCPChecked;
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public boolean isRowDeleted()
 	{
-		return isRowDeleted;
+		return this.isRowDeleted;
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public boolean isRowEdited()
 	{
-		return isRowEdited;
+		return this.isRowEdited;
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class SiteUserRolePrivilegeBean
 	 */
 	public boolean isCustChecked()
 	{
-		return isCustChecked;
+		return this.isCustChecked;
 	}
 
 	/**

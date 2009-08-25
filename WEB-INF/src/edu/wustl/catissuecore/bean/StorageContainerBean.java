@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import edu.wustl.common.util.global.Status;
 
 public class StorageContainerBean implements Serializable
 {
+
 	private static final long serialVersionUID = 1L;
 
 	private long typeId = -1;
@@ -116,6 +118,7 @@ public class StorageContainerBean implements Serializable
 	private String parentContainerSelected;
 
 	private long id;
+
 	/**
 	 * Returns an id which refers to the type of the storage.
 	 * @return An id which refers to the type of the storage.
@@ -125,6 +128,7 @@ public class StorageContainerBean implements Serializable
 	{
 		return this.typeId;
 	}
+
 	/**
 	 * Returns the activity status
 	 * @return the activityStatus.
@@ -132,8 +136,9 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
+
 	/**
 	 * Sets the activity status.
 	 * @param activityStatus activity status.
@@ -143,13 +148,15 @@ public class StorageContainerBean implements Serializable
 	{
 		this.activityStatus = activityStatus;
 	}
+
 	/**
 	 * @return Returns the containerId.
 	 */
 	public String getContainerId()
 	{
-		return containerId;
+		return this.containerId;
 	}
+
 	/**
 	 * @param containerId The containerId to set.
 	 */
@@ -157,13 +164,15 @@ public class StorageContainerBean implements Serializable
 	{
 		this.containerId = containerId;
 	}
+
 	/**
 	 * @return Returns the pos1.
 	 */
 	public String getPos1()
 	{
-		return pos1;
+		return this.pos1;
 	}
+
 	/**
 	 * @param pos1 The pos1 to set.
 	 */
@@ -171,13 +180,15 @@ public class StorageContainerBean implements Serializable
 	{
 		this.pos1 = pos1;
 	}
+
 	/**
 	 * @return Returns the pos2.
 	 */
 	public String getPos2()
 	{
-		return pos2;
+		return this.pos2;
 	}
+
 	/**
 	 * @param pos2 The pos2 to set.
 	 */
@@ -185,24 +196,28 @@ public class StorageContainerBean implements Serializable
 	{
 		this.pos2 = pos2;
 	}
+
 	/**
 	 * For parent container type.
 	 */
 	public String getParentContainerSelected()
 	{
-		return parentContainerSelected;
+		return this.parentContainerSelected;
 	}
+
 	public void setParentContainerSelected(String parentContainerSelected)
 	{
-		this.parentContainerSelected=parentContainerSelected;
+		this.parentContainerSelected = parentContainerSelected;
 	}
+
 	/**
 	 * @return Returns the selectedContainerName.
 	 */
 	public String getSelectedContainerName()
 	{
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
+
 	/**
 	 * @param selectedContainerName The selectedContainerName to set.
 	 */
@@ -210,13 +225,15 @@ public class StorageContainerBean implements Serializable
 	{
 		this.selectedContainerName = selectedContainerName;
 	}
+
 	/**
 	 * @return Returns the stContSelection.
 	 */
 	public int getStContSelection()
 	{
-		return stContSelection;
+		return this.stContSelection;
 	}
+
 	/**
 	 * @param stContSelection The stContSelection to set.
 	 */
@@ -224,6 +241,7 @@ public class StorageContainerBean implements Serializable
 	{
 		this.stContSelection = stContSelection;
 	}
+
 	/**
 	 * Sets an id which refers to the type of the storage.
 	 * @param typeId An id which refers to the type of the storage.
@@ -234,7 +252,6 @@ public class StorageContainerBean implements Serializable
 		this.typeId = typeId;
 	}
 
-
 	/**
 	 * Sets an name which refers to the type of the storage.
 	 * @param typeName An id which refers to the type of the storage.
@@ -244,7 +261,7 @@ public class StorageContainerBean implements Serializable
 	{
 		this.typeName = typeName;
 	}
-	
+
 	/**
 	 * Returns an name which refers to the type of the storage.
 	 * @return An name which refers to the type of the storage.
@@ -255,11 +272,11 @@ public class StorageContainerBean implements Serializable
 		return this.typeName;
 	}
 
-		/**
-	 * Returns the default temperature of the storage container.
-	 * @return double the default temperature of the storage container to be set.
-	 * @see #setDefaultTemperature(double)
-	 */
+	/**
+	* Returns the default temperature of the storage container.
+	* @return double the default temperature of the storage container to be set.
+	* @see #setDefaultTemperature(double)
+	*/
 	public String getDefaultTemperature()
 	{
 		return this.defaultTemperature;
@@ -315,7 +332,6 @@ public class StorageContainerBean implements Serializable
 		this.twoDimensionCapacity = twoDimensionCapacity;
 	}
 
-	
 	/**
 	 * Returns an id which refers to Parent Container of this container.
 	 * @return long An id which refers to Parent Container of this container.
@@ -323,7 +339,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public long getParentContainerId()
 	{
-		return parentContainerId;
+		return this.parentContainerId;
 	}
 
 	/**
@@ -341,7 +357,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getPositionInParentContainer()
 	{
-		return positionInParentContainer;
+		return this.positionInParentContainer;
 	}
 
 	/**
@@ -359,7 +375,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public long getSiteId()
 	{
-		return siteId;
+		return this.siteId;
 	}
 
 	/**
@@ -371,9 +387,6 @@ public class StorageContainerBean implements Serializable
 	{
 		this.siteId = siteId;
 	}
-
-
-	
 
 	/**
 	 * Returns the label of dimension two.
@@ -395,28 +408,26 @@ public class StorageContainerBean implements Serializable
 		this.twoDimensionLabel = twoDimensionLabel;
 	}
 
-	
 	public void setId(long id)
 	{
-		this.id=id;
+		this.id = id;
 	}
-	
+
 	public long getID()
 	{
-		return id;
+		return this.id;
 	}
-	
+
 	/**
 	 * Tells whether this container is full or not.
 	 */
-	
+
 	private String isFull = "False";
 
 	/**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
 	//protected Map values = new HashMap();
-
 	/** 
 	 * Positon for dimension 1
 	 */
@@ -453,15 +464,13 @@ public class StorageContainerBean implements Serializable
 	private Map similarContainersMap = new HashMap();
 
 	private String specimenOrArrayType;
-	
-	
 
 	/**
 	 * @return Returns the checkedButton.
 	 */
 	public int getCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -477,7 +486,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getIsFull()
 	{
-		return isFull;
+		return this.isFull;
 	}
 
 	/**
@@ -495,10 +504,9 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getSiteName()
 	{
-		return siteName;
+		return this.siteName;
 	}
 
-	
 	/**
 	 * Sets an name which refers to the site of the container if it is parent container.
 	 * @param siteName An name which refers to the site of the container if it is parent container.
@@ -508,7 +516,7 @@ public class StorageContainerBean implements Serializable
 	{
 		this.siteName = siteName;
 	}
-	
+
 	/**
 	 * Returns the label of dimension one.
 	 * @return String the label of dimension one.
@@ -528,13 +536,13 @@ public class StorageContainerBean implements Serializable
 	{
 		this.oneDimensionLabel = oneDimensionLabel;
 	}
-	
+
 	/**
 	 * @return Returns the barcode.
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -545,14 +553,13 @@ public class StorageContainerBean implements Serializable
 		this.barcode = barcode;
 	}
 
-
 	/**
 	 * getting Specimen class Type Ids that this container can hold 
 	 * @return specimenClassType Id's array
 	 */
 	public String[] getHoldsSpecimenClassTypes()
 	{
-		return holdsSpecimenClassTypes;
+		return this.holdsSpecimenClassTypes;
 	}
 
 	/**
@@ -569,7 +576,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getKey()
 	{
-		return key;
+		return this.key;
 	}
 
 	/**
@@ -585,7 +592,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public int getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -595,13 +602,14 @@ public class StorageContainerBean implements Serializable
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
+
 	/**
 	 * getitng StorageType Id's that this container can hold
 	 * @return StorageType Id' array
 	 */
 	public long[] getHoldsStorageTypeIds()
 	{
-		return holdsStorageTypeIds;
+		return this.holdsStorageTypeIds;
 	}
 
 	/**
@@ -630,25 +638,27 @@ public class StorageContainerBean implements Serializable
 	{
 		this.collectionIds = collectionIds;
 	}
+
 	/**
-     * Sets the Specimen Array Type Holds List.
-     * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
-     * @see #getHoldsSpecimenArrTypeIds()
-     */
+	 * Sets the Specimen Array Type Holds List.
+	 * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
+	 * @see #getHoldsSpecimenArrTypeIds()
+	 */
 	public void setHoldsSpecimenArrTypeIds(long[] holdsSpecimenArrTypeIds)
 	{
 		this.holdsSpecimenArrTypeIds = holdsSpecimenArrTypeIds;
 	}
 
-	 /**
-     * Returns the list of specimen array type Ids that this Storage Type can hold.
-     * @return long[] the list of specimen array type Ids.
-     * @see #setHoldsSpecimenArrTypeIds(long[])
-     */
-    public long[] getHoldsSpecimenArrTypeIds()
+	/**
+	* Returns the list of specimen array type Ids that this Storage Type can hold.
+	* @return long[] the list of specimen array type Ids.
+	* @see #setHoldsSpecimenArrTypeIds(long[])
+	*/
+	public long[] getHoldsSpecimenArrTypeIds()
 	{
-		return holdsSpecimenArrTypeIds;
+		return this.holdsSpecimenArrTypeIds;
 	}
+
 	/**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.
@@ -657,7 +667,7 @@ public class StorageContainerBean implements Serializable
 	public Map getSimilarContainersMap()
 	{
 		//System.out.println("AliquotForm : getAliquotMap "+similarContainersMap);
-		return similarContainersMap;
+		return this.similarContainersMap;
 	}
 
 	/**
@@ -679,7 +689,7 @@ public class StorageContainerBean implements Serializable
 	public void setSimilarContainerMapValue(String key, Object value)
 	{
 		//System.out.println("simCont: setValue -> "+key+" "+value);
-		similarContainersMap.put(key, value);
+		this.similarContainersMap.put(key, value);
 	}
 
 	/**
@@ -705,7 +715,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public int getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -716,13 +726,12 @@ public class StorageContainerBean implements Serializable
 		this.positionDimensionOne = positionDimensionOne;
 	}
 
-
 	/**
 	 * @return Returns the noOfContainers.
 	 */
 	public int getNoOfContainers()
 	{
-		return noOfContainers;
+		return this.noOfContainers;
 	}
 
 	/**
@@ -738,7 +747,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getStartNumber()
 	{
-		return startNumber;
+		return this.startNumber;
 	}
 
 	/**
@@ -749,7 +758,6 @@ public class StorageContainerBean implements Serializable
 		this.startNumber = startNumber;
 	}
 
-	
 	/**
 	 * Returns the object to which this map maps the specified key.
 	 * @param key the required key.
@@ -758,14 +766,15 @@ public class StorageContainerBean implements Serializable
 	public Object getSimilarContainerMapValue(String key)
 	{
 		//System.out.println("simCont: getValue <- "+key+" "+similarContainersMap.get(key));
-		return similarContainersMap.get(key);
+		return this.similarContainersMap.get(key);
 	}
+
 	/**
 	 * @return siteForParentContainer
 	 */
 	public String getSiteForParentContainer()
 	{
-		return siteForParentContainer;
+		return this.siteForParentContainer;
 	}
 
 	/**
@@ -781,7 +790,7 @@ public class StorageContainerBean implements Serializable
 	 */
 	public String getSpecimenOrArrayType()
 	{
-		return specimenOrArrayType;
+		return this.specimenOrArrayType;
 	}
 
 	/**

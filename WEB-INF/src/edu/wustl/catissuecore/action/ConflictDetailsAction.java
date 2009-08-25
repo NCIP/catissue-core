@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConflictDetailsForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+
 /**
  *
  * @author renuka_bajpai
@@ -42,12 +43,13 @@ public class ConflictDetailsAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 * */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String reportQueueId = request.getParameter(Constants.REPORT_ID);
+		final String reportQueueId = request.getParameter(Constants.REPORT_ID);
 
-		ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm) form;
+		final ConflictDetailsForm conflictDetailsForm = (ConflictDetailsForm) form;
 		conflictDetailsForm.setReportQueueId(reportQueueId);
 
 		request.setAttribute(Constants.REPORT_ID, reportQueueId);

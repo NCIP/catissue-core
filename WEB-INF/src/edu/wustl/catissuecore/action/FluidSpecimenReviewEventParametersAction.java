@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class FluidSpecimenReviewEventParametersAction extends SpecimenEventParametersAction
 {
+
 	/**
 	 * @param request object of HttpServletRequest
 	 * @param eventParametersForm : eventParametersForm
@@ -26,8 +27,7 @@ public class FluidSpecimenReviewEventParametersAction extends SpecimenEventParam
 		String formName, specimenId = null;
 		specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
-		FluidSpecimenReviewEventParametersForm fluidSpecimenReviewEventParametersForm =
-			(FluidSpecimenReviewEventParametersForm) eventParametersForm;
+		final FluidSpecimenReviewEventParametersForm fluidSpecimenReviewEventParametersForm = (FluidSpecimenReviewEventParametersForm) eventParametersForm;
 
 		boolean readOnlyValue;
 		if (fluidSpecimenReviewEventParametersForm.getOperation().equals(Constants.EDIT))
@@ -41,7 +41,7 @@ public class FluidSpecimenReviewEventParametersAction extends SpecimenEventParam
 
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);

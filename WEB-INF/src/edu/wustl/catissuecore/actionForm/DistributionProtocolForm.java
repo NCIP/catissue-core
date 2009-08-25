@@ -60,7 +60,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 */
 	public int getCounter()
 	{
-		return counter;
+		return this.counter;
 	}
 
 	/**
@@ -83,6 +83,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//super.reset();
@@ -93,49 +94,50 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
 	 * @param abstractDomain An AbstractDomain object.
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 
-		DistributionProtocol dProtocol = (DistributionProtocol) abstractDomain;
+		final DistributionProtocol dProtocol = (DistributionProtocol) abstractDomain;
 
-		Collection < DistributionSpecimenRequirement > distSpcimenReqquirementCollection = dProtocol
+		final Collection<DistributionSpecimenRequirement> distSpcimenReqquirementCollection = dProtocol
 				.getDistributionSpecimenRequirementCollection();
 
 		//Added by Abhishek
-		List < DistributionSpecimenRequirement > spcimenProtocolCollectionList = new ArrayList < DistributionSpecimenRequirement >(
+		final List<DistributionSpecimenRequirement> spcimenProtocolCollectionList = new ArrayList<DistributionSpecimenRequirement>(
 				distSpcimenReqquirementCollection);
-		DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
+		final DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
 		Collections.sort(spcimenProtocolCollectionList, domainBeanIdentifierComparator);
 
 		if (spcimenProtocolCollectionList != null)
 		{
-			values = new LinkedHashMap();
-			counter = 0;
+			this.values = new LinkedHashMap();
+			this.counter = 0;
 
 			int i = 1;
-			Iterator it = spcimenProtocolCollectionList.iterator();
+			final Iterator it = spcimenProtocolCollectionList.iterator();
 			while (it.hasNext())
 			{
-				DistributionSpecimenRequirement distSpecimenRequirement = (DistributionSpecimenRequirement) it
+				final DistributionSpecimenRequirement distSpecimenRequirement = (DistributionSpecimenRequirement) it
 						.next();
 
-				String[] key = {"DistributionSpecimenRequirement:" + i + "_specimenClass",
+				final String[] key = {"DistributionSpecimenRequirement:" + i + "_specimenClass",
 						"DistributionSpecimenRequirement:" + i + "_unitspan",
 						"DistributionSpecimenRequirement:" + i + "_specimenType",
 						"DistributionSpecimenRequirement:" + i + "_tissueSite",
 						"DistributionSpecimenRequirement:" + i + "_pathologyStatus",
 						"DistributionSpecimenRequirement:" + i + "_quantity",
 						"DistributionSpecimenRequirement:" + i + "_id"};
-				setSpecimenRequirement(key, distSpecimenRequirement);
+				this.setSpecimenRequirement(key, distSpecimenRequirement);
 				i++;
-				counter++;
+				this.counter++;
 			}
 
 			//At least one row should be displayed in ADD MORE therefore
-			if (counter == 0)
+			if (this.counter == 0)
 			{
-				counter = 1;
+				this.counter = 1;
 			}
 		}
 	}
@@ -146,10 +148,11 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 		try
 		{
 
@@ -159,11 +162,11 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 			boolean bPathologyStatus = false;
 			boolean bQuantity = false;
 
-			Iterator it = this.values.keySet().iterator();
+			final Iterator it = this.values.keySet().iterator();
 			while (it.hasNext())
 			{
-				String key = (String) it.next();
-				String value = (String) values.get(key);
+				final String key = (String) it.next();
+				String value = (String) this.values.get(key);
 				logger.debug(key + " : " + value);
 
 				if (!bSpecimenClass)
@@ -224,12 +227,12 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 						//	    					{
 						String classKey = key.substring(0, key.indexOf("_"));
 						classKey = classKey + "_specimenClass";
-						String classValue = (String) getValue(classKey);
+						final String classValue = (String) this.getValue(classKey);
 
 						// -------Mandar: 20-12-2005
 						String typeKey = key.substring(0, key.indexOf("_"));
 						typeKey = typeKey + "_specimenType";
-						String typeValue = (String) getValue(typeKey);
+						final String typeValue = (String) this.getValue(typeKey);
 						logger.debug("TypeKey : " + typeKey + " : Type Value : " + typeValue);
 
 						try
@@ -264,7 +267,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 								}
 							}
 						}
-						catch (NumberFormatException exp)
+						catch (final NumberFormatException exp)
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
@@ -275,7 +278,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 			errors = new ActionErrors();
@@ -286,6 +289,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * @return DISTRIBUTIONPROTOCOL_FORM_ID Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.DISTRIBUTIONPROTOCOL_FORM_ID;
@@ -296,11 +300,12 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if (addNewFor.equals("principalInvestigator"))
 		{
-			setPrincipalInvestigatorId(addObjectIdentifier.longValue());
+			this.setPrincipalInvestigatorId(addObjectIdentifier.longValue());
 		}
 	}
 }

@@ -10,12 +10,11 @@
 
 package edu.wustl.catissuecore.bean;
 
-
 import java.io.Serializable;
 
 public class RequestViewBean implements Serializable
-{	
-	
+{
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The serial number to display.
@@ -57,14 +56,13 @@ public class RequestViewBean implements Serializable
 	 * The distribution Protocol id.
 	 */
 	private String distributionProtocolId;
-	
 
 	/**
 	 * @return comments The comments associated with the request order.
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -80,7 +78,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getDistributionProtocol()
 	{
-		return distributionProtocol;
+		return this.distributionProtocol;
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getEmail()
 	{
-		return email;
+		return this.email;
 	}
 
 	/**
@@ -112,7 +110,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getOrderName()
 	{
-		return orderName;
+		return this.orderName;
 	}
 
 	/**
@@ -128,7 +126,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getRequestedDate()
 	{
-		return requestedDate;
+		return this.requestedDate;
 	}
 
 	/** 
@@ -144,7 +142,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getRequestedBy()
 	{
-		return requestedBy;
+		return this.requestedBy;
 	}
 
 	/**
@@ -160,7 +158,7 @@ public class RequestViewBean implements Serializable
 	 */
 	public String getStatus()
 	{
-		return status;
+		return this.status;
 	}
 
 	/**
@@ -171,16 +169,14 @@ public class RequestViewBean implements Serializable
 		this.status = status;
 	}
 
-	
 	/**
 	 * @return the requestId The Id associated with the request order.
 	 */
 	public String getRequestId()
 	{
-		return requestId;
+		return this.requestId;
 	}
 
-	
 	/**
 	 * @param requestId the requestId to set
 	 */
@@ -189,16 +185,14 @@ public class RequestViewBean implements Serializable
 		this.requestId = requestId;
 	}
 
-	
 	/**
 	 * @return the serialNo
 	 */
 	public int getSerialNo()
 	{
-		return serialNo;
+		return this.serialNo;
 	}
 
-	
 	/**
 	 * @param serialNo the serialNo to set
 	 */
@@ -207,16 +201,14 @@ public class RequestViewBean implements Serializable
 		this.serialNo = serialNo;
 	}
 
-	
 	/**
 	 * @return the distributionProtocolId
 	 */
 	public String getDistributionProtocolId()
 	{
-		return distributionProtocolId;
+		return this.distributionProtocolId;
 	}
 
-	
 	/**
 	 * @param distributionProtocolId the distributionProtocolId to set
 	 */

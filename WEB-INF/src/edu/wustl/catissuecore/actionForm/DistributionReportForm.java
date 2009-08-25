@@ -7,8 +7,8 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -64,7 +64,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public Integer getDistributionType()
 	{
-		return distributionType;
+		return this.distributionType;
 	}
 
 	/**
@@ -81,24 +81,26 @@ public class DistributionReportForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
 
-		Distribution distribution = (Distribution) abstractDomainObject;
+		final Distribution distribution = (Distribution) abstractDomainObject;
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol()
 				.getTitle());
-		String lName = (String) distribution.getDistributedBy().getLastName();
-		String fName = (String) distribution.getDistributedBy().getFirstName();
+		final String lName = distribution.getDistributedBy().getLastName();
+		final String fName = distribution.getDistributedBy().getFirstName();
 		logger.debug("User's name" + lName + " " + fName);
 		this.userName = lName + ", " + fName;
-		Calendar calender = Calendar.getInstance();
+		final Calendar calender = Calendar.getInstance();
 		calender.setTime(distribution.getTimestamp());
-		this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
-		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),
+		this.timeInHours = CommonUtilities.toString(Integer.toString(calender
+				.get(Calendar.HOUR_OF_DAY)));
+		this.timeInMinutes = CommonUtilities.toString(Integer.toString(calender
+				.get(Calendar.MINUTE)));
+		this.dateOfEvent = CommonUtilities.parseDateToString(distribution.getTimestamp(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		this.id = distribution.getId().longValue();
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
-		this.comments = Utility.toString(distribution.getComment());
-		distributionId = distribution.getId();
+		this.comments = CommonUtilities.toString(distribution.getComment());
+		this.distributionId = distribution.getId();
 	}
 
 	//	/**
@@ -120,7 +122,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getToSite()
 	{
-		return toSite;
+		return this.toSite;
 	}
 
 	/**
@@ -128,7 +130,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getDistributionProtocolTitle()
 	{
-		return distributionProtocolTitle;
+		return this.distributionProtocolTitle;
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -168,7 +170,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getDateOfEvent()
 	{
-		return dateOfEvent;
+		return this.dateOfEvent;
 	}
 
 	/**
@@ -184,7 +186,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getTimeInMinutes()
 	{
-		return timeInMinutes;
+		return this.timeInMinutes;
 	}
 
 	/**
@@ -200,7 +202,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getTimeInHours()
 	{
-		return timeInHours;
+		return this.timeInHours;
 	}
 
 	/**
@@ -216,7 +218,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public String getUserName()
 	{
-		return userName;
+		return this.userName;
 	}
 
 	/**
@@ -230,6 +232,7 @@ public class DistributionReportForm extends AbstractActionForm
 	/**
 	 *@return id
 	 */
+	@Override
 	public long getId()
 	{
 		return this.id;
@@ -238,6 +241,7 @@ public class DistributionReportForm extends AbstractActionForm
 	/**
 	 * @param id Setting id
 	 */
+	@Override
 	public void setId(long id)
 	{
 		this.id = id;
@@ -248,7 +252,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 */
 	public Long getDistributionId()
 	{
-		return distributionId;
+		return this.distributionId;
 	}
 
 	/**
@@ -262,6 +266,7 @@ public class DistributionReportForm extends AbstractActionForm
 	/**
 	 * @return 0
 	 */
+	@Override
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
@@ -272,6 +277,7 @@ public class DistributionReportForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		// TODO Auto-generated method stub

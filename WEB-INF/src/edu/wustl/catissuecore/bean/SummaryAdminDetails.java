@@ -27,7 +27,8 @@ public class SummaryAdminDetails
 	private String repSites;
 	private String labSites;
 
-	private List < List > adminInfo;
+	private List<List> adminInfo;
+
 	/**
 	 * @return - colSites
 	 */
@@ -35,6 +36,7 @@ public class SummaryAdminDetails
 	{
 		return this.colSites;
 	}
+
 	/**
 	 * @param colSitesParam - colSitesParam
 	 */
@@ -42,6 +44,7 @@ public class SummaryAdminDetails
 	{
 		this.colSites = colSitesParam;
 	}
+
 	/**
 	 * @return - cpTot
 	 */
@@ -49,6 +52,7 @@ public class SummaryAdminDetails
 	{
 		return this.cpTot;
 	}
+
 	/**
 	 * @param tot - cpTot
 	 */
@@ -56,6 +60,7 @@ public class SummaryAdminDetails
 	{
 		this.cpTot = tot;
 	}
+
 	/**
 	 * @return - dpTot
 	 */
@@ -63,13 +68,15 @@ public class SummaryAdminDetails
 	{
 		return this.dpTot;
 	}
-    /**
-     * @param tot - tot
-     */
+
+	/**
+	 * @param tot - tot
+	 */
 	public void setDpTot(final String tot)
 	{
 		this.dpTot = tot;
 	}
+
 	/**
 	 * @return - String
 	 */
@@ -77,6 +84,7 @@ public class SummaryAdminDetails
 	{
 		return this.labSites;
 	}
+
 	/**
 	 * @param labSitesParam - labSitesParam
 	 */
@@ -84,6 +92,7 @@ public class SummaryAdminDetails
 	{
 		this.labSites = labSitesParam;
 	}
+
 	/**
 	 * @return - repSites
 	 */
@@ -91,6 +100,7 @@ public class SummaryAdminDetails
 	{
 		return this.repSites;
 	}
+
 	/**
 	 * @param regSitesParam - regSitesParam
 	 */
@@ -98,6 +108,7 @@ public class SummaryAdminDetails
 	{
 		this.repSites = regSitesParam;
 	}
+
 	/**
 	 * @return - regUsers
 	 */
@@ -105,6 +116,7 @@ public class SummaryAdminDetails
 	{
 		return this.regUsers;
 	}
+
 	/**
 	 * @param regUsersParam - regUsersParam
 	 */
@@ -112,17 +124,19 @@ public class SummaryAdminDetails
 	{
 		this.regUsers = regUsersParam;
 	}
+
 	/**
 	 * @return - List
 	 */
-	public List < List > getAdminInfo()
+	public List<List> getAdminInfo()
 	{
 		return this.adminInfo;
 	}
+
 	/**
 	 * @param adminInfoParam - adminInfoParam
 	 */
-	public void setAdminInfo(List < List > adminInfoParam)
+	public void setAdminInfo(List<List> adminInfoParam)
 	{
 		this.adminInfo = adminInfoParam;
 	}

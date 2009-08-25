@@ -77,7 +77,7 @@ public class ViewSpecimenSummaryAction extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
+
 		String target = Constants.SUCCESS;
 		final ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 		try
@@ -87,16 +87,16 @@ public class ViewSpecimenSummaryAction extends Action
 			// getSelectedSpecimenId());
 			// Mandar : 5Aug08 ----------- start
 			//bug 13164 start
-			String forwardToValue = request.getParameter( Constants.FORWARD_TO );
-			if(forwardToValue!=null)
+			final String forwardToValue = request.getParameter(Constants.FORWARD_TO);
+			if (forwardToValue != null)
 			{
-				if(Constants.CP_CHILD_SUBMIT.equals( forwardToValue ))
+				if (Constants.CP_CHILD_SUBMIT.equals(forwardToValue))
 				{
-					request.setAttribute( Constants.IS_SCG_SUBMIT, Constants.SPECIMEN_SUBMIT );
+					request.setAttribute(Constants.IS_SCG_SUBMIT, Constants.SPECIMEN_SUBMIT);
 				}
 				else
 				{
-					request.setAttribute( Constants.IS_SCG_SUBMIT, Constants.SCG_SUBMIT );
+					request.setAttribute(Constants.IS_SCG_SUBMIT, Constants.SCG_SUBMIT);
 				}
 			}
 			//bug 13164 end
@@ -249,7 +249,7 @@ public class ViewSpecimenSummaryAction extends Action
 				// request.setAttribute(Constants.PAGE_OF,pageOf);
 				return mapping.findForward(target);
 			}
-			
+
 			return mapping.findForward(target);
 		}
 		catch (final Exception exception)
@@ -833,21 +833,21 @@ public class ViewSpecimenSummaryAction extends Action
 	{
 		final String eventId = summaryForm.getEventId();
 		if (eventId == null
-				|| session.getAttribute( Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP ) == null)
+				|| session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) == null)
 		{
 			return;
 		}
 		final Map collectionProtocolEventMap = (Map) session
-				.getAttribute( Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP );
+				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		final CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-				.get( eventId ); // get nullpointer sometimes
+				.get(eventId); // get nullpointer sometimes
 		final LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
-		final Iterator specItr = specimenMap.values().iterator();
-		final List < GenericSpecimen > allSpcimens = new ArrayList < GenericSpecimen >();
-		allSpcimens.addAll( specimenMap.values() );
+		specimenMap.values().iterator();
+		final List<GenericSpecimen> allSpcimens = new ArrayList<GenericSpecimen>();
+		allSpcimens.addAll(specimenMap.values());
 		final Set printSpecimenSet = new HashSet();
 		//bug 13157
-		getSpecimenList(specimenMap, allSpcimens);
+		this.getSpecimenList(specimenMap, allSpcimens);
 		/*while (specItr.hasNext())
 		{
 			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
@@ -868,12 +868,12 @@ public class ViewSpecimenSummaryAction extends Action
 		{
 			if (specimen.getPrintSpecimen() == true)
 			{
-				printSpecimenSet.add( specimen );
+				printSpecimenSet.add(specimen);
 			}
 		}
 		if (!printSpecimenSet.isEmpty())
 		{
-			summaryForm.setSpecimenPrintList( printSpecimenSet );
+			summaryForm.setSpecimenPrintList(printSpecimenSet);
 		}
 
 	}
@@ -907,30 +907,34 @@ public class ViewSpecimenSummaryAction extends Action
 			}
 		}
 	}
+
 	private Collection getSpecimenList(LinkedHashMap specimenMap, List<GenericSpecimen> allSpcimens)
 	{
-		if(specimenMap != null) 
+		if (specimenMap != null)
 		{
-			Iterator<GenericSpecimen> specItr = specimenMap.values().iterator();
-			while(specItr.hasNext())
+			final Iterator<GenericSpecimen> specItr = specimenMap.values().iterator();
+			while (specItr.hasNext())
 			{
-				GenericSpecimen pSpecimen=(GenericSpecimen)specItr.next();
-				LinkedHashMap<String, GenericSpecimen> aliquots = pSpecimen.getAliquotSpecimenCollection();
-				if(aliquots!=null && !aliquots.isEmpty())
+				final GenericSpecimen pSpecimen = specItr.next();
+				final LinkedHashMap<String, GenericSpecimen> aliquots = pSpecimen
+						.getAliquotSpecimenCollection();
+				if (aliquots != null && !aliquots.isEmpty())
 				{
 					allSpcimens.addAll(aliquots.values());
-					getSpecimenList(aliquots, allSpcimens);
+					this.getSpecimenList(aliquots, allSpcimens);
 				}
-				LinkedHashMap<String, GenericSpecimen> derivaties = pSpecimen.getDeriveSpecimenCollection();
-				if(derivaties!=null && !derivaties.isEmpty())
+				final LinkedHashMap<String, GenericSpecimen> derivaties = pSpecimen
+						.getDeriveSpecimenCollection();
+				if (derivaties != null && !derivaties.isEmpty())
 				{
 					allSpcimens.addAll(derivaties.values());
-					getSpecimenList(derivaties, allSpcimens);
-				}						
+					this.getSpecimenList(derivaties, allSpcimens);
+				}
 			}
 		}
 		return allSpcimens;
 	}
+
 	/**
 	 * @param request
 	 *            : request
@@ -945,12 +949,12 @@ public class ViewSpecimenSummaryAction extends Action
 			throws IOException, ApplicationException
 	{
 		DAO dao = null;
-		
+
 		try
 		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-			.getAttribute(Constants.SESSION_DATA);
-			dao= AppUtility.openDAOSession(sessionData);
+					.getAttribute(Constants.SESSION_DATA);
+			dao = AppUtility.openDAOSession(sessionData);
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
 			final HttpSession session = request.getSession();
@@ -970,7 +974,7 @@ public class ViewSpecimenSummaryAction extends Action
 			final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			final String exceedingMaxLimit = new String();
-			
+
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
 			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,

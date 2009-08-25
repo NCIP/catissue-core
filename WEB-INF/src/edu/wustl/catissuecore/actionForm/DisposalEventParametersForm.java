@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -54,14 +54,16 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * Getting Activity status
 	 * @return activityStatus 
 	 */
+	@Override
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
 	 * @param activityStatus Setting Activity Status
 	 */
+	@Override
 	public void setActivityStatus(final String activityStatus)
 	{
 		this.activityStatus = activityStatus;
@@ -72,7 +74,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getReason()
 	{
-		return reason;
+		return this.reason;
 	}
 
 	/**
@@ -87,6 +89,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return DISPOSAL_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID;
@@ -96,11 +99,12 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomainObject Obj
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		final DisposalEventParameters disEvtPar = (DisposalEventParameters) abstractDomain;
-		this.reason = Utility.toString(disEvtPar.getReason());
+		this.reason = CommonUtilities.toString(disEvtPar.getReason());
 		this.activityStatus = disEvtPar.getSpecimen().getActivityStatus();
 	}
 
@@ -110,6 +114,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = super.validate(mapping, request);
@@ -117,8 +122,8 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		try
 		{
 			//resolved bug# 4058	
-			if (!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])
-					&& !activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
+			if (!this.activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])
+					&& !this.activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
@@ -130,7 +135,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.reason")));
 			//            }
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -141,6 +146,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//        super.reset();

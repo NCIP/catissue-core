@@ -63,8 +63,7 @@ public class FilePoller implements Observable
 			CaCoreAPIService.initialize();
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, CaTIESConstants.CSVLOGGER_DATETIME
 					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_FILENAME
-					+ CaTIESConstants.CSVLOGGER_SEPARATOR
-					+ CaTIESConstants.CSVLOGGER_REPORTQUEUE
+					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_REPORTQUEUE
 					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_STATUS
 					+ CaTIESConstants.CSVLOGGER_SEPARATOR + CaTIESConstants.CSVLOGGER_MESSAGE
 					+ CaTIESConstants.CSVLOGGER_SEPARATOR
@@ -118,7 +117,7 @@ public class FilePoller implements Observable
 					poller.obr.notifyEvent(files);
 				}
 				logger.info("Report Loader Server is going to sleep for "
-				+ CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
+						+ CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
 				Thread.sleep(Long.parseLong(CaTIESProperties
 						.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}

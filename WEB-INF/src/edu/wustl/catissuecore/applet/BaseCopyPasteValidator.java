@@ -46,14 +46,14 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	public String validate()
 	{
 		String message = "";
-		message = preValidate();
+		message = this.preValidate();
 		if (message.equals(""))
 		{
-			message = doValidate();
+			message = this.doValidate();
 		}
 		if (message.equals(""))
 		{
-			message = postValidate();
+			message = this.postValidate();
 		}
 		return message;
 	}
@@ -77,15 +77,15 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		List selectedCols = null;
 
 		// get selected rows and columns as per copy or paste operation
-		if (validatorModel.getOperation().equals("copy"))
+		if (this.validatorModel.getOperation().equals("copy"))
 		{
-			selectedRows = validatorModel.getSelectedCopiedRows();
-			selectedCols = validatorModel.getSelectedCopiedCols();
+			selectedRows = this.validatorModel.getSelectedCopiedRows();
+			selectedCols = this.validatorModel.getSelectedCopiedCols();
 		}
 		else
 		{
-			selectedRows = validatorModel.getSelectedPastedRows();
-			selectedCols = validatorModel.getSelectedPastedCols();
+			selectedRows = this.validatorModel.getSelectedPastedRows();
+			selectedCols = this.validatorModel.getSelectedPastedCols();
 		}
 
 		/**
@@ -93,14 +93,14 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		 *  -- If a single row/column is selected while paste operation,
 		 *   there should be enough rows/columns as per copied data
 		 */
-		if (validatorModel.getOperation().equals("paste"))
+		if (this.validatorModel.getOperation().equals("paste"))
 		{
-			message = validateRowsForPaste(selectedRows, validatorModel);
+			message = this.validateRowsForPaste(selectedRows, this.validatorModel);
 			if (!message.equals(""))
 			{
 				return message;
 			}
-			message = validateColsForPaste(selectedCols, validatorModel);
+			message = this.validateColsForPaste(selectedCols, this.validatorModel);
 			if (!message.equals(""))
 			{
 				return message;
@@ -111,7 +111,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		 * -- Selection of number of rows in a column should be contiguous
 		 */
 
-		message = validateRows(selectedRows);
+		message = this.validateRows(selectedRows);
 		if (!message.equals(""))
 		{
 			return message;
@@ -120,7 +120,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		/**
 		 * -- Selection of number of columns should be contiguous
 		 */
-		message = validateCols(selectedCols);
+		message = this.validateCols(selectedCols);
 
 		return message;
 	}
@@ -135,7 +135,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		int rowValue = 0;
 		for (int i = 0; i < selectedRows.size(); i++)
 		{
-			Integer row = (Integer) selectedRows.get(i);
+			final Integer row = (Integer) selectedRows.get(i);
 			if (i == 0)
 			{
 				rowValue = row.intValue();
@@ -159,7 +159,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		int colValue = 0;
 		for (int i = 0; i < selectedCols.size(); i++)
 		{
-			Integer col = (Integer) selectedCols.get(i);
+			final Integer col = (Integer) selectedCols.get(i);
 			if (i == 0)
 			{
 				colValue = col.intValue();
@@ -183,13 +183,14 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 * @param validatorModel - CopyPasteOperationValidatorModel
 	 * @return - message
 	 */
-	private String validateRowsForPaste(List selectedRows, CopyPasteOperationValidatorModel validatorModel)
+	private String validateRowsForPaste(List selectedRows,
+			CopyPasteOperationValidatorModel validatorModel)
 	{
-		int numberOfRowsCopied = validatorModel.getSelectedCopiedRows().size();
+		final int numberOfRowsCopied = validatorModel.getSelectedCopiedRows().size();
 		if (selectedRows.size() == 1)
 		{
-			Integer row = (Integer) selectedRows.get(0);
-			int rowValue = row.intValue();
+			final Integer row = (Integer) selectedRows.get(0);
+			final int rowValue = row.intValue();
 			if (validatorModel.getRowCount() - rowValue < numberOfRowsCopied)
 			{
 				return "There are not enough rows to paste the copied data";
@@ -214,13 +215,14 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 * @param validatorModel - CopyPasteOperationValidatorModel
 	 * @return - message
 	 */
-	private String validateColsForPaste(List selectedCols, CopyPasteOperationValidatorModel validatorModel)
+	private String validateColsForPaste(List selectedCols,
+			CopyPasteOperationValidatorModel validatorModel)
 	{
-		int numberOfColsCopied = validatorModel.getSelectedCopiedCols().size();
+		final int numberOfColsCopied = validatorModel.getSelectedCopiedCols().size();
 		if (selectedCols.size() == 1)
 		{
-			Integer col = (Integer) selectedCols.get(0);
-			int colValue = col.intValue();
+			final Integer col = (Integer) selectedCols.get(0);
+			final int colValue = col.intValue();
 			if (validatorModel.getColumnCount() - colValue < numberOfColsCopied)
 			{
 				return "There are not enough columns to paste the copied data";
@@ -249,7 +251,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 */
 	protected String postValidate()
 	{
-		String message = "";
+		final String message = "";
 		return message;
 	}
 }

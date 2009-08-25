@@ -20,7 +20,7 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/**
 	 * Logger object.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
 
 	/**
@@ -67,18 +67,19 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	{
 		super.setBarcode(obj);
 	}
-	
+
 	/**
 	 * This method will be called to get the barcode.
 	 * @return
 	 */
+	@Override
 	protected String getBarcode(Specimen objSpecimen)
 	{
 		final String siteName = objSpecimen.getSpecimenCollectionGroup().getGroupName();
 		this.currentBarcode = this.currentBarcode + 1;
 		final String nextNumber = this.format(this.currentBarcode, "0000");
 		final String barcode = siteName + "_" + nextNumber;
-		return  barcode;
+		return barcode;
 	}
 
 	/**

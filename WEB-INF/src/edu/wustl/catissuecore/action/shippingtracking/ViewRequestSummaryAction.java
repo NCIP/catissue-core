@@ -132,9 +132,9 @@ public class ViewRequestSummaryAction extends SecureAction
 					ShipmentRequest shipmentRequestObject = shipmentRequestIterator.next();
 					ShipmentRequestForm shipmentReqFormTemp = new ShipmentRequestForm();
 					shipmentReqFormTemp.setAllValues(shipmentRequestObject);
-					specimenCount = getSpecimenCounter(specimenLabelArr, specimenCount,
+					specimenCount = this.getSpecimenCounter(specimenLabelArr, specimenCount,
 							shipmentReqFormTemp);
-					containerCount = getContainerCount(containerLabelArr, containerCount,
+					containerCount = this.getContainerCount(containerLabelArr, containerCount,
 							shipmentReqFormTemp);
 					specimenCountArr[count] = shipmentReqFormTemp.getSpecimenCounter();
 					containerCountArr[count] = shipmentReqFormTemp.getContainerCounter();
@@ -154,9 +154,9 @@ public class ViewRequestSummaryAction extends SecureAction
 						recieverSiteNameArr[count] = shipmentRequestObject.getReceiverSite()
 								.getName();
 						count++;
-						specimenCount = getSpecimenCounter(specimenLabelArr, specimenCount,
+						specimenCount = this.getSpecimenCounter(specimenLabelArr, specimenCount,
 								shipmentReqFormTemp);
-						containerCount = getContainerCount(containerLabelArr, containerCount,
+						containerCount = this.getContainerCount(containerLabelArr, containerCount,
 								shipmentReqFormTemp);
 						shipmentReqFormTemp.reset(mapping, request);
 					}

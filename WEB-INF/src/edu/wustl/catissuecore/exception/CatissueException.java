@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class CatissueException extends Exception implements Serializable
 {
+
 	/**
 	 * serialVersionUID.
 	 */

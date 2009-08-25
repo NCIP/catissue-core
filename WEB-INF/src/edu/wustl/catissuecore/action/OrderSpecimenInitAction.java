@@ -85,7 +85,7 @@ public class OrderSpecimenInitAction extends BaseAction
 			request.setAttribute("typeOf", "specimen");
 			request.setAttribute("OrderSpecimenForm", spec);
 
-			final List defineArraysList =  OrderingSystemUtil.getDefinedArraysList(session); 
+			final List defineArraysList = OrderingSystemUtil.getDefinedArraysList(session);
 			//Add the collection in request scope to be used in the OrderItem.jsp
 			request.setAttribute(Constants.ORDERTO_LIST_ARRAY, defineArraysList);
 
@@ -97,12 +97,6 @@ public class OrderSpecimenInitAction extends BaseAction
 		}
 		return mapping.findForward(target);
 	}
-
-	
-
-	
-
-
 
 	/** function for getting protocol name.
 	 * @param request HttpServletRequest object

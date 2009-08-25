@@ -36,6 +36,7 @@ public final class IdentifiedReportGenerator
 	{
 
 	}
+
 	/**
 	 * @param reportMap Map of String, Set
 	 * @param abbrToHeader HashMap of String, String
@@ -82,8 +83,8 @@ public final class IdentifiedReportGenerator
 				if (tempReportSection.getDocumentFragment().length() > 3900)
 				{
 					logger.info("*****************for trim");
-					tempReportSection.setDocumentFragment(tempReportSection.
-							getDocumentFragment().substring(0, 3900));
+					tempReportSection.setDocumentFragment(tempReportSection.getDocumentFragment()
+							.substring(0, 3900));
 					logger.info("*****************trim completed");
 				}
 			}
@@ -209,8 +210,7 @@ public final class IdentifiedReportGenerator
 					final String seconds = field.substring(10, 12);
 
 					final GregorianCalendar gregorianCalen = new GregorianCalendar(Integer
-							.parseInt(year),
-							Integer.parseInt(month) - 1, Integer.parseInt(day),
+							.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day),
 							Integer.parseInt(hours), Integer.parseInt(seconds));
 					report.setCollectionDateTime(gregorianCalen.getTime());
 				}

@@ -25,9 +25,9 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -127,7 +127,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/** Associates the specified object with the specified key in the map.
@@ -137,9 +137,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 
 	public void setValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Object getValue(final String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**
@@ -175,16 +175,19 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		String dtePattern = CommonServiceLocator.getInstance().getDatePattern();
+		final String dtePattern = CommonServiceLocator.getInstance().getDatePattern();
 		final CollectionProtocolRegistration registration = (CollectionProtocolRegistration) abstractDomain;
 		this.setId(registration.getId().longValue());
 		this.setActivityStatus(registration.getActivityStatus());
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
-		final String firstName = Utility.toString(registration.getParticipant().getFirstName());;
-		final String lastName = Utility.toString(registration.getParticipant().getLastName());
-		final String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
-		final String ssn = Utility
-				.toString(registration.getParticipant().getSocialSecurityNumber());
+		final String firstName = CommonUtilities.toString(registration.getParticipant()
+				.getFirstName());;
+		final String lastName = CommonUtilities.toString(registration.getParticipant()
+				.getLastName());
+		final String birthDate = CommonUtilities.toString(registration.getParticipant()
+				.getBirthDate());
+		final String ssn = CommonUtilities.toString(registration.getParticipant()
+				.getSocialSecurityNumber());
 
 		if ((registration.getParticipant() != null)
 				&& (firstName.trim().length() > 0 || lastName.trim().length() > 0
@@ -196,10 +199,10 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			this.participantName = registration.getParticipant().getMessageLabel();
 			//checkedButton = true;
 		}
-		this.participantProtocolID = Utility.toString(registration
+		this.participantProtocolID = CommonUtilities.toString(registration
 				.getProtocolParticipantIdentifier());
-		this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),
-				dtePattern);
+		this.registrationDate = CommonUtilities.parseDateToString(registration
+				.getRegistrationDate(), dtePattern);
 		/**
 		 * For Consent tracking setting UI attributes
 		 */
@@ -208,9 +211,10 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		{
 			this.witnessId = witness.getId();
 		}
-		this.signedConsentUrl = Utility.toString(registration.getSignedConsentDocumentURL());
-		this.consentDate = Utility.parseDateToString(registration.getConsentSignatureDate(),
-				dtePattern);
+		this.signedConsentUrl = CommonUtilities
+				.toString(registration.getSignedConsentDocumentURL());
+		this.consentDate = CommonUtilities.parseDateToString(
+				registration.getConsentSignatureDate(), dtePattern);
 		// Offset changes 27th Dec 2007
 		//	  	this.setOffset(registration.getOffset().intValue());
 		this.setOffset(0);
@@ -220,6 +224,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	/**
 	* @return COLLECTION_PROTOCOL_REGISTRATION_FORM_ID Returns the id assigned to form bean
 	*/
+	@Override
 	public int getFormId()
 	{
 		return Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID;
@@ -234,7 +239,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getRegistrationDate()
 	{
-		return registrationDate;
+		return this.registrationDate;
 	}
 
 	/**
@@ -254,7 +259,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public long getCollectionProtocolID()
 	{
-		return collectionProtocolID;
+		return this.collectionProtocolID;
 	}
 
 	/**
@@ -270,7 +275,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getCollectionProtocolShortTitle()
 	{
-		return collectionProtocolShortTitle;
+		return this.collectionProtocolShortTitle;
 	}
 
 	/**
@@ -286,7 +291,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public long getParticipantID()
 	{
-		return participantID;
+		return this.participantID;
 	}
 
 	/**
@@ -302,7 +307,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	*/
 	public String getParticipantProtocolID()
 	{
-		return participantProtocolID;
+		return this.participantProtocolID;
 	}
 
 	/**
@@ -319,6 +324,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
@@ -326,10 +332,10 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		final Validator validator = new Validator();
 		try
 		{
-			setRedirectValue(validator);
+			this.setRedirectValue(validator);
 
 			//check if Protocol Title is empty.
-			if (collectionProtocolID == -1)
+			if (this.collectionProtocolID == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties
@@ -340,15 +346,15 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 
 			// changes as per Bugzilla Bug 287 			
 
-			if (validator.isEmpty(participantProtocolID)
-					&& (participantID == -1 || participantID == 0))
+			if (Validator.isEmpty(this.participantProtocolID)
+					&& (this.participantID == -1 || this.participantID == 0))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"errors.collectionprotocolregistration.atleast"));
 			}
 
 			//  date validation according to bug id 707, 722 and 730
-			final String errorKey = validator.validateDate(registrationDate, true);
+			final String errorKey = validator.validateDate(this.registrationDate, true);
 			if (errorKey.trim().length() > 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,
@@ -362,7 +368,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 								.getValue("collectionprotocolregistration.activityStatus")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -373,6 +379,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	* Resets the values of all the fields.
 	* Is called by the overridden reset method defined in ActionForm.  
 	* */
+	@Override
 	protected void reset()
 	{
 		//	   this.collectionProtocolID = 0;
@@ -402,15 +409,16 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if ("collectionProtocolId".equals(addNewFor))
 		{
-			setCollectionProtocolID(addObjectIdentifier.longValue());
+			this.setCollectionProtocolID(addObjectIdentifier.longValue());
 		}
 		else if ("participantId".equals(addNewFor))
 		{
-			setParticipantID(addObjectIdentifier.longValue());
+			this.setParticipantID(addObjectIdentifier.longValue());
 			//setCheckedButton(true);
 		}
 	}
@@ -420,7 +428,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -437,7 +445,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getConsentDate()
 	{
-		return consentDate;
+		return this.consentDate;
 	}
 
 	/**
@@ -453,7 +461,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getSignedConsentUrl()
 	{
-		return signedConsentUrl;
+		return this.signedConsentUrl;
 	}
 
 	/**
@@ -469,7 +477,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public long getWitnessId()
 	{
-		return witnessId;
+		return this.witnessId;
 	}
 
 	/**
@@ -486,9 +494,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public void setConsentResponseValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			consentResponseValues.put(key, value);
+			this.consentResponseValues.put(key, value);
 		}
 	}
 
@@ -499,7 +507,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Object getConsentResponseValue(final String key)
 	{
-		return consentResponseValues.get(key);
+		return this.consentResponseValues.get(key);
 	}
 
 	/**
@@ -507,7 +515,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Collection getAllConsentResponseValue()
 	{
-		return consentResponseValues.values();
+		return this.consentResponseValues.values();
 	}
 
 	/**
@@ -515,7 +523,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public Map getConsentResponseValues()
 	{
-		return consentResponseValues;
+		return this.consentResponseValues;
 	}
 
 	/**
@@ -531,7 +539,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	/**
@@ -548,7 +556,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getWithdrawlButtonStatus()
 	{
-		return withdrawlButtonStatus;
+		return this.withdrawlButtonStatus;
 	}
 
 	/**
@@ -600,7 +608,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public String getStudyCalEvtPoint()
 	{
-		return studyCalEvtPoint;
+		return this.studyCalEvtPoint;
 	}
 
 	/**
@@ -617,7 +625,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */
 	public int getOffset()
 	{
-		return offset;
+		return this.offset;
 	}
 
 	/**
@@ -630,7 +638,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	public void setBarcode(final String barcode)

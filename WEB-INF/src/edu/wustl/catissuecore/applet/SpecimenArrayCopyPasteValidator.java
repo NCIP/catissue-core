@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.applet;
 
 /**
@@ -25,6 +26,7 @@ public class SpecimenArrayCopyPasteValidator extends BaseCopyPasteValidator
 	 * @see edu.wustl.catissuecore.applet.BaseCopyPasteValidator#doValidate()
 	 * @return String
 	 */
+	@Override
 	protected String doValidate()
 	{
 		return "";

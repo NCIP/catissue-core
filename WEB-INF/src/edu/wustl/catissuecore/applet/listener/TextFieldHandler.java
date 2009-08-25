@@ -26,6 +26,7 @@ public class TextFieldHandler extends BaseActionHandler
 	/**
 	 * @param event : event
 	 */
+	@Override
 	protected void handleAction(ActionEvent event)
 	{
 		super.handleAction(event);
@@ -47,9 +48,10 @@ public class TextFieldHandler extends BaseActionHandler
 	 * @param event : event
 	 * @return Object
 	 */
+	@Override
 	protected Object getSelectedValue(ActionEvent event)
 	{
-		JTextField selectedField = (JTextField) event.getSource();
+		final JTextField selectedField = (JTextField) event.getSource();
 		return selectedField.getText();
 	}
 

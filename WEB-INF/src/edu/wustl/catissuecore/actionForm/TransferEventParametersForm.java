@@ -108,7 +108,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public int getFromPositionDimensionOne()
 	{
-		return fromPositionDimensionOne;
+		return this.fromPositionDimensionOne;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public int getFromPositionDimensionTwo()
 	{
-		return fromPositionDimensionTwo;
+		return this.fromPositionDimensionTwo;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getStorageContainer()
 	{
-		return storageContainer;
+		return this.storageContainer;
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	public long getFromStorageContainerId()
 	{
 
-		return fromStorageContainerId;
+		return this.fromStorageContainerId;
 	}
 
 	/**
@@ -219,6 +219,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * @return TRANSFER_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID;
@@ -228,12 +229,13 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Populates all the fields from the domain object to the form bean.
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		try
 		{
 			super.setAllValues(abstractDomain);
-			TransferEventParameters transferEventParametersObject = (TransferEventParameters) abstractDomain;
+			final TransferEventParameters transferEventParametersObject = (TransferEventParameters) abstractDomain;
 			if (transferEventParametersObject.getFromStorageContainer() != null)
 			{
 				this.fromStorageContainerId = transferEventParametersObject
@@ -284,7 +286,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 					+ this.fromPositionDimensionOne
 					+ "," + this.fromPositionDimensionTwo + ")";
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -296,34 +298,35 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 			// check the FROM Position
-			if (validator.isEmpty(String.valueOf(fromPosition)))
+			if (Validator.isEmpty(String.valueOf(this.fromPosition)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("transfereventparameters.fromposition")));
 			}
 
-			if (stContSelection == 1)
+			if (this.stContSelection == 1)
 			{
-				if (validator.isEmpty(positionDimensionOne)
-						|| validator.isEmpty(positionDimensionTwo)
-						|| validator.isEmpty(storageContainer))
+				if (Validator.isEmpty(this.positionDimensionOne)
+						|| Validator.isEmpty(this.positionDimensionTwo)
+						|| Validator.isEmpty(this.storageContainer))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("transfereventparameters.toposition")));
 				}
 				else
 				{
-					if (!validator.isNumeric(positionDimensionOne, 1)
-							|| !validator.isNumeric(positionDimensionTwo, 1)
-							|| !validator.isNumeric(storageContainer, 1))
+					if (!validator.isNumeric(this.positionDimensionOne, 1)
+							|| !validator.isNumeric(this.positionDimensionTwo, 1)
+							|| !validator.isNumeric(this.storageContainer, 1))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties
@@ -332,9 +335,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 				}
 			}
-			else if (stContSelection == 2)
+			else if (this.stContSelection == 2)
 			{
-				boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+				final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 				if (flag)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
@@ -343,7 +346,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -353,6 +356,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//        super.reset();
@@ -372,7 +376,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getFromPosition()
 	{
-		return fromPosition;
+		return this.fromPosition;
 	}
 
 	/**
@@ -388,7 +392,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getPositionInStorageContainer()
 	{
-		return positionInStorageContainer;
+		return this.positionInStorageContainer;
 	}
 
 	/**
@@ -404,7 +408,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getContainerId()
 	{
-		return containerId;
+		return this.containerId;
 	}
 
 	/**
@@ -420,7 +424,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getPos1()
 	{
-		return pos1;
+		return this.pos1;
 	}
 
 	/**
@@ -436,7 +440,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getPos2()
 	{
-		return pos2;
+		return this.pos2;
 	}
 
 	/**
@@ -452,7 +456,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getSelectedContainerName()
 	{
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
 
 	/**
@@ -468,7 +472,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public int getStContSelection()
 	{
-		return stContSelection;
+		return this.stContSelection;
 	}
 
 	/**
@@ -481,7 +485,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	public String getFromPositionData()
 	{
-		return fromPositionData;
+		return this.fromPositionData;
 	}
 
 	public void setFromPositionData(String fromPositionData)

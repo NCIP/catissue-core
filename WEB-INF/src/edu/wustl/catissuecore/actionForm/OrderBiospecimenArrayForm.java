@@ -26,6 +26,11 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7635778711464322080L;
+
+	/**
 	 * A String containing type of Array
 	 */
 	private String typeOfArray = "existingArray";
@@ -59,7 +64,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public String[] getItemsToRemove()
 	{
-		return itemsToRemove;
+		return this.itemsToRemove;
 	}
 
 	/**
@@ -75,7 +80,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public List getDefineArrayObj()
 	{
-		return defineArrayObj;
+		return this.defineArrayObj;
 	}
 
 	/**
@@ -89,6 +94,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @return boolean true 
 	 */
+	@Override
 	public boolean isAddOperation()
 
 	{
@@ -100,7 +106,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public String getDistrbutionProtocol()
 	{
-		return distrbutionProtocol;
+		return this.distrbutionProtocol;
 	}
 
 	/**
@@ -116,7 +122,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public OrderForm getOrderForm()
 	{
-		return orderForm;
+		return this.orderForm;
 	}
 
 	/**
@@ -133,7 +139,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public String getTypeOfArray()
 	{
-		return typeOfArray;
+		return this.typeOfArray;
 	}
 
 	/**
@@ -147,6 +153,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * @return FormId
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.ORDER_ARRAY_FORM_ID;
@@ -155,6 +162,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	/**
 	 * reset function
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -163,6 +171,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param mapping ActionMapping
 	 * @param request HttpServletRequest
 	 */
+	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
 	}
@@ -172,63 +181,64 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
-		ActionErrors errors = new ActionErrors();
-		HttpSession session = request.getSession();
-		Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
+		final ActionErrors errors = new ActionErrors();
+		final HttpSession session = request.getSession();
+		final Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 
-		if (selectedItems != null)
+		if (this.selectedItems != null)
 		{
 			boolean isNumber = true;
-			if (values != null && values.size() != 0)
+			if (this.values != null && this.values.size() != 0)
 			{
 				String cnt = null;
 				int reqQntyError = 0;
 				//String reqQntyValue = null;
-				for (int i = 0; i < selectedItems.length; i++)
+				for (final String selectedItem : this.selectedItems)
 				{
-					cnt = selectedItems[i];
-					String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
-					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
+					cnt = selectedItem;
+					final String disSiteKey = "OrderSpecimenBean:" + cnt + "_distributionSite";
+					final String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
 
 					//to check for site:Only those specimen Array can be ordered which belongs to same site
 					if (dataMap != null && dataMap.containsKey("None"))
 					{
-						List orderItems = (List) dataMap.get("None");
+						final List orderItems = (List) dataMap.get("None");
 						if (!orderItems.isEmpty() && orderItems.size() > 0)
 						{
-							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
+							final OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
 									.get(0);
 							if (!orderSpecimenBean.getDistributionSite().equals(
-									values.get(disSiteKey)))
+									this.values.get(disSiteKey)))
 							{
 								errors.add("values",
 										new ActionError("errors.same.distributionSite"));
-								values.clear();
+								this.values.clear();
 								break;
 							}
 						}
 
 					}
 
-					if ((values.get(disSiteKey)) == null || !isSameSite())
+					if ((this.values.get(disSiteKey)) == null || !this.isSameSite())
 					{
 						errors.add("values", new ActionError(
 								"errors.specimenArray.same.distributionSite.required"));
-						values.clear();
+						this.values.clear();
 						break;
 					}
 
-					if (typeOfArray.equals("false"))
+					if (this.typeOfArray.equals("false"))
 					{
-						values.put(key, "0.0");
+						this.values.put(key, "0.0");
 					}
 
 					else
 					{
-						if ((values.get(key)) == null || (values.get(key)).equals(""))
+						if ((this.values.get(key)) == null || (this.values.get(key)).equals(""))
 						{
 							reqQntyError = 1;
 							break;
@@ -236,7 +246,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 
 						else
 						{
-							isNumber = AppUtility.isNumeric(values.get(key).toString());
+							isNumber = AppUtility.isNumeric(this.values.get(key).toString());
 							if (!(isNumber))
 							{
 								reqQntyError = 2;
@@ -244,7 +254,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 							}
 							else
 							{
-								Double reqQnty = new Double(values.get(key).toString());
+								final Double reqQnty = new Double(this.values.get(key).toString());
 								if (reqQnty < 0.0 || reqQnty == 0.0)
 								{
 									reqQntyError = 1;
@@ -257,13 +267,13 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 				if (reqQntyError == 1)
 				{
 					errors.add("values", new ActionError("errors.requestedQuantity.required"));
-					values.clear();
+					this.values.clear();
 				}
 				if (reqQntyError == 2)
 				{
 					errors.add("values", new ActionError(
 							"errors.requestedQuantityBeNumeric.required"));
-					values.clear();
+					this.values.clear();
 				}
 			}
 		}
@@ -272,19 +282,17 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 
 	private boolean isSameSite()
 	{
-		boolean isSameSite = true;
-		if (values != null && values.size() != 0)
+		final boolean isSameSite = true;
+		if (this.values != null && this.values.size() != 0)
 		{
-			for (int i = 0; i < selectedItems.length; i++)
+			for (final  String cnt : this.selectedItems)
 			{
-				String cnt = selectedItems[i];
-				String disSite = (String) values.get("OrderSpecimenBean:" + cnt
+				final String disSite = (String) this.values.get("OrderSpecimenBean:" + cnt
 						+ "_distributionSite");
-				for (int j = 0; j < selectedItems.length; j++)
+				for (final  String count : this.selectedItems)
 				{
-					String count = selectedItems[j];
-					String disSiteInner = (String) values.get("OrderSpecimenBean:" + count
-							+ "_distributionSite");
+					final String disSiteInner = (String) this.values.get("OrderSpecimenBean:"
+							+ count + "_distributionSite");
 					if (!disSiteInner.equals(disSite))
 					{
 						return false;
@@ -309,7 +317,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public String[] getSelectedItems()
 	{
-		return selectedItems;
+		return this.selectedItems;
 	}
 
 	/**
@@ -326,9 +334,9 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -338,7 +346,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -346,7 +354,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 	 */
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**

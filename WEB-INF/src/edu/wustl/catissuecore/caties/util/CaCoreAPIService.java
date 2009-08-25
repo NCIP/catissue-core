@@ -15,12 +15,14 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
+
 /**
  * @author
  *
  */
 public class CaCoreAPIService
 {
+
 	/**
 	 * logger.
 	 */
@@ -62,14 +64,14 @@ public class CaCoreAPIService
 				cs.startSession(CaTIESProperties.getValue(CaTIESConstants.USER_NAME),
 						CaTIESProperties.getValue(CaTIESConstants.PASSWORD));
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
 				System.out.println("Please check your login information!");
 				logger.error("Error in initializing CaCoreAPIService " + ex);
 				throw ex;
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Test client throws Exception = " + ex);
 			throw ex;
@@ -87,13 +89,13 @@ public class CaCoreAPIService
 	{
 		try
 		{
-			List resultList = getList(targertClass, columnName, columnValue);
+			final List resultList = getList(targertClass, columnName, columnValue);
 			if (resultList != null && resultList.size() > 0)
 			{
 				return resultList.get(0);
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Error while retrieving object " + targertClass + e);
 		}
@@ -109,14 +111,14 @@ public class CaCoreAPIService
 	 */
 	public static List getList(Class targertClass, String columnName, Object columnValue)
 	{
-		DetachedCriteria criteria = DetachedCriteria.forClass(targertClass);
+		final DetachedCriteria criteria = DetachedCriteria.forClass(targertClass);
 		criteria.add(Restrictions.eq(columnName, columnValue));
 		try
 		{
-			List resultList = appService.query(criteria, targertClass.getName());
+			final List resultList = appService.query(criteria, targertClass.getName());
 			return resultList;
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Error while retrieving List for " + targertClass, e);
 		}
@@ -133,14 +135,14 @@ public class CaCoreAPIService
 	public static Collection executeQuery(String hqlQuery, String targetClassName) throws Exception
 	{
 		List resultList = null;
-		HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery);
+		final HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery);
 
 		try
 		{
 			resultList = appService.query(hqlCriteria, targetClassName);
 			return resultList;
 		}
-		catch (ApplicationException ex)
+		catch (final ApplicationException ex)
 		{
 			logger.error("Error while executing query " + hqlQuery + ex);
 			throw new Exception("Error while executing query " + ex.getMessage());
@@ -163,7 +165,7 @@ public class CaCoreAPIService
 			resultList = appService.query(criteria, targetClassName);
 			return resultList;
 		}
-		catch (ApplicationException ex)
+		catch (final ApplicationException ex)
 		{
 			logger.error("Error while executing query " + ex);
 			throw new Exception("Error while executing query " + ex.getMessage());
@@ -183,7 +185,7 @@ public class CaCoreAPIService
 			object = appService.createObject(object);
 			return object;
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error occured while adding object using CaCoreAPI for object:"
 					+ object.getClass());
@@ -205,7 +207,7 @@ public class CaCoreAPIService
 			object = appService.updateObject(object);
 			return object;
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error occured while updating object using CaCoreAPI for object:"
 					+ object.getClass());
@@ -225,7 +227,7 @@ public class CaCoreAPIService
 		{
 			appService.removeObject(object);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error occured while updating object using CaCoreAPI for object:"
 					+ object.getClass());
@@ -247,7 +249,7 @@ public class CaCoreAPIService
 		{
 			return appService.getSpecimenCollectionGroupLabel(scg);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error occured while retrieving SCG label");
 			throw new Exception("Error occured while retrieving SCG label " + e.getMessage());
@@ -266,7 +268,7 @@ public class CaCoreAPIService
 		{
 			return appService.getDefaultValue(key);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error occured while retrieving default value for " + key);
 			throw new Exception("Error occured while retrieving default value for " + key
@@ -286,7 +288,7 @@ public class CaCoreAPIService
 		{
 			return appService.getParticipantMatchingObects(participant);
 		}
-		catch (ApplicationException e)
+		catch (final ApplicationException e)
 		{
 			logger.error("Error while retrieving matching participant list");
 			throw new Exception("Error while retrieving matching participant list" + e.getMessage());

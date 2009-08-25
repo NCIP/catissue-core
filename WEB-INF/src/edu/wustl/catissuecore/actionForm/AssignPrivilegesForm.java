@@ -28,6 +28,11 @@ public class AssignPrivilegesForm extends ActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2470071095417032110L;
+
+	/**
 	 * A String containing the assignment operation(Allow/Disallow) to be performed.
 	 * */
 	private String assignOperation;
@@ -66,7 +71,7 @@ public class AssignPrivilegesForm extends ActionForm
 	 */
 	public String getAssignOperation()
 	{
-		return assignOperation;
+		return this.assignOperation;
 	}
 
 	/**
@@ -86,7 +91,7 @@ public class AssignPrivilegesForm extends ActionForm
 	 */
 	public String[] getGroups()
 	{
-		return groups;
+		return this.groups;
 	}
 
 	/**
@@ -106,7 +111,7 @@ public class AssignPrivilegesForm extends ActionForm
 	 */
 	public String getObjectType()
 	{
-		return objectType;
+		return this.objectType;
 	}
 
 	/**
@@ -126,7 +131,7 @@ public class AssignPrivilegesForm extends ActionForm
 	 */
 	public String getPrivilege()
 	{
-		return privilege;
+		return this.privilege;
 	}
 
 	/**
@@ -146,7 +151,7 @@ public class AssignPrivilegesForm extends ActionForm
 	 */
 	public String[] getRecordIds()
 	{
-		return recordIds;
+		return this.recordIds;
 	}
 
 	/**
@@ -165,36 +170,37 @@ public class AssignPrivilegesForm extends ActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		//Validator validator = new Validator();
 
-		if (assignOperation == null)
+		if (this.assignOperation == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("assignPrivileges.assign")));
 		}
 
-		if (privilege == null)
+		if (this.privilege == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("assignPrivileges.privileges")));
 		}
 
-		if (objectType == null)
+		if (this.objectType == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("assignPrivileges.objectType")));
 		}
 
-		if (recordIds == null)
+		if (this.recordIds == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("assignPrivileges.recordId")));
 		}
 
-		if (groups == null)
+		if (this.groups == null)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("assignPrivileges.group")));

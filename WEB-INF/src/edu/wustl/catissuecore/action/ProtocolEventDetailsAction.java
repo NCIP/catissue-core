@@ -189,8 +189,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventKey = st.nextToken();
 		}
-		final CollectionProtocolEventBean collectionProtocolEventBean
-		= (CollectionProtocolEventBean) collectionProtocolEventMap
+		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(collectionProtocolEventKey);
 		if (new Long(collectionProtocolEventBean.getId()) != null
 				&& collectionProtocolEventBean.getId() > 0)
@@ -216,7 +215,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		protocolEventDetailsForm.setCollectionEventCollectionProcedure(collectionProtocolEventBean
 				.getCollectionProcedure());
 		protocolEventDetailsForm.setCollectionProtocolEventkey(collectionProtocolEventKey);
-		
+
 		protocolEventDetailsForm.setLabelFormat(collectionProtocolEventBean.getLabelFormat());
 
 	}

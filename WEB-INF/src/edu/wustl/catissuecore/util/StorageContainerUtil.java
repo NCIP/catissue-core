@@ -66,8 +66,9 @@ public final class StorageContainerUtil
 		// TODO move all code to common utility
 
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
-		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-		List disabledconts = (ArrayList) catissueCoreCacheManager
+		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+				.getInstance();
+		final List disabledconts = (ArrayList) catissueCoreCacheManager
 				.getObjectFromCache(Constants.MAP_OF_DISABLED_CONTAINERS);
 		return disabledconts;
 	}
@@ -82,7 +83,7 @@ public final class StorageContainerUtil
 	public static Map getAvailablePositionMapForNewContainer(StorageContainer container)
 			throws DAOException
 	{
-		Map map = new TreeMap();
+		final Map map = new TreeMap();
 
 		if (!container.isFull().booleanValue())
 		{
@@ -92,7 +93,7 @@ public final class StorageContainerUtil
 			for (int x = 1; x < dimX; x++)
 			{
 
-				List list = new ArrayList();
+				final List list = new ArrayList();
 
 				for (int y = 1; y < dimY; y++)
 				{
@@ -102,8 +103,8 @@ public final class StorageContainerUtil
 
 				if (!list.isEmpty())
 				{
-					Integer xObj = Integer.valueOf(x);
-					NameValueBean nvb = new NameValueBean(xObj, xObj);
+					final Integer xObj = Integer.valueOf(x);
+					final NameValueBean nvb = new NameValueBean(xObj, xObj);
 					map.put(nvb, list);
 
 				}
@@ -114,13 +115,14 @@ public final class StorageContainerUtil
 	}
 
 	public static Position getFirstAvailablePositionsInContainer(StorageContainer storageContainer,
-			HashSet<String> allocatedPositions,DAO dao) throws ApplicationException
+			HashSet<String> allocatedPositions, DAO dao) throws ApplicationException
 	{
-		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer, dao, allocatedPositions);
-		if(position==null)
+		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+		final Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer,
+				dao, allocatedPositions);
+		if (position == null)
 		{
-				throw AppUtility.getApplicationException(null, "storage.full", "");
+			throw AppUtility.getApplicationException(null, "storage.full", "");
 		}
 		return position;
 	}
@@ -139,7 +141,7 @@ public final class StorageContainerUtil
 		if (specimen.getSpecimenPosition() != null
 				&& specimen.getSpecimenPosition().getStorageContainer() != null)
 		{
-			StorageContainer storageContainer = specimen.getSpecimenPosition()
+			final StorageContainer storageContainer = specimen.getSpecimenPosition()
 					.getStorageContainer();
 			String containerValue = null;
 			if (specimen.getSpecimenPosition() != null)
@@ -154,38 +156,39 @@ public final class StorageContainerUtil
 
 			if (xPos == null || yPos == null)
 			{
-				
-				StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-				Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer,dao);
-					if(position!=null)
+
+				final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+				final Position position = scBizLogic.getFirstAvailablePositionInContainer(
+						storageContainer, dao);
+				if (position != null)
+				{
+					xPos = position.getXPos();
+					yPos = position.getYPos();
+					final Long containerId = storageContainer.getId();
+					if (containerId != null)
 					{
-						xPos = position.getXPos();
-						yPos = position.getYPos();
-						Long containerId = storageContainer.getId();
-						if (containerId != null)
-						{
-							containerValue = StorageContainerUtil.getStorageValueKey(null, containerId
-									.toString(), xPos, yPos);
-						}
-						else
-						{
-							containerValue = StorageContainerUtil.getStorageValueKey(storageContainer
-									.getName(), null, xPos, yPos);
-						}
-						if (!allocatedPositions.contains(containerValue))
-						{
-							SpecimenPosition specPos = specimen.getSpecimenPosition();
-							specPos.setPositionDimensionOne(xPos);
-							specPos.setPositionDimensionTwo(yPos);
-							specPos.setSpecimen(specimen);
-							allocatedPositions.add(containerValue);
-							//	break;
-						}
+						containerValue = StorageContainerUtil.getStorageValueKey(null, containerId
+								.toString(), xPos, yPos);
 					}
 					else
 					{
-						throw AppUtility.getApplicationException(null, "storage.full", "");
+						containerValue = StorageContainerUtil.getStorageValueKey(storageContainer
+								.getName(), null, xPos, yPos);
 					}
+					if (!allocatedPositions.contains(containerValue))
+					{
+						final SpecimenPosition specPos = specimen.getSpecimenPosition();
+						specPos.setPositionDimensionOne(xPos);
+						specPos.setPositionDimensionTwo(yPos);
+						specPos.setSpecimen(specimen);
+						allocatedPositions.add(containerValue);
+						//	break;
+					}
+				}
+				else
+				{
+					throw AppUtility.getApplicationException(null, "storage.full", "");
+				}
 			}
 			if (containerValue == null)
 			{
@@ -221,24 +224,24 @@ public final class StorageContainerUtil
 
 	}
 
-		/**
-	 * @param dao
-	 * @param similarContainerMap
-	 * @param containerPrefixKey
-	 * @param positionsToBeAllocatedList
-	 * @param usedPositionsList
-	 * @param iCount
-	 * @throws ApplicationException 
-	 */
+	/**
+	* @param dao
+	* @param similarContainerMap
+	* @param containerPrefixKey
+	* @param positionsToBeAllocatedList
+	* @param usedPositionsList
+	* @param iCount
+	* @throws ApplicationException 
+	*/
 	public static void prepareContainerMap(DAO dao, Map similarContainerMap,
 			String containerPrefixKey, List positionsToBeAllocatedList, List usedPositionsList,
 			int iCount, String contId) throws ApplicationException
 	{
-		String radioButonKey = "radio_" + iCount;
-		String containerIdKey = containerPrefixKey + iCount + contId;
-		String containerNameKey = containerPrefixKey + iCount + "_StorageContainer_name";
-		String posDim1Key = containerPrefixKey + iCount + "_positionDimensionOne";
-		String posDim2Key = containerPrefixKey + iCount + "_positionDimensionTwo";
+		final String radioButonKey = "radio_" + iCount;
+		final String containerIdKey = containerPrefixKey + iCount + contId;
+		final String containerNameKey = containerPrefixKey + iCount + "_StorageContainer_name";
+		final String posDim1Key = containerPrefixKey + iCount + "_positionDimensionOne";
+		final String posDim2Key = containerPrefixKey + iCount + "_positionDimensionTwo";
 
 		String containerName = null;
 		String containerId = null;
@@ -260,16 +263,11 @@ public final class StorageContainerUtil
 		{
 			containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
 
-			String sourceObjectName = StorageContainer.class.getName();
-			String[] selectColumnName = {"id"};
-			String[] whereColumnName = {"name"};
-			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {containerName};
-			String joinCondition = null;
-
-			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = {"id"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause("name", containerName));
-			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 
 			if (!list.isEmpty())
 			{
@@ -277,8 +275,8 @@ public final class StorageContainerUtil
 			}
 			else
 			{
-				String message = ApplicationProperties.getValue("specimen.storageContainer");
-				throw AppUtility.getApplicationException( null,"errors.invalid",
+				final String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw AppUtility.getApplicationException(null, "errors.invalid",
 						"StorageContainerUtil.java :" + message);
 			}
 
@@ -315,22 +313,22 @@ public final class StorageContainerUtil
 	{
 		List initialValues = null;
 
-		if((containerMap!=null)&&(containerMap.size() > 0))
+		if ((containerMap != null) && (containerMap.size() > 0))
 		{
-			String[] startingPoints = new String[3];
+			final String[] startingPoints = new String[3];
 
 			Set keySet = containerMap.keySet();
 			Iterator itr = keySet.iterator();
 			NameValueBean nvb = (NameValueBean) itr.next();
 			startingPoints[0] = nvb.getValue();
 
-			Map map1 = (Map) containerMap.get(nvb);
+			final Map map1 = (Map) containerMap.get(nvb);
 			keySet = map1.keySet();
 			itr = keySet.iterator();
 			nvb = (NameValueBean) itr.next();
 			startingPoints[1] = nvb.getValue();
 
-			List list = (List) map1.get(nvb);
+			final List list = (List) map1.get(nvb);
 			nvb = (NameValueBean) list.get(0);
 			startingPoints[2] = nvb.getValue();
 
@@ -351,16 +349,16 @@ public final class StorageContainerUtil
 	 */
 	public static int checkForLocation(Map containerMap, int aliquotCount, int counter)
 	{
-		Object[] containerId = containerMap.keySet().toArray();
+		final Object[] containerId = containerMap.keySet().toArray();
 		for (int i = 0; i < containerId.length; i++)
 		{
-			Map xDimMap = (Map) containerMap.get(containerId[i]);
+			final Map xDimMap = (Map) containerMap.get(containerId[i]);
 			if (!xDimMap.isEmpty())
 			{
-				Object[] xDim = xDimMap.keySet().toArray();
-				for (int j = 0; j < xDim.length; j++)
+				final Object[] xDim = xDimMap.keySet().toArray();
+				for (final Object element : xDim)
 				{
-					List yDimList = (List) xDimMap.get(xDim[j]);
+					final List yDimList = (List) xDimMap.get(element);
 					counter = counter + yDimList.size();
 					if (counter >= aliquotCount)
 					{
@@ -385,10 +383,10 @@ public final class StorageContainerUtil
 		int counter = 1;
 		if (!containerMap.isEmpty())
 		{
-			Object[] containerId = containerMap.keySet().toArray();
+			final Object[] containerId = containerMap.keySet().toArray();
 			for (int i = 0; i < containerId.length; i++)
 			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
+				final Map xDimMap = (Map) containerMap.get(containerId[i]);
 				counter = setAliquotMap(objectKey, xDimMap, containerId, noOfAliquots, counter,
 						aliquotMap, i);
 				if (counter <= Integer.parseInt(noOfAliquots))
@@ -406,17 +404,17 @@ public final class StorageContainerUtil
 
 		if (!xDimMap.isEmpty())
 		{
-			Object[] xDim = xDimMap.keySet().toArray();
+			final Object[] xDim = xDimMap.keySet().toArray();
 			for (int j = 0; j < xDim.length; j++)
 			{
-				List yDimList = (List) xDimMap.get(xDim[j]);
+				final List yDimList = (List) xDimMap.get(xDim[j]);
 				for (int k = 0; k < yDimList.size(); k++)
 				{
 					if (counter <= Integer.parseInt(noOfAliquots))
 					{
-						String containerKey = objectKey + counter + "_StorageContainer_id";
-						String pos1Key = objectKey + counter + "_positionDimensionOne";
-						String pos2Key = objectKey + counter + "_positionDimensionTwo";
+						final String containerKey = objectKey + counter + "_StorageContainer_id";
+						final String pos1Key = objectKey + counter + "_positionDimensionOne";
+						final String pos2Key = objectKey + counter + "_positionDimensionTwo";
 
 						aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
 						aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
@@ -445,10 +443,11 @@ public final class StorageContainerUtil
 	 * @throws DAOException
 	 */
 	public static List setInitialValue(SpecimenArrayBizLogic specimenArrayBizLogic,
-			SpecimenArrayForm specimenArrayForm, TreeMap containerMap,DAO dao) throws ApplicationException
+			SpecimenArrayForm specimenArrayForm, TreeMap containerMap, DAO dao)
+			throws ApplicationException
 	{
 		List initialValues = null;
-		String[] startingPoints = new String[]{"-1", "-1", "-1"};
+		final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 		//String containerName = null;
 		if (specimenArrayForm.getStorageContainer() != null
 				&& !specimenArrayForm.getStorageContainer().equals("-1"))
@@ -483,7 +482,6 @@ public final class StorageContainerUtil
 		return initialValues;
 	}
 
-	
 	/**
 	 *  This method allocates available position to single specimen
 	 * @param object
@@ -492,34 +490,33 @@ public final class StorageContainerUtil
 	 * @throws ApplicationException 
 	 */
 	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
-			List usedPositionsList, String spKey, String scId,DAO dao) throws ApplicationException
+			List usedPositionsList, String spKey, String scId, DAO dao) throws ApplicationException
 	{
-		int specimenNumber = ((Integer) object).intValue();
-		String specimenKey = spKey;
-		String containerIDKey = specimenKey + specimenNumber
-				+ "_StorageContainer_id";
-		String containerIdKey = specimenKey + specimenNumber + scId;
-		String posDim1Key = specimenKey + specimenNumber
-				+ "_positionDimensionOne";
-		String posDim2Key = specimenKey + specimenNumber
-				+ "_positionDimensionTwo";
+		final int specimenNumber = ((Integer) object).intValue();
+		final String specimenKey = spKey;
+		final String containerIDKey = specimenKey + specimenNumber + "_StorageContainer_id";
+		final String containerIdKey = specimenKey + specimenNumber + scId;
+		final String posDim1Key = specimenKey + specimenNumber + "_positionDimensionOne";
+		final String posDim2Key = specimenKey + specimenNumber + "_positionDimensionTwo";
 
-		String containerID = (String) aliquotMap.get(containerIDKey);
-		Container container = new Container();
+		final String containerID = (String) aliquotMap.get(containerIDKey);
+		final Container container = new Container();
 		container.setId(Long.valueOf(containerID));
-		StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		Position position = scBizLogic.getFirstAvailablePositionInContainer(container,dao);
-		if (position != null) {
+		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
+		final Position position = scBizLogic.getFirstAvailablePositionInContainer(container, dao);
+		if (position != null)
+		{
 			aliquotMap.put(containerIdKey, containerID);
 			aliquotMap.put(posDim1Key, position.getXPos());
 			aliquotMap.put(posDim2Key, position.getYPos());
 			aliquotMap.remove(containerIdKey + "_fromMap");
 			aliquotMap.remove(posDim1Key + "_fromMap");
 			aliquotMap.remove(posDim2Key + "_fromMap");
-		} else {
-			throw AppUtility.getApplicationException(null,
-					"storage.container.has.nt.enough.space", Long.valueOf(
-							specimenNumber).toString());
+		}
+		else
+		{
+			throw AppUtility.getApplicationException(null, "storage.container.has.nt.enough.space",
+					Long.valueOf(specimenNumber).toString());
 		}
 	}
 
@@ -536,7 +533,7 @@ public final class StorageContainerUtil
 			{
 				l = Long.parseLong(pos1);
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
 				logger.debug(e.getMessage(), e);
 				flag = true;
@@ -554,7 +551,7 @@ public final class StorageContainerUtil
 			{
 				l = Long.parseLong(pos2);
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
 				logger.debug(e.getMessage(), e);
 				flag = true;
@@ -577,7 +574,7 @@ public final class StorageContainerUtil
 	 */
 	public static Collection getChildren(DAO dao, Long containerId) throws ApplicationException
 	{
-		String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="
+		final String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="
 				+ containerId;
 		List childrenColl = new ArrayList();
 		childrenColl = dao.executeQuery(hql);
@@ -612,7 +609,7 @@ public final class StorageContainerUtil
 	public static String getStorageValueKey(String containerName, String containerID,
 			Integer containerPos1, Integer containerPos2)
 	{
-		StringBuffer storageValue = new StringBuffer();
+		final StringBuffer storageValue = new StringBuffer();
 		if (containerName != null)
 		{
 			storageValue.append(containerName);
@@ -631,40 +628,45 @@ public final class StorageContainerUtil
 		}
 		return storageValue.toString();
 	}
+
 	/**
 	 * 
 	 * @param containerMap
 	 * @param containerId
 	 * @throws BizLogicException 
 	 */
-	public static void addAllocatedPositionToMap(TreeMap containerMap,long containerId, int xPos, int yPos, DAO dao) throws BizLogicException 
+	public static void addAllocatedPositionToMap(TreeMap containerMap, long containerId, int xPos,
+			int yPos, DAO dao) throws BizLogicException
 	{
-		Long relevanceCnt = 1L;
-		if((containerId!=0)&&(xPos!=0)&&(yPos!=0))
+		final Long relevanceCnt = 1L;
+		if ((containerId != 0) && (xPos != 0) && (yPos != 0))
 		{
 			List parentContainerNameList;
-			try 
+			try
 			{
-				parentContainerNameList = (List)dao.retrieveAttribute(StorageContainer.class, "id" ,containerId, "name");
-				if((parentContainerNameList!=null)&&(parentContainerNameList.size()>0))
+				parentContainerNameList = dao.retrieveAttribute(StorageContainer.class, "id",
+						containerId, "name");
+				if ((parentContainerNameList != null) && (parentContainerNameList.size() > 0))
 				{
-					String parentContainerName = (String)parentContainerNameList.get(0); 
-					Map positionMap =(Map) containerMap.get(new NameValueBean(parentContainerName,containerId,relevanceCnt));
-					if(positionMap==null)
+					final String parentContainerName = (String) parentContainerNameList.get(0);
+					Map positionMap = (Map) containerMap.get(new NameValueBean(parentContainerName,
+							containerId, relevanceCnt));
+					if (positionMap == null)
 					{
-						positionMap=new TreeMap(); 
+						positionMap = new TreeMap();
 					}
-					List list = (List)positionMap.get(new NameValueBean(xPos,xPos));
-					if(list==null)
+					List list = (List) positionMap.get(new NameValueBean(xPos, xPos));
+					if (list == null)
 					{
-						list=new ArrayList();
+						list = new ArrayList();
 					}
-					list.add(new NameValueBean(yPos,yPos));
-					positionMap.put(new NameValueBean(xPos,xPos),list);
-					containerMap.put(new NameValueBean(parentContainerName,containerId,relevanceCnt),positionMap);
+					list.add(new NameValueBean(yPos, yPos));
+					positionMap.put(new NameValueBean(xPos, xPos), list);
+					containerMap.put(new NameValueBean(parentContainerName, containerId,
+							relevanceCnt), positionMap);
 				}
 			}
-			catch (DAOException e) 
+			catch (final DAOException e)
 			{
 				e.printStackTrace();
 				throw new BizLogicException(e);

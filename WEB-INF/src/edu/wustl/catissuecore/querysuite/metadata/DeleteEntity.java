@@ -97,9 +97,8 @@ public class DeleteEntity
 
 		this.deleteAssociation(deleteSQL, this.entityToDelete.getId());
 
-		sql = "delete from intra_model_association" +
-				" where DE_ASSOCIATION_ID" +
-				" in (select identifier from DYEXTN_ASSOCIATION where TARGET_ENTITY_ID ="
+		sql = "delete from intra_model_association" + " where DE_ASSOCIATION_ID"
+				+ " in (select identifier from DYEXTN_ASSOCIATION where TARGET_ENTITY_ID ="
 				+ this.entityToDelete.getId() + ")";
 		deleteSQL.add(sql);
 

@@ -225,8 +225,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm) 
-	throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{

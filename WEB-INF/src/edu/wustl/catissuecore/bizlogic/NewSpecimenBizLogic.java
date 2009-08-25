@@ -2378,23 +2378,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId),
 	 * userId, roleId, assignToUser, assignOperation); } }
 	 *//**
-							 * Todo Remove this method
-							 *
-							 * @param dao
-							 *            DAO object
-							 * @param privilegeName
-							 *            privilegeName
-							 * @param class1
-							 *            Class
-							 * @param speIDArr
-							 *            Array of Specimen Id
-							 * @param roleId
-							 *            Role Identifier
-							 * @param assignToUser
-							 *            boolean true or false
-							 * @param assignOperation
-							 *            boolean
-							 */
+								 * Todo Remove this method
+								 *
+								 * @param dao
+								 *            DAO object
+								 * @param privilegeName
+								 *            privilegeName
+								 * @param class1
+								 *            Class
+								 * @param speIDArr
+								 *            Array of Specimen Id
+								 * @param roleId
+								 *            Role Identifier
+								 * @param assignToUser
+								 *            boolean true or false
+								 * @param assignOperation
+								 *            boolean
+								 */
 	/*
 	 * private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName,
 	 * Class class1, Long[] speIDArr, Long userId, String roleId, boolean
@@ -2432,27 +2432,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * privilegeName, Specimen.class, objectIds, userId, roleId, assignToUser,
 	 * assignOperation); }
 	 *//**
-							 * Todo Remove this method
-							 *
-							 * @param dao
-							 *            DAO object
-							 * @param privilegeName
-							 *            privilegeName
-							 * @param objectIds
-							 *            Array of Passed object Id
-							 * @param userId
-							 *            User Identifier
-							 * @param roleId
-							 *            Role Identifier
-							 * @param assignToUser
-							 *            boolean true or false
-							 * @param assignOperation
-							 *            boolean
-							 * @throws SMException
-							 *             Security related Exception
-							 * @throws BizLogicException
-							 *             Database related exception
-							 */
+								 * Todo Remove this method
+								 *
+								 * @param dao
+								 *            DAO object
+								 * @param privilegeName
+								 *            privilegeName
+								 * @param objectIds
+								 *            Array of Passed object Id
+								 * @param userId
+								 *            User Identifier
+								 * @param roleId
+								 *            Role Identifier
+								 * @param assignToUser
+								 *            boolean true or false
+								 * @param assignOperation
+								 *            boolean
+								 * @throws SMException
+								 *             Security related Exception
+								 * @throws BizLogicException
+								 *             Database related exception
+								 */
 	/*
 	 * public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao,
 	 * String privilegeName, Long[] objectIds, Long userId, String roleId,

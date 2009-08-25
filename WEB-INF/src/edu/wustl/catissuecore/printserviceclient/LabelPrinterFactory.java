@@ -25,6 +25,7 @@ public final class LabelPrinterFactory
 	{
 
 	}
+
 	/**
 	 * Map of class.
 	 */

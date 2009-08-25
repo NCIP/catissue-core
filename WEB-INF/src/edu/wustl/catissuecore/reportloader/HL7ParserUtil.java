@@ -41,6 +41,7 @@ public final class HL7ParserUtil
 	{
 
 	}
+
 	/**
 	 * Method to validate report map.
 	 * @param reportMap report map representing map of different pathology reports
@@ -63,11 +64,9 @@ public final class HL7ParserUtil
 					{
 						final String surgicalPathologyNumber = HL7ParserUtil
 								.getSurgicalPathologyNumber(HL7ParserUtil
-									.getReportDataFromReportMap(reportMap,
-											CaTIESConstants.OBR));
+										.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
 
-						if (!(surgicalPathologyNumber == null ||
-								surgicalPathologyNumber.equals("")))
+						if (!(surgicalPathologyNumber == null || surgicalPathologyNumber.equals("")))
 						{
 							isValid = true;
 						}
@@ -197,12 +196,10 @@ public final class HL7ParserUtil
 					else
 					{
 						// initialization of set
-						medicalIdentificationCollection =
-							new HashSet<ParticipantMedicalIdentifier>();
+						medicalIdentificationCollection = new HashSet<ParticipantMedicalIdentifier>();
 						medicalIdentificationCollection.add(medicalIdentification);
 						participant
-								.setParticipantMedicalIdentifierCollection
-								(medicalIdentificationCollection);
+								.setParticipantMedicalIdentifierCollection(medicalIdentificationCollection);
 					}
 				}
 				// token for participant name
@@ -238,8 +235,7 @@ public final class HL7ParserUtil
 					final String day = field.substring(6, 8);
 
 					final GregorianCalendar gregorianCal = new GregorianCalendar(Integer
-							.parseInt(year),
-							Integer.parseInt(month) - 1, Integer.parseInt(day));
+							.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
 
 					participant.setBirthDate(gregorianCal.getTime());
 				}
@@ -403,8 +399,8 @@ public final class HL7ParserUtil
 					if (siteName != null)
 					{
 						// check for site in DB
-						siteObj = (Site) CaCoreAPIService.getObject(Site.class,
-								Constants.NAME, siteName);
+						siteObj = (Site) CaCoreAPIService.getObject(Site.class, Constants.NAME,
+								siteName);
 						if (siteObj == null)
 						{
 							logger.error("Site name " + siteName + " not found in"

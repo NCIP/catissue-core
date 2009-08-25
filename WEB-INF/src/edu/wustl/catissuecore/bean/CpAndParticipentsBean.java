@@ -5,6 +5,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+
 /**
  * @author janhavi_hasabnis
  */
@@ -17,17 +18,18 @@ public class CpAndParticipentsBean implements Externalizable
 
 	private String value;
 
-/**
- * Default Constructor
- */
+	/**
+	 * Default Constructor
+	 */
 	public CpAndParticipentsBean()
 	{
 
 	}
-    /**
-     * @param nameParam - nameParam
-     * @param valueParam - valueParam
-     */
+
+	/**
+	 * @param nameParam - nameParam
+	 * @param valueParam - valueParam
+	 */
 	public CpAndParticipentsBean(String nameParam, String valueParam)
 	{
 		this.name = nameParam;
@@ -66,31 +68,34 @@ public class CpAndParticipentsBean implements Externalizable
 	{
 		this.value = valueParam;
 	}
-    /**
-     * @param in - ObjectInput
-     * @throws IOException - IOException
-     * @throws ClassNotFoundException - ClassNotFoundException
-     */
+
+	/**
+	 * @param in - ObjectInput
+	 * @throws IOException - IOException
+	 * @throws ClassNotFoundException - ClassNotFoundException
+	 */
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		this.name = in.readUTF();
 	}
+
 	/**
-     * @param out - ObjectOutput
-     * @throws IOException - IOException
-     */
+	 * @param out - ObjectOutput
+	 * @throws IOException - IOException
+	 */
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
-		out.writeUTF( this.name );
-		out.writeUTF( this.value );
+		out.writeUTF(this.name);
+		out.writeUTF(this.value);
 
 	}
+
 	/**
 	 * @return String
 	 */
 	@Override
 	public String toString()
 	{
-		return new String( "name:" + this.name.toString() + " value:" + this.value.toString() );
+		return new String("name:" + this.name.toString() + " value:" + this.value.toString());
 	}
 }

@@ -82,6 +82,7 @@ public class ContainerForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return 0
 	 */
+	@Override
 	public int getFormId()
 	{
 		return 0;
@@ -95,7 +96,7 @@ public class ContainerForm extends AbstractActionForm
 	{
 		if (domainObject instanceof Container)
 		{
-			Container container = (Container) domainObject;
+			final Container container = (Container) domainObject;
 			this.setId(container.getId().longValue());
 			this.barcode = container.getBarcode();
 			this.activityStatus = container.getActivityStatus();
@@ -130,6 +131,7 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -137,14 +139,16 @@ public class ContainerForm extends AbstractActionForm
 	/**
 	 * @return Returns the activityStatus.
 	 */
+	@Override
 	public String getActivityStatus()
 	{
-		return activityStatus;
+		return this.activityStatus;
 	}
 
 	/**
 	 * @param activityStatus The activityStatus to set.
 	 */
+	@Override
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
@@ -155,7 +159,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -171,7 +175,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -187,7 +191,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public String getIsFull()
 	{
-		return isFull;
+		return this.isFull;
 	}
 
 	/**
@@ -203,7 +207,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -219,7 +223,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public int getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -235,7 +239,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public int getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -251,7 +255,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public int getOneDimensionCapacity()
 	{
-		return oneDimensionCapacity;
+		return this.oneDimensionCapacity;
 	}
 
 	/**
@@ -267,7 +271,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public int getTwoDimensionCapacity()
 	{
-		return twoDimensionCapacity;
+		return this.twoDimensionCapacity;
 	}
 
 	/**
@@ -283,7 +287,7 @@ public class ContainerForm extends AbstractActionForm
 	 */
 	public String getPositionInStorageContainer()
 	{
-		return positionInStorageContainer;
+		return this.positionInStorageContainer;
 	}
 
 	/**

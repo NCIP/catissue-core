@@ -142,7 +142,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 			String orderByField, Long[] siteId, int startIndex, int numOfRecords)
 			throws BizLogicException
 	{
-		String whereClauseString = getWhereClauseForShipment(siteId,columnName);	
+		final String whereClauseString = this.getWhereClauseForShipment(siteId, columnName);
 		List<Object[]> shipmentsList = null;
 		shipmentsList = this.getShipmentDetails(Shipment.class.getName(), selectColumnName,
 				whereClauseString, siteId, orderByField, startIndex, numOfRecords);
@@ -162,29 +162,29 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	public int getShipmentsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
-		String whereClauseString = getWhereClauseForShipment(siteId,columnName);		
+		final String whereClauseString = this.getWhereClauseForShipment(siteId, columnName);
 		final int count = getShipmentsCount(Shipment.class.getName(), whereClauseString, siteId,
 				orderByField, startIndex, numOfRecords);
 		return count;
 	}
-	
+
 	/**
 	 * @param siteId - denotes the site id.
 	 * @param columnName - column name to be looked for.
 	 * @return whereClause
 	 */
-	private String getWhereClauseForShipment(Long[] siteId,String columnName)
+	private String getWhereClauseForShipment(Long[] siteId, String columnName)
 	{
 		final StringBuffer whereClause = new StringBuffer();
-		whereClause.append(" shipment.activityStatus!='"
-				+ Constants.ACTIVITY_STATUS_RECEIVED + "' "+CommonConstants.AND_JOIN_CONDITION +" (");
+		whereClause.append(" shipment.activityStatus!='" + Constants.ACTIVITY_STATUS_RECEIVED
+				+ "' " + CommonConstants.AND_JOIN_CONDITION + " (");
 		for (final Long element : siteId)
 		{
-			whereClause.append(" shipment." + columnName
-					+ "=? "+CommonConstants.OR_JOIN_CONDITION );
+			whereClause.append(" shipment." + columnName + "=? "
+					+ CommonConstants.OR_JOIN_CONDITION);
 		}
 		String whereClauseString = whereClause.toString();
-		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
+		whereClauseString = whereClauseString.substring(0, (whereClauseString.length() - 2));
 		whereClauseString = whereClauseString + ")";
 		return whereClauseString;
 	}
@@ -200,7 +200,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-			super.postInsert( obj, dao, sessionDataBean );
+		super.postInsert(obj, dao, sessionDataBean);
 	}
 
 	/**

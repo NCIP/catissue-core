@@ -43,7 +43,7 @@ public class ReportLoader
 	/**
 	 * Logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ReportLoader.class);
+	private transient final Logger logger = Logger.getCommonLogger(ReportLoader.class);
 	/**
 	 * Participant of the report.
 	 */
@@ -126,8 +126,7 @@ public class ReportLoader
 			{
 				//check for exactly matching SCG
 				this.logger.info("Checking for Matching SCG. Default site name:"
-						+ DEFAULT_SITE_NAME
-						+ " :" + this.site.getName());
+						+ DEFAULT_SITE_NAME + " :" + this.site.getName());
 				if (this.site.getName().equalsIgnoreCase(DEFAULT_SITE_NAME))
 				{
 					this.logger.info("Inside if");
@@ -140,8 +139,7 @@ public class ReportLoader
 					// if scg is null create new scg
 					this.logger.debug("Null SCG found in ReportLoader, Creating New SCG");
 					this.scg = this.createNewSpecimenCollectionGroup();
-					this.scg = (SpecimenCollectionGroup)
-					CaCoreAPIService.createObject(this.scg);
+					this.scg = (SpecimenCollectionGroup) CaCoreAPIService.createObject(this.scg);
 					this.identifiedReport.setSpecimenCollectionGroup(this.scg);
 					CaCoreAPIService.createObject(this.identifiedReport);
 				}
@@ -224,8 +222,7 @@ public class ReportLoader
 				collProtocolReg.setParticipant(transientParticipant);
 				collProtocolReg.setCollectionProtocol(transientCP);
 				collProtocolReg
-						.setProtocolParticipantIdentifier(Constants.
-								REGISTRATION_FOR_REPORT_LOADER);
+						.setProtocolParticipantIdentifier(Constants.REGISTRATION_FOR_REPORT_LOADER);
 				try
 				{
 					collProtocolReg = (CollectionProtocolRegistration) CaCoreAPIService
@@ -233,12 +230,10 @@ public class ReportLoader
 				}
 				catch (final Exception ex)
 				{
-					this.logger.error(
-							"Error: Could not save object" +
-							" of CollectionProtocolRegistration", ex);
-					throw new Exception("Could not save object of" +
-							" CollectionProtocolRegistration :"
-							+ ex.getMessage());
+					this.logger.error("Error: Could not save object"
+							+ " of CollectionProtocolRegistration", ex);
+					throw new Exception("Could not save object of"
+							+ " CollectionProtocolRegistration :" + ex.getMessage());
 				}
 			}
 			scg.setCollectionProtocolEvent(collProtocolEvent);
@@ -286,8 +281,7 @@ public class ReportLoader
 				// cpr exist then return existing cpr
 				this.logger.info("Existing CPR found for participant id=" + participant.getId()
 						+ " collectionProtocol id=" + cp.getId());
-				final CollectionProtocolRegistration collProtocolReg =
-					(CollectionProtocolRegistration) cprList
+				final CollectionProtocolRegistration collProtocolReg = (CollectionProtocolRegistration) cprList
 						.get(0);
 				collProtocolReg.setParticipant(participant);
 				collProtocolReg.setCollectionProtocol(cp);
@@ -313,8 +307,7 @@ public class ReportLoader
 	private Collection<SpecimenEventParameters> getDefaultEvents(
 			SpecimenCollectionGroup specimenCollectionGroup) throws Exception
 	{
-		final Collection<SpecimenEventParameters> defaultEventCollection =
-			new HashSet<SpecimenEventParameters>();
+		final Collection<SpecimenEventParameters> defaultEventCollection = new HashSet<SpecimenEventParameters>();
 		final String loginName = CaTIESProperties.getValue(CaTIESConstants.USER_NAME);
 		final User user = (User) CaCoreAPIService.getObject(User.class, Constants.LOGINNAME,
 				loginName);
@@ -352,8 +345,7 @@ public class ReportLoader
 		{
 			this.scg.setSpecimenCollectionSite(this.site);
 		}
-		final CollectionProtocolRegistration collectionProtocolRegistration =
-			(CollectionProtocolRegistration) CaCoreAPIService
+		final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) CaCoreAPIService
 				.getObject(CollectionProtocolRegistration.class, Constants.SYSTEM_IDENTIFIER,
 						this.scg.getCollectionProtocolRegistration().getId());
 		this.scg.setCollectionProtocolRegistration(collectionProtocolRegistration);
@@ -363,19 +355,17 @@ public class ReportLoader
 
 			this.logger.info("inside" + this.scg.getIdentifiedSurgicalPathologyReport().getId());
 
-			IdentifiedSurgicalPathologyReport existingReport =
-				(IdentifiedSurgicalPathologyReport) CaCoreAPIService
+			IdentifiedSurgicalPathologyReport existingReport = (IdentifiedSurgicalPathologyReport) CaCoreAPIService
 					.getObject(IdentifiedSurgicalPathologyReport.class,
 							Constants.SYSTEM_IDENTIFIER, this.scg
-								.getIdentifiedSurgicalPathologyReport().getId());
+									.getIdentifiedSurgicalPathologyReport().getId());
 			DeidentifiedSurgicalPathologyReport existingDeidReport = null;
 			if (this.scg.getDeIdentifiedSurgicalPathologyReport() != null)
 			{
 				existingDeidReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
 						.getObject(DeidentifiedSurgicalPathologyReport.class,
 								Constants.SYSTEM_IDENTIFIER, this.scg
-									.getDeIdentifiedSurgicalPathologyReport()
-									.getId());
+										.getDeIdentifiedSurgicalPathologyReport().getId());
 				existingReport.setDeIdentifiedSurgicalPathologyReport(null);
 			}
 			existingReport.getTextContent().setData(
@@ -389,8 +379,7 @@ public class ReportLoader
 				if (existingDeidReport != null)
 				{
 					existingDeidReport.setSpecimenCollectionGroup(null);
-					final DeidentifiedSurgicalPathologyReport deidreport =
-						(DeidentifiedSurgicalPathologyReport) CaCoreAPIService
+					final DeidentifiedSurgicalPathologyReport deidreport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
 							.updateObject(existingDeidReport);
 					this.logger.info("deid report updated: " + deidreport.getId());
 				}

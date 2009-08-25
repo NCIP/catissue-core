@@ -61,10 +61,11 @@ import edu.wustl.simplequery.query.Table;
  */
 public class TitliFetchAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TitliFetchAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TitliFetchAction.class);
 	/**
 	 * alias.
 	 */
@@ -97,6 +98,7 @@ public class TitliFetchAction extends Action
 	 *            the response
 	 * @return action forward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -104,16 +106,15 @@ public class TitliFetchAction extends Action
 		// forward
 		// for that we need to fetch the selected group of records
 
-		TitliSearchForm titliSearchForm = (TitliSearchForm) form;
+		final TitliSearchForm titliSearchForm = (TitliSearchForm) form;
 
 		titliSearchForm.setSortedResultMap((SortedResultMapInterface) (request.getSession()
 				.getAttribute(Constants.TITLI_SORTED_RESULT_MAP)));
 
-		TitliResultGroup resultGroup = titliSearchForm.getSelectedGroup();
-		Collection < SimpleConditionsNode > simpleConditionsNodeCollection =
-			getSimpleConditionsNodeCollecton(
-				resultGroup, request);
-		setDataAndColumnLists(simpleConditionsNodeCollection, request);
+		final TitliResultGroup resultGroup = titliSearchForm.getSelectedGroup();
+		final Collection<SimpleConditionsNode> simpleConditionsNodeCollection = this
+				.getSimpleConditionsNodeCollecton(resultGroup, request);
+		this.setDataAndColumnLists(simpleConditionsNodeCollection, request);
 
 		try
 		{
@@ -121,40 +122,41 @@ public class TitliFetchAction extends Action
 
 			// if there is only one record in the selected group, go directly to
 			// the edit page
-			if (dataList.size() == 1)
+			if (this.dataList.size() == 1)
 			{
-				String pageOf = resultGroup.getPageOf();
+				final String pageOf = resultGroup.getPageOf();
 
-				List row = (List) (dataList.get(0));
+				final List row = (List) (this.dataList.get(0));
 
-				String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGE_OF + "="
+				final String path = Constants.SEARCH_OBJECT_ACTION + "?" + Constants.PAGE_OF + "="
 						+ pageOf + "&" + Constants.OPERATION + "=" + Constants.SEARCH + "&"
-						+ Constants.SYSTEM_IDENTIFIER + "=" + (String) (row.get(id));
+						+ Constants.SYSTEM_IDENTIFIER + "=" + (String) (row.get(this.id));
 
-				return getActionForward(Constants.TITLI_SINGLE_RESULT, path);
+				return this.getActionForward(Constants.TITLI_SINGLE_RESULT, path);
 			}
 
 			request.setAttribute(Constants.PAGE_OF, resultGroup.getPageOf());
-			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, dataList);
-			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
-			request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, identifierIndex);
+			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, this.dataList);
+			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, this.columnNames);
+			request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, this.identifierIndex);
 			request.setAttribute(Constants.PAGE_NUMBER, 1);
-			request.getSession().setAttribute(Constants.TOTAL_RESULTS, dataList.size());
+			request.getSession().setAttribute(Constants.TOTAL_RESULTS, this.dataList.size());
 			// request.getSession().setAttribute(Constants.RESULTS_PER_PAGE,
 			// 10);
 
 		}
-		catch (TitliFetchException e)
+		catch (final TitliFetchException e)
 		{
-			logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
 		}
 
 		return mapping.findForward(Constants.SUCCESS);
 	}
+
 	/**
 	 *
 	 * @param name : name
@@ -163,7 +165,7 @@ public class TitliFetchAction extends Action
 	 */
 	private ActionForward getActionForward(String name, String path)
 	{
-		ActionForward actionForward = new ActionForward();
+		final ActionForward actionForward = new ActionForward();
 		actionForward.setName(name);
 		actionForward.setPath(path);
 
@@ -181,38 +183,38 @@ public class TitliFetchAction extends Action
 	 * @return a collection of SimpleConditionsNode as needed to create
 	 *         SimpleQuery
 	 */
-	Collection < SimpleConditionsNode > getSimpleConditionsNodeCollecton(
-			TitliResultGroup resultGroup, HttpServletRequest request)
+	Collection<SimpleConditionsNode> getSimpleConditionsNodeCollecton(TitliResultGroup resultGroup,
+			HttpServletRequest request)
 	{
-		Collection < SimpleConditionsNode > simpleConditionsNodeCollection =
-			new ArrayList < SimpleConditionsNode >();
-		MatchListInterface matchList = resultGroup.getNativeGroup().getMatchList();
+		final Collection<SimpleConditionsNode> simpleConditionsNodeCollection = new ArrayList<SimpleConditionsNode>();
+		final MatchListInterface matchList = resultGroup.getNativeGroup().getMatchList();
 		try
 		{
-			String maxNoOfRecords = XMLPropertyHandler
+			final String maxNoOfRecords = XMLPropertyHandler
 					.getValue(Constants.MAXIMUM_RECORDS_FOR_TITLI_RESULTS);
-			int maxLimit = Integer.parseInt(maxNoOfRecords);
+			final int maxLimit = Integer.parseInt(maxNoOfRecords);
 
-			Name dbName = Titli.getInstance().getDatabases().keySet().toArray(new Name[0])[0];
-			Name tableName = matchList.get(0).getTableName();
-			setAliasFor(tableName.toString(), request);
-			TableInterface table = Titli.getInstance().getDatabase(dbName).getTable(tableName);
+			final Name dbName = Titli.getInstance().getDatabases().keySet().toArray(new Name[0])[0];
+			final Name tableName = matchList.get(0).getTableName();
+			this.setAliasFor(tableName.toString(), request);
+			final TableInterface table = Titli.getInstance().getDatabase(dbName)
+					.getTable(tableName);
 
 			int count = 1;
 
 			// for each match form a SimpleConditionsNode and add it to the
 			// collection
-			for (MatchInterface match : matchList)
+			for (final MatchInterface match : matchList)
 			{
-				Name identifier = new Name(Constants.IDENTIFIER);
-				ColumnInterface column = table.getColumn(identifier);
-				String value = match.getUniqueKeys().get(identifier);
-				DataElement dataElement = new DataElement(alias, Constants.IDENTIFIER, column
-						.getType());
-				Condition condition = new Condition(dataElement, new Operator(Operator.EQUAL),
-						value);
-				SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode(condition,
-						new Operator(Operator.OR));
+				final Name identifier = new Name(Constants.IDENTIFIER);
+				final ColumnInterface column = table.getColumn(identifier);
+				final String value = match.getUniqueKeys().get(identifier);
+				final DataElement dataElement = new DataElement(this.alias, Constants.IDENTIFIER,
+						column.getType());
+				final Condition condition = new Condition(dataElement,
+						new Operator(Operator.EQUAL), value);
+				final SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode(
+						condition, new Operator(Operator.OR));
 
 				simpleConditionsNodeCollection.add(simpleConditionsNode);
 
@@ -223,17 +225,17 @@ public class TitliFetchAction extends Action
 				count++;
 			}
 		}
-		catch (TitliException e)
+		catch (final TitliException e)
 		{
-			logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.error("ClassNotFoundException in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("ClassNotFoundException in TitliFetchAction : " + e.getMessage(), e);
 		}
 		return simpleConditionsNodeCollection;
 	}
@@ -247,49 +249,48 @@ public class TitliFetchAction extends Action
 	 *            the servlet request
 	 */
 	private void setDataAndColumnLists(
-			Collection < SimpleConditionsNode > simpleConditionsNodeCollection,
+			Collection<SimpleConditionsNode> simpleConditionsNodeCollection,
 			HttpServletRequest request)
 	{
-		dataList = new ArrayList();
-		columnNames = new ArrayList();
-		HttpSession session = request.getSession();
-		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, alias);
+		this.dataList = new ArrayList();
+		this.columnNames = new ArrayList();
+		final HttpSession session = request.getSession();
+		final Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, this.alias);
 		// Sets the condition objects from user in the query object.
 		((SimpleQuery) query).addConditions(simpleConditionsNodeCollection);
 
-		Map queryResultObjectDataMap = new HashMap();
-		SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
+		final Map queryResultObjectDataMap = new HashMap();
+		final SimpleQueryBizLogic simpleQueryBizLogic = new SimpleQueryBizLogic();
 
 		try
 		{
-			List fieldList = new ArrayList();
-			List aliasList = new ArrayList();
-			aliasList.add(alias);
+			final List fieldList = new ArrayList();
+			final List aliasList = new ArrayList();
+			aliasList.add(this.alias);
 
 			if (simpleConditionsNodeCollection != null && !simpleConditionsNodeCollection.isEmpty())
 			{
-				Iterator itr = simpleConditionsNodeCollection.iterator();
+				final Iterator itr = simpleConditionsNodeCollection.iterator();
 				while (itr.hasNext())
 				{
-					SimpleConditionsNode simpleConditionsNode =
-						(SimpleConditionsNode) itr.next();
-					Table table = simpleConditionsNode.getCondition().
-					getDataElement().getTable();
-					DataElement dataElement =
-						simpleConditionsNode.getCondition().getDataElement();
-					String field = table.getTableName() + "." + table.getTableName() + "."
-							+ dataElement.getField() + "." +
-							dataElement.getFieldType();
+					final SimpleConditionsNode simpleConditionsNode = (SimpleConditionsNode) itr
+							.next();
+					final Table table = simpleConditionsNode.getCondition().getDataElement()
+							.getTable();
+					final DataElement dataElement = simpleConditionsNode.getCondition()
+							.getDataElement();
+					final String field = table.getTableName() + "." + table.getTableName() + "."
+							+ dataElement.getField() + "." + dataElement.getFieldType();
 					fieldList.add(field);
 				}
 			}
 
 			Vector selectDataElements = null;
 			selectDataElements = simpleQueryBizLogic.getSelectDataElements(null, aliasList,
-					columnNames, true, fieldList);
+					this.columnNames, true, fieldList);
 			query.setResultView(selectDataElements);
 
-			Set fromTables = query.getTableNamesSet();
+			final Set fromTables = query.getTableNamesSet();
 			query.setTableSet(fromTables);
 			simpleQueryBizLogic.createQueryResultObjectData(fromTables, queryResultObjectDataMap,
 					query);
@@ -300,20 +301,20 @@ public class TitliFetchAction extends Action
 
 			for (int i = 0; i < identifierColumnNames.size(); i++)
 			{
-				columnNames.add((String) identifierColumnNames.get(i));
+				this.columnNames.add(identifierColumnNames.get(i));
 			}
 
 			// Get the index of Identifier field of main object.
-			Vector tableAliasNames = new Vector();
-			tableAliasNames.add(alias);
-			Map tableMap = query.getIdentifierColumnIds(tableAliasNames);
+			final Vector tableAliasNames = new Vector();
+			tableAliasNames.add(this.alias);
+			final Map tableMap = query.getIdentifierColumnIds(tableAliasNames);
 			if (tableMap != null)
 			{
-				identifierIndex = Integer.parseInt(tableMap.get(alias).toString()) - 1;
+				this.identifierIndex = Integer.parseInt(tableMap.get(this.alias).toString()) - 1;
 			}
 
-			boolean isSecureExecute = true;
-			boolean hasConditionOnIdentifiedField = query.hasConditionOnIdentifiedField();
+			final boolean isSecureExecute = true;
+			final boolean hasConditionOnIdentifiedField = query.hasConditionOnIdentifiedField();
 			PagenatedResultData pagenatedResultData = null;
 
 			/*
@@ -323,7 +324,7 @@ public class TitliFetchAction extends Action
 			int recordsPerPage;
 
 			System.out.println(session.getAttribute(Constants.RESULTS_PER_PAGE));
-			String recordsPerPageSessionValue = (String) session
+			final String recordsPerPageSessionValue = (String) session
 					.getAttribute(Constants.RESULTS_PER_PAGE);
 			if (recordsPerPageSessionValue == null)
 			{
@@ -336,11 +337,11 @@ public class TitliFetchAction extends Action
 				recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
 			}
 
-			pagenatedResultData = query.execute(getSessionData(request), isSecureExecute,
+			pagenatedResultData = query.execute(this.getSessionData(request), isSecureExecute,
 					queryResultObjectDataMap, query.hasConditionOnIdentifiedField(), 0,
 					recordsPerPage);
 
-			QuerySessionData querySessionData = new QuerySessionData();
+			final QuerySessionData querySessionData = new QuerySessionData();
 			querySessionData.setSql(query.getString());
 			querySessionData.setQueryResultObjectDataMap(queryResultObjectDataMap);
 			querySessionData.setSecureExecute(isSecureExecute);
@@ -350,18 +351,19 @@ public class TitliFetchAction extends Action
 
 			session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 
-			dataList = pagenatedResultData.getResult();
+			this.dataList = pagenatedResultData.getResult();
 
-			id = (Integer) (query.getColumnIdsMap().get(alias + "." + Constants.IDENTIFIER)) - 1;
+			this.id = (Integer) (query.getColumnIdsMap().get(this.alias + "."
+					+ Constants.IDENTIFIER)) - 1;
 
 		}
-		catch (DAOException e)
+		catch (final DAOException e)
 		{
-			logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
-			logger.error("SQLException in TitliFetchAction : " + e.getMessage(), e);
+			this.logger.error("SQLException in TitliFetchAction : " + e.getMessage(), e);
 		}
 
 	}
@@ -380,19 +382,20 @@ public class TitliFetchAction extends Action
 
 		// String query=null;
 
-		String query = "select " + Constants.TABLE_ALIAS_NAME_COLUMN + " from "
+		final String query = "select " + Constants.TABLE_ALIAS_NAME_COLUMN + " from "
 				+ Constants.TABLE_DATA_TABLE_NAME + " where " + Constants.TABLE_TABLE_NAME_COLUMN
 				+ "='" + tableName + "'";
-		JDBCDAO dao = DAOConfigFactory.getInstance().getDAOFactory(Constants.APPLICATION_NAME)
-				.getJDBCDAO();
-		dao.openSession(getSessionData(request));
+		final JDBCDAO dao = DAOConfigFactory.getInstance()
+				.getDAOFactory(Constants.APPLICATION_NAME).getJDBCDAO();
+		dao.openSession(this.getSessionData(request));
 
-		List list = dao.executeQuery(query);
-		List subList = (List) (list.get(0));
-		alias = (String) (subList.get(0));
+		final List list = dao.executeQuery(query);
+		final List subList = (List) (list.get(0));
+		this.alias = (String) (subList.get(0));
 		dao.closeSession();
 
 	}
+
 	/**
 	 *
 	 * @param request : request
@@ -400,10 +403,10 @@ public class TitliFetchAction extends Action
 	 */
 	protected SessionDataBean getSessionData(HttpServletRequest request)
 	{
-		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		final Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
 		if (obj != null)
 		{
-			SessionDataBean sessionData = (SessionDataBean) obj;
+			final SessionDataBean sessionData = (SessionDataBean) obj;
 			return sessionData;
 		}
 		return null;

@@ -1,16 +1,15 @@
 /**
  * 
  */
-package edu.wustl.catissuecore.util.global;
 
+package edu.wustl.catissuecore.util.global;
 
 /**
  * @author juberahamad_patel
  *
  */
-public enum SitePrivilege
-{
-	
+public enum SitePrivilege {
+
 	/*  populate */
 
 }

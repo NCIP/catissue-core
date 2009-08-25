@@ -137,7 +137,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	public Map getSimilarContainersMap()
 	{
 		//System.out.println("AliquotForm : getAliquotMap "+similarContainersMap);
-		return similarContainersMap;
+		return this.similarContainersMap;
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	public void setValue(String key, Object value)
 	{
 		//System.out.println("simCont: setValue -> "+key+" "+value);
-		similarContainersMap.put(key, value);
+		this.similarContainersMap.put(key, value);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	public Object getValue(String key)
 	{
 		//System.out.println("simCont: getValue <- "+key+" "+similarContainersMap.get(key));
-		return similarContainersMap.get(key);
+		return this.similarContainersMap.get(key);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getStorageContainerType()
 	{
-		return storageContainerType;
+		return this.storageContainerType;
 	}
 
 	/**
@@ -192,6 +192,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	/**
 	 * @return SIMILAR_CONTAINERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
@@ -211,6 +212,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
@@ -222,7 +224,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getNoOfContainers()
 	{
-		return noOfContainers;
+		return this.noOfContainers;
 	}
 
 	/**
@@ -240,7 +242,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getStorageContainerId()
 	{
-		return storageContainerId;
+		return this.storageContainerId;
 	}
 
 	/**
@@ -256,7 +258,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getDefaultTemperature()
 	{
-		return defaultTemperature;
+		return this.defaultTemperature;
 	}
 
 	/**
@@ -272,7 +274,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public int getOneDimensionCapacity()
 	{
-		return oneDimensionCapacity;
+		return this.oneDimensionCapacity;
 	}
 
 	/**
@@ -288,7 +290,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public int getTwoDimensionCapacity()
 	{
-		return twoDimensionCapacity;
+		return this.twoDimensionCapacity;
 	}
 
 	/**
@@ -304,7 +306,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public long getTypeId()
 	{
-		return typeId;
+		return this.typeId;
 	}
 
 	/**
@@ -321,7 +323,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public long getSiteId()
 	{
-		return siteId;
+		return this.siteId;
 	}
 
 	/**
@@ -337,7 +339,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getSiteName()
 	{
-		return siteName;
+		return this.siteName;
 	}
 
 	/**
@@ -353,7 +355,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getCollectionProtocolTitle()
 	{
-		return collectionProtocolTitle;
+		return this.collectionProtocolTitle;
 	}
 
 	/**
@@ -369,7 +371,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getHolds()
 	{
-		return holds;
+		return this.holds;
 	}
 
 	/**
@@ -404,7 +406,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public long[] getHoldsStorageTypeIds()
 	{
-		return holdsStorageTypeIds;
+		return this.holdsStorageTypeIds;
 	}
 
 	/**
@@ -421,7 +423,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public int getCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -438,7 +440,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getIsFull()
 	{
-		return isFull;
+		return this.isFull;
 	}
 
 	/**
@@ -494,7 +496,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public long[] getHoldsSpecimenClassTypeIds()
 	{
-		return holdsSpecimenClassTypeIds;
+		return this.holdsSpecimenClassTypeIds;
 	}
 
 	/**
@@ -511,11 +513,12 @@ public class SimilarContainersForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		logger.debug("SimilarContainersForm :: validate()");
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -524,23 +527,25 @@ public class SimilarContainersForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.type")));
 			}
-			int noOfCont = Integer.parseInt(this.noOfContainers);
-			logger.debug("simMap ^^--?? " + similarContainersMap);
+			final int noOfCont = Integer.parseInt(this.noOfContainers);
+			logger.debug("simMap ^^--?? " + this.similarContainersMap);
 			for (int i = 1; i <= noOfCont; i++)
 			{
-				String iBarcode = (String) this.getValue("simCont:" + i + "_barcode"); //simCont:1_barcode
+				final String iBarcode = (String) this.getValue("simCont:" + i + "_barcode"); //simCont:1_barcode
 				if (iBarcode != null && iBarcode.equals("")) // this is done because barcode is empty string set by struts
 				{ // but barcode in DB is unique but can be null.
 					this.setValue("simCont:" + i + "_barcode", null);
 				}
-				int checkedButtonStatus = Integer.parseInt((String) getValue("checkedButton"));
-				String siteId = (String) getValue("simCont:" + i + "_siteId");
+				final int checkedButtonStatus = Integer.parseInt((String) this
+						.getValue("checkedButton"));
+				final String siteId = (String) this.getValue("simCont:" + i + "_siteId");
 				if (checkedButtonStatus == 2 || siteId == null)
 				{
-					String parentContId = (String) getValue("simCont:" + i + "_parentContainerId");
-					String positionDimensionOne = (String) getValue("simCont:" + i
+					final String parentContId = (String) this.getValue("simCont:" + i
+							+ "_parentContainerId");
+					final String positionDimensionOne = (String) this.getValue("simCont:" + i
 							+ "_positionDimensionOne");
-					String positionDimensionTwo = (String) getValue("simCont:" + i
+					final String positionDimensionTwo = (String) this.getValue("simCont:" + i
 							+ "_positionDimensionTwo");
 					logger.debug(i + " parentContId " + parentContId + " positionDimensionOne "
 							+ positionDimensionOne + " positionDimensionTwo "
@@ -567,16 +572,15 @@ public class SimilarContainersForm extends AbstractActionForm
 				}
 			}
 
-			
 			//			VALIDATIONS FOR DIMENSION 1.
-			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+			if (Validator.isEmpty(String.valueOf(this.oneDimensionCapacity)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.oneDimension")));
 			}
 			else
 			{
-				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+				if (!validator.isNumeric(String.valueOf(this.oneDimensionCapacity)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.oneDimension")));
@@ -584,23 +588,23 @@ public class SimilarContainersForm extends AbstractActionForm
 			}
 
 			//Validations for dimension 2
-			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity))
-					&& (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
+			if (!Validator.isEmpty(String.valueOf(this.twoDimensionCapacity))
+					&& (!validator.isNumeric(String.valueOf(this.twoDimensionCapacity))))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageContainer.twoDimension")));
 			}
-			
-//			validations for temperature
-			if (!validator.isEmpty(defaultTemperature)
-					&& (!validator.isDouble(defaultTemperature, false)))
+
+			//			validations for temperature
+			if (!Validator.isEmpty(this.defaultTemperature)
+					&& (!validator.isDouble(this.defaultTemperature, false)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageContainer.temperature")));
 			}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -612,7 +616,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public long getParentContainerId()
 	{
-		return parentContainerId;
+		return this.parentContainerId;
 	}
 
 	/**
@@ -629,7 +633,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public int getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -646,7 +650,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public int getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -663,7 +667,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -679,7 +683,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	 */
 	public String getContainerName()
 	{
-		return containerName;
+		return this.containerName;
 	}
 
 	/**

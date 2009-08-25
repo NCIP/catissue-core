@@ -24,7 +24,7 @@ public class ParticipantAnnotationCondition implements ICPCondition
 {
 
 	private transient final Logger logger = Logger
-			.getCommonLogger( ParticipantAnnotationCondition.class );
+			.getCommonLogger(ParticipantAnnotationCondition.class);
 
 	/**
 	 * Returns the list of protocol with which the given participant is registered 
@@ -33,17 +33,17 @@ public class ParticipantAnnotationCondition implements ICPCondition
 	public List getCollectionProtocolList(Long entityInstanceId)
 	{
 
-		final List < Long > annotationsList = new ArrayList < Long >();
+		final List<Long> annotationsList = new ArrayList<Long>();
 		final DefaultBizLogic bizLogic = new DefaultBizLogic();
 		Collection objectList = new HashSet();
 		try
 		{
-			if (entityInstanceId != null || !entityInstanceId.equals( "" ))
+			if (entityInstanceId != null || !entityInstanceId.equals(""))
 			{
 				/*  objectList = bizLogic.retrieve(Participant.class.getName(),
 				        "id", entityInstanceId);*/
-				objectList = (Collection) bizLogic.retrieveAttribute( Participant.class.getName(),
-						entityInstanceId, "elements(collectionProtocolRegistrationCollection)" );
+				objectList = (Collection) bizLogic.retrieveAttribute(Participant.class.getName(),
+						entityInstanceId, "elements(collectionProtocolRegistrationCollection)");
 			}
 			if (objectList != null && !objectList.isEmpty())
 			{
@@ -60,7 +60,7 @@ public class ParticipantAnnotationCondition implements ICPCondition
 					if (cpReg != null && cpReg.getCollectionProtocol() != null
 							&& cpReg.getCollectionProtocol().getId() != null)
 					{
-						annotationsList.add( cpReg.getCollectionProtocol().getId() );
+						annotationsList.add(cpReg.getCollectionProtocol().getId());
 					}
 
 				}
@@ -69,7 +69,7 @@ public class ParticipantAnnotationCondition implements ICPCondition
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.debug( e.getMessage(), e );
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

@@ -82,7 +82,7 @@ public class CategorySearchForm extends ActionForm
 
 	private String[] selectedColumnNames;
 	private String[] columnNames;
-	private List < NameValueBean > selectedColumnNameValueBeanList;
+	private List<NameValueBean> selectedColumnNameValueBeanList;
 	/**
 	 * String to store currentSelectedObject
 	 */
@@ -97,7 +97,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getCurrentPage()
 	{
-		return currentPage;
+		return this.currentPage;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getNextOperation()
 	{
-		return nextOperation;
+		return this.nextOperation;
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getSearchButton()
 	{
-		return searchButton;
+		return this.searchButton;
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public List getErrors()
 	{
-		return errors;
+		return this.errors;
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getStringToCreateQueryObject()
 	{
-		return stringToCreateQueryObject;
+		return this.stringToCreateQueryObject;
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getSelected()
 	{
-		return selected;
+		return this.selected;
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getTextField()
 	{
-		return textField;
+		return this.textField;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getAttributeChecked()
 	{
-		return attributeChecked;
+		return this.attributeChecked;
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getClassChecked()
 	{
-		return classChecked;
+		return this.classChecked;
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getPermissibleValuesChecked()
 	{
-		return permissibleValuesChecked;
+		return this.permissibleValuesChecked;
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getEntityName()
 	{
-		return entityName;
+		return this.entityName;
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getNodeId()
 	{
-		return nodeId;
+		return this.nodeId;
 	}
 
 	/**
@@ -289,7 +289,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getBooleanAttribute()
 	{
-		return booleanAttribute;
+		return this.booleanAttribute;
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class CategorySearchForm extends ActionForm
 
 	public String getIncludeDescriptionChecked()
 	{
-		return includeDescriptionChecked;
+		return this.includeDescriptionChecked;
 	}
 
 	public void setIncludeDescriptionChecked(String includeDescriptionChecked)
@@ -315,7 +315,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String[] getColumnNames()
 	{
-		return columnNames;
+		return this.columnNames;
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String[] getSelectedColumnNames()
 	{
-		return selectedColumnNames;
+		return this.selectedColumnNames;
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getCurrentSelectedObject()
 	{
-		return currentSelectedObject;
+		return this.currentSelectedObject;
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getCurrentSelectedNodeInTree()
 	{
-		return currentSelectedNodeInTree;
+		return this.currentSelectedNodeInTree;
 	}
 
 	/**
@@ -377,16 +377,16 @@ public class CategorySearchForm extends ActionForm
 	/**
 	 * @return the selectedColumnNameValueBeanList
 	 */
-	public List < NameValueBean > getSelectedColumnNameValueBeanList()
+	public List<NameValueBean> getSelectedColumnNameValueBeanList()
 	{
-		return selectedColumnNameValueBeanList;
+		return this.selectedColumnNameValueBeanList;
 	}
 
 	/**
 	 * @param selectedColumnNameValueBeanList the selectedColumnNameValueBeanList to set
 	 */
 	public void setSelectedColumnNameValueBeanList(
-			List < NameValueBean > selectedColumnNameValueBeanList)
+			List<NameValueBean> selectedColumnNameValueBeanList)
 	{
 		this.selectedColumnNameValueBeanList = selectedColumnNameValueBeanList;
 	}
@@ -396,7 +396,7 @@ public class CategorySearchForm extends ActionForm
 	 */
 	public String getOptions()
 	{
-		return options;
+		return this.options;
 	}
 
 	/**

@@ -30,14 +30,14 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 
 		String formName = null;
 		boolean readOnlyValue;
-		CheckInCheckOutEventParametersForm checkInCheckOutEventParametersForm =
-			(CheckInCheckOutEventParametersForm) eventParametersForm;
+		final CheckInCheckOutEventParametersForm checkInCheckOutEventParametersForm = (CheckInCheckOutEventParametersForm) eventParametersForm;
 		if (checkInCheckOutEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_EDIT_ACTION;
@@ -48,7 +48,7 @@ public class CheckInCheckOutEventParametersAction extends SpecimenEventParameter
 			formName = Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_ADD_ACTION;
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);

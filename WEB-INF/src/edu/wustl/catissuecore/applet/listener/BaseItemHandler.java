@@ -23,14 +23,16 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class BaseItemHandler implements ItemListener
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(BaseItemHandler.class);
+	private transient final Logger logger = Logger.getCommonLogger(BaseItemHandler.class);
 	/**
 	 * table.
 	 */
 	protected JTable table;
+
 	/**
 	 * @param table : table
 	 */
@@ -55,15 +57,16 @@ public class BaseItemHandler implements ItemListener
 	 */
 	protected void postActionPerformed(ItemEvent event)
 	{
-		System.out.println("\n ************** In BaseItemHandler \n  : " + getSelectedValue(event));
-		System.out.println("getSelectedValue(event) : " + getSelectedValue(event)
-				+ " table.getSelectedRow() : " + table.getSelectedRow()
-				+ " table.getSelectedColumn() : " + table.getSelectedColumn());
+		System.out.println("\n ************** In BaseItemHandler \n  : "
+				+ this.getSelectedValue(event));
+		System.out.println("getSelectedValue(event) : " + this.getSelectedValue(event)
+				+ " table.getSelectedRow() : " + this.table.getSelectedRow()
+				+ " table.getSelectedColumn() : " + this.table.getSelectedColumn());
 		//fireEditingStopped();
-		if (table.getSelectedColumn() != -1)
+		if (this.table.getSelectedColumn() != -1)
 		{
-			table.getModel().setValueAt(getSelectedValue(event), table.getSelectedRow(),
-					table.getSelectedColumn());
+			this.table.getModel().setValueAt(this.getSelectedValue(event),
+					this.table.getSelectedRow(), this.table.getSelectedColumn());
 		}
 
 	}
@@ -85,7 +88,7 @@ public class BaseItemHandler implements ItemListener
 	 */
 	protected void handleAction(ItemEvent event)
 	{
-		commonActions(event);
+		this.commonActions(event);
 	}
 
 	/* (non-Javadoc)
@@ -96,9 +99,9 @@ public class BaseItemHandler implements ItemListener
 	 */
 	public void itemStateChanged(ItemEvent event)
 	{
-		preActionPerformed();
-		handleAction(event);
-		postActionPerformed(event);
+		this.preActionPerformed();
+		this.handleAction(event);
+		this.postActionPerformed(event);
 
 	}
 
@@ -111,13 +114,12 @@ public class BaseItemHandler implements ItemListener
 	{
 		try
 		{
-			JRadioButton selectedRadio = (JRadioButton) event.getSource();
+			final JRadioButton selectedRadio = (JRadioButton) event.getSource();
 			if (selectedRadio != null)
 			{
-				Component[] comps = selectedRadio.getParent().getComponents();
-				for (int i = 0; i < comps.length; i++)
+				final Component[] comps = selectedRadio.getParent().getComponents();
+				for (final Component comp : comps)
 				{
-					Component comp = comps[i];
 					if (comp instanceof JTextField) // for parent specimen
 					{
 						comp.setEnabled(selectedRadio.isSelected());
@@ -131,18 +133,18 @@ public class BaseItemHandler implements ItemListener
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
-			logger.debug(excp.getMessage(), excp);
+			this.logger.debug(excp.getMessage(), excp);
 			System.out.println("Error: " + excp.getMessage());
 		}
 		try
 		{
-			table.updateUI();
+			this.table.updateUI();
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
-			logger.debug(excp.getMessage(), excp);
+			this.logger.debug(excp.getMessage(), excp);
 			System.out.println("Error in table update: " + excp.getMessage());
 		}
 

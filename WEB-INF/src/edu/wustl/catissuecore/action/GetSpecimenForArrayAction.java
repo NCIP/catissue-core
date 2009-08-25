@@ -53,60 +53,56 @@ public class GetSpecimenForArrayAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
-		String arrayRowCounter = request.getParameter("arrayRowCounter");
-		String rowCounter1 = request.getParameter("rowCounter");
-		int rowCounter = new Integer(rowCounter1).intValue();
-		String arrayName = request.getParameter("array");
+		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
+		final String arrayRowCounter = request.getParameter("arrayRowCounter");
+		final String rowCounter1 = request.getParameter("rowCounter");
+		final int rowCounter = new Integer(rowCounter1).intValue();
+		final String arrayName = request.getParameter("array");
 
 		// Getting Values Map from requestDetailsForm
-		Map values = requestDetailsForm.getValues();
-		String arrayNameKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_arrayName";
-		String arrayNameInMap = (String) values.get(arrayNameKey);
-		List < Long > specimenIdList = new ArrayList < Long >();
+		final Map values = requestDetailsForm.getValues();
+		final String arrayNameKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_arrayName";
+		final String arrayNameInMap = (String) values.get(arrayNameKey);
+		final List<Long> specimenIdList = new ArrayList<Long>();
 		if (arrayName.equals(arrayNameInMap))
 		{
-			String noOfItemsKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_noOfItems";
-			int noOfItems = new Integer((String) values.get(noOfItemsKey)).intValue();
+			final String noOfItemsKey = "DefinedArrayRequestBean:" + arrayRowCounter + "_noOfItems";
+			final int noOfItems = new Integer((String) values.get(noOfItemsKey)).intValue();
 			for (int i = rowCounter; i < rowCounter + noOfItems; i++)
 			{
-				String statusKey = "DefinedArrayDetailsBean:" + i + "_assignedStatus";
+				final String statusKey = "DefinedArrayDetailsBean:" + i + "_assignedStatus";
 				if (!(values.get(statusKey).equals(
 						Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE)
 						|| values.get(statusKey).equals(
-								Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST)
-								|| values
+								Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || values
 						.get(statusKey).equals(
-								Constants.
-								ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)))
+								Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE)))
 				{
-					String instanceOfKey = "DefinedArrayDetailsBean:" + i + "_instanceOf";
+					final String instanceOfKey = "DefinedArrayDetailsBean:" + i + "_instanceOf";
 
 					// if specimen is derived specimen then take requestFor
 					// Specimen Id .
 					if (values.get(instanceOfKey).equals("Derived"))
 					{
-						String requestedForKey =
-							"DefinedArrayDetailsBean:" + i + "_requestFor";
+						final String requestedForKey = "DefinedArrayDetailsBean:" + i
+								+ "_requestFor";
 
 						if (values.get(requestedForKey) != null)
 						{
-							Long specimenId =
-								new Long((String) values.get(requestedForKey));
+							final Long specimenId = new Long((String) values.get(requestedForKey));
 							specimenIdList.add(specimenId);
 						}
 					}
 					else
 					{
-						String specimenIdKey =
-							"DefinedArrayDetailsBean:" + i + "_specimenId";
+						final String specimenIdKey = "DefinedArrayDetailsBean:" + i + "_specimenId";
 						if (values.get(specimenIdKey) != null)
 						{
-							Long specimenId = new Long((String)
-									values.get(specimenIdKey));
+							final Long specimenId = new Long((String) values.get(specimenIdKey));
 							specimenIdList.add(specimenId);
 						}
 					}

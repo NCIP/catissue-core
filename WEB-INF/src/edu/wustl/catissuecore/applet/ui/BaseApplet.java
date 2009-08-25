@@ -7,7 +7,6 @@
  * Created on Sep 18, 2006
  */
 
-
 package edu.wustl.catissuecore.applet.ui;
 
 import javax.swing.JApplet;
@@ -28,10 +27,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class BaseApplet extends JApplet
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(BaseApplet.class);
+	private transient final Logger logger = Logger.getCommonLogger(BaseApplet.class);
 	/**
 	 * Default Serial Version ID.
 	 */
@@ -53,12 +53,13 @@ public class BaseApplet extends JApplet
 	/**
 	 * @see java.applet.Applet#init()
 	 */
+	@Override
 	public void init()
 	{
 		super.init();
-		preInit();
-		doInit();
-		postInit();
+		this.preInit();
+		this.doInit();
+		this.postInit();
 	}
 
 	/**
@@ -67,8 +68,8 @@ public class BaseApplet extends JApplet
 	protected void preInit()
 	{
 		// set server URL
-		serverURL = getParameter(Constants.APPLET_SERVER_URL_PARAM_NAME);
-		setLookAndFeel();
+		this.serverURL = this.getParameter(Constants.APPLET_SERVER_URL_PARAM_NAME);
+		this.setLookAndFeel();
 	}
 
 	/**
@@ -95,24 +96,24 @@ public class BaseApplet extends JApplet
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (InstantiationException e)
+		catch (final InstantiationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (IllegalAccessException e)
+		catch (final IllegalAccessException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (UnsupportedLookAndFeelException e)
+		catch (final UnsupportedLookAndFeelException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -122,6 +123,6 @@ public class BaseApplet extends JApplet
 	 */
 	public String getServerURL()
 	{
-		return serverURL;
+		return this.serverURL;
 	}
 }

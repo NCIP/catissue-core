@@ -92,8 +92,9 @@ public class BaseShipmentAction extends SecureAction
 		 */
 		if (operation != null
 				&& (operation.trim().equals(edu.wustl.catissuecore.util.global.Constants.EDIT) || (operation
-						.trim().equals(Constants.VIEW))) || operation.trim().equals("viewNonEditable"))
-						
+						.trim().equals(Constants.VIEW)))
+				|| operation.trim().equals("viewNonEditable"))
+
 		{
 			String pageOf = request.getParameter(edu.wustl.common.util.global.Constants.PAGEOF);
 			if (pageOf == null || pageOf.trim().equals(""))
@@ -179,7 +180,8 @@ public class BaseShipmentAction extends SecureAction
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST,
 				edu.wustl.catissuecore.util.global.Constants.HOUR_ARRAY);
 		//bug 12814
-		if (operation != null && (operation.equals("view") || operation.trim().equals("viewNonEditable"))
+		if (operation != null
+				&& (operation.equals("view") || operation.trim().equals("viewNonEditable"))
 				&& shipmentForm instanceof BaseShipmentForm)
 		{
 			if (shipmentForm.getSenderSiteId() != 0l)

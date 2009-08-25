@@ -12,18 +12,19 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class CellSpecimenReviewParametersAction extends SpecimenEventParametersAction
 {
-/**
- * @param request : request
- * @param eventParametersForm : eventParametersForm
- * @throws Exception : Exception
- */
+
+	/**
+	 * @param request : request
+	 * @param eventParametersForm : eventParametersForm
+	 * @throws Exception : Exception
+	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		CellSpecimenReviewParametersForm cellSpecimenReviewParametersForm =
-			(CellSpecimenReviewParametersForm) eventParametersForm;
+		final CellSpecimenReviewParametersForm cellSpecimenReviewParametersForm = (CellSpecimenReviewParametersForm) eventParametersForm;
 		if (cellSpecimenReviewParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
@@ -34,7 +35,7 @@ public class CellSpecimenReviewParametersAction extends SpecimenEventParametersA
 			formName = Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);

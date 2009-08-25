@@ -67,8 +67,8 @@ public class BiohazardForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		Biohazard hazard = (Biohazard) abstractDomain;
-		setId(hazard.getId().longValue());
+		final Biohazard hazard = (Biohazard) abstractDomain;
+		this.setId(hazard.getId().longValue());
 		this.name = hazard.getName();
 		this.type = hazard.getType();
 		this.comments = hazard.getComment();
@@ -101,7 +101,7 @@ public class BiohazardForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class BiohazardForm extends AbstractActionForm
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -148,10 +148,10 @@ public class BiohazardForm extends AbstractActionForm
 	    
 	    
 	    *//**
-	     * Setting Activity Status 
-	     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
-	     * @param activityStatus Setting Activity Status
-	     */
+		     * Setting Activity Status 
+		     * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
+		     * @param activityStatus Setting Activity Status
+		     */
 	/*
 	    public void setActivityStatus(final String activityStatus)
 	    {
@@ -163,15 +163,17 @@ public class BiohazardForm extends AbstractActionForm
 	 * Checks the operation to be performed is add or not.
 	 * @return Returns true if operation is equal to "add", else it returns false
 	 * */
+	@Override
 	public boolean isAddOperation()
 	{
-		return getOperation().equals(Constants.ADD);
+		return this.getOperation().equals(Constants.ADD);
 	}
 
 	/**
 	 * Returns the id assigned to form bean
 	 * @return BIOHAZARD_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.BIOHAZARD_FORM_ID;
@@ -181,6 +183,7 @@ public class BiohazardForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 
@@ -200,6 +203,7 @@ public class BiohazardForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
@@ -210,18 +214,18 @@ public class BiohazardForm extends AbstractActionForm
 			// Mandar 10-apr-06 : bugid :353 
 			// Error messages should be in the same sequence as the sequence of fields on the page.
 
-			if (validator.isEmpty(name))
+			if (Validator.isEmpty(this.name))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("biohazard.name")));
 			}
-			if (!validator.isValidOption(type))
+			if (!validator.isValidOption(this.type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("biohazard.type")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}

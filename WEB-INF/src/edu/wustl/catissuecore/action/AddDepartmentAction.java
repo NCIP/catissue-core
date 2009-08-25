@@ -29,7 +29,8 @@ public class AddDepartmentAction extends CommonAddEditAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(AddDepartmentAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(AddDepartmentAction.class);
+
 	/**
 	 * @param mapping : mapping
 	 * @param form : form
@@ -39,24 +40,25 @@ public class AddDepartmentAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 * @return ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		String departmentName = (String) request.getParameter(Constants.DEPARTMENT_NAME);
-		DepartmentBizLogic bizlogic = new DepartmentBizLogic();
+		final String departmentName = request.getParameter(Constants.DEPARTMENT_NAME);
+		final DepartmentBizLogic bizlogic = new DepartmentBizLogic();
 		String departmentId = null;
 		String responseString = null;
 
 		/**
 		 * Setting the department name to form
 		 */
-		DepartmentForm departmentForm = (DepartmentForm) form;
+		final DepartmentForm departmentForm = (DepartmentForm) form;
 		departmentForm.setOperation(Constants.ADD);
 		departmentForm.setName(departmentName);
 
 		// Saving the department to the Database using COmmonAddEditAction
-		ActionForward forward = super.execute(mapping, departmentForm, request, response);
+		final ActionForward forward = super.execute(mapping, departmentForm, request, response);
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
@@ -68,14 +70,14 @@ public class AddDepartmentAction extends CommonAddEditAction
 				departmentId = bizlogic.getLatestDepartment(departmentName);
 				responseString = departmentId + Constants.RESPONSE_SEPARATOR + departmentName;
 			}
-			catch (BizLogicException e)
+			catch (final BizLogicException e)
 			{
-				logger.error("Exception occurred in retrieving Department");
+				this.logger.error("Exception occurred in retrieving Department");
 				e.printStackTrace();
 			}
 		}
 
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 
 		/**

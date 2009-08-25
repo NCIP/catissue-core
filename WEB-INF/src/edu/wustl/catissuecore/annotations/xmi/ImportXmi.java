@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.annotations.xmi;
 
 import java.io.BufferedReader;
@@ -326,9 +327,10 @@ public class ImportXmi
 		}
 		return containerNames;
 	}
-/**
- *  @throws Exception - Exception
- */
+
+	/**
+	 *  @throws Exception - Exception
+	 */
 	private static void init() throws Exception
 	{
 		uml = (UmlPackage) rep.getExtent(UML_INSTANCE);

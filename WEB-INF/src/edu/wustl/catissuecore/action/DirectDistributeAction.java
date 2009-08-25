@@ -24,7 +24,7 @@ public class DirectDistributeAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DirectDistributeAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(DirectDistributeAction.class);
 
 	/**
 	 * @param mapping
@@ -39,29 +39,30 @@ public class DirectDistributeAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		logger.debug("Inside DirectDistributeSpecAction ");
-		String typeOf = request.getParameter("typeOf");
+		this.logger.debug("Inside DirectDistributeSpecAction ");
+		final String typeOf = request.getParameter("typeOf");
 		Long orderId = null;
 		if (typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 		{
-			OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) form;
+			final OrderSpecimenForm orderSpecimenForm = (OrderSpecimenForm) form;
 			orderId = orderSpecimenForm.getId();
 		}
 		else if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 		{
-			OrderBiospecimenArrayForm orderArrayForm = (OrderBiospecimenArrayForm) form;
+			final OrderBiospecimenArrayForm orderArrayForm = (OrderBiospecimenArrayForm) form;
 			orderId = orderArrayForm.getId();
 		}
 		else
 		{
-			OrderPathologyCaseForm pathologyForm = (OrderPathologyCaseForm) form;
+			final OrderPathologyCaseForm pathologyForm = (OrderPathologyCaseForm) form;
 			orderId = pathologyForm.getId();
 		}
-		logger.debug("order Id ::" + orderId);
+		this.logger.debug("order Id ::" + orderId);
 		request.setAttribute("id", orderId.toString());
 
 		return mapping.findForward("success");

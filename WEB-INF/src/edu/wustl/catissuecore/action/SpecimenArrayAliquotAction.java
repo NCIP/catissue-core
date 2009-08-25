@@ -73,16 +73,16 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		String pageOf = null;
 		try
 		{
-			final SessionDataBean sessionDataBean = (SessionDataBean) request
-			.getSession().getAttribute(Constants.SESSION_DATA);
-			dao=AppUtility.openDAOSession(sessionDataBean);
+			final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
+			dao = AppUtility.openDAOSession(sessionDataBean);
 			final SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 			pageOf = request.getParameter(Constants.PAGE_OF);
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
 			// Bean List for the dropdown for the storage location
 			final List<NameValueBean> storagePositionListForSpecimenArrayAliquot = AppUtility
 					.getStoragePositionTypeListForTransferEvent();
@@ -97,8 +97,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				final Map tempAliquotMap = new HashMap();
 				if (specimenArrayAliquotForm.getCheckedButton().equals("1"))
 				{
-					tempAliquotMap.put("label", specimenArrayAliquotForm.
-							getParentSpecimenArrayLabel());
+					tempAliquotMap.put("label", specimenArrayAliquotForm
+							.getParentSpecimenArrayLabel());
 				}
 				else
 				{
@@ -112,16 +112,15 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				// arePropertiesChanged is used to identify if any of label/barcode,
 				// aliquot count are changed
 				boolean arePropertiesChanged = false;
-				final Map tempAliquotMap = (HashMap) request.getSession()
-						.getAttribute("tempAliquotMap");
+				final Map tempAliquotMap = (HashMap) request.getSession().getAttribute(
+						"tempAliquotMap");
 				final String label = (String) tempAliquotMap.get("label");
 				final String barcode = (String) tempAliquotMap.get("barcode");
 				if (specimenArrayAliquotForm.getCheckedButton().equals("1"))
 				{
 					if (label == null
 							|| !label.trim().equalsIgnoreCase(
-									specimenArrayAliquotForm.
-									getParentSpecimenArrayLabel().trim()))
+									specimenArrayAliquotForm.getParentSpecimenArrayLabel().trim()))
 					{
 						arePropertiesChanged = true;
 					}
@@ -134,7 +133,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					{
 						arePropertiesChanged = true;
 					}
-	
+
 				}
 				final String aliquotcount = (String) tempAliquotMap.get("aliquotcount");
 				if (!aliquotcount.trim().equalsIgnoreCase(
@@ -142,7 +141,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				{
 					arePropertiesChanged = true;
 				}
-	
+
 				/**
 				 * Repopulate the form with storage container locations in case user
 				 * has changed any of label/barcode, aliquot count, quantity per
@@ -153,9 +152,9 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					specimenArrayAliquotForm.setParentSpecimenArrayLabel(label);
 					specimenArrayAliquotForm.setAliquotCount(aliquotcount);
 					specimenArrayAliquotForm.setBarcode(barcode);
-	
+
 					ActionErrors errors = this.getActionErrors(request);
-	
+
 					if (errors == null)
 					{
 						errors = new ActionErrors();
@@ -165,21 +164,21 @@ public class SpecimenArrayAliquotAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.specimenArrayAliquots.reSubmit"));
 					}
-	
+
 					TreeMap containerMap = new TreeMap();
-					this.checkForSpecimenArray(request, specimenArrayAliquotForm,dao);
+					this.checkForSpecimenArray(request, specimenArrayAliquotForm, dao);
 					// int aliquotCount =
 					// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,
-							sessionData, exceedingMaxLimit,dao);
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(
+							id.longValue(), 0, sessionData, exceedingMaxLimit, dao);
 					this.populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGE_OF,
 							Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
 					this.saveErrors(request, errors);
 					return mapping.findForward(Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
-	
+
 				}
 				else
 				{
@@ -187,13 +186,13 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					specimenArrayAliquotForm.setButtonClicked("none");
 					return mapping.findForward(Constants.COMMON_ADD_EDIT);
 				}
-	
+
 			}
-	
+
 			if (Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY.equals(pageOf))
 			{
 				final Map map = (Map) request.getAttribute("forwardToHashMap");
-	
+
 				if (map != null)
 				{
 					// TODO
@@ -210,46 +209,46 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 					specimenArrayAliquotForm.setSpecimenArrayAliquotMap(map);
 				}
-	
+
 				final ActionErrors errors = this.getActionErrors(request);
-	
+
 				if (errors == null || errors.size() == 0)
 				{
 					final ActionMessages messages = new ActionMessages();
-					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("aliquots.success"));
+					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+							"aliquots.success"));
 					this.saveMessages(request, messages);
 				}
 				return mapping.findForward(pageOf);
 			}
-	
+
 			Map containerMap = new HashMap();
 			if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(request
 					.getParameter(Constants.PAGE_OF)))
 			{
 				pageOf = this.validate(request, specimenArrayAliquotForm);
-	
+
 				if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 				{
-					pageOf = this.checkForSpecimenArray(request, specimenArrayAliquotForm,dao);
-	
+					pageOf = this.checkForSpecimenArray(request, specimenArrayAliquotForm, dao);
+
 					if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 					{
 						final int aliquotCount = Integer.parseInt(specimenArrayAliquotForm
 								.getAliquotCount());
 						final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(
-								id.longValue(), 0, sessionData, exceedingMaxLimit,dao);
+						containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id
+								.longValue(), 0, sessionData, exceedingMaxLimit, dao);
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);
-	
+
 						if (Constants.PAGE_OF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 						{
 							final ActionErrors errors = (ActionErrors) request
 									.getAttribute(Globals.ERROR_KEY);
 							if (errors == null || errors.size() == 0)
 							{
-								this.populateAliquotsStorageLocations
-								(specimenArrayAliquotForm,
+								this.populateAliquotsStorageLocations(specimenArrayAliquotForm,
 										containerMap);
 							}
 						}
@@ -288,8 +287,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 * @throws BizLogicException : BizLogicException
 	 * @throws Exception : Exception
 	 */
-	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form,DAO dao)
-			throws BizLogicException, Exception
+	private String checkForSpecimenArray(HttpServletRequest request, SpecimenArrayAliquotForm form,
+			DAO dao) throws BizLogicException, Exception
 	{
 		List specimenArrayList = new ArrayList();
 		String errorString = "";
@@ -298,8 +297,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		if (form.getCheckedButton().equals("1"))
 		{
 
-			specimenArrayList = dao.retrieve(SpecimenArray.class.getName(),
-					Constants.SYSTEM_NAME, specimenArrayLabel);
+			specimenArrayList = dao.retrieve(SpecimenArray.class.getName(), Constants.SYSTEM_NAME,
+					specimenArrayLabel);
 			errorString = Constants.SYSTEM_LABEL;
 		}
 		else
@@ -320,30 +319,29 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		}
 		else
 		{
-			final SpecimenArray specimenArray = (SpecimenArray) specimenArrayList
-					.get(0);
+			final SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);
 			/**
 			 * Name : Virender Reviewer: Prafull Retriving
 			 * specimenArrayTypeObject replaced SpecimenArrayType arrayType =
 			 * specimenArray.getSpecimenArrayType();
 			 */
-			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(
-					specimenArray.getActivityStatus())) {
+			if (Status.ACTIVITY_STATUS_DISABLED.toString()
+					.equals(specimenArray.getActivityStatus()))
+			{
 				final ActionErrors errors = this.getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"errors.specimenArrayAliquots.disabled",
-						"Parent Specimen Array"));
+						"errors.specimenArrayAliquots.disabled", "Parent Specimen Array"));
 				this.saveErrors(request, errors);
 				return Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT;
 				// throw BizLogicException(
 				// "Fail to create Aliquots, Parent SpecimenArray" + " " +
 				// ApplicationProperties.getValue("error.object.disabled"));
 			}
-			final List arrayTypeList = (List) dao.retrieveAttribute(
-					SpecimenArray.class, "id", specimenArray.getId(),
-					"specimenArrayType");
-			if ((arrayTypeList != null) && (arrayTypeList.size() > 0)) {
-				final SpecimenArrayType arrayType =(SpecimenArrayType) arrayTypeList.get(0);
+			final List arrayTypeList = dao.retrieveAttribute(SpecimenArray.class, "id",
+					specimenArray.getId(), "specimenArrayType");
+			if ((arrayTypeList != null) && (arrayTypeList.size() > 0))
+			{
+				final SpecimenArrayType arrayType = (SpecimenArrayType) arrayTypeList.get(0);
 				form.setSpecimenArrayType(arrayType.getName());
 				form.setSpecimenClass(arrayType.getSpecimenClass());
 
@@ -352,20 +350,16 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				 * Collection from parent Specimen String[] specimenTypeArr =
 				 * new String[arrayType.getSpecimenTypeCollection().size()];
 				 */
-				final Collection specimenTypeCollection = (Collection) dao
-						.retrieveAttribute(SpecimenArrayType.class, "id",
-								arrayType.getId(),
-								"elements(specimenTypeCollection)");
+				final Collection specimenTypeCollection = dao.retrieveAttribute(
+						SpecimenArrayType.class, "id", arrayType.getId(),
+						"elements(specimenTypeCollection)");
 				// String[] specimenTypeArr = new
 				// String[specimenTypeCollection.size()];
 
-				final List specimenTypeList = this.setSpecimenTypes(
-						specimenTypeCollection, form);
-				request.setAttribute(Constants.SPECIMEN_TYPE_LIST,
-						specimenTypeList);
+				final List specimenTypeList = this.setSpecimenTypes(specimenTypeCollection, form);
+				request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-				request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType
-						.getId());
+				request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
 
 				final Map aliquotMap = form.getSpecimenArrayAliquotMap();
 
@@ -378,7 +372,8 @@ public class SpecimenArrayAliquotAction extends SecureAction
 				/**
 				 * Putting the default label values in the AliquotMap
 				 */
-				for (int i = 1; i <= aliquotCount; i++) {
+				for (int i = 1; i <= aliquotCount; i++)
+				{
 
 					final String labelKey = "SpecimenArray:" + i + "_label";
 					final String aliquotLabel = specimenArrayLabel + "_"

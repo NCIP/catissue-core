@@ -110,7 +110,7 @@ public class LoginAction extends Action
 						loginName, password);
 				if (loginOK)
 				{
-					
+
 					PrivilegeManager.getInstance().getPrivilegeCache(loginName);
 					this.logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 					final HttpSession session = request.getSession(true);
@@ -147,14 +147,12 @@ public class LoginAction extends Action
 
 					this.setSecurityParamsInSessionData(validUser, sessionData);
 
-					final String validRole
-					= this.getForwardToPageOnLogin(validUser.getCsmUserId()
+					final String validRole = this.getForwardToPageOnLogin(validUser.getCsmUserId()
 							.longValue());
 					if (validRole != null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
 					{
 						final ActionErrors errors = new ActionErrors();
-						errors.add(ActionErrors.GLOBAL_ERROR
-								, new ActionError("errors.noRole"));
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.noRole"));
 						this.saveErrors(request, errors);
 						session.setAttribute(Constants.SESSION_DATA, null);
 						return mapping.findForward(Constants.FAILURE);
@@ -164,14 +162,12 @@ public class LoginAction extends Action
 					{
 						// ActionError changed to ActionMessage
 						final ActionMessages messages = new ActionMessages();
-						messages.add(ActionMessages.GLOBAL_MESSAGE
-								, new ActionMessage(result));
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result));
 						this.saveMessages(request, messages);
 
 						session.setAttribute(Constants.SESSION_DATA, null);
 						session.setAttribute(Constants.TEMP_SESSION_DATA, sessionData);
-						request.setAttribute(Constants.PAGE_OF
-								, Constants.PAGE_OF_CHANGE_PASSWORD);
+						request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CHANGE_PASSWORD);
 						return mapping.findForward(Constants.ACCESS_DENIED);
 					}
 

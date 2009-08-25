@@ -28,6 +28,11 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5307623948521795045L;
+
+	/**
 	 * Label of the ParentSpecimenArray
 	 */
 	private String parentSpecimenArrayLabel = "";
@@ -86,6 +91,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 * Returns the identifier assigned to form bean.
 	 * @return The identifier assigned to form bean.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID;
@@ -94,6 +100,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	/**
 	 * This method resets the form fields.
 	 */
+	@Override
 	protected void reset()
 	{
 
@@ -114,14 +121,15 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
-		if (checkedButton.equals("1"))
+		if (this.checkedButton.equals("1"))
 		{
-			if (validator.isEmpty(parentSpecimenArrayLabel))
+			if (Validator.isEmpty(this.parentSpecimenArrayLabel))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimenArrayAliquots.parentLabel")));
@@ -129,14 +137,14 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 		}
 		else
 		{
-			if (barcode == null || barcode.trim().length() == 0)
+			if (this.barcode == null || this.barcode.trim().length() == 0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimenArrayAliquots.barcode")));
 			}
 		}
 
-		if (!validator.isNumeric(aliquotCount))
+		if (!validator.isNumeric(this.aliquotCount))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 					ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots")));
@@ -145,15 +153,15 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 		if (request.getParameter(Constants.PAGE_OF).equals(
 				Constants.PAGE_OF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY))
 		{
-			Iterator keyIterator = specimenArrayAliquotMap.keySet().iterator();
+			final Iterator keyIterator = this.specimenArrayAliquotMap.keySet().iterator();
 			while (keyIterator.hasNext())
 			{
-				String key = (String) keyIterator.next();
+				final String key = (String) keyIterator.next();
 				if (key.endsWith("_label"))
 				{
-					String value = (String) specimenArrayAliquotMap.get(key);
+					final String value = (String) this.specimenArrayAliquotMap.get(key);
 
-					if (validator.isEmpty(value))
+					if (Validator.isEmpty(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
@@ -162,7 +170,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 				}
 				else if (key.indexOf("_positionDimension") != -1)
 				{
-					String value = (String) specimenArrayAliquotMap.get(key);
+					final String value = (String) this.specimenArrayAliquotMap.get(key);
 					if (value != null && !value.trim().equals("") && !validator.isDouble(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
@@ -182,7 +190,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getAliquotCount()
 	{
-		return aliquotCount;
+		return this.aliquotCount;
 	}
 
 	/**
@@ -198,7 +206,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -214,7 +222,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -230,7 +238,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getParentSpecimenArrayLabel()
 	{
-		return parentSpecimenArrayLabel;
+		return this.parentSpecimenArrayLabel;
 	}
 
 	/**
@@ -246,7 +254,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getQuantityPerAliquot()
 	{
-		return quantityPerAliquot;
+		return this.quantityPerAliquot;
 	}
 
 	/**
@@ -262,7 +270,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getButtonClicked()
 	{
-		return buttonClicked;
+		return this.buttonClicked;
 	}
 
 	/**
@@ -278,7 +286,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getSpecimenArrayType()
 	{
-		return specimenArrayType;
+		return this.specimenArrayType;
 	}
 
 	/**
@@ -294,7 +302,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -310,7 +318,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String[] getSpecimenTypes()
 	{
-		return specimenTypes;
+		return this.specimenTypes;
 	}
 
 	/**
@@ -326,7 +334,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public Map getSpecimenArrayAliquotMap()
 	{
-		return specimenArrayAliquotMap;
+		return this.specimenArrayAliquotMap;
 	}
 
 	/**
@@ -344,7 +352,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		specimenArrayAliquotMap.put(key, value);
+		this.specimenArrayAliquotMap.put(key, value);
 	}
 
 	/**
@@ -354,7 +362,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return specimenArrayAliquotMap.get(key);
+		return this.specimenArrayAliquotMap.get(key);
 	}
 
 	/**
@@ -362,7 +370,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	 */
 	public String getSpecimenArrayId()
 	{
-		return specimenArrayId;
+		return this.specimenArrayId;
 	}
 
 	/**

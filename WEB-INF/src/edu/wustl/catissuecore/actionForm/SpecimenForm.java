@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -36,9 +35,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -195,7 +194,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getConcentration()
 	{
-		return concentration;
+		return this.concentration;
 	}
 
 	/**
@@ -216,9 +215,9 @@ public class SpecimenForm extends AbstractActionForm
 	public void setExternalIdentifierValue(String key, Object value)
 	{
 
-		if (isMutable())
+		if (this.isMutable())
 		{
-			externalIdentifier.put(key, value);
+			this.externalIdentifier.put(key, value);
 		}
 	}
 
@@ -229,7 +228,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public Object getExternalIdentifierValue(String key)
 	{
-		return externalIdentifier.get(key);
+		return this.externalIdentifier.get(key);
 	}
 
 	/**
@@ -238,7 +237,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public Collection getAllExternalIdentifiers()
 	{
-		return externalIdentifier.values();
+		return this.externalIdentifier.values();
 	}
 
 	/**
@@ -268,7 +267,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -288,7 +287,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -308,7 +307,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -328,7 +327,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -348,7 +347,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getQuantity()
 	{
-		return quantity;
+		return this.quantity;
 	}
 
 	/**
@@ -368,7 +367,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getAvailableQuantity()
 	{
-		return availableQuantity;
+		return this.availableQuantity;
 	}
 
 	/**
@@ -378,7 +377,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public void setAvailableQuantity(String availableQuantity)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
 			this.availableQuantity = availableQuantity;
 		}
@@ -392,7 +391,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getUnit()
 	{
-		return unit;
+		return this.unit;
 	}
 
 	/**
@@ -412,7 +411,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getStorageContainer()
 	{
-		return storageContainer;
+		return this.storageContainer;
 	}
 
 	/**
@@ -432,7 +431,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -452,7 +451,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
 
 	/**
@@ -472,6 +471,7 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		this.className = null;
@@ -484,19 +484,18 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * @return Returns the id assigned to form bean.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return -1;
 	}
-
-	
 
 	/**
 	 * @return Returns the pos2.
 	 */
 	public String getPos2()
 	{
-		return pos2;
+		return this.pos2;
 	}
 
 	/**
@@ -512,7 +511,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getSelectedContainerName()
 	{
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
 
 	/**
@@ -528,7 +527,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public int getStContSelection()
 	{
-		return stContSelection;
+		return this.stContSelection;
 	}
 
 	/**
@@ -545,7 +544,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		Specimen specimen = (Specimen) abstractDomain;
+		final Specimen specimen = (Specimen) abstractDomain;
 		this.setId(specimen.getId().longValue());
 		this.type = specimen.getSpecimenType();
 		this.concentration = "";
@@ -557,8 +556,8 @@ public class SpecimenForm extends AbstractActionForm
 		 * See also: 1_1 to 1_5
 		 * Description : set createdOn date from database object
 		 */
-		this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(), CommonServiceLocator
-				.getInstance().getDatePattern());
+		this.createdDate = CommonUtilities.parseDateToString(specimen.getCreatedOn(),
+				CommonServiceLocator.getInstance().getDatePattern());
 
 		if (specimen.getIsAvailable() != null)
 		{
@@ -567,7 +566,7 @@ public class SpecimenForm extends AbstractActionForm
 
 		if (specimen != null && specimen.getSpecimenPosition() != null)
 		{
-			StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
+			final StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
 			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
@@ -592,7 +591,7 @@ public class SpecimenForm extends AbstractActionForm
 			// bug #11177
 			if (specimen.getSpecimenRequirement() != null)
 			{
-				String storageType = specimen.getSpecimenRequirement().getStorageType();
+				final String storageType = specimen.getSpecimenRequirement().getStorageType();
 				if (storageType.equals(Constants.STORAGE_TYPE_POSITION_VIRTUAL))
 				{
 					this.setStContSelection(Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE);
@@ -657,7 +656,7 @@ public class SpecimenForm extends AbstractActionForm
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			this.className = Constants.MOLECULAR;
-			this.concentration = Utility.toString(((MolecularSpecimen) specimen)
+			this.concentration = CommonUtilities.toString(((MolecularSpecimen) specimen)
 					.getConcentrationInMicrogramPerMicroliter());
 		}
 		else if (specimen instanceof TissueSpecimen)
@@ -669,7 +668,7 @@ public class SpecimenForm extends AbstractActionForm
 			this.className = specimen.getParentSpecimen().getClassName();
 		}
 
-		if (!AppUtility.isQuantityDouble(className, type))
+		if (!AppUtility.isQuantityDouble(this.className, this.type))
 		{
 			Double doubleQuantity = specimen.getInitialQuantity();
 			if (doubleQuantity.toString().contains("E"))
@@ -678,7 +677,7 @@ public class SpecimenForm extends AbstractActionForm
 			}
 			else
 			{
-				long longQuantity = doubleQuantity.longValue();
+				final long longQuantity = doubleQuantity.longValue();
 				this.quantity = new Long(longQuantity).toString();
 			}
 
@@ -707,35 +706,35 @@ public class SpecimenForm extends AbstractActionForm
 			this.availableQuantity = specimen.getAvailableQuantity().toString();
 		}
 
-		SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+		specimen.getSpecimenCharacteristics();
 
-		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
-		exIdCounter = 1;
+		final Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+		this.exIdCounter = 1;
 
 		if (externalIdentifierCollection != null && externalIdentifierCollection.size() != 0)
 		{
-			externalIdentifier = new HashMap();
+			this.externalIdentifier = new HashMap();
 
 			int i = 1;
 
-			Iterator it = externalIdentifierCollection.iterator();
+			final Iterator it = externalIdentifierCollection.iterator();
 
 			while (it.hasNext())
 			{
-				String key1 = "ExternalIdentifier:" + i + "_name";
-				String key2 = "ExternalIdentifier:" + i + "_value";
-				String key3 = "ExternalIdentifier:" + i + "_id";
+				final String key1 = "ExternalIdentifier:" + i + "_name";
+				final String key2 = "ExternalIdentifier:" + i + "_value";
+				final String key3 = "ExternalIdentifier:" + i + "_id";
 
-				ExternalIdentifier externalId = (ExternalIdentifier) it.next();
+				final ExternalIdentifier externalId = (ExternalIdentifier) it.next();
 
-				externalIdentifier.put(key1, externalId.getName());
-				externalIdentifier.put(key2, externalId.getValue());
-				externalIdentifier.put(key3, String.valueOf(externalId.getId()));
+				this.externalIdentifier.put(key1, externalId.getName());
+				this.externalIdentifier.put(key2, externalId.getValue());
+				this.externalIdentifier.put(key3, String.valueOf(externalId.getId()));
 
 				i++;
 			}
 
-			exIdCounter = externalIdentifierCollection.size();
+			this.exIdCounter = externalIdentifierCollection.size();
 		}
 	}
 
@@ -745,10 +744,11 @@ public class SpecimenForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -760,10 +760,11 @@ public class SpecimenForm extends AbstractActionForm
 				     * See also: 1_1 to 1_5
 				     * Description : Validated the createdOn date field. 
 				     */
-				if (!validator.isEmpty(createdDate))
+				if (!Validator.isEmpty(this.createdDate))
 				{
 
-					String errorKeyForCreatedDate = validator.validateDate(createdDate, true);
+					final String errorKeyForCreatedDate = validator.validateDate(this.createdDate,
+							true);
 					if (errorKeyForCreatedDate.trim().length() > 0)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -774,32 +775,32 @@ public class SpecimenForm extends AbstractActionForm
 
 				//Changed by falguni
 				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-						&& validator.isEmpty(label))
+						&& Validator.isEmpty(this.label))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.label")));
 				}
 
-				if (validator.isEmpty(className))
+				if (Validator.isEmpty(this.className))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.type")));
 				}
-				if (validator.isEmpty(type))
+				if (Validator.isEmpty(this.type))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.subType")));
 				}
 
 				boolean isQuantityValid = true;
-				if (!validator.isEmpty(quantity))
+				if (!Validator.isEmpty(this.quantity))
 				{
 					try
 					{
-						quantity = new BigDecimal(quantity).toPlainString();
-						if (AppUtility.isQuantityDouble(className, type))
+						this.quantity = new BigDecimal(this.quantity).toPlainString();
+						if (AppUtility.isQuantityDouble(this.className, this.type))
 						{
-							if (!validator.isDouble(quantity, true))
+							if (!validator.isDouble(this.quantity, true))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -808,7 +809,7 @@ public class SpecimenForm extends AbstractActionForm
 						}
 						else
 						{
-							if (!validator.isNumeric(quantity, 0))
+							if (!validator.isNumeric(this.quantity, 0))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -817,25 +818,26 @@ public class SpecimenForm extends AbstractActionForm
 						}
 
 						//bug#7788
-						if (Constants.FIXED_TISSUE_BLOCK.equals(type)
-								|| Constants.FIXED_TISSUE_SLIDE.equals(type)
-								|| Constants.FROZEN_TISSUE_BLOCK.equals(type)
-								|| Constants.FROZEN_TISSUE_SLIDE.equals(type)
-								|| Constants.NOT_SPECIFIED.equals(type))
+						if (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
+								|| Constants.FIXED_TISSUE_SLIDE.equals(this.type)
+								|| Constants.FROZEN_TISSUE_BLOCK.equals(this.type)
+								|| Constants.FROZEN_TISSUE_SLIDE.equals(this.type)
+								|| Constants.NOT_SPECIFIED.equals(this.type))
 						{
-							Double initialFloorQty = Math.floor(Double.parseDouble(quantity));
-							Double initialQty = Double.parseDouble(quantity);
-							int initialQtyDiff = initialQty.compareTo(initialFloorQty);
+							final Double initialFloorQty = Math.floor(Double
+									.parseDouble(this.quantity));
+							final Double initialQty = Double.parseDouble(this.quantity);
+							final int initialQtyDiff = initialQty.compareTo(initialFloorQty);
 							if (initialQtyDiff != 0)
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.specimen.quantity", ApplicationProperties
-												.getValue("specimen.quantity"), type));
+												.getValue("specimen.quantity"), this.type));
 							}
 						}
 						//#7788 ends
 					}
-					catch (NumberFormatException exp)
+					catch (final NumberFormatException exp)
 					{
 						isQuantityValid = false;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
@@ -845,27 +847,28 @@ public class SpecimenForm extends AbstractActionForm
 				}
 				else
 				{
-					quantity = "0";
+					this.quantity = "0";
 				}
 				if (this instanceof NewSpecimenForm
 						&& this.getOperation().equalsIgnoreCase(Constants.EDIT))
 				{
-					if (!validator.isEmpty(availableQuantity))
+					if (!Validator.isEmpty(this.availableQuantity))
 					{
 						try
 						{
-							availableQuantity = new BigDecimal(availableQuantity).toPlainString();
+							this.availableQuantity = new BigDecimal(this.availableQuantity)
+									.toPlainString();
 							if (isQuantityValid
-									&& 1 == new BigDecimal(availableQuantity)
-											.compareTo(new BigDecimal(quantity)))
+									&& 1 == new BigDecimal(this.availableQuantity)
+											.compareTo(new BigDecimal(this.quantity)))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.availablequantity", ApplicationProperties
 												.getValue("specimen.availableQuantity")));
 							}
-							if (AppUtility.isQuantityDouble(className, type))
+							if (AppUtility.isQuantityDouble(this.className, this.type))
 							{
-								if (!validator.isDouble(availableQuantity, true))
+								if (!validator.isDouble(this.availableQuantity, true))
 								{
 									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 											"errors.item.format", ApplicationProperties
@@ -874,7 +877,7 @@ public class SpecimenForm extends AbstractActionForm
 							}
 							else
 							{
-								if (!validator.isNumeric(quantity, 0))
+								if (!validator.isNumeric(this.quantity, 0))
 								{
 									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 											"errors.item.format", ApplicationProperties
@@ -883,26 +886,29 @@ public class SpecimenForm extends AbstractActionForm
 							}
 
 							//bug#7788
-							if (Constants.FIXED_TISSUE_BLOCK.equals(type)
-									|| Constants.FIXED_TISSUE_SLIDE.equals(type)
-									|| Constants.FROZEN_TISSUE_BLOCK.equals(type)
-									|| Constants.FROZEN_TISSUE_SLIDE.equals(type)
-									|| Constants.NOT_SPECIFIED.equals(type))
+							if (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
+									|| Constants.FIXED_TISSUE_SLIDE.equals(this.type)
+									|| Constants.FROZEN_TISSUE_BLOCK.equals(this.type)
+									|| Constants.FROZEN_TISSUE_SLIDE.equals(this.type)
+									|| Constants.NOT_SPECIFIED.equals(this.type))
 							{
-								Double availableFloorQty = Math.floor(Double
-										.parseDouble(availableQuantity));
-								Double availableQty = Double.parseDouble(availableQuantity);
-								int availableQtyDiff = availableQty.compareTo(availableFloorQty);
+								final Double availableFloorQty = Math.floor(Double
+										.parseDouble(this.availableQuantity));
+								final Double availableQty = Double
+										.parseDouble(this.availableQuantity);
+								final int availableQtyDiff = availableQty
+										.compareTo(availableFloorQty);
 								if (availableQtyDiff != 0)
 								{
 									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 											"errors.specimen.quantity", ApplicationProperties
-													.getValue("specimen.availableQuantity"), type));
+													.getValue("specimen.availableQuantity"),
+											this.type));
 								}
 							}
 							//#7788 ends
 						}
-						catch (NumberFormatException exp)
+						catch (final NumberFormatException exp)
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
@@ -918,7 +924,7 @@ public class SpecimenForm extends AbstractActionForm
 				}
 
 				// If not multiple specimen then validate storage container
-				if (!multipleSpecimen.equals("1"))
+				if (!this.multipleSpecimen.equals("1"))
 				{
 					//					if (!isVirtuallyLocated())
 					//					{
@@ -952,21 +958,21 @@ public class SpecimenForm extends AbstractActionForm
 					//					}
 				}
 				//Validations for External Identifier Add-More Block
-				String className = "ExternalIdentifier:";
-				String key1 = "_name";
-				String key2 = "_value";
-				String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
+				final String className = "ExternalIdentifier:";
+				final String key1 = "_name";
+				final String key2 = "_value";
+				final String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
 
 				int index = 1;
 
 				while (true)
 				{
-					String keyOne = className + index + key1;
-					String keyTwo = className + index + key2;
-					String keyThree = className + index + key3;
+					final String keyOne = className + index + key1;
+					final String keyTwo = className + index + key2;
+					final String keyThree = className + index + key3;
 
-					String value1 = (String) externalIdentifier.get(keyOne);
-					String value2 = (String) externalIdentifier.get(keyTwo);
+					final String value1 = (String) this.externalIdentifier.get(keyOne);
+					final String value2 = (String) this.externalIdentifier.get(keyTwo);
 
 					if (value1 == null || value2 == null)
 					{
@@ -974,9 +980,9 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					else if (value1.trim().equals("") && value2.trim().equals(""))
 					{
-						externalIdentifier.remove(keyOne);
-						externalIdentifier.remove(keyTwo);
-						externalIdentifier.remove(keyThree);
+						this.externalIdentifier.remove(keyOne);
+						this.externalIdentifier.remove(keyTwo);
+						this.externalIdentifier.remove(keyThree);
 					}
 					else if ((!value1.trim().equals("") && value2.trim().equals(""))
 							|| (value1.trim().equals("") && !value2.trim().equals("")))
@@ -988,7 +994,7 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					index++;
 				}
-				boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+				final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 				if (flag)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
@@ -996,7 +1002,7 @@ public class SpecimenForm extends AbstractActionForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -1010,7 +1016,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public int getExIdCounter()
 	{
-		return exIdCounter;
+		return this.exIdCounter;
 	}
 
 	/**
@@ -1030,7 +1036,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getPositionInStorageContainer()
 	{
-		return positionInStorageContainer;
+		return this.positionInStorageContainer;
 	}
 
 	/**
@@ -1050,7 +1056,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public boolean isAvailable()
 	{
-		return available;
+		return this.available;
 	}
 
 	/**
@@ -1070,7 +1076,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getParentContainerId()
 	{
-		return parentContainerId;
+		return this.parentContainerId;
 	}
 
 	/**
@@ -1090,7 +1096,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getLabel()
 	{
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -1107,7 +1113,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public boolean isVirtuallyLocated()
 	{
-		return virtuallyLocated;
+		return this.virtuallyLocated;
 	}
 
 	/**
@@ -1115,7 +1121,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getVirtuallyLocated()
 	{
-		if (virtuallyLocated)
+		if (this.virtuallyLocated)
 		{
 			return "true";
 		}
@@ -1138,7 +1144,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getButtonClicked()
 	{
-		return buttonClicked;
+		return this.buttonClicked;
 	}
 
 	/**
@@ -1154,7 +1160,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getMultipleSpecimen()
 	{
-		return multipleSpecimen;
+		return this.multipleSpecimen;
 	}
 
 	/**
@@ -1173,7 +1179,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getCreatedDate()
 	{
-		return createdDate;
+		return this.createdDate;
 	}
 
 	/**
@@ -1189,7 +1195,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getIsBarcodeEditable()
 	{
-		return isBarcodeEditable;
+		return this.isBarcodeEditable;
 	}
 
 	/**
@@ -1197,7 +1203,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getContainerId()
 	{
-		return containerId;
+		return this.containerId;
 	}
 
 	/**
@@ -1213,7 +1219,7 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public String getPos1()
 	{
-		return pos1;
+		return this.pos1;
 	}
 
 	/**
@@ -1223,6 +1229,7 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		this.pos1 = pos1;
 	}
+
 	/** 
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable
 	 */

@@ -26,6 +26,11 @@ public class LoginForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2179334257607237377L;
+
+	/**
 	 * login ID entered by user
 	 */
 	private String loginName = new String();
@@ -40,7 +45,7 @@ public class LoginForm extends AbstractActionForm
 	 */
 	public String getLoginName()
 	{
-		return loginName;
+		return this.loginName;
 	}
 
 	/**
@@ -56,7 +61,7 @@ public class LoginForm extends AbstractActionForm
 	 */
 	public String getPassword()
 	{
-		return password;
+		return this.password;
 	}
 
 	/**
@@ -73,17 +78,18 @@ public class LoginForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		HttpSession prevSession = request.getSession();
+		final HttpSession prevSession = request.getSession();
 		if (prevSession != null)
 		{
 			prevSession.invalidate();
 		}
 
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
-		if (validator.isEmpty(loginName))
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
+		if (Validator.isEmpty(this.loginName))
 		{
 			//Mandar 05-apr-06 : bugid:928 Loginname in error changed to email address.
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -91,13 +97,13 @@ public class LoginForm extends AbstractActionForm
 		}
 		else
 		{
-			if (!Character.isLetter(loginName.charAt(0)))
+			if (!Character.isLetter(this.loginName.charAt(0)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("user.loginName")));
 			}
 		}
-		if (validator.isEmpty(password))
+		if (Validator.isEmpty(this.password))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("user.password")));
@@ -111,6 +117,7 @@ public class LoginForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
 		this.loginName = null;
@@ -120,6 +127,7 @@ public class LoginForm extends AbstractActionForm
 	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 */
+	@Override
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
@@ -130,6 +138,7 @@ public class LoginForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return 0
 	 */
+	@Override
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub

@@ -101,8 +101,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			configForm.setDistributionId(distriId);
 		}
 
-		final Distribution dist = this.getDistribution(distriId,
-				this.getSessionData(request),
+		final Distribution dist = this.getDistribution(distriId, this.getSessionData(request),
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 
 		// Retrieve the distributed items data

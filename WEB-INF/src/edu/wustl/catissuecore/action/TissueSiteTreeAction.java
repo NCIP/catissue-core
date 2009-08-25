@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.Vector;
@@ -14,10 +15,9 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
-
-
 public class TissueSiteTreeAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -39,32 +39,32 @@ public class TissueSiteTreeAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		Vector<StorageContainerTreeNode> finalDataListVector = null;
-		String success = Constants.SUCCESS ;
-		String pageOf = request.getParameter(Constants.PAGE_OF) ;
-		String cdeName = request.getParameter("cdeName") ;
-			
-		if(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
+		final String success = Constants.SUCCESS;
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String cdeName = request.getParameter("cdeName");
+
+		if (Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
 		{
-			String dummyNodeName = Constants.DUMMY_NODE_NAME;
-			final Vector<StorageContainerTreeNode> dataList= new Vector<StorageContainerTreeNode>() ;
-		
-			final StorageContainerTreeNode tissueSiteNode = new StorageContainerTreeNode(
-					Long.valueOf(1), cdeName, cdeName,"Active");
-		
-			final StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(
-				Long.valueOf(1), dummyNodeName, dummyNodeName,"Active");
+			final String dummyNodeName = Constants.DUMMY_NODE_NAME;
+			final Vector<StorageContainerTreeNode> dataList = new Vector<StorageContainerTreeNode>();
+
+			final StorageContainerTreeNode tissueSiteNode = new StorageContainerTreeNode(Long
+					.valueOf(1), cdeName, cdeName, "Active");
+
+			final StorageContainerTreeNode dummyContainerNode = new StorageContainerTreeNode(Long
+					.valueOf(1), dummyNodeName, dummyNodeName, "Active");
 			dummyContainerNode.setParentNode(tissueSiteNode);
 			tissueSiteNode.getChildNodes().add(dummyContainerNode);
-			
+
 			dataList.add(tissueSiteNode);
-			
-			if(dataList != null )
+
+			if (dataList != null)
 			{
 				finalDataListVector = new Vector<StorageContainerTreeNode>();
 			}
 			finalDataListVector = AppUtility.createTreeNodeVector(dataList, finalDataListVector);
 			request.setAttribute(Constants.TREE_DATA, finalDataListVector);
 		}
-		return mapping.findForward(success) ;
+		return mapping.findForward(success);
 	}
 }

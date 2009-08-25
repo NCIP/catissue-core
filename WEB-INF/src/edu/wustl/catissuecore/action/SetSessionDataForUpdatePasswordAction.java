@@ -24,6 +24,7 @@ import edu.wustl.common.action.BaseAction;
  */
 public class SetSessionDataForUpdatePasswordAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping

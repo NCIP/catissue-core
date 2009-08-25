@@ -51,13 +51,11 @@ public class SPRCommentAddEditAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-		final ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm =
-			(ViewSurgicalPathologyReportForm) form;
+		final ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm = (ViewSurgicalPathologyReportForm) form;
 		try
 		{
 			AbstractDomainObject abstractDomain = (new DomainObjectFactory().getDomainObject(
-					viewSurgicalPathologyReportForm.getFormId(),
-					viewSurgicalPathologyReportForm));
+					viewSurgicalPathologyReportForm.getFormId(), viewSurgicalPathologyReportForm));
 			abstractDomain = defaultBizLogic.populateDomainObject(abstractDomain.getClass()
 					.getName(), new Long(viewSurgicalPathologyReportForm.getId()),
 					viewSurgicalPathologyReportForm);
@@ -71,19 +69,14 @@ public class SPRCommentAddEditAction extends BaseAction
 				final AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 				if (abstractDomainOld instanceof QuarantineEventParameter)
 				{
-					final QuarantineEventParameter quarantineEventParamanter =
-						(QuarantineEventParameter) abstractDomainOld;
-					final DeidentifiedSurgicalPathologyReport deidReport =
-						(DeidentifiedSurgicalPathologyReport) bizLogic
-							.retrieveAttribute
-							(QuarantineEventParameter.class.getName(),
+					final QuarantineEventParameter quarantineEventParamanter = (QuarantineEventParameter) abstractDomainOld;
+					final DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) bizLogic
+							.retrieveAttribute(QuarantineEventParameter.class.getName(),
 									quarantineEventParamanter.getId(),
 									Constants.COLUMN_NAME_DEID_REPORT);
-					quarantineEventParamanter.
-					setDeIdentifiedSurgicalPathologyReport(deidReport);
+					quarantineEventParamanter.setDeIdentifiedSurgicalPathologyReport(deidReport);
 				}
-				bizLogic.update(abstractDomain, abstractDomainOld, 0,
-						this.getSessionData(request));
+				bizLogic.update(abstractDomain, abstractDomainOld, 0, this.getSessionData(request));
 			}
 		}
 		catch (final Exception ex)

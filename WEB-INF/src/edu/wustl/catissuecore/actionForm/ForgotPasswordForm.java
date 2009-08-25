@@ -31,6 +31,10 @@ public class ForgotPasswordForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7483598647002722026L;
+	/**
 	 * EmailAddress of the user whose password is to be searched.
 	 */
 	private String emailAddress;
@@ -41,7 +45,7 @@ public class ForgotPasswordForm extends AbstractActionForm
 	 */
 	public String getEmailAddress()
 	{
-		return emailAddress;
+		return this.emailAddress;
 	}
 
 	/**
@@ -56,6 +60,7 @@ public class ForgotPasswordForm extends AbstractActionForm
 	/**
 	 * @return FORGOT_PASSWORD_FORM_ID The form id of ForgotPasswordForm.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.FORGOT_PASSWORD_FORM_ID;
@@ -76,19 +81,20 @@ public class ForgotPasswordForm extends AbstractActionForm
 	 * @param arg0 Actionmapping instance
 	 * @param arg1 HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
-		if (validator.isEmpty(emailAddress))
+		if (Validator.isEmpty(this.emailAddress))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("user.emailAddress")));
 		}
 		else
 		{
-			if (!validator.isValidEmailAddress(emailAddress))
+			if (!validator.isValidEmailAddress(this.emailAddress))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("user.emailAddress")));
@@ -101,6 +107,7 @@ public class ForgotPasswordForm extends AbstractActionForm
 	/**
 	 * Overrides the method in the AbstractActionForm.
 	 */
+	@Override
 	protected void reset()
 	{
 

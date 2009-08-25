@@ -702,13 +702,13 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		for (final Long element : siteId)
 		{
-			whereClause.append(" shipment." + columnName
-					+ "=? " + CommonConstants.OR_JOIN_CONDITION);
+			whereClause.append(" shipment." + columnName + "=? "
+					+ CommonConstants.OR_JOIN_CONDITION);
 		}
 		String whereClauseString = whereClause.toString();
-		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
+		whereClauseString = whereClauseString.substring(0, (whereClauseString.length() - 2));
 		whereClauseString = whereClauseString + ")";
-		
+
 		List<Object[]> shipmentsList = null;
 		shipmentsList = this.getShipmentDetails(ShipmentRequest.class.getName(), selectColumnName,
 				whereClauseString, siteId, orderByField, startIndex, numOfRecords);
@@ -757,22 +757,22 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	public int getShipmentRequestsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
-		StringBuffer whereClause = new StringBuffer();
-			whereClause.append(" shipment.activityStatus != '"
-					+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
-			whereClause.append(" (");
-		
+		final StringBuffer whereClause = new StringBuffer();
+		whereClause.append(" shipment.activityStatus != '"
+				+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
+		whereClause.append(" (");
+
 		for (final Long element : siteId)
 		{
-			whereClause.append(" shipment." + columnName
-					+ "=? " + CommonConstants.OR_JOIN_CONDITION);
+			whereClause.append(" shipment." + columnName + "=? "
+					+ CommonConstants.OR_JOIN_CONDITION);
 		}
 		String whereClauseString = whereClause.toString();
-		whereClauseString = whereClauseString.substring( 0, (whereClauseString.length()-2) );
+		whereClauseString = whereClauseString.substring(0, (whereClauseString.length() - 2));
 		whereClauseString = whereClauseString + ")";
-		
-		final int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClauseString, siteId,
-				orderByField, startIndex, numOfRecords);
+
+		final int count = getShipmentsCount(ShipmentRequest.class.getName(), whereClauseString,
+				siteId, orderByField, startIndex, numOfRecords);
 		return count;
 	}
 

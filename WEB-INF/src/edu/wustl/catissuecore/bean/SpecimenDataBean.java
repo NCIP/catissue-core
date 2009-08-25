@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.Collection;
@@ -9,12 +10,12 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
 public class SpecimenDataBean implements GenericSpecimen
 {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -593612220432189911L;
-	public String uniqueId ;
+	public String uniqueId;
 	protected Long id;
 
 	protected String className;
@@ -26,7 +27,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * Reference to dimensional position one of the specimen in Storage Container.
 	 */
-	protected String positionDimensionOne ="";
+	protected String positionDimensionOne = "";
 
 	/**
 	 * Reference to dimensional position two of the specimen in Storage Container.
@@ -53,7 +54,6 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	protected Collection biohazardCollection = new HashSet();
 
-	
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen. 
 	 */
@@ -70,7 +70,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	protected SpecimenCollectionGroup specimenCollectionGroup;
 
 	protected String pathologicalStatus;
-	protected String tissueSite ;
+	protected String tissueSite;
 	protected String tissueSide;
 	/**
 	 * A historical information about the specimen i.e. whether the specimen is a new specimen
@@ -88,11 +88,10 @@ public class SpecimenDataBean implements GenericSpecimen
 	 * The quantity of a specimen.
 	 */
 	protected String initialQuantity;
-	
+
 	protected String concentration;
 
-	
-	public LinkedHashMap <String,GenericSpecimen> deriveSpecimenCollection = new LinkedHashMap<String,GenericSpecimen>();
+	public LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection = new LinkedHashMap<String, GenericSpecimen>();
 	private String parentName;
 	private String storageType;
 	private String selectedContainerName;
@@ -106,6 +105,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private boolean showLabel = true;
 
 	private boolean readOnly = false;
+
 	public GenericSpecimen getFormSpecimenVo()
 	{
 		return this.formSpecimenVo;
@@ -121,10 +121,9 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public Collection getBiohazardCollection()
 	{
-		return biohazardCollection;
+		return this.biohazardCollection;
 	}
 
-	
 	/**
 	 * @param biohazardCollection The biohazardCollection to set.
 	 */
@@ -142,13 +141,13 @@ public class SpecimenDataBean implements GenericSpecimen
 	{
 		this.corresSpecimen = corresSpecimen;
 	}
-	
+
 	/**
 	 * @return Returns the className.
 	 */
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
 
 	/**
@@ -164,7 +163,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -180,7 +179,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getConcentration()
 	{
-		return concentration;
+		return this.concentration;
 	}
 
 	/**
@@ -196,7 +195,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public Collection getExternalIdentifierCollection()
 	{
-		return externalIdentifierCollection;
+		return this.externalIdentifierCollection;
 	}
 
 	/**
@@ -212,14 +211,14 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public long getId()
 	{
-		long num =-1;
-		if(id == null)
+		long num = -1;
+		if (this.id == null)
 		{
 			num = -1;
 		}
 		else
 		{
-			num = id.longValue();
+			num = this.id.longValue();
 		}
 		return num;
 	}
@@ -232,13 +231,12 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.id = id;
 	}
 
-
 	/**
 	 * @return Returns the label.
 	 */
 	public String getLabel()
 	{
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -254,7 +252,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getLineage()
 	{
-		return lineage;
+		return this.lineage;
 	}
 
 	/**
@@ -270,7 +268,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public Specimen getParentSpecimen()
 	{
-		return parentSpecimen;
+		return this.parentSpecimen;
 	}
 
 	/**
@@ -286,7 +284,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -302,16 +300,15 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getPositionDimensionOne()
 	{
-		return String.valueOf(positionDimensionOne);
+		return String.valueOf(this.positionDimensionOne);
 	}
-
 
 	/**
 	 * @return Returns the positionDimensionTwo.
 	 */
 	public String getPositionDimensionTwo()
 	{
-		return String.valueOf(positionDimensionTwo);
+		return String.valueOf(this.positionDimensionTwo);
 	}
 
 	/**
@@ -319,7 +316,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public SpecimenCollectionGroup getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -335,7 +332,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public Collection getSpecimenEventCollection()
 	{
-		return specimenEventCollection;
+		return this.specimenEventCollection;
 	}
 
 	/**
@@ -351,7 +348,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getTissueSide()
 	{
-		return tissueSide;
+		return this.tissueSide;
 	}
 
 	/**
@@ -367,7 +364,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -383,7 +380,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -393,27 +390,25 @@ public class SpecimenDataBean implements GenericSpecimen
 	{
 		this.type = type;
 	}
-	
+
 	/**
 	 * @return Returns the deriveSpecimenCollection.
 	 */
 	public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection()
 	{
-		return deriveSpecimenCollection;
+		return this.deriveSpecimenCollection;
 	}
 
 	/**
 	 * @param deriveSpecimenCollection The deriveSpecimenCollection to set.
 	 */
-	public void setDeriveSpecimenCollection(LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection)
+	public void setDeriveSpecimenCollection(
+			LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection)
 	{
 		this.deriveSpecimenCollection = deriveSpecimenCollection;
 	}
-	
-	/* getters and setter for attributes finish */
 
-	
-	
+	/* getters and setter for attributes finish */
 
 	/* overide methods */
 	/* (non-Javadoc)
@@ -425,7 +420,6 @@ public class SpecimenDataBean implements GenericSpecimen
 		return null;
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getDisplayName()
 	 */
@@ -457,7 +451,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getStorageContainerForSpecimen()
 	 */
 	public String getStorageContainerForSpecimen()
-	{ 
+	{
 		// TODO Auto-generated method stub
 		return this.storageType;
 	}
@@ -471,124 +465,123 @@ public class SpecimenDataBean implements GenericSpecimen
 		return this.uniqueId;
 	}
 
-	
-	public String getBarCode() {
+	public String getBarCode()
+	{
 		// TODO Auto-generated method stub
 		return this.barCode;
 	}
 
-	
-	public boolean getCheckedSpecimen() {
+	public boolean getCheckedSpecimen()
+	{
 		// TODO Auto-generated method stub
-		return checkedSpecimen;
+		return this.checkedSpecimen;
 	}
 
-	
-	public String getContainerId() {
+	public String getContainerId()
+	{
 		// TODO Auto-generated method stub
 		return this.containerId;
 	}
 
-	
-	public boolean getReadOnly() {
+	public boolean getReadOnly()
+	{
 		// TODO Auto-generated method stub
-		return readOnly;
+		return this.readOnly;
 	}
 
-	
-	public String getSelectedContainerName() {
+	public String getSelectedContainerName()
+	{
 		// TODO Auto-generated method stub
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
 
-	
 	public void setAliquotSpecimenCollection(
-			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection) {
+			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	public void setBarCode(String barCode) {
+	public void setBarCode(String barCode)
+	{
 		// TODO Auto-generated method stub
 		this.barCode = barCode;
 	}
 
-	
-	public void setCheckedSpecimen(boolean checkedSpecimen) {
-		this.checkedSpecimen =checkedSpecimen;
-		
+	public void setCheckedSpecimen(boolean checkedSpecimen)
+	{
+		this.checkedSpecimen = checkedSpecimen;
+
 	}
 
-	
-	public void setContainerId(String containerId) {
-		
+	public void setContainerId(String containerId)
+	{
+
 		this.containerId = containerId;
 	}
 
-	
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName)
+	{
 		// TODO Auto-generated method stub
-		this.label = displayName ;
+		this.label = displayName;
 	}
 
-	
-	public void setId(long id) {
+	public void setId(long id)
+	{
 		// TODO Auto-generated method stub
-		this.id = id ;
+		this.id = id;
 	}
 
-	
-	public void setParentName(String parentName) {
+	public void setParentName(String parentName)
+	{
 
-		 this.parentName = parentName;
-		
+		this.parentName = parentName;
+
 	}
 
-	
-	public void setPositionDimensionOne(String positionDimensionOne) {
-		
+	public void setPositionDimensionOne(String positionDimensionOne)
+	{
+
 		this.positionDimensionOne = positionDimensionOne;
-		
+
 	}
 
-	
-	public void setPositionDimensionTwo(String positionDimensionTwo) {
+	public void setPositionDimensionTwo(String positionDimensionTwo)
+	{
 
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
 
-	
-	public void setQuantity(String quantity) {
-		
+	public void setQuantity(String quantity)
+	{
+
 		this.initialQuantity = quantity;
 	}
 
-	
-	public void setReadOnly(boolean readOnly) {
+	public void setReadOnly(boolean readOnly)
+	{
 		// TODO Auto-generated method stub
 		this.readOnly = readOnly;
 	}
 
-	
-	public void setSelectedContainerName(String selectedContainerName) {
-		
+	public void setSelectedContainerName(String selectedContainerName)
+	{
+
 		this.selectedContainerName = selectedContainerName;
-		
+
 	}
 
-	
-	public void setStorageContainerForSpecimen(
-			String storageContainerForSpecimen) {
-		
+	public void setStorageContainerForSpecimen(String storageContainerForSpecimen)
+	{
+
 		this.storageType = storageContainerForSpecimen;
-		
+
 	}
 
-	
-	public void setUniqueIdentifier(String uniqueIdentifier) {
-	
-		this.uniqueId = uniqueIdentifier ;
+	public void setUniqueIdentifier(String uniqueIdentifier)
+	{
+
+		this.uniqueId = uniqueIdentifier;
 	}
 
 	/**
@@ -596,7 +589,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 */
 	public Long getCollectionProtocolId()
 	{
-		return collectionProtocolId;
+		return this.collectionProtocolId;
 	}
 
 	/**
@@ -606,46 +599,42 @@ public class SpecimenDataBean implements GenericSpecimen
 	{
 		this.collectionProtocolId = collectionProtocolId;
 	}
-	
+
 	public boolean getShowBarcode()
 	{
 		// TODO Auto-generated method stub
-		return showBarcode;
+		return this.showBarcode;
 	}
 
 	public boolean getShowLabel()
 	{
 		// TODO Auto-generated method stub
-		return showLabel;
+		return this.showLabel;
 	}
 
 	public void setShowBarcode(boolean showBarcode)
 	{
-		this.showBarcode = showBarcode;	
-		
+		this.showBarcode = showBarcode;
+
 	}
 
 	public void setShowLabel(boolean showLabel)
 	{
 		this.showLabel = showLabel;
-		
+
 	}
 
-	public boolean getPrintSpecimen() {
+	public boolean getPrintSpecimen()
+	{
 		// TODO Auto-generated method stub
-		return printSpecimen;
+		return this.printSpecimen;
 	}
 
 	public void setPrintSpecimen(boolean printSpecimen)
 	{
-	  this.printSpecimen = printSpecimen;
-	} 
-
+		this.printSpecimen = printSpecimen;
+	}
 
 	/* override methods finish */
 
-	
-
-
-		
 }

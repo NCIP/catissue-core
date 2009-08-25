@@ -13,11 +13,13 @@ public class ConflictParticipantSCGTreeForm extends AbstractActionForm
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public int getFormId()
 	{
 		return 0;
 	}
 
+	@Override
 	protected void reset()
 	{
 

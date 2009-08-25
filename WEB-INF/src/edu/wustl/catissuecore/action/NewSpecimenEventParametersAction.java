@@ -37,6 +37,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -48,7 +49,7 @@ public class NewSpecimenEventParametersAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(NewSpecimenEventParametersAction.class);
 
 	/**
@@ -69,6 +70,7 @@ public class NewSpecimenEventParametersAction extends SecureAction
 	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -81,71 +83,64 @@ public class NewSpecimenEventParametersAction extends SecureAction
 		// request.setAttribute(Constants.OPERATION, operation);
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
 			String identifier = (String) request.getAttribute("specimenIdentifier");
 			if (identifier == null)
 			{
-				identifier = (String) request.getParameter("specimenIdentifier");
+				identifier = request.getParameter("specimenIdentifier");
 			}
 
-			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
+			final Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(identifier));
 
 			if (object != null)
 			{
-				Specimen specimen = (Specimen) object;
+				final Specimen specimen = (Specimen) object;
 
 				// Setting Specimen Event Parameters' Grid
-				Collection specimenEventCollection = specimen.getSpecimenEventCollection();
+				final Collection specimenEventCollection = specimen.getSpecimenEventCollection();
 
 				if (specimenEventCollection != null)
 				{
-					List gridData = new ArrayList();
-					Iterator it = specimenEventCollection.iterator();
+					final List gridData = new ArrayList();
+					final Iterator it = specimenEventCollection.iterator();
 					// int i=1;
 
 					while (it.hasNext())
 					{
-						List rowData = new ArrayList();
-						SpecimenEventParameters eventParameters =
-							(SpecimenEventParameters) it
+						final List rowData = new ArrayList();
+						final SpecimenEventParameters eventParameters = (SpecimenEventParameters) it
 								.next();
 
 						if (eventParameters != null)
 						{
-							String[] events = EventsUtil.getEvent(eventParameters);
+							final String[] events = EventsUtil.getEvent(eventParameters);
 							rowData.add(String.valueOf(eventParameters.getId()));
 							rowData.add(events[0]);// Event Name
 
-							User user = eventParameters.getUser();
-							rowData.add(user.getLastName() + ", " +
-									user.getFirstName());
-							rowData.add(edu.wustl.common.util.Utility.
-									parseDateToString(
-									eventParameters.getTimestamp(),
-									CommonServiceLocator
-											.getInstance().
-											getDatePattern()));
+							final User user = eventParameters.getUser();
+							rowData.add(user.getLastName() + ", " + user.getFirstName());
+							rowData.add(CommonUtilities.parseDateToString(eventParameters
+									.getTimestamp(), CommonServiceLocator.getInstance()
+									.getDatePattern()));
 							rowData.add(events[1]);// pageOf
 							gridData.add(rowData);
 						}
 					}
 
 					request.setAttribute(
-							edu.wustl.simplequery.global.Constants.
-							SPREADSHEET_DATA_LIST,
-							gridData);
+							edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST, gridData);
 				}
 			}
 
 			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 }

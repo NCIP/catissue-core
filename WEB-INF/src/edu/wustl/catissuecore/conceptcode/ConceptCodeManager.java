@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.conceptcode;
 
 import java.util.Date;
@@ -27,9 +28,9 @@ public class ConceptCodeManager
 
 	static
 	{
-		LoggerConfig.configureLogger( System.getProperty( "user.dir" ) );
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
-	private static Logger logger = Logger.getCommonLogger( ConceptCodeManager.class );
+	private static Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
 	/**
 	 * Field coderVersion.
 	 */
@@ -86,8 +87,8 @@ public class ConceptCodeManager
 		}
 		catch (final Exception ex)
 		{
-			logger.error(
-					"Initialization of concept coding process failed or error in main thread", ex );
+			logger.error("Initialization of concept coding process failed or error in main thread",
+					ex);
 		}
 	}
 
@@ -101,7 +102,7 @@ public class ConceptCodeManager
 		//Initialize CaCoreAPISservice
 		CaCoreAPIService.initialize();
 		// Configuring CSV logger
-		CSVLogger.configure( CaTIESConstants.LOGGER_CONCEPT_CODER );
+		CSVLogger.configure(CaTIESConstants.LOGGER_CONCEPT_CODER);
 		this.setAll();
 		this.initialize();
 	}
@@ -111,18 +112,18 @@ public class ConceptCodeManager
 	 */
 	public void setAll()
 	{
-		this.coderVersion = CaTIESProperties.getValue( "caties.coder.version" );
-		this.gateHome = CaTIESProperties.getValue( "caties.gate.home" );
-		this.creoleUrlName = CaTIESProperties.getValue( "caties.creole.url.name" );
+		this.coderVersion = CaTIESProperties.getValue("caties.coder.version");
+		this.gateHome = CaTIESProperties.getValue("caties.gate.home");
+		this.creoleUrlName = CaTIESProperties.getValue("caties.creole.url.name");
 		this.caseInsensitiveGazetteerUrlName = CaTIESProperties
-				.getValue( "caties.case.insensitive.gazetteer.url.name" );
+				.getValue("caties.case.insensitive.gazetteer.url.name");
 		this.caseSensitiveGazetteerUrlName = CaTIESProperties
-				.getValue( "caties.case.sensitive.gazetteer.url.name" );
-		this.sectionChunkerUrlName = CaTIESProperties.getValue( "caties.section.chunker.url.name" );
-		this.conceptFilterUrlName = CaTIESProperties.getValue( "caties.concept.filter.url.name" );
-		this.negExUrlName = CaTIESProperties.getValue( "caties.neg.ex.url.name" );
+				.getValue("caties.case.sensitive.gazetteer.url.name");
+		this.sectionChunkerUrlName = CaTIESProperties.getValue("caties.section.chunker.url.name");
+		this.conceptFilterUrlName = CaTIESProperties.getValue("caties.concept.filter.url.name");
+		this.negExUrlName = CaTIESProperties.getValue("caties.neg.ex.url.name");
 		this.conceptCategorizerUrlName = CaTIESProperties
-				.getValue( "caties.concept.categorizer.url.name" );
+				.getValue("caties.concept.categorizer.url.name");
 	}
 
 	/**
@@ -131,11 +132,11 @@ public class ConceptCodeManager
 	public void initialize()
 	{
 		this.establishCaTIESExporterPR();
-		logger.debug( "Established Exporter PR." );
+		logger.debug("Established Exporter PR.");
 		this.establishTiesPipeForDirectAccess();
-		logger.debug( "Established Ties Pipe." );
+		logger.debug("Established Ties Pipe.");
 		this.establishGateInterface();
-		logger.debug( "Established Gate Interface." );
+		logger.debug("Established Gate Interface.");
 	}
 
 	/**
@@ -154,18 +155,18 @@ public class ConceptCodeManager
 		try
 		{
 			this.tiesPipe = new TiesPipe();
-			this.tiesPipe.setGateHome( this.gateHome );
-			this.tiesPipe.setCreoleUrlName( this.creoleUrlName );
-			this.tiesPipe.setCaseInsensitiveGazetteerUrlName( this.caseInsensitiveGazetteerUrlName );
-			this.tiesPipe.setCaseSensitiveGazetteerUrlName( this.caseSensitiveGazetteerUrlName );
-			this.tiesPipe.setSectionChunkerUrlName( this.sectionChunkerUrlName );
-			this.tiesPipe.setConceptFilterUrlName( this.conceptFilterUrlName );
-			this.tiesPipe.setNegExUrlName( this.negExUrlName );
-			this.tiesPipe.setConceptCategorizerUrlName( this.conceptCategorizerUrlName );
+			this.tiesPipe.setGateHome(this.gateHome);
+			this.tiesPipe.setCreoleUrlName(this.creoleUrlName);
+			this.tiesPipe.setCaseInsensitiveGazetteerUrlName(this.caseInsensitiveGazetteerUrlName);
+			this.tiesPipe.setCaseSensitiveGazetteerUrlName(this.caseSensitiveGazetteerUrlName);
+			this.tiesPipe.setSectionChunkerUrlName(this.sectionChunkerUrlName);
+			this.tiesPipe.setConceptFilterUrlName(this.conceptFilterUrlName);
+			this.tiesPipe.setNegExUrlName(this.negExUrlName);
+			this.tiesPipe.setConceptCategorizerUrlName(this.conceptCategorizerUrlName);
 		}
 		catch (final Exception x)
 		{
-			logger.fatal( x.getMessage() );
+			logger.fatal(x.getMessage());
 		}
 	}
 
@@ -176,12 +177,12 @@ public class ConceptCodeManager
 	{
 		try
 		{
-			System.setProperty( "gate.home", this.gateHome );
+			System.setProperty("gate.home", this.gateHome);
 			Gate.init();
 		}
 		catch (final Exception x)
 		{
-			logger.fatal( x.getMessage() );
+			logger.fatal(x.getMessage());
 		}
 	}
 
@@ -195,17 +196,17 @@ public class ConceptCodeManager
 		{
 			try
 			{
-				logger.info( "Concept Coding process started at " + new Date().toString() );
+				logger.info("Concept Coding process started at " + new Date().toString());
 				final List deidReportIDList = this.getReportIDList();
-				this.processReports( deidReportIDList );
+				this.processReports(deidReportIDList);
 			}
 			catch (final Exception ex)
 			{
-				logger.error( "Unexpected Exception in Concept Code Pipeline ", ex );
-				logger.info( "Concept Coding process finished at " + new Date().toString()
-						+ ". Thread is going to sleep." );
-				Thread.sleep( Integer.parseInt( CaTIESProperties
-						.getValue( CaTIESConstants.CONCEPT_CODER_SLEEPTIME ) ) );
+				logger.error("Unexpected Exception in Concept Code Pipeline ", ex);
+				logger.info("Concept Coding process finished at " + new Date().toString()
+						+ ". Thread is going to sleep.");
+				Thread.sleep(Integer.parseInt(CaTIESProperties
+						.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
 			}
 		}
 	}
@@ -219,10 +220,10 @@ public class ConceptCodeManager
 	{
 		if (deidReportIDList != null && deidReportIDList.size() > 0)
 		{
-			logger.info( deidReportIDList.size() + " reports found for Concept Coding" );
+			logger.info(deidReportIDList.size() + " reports found for Concept Coding");
 			try
 			{
-				CSVLogger.info( CaTIESConstants.LOGGER_CONCEPT_CODER,
+				CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,
 						CaTIESConstants.CSVLOGGER_DATETIME + CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
@@ -230,32 +231,32 @@ public class ConceptCodeManager
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_MESSAGE
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
-								+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME );
+								+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 				DeidentifiedSurgicalPathologyReport deidReport = null;
 				ConceptCoder cc = null;
 				for (int i = 0; i < deidReportIDList.size(); i++)
 				{
 					deidReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService.getObject(
 							DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER,
-							deidReportIDList.get( i ) );
-					cc = new ConceptCoder( deidReport , this.exporterPR , this.tiesPipe );
-					logger.info( "Concept coding of report serial no " + i + " started...." );
+							deidReportIDList.get(i));
+					cc = new ConceptCoder(deidReport, this.exporterPR, this.tiesPipe);
+					logger.info("Concept coding of report serial no " + i + " started....");
 					cc.process();
 					System.gc();
-					logger.info( "Concept coding of report serial no " + i + " finished." );
+					logger.info("Concept coding of report serial no " + i + " finished.");
 				}
 			}
 			catch (final Exception ex)
 			{
-				logger.error( "Concept Coding pipeline failed:", ex );
+				logger.error("Concept Coding pipeline failed:", ex);
 			}
 		}
 		else
 		{
-			logger.info( "Concept Coding process finished at " + new Date().toString()
-					+ ". Thread is going to sleep." );
-			Thread.sleep( Integer.parseInt( CaTIESProperties
-					.getValue( CaTIESConstants.CONCEPT_CODER_SLEEPTIME ) ) );
+			logger.info("Concept Coding process finished at " + new Date().toString()
+					+ ". Thread is going to sleep.");
+			Thread.sleep(Integer.parseInt(CaTIESProperties
+					.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
 		}
 	}
 
@@ -270,8 +271,8 @@ public class ConceptCodeManager
 				+ CaTIESConstants.COLUMN_NAME_REPORT_STATUS
 				+ "='"
 				+ CaTIESConstants.PENDING_FOR_XML + "'";
-		final List deidReportIDList = (List) CaCoreAPIService.executeQuery( hqlQuery,
-				DeidentifiedSurgicalPathologyReport.class.getName() );
+		final List deidReportIDList = (List) CaCoreAPIService.executeQuery(hqlQuery,
+				DeidentifiedSurgicalPathologyReport.class.getName());
 		return deidReportIDList;
 	}
 
@@ -284,13 +285,13 @@ public class ConceptCodeManager
 		try
 		{
 			final ConceptCodeManager conceptCodeManager = new ConceptCodeManager();
-			final Thread stopThread = new StopServer( CaTIESConstants.CONCEPT_CODER_PORT );
+			final Thread stopThread = new StopServer(CaTIESConstants.CONCEPT_CODER_PORT);
 			stopThread.start();
 			conceptCodeManager.startProcess();
 		}
 		catch (final Exception ex)
 		{
-			Logger.out.error( "Concept code manager failed" );
+			Logger.out.error("Concept code manager failed");
 		}
 	}
 }

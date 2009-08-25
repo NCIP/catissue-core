@@ -59,16 +59,14 @@ public class FetchReportAction extends BaseAction
 		if (reportId != null && !reportId.equals(""))
 		{
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic
-			= (IdentifiedSurgicalPathologyReportBizLogic) factory
+			final IdentifiedSurgicalPathologyReportBizLogic identifiedReportBizLogic = (IdentifiedSurgicalPathologyReportBizLogic) factory
 					.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 
 			final Object object = identifiedReportBizLogic.retrieve(
 					IdentifiedSurgicalPathologyReport.class.getName(), new Long(reportId));
 			if (object != null)
 			{
-				final IdentifiedSurgicalPathologyReport identifiedReport
-				= (IdentifiedSurgicalPathologyReport) object;
+				final IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) object;
 				if (identifiedReport.getSpecimenCollectionGroup() != null)
 				{
 					xmlData = this.makeXMLData(xmlData, identifiedReport);
@@ -97,8 +95,7 @@ public class FetchReportAction extends BaseAction
 		final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic
 				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedReport.getId(), Constants.COLUMN_NAME_SCG);
-		final DeidentifiedSurgicalPathologyReport deidReport
-		= (DeidentifiedSurgicalPathologyReport) defaultBizLogic
+		final DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) defaultBizLogic
 				.retrieveAttribute(IdentifiedSurgicalPathologyReport.class.getName(),
 						identifiedReport.getId(), Constants.COLUMN_NAME_DEID_REPORT);
 		final Site source = (Site) defaultBizLogic.retrieveAttribute(
@@ -195,8 +192,7 @@ public class FetchReportAction extends BaseAction
 
 				final String chkBoxId = "select" + i;
 				onClickMethod[i] = "selectByOffset(document.getElementById('" + chkBoxId + "'),'"
-						+ startOff + "','" + endOff + "','"
-						+ colours[i] + "','" + conceptName
+						+ startOff + "','" + endOff + "','" + colours[i] + "','" + conceptName
 						+ "')";
 				script.append("<ConceptBean>");
 				script.append("<ConceptName>");

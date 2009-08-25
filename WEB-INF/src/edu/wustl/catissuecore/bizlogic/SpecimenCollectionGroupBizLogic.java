@@ -1431,9 +1431,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * edu.wustl.common.util.Utility.toLongArray(listOfSubElement), userId,
 	 * roleId, assignToUser, assignOperation); } }
 	 *//**
-						* @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String,
-						*      Class, Long[], Long, String, boolean)
-						*/
+							* @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String,
+							*      Class, Long[], Long, String, boolean)
+							*/
 	/*
 	 * protected void setPrivilege(DAO dao, String privilegeName, Class
 	 * objectType, Long[] objectIds, Long userId, String roleId, boolean

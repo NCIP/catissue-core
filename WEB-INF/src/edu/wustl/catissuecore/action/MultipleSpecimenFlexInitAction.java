@@ -151,9 +151,10 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				}
 				else
 				{
-					if(forwardToHashMap.get(Constants.SPECIMEN_LABEL)!=null)
+					if (forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
 					{
-					  parentSpecimenLabel = forwardToHashMap.get(Constants.SPECIMEN_LABEL).toString();
+						parentSpecimenLabel = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
+								.toString();
 					}
 				}
 
@@ -183,27 +184,28 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 *
 	 * @param form : form
 	 * @return String : String
-	 *//*
+	 */
+	/*
 
-	protected String getObjectId(AbstractActionForm form)
-	{
-		final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
-		SpecimenCollectionGroup specimenCollectionGroup = null;
-		if (createSpecimenForm.getParentSpecimenId() != null
-				&& createSpecimenForm.getParentSpecimenId() != "")
+		protected String getObjectId(AbstractActionForm form)
 		{
-			final Specimen specimen = AppUtility.getSpecimen(createSpecimenForm
-					.getParentSpecimenId());
-			specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
-			final CollectionProtocolRegistration cpr = specimenCollectionGroup
-					.getCollectionProtocolRegistration();
-			if (cpr != null)
+			final CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) form;
+			SpecimenCollectionGroup specimenCollectionGroup = null;
+			if (createSpecimenForm.getParentSpecimenId() != null
+					&& createSpecimenForm.getParentSpecimenId() != "")
 			{
-				final CollectionProtocol cp = cpr.getCollectionProtocol();
-				return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+				final Specimen specimen = AppUtility.getSpecimen(createSpecimenForm
+						.getParentSpecimenId());
+				specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
+				final CollectionProtocolRegistration cpr = specimenCollectionGroup
+						.getCollectionProtocolRegistration();
+				if (cpr != null)
+				{
+					final CollectionProtocol cp = cpr.getCollectionProtocol();
+					return Constants.COLLECTION_PROTOCOL_CLASS_NAME + "_" + cp.getId();
+				}
 			}
-		}
-		return null;
+			return null;
 
-	}*/
+		}*/
 }

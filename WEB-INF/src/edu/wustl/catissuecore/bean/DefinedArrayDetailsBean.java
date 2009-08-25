@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.List;
+
 /**
  * @author janhavi_hasabnis
  *
@@ -175,8 +176,8 @@ public class DefinedArrayDetailsBean implements Serializable
 			return specimenId;
 		}
 		*//**
-		 * @param specimenId the specimenId to set
-		 */
+			 * @param specimenId the specimenId to set
+			 */
 	/*
 		public void setSpecimenId(String specimenId)
 		{

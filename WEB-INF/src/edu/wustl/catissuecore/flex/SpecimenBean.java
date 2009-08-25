@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 
 public class SpecimenBean implements Externalizable
 {
+
 	/**
 	 * 
 	 */
@@ -39,23 +40,21 @@ public class SpecimenBean implements Externalizable
 	public Date creationDate = new Date();
 	public Double quantity = new Double(0);
 	public Double concentration = new Double(0);
-	public String storage= "";
+	public String storage = "";
 	public String comment = "";
 	public List<ExternalIdentifier> exIdColl = new ArrayList<ExternalIdentifier>();
 	public List<Biohazard> biohazardColl = new ArrayList<Biohazard>();
 	public EventParamtersBean collectionEvent = new EventParamtersBean();
 	public EventParamtersBean receivedEvent = new EventParamtersBean();
 	public List<SpecimenBean> derivedColl = new ArrayList<SpecimenBean>();
-	
-	public String mode = ""; 
+
+	public String mode = "";
 
 	public SpecimenBean()
 	{
-		
 
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getClassName()
 	 */
@@ -71,14 +70,13 @@ public class SpecimenBean implements Externalizable
 	public String getConcentration()
 	{
 		// TODO Auto-generated method stub
-		if (concentration != null)
+		if (this.concentration != null)
 		{
 			return this.concentration.toString();
 		}
 		return null;
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getDisplayName()
 	 */
@@ -161,7 +159,7 @@ public class SpecimenBean implements Externalizable
 	public String getUniqueIdentifier()
 	{
 		// TODO Auto-generated method stub
-		if (spID != null)
+		if (this.spID != null)
 		{
 			return this.spID.toString();
 		}
@@ -173,31 +171,31 @@ public class SpecimenBean implements Externalizable
 	{
 		System.out.println("SERVER IN writeExternal START");
 		// Write out the client properties from the server representation
-		out.writeInt(spID.intValue());
+		out.writeInt(this.spID.intValue());
 		/*out.writeUTF(scgName);
 		out.writeUTF(parentSpecimenName);*/
-		out.writeUTF(parentType);
-		out.writeUTF(parentName);
-		out.writeUTF(specimenLabel);
-		out.writeUTF(specimenBarcode);
-		out.writeUTF(lineage);
-		out.writeUTF(specimenClass);
-		out.writeUTF(specimenType);
-		out.writeUTF(tissueSite);
-		out.writeUTF(tissueSide);
-		out.writeUTF(pathologicalStatus);
-		out.writeObject(creationDate);
-		out.writeDouble(quantity);
-		out.writeDouble(concentration);
-		out.writeUTF(storage);
-		out.writeUTF(comment);
-		out.writeObject(exIdColl);
-		out.writeObject(biohazardColl);
-		out.writeObject(collectionEvent);
-		out.writeObject(receivedEvent);
-		out.writeObject(derivedColl);
-		
-		System.out.println(toString());
+		out.writeUTF(this.parentType);
+		out.writeUTF(this.parentName);
+		out.writeUTF(this.specimenLabel);
+		out.writeUTF(this.specimenBarcode);
+		out.writeUTF(this.lineage);
+		out.writeUTF(this.specimenClass);
+		out.writeUTF(this.specimenType);
+		out.writeUTF(this.tissueSite);
+		out.writeUTF(this.tissueSide);
+		out.writeUTF(this.pathologicalStatus);
+		out.writeObject(this.creationDate);
+		out.writeDouble(this.quantity);
+		out.writeDouble(this.concentration);
+		out.writeUTF(this.storage);
+		out.writeUTF(this.comment);
+		out.writeObject(this.exIdColl);
+		out.writeObject(this.biohazardColl);
+		out.writeObject(this.collectionEvent);
+		out.writeObject(this.receivedEvent);
+		out.writeObject(this.derivedColl);
+
+		System.out.println(this.toString());
 		System.out.println("SERVER IN writeExternal DONE");
 	}
 
@@ -205,51 +203,56 @@ public class SpecimenBean implements Externalizable
 	{
 		System.out.println("SERVER IN readExternal");
 
-		spID = new Long(in.readInt());
+		this.spID = new Long(in.readInt());
 		/*scgName = in.readUTF();
 		parentSpecimenName = in.readUTF();*/
-		parentType = in.readUTF();
-		parentName = in.readUTF();
-		specimenLabel = in.readUTF();
-		specimenBarcode = in.readUTF();
-		lineage = in.readUTF();
-		specimenClass = in.readUTF();
-		specimenType = in.readUTF();
-		tissueSite = in.readUTF();
-		tissueSide = in.readUTF();
-		pathologicalStatus = in.readUTF();
-		creationDate = (Date) in.readObject();
-		quantity = in.readDouble();
-		concentration = in.readDouble();
-		storage = in.readUTF();
-		comment = in.readUTF();
+		this.parentType = in.readUTF();
+		this.parentName = in.readUTF();
+		this.specimenLabel = in.readUTF();
+		this.specimenBarcode = in.readUTF();
+		this.lineage = in.readUTF();
+		this.specimenClass = in.readUTF();
+		this.specimenType = in.readUTF();
+		this.tissueSite = in.readUTF();
+		this.tissueSide = in.readUTF();
+		this.pathologicalStatus = in.readUTF();
+		this.creationDate = (Date) in.readObject();
+		this.quantity = in.readDouble();
+		this.concentration = in.readDouble();
+		this.storage = in.readUTF();
+		this.comment = in.readUTF();
 		//Object obj2 = in.readObject();
 		//System.out.println("obj2 "+obj2.getClass()+" "+obj2);
-		exIdColl = (List) in.readObject();
-		biohazardColl = (List) in.readObject();
-		collectionEvent = (EventParamtersBean) in.readObject();
-		receivedEvent = (EventParamtersBean) in.readObject();
-		derivedColl = (List) in.readObject();
-		
-		System.out.println(toString());
+		this.exIdColl = (List) in.readObject();
+		this.biohazardColl = (List) in.readObject();
+		this.collectionEvent = (EventParamtersBean) in.readObject();
+		this.receivedEvent = (EventParamtersBean) in.readObject();
+		this.derivedColl = (List) in.readObject();
+
+		System.out.println(this.toString());
 	}
 
+	@Override
 	public String toString()
 	{
-		return "spID " + spID + "\n" + "parentName " + parentName + "\n" + "specimenLabel "
-				+ specimenLabel + "\n" + "specimenBarcode " + specimenBarcode + "\n" + "lineage " + lineage +"\n" + "specimenClass " + specimenClass + "\n" + "specimenType "
-				+ specimenType + "\n" + "tissueSite " + tissueSite + "\n" + "tissueSide " + tissueSide + "\n" + "pathologicalStatus "
-				+ pathologicalStatus + "\n" + "creationDate " + creationDate + "\n" + "quantity " + quantity + "\n" + "concentration "
-				+ concentration + "\n" + "comment " + comment + "\n" + "exIdColl " + exIdColl + "\n" + "collEvent " + collectionEvent;
+		return "spID " + this.spID + "\n" + "parentName " + this.parentName + "\n"
+				+ "specimenLabel " + this.specimenLabel + "\n" + "specimenBarcode "
+				+ this.specimenBarcode + "\n" + "lineage " + this.lineage + "\n" + "specimenClass "
+				+ this.specimenClass + "\n" + "specimenType " + this.specimenType + "\n"
+				+ "tissueSite " + this.tissueSite + "\n" + "tissueSide " + this.tissueSide + "\n"
+				+ "pathologicalStatus " + this.pathologicalStatus + "\n" + "creationDate "
+				+ this.creationDate + "\n" + "quantity " + this.quantity + "\n" + "concentration "
+				+ this.concentration + "\n" + "comment " + this.comment + "\n" + "exIdColl "
+				+ this.exIdColl + "\n" + "collEvent " + this.collectionEvent;
 	}
 
-
-	public String getLineage() {
-		return lineage;
+	public String getLineage()
+	{
+		return this.lineage;
 	}
 
-
-	public void setLineage(String lineage) {
+	public void setLineage(String lineage)
+	{
 		this.lineage = lineage;
 	}
 }

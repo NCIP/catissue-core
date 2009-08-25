@@ -4,6 +4,7 @@
  * Listener for cleanup after session invalidates.
  * 
  */
+
 package edu.wustl.catissuecore.util.listener;
 
 import javax.servlet.http.HttpSession;
@@ -23,22 +24,27 @@ import edu.wustl.dao.exception.DAOException;
  *
  * Listener for cleanup after session invalidates.
  */
-public class CatissueCoreSessionListener implements HttpSessionListener{
+public class CatissueCoreSessionListener implements HttpSessionListener
+{
 
-	private transient Logger logger = Logger.getCommonLogger(CatissueCoreSessionListener.class);
-	public void sessionCreated(HttpSessionEvent arg0) {
+	private transient final Logger logger = Logger
+			.getCommonLogger(CatissueCoreSessionListener.class);
+
+	public void sessionCreated(HttpSessionEvent arg0)
+	{
 
 	}
 
 	//Cleanup after session invalidates.
-	public void sessionDestroyed(HttpSessionEvent arg0) 
+	public void sessionDestroyed(HttpSessionEvent arg0)
 	{
-		HttpSession session = arg0.getSession();
-		SessionDataBean sessionData= (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
+		final HttpSession session = arg0.getSession();
+		final SessionDataBean sessionData = (SessionDataBean) session
+				.getAttribute(Constants.SESSION_DATA);
 
-		if(sessionData!=null)
+		if (sessionData != null)
 		{
-			cleanUp(sessionData,(String)session.getAttribute(Constants.RANDOM_NUMBER));
+			this.cleanUp(sessionData, (String) session.getAttribute(Constants.RANDOM_NUMBER));
 		}
 
 		// To remove PrivilegeCache from the session, requires user LoginName
@@ -49,35 +55,41 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 			privilegeManager.removePrivilegeCache(sessionData.getUserName());
 		}*/
 	}
-	private void cleanUp(SessionDataBean sessionData,String randomNumber)
+
+	private void cleanUp(SessionDataBean sessionData, String randomNumber)
 	{
 		//Delete Advance Query table if exists
 		//Advance Query table name with userID attached
-		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
+		final String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
 		try
 		{
-			String appName = CommonServiceLocator.getInstance().getAppName();
-			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
+			final String appName = CommonServiceLocator.getInstance().getAppName();
+			final JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName)
+					.getJDBCDAO();
 			jdbcDao.openSession(sessionData);
 			jdbcDao.deleteTable(tempTableName);
 			jdbcDao.closeSession();
 		}
-		catch(DAOException ex)
+		catch (final DAOException ex)
 		{
-			logger.error("Could not delete the Advance Search temporary table."+ex.getMessage(),ex);
+			this.logger.error("Could not delete the Advance Search temporary table."
+					+ ex.getMessage(), ex);
 		}
-		String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId()+randomNumber;
+		final String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME
+				+ sessionData.getUserId() + randomNumber;
 		try
 		{
-			String appName = CommonServiceLocator.getInstance().getAppName();
-			JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName).getJDBCDAO();
+			final String appName = CommonServiceLocator.getInstance().getAppName();
+			final JDBCDAO jdbcDao = DAOConfigFactory.getInstance().getDAOFactory(appName)
+					.getJDBCDAO();
 			jdbcDao.openSession(sessionData);
 			jdbcDao.deleteTable(tempTableNameForQuery);
 			jdbcDao.closeSession();
 		}
-		catch(DAOException ex)
+		catch (final DAOException ex)
 		{
-			logger.error("Could not delete the Query Module Search temporary table."+ex.getMessage(),ex);
+			this.logger.error("Could not delete the Query Module Search temporary table."
+					+ ex.getMessage(), ex);
 		}
 	}
 }

@@ -80,7 +80,8 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	 * @param abstractForm AbstractActionForm.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm) throws AssignDataException
+	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
+			throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -98,8 +99,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	{
 		try
 		{
-			final FluidSpecimenReviewEventParametersForm form =
-				(FluidSpecimenReviewEventParametersForm) abstractForm;
+			final FluidSpecimenReviewEventParametersForm form = (FluidSpecimenReviewEventParametersForm) abstractForm;
 			logger.debug("############DomainObject################## : ");
 			logger.debug(form.getCellCount());
 			logger.debug("############################## ");
@@ -113,7 +113,8 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		{
 			logger.error(excp.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey, null, "FluidSpecimenReviewEventParameters.java :");
+			throw new AssignDataException(errorKey, null,
+					"FluidSpecimenReviewEventParameters.java :");
 		}
 	}
 }

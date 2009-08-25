@@ -36,12 +36,13 @@ public class XMIUtility
 {
 
 	private static EntityManagerInterface entityManager = EntityManager.getInstance();
-/**
- * @param groupName - groupName
- * @return - EntityGroupInterface
- * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
- * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
- */
+
+	/**
+	 * @param groupName - groupName
+	 * @return - EntityGroupInterface
+	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
+	 */
 	public static EntityGroupInterface getEntityGroup(String groupName)
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -52,12 +53,13 @@ public class XMIUtility
 		}
 		return null;
 	}
-/**
- * @param entityGroup - entityGroup
- * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
- * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
- * @throws BizLogicException - BizLogicException
- */
+
+	/**
+	 * @param entityGroup - entityGroup
+	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
+	 * @throws BizLogicException - BizLogicException
+	 */
 	public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup)
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
 			BizLogicException
@@ -213,10 +215,10 @@ public class XMIUtility
 		return null;
 	}
 
-/**
- * @param entity - entity
- * @return - AttributeInterface
- */
+	/**
+	 * @param entity - entity
+	 * @return - AttributeInterface
+	 */
 	public static AttributeInterface getIdAttribute(EntityInterface entity)
 	{
 		if (entity != null)

@@ -432,6 +432,7 @@ public class DomainObjectFactory implements IDomainObjectFactory
 		}
 		return abstractDomain;
 	}
+
 	/**
 	 * @param arg0 : arg0
 	 * @param arg1 : arg1

@@ -34,7 +34,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	 */
 	public String getSpecimenEventParameter()
 	{
-		return specimenEventParameter;
+		return this.specimenEventParameter;
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	 */
 	public String getSpecimenId()
 	{
-		return specimenId;
+		return this.specimenId;
 	}
 
 	/**
@@ -81,14 +81,16 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	 * Checks the operation to be performed is add operation.
 	 * @return Returns true if operation is equal to "add", else it returns false
 	 * */
+	@Override
 	public boolean isAddOperation()
 	{
-		return (getOperation().equals(Constants.ADD));
+		return (this.getOperation().equals(Constants.ADD));
 	}
 
 	/**
 	 * @return LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID;
@@ -98,6 +100,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 	}
@@ -108,14 +111,15 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		//        Validator validator = new Validator();
 		try
 		{
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

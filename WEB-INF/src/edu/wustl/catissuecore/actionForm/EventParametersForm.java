@@ -22,8 +22,8 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -34,6 +34,10 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class EventParametersForm extends AbstractActionForm
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7656338598031229913L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -71,7 +75,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -87,7 +91,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public String getDateOfEvent()
 	{
-		return dateOfEvent;
+		return this.dateOfEvent;
 	}
 
 	/**
@@ -103,7 +107,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public String getTimeInMinutes()
 	{
-		return timeInMinutes;
+		return this.timeInMinutes;
 	}
 
 	/**
@@ -119,7 +123,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public String getTimeInHours()
 	{
-		return timeInHours;
+		return this.timeInHours;
 	}
 
 	/**
@@ -135,7 +139,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public long getUserId()
 	{
-		return userId;
+		return this.userId;
 	}
 
 	/**
@@ -150,6 +154,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -160,18 +165,19 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
 			MultipleSpecimenValidationUtil.validateDate(errors, validator, this.userId,
 					this.dateOfEvent, this.timeInHours, this.timeInMinutes);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -184,24 +190,26 @@ public abstract class EventParametersForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		SpecimenEventParameters eventParametersObject = (SpecimenEventParameters) abstractDomain;
-		this.comments = Utility.toString(eventParametersObject.getComment());
+		final SpecimenEventParameters eventParametersObject = (SpecimenEventParameters) abstractDomain;
+		this.comments = CommonUtilities.toString(eventParametersObject.getComment());
 		this.setId(eventParametersObject.getId().longValue());
 
-		Calendar calender = Calendar.getInstance();
+		final Calendar calender = Calendar.getInstance();
 		if (eventParametersObject.getTimestamp() != null)
 		{
 			calender.setTime(eventParametersObject.getTimestamp());
-			this.timeInHours = Utility.toString(Integer
-					.toString(calender.get(Calendar.HOUR_OF_DAY)));
-			this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
-			this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),
-					CommonServiceLocator.getInstance().getDatePattern());
+			this.timeInHours = CommonUtilities.toString(Integer.toString(calender
+					.get(Calendar.HOUR_OF_DAY)));
+			this.timeInMinutes = CommonUtilities.toString(Integer.toString(calender
+					.get(Calendar.MINUTE)));
+			this.dateOfEvent = CommonUtilities.parseDateToString(eventParametersObject
+					.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern());
 		}
 		this.userId = eventParametersObject.getUser().getId().longValue();
 		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
-		logger.debug("id:" + this.getId() + " timeInHours:" + timeInHours + " timeInMinutes:"
-				+ timeInMinutes + " userId:" + userId + " dateOfEvent:" + dateOfEvent);
+		logger.debug("id:" + this.getId() + " timeInHours:" + this.timeInHours + " timeInMinutes:"
+				+ this.timeInMinutes + " userId:" + this.userId + " dateOfEvent:"
+				+ this.dateOfEvent);
 	}
 
 }

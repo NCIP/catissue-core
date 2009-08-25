@@ -132,8 +132,8 @@ public class AddAssociations
 			System.out.println("Entity not found of name ");
 		}
 
-		sql = "insert into dyextn_abstract_metadata" +
-				"(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values ("
+		sql = "insert into dyextn_abstract_metadata"
+				+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values ("
 				+ nextIdOfAbstractMetadata + ",null,null,null,'" + associationName + "',null)";
 		if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 		{
@@ -152,16 +152,10 @@ public class AddAssociations
 		if (isSwap)
 		{
 			roleId = nextIdOfDERole + 1;
-			sql = "insert into dyextn_role" +
-					"(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) " +
-					"values ("
-					+ nextIdOfDERole
-					+ ",'"
-					+ associationType
-					+ "',"
-					+ maxCardinality
-					+ ",0,'"
-					+ roleName + "')";
+			sql = "insert into dyextn_role"
+					+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) "
+					+ "values (" + nextIdOfDERole + ",'" + associationType + "'," + maxCardinality
+					+ ",0,'" + roleName + "')";
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
 				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql, "dyextn_role");
@@ -170,17 +164,15 @@ public class AddAssociations
 
 			if (isSystemGenerated == 0)
 			{
-				sql = "insert into dyextn_role" +
-					"(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) " +
-						"values ("
-						+ roleId + ",'ASSOCIATION',2,0,'" + roleNameTable + "')";
+				sql = "insert into dyextn_role"
+						+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) "
+						+ "values (" + roleId + ",'ASSOCIATION',2,0,'" + roleNameTable + "')";
 			}
 			else
 			{
-				sql = "insert into dyextn_role" +
-					"(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME)" +
-						" values ("
-						+ roleId + ",'ASSOCIATION',1,0,'" + roleNameTable + "')";
+				sql = "insert into dyextn_role"
+						+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME)"
+						+ " values (" + roleId + ",'ASSOCIATION',1,0,'" + roleNameTable + "')";
 			}
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
@@ -225,35 +217,25 @@ public class AddAssociations
 		{
 			if (targetAssociationId == null)
 			{
-				sql = "insert into dyextn_constraint_properties" +
-					" (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties
-						+ ",null,'"
-						+ srcAssociationId
-						+ "',"
+				sql = "insert into dyextn_constraint_properties"
+						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+						+ nextIdOfDBProperties + ",null,'" + srcAssociationId + "',"
 						+ nextIdOfAbstractMetadata + ")";
 			}
 			else
 			{
 				if (srcAssociationId == null)
 				{
-					sql = "insert into dyextn_constraint_properties" +
-					" (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID)" +
-						" values("
-							+ nextIdOfDBProperties
-							+ ",'"
-							+ targetAssociationId
-							+ "',"
+					sql = "insert into dyextn_constraint_properties"
+							+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID)"
+							+ " values(" + nextIdOfDBProperties + ",'" + targetAssociationId + "',"
 							+ srcAssociationId + "," + nextIdOfAbstractMetadata + ")";
 				}
 				else
 				{
-					sql = "insert into dyextn_constraint_properties" +
-					" (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-							+ nextIdOfDBProperties
-							+ ",'"
-							+ targetAssociationId
-							+ "','"
+					sql = "insert into dyextn_constraint_properties"
+							+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+							+ nextIdOfDBProperties + ",'" + targetAssociationId + "','"
 							+ srcAssociationId + "'," + nextIdOfAbstractMetadata + ")";
 				}
 			}
@@ -263,12 +245,9 @@ public class AddAssociations
 		{
 			if (targetAssociationId == null)
 			{
-				sql = "insert into dyextn_constraint_properties" +
-				" (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties
-						+ ",'"
-						+ srcAssociationId
-						+ "',null,"
+				sql = "insert into dyextn_constraint_properties"
+						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+						+ nextIdOfDBProperties + ",'" + srcAssociationId + "',null,"
 						+ nextIdOfAbstractMetadata + ")";
 			}
 			else
@@ -277,12 +256,9 @@ public class AddAssociations
 				{
 					srcAssociationId = "'" + srcAssociationId + "'";
 				}
-				sql = "insert into dyextn_constraint_properties" +
-				" (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties
-						+ ","
-						+ srcAssociationId
-						+ ",'"
+				sql = "insert into dyextn_constraint_properties"
+						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
+						+ nextIdOfDBProperties + "," + srcAssociationId + ",'"
 						+ targetAssociationId + "'," + nextIdOfAbstractMetadata + ")";
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());

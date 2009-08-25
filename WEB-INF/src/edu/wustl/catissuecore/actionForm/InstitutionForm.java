@@ -57,7 +57,7 @@ public class InstitutionForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		Institution institute = (Institution) abstractDomain;
+		final Institution institute = (Institution) abstractDomain;
 		this.setId(institute.getId().longValue());
 		this.name = institute.getName();
 	}
@@ -85,6 +85,7 @@ public class InstitutionForm extends AbstractActionForm
 	/**
 	 * @return INSTITUTION_FORM_ID Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.INSTITUTION_FORM_ID;
@@ -94,6 +95,7 @@ public class InstitutionForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 
@@ -105,19 +107,20 @@ public class InstitutionForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		try
 		{
-			if (validator.isEmpty(name))
+			if (Validator.isEmpty(this.name))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("institution.name")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
@@ -7,10 +8,9 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Specimen;
 
-
 public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 {
-	
+
 	private static final long serialVersionUID = -6804520255061293674L;
 
 	private String uniqueIdentifier;
@@ -31,22 +31,21 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	protected String type;
 
 	/**
-     * Anatomic site from which the specimen was derived.
-     */
-    private String tissueSite;
+	 * Anatomic site from which the specimen was derived.
+	 */
+	private String tissueSite;
 
-    /**
-     * For bilateral sites, left or right.
-     */
-    private String tissueSide;
+	/**
+	 * For bilateral sites, left or right.
+	 */
+	private String tissueSide;
 
-    /**
-     * Histopathological character of the specimen 
-     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
-     */
-    private String pathologicalStatus;
-    
-    
+	/**
+	 * Histopathological character of the specimen 
+	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+	 */
+	private String pathologicalStatus;
+
 	/**
 	 * Concentration of specimen.
 	 */
@@ -56,59 +55,55 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	 * Amount of Specimen.
 	 */
 	protected String quantity;
-	
+
 	/**
-     * A historical information about the specimen i.e. whether the specimen is a new specimen
-     * or a derived specimen or an aliquot.
-     */
-    private String lineage;
-    
-    private String storageContainerForSpecimen;
-    
-    private String storageContainerForAliquotSpecimem;
-	
-	
+	 * A historical information about the specimen i.e. whether the specimen is a new specimen
+	 * or a derived specimen or an aliquot.
+	 */
+	private String lineage;
+
+	private String storageContainerForSpecimen;
+
+	private String storageContainerForAliquotSpecimem;
+
 	private String collectionEventCollectionProcedure;
-	
+
 	private String collectionEventContainer;
-	
+
 	private String receivedEventReceivedQuality;
-	
-	
-	private long collectionEventId;																											// Mandar : CollectionEvent 10-July-06
+
+	private long collectionEventId; // Mandar : CollectionEvent 10-July-06
 	private long collectionEventSpecimenId;
 	private long collectionEventUserId;
-		
-	
+
 	private long receivedEventId;
 	private long receivedEventSpecimenId;
 	private long receivedEventUserId;
-	
-	 /**
-     * A number that tells how many aliquots to be created.
-     */
-    private String noOfAliquots;
-    
-    /**
-     * Initial quantity per aliquot.
-     */
-    private String quantityPerAliquot;
-	
+
+	/**
+	* A number that tells how many aliquots to be created.
+	*/
+	private String noOfAliquots;
+
+	/**
+	 * Initial quantity per aliquot.
+	 */
+	private String quantityPerAliquot;
+
 	/**
 	 * Collection of aliquot specimens derived from this specimen. 
 	 */
-	protected Map aliquotSpecimenCollection =new LinkedHashMap();
-	
+	protected Map aliquotSpecimenCollection = new LinkedHashMap();
+
 	/**
 	 * Collection of derive specimens derived from this specimen. 
 	 */
 	protected Map deriveSpecimenCollection = new LinkedHashMap();
-	
-	
-    private int noOfDeriveSpecimen=0;
-    
-    private Map deriveSpecimen = new HashMap();
-    
+
+	private int noOfDeriveSpecimen = 0;
+
+	private Map deriveSpecimen = new HashMap();
+
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
 	 */
@@ -128,18 +123,18 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	 * Amount of Specimen.
 	 */
 	protected String deriveQuantity;
-	
+
 	protected String parentName;
 
 	private long id = -1;
-	
+
 	private long specimenCharsId = -1;
 	private GenericSpecimen formSpecimenVo;
 	private Specimen corresSpecimen;
-	
+
 	private boolean showBarcode = true;
 	private boolean showLabel = true;
-	
+
 	public GenericSpecimen getFormSpecimenVo()
 	{
 		return this.formSpecimenVo;
@@ -160,110 +155,95 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.corresSpecimen = corresSpecimen;
 	}
 
-	public long getId() {
-		return id;
+	public long getId()
+	{
+		return this.id;
 	}
 
-
-	public void setId(long id) {
+	public void setId(long id)
+	{
 		this.id = id;
 	}
 
-
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
 
-	
 	public void setClassName(String className)
 	{
 		this.className = className;
 	}
 
-	
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
-	
 	public void setType(String type)
 	{
 		this.type = type;
 	}
 
-	
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
-	
 	public void setTissueSite(String tissueSite)
 	{
 		this.tissueSite = tissueSite;
 	}
 
-	
 	public String getTissueSide()
 	{
-		return tissueSide;
+		return this.tissueSide;
 	}
 
-	
 	public void setTissueSide(String tissueSide)
 	{
 		this.tissueSide = tissueSide;
 	}
 
-	
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
-	
 	public void setPathologicalStatus(String pathologicalStatus)
 	{
 		this.pathologicalStatus = pathologicalStatus;
 	}
 
-	
 	public String getConcentration()
 	{
-		if(concentration==null)
+		if (this.concentration == null)
 		{
-			concentration = "0";
+			this.concentration = "0";
 		}
-		return concentration;
+		return this.concentration;
 	}
 
-	
 	public void setConcentration(String concentration)
 	{
 		this.concentration = concentration;
 	}
 
-	
 	public String getQuantity()
 	{
-		return quantity;
+		return this.quantity;
 	}
 
-	
 	public void setQuantity(String quantity)
 	{
 		this.quantity = quantity;
 	}
 
-	
 	public String getLineage()
 	{
-		return lineage;
+		return this.lineage;
 	}
 
-	
 	public void setLineage(String lineage)
 	{
 		this.lineage = lineage;
@@ -271,266 +251,210 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	public String getNoOfAliquots()
 	{
-		return noOfAliquots;
+		return this.noOfAliquots;
 	}
 
-	
 	public void setNoOfAliquots(String noOfAliquots)
 	{
 		this.noOfAliquots = noOfAliquots;
 	}
 
-	
 	public String getQuantityPerAliquot()
 	{
-		return quantityPerAliquot;
+		return this.quantityPerAliquot;
 	}
 
-	
 	public void setQuantityPerAliquot(String quantityPerAliquot)
 	{
 		this.quantityPerAliquot = quantityPerAliquot;
 	}
 
-	
-	
-	
 	public String getReceivedEventReceivedQuality()
 	{
-		return receivedEventReceivedQuality;
+		return this.receivedEventReceivedQuality;
 	}
 
-	
 	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
 	{
 		this.receivedEventReceivedQuality = receivedEventReceivedQuality;
 	}
 
-	
 	public int getNoOfDeriveSpecimen()
 	{
-		return noOfDeriveSpecimen;
+		return this.noOfDeriveSpecimen;
 	}
 
-	
 	public void setNoOfDeriveSpecimen(int noOfDeriveSpecimen)
 	{
 		this.noOfDeriveSpecimen = noOfDeriveSpecimen;
 	}
 
-	
 	public Map getDeriveSpecimen()
 	{
-		return deriveSpecimen;
+		return this.deriveSpecimen;
 	}
 
-	
 	public void setDeriveSpecimen(Map deriveSpecimen)
 	{
 		this.deriveSpecimen = deriveSpecimen;
 	}
 
-	
 	public String getDeriveClassName()
 	{
-		return deriveClassName;
+		return this.deriveClassName;
 	}
 
-	
 	public void setDeriveClassName(String deriveClassName)
 	{
 		this.deriveClassName = deriveClassName;
 	}
 
-	
 	public String getDeriveType()
 	{
-		return deriveType;
+		return this.deriveType;
 	}
 
-	
 	public void setDeriveType(String deriveType)
 	{
 		this.deriveType = deriveType;
 	}
 
-	
 	public String getDeriveConcentration()
 	{
-		return deriveConcentration;
+		return this.deriveConcentration;
 	}
 
-	
 	public void setDeriveConcentration(String deriveConcentration)
 	{
 		this.deriveConcentration = deriveConcentration;
 	}
 
-	
 	public String getDeriveQuantity()
 	{
-		return deriveQuantity;
+		return this.deriveQuantity;
 	}
 
-	
 	public void setDeriveQuantity(String deriveQuantity)
 	{
 		this.deriveQuantity = deriveQuantity;
 	}
 
-	
 	public static long getSerialVersionUID()
 	{
 		return serialVersionUID;
 	}
 
-
-	
 	public LinkedHashMap getAliquotSpecimenCollection()
 	{
-		return (LinkedHashMap)aliquotSpecimenCollection;
+		return (LinkedHashMap) this.aliquotSpecimenCollection;
 	}
 
 	public void addAliquotSpecimenBean(SpecimenRequirementBean specimenRequirementBean)
 	{
-		aliquotSpecimenCollection.put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
+		this.aliquotSpecimenCollection.put(specimenRequirementBean.getUniqueIdentifier(),
+				specimenRequirementBean);
 	}
 
 	public long getCollectionEventId()
 	{
-		return collectionEventId;
+		return this.collectionEventId;
 	}
 
-
-	
 	public void setCollectionEventId(long collectionEventId)
 	{
 		this.collectionEventId = collectionEventId;
 	}
 
-
-	
 	public long getCollectionEventSpecimenId()
 	{
-		return collectionEventSpecimenId;
+		return this.collectionEventSpecimenId;
 	}
 
-
-	
 	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
 	{
 		this.collectionEventSpecimenId = collectionEventSpecimenId;
 	}
 
-	
 	public LinkedHashMap getDeriveSpecimenCollection()
 	{
-		return (LinkedHashMap)deriveSpecimenCollection;
+		return (LinkedHashMap) this.deriveSpecimenCollection;
 	}
 
-	
 	public String getDisplayName()
 	{
-		return displayName;
+		return this.displayName;
 	}
 
-
-	
 	public void setDisplayName(String displayName)
 	{
 		this.displayName = displayName;
 	}
 
-
-	
 	public String getStorageContainerForSpecimen()
 	{
-		return storageContainerForSpecimen;
+		return this.storageContainerForSpecimen;
 	}
 
-
-	
 	public void setStorageContainerForSpecimen(String storageContainerForSpecimen)
 	{
 		this.storageContainerForSpecimen = storageContainerForSpecimen;
 	}
 
-
-	
 	public String getStorageContainerForAliquotSpecimem()
 	{
-		return storageContainerForAliquotSpecimem;
+		return this.storageContainerForAliquotSpecimem;
 	}
 
-
-	
 	public void setStorageContainerForAliquotSpecimem(String storageContainerForAliquotSpecimem)
 	{
 		this.storageContainerForAliquotSpecimem = storageContainerForAliquotSpecimem;
 	}
 
-
-	
-	
-	
 	public long getCollectionEventUserId()
 	{
-		return collectionEventUserId;
+		return this.collectionEventUserId;
 	}
 
-
-	
 	public void setCollectionEventUserId(long collectionEventUserId)
 	{
 		this.collectionEventUserId = collectionEventUserId;
 	}
 
-
-	
 	public long getReceivedEventId()
 	{
-		return receivedEventId;
+		return this.receivedEventId;
 	}
 
-
-	
 	public void setReceivedEventId(long receivedEventId)
 	{
 		this.receivedEventId = receivedEventId;
 	}
 
-
-	
 	public long getReceivedEventSpecimenId()
 	{
-		return receivedEventSpecimenId;
+		return this.receivedEventSpecimenId;
 	}
 
-
-	
 	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
 	{
 		this.receivedEventSpecimenId = receivedEventSpecimenId;
 	}
 
-
-	
 	public long getReceivedEventUserId()
 	{
-		return receivedEventUserId;
+		return this.receivedEventUserId;
 	}
 
 	public void setReceivedEventUserId(long receivedEventUserId)
 	{
 		this.receivedEventUserId = receivedEventUserId;
 	}
-	
+
 	public String getUniqueIdentifier()
 	{
-		return uniqueIdentifier;
+		return this.uniqueIdentifier;
 	}
 
-	
 	public void setUniqueIdentifier(String uniqueIdentifier)
 	{
 		this.uniqueIdentifier = uniqueIdentifier;
@@ -538,7 +462,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	public String getParentName()
 	{
-		return parentName;
+		return this.parentName;
 	}
 
 	public void setParentName(String parentName)
@@ -546,130 +470,113 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.parentName = parentName;
 	}
 
-
-	public long getSpecimenCharsId() {
-		return specimenCharsId;
+	public long getSpecimenCharsId()
+	{
+		return this.specimenCharsId;
 	}
 
-
-	public void setSpecimenCharsId(long specimenCharsId) {
+	public void setSpecimenCharsId(long specimenCharsId)
+	{
 		this.specimenCharsId = specimenCharsId;
 	}
 
-
-	
-	public String getBarCode() {
+	public String getBarCode()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
-	public boolean getCheckedSpecimen() {
+	public boolean getCheckedSpecimen()
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-
-	
-	public String getContainerId() {
+	public String getContainerId()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
-	public String getPositionDimensionOne() {
+	public String getPositionDimensionOne()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
-	public String getPositionDimensionTwo() {
+	public String getPositionDimensionTwo()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
-	public boolean getReadOnly() {
+	public boolean getReadOnly()
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-
-	
-	public String getSelectedContainerName() {
+	public String getSelectedContainerName()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
 	public void setAliquotSpecimenCollection(
-			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection) {
+			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection)
+	{
 
 		this.aliquotSpecimenCollection = aliquotSpecimenCollection;
-		
+
 	}
 
-
-	 
-	public void setBarCode(String barCode) {
+	public void setBarCode(String barCode)
+	{
 		// TODO Auto-generated method stub
-		
-	}
- 
 
-	 
-	public void setCheckedSpecimen(boolean checkedSpecimen) {
+	}
+
+	public void setCheckedSpecimen(boolean checkedSpecimen)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	 
-	public void setContainerId(String containerId) {
+	public void setContainerId(String containerId)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	 
 	public void setDeriveSpecimenCollection(
-			LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection) {
-		this.deriveSpecimenCollection =	deriveSpecimenCollection;
+			LinkedHashMap<String, GenericSpecimen> deriveSpecimenCollection)
+	{
+		this.deriveSpecimenCollection = deriveSpecimenCollection;
 	}
 
-
-	 
-	public void setPositionDimensionOne(String positionDimensionOne) {
+	public void setPositionDimensionOne(String positionDimensionOne)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	 
-	public void setPositionDimensionTwo(String positionDimensionTwo) {
+	public void setPositionDimensionTwo(String positionDimensionTwo)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	 
-	public void setReadOnly(boolean readOnly) {
+	public void setReadOnly(boolean readOnly)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	 
-	public void setSelectedContainerName(String selectedContainerName) {
+	public void setSelectedContainerName(String selectedContainerName)
+	{
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getCollectionProtocolId()
@@ -680,91 +587,88 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		return null;
 	}
 
-
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#setCollectionProtocolId(java.lang.Long)
 	 */
 	public void setCollectionProtocolId(Long collectionProtocolId)
 	{
 		// TODO Auto-generated method stub
-		
-	}	
-	
+
+	}
+
 	public boolean getShowBarcode()
 	{
 		// TODO Auto-generated method stub
-		return showBarcode;
+		return this.showBarcode;
 	}
 
 	public boolean getShowLabel()
 	{
 		// TODO Auto-generated method stub
-		return showLabel;
+		return this.showLabel;
 	}
 
 	public void setShowBarcode(boolean showBarcode)
 	{
-		this.showBarcode = showBarcode;	
-		
+		this.showBarcode = showBarcode;
+
 	}
 
 	public void setShowLabel(boolean showLabel)
 	{
 		this.showLabel = showLabel;
-		
+
 	}
 
-	public boolean getPrintSpecimen() 
+	public boolean getPrintSpecimen()
 	{
 		return false;
 	}
 
-	public void setPrintSpecimen(boolean printSpecimen) {
-		
+	public void setPrintSpecimen(boolean printSpecimen)
+	{
+
 	}
 
 	public String getCollectionEventCollectionProcedure()
 	{
-		return collectionEventCollectionProcedure;
+		return this.collectionEventCollectionProcedure;
 	}
 
-	
 	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
 	{
 		this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
 	}
 
-	
 	public String getCollectionEventContainer()
 	{
-		return collectionEventContainer;
+		return this.collectionEventContainer;
 	}
 
-	
 	public void setCollectionEventContainer(String collectionEventContainer)
 	{
 		this.collectionEventContainer = collectionEventContainer;
 	}
 
-	
 	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	private String labelFormat;
 
-    /**
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
-    /**
+
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public void setLabelFormat(String labelFormat)
 	{
 		this.labelFormat = labelFormat;
 	}
-	
+
 }

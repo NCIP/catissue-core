@@ -22,7 +22,7 @@ public class AddSpecimenRequirementMetaData extends BaseMetadata
 	/**
 	 * Statement instance.
 	 */
-	private Statement stmt = null;
+	private final Statement stmt = null;
 
 	/**
 	 * This method adds Specimen Requirement Meta Data.

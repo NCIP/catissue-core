@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.vo;
 
 import java.util.List;

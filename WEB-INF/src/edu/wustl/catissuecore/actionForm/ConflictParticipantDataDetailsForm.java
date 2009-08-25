@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -98,7 +98,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getBirthDate()
 	{
-		return birthDate;
+		return this.birthDate;
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getDeathDate()
 	{
-		return deathDate;
+		return this.deathDate;
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getEthinicity()
 	{
-		return ethinicity;
+		return this.ethinicity;
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getGender()
 	{
-		return gender;
+		return this.gender;
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getVitalStatus()
 	{
-		return vitalStatus;
+		return this.vitalStatus;
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public Collection getMedicalIdentifierNumbers()
 	{
-		return medicalIdentifierNumbers;
+		return this.medicalIdentifierNumbers;
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getRace()
 	{
-		return race;
+		return this.race;
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getSexGenotype()
 	{
-		return sexGenotype;
+		return this.sexGenotype;
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public String getSocialSecurityNumber()
 	{
-		return socialSecurityNumber;
+		return this.socialSecurityNumber;
 	}
 
 	/**
@@ -285,6 +285,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 * 
 	 */
+	@Override
 	protected void reset()
 	{
 
@@ -296,7 +297,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject domainObj)
 	{
-		String dtePattern = CommonServiceLocator.getInstance().getDatePattern();
+		final String dtePattern = CommonServiceLocator.getInstance().getDatePattern();
 		final Participant participant = (Participant) domainObj;
 		try
 		{
@@ -304,11 +305,13 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			this.vitalStatus = participant.getVitalStatus();
 			if (participant.getBirthDate() != null)
 			{
-				this.birthDate = Utility.parseDateToString(participant.getBirthDate(), dtePattern);
+				this.birthDate = CommonUtilities.parseDateToString(participant.getBirthDate(),
+						dtePattern);
 			}
 			if (participant.getDeathDate() != null)
 			{
-				this.deathDate = Utility.parseDateToString(participant.getDeathDate(), dtePattern);
+				this.deathDate = CommonUtilities.parseDateToString(participant.getDeathDate(),
+						dtePattern);
 			}
 			this.ethinicity = participant.getEthnicity();
 			final Collection tempRaceColl = participant.getRaceCollection();
@@ -328,14 +331,14 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 			this.socialSecurityNumber = participant.getSocialSecurityNumber();
 			this.medicalIdentifierNumbers = participant.getParticipantMedicalIdentifierCollection();
 
-			if (medicalIdentifierNumbers != null)
+			if (this.medicalIdentifierNumbers != null)
 			{
-				values = edu.wustl.catissuecore.caties.util.ViewSPRUtil
-						.getMedicalIdentifierNumbers(medicalIdentifierNumbers);
-				counter = medicalIdentifierNumbers.size();
+				this.values = edu.wustl.catissuecore.caties.util.ViewSPRUtil
+						.getMedicalIdentifierNumbers(this.medicalIdentifierNumbers);
+				this.counter = this.medicalIdentifierNumbers.size();
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("viewSPR:Participant information is null");
 		}
@@ -347,6 +350,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return identifier of Form
 	 */
+	@Override
 	public int getFormId()
 	{
 		int result = Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID;
@@ -363,7 +367,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public int getCounter()
 	{
-		return counter;
+		return this.counter;
 	}
 
 	/**
@@ -382,9 +386,9 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public void setValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -395,7 +399,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public Object getValue(final String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -404,7 +408,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
@@ -430,6 +434,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getId()
 	 * @return id identifier of current domain object
 	 */
+	@Override
 	public long getId()
 	{
 		return super.getId();
@@ -440,6 +445,7 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setId(long)
 	 * @param id identifier of current domain object
 	 */
+	@Override
 	public void setId(final long id)
 	{
 		super.setId(id);

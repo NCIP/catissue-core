@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class SpunEventParametersAction extends SpecimenEventParametersAction
 {
+
 	/**
 	* @param request object of HttpServletRequest
 	* @param eventParametersForm : eventParametersForm
@@ -22,11 +23,11 @@ public class SpunEventParametersAction extends SpecimenEventParametersAction
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		// TODO Auto-generated method stub
-		SpunEventParametersForm spunEventParametersForm = (SpunEventParametersForm) eventParametersForm;
+		final SpunEventParametersForm spunEventParametersForm = (SpunEventParametersForm) eventParametersForm;
 
 		// String operation = (String)
 		// request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
+		String formName;
 
 		boolean readOnlyValue;
 		if (spunEventParametersForm.getOperation().equals(Constants.EDIT))
@@ -37,10 +38,9 @@ public class SpunEventParametersAction extends SpecimenEventParametersAction
 		else
 		{
 			formName = Constants.SPUN_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);

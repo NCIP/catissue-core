@@ -132,17 +132,17 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	{
 		synchronized (parent.getTreeLock())
 		{
-			Insets insets = parent.getInsets();
+			final Insets insets = parent.getInsets();
 			int width = 0;
-			int height = vgap;
+			int height = this.vgap;
 			for (int i = 0; i < parent.getComponentCount(); i++)
 			{
-				Component child = parent.getComponent(i);
+				final Component child = parent.getComponent(i);
 				width = Math.max(child.getMaximumSize().width, width);
-				height += child.getMaximumSize().height + vgap;
+				height += child.getMaximumSize().height + this.vgap;
 			}
-			return new Dimension(insets.left + width + insets.right + hgap * 2, insets.top + height
-					+ insets.bottom);
+			return new Dimension(insets.left + width + insets.right + this.hgap * 2, insets.top
+					+ height + insets.bottom);
 		}
 	}
 
@@ -171,17 +171,17 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	{
 		synchronized (parent.getTreeLock())
 		{
-			Insets insets = parent.getInsets();
+			final Insets insets = parent.getInsets();
 			int width = 0;
-			int height = vgap;
+			int height = this.vgap;
 			for (int i = 0; i < parent.getComponentCount(); i++)
 			{
-				Component child = parent.getComponent(i);
+				final Component child = parent.getComponent(i);
 				width = Math.max(child.getMinimumSize().width, width);
-				height += child.getMinimumSize().height + vgap;
+				height += child.getMinimumSize().height + this.vgap;
 			}
-			return new Dimension(insets.left + width + insets.right + hgap * 2, insets.top + height
-					+ insets.bottom);
+			return new Dimension(insets.left + width + insets.right + this.hgap * 2, insets.top
+					+ height + insets.bottom);
 		}
 	}
 
@@ -198,18 +198,18 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	{
 		synchronized (parent.getTreeLock())
 		{
-			Insets insets = parent.getInsets();
-			int height = vgap;
-			int width = min;
+			final Insets insets = parent.getInsets();
+			int height = this.vgap;
+			int width = this.min;
 			for (int i = 0; i < parent.getComponentCount(); i++)
 			{
-				Component child = parent.getComponent(i);
-				Dimension d = child.getPreferredSize();
+				final Component child = parent.getComponent(i);
+				final Dimension d = child.getPreferredSize();
 				width = Math.max(width, d.width);
-				height += d.height + vgap;
+				height += d.height + this.vgap;
 			}
-			return new Dimension(insets.left + width + insets.right + hgap * 2, insets.top + height
-					+ insets.bottom);
+			return new Dimension(insets.left + width + insets.right + this.hgap * 2, insets.top
+					+ height + insets.bottom);
 		}
 	}
 
@@ -223,20 +223,20 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	{
 		synchronized (parent.getTreeLock())
 		{
-			Insets insets = parent.getInsets();
-			Rectangle bounds = parent.getBounds();
+			final Insets insets = parent.getInsets();
+			final Rectangle bounds = parent.getBounds();
 
-			int xPos = insets.left + hgap;
-			int yPos = insets.top + vgap;
-			int width = bounds.width - (insets.left + insets.right + hgap * 2);
+			final int xPos = insets.left + this.hgap;
+			int yPos = insets.top + this.vgap;
+			final int width = bounds.width - (insets.left + insets.right + this.hgap * 2);
 
 			for (int i = 0; i < parent.getComponentCount(); i++)
 			{
-				Component child = parent.getComponent(i);
+				final Component child = parent.getComponent(i);
 				child.setSize(width, child.getHeight());
-				Dimension prefSize = child.getPreferredSize();
+				final Dimension prefSize = child.getPreferredSize();
 				child.setBounds(xPos, yPos, width, prefSize.height);
-				yPos += prefSize.height + vgap;
+				yPos += prefSize.height + this.vgap;
 			}
 		}
 	}
@@ -248,7 +248,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public int getHgap()
 	{
-		return hgap;
+		return this.hgap;
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public int getVgap()
 	{
-		return vgap;
+		return this.vgap;
 	}
 
 	/**

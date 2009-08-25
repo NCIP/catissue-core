@@ -34,9 +34,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -252,7 +252,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getButtonType()
 	{
-		return buttonType;
+		return this.buttonType;
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public int getNumberOfSpecimens()
 	{
-		return numberOfSpecimens;
+		return this.numberOfSpecimens;
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public SpecimenCollectionGroupForm()
 	{
-		reset();
+		this.reset();
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getClinicalDiagnosis()
 	{
-		return clinicalDiagnosis;
+		return this.clinicalDiagnosis;
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -324,7 +324,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getSurgicalPathologyNumber()
 	{
-		return surgicalPathologyNumber;
+		return this.surgicalPathologyNumber;
 	}
 
 	/**
@@ -340,7 +340,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getParticipantId()
 	{
-		return participantId;
+		return this.participantId;
 	}
 
 	/**
@@ -373,7 +373,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public int getRadioButtonForParticipant()
 	{
-		return radioButtonForParticipant;
+		return this.radioButtonForParticipant;
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public void setRadioButtonForParticipant(int radioButton)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
 			this.radioButtonForParticipant = radioButton;
 		}
@@ -391,6 +391,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 		//		this.clinicalDiagnosis = null;
@@ -412,18 +413,21 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		//		if(operation.equals("add" ) )
 		//			setMutable(true );
 
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
+		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
 
 		this.setId(specimenCollectionGroup.getId().longValue());
-		name = specimenCollectionGroup.getName();
-		barcode = Utility.toString(specimenCollectionGroup.getBarcode());
+		this.name = specimenCollectionGroup.getName();
+		this.barcode = CommonUtilities.toString(specimenCollectionGroup.getBarcode());
 		logger.debug("specimenCollectionGroup.getClinicalDiagnosis() "
 				+ specimenCollectionGroup.getClinicalDiagnosis());
-		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
-		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
-		this.setActivityStatus(Utility.toString(specimenCollectionGroup.getActivityStatus()));
-		collectionStatus = Utility.toString(specimenCollectionGroup.getCollectionStatus());
-		surgicalPathologyNumber = Utility.toString(specimenCollectionGroup
+		this.clinicalDiagnosis = CommonUtilities.toString(specimenCollectionGroup
+				.getClinicalDiagnosis());
+		this.clinicalStatus = CommonUtilities.toString(specimenCollectionGroup.getClinicalStatus());
+		this.setActivityStatus(CommonUtilities
+				.toString(specimenCollectionGroup.getActivityStatus()));
+		this.collectionStatus = CommonUtilities.toString(specimenCollectionGroup
+				.getCollectionStatus());
+		this.surgicalPathologyNumber = CommonUtilities.toString(specimenCollectionGroup
 				.getSurgicalPathologyNumber());
 		/**
 		* Name: Shital Lawhale
@@ -433,7 +437,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		* See also: 1_1 to 1_5
 		* Description : Get comment field from database and set it to form bean.
 		*/
-		comment = Utility.toString(specimenCollectionGroup.getComment());
+		this.comment = CommonUtilities.toString(specimenCollectionGroup.getComment());
 
 		////		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
 		//		surgicalPathologyNumber = AppUtility.toString(clinicalReport.getSurgicalPathologyNumber());
@@ -443,18 +447,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		//			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
 		//		}
 
-		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration()
+		this.collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getCollectionProtocol().getId().longValue();
-		collectionProtocolName = specimenCollectionGroup.getCollectionProtocolRegistration()
+		this.collectionProtocolName = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getCollectionProtocol().getShortTitle();
-		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId()
-				.longValue();
+		this.collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent()
+				.getId().longValue();
 
-		Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration()
+		final Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getParticipant();
 		/**For Migration Start**/
 
-		participantId = participant.getId();
+		this.participantId = participant.getId();
 		/**For Migration End**/
 		logger.debug("SCgForm --------- Participant : -- " + participant.toString());
 		//if(participant!=null)
@@ -481,7 +485,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			lastName = participant.getLastName();
 		}
 
-		participantName = lastName + ", " + firstName;
+		this.participantName = lastName + ", " + firstName;
 
 		if (participant.getBirthDate() == null)
 		{
@@ -502,10 +506,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		}
 
 		//kalpana :bug #5761
-		if (Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration()
+		if (CommonUtilities.toString(specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getProtocolParticipantIdentifier()) != null)
 		{
-			protocolParticipantIdentifier = Utility.toString(specimenCollectionGroup
+			this.protocolParticipantIdentifier = CommonUtilities.toString(specimenCollectionGroup
 					.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
 
 		}
@@ -513,30 +517,30 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		if (firstName.length() > 0 || lastName.length() > 0 || birthDate.length() > 0
 				|| ssn.length() > 0)
 		{
-			participantId = participant.getId().longValue();
-			radioButtonForParticipant = 1;
+			this.participantId = participant.getId().longValue();
+			this.radioButtonForParticipant = 1;
 		}
 		else
 		{
-			radioButtonForParticipant = 2;
+			this.radioButtonForParticipant = 2;
 		}
 
-		logger.debug("participantId.................................." + participantId);
+		logger.debug("participantId.................................." + this.participantId);
 		logger.debug("protocolParticipantIdentifier........................."
-				+ protocolParticipantIdentifier);
-		logger.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant);
+				+ this.protocolParticipantIdentifier);
+		logger.debug("SCgForm --------- checkButton : -- " + this.radioButtonForParticipant);
 
 		//Abhishek Mehta If site is null
-		Site site = specimenCollectionGroup.getSpecimenCollectionSite();
+		final Site site = specimenCollectionGroup.getSpecimenCollectionSite();
 		if (null != site)
 		{
-			siteId = site.getId().longValue();
+			this.siteId = site.getId().longValue();
 		}
 
 		/**
 		 * For Consent tracking setting UI attributes
 		 */
-		User witness = specimenCollectionGroup.getCollectionProtocolRegistration()
+		final User witness = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getConsentWitness();
 		if (witness == null || witness.getFirstName() == null)
 		{
@@ -544,11 +548,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		}
 		else
 		{
-			this.witnessName = Utility.toString(witness.getFirstName());
+			this.witnessName = CommonUtilities.toString(witness.getFirstName());
 		}
-		this.signedConsentUrl = Utility.toString(specimenCollectionGroup
+		this.signedConsentUrl = CommonUtilities.toString(specimenCollectionGroup
 				.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate = Utility.parseDateToString(specimenCollectionGroup
+		this.consentDate = CommonUtilities.parseDateToString(specimenCollectionGroup
 				.getCollectionProtocolRegistration().getConsentSignatureDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
 		/**
@@ -559,11 +563,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		* Description: Method to populate Events in SCG form
 		*/
 		//Populating the events
-		setSCGEvents(specimenCollectionGroup);
+		this.setSCGEvents(specimenCollectionGroup);
 
 		//For offset
 		if (specimenCollectionGroup.getOffset() != null)
+		{
 			this.offset = specimenCollectionGroup.getOffset().intValue();
+		}
 	}
 
 	/**
@@ -571,56 +577,56 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	private void setSCGEvents(SpecimenCollectionGroup specimenCollectionGroup)
 	{
-		Collection eventsParametersColl = specimenCollectionGroup
+		final Collection eventsParametersColl = specimenCollectionGroup
 				.getSpecimenEventParametersCollection();
 		if (eventsParametersColl != null && !eventsParametersColl.isEmpty())
 		{
-			Iterator iter = eventsParametersColl.iterator();
+			final Iterator iter = eventsParametersColl.iterator();
 			while (iter.hasNext())
 			{
-				Object tempObj = iter.next();
-				Calendar calender = Calendar.getInstance();
+				final Object tempObj = iter.next();
+				final Calendar calender = Calendar.getInstance();
 				if (tempObj instanceof CollectionEventParameters)
 				{
-					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) tempObj;
+					final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) tempObj;
 					this.collectionEventId = collectionEventParameters.getId().longValue(); // Mandar : CollectionEvent 10-July-06
 					//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
 					this.collectionEventUserId = collectionEventParameters.getUser().getId()
 							.longValue();
 
 					calender.setTime(collectionEventParameters.getTimestamp());
-					this.collectionEventdateOfEvent = Utility.parseDateToString(
+					this.collectionEventdateOfEvent = CommonUtilities.parseDateToString(
 							collectionEventParameters.getTimestamp(), CommonServiceLocator
 									.getInstance().getDatePattern());
-					this.collectionEventTimeInHours = Utility.toString(Integer.toString(calender
-							.get(Calendar.HOUR_OF_DAY)));
-					this.collectionEventTimeInMinutes = Utility.toString(Integer.toString(calender
-							.get(Calendar.MINUTE)));
+					this.collectionEventTimeInHours = CommonUtilities.toString(Integer
+							.toString(calender.get(Calendar.HOUR_OF_DAY)));
+					this.collectionEventTimeInMinutes = CommonUtilities.toString(Integer
+							.toString(calender.get(Calendar.MINUTE)));
 					this.collectionEventCollectionProcedure = collectionEventParameters
 							.getCollectionProcedure();
 					this.collectionEventContainer = collectionEventParameters.getContainer();
-					this.collectionEventComments = Utility.toString(collectionEventParameters
-							.getComment());
+					this.collectionEventComments = CommonUtilities
+							.toString(collectionEventParameters.getComment());
 				}
 				else if (tempObj instanceof ReceivedEventParameters)
 				{
-					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) tempObj;
+					final ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) tempObj;
 
 					calender.setTime(receivedEventParameters.getTimestamp());
 					this.receivedEventId = receivedEventParameters.getId().longValue();
 					//	this.receivedEventSpecimenId = receivedEventParameters.getSpecimen().getId().longValue();
 					this.receivedEventUserId = receivedEventParameters.getUser().getId()
 							.longValue();
-					this.receivedEventDateOfEvent = Utility.parseDateToString(
+					this.receivedEventDateOfEvent = CommonUtilities.parseDateToString(
 							receivedEventParameters.getTimestamp(), CommonServiceLocator
 									.getInstance().getDatePattern());
-					this.receivedEventTimeInHours = Utility.toString(Integer.toString(calender
-							.get(Calendar.HOUR_OF_DAY)));
-					this.receivedEventTimeInMinutes = Utility.toString(Integer.toString(calender
-							.get(Calendar.MINUTE)));
+					this.receivedEventTimeInHours = CommonUtilities.toString(Integer
+							.toString(calender.get(Calendar.HOUR_OF_DAY)));
+					this.receivedEventTimeInMinutes = CommonUtilities.toString(Integer
+							.toString(calender.get(Calendar.MINUTE)));
 					this.receivedEventReceivedQuality = receivedEventParameters
 							.getReceivedQuality();
-					this.receivedEventComments = Utility.toString(receivedEventParameters
+					this.receivedEventComments = CommonUtilities.toString(receivedEventParameters
 							.getComment());
 				}
 			}
@@ -631,6 +637,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return SPECIMEN_COLLECTION_GROUP_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
@@ -641,7 +648,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getSiteId()
 	{
-		return siteId;
+		return this.siteId;
 	}
 
 	/**
@@ -657,7 +664,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getClinicalStatus()
 	{
-		return clinicalStatus;
+		return this.clinicalStatus;
 	}
 
 	/**
@@ -673,7 +680,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getCollectionProtocolEventId()
 	{
-		return collectionProtocolEventId;
+		return this.collectionProtocolEventId;
 	}
 
 	/**
@@ -689,7 +696,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getCollectionProtocolId()
 	{
-		return collectionProtocolId;
+		return this.collectionProtocolId;
 	}
 
 	/**
@@ -705,7 +712,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getParticipantsMedicalIdentifierId()
 	{
-		return participantsMedicalIdentifierId;
+		return this.participantsMedicalIdentifierId;
 	}
 
 	/**
@@ -721,7 +728,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getProtocolParticipantIdentifier()
 	{
-		return protocolParticipantIdentifier;
+		return this.protocolParticipantIdentifier;
 	}
 
 	/**
@@ -738,17 +745,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 		try
 		{
-			setRedirectValue(validator);
+			this.setRedirectValue(validator);
 
 			if (this.getOperation().equals(Constants.EDIT))
 			{
-				if (collectionStatus.trim().length() <= 0)
+				if (this.collectionStatus.trim().length() <= 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.collectionStatus")));
@@ -777,10 +785,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			{
 				//if participant name field is checked.
 				/**For Migration Start**/
-				if (this.participantName == null || validator.isEmpty(this.participantName)) // || AppUtility.this.participantName.trim().equals(""))
+				if (this.participantName == null || Validator.isEmpty(this.participantName)) // || AppUtility.this.participantName.trim().equals(""))
 				{
 					if (this.participantNameWithProtocolId == null
-							|| validator.isEmpty(this.participantNameWithProtocolId))
+							|| Validator.isEmpty(this.participantNameWithProtocolId))
 					{
 						errors
 								.add(
@@ -795,7 +803,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			}
 			else
 			{
-				if (validator.isEmpty(this.protocolParticipantIdentifier))
+				if (Validator.isEmpty(this.protocolParticipantIdentifier))
 				{
 					errors
 							.add(
@@ -830,7 +838,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			}
 
 			// Mandatory Field : clinical Status
-			if (!validator.isValidOption(clinicalStatus))
+			if (!validator.isValidOption(this.clinicalStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
@@ -860,16 +868,17 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			* Description: Methods for validation of events in scg
 			*/
 			//Time validation
-			String collectionTime = this.collectionEventTimeInHours + ":"
+			final String collectionTime = this.collectionEventTimeInHours + ":"
 					+ this.collectionEventTimeInMinutes + ":00";
-			String receivedTime = this.receivedEventTimeInHours + ":"
+			final String receivedTime = this.receivedEventTimeInHours + ":"
 					+ this.receivedEventTimeInMinutes + ":00";
 			//			CollectionEvent validation.
-			EventsUtil.validateCollectionEvent(errors, validator, collectionEventUserId,
-					collectionEventdateOfEvent, collectionEventCollectionProcedure, collectionTime);
+			EventsUtil.validateCollectionEvent(errors, validator, this.collectionEventUserId,
+					this.collectionEventdateOfEvent, this.collectionEventCollectionProcedure,
+					collectionTime);
 			//ReceivedEvent validation
-			EventsUtil.validateReceivedEvent(errors, validator, receivedEventUserId,
-					receivedEventDateOfEvent, receivedEventReceivedQuality, receivedTime);
+			EventsUtil.validateReceivedEvent(errors, validator, this.receivedEventUserId,
+					this.receivedEventDateOfEvent, this.receivedEventReceivedQuality, receivedTime);
 
 			//Added by Ashish for Multiple Specimens
 			/**
@@ -880,27 +889,27 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			 * See also: 1-8
 			 * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 			*/
-			String buttonName = request.getParameter("button");
+			final String buttonName = request.getParameter("button");
 
 			if (buttonName != null && !buttonName.equals(""))
 			{
-				if (numberOfSpecimens < 1)
+				if (this.numberOfSpecimens < 1)
 				{
-					setNumberOfSpecimens(1);
+					this.setNumberOfSpecimens(1);
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.multiplespecimen.minimumspecimen"));
 				}
 			}
 			request.getSession().setAttribute("scgForm", this);
 			//For setting whether to set specimen 
-			String applyToString = request.getParameter("applyToSpecimenValue");
+			final String applyToString = request.getParameter("applyToSpecimenValue");
 			if (applyToString != null && applyToString.equals("true"))
 			{
-				applyEventsToSpecimens = true;
+				this.applyEventsToSpecimens = true;
 			}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
@@ -914,27 +923,28 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if (addNewFor.equals("collectionProtocol"))
 		{
-			setCollectionProtocolId(addObjectIdentifier.longValue());
+			this.setCollectionProtocolId(addObjectIdentifier.longValue());
 		}
 		else if (addNewFor.equals("site"))
 		{
-			setSiteId(addObjectIdentifier.longValue());
+			this.setSiteId(addObjectIdentifier.longValue());
 		}
 		else if (addNewFor.equals("participant"))
 		{
 			//            setParticipantId(addObjectIdentifier.longValue());
-			setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
-			setRadioButtonForParticipant(1);
+			this.setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
+			this.setRadioButtonForParticipant(1);
 		}
 		else if (addNewFor.equals("protocolParticipantIdentifier"))
 		{
-			setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
+			this.setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
 			//            setProtocolParticipantIdentifier(addObjectIdentifier.toString());
-			setRadioButtonForParticipant(2);
+			this.setRadioButtonForParticipant(2);
 		}
 	}
 
@@ -944,7 +954,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public Map getConsentResponseForScgValues()
 	{
-		return consentResponseForScgValues;
+		return this.consentResponseForScgValues;
 	}
 
 	/**
@@ -961,8 +971,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public void setConsentResponseForScgValue(String key, Object value)
 	{
-		if (isMutable())
-			consentResponseForScgValues.put(key, value);
+		if (this.isMutable())
+		{
+			this.consentResponseForScgValues.put(key, value);
+		}
 	}
 
 	/**
@@ -971,7 +983,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public Object getConsentResponseForScgValue(String key)
 	{
-		return consentResponseForScgValues.get(key);
+		return this.consentResponseForScgValues.get(key);
 	}
 
 	/**
@@ -979,7 +991,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public Collection getAllConsentResponseForScgValue()
 	{
-		return consentResponseForScgValues.values();
+		return this.consentResponseForScgValues.values();
 	}
 
 	/**
@@ -987,7 +999,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	/**
@@ -1003,7 +1015,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getConsentDate()
 	{
-		return consentDate;
+		return this.consentDate;
 	}
 
 	/**
@@ -1014,13 +1026,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.consentDate = consentDate;
 	}
 
-	
 	/**
 	 * @return applyChangesTo
 	 */
 	public String getApplyChangesTo()
 	{
-		return applyChangesTo;
+		return this.applyChangesTo;
 	}
 
 	/**
@@ -1037,7 +1048,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getStringOfResponseKeys()
 	{
-		return stringOfResponseKeys;
+		return this.stringOfResponseKeys;
 	}
 
 	/**
@@ -1055,9 +1066,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public Collection getConsentTiers()
 	{
-		Collection consentTiersList = new ArrayList();
+		final Collection consentTiersList = new ArrayList();
 		String[] strArray = null;
-		int noOfConsents = this.getConsentTierCounter();
+		final int noOfConsents = this.getConsentTierCounter();
 		for (int counter = 0; counter < noOfConsents; counter++)
 		{
 			strArray = new String[6];
@@ -1091,7 +1102,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventCollectionProcedure()
 	{
-		return collectionEventCollectionProcedure;
+		return this.collectionEventCollectionProcedure;
 	}
 
 	/**
@@ -1107,7 +1118,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventComments()
 	{
-		return collectionEventComments;
+		return this.collectionEventComments;
 	}
 
 	/**
@@ -1123,7 +1134,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventContainer()
 	{
-		return collectionEventContainer;
+		return this.collectionEventContainer;
 	}
 
 	/**
@@ -1139,7 +1150,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventdateOfEvent()
 	{
-		return collectionEventdateOfEvent;
+		return this.collectionEventdateOfEvent;
 	}
 
 	/**
@@ -1155,7 +1166,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getCollectionEventId()
 	{
-		return collectionEventId;
+		return this.collectionEventId;
 	}
 
 	/**
@@ -1171,7 +1182,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getCollectionEventSpecimenId()
 	{
-		return collectionEventSpecimenId;
+		return this.collectionEventSpecimenId;
 	}
 
 	/**
@@ -1187,7 +1198,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventTimeInHours()
 	{
-		return collectionEventTimeInHours;
+		return this.collectionEventTimeInHours;
 	}
 
 	/**
@@ -1203,7 +1214,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getCollectionEventTimeInMinutes()
 	{
-		return collectionEventTimeInMinutes;
+		return this.collectionEventTimeInMinutes;
 	}
 
 	/**
@@ -1214,13 +1225,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.collectionEventTimeInMinutes = collectionEventTimeInMinutes;
 	}
 
-	
 	/**
 	 * @return the receivedEventDateOfEvent
 	 */
 	public String getReceivedEventDateOfEvent()
 	{
-		return receivedEventDateOfEvent;
+		return this.receivedEventDateOfEvent;
 	}
 
 	/**
@@ -1236,7 +1246,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getReceivedEventId()
 	{
-		return receivedEventId;
+		return this.receivedEventId;
 	}
 
 	/**
@@ -1252,7 +1262,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getReceivedEventReceivedQuality()
 	{
-		return receivedEventReceivedQuality;
+		return this.receivedEventReceivedQuality;
 	}
 
 	/**
@@ -1268,7 +1278,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getReceivedEventSpecimenId()
 	{
-		return receivedEventSpecimenId;
+		return this.receivedEventSpecimenId;
 	}
 
 	/**
@@ -1284,7 +1294,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getReceivedEventTimeInHours()
 	{
-		return receivedEventTimeInHours;
+		return this.receivedEventTimeInHours;
 	}
 
 	/**
@@ -1294,13 +1304,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		this.receivedEventTimeInHours = receivedEventTimeInHours;
 	}
-	
+
 	/**
 	 * @return the collectionEventUserId
 	 */
 	public long getCollectionEventUserId()
 	{
-		return collectionEventUserId;
+		return this.collectionEventUserId;
 	}
 
 	/**
@@ -1316,7 +1326,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getReceivedEventComments()
 	{
-		return receivedEventComments;
+		return this.receivedEventComments;
 	}
 
 	/**
@@ -1327,13 +1337,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.receivedEventComments = receivedEventComments;
 	}
 
-
 	/**
 	 * @return the receivedEventTimeInMinutes
 	 */
 	public String getReceivedEventTimeInMinutes()
 	{
-		return receivedEventTimeInMinutes;
+		return this.receivedEventTimeInMinutes;
 	}
 
 	/**
@@ -1349,7 +1358,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public long getReceivedEventUserId()
 	{
-		return receivedEventUserId;
+		return this.receivedEventUserId;
 	}
 
 	/**
@@ -1365,7 +1374,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public boolean isApplyEventsToSpecimens()
 	{
-		return applyEventsToSpecimens;
+		return this.applyEventsToSpecimens;
 	}
 
 	/**
@@ -1390,7 +1399,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -1413,7 +1422,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getRestrictSCGCheckbox()
 	{
-		return restrictSCGCheckbox;
+		return this.restrictSCGCheckbox;
 	}
 
 	/**
@@ -1433,7 +1442,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -1447,7 +1456,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getCollectionProtocolName()
 	{
-		return collectionProtocolName;
+		return this.collectionProtocolName;
 	}
 
 	public void setCollectionProtocolName(String collectionProtocolName)
@@ -1457,19 +1466,29 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getParticipantNameWithProtocolId()
 	{
-		participantNameWithProtocolId = "";
-		if (participantName != null)
-			participantNameWithProtocolId = participantName;
+		this.participantNameWithProtocolId = "";
+		if (this.participantName != null)
+		{
+			this.participantNameWithProtocolId = this.participantName;
+		}
 		else
-			participantNameWithProtocolId = "N/A";
+		{
+			this.participantNameWithProtocolId = "N/A";
+		}
 
-		if (protocolParticipantIdentifier != null && protocolParticipantIdentifier.length() > 0)
-			participantNameWithProtocolId = participantNameWithProtocolId + '('
-					+ protocolParticipantIdentifier + ')';
+		if (this.protocolParticipantIdentifier != null
+				&& this.protocolParticipantIdentifier.length() > 0)
+		{
+			this.participantNameWithProtocolId = this.participantNameWithProtocolId + '('
+					+ this.protocolParticipantIdentifier + ')';
+		}
 		else
-			participantNameWithProtocolId = participantNameWithProtocolId + '(' + "N/A" + ')';
+		{
+			this.participantNameWithProtocolId = this.participantNameWithProtocolId + '(' + "N/A"
+					+ ')';
+		}
 
-		return participantNameWithProtocolId;
+		return this.participantNameWithProtocolId;
 	}
 
 	public void setParticipantNameWithProtocolId(String participantNameProtocolId)
@@ -1479,7 +1498,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getCollectionStatus()
 	{
-		return collectionStatus;
+		return this.collectionStatus;
 	}
 
 	public void setCollectionStatus(String collectionStatus)
@@ -1489,7 +1508,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getNextForwardTo()
 	{
-		return nextForwardTo;
+		return this.nextForwardTo;
 	}
 
 	public void setNextForwardTo(String nextForwardTo)
@@ -1499,7 +1518,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getPrintCheckbox()
 	{
-		return printCheckbox;
+		return this.printCheckbox;
 	}
 
 	public void setPrintCheckbox(String printCheckbox)
@@ -1509,7 +1528,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public int getOffset()
 	{
-		return offset;
+		return this.offset;
 	}
 
 	public void setOffset(int offset)
@@ -1519,7 +1538,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	public void setBarcode(String barcode)
@@ -1529,7 +1548,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getPrinterLocation()
 	{
-		return printerLocation;
+		return this.printerLocation;
 	}
 
 	public void setPrinterLocation(String printerLocation)
@@ -1539,7 +1558,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	public String getPrinterType()
 	{
-		return printerType;
+		return this.printerType;
 	}
 
 	public void setPrinterType(String printerType)
@@ -1552,7 +1571,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getIsBarcodeEditable()
 	{
-		return isBarcodeEditable;
+		return this.isBarcodeEditable;
 	}
 
 	/** 
@@ -1562,13 +1581,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
 	}
-	
+
 	/**
 	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
 	 */
 	public String getSignedConsentUrl()
 	{
-		return signedConsentUrl;
+		return this.signedConsentUrl;
 	}
 
 	/**
@@ -1584,7 +1603,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getWitnessName()
 	{
-		return witnessName;
+		return this.witnessName;
 	}
 
 	/**
@@ -1601,7 +1620,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public String getWithdrawlButtonStatus()
 	{
-		return withdrawlButtonStatus;
+		return this.withdrawlButtonStatus;
 	}
 
 	/**

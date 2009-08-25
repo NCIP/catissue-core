@@ -154,10 +154,8 @@ public class ShoppingCartAction extends BaseAction
 				int recordsPerPage = new Integer(recordsPerPageStr);
 				int pageNum = new Integer(pageNo);
 				final QuerySessionData querySessionData = (QuerySessionData) session
-						.getAttribute(edu.wustl.common.util.global.
-								Constants.QUERY_SESSION_DATA);
-				if (isCheckAllAcrossAllChecked != null
-						&& isCheckAllAcrossAllChecked.equals("true"))
+						.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
+				if (isCheckAllAcrossAllChecked != null && isCheckAllAcrossAllChecked.equals("true"))
 				{
 					final Integer totalRecords = (Integer) session
 							.getAttribute(Constants.TOTAL_RESULTS);
@@ -165,8 +163,7 @@ public class ShoppingCartAction extends BaseAction
 					pageNum = 1;
 				}
 				paginationDataList = AppUtility.getPaginationDataList(request, this
-						.getSessionData(request), recordsPerPage, pageNum
-						, querySessionData);
+						.getSessionData(request), recordsPerPage, pageNum, querySessionData);
 
 				request.setAttribute(Constants.PAGINATION_DATA_LIST, paginationDataList);
 
@@ -209,8 +206,7 @@ public class ShoppingCartAction extends BaseAction
 					{
 						final List selectedRow = (List) paginationDataList.get(index);
 						Logger.out.debug("index selected :" + index);
-						selectedSpecimenIds[index] =
-							selectedRow.get(spreadsheetSpecimenIndex);
+						selectedSpecimenIds[index] = selectedRow.get(spreadsheetSpecimenIndex);
 						Logger.out.debug("specimen id to be added to cart :"
 								+ selectedSpecimenIds[index]);
 					}

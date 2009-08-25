@@ -56,7 +56,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getArrayTypeName()
 	{
-		return arrayTypeName;
+		return this.arrayTypeName;
 	}
 
 	/**
@@ -77,6 +77,7 @@ public class DefineArrayForm extends AbstractActionForm
 	/**
 	 * @return 0
 	 */
+	@Override
 	public int getFormId()
 	{
 		return 0;
@@ -86,6 +87,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 		this.arrayName = null;
@@ -102,14 +104,15 @@ public class DefineArrayForm extends AbstractActionForm
 	* @param request HttpServletRequest
 	* @return ActionErrors 
 	*/
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		if ((arrayName == null) || (arrayName.length() == 0))
+		final ActionErrors errors = new ActionErrors();
+		if ((this.arrayName == null) || (this.arrayName.length() == 0))
 		{
 			errors.add("orderRequestName", new ActionError("errors.arrayname.required"));
 		}
-		if ((arraytype == null) || (arraytype.equals("-1")))
+		if ((this.arraytype == null) || (this.arraytype.equals("-1")))
 		{
 			errors.add("arraytype", new ActionError("errors.arraytype.required"));
 		}
@@ -121,7 +124,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getArrayName()
 	{
-		return arrayName;
+		return this.arrayName;
 	}
 
 	/**
@@ -137,7 +140,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getArraytype()
 	{
-		return arraytype;
+		return this.arraytype;
 	}
 
 	/**
@@ -153,7 +156,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getDimenmsionX()
 	{
-		return dimenmsionX;
+		return this.dimenmsionX;
 	}
 
 	/**
@@ -169,7 +172,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getDimenmsionY()
 	{
-		return dimenmsionY;
+		return this.dimenmsionY;
 	}
 
 	/**
@@ -185,7 +188,7 @@ public class DefineArrayForm extends AbstractActionForm
 	 */
 	public String getArrayClass()
 	{
-		return arrayClass;
+		return this.arrayClass;
 	}
 
 	/**

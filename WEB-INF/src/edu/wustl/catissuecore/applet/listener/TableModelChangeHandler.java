@@ -20,6 +20,7 @@ import javax.swing.event.TableModelListener;
  */
 public class TableModelChangeHandler implements TableModelListener
 {
+
 	/**
 	 * table.
 	 */
@@ -43,27 +44,28 @@ public class TableModelChangeHandler implements TableModelListener
 	{
 		System.out.println("in TableModelChangeHandler");
 		// Get anchor cell location
-		int rAnchor = table.getSelectionModel().getAnchorSelectionIndex();
-		int vcAnchor = table.getColumnModel().getSelectionModel().getAnchorSelectionIndex();
+		final int rAnchor = this.table.getSelectionModel().getAnchorSelectionIndex();
+		final int vcAnchor = this.table.getColumnModel().getSelectionModel()
+				.getAnchorSelectionIndex();
 
 		// This method is defined in
 		// e915 Converting a Column Index Between the View and Model in a JTable Component
-		int mcAnchor = toModel(table, vcAnchor);
+		final int mcAnchor = this.toModel(this.table, vcAnchor);
 
 		// Get affected rows and columns
-		int firstRow = e.getFirstRow();
-		int lastRow = e.getLastRow();
-		int mColIndex = e.getColumn();
+		final int firstRow = e.getFirstRow();
+		final int lastRow = e.getLastRow();
+		final int mColIndex = e.getColumn();
 
 		if (firstRow != TableModelEvent.HEADER_ROW && rAnchor >= firstRow && rAnchor <= lastRow
 				&& (mColIndex == TableModelEvent.ALL_COLUMNS || mColIndex == mcAnchor))
 		{
 			// Set the text field with the new value
 			//textField.setText((String)table.getValueAt(rAnchor, vcAnchor));
-			Object obj = table.getComponentAt(rAnchor, vcAnchor);
+			final Object obj = this.table.getComponentAt(rAnchor, vcAnchor);
 			if (obj instanceof JTextField)
 			{
-				((JTextField) obj).setText((String) table.getValueAt(rAnchor, vcAnchor));
+				((JTextField) obj).setText((String) this.table.getValueAt(rAnchor, vcAnchor));
 			}
 			//                else if(obj instanceof JComboBox )
 			//                {
@@ -73,6 +75,7 @@ public class TableModelChangeHandler implements TableModelListener
 
 		}
 	}
+
 	/**
 	 * @param table : table
 	 * @param vColIndex : vColIndex

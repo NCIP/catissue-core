@@ -29,7 +29,8 @@ public class AddCRGAction extends CommonAddEditAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(AddCRGAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(AddCRGAction.class);
+
 	/**
 	 * @param mapping : mapping
 	 * @param form : form
@@ -39,20 +40,21 @@ public class AddCRGAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 * @return ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		String crgName = (String) request.getParameter(Constants.CRG_NAME);
-		CancerResearchBizLogic bizlogic = new CancerResearchBizLogic();
+		final String crgName = request.getParameter(Constants.CRG_NAME);
+		final CancerResearchBizLogic bizlogic = new CancerResearchBizLogic();
 		String crgId = null;
 		String responseString = null;
 
-		CancerResearchGroupForm crgForm = (CancerResearchGroupForm) form;
+		final CancerResearchGroupForm crgForm = (CancerResearchGroupForm) form;
 		crgForm.setOperation(Constants.ADD);
 		crgForm.setName(crgName);
 
-		ActionForward forward = super.execute(mapping, crgForm, request, response);
+		final ActionForward forward = super.execute(mapping, crgForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
@@ -65,14 +67,14 @@ public class AddCRGAction extends CommonAddEditAction
 				crgId = bizlogic.getLatestCRG(crgName);
 				responseString = crgId + Constants.RESPONSE_SEPARATOR + crgName;
 			}
-			catch (BizLogicException e)
+			catch (final BizLogicException e)
 			{
-				logger.error("Exception occurred in retrieving Cancer Research Group");
+				this.logger.error("Exception occurred in retrieving Cancer Research Group");
 				e.printStackTrace();
 			}
 		}
 
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 
 		/**

@@ -12,6 +12,7 @@
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
+
 /**
  * @author janhavi_hasabnis
  */
@@ -96,7 +97,8 @@ public class ConsentBean implements Serializable
 	/**
 	 * @param specimenCollectionGroupLevelResponseParam The comments associated with Participant Response at Specimen Collection Group level
 	 */
-	public void setSpecimenCollectionGroupLevelResponse(String specimenCollectionGroupLevelResponseParam)
+	public void setSpecimenCollectionGroupLevelResponse(
+			String specimenCollectionGroupLevelResponseParam)
 	{
 		this.specimenCollectionGroupLevelResponse = specimenCollectionGroupLevelResponseParam;
 	}
@@ -108,9 +110,10 @@ public class ConsentBean implements Serializable
 	{
 		return this.specimenLevelResponse;
 	}
-    /**
-     * @param specimenLevelResponseParam - specimenLevelResponseParam
-     */
+
+	/**
+	 * @param specimenLevelResponseParam - specimenLevelResponseParam
+	 */
 	public void setSpecimenLevelResponse(String specimenLevelResponseParam)
 	{
 		this.specimenLevelResponse = specimenLevelResponseParam;

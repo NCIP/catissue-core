@@ -21,7 +21,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 	/**
 	 * Generic logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(StorageContainerLabelPrinterImpl.class);
 	/**
 	 * Specify default Empty String.

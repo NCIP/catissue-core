@@ -54,8 +54,8 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -67,7 +67,7 @@ public class DistributionAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DistributionAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(DistributionAction.class);
 	// This counter will keep track of the no of consentTiers
 	/**
 	 * consentTierCounter.
@@ -90,16 +90,16 @@ public class DistributionAction extends SecureAction
 	 */
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		DistributionBizLogic dao = (DistributionBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final DistributionBizLogic dao = (DistributionBizLogic) factory
 				.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
 		// Sets the Site list.
 		String sourceObjectName = Site.class.getName();
-		String[] displayNameFields = {"name"};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
+		final String[] displayNameFields = {"name"};
+		final String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
+		final List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 
 		request.setAttribute(Constants.FROM_SITE_LIST, siteList);
 		request.setAttribute(Constants.TO_SITE_LIST, siteList);
@@ -107,28 +107,28 @@ public class DistributionAction extends SecureAction
 		// Sets the Distribution Protocol Id List.
 		sourceObjectName = DistributionProtocol.class.getName();
 
-		String[] displayName = {"title"};
+		final String[] displayName = {"title"};
 
-		List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
+		final List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 
 		// SET THE SPECIMEN Ids LIST
-		String[] displayNameField = {Constants.SYSTEM_IDENTIFIER};
-		List specimenList = dao.getList(Specimen.class.getName(), displayNameField, valueField,
-				true);
+		final String[] displayNameField = {Constants.SYSTEM_IDENTIFIER};
+		final List specimenList = dao.getList(Specimen.class.getName(), displayNameField,
+				valueField, true);
 		request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList);
 
 		// Sets the activityStatusList attribute to be used in the Site Add/Edit
 		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		List distributionType = new ArrayList();
+		final List distributionType = new ArrayList();
 		distributionType.add(new NameValueBean("Specimen", new Integer(
 				Constants.SPECIMEN_DISTRIBUTION_TYPE)));
 		distributionType.add(new NameValueBean("Specimen Array", new Integer(
 				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE)));
 
-		List distributionBasedOn = new ArrayList();
+		final List distributionBasedOn = new ArrayList();
 		distributionBasedOn.add(new NameValueBean("Barcode", new Integer(
 				Constants.BARCODE_BASED_DISTRIBUTION)));
 		distributionBasedOn.add(new NameValueBean("Label", new Integer(
@@ -151,11 +151,12 @@ public class DistributionAction extends SecureAction
 	 *             generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DistributionForm dForm = (DistributionForm) form;
-		setCommonRequestParameters(request);
+		final DistributionForm dForm = (DistributionForm) form;
+		this.setCommonRequestParameters(request);
 
 		// EventParametersForm eventParametersForm = (EventParametersForm)form;
 
@@ -164,19 +165,19 @@ public class DistributionAction extends SecureAction
 		{
 			if (dForm.getUserId() == 0)
 			{
-				SessionDataBean sessionData = getSessionData(request);
+				final SessionDataBean sessionData = this.getSessionData(request);
 				if (sessionData != null && sessionData.getUserId() != null)
 				{
-					long userId = sessionData.getUserId().longValue();
+					final long userId = sessionData.getUserId().longValue();
 					dForm.setUserId(userId);
 				}
 			}
 			// set the current Date and Time for the event.
-			Calendar cal = Calendar.getInstance();
+			final Calendar cal = Calendar.getInstance();
 			if (dForm.getDateOfEvent() == null)
 			{
-				dForm.setDateOfEvent(Utility.parseDateToString(cal.getTime(), CommonServiceLocator
-						.getInstance().getDatePattern()));
+				dForm.setDateOfEvent(CommonUtilities.parseDateToString(cal.getTime(),
+						CommonServiceLocator.getInstance().getDatePattern()));
 			}
 			if (dForm.getTimeInHours() == null)
 			{
@@ -195,12 +196,12 @@ public class DistributionAction extends SecureAction
 		// ID is changed.
 		if (dForm.isIdChange())
 		{
-			String test = null;
+			final String test = null;
 			test.getBytes();
-			setSpecimenCharateristics(dForm, request);
+			this.setSpecimenCharateristics(dForm, request);
 		}
 
-		String distributionBasedOn = request.getParameter("distributionBasedOnOption");
+		final String distributionBasedOn = request.getParameter("distributionBasedOnOption");
 		if (distributionBasedOn != null && !distributionBasedOn.equals("")
 				&& distributionBasedOn.equals("unknown"))
 		{
@@ -211,16 +212,16 @@ public class DistributionAction extends SecureAction
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap == null)
 		{
-			String specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
+			final String specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
 			if (specimenLabel != null)
 			{
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-				List list = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL,
-						specimenLabel);
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+				final List list = bizLogic.retrieve(Specimen.class.getName(),
+						Constants.SYSTEM_LABEL, specimenLabel);
 				if (list != null && !list.isEmpty())
 				{
-					Specimen specimen = (Specimen) list.get(0);
+					final Specimen specimen = (Specimen) list.get(0);
 					forwardToHashMap = new HashMap();
 					forwardToHashMap.put("specimenObjectKey", specimen);
 				}
@@ -229,7 +230,7 @@ public class DistributionAction extends SecureAction
 
 		if (forwardToHashMap != null)
 		{
-			Object specimenObjectOrList = forwardToHashMap.get("specimenObjectKey");
+			final Object specimenObjectOrList = forwardToHashMap.get("specimenObjectKey");
 			if (specimenObjectOrList != null)
 			{
 				if (specimenObjectOrList instanceof Specimen)
@@ -238,51 +239,49 @@ public class DistributionAction extends SecureAction
 					 * this code is for setting specimenId for showing specimen
 					 * selected in tree
 					 */
-					Specimen sp = (Specimen) specimenObjectOrList;
-					String spId = sp.getId().toString();
+					final Specimen sp = (Specimen) specimenObjectOrList;
+					final String spId = sp.getId().toString();
 					request.setAttribute(Constants.SPECIMEN_ID, spId);
 
-					addDistributionSample((DistributionForm) form, 1,
+					this.addDistributionSample((DistributionForm) form, 1,
 							(Specimen) specimenObjectOrList);
 				}
 				else
 				{
-					List specimenIdList = (List) specimenObjectOrList;
-					IFactory factory = AbstractFactoryConfig.
-					getInstance().getBizLogicFactory();
-					DistributionBizLogic dao = (DistributionBizLogic) factory
+					final List specimenIdList = (List) specimenObjectOrList;
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final DistributionBizLogic dao = (DistributionBizLogic) factory
 							.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
 					for (int i = 0; i < specimenIdList.size(); i++)
 					{
-						Long specimenId = Long.getLong((String) specimenIdList.get(i));
-						List list = dao.retrieve(Specimen.class.getName(),
+						final Long specimenId = Long.getLong((String) specimenIdList.get(i));
+						final List list = dao.retrieve(Specimen.class.getName(),
 								Constants.SYSTEM_IDENTIFIER, specimenId);
-						Specimen specimen = (Specimen) list.get(0);
-						addDistributionSample((DistributionForm) form,
-								i + 1, (Specimen) specimen);
+						final Specimen specimen = (Specimen) list.get(0);
+						this.addDistributionSample((DistributionForm) form, i + 1, specimen);
 					}
 				}
 			}
 			else
 			// If forwarded from Aliquout Summary page;
 			{
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-				String noOfAliquots = (String) forwardToHashMap.get("noOfAliquots");
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+				final String noOfAliquots = (String) forwardToHashMap.get("noOfAliquots");
 				String labelKey;
 				List specimenList;
 				for (int i = 0; i < Integer.valueOf(noOfAliquots).intValue(); i++)
 				{
 					labelKey = "Specimen:" + (i + 1) + "_label";
-					String label = (String) forwardToHashMap.get(labelKey);
+					final String label = (String) forwardToHashMap.get(labelKey);
 					specimenList = bizLogic.retrieve(Specimen.class.getName(),
 							Constants.SYSTEM_LABEL, label);
 					if (!specimenList.isEmpty())
 					{
-						Specimen specimen = (Specimen) specimenList.get(0);
-						addDistributionSample((DistributionForm) form,
-								i + 1, (Specimen) specimen);
+						final Specimen specimen = (Specimen) specimenList.get(0);
+						this.addDistributionSample((DistributionForm) form, i + 1, specimen);
 					}
 
 				}
@@ -291,40 +290,41 @@ public class DistributionAction extends SecureAction
 		}
 		// Consent Tracking (Virender Mehta)
 		// Show Consents for Specimen
-		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); // "specimenConsents"
+		final String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); // "specimenConsents"
 		if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 		{
-			String labelBarcodeDistributionBasedOnValue = request
+			final String labelBarcodeDistributionBasedOnValue = request
 					.getParameter(Constants.DISTRIBUTION_ON);// "labelBarcode"
-			String barcodeLableValue = request.getParameter(Constants.BARCODE_LABLE);// barcodelabel
-			int distributionOn = Integer.parseInt(labelBarcodeDistributionBasedOnValue);
-			StringTokenizer stringToken = new StringTokenizer(barcodeLableValue, "|");
-			listOfMap = new ArrayList();
-			listOfStringArray = new ArrayList();
+			final String barcodeLableValue = request.getParameter(Constants.BARCODE_LABLE);// barcodelabel
+			final int distributionOn = Integer.parseInt(labelBarcodeDistributionBasedOnValue);
+			final StringTokenizer stringToken = new StringTokenizer(barcodeLableValue, "|");
+			this.listOfMap = new ArrayList();
+			this.listOfStringArray = new ArrayList();
 			while (stringToken.hasMoreTokens())
 			{
-				String barcodeLable = stringToken.nextToken();
+				final String barcodeLable = stringToken.nextToken();
 				// function that will check if the barcode/lable is present in
 				// the Database or not
-				Specimen specimen = getConsentListForSpecimen(barcodeLable, distributionOn);
+				final Specimen specimen = this.getConsentListForSpecimen(barcodeLable,
+						distributionOn);
 				// Set all the consents and attributes related to specimen in
 				// List.
-				showConsents(dForm, specimen, request, barcodeLable);
+				this.showConsents(dForm, specimen, request, barcodeLable);
 			}
-			request.setAttribute("listOfStringArray", listOfStringArray);
-			request.setAttribute("listOfMap", listOfMap);
+			request.setAttribute("listOfStringArray", this.listOfStringArray);
+			request.setAttribute("listOfMap", this.listOfMap);
 			return mapping.findForward(Constants.VIEWAll);// ViewAll
 		}
 		// Show All Consents for Specimen(Consent tarcking)
 
 		// Show Consents for Specimen(Consent Tracking)
-		String showConsents = request.getParameter(Constants.SHOW_CONSENTS);
+		final String showConsents = request.getParameter(Constants.SHOW_CONSENTS);
 		if (showConsents != null && showConsents.equalsIgnoreCase(Constants.YES))
 		{
-			String barcodeLable = request.getParameter(Constants.BARCODE_LABLE);
+			final String barcodeLable = request.getParameter(Constants.BARCODE_LABLE);
 			int barcodeLabelBasedDistribution = 1;
-			String labelBarcodeDistributionValue =
-				request.getParameter(Constants.DISTRIBUTION_ON);// labelBarcode
+			final String labelBarcodeDistributionValue = request
+					.getParameter(Constants.DISTRIBUTION_ON);// labelBarcode
 			if (labelBarcodeDistributionValue.equalsIgnoreCase(Constants.BARCODE_DISTRIBUTION))// "1"
 			{
 				barcodeLabelBasedDistribution = 1;
@@ -334,21 +334,21 @@ public class DistributionAction extends SecureAction
 				barcodeLabelBasedDistribution = 2;
 			}
 			// Getting SpecimenCollectionGroup object
-			Specimen specimen = getConsentListForSpecimen(barcodeLable,
+			final Specimen specimen = this.getConsentListForSpecimen(barcodeLable,
 					barcodeLabelBasedDistribution);
 			// SpecimenCollectionGroup specimenCollectionGroup =
 			// getConsentListForSpecimen(barcode);
-			showConsents(dForm, specimen, request, barcodeLable);
+			this.showConsents(dForm, specimen, request, barcodeLable);
 
 			request.setAttribute("barcodeStatus", Constants.VALID);// valid
 			return mapping.findForward(Constants.POPUP);
 		}
 		// Consent Tracking (Virender Mehta)
-		logger.debug("executeSecureAction");
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		this.logger.debug("executeSecureAction");
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 
 	/**
@@ -367,13 +367,14 @@ public class DistributionAction extends SecureAction
 			HttpServletRequest request, String barcodeLable) throws ApplicationException
 	{
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String initialURLValue = "";
 		String initialWitnessValue = "";
 		String initialSignedConsentDateValue = "";
 
-		CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil.getCollectionProtRegistration(specimen);
+		final CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil
+				.getCollectionProtRegistration(specimen);
 
 		if (collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 		{
@@ -385,7 +386,7 @@ public class DistributionAction extends SecureAction
 			consentWitness = (User) bizLogic.retrieveAttribute(CollectionProtocolRegistration.class
 					.getName(), collectionProtocolRegistration.getId(), "consentWitness");
 		}
-		
+
 		if (consentWitness == null)
 		{
 			initialWitnessValue = Constants.NULL;
@@ -394,72 +395,68 @@ public class DistributionAction extends SecureAction
 		{
 			initialSignedConsentDateValue = Constants.NULL;
 		}
-		List cprObjectList = new ArrayList();
+		final List cprObjectList = new ArrayList();
 		cprObjectList.add(collectionProtocolRegistration);
-		SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
-		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
-		String userName = Utility.toString(sessionDataBean.getUserName());
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
+		final CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		final String userName = CommonUtilities.toString(sessionDataBean.getUserName());
 		try
 		{
-			caCoreAppServicesDelegator.delegateSearchFilter(userName,
-					cprObjectList);
+			caCoreAppServicesDelegator.delegateSearchFilter(userName, cprObjectList);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		CollectionProtocolRegistration cprObject = collectionProtocolRegistration;// (
-		String witnessName = ConsentUtil.getWitnessName( bizLogic, initialWitnessValue,
+		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;// (
+		final String witnessName = ConsentUtil.getWitnessName(bizLogic, initialWitnessValue,
 				cprObject);
-		String consentDate  = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
+		final String consentDate = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
 				cprObject);
-    	String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
-    	
+		final String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
+
 		// Setting WitnessName,ConsentDate and Signed Consent Url
-    	dForm.setWitnessName(witnessName);
+		dForm.setWitnessName(witnessName);
 		dForm.setConsentDate(consentDate);
 		dForm.setSignedConsentUrl(signedConsentURL);
 
 		// Getting ConsentResponse collection for CPR level
 		// Resolved lazy ---
 		// collectionProtocolRegistration.getConsentTierResponseCollection();
-		Collection participantResponseCollection = (Collection) bizLogic.retrieveAttribute(
+		final Collection participantResponseCollection = (Collection) bizLogic.retrieveAttribute(
 				CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
 						.getId(), "elements(consentTierResponseCollection)");
 		// Getting ConsentResponse collection for Specimen level
 		// Resolved lazy --- specimen.getConsentTierStatusCollection();
-		Collection specimenLevelResponseCollection = (Collection) bizLogic
+		final Collection specimenLevelResponseCollection = (Collection) bizLogic
 				.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
 						"elements(consentTierStatusCollection)");
 		// Prepare Map and iterate both Collections
-		Map tempMap = prepareConsentMap(participantResponseCollection,
+		final Map tempMap = this.prepareConsentMap(participantResponseCollection,
 				specimenLevelResponseCollection);
 		// Setting map and counter in the form
 		dForm.setConsentResponseForDistributionValues(tempMap);
-		dForm.setConsentTierCounter(consentTierCounter);
-		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS);
+		dForm.setConsentTierCounter(this.consentTierCounter);
+		final String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS);
 		if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 		{
 			// For no consents and Consent waived
-			if (consentTierCounter > 0
-					&& !(specimen.getActivityStatus().
-							equalsIgnoreCase(Constants.DISABLED)))// disabled
+			if (this.consentTierCounter > 0
+					&& !(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED)))// disabled
 			{
-				String[] barcodeLabelAttribute = new String[5];
+				final String[] barcodeLabelAttribute = new String[5];
 				barcodeLabelAttribute[0] = witnessName;
 				barcodeLabelAttribute[1] = consentDate;
 				barcodeLabelAttribute[2] = signedConsentURL;
-				barcodeLabelAttribute[3] = Integer.toString(consentTierCounter);
+				barcodeLabelAttribute[3] = Integer.toString(this.consentTierCounter);
 				barcodeLabelAttribute[4] = barcodeLable;
-				listOfMap.add(tempMap);
-				listOfStringArray.add(barcodeLabelAttribute);
+				this.listOfMap.add(tempMap);
+				this.listOfStringArray.add(barcodeLabelAttribute);
 			}
 		}
 	}
-
-	
 
 	// Consent tracking (Virender Mehta)
 	/**
@@ -472,7 +469,7 @@ public class DistributionAction extends SecureAction
 	 */
 	private void addDistributionSample(DistributionForm dForm, int itemNo, Specimen specimen)
 	{
-		String keyPrefix = "DistributedItem:" + itemNo + "_";
+		final String keyPrefix = "DistributedItem:" + itemNo + "_";
 
 		dForm.setValue(keyPrefix + "Specimen_id", specimen.getId());
 		dForm.setValue(keyPrefix + "Specimen_barcode", specimen.getBarcode());
@@ -495,21 +492,22 @@ public class DistributionAction extends SecureAction
 			throws BizLogicException
 	{
 		// Set specimen characteristics according to the specimen ID changed
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		DistributionBizLogic dao = (DistributionBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final DistributionBizLogic dao = (DistributionBizLogic) factory
 				.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
-		String specimenIdKey = request.getParameter("specimenIdKey");
+		final String specimenIdKey = request.getParameter("specimenIdKey");
 
 		// Parse key to get row number. Key is in the format
 		// DistributedItem:rowNo_Specimen_id
-		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.Distribution");
-		int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
+		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.Distribution");
+		final int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
 
 		// int a = Integer.parseInt()
-		logger.debug("row number of the dist item: " + rowNo);
+		this.logger.debug("row number of the dist item: " + rowNo);
 
-		String specimenId = (String) dForm.getValue("DistributedItem:" + rowNo + "_Specimen_id");
+		final String specimenId = (String) dForm.getValue("DistributedItem:" + rowNo
+				+ "_Specimen_id");
 
 		// if '--Select--' is selected in the drop down of Specimen Id, empty
 		// the row values for that distributed item
@@ -521,14 +519,14 @@ public class DistributionAction extends SecureAction
 		// specimen id
 		else
 		{
-			List list = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
+			final List list = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
 					specimenId);
-			Specimen specimen = (Specimen) list.get(0);
+			final Specimen specimen = (Specimen) list.get(0);
 			dForm.setValue("DistributedItem:" + rowNo + "_availableQty", dForm
 					.getAvailableQty(specimen));
 		}
 
-		logger.debug("Map values after speci chars are set: " + dForm.getValues());
+		this.logger.debug("Map values after speci chars are set: " + dForm.getValues());
 		// Set back the idChange boolean to false.
 		dForm.setIdChange(false);
 	}
@@ -548,53 +546,49 @@ public class DistributionAction extends SecureAction
 	private Map prepareConsentMap(Collection participantResponseList,
 			Collection specimenLevelResponseList)
 	{
-		Map tempMap = new HashMap();
+		final Map tempMap = new HashMap();
 		Long consentTierID;
 		Long consentID;
 		if (participantResponseList != null)
 		{
 			int i = 0;
-			Iterator consentResponseCollectionIter = participantResponseList.iterator();
+			final Iterator consentResponseCollectionIter = participantResponseList.iterator();
 			while (consentResponseCollectionIter.hasNext())
 			{
-				ConsentTierResponse consentTierResponse =
-					(ConsentTierResponse) consentResponseCollectionIter
+				final ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
 						.next();
 				consentTierID = consentTierResponse.getConsentTier().getId();
-				Iterator specimenCollectionIter = specimenLevelResponseList.iterator();
+				final Iterator specimenCollectionIter = specimenLevelResponseList.iterator();
 				while (specimenCollectionIter.hasNext())
 				{
-					ConsentTierStatus specimenConsentResponse =
-						(ConsentTierStatus) specimenCollectionIter
+					final ConsentTierStatus specimenConsentResponse = (ConsentTierStatus) specimenCollectionIter
 							.next();
 					consentID = specimenConsentResponse.getConsentTier().getId();
 					if (consentTierID.longValue() == consentID.longValue())
 					{
-						ConsentTier consent = consentTierResponse.getConsentTier();
-						String idKey = "ConsentBean:" + i + "_consentTierID";
-						String statementKey = "ConsentBean:" + i + "_statement";
-						String responseKey = "ConsentBean:" + i + "_participantResponse";
-						String participantResponceIdKey = "ConsentBean:" + i
+						final ConsentTier consent = consentTierResponse.getConsentTier();
+						final String idKey = "ConsentBean:" + i + "_consentTierID";
+						final String statementKey = "ConsentBean:" + i + "_statement";
+						final String responseKey = "ConsentBean:" + i + "_participantResponse";
+						final String participantResponceIdKey = "ConsentBean:" + i
 								+ "_participantResponseID";
-						String specimenResponsekey = "ConsentBean:"
-							+ i + "_specimenLevelResponse";
-						String specimenResponseIDkey = "ConsentBean:" + i
+						final String specimenResponsekey = "ConsentBean:" + i
+								+ "_specimenLevelResponse";
+						final String specimenResponseIDkey = "ConsentBean:" + i
 								+ "_specimenLevelResponseID";
 						// Adding Keys and its data into the Map
 						tempMap.put(idKey, consent.getId());
 						tempMap.put(statementKey, consent.getStatement());
 						tempMap.put(responseKey, consentTierResponse.getResponse());
 						tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-						tempMap.put(specimenResponsekey,
-								specimenConsentResponse.getStatus());
-						tempMap.put(specimenResponseIDkey,
-								specimenConsentResponse.getId());
+						tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
+						tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
 						i++;
 						break;
 					}
 				}
 			}
-			consentTierCounter = i;
+			this.consentTierCounter = i;
 			return tempMap;
 		}
 		else
@@ -619,8 +613,8 @@ public class DistributionAction extends SecureAction
 	private Specimen getConsentListForSpecimen(String barcode, int barcodeLabelBasedDistribution)
 			throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
 				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName = null;
 		if (barcodeLabelBasedDistribution == Constants.BARCODE_BASED_DISTRIBUTION)
@@ -631,9 +625,9 @@ public class DistributionAction extends SecureAction
 		{
 			colName = Constants.SYSTEM_LABEL;// "label"
 		}
-		List specimenList = newSpecimenBizLogic
-				.retrieve(Specimen.class.getName(), colName, barcode);
-		Specimen specimen = (Specimen) specimenList.get(0);
+		final List specimenList = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName,
+				barcode);
+		final Specimen specimen = (Specimen) specimenList.get(0);
 		return specimen;
 	}
 
@@ -652,7 +646,7 @@ public class DistributionAction extends SecureAction
 	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
 	{
 		// Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 
 		// Sets the operation attribute to be used in the Add/Edit
 		// FrozenEventParameters Page.
@@ -667,19 +661,21 @@ public class DistributionAction extends SecureAction
 		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 
 		// The id of specimen of this event.
-		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
+		final String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-		logger.debug("\t\t SpecimenEventParametersAction************************************ : "
-				+ specimenId);
+		this.logger
+				.debug("\t\t SpecimenEventParametersAction************************************ : "
+						+ specimenId);
 
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(operation);
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final UserBizLogic userBizLogic = (UserBizLogic) factory
+				.getBizLogic(Constants.USER_FORM_ID);
+		final Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);
 
 		// This method will be overridden by the sub classes
-		setRequestParameters(request);
+		this.setRequestParameters(request);
 
 	}
 

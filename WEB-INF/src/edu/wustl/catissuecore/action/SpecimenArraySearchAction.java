@@ -50,7 +50,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArraySearchAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArraySearchAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -67,6 +67,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServerException
@@ -74,33 +75,34 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 
 		try
 		{
-			ActionForward forward = super.execute(mapping, form, request, response);
-			SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
-			List specimenTypeList = new ArrayList();
+			final ActionForward forward = super.execute(mapping, form, request, response);
+			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
+			final List specimenTypeList = new ArrayList();
 
-			String[] specimenTypeArr = specimenArrayForm.getSpecimenTypes();
+			final String[] specimenTypeArr = specimenArrayForm.getSpecimenTypes();
 			String specimenType = null;
 			NameValueBean nameValueBean = null;
 
-			for (int i = 0; i < specimenTypeArr.length; i++)
+			for (final String element : specimenTypeArr)
 			{
-				specimenType = specimenTypeArr[i];
+				specimenType = element;
 				nameValueBean = new NameValueBean(specimenType, specimenType);
 				specimenTypeList.add(nameValueBean);
 			}
 
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-			Collection arrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
+			final Collection arrayContentCollection = specimenArrayForm
+					.getSpecArrayContentCollection();
 			SpecimenArrayContent arrayContent = null;
 			// int rowCount = specimenArrayForm.getOneDimensionCapacity();
-			int columnCount = specimenArrayForm.getTwoDimensionCapacity();
+			final int columnCount = specimenArrayForm.getTwoDimensionCapacity();
 			int rowNo = 0;
 			int columnNo = 0;
-			Map arrayContentMap = new HashMap();
+			final Map arrayContentMap = new HashMap();
 			String key = null;
 			String value = null;
 
-			for (Iterator iter = arrayContentCollection.iterator(); iter.hasNext();)
+			for (final Iterator iter = arrayContentCollection.iterator(); iter.hasNext();)
 			{
 				arrayContent = (SpecimenArrayContent) iter.next();
 
@@ -112,8 +114,8 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 				 * Name : Virender Reviewer: Prafull Retriving specimenObject
 				 * replaced arrayContent.getSpecimen()
 				 */
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				DefaultBizLogic bizLogic = (DefaultBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final DefaultBizLogic bizLogic = (DefaultBizLogic) factory
 						.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 				Specimen specimen = null;
 				specimen = (Specimen) bizLogic.retrieveAttribute(SpecimenArrayContent.class
@@ -121,18 +123,15 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 				if (specimen != null)
 				{
 					if ((specimenArrayForm.getEnterSpecimenBy() != null)
-							&& (specimenArrayForm.getEnterSpecimenBy().
-									equalsIgnoreCase("Barcode")))
+							&& (specimenArrayForm.getEnterSpecimenBy().equalsIgnoreCase("Barcode")))
 					{
-						key = SpecimenArrayAppletUtil.getArrayMapKey
-						(rowNo, columnNo, columnCount,
+						key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
 								AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX);
 						value = specimen.getBarcode();
 					}
 					else
 					{
-						key = SpecimenArrayAppletUtil.getArrayMapKey
-						(rowNo, columnNo, columnCount,
+						key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
 								AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX);
 						value = specimen.getLabel();
 					}
@@ -142,26 +141,18 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 						// check qunatity not null
 						if (arrayContent.getInitialQuantity() != null)
 						{
-							key = SpecimenArrayAppletUtil.getArrayMapKey
-							(rowNo, columnNo,
-									columnCount,
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
+							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo,
+									columnCount, AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
 							value = arrayContent.getInitialQuantity().toString();
 							arrayContentMap.put(key, value);
 						}
 
 						// check concentration not null
-						if (arrayContent.getConcentrationInMicrogramPerMicroliter()
-								!= null)
+						if (arrayContent.getConcentrationInMicrogramPerMicroliter() != null)
 						{
-							key = SpecimenArrayAppletUtil.
-							getArrayMapKey(rowNo, columnNo,
-									columnCount,
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_CONC_INDEX);
-							value = arrayContent.
-							getConcentrationInMicrogramPerMicroliter()
+							key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo,
+									columnCount, AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX);
+							value = arrayContent.getConcentrationInMicrogramPerMicroliter()
 									.toString();
 							arrayContentMap.put(key, value);
 						}
@@ -174,7 +165,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 						 * specimen.getId().toString();
 						 * arrayContentMap.put(key,value);
 						 */
-						}
+					}
 
 					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo, columnNo, columnCount,
 							AppletConstants.ARRAY_CONTENT_ATTR_ID_INDEX);
@@ -200,14 +191,14 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 					.setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY, arrayContentMap);
 			return forward;
 		}
-		catch (ApplicationException excp)
+		catch (final ApplicationException excp)
 		{
-			logger.error(excp.getMessage(), excp);
-			ActionErrors errors = new ActionErrors();
-			String objName = SpecimenArray.class.getName();
+			this.logger.error(excp.getMessage(), excp);
+			final ActionErrors errors = new ActionErrors();
+			final String objName = SpecimenArray.class.getName();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown",
 					AbstractDomainObject.parseClassName(objName)));
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 
 			return mapping.findForward(Constants.FAILURE);
 		}

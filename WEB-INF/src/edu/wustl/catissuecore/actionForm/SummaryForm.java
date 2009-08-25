@@ -38,7 +38,7 @@ public class SummaryForm extends ActionForm
 	 */
 	public String getTotalSpCount()
 	{
-		return totalSpCount;
+		return this.totalSpCount;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class SummaryForm extends ActionForm
 
 	public SummaryAdminDetails getAdminDetails()
 	{
-		return adminDetails;
+		return this.adminDetails;
 	}
 
 	public void setAdminDetails(final SummaryAdminDetails adminDetails)
@@ -63,7 +63,7 @@ public class SummaryForm extends ActionForm
 
 	public SummaryPartDetails getPartDetails()
 	{
-		return partDetails;
+		return this.partDetails;
 	}
 
 	public void setPartDetails(final SummaryPartDetails partDetails)
@@ -73,7 +73,7 @@ public class SummaryForm extends ActionForm
 
 	public SummarySpDetails getSpecDetails()
 	{
-		return specDetails;
+		return this.specDetails;
 	}
 
 	public void setSpecDetails(final SummarySpDetails specDetails)

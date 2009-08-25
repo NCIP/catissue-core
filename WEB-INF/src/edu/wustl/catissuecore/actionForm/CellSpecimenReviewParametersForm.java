@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -55,7 +55,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 */
 	public String getNeoplasticCellularityPercentage()
 	{
-		return neoplasticCellularityPercentage;
+		return this.neoplasticCellularityPercentage;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 */
 	public String getViableCellPercentage()
 	{
-		return viableCellPercentage;
+		return this.viableCellPercentage;
 	}
 
 	/**
@@ -93,6 +93,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID;
@@ -102,13 +103,14 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 *  @param abstractDomain An object of Specimen class. 
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		final CellSpecimenReviewParameters cellSpecimenReviewParametersObject = (CellSpecimenReviewParameters) abstractDomain;
-		this.neoplasticCellularityPercentage = Utility.toString(cellSpecimenReviewParametersObject
-				.getNeoplasticCellularityPercentage());
-		this.viableCellPercentage = Utility.toString(cellSpecimenReviewParametersObject
+		this.neoplasticCellularityPercentage = CommonUtilities
+				.toString(cellSpecimenReviewParametersObject.getNeoplasticCellularityPercentage());
+		this.viableCellPercentage = CommonUtilities.toString(cellSpecimenReviewParametersObject
 				.getViableCellPercentage());
 	}
 
@@ -118,6 +120,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = super.validate(mapping, request);
@@ -126,8 +129,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 		try
 		{
 			// checks the neoplasticCellularityPercentage
-			if (!validator.isEmpty(neoplasticCellularityPercentage)
-					&& !validator.isDouble(neoplasticCellularityPercentage, false))
+			if (!Validator.isEmpty(this.neoplasticCellularityPercentage)
+					&& !validator.isDouble(this.neoplasticCellularityPercentage, false))
 			{
 				errors
 						.add(
@@ -138,15 +141,15 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 												.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
 			}
 			// checks the viableCellPercentage
-			if (!validator.isEmpty(viableCellPercentage)
-					&& !validator.isDouble(viableCellPercentage, false))
+			if (!Validator.isEmpty(this.viableCellPercentage)
+					&& !validator.isDouble(this.viableCellPercentage, false))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties
 								.getValue("cellspecimenreviewparameters.viablecellpercentage")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -156,6 +159,7 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	/**
 	 * Method for reset class attributes
 	 */
+	@Override
 	protected void reset()
 	{
 		//super.reset();

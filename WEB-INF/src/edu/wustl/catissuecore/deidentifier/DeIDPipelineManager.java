@@ -44,7 +44,7 @@ public class DeIDPipelineManager
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DeIDPipelineManager.class);
+	private transient final Logger logger = Logger.getCommonLogger(DeIDPipelineManager.class);
 	/**
 	 * abbrToHeader.
 	 */
@@ -80,13 +80,10 @@ public class DeIDPipelineManager
 		{
 			this.initDeid();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
-			logger
-					.error(
-							"Initialization of deidentification process" +
-							" failed or error in main thread",
-							ex);
+			this.logger.error("Initialization of deidentification process"
+					+ " failed or error in main thread", ex);
 			throw ex;
 		}
 	}
@@ -105,26 +102,25 @@ public class DeIDPipelineManager
 		// Initializing caCoreAPI instance
 		CaCoreAPIService.initialize();
 		// Min. no of threads that should be created by threadPoolExecutor
-		corePoolSize = 4;
+		this.corePoolSize = 4;
 		// Max no og threads that should be created by threadPoolExecutor
-		maxPoolSize = Integer.parseInt(CaTIESProperties
+		this.maxPoolSize = Integer.parseInt(CaTIESProperties
 				.getValue(CaTIESConstants.MAX_THREADPOOL_SIZE));
 		// Thread alive time
-		keepAliveSeconds = 100;
+		this.keepAliveSeconds = 100;
 		try
 		{
-			deidentifier = DeidentifierFactory.getDeidentiifier();
+			this.deidentifier = DeidentifierFactory.getDeidentiifier();
 		}
-		catch (ClassCastException ex)
+		catch (final ClassCastException ex)
 		{
-			logger
+			this.logger
 					.error("Class not found:"
-							+ CaTIESProperties.getValue(CaTIESConstants
-									.DEIDENTIFIER_CLASSNAME
+							+ CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME
 									+ "\n" + ex));
 			throw ex;
 		}
-		deidentifier.initialize();
+		this.deidentifier.initialize();
 	}
 
 	/**
@@ -134,28 +130,28 @@ public class DeIDPipelineManager
 	 */
 	public void startProcess() throws InterruptedException
 	{
-		logger.info("Inside process manager");
+		this.logger.info("Inside process manager");
 		while (true)
 		{
 			try
 			{
-				logger.info("Deidentification process started at " + new Date().toString());
+				this.logger.info("Deidentification process started at " + new Date().toString());
 				// Fetch the list of identified report Ids that are pending for
 				// de-identification
-				List isprIDList = getReportIDList();
+				final List isprIDList = this.getReportIDList();
 				// Process reports that are pending for de-identification
-				processReports(isprIDList);
+				this.processReports(isprIDList);
 				// if report list contains less than one report then thread will
 				// go to sleep
-				logger.info("Deidentification process finished at " + new Date().toString()
+				this.logger.info("Deidentification process finished at " + new Date().toString()
 						+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties
 						.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.error("Unexpected Exception in deid Pipeline ", ex);
-				logger.info("Deidentification process finished at " + new Date().toString()
+				this.logger.error("Unexpected Exception in deid Pipeline ", ex);
+				this.logger.info("Deidentification process finished at " + new Date().toString()
 						+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties
 						.getValue(CaTIESConstants.DEID_SLEEPTIME)));
@@ -175,12 +171,13 @@ public class DeIDPipelineManager
 	{
 		// set policy for the handling of rejected threads by thread pool
 		// manager
-		rejectedExecutionHandler = new ThreadPoolExecutor.AbortPolicy();
+		this.rejectedExecutionHandler = new ThreadPoolExecutor.AbortPolicy();
 		// Instantiate threadPoolExecutor which manages the pool of thread, this
 		// is feature of java 1.5
-		ThreadPoolExecutor deidExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
-				keepAliveSeconds, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), Executors
-						.defaultThreadFactory(), this.rejectedExecutionHandler);
+		final ThreadPoolExecutor deidExecutor = new ThreadPoolExecutor(this.corePoolSize,
+				this.maxPoolSize, this.keepAliveSeconds, TimeUnit.SECONDS,
+				new LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory(),
+				this.rejectedExecutionHandler);
 
 		if (isprIDList != null || isprIDList.size() > 0)
 		{
@@ -189,8 +186,7 @@ public class DeIDPipelineManager
 			try
 			{
 				CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER,
-						CaTIESConstants.CSVLOGGER_DATETIME
-						+ CaTIESConstants.CSVLOGGER_SEPARATOR
+						CaTIESConstants.CSVLOGGER_DATETIME + CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_IDENTIFIED_REPORT
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_STATUS
@@ -200,25 +196,26 @@ public class DeIDPipelineManager
 								+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 				IdentifiedSurgicalPathologyReport identifiedReport = null;
 				// loop to process each report
-				logger.info("Starting to process list of size " + isprIDList.size());
-				int isprListSize = isprIDList.size();
+				this.logger.info("Starting to process list of size " + isprIDList.size());
+				final int isprListSize = isprIDList.size();
 				for (int i = 0; i < isprListSize; i++)
 				{
-					logger.info("Processing report serial no:" + i);
+					this.logger.info("Processing report serial no:" + i);
 					// retrieve the identified report using its id
 
-					identifiedReport = getIdentifiedReport((Long) isprIDList.get(i));
+					identifiedReport = this.getIdentifiedReport((Long) isprIDList.get(i));
 					// instantiate a thread to process the report
-					logger.info("Instantiating thread for report id="
+					this.logger.info("Instantiating thread for report id="
 							+ identifiedReport.getId());
-					Thread th = new DeidentifierReportThread(identifiedReport, deidentifier);
+					final Thread th = new DeidentifierReportThread(identifiedReport,
+							this.deidentifier);
 					// add thread to thread pool manager
 					deidExecutor.execute(th);
 				}
 			}
-			catch (Exception ex)
+			catch (final Exception ex)
 			{
-				logger.error("Deidentification pipeline is failed:", ex);
+				this.logger.error("Deidentification pipeline is failed:", ex);
 				// shut down the thread pool manager
 				deidExecutor.shutdown();
 				throw ex;
@@ -234,6 +231,7 @@ public class DeIDPipelineManager
 			deidExecutor.shutdown();
 		}
 	}
+
 	/**
 	 * @param identifiedReportId : identifiedReportId
 	 * @return IdentifiedSurgicalPathologyReport
@@ -242,20 +240,17 @@ public class DeIDPipelineManager
 	private IdentifiedSurgicalPathologyReport getIdentifiedReport(Long identifiedReportId)
 			throws Exception
 	{
-		IdentifiedSurgicalPathologyReport identifiedReport
-		= (IdentifiedSurgicalPathologyReport) CaCoreAPIService
+		final IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) CaCoreAPIService
 				.getObject(
-						edu.wustl.catissuecore.domain.pathology.
-						IdentifiedSurgicalPathologyReport.class,
+						edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport.class,
 						Constants.SYSTEM_IDENTIFIER, identifiedReportId);
-		String hqlQuery = "select cpr.participant from edu.wustl.catissuecore.domain" +
-				".CollectionProtocolRegistration cpr, "
-				+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg"
-				+ " where scg.id="
+		String hqlQuery = "select cpr.participant from edu.wustl.catissuecore.domain"
+				+ ".CollectionProtocolRegistration cpr, "
+				+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg" + " where scg.id="
 				+ identifiedReport.getSpecimenCollectionGroup().getId()
 				+ " and scg.id in elements(cpr.specimenCollectionGroupCollection)";
-		List participantList = (List) CaCoreAPIService.executeQuery(hqlQuery, Participant.class
-				.getName());
+		final List participantList = (List) CaCoreAPIService.executeQuery(hqlQuery,
+				Participant.class.getName());
 		Participant participant = null;
 		if (participantList != null && participantList.size() > 0)
 		{
@@ -264,25 +259,22 @@ public class DeIDPipelineManager
 			hqlQuery = "select elements(p.participantMedicalIdentifierCollection)"
 					+ " from edu.wustl.catissuecore.domain.Participant as p" + " where p.id="
 					+ participant.getId();
-			Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection
-			= (List) CaCoreAPIService
+			final Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = CaCoreAPIService
 					.executeQuery(hqlQuery, Participant.class.getName());
 			participant
-					.setParticipantMedicalIdentifierCollection
-					(participantMedicalIdentifierCollection);
+					.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 		}
-		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+		final SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 		specimenCollectionGroup.setId(identifiedReport.getSpecimenCollectionGroup().getId());
-		CollectionProtocolRegistration collectionProtocolRegistration
-		= new CollectionProtocolRegistration();
+		final CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 		collectionProtocolRegistration.setParticipant(participant);
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		identifiedReport.setSpecimenCollectionGroup(specimenCollectionGroup);
 		// get textcontent
-		TextContent textContent = (TextContent) CaCoreAPIService.getObject(TextContent.class,
+		final TextContent textContent = (TextContent) CaCoreAPIService.getObject(TextContent.class,
 				Constants.SYSTEM_IDENTIFIER, identifiedReport.getTextContent().getId());
 		// get source
-		Site reportSource = (Site) CaCoreAPIService.getObject(Site.class,
+		final Site reportSource = (Site) CaCoreAPIService.getObject(Site.class,
 				Constants.SYSTEM_IDENTIFIER, identifiedReport.getReportSource().getId());
 		identifiedReport.setReportSource(reportSource);
 		identifiedReport.setTextContent(textContent);
@@ -298,12 +290,11 @@ public class DeIDPipelineManager
 	 */
 	private List getReportIDList() throws Exception
 	{
-		String hqlQuery = "select id from edu.wustl.catissuecore" +
-				".domain.pathology.IdentifiedSurgicalPathologyReport where "
-				+ CaTIESConstants.COLUMN_NAME_REPORT_STATUS
-				+ "='"
+		final String hqlQuery = "select id from edu.wustl.catissuecore"
+				+ ".domain.pathology.IdentifiedSurgicalPathologyReport where "
+				+ CaTIESConstants.COLUMN_NAME_REPORT_STATUS + "='"
 				+ CaTIESConstants.PENDING_FOR_DEID + "'";
-		List isprIDList = (List) CaCoreAPIService.executeQuery(hqlQuery,
+		final List isprIDList = (List) CaCoreAPIService.executeQuery(hqlQuery,
 				IdentifiedSurgicalPathologyReport.class.getName());
 		return isprIDList;
 	}
@@ -317,13 +308,13 @@ public class DeIDPipelineManager
 	{
 		try
 		{
-			DeIDPipelineManager deidPipeline = new DeIDPipelineManager();
+			final DeIDPipelineManager deidPipeline = new DeIDPipelineManager();
 			// Thread for stopping deid poller server
-			Thread stopThread = new StopServer(CaTIESConstants.DEID_PORT);
+			final Thread stopThread = new StopServer(CaTIESConstants.DEID_PORT);
 			stopThread.start();
 			deidPipeline.startProcess();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			ex.printStackTrace();
 			// Logger.error("Error while initializing DeidPipelineManager "+

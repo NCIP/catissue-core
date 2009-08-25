@@ -34,11 +34,12 @@ public class ChangePasswordAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//UserForm userForm = (UserForm) form;
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 		return mapping.findForward(pageOf);
 	}

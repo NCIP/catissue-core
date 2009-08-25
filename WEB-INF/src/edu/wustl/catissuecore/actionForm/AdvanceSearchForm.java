@@ -41,19 +41,18 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 public class AdvanceSearchForm extends ActionForm
 {
 
-	private static final long				serialVersionUID	= 1234567890L;
+	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger	logger				= Logger
-																		.getLogger(AdvanceSearchForm.class);
+	private static org.apache.log4j.Logger logger = Logger.getLogger(AdvanceSearchForm.class);
 
 	/**
 	 * @return Returns the columnNames.
 	 */
 	public String[] getColumnNames()
 	{
-		return columnNames;
+		return this.columnNames;
 	}
 
 	/**
@@ -69,7 +68,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public String[] getSelectedColumnNames()
 	{
-		return selectedColumnNames;
+		return this.selectedColumnNames;
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public String getTableName()
 	{
-		return tableName;
+		return this.tableName;
 	}
 
 	/**
@@ -99,35 +98,35 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * A map that handles all the values of Advanced Search pages
 	 */
-	private Map			values			= new HashMap();
+	private Map values = new HashMap();
 
 	/**
 	 * A map that handles event parameters' data
 	 */
-	private final Map	eventMap		= new HashMap();
+	private final Map eventMap = new HashMap();
 
 	/**
 	 * Objectname of the advancedConditionNode Object
 	 */
-	private String		objectName		= "";
+	private String objectName = "";
 
 	/**
 	 * Selected node from the query tree
 	 */
-	private String		selectedNode	= "";
+	private String selectedNode = "";
 
 	/**
 	 * A counter that holds the number of event parameter rows
 	 */
-	private int			eventCounter	= 1;
+	private int eventCounter = 1;
 
-	private String		itemNodeId		= "";
+	private String itemNodeId = "";
 
 	//Variables neccessary for Configuration of Advance Search Results 
 
-	private String		tableName;
-	private String[]	selectedColumnNames;
-	private String[]	columnNames;
+	private String tableName;
+	private String[] selectedColumnNames;
+	private String[] columnNames;
 
 	/**
 	 * Returns the selected node from a query tree.
@@ -136,7 +135,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public String getSelectedNode()
 	{
-		return selectedNode;
+		return this.selectedNode;
 	}
 
 	/**
@@ -165,7 +164,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public void setValue(final String key, final Object value)
 	{
-		values.put(key, value);
+		this.values.put(key, value);
 	}
 
 	/**
@@ -175,7 +174,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	//Bug 700: changed the method name for setting the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
@@ -186,7 +185,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public void setValue1(String key, Object value)
 	{
-		values.put(key, value);
+		this.values.put(key, value);
 	}
 
 	/**
@@ -196,7 +195,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Object getValue1(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -205,7 +204,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
@@ -235,7 +234,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public void setValueList(String key, Object[] value)
 	{
-		values.put(key, value);
+		this.values.put(key, value);
 	}
 
 	/**
@@ -245,7 +244,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Object[] getValueList(String key)
 	{
-		return (Object[]) values.get(key);
+		return (Object[]) this.values.get(key);
 	}
 
 	/**
@@ -262,17 +261,18 @@ public class AdvanceSearchForm extends ActionForm
 	 * @param mapping
 	 * @param request
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 
 		final String opConstant = "Operator:";
 		//        Iterator it = values.keySet().iterator();
 
-		if (objectName != null && !"".equals(objectName))
+		if (this.objectName != null && !"".equals(this.objectName))
 		{
-			final Map resourceBundleMap = SearchUtil.getResourceBundleMap(objectName);
+			final Map resourceBundleMap = SearchUtil.getResourceBundleMap(this.objectName);
 
 			final Iterator iterator = resourceBundleMap.keySet().iterator();
 
@@ -281,12 +281,12 @@ public class AdvanceSearchForm extends ActionForm
 				String valKey = (String) iterator.next(); //Value Key - ALIAS_NAME:COLUMN_NAME
 				final String opKey = opConstant + valKey; //Operator Key - OPERATOR:ALIAS_NAME:COLUMN_NAME
 
-				final String opValue = (String) values.get(opKey); //Operator Value
+				final String opValue = (String) this.values.get(opKey); //Operator Value
 
 				if (validator.isOperator(opValue)) //IF the operator is a valid operator
 				{
-					String value = (String) values.get(valKey);
-					NameValueBean bean = (NameValueBean) resourceBundleMap.get(valKey);
+					String value = (String) this.values.get(valKey);
+					final NameValueBean bean = (NameValueBean) resourceBundleMap.get(valKey);
 					final String labelName = bean.getName(); //A key in ApplicationResources.properties
 
 					if (validator.isValue(value)) //IF the value is a valid value
@@ -298,7 +298,7 @@ public class AdvanceSearchForm extends ActionForm
 								if (validator.checkDate(value)) //IF the start date is improper
 								{
 									valKey = valKey + ":HLIMIT"; //Key for second field
-									value = (String) values.get(valKey);
+									value = (String) this.values.get(valKey);
 
 									if (!validator.isValue(value)) //IF the value is a valid value
 									{
@@ -329,7 +329,7 @@ public class AdvanceSearchForm extends ActionForm
 								if (validator.isDouble(value, true)) //IF the numeric value is improper
 								{
 									valKey = valKey + ":HLIMIT"; //Key for second field
-									value = (String) values.get(valKey);
+									value = (String) this.values.get(valKey);
 
 									if (validator.isValue(value)) //IF the value is a valid value
 									{
@@ -364,9 +364,9 @@ public class AdvanceSearchForm extends ActionForm
 				}
 			}
 
-			if ("Specimen".equals(objectName))
+			if ("Specimen".equals(this.objectName))
 			{
-				validateEventParameters(validator, errors);
+				this.validateEventParameters(validator, errors);
 			}
 		}
 
@@ -380,7 +380,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public String getObjectName()
 	{
-		return objectName;
+		return this.objectName;
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public void setEventMap(String key, Object value)
 	{
-		eventMap.put(key, value);
+		this.eventMap.put(key, value);
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Object getEventMap(String key)
 	{
-		return eventMap.get(key);
+		return this.eventMap.get(key);
 	}
 
 	/**
@@ -429,7 +429,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public int getEventCounter()
 	{
-		return eventCounter;
+		return this.eventCounter;
 	}
 
 	/**
@@ -444,7 +444,7 @@ public class AdvanceSearchForm extends ActionForm
 
 	public String getItemNodeId()
 	{
-		return itemNodeId;
+		return this.itemNodeId;
 	}
 
 	public void setItemNodeId(String itemId)
@@ -456,14 +456,14 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * Map to hold values for rows to display calendar icon.
 	 */
-	protected Map	showCalendarValues	= new HashMap();
+	protected Map showCalendarValues = new HashMap();
 
 	/**
 	 * @return Returns the showCalendarValues.
 	 */
 	public Map getShowCalendarValues()
 	{
-		return showCalendarValues;
+		return this.showCalendarValues;
 	}
 
 	/**
@@ -481,7 +481,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public void setShowCalendar(String key, Object value)
 	{
-		showCalendarValues.put(key, value);
+		this.showCalendarValues.put(key, value);
 	}
 
 	/**
@@ -493,7 +493,7 @@ public class AdvanceSearchForm extends ActionForm
 	 */
 	public Object getShowCalendar(String key)
 	{
-		return showCalendarValues.get(key);
+		return this.showCalendarValues.get(key);
 	}
 
 	//This method validates the Event-Parameters Block in Specimen Search Page
@@ -507,26 +507,26 @@ public class AdvanceSearchForm extends ActionForm
 		Map evtPrmDspNm = null;
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final QueryBizLogic bizLogic = (QueryBizLogic) factory
 					.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
 
 			evtPrmDspNm = SearchUtil.getEventParametersDisplayNames(bizLogic, SearchUtil
 					.getEventParametersTables(bizLogic));
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.debug("Exception in AdvanceSearchForm ", e);
 		}
 
-		for (int i = 1; i <= eventCounter; i++)
+		for (int i = 1; i <= this.eventCounter; i++)
 		{
-			final String name = (String) eventMap.get(eventName + i);
-			final String column = (String) eventMap.get(eventColumn + i);
+			final String name = (String) this.eventMap.get(eventName + i);
+			final String column = (String) this.eventMap.get(eventColumn + i);
 
 			if (validator.isValidOption(name) && validator.isValidOption(column))
 			{
-				final String value = (String) eventMap.get(eventValue + i);
+				final String value = (String) this.eventMap.get(eventValue + i);
 
 				final String fieldName = column.substring(column.indexOf(".") + 1, column
 						.lastIndexOf("."));

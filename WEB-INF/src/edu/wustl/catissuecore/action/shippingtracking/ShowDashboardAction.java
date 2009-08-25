@@ -78,29 +78,33 @@ public class ShowDashboardAction extends SecureAction
 						loggedInUserSiteId = new Long[siteIds.size()];
 						loggedInUserSiteId = siteIds.toArray(loggedInUserSiteId);
 						//bug 12809 start
-						getTotalRecordsAndPagesForRequest( dashboardForm, requestBizLogic, recordsPerPage, loggedInUserSiteId, request );
-						getTotalRecordsAndPagesForShipment( dashboardForm, bizLogic, recordsPerPage, loggedInUserSiteId, request );
+						this.getTotalRecordsAndPagesForRequest(dashboardForm, requestBizLogic,
+								recordsPerPage, loggedInUserSiteId, request);
+						this.getTotalRecordsAndPagesForShipment(dashboardForm, bizLogic,
+								recordsPerPage, loggedInUserSiteId, request);
 						if (!sessionDataBean.isAdmin())
 						{
 							//incoming shipment requests
 							this.setRequestsReceivedInfo(request, requestBizLogic,
-									loggedInUserSiteId, recordsPerPage,dashboardForm,sessionDataBean.isAdmin());
+									loggedInUserSiteId, recordsPerPage, dashboardForm,
+									sessionDataBean.isAdmin());
 							//incoming shipments
 							this.setShipmentsReceivedInfo(request, bizLogic, loggedInUserSiteId,
-									recordsPerPage,dashboardForm);
+									recordsPerPage, dashboardForm);
 							//Outgoing Shipments
 							this.setOutgoingShipmentsInfo(request, bizLogic, loggedInUserSiteId,
-									recordsPerPage,dashboardForm);
+									recordsPerPage, dashboardForm);
 							//Outgoing Shipment Requests
 							this.setRequestsSentInfo(request, requestBizLogic, loggedInUserSiteId,
-									recordsPerPage,dashboardForm);
+									recordsPerPage, dashboardForm);
 						}
 						else
 						{
 							this.setShipmentsReceivedInfo(request, bizLogic, loggedInUserSiteId,
-									recordsPerPage,dashboardForm);
+									recordsPerPage, dashboardForm);
 							this.setRequestsReceivedInfo(request, requestBizLogic,
-									loggedInUserSiteId, recordsPerPage,dashboardForm,sessionDataBean.isAdmin());
+									loggedInUserSiteId, recordsPerPage, dashboardForm,
+									sessionDataBean.isAdmin());
 						}
 						//bug 12809 end
 						request.setAttribute("identifierFieldIndex", 0);
@@ -154,6 +158,7 @@ public class ShowDashboardAction extends SecureAction
 		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
+
 	/**
 	 * This method calculates total number of records and pages of incoming and outgoing shipment
 	 *  and sets these vales in form.
@@ -164,14 +169,18 @@ public class ShowDashboardAction extends SecureAction
 	 * @param request - request
 	 * @throws BizLogicException - BizLogicException
 	 */
-	private void getTotalRecordsAndPagesForShipment(DashboardForm form,ShipmentBizLogic bizLogic,Integer recordsPerPage,Long[] loggedInUserSiteId,HttpServletRequest request) throws BizLogicException
+	private void getTotalRecordsAndPagesForShipment(DashboardForm form, ShipmentBizLogic bizLogic,
+			Integer recordsPerPage, Long[] loggedInUserSiteId, HttpServletRequest request)
+			throws BizLogicException
 	{
-		Integer totalRecords = (Integer) request.getSession().getAttribute("incomingShipTotalRecords");
-        Integer totalPages = (Integer) request.getSession().getAttribute("incomingShipTotalPages");
-		String columnNamesShipmentsReceived[] = {"receiverSite.id", "createdDate"};
-		totalRecords = getTotalNumberOfRecords(bizLogic,loggedInUserSiteId,recordsPerPage,columnNamesShipmentsReceived);
+		Integer totalRecords = (Integer) request.getSession().getAttribute(
+				"incomingShipTotalRecords");
+		Integer totalPages = (Integer) request.getSession().getAttribute("incomingShipTotalPages");
+		final String columnNamesShipmentsReceived[] = {"receiverSite.id", "createdDate"};
+		totalRecords = this.getTotalNumberOfRecords(bizLogic, loggedInUserSiteId, recordsPerPage,
+				columnNamesShipmentsReceived);
 		int numOfRecords = 1;
-		if(recordsPerPage!=null)
+		if (recordsPerPage != null)
 		{
 			numOfRecords = recordsPerPage.intValue();
 		}
@@ -179,19 +188,23 @@ public class ShowDashboardAction extends SecureAction
 		{
 			numOfRecords = 5;
 		}
-		totalPages = getTotalNumberOfPages(numOfRecords,totalRecords);
-		form.setIncomingShipmentsTotalPages( totalPages );
-		form.setIncomingShipmentsTotalRecords( totalRecords );
-		
-		Integer totalRecordsOutgoing = (Integer) request.getSession().getAttribute("outgoingShipTotalRecords");
-        Integer totalPagesOutgoing = (Integer) request.getSession().getAttribute("outgoingShipTotalPages");
-		String columnNamesOutgoingShipments[] = {"senderSite.id", "createdDate"};
-		totalRecordsOutgoing = getTotalNumberOfRecords(bizLogic,loggedInUserSiteId,recordsPerPage,columnNamesOutgoingShipments);
-		totalPagesOutgoing = getTotalNumberOfPages(numOfRecords,totalRecordsOutgoing);
-		form.setOutgoingShipmentsTotalPages( totalPagesOutgoing );
-		form.setOutgoingShipmentsTotalRecords( totalRecordsOutgoing );
-		
+		totalPages = this.getTotalNumberOfPages(numOfRecords, totalRecords);
+		form.setIncomingShipmentsTotalPages(totalPages);
+		form.setIncomingShipmentsTotalRecords(totalRecords);
+
+		Integer totalRecordsOutgoing = (Integer) request.getSession().getAttribute(
+				"outgoingShipTotalRecords");
+		Integer totalPagesOutgoing = (Integer) request.getSession().getAttribute(
+				"outgoingShipTotalPages");
+		final String columnNamesOutgoingShipments[] = {"senderSite.id", "createdDate"};
+		totalRecordsOutgoing = this.getTotalNumberOfRecords(bizLogic, loggedInUserSiteId,
+				recordsPerPage, columnNamesOutgoingShipments);
+		totalPagesOutgoing = this.getTotalNumberOfPages(numOfRecords, totalRecordsOutgoing);
+		form.setOutgoingShipmentsTotalPages(totalPagesOutgoing);
+		form.setOutgoingShipmentsTotalRecords(totalRecordsOutgoing);
+
 	}
+
 	/**
 	 * This method calculates total number of records and pages of incoming and outgoing shipment request
 	 *  and sets these vales in form.
@@ -202,17 +215,21 @@ public class ShowDashboardAction extends SecureAction
 	 * @param request - request
 	 * @throws BizLogicException - BizLogicException
 	 */
-	private void getTotalRecordsAndPagesForRequest(DashboardForm form,ShipmentRequestBizLogic requestBizLogic,Integer recordsPerPage,Long[] loggedInUserSiteId,HttpServletRequest request) throws BizLogicException
+	private void getTotalRecordsAndPagesForRequest(DashboardForm form,
+			ShipmentRequestBizLogic requestBizLogic, Integer recordsPerPage,
+			Long[] loggedInUserSiteId, HttpServletRequest request) throws BizLogicException
 	{
-		Integer totalRecords = (Integer) request.getSession().getAttribute("reqReceivedTotalRecords");
-        Integer totalPages = (Integer) request.getSession().getAttribute("reqReceivedTotalPages");
-		String columnNamesRequestsReceived[] = {"receiverSite.id", "sendDate"};
-		if(totalRecords == null)
+		Integer totalRecords = (Integer) request.getSession().getAttribute(
+				"reqReceivedTotalRecords");
+		Integer totalPages = (Integer) request.getSession().getAttribute("reqReceivedTotalPages");
+		final String columnNamesRequestsReceived[] = {"receiverSite.id", "sendDate"};
+		if (totalRecords == null)
 		{
-		   totalRecords = getTotalNumberOfRecords(requestBizLogic,loggedInUserSiteId,recordsPerPage,columnNamesRequestsReceived);
+			totalRecords = this.getTotalNumberOfRecords(requestBizLogic, loggedInUserSiteId,
+					recordsPerPage, columnNamesRequestsReceived);
 		}
 		int numOfRecords = 1;
-		if(recordsPerPage!=null)
+		if (recordsPerPage != null)
 		{
 			numOfRecords = recordsPerPage.intValue();
 		}
@@ -220,27 +237,28 @@ public class ShowDashboardAction extends SecureAction
 		{
 			numOfRecords = 5;
 		}
-		if(totalPages == null)
+		if (totalPages == null)
 		{
-		  totalPages = getTotalNumberOfPages(numOfRecords,totalRecords);
+			totalPages = this.getTotalNumberOfPages(numOfRecords, totalRecords);
 		}
-		form.setIncomingShipmentReqsTotalPages( totalPages );
-		form.setIncomingShipmentReqsTotalRecords( totalRecords );
-		
-		
-		Integer totalRecordsSent = (Integer) request.getSession().getAttribute("reqSentTotalRecords");
+		form.setIncomingShipmentReqsTotalPages(totalPages);
+		form.setIncomingShipmentReqsTotalRecords(totalRecords);
+
+		Integer totalRecordsSent = (Integer) request.getSession().getAttribute(
+				"reqSentTotalRecords");
 		Integer totalPagesSent = (Integer) request.getSession().getAttribute("reqSentTotalPages");
-		String columnNamesRequestsSent[] = {"senderSite.id", "createdDate"};
-		if(totalRecordsSent == null)
+		final String columnNamesRequestsSent[] = {"senderSite.id", "createdDate"};
+		if (totalRecordsSent == null)
 		{
-		  totalRecordsSent = getTotalNumberOfRecords(requestBizLogic,loggedInUserSiteId,recordsPerPage,columnNamesRequestsSent);
+			totalRecordsSent = this.getTotalNumberOfRecords(requestBizLogic, loggedInUserSiteId,
+					recordsPerPage, columnNamesRequestsSent);
 		}
-		if(totalPagesSent == null)
+		if (totalPagesSent == null)
 		{
-		  totalPagesSent = getTotalNumberOfPages(numOfRecords,totalRecordsSent);
+			totalPagesSent = this.getTotalNumberOfPages(numOfRecords, totalRecordsSent);
 		}
-		form.setOutgoingShipmentReqsTotalPages( totalPagesSent );
-		form.setOutgoingShipmentReqsTotalRecords( totalRecordsSent );
+		form.setOutgoingShipmentReqsTotalPages(totalPagesSent);
+		form.setOutgoingShipmentReqsTotalRecords(totalRecordsSent);
 	}
 
 	/**
@@ -284,7 +302,8 @@ public class ShowDashboardAction extends SecureAction
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private void setRequestsSentInfo(HttpServletRequest request, ShipmentRequestBizLogic bizLogic,
-			Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm) throws BizLogicException
+			Long[] loggedInUserSiteId, Integer recordsPerPage, DashboardForm dashboardForm)
+			throws BizLogicException
 	{
 		final List<String> requestsSentHeader = this.getRequestsSentHeader();
 		List<Object[]> requestsSentList = null;
@@ -304,7 +323,8 @@ public class ShowDashboardAction extends SecureAction
 		}
 		int startIndex = 0;
 		int numOfRecords = 1;
-		Integer[] indexValues = getStartIndexAndRecordsPerPage(currentPageNo,recordsPerPage);
+		final Integer[] indexValues = this.getStartIndexAndRecordsPerPage(currentPageNo,
+				recordsPerPage);
 		startIndex = indexValues[0];
 		numOfRecords = indexValues[1];
 		currentPageNo = indexValues[2];
@@ -313,7 +333,8 @@ public class ShowDashboardAction extends SecureAction
 				numOfRecords);
 		recordsPerPage = numOfRecords;
 		this.setPagenationInfoToSession(request, "reqSentCurrentPageNo", currentPageNo,
-				"reqSentTotalRecords", dashboardForm.getOutgoingShipmentReqsTotalRecords(), "reqSentTotalPages", dashboardForm.getOutgoingShipmentReqsTotalPages(),
+				"reqSentTotalRecords", dashboardForm.getOutgoingShipmentReqsTotalRecords(),
+				"reqSentTotalPages", dashboardForm.getOutgoingShipmentReqsTotalPages(),
 				"reqSentRecordsPerPage", recordsPerPage);
 		request.setAttribute("requestsSentHeader", requestsSentHeader);
 		request.setAttribute("requestsSentList", requestsSentList);
@@ -321,20 +342,21 @@ public class ShowDashboardAction extends SecureAction
 		request.setAttribute("sentReqActivityStatusIndex", 6);
 		request.setAttribute("sentReqReceiverSiteNameIndex", 3);
 	}
+
 	/**
 	 * 
 	 * @param currentPageNo - current Page No
 	 * @param recordsPerPage - records Per Page
 	 * @return Integer array with values as startIndex,numOfRecords,currentPageNo
 	 */
-	private Integer[] getStartIndexAndRecordsPerPage(Integer currentPageNo,Integer recordsPerPage)
+	private Integer[] getStartIndexAndRecordsPerPage(Integer currentPageNo, Integer recordsPerPage)
 	{
 		int startIndex = 0;
 		int numOfRecords = 1;
 		if (currentPageNo != null && recordsPerPage != null)
 		{
 			startIndex = (currentPageNo.intValue() - 1) * recordsPerPage.intValue();
-			numOfRecords = recordsPerPage.intValue();			
+			numOfRecords = recordsPerPage.intValue();
 		}
 		else
 		{
@@ -342,7 +364,7 @@ public class ShowDashboardAction extends SecureAction
 			numOfRecords = 5;
 			currentPageNo = 1;
 		}
-		Integer[] returnValues = {startIndex,numOfRecords,currentPageNo};
+		final Integer[] returnValues = {startIndex, numOfRecords, currentPageNo};
 		return returnValues;
 	}
 
@@ -409,7 +431,8 @@ public class ShowDashboardAction extends SecureAction
 	 */
 	//For Incoming Shipments
 	private void setShipmentsReceivedInfo(HttpServletRequest request, ShipmentBizLogic bizLogic,
-			Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm) throws BizLogicException
+			Long[] loggedInUserSiteId, Integer recordsPerPage, DashboardForm dashboardForm)
+			throws BizLogicException
 	{
 		final List<String> incomingShipmentsHeader = this.getIncomingShipmentsHeader();
 		// Pass the siteiID array of logged in user
@@ -431,7 +454,8 @@ public class ShowDashboardAction extends SecureAction
 		}
 		int startIndex = 0;
 		int numOfRecords = 10;
-		Integer[] indexValues = getStartIndexAndRecordsPerPage(currentPageNo,recordsPerPage);
+		final Integer[] indexValues = this.getStartIndexAndRecordsPerPage(currentPageNo,
+				recordsPerPage);
 		startIndex = indexValues[0];
 		numOfRecords = indexValues[1];
 		currentPageNo = indexValues[2];
@@ -440,63 +464,69 @@ public class ShowDashboardAction extends SecureAction
 				startIndex, numOfRecords);
 		recordsPerPage = numOfRecords;
 		this.setPagenationInfoToSession(request, "incomingShipCurrentPageNo", currentPageNo,
-				"incomingShipTotalRecords", dashboardForm.getIncomingShipmentsTotalRecords(), "incomingShipTotalPages", dashboardForm.getIncomingShipmentsTotalPages(),
+				"incomingShipTotalRecords", dashboardForm.getIncomingShipmentsTotalRecords(),
+				"incomingShipTotalPages", dashboardForm.getIncomingShipmentsTotalPages(),
 				"incomingShipRecordsPerPage", recordsPerPage);
 		request.setAttribute("incomingShipmentsHeader", incomingShipmentsHeader);
 		request.setAttribute("incomingShipmentsList", incomingShipmentsList);
 		request.setAttribute("incomingShipUserNameIndex", 5);
 	}
+
 	/**
 	 * This method is used to calculate total number of pages
 	 * @param numOfRecords - Number of records per page
 	 * @param totalRecords - total records
 	 * @return totalPages
 	 */
-private Integer getTotalNumberOfPages(Integer numOfRecords,Integer totalRecords)
-{
-	Integer totalPages = 1;
-	totalPages = totalRecords % numOfRecords == 0
-	? totalRecords / numOfRecords
-	: (totalRecords / numOfRecords) + 1;
-	return totalPages;
-	
-}
-/**
- * This method is used to calculate total number of records
- * @param bizLogic - BaseShipmentBizLogic object
- * @param loggedInUserSiteId - site id
- * @param recordsPerPage - records per page 
- * @param columnNames - columns names
- * @return Total number of records
- * @throws BizLogicException - BizLogicException
- */
-private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] loggedInUserSiteId,Integer recordsPerPage,String columnNames[]) throws BizLogicException
-{
-	Integer totalRecords = 0;
-	int startIndex = 0;
-	int numOfRecords = 10;
-	if(recordsPerPage != null)
+	private Integer getTotalNumberOfPages(Integer numOfRecords, Integer totalRecords)
 	{
-		numOfRecords = recordsPerPage.intValue();
+		Integer totalPages = 1;
+		totalPages = totalRecords % numOfRecords == 0
+				? totalRecords / numOfRecords
+				: (totalRecords / numOfRecords) + 1;
+		return totalPages;
+
 	}
-	else
+
+	/**
+	 * This method is used to calculate total number of records
+	 * @param bizLogic - BaseShipmentBizLogic object
+	 * @param loggedInUserSiteId - site id
+	 * @param recordsPerPage - records per page 
+	 * @param columnNames - columns names
+	 * @return Total number of records
+	 * @throws BizLogicException - BizLogicException
+	 */
+	private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,
+			Long[] loggedInUserSiteId, Integer recordsPerPage, String columnNames[])
+			throws BizLogicException
 	{
-		numOfRecords = 5;
+		Integer totalRecords = 0;
+		final int startIndex = 0;
+		int numOfRecords = 10;
+		if (recordsPerPage != null)
+		{
+			numOfRecords = recordsPerPage.intValue();
+		}
+		else
+		{
+			numOfRecords = 5;
+		}
+		if (bizLogic instanceof ShipmentBizLogic)
+		{
+			final ShipmentBizLogic shipmentBizLogic = (ShipmentBizLogic) bizLogic;
+			totalRecords = shipmentBizLogic.getShipmentsCount(columnNames[0], columnNames[1],
+					loggedInUserSiteId, startIndex, numOfRecords);
+		}
+		else if (bizLogic instanceof ShipmentRequestBizLogic)
+		{
+			final ShipmentRequestBizLogic requestBizLogic = (ShipmentRequestBizLogic) bizLogic;
+			totalRecords = requestBizLogic.getShipmentRequestsCount(columnNames[0], columnNames[1],
+					loggedInUserSiteId, startIndex, numOfRecords);
+		}
+		return totalRecords;
 	}
-	if(bizLogic instanceof ShipmentBizLogic)
-	{
-		ShipmentBizLogic shipmentBizLogic = (ShipmentBizLogic)bizLogic;
-		totalRecords = shipmentBizLogic.getShipmentsCount(columnNames[0], columnNames[1],
-				loggedInUserSiteId, startIndex, numOfRecords);
-	}
-	else if(bizLogic instanceof ShipmentRequestBizLogic)
-	{
-		ShipmentRequestBizLogic requestBizLogic = (ShipmentRequestBizLogic)bizLogic;
-		totalRecords = requestBizLogic.getShipmentRequestsCount(columnNames[0], columnNames[1],
-				loggedInUserSiteId, startIndex, numOfRecords);
-	}
-	return totalRecords;
-}
+
 	/**
 	 * gets the incoming shipment headers.
 	 * @return list of string containing headers.
@@ -542,7 +572,8 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private void setOutgoingShipmentsInfo(HttpServletRequest request, ShipmentBizLogic bizLogic,
-			Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm) throws BizLogicException
+			Long[] loggedInUserSiteId, Integer recordsPerPage, DashboardForm dashboardForm)
+			throws BizLogicException
 	{
 		final List<String> outgoingShipmentsHeader = this.getOutgoingShipmentsHeader();
 		List<Object[]> outgoingShipmentsList = null;
@@ -563,7 +594,8 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 		}
 		int startIndex = 0;
 		int numOfRecords = 10;
-		Integer[] indexValues = getStartIndexAndRecordsPerPage(currentPageNo,recordsPerPage);
+		final Integer[] indexValues = this.getStartIndexAndRecordsPerPage(currentPageNo,
+				recordsPerPage);
 		startIndex = indexValues[0];
 		numOfRecords = indexValues[1];
 		currentPageNo = indexValues[2];
@@ -572,7 +604,8 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 				startIndex, numOfRecords);
 		recordsPerPage = numOfRecords;
 		this.setPagenationInfoToSession(request, "outgoingShipCurrentPageNo", currentPageNo,
-				"outgoingShipTotalRecords", dashboardForm.getOutgoingShipmentsTotalRecords(), "outgoingShipTotalPages", dashboardForm.getOutgoingShipmentsTotalPages(),
+				"outgoingShipTotalRecords", dashboardForm.getOutgoingShipmentsTotalRecords(),
+				"outgoingShipTotalPages", dashboardForm.getOutgoingShipmentsTotalPages(),
 				"outgoingShipRecordsPerPage", recordsPerPage);
 		request.setAttribute("outgoingShipmentsHeader", outgoingShipmentsHeader);
 		request.setAttribute("outgoingShipmentsList", outgoingShipmentsList);
@@ -624,8 +657,8 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 	 * @throws BizLogicException if some bizlogic error occurs.
 	 */
 	private void setRequestsReceivedInfo(HttpServletRequest request,
-			ShipmentRequestBizLogic bizLogic, Long[] loggedInUserSiteId, Integer recordsPerPage,DashboardForm dashboardForm,boolean isAdmin)
-			throws BizLogicException
+			ShipmentRequestBizLogic bizLogic, Long[] loggedInUserSiteId, Integer recordsPerPage,
+			DashboardForm dashboardForm, boolean isAdmin) throws BizLogicException
 	{
 		final List<String> requestsReceivedHeader = this.getRequestsReceivedHeader();
 		List<Object[]> requestsReceivedList = null;
@@ -645,16 +678,18 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 		}
 		int startIndex = 0;
 		int numOfRecords = 1;
-		Integer[] indexValues = getStartIndexAndRecordsPerPage(currentPageNo,recordsPerPage);
+		final Integer[] indexValues = this.getStartIndexAndRecordsPerPage(currentPageNo,
+				recordsPerPage);
 		startIndex = indexValues[0];
 		numOfRecords = indexValues[1];
 		currentPageNo = indexValues[2];
 		// Pass the siteiID array of logged in user
 		requestsReceivedList = this.getRequestsReceivedList(bizLogic, loggedInUserSiteId,
-				startIndex, numOfRecords,isAdmin);
+				startIndex, numOfRecords, isAdmin);
 		recordsPerPage = numOfRecords;
 		this.setPagenationInfoToSession(request, "reqReceivedCurrentPageNo", currentPageNo,
-				"reqReceivedTotalRecords", dashboardForm.getIncomingShipmentReqsTotalRecords(), "reqReceivedTotalPages", dashboardForm.getIncomingShipmentReqsTotalPages(),
+				"reqReceivedTotalRecords", dashboardForm.getIncomingShipmentReqsTotalRecords(),
+				"reqReceivedTotalPages", dashboardForm.getIncomingShipmentReqsTotalPages(),
 				"reqReceivedRecordsPerPage", recordsPerPage);
 		request.setAttribute("requestsReceivedHeader", requestsReceivedHeader);
 		request.setAttribute("requestsReceivedList", requestsReceivedList);
@@ -694,7 +729,8 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
 	private List<Object[]> getRequestsReceivedList(ShipmentRequestBizLogic bizLogic,
-			Long[] loggedInUserSiteIds, int startIndex, int numOfRecords,boolean isAdmin) throws BizLogicException
+			Long[] loggedInUserSiteIds, int startIndex, int numOfRecords, boolean isAdmin)
+			throws BizLogicException
 	{
 		final String selectColumnName = "shipment.id, shipment.senderContactPerson.lastName, shipment.label, shipment.senderSite.name, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
 		//bug 13572 start
@@ -702,21 +738,20 @@ private Integer getTotalNumberOfRecords(BaseShipmentBizLogic bizLogic,Long[] log
 		 * If last where clause is added to query, then query will not return proper results
 		 * in case of super admin.But in case of site admin query will return proper results.
 		 */
-		if(isAdmin)
+		if (isAdmin)
 		{
 			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
-					loggedInUserSiteIds, startIndex, numOfRecords," shipment.activityStatus != '"
-						+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
+					loggedInUserSiteIds, startIndex, numOfRecords, " shipment.activityStatus != '"
+							+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
 		}
 		else
 		{
 			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
 					loggedInUserSiteIds, startIndex, numOfRecords,
-			" shipment.senderSite <> shipment.receiverSite AND ");
+					" shipment.senderSite <> shipment.receiverSite AND ");
 		}
 		//bug 13572 end
 	}
-		
 
 	/**
 	 * gets the requests received header.

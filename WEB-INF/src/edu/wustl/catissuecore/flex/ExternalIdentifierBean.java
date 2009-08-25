@@ -8,7 +8,8 @@ import java.io.ObjectOutput;
 
 public class ExternalIdentifierBean implements Externalizable
 {
-	 private static final long serialVersionUID = 1234567890L;
+
+	private static final long serialVersionUID = 1234567890L;
 
 	protected Long id;
 
@@ -21,11 +22,12 @@ public class ExternalIdentifierBean implements Externalizable
 	 * Value of the legacy id.
 	 */
 	protected String value;
+
 	public ExternalIdentifierBean()
 	{
-		
+
 	}
-	
+
 	public ExternalIdentifierBean(ExternalIdentifierBean externalIdentifier)
 	{
 		this.name = externalIdentifier.getName();
@@ -34,7 +36,7 @@ public class ExternalIdentifierBean implements Externalizable
 
 	public Long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	public void setId(Long id)
@@ -44,7 +46,7 @@ public class ExternalIdentifierBean implements Externalizable
 
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name)
@@ -54,7 +56,7 @@ public class ExternalIdentifierBean implements Externalizable
 
 	public String getValue()
 	{
-		return value;
+		return this.value;
 	}
 
 	public void setValue(String value)
@@ -62,44 +64,41 @@ public class ExternalIdentifierBean implements Externalizable
 		this.value = value;
 	}
 
-	
-	public void writeExternal(ObjectOutput out) throws IOException 
+	public void writeExternal(ObjectOutput out) throws IOException
 	{
-        // Write out the client properties from the server representation
-		if(id!=null)
+		// Write out the client properties from the server representation
+		if (this.id != null)
 		{
-			out.writeInt(id.intValue());
+			out.writeInt(this.id.intValue());
 		}
 		else
 		{
 			out.writeInt(-1);
 		}
-		if(name==null)
+		if (this.name == null)
 		{
-			name="";
+			this.name = "";
 		}
-		out.writeUTF(name);
-		if(value==null)
+		out.writeUTF(this.name);
+		if (this.value == null)
 		{
-			value="";
+			this.value = "";
 		}
-        out.writeUTF(value);
-    }
-    
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
-	{	
-		id = new Long(in.readInt());
-		name = in.readUTF();
-		value = in.readUTF();
+		out.writeUTF(this.value);
 	}
-	
+
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+	{
+		this.id = new Long(in.readInt());
+		this.name = in.readUTF();
+		this.value = in.readUTF();
+	}
+
+	@Override
 	public String toString()
 	{
-		return "EI{"+
-				"id "+id+"\t"+
-				"Name "+name+"\t"+
-				"Value "+value+
-				"}";
+		return "EI{" + "id " + this.id + "\t" + "Name " + this.name + "\t" + "Value " + this.value
+				+ "}";
 	}
-	
+
 }

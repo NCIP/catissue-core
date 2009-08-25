@@ -34,10 +34,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenArrayTypeAction extends SecureAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayTypeAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayTypeAction.class);
 	/**
 	 * Key used in map.
 	 */
@@ -61,30 +62,31 @@ public class SpecimenArrayTypeAction extends SecureAction
 	 * @throws Exception : Exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm)
 		// actionForm;
 
-		String operation = request.getParameter(Constants.OPERATION);
+		final String operation = request.getParameter(Constants.OPERATION);
 		request.setAttribute(Constants.OPERATION, operation);
 
 		// Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		// Setting the specimen type list
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-		Map specimenTypeClassMap = getSpecimenClassAndType();
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, (List) specimenTypeClassMap
-				.get(specimenClassKey));
-		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, (Map) specimenTypeClassMap
-				.get(specimenTypeKey));
+		final Map specimenTypeClassMap = this.getSpecimenClassAndType();
+		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenTypeClassMap
+				.get(this.specimenClassKey));
+		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, specimenTypeClassMap
+				.get(this.specimenTypeKey));
 
 		/*
 		 * if(operation.equals(Constants.ADD)) {
@@ -97,7 +99,7 @@ public class SpecimenArrayTypeAction extends SecureAction
 		 * ,strMenu); Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu
 		 * +" set successfully"); }
 		 */
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		if (pageOf == null)
 		{
@@ -114,12 +116,13 @@ public class SpecimenArrayTypeAction extends SecureAction
 	private Map getSpecimenClassAndType()
 	{
 		// get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Iterator itr = setPV.iterator();
 
-		List specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
+		final List specimenClassList = new ArrayList();
+		final Map subTypeMap = new HashMap();
 
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		Object pvObject = null;
@@ -131,15 +134,15 @@ public class SpecimenArrayTypeAction extends SecureAction
 			pvObject = itr.next();
 			pv = (PermissibleValue) pvObject;
 			pvValue = pv.getValue();
-			logger.debug(pvValue);
+			this.logger.debug(pvValue);
 			specimenClassList.add(new NameValueBean(pvValue, pvValue));
-			specimenTypeList = getSpecimenTypeList(pv);
+			specimenTypeList = this.getSpecimenTypeList(pv);
 			subTypeMap.put(pv.getValue(), specimenTypeList);
 		} // class and values set
 
-		Map specimenClassTypeMap = new HashMap();
-		specimenClassTypeMap.put(specimenClassKey, specimenClassList);
-		specimenClassTypeMap.put(specimenTypeKey, subTypeMap);
+		final Map specimenClassTypeMap = new HashMap();
+		specimenClassTypeMap.put(this.specimenClassKey, specimenClassList);
+		specimenClassTypeMap.put(this.specimenTypeKey, subTypeMap);
 		return specimenClassTypeMap;
 	}
 
@@ -152,10 +155,10 @@ public class SpecimenArrayTypeAction extends SecureAction
 	 */
 	private List getSpecimenTypeList(PermissibleValue specimenClassPV)
 	{
-		List specimenTypeList = new ArrayList();
-		Set subPVList = specimenClassPV.getSubPermissibleValues();
-		logger.debug("subPVList " + subPVList);
-		Iterator subPVItr = subPVList.iterator();
+		final List specimenTypeList = new ArrayList();
+		final Set subPVList = specimenClassPV.getSubPermissibleValues();
+		this.logger.debug("subPVList " + subPVList);
+		final Iterator subPVItr = subPVList.iterator();
 		specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		Object subPVObj = null;
 		PermissibleValue subPV = null;
@@ -166,7 +169,7 @@ public class SpecimenArrayTypeAction extends SecureAction
 			subPV = (PermissibleValue) subPVObj;
 			// set specimen type
 			subPVValue = subPV.getValue();
-			logger.debug("\t\t" + subPVValue);
+			this.logger.debug("\t\t" + subPVValue);
 			specimenTypeList.add(new NameValueBean(subPVValue, subPVValue));
 		}
 		return specimenTypeList;

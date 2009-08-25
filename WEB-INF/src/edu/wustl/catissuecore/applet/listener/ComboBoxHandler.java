@@ -14,6 +14,7 @@ import javax.swing.JTable;
  */
 public class ComboBoxHandler extends BaseActionHandler
 {
+
 	/**
 	 * @param table : table
 	 */
@@ -28,10 +29,11 @@ public class ComboBoxHandler extends BaseActionHandler
 	/**
 	 * @param event : event
 	 */
+	@Override
 	public void actionPerformed(ActionEvent event)
 	{
 
-		if (table.getSelectedColumn() >= 0)
+		if (this.table.getSelectedColumn() >= 0)
 		{
 			super.actionPerformed(event);
 		}
@@ -41,6 +43,7 @@ public class ComboBoxHandler extends BaseActionHandler
 	 * @see edu.wustl.catissuecore.appletui.listener.BaseActionHandler#handleAction(java.awt.event.ActionEvent)
 	 * @param event : event
 	 */
+	@Override
 	protected void handleAction(ActionEvent event)
 	{
 		super.handleAction(event);
@@ -54,9 +57,10 @@ public class ComboBoxHandler extends BaseActionHandler
 	 * @param event : event
 	 * @return Object
 	 */
+	@Override
 	protected Object getSelectedValue(ActionEvent event)
 	{
-		JComboBox selectedField = (JComboBox) event.getSource();
+		final JComboBox selectedField = (JComboBox) event.getSource();
 		return selectedField.getSelectedItem();
 	}
 

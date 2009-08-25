@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -87,7 +87,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 
 	public String getGelImageURL()
 	{
-		return gelImageURL;
+		return this.gelImageURL;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getQualityIndex()
 	{
-		return qualityIndex;
+		return this.qualityIndex;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getLaneNumber()
 	{
-		return laneNumber;
+		return this.laneNumber;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getGelNumber()
 	{
-		return gelNumber;
+		return this.gelNumber;
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getAbsorbanceAt260()
 	{
-		return absorbanceAt260;
+		return this.absorbanceAt260;
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getAbsorbanceAt280()
 	{
-		return absorbanceAt280;
+		return this.absorbanceAt280;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getRatio28STo18S()
 	{
-		return ratio28STo18S;
+		return this.ratio28STo18S;
 	}
 
 	/**
@@ -229,6 +229,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID;
@@ -238,21 +239,24 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 * Populates all the fields from the domain object to the form bean.
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters) abstractDomain;
-		this.gelImageURL = Utility.toString(molecularSpecimenReviewParametersObject
+		final MolecularSpecimenReviewParameters molecularSpecimenReviewParametersObject = (MolecularSpecimenReviewParameters) abstractDomain;
+		this.gelImageURL = CommonUtilities.toString(molecularSpecimenReviewParametersObject
 				.getGelImageURL());
-		this.qualityIndex = Utility.toString(molecularSpecimenReviewParametersObject
+		this.qualityIndex = CommonUtilities.toString(molecularSpecimenReviewParametersObject
 				.getQualityIndex());
-		this.laneNumber = Utility.toString(molecularSpecimenReviewParametersObject.getLaneNumber());
-		this.gelNumber = Utility.toString(molecularSpecimenReviewParametersObject.getGelNumber());
-		this.absorbanceAt260 = Utility.toString(molecularSpecimenReviewParametersObject
+		this.laneNumber = CommonUtilities.toString(molecularSpecimenReviewParametersObject
+				.getLaneNumber());
+		this.gelNumber = CommonUtilities.toString(molecularSpecimenReviewParametersObject
+				.getGelNumber());
+		this.absorbanceAt260 = CommonUtilities.toString(molecularSpecimenReviewParametersObject
 				.getAbsorbanceAt260());
-		this.absorbanceAt280 = Utility.toString(molecularSpecimenReviewParametersObject
+		this.absorbanceAt280 = CommonUtilities.toString(molecularSpecimenReviewParametersObject
 				.getAbsorbanceAt280());
-		this.ratio28STo18S = Utility.toString(molecularSpecimenReviewParametersObject
+		this.ratio28STo18S = CommonUtilities.toString(molecularSpecimenReviewParametersObject
 				.getRatio28STo18S());
 		if (this.ratio28STo18S.trim().length() > 0)
 		{
@@ -270,70 +274,73 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 
-			logger.info("GelImageUrl: " + gelImageURL);
+			logger.info("GelImageUrl: " + this.gelImageURL);
 			//         //	 checks the gelImageURL
 			//          	if (validator.isEmpty(gelImageURL))
 			//            {
 			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
 			//            }
 
-			logger.info("qualityIndex: " + qualityIndex);
+			logger.info("qualityIndex: " + this.qualityIndex);
 			//	 checks the qualityIndex
 			//         	if (validator.isEmpty(qualityIndex ))
 			//            {
 			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
 			//            }
 
-			logger.info("laneNumber: " + laneNumber);
+			logger.info("laneNumber: " + this.laneNumber);
 			//            //	 checks the laneNumber
 			//         	if (validator.isEmpty(laneNumber))
 			//            {
 			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
 			//            }
 
-			logger.info("gelNumber: " + gelNumber);
+			logger.info("gelNumber: " + this.gelNumber);
 			//	 checks the gelNumber
-			if (!validator.isEmpty(gelNumber) && !validator.isNumeric(gelNumber, 0))
+			if (!Validator.isEmpty(this.gelNumber) && !validator.isNumeric(this.gelNumber, 0))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties
 								.getValue("molecularspecimenreviewparameters.gelnumber")));
 			}
 
-			logger.info("absorbanceAt260: " + absorbanceAt260);
+			logger.info("absorbanceAt260: " + this.absorbanceAt260);
 			//	 checks the absorbanceAt260
-			if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260, false))
+			if (!Validator.isEmpty(this.absorbanceAt260)
+					&& !validator.isDouble(this.absorbanceAt260, false))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties
 								.getValue("molecularspecimenreviewparameters.absorbanceat260")));
 			}
 
-			logger.info("absorbanceAt280: " + absorbanceAt280);
+			logger.info("absorbanceAt280: " + this.absorbanceAt280);
 			//	 checks the absorbanceAt280
-			if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280, false))
+			if (!Validator.isEmpty(this.absorbanceAt280)
+					&& !validator.isDouble(this.absorbanceAt280, false))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties
 								.getValue("molecularspecimenreviewparameters.absorbanceat280")));
 			}
 
-			logger.info("ratio28STo18S : " + ratio28STo18S);
+			logger.info("ratio28STo18S : " + this.ratio28STo18S);
 			//            //	 checks the ratio28STo18S 
 			//         	if (!validator.isDouble(""+ratio28STo18S ))
 			//            {
 			//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.ratio28STo18S")));
 			//            }
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -344,6 +351,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//         super.reset();
@@ -362,7 +370,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	 */
 	public String getIsRNA()
 	{
-		return isRNA;
+		return this.isRNA;
 	}
 
 	/**
@@ -375,7 +383,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 
 	public String getCheckRNA()
 	{
-		return checkRNA;
+		return this.checkRNA;
 	}
 
 	public void setCheckRNA(String checkRNA)

@@ -42,6 +42,7 @@ public class ForgotPasswordAction extends Action
 	 * @throws ServletException servlet exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException

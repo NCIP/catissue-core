@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -59,7 +59,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getFixationType()
 	{
-		return fixationType;
+		return this.fixationType;
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getDurationInMinutes()
 	{
-		return durationInMinutes;
+		return this.durationInMinutes;
 	}
 
 	/**
@@ -94,6 +94,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return FIXED_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.FIXED_EVENT_PARAMETERS_FORM_ID;
@@ -102,17 +103,19 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * @param abstractDomain An AbstractDomainObject obj
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		try
 		{
 			super.setAllValues(abstractDomain);
-			FixedEventParameters fixedEventParametersObject = (FixedEventParameters) abstractDomain;
-			this.fixationType = Utility.toString(fixedEventParametersObject.getFixationType());
-			this.durationInMinutes = Utility.toString(fixedEventParametersObject
+			final FixedEventParameters fixedEventParametersObject = (FixedEventParameters) abstractDomain;
+			this.fixationType = CommonUtilities.toString(fixedEventParametersObject
+					.getFixationType());
+			this.durationInMinutes = CommonUtilities.toString(fixedEventParametersObject
 					.getDurationInMinutes());
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -124,23 +127,25 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
-			if (!durationInMinutes.equals(""))
+			if (!this.durationInMinutes.equals(""))
 			{
-				if (durationInMinutes.contains(".") || !validator.isNumeric(durationInMinutes))
+				if (this.durationInMinutes.contains(".")
+						|| !validator.isNumeric(this.durationInMinutes))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.invalid.durationinminutes", ApplicationProperties
 									.getValue("fixedeventparameters.durationinminutes")));
 				}
 
-				if (Integer.parseInt(durationInMinutes) <= 0)
+				if (Integer.parseInt(this.durationInMinutes) <= 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.capacity.greaterThan0", ApplicationProperties
@@ -148,7 +153,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -159,6 +164,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	 * Resets the values of all the fields. This method defined in
 	 * ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//         super.reset();

@@ -7,34 +7,34 @@
  * @version 1.00
  * Created on Oct 10,2006
  */
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-
-
 public class RequestDetailsBean implements Serializable
-{	
+{
+
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The requested Item - Specimen, Array or Pathological case.
 	 */
-	private String requestedItem ;
+	private String requestedItem;
 	/**
 	 * The item requested for.
 	 */
-	private String requestFor ;
+	private String requestFor;
 	/**
 	 * The requested quantity.
 	 */
-	private String requestedQty ;
+	private String requestedQty;
 	/**
 	 * The available quantity.
 	 */
-	private String availableQty ;
+	private String availableQty;
 	/**
 	 * The assigned status.
 	 */
@@ -46,11 +46,11 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * The requested item class.
 	 */
-	private String className ;
+	private String className;
 	/**
 	 * The requested item type.
 	 */
-	private String type ;
+	private String type;
 	/**
 	 * The description of the order item.
 	 */
@@ -70,7 +70,7 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * The assigned quantity.
 	 */
-	private String assignedQty ;
+	private String assignedQty;
 	/**
 	 * The specimen associated with the order item.
 	 */
@@ -91,42 +91,40 @@ public class RequestDetailsBean implements Serializable
 	 * The type of specimen.
 	 */
 	private String actualSpecimenType;
-	
-	
+
 	/**
 	 * This gives the type of selected specimen.
 	 */
 	private String selectedSpecimenType;
-	
+
 	/**
 	 * Selected specimen Unit
 	 */
 	private String specimenQuantityUnit;
-	
+
 	/**
 	 * Selected specimen Quantity
 	 */
 	private String selectedSpecimenQuantity;
-	
-	
+
 	/**
 	 * For consent View form
 	 * 
 	 */
 	private String consentVerificationkey;
-	
+
 	private String rowStatuskey;
-	
+
 	private String canDistribute;
-			
+
 	/**
 	 * @return the className
-	 */	
+	 */
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
-	
+
 	/**
 	 * @param className the className to set
 	 */
@@ -135,18 +133,14 @@ public class RequestDetailsBean implements Serializable
 		this.className = className;
 	}
 
-
-	
 	/**
 	 * @return the type
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
-
-	
 	/**
 	 * @param type the type to set
 	 */
@@ -155,16 +149,14 @@ public class RequestDetailsBean implements Serializable
 		this.type = type;
 	}
 
-
 	/**
 	 * @return the itemsStatusList
 	 */
 	public List getItemsStatusList()
 	{
-		return itemsStatusList;
+		return this.itemsStatusList;
 	}
 
-	
 	/**
 	 * @param itemsStatusList the itemsStatusList to set
 	 */
@@ -178,9 +170,9 @@ public class RequestDetailsBean implements Serializable
 	 */
 	public String getAssignedStatus()
 	{
-		return assignedStatus;
+		return this.assignedStatus;
 	}
-	
+
 	/**
 	 * @param assignedStatus the assignedStatus to set
 	 */
@@ -188,15 +180,15 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.assignedStatus = assignedStatus;
 	}
-	
+
 	/**
 	 * @return the availableQty
 	 */
 	public String getAvailableQty()
 	{
-		return availableQty;
+		return this.availableQty;
 	}
-	
+
 	/**
 	 * @param availableQty the availableQty to set
 	 */
@@ -204,15 +196,15 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.availableQty = availableQty;
 	}
-	
+
 	/**
 	 * @return the requestedItem
 	 */
 	public String getRequestedItem()
 	{
-		return requestedItem;
+		return this.requestedItem;
 	}
-	
+
 	/**
 	 * @param requestedItem the requestedItem to set
 	 */
@@ -220,15 +212,15 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.requestedItem = requestedItem;
 	}
-	
+
 	/**
 	 * @return the requestedQty
 	 */
 	public String getRequestedQty()
 	{
-		return requestedQty;
+		return this.requestedQty;
 	}
-	
+
 	/**
 	 * @param requestedQty the requestedQty to set
 	 */
@@ -236,15 +228,15 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.requestedQty = requestedQty;
 	}
-	
+
 	/**
 	 * @return the requestFor
 	 */
 	public String getRequestFor()
 	{
-		return requestFor;
+		return this.requestFor;
 	}
-	
+
 	/**
 	 * @param requestFor the requestFor to set
 	 */
@@ -257,29 +249,28 @@ public class RequestDetailsBean implements Serializable
 	 * Return the Specimen list
 	 * @return List
 	 */
-	public Collection getSpecimenList() 
-	{		
-		return specimenList;
+	public Collection getSpecimenList()
+	{
+		return this.specimenList;
 	}
 
 	/**
 	 * Sets the specimen List.
 	 * @param specimenList List containing existing and derived specimens is set in the bean
 	 */
-	public void setSpecimenList(Collection specimenList) 
+	public void setSpecimenList(Collection specimenList)
 	{
 		this.specimenList = specimenList;
 	}
-	
+
 	/**
 	 * @return the description
 	 */
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	
 	/**
 	 * @param description the description to set
 	 */
@@ -288,16 +279,14 @@ public class RequestDetailsBean implements Serializable
 		this.description = description;
 	}
 
-	
 	/**
 	 * @return the instanceOf
 	 */
 	public String getInstanceOf()
 	{
-		return instanceOf;
+		return this.instanceOf;
 	}
 
-	
 	/**
 	 * @param instanceOf the instanceOf to set
 	 */
@@ -306,16 +295,14 @@ public class RequestDetailsBean implements Serializable
 		this.instanceOf = instanceOf;
 	}
 
-	
 	/**
 	 * @return the orderItemId
 	 */
 	public String getOrderItemId()
 	{
-		return orderItemId;
+		return this.orderItemId;
 	}
 
-	
 	/**
 	 * @param orderItemId the orderItemId to set
 	 */
@@ -324,16 +311,14 @@ public class RequestDetailsBean implements Serializable
 		this.orderItemId = orderItemId;
 	}
 
-	
 	/**
 	 * @return the assignedQty
 	 */
 	public String getAssignedQty()
 	{
-		return assignedQty;
+		return this.assignedQty;
 	}
 
-	
 	/**
 	 * @param assignedQty the assignedQty to set
 	 */
@@ -342,16 +327,14 @@ public class RequestDetailsBean implements Serializable
 		this.assignedQty = assignedQty;
 	}
 
-	
 	/**
 	 * @return the specimenId
 	 */
 	public String getSpecimenId()
 	{
-		return specimenId;
+		return this.specimenId;
 	}
 
-	
 	/**
 	 * @param specimenId the specimenId to set
 	 */
@@ -365,27 +348,25 @@ public class RequestDetailsBean implements Serializable
 	 */
 	public String getSpecimenCollGroupId()
 	{
-		return specimenCollGroupId;
+		return this.specimenCollGroupId;
 	}
-	
+
 	/**
 	 * @param specimenCollGroupId the specimen collection group.
 	 */
-	public void setSpecimenCollGroupId(String specimenCollGroupId) 
+	public void setSpecimenCollGroupId(String specimenCollGroupId)
 	{
 		this.specimenCollGroupId = specimenCollGroupId;
 	}
 
-	
 	/**
 	 * @return the distributedItemId
 	 */
 	public String getDistributedItemId()
 	{
-		return distributedItemId;
+		return this.distributedItemId;
 	}
 
-	
 	/**
 	 * @param distributedItemId the distributedItemId to set
 	 */
@@ -394,16 +375,14 @@ public class RequestDetailsBean implements Serializable
 		this.distributedItemId = distributedItemId;
 	}
 
-	
 	/**
 	 * @return the actualSpecimenClass
 	 */
 	public String getActualSpecimenClass()
 	{
-		return actualSpecimenClass;
+		return this.actualSpecimenClass;
 	}
 
-	
 	/**
 	 * @param actualSpecimenClass the actualSpecimenClass to set
 	 */
@@ -412,16 +391,14 @@ public class RequestDetailsBean implements Serializable
 		this.actualSpecimenClass = actualSpecimenClass;
 	}
 
-	
 	/**
 	 * @return the actualSpecimenType
 	 */
 	public String getActualSpecimenType()
 	{
-		return actualSpecimenType;
+		return this.actualSpecimenType;
 	}
 
-	
 	/**
 	 * @param actualSpecimenType the actualSpecimenType to set
 	 */
@@ -430,54 +407,64 @@ public class RequestDetailsBean implements Serializable
 		this.actualSpecimenType = actualSpecimenType;
 	}
 
-	public String getConsentVerificationkey() {
-		return consentVerificationkey;
+	public String getConsentVerificationkey()
+	{
+		return this.consentVerificationkey;
 	}
 
-	public void setConsentVerificationkey(String consentVerificationkey) {
+	public void setConsentVerificationkey(String consentVerificationkey)
+	{
 		this.consentVerificationkey = consentVerificationkey;
 	}
 
-	public String getRowStatuskey() {
-		return rowStatuskey;
+	public String getRowStatuskey()
+	{
+		return this.rowStatuskey;
 	}
 
-	public void setRowStatuskey(String rowStatuskey) {
+	public void setRowStatuskey(String rowStatuskey)
+	{
 		this.rowStatuskey = rowStatuskey;
 	}
 
-	public String getCanDistribute() {
-		return canDistribute;
+	public String getCanDistribute()
+	{
+		return this.canDistribute;
 	}
 
-	public void setCanDistribute(String canDistribute) {
+	public void setCanDistribute(String canDistribute)
+	{
 		this.canDistribute = canDistribute;
 	}
 
-	public String getSelectedSpecimenType() {
-		return selectedSpecimenType;
+	public String getSelectedSpecimenType()
+	{
+		return this.selectedSpecimenType;
 	}
 
-	public void setSelectedSpecimenType(String selectedSpecimenType) {
+	public void setSelectedSpecimenType(String selectedSpecimenType)
+	{
 		this.selectedSpecimenType = selectedSpecimenType;
 	}
 
-	public String getSpecimenQuantityUnit() {
-		return specimenQuantityUnit;
+	public String getSpecimenQuantityUnit()
+	{
+		return this.specimenQuantityUnit;
 	}
 
-	public void setSpecimenQuantityUnit(String specimenQuantityUnit) {
+	public void setSpecimenQuantityUnit(String specimenQuantityUnit)
+	{
 		this.specimenQuantityUnit = specimenQuantityUnit;
 	}
 
-	public String getSelectedSpecimenQuantity() {
-		return selectedSpecimenQuantity;
+	public String getSelectedSpecimenQuantity()
+	{
+		return this.selectedSpecimenQuantity;
 	}
 
-	public void setSelectedSpecimenQuantity(String selectedSpecimenQuantity) {
+	public void setSelectedSpecimenQuantity(String selectedSpecimenQuantity)
+	{
 		this.selectedSpecimenQuantity = selectedSpecimenQuantity;
 	}
 
-	
-	
 }

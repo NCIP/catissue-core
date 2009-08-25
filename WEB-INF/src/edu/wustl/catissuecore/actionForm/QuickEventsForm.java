@@ -81,6 +81,7 @@ public class QuickEventsForm extends AbstractActionForm
 	/**
 	 * @return QUICKEVENTS_FORM_ID Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.QUICKEVENTS_FORM_ID;
@@ -90,6 +91,7 @@ public class QuickEventsForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 	}
@@ -99,7 +101,7 @@ public class QuickEventsForm extends AbstractActionForm
 	 */
 	public String getBarCode()
 	{
-		return barCode;
+		return this.barCode;
 	}
 
 	/**
@@ -115,7 +117,7 @@ public class QuickEventsForm extends AbstractActionForm
 	 */
 	public String getSpecimenEventParameter()
 	{
-		return specimenEventParameter;
+		return this.specimenEventParameter;
 	}
 
 	/**
@@ -131,7 +133,7 @@ public class QuickEventsForm extends AbstractActionForm
 	 */
 	public String getSpecimenLabel()
 	{
-		return specimenLabel;
+		return this.specimenLabel;
 	}
 
 	/**
@@ -147,7 +149,7 @@ public class QuickEventsForm extends AbstractActionForm
 	 */
 	public String getCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -164,29 +166,30 @@ public class QuickEventsForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		try
 		{
-			if (!validator.isValidOption(specimenEventParameter))
+			if (!validator.isValidOption(this.specimenEventParameter))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("quickEvents.eventparameters")));
 			}
-			if (checkedButton.equals("1") && !validator.isValidOption(specimenLabel))
+			if (this.checkedButton.equals("1") && !validator.isValidOption(this.specimenLabel))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("quickEvents.specimenLabel")));
 			}
-			if (checkedButton.equals("2") && validator.isEmpty(barCode))
+			if (this.checkedButton.equals("2") && Validator.isEmpty(this.barCode))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("quickEvents.barcode")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

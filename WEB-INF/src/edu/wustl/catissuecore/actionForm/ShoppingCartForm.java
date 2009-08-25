@@ -54,7 +54,7 @@ public class ShoppingCartForm extends ActionForm
 	 */
 	public String getOperation()
 	{
-		return operation;
+		return this.operation;
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class ShoppingCartForm extends ActionForm
 	 */
 	public boolean isCheckAll()
 	{
-		return checkAll;
+		return this.checkAll;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class ShoppingCartForm extends ActionForm
 	*/
 	public void setValue(String key, Object value)
 	{
-		values.put(key, value);
+		this.values.put(key, value);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class ShoppingCartForm extends ActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class ShoppingCartForm extends ActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
@@ -133,9 +133,10 @@ public class ShoppingCartForm extends ActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 		//         Validator validator = new Validator();
 
 		return errors;

@@ -85,12 +85,12 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		final String dataType = this.getDataTypeOfAttribute(attribute.getName());
 		if (dataType.equals("long"))
 		{
-			sql = "delete from dyextn_long_concept_value" +
-					" where IDENTIFIER in (select PERMISSIBLE_VALUE_ID" +
-					" from dyextn_userdef_de_value_rel where USER_DEF_DE_ID" +
-					" in (select identifier from dyextn_userdefined_de" +
-					" where  identifier in (select identifier" +
-					" from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "delete from dyextn_long_concept_value"
+					+ " where IDENTIFIER in (select PERMISSIBLE_VALUE_ID"
+					+ " from dyextn_userdef_de_value_rel where USER_DEF_DE_ID"
+					+ " in (select identifier from dyextn_userdefined_de"
+					+ " where  identifier in (select identifier"
+					+ " from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			deleteSQL.add(sql);
 
@@ -100,12 +100,12 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		}
 		else if (dataType.equals("string"))
 		{
-			sql = "delete from  dyextn_string_concept_value" +
-					" where IDENTIFIER in (select PERMISSIBLE_VALUE_ID" +
-					" from dyextn_userdef_de_value_rel where USER_DEF_DE_ID" +
-					" in (select identifier from dyextn_userdefined_de where" +
-					"  identifier in (select identifier from dyextn_data_element" +
-					" where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "delete from  dyextn_string_concept_value"
+					+ " where IDENTIFIER in (select PERMISSIBLE_VALUE_ID"
+					+ " from dyextn_userdef_de_value_rel where USER_DEF_DE_ID"
+					+ " in (select identifier from dyextn_userdefined_de where"
+					+ "  identifier in (select identifier from dyextn_data_element"
+					+ " where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			deleteSQL.add(sql);
 
@@ -115,13 +115,12 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		}
 		else if (dataType.equals("integer"))
 		{
-			sql = "delete from  dyextn_integer_concept_value where IDENTIFIER" +
-					" in (select PERMISSIBLE_VALUE_ID" +
-					" from dyextn_userdef_de_value_rel" +
-					" where USER_DEF_DE_ID in (select identifier" +
-					" from dyextn_userdefined_de where  identifier" +
-					" in (select identifier from dyextn_data_element" +
-					" where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "delete from  dyextn_integer_concept_value where IDENTIFIER"
+					+ " in (select PERMISSIBLE_VALUE_ID" + " from dyextn_userdef_de_value_rel"
+					+ " where USER_DEF_DE_ID in (select identifier"
+					+ " from dyextn_userdefined_de where  identifier"
+					+ " in (select identifier from dyextn_data_element"
+					+ " where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			deleteSQL.add(sql);
 
@@ -132,12 +131,11 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		}
 		else if (dataType.equals("double"))
 		{
-			sql = "delete from  dyextn_double_concept_value where IDENTIFIER" +
-					" in (select PERMISSIBLE_VALUE_ID" +
-					" from dyextn_userdef_de_value_rel" +
-					" where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de" +
-					" where  identifier in (select identifier from dyextn_data_element" +
-					" where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "delete from  dyextn_double_concept_value where IDENTIFIER"
+					+ " in (select PERMISSIBLE_VALUE_ID" + " from dyextn_userdef_de_value_rel"
+					+ " where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de"
+					+ " where  identifier in (select identifier from dyextn_data_element"
+					+ " where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			deleteSQL.add(sql);
 
@@ -148,11 +146,11 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 		}
 		else if (dataType.equals("boolean"))
 		{
-			sql = "delete from  dyextn_boolean_concept_value where IDENTIFIER" +
-					" in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel" +
-					" where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de" +
-					" where  identifier in (select identifier from dyextn_data_element" +
-					" where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "delete from  dyextn_boolean_concept_value where IDENTIFIER"
+					+ " in (select PERMISSIBLE_VALUE_ID from dyextn_userdef_de_value_rel"
+					+ " where USER_DEF_DE_ID in (select identifier from dyextn_userdefined_de"
+					+ " where  identifier in (select identifier from dyextn_data_element"
+					+ " where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			deleteSQL.add(sql);
 
@@ -161,16 +159,16 @@ public class DeletePermissibleValueAttribute extends DeleteBaseMetadata
 			deleteSQL.add(sql);
 		}
 
-		sql = "delete from dyextn_userdef_de_value_rel where USER_DEF_DE_ID" +
-				" in (select identifier from dyextn_userdefined_de where" +
-				"  identifier in (select identifier from dyextn_data_element" +
-				" where ATTRIBUTE_TYPE_INFO_ID="
+		sql = "delete from dyextn_userdef_de_value_rel where USER_DEF_DE_ID"
+				+ " in (select identifier from dyextn_userdefined_de where"
+				+ "  identifier in (select identifier from dyextn_data_element"
+				+ " where ATTRIBUTE_TYPE_INFO_ID="
 				+ attribute.getAttributeTypeInformation().getDataElement().getId() + "))";
 		deleteSQL.add(sql);
 
-		sql = "delete from dyextn_userdefined_de where  identifier" +
-				" in (select identifier from dyextn_data_element" +
-				" where ATTRIBUTE_TYPE_INFO_ID="
+		sql = "delete from dyextn_userdefined_de where  identifier"
+				+ " in (select identifier from dyextn_data_element"
+				+ " where ATTRIBUTE_TYPE_INFO_ID="
 				+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")";
 		deleteSQL.add(sql);
 

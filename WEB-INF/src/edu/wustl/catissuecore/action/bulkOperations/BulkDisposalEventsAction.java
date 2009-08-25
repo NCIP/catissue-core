@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class BulkDisposalEventsAction extends BulkOperationAction
 {
+
 	/**
 	 * @param eventParametersForm : eventParametersForm
 	 * @param specimenRow : specimenRow

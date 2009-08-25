@@ -47,7 +47,7 @@ public class RequestReceivedAction extends ProcessShipmentRequestsAction
 			//forwardTo = Constants.VIEW_SHIPMENT_REQUEST;
 		}
 		//Bug 13551
-		else if(activityStatus.equals("Drafted"))
+		else if (activityStatus.equals("Drafted"))
 		{
 			forwardTo = Constants.EDIT_SHIPMENT_REQUEST;
 		}

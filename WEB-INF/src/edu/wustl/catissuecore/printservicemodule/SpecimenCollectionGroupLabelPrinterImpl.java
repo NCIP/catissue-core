@@ -27,7 +27,7 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter
 	/**
 	 * Generic logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(SpecimenCollectionGroupLabelPrinterImpl.class);
 
 	/**

@@ -38,9 +38,9 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	public static final String REQUEST_TYPE_COLLECTION_PROTOCOL = "Collection Protocol";
 	public static final String REQUEST_TYPE_ANTICIPAT_SPECIMENS = "anticipatory specimens";
 
-	private List < GenericSpecimen > specimenList = null;
-	private List < GenericSpecimen > aliquotList = null;
-	private List < GenericSpecimen > derivedList = null;
+	private List<GenericSpecimen> specimenList = null;
+	private List<GenericSpecimen> aliquotList = null;
+	private List<GenericSpecimen> derivedList = null;
 	private String eventId = null;
 	private String selectedSpecimenId = null;
 	private String userAction = ADD_USER_ACTION;
@@ -66,17 +66,17 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public Set getSpecimenPrintList()
 	{
-		return specimenPrintList;
+		return this.specimenPrintList;
 	}
 
-	public void setSpecimenPrintList(Set < GenericSpecimen > specimenPrintList)
+	public void setSpecimenPrintList(Set<GenericSpecimen> specimenPrintList)
 	{
 		this.specimenPrintList = specimenPrintList;
 	}
 
 	public boolean isMultipleSpEditMode()
 	{
-		return multipleSpEditMode;
+		return this.multipleSpEditMode;
 	}
 
 	public void setMultipleSpEditMode(boolean multipleSpEditMode)
@@ -92,10 +92,10 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	public void setReadOnly(boolean readOnly)
 	{
 		this.readOnly = readOnly;
-		setReadOnlyModeToAll();
+		this.setReadOnlyModeToAll();
 	}
 
-	private HashMap < String , String > titleMap = new HashMap < String , String >();
+	private final HashMap<String, String> titleMap = new HashMap<String, String>();
 
 	private static String collectionProtocolStatus = "";
 
@@ -103,33 +103,34 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public ViewSpecimenSummaryForm()
 	{
-		titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen details");
-		titleMap.put(REQUEST_TYPE_COLLECTION_PROTOCOL, "Specimen requirement(s)");
-		titleMap.put(REQUEST_TYPE_ANTICIPAT_SPECIMENS, "Specimen details");
-		specimenList = new ArrayList < GenericSpecimen >();
-		aliquotList = new ArrayList < GenericSpecimen >();
-		derivedList = new ArrayList < GenericSpecimen >();
-		userAction = ADD_USER_ACTION;
-		requestType = REQUEST_TYPE_COLLECTION_PROTOCOL;
+		this.titleMap.put(REQUEST_TYPE_MULTI_SPECIMENS, "Specimen details");
+		this.titleMap.put(REQUEST_TYPE_COLLECTION_PROTOCOL, "Specimen requirement(s)");
+		this.titleMap.put(REQUEST_TYPE_ANTICIPAT_SPECIMENS, "Specimen details");
+		this.specimenList = new ArrayList<GenericSpecimen>();
+		this.aliquotList = new ArrayList<GenericSpecimen>();
+		this.derivedList = new ArrayList<GenericSpecimen>();
+		this.userAction = ADD_USER_ACTION;
+		this.requestType = REQUEST_TYPE_COLLECTION_PROTOCOL;
 		collectionProtocolStatus = "";
 
 	}
 
+	@Override
 	public void reset(ActionMapping mapping, ServletRequest request)
 	{
-		specimenList = new ArrayList < GenericSpecimen >();
-		aliquotList = new ArrayList < GenericSpecimen >();
-		derivedList = new ArrayList < GenericSpecimen >();
+		this.specimenList = new ArrayList<GenericSpecimen>();
+		this.aliquotList = new ArrayList<GenericSpecimen>();
+		this.derivedList = new ArrayList<GenericSpecimen>();
 	}
 
 	public String getTitle()
 	{
-		return titleMap.get(requestType);
+		return this.titleMap.get(this.requestType);
 	}
 
 	public String getUserAction()
 	{
-		return userAction;
+		return this.userAction;
 	}
 
 	public void setUserAction(String userAction)
@@ -139,7 +140,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getRequestType()
 	{
-		return requestType;
+		return this.requestType;
 	}
 
 	public void switchUserAction()
@@ -165,7 +166,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	 */
 	public String getSelectedSpecimenId()
 	{
-		return selectedSpecimenId;
+		return this.selectedSpecimenId;
 	}
 
 	public void setSelectedSpecimenId(String selectedSpecimenId)
@@ -176,12 +177,12 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getSpecimenList()
 	 */
-	public List < GenericSpecimen > getSpecimenList()
+	public List<GenericSpecimen> getSpecimenList()
 	{
-		return specimenList;
+		return this.specimenList;
 	}
 
-	public void setSpecimenList(List < GenericSpecimen > specimenList)
+	public void setSpecimenList(List<GenericSpecimen> specimenList)
 	{
 		if (specimenList != null)
 		{
@@ -192,12 +193,12 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getAliquotList()
 	 */
-	public List < GenericSpecimen > getAliquotList()
+	public List<GenericSpecimen> getAliquotList()
 	{
-		return aliquotList;
+		return this.aliquotList;
 	}
 
-	public void setAliquotList(List < GenericSpecimen > aliquoteList)
+	public void setAliquotList(List<GenericSpecimen> aliquoteList)
 	{
 		if (aliquoteList != null)
 		{
@@ -208,12 +209,12 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.SpecimenDetailsInfo#getDerivedList()
 	 */
-	public List < GenericSpecimen > getDerivedList()
+	public List<GenericSpecimen> getDerivedList()
 	{
-		return derivedList;
+		return this.derivedList;
 	}
 
-	public void setDerivedList(List < GenericSpecimen > derivedList)
+	public void setDerivedList(List<GenericSpecimen> derivedList)
 	{
 		if (derivedList != null)
 		{
@@ -224,52 +225,52 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	public GenericSpecimen getDerived(int index)
 	{
 
-		while (index >= derivedList.size())
+		while (index >= this.derivedList.size())
 		{
-			derivedList.add(getNewSpecimen());
+			this.derivedList.add(this.getNewSpecimen());
 		}
-		return derivedList.get(index);
+		return this.derivedList.get(index);
 	}
 
 	public void setDerived(int index, GenericSpecimen derivedSpecimen)
 	{
-		derivedList.add(index, derivedSpecimen);
+		this.derivedList.add(index, derivedSpecimen);
 	}
 
 	public GenericSpecimen getAliquot(int index)
 	{
 
-		while (index >= aliquotList.size())
+		while (index >= this.aliquotList.size())
 		{
-			aliquotList.add(getNewSpecimen());
+			this.aliquotList.add(this.getNewSpecimen());
 		}
 
-		return aliquotList.get(index);
+		return this.aliquotList.get(index);
 	}
 
 	public void setAliquot(int index, GenericSpecimen aliquotSpecimen)
 	{
-		aliquotList.add(index, aliquotSpecimen);
+		this.aliquotList.add(index, aliquotSpecimen);
 	}
 
 	public GenericSpecimen getSpecimen(int index)
 	{
 
-		while (index >= specimenList.size())
+		while (index >= this.specimenList.size())
 		{
-			specimenList.add(getNewSpecimen());
+			this.specimenList.add(this.getNewSpecimen());
 		}
-		return specimenList.get(index);
+		return this.specimenList.get(index);
 	}
 
 	public void setSpecimen(int index, GenericSpecimen specimen)
 	{
-		aliquotList.add(index, specimen);
+		this.aliquotList.add(index, specimen);
 	}
 
 	public String getEventId()
 	{
-		return eventId;
+		return this.eventId;
 	}
 
 	public void setEventId(String eventId)
@@ -285,7 +286,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public Object getSummaryObject()
 	{
-		return summaryObject;
+		return this.summaryObject;
 	}
 
 	public void setSummaryObject(Object summaryObject)
@@ -295,7 +296,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getLastSelectedSpecimenId()
 	{
-		return lastSelectedSpecimenId;
+		return this.lastSelectedSpecimenId;
 	}
 
 	public void setLastSelectedSpecimenId(String lastEventId)
@@ -305,7 +306,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getContainerMap()
 	{
-		return containerMap;
+		return this.containerMap;
 	}
 
 	public void setContainerMap(String containerMap)
@@ -315,7 +316,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getTargetSuccess()
 	{
-		return targetSuccess;
+		return this.targetSuccess;
 	}
 
 	public void setTargetSuccess(String targetSuccess)
@@ -325,7 +326,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getSubmitAction()
 	{
-		return submitAction;
+		return this.submitAction;
 	}
 
 	public void setSubmitAction(String submitAction)
@@ -348,7 +349,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	 */
 	public boolean getShowCheckBoxes()
 	{
-		return showCheckBoxes;
+		return this.showCheckBoxes;
 	}
 
 	public void setShowCheckBoxes(boolean showCheckBoxes)
@@ -361,7 +362,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	 */
 	public boolean getShowbarCode()
 	{
-		return showbarCode;
+		return this.showbarCode;
 	}
 
 	public void setShowbarCode(boolean showbarCode)
@@ -374,7 +375,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	 */
 	public boolean getShowLabel()
 	{
-		return showLabel;
+		return this.showLabel;
 	}
 
 	public void setShowLabel(boolean showLabel)
@@ -394,7 +395,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public boolean getShowParentStorage()
 	{
-		return showParentStorage;
+		return this.showParentStorage;
 	}
 
 	public void setShowParentStorage(boolean showParentStorage)
@@ -404,7 +405,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getPrintCheckbox()
 	{
-		return printCheckbox;
+		return this.printCheckbox;
 	}
 
 	public void setPrintCheckbox(String printCheckbox)
@@ -414,23 +415,23 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	private void setReadOnlyModeToAll()
 	{
-		Iterator < GenericSpecimen > specIterator = specimenList.iterator();
-		setReadOnlyMode(specIterator);
-		specIterator = aliquotList.iterator();
-		setReadOnlyMode(specIterator);
-		specIterator = derivedList.iterator();
-		setReadOnlyMode(specIterator);
+		Iterator<GenericSpecimen> specIterator = this.specimenList.iterator();
+		this.setReadOnlyMode(specIterator);
+		specIterator = this.aliquotList.iterator();
+		this.setReadOnlyMode(specIterator);
+		specIterator = this.derivedList.iterator();
+		this.setReadOnlyMode(specIterator);
 	}
 
 	/**
 	 * @param readOnlyMode
 	 * @param specIterator
 	 */
-	private void setReadOnlyMode(Iterator < GenericSpecimen > specIterator)
+	private void setReadOnlyMode(Iterator<GenericSpecimen> specIterator)
 	{
 		while (specIterator.hasNext())
 		{
-			GenericSpecimen genericSpecimen = specIterator.next();
+			final GenericSpecimen genericSpecimen = specIterator.next();
 			if (genericSpecimen.getCheckedSpecimen())
 			{
 				genericSpecimen.setReadOnly(this.readOnly);
@@ -445,7 +446,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	 */
 	public String getForwardTo()
 	{
-		return forwardTo;
+		return this.forwardTo;
 	}
 
 	/**
@@ -458,7 +459,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getPrinterLocation()
 	{
-		return printerLocation;
+		return this.printerLocation;
 	}
 
 	public void setPrinterLocation(String printerLocation)
@@ -468,7 +469,7 @@ public class ViewSpecimenSummaryForm extends ActionForm
 
 	public String getPrinterType()
 	{
-		return printerType;
+		return this.printerType;
 	}
 
 	public void setPrinterType(String printerType)

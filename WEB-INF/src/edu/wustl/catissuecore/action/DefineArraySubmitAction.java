@@ -93,12 +93,10 @@ public class DefineArraySubmitAction extends BaseAction
 
 			for (int i = 0; i < defineArrayFormList.size(); i++)
 			{
-				final DefineArrayForm defineArrayObj
-				= (DefineArrayForm) defineArrayFormList.get(i);
+				final DefineArrayForm defineArrayObj = (DefineArrayForm) defineArrayFormList.get(i);
 				if (defineArrayObj.getArrayName().equals(defineArray.getArrayName()))
 				{
-					ActionErrors errors
-					= (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 					if (errors == null || errors.size() == 0)
 					{
 						errors = new ActionErrors();

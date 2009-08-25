@@ -117,8 +117,7 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 		}
 
 		final String cpTitle = CommonUtilities.toString(specimen.getSpecimenCollectionGroup()
-				.getCollectionProtocolRegistration().
-				getCollectionProtocol().getShortTitle());
+				.getCollectionProtocolRegistration().getCollectionProtocol().getShortTitle());
 		final String ppi = specimen.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
 		dataMap.put(PrintWebServiceConstants.CP_TITLE, cpTitle);

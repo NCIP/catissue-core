@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import edu.wustl.catissuecore.util.global.Constants;
+
 /**
  * @author janhavi_hasabnis
  */
@@ -50,7 +51,8 @@ public class ConsentResponseBean implements Serializable
 	/**
 	 * Consent response
 	 */
-	protected Collection < ConsentBean > consentResponse;
+	protected Collection<ConsentBean> consentResponse;
+
 	/**
 	 * @param collectionProtocolIDParam - collectionProtocolIDParam
 	 * @param signedConsentUrlParam - signedConsentUrlParam
@@ -59,9 +61,9 @@ public class ConsentResponseBean implements Serializable
 	 * @param consentResponseParam - consentResponseParam
 	 * @param consentWithdrawalOptionParam - consentWithdrawalOptionParam
 	 */
-	public ConsentResponseBean(long collectionProtocolIDParam, String signedConsentUrlParam, long witnessIdParam,
-			String consentDateParam, Collection < ConsentBean > consentResponseParam,
-			String consentWithdrawalOptionParam)
+	public ConsentResponseBean(long collectionProtocolIDParam, String signedConsentUrlParam,
+			long witnessIdParam, String consentDateParam,
+			Collection<ConsentBean> consentResponseParam, String consentWithdrawalOptionParam)
 	{
 		this.collectionProtocolID = collectionProtocolIDParam;
 		this.signedConsentUrl = signedConsentUrlParam;
@@ -71,6 +73,7 @@ public class ConsentResponseBean implements Serializable
 		this.consentWithdrawalOption = consentWithdrawalOptionParam;
 
 	}
+
 	/**
 	 * @return - collectionProtocolID
 	 */
@@ -78,6 +81,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		return this.collectionProtocolID;
 	}
+
 	/**
 	 * @param collectionProtocolIDParam - collectionProtocolIDParam
 	 */
@@ -85,6 +89,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		this.collectionProtocolID = collectionProtocolIDParam;
 	}
+
 	/**
 	 * @return - signedConsentUrl
 	 */
@@ -92,6 +97,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		return this.signedConsentUrl;
 	}
+
 	/**
 	 * @param signedConsentUrlParam - signedConsentUrlParam
 	 */
@@ -99,6 +105,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		this.signedConsentUrl = signedConsentUrlParam;
 	}
+
 	/**
 	 * @return - witnessId
 	 */
@@ -106,6 +113,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		return this.witnessId;
 	}
+
 	/**
 	 * @param witnessIdParam - witnessIdParam
 	 */
@@ -113,6 +121,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		this.witnessId = witnessIdParam;
 	}
+
 	/**
 	 * @return - consentDate
 	 */
@@ -120,6 +129,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		return this.consentDate;
 	}
+
 	/**
 	 * @param consentDateParam - consentDateParam
 	 */
@@ -127,20 +137,23 @@ public class ConsentResponseBean implements Serializable
 	{
 		this.consentDate = consentDateParam;
 	}
+
 	/**
 	 * @return - consentResponse
 	 */
-	public Collection < ConsentBean > getConsentResponse()
+	public Collection<ConsentBean> getConsentResponse()
 	{
 		return this.consentResponse;
 	}
-    /**
-     * @param consentResponseParam - consentResponseParam
-     */
-	public void setConsentResponse(Collection < ConsentBean > consentResponseParam)
+
+	/**
+	 * @param consentResponseParam - consentResponseParam
+	 */
+	public void setConsentResponse(Collection<ConsentBean> consentResponseParam)
 	{
 		this.consentResponse = consentResponseParam;
 	}
+
 	/**
 	 * @return - consentWithdrawalOption
 	 */
@@ -148,6 +161,7 @@ public class ConsentResponseBean implements Serializable
 	{
 		return this.consentWithdrawalOption;
 	}
+
 	/**
 	 * @param consentWithdrawalOptionParam - consentWithdrawalOptionParam
 	 */

@@ -41,7 +41,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 	/**
 	 * Generic logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(PrintServiceInputXMLParser.class);
 	/**
 	 * Document object.
@@ -158,15 +158,13 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 					final String classname = (String) objMap.get("class");
 					final String id = (String) objMap.get("id");
 					// add child element
-					final Node objectNode =
-						this.createObjectNode(this.document, classname, id);
+					final Node objectNode = this.createObjectNode(this.document, classname, id);
 					root.appendChild(objectNode);
 					while (it.hasNext())
 					{
 						this.key = (String) it.next();
 						this.value = (String) objMap.get(this.key);
-						final Node property =
-							this.createPropertyNode(this.document, this.key,
+						final Node property = this.createPropertyNode(this.document, this.key,
 								this.value);
 						objectNode.appendChild(property);
 					}

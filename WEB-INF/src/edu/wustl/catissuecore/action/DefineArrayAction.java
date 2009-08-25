@@ -114,8 +114,7 @@ public class DefineArrayAction extends BaseAction
 				defineArray.setArrayClass(containerTyperow.getSpecimenClass());
 
 				final String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString()
-						+ ":" + new Integer(capacityobj
-								.getTwoDimensionCapacity()).toString() + ":"
+						+ ":" + new Integer(capacityobj.getTwoDimensionCapacity()).toString() + ":"
 						+ defineArray.getArrayClass();
 
 				final PrintWriter out = response.getWriter();

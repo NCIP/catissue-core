@@ -62,17 +62,19 @@ public class ReportReviewQuarantineAction extends BaseAction
 	 * @throws Exception
 	 *             object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		String reportAction = request.getParameter(Constants.REPORT_ACTION);
-		String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (reportAction == null)
 		{
 			reportAction = (String) request.getAttribute(Constants.REPORT_ACTION);
 		}
-		List reportStatusList = getReportStatus(Constants.COMMENT_STATUS_RENDING, reportAction);
+		final List reportStatusList = this.getReportStatus(Constants.COMMENT_STATUS_RENDING,
+				reportAction);
 		if (reportStatusList == null || reportStatusList.size() == 0)
 		{
 			return mapping.findForward(Constants.NO_PENDING_REQUEST);
@@ -85,7 +87,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 		for (int iCount = 0; iCount < reportStatusList.size(); iCount++)
 		{
 			String witnessFullName = null;
-			List dataList = new ArrayList();
+			final List dataList = new ArrayList();
 			AbstractDomainObject reportObject = null;
 			SurgicalPathologyReport surgicalPathologyReport = null;
 			String scgName = null;
@@ -100,39 +102,33 @@ public class ReportReviewQuarantineAction extends BaseAction
 						.retrieveAttribute(PathologyReportReviewParameter.class.getName(),
 								reportObject.getId(), "surgicalPathologyReport");
 				user = (User) defaultBizLogic.retrieveAttribute(
-						PathologyReportReviewParameter.class.getName(),
-						reportObject.getId(),
+						PathologyReportReviewParameter.class.getName(), reportObject.getId(),
 						"user");
 			}
 			else
 			{
 				reportObject = (QuarantineEventParameter) reportStatusList.get(iCount);
 				timestamp = ((QuarantineEventParameter) reportObject).getTimestamp();
-				surgicalPathologyReport = (SurgicalPathologyReport)
-				((QuarantineEventParameter) reportObject)
+				surgicalPathologyReport = ((QuarantineEventParameter) reportObject)
 						.getDeIdentifiedSurgicalPathologyReport();
 				user = (User) defaultBizLogic.retrieveAttribute(QuarantineEventParameter.class
 						.getName(), reportObject.getId(), "user");
 			}
 			if (surgicalPathologyReport instanceof DeidentifiedSurgicalPathologyReport)
 			{
-				DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =
-					(DeidentifiedSurgicalPathologyReport) surgicalPathologyReport;
+				final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = (DeidentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				scgName = (String) defaultBizLogic
-						.retrieveAttribute
-						(DeidentifiedSurgicalPathologyReport.class.getName(),
+						.retrieveAttribute(DeidentifiedSurgicalPathologyReport.class.getName(),
 								deidentifiedSurgicalPathologyReport.getId(),
 								"specimenCollectionGroup.name");
 
 			}
 			else
 			{
-				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport =
-					(IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
+				final IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				scgName = (String) defaultBizLogic.retrieveAttribute(
 						IdentifiedSurgicalPathologyReport.class.getName(),
-						identifiedSurgicalPathologyReport.getId(),
-						"specimenCollectionGroup.name");
+						identifiedSurgicalPathologyReport.getId(), "specimenCollectionGroup.name");
 
 			}
 
@@ -143,13 +139,13 @@ public class ReportReviewQuarantineAction extends BaseAction
 			dataList.add(scgName);
 			dataList.add(reportObject.getId());
 			// dataList.add(surgicalPathologyReport.getAccessionNumber());
-			Site reportSource = (Site) defaultBizLogic.retrieveAttribute(
+			final Site reportSource = (Site) defaultBizLogic.retrieveAttribute(
 					SurgicalPathologyReport.class.getName(), surgicalPathologyReport.getId(),
 					"reportSource");
 			dataList.add(reportSource.getName());
 			finalDataList.add(dataList);
 		}
-		List columnList = columnNames();
+		final List columnList = this.columnNames();
 		request.setAttribute(Constants.REPORT_STATUS_LIST, finalDataList);
 		// request.setAttribute(Constants.COLUMN_LIST,columnList);
 		request.setAttribute("pageOf", pageOf);
@@ -157,10 +153,10 @@ public class ReportReviewQuarantineAction extends BaseAction
 		// Gets the session of this request.
 		List list = null, showList = null;
 		// Returns the page number to be shown.
-		int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
+		final int pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));
 
 		// Gets the session of this request.
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 
 		// The start index in the list of users to be approved/rejected.
 		int startIndex = Constants.ZERO;
@@ -219,7 +215,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 		// Saves the list of users to be shown on the page in the request.
 		// request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
 		AppUtility.setGridData(showList, columnList, request);
-		Integer identifierFieldIndex = new Integer(4);
+		final Integer identifierFieldIndex = new Integer(4);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		// Saves the page number in the request.
 		request.setAttribute(Constants.PAGE_NUMBER, Integer.toString(pageNum));
@@ -248,8 +244,8 @@ public class ReportReviewQuarantineAction extends BaseAction
 	{
 		IBizLogic bizLogic = null;
 		List pendingStatusList = null;
-		String colName = Constants.STATUS;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final String colName = Constants.STATUS;
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		if (reportAction.equalsIgnoreCase(Constants.REVIEW))
 		{
 			bizLogic = factory.getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
@@ -272,7 +268,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 	 */
 	public List columnNames()
 	{
-		List columnList = new ArrayList();
+		final List columnList = new ArrayList();
 		columnList.add(Constants.IDENTIFIER_NO);
 		columnList.add(Constants.REQUEST_DATE);
 		columnList.add(Constants.USER_NAME_ADMIN_VIEW);

@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
  */
 public class UserDTO
 {
+
 	/**
 	 * user.
 	 */
@@ -23,15 +24,16 @@ public class UserDTO
 	/**
 	 * userRowIdBeanMap.
 	 */
-	private Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap =
-		new HashMap<String, SiteUserRolePrivilegeBean>();
+	private Map<String, SiteUserRolePrivilegeBean> userRowIdBeanMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+
 	/**
 	 * @return User
 	 */
 	public User getUser()
 	{
-		return user;
+		return this.user;
 	}
+
 	/**
 	 * @param user : user
 	 */
@@ -39,13 +41,15 @@ public class UserDTO
 	{
 		this.user = user;
 	}
+
 	/**
 	 * @return Map
 	 */
 	public Map<String, SiteUserRolePrivilegeBean> getUserRowIdBeanMap()
 	{
-		return userRowIdBeanMap;
+		return this.userRowIdBeanMap;
 	}
+
 	/**
 	 * @param userRowIdBeanMap : userRowIdBeanMap
 	 */
@@ -54,7 +58,7 @@ public class UserDTO
 		this.userRowIdBeanMap = userRowIdBeanMap;
 	}
 
-    /*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
+	/*public List<SiteUserRolePrivilegeBean> getSiteUserRolePrivilegeBeanList()
 	{
 		return siteUserRolePrivilegeBeanList;
 	}

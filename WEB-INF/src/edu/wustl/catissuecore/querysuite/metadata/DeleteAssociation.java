@@ -89,8 +89,8 @@ public class DeleteAssociation
 	{
 		final int sourceEntityId = UpdateMetadataUtil.getEntityIdByName(srcName, this.connection
 				.createStatement());
-		final int targetEntityId = UpdateMetadataUtil.getEntityIdByName(targetName,
-				this.connection.createStatement());
+		final int targetEntityId = UpdateMetadataUtil.getEntityIdByName(targetName, this.connection
+				.createStatement());
 
 		final List<String> deleteSQL = this.deleteAssociation(sourceEntityId, targetEntityId);
 
@@ -110,8 +110,7 @@ public class DeleteAssociation
 		final List<String> deleteSQL = new ArrayList<String>();
 		String sql;
 
-		final List<Long> roleIdMap = this.getSourceSQL(deleteSQL, sourceEntityId,
-				targetEntityId);
+		final List<Long> roleIdMap = this.getSourceSQL(deleteSQL, sourceEntityId, targetEntityId);
 		roleIdMap.addAll(this.getSourceSQL(deleteSQL, targetEntityId, sourceEntityId));
 
 		for (final Long srcRoleId : roleIdMap)
@@ -134,8 +133,8 @@ public class DeleteAssociation
 	 * @return list
 	 * @throws SQLException SQL Exception
 	 */
-	public List<Long> getSourceSQL(List<String> deleteSQL, int sourceEntityId,
-			int targetEntityId) throws SQLException
+	public List<Long> getSourceSQL(List<String> deleteSQL, int sourceEntityId, int targetEntityId)
+			throws SQLException
 	{
 		String sql;
 		Long srcRoleId = null;
@@ -163,17 +162,15 @@ public class DeleteAssociation
 					final String pathId = st.nextToken();
 					sql = "delete from path where INTERMEDIATE_PATH ='" + pathId + "'";
 					deleteSQL.add(sql);
-					sql = "select DE_ASSOCIATION_ID" +
-							" from intra_model_association where ASSOCIATION_ID="
-							+ pathId;
+					sql = "select DE_ASSOCIATION_ID"
+							+ " from intra_model_association where ASSOCIATION_ID=" + pathId;
 					final Statement stmt2 = this.connection.createStatement();
 					final ResultSet rs2 = stmt2.executeQuery(sql);
 					if (rs2.next())
 					{
 						deAssociationId = rs2.getLong(1);
-						sql = "select DIRECTION,SOURCE_ROLE_ID,TARGET_ROLE_ID" +
-								" from dyextn_association where identifier = "
-								+ deAssociationId;
+						sql = "select DIRECTION,SOURCE_ROLE_ID,TARGET_ROLE_ID"
+								+ " from dyextn_association where identifier = " + deAssociationId;
 						final Statement stmt3 = this.connection.createStatement();
 						final ResultSet rs3 = stmt3.executeQuery(sql);
 						if (rs3.next())
@@ -192,17 +189,14 @@ public class DeleteAssociation
 					rs2.close();
 					stmt2.close();
 
-					sql = "select identifier" +
-							" from dyextn_constraint_properties" +
-							" where ASSOCIATION_ID = "
-							+ deAssociationId;
+					sql = "select identifier" + " from dyextn_constraint_properties"
+							+ " where ASSOCIATION_ID = " + deAssociationId;
 					final Statement stmt1 = this.connection.createStatement();
 					final ResultSet rs1 = stmt1.executeQuery(sql);
 					if (rs1.next())
 					{
 						final Long constraintId = rs1.getLong(1);
-						sql = "delete from dyextn_constraint_properties" +
-								" where identifier = "
+						sql = "delete from dyextn_constraint_properties" + " where identifier = "
 								+ constraintId;
 						deleteSQL.add(sql);
 
@@ -214,8 +208,8 @@ public class DeleteAssociation
 					rs1.close();
 					stmt1.close();
 
-					sql = "delete from intra_model_association" +
-							" where ASSOCIATION_ID =" + pathId;
+					sql = "delete from intra_model_association" + " where ASSOCIATION_ID ="
+							+ pathId;
 					deleteSQL.add(sql);
 
 					sql = "delete from association where ASSOCIATION_ID =" + pathId;
@@ -243,10 +237,9 @@ public class DeleteAssociation
 							+ deAssociationId;
 					deleteSQL.add(sql);
 
-					sql = "delete from dyextn_rule_parameter" +
-							" where  RULE_ID =(select IDENTIFIER" +
-							" from dyextn_rule where ATTRIBUTE_ID ="
-							+ deAssociationId + ")";
+					sql = "delete from dyextn_rule_parameter"
+							+ " where  RULE_ID =(select IDENTIFIER"
+							+ " from dyextn_rule where ATTRIBUTE_ID =" + deAssociationId + ")";
 					deleteSQL.add(sql);
 
 					sql = "delete from dyextn_rule where ATTRIBUTE_ID =" + deAssociationId;

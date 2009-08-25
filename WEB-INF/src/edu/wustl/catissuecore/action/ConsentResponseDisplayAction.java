@@ -121,8 +121,7 @@ public class ConsentResponseDisplayAction extends BaseAction
 				&& consentResponseHashTable.containsKey(consentResponseKey))
 		// If Map already exist in session
 		{
-			final ConsentResponseBean consentResponseBean
-			= (ConsentResponseBean) consentResponseHashTable
+			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) consentResponseHashTable
 					.get(consentResponseKey);
 			final Collection consentResponseCollection = consentResponseBean.getConsentResponse();
 			consentResponseMap = this.getConsentResponseMap(consentResponseCollection, true);

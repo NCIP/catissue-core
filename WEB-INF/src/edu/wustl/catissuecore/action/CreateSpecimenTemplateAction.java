@@ -153,8 +153,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			{
 				createSpecimenTemplateForm
 						.setCollectionEventCollectionProcedure((String) DefaultValueManager
-								.getDefaultValue(Constants
-										.DEFAULT_COLLECTION_PROCEDURE));
+								.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 			}
 			if (createSpecimenTemplateForm.getCollectionEventContainer() == null)
 			{
@@ -165,8 +164,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			{
 				createSpecimenTemplateForm
 						.setReceivedEventReceivedQuality((String) DefaultValueManager
-								.getDefaultValue(Constants
-										.DEFAULT_RECEIVED_QUALITY));
+								.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 			}
 		}
 		final List storageContainerList = new LinkedList();
@@ -325,24 +323,20 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			{
 				final Map aliqutCollectionMap = specimenRequirementBean
 						.getAliquotSpecimenCollection();
-				final SpecimenRequirementBean childSpecimenRequirementBean
-				= (SpecimenRequirementBean) aliqutCollectionMap
+				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) aliqutCollectionMap
 						.get(currentKey);
 				final SpecimenRequirementBean specimenRequirementBean1 = this
-						.getSpecimenBeanFromMap(keyToken
-								, childSpecimenRequirementBean, currentKey);
+						.getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
 				return specimenRequirementBean1;
 			}
 			else
 			{
 				final Map deriveCollectionMap = specimenRequirementBean
 						.getDeriveSpecimenCollection();
-				final SpecimenRequirementBean childSpecimenRequirementBean
-				= (SpecimenRequirementBean) deriveCollectionMap
+				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) deriveCollectionMap
 						.get(currentKey);
 				final SpecimenRequirementBean specimenRequirementBean1 = this
-						.getSpecimenBeanFromMap(keyToken
-								, childSpecimenRequirementBean, currentKey);
+						.getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
 				return specimenRequirementBean1;
 			}
 
@@ -500,13 +494,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		final CollectionProtocolEventBean collectionProtocolEventBean
-		= (CollectionProtocolEventBean) collectionProtocolEventMap
+		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(eventKey);
 		final Map specimenRequirementmaps = collectionProtocolEventBean
 				.getSpecimenRequirementbeanMap();
-		final SpecimenRequirementBean parentSpecimenRequirementBean
-		= (SpecimenRequirementBean) specimenRequirementmaps
+		final SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean) specimenRequirementmaps
 				.get(specimenKey);
 		final SpecimenRequirementBean specimenRequirementBean = this.getSpecimenBeanFromMap(
 				stringToken, parentSpecimenRequirementBean, specimenKey);

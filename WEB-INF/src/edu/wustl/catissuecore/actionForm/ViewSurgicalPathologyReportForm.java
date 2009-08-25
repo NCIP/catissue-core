@@ -16,8 +16,8 @@ import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -161,7 +161,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public long getCollectionProtocolId()
 	{
-		return collectionProtocolId;
+		return this.collectionProtocolId;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getBirthDate()
 	{
-		return birthDate;
+		return this.birthDate;
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getDeathDate()
 	{
-		return deathDate;
+		return this.deathDate;
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getEthinicity()
 	{
-		return ethinicity;
+		return this.ethinicity;
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getGender()
 	{
-		return gender;
+		return this.gender;
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getVitalStatus()
 	{
-		return vitalStatus;
+		return this.vitalStatus;
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public Collection getMedicalIdentifierNumbers()
 	{
-		return medicalIdentifierNumbers;
+		return this.medicalIdentifierNumbers;
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getRace()
 	{
-		return race;
+		return this.race;
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getSexGenotype()
 	{
-		return sexGenotype;
+		return this.sexGenotype;
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getSocialSecurityNumber()
 	{
-		return socialSecurityNumber;
+		return this.socialSecurityNumber;
 	}
 
 	/**
@@ -359,7 +359,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getSurgicalPathologyNumber()
 	{
-		return surgicalPathologyNumber;
+		return this.surgicalPathologyNumber;
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getIdentifiedReportSite()
 	{
-		return identifiedReportSite;
+		return this.identifiedReportSite;
 	}
 
 	/**
@@ -412,7 +412,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public ViewSurgicalPathologyReportForm()
 	{
-		reset();
+		this.reset();
 	}
 
 	/** 
@@ -420,6 +420,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 * 
 	 */
+	@Override
 	protected void reset()
 	{
 
@@ -436,12 +437,13 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		{
 			if (abstractDomain instanceof IdentifiedSurgicalPathologyReport)
 			{
-				IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) abstractDomain;
+				final IdentifiedSurgicalPathologyReport identifiedReport = (IdentifiedSurgicalPathologyReport) abstractDomain;
 				if (identifiedReport != null)
 				{
-					setIdentifiedReport(identifiedReport);
-					setDeIdentifiedReport(identifiedReport.getDeIdentifiedSurgicalPathologyReport());
-					setParticipant(identifiedReport.getSpecimenCollectionGroup()
+					this.setIdentifiedReport(identifiedReport);
+					this.setDeIdentifiedReport(identifiedReport
+							.getDeIdentifiedSurgicalPathologyReport());
+					this.setParticipant(identifiedReport.getSpecimenCollectionGroup()
 							.getCollectionProtocolRegistration().getParticipant());
 					this.surgicalPathologyNumber = identifiedReport.getSpecimenCollectionGroup()
 							.getSurgicalPathologyNumber();
@@ -449,8 +451,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			}
 			else
 			{
-				DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) abstractDomain;
-				setDeIdentifiedReport(deidReport);
+				final DeidentifiedSurgicalPathologyReport deidReport = (DeidentifiedSurgicalPathologyReport) abstractDomain;
+				this.setDeIdentifiedReport(deidReport);
 			}
 			this.setCollectionProtocolId(((SurgicalPathologyReport) abstractDomain)
 					.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
@@ -459,7 +461,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			this.hasAccess = false;
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Exception in setAllValues of ViewSurgicalPathologyReportForm" + e);
 		}
@@ -481,7 +483,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 						.getTextContent().getData();
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("viewSPR:De-identified Report information is null");
 			if (this.deIdentifiedReportTextContent == null)
@@ -504,7 +506,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			this.identifiedReportTextContent = ispr.getTextContent().getData();
 			this.identifiedReportSite = ispr.getReportSource().getName();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("viewSPR:Identified Report information is null");
 			if (this.identifiedReportTextContent == null)
@@ -520,7 +522,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setParticipant(final Participant participant)
 	{
-		String datePattern = CommonServiceLocator.getInstance().getDatePattern();
+		final String datePattern = CommonServiceLocator.getInstance().getDatePattern();
 		try
 		{
 			this.participantIdForReport = participant.getId();
@@ -528,17 +530,19 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			this.vitalStatus = participant.getVitalStatus();
 			if (participant.getBirthDate() != null)
 			{
-				this.birthDate = Utility.parseDateToString(participant.getBirthDate(), datePattern);
+				this.birthDate = CommonUtilities.parseDateToString(participant.getBirthDate(),
+						datePattern);
 			}
 			if (participant.getDeathDate() != null)
 			{
-				this.deathDate = Utility.parseDateToString(participant.getDeathDate(), datePattern);
+				this.deathDate = CommonUtilities.parseDateToString(participant.getDeathDate(),
+						datePattern);
 			}
 			this.ethinicity = participant.getEthnicity();
-			Collection tempRaceColl = participant.getRaceCollection();
-			Iterator raceIter = tempRaceColl.iterator();
+			final Collection tempRaceColl = participant.getRaceCollection();
+			final Iterator raceIter = tempRaceColl.iterator();
 			this.race = "";
-			StringBuffer tempStr = new StringBuffer();
+			final StringBuffer tempStr = new StringBuffer();
 			while (raceIter.hasNext())
 			{
 				tempStr.append((String) raceIter.next() + ", ");
@@ -549,14 +553,14 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			this.socialSecurityNumber = participant.getSocialSecurityNumber();
 			this.medicalIdentifierNumbers = participant.getParticipantMedicalIdentifierCollection();
 
-			if (medicalIdentifierNumbers != null)
+			if (this.medicalIdentifierNumbers != null)
 			{
-				values = edu.wustl.catissuecore.caties.util.ViewSPRUtil
-						.getMedicalIdentifierNumbers(medicalIdentifierNumbers);
-				counter = medicalIdentifierNumbers.size();
+				this.values = edu.wustl.catissuecore.caties.util.ViewSPRUtil
+						.getMedicalIdentifierNumbers(this.medicalIdentifierNumbers);
+				this.counter = this.medicalIdentifierNumbers.size();
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("viewSPR:Participant information is null");
 		}
@@ -568,6 +572,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return identifier of Form
 	 */
+	@Override
 	public int getFormId()
 	{
 		if (this.getSubmittedFor().equalsIgnoreCase(Constants.QUARANTINE))
@@ -583,7 +588,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getDeIdentifiedReportTextContent()
 	{
-		return deIdentifiedReportTextContent;
+		return this.deIdentifiedReportTextContent;
 	}
 
 	/**
@@ -601,7 +606,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getIdentifiedReportTextContent()
 	{
-		return identifiedReportTextContent;
+		return this.identifiedReportTextContent;
 	}
 
 	/**
@@ -619,7 +624,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public int getCounter()
 	{
-		return counter;
+		return this.counter;
 	}
 
 	/**
@@ -638,8 +643,10 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		if (isMutable())
-			values.put(key, value);
+		if (this.isMutable())
+		{
+			this.values.put(key, value);
+		}
 	}
 
 	/**
@@ -649,7 +656,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -658,7 +665,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
@@ -684,9 +691,10 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getId()
 	 * @return id identifier of current domain object
 	 */
+	@Override
 	public long getId()
 	{
-		return id;
+		return this.id;
 	}
 
 	/** 
@@ -694,6 +702,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setId(long)
 	 * @param id identifier of current domain object
 	 */
+	@Override
 	public void setId(long id)
 	{
 		this.id = id;
@@ -705,7 +714,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getIdentifiedReportId()
 	{
-		return identifiedReportId;
+		return this.identifiedReportId;
 	}
 
 	/**
@@ -723,7 +732,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public long getDeIdentifiedReportId()
 	{
-		return deIdentifiedReportId;
+		return this.deIdentifiedReportId;
 	}
 
 	/**
@@ -741,7 +750,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getDeIdentifiedReportSite()
 	{
-		return deIdentifiedReportSite;
+		return this.deIdentifiedReportSite;
 	}
 
 	/**
@@ -759,7 +768,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public List getReportIdList()
 	{
-		return reportIdList;
+		return this.reportIdList;
 	}
 
 	/**
@@ -777,7 +786,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getReportId()
 	{
-		return reportId;
+		return this.reportId;
 	}
 
 	/**
@@ -795,7 +804,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getUserComments()
 	{
-		return userComments;
+		return this.userComments;
 	}
 
 	/**
@@ -813,7 +822,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public long getRequestIdentifier()
 	{
-		return requestIdentifier;
+		return this.requestIdentifier;
 	}
 
 	/**
@@ -831,7 +840,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public long getAcceptReject()
 	{
-		return acceptReject;
+		return this.acceptReject;
 	}
 
 	/**
@@ -849,7 +858,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public String getUserName()
 	{
-		return userName;
+		return this.userName;
 	}
 
 	/**
@@ -867,7 +876,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public boolean isHasAccess()
 	{
-		return hasAccess;
+		return this.hasAccess;
 	}
 
 	/**
@@ -881,7 +890,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	public long getParticipantIdForReport()
 	{
-		return participantIdForReport;
+		return this.participantIdForReport;
 	}
 
 	public void setParticipantIdForReport(long participantIdForReport)

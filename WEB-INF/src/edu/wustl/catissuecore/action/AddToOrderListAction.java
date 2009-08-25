@@ -80,8 +80,7 @@ public class AddToOrderListAction extends BaseAction
 					{
 						// put key-value pair in map
 						itemMap = (Map) this
-								.putValueInMapSpecimen(orderSpecimenFormObject
-										, request);
+								.putValueInMapSpecimen(orderSpecimenFormObject, request);
 						orderSpecimenFormObject.setSelectedItems(null);
 						target = Constants.SPECIMEN_ORDER_FORM_TYPE;
 					}
@@ -91,12 +90,10 @@ public class AddToOrderListAction extends BaseAction
 				// For BiospecimenArray
 				if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 				{
-					final OrderBiospecimenArrayForm orderArrayFormObject
-					= (OrderBiospecimenArrayForm) form;
+					final OrderBiospecimenArrayForm orderArrayFormObject = (OrderBiospecimenArrayForm) form;
 					if (orderArrayFormObject.getSelectedItems() != null)
 					{
-						itemMap = (Map) this.putValueInMapArray(orderArrayFormObject
-								, request);
+						itemMap = (Map) this.putValueInMapArray(orderArrayFormObject, request);
 						orderArrayFormObject.setSelectedItems(null);
 						target = Constants.ARRAY_ORDER_FORM_TYPE;
 					}
@@ -106,13 +103,11 @@ public class AddToOrderListAction extends BaseAction
 				// Pathology
 				if (typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 				{
-					final OrderPathologyCaseForm pathologyFormObject
-					= (OrderPathologyCaseForm) form;
+					final OrderPathologyCaseForm pathologyFormObject = (OrderPathologyCaseForm) form;
 					if (pathologyFormObject.getSelectedItems() != null)
 					{
 						// put key-value pair in map
-						itemMap = (Map) this.putValueInMapPathology(pathologyFormObject
-								, request);
+						itemMap = (Map) this.putValueInMapPathology(pathologyFormObject, request);
 						pathologyFormObject.setSelectedItems(null);
 						target = Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
 					}
@@ -152,8 +147,7 @@ public class AddToOrderListAction extends BaseAction
 					final Iterator orderItemItr = orderItemsList.iterator();
 					while (orderItemItr.hasNext())
 					{
-						final OrderSpecimenBean specimenBean
-						= (OrderSpecimenBean) orderItemItr
+						final OrderSpecimenBean specimenBean = (OrderSpecimenBean) orderItemItr
 								.next();
 						orderItem.add(specimenBean);
 					}
@@ -180,29 +174,23 @@ public class AddToOrderListAction extends BaseAction
 					if (typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
 					// If typeOf == 'specimen'
 					{
-						final OrderSpecimenForm orderSpecimenFormObject
-						= (OrderSpecimenForm) form;
-						this.removeSelectedItems(orderSpecimenFormObject
-								.getItemsToRemove(),
+						final OrderSpecimenForm orderSpecimenFormObject = (OrderSpecimenForm) form;
+						this.removeSelectedItems(orderSpecimenFormObject.getItemsToRemove(),
 								session);
 						target = Constants.SPECIMEN_ORDER_FORM_TYPE;
 					}
 					else if (typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
 					// If typeOf == 'biospecimen array'
 					{
-						final OrderBiospecimenArrayForm orderArrayFormObject
-						= (OrderBiospecimenArrayForm) form;
-						this.removeSelectedItems(orderArrayFormObject
-								.getItemsToRemove(), session);
+						final OrderBiospecimenArrayForm orderArrayFormObject = (OrderBiospecimenArrayForm) form;
+						this.removeSelectedItems(orderArrayFormObject.getItemsToRemove(), session);
 						target = Constants.ARRAY_ORDER_FORM_TYPE;
 					}
 					else if (typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
 					// If typeOf == 'pathological case'
 					{
-						final OrderPathologyCaseForm pathologyFormObject
-						= (OrderPathologyCaseForm) form;
-						this.removeSelectedItems(pathologyFormObject
-								.getItemsToRemove(), session);
+						final OrderPathologyCaseForm pathologyFormObject = (OrderPathologyCaseForm) form;
+						this.removeSelectedItems(pathologyFormObject.getItemsToRemove(), session);
 						target = Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
 					}
 				}// End if(remove == "yes")
@@ -261,8 +249,7 @@ public class AddToOrderListAction extends BaseAction
 					{
 						final List orderItemsList = (ArrayList) orderItemsMap
 								.get(arrayNameToRemove);
-						final OrderSpecimenBean orderSpecimenBeanObj
-						= (OrderSpecimenBean) orderItemsList
+						final OrderSpecimenBean orderSpecimenBeanObj = (OrderSpecimenBean) orderItemsList
 								.get(rowIndex);
 
 						// Move the orderspecimenobjects that are
@@ -294,8 +281,7 @@ public class AddToOrderListAction extends BaseAction
 				final String arrayName = (String) orderItemstoRemoveMapItr.next();
 				if (orderItemsToRetainMap.containsKey(arrayName))
 				{
-					final List itemsToRemoveList
-					= (ArrayList) orderItemstoRemoveMap.get(arrayName);
+					final List itemsToRemoveList = (ArrayList) orderItemstoRemoveMap.get(arrayName);
 					orderItemsToRetainList = (ArrayList) orderItemsToRetainMap.get(arrayName);
 
 					// Remove the selected order items from the original list
@@ -422,8 +408,7 @@ public class AddToOrderListAction extends BaseAction
 			if (orderArrayFormObject.getTypeOfArray().equals("false"))
 			{
 				arrayMap
-						.put("OrderSpecimenBean:" + strSelectedItem +
-								"_unitRequestedQuantity", " ");
+						.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity", " ");
 			}
 			else
 			{
@@ -485,8 +470,7 @@ public class AddToOrderListAction extends BaseAction
 				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_specimenType",
 						pathologyFormObject.getType());
 				pathologyMap.put("OrderSpecimenBean:" + strSelectedItem + "_unitRequestedQuantity",
-						tempOrderPathologyFormObjectMap
-						.get("OrderSpecimenBean:" + strSelectedItem
+						tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:" + strSelectedItem
 								+ "_unitRequestedQuantity"));
 			}
 			else

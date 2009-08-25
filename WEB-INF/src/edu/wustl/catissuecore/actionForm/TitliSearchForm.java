@@ -46,7 +46,7 @@ public class TitliSearchForm extends ActionForm
 
 	private SortedResultMapInterface sortedResultMap;
 
-	private Map < Name , TitliResultGroup > titliResultMap;
+	private Map<Name, TitliResultGroup> titliResultMap;
 
 	private String selectedLabel;
 
@@ -55,7 +55,7 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public String getSelectedLabel()
 	{
-		return selectedLabel;
+		return this.selectedLabel;
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public String getSearchString()
 	{
-		return searchString;
+		return this.searchString;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public SortedResultMapInterface getSortedResultMap()
 	{
-		return sortedResultMap;
+		return this.sortedResultMap;
 	}
 
 	/**
@@ -100,11 +100,11 @@ public class TitliSearchForm extends ActionForm
 	{
 		this.sortedResultMap = sortedResultMap;
 
-		titliResultMap = new LinkedHashMap < Name , TitliResultGroup >();
+		this.titliResultMap = new LinkedHashMap<Name, TitliResultGroup>();
 
-		for (ResultGroupInterface i : sortedResultMap.values())
+		for (final ResultGroupInterface i : sortedResultMap.values())
 		{
-			titliResultMap.put(i.getTableName(), new TitliResultGroup(i));
+			this.titliResultMap.put(i.getTableName(), new TitliResultGroup(i));
 		}
 
 	}
@@ -118,10 +118,11 @@ public class TitliSearchForm extends ActionForm
 		ResultGroupInterface i = null;
 		try
 		{
-			i = sortedResultMap.get(TitliTableMapper.getInstance().getTable(selectedLabel));
+			i = this.sortedResultMap.get(TitliTableMapper.getInstance()
+					.getTable(this.selectedLabel));
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error("Exception in TitliSearchForm : " + e.getMessage(), e);
 
@@ -134,9 +135,9 @@ public class TitliSearchForm extends ActionForm
 	/**
 	 * @return the titliResultMap
 	 */
-	public Map < Name , TitliResultGroup > getTitliResultMap()
+	public Map<Name, TitliResultGroup> getTitliResultMap()
 	{
-		return titliResultMap;
+		return this.titliResultMap;
 	}
 
 	/**
@@ -145,11 +146,12 @@ public class TitliSearchForm extends ActionForm
 	 * @param request the request
 	 * @return acttion errors
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 
-		String requestSearchString = request.getParameter("searchString");
+		final String requestSearchString = request.getParameter("searchString");
 
 		// searchString is null or empty
 		if (requestSearchString == null || requestSearchString.trim().equals(""))
@@ -171,7 +173,7 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public String getDisplaySearchString()
 	{
-		return displaySearchString;
+		return this.displaySearchString;
 	}
 
 	/**
@@ -187,7 +189,7 @@ public class TitliSearchForm extends ActionForm
 	 */
 	public String getDisplayStats()
 	{
-		return displayStats;
+		return this.displayStats;
 	}
 
 	/**

@@ -45,8 +45,9 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(ParticipantRegistrationSelectAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -59,6 +60,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	 *            object of HttpServletResponse
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -67,64 +69,62 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		{
 			AbstractDomainObject abstractDomain = null;
 
-			ParticipantForm participantForm = (ParticipantForm) form;
-			IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
+			final ParticipantForm participantForm = (ParticipantForm) form;
+			final IDomainObjectFactory iDomainObjectFactory = AbstractFactoryConfig.getInstance()
 					.getDomainObjectFactory();
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(participantForm.getFormId());
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(participantForm.getFormId());
 
-			String objectName = iDomainObjectFactory.getDomainObjectName(participantForm
+			final String objectName = iDomainObjectFactory.getDomainObjectName(participantForm
 					.getFormId());
 
-			logger
-					.info("Participant Id-------------------"
-							+ request.getParameter("participantId"));
+			this.logger.info("Participant Id-------------------"
+					+ request.getParameter("participantId"));
 
-			Object object = bizLogic.retrieve(objectName, new Long(request
+			final Object object = bizLogic.retrieve(objectName, new Long(request
 					.getParameter("participantId")));
 			abstractDomain = (AbstractDomainObject) object;
-			Participant participant = (Participant) abstractDomain;
+			final Participant participant = (Participant) abstractDomain;
 
-			logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
+			this.logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
 
 			// To append the cpr to already existing cprs
 			//Gets the collection Protocol Registration map from ActionForm
-			Map mapCollectionProtocolRegistration = participantForm
+			final Map mapCollectionProtocolRegistration = participantForm
 					.getCollectionProtocolRegistrationValues();
-			int cprCount = participantForm.getCollectionProtocolRegistrationValueCounter();
-			Collection consentResponseBeanCollection = participantForm
+			final int cprCount = participantForm.getCollectionProtocolRegistrationValueCounter();
+			final Collection consentResponseBeanCollection = participantForm
 					.getConsentResponseBeanCollection();
-			Map consentResponseHashTable = participantForm.getConsentResponseHashTable();
-			Map mapParticipantMedicalIdentifier = participantMedicalIdentifierMap(participantForm
-					.getValues());
+			final Map consentResponseHashTable = participantForm.getConsentResponseHashTable();
+			final Map mapParticipantMedicalIdentifier = this
+					.participantMedicalIdentifierMap(participantForm.getValues());
 
 			//Gets the collection Protocol Registration map from Database
-			DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+			final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 			defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
 					participantForm);
 
-			Map mapCollectionProtocolRegistrationOld = participantForm
+			final Map mapCollectionProtocolRegistrationOld = participantForm
 					.getCollectionProtocolRegistrationValues();
-			int cprCountOld = participantForm.getCollectionProtocolRegistrationValueCounter();
-			Collection consentResponseBeanCollectionOld = participantForm
+			final int cprCountOld = participantForm.getCollectionProtocolRegistrationValueCounter();
+			final Collection consentResponseBeanCollectionOld = participantForm
 					.getConsentResponseBeanCollection();
-			Map consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
+			final Map consentResponseHashTableOld = participantForm.getConsentResponseHashTable();
 
-			Map mapCollectionProtocolRegistrationAppended = appendCollectionProtocolRegistrations(
-					mapCollectionProtocolRegistration, cprCount,
-					mapCollectionProtocolRegistrationOld, cprCountOld);
-			Map mapParticipantMedicalIdentifierOld = participantMedicalIdentifierMap(participantForm
-					.getValues());
+			final Map mapCollectionProtocolRegistrationAppended = this
+					.appendCollectionProtocolRegistrations(mapCollectionProtocolRegistration,
+							cprCount, mapCollectionProtocolRegistrationOld, cprCountOld);
+			final Map mapParticipantMedicalIdentifierOld = this
+					.participantMedicalIdentifierMap(participantForm.getValues());
 
 			if (consentResponseBeanCollection != null)
 			{
-				updateConsentResponse(consentResponseBeanCollection,
+				this.updateConsentResponse(consentResponseBeanCollection,
 						consentResponseBeanCollectionOld, consentResponseHashTableOld);
 			}
 
 			participantForm
-					.setCollectionProtocolRegistrationValues
-					(mapCollectionProtocolRegistrationAppended);
+					.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistrationAppended);
 			participantForm.setCollectionProtocolRegistrationValueCounter((cprCountOld + cprCount));
 			participantForm.setValues(mapParticipantMedicalIdentifierOld);
 			participantForm.setConsentResponseBeanCollection(consentResponseBeanCollectionOld);
@@ -141,8 +141,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			else
 			{
 				participantForm
-						.setCollectionProtocolRegistrationValues
-						(mapCollectionProtocolRegistration);
+						.setCollectionProtocolRegistrationValues(mapCollectionProtocolRegistration);
 				participantForm.setCollectionProtocolRegistrationValueCounter(cprCount);
 				participantForm.setValues(mapParticipantMedicalIdentifier);
 				participantForm.setConsentResponseBeanCollection(consentResponseBeanCollection);
@@ -150,9 +149,9 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 				request.setAttribute("continueLookup", "yes");
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.info(e.getMessage());
+			this.logger.info(e.getMessage());
 		}
 
 		return forward;
@@ -167,17 +166,17 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	private void updateConsentResponse(Collection consentResponseBeanCollection,
 			Collection consentResponseBeanCollectionOld, Map consentResponseHashTableOld)
 	{
-		Iterator it = consentResponseBeanCollection.iterator();
+		final Iterator it = consentResponseBeanCollection.iterator();
 		while (it.hasNext())
 		{
-			ConsentResponseBean consentResponseBean = (ConsentResponseBean) it.next();
-			long collectionProtocolId = consentResponseBean.getCollectionProtocolID();
+			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) it.next();
+			final long collectionProtocolId = consentResponseBean.getCollectionProtocolID();
 			if (collectionProtocolId > 0)
 			{
-				if (!isAlreadyExist(consentResponseBeanCollectionOld, collectionProtocolId))
+				if (!this.isAlreadyExist(consentResponseBeanCollectionOld, collectionProtocolId))
 				{
 					consentResponseBeanCollectionOld.add(consentResponseBean);
-					String key = Constants.CONSENT_RESPONSE_KEY + collectionProtocolId;
+					final String key = Constants.CONSENT_RESPONSE_KEY + collectionProtocolId;
 					consentResponseHashTableOld.put(key, consentResponseBean);
 				}
 			}
@@ -194,11 +193,11 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			long collectionProtocolId)
 	{
 
-		Iterator it = consentResponseBeanCollection.iterator();
+		final Iterator it = consentResponseBeanCollection.iterator();
 		while (it.hasNext())
 		{
-			ConsentResponseBean consentResponseBean = (ConsentResponseBean) it.next();
-			long cpId = consentResponseBean.getCollectionProtocolID();
+			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) it.next();
+			final long cpId = consentResponseBean.getCollectionProtocolID();
 			if (cpId == collectionProtocolId)
 			{
 				return true;
@@ -214,21 +213,21 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	 */
 	private Map participantMedicalIdentifierMap(Map participantMedicalIdentifier)
 	{
-		Validator validator = new Validator();
-		String className = "ParticipantMedicalIdentifier:";
-		String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
-		String key2 = "_medicalRecordNumber";
-		String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
+		final Validator validator = new Validator();
+		final String className = "ParticipantMedicalIdentifier:";
+		final String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
+		final String key2 = "_medicalRecordNumber";
+		final String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
 		int index = 1;
 
 		while (true)
 		{
-			String keyOne = className + index + key1;
-			String keyTwo = className + index + key2;
-			String keyThree = className + index + key3;
+			final String keyOne = className + index + key1;
+			final String keyTwo = className + index + key2;
+			final String keyThree = className + index + key3;
 
-			String value1 = (String) participantMedicalIdentifier.get(keyOne);
-			String value2 = (String) participantMedicalIdentifier.get(keyTwo);
+			final String value1 = (String) participantMedicalIdentifier.get(keyOne);
+			final String value2 = (String) participantMedicalIdentifier.get(keyTwo);
 
 			if (value1 == null || value2 == null)
 			{
@@ -258,36 +257,37 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			int cprCount, Map mapCollectionProtocolRegistrationOld, int cprCountOld)
 			throws Exception
 	{
-		int cprCountNew = cprCount + cprCountOld;
+		final int cprCountNew = cprCount + cprCountOld;
 		for (int i = cprCountOld + 1; i <= cprCountNew; i++)
 		{
-			String collectionProtocolId = "CollectionProtocolRegistration:" + (i - cprCountOld)
-					+ "_CollectionProtocol_id";
-			String collectionProtocolTitle = "CollectionProtocolRegistration:" + (i - cprCountOld)
-					+ "_CollectionProtocol_shortTitle";
-			String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
+			final String collectionProtocolId = "CollectionProtocolRegistration:"
+					+ (i - cprCountOld) + "_CollectionProtocol_id";
+			final String collectionProtocolTitle = "CollectionProtocolRegistration:"
+					+ (i - cprCountOld) + "_CollectionProtocol_shortTitle";
+			final String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
 					+ (i - cprCountOld) + "_protocolParticipantIdentifier";
-			String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
+			final String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
 					+ (i - cprCountOld) + "_registrationDate";
-			String collectionProtocolIdentifier = "CollectionProtocolRegistration:"
+			final String collectionProtocolIdentifier = "CollectionProtocolRegistration:"
 					+ (i - cprCountOld) + "_id";
-			String isConsentAvailable = "CollectionProtocolRegistration:" + (i - cprCountOld)
+			final String isConsentAvailable = "CollectionProtocolRegistration:" + (i - cprCountOld)
 					+ "_isConsentAvailable";
-			String isActive = "CollectionProtocolRegistration:" + (i - cprCountOld)
+			final String isActive = "CollectionProtocolRegistration:" + (i - cprCountOld)
 					+ "_activityStatus";
 
-			String collectionProtocolIdNew = "CollectionProtocolRegistration:" + i
+			final String collectionProtocolIdNew = "CollectionProtocolRegistration:" + i
 					+ "_CollectionProtocol_id";
-			String collectionProtocolTitleNew = "CollectionProtocolRegistration:" + i
+			final String collectionProtocolTitleNew = "CollectionProtocolRegistration:" + i
 					+ "_CollectionProtocol_shortTitle";
-			String collectionProtocolParticipantIdNew = "CollectionProtocolRegistration:" + i
+			final String collectionProtocolParticipantIdNew = "CollectionProtocolRegistration:" + i
 					+ "_protocolParticipantIdentifier";
-			String collectionProtocolRegistrationDateNew = "CollectionProtocolRegistration:" + i
-					+ "_registrationDate";
-			String collectionProtocolIdentifierNew = "CollectionProtocolRegistration:" + i + "_id";
-			String isConsentAvailableNew = "CollectionProtocolRegistration:" + i
+			final String collectionProtocolRegistrationDateNew = "CollectionProtocolRegistration:"
+					+ i + "_registrationDate";
+			final String collectionProtocolIdentifierNew = "CollectionProtocolRegistration:" + i
+					+ "_id";
+			final String isConsentAvailableNew = "CollectionProtocolRegistration:" + i
 					+ "_isConsentAvailable";
-			String isActiveNew = "CollectionProtocolRegistration:" + i + "_activityStatus";
+			final String isActiveNew = "CollectionProtocolRegistration:" + i + "_activityStatus";
 
 			mapCollectionProtocolRegistrationOld.put(collectionProtocolIdNew,
 					mapCollectionProtocolRegistration.get(collectionProtocolId));
@@ -310,8 +310,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			mapCollectionProtocolRegistrationOld.put(isActiveNew, status);
 		}
 
-		mapCollectionProtocolRegistrationOld =
-			participantCollectionProtocolRegistration(mapCollectionProtocolRegistrationOld);
+		mapCollectionProtocolRegistrationOld = this
+				.participantCollectionProtocolRegistration(mapCollectionProtocolRegistrationOld);
 
 		return mapCollectionProtocolRegistrationOld;
 	}
@@ -323,32 +323,34 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	 */
 	private Map participantCollectionProtocolRegistration(Map collectionProtocolRegistrationValues)
 	{
-		Validator validator = new Validator();
-		String collectionProtocolClassName = "CollectionProtocolRegistration:";
-		String collectionProtocolId = "_CollectionProtocol_id";
-		String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
-		String collectionProtocolRegistrationDate = "_registrationDate";
-		String collectionProtocolIdentifier = "_id";
-		String isConsentAvailable = "_isConsentAvailable";
-		String isActive = "_activityStatus";
-		String collectionProtocolTitle = "_CollectionProtocol_shortTitle";
+		final Validator validator = new Validator();
+		final String collectionProtocolClassName = "CollectionProtocolRegistration:";
+		final String collectionProtocolId = "_CollectionProtocol_id";
+		final String collectionProtocolParticipantId = "_protocolParticipantIdentifier";
+		final String collectionProtocolRegistrationDate = "_registrationDate";
+		final String collectionProtocolIdentifier = "_id";
+		final String isConsentAvailable = "_isConsentAvailable";
+		final String isActive = "_activityStatus";
+		final String collectionProtocolTitle = "_CollectionProtocol_shortTitle";
 
 		int index = 1;
 
 		while (true)
 		{
-			String keyOne = collectionProtocolClassName + index + collectionProtocolId;
-			String keyTwo = collectionProtocolClassName + index + collectionProtocolParticipantId;
-			String keyThree = collectionProtocolClassName + index
+			final String keyOne = collectionProtocolClassName + index + collectionProtocolId;
+			final String keyTwo = collectionProtocolClassName + index
+					+ collectionProtocolParticipantId;
+			final String keyThree = collectionProtocolClassName + index
 					+ collectionProtocolRegistrationDate;
-			String keyFour = collectionProtocolClassName + index + collectionProtocolIdentifier;
-			String keyFive = collectionProtocolClassName + index + isConsentAvailable;
-			String keySix = collectionProtocolClassName + index + isActive;
-			String KeySeven = collectionProtocolClassName + index + collectionProtocolTitle;
+			final String keyFour = collectionProtocolClassName + index
+					+ collectionProtocolIdentifier;
+			final String keyFive = collectionProtocolClassName + index + isConsentAvailable;
+			final String keySix = collectionProtocolClassName + index + isActive;
+			final String KeySeven = collectionProtocolClassName + index + collectionProtocolTitle;
 
-			String value1 = (String) collectionProtocolRegistrationValues.get(keyOne);
-			String value2 = (String) collectionProtocolRegistrationValues.get(keyTwo);
-			String value3 = (String) collectionProtocolRegistrationValues.get(keyThree);
+			final String value1 = (String) collectionProtocolRegistrationValues.get(keyOne);
+			final String value2 = (String) collectionProtocolRegistrationValues.get(keyTwo);
+			final String value3 = (String) collectionProtocolRegistrationValues.get(keyThree);
 
 			if (value1 == null || value2 == null || value3 == null)
 			{

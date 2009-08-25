@@ -178,8 +178,7 @@ public class ShipmentRequest extends BaseShipment
 				if (fieldValue != null && !fieldValue.trim().equals(""))
 				{
 					specimen = new Specimen();
-					if (shipmentForm.getSpecimenLabelChoice().
-							equalsIgnoreCase("SpecimenLabel"))
+					if (shipmentForm.getSpecimenLabelChoice().equalsIgnoreCase("SpecimenLabel"))
 					{
 						specimen.setLabel(fieldValue);
 					}

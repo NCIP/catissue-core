@@ -78,7 +78,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public int getOneDimensionCapacity()
 	{
-		return oneDimensionCapacity;
+		return this.oneDimensionCapacity;
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public String[] getSpecimenTypes()
 	{
-		return specimenTypes;
+		return this.specimenTypes;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public int getTwoDimensionCapacity()
 	{
-		return twoDimensionCapacity;
+		return this.twoDimensionCapacity;
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	public String getComment()
 	{
-		return comment;
+		return this.comment;
 	}
 
 	/**
@@ -172,6 +172,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	/**
 	 * @return SPECIMEN_ARRAY_TYPE_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.SPECIMEN_ARRAY_TYPE_FORM_ID;
@@ -185,7 +186,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	{
 		if (domainObject instanceof SpecimenArrayType)
 		{
-			SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
+			final SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
 			this.setId(arrayType.getId().longValue());
 			this.name = arrayType.getName();
 			this.specimenClass = arrayType.getSpecimenClass();
@@ -194,17 +195,17 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 			this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity()
 					.intValue();
 			this.comment = arrayType.getComment();
-			Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
+			final Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
 
 			if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty()))
 			{
 				this.specimenTypes = new String[specimenTypeCollection.size()];
 				String specimenTypeStr = null;
 				int i = 0;
-				for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext(); i++)
+				for (final Iterator iter = specimenTypeCollection.iterator(); iter.hasNext(); i++)
 				{
 					specimenTypeStr = (String) iter.next();
-					specimenTypes[i] = specimenTypeStr;
+					this.specimenTypes[i] = specimenTypeStr;
 				}
 			}
 		}
@@ -213,6 +214,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -223,35 +225,36 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		try
 		{
 			if (this.getOperation().equals(Constants.ADD)
 					|| this.getOperation().equals(Constants.EDIT))
 			{
 				//            	validate name of array type
-				if (validator.isEmpty(name))
+				if (Validator.isEmpty(this.name))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("arrayType.name")));
 				}
 				//            	 validate specimen class of array type
-				if (!validator.isValidOption(specimenClass))
+				if (!validator.isValidOption(this.specimenClass))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("arrayType.specimenClass")));
 				}
 				//              validate specimen type in array type
-				if ((specimenTypes != null) && (specimenTypes.length > 0))
+				if ((this.specimenTypes != null) && (this.specimenTypes.length > 0))
 				{
-					for (int i = 0; i < specimenTypes.length; i++)
+					for (int i = 0; i < this.specimenTypes.length; i++)
 					{
-						if (specimenTypes[i] != null)
+						if (this.specimenTypes[i] != null)
 						{
-							if (!validator.isValidOption(specimenTypes[i]))
+							if (!validator.isValidOption(this.specimenTypes[i]))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.selected", ApplicationProperties
@@ -275,15 +278,15 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 					                          .getValue("arrayType.oneDimensionCapacity")));
 				                } else
 				*/
-				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity), 1)
-						|| !validator.isNumeric(String.valueOf(twoDimensionCapacity), 1))
+				if (!validator.isNumeric(String.valueOf(this.oneDimensionCapacity), 1)
+						|| !validator.isNumeric(String.valueOf(this.twoDimensionCapacity), 1))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("arrayType.capacity")));
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error(e.getMessage());
 		}

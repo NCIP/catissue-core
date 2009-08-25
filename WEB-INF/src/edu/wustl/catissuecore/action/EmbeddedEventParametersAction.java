@@ -30,12 +30,13 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception generic exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
-		EmbeddedEventParametersForm embeddedEventParametersForm =
+		String formName;
+		final EmbeddedEventParametersForm embeddedEventParametersForm =
 			(EmbeddedEventParametersForm) eventParametersForm;
 		boolean readOnlyValue;
 		if (embeddedEventParametersForm.getOperation().equals(Constants.EDIT))
@@ -46,10 +47,10 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 		else
 		{
 			formName = Constants.EMBEDDED_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
+			//(String) request.getAttribute(Constants.SPECIMEN_ID);
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);
@@ -57,9 +58,8 @@ public class EmbeddedEventParametersAction extends SpecimenEventParametersAction
 				Constants.EMBEDDED_EVENT_PARAMETERS_ADD_ACTION);
 
 		//set array of EmbeddingMedium
-		List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_EMBEDDING_MEDIUM, null);
 		request.setAttribute("embeddingMediumList", embeddingMediumList);
 	}
-
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.common.util.global.Status;
+
 /**
  *  @author janhavi_hasabnis
  *
@@ -39,16 +40,18 @@ public class CollectionProtocolBean implements Serializable
 	private long[] siteIds;
 
 	private boolean isParticiapantReg = false;
-    /**
-     * @return - boolean
-     */
+
+	/**
+	 * @return - boolean
+	 */
 	public boolean isParticiapantReg()
 	{
 		return this.isParticiapantReg;
 	}
-    /**
-     * @param isParticiapantRegParam - isParticiapantRegParam
-     */
+
+	/**
+	 * @param isParticiapantRegParam - isParticiapantRegParam
+	 */
 	public void setParticiapantReg(boolean isParticiapantRegParam)
 	{
 		this.isParticiapantReg = isParticiapantRegParam;
@@ -83,275 +86,311 @@ public class CollectionProtocolBean implements Serializable
 	private boolean consentWaived = false;
 
 	private String operation = "Add";
-    /**
-     * @return - array of long
-     */
+
+	/**
+	 * @return - array of long
+	 */
 	public long[] getProtocolCoordinatorIds()
 	{
 		return this.protocolCoordinatorIds;
 	}
-    /**
-     * @param protocolCoordinatorIdsParam - protocolCoordinatorIdsParam
-     */
+
+	/**
+	 * @param protocolCoordinatorIdsParam - protocolCoordinatorIdsParam
+	 */
 	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIdsParam)
 	{
 		this.protocolCoordinatorIds = protocolCoordinatorIdsParam;
 	}
-    /**
-     * @return - principalInvestigatorId
-     */
+
+	/**
+	 * @return - principalInvestigatorId
+	 */
 	public long getPrincipalInvestigatorId()
 	{
 		return this.principalInvestigatorId;
 	}
-    /**
-     * @param principalInvestigatorIdParam - principalInvestigatorIdParam
-     */
+
+	/**
+	 * @param principalInvestigatorIdParam - principalInvestigatorIdParam
+	 */
 	public void setPrincipalInvestigatorId(long principalInvestigatorIdParam)
 	{
 		this.principalInvestigatorId = principalInvestigatorIdParam;
 	}
-    /**
-     * @return - irbID
-     */
+
+	/**
+	 * @return - irbID
+	 */
 	public String getIrbID()
 	{
 		return this.irbID;
 	}
-    /**
-     * @param irbIDParam - irbIDParam
-     */
+
+	/**
+	 * @param irbIDParam - irbIDParam
+	 */
 	public void setIrbID(String irbIDParam)
 	{
 		this.irbID = irbIDParam;
 	}
-    /**
-     * @return - descriptionURL
-     */
+
+	/**
+	 * @return - descriptionURL
+	 */
 	public String getDescriptionURL()
 	{
 		return this.descriptionURL;
 	}
-    /**
-     * @param descriptionURLParam - descriptionURLParam
-     */
+
+	/**
+	 * @param descriptionURLParam - descriptionURLParam
+	 */
 	public void setDescriptionURL(String descriptionURLParam)
 	{
 		this.descriptionURL = descriptionURLParam;
 	}
-    /**
-     * @return - title
-     */
+
+	/**
+	 * @return - title
+	 */
 	public String getTitle()
 	{
 		return this.title;
 	}
-    /**
-     * @param titleParam - titleParam
-     */
+
+	/**
+	 * @param titleParam - titleParam
+	 */
 	public void setTitle(String titleParam)
 	{
 		this.title = titleParam;
 	}
-    /**
-     * @return - shortTitle
-     */
+
+	/**
+	 * @return - shortTitle
+	 */
 	public String getShortTitle()
 	{
 		return this.shortTitle;
 	}
-    /**
-     * @param shortTitleParam - shortTitleParam
-     */
+
+	/**
+	 * @param shortTitleParam - shortTitleParam
+	 */
 	public void setShortTitle(String shortTitleParam)
 	{
 		this.shortTitle = shortTitleParam;
 	}
-    /**
-     * @return - startDate
-     */
+
+	/**
+	 * @return - startDate
+	 */
 	public String getStartDate()
 	{
 		return this.startDate;
 	}
-    /**
-     * @param startDateParam - startDateParam
-     */
+
+	/**
+	 * @param startDateParam - startDateParam
+	 */
 	public void setStartDate(String startDateParam)
 	{
 		this.startDate = startDateParam;
 	}
-    /**
-     * @return - enrollment
-     */
+
+	/**
+	 * @return - enrollment
+	 */
 	public String getEnrollment()
 	{
 		return this.enrollment;
 	}
-    /**
-     * @param enrollmentParam -enrollmentParam
-     */
+
+	/**
+	 * @param enrollmentParam -enrollmentParam
+	 */
 	public void setEnrollment(String enrollmentParam)
 	{
 		this.enrollment = enrollmentParam;
 	}
-    /**
-     * @return - unsignedConsentURLName
-     */
+
+	/**
+	 * @return - unsignedConsentURLName
+	 */
 	public String getUnsignedConsentURLName()
 	{
 		return this.unsignedConsentURLName;
 	}
-    /**
-     * @param unsignedConsentURLNameParam - unsignedConsentURLNameParam
-     */
+
+	/**
+	 * @param unsignedConsentURLNameParam - unsignedConsentURLNameParam
+	 */
 	public void setUnsignedConsentURLName(String unsignedConsentURLNameParam)
 	{
 		this.unsignedConsentURLName = unsignedConsentURLNameParam;
 	}
-    /**
-     * @return - consentValues
-     */
+
+	/**
+	 * @return - consentValues
+	 */
 	public Map getConsentValues()
 	{
 		return this.consentValues;
 	}
-    /**
-     * @param consentValuesParam - consentValuesParam
-     */
+
+	/**
+	 * @param consentValuesParam - consentValuesParam
+	 */
 	public void setConsentValues(Map consentValuesParam)
 	{
 		this.consentValues = consentValuesParam;
 	}
-    /**
-     * @return - consentTierCounter
-     */
+
+	/**
+	 * @return - consentTierCounter
+	 */
 	public int getConsentTierCounter()
 	{
 		return this.consentTierCounter;
 	}
-    /**
-     * @param consentTierCounterParam - consentTierCounterParam
-     */
+
+	/**
+	 * @param consentTierCounterParam - consentTierCounterParam
+	 */
 	public void setConsentTierCounter(int consentTierCounterParam)
 	{
 		this.consentTierCounter = consentTierCounterParam;
 	}
-    /**
-     * @return - consentWaived
-     */
+
+	/**
+	 * @return - consentWaived
+	 */
 	public boolean isConsentWaived()
 	{
 		return this.consentWaived;
 	}
-    /**
-     * @param consentWaivedParam - consentWaivedParam
-     */
+
+	/**
+	 * @param consentWaivedParam - consentWaivedParam
+	 */
 	public void setConsentWaived(boolean consentWaivedParam)
 	{
 		this.consentWaived = consentWaivedParam;
 	}
-    /**
-     * @return - identifier
-     */
+
+	/**
+	 * @return - identifier
+	 */
 	public Long getIdentifier()
 	{
 		return this.identifier;
 	}
-    /**
-     * @param identifierParam - identifierParam
-     */
+
+	/**
+	 * @param identifierParam - identifierParam
+	 */
 	public void setIdentifier(Long identifierParam)
 	{
 		this.identifier = identifierParam;
 	}
-    /**
-     * @return - operation
-     */
+
+	/**
+	 * @return - operation
+	 */
 	public String getOperation()
 	{
 		return this.operation;
 	}
-    /**
-     * @param operationParam - operationParam
-     */
+
+	/**
+	 * @param operationParam - operationParam
+	 */
 	public void setOperation(String operationParam)
 	{
 		this.operation = operationParam;
 	}
-    /**
-     * @return - activityStatus
-     */
+
+	/**
+	 * @return - activityStatus
+	 */
 	public String getActivityStatus()
 	{
 		return this.activityStatus;
 	}
-    /**
-     * @param activityStatusParam - activityStatusParam
-     */
+
+	/**
+	 * @param activityStatusParam - activityStatusParam
+	 */
 	public void setActivityStatus(String activityStatusParam)
 	{
 		this.activityStatus = activityStatusParam;
 	}
-    /**
-     * @return - endDate
-     */
+
+	/**
+	 * @return - endDate
+	 */
 	public String getEndDate()
 	{
 		return this.endDate;
 	}
-    /**
-     * @param endDateParam - endDateParam
-     */
+
+	/**
+	 * @param endDateParam - endDateParam
+	 */
 	public void setEndDate(String endDateParam)
 	{
 		this.endDate = endDateParam;
 	}
-    /**
-     * @return - aliqoutInSameContainer
-     */
+
+	/**
+	 * @return - aliqoutInSameContainer
+	 */
 	public boolean isAliqoutInSameContainer()
 	{
 		return this.aliqoutInSameContainer;
 	}
-    /**
-     * @param aliqoutInSameContainerParam - aliqoutInSameContainerParam
-     */
+
+	/**
+	 * @param aliqoutInSameContainerParam - aliqoutInSameContainerParam
+	 */
 	public void setAliqoutInSameContainer(boolean aliqoutInSameContainerParam)
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainerParam;
 	}
-    /**
-     * @return - siteIds
-     */
+
+	/**
+	 * @return - siteIds
+	 */
 	public long[] getSiteIds()
 	{
 		return this.siteIds;
 	}
-    /**
-     * @param siteIdsParam - siteIdsParam
-     */
+
+	/**
+	 * @param siteIdsParam - siteIdsParam
+	 */
 	public void setSiteIds(long[] siteIdsParam)
 	{
 		this.siteIds = siteIdsParam;
 	}
-	
+
 	/**
 	 * parentCollectionProtocol.
 	 * @return parentCollectionProtocol.
 	 */
 	public CollectionProtocol getParentCollectionProtocol()
 	{
-		return parentCollectionProtocol;
+		return this.parentCollectionProtocol;
 	}
 
 	/**
 	 * sequenceNumber.
 	 * @return sequenceNumber.
 	 */
-	public Integer getSequenceNumber() 
+	public Integer getSequenceNumber()
 	{
-		return sequenceNumber;
+		return this.sequenceNumber;
 	}
 
 	/**
@@ -360,24 +399,23 @@ public class CollectionProtocolBean implements Serializable
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
 	 * studyCalendarEventPoint.
 	 * @return studyCalendarEventPoint.
 	 */
-	public Double getStudyCalendarEventPoint() 
+	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	/**
 	 * parentCollectionProtocol.
 	 * @param parentCollectionProtocol parentCollectionProtocol.
 	 */
-	public void setParentCollectionProtocol(
-			CollectionProtocol parentCollectionProtocol) 
+	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
 	{
 		this.parentCollectionProtocol = parentCollectionProtocol;
 	}
@@ -386,7 +424,7 @@ public class CollectionProtocolBean implements Serializable
 	 * sequenceNumber.
 	 * @param sequenceNumber sequenceNumber.
 	 */
-	public void setSequenceNumber(Integer sequenceNumber) 
+	public void setSequenceNumber(Integer sequenceNumber)
 	{
 		this.sequenceNumber = sequenceNumber;
 	}
@@ -395,7 +433,7 @@ public class CollectionProtocolBean implements Serializable
 	 * type.
 	 * @param type type.
 	 */
-	public void setType(String type) 
+	public void setType(String type)
 	{
 		this.type = type;
 	}
@@ -404,7 +442,7 @@ public class CollectionProtocolBean implements Serializable
 	 * setStudyCalendarEventPoint .
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) 
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
 	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
@@ -427,8 +465,7 @@ public class CollectionProtocolBean implements Serializable
 	 * Defines the relative time point in days.
 	 */
 	protected Double studyCalendarEventPoint;
-	
-	
+
 	/**
 	 * Parent collection protocol Identifier.
 	 */
@@ -438,19 +475,18 @@ public class CollectionProtocolBean implements Serializable
 	 * This method will be called to get parentCollectionProtocolId.
 	 * @return parentCollectionProtocolId.
 	 */
-	public Long getParentCollectionProtocolId() 
+	public Long getParentCollectionProtocolId()
 	{
-		return parentCollectionProtocolId;
+		return this.parentCollectionProtocolId;
 	}
 
 	/**
 	 * This method will be called to set parentCollectionProtocolId.
 	 * @param parentCollectionProtocolId parentCollectionProtocolId.
 	 */
-	public void setParentCollectionProtocolId(Long parentCollectionProtocolId) 
+	public void setParentCollectionProtocolId(Long parentCollectionProtocolId)
 	{
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
-	
 
 }

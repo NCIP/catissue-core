@@ -55,7 +55,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 
 	public String[] getConditionVal()
 	{
-		return conditionVal;
+		return this.conditionVal;
 	}
 
 	public void setConditionVal(final String[] conditionVal)
@@ -103,6 +103,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 		this.annotationGroupsXML = annotationGroupsXML;
 	}
 
+	@Override
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
@@ -115,6 +116,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 
 	}
 
+	@Override
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
@@ -123,7 +125,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 
 	public List getConditionalInstancesList()
 	{
-		return conditionalInstancesList;
+		return this.conditionalInstancesList;
 	}
 
 	public void setConditionalInstancesList(List conditionalInstancesList)
@@ -138,17 +140,18 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 
 	public String getDeoperation()
 	{
-		return deoperation;
+		return this.deoperation;
 	}
 
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 		try
 		{
-			if ((deoperation != null && "add".equals(deoperation))
-					&& (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false))
+			if ((this.deoperation != null && "add".equals(this.deoperation))
+					&& (validator.isValidOption(String.valueOf(this.selectedStaticEntityId)) == false))
 			{
 				//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false) 
 				{
@@ -158,7 +161,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

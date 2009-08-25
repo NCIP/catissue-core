@@ -150,8 +150,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (collectionProtocolForm.getStartDate() == null)
 		{
 			collectionProtocolForm.setStartDate(CommonUtilities.parseDateToString(Calendar
-					.getInstance().getTime()
-					, CommonServiceLocator.getInstance().getDatePattern()));
+					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		// Name of delete button clicked
 		final String button = request.getParameter("button");
@@ -409,12 +408,14 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setConsentValues(collectionProtocolBean.getConsentValues());
 		collectionProtocolForm.setUnsignedConsentURLName(collectionProtocolBean
 				.getUnsignedConsentURLName());
-		
+
 		collectionProtocolForm.setSequenceNumber(collectionProtocolBean.getSequenceNumber());
 		collectionProtocolForm.setType(collectionProtocolBean.getType());
-		collectionProtocolForm.setStudyCalendarEventPoint(collectionProtocolBean.getStudyCalendarEventPoint());
-		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean.getParentCollectionProtocolId());
-		
+		collectionProtocolForm.setStudyCalendarEventPoint(collectionProtocolBean
+				.getStudyCalendarEventPoint());
+		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean
+				.getParentCollectionProtocolId());
+
 		return (mapping.findForward(pageOf));
 	}
 

@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -68,7 +68,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getCollectionProcedure()
 	{
-		return collectionProcedure;
+		return this.collectionProcedure;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getContainer()
 	{
-		return container;
+		return this.container;
 	}
 
 	/**
@@ -104,6 +104,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return COLLECTION_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID;
@@ -113,13 +114,14 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An object of AbstractDomainObject
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		final CollectionEventParameters collectionEventParameterObject = (CollectionEventParameters) abstractDomain;
-		this.collectionProcedure = Utility.toString(collectionEventParameterObject
+		this.collectionProcedure = CommonUtilities.toString(collectionEventParameterObject
 				.getCollectionProcedure());
-		this.container = Utility.toString(collectionEventParameterObject.getContainer());
+		this.container = CommonUtilities.toString(collectionEventParameterObject.getContainer());
 	}
 
 	/**
@@ -128,6 +130,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
@@ -138,7 +141,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 		{
 
 			// checks the collectionProcedure
-			if (!validator.isValidOption(collectionProcedure))
+			if (!validator.isValidOption(this.collectionProcedure))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties
@@ -146,7 +149,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 			}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -156,6 +159,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Method to set class Attributes
 	 */
+	@Override
 	protected void reset()
 	{
 		//     	super.reset();

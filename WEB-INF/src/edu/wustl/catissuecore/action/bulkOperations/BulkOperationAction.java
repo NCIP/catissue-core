@@ -34,6 +34,7 @@ import edu.wustl.common.util.global.CommonUtilities;
  */
 public abstract class BulkOperationAction extends SecureAction
 {
+
 	/**
 	 * @param mapping
 	 *            object of ActionMapping

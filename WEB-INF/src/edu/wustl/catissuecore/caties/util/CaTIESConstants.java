@@ -1,11 +1,13 @@
 
 package edu.wustl.catissuecore.caties.util;
+
 /**
  * @author
  *
  */
 public abstract class CaTIESConstants
 {
+
 	/**
 	 * MSH.
 	 */

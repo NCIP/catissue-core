@@ -7,7 +7,6 @@
  * Created on Sep 18, 2006
  */
 
-
 package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.table.TableModel;
@@ -35,7 +34,7 @@ public class SpecimenArrayTable extends BaseTable
 	public SpecimenArrayTable(TableModel tableModel)
 	{
 		super(tableModel);
-		initUI();
+		this.initUI();
 	}
 
 	/**
@@ -43,6 +42,6 @@ public class SpecimenArrayTable extends BaseTable
 	 */
 	private void initUI()
 	{
-		addMouseListener(new SpecimenArrayTableMouseHandler());
+		this.addMouseListener(new SpecimenArrayTableMouseHandler());
 	}
 }

@@ -83,7 +83,7 @@ public class StorageContainerAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
-		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		final DAO dao = AppUtility.openDAOSession(sessionDataBean);
 		try
 		{
 			final StorageContainerForm storageContainerForm = (StorageContainerForm) form;
@@ -96,16 +96,15 @@ public class StorageContainerAction extends SecureAction
 			// is exceeding the max limit.
 			final String exceedingMaxLimit = "false";
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
-			final String containerId = request
-					.getParameter("containerIdentifier");
+			final String containerId = request.getParameter("containerIdentifier");
 			final String isPageFromStorageType = (String) session
 					.getAttribute("isPageFromStorageType");
 			// String
 			// isSiteChanged=(String)request.getParameter("isSiteChanged");
-			final String isContainerChanged = request
-					.getParameter("isContainerChanged");
+			final String isContainerChanged = request.getParameter("isContainerChanged");
 
-			if (storageContainerForm.getSpecimenOrArrayType() == null) {
+			if (storageContainerForm.getSpecimenOrArrayType() == null)
+			{
 				storageContainerForm.setSpecimenOrArrayType("Specimen");
 			}
 			// set the menu selection
@@ -116,7 +115,8 @@ public class StorageContainerAction extends SecureAction
 
 			String str = request.getParameter("isOnChange");
 			str = request.getParameter("typeChange");
-			if (str != null && str.equals("true")) {
+			if (str != null && str.equals("true"))
+			{
 				isTypeChange = true;
 
 			}
@@ -129,16 +129,14 @@ public class StorageContainerAction extends SecureAction
 			// Gets the value of the operation parameter.
 			final String operation = request.getParameter(Constants.OPERATION);
 			request.setAttribute(Constants.OPERATION, operation);
-			if (operation.equals(Constants.EDIT)
-					&& storageContainerBean != null
-					&& Constants.PAGE_OF_STORAGE_CONTAINER.equals(pageOf)) {
-				this.initStorageContainerForm(storageContainerForm,
-						storageContainerBean);
+			if (operation.equals(Constants.EDIT) && storageContainerBean != null
+					&& Constants.PAGE_OF_STORAGE_CONTAINER.equals(pageOf))
+			{
+				this.initStorageContainerForm(storageContainerForm, storageContainerBean);
 			}
-			this.setRequestAttributes(request, storageContainerForm,dao);
+			this.setRequestAttributes(request, storageContainerForm, dao);
 			this.setStorageType(request, storageContainerForm, session);
-			final IFactory factory = AbstractFactoryConfig.getInstance()
-					.getBizLogicFactory();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			// ---- chetan 15-06-06 ----
@@ -148,35 +146,36 @@ public class StorageContainerAction extends SecureAction
 			// );
 			//
 			// }
-			if (isContainerChanged != null && isContainerChanged.equals("true")) {
+			if (isContainerChanged != null && isContainerChanged.equals("true"))
+			{
 				final List<JSONObject> jsonList = new ArrayList<JSONObject>();
-				final String parentEleType = request
-						.getParameter("parentEleType");
-				if (parentEleType.equals("parentContAuto")) {
-					final long contId = new Long(request
-							.getParameter("parentContainerId"));
+				final String parentEleType = request.getParameter("parentEleType");
+				if (parentEleType.equals("parentContAuto"))
+				{
+					final long contId = new Long(request.getParameter("parentContainerId"));
 					// long contId =
 					// storageContainerForm.getParentContainerId();
-					final Site site = bizLogic.getRelatedSite(
-							contId, dao);
-					if (site != null) {
+					final Site site = bizLogic.getRelatedSite(contId, dao);
+					if (site != null)
+					{
 						final long siteId = site.getId();
-						AppUtility.setCollectionProtocolList(request, siteId,
-								dao);
+						AppUtility.setCollectionProtocolList(request, siteId, dao);
 					}
-				} else if (parentEleType.equals("parentContManual")) {
-					final String contName = request
-							.getParameter("selectedContainerName");
+				}
+				else if (parentEleType.equals("parentContManual"))
+				{
+					final String contName = request.getParameter("selectedContainerName");
 					// String contName =
 					// storageContainerForm.getSelectedContainerName();
-					final Site site = bizLogic.getRelatedSiteForManual(
-							contName, dao);
-					if (site != null) {
+					final Site site = bizLogic.getRelatedSiteForManual(contName, dao);
+					if (site != null)
+					{
 						final long siteId = site.getId();
-						AppUtility.setCollectionProtocolList(request, siteId,
-								dao);
+						AppUtility.setCollectionProtocolList(request, siteId, dao);
 					}
-				} else if (parentEleType.equals("parentContSite")) {
+				}
+				else if (parentEleType.equals("parentContSite"))
+				{
 					final long siteId = new Long(request.getParameter("siteId"));
 					// String contName =
 					// storageContainerForm.getSelectedContainerName();
@@ -185,8 +184,10 @@ public class StorageContainerAction extends SecureAction
 				JSONObject jsonObject = null;
 				final List<NameValueBean> cpList = (List<NameValueBean>) request
 						.getAttribute(Constants.PROTOCOL_LIST);
-				if (cpList != null && !cpList.isEmpty()) {
-					for (final NameValueBean nvbean : cpList) {
+				if (cpList != null && !cpList.isEmpty())
+				{
+					for (final NameValueBean nvbean : cpList)
+					{
 						jsonObject = new JSONObject();
 						jsonObject.append("cpName", nvbean.getName());
 						jsonObject.append("cpValue", nvbean.getValue());
@@ -194,8 +195,7 @@ public class StorageContainerAction extends SecureAction
 					}
 				}
 				response.flushBuffer();
-				response.getWriter().write(
-						new JSONObject().put("locations", jsonList).toString());
+				response.getWriter().write(new JSONObject().put("locations", jsonList).toString());
 
 				return null;
 
@@ -203,72 +203,64 @@ public class StorageContainerAction extends SecureAction
 
 			TreeMap containerMap = new TreeMap();
 
-			if (storageContainerForm.getTypeId() != -1) {
+			if (storageContainerForm.getTypeId() != -1)
+			{
 				final long start = System.currentTimeMillis();
-				containerMap = bizLogic.getAllocatedContaienrMapForContainer(
-						storageContainerForm.getTypeId(), exceedingMaxLimit,
-						null, sessionDataBean, dao);
+				containerMap = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm
+						.getTypeId(), exceedingMaxLimit, null, sessionDataBean, dao);
 				final long end = System.currentTimeMillis();
 
-				System.out
-						.println("Time taken for getAllocatedMapForCOntainer:"
-								+ (end - start));
+				System.out.println("Time taken for getAllocatedMapForCOntainer:" + (end - start));
 			}
-			if (containerId != null) 
+			if (containerId != null)
 			{
 				final Long id = new Long(containerId);
-				final List storageTypeList =  dao
-						.retrieveAttribute(StorageContainer.class, "id", id,
-								"storageType");
-				if((storageTypeList!=null)&&(storageTypeList.size()>0))
+				final List storageTypeList = dao.retrieveAttribute(StorageContainer.class, "id",
+						id, "storageType");
+				if ((storageTypeList != null) && (storageTypeList.size() > 0))
 				{
-					final StorageType storageType = (StorageType)storageTypeList.get(0);
+					final StorageType storageType = (StorageType) storageTypeList.get(0);
 					final Long typeId = storageType.getId();
 					final long start = System.currentTimeMillis();
-					containerMap = bizLogic.getAllocatedContaienrMapForContainer(
-							typeId, exceedingMaxLimit, null, sessionDataBean, dao);
+					containerMap = bizLogic.getAllocatedContaienrMapForContainer(typeId,
+							exceedingMaxLimit, null, sessionDataBean, dao);
 					final long end = System.currentTimeMillis();
-					System.out
-							.println("Time taken for getAllocatedMapForCOntainer:"
-									+ (end - start));
+					System.out.println("Time taken for getAllocatedMapForCOntainer:"
+							+ (end - start));
 
 				}
 			}
 
-			if (operation.equals(Constants.ADD)) {
-				this.setParentStorageContainersForAdd(containerMap,
-						storageContainerForm, request, dao);
+			if (operation.equals(Constants.ADD))
+			{
+				this.setParentStorageContainersForAdd(containerMap, storageContainerForm, request,
+						dao);
 			}
 
-			if (operation.equals(Constants.EDIT)) {
+			if (operation.equals(Constants.EDIT))
+			{
 
 				if (bizLogic.isContainerFull(storageContainerForm.getId() + "",
-						storageContainerForm.getContainerName())) {
+						storageContainerForm.getContainerName()))
+				{
 					storageContainerForm.setIsFull("true");
 				}
 				final List storagetypeList = new ArrayList();
-				final NameValueBean nvb = new NameValueBean(
-						storageContainerForm.getTypeName(), new Long(
-								storageContainerForm.getTypeId()));
+				final NameValueBean nvb = new NameValueBean(storageContainerForm.getTypeName(),
+						new Long(storageContainerForm.getTypeId()));
 				storagetypeList.add(nvb);
-				request
-						.setAttribute(Constants.STORAGETYPELIST,
-								storagetypeList);
-				this.setParentStorageContainersForEdit(containerMap,
-						storageContainerForm, request, dao);
+				request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
+				this.setParentStorageContainersForEdit(containerMap, storageContainerForm, request,
+						dao);
 
 				// request =
 				//Utility.setCollectionProtocolList(request,storageContainerForm
 				// .getSiteId());
 			}
 
-			request.setAttribute("storageContainerIdentifier",
-					storageContainerForm.getId());
-			request
-					.setAttribute(Constants.EXCEEDS_MAX_LIMIT,
-							exceedingMaxLimit);
-			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,
-					containerMap);
+			request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
+			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 
 			/*
 			 * if (isSiteOrParentContainerChange) {
@@ -278,13 +270,14 @@ public class StorageContainerAction extends SecureAction
 
 			this.setFormAttributesForAddNew(request, storageContainerForm);
 			// -- 24-Jan-06 end
-			if (isTypeChange
-					|| request.getAttribute(Constants.SUBMITTED_FOR) != null
-					|| Constants.YES.equals(isPageFromStorageType)) {
+			if (isTypeChange || request.getAttribute(Constants.SUBMITTED_FOR) != null
+					|| Constants.YES.equals(isPageFromStorageType))
+			{
 				this.onTypeChange(storageContainerForm, operation, request);
 			}
 
-			if (request.getAttribute(Constants.SUBMITTED_FOR) != null) {
+			if (request.getAttribute(Constants.SUBMITTED_FOR) != null)
+			{
 				final long[] collectionIds = this.parentContChange(request);
 				storageContainerForm.setCollectionIds(collectionIds);
 			}
@@ -292,15 +285,15 @@ public class StorageContainerAction extends SecureAction
 			// ---------- Add new
 			final String reqPath = request.getParameter(Constants.REQ_PATH);
 
-			if (reqPath != null) {
+			if (reqPath != null)
+			{
 				request.setAttribute(Constants.REQ_PATH, reqPath);
 			}
 			final List<NameValueBean> parentContainerTypeList = AppUtility
 					.getParentContainerTypeList();
-			request.setAttribute("parentContainerTypeList",
-					parentContainerTypeList);
-			request.setAttribute("parentContainerSelected",
-					storageContainerForm.getParentContainerSelected());
+			request.setAttribute("parentContainerTypeList", parentContainerTypeList);
+			request.setAttribute("parentContainerSelected", storageContainerForm
+					.getParentContainerSelected());
 			session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 			session.removeAttribute("isPageFromStorageType");
 			AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
@@ -364,7 +357,7 @@ public class StorageContainerAction extends SecureAction
 	 *             : ApplicationException
 	 */
 	private void setRequestAttributes(HttpServletRequest request,
-			StorageContainerForm storageContainerForm,DAO dao) throws ApplicationException
+			StorageContainerForm storageContainerForm, DAO dao) throws ApplicationException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
@@ -426,15 +419,15 @@ public class StorageContainerAction extends SecureAction
 		if ("Site".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			request = AppUtility.setCollectionProtocolList(request, storageContainerForm
-					.getSiteId(),dao);
+					.getSiteId(), dao);
 		}
 		else if ("Auto".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			final long parentContId = storageContainerForm.getParentContainerId();
-			final Site site = bizLogic.getRelatedSite(parentContId,dao);
+			final Site site = bizLogic.getRelatedSite(parentContId, dao);
 			if (site != null)
 			{
-				request = AppUtility.setCollectionProtocolList(request, site.getId(),dao);
+				request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
 			}
 			else
 			{
@@ -447,10 +440,10 @@ public class StorageContainerAction extends SecureAction
 		else if ("Manual".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			final String containerName = storageContainerForm.getSelectedContainerName();
-			final Site site = bizLogic.getRelatedSiteForManual(containerName,dao);
+			final Site site = bizLogic.getRelatedSiteForManual(containerName, dao);
 			if (site != null)
 			{
-				request = AppUtility.setCollectionProtocolList(request, site.getId(),dao);
+				request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
 			}
 			else
 			{
@@ -527,15 +520,13 @@ public class StorageContainerAction extends SecureAction
 				// according to storage type selected.
 				if (operation != null && operation.equals(Constants.ADD))
 				{
-					final StorageTypeBizLogic storageTypebizLogic =
-						(StorageTypeBizLogic) factory
+					final StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) factory
 							.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
 					final long[] defHoldsStorageTypeList = storageTypebizLogic
 							.getDefaultHoldStorageTypeList(type);
 					if (defHoldsStorageTypeList != null)
 					{
-						storageContainerForm.setHoldsStorageTypeIds
-						(defHoldsStorageTypeList);
+						storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
 					}
 
 					final String[] defHoldsSpecimenClassTypeList = storageTypebizLogic
@@ -543,8 +534,7 @@ public class StorageContainerAction extends SecureAction
 					if (defHoldsSpecimenClassTypeList != null)
 					{
 						storageContainerForm
-								.setHoldsSpecimenClassTypes
-								(defHoldsSpecimenClassTypeList);
+								.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
 					}
 
 					final long[] defHoldsSpecimenArrayTypeList = storageTypebizLogic
@@ -552,8 +542,7 @@ public class StorageContainerAction extends SecureAction
 					if (defHoldsSpecimenArrayTypeList != null)
 					{
 						storageContainerForm
-								.setHoldsSpecimenArrTypeIds
-								(defHoldsSpecimenArrayTypeList);
+								.setHoldsSpecimenArrTypeIds(defHoldsSpecimenArrayTypeList);
 					}
 				}
 			}
@@ -584,11 +573,11 @@ public class StorageContainerAction extends SecureAction
 	 *             : ApplicationException
 	 */
 	private void setParentStorageContainersForAdd(TreeMap containerMap,
-			StorageContainerForm storageContainerForm, HttpServletRequest request,DAO dao)
+			StorageContainerForm storageContainerForm, HttpServletRequest request, DAO dao)
 			throws ApplicationException
 	{
 		List initialValues = null;
-		
+
 		initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 		if (initialValues != null)
 		{
@@ -598,7 +587,7 @@ public class StorageContainerAction extends SecureAction
 
 			// getting collection protocol list and name of the container for
 			// default selected parent container
-			
+
 			final Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(
 					initValues[0]));
 			if (object != null)
@@ -609,7 +598,7 @@ public class StorageContainerAction extends SecureAction
 					final Site site = container.getSite();
 					if (site != null)
 					{
-						AppUtility.setCollectionProtocolList(request, site.getId(),dao);
+						AppUtility.setCollectionProtocolList(request, site.getId(), dao);
 					}
 					// storageContainerForm.setCollectionIds(collectionIds);
 					// storageContainerForm.setCollectionIds(bizLogic.
@@ -636,7 +625,7 @@ public class StorageContainerAction extends SecureAction
 	 *             : BizLogicException
 	 */
 	private void setParentStorageContainersForEdit(TreeMap containerMap,
-			StorageContainerForm storageContainerForm, HttpServletRequest request,DAO dao)
+			StorageContainerForm storageContainerForm, HttpServletRequest request, DAO dao)
 			throws BizLogicException
 	{
 		List initialValues = null;
@@ -645,8 +634,7 @@ public class StorageContainerAction extends SecureAction
 			if (!Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
 			{
 				final String[] startingPoints = new String[]{"-1", "-1", "-1"};
-	
-				
+
 				if (storageContainerForm.getParentContainerId() != -1)
 				{
 					startingPoints[0] = new Long(storageContainerForm.getParentContainerId())
@@ -662,7 +650,7 @@ public class StorageContainerAction extends SecureAction
 					startingPoints[2] = new Integer(storageContainerForm.getPositionDimensionTwo())
 							.toString();
 				}
-	
+
 				initialValues = new Vector();
 				initialValues.add(startingPoints);
 			}
@@ -681,19 +669,20 @@ public class StorageContainerAction extends SecureAction
 						storageContainerForm.setContainerName(cont.getName());
 					}
 				}
-	
+
 			}
-			
+
 			request.setAttribute("initValues", initialValues);
-			StorageContainerUtil.addAllocatedPositionToMap(containerMap,storageContainerForm.getParentContainerId(),storageContainerForm.getPositionDimensionOne(),storageContainerForm.getPositionDimensionTwo(),dao);
+			StorageContainerUtil.addAllocatedPositionToMap(containerMap, storageContainerForm
+					.getParentContainerId(), storageContainerForm.getPositionDimensionOne(),
+					storageContainerForm.getPositionDimensionTwo(), dao);
 		}
-		catch(DAOException e)
+		catch (final DAOException e)
 		{
 			e.printStackTrace();
 			throw new BizLogicException(e);
 		}
 	}
-	
 
 	/**
 	 * @param request

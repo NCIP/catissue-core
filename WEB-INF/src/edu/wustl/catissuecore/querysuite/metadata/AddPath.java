@@ -209,47 +209,39 @@ public class AddPath
 						associatedEntityId = String.valueOf(rs.getLong(1));
 
 						sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "
-								+ entityId
-								+ " and LAST_ENTITY_ID = " + associatedEntityId;
+								+ entityId + " and LAST_ENTITY_ID = " + associatedEntityId;
 						final Statement stmt5 = connection.createStatement();
 						rs = stmt5.executeQuery(sql);
 
 						while (rs.next())
 						{
 							final String intermediatePathId = rs.getString(1);
-							final List<String> subClassList =
-								superClassAndSubClassesMap.get(key);
+							final List<String> subClassList = superClassAndSubClassesMap.get(key);
 							for (final String subClassEntity : subClassList)
 							{
 								String subClassEntityId;
-								final Statement stmt1 =
-									connection.createStatement();
-								sql = "Select IDENTIFIER from" +
-									" dyextn_abstract_metadata where NAME "
-									+ UpdateMetadataUtil.getDBCompareModifier()
-									+ "'"+ subClassEntity + "'";
+								final Statement stmt1 = connection.createStatement();
+								sql = "Select IDENTIFIER from"
+										+ " dyextn_abstract_metadata where NAME "
+										+ UpdateMetadataUtil.getDBCompareModifier() + "'"
+										+ subClassEntity + "'";
 								final ResultSet rs1 = stmt.executeQuery(sql);
 								if (rs1.next())
 								{
-									subClassEntityId =
-										String.valueOf(rs1.getLong(1));
+									subClassEntityId = String.valueOf(rs1.getLong(1));
 									if (key.equals(associatedEntityName))
 									{
 										insertPathSQL
-										.add("insert into path values("
-										+ this.identifier++
-										+ "," + subClassEntityId + ","
-										+ intermediatePathId + ","
-										+ subClassEntityId + ")");
+												.add("insert into path values(" + this.identifier++
+														+ "," + subClassEntityId + ","
+														+ intermediatePathId + ","
+														+ subClassEntityId + ")");
 									}
 									else
 									{
-										insertPathSQL.
-										add("insert into path values("
-										+ this.identifier++ + ","
-										+ subClassEntityId + ","
-										+ intermediatePathId + ","
-										+ associatedEntityId
+										insertPathSQL.add("insert into path values("
+												+ this.identifier++ + "," + subClassEntityId + ","
+												+ intermediatePathId + "," + associatedEntityId
 												+ ")");
 									}
 								}
@@ -259,42 +251,31 @@ public class AddPath
 						stmt5.close();
 						if (!(key.equals(associatedEntityName)))
 						{
-							sql = "Select INTERMEDIATE_PATH" +
-									" from PATH where FIRST_ENTITY_ID = "
-									+ associatedEntityId
+							sql = "Select INTERMEDIATE_PATH"
+									+ " from PATH where FIRST_ENTITY_ID = " + associatedEntityId
 									+ " and LAST_ENTITY_ID = " + entityId;
 							final Statement stmt2 = connection.createStatement();
 							rs = stmt2.executeQuery(sql);
 							while (rs.next())
 							{
 								final String intermediatePathId = rs.getString(1);
-								final List<String> subClassList =
-									superClassAndSubClassesMap
+								final List<String> subClassList = superClassAndSubClassesMap
 										.get(key);
 								for (final String subClassEntity : subClassList)
 								{
 									String subClassEntityId;
-									final Statement stmt3 =
-										connection.createStatement();
-									sql = "Select IDENTIFIER" +
-										" from dyextn_abstract_metadata" +
-										" where NAME "
-									+ UpdateMetadataUtil.getDBCompareModifier()
-											+ "'"
+									final Statement stmt3 = connection.createStatement();
+									sql = "Select IDENTIFIER" + " from dyextn_abstract_metadata"
+											+ " where NAME "
+											+ UpdateMetadataUtil.getDBCompareModifier() + "'"
 											+ subClassEntity + "'";
-									final ResultSet rs1 =
-										stmt3.executeQuery(sql);
+									final ResultSet rs1 = stmt3.executeQuery(sql);
 									if (rs1.next())
 									{
-										subClassEntityId =
-										String.valueOf(rs1.getLong(1));
-										insertPathSQL.
-										add("insert into path values("
-										+ this.identifier++ + ","
-										+ associatedEntityId
-										+ ","
-										+ intermediatePathId
-										+ "," + subClassEntityId
+										subClassEntityId = String.valueOf(rs1.getLong(1));
+										insertPathSQL.add("insert into path values("
+												+ this.identifier++ + "," + associatedEntityId
+												+ "," + intermediatePathId + "," + subClassEntityId
 												+ ")");
 									}
 									stmt3.close();
@@ -404,8 +385,7 @@ public class AddPath
 					final String key = iterator.next();
 					String keyId = null;
 					sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
-							+ UpdateMetadataUtil.getDBCompareModifier()
-							+ "'" + key + "'";
+							+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key + "'";
 					final ResultSet rs = stmt.executeQuery(sql);
 					if (rs.next())
 					{
@@ -417,16 +397,13 @@ public class AddPath
 					{
 						String associateEntityId = null;
 						sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
-								+ UpdateMetadataUtil.getDBCompareModifier()
-								+ "'" + entity + "'";
+								+ UpdateMetadataUtil.getDBCompareModifier() + "'" + entity + "'";
 						final ResultSet entityIdRS = stmt.executeQuery(sql);
 						if (entityIdRS.next())
 						{
 							associateEntityId = String.valueOf(entityIdRS.getLong(1));
-							final String sqlStmt = "insert into path values("
-								+ this.identifier++
-									+ "," + keyId + ","
-									+ intermediatePathId + ","
+							final String sqlStmt = "insert into path values(" + this.identifier++
+									+ "," + keyId + "," + intermediatePathId + ","
 									+ associateEntityId + ")";
 							insertPathSQL.add(sqlStmt);
 						}

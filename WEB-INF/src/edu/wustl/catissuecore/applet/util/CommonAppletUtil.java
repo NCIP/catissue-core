@@ -30,6 +30,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public final class CommonAppletUtil
 {
+
 	/**
 	 * logger.
 	 */
@@ -62,11 +63,11 @@ public final class CommonAppletUtil
 	public static void callJavaScriptFunction(Component component, String functionName,
 			Object[] parameters)
 	{
-		JApplet applet = getBaseApplet(component);
+		final JApplet applet = getBaseApplet(component);
 
 		if (applet != null)
 		{
-			JSObject jsObject = JSObject.getWindow(applet);
+			final JSObject jsObject = JSObject.getWindow(applet);
 			jsObject.call(functionName, parameters);
 		}
 	}
@@ -80,7 +81,7 @@ public final class CommonAppletUtil
 	{
 		try
 		{
-			double doubleValue = Double.parseDouble(numString);
+			final double doubleValue = Double.parseDouble(numString);
 			if (doubleValue <= 0)
 			{
 				return false;
@@ -88,7 +89,7 @@ public final class CommonAppletUtil
 
 			return true;
 		}
-		catch (NumberFormatException exp)
+		catch (final NumberFormatException exp)
 		{
 			logger.debug(exp.getMessage(), exp);
 			return false;
@@ -144,7 +145,7 @@ public final class CommonAppletUtil
 	 */
 	public static boolean validateCell()
 	{
-		boolean result = true;
+		final boolean result = true;
 
 		return result;
 	}
@@ -156,28 +157,30 @@ public final class CommonAppletUtil
 	 */
 	public static List createListFromArray(int[] array)
 	{
-		List list = new ArrayList();
+		final List list = new ArrayList();
 		if (array != null)
 		{
-			for (int index = 0; index < array.length; index++)
+			for (final int element : array)
 			{
-				list.add(new Integer(array[index]));
+				list.add(new Integer(element));
 			}
 		}
 		return list;
 	}
+
 	/**
 	 * @param array : array
 	 */
 	public static void printArray(int[] array)
 	{
 		System.out.println("\n------- Printing Array -------\n");
-		for (int i = 0; i < array.length; i++)
+		for (final int element : array)
 		{
-			System.out.print("  " + array[i]);
+			System.out.print("  " + element);
 		}
 		System.out.println("\n-------Printing Array Done ------\n");
 	}
+
 	/**
 	 * @param row : row
 	 * @param col : col

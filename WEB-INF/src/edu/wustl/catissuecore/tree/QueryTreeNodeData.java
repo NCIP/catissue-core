@@ -91,7 +91,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public void initialiseRoot(String rootName)
 	{
-		initialiseRoot();
+		this.initialiseRoot();
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public Object getIdentifier()
 	{
-		return identifier;
+		return this.identifier;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getObjectName()
 	{
-		return objectName;
+		return this.objectName;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getDisplayName()
 	{
-		return displayName;
+		return this.displayName;
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getParentObjectName()
 	{
-		return parentObjectName;
+		return this.parentObjectName;
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public QueryTreeNode getParentTreeNode()
 	{
-		QueryTreeNodeData node = new QueryTreeNodeData();
+		final QueryTreeNodeData node = new QueryTreeNodeData();
 		node.setIdentifier(this.combinedParentIdentifier);
 		node.setObjectName(this.getCombinedParentObjectName());
 
@@ -189,18 +189,15 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public boolean isChildOf(QueryTreeNode treeNode)
 	{
-		QueryTreeNodeData node = (QueryTreeNodeData) treeNode;
+		final QueryTreeNodeData node = (QueryTreeNodeData) treeNode;
 		boolean isChild = this.parentObjectIdentifier.equals(node.getIdentifier())
 				&& this.parentObjectName.equals(node.getObjectName());
 
 		if ((this.getCombinedParentIdentifier() != null) && (this.getParentIdentifier() != null))
 		{
-			isChild = (this.parentObjectIdentifier.equals(node.getIdentifier())
-					&& this.parentObjectName
+			isChild = (this.parentObjectIdentifier.equals(node.getIdentifier()) && this.parentObjectName
 					.equals(node.getObjectName()))
-					&& (this.combinedParentIdentifier.equals(node.
-							getCombinedParentIdentifier())
-							&& this.combinedParentObjectName
+					&& (this.combinedParentIdentifier.equals(node.getCombinedParentIdentifier()) && this.combinedParentObjectName
 							.equals(node.getCombinedParentObjectName()));
 		}
 
@@ -214,7 +211,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public boolean hasEqualParents(QueryTreeNode treeNode)
 	{
-		QueryTreeNodeData node = (QueryTreeNodeData) treeNode;
+		final QueryTreeNodeData node = (QueryTreeNodeData) treeNode;
 		return this.getIdentifier().equals(node.getCombinedParentIdentifier());
 	}
 
@@ -232,7 +229,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getCombinedParentIdentifier()
 	{
-		return combinedParentIdentifier;
+		return this.combinedParentIdentifier;
 	}
 
 	/**
@@ -248,7 +245,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getCombinedParentObjectName()
 	{
-		return combinedParentObjectName;
+		return this.combinedParentObjectName;
 	}
 
 	/**
@@ -272,8 +269,9 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 		boolean isPresent = false;
 		for (int i = 0; i < parentNode.getChildCount(); i++)
 		{
-			DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(i);
-			QueryTreeNodeData node = (QueryTreeNodeData) childNode.getUserObject();
+			final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode
+					.getChildAt(i);
+			final QueryTreeNodeData node = (QueryTreeNodeData) childNode.getUserObject();
 
 			if (this.identifier.equals(node.getIdentifier()))
 			{
@@ -289,9 +287,10 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 * overrides java.lang.Object.toString.
 	 * @return node Name.
 	 */
+	@Override
 	public String toString()
 	{
-		StringBuffer nodeName = new StringBuffer(this.objectName);
+		final StringBuffer nodeName = new StringBuffer(this.objectName);
 		if (this.identifier != null)
 		{
 			nodeName.append(':').append(this.identifier);
@@ -306,7 +305,7 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 */
 	public String getToolTipText()
 	{
-		return toolTipText;
+		return this.toolTipText;
 	}
 
 	/**

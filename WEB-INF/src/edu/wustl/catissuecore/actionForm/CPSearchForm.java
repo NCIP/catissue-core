@@ -24,7 +24,7 @@ public class CPSearchForm extends AbstractActionForm
 	 */
 	public Long getParticipantId()
 	{
-		return participantId;
+		return this.participantId;
 	}
 
 	/**
@@ -39,6 +39,7 @@ public class CPSearchForm extends AbstractActionForm
 	 * Returns the identifier assigned to form bean.
 	 * @return The identifier assigned to form bean.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return 0;
@@ -55,6 +56,7 @@ public class CPSearchForm extends AbstractActionForm
 	/**
 	 * This method resets the form fields.
 	 */
+	@Override
 	public void reset()
 	{
 	}
@@ -65,7 +67,7 @@ public class CPSearchForm extends AbstractActionForm
 	 */
 	public Long getCpId()
 	{
-		return cpId;
+		return this.cpId;
 	}
 
 	/**

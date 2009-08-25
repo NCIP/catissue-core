@@ -12,6 +12,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
  */
 public class MockBizLogicFactory extends BizLogicFactory
 {
+
 	private IBizLogic bizLogic;
 
 	/**
@@ -26,9 +27,10 @@ public class MockBizLogicFactory extends BizLogicFactory
 	 * @param businessAction business action
 	 * @return BusinessInterface business interface
 	 */
+	@Override
 	public IBizLogic getBizLogic(int FORM_TYPE)
 	{
-		return bizLogic;
+		return this.bizLogic;
 	}
 
 	/**

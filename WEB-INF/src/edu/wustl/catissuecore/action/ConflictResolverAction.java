@@ -122,8 +122,7 @@ public class ConflictResolverAction extends BaseAction
 				if (specimenCollGrpId != null && !specimenCollGrpId.equals(""))
 				{
 					// Associate existing SCG with Report
-					this.associateSCGWithReport(request
-							, reportQueueId, participantIdToAssociate,
+					this.associateSCGWithReport(request, reportQueueId, participantIdToAssociate,
 							specimenCollGrpId);
 				}
 			}
@@ -268,8 +267,7 @@ public class ConflictResolverAction extends BaseAction
 		{
 			SpecimenCollectionGroup scg = null;
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic
-			= (ReportLoaderQueueBizLogic) factory
+			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 					.getBizLogic(ReportLoaderQueue.class.getName());
 			final Object object = reportLoaderQueueBizLogic.retrieve(SpecimenCollectionGroup.class
 					.getName(), new Long(specimenCollGrpId));
@@ -326,8 +324,7 @@ public class ConflictResolverAction extends BaseAction
 		try
 		{
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic
-			= (ReportLoaderQueueBizLogic) factory
+			final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 					.getBizLogic(ReportLoaderQueue.class.getName());
 			reportLoaderQueueBizLogic.update(reportLoaderQueue, reportLoaderQueue, 0, this
 					.getSessionData(request));

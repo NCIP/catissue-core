@@ -23,6 +23,7 @@ public class BaseActionHandler implements ActionListener
 	 * table.
 	 */
 	protected JTable table;
+
 	/**
 	 * @param table : table
 	 */
@@ -43,10 +44,10 @@ public class BaseActionHandler implements ActionListener
 		//	if(!isPasteOperation())
 		{
 			//getMultipleSpecimenTableModel().showMapData();
-			preActionPerformed(event);
+			this.preActionPerformed(event);
 		}
-		handleAction(event);
-		postActionPerformed(event);
+		this.handleAction(event);
+		this.postActionPerformed(event);
 	}
 
 	/**
@@ -57,14 +58,15 @@ public class BaseActionHandler implements ActionListener
 	protected void preActionPerformed(ActionEvent event)
 	{
 		System.out.println("inside BaseActionHandler: - preActionPerformed");
-		int colNo = table.getSelectedColumn();
+		this.table.getSelectedColumn();
 		//	 	table.getColumnModel().getColumn(colNo).getCellEditor().stopCellEditing();
-		table.getModel().setValueAt(getSelectedValue(event), table.getSelectedRow(),
-				table.getSelectedColumn());
+		this.table.getModel().setValueAt(this.getSelectedValue(event), this.table.getSelectedRow(),
+				this.table.getSelectedColumn());
 		System.out.println("table.getModel().setValueAt(getSelectedValue(event) : "
-				+ table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn())
-				+ " table.getSelectedRow() : " + table.getSelectedRow()
-				+ " table.getSelectedColumn() : " + table.getSelectedColumn());
+				+ this.table.getModel().getValueAt(this.table.getSelectedRow(),
+						this.table.getSelectedColumn()) + " table.getSelectedRow() : "
+				+ this.table.getSelectedRow() + " table.getSelectedColumn() : "
+				+ this.table.getSelectedColumn());
 		System.out.println("inside BaseActionHandler: - preActionPerformed done");
 	}
 
@@ -96,6 +98,7 @@ public class BaseActionHandler implements ActionListener
 	{
 
 	}
+
 	/**
 	 * @return boolean
 	 */
@@ -103,11 +106,11 @@ public class BaseActionHandler implements ActionListener
 	{
 		boolean result = false;
 
-		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table)
-				.getCopyPasteOperationValidatorModel();
+		final CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(
+				this.table).getCopyPasteOperationValidatorModel();
 		if (!CommonAppletUtil.isNull(validatorModel))
 		{
-			String operationInValidatorModel = validatorModel.getOperation();
+			final String operationInValidatorModel = validatorModel.getOperation();
 			if (!CommonAppletUtil.isNull(operationInValidatorModel))
 			{
 				if (operationInValidatorModel.equals(AppletConstants.PASTE_OPERATION))

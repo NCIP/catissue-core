@@ -475,7 +475,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				final AliquotForm form = (AliquotForm) abstractForm;
 				// Dispose parent specimen Bug 3773
 				this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
-				final Validator validator = new Validator();
+				new Validator();
 
 				this.aliqoutMap = form.getAliquotMap();
 				this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
@@ -508,8 +508,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				final String qty = ((SpecimenForm) abstractForm).getQuantity();
 				if (qty != null && qty.trim().length() > 0)
 				{
-					this.initialQuantity
-					= new Double(((SpecimenForm) abstractForm).getQuantity());
+					this.initialQuantity = new Double(((SpecimenForm) abstractForm).getQuantity());
 				}
 				else
 				{
@@ -527,7 +526,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 							.getAvailableQuantity());
 				}
 
-				final Validator validator = new Validator();
+				new Validator();
 				if (abstractForm instanceof NewSpecimenForm)
 				{
 					final NewSpecimenForm form = (NewSpecimenForm) abstractForm;
@@ -541,8 +540,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					if (!(form.getSpecimenCollectionGroupName() == null && form
 							.getSelectedContainerName().equals("")))
 					{
-						this.specimenCollectionGroup.name
-						= form.getSelectedContainerName();
+						this.specimenCollectionGroup.name = form.getSelectedContainerName();
 					}
 					/**For Migration End**/
 					this.activityStatus = form.getActivityStatus();
@@ -585,8 +583,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						{
 							final String parentSpecimenId = form.getParentSpecimenId();
 							// specimen created from another specimen
-							if (parentSpecimenId != null
-									&& !parentSpecimenId.trim().equals("")
+							if (parentSpecimenId != null && !parentSpecimenId.trim().equals("")
 									&& Long.parseLong(parentSpecimenId) > 0)
 							{
 								this.isParentChanged = true;
@@ -595,8 +592,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						else
 						//specimen created from another specimen
 						{
-							if (!((Specimen) this.parentSpecimen).getLabel()
-									.equalsIgnoreCase(
+							if (!((Specimen) this.parentSpecimen).getLabel().equalsIgnoreCase(
 									form.getParentSpecimenName()))
 							{
 								this.isParentChanged = true;
@@ -608,8 +604,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						 * Description : Set createdOn date in edit mode for new specimen
 						 */
 						this.createdOn = CommonUtilities.parseDate(form.getCreatedDate(),
-								CommonServiceLocator.getInstance()
-								.getDatePattern());
+								CommonServiceLocator.getInstance().getDatePattern());
 					}
 
 					logger.debug("isParentChanged " + this.isParentChanged);
@@ -646,23 +641,18 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					{
 						logger.debug("Setting Collection event in specimen domain object");
 						//seting collection event values
-						final CollectionEventParametersForm collectionEvent
-						= new CollectionEventParametersForm();
+						final CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
 						collectionEvent.setCollectionProcedure(form
 								.getCollectionEventCollectionProcedure());
 						collectionEvent.setComments(form.getCollectionEventComments());
 						collectionEvent.setContainer(form.getCollectionEventContainer());
-						collectionEvent
-						.setTimeInHours(form.getCollectionEventTimeInHours());
-						collectionEvent
-						.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
-						collectionEvent
-						.setDateOfEvent(form.getCollectionEventdateOfEvent());
+						collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
+						collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
+						collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent());
 						collectionEvent.setUserId(form.getCollectionEventUserId());
 						collectionEvent.setOperation(form.getOperation());
 
-						final CollectionEventParameters collectionEventParameters
-						= new CollectionEventParameters();
+						final CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 						collectionEventParameters.setAllValues(collectionEvent);
 
 						collectionEventParameters.setSpecimen(this);
@@ -710,15 +700,14 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					if (form.isAddOperation())
 					{
-						setSpecimenPosition(form);
+						this.setSpecimenPosition(form);
 					}
 					else
 					{
 						if (this.specimenPosition == null)
 						{
 							this.specimenPosition = new SpecimenPosition();
-							this.specimenPosition.storageContainer
-							= new StorageContainer();
+							this.specimenPosition.storageContainer = new StorageContainer();
 
 							if (form.getStContSelection() == 1)
 							{
@@ -748,8 +737,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 							else if (form.getStContSelection() == 3)
 							{
 
-								if (form.getPos1() != null
-										&& !form.getPos1().trim().equals("")
+								if (form.getPos1() != null && !form.getPos1().trim().equals("")
 										&& form.getPos2() != null
 										&& !form.getPos2().trim().equals(""))
 								{
@@ -765,8 +753,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 											.getSelectedContainerName());
 									this.specimenPosition.positionDimensionOne = Integer
 											.valueOf(form.getPos1());
-									this.specimenPosition.positionDimensionTwo
-									= Integer
+									this.specimenPosition.positionDimensionTwo = Integer
 											.valueOf(form.getPos2());
 									this.specimenPosition.specimen = this;
 								}
@@ -786,11 +773,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						{
 							this.specimenPosition.storageContainer.setName(form
 									.getSelectedContainerName());
-							this.specimenPosition.positionDimensionOne
-							= Integer.valueOf(form
+							this.specimenPosition.positionDimensionOne = Integer.valueOf(form
 									.getPositionDimensionOne());
-							this.specimenPosition.positionDimensionTwo
-							= Integer.valueOf(form
+							this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
 									.getPositionDimensionTwo());
 							this.specimenPosition.specimen = this;
 						}
@@ -881,13 +866,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 					((Specimen) this.parentSpecimen).setLabel(form.getParentSpecimenLabel());
-					((Specimen) this.parentSpecimen)
-					.setBarcode(form.getParentSpecimenBarcode());
+					((Specimen) this.parentSpecimen).setBarcode(form.getParentSpecimenBarcode());
 					//Getting the Map of External Identifiers
 					final Map extMap = form.getExternalIdentifier();
 
-					final MapDataParser parser
-					= new MapDataParser("edu.wustl.catissuecore.domain");
+					final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 
 					final Collection extCollection = parser.generateData(extMap);
 					this.externalIdentifierCollection = extCollection;
@@ -895,7 +878,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 					//setting the value of storage container
 					if (form.isAddOperation())
 					{
-						setSpecimenPosition(form);
+						this.setSpecimenPosition(form);
 					}
 				}
 			}
@@ -919,15 +902,13 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 	}
 
-	
 	/**
 	 * This method will be called to set the specimen position.
 	 * @param form
 	 */
 	private void setSpecimenPosition(final SpecimenForm form)
 	{
-		if (this.specimenPosition == null
-				|| this.specimenPosition.storageContainer == null)
+		if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
 		{
 			this.specimenPosition = new SpecimenPosition();
 			this.specimenPosition.storageContainer = new StorageContainer();
@@ -955,24 +936,17 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		else if (form.getStContSelection() == 3)
 		{
-			this.specimenPosition.storageContainer.setName(form
-					.getSelectedContainerName());
-			if (form.getPos1() != null
-					&& !form.getPos1().trim().equals("")
-					&& form.getPos2() != null
-					&& !form.getPos2().trim().equals(""))
+			this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
+			if (form.getPos1() != null && !form.getPos1().trim().equals("")
+					&& form.getPos2() != null && !form.getPos2().trim().equals(""))
 			{
 				/*if (this.specimenPosition == null)
 				{
 					this.specimenPosition
 					= new SpecimenPosition();
 				}*/
-				this.specimenPosition.positionDimensionOne
-				= Integer.valueOf(form
-						.getPos1());
-				this.specimenPosition.positionDimensionTwo
-				= Integer.valueOf(form
-						.getPos2());
+				this.specimenPosition.positionDimensionOne = Integer.valueOf(form.getPos1());
+				this.specimenPosition.positionDimensionTwo = Integer.valueOf(form.getPos2());
 				this.specimenPosition.specimen = this;
 				//this.specimenPosition.storageContainer
 				//= this.storageContainer;
@@ -1473,12 +1447,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			final SpecimenEventParameters eventParam = (SpecimenEventParameters) itr.next();
 			if (eventParam instanceof CollectionEventParameters)
 			{
-				final CollectionEventParameters collEventParam
-				= (CollectionEventParameters) eventParam;
+				final CollectionEventParameters collEventParam = (CollectionEventParameters) eventParam;
 				if (collEventParam != null)
 				{
-					final CollectionEventParameters collectionEventParameters
-					= new CollectionEventParameters(
+					final CollectionEventParameters collectionEventParameters = new CollectionEventParameters(
 							collEventParam);
 					collectionEventParameters.setSpecimen(this);
 					collectionEventParameters.setTimestamp(collTimestamp);
@@ -1499,8 +1471,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				final ReceivedEventParameters recEventParam = (ReceivedEventParameters) eventParam;
 				if (recEventParam != null)
 				{
-					final ReceivedEventParameters receivedEventParameters
-					= new ReceivedEventParameters(
+					final ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters(
 							recEventParam);
 					receivedEventParameters.setSpecimen(this);
 					receivedEventParameters.setTimestamp(recTimestamp);

@@ -473,8 +473,8 @@ public class StorageContainer extends Container implements IActivityStatus
 				{
 					if (this.locatedAtPosition != null
 							&& this.locatedAtPosition.getParentContainer() != null
-							&& this.locatedAtPosition.parentContainer.getId().longValue()
-							!= form.getParentContainerId())
+							&& this.locatedAtPosition.parentContainer.getId().longValue() != form
+									.getParentContainerId())
 					{
 						this.isParentChanged = true;
 					}
@@ -491,11 +491,9 @@ public class StorageContainer extends Container implements IActivityStatus
 
 				if (form.getStContSelection() == 1)
 				{
-					if ((this.locatedAtPosition != null
-							&& this.locatedAtPosition.positionDimensionOne
+					if ((this.locatedAtPosition != null && this.locatedAtPosition.positionDimensionOne
 							.intValue() != form.getPositionDimensionOne())
-							|| (this.locatedAtPosition != null
-									&& this.locatedAtPosition.positionDimensionTwo
+							|| (this.locatedAtPosition != null && this.locatedAtPosition.positionDimensionTwo
 									.intValue() != form.getPositionDimensionOne()))
 					{
 						this.positionChanged = true;
@@ -504,10 +502,8 @@ public class StorageContainer extends Container implements IActivityStatus
 				else
 				{
 					if (this.locatedAtPosition != null
-							&& this.locatedAtPosition
-							.positionDimensionOne.equals(form.getPos1())
-							|| this.locatedAtPosition
-							.positionDimensionTwo.equals(form.getPos2()))
+							&& this.locatedAtPosition.positionDimensionOne.equals(form.getPos1())
+							|| this.locatedAtPosition.positionDimensionTwo.equals(form.getPos2()))
 					{
 						this.positionChanged = true;
 					}
@@ -527,8 +523,7 @@ public class StorageContainer extends Container implements IActivityStatus
 			{
 
 				this.locatedAtPosition.parentContainer = new StorageContainer();
-				this.locatedAtPosition.parentContainer
-				.setId(new Long(form.getParentContainerId()));
+				this.locatedAtPosition.parentContainer.setId(new Long(form.getParentContainerId()));
 
 				this.locatedAtPosition.setPositionDimensionOne(new Integer(form
 						.getPositionDimensionOne()));
@@ -541,13 +536,11 @@ public class StorageContainer extends Container implements IActivityStatus
 				this.locatedAtPosition.parentContainer = new StorageContainer();
 				if (form.getContainerId() != null && !form.getContainerId().trim().equals(""))
 				{
-					this.locatedAtPosition.parentContainer
-					.setId(new Long(form.getContainerId()));
+					this.locatedAtPosition.parentContainer.setId(new Long(form.getContainerId()));
 				}
 				else
 				{
-					this.locatedAtPosition.parentContainer
-					.setName(form.getSelectedContainerName());
+					this.locatedAtPosition.parentContainer.setName(form.getSelectedContainerName());
 				}
 				if (form.getPos1() != null && !form.getPos1().trim().equals("")
 						&& form.getPos2() != null && !form.getPos2().trim().equals(""))

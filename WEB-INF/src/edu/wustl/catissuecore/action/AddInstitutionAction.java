@@ -30,7 +30,8 @@ public class AddInstitutionAction extends CommonAddEditAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(AddInstitutionAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(AddInstitutionAction.class);
+
 	/**
 	 * @param mapping : mapping
 	 * @param form : form
@@ -40,20 +41,21 @@ public class AddInstitutionAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 * @return ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		String institutionName = (String) request.getParameter(Constants.INSTITUTION_NAME);
-		InstitutionBizLogic bizlogic = new InstitutionBizLogic();
+		final String institutionName = request.getParameter(Constants.INSTITUTION_NAME);
+		final InstitutionBizLogic bizlogic = new InstitutionBizLogic();
 		String institutionId = null;
 		String responseString = "";
-		InstitutionForm institutionForm = (InstitutionForm) form;
+		final InstitutionForm institutionForm = (InstitutionForm) form;
 
 		institutionForm.setOperation(Constants.ADD);
 		institutionForm.setName(institutionName);
 
-		ActionForward forward = super.execute(mapping, institutionForm, request, response);
+		final ActionForward forward = super.execute(mapping, institutionForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
@@ -66,13 +68,13 @@ public class AddInstitutionAction extends CommonAddEditAction
 				institutionId = bizlogic.getLatestInstitution(institutionName);
 				responseString = institutionId + Constants.RESPONSE_SEPARATOR + institutionName;
 			}
-			catch (BizLogicException e)
+			catch (final BizLogicException e)
 			{
-				logger.error("Exception occurred in retrieving Institution");
+				this.logger.error("Exception occurred in retrieving Institution");
 				e.printStackTrace();
 			}
 		}
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 
 		/**

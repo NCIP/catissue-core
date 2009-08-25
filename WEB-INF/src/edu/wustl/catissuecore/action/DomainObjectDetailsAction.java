@@ -44,18 +44,19 @@ public class DomainObjectDetailsAction extends SecureAction
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		HttpSession session = request.getSession();
-		List list = (List) session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
+		final HttpSession session = request.getSession();
+		final List list = (List) session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
 
 		// To show empty summary in case of Approve User scenario
 		request.getSession(true).setAttribute(Constants.USER_ROW_ID_BEAN_MAP, null);
 
-		long identifier = Long.parseLong(request.getParameter(Constants.SYSTEM_IDENTIFIER));
-		Iterator iterator = list.iterator();
+		final long identifier = Long.parseLong(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		final Iterator iterator = list.iterator();
 
 		AbstractDomainObject currentDomainObject = null;
 		Long prevIdentifier = null, nextIdentifier = null;
@@ -72,11 +73,11 @@ public class DomainObjectDetailsAction extends SecureAction
 
 		if (iterator.hasNext())
 		{
-			AbstractDomainObject nextDomainObject = (AbstractDomainObject) iterator.next();
+			final AbstractDomainObject nextDomainObject = (AbstractDomainObject) iterator.next();
 			nextIdentifier = nextDomainObject.getId();
 		}
 
-		AbstractActionForm abstractActionForm = (AbstractActionForm) form;
+		final AbstractActionForm abstractActionForm = (AbstractActionForm) form;
 		/**
 		 * Name: Vijay Pande
 		 * Reviewer Name: Aarti Sharma
@@ -84,7 +85,7 @@ public class DomainObjectDetailsAction extends SecureAction
 		 *  is called to bypass lazy loading error in domain object
 		 */
 		//abstractActionForm.setAllValues(currentDomainObject);
-		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(currentDomainObject.getClass().getName(),
 				currentDomainObject.getId(), abstractActionForm);
 

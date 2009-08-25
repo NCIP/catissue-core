@@ -23,6 +23,11 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1707993243973326753L;
+
+	/**
 	 * Map containing the key-value pairs
 	 */
 	private Map values = new HashMap();
@@ -97,7 +102,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String[] getItemsToRemove()
 	{
-		return itemsToRemove;
+		return this.itemsToRemove;
 	}
 
 	/**
@@ -113,7 +118,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getConcentration()
 	{
-		return concentration;
+		return this.concentration;
 	}
 
 	/**
@@ -129,7 +134,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String[] getSelectedItems()
 	{
-		return selectedItems;
+		return this.selectedItems;
 	}
 
 	/**
@@ -145,7 +150,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getAddToArray()
 	{
-		return addToArray;
+		return this.addToArray;
 	}
 
 	/**
@@ -161,7 +166,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public List getDefineArrayObj()
 	{
-		return defineArrayObj;
+		return this.defineArrayObj;
 	}
 
 	/**
@@ -177,7 +182,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public OrderForm getOrderForm()
 	{
-		return orderForm;
+		return this.orderForm;
 	}
 
 	/** 
@@ -193,7 +198,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -209,7 +214,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
 
 	/**
@@ -225,7 +230,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
@@ -241,7 +246,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -257,7 +262,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**
@@ -271,6 +276,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * reset function
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -281,9 +287,9 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -293,7 +299,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -307,6 +313,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return Constants.ORDER_PATHOLOGY_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.ORDER_PATHOLOGY_FORM_ID;
@@ -317,7 +324,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getTypeOfCase()
 	{
-		return typeOfCase;
+		return this.typeOfCase;
 	}
 
 	/**
@@ -333,7 +340,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getDistrbutionProtocol()
 	{
-		return distrbutionProtocol;
+		return this.distrbutionProtocol;
 	}
 
 	/**
@@ -349,7 +356,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	public String getUnit()
 	{
-		return unit;
+		return this.unit;
 	}
 
 	/**
@@ -365,145 +372,148 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
-		ActionErrors errors = new ActionErrors();
+		final ActionErrors errors = new ActionErrors();
 
-		if (selectedItems != null)
+		if (this.selectedItems != null)
 		{
-			HttpSession session = request.getSession();
-			List defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
-			Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
+			final HttpSession session = request.getSession();
+			final List defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
+			final Map dataMap = (Map) session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
 			DefineArrayForm defineArrayFormObj = null;
 			int capacity = 0;
 
 			if (defineArrayFormList != null)
 			{
-				defineArrayFormObj = (DefineArrayForm) searchDefineArrayList(defineArrayFormList,
-						addToArray);
+				defineArrayFormObj = this.searchDefineArrayList(defineArrayFormList,
+						this.addToArray);
 				capacity = Integer.parseInt(defineArrayFormObj.getDimenmsionX())
 						* Integer.parseInt(defineArrayFormObj.getDimenmsionY());
 			}
-			if (!addToArray.equalsIgnoreCase("None"))
+			if (!this.addToArray.equalsIgnoreCase("None"))
 			{
-				if (dataMap != null && dataMap.containsKey(addToArray))
+				if (dataMap != null && dataMap.containsKey(this.addToArray))
 				{
-					List orderItems = (List) dataMap.get(addToArray);
-					if (orderItems.size() + selectedItems.length > capacity)
+					final List orderItems = (List) dataMap.get(this.addToArray);
+					if (orderItems.size() + this.selectedItems.length > capacity)
 					{
 						errors.add("addToArray", new ActionError("errors.order.capacityless"));
-						values.clear();
+						this.values.clear();
 					}
 				}
 				else
 				{
-					if (selectedItems.length > capacity)
+					if (this.selectedItems.length > capacity)
 					{
 						errors.add("addToArray", new ActionError("errors.order.capacityless"));
-						values.clear();
+						this.values.clear();
 					}
 				}
 			}
 
-			if (typeOfCase.equals("false"))
+			if (this.typeOfCase.equals("false"))
 			{
-				if (className.equals("-1") || className.equals("-- Select --")
-						|| className.equals(""))
+				if (this.className.equals("-1") || this.className.equals("-- Select --")
+						|| this.className.equals(""))
 				{
 					errors.add("specimenClass", new ActionError("errors.specimenClass.required"));
-					values.clear();
+					this.values.clear();
 
 				}
-				if (type.equals("-1") || type.equals("-- Select --") || type.equals(""))
+				if (this.type.equals("-1") || this.type.equals("-- Select --")
+						|| this.type.equals(""))
 				{
 					errors.add("type", new ActionError("errors.specimenType.required"));
-					values.clear();
+					this.values.clear();
 				}
-				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
-						&& !defineArrayFormObj.getArrayClass().equals(className))
+				if (!this.addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
+						&& !defineArrayFormObj.getArrayClass().equals(this.className))
 				{
 					errors.add("addToArray", new ActionError("errors.order.properclass"));
-					values.clear();
+					this.values.clear();
 				}
 			}
 			else
 			{
-				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
+				if (!this.addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
 						&& !defineArrayFormObj.getArrayClass().equals("Tissue"))
 				{
 					errors.add("addToArray", new ActionError("errors.order.properclass"));
-					values.clear();
+					this.values.clear();
 				}
 			}
 
-			if (pathologicalStatus.equals("-1") || pathologicalStatus.equals("-- Select --"))
+			if (this.pathologicalStatus.equals("-1")
+					|| this.pathologicalStatus.equals("-- Select --"))
 			{
 				errors.add("pathologicalStatus", new ActionError(
 						"errors.pathologicalStatus.required"));
-				values.clear();
+				this.values.clear();
 			}
-			if (tissueSite.equals("-1") || tissueSite.equals("-- Select --"))
+			if (this.tissueSite.equals("-1") || this.tissueSite.equals("-- Select --"))
 			{
 				errors.add("tissueSite", new ActionError("errors.tissueSite.required"));
-				values.clear();
+				this.values.clear();
 			}
 
 			boolean isNumber = true;
-			if (values != null && values.size() != 0)
+			if (this.values != null && this.values.size() != 0)
 			{
 				String cnt = null;
 				//int reqQntyError = 0;
-				for (int i = 0; i < selectedItems.length; i++)
+				for (final String selectedItem : this.selectedItems)
 				{
-					cnt = selectedItems[i];
-					String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
-					String colprotKey = "OrderSpecimenBean:" + cnt + "_collectionProtocol";
+					cnt = selectedItem;
+					final String key = "OrderSpecimenBean:" + cnt + "_requestedQuantity";
+					final String colprotKey = "OrderSpecimenBean:" + cnt + "_collectionProtocol";
 
 					//					to check for Same CP:Only those SPR can be ordered which belongs to same CP
 					if (dataMap != null && dataMap.containsKey("None"))
 					{
-						List orderItems = (List) dataMap.get("None");
+						final List orderItems = (List) dataMap.get("None");
 						if (!orderItems.isEmpty() && orderItems.size() > 0)
 						{
-							OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
+							final OrderSpecimenBean orderSpecimenBean = (OrderSpecimenBean) orderItems
 									.get(0);
 							if (!orderSpecimenBean.getCollectionProtocol().equals(
-									values.get(colprotKey)))
+									this.values.get(colprotKey)))
 							{
 								errors.add("values", new ActionError(
 										"errors.same.collectionProtocol"));
-								values.clear();
+								this.values.clear();
 								break;
 							}
 						}
 
 					}
 
-					if ((values.get(key)) == null || (values.get(key)).equals(""))
+					if ((this.values.get(key)) == null || (this.values.get(key)).equals(""))
 					{
 						errors.add("values", new ActionError("errors.requestedQuantity.required"));
-						values.clear();
+						this.values.clear();
 						break;
 					}
 					else
 					{
-						isNumber = AppUtility.isNumeric(values.get(key).toString());
+						isNumber = AppUtility.isNumeric(this.values.get(key).toString());
 						if (!(isNumber))
 						{
 							errors.add("values", new ActionError(
 									"errors.requestedQuantityBeNumeric.required"));
-							values.clear();
+							this.values.clear();
 							break;
 						}
 						else
 						{
-							Double reqQnty = new Double(values.get(key).toString());
+							final Double reqQnty = new Double(this.values.get(key).toString());
 							if (reqQnty < 0.0 || reqQnty == 0.0)
 							{
 								errors.add("values", new ActionError(
 										"errors.requestedQuantity.required"));
-								values.clear();
+								this.values.clear();
 								break;
 							}
 						}
@@ -521,7 +531,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	 */
 	private DefineArrayForm searchDefineArrayList(List defineArrayFormList, String arrayName)
 	{
-		Iterator iter = defineArrayFormList.iterator();
+		final Iterator iter = defineArrayFormList.iterator();
 		DefineArrayForm defineArrayFormObj = null;
 		while (iter.hasNext())
 		{
@@ -537,6 +547,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * @return boolean true
 	 */
+	@Override
 	public boolean isAddOperation()
 	{
 		return true;

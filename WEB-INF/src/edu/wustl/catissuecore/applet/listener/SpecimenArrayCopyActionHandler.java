@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
  */
 public class SpecimenArrayCopyActionHandler implements ActionListener
 {
+
 	/**
 	 * popupMenu.
 	 */
@@ -35,21 +36,21 @@ public class SpecimenArrayCopyActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
-		Component c = (Component) e.getSource();
+		final Component c = (Component) e.getSource();
 
-		int px = c.getX();
-		int py = c.getY() + c.getHeight() + 50;
-		Point point = new Point(px, py);
+		final int px = c.getX();
+		final int py = c.getY() + c.getHeight() + 50;
+		final Point point = new Point(px, py);
 		//Point point = c.getLocation();
 		SwingUtilities.convertPointFromScreen(point, c);
 
-		if (!popupMenu.isShowing())
+		if (!this.popupMenu.isShowing())
 		{
-			popupMenu.show(c, point.x, point.y);
+			this.popupMenu.show(c, point.x, point.y);
 		}
 		else
 		{
-			popupMenu.setVisible(false);
+			this.popupMenu.setVisible(false);
 		}
 	}
 

@@ -135,7 +135,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		final Specimen objSpecimen = (Specimen) obj;
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
 		{
-			objSpecimen.setBarcode(getBarcode(objSpecimen));
+			objSpecimen.setBarcode(this.getBarcode(objSpecimen));
 		}
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
@@ -163,7 +163,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		}
 
 	}
-	
+
 	/**
 	 * This method will be called to get the barcode.
 	 * @return
@@ -171,7 +171,7 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 	protected String getBarcode(Specimen objSpecimen)
 	{
 		this.currentBarcode = this.currentBarcode + 1;
-		return  this.currentBarcode.toString();
+		return this.currentBarcode.toString();
 	}
 
 	/**

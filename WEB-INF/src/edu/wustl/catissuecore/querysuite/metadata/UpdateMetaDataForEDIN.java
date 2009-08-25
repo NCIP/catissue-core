@@ -111,79 +111,65 @@ public class UpdateMetaDataForEDIN extends UpdateMetadata
 
 		//		 Added by Geeta for edinburgh : Renaming zipcode to postCode
 		stmt = connection.createStatement();
-		rs = stmt
-				.executeQuery("select IDENTIFIER from dyextn_abstract_metadata" +
-						" where IDENTIFIER in (Select IDENTIFIER" +
-						" from dyextn_attribute where ENTIY_ID" +
-						" in (Select IDENTIFIER from dyextn_abstract_metadata where name "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
-						+ "'edu.wustl.catissuecore.domain.Address')) and NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR + "'zipCode'");
+		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
+				+ " where IDENTIFIER in (Select IDENTIFIER"
+				+ " from dyextn_attribute where ENTIY_ID"
+				+ " in (Select IDENTIFIER from dyextn_abstract_metadata where name "
+				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ "'edu.wustl.catissuecore.domain.Address')) and NAME "
+				+ DB_SPECIFIC_COMPARE_OPERATOR + "'zipCode'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
-			dbUpdateSQL
-					.add("update dyextn_abstract_metadata set NAME =" +
-							" 'postCode' where IDENTIFIER ="
-							+ identifier);
+			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME ="
+					+ " 'postCode' where IDENTIFIER =" + identifier);
 		}
 		stmt.close();
 
 		//Added by Geeta for edinburgh : Renaming irb id to Ethics number
 		stmt = connection.createStatement();
-		rs = stmt
-				.executeQuery("select IDENTIFIER from dyextn_abstract_metadata" +
-						" where IDENTIFIER in (Select IDENTIFIER" +
-						" from dyextn_attribute where ENTIY_ID in" +
-						" (Select IDENTIFIER from dyextn_abstract_metadata where name "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
-						+ "'edu.wustl.catissuecore.domain.SpecimenProtocol')) and NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
+		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
+				+ " where IDENTIFIER in (Select IDENTIFIER"
+				+ " from dyextn_attribute where ENTIY_ID in"
+				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
+				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ "'edu.wustl.catissuecore.domain.SpecimenProtocol')) and NAME "
+				+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
-			dbUpdateSQL
-					.add("update dyextn_abstract_metadata set NAME =" +
-							" 'ethicsNumber' where IDENTIFIER ="
-							+ identifier);
+			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME ="
+					+ " 'ethicsNumber' where IDENTIFIER =" + identifier);
 		}
 		stmt.close();
 
 		stmt = connection.createStatement();
-		rs = stmt
-				.executeQuery("select IDENTIFIER from dyextn_abstract_metadata" +
-						" where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute" +
-						" where ENTIY_ID in (Select IDENTIFIER " +
-						"from dyextn_abstract_metadata where name "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
-						+ "'edu.wustl.catissuecore.domain.CollectionProtocol')) and NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
+		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
+				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
+				+ " where ENTIY_ID in (Select IDENTIFIER "
+				+ "from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ "'edu.wustl.catissuecore.domain.CollectionProtocol')) and NAME "
+				+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
-			dbUpdateSQL
-					.add("update dyextn_abstract_metadata set NAME =" +
-							" 'ethicsNumber' where IDENTIFIER ="
-							+ identifier);
+			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME ="
+					+ " 'ethicsNumber' where IDENTIFIER =" + identifier);
 		}
 		stmt.close();
 		stmt = connection.createStatement();
-		rs = stmt
-				.executeQuery("select IDENTIFIER from dyextn_abstract_metadata" +
-						" where IDENTIFIER in (Select IDENTIFIER" +
-						" from dyextn_attribute where ENTIY_ID" +
-						" in (Select IDENTIFIER from dyextn_abstract_metadata where name "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
-						+ "'edu.wustl.catissuecore.domain.DistributionProtocol'))" +
-								" and NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
+		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
+				+ " where IDENTIFIER in (Select IDENTIFIER"
+				+ " from dyextn_attribute where ENTIY_ID"
+				+ " in (Select IDENTIFIER from dyextn_abstract_metadata where name "
+				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ "'edu.wustl.catissuecore.domain.DistributionProtocol'))" + " and NAME "
+				+ DB_SPECIFIC_COMPARE_OPERATOR + "'irbIdentifier'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
-			dbUpdateSQL
-					.add("update dyextn_abstract_metadata set NAME =" +
-							" 'ethicsNumber' where IDENTIFIER ="
-							+ identifier);
+			dbUpdateSQL.add("update dyextn_abstract_metadata set NAME ="
+					+ " 'ethicsNumber' where IDENTIFIER =" + identifier);
 		}
 		stmt.close();
 

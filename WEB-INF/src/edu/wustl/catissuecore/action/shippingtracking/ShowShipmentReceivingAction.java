@@ -47,6 +47,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @return forward mapping.
 	 * @throws Exception if some problem occurs.
 	 */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -57,28 +58,28 @@ public class ShowShipmentReceivingAction extends SecureAction
 			shipmentId = Long.parseLong(request
 					.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER));
 		}
-		ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) form;
+		final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) form;
 		Shipment shipment = null;
 		// Get the Shipment details.
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ShipmentBizLogic shipmentBizLogic = (ShipmentBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ShipmentBizLogic shipmentBizLogic = (ShipmentBizLogic) factory
 				.getBizLogic(Constants.SHIPMENT_FORM_ID);
-		String requestFor = request.getParameter("requestFor");
+		final String requestFor = request.getParameter("requestFor");
 		if (requestFor == null || (requestFor != null && !requestFor.equals("storageLocation")))
 		{
 			shipment = shipmentBizLogic.getShipmentObject(shipmentId);
 			shipmentReceivingForm.setAllValues(shipment);
 		}
-		TreeMap containerMap = new TreeMap();
+		final TreeMap containerMap = new TreeMap();
 		//String exceedingMaxLimit = "false";
 
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
+		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
 		// Get storageType for a "Shipment container".
 		/*StorageType st = ((List < StorageType >) bizLogic.retrieve(StorageType.class.getName(),
 				Constants.NAME, Constants.SHIPMENT_CONTAINER_TYPE_NAME)).get(0);*/
 		//long shipmentContainerStorageTypeId = st.getId();
-		SessionDataBean sessionDataBean = getSessionData(request);
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
 
 		// Commented due to removing 'auto' functionality.
 		/*
@@ -93,22 +94,22 @@ public class ShowShipmentReceivingAction extends SecureAction
 		}
 		*/
 
-		setContainerStorageInformation(containerMap, bizLogic, request, shipmentReceivingForm);
+		this.setContainerStorageInformation(containerMap, bizLogic, request, shipmentReceivingForm);
 
-		setSpecimenStorageInformation(bizLogic, containerMap, request, shipmentReceivingForm,
+		this.setSpecimenStorageInformation(bizLogic, containerMap, request, shipmentReceivingForm,
 				shipment);
 
 		// For ParentStorageContainer Site
-		String[] siteDisplayField = {"name"};
-		String valueField = "id";
-		String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
+		final String[] siteDisplayField = {"name"};
+		final String valueField = "id";
+		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
 				Status.ACTIVITY_STATUS_CLOSED.toString()};
-		List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
+		final List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
 				sessionDataBean.getUserId());
-		NameValueBean nvbForSelect = (NameValueBean) list.get(0);
+		final NameValueBean nvbForSelect = (NameValueBean) list.get(0);
 		if (!"-1".equals(nvbForSelect.getValue()))
 		{
-			NameValueBean nvb = new NameValueBean("--Select--", "-1");
+			final NameValueBean nvb = new NameValueBean("--Select--", "-1");
 			list.add(0, nvb);
 		}
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.SITELIST, list);
@@ -128,20 +129,20 @@ public class ShowShipmentReceivingAction extends SecureAction
 	{
 
 		// For ParentStorageContainer Container
-		String parentContainerSelected = request.getParameter("parentContainerSelected");
+		final String parentContainerSelected = request.getParameter("parentContainerSelected");
 		request.setAttribute("parentContainerSelected", parentContainerSelected);
 
-		String containerId = request.getParameter("containerObjectId");
+		final String containerId = request.getParameter("containerObjectId");
 
 		int containerCount = 0;
 		if (shipmentReceivingForm != null && shipmentReceivingForm.getContainerCollection() != null)
 		{
 			containerCount = shipmentReceivingForm.getContainerCollection().size();
 		}
-		checkForSufficientAvailablePositions(request, containerMap, containerCount,
+		this.checkForSufficientAvailablePositions(request, containerMap, containerCount,
 				ApplicationProperties.getValue("shipment.contentsContainers"));
 
-		populateContainerStorageLocations(shipmentReceivingForm, containerMap);
+		this.populateContainerStorageLocations(shipmentReceivingForm, containerMap);
 		if (containerId != null && !containerId.trim().equals(""))
 		{
 			request.setAttribute("containerObjectId", containerId);
@@ -161,14 +162,14 @@ public class ShowShipmentReceivingAction extends SecureAction
 			ShipmentReceivingForm shipmentReceivingForm, Shipment shipment)
 	{
 		//		For Storage Location Allocation
-		Logger logger = Logger.getCommonLogger(ShowShipmentReceivingAction.class);
-		String requestFor = request.getParameter("requestFor");
+		final Logger logger = Logger.getCommonLogger(ShowShipmentReceivingAction.class);
+		final String requestFor = request.getParameter("requestFor");
 		// Removing 'auto' in shipment receiving.
 		//List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
-		List<NameValueBean> storagePositionList = getStoragePositionTypeList();
+		final List<NameValueBean> storagePositionList = this.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
-		String exceedingMaxLimit = "";
-		String operation = (String) request
+		final String exceedingMaxLimit = "";
+		String operation = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
 		if (operation == null || operation.trim().equals(""))
 		{
@@ -181,18 +182,18 @@ public class ShowShipmentReceivingAction extends SecureAction
 		//		{
 		//			//specimenForm.setVirtuallyLocated(false);
 		//		}
-		String specimenId = request.getParameter("specimenId");
-		List initialValues = null;
-		String stContSelection = request.getParameter("stContSelection");
+		final String specimenId = request.getParameter("specimenId");
+		final List initialValues = null;
+		final String stContSelection = request.getParameter("stContSelection");
 		request.setAttribute("stContSelection", stContSelection);
 		int specimenCount = 0;
 		if (shipmentReceivingForm != null && shipmentReceivingForm.getSpecimenCollection() != null)
 		{
 			specimenCount = shipmentReceivingForm.getSpecimenCollection().size();
 		}
-		checkForSufficientAvailablePositions(request, containerMap, specimenCount,
+		this.checkForSufficientAvailablePositions(request, containerMap, specimenCount,
 				ApplicationProperties.getValue("shipment.contentsSpecimens"));
-		populateSpecimenStorageLocations(shipmentReceivingForm, containerMap);
+		this.populateSpecimenStorageLocations(shipmentReceivingForm, containerMap);
 		if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
 				&& requestFor != null && !requestFor.trim().equals("") && stContSelection != null)
 		{
@@ -201,15 +202,16 @@ public class ShowShipmentReceivingAction extends SecureAction
 				String collectionProtocolId = "";
 				if (specimenId != null && !specimenId.trim().equals(""))
 				{
-					Specimen specimen = new Specimen();
+					final Specimen specimen = new Specimen();
 					specimen.setId(Long.parseLong(specimenId));
 					DAO dao = null;
 					try
 					{
 						//Create DAO
 						dao = AppUtility.openDAOSession(null);
-						IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-						NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+						final IFactory factory = AbstractFactoryConfig.getInstance()
+								.getBizLogicFactory();
+						final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
 								.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
 
 						collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
@@ -218,7 +220,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 							collectionProtocolId = collectionProtocolId.split("_")[1];
 						}
 					}
-					catch (ApplicationException e)
+					catch (final ApplicationException e)
 					{
 						collectionProtocolId = "";
 						logger.debug(e.getMessage(), e);
@@ -229,7 +231,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 						{
 							AppUtility.closeDAOSession(dao);
 						}
-						catch (ApplicationException e)
+						catch (final ApplicationException e)
 						{
 							logger.debug(e.getMessage(), e);
 							e.printStackTrace();
@@ -263,15 +265,15 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 */
 	private void populateSpecimenStorageLocations(ShipmentReceivingForm form, Map containerMap)
 	{
-		Map map = form.getSpecimenDetailsMap();
-		String keyName = "Specimen:";
+		final Map map = form.getSpecimenDetailsMap();
+		final String keyName = "Specimen:";
 		int number = 0;
 		if (form.getSpecimenCollection() != null)
 		{
 			number = form.getSpecimenCollection().size();
 		}
 
-		populateStorageLocations(containerMap, map, keyName, number);
+		this.populateStorageLocations(containerMap, map, keyName, number);
 		form.setSpecimenDetailsMap(map);
 	}
 
@@ -286,22 +288,23 @@ public class ShowShipmentReceivingAction extends SecureAction
 		if (!containerMap.isEmpty())
 		{
 			int counter = 1;
-			Object[] containerId = containerMap.keySet().toArray();
+			final Object[] containerId = containerMap.keySet().toArray();
 			for (int i = 0; i < containerId.length; i++)
 			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
+				final Map xDimMap = (Map) containerMap.get(containerId[i]);
 				if (!xDimMap.isEmpty())
 				{
-					Object[] xDim = xDimMap.keySet().toArray();
+					final Object[] xDim = xDimMap.keySet().toArray();
 					for (int j = 0; j < xDim.length; j++)
 					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
+						final List yDimList = (List) xDimMap.get(xDim[j]);
 						for (int k = 0; k < yDimList.size(); k++)
 						{
 							if (counter <= number)
 							{
-								String initailValuesKey = keyName + counter + "_initialValues";
-								String[] initialValues = new String[3];
+								final String initailValuesKey = keyName + counter
+										+ "_initialValues";
+								final String[] initialValues = new String[3];
 								initialValues[0] = ((NameValueBean) containerId[i]).getValue();
 								initialValues[1] = ((NameValueBean) xDim[j]).getValue();
 								initialValues[2] = ((NameValueBean) yDimList.get(k)).getValue();
@@ -323,8 +326,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 		{
 			for (int commonCounter = 0; commonCounter < number; commonCounter++)
 			{
-				String initailValueKey = keyName + (commonCounter + 1) + "_initialValues";
-				String[] initialValues = new String[3];
+				final String initailValueKey = keyName + (commonCounter + 1) + "_initialValues";
+				final String[] initialValues = new String[3];
 				initialValues[0] = "";
 				initialValues[1] = "";
 				initialValues[2] = "";
@@ -340,14 +343,14 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 */
 	private void populateContainerStorageLocations(ShipmentReceivingForm form, Map containerMap)
 	{
-		Map map = form.getContainerDetailsMap();
-		String keyName = "Container:";
+		final Map map = form.getContainerDetailsMap();
+		final String keyName = "Container:";
 		int number = 0;
 		if (form.getContainerCollection() != null)
 		{
 			number = form.getContainerCollection().size();
 		}
-		populateStorageLocations(containerMap, map, keyName, number);
+		this.populateStorageLocations(containerMap, map, keyName, number);
 		form.setContainerDetailsMap(map);
 	}
 
@@ -404,7 +407,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 */
 	private List getStoragePositionTypeList()
 	{
-		List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
 		storagePositionTypeList.add(new NameValueBean(
 				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_VIRTUAL,
 				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE));

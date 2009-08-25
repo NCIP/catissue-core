@@ -78,55 +78,50 @@ public class CreateArrayInitAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;
-		String pageOf = null;
 		try
 		{
 			// Obtain session object from request.
 			final HttpSession session = request.getSession();
-			final SessionDataBean sessionDataBean = (SessionDataBean) request
-			.getSession().getAttribute(Constants.SESSION_DATA);
-			dao=AppUtility.openDAOSession(sessionDataBean);
+			final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
+			dao = AppUtility.openDAOSession(sessionDataBean);
 
 			// Retrieve from query string
 			// String arrayName = request.getParameter("array");
 			// String operation = request.getParameter("operation");
 
-			final String arrayName = (String) request
-					.getAttribute(Constants.ARRAY_NAME);
-			final String operation = (String) request
-					.getAttribute(Constants.OPERATION);
+			final String arrayName = (String) request.getAttribute(Constants.ARRAY_NAME);
+			final String operation = (String) request.getAttribute(Constants.OPERATION);
 			final List<NameValueBean> storagePositionListForSpecimenArray = AppUtility
 					.getStoragePositionTypeListForTransferEvent();
 			request.setAttribute("storagePositionListForSpecimenArray",
 					storagePositionListForSpecimenArray);
 
 			final String exceedingMaxLimit = "false";
-			final SessionDataBean sessionData = (SessionDataBean) request
-					.getSession().getAttribute(Constants.SESSION_DATA);
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
 
 			// Obtain specimenArray BizLogic
-			final IFactory factory = AbstractFactoryConfig.getInstance()
-					.getBizLogicFactory();
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 					.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
 
 			final List definedArrayRequestMapList = (ArrayList) session
 					.getAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST);
-			final Iterator definedArrayRequestMapListItr = definedArrayRequestMapList
-					.iterator();
-			while (definedArrayRequestMapListItr.hasNext()) {
-				final Map defineArrayMap = (Map) definedArrayRequestMapListItr
-						.next();
+			final Iterator definedArrayRequestMapListItr = definedArrayRequestMapList.iterator();
+			while (definedArrayRequestMapListItr.hasNext())
+			{
+				final Map defineArrayMap = (Map) definedArrayRequestMapListItr.next();
 				final Set defineArrayKeySet = defineArrayMap.keySet();
-				final Iterator defineArrayKeySetItr = defineArrayKeySet
-						.iterator();
+				final Iterator defineArrayKeySetItr = defineArrayKeySet.iterator();
 
 				// The Set has only one element(i.e,defineArrayRequestBean
 				// instance)
 				final DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean) defineArrayKeySetItr
 						.next();
 
-				if (definedArrayRequestBean.getArrayName().equals(arrayName)) {
+				if (definedArrayRequestBean.getArrayName().equals(arrayName))
+				{
 					final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 
 					// Set Specimen Class in request attribute to be displayed
@@ -135,30 +130,26 @@ public class CreateArrayInitAction extends BaseAction
 					final List specimenClassList = new ArrayList();
 
 					final String colName = "specimenClass";
-					final String colValue = definedArrayRequestBean
-							.getArrayClass();
-					final List specimenArrayTypeList = dao.retrieve(SpecimenArrayType.class.getName(),
-									colName, colValue);
+					final String colValue = definedArrayRequestBean.getArrayClass();
+					final List specimenArrayTypeList = dao.retrieve(SpecimenArrayType.class
+							.getName(), colName, colValue);
 					final SpecimenArrayType specimenArrayType = (SpecimenArrayType) specimenArrayTypeList
 							.get(0);
 
-					final String specimenClassId = specimenArrayType.getId()
-							.toString();
-					final String specimenClass = specimenArrayType
-							.getSpecimenClass();
+					final String specimenClassId = specimenArrayType.getId().toString();
+					final String specimenClass = specimenArrayType.getSpecimenClass();
 
 					// Populate Specimen Class List in the request scope.
-					final NameValueBean specClassNameValue = new NameValueBean(
-							specimenClass, specimenClassId);
+					final NameValueBean specClassNameValue = new NameValueBean(specimenClass,
+							specimenClassId);
 					specimenClassList.add(specClassNameValue);
-					request.setAttribute(Constants.SPECIMEN_CLASS_LIST,
-							specimenClassList);
+					request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 					specimenArrayForm.setSpecimenClass(specimenClass);
 
 					// Set Specimen Types
-					List specimenTypeList = this.setClassAndtype(
-							specimenArrayForm, specimenArrayType,dao);
+					List specimenTypeList = this.setClassAndtype(specimenArrayForm,
+							specimenArrayType, dao);
 
 					// specimens ArrayList contains the id of all specimens in
 					// the
@@ -173,104 +164,87 @@ public class CreateArrayInitAction extends BaseAction
 							.getAttribute(Constants.SPECIMEN_ID_LIST);
 					// specimensObjList =
 					// constructSpecimenObjList(definedArrayDetailsBeanList);
-					specimensObjList = this
-							.constructSpecimenObjList(specimenIdList,dao);
+					specimensObjList = this.constructSpecimenObjList(specimenIdList, dao);
 					// Populate arraycontentmap and set it in request scope.
 					Map arrayContentMap = new HashMap();
-					arrayContentMap = this.populateArrayContentMap(
-							definedArrayRequestBean, specimensObjList);
-					request.getSession().setAttribute(
-							Constants.SPECIMEN_ARRAY_CONTENT_KEY,
+					arrayContentMap = this.populateArrayContentMap(definedArrayRequestBean,
+							specimensObjList);
+					request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
 							arrayContentMap);
 					specimenArrayForm.setSubOperation("");
 					specimenArrayForm.setCreateSpecimenArray("yes");
 
-					request.setAttribute(Constants.SPECIMEN_TYPE_LIST,
-							specimenTypeList);
+					request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 					// Set the specimen name (i.e,label) in the form
-					specimenArrayForm.setName(definedArrayRequestBean
-							.getArrayName());
+					specimenArrayForm.setName(definedArrayRequestBean.getArrayName());
 
 					// Setting newSpecimenArrayOrderItem Id
-					specimenArrayForm
-							.setNewArrayOrderItemId(definedArrayRequestBean
-									.getOrderItemId());
+					specimenArrayForm.setNewArrayOrderItemId(definedArrayRequestBean
+							.getOrderItemId());
 					specimenArrayForm.setIsDefinedArray("True");
 
 					// Set the array type in request attribute to be viewed in
 					// SpecimenArray.jsp
 					final List arrayTypeList = new ArrayList();
-					final String arrayTypeName = definedArrayRequestBean
-							.getArrayType();
-					final String arrayTypeId = definedArrayRequestBean
-							.getArrayTypeId();
-					final NameValueBean typeNameValueBean = new NameValueBean(
-							arrayTypeName, arrayTypeId);
+					final String arrayTypeName = definedArrayRequestBean.getArrayType();
+					final String arrayTypeId = definedArrayRequestBean.getArrayTypeId();
+					final NameValueBean typeNameValueBean = new NameValueBean(arrayTypeName,
+							arrayTypeId);
 					arrayTypeList.add(typeNameValueBean);
-					request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST,
-							arrayTypeList);
+					request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, arrayTypeList);
 
-					specimenArrayForm.setSpecimenArrayTypeId(new Long(
-							arrayTypeId).longValue());
+					specimenArrayForm.setSpecimenArrayTypeId(new Long(arrayTypeId).longValue());
 
 					// Set Dimensions in the form
 					specimenArrayForm.setOneDimensionCapacity(Integer
-							.parseInt(definedArrayRequestBean
-									.getOneDimensionCapacity()));
+							.parseInt(definedArrayRequestBean.getOneDimensionCapacity()));
 					specimenArrayForm.setTwoDimensionCapacity(Integer
-							.parseInt(definedArrayRequestBean
-									.getTwoDimensionCapacity()));
+							.parseInt(definedArrayRequestBean.getTwoDimensionCapacity()));
 
 					// Set the User List in request attribute.
 					final UserBizLogic userBizLogic = (UserBizLogic) factory
 							.getBizLogic(Constants.USER_FORM_ID);
-					final Collection userCollection = userBizLogic
-							.getUsers(operation);
+					final Collection userCollection = userBizLogic.getUsers(operation);
 					request.setAttribute(Constants.USERLIST, userCollection);
 
-					final String subOperation = specimenArrayForm
-							.getSubOperation();
+					final String subOperation = specimenArrayForm.getSubOperation();
 					TreeMap containerMap = new TreeMap();
 					// boolean isChangeArrayType = false;
 
-					if (subOperation != null) {
+					if (subOperation != null)
+					{
 						SpecimenArrayType arrayType = null;
-						if (specimenArrayForm.getSpecimenArrayTypeId() > 0) {
-							final Object object = dao
-									.retrieveById(
-											SpecimenArrayType.class.getName(),
-											specimenArrayForm
-													.getSpecimenArrayTypeId());
-							if (object != null) {
+						if (specimenArrayForm.getSpecimenArrayTypeId() > 0)
+						{
+							final Object object = dao.retrieveById(SpecimenArrayType.class
+									.getName(), specimenArrayForm.getSpecimenArrayTypeId());
+							if (object != null)
+							{
 								arrayType = (SpecimenArrayType) object;
 							}
 						}
-						specimenTypeList = this.setClassAndtype(
-								specimenArrayForm, arrayType,dao);
+						specimenTypeList = this.setClassAndtype(specimenArrayForm, arrayType, dao);
 					}
 
 					final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 					containerMap = storageContainerBizLogic
-							.getAllocatedContaienrMapForSpecimenArray(
-									specimenArrayForm.getSpecimenArrayTypeId(),
-									0, sessionData, exceedingMaxLimit,dao);
-					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,
-							exceedingMaxLimit);
-					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,
-							containerMap);
+							.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm
+									.getSpecimenArrayTypeId(), 0, sessionData, exceedingMaxLimit,
+									dao);
+					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 
 					List initialValues = null;
-					initialValues = StorageContainerUtil.setInitialValue(
-							specimenArrayBizLogic, specimenArrayForm,
-							containerMap,dao);
+					initialValues = StorageContainerUtil.setInitialValue(specimenArrayBizLogic,
+							specimenArrayForm, containerMap, dao);
 					request.setAttribute("initValues", initialValues);
 
 					break;
 				}// End
-					// if(definedArrayRequestBean.getArrayName().equals(arrayName
-					// ))
+				// if(definedArrayRequestBean.getArrayName().equals(arrayName
+				// ))
 			}// End Outer While
 			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 			specimenArrayForm.setForwardTo("orderDetails");
@@ -292,7 +266,7 @@ public class CreateArrayInitAction extends BaseAction
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private List constructSpecimenObjList(List specimenIdList,DAO dao) throws BizLogicException
+	private List constructSpecimenObjList(List specimenIdList, DAO dao) throws BizLogicException
 	{
 		final List specimensObjList = new ArrayList();
 		try
@@ -308,7 +282,7 @@ public class CreateArrayInitAction extends BaseAction
 				specimensObjList.add(object);
 			}
 		}
-		catch(DAOException e)
+		catch (final DAOException e)
 		{
 			e.printStackTrace();
 			throw new BizLogicException(e);
@@ -386,20 +360,20 @@ public class CreateArrayInitAction extends BaseAction
 	 *             : BizLogicException
 	 */
 	private List setClassAndtype(SpecimenArrayForm specimenArrayForm,
-			SpecimenArrayType specimenArrayType,DAO dao) throws BizLogicException
+			SpecimenArrayType specimenArrayType, DAO dao) throws BizLogicException
 	{
 		final List specimenTypeList = new ArrayList();
 		try
 		{
 			String specimentype = new String();
 			NameValueBean specTypeNameValue = null;
-			final Collection specimenArrayTypeCollection = (Collection) dao
-					.retrieveAttribute(SpecimenArrayType.class,"id", specimenArrayType.getId(),
-							"elements(specimenTypeCollection)");
-	
+			final Collection specimenArrayTypeCollection = dao.retrieveAttribute(
+					SpecimenArrayType.class, "id", specimenArrayType.getId(),
+					"elements(specimenTypeCollection)");
+
 			specimenArrayType.setSpecimenTypeCollection(specimenArrayTypeCollection);
-			final String[] specimenTypeArr = new String[specimenArrayType.getSpecimenTypeCollection()
-					.size()];
+			final String[] specimenTypeArr = new String[specimenArrayType
+					.getSpecimenTypeCollection().size()];
 			final int i = 0;
 			final Iterator listItr = specimenArrayType.getSpecimenTypeCollection().iterator();
 			while (listItr.hasNext())
@@ -412,7 +386,7 @@ public class CreateArrayInitAction extends BaseAction
 			// Set specimenType in the form
 			specimenArrayForm.setSpecimenTypes(specimenTypeArr);
 		}
-		catch(DAOException e)
+		catch (final DAOException e)
 		{
 			e.printStackTrace();
 			throw new BizLogicException(e);

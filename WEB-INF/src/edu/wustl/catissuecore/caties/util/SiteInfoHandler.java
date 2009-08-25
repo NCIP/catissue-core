@@ -32,6 +32,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SiteInfoHandler
 {
+
 	/**
 	 * logger.
 	 */
@@ -49,10 +50,10 @@ public class SiteInfoHandler
 	public static void init(String path) throws Exception
 	{
 
-		DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory dbfactory = DocumentBuilderFactory.newInstance();
 		try
 		{
-			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
+			final DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
 			// ParserConfigurationException
 			if (path != null)
 			{
@@ -60,17 +61,17 @@ public class SiteInfoHandler
 				// throws SAXException,IOException,IllegalArgumentException(if path is null
 			}
 		}
-		catch (SAXException e)
+		catch (final SAXException e)
 		{
 			logger.error(e.getMessage(), e);
 			throw e;
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			logger.error(e.getMessage(), e);
 			throw e;
 		}
-		catch (ParserConfigurationException e)
+		catch (final ParserConfigurationException e)
 		{
 			logger.error("Could not locate a JAXP parser: " + e.getMessage(), e);
 			throw e;
@@ -90,29 +91,28 @@ public class SiteInfoHandler
 	public static String getSiteAbbriviation(String siteName) throws Exception
 	{
 		// it gives the rootNode of the xml file
-		Element root = document.getDocumentElement();
+		final Element root = document.getDocumentElement();
 
-		NodeList children = root.getChildNodes();
+		final NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++)
 		{
-			Node child = children.item(i);
+			final Node child = children.item(i);
 
 			if (child instanceof Element)
 			{
 				// it gives the subchild nodes in the xml file(name & value)
-				NodeList subChildNodes = child.getChildNodes();
+				final NodeList subChildNodes = child.getChildNodes();
 
 				boolean isNameFound = false;
 				//Logger.out.debug("subchildNodes : "+subChildNodes.getLength());
 				for (int j = 0; j < subChildNodes.getLength(); j++)
 				{
-					Node subchildNode = subChildNodes.item(j);
-					String subNodeName = subchildNode.getNodeName();
+					final Node subchildNode = subChildNodes.item(j);
+					final String subNodeName = subchildNode.getNodeName();
 					//Logger.out.debug("subnodeName : "+subNodeName);
 					if (subNodeName.equals(CaTIESConstants.SITE_NAME))
 					{
-						String pName = (String) subchildNode.
-						getFirstChild().getNodeValue();
+						final String pName = subchildNode.getFirstChild().getNodeValue();
 						//Logger.out.debug("pName : "+pName);
 						if (siteName.equals(pName))
 						{
@@ -123,8 +123,7 @@ public class SiteInfoHandler
 
 					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_ABBRIVIATION))
 					{
-						String pValue = (String) subchildNode.
-						getFirstChild().getNodeValue();
+						final String pValue = subchildNode.getFirstChild().getNodeValue();
 						return pValue;
 					}
 				}
@@ -145,29 +144,28 @@ public class SiteInfoHandler
 	public static String getSiteName(String abbr) throws Exception
 	{
 		// it gives the rootNode of the xml file
-		Element root = document.getDocumentElement();
+		final Element root = document.getDocumentElement();
 
-		NodeList children = root.getChildNodes();
+		final NodeList children = root.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++)
 		{
-			Node child = children.item(i);
+			final Node child = children.item(i);
 
 			if (child instanceof Element)
 			{
 				// it gives the subchild nodes in the xml file(name & value)
-				NodeList subChildNodes = child.getChildNodes();
+				final NodeList subChildNodes = child.getChildNodes();
 
 				boolean isNameFound = false;
 				//Logger.out.debug("subchildNodes : "+subChildNodes.getLength());
 				for (int j = subChildNodes.getLength() - 1; j >= 0; j--)
 				{
-					Node subchildNode = subChildNodes.item(j);
-					String subNodeName = subchildNode.getNodeName();
+					final Node subchildNode = subChildNodes.item(j);
+					final String subNodeName = subchildNode.getNodeName();
 					//Logger.out.debug("subnodeName : "+subNodeName);
 					if (subNodeName.equals(CaTIESConstants.SITE_ABBRIVIATION))
 					{
-						String pName = (String) subchildNode.
-						getFirstChild().getNodeValue();
+						final String pName = subchildNode.getFirstChild().getNodeValue();
 						//Logger.out.debug("pName : "+pName);
 						if (abbr.equals(pName))
 						{
@@ -178,8 +176,7 @@ public class SiteInfoHandler
 
 					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_NAME))
 					{
-						String pValue = (String) subchildNode.
-						getFirstChild().getNodeValue();
+						final String pValue = subchildNode.getFirstChild().getNodeValue();
 						return pValue;
 					}
 				}
@@ -199,12 +196,12 @@ public class SiteInfoHandler
 		try
 		{
 			// it gives the rootNode of the xml file
-			Element root = document.getDocumentElement();
+			final Element root = document.getDocumentElement();
 
-			NodeList children = root.getChildNodes();
+			final NodeList children = root.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++)
 			{
-				Node child = children.item(i);
+				final Node child = children.item(i);
 
 				if (child instanceof Element)
 				{
@@ -212,14 +209,14 @@ public class SiteInfoHandler
 					Logger.out.info("subnodeName : " + child.getNodeName());
 					if (child.getNodeName().equals(CaTIESConstants.DEFAULT_SITE_NAME))
 					{
-						String pName = (String) child.getFirstChild().getNodeValue();
+						final String pName = child.getFirstChild().getNodeValue();
 						Logger.out.info("sitename:" + pName);
 						return pName;
 					}
 				}
 			}
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error occured while", ex);
 		}

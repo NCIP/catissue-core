@@ -335,8 +335,7 @@ public class CreateAliquotAction extends BaseAction
 	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm,
 			SpecimenCollectionGroup scg, Specimen parentSpecimen) throws ApplicationException
 	{
-		final Collection<AbstractDomainObject> specimenCollection
-		= new LinkedHashSet<AbstractDomainObject>();
+		final Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		final boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
 		final Map aliquotMap = aliquotForm.getAliquotMap();
 		final String specimenKey = "Specimen:";
@@ -370,7 +369,7 @@ public class CreateAliquotAction extends BaseAction
 				posDim1Key = specimenKey + i + "_positionDimensionOne" + fromMapsuffixKey;
 				posDim2Key = specimenKey + i + "_positionDimensionTwo" + fromMapsuffixKey;
 			}
-			final Validator validator = new Validator();
+			new Validator();
 			final String quantity = (String) aliquotMap.get(quantityKey);
 			String containerId = (String) aliquotMap.get(containerIdKey);
 			Long storageContainerId = null;
@@ -404,10 +403,8 @@ public class CreateAliquotAction extends BaseAction
 				{
 					if (Validator.isEmpty(containername))
 					{
-						throw AppUtility.getApplicationException(null
-								, "errors.item.format",
-								ApplicationProperties.getValue("specimen" +
-										".storageContainer"));
+						throw AppUtility.getApplicationException(null, "errors.item.format",
+								ApplicationProperties.getValue("specimen" + ".storageContainer"));
 					}
 				}
 				// bug 11479 S bug
@@ -416,11 +413,9 @@ public class CreateAliquotAction extends BaseAction
 				{
 					if (Validator.isEmpty(posDim1) || Validator.isEmpty(posDim2))
 					{
-						throw AppUtility.getApplicationException(null
-								, "errors.item.format",
-								ApplicationProperties
-										.getValue("specimen" +
-								".positionInStorageContainer"));
+						throw AppUtility.getApplicationException(null, "errors.item.format",
+								ApplicationProperties.getValue("specimen"
+										+ ".positionInStorageContainer"));
 					}
 				}
 			}
@@ -461,8 +456,7 @@ public class CreateAliquotAction extends BaseAction
 					if (concentration != null)
 					{
 						((MolecularSpecimen) aliquotSpecimen)
-								.setConcentrationInMicrogramPerMicroliter
-								(concentration);
+								.setConcentrationInMicrogramPerMicroliter(concentration);
 					}
 				}
 			}

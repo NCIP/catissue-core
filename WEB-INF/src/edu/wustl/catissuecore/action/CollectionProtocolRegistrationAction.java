@@ -96,8 +96,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		final CollectionProtocolRegistrationForm collectionProtocolRegistrationForm
-		= (CollectionProtocolRegistrationForm) form;
+		final CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) form;
 		// Gets the value of the operation parameter.
 		final String operation = request.getParameter(Constants.OPERATION);
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -153,8 +152,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			// collectionProtocolRegistration.getConsentTierResponseCollection
 			// ();
 			final Collection consentResponse = (Collection) bizLogic.retrieveAttribute(
-					CollectionProtocolRegistration.class.getName()
-					, collectionProtocolRegistration
+					CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
 							.getId(), "elements(consentTierResponseCollection)");
 			final Map tempMap = this.prepareMap(consentResponse);
 			collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
@@ -171,8 +169,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
 		if (operation.equalsIgnoreCase(Constants.ADD))
 		{
-			final CollectionProtocolRegistrationForm cpform
-			= (CollectionProtocolRegistrationForm) form;
+			final CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm) form;
 			cpform.setId(0);
 			if (cpform.getRegistrationDate() == null)
 			{
@@ -232,17 +229,14 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			{
 				try
 				{
-					final AddNewSessionDataBean addNewSessionDataBean
-					= (AddNewSessionDataBean) formBeanStack
+					final AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean) formBeanStack
 							.peek();
 
-					final SpecimenCollectionGroupForm sessionFormBean
-					= (SpecimenCollectionGroupForm) addNewSessionDataBean
+					final SpecimenCollectionGroupForm sessionFormBean = (SpecimenCollectionGroupForm) addNewSessionDataBean
 							.getAbstractActionForm();
 
 					((CollectionProtocolRegistrationForm) form)
-							.setCollectionProtocolID(sessionFormBean
-									.getCollectionProtocolId());
+							.setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
 				}
 				catch (final ClassCastException exp)
 				{
@@ -346,13 +340,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					|| (request.getParameter("lastName").trim().length() > 0)
 					|| (request.getParameter("birthDate").trim().length() > 0)
 					|| ((request.getParameter("socialSecurityNumberPartA").trim().length() > 0)
-							&& (request.getParameter("socialSecurityNumberPartB")
-									.trim().length() > 0) && (request
-							.getParameter("socialSecurityNumberPartC")
-							.trim().length() > 0)))
+							&& (request.getParameter("socialSecurityNumberPartB").trim().length() > 0) && (request
+							.getParameter("socialSecurityNumberPartC").trim().length() > 0)))
 			{
-				final CollectionProtocolRegistrationForm cprForm
-				= (CollectionProtocolRegistrationForm) form;
+				final CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
 				cprForm.setParticipantID(participantId.longValue());
 				// cprForm.setCheckedButton(true);
 				// Bug-2819: Performance issue due to participant drop down:
@@ -373,8 +364,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				try
 				{
 					final Long participantId = new Long(request.getParameter("participantId"));
-					final CollectionProtocolRegistrationForm cprForm
-					= (CollectionProtocolRegistrationForm) form;
+					final CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
 					// cprForm.setCheckedButton(true);
 					final Object object = bizLogic.retrieve(sourceObjectName, participantId);
@@ -395,11 +385,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			{
 				try
 				{
-					final Long participantId
-					= new Long(((CollectionProtocolRegistrationForm) form)
+					final Long participantId = new Long(((CollectionProtocolRegistrationForm) form)
 							.getParticipantID());
-					final CollectionProtocolRegistrationForm cprForm
-					= (CollectionProtocolRegistrationForm) form;
+					final CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
 					cprForm.setParticipantID(participantId.longValue());
 					// cprForm.setCheckedButton(true);
 					final Object object = bizLogic.retrieve(sourceObjectName, participantId);
@@ -430,8 +418,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		if (request.getParameter(Constants.OPERATION).equals(Constants.EDIT))
 		{
-			final CollectionProtocolRegistrationForm cprForm
-			= (CollectionProtocolRegistrationForm) form;
+			final CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm) form;
 			String participantId = new Long(cprForm.getParticipantID()).toString();
 			if (cprForm.getParticipantID() == 0 && cprForm.getParticipantProtocolID() != null)
 			{
@@ -473,8 +460,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 			for (int j = 0; j < listOfDisabledParticipant.size(); j++)
 			{
-				if (Long.parseLong(((NameValueBean) listOfDisabledParticipant
-						.get(j)).getValue()) == -1)
+				if (Long.parseLong(((NameValueBean) listOfDisabledParticipant.get(j)).getValue()) == -1)
 				{
 					continue;
 				}
@@ -551,8 +537,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			Long consentID;
 			while (consentResponseCollectionIter.hasNext())
 			{
-				final ConsentTierResponse consentTierResponse
-				= (ConsentTierResponse) consentResponseCollectionIter
+				final ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
 						.next();
 				final ConsentTier consent = consentTierResponse.getConsentTier();
 				consentTierID = consentTierResponse.getConsentTier().getId();

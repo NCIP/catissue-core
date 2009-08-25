@@ -20,6 +20,11 @@ public class OrderForm extends AbstractActionForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6976105130845820240L;
+
+	/**
 	 * String contains the order name
 	 */
 	private String orderRequestName = null;
@@ -92,6 +97,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * @return FormId
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.ORDER_FORM_ID;
@@ -100,6 +106,7 @@ public class OrderForm extends AbstractActionForm
 	/**
 	 * function reset 
 	 */
+	@Override
 	protected void reset()
 	{
 	}
@@ -108,6 +115,7 @@ public class OrderForm extends AbstractActionForm
 	 * @param mapping ActionMapping
 	 * @param request HttpServletRequest
 	 */
+	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
 		this.orderRequestName = null;
@@ -120,17 +128,18 @@ public class OrderForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @return errors ActionErrors
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		new Validator();
 
-		if ((orderRequestName == null) || (orderRequestName.length() == 0))
+		if ((this.orderRequestName == null) || (this.orderRequestName.length() == 0))
 		{
 			errors.add("orderRequestName", new ActionError("errors.ordername.required"));
 		}
-		if ((distributionProtocol == null) || (distributionProtocol.equals("-1")))
+		if ((this.distributionProtocol == null) || (this.distributionProtocol.equals("-1")))
 		{
 			errors.add("distributionProtocol", new ActionError(
 					"errors.distributionprotocol.required"));

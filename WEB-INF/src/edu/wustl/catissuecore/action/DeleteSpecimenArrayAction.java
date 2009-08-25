@@ -74,8 +74,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 						.generateData(arrayContentMap);
 				if (abstractForm instanceof SpecimenArrayForm)
 				{
-					final SpecimenArrayForm specimenArrayForm
-					= (SpecimenArrayForm) abstractForm;
+					final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) abstractForm;
 					specimenArrayForm.setSpecArrayContentCollection(specimenArrayContentList);
 				}
 			}

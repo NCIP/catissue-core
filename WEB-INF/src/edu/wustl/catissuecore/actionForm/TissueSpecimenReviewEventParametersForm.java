@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -82,7 +82,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 */
 	public String getNeoplasticCellularityPercentage()
 	{
-		return neoplasticCellularityPercentage;
+		return this.neoplasticCellularityPercentage;
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 */
 	public String getNecrosisPercentage()
 	{
-		return necrosisPercentage;
+		return this.necrosisPercentage;
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 */
 	public String getLymphocyticPercentage()
 	{
-		return lymphocyticPercentage;
+		return this.lymphocyticPercentage;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 */
 	public String getTotalCellularityPercentage()
 	{
-		return totalCellularityPercentage;
+		return this.totalCellularityPercentage;
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 */
 	public String getHistologicalQuality()
 	{
-		return histologicalQuality;
+		return this.histologicalQuality;
 	}
 
 	/**
@@ -179,6 +179,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	/**
 	 * @return TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
@@ -188,20 +189,21 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 * Populates all the fields from the domain object to the form bean.
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters) abstractDomain;
+		final TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters) abstractDomain;
 
-		this.neoplasticCellularityPercentage = Utility
+		this.neoplasticCellularityPercentage = CommonUtilities
 				.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage());
-		this.necrosisPercentage = Utility.toString(tissueSpecimenReviewParametersObject
+		this.necrosisPercentage = CommonUtilities.toString(tissueSpecimenReviewParametersObject
 				.getNecrosisPercentage());
-		this.lymphocyticPercentage = Utility.toString(tissueSpecimenReviewParametersObject
+		this.lymphocyticPercentage = CommonUtilities.toString(tissueSpecimenReviewParametersObject
 				.getLymphocyticPercentage());
-		this.totalCellularityPercentage = Utility.toString(tissueSpecimenReviewParametersObject
-				.getTotalCellularityPercentage());
-		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject
+		this.totalCellularityPercentage = CommonUtilities
+				.toString(tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
+		this.histologicalQuality = CommonUtilities.toString(tissueSpecimenReviewParametersObject
 				.getHistologicalQuality());
 		logger.debug("this.neoplasticCellularityPercentage : "
 				+ this.neoplasticCellularityPercentage);
@@ -216,17 +218,18 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 
 			//         	// checks the neoplasticCellularityPercentage
-			if (!validator.isEmpty(neoplasticCellularityPercentage)
-					&& !validator.isDouble(neoplasticCellularityPercentage, false))
+			if (!Validator.isEmpty(this.neoplasticCellularityPercentage)
+					&& !validator.isDouble(this.neoplasticCellularityPercentage, false))
 			{
 				errors
 						.add(
@@ -239,8 +242,8 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 			//
 
 			//         	// checks the necrosisPercentage
-			if (!validator.isEmpty(necrosisPercentage)
-					&& !validator.isDouble(necrosisPercentage, false))
+			if (!Validator.isEmpty(this.necrosisPercentage)
+					&& !validator.isDouble(this.necrosisPercentage, false))
 			{
 				errors
 						.add(
@@ -253,8 +256,8 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 			//
 
 			//         	// checks the lymphocyticPercentage
-			if (!validator.isEmpty(lymphocyticPercentage)
-					&& !validator.isDouble(lymphocyticPercentage, false))
+			if (!Validator.isEmpty(this.lymphocyticPercentage)
+					&& !validator.isDouble(this.lymphocyticPercentage, false))
 
 			{
 				errors
@@ -268,8 +271,8 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 			//
 
 			//         	// checks the totalCellularityPercentage
-			if (!validator.isEmpty(totalCellularityPercentage)
-					&& !validator.isDouble(totalCellularityPercentage, false))
+			if (!Validator.isEmpty(this.totalCellularityPercentage)
+					&& !validator.isDouble(this.totalCellularityPercentage, false))
 			{
 				errors
 						.add(
@@ -288,7 +291,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 			//            }
 			//        
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -298,6 +301,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//	 	super.reset();

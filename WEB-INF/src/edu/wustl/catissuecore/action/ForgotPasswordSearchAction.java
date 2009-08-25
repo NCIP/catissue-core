@@ -42,10 +42,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ForgotPasswordSearchAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ForgotPasswordSearchAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(ForgotPasswordSearchAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -63,6 +65,7 @@ public class ForgotPasswordSearchAction extends Action
 	 *             ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -71,27 +74,27 @@ public class ForgotPasswordSearchAction extends Action
 
 		try
 		{
-			ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm
+			final ForgotPasswordForm forgotPasswordForm = (ForgotPasswordForm) form;
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(forgotPasswordForm
 					.getFormId());
 
 			// Retrieves and sends the password to the user whose email address
 			// is passed
 			// else returns the error key in case of an error.
-			SessionDataBean sessionData = new SessionDataBean();
+			final SessionDataBean sessionData = new SessionDataBean();
 			sessionData.setUserName(forgotPasswordForm.getEmailAddress());
-			String message = userBizLogic.sendForgotPassword(forgotPasswordForm.getEmailAddress(),
-					sessionData);
+			final String message = userBizLogic.sendForgotPassword(forgotPasswordForm
+					.getEmailAddress(), sessionData);
 
 			request.setAttribute(Constants.STATUS_MESSAGE_KEY, message);
 
 			target = new String(Constants.SUCCESS);
 		}
-		catch (BizLogicException excp)
+		catch (final BizLogicException excp)
 		{
 			target = new String(Constants.FAILURE);
-			logger.error(excp.getMessage());
+			this.logger.error(excp.getMessage());
 		}
 
 		return (mapping.findForward(target));

@@ -22,6 +22,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class RedirectToHelpAction extends Action
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -37,6 +38,7 @@ public class RedirectToHelpAction extends Action
 	 * @throws DAOException : DAOException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, DAOException

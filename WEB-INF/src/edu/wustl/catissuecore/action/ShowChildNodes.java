@@ -49,21 +49,21 @@ public class ShowChildNodes extends BaseAction
 		final PrintWriter out = response.getWriter();
 		Vector<StorageContainerTreeNode> treeNodeDataVector = new Vector<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
-		HttpSession session = request.getSession() ;
-		String pageOf = (String)session.getAttribute("PageForTree") ;
+		final HttpSession session = request.getSession();
+		final String pageOf = (String) session.getAttribute("PageForTree");
 		final String nodeName = request.getParameter(Constants.NODE_NAME);
 		final Long identifier = new Long(request.getParameter(Constants.CONTAINER_IDENTIFIER));
 		final String parentId = request.getParameter(Constants.PARENT_IDENTIFIER);
-		if(Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
+		if (Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
 		{
-			treeNodeDataVector = AppUtility.getTissueSiteNodes(identifier, nodeName, parentId) ;
+			treeNodeDataVector = AppUtility.getTissueSiteNodes(identifier, nodeName, parentId);
 		}
 		else
 		{
 			final StorageContainerBizLogic sc = new StorageContainerBizLogic();
 			treeNodeDataVector = sc.getStorageContainers(identifier, nodeName, parentId);
 		}
-		
+
 		response.setContentType("text/xml");
 		xmlData = this.makeXMLData(treeNodeDataVector, xmlData);
 		out.print(xmlData.toString());

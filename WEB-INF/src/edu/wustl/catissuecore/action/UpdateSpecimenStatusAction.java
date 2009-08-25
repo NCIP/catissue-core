@@ -144,7 +144,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				else
 				{
 					final HashSet specimenCollection = this.getSpecimensToPrint((Long) obj,
-							sessionDataBean,dao);
+							sessionDataBean, dao);
 					// bug 11169
 					// Set specimenprintCollection =
 					// specimenSummaryForm.getSpecimenPrintList();
@@ -171,14 +171,16 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					&& specimenSummaryForm.getForwardTo().equals(
 							Constants.ADD_MULTIPLE_SPECIMEN_TO_CART))
 			{
-			    //bug 13164 start
-				if(request.getParameter( Constants.IS_SCG_SUBMIT )!=null && (request.getParameter( Constants.IS_SCG_SUBMIT ).equals( Constants.SCG_SUBMIT )))
+				//bug 13164 start
+				if (request.getParameter(Constants.IS_SCG_SUBMIT) != null
+						&& (request.getParameter(Constants.IS_SCG_SUBMIT)
+								.equals(Constants.SCG_SUBMIT)))
 				{
 					final HashSet specimenprintCollection = this.getSpecimensToPrint((Long) obj,
-							sessionDataBean,dao);
+							sessionDataBean, dao);
 
 					final Iterator iter = specimenprintCollection.iterator();
-					List specimenIdList = new ArrayList();
+					final List specimenIdList = new ArrayList();
 					while (iter.hasNext())
 					{
 						specimenIdList.add(((Specimen) iter.next()).getId());
@@ -186,8 +188,9 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenIdList);
 				}
 				else
-				{			
-				   request.setAttribute(Constants.SPECIMEN_ID_LIST, getSpecimenIdList(specimenSummaryForm));
+				{
+					request.setAttribute(Constants.SPECIMEN_ID_LIST, this
+							.getSpecimenIdList(specimenSummaryForm));
 				}
 				//bug 13164 end
 				this.saveToken(request);
@@ -250,17 +253,18 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			AppUtility.closeDAOSession(dao);
 		}
 	}
+
 	private List getSpecimenIdList(ViewSpecimenSummaryForm specimenSummaryForm)
 	{
-		List specimenIdList = new ArrayList();
-		String eventId = specimenSummaryForm.getEventId();
-		List < GenericSpecimen > genericSpecimensList = new ArrayList < GenericSpecimen >();
-		genericSpecimensList.addAll( specimenSummaryForm.getSpecimenList() );
-		genericSpecimensList.addAll( specimenSummaryForm.getAliquotList() );
-		genericSpecimensList.addAll( specimenSummaryForm.getDerivedList() );
-		for(GenericSpecimen gSpecimen : genericSpecimensList)
+		final List specimenIdList = new ArrayList();
+		specimenSummaryForm.getEventId();
+		final List<GenericSpecimen> genericSpecimensList = new ArrayList<GenericSpecimen>();
+		genericSpecimensList.addAll(specimenSummaryForm.getSpecimenList());
+		genericSpecimensList.addAll(specimenSummaryForm.getAliquotList());
+		genericSpecimensList.addAll(specimenSummaryForm.getDerivedList());
+		for (final GenericSpecimen gSpecimen : genericSpecimensList)
 		{
-			specimenIdList.add( gSpecimen.getId() );
+			specimenIdList.add(gSpecimen.getId());
 		}
 		return specimenIdList;
 	}
@@ -290,18 +294,18 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					//if label and barcode generation is off then label will be null.
 					// thus added this check
 					//bug 13026
-					if(specimen.getId().toString()!=null && gSpecimen.getId()!= -1)
+					if (specimen.getId().toString() != null && gSpecimen.getId() != -1)
 					{
-						if(specimen.getId().longValue()== gSpecimen.getId())
+						if (specimen.getId().longValue() == gSpecimen.getId())
 						{
-						  specimensToPrint.add(specimen);
+							specimensToPrint.add(specimen);
 						}
 					}
-					else if(specimen.getLabel()!=null && gSpecimen.getDisplayName()!=null)
+					else if (specimen.getLabel() != null && gSpecimen.getDisplayName() != null)
 					{
-						if(specimen.getLabel().equals(gSpecimen.getDisplayName()))
+						if (specimen.getLabel().equals(gSpecimen.getDisplayName()))
 						{
-						  specimensToPrint.add(specimen);
+							specimensToPrint.add(specimen);
 						}
 					}
 				}
@@ -309,8 +313,6 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		return specimensToPrint;
 	}
-
-
 
 	/**
 	 *
@@ -709,12 +711,13 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	 * @return HashSet : HashSet
 	 * @throws BizLogicException : BizLogicException
 	 */
-	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean,DAO dao)
+	protected HashSet getSpecimensToPrint(Long scgId, SessionDataBean sessionDataBean, DAO dao)
 			throws BizLogicException
 	{
 
 		final SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true,dao);
+		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true,
+				dao);
 		final HashSet specimenCollection = new HashSet(objSCG.getSpecimenCollection());
 
 		return specimenCollection;

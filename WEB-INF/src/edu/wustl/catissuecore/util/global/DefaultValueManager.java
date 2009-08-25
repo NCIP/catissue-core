@@ -11,6 +11,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.CommonConstants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -61,65 +62,62 @@ public class DefaultValueManager
 	{
 		String specimenClassName = null;
 		List permissibleValueList = new ArrayList();
-		for (int iCount = 0; iCount < Constants.defaultValueKeys.length; iCount++)
+		for (final String[] defaultValueKey : Constants.defaultValueKeys)
 		{
-			String defaultValue = XMLPropertyHandler.getValue(Constants.defaultValueKeys[iCount][0]);
+			final String defaultValue = XMLPropertyHandler.getValue(defaultValueKey[0]);
 			NameValueBean defaultValueBean = null;
 			//converting defaultValue into NameValue object.
 			if (defaultValue != null)
 			{
 				defaultValueBean = new NameValueBean(defaultValue, defaultValue);
 			}
-			if (Constants.defaultValueKeys[iCount][0].equalsIgnoreCase(Constants.IS_BARCODE_EDITABLE))
+			if (defaultValueKey[0].equalsIgnoreCase(Constants.IS_BARCODE_EDITABLE))
 			{
-				logger.error("......barcode.isEditable....." + defaultValue +
-						"default keys : " + Constants.defaultValueKeys[iCount][0]);
-				DefaultValueManager.setDefaultValue
-				(Constants.defaultValueKeys[iCount][0], defaultValue);
+				logger.error("......barcode.isEditable....." + defaultValue + "default keys : "
+						+ defaultValueKey[0]);
+				DefaultValueManager.setDefaultValue(defaultValueKey[0], defaultValue);
 			}
 			else
 			{
-				if ((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_SPECIMEN))
+				if ((defaultValueKey[0]).equals(Constants.DEFAULT_SPECIMEN))
 				{
 					specimenClassName = defaultValue;
 				}
-				if ((Constants.defaultValueKeys[iCount][0]).equals
-						(Constants.DEFAULT_SPECIMEN_TYPE))
+				if ((defaultValueKey[0]).equals(Constants.DEFAULT_SPECIMEN_TYPE))
 				{
 					//Get the Specimen Type List.
 					permissibleValueList = AppUtility.getSpecimenTypes(specimenClassName);
 				}
-				if ((Constants.defaultValueKeys[iCount][0]).equals
-						(Constants.DEFAULT_CLINICAL_DIAGNOSIS))
+				if ((defaultValueKey[0]).equals(Constants.DEFAULT_CLINICAL_DIAGNOSIS))
 				{
-					String sourceObjectName = PermissibleValueImpl.class.getName();
-					String[] selectColumnName = {"value"};
+					final String sourceObjectName = PermissibleValueImpl.class.getName();
+					final String[] selectColumnName = {"value"};
 					// String[] whereColumnName ={ "value" };
 					// String[] whereColumnCondition =  { "=" };
 					// Object[] whereColumnValue ={Constants.SPECIMEN_TYPE_NOT_SPECIFIED};
 
-					String[] whereColumnName = {"value", "cde.publicId"};
-					String[] whereColumnCondition = {"=", "="};
-					Object[] whereColumnValue =
-					{Constants.NOT_SPECIFIED, "Clinical_Diagnosis_PID"};
+					final String[] whereColumnName = {"value", "cde.publicId"};
+					final String[] whereColumnCondition = {"=", "="};
+					final Object[] whereColumnValue = {Constants.NOT_SPECIFIED,
+							"Clinical_Diagnosis_PID"};
 
-					String joinCondition = edu.wustl.common.util.global.Constants.AND_JOIN_CONDITION;
-					List clinicalDiagnosisList = new ArrayList();
-					IBizLogic bizLogic = new DefaultBizLogic();
+					final String joinCondition = CommonConstants.AND_JOIN_CONDITION;
+					new ArrayList();
+					final IBizLogic bizLogic = new DefaultBizLogic();
 					try
 					{
-						Iterator<String> iterator = bizLogic.retrieve
-						(sourceObjectName, selectColumnName, whereColumnName,
-						whereColumnCondition,whereColumnValue, joinCondition).iterator();
+						final Iterator<String> iterator = bizLogic.retrieve(sourceObjectName,
+								selectColumnName, whereColumnName, whereColumnCondition,
+								whereColumnValue, joinCondition).iterator();
 
 						if (iterator.hasNext())
 						{
-							String clinicaDiagnosisvalue = iterator.next();
-							permissibleValueList.add(new NameValueBean
-								(clinicaDiagnosisvalue, clinicaDiagnosisvalue));
+							final String clinicaDiagnosisvalue = iterator.next();
+							permissibleValueList.add(new NameValueBean(clinicaDiagnosisvalue,
+									clinicaDiagnosisvalue));
 						}
 					}
-					catch (Exception e)
+					catch (final Exception e)
 					{
 						logger.debug(e.getMessage(), e);
 						e.printStackTrace();
@@ -127,16 +125,14 @@ public class DefaultValueManager
 				}
 				else
 				{
-					permissibleValueList = AppUtility.getListFromCDE
-					(Constants.defaultValueKeys[iCount][1]);
+					permissibleValueList = AppUtility.getListFromCDE(defaultValueKey[1]);
 				}
 				//added for bug 10750
-				if ((Constants.defaultValueKeys[iCount][0]).equals
-						(Constants.DEFAULT_PRINTER_LOCATION))
+				if ((defaultValueKey[0]).equals(Constants.DEFAULT_PRINTER_LOCATION))
 				{
 					permissibleValueList = new ArrayList<NameValueBean>();
-					if(Variables.printerLocationList != null &&
-							Variables.printerLocationList.size() > 0)
+					if (Variables.printerLocationList != null
+							&& Variables.printerLocationList.size() > 0)
 					{
 						defaultValueBean = Variables.printerLocationList.get(0);
 						permissibleValueList.add(defaultValueBean);
@@ -144,11 +140,10 @@ public class DefaultValueManager
 
 				}
 				//added for bug 10750
-				if ((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_PRINTER_TYPE))
+				if ((defaultValueKey[0]).equals(Constants.DEFAULT_PRINTER_TYPE))
 				{
 					permissibleValueList = new ArrayList<NameValueBean>();
-					if (Variables.printerTypeList != null &&
-							Variables.printerTypeList.size() > 0)
+					if (Variables.printerTypeList != null && Variables.printerTypeList.size() > 0)
 					{
 						defaultValueBean = Variables.printerTypeList.get(0);
 						permissibleValueList.add(defaultValueBean);
@@ -158,18 +153,16 @@ public class DefaultValueManager
 
 				/*If List contain default value then key,Value pair is set in default value map
 				else empty string is set for that key*/
-				if (permissibleValueList != null &&
-						permissibleValueList.contains(defaultValueBean))
+				if (permissibleValueList != null && permissibleValueList.contains(defaultValueBean))
 				{
-					DefaultValueManager.setDefaultValue
-					(Constants.defaultValueKeys[iCount][0], defaultValueBean.getValue());
+					DefaultValueManager.setDefaultValue(defaultValueKey[0], defaultValueBean
+							.getValue());
 				}
 				else
 				{
-					DefaultValueManager.setDefaultValue
-					(Constants.defaultValueKeys[iCount][0], "");
-					logger.error("Default Value set for '" +
-						Constants.defaultValueKeys[iCount][0] + "' is not in the CDEList");
+					DefaultValueManager.setDefaultValue(defaultValueKey[0], "");
+					logger.error("Default Value set for '" + defaultValueKey[0]
+							+ "' is not in the CDEList");
 				}
 			}
 		}

@@ -470,22 +470,19 @@ public interface AppletConstants
 	/**
 	 * SET_DATA.
 	 */
-	 String SET_DATA = "setData";
+	String SET_DATA = "setData";
 	/**
 	 * EMPTY_LIMIT_ERROR_MESSAGE.
 	 */
-	String EMPTY_LIMIT_ERROR_MESSAGE
-	= "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
+	String EMPTY_LIMIT_ERROR_MESSAGE = "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
 	/**
 	 * EMPTY_DAG_ERROR_MESSAGE.
 	 */
-	String EMPTY_DAG_ERROR_MESSAGE
-	= "<li><font color='red'>Limit set should contain at least one limit.</font></li>";
+	String EMPTY_DAG_ERROR_MESSAGE = "<li><font color='red'>Limit set should contain at least one limit.</font></li>";
 	/**
 	 * MULTIPLE_ROOTS_EXCEPTION.
 	 */
-	String MULTIPLE_ROOTS_EXCEPTION
-	 = "<li><font color='red'>Expression graph should be a connected graph.</font></li>";
+	String MULTIPLE_ROOTS_EXCEPTION = "<li><font color='red'>Expression graph should be a connected graph.</font></li>";
 	/**
 	 * EDIT_LIMITS.
 	 */

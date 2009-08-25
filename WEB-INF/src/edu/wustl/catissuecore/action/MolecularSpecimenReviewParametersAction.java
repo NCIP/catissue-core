@@ -35,30 +35,26 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	 * @param eventParametersForm : eventParametersForm
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
+		String formName;
 		String isRNA = null;
 
-		boolean readOnlyValue;
-		MolecularSpecimenReviewParametersForm molecularSpecimenReviewParametersForm =
+		final MolecularSpecimenReviewParametersForm molecularSpecimenReviewParametersForm =
 			(MolecularSpecimenReviewParametersForm) eventParametersForm;
 		if (molecularSpecimenReviewParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_EDIT_ACTION;
-			readOnlyValue = true;
 		}
 		else
 		{
 			formName = Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			isRNA = (String) request.getAttribute(Constants.IS_RNA);
-
-			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("isRNA", isRNA);
 		request.setAttribute("changeAction", changeAction);
 		request.setAttribute("formName", formName);
@@ -66,7 +62,7 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 		* Sets the isRNA attribute. It is used to display "Ratio 28S To 18S" field
 		* only for Specimen of Type = "Molecular" and subType = "RNA".
 		*/
-		String specimenID = (String) request.getAttribute(Constants.SPECIMEN_ID);
+		final String specimenID = (String) request.getAttribute(Constants.SPECIMEN_ID);
 
 		if (((request.getAttribute("isRNA") != null) && (request.getAttribute("isRNA")
 				.equals("true")))
@@ -84,16 +80,16 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 
 		if (specimenID != null)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			DefaultBizLogic specimenBizLogic = (DefaultBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final DefaultBizLogic specimenBizLogic = (DefaultBizLogic) factory
 					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			Object object = specimenBizLogic.retrieve(Specimen.class.getName(),
+			final Object object = specimenBizLogic.retrieve(Specimen.class.getName(),
 					new Long(specimenID));
 			if (object != null)
 			{
-				Specimen specimen = (Specimen) object;
-				String strClass = specimen.getClassName();
-				String strType = specimen.getSpecimenType();
+				final Specimen specimen = (Specimen) object;
+				final String strClass = specimen.getClassName();
+				final String strType = specimen.getSpecimenType();
 
 				if (strClass.equals(Constants.MOLECULAR) && strType.equals(Constants.RNA))
 				{
@@ -110,5 +106,4 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 			request.setAttribute("isRNA", Constants.FALSE);
 		}
 	}
-
 }

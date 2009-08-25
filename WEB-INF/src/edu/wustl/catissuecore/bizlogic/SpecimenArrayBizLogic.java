@@ -1439,9 +1439,9 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/*	*//**
-			 * @return Map
-			 * @throws BizLogicException : BizLogicException
-			 */
+				 * @return Map
+				 * @throws BizLogicException : BizLogicException
+				 */
 	/*
 		public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
 		{

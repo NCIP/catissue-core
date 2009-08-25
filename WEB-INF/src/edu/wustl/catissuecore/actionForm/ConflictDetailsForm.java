@@ -35,11 +35,13 @@ public class ConflictDetailsForm extends AbstractActionForm
 	 */
 	protected String reportQueueId;
 
+	@Override
 	public int getFormId()
 	{
 		return 0; //Constants.CONFLICT_DETAILS_FORM_ID;
 	}
 
+	@Override
 	protected void reset()
 	{
 	}
@@ -54,7 +56,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	 */
 	public String getReportQueueId()
 	{
-		return reportQueueId;
+		return this.reportQueueId;
 	}
 
 	/**
@@ -70,7 +72,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	 */
 	public String getParticipantId()
 	{
-		return participantId;
+		return this.participantId;
 	}
 
 	/**
@@ -86,7 +88,7 @@ public class ConflictDetailsForm extends AbstractActionForm
 	 */
 	public String getScgId()
 	{
-		return scgId;
+		return this.scgId;
 	}
 
 	/**

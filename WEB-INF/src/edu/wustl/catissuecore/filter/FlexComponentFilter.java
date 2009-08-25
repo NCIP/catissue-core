@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class FlexComponentFilter implements Filter
 {
+
 	/**
 	 * @param req : request
 	 * @param res : response
@@ -33,9 +34,9 @@ public class FlexComponentFilter implements Filter
 			throws IOException, ServletException
 	{
 
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
-		HttpSession session = request.getSession();
+		final HttpServletRequest request = (HttpServletRequest) req;
+		final HttpServletResponse response = (HttpServletResponse) res;
+		final HttpSession session = request.getSession();
 
 		if (session != null && session.getAttribute(Constants.SESSION_DATA) != null)
 		{
@@ -47,6 +48,7 @@ public class FlexComponentFilter implements Filter
 		}
 
 	}
+
 	/**
 	 * @param arg0 : arg0
 	 * @throws ServletException : ServletException
@@ -54,6 +56,7 @@ public class FlexComponentFilter implements Filter
 	public void init(FilterConfig arg0) throws ServletException
 	{
 	}
+
 	/**
 	 * destroy.
 	 */

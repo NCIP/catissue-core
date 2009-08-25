@@ -35,14 +35,15 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#doActionPerformed()
 	 * @param e : e
 	 */
+	@Override
 	protected void doActionPerformed(ActionEvent e)
 	{
-		JMenuItem menuItem = (JMenuItem) e.getSource();
-		((SpecimenArrayTableModel) table.getModel()).setCopySelectedOption(menuItem.getText());
+		final JMenuItem menuItem = (JMenuItem) e.getSource();
+		((SpecimenArrayTableModel) this.table.getModel()).setCopySelectedOption(menuItem.getText());
 		super.doActionPerformed(e);
 		// enable paste button
-		SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil
-				.getBaseApplet(table);
+		final SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil
+				.getBaseApplet(this.table);
 		arrayApplet.getPasteButton().setEnabled(true);
 	}
 
@@ -52,26 +53,27 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	 * @param rowIndex : rowIndex
 	 * @return List
 	 */
+	@Override
 	protected List getValueList(int rowIndex, int columnIndex)
 	{
 		List valueList = new ArrayList();
-		SpecimenArrayTableModel model = ((SpecimenArrayTableModel) table.getModel());
+		final SpecimenArrayTableModel model = ((SpecimenArrayTableModel) this.table.getModel());
 		if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_LABELBAR))
 		{
-			valueList.add(getCopiedLabelOrBarcode(model, rowIndex, columnIndex));
+			valueList.add(this.getCopiedLabelOrBarcode(model, rowIndex, columnIndex));
 		}
 		else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_QUANTITY))
 		{
-			valueList = new ArrayList(getCopiedQuantity(model, rowIndex, columnIndex));
+			valueList = new ArrayList(this.getCopiedQuantity(model, rowIndex, columnIndex));
 		}
 		else if (model.getCopySelectedOption().equals(
 				AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION))
 		{
-			valueList.add(getCopiedConcentration(model, rowIndex, columnIndex));
+			valueList.add(this.getCopiedConcentration(model, rowIndex, columnIndex));
 		}
 		else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_ALL))
 		{
-			valueList = new ArrayList(getCopiedAll(model, rowIndex, columnIndex));
+			valueList = new ArrayList(this.getCopiedAll(model, rowIndex, columnIndex));
 		}
 		return valueList;
 	}
@@ -90,15 +92,13 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 		{
 			return (String) model.getSpecimenArrayModelMap().get(
 					SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
-							.getColumnCount(), AppletConstants.
-							ARRAY_CONTENT_ATTR_LABEL_INDEX));
+							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX));
 		}
 		else
 		{
 			return (String) model.getSpecimenArrayModelMap().get(
 					SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
-							.getColumnCount(), AppletConstants.
-							ARRAY_CONTENT_ATTR_BARCODE_INDEX));
+							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX));
 		}
 	}
 
@@ -111,11 +111,10 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	 */
 	private List getCopiedQuantity(SpecimenArrayTableModel model, int rowIndex, int columnIndex)
 	{
-		List valueList = new ArrayList();
-		valueList.add((String) model.getSpecimenArrayModelMap().get(
+		final List valueList = new ArrayList();
+		valueList.add(model.getSpecimenArrayModelMap().get(
 				SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
-						.getColumnCount(), AppletConstants.
-						ARRAY_CONTENT_ATTR_QUANTITY_INDEX)));
+						.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX)));
 		//valueList.add((String) model.getSpecimenArrayModelMap().
 		//get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,model.getColumnCount(),
 		//AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX)));
@@ -146,24 +145,24 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	 */
 	private List getCopiedAll(SpecimenArrayTableModel model, int rowIndex, int columnIndex)
 	{
-		List valueList = new ArrayList();
-		valueList.add(getCopiedLabelOrBarcode(model, rowIndex, columnIndex));
-		valueList.add((String) model.getSpecimenArrayModelMap().get(
+		final List valueList = new ArrayList();
+		valueList.add(this.getCopiedLabelOrBarcode(model, rowIndex, columnIndex));
+		valueList.add(model.getSpecimenArrayModelMap().get(
 				SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
-						.getColumnCount(), AppletConstants.
-						ARRAY_CONTENT_ATTR_QUANTITY_INDEX)));
+						.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX)));
 		//valueList.add((String) model.getSpecimenArrayModelMap().
 		//get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,
 		//model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX)));
-		valueList.add(getCopiedConcentration(model, rowIndex, columnIndex));
+		valueList.add(this.getCopiedConcentration(model, rowIndex, columnIndex));
 		return valueList;
 	}
 
 	/**
 	 * @return total coumn count
 	 */
+	@Override
 	protected int getColumnCount()
 	{
-		return table.getColumnCount();
+		return this.table.getColumnCount();
 	}
 }

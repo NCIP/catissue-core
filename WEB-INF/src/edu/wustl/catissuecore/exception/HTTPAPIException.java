@@ -17,16 +17,23 @@ package edu.wustl.catissuecore.exception;
  */
 public class HTTPAPIException extends Exception
 {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6880858887978581655L;
 	/**
 	 * httpApiException.
 	 */
 	private Exception httpApiException;
+
 	/**
 	 * default constructor.
 	 */
 	public HTTPAPIException()
 	{
 	}
+
 	/**
 	 * @param message : message
 	 */
@@ -34,6 +41,7 @@ public class HTTPAPIException extends Exception
 	{
 		this(message, null);
 	}
+
 	/**
 	 * @param ex : ex
 	 */
@@ -41,6 +49,7 @@ public class HTTPAPIException extends Exception
 	{
 		this("", ex);
 	}
+
 	/**
 	 * @param message : message
 	 * @param ex : ex

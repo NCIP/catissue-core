@@ -141,16 +141,15 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 
-    protected String metaPhoneCode;
-	
-    protected String empiId=null;
-	
+	protected String metaPhoneCode;
+
+	protected String empiId = null;
+
 	public String getMetaPhoneCode()
 	{
-		return metaPhoneCode;
+		return this.metaPhoneCode;
 	}
 
-	
 	public void setMetaPhoneCode(String metaPhoneCode)
 	{
 		this.metaPhoneCode = metaPhoneCode;
@@ -205,8 +204,7 @@ public class Participant extends AbstractDomainObject
 		}
 		this.raceCollection = raceCollection;
 
-		final Collection<ParticipantMedicalIdentifier> pmiCollection
-		= new ArrayList<ParticipantMedicalIdentifier>();
+		final Collection<ParticipantMedicalIdentifier> pmiCollection = new ArrayList<ParticipantMedicalIdentifier>();
 		if (participant.getParticipantMedicalIdentifierCollection() != null)
 		{
 			final Iterator<ParticipantMedicalIdentifier> pmiItr = participant
@@ -576,17 +574,16 @@ public class Participant extends AbstractDomainObject
 	{
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
-	
-    
-    public String getEmpiId()
-    {
-        return empiId;
-    }
 
-    public void setEmpiId(String empiId) 
-    {
-        this.empiId = empiId;
-    }
+	public String getEmpiId()
+	{
+		return this.empiId;
+	}
+
+	public void setEmpiId(String empiId)
+	{
+		this.empiId = empiId;
+	}
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
@@ -698,8 +695,7 @@ public class Participant extends AbstractDomainObject
 			logger.debug("Map " + map);
 			final MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
 					"edu.wustl.catissuecore.domain");
-			this.collectionProtocolRegistrationCollection
-			= parserCollectionProtocolRegistrationCollection
+			this.collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
 					.generateData(mapCollectionProtocolRegistrationCollection);
 			logger.debug("ParticipantMedicalIdentifierCollection "
 					+ this.participantMedicalIdentifierCollection);
@@ -729,8 +725,7 @@ public class Participant extends AbstractDomainObject
 		final Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
 		while (itr.hasNext())
 		{
-			final CollectionProtocolRegistration collectionProtocolRegistration
-			= (CollectionProtocolRegistration) itr
+			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itr
 					.next();
 			this.setConsentResponse(collectionProtocolRegistration, consentResponseBeanCollection);
 		}

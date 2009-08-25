@@ -4,7 +4,8 @@
  *<p>Copyright:TODO</p>
  *@author 
  *@version 1.0
- */ 
+ */
+
 package edu.wustl.catissuecore.security;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -19,50 +20,60 @@ import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSTransactionException;
 
-
-
-public class SecurityManager extends  edu.wustl.security.manager.SecurityManager
+public class SecurityManager extends edu.wustl.security.manager.SecurityManager
 {
-	
-	public void createUser(User user) throws SMException {
-        try {
+
+	@Override
+	public void createUser(User user) throws SMException
+	{
+		try
+		{
 			ProvisionManager.getInstance().getUserProvisioningManager().createUser(user);
-            if(isIdpEnabled())
-            {
-                IdPManager idp = IdPManager.getInstance();
-                idp.addUserToQueue(SecurityManagerPropertiesLocator.getInstance()
-        				.getApplicationCtxName(), user);
-       
-            }
-        } catch (CSTransactionException exception)
+			if (this.isIdpEnabled())
+			{
+				final IdPManager idp = IdPManager.getInstance();
+				idp.addUserToQueue(SecurityManagerPropertiesLocator.getInstance()
+						.getApplicationCtxName(), user);
+
+			}
+		}
+		catch (final CSTransactionException exception)
 		{
-			String mesg = "Unable to create user " + user.getEmailId();
+			final String mesg = "Unable to create user " + user.getEmailId();
 			Utility.getInstance().throwSMException(exception, mesg, "sm.operation.error");
 		}
-    }
-    
-    private boolean isIdpEnabled()
-    {
-        String idpEnabled = XMLPropertyHandler.getValue(Constants.IDP_ENABLED);
-        if (Constants.TRUE.equalsIgnoreCase(idpEnabled))
-            return true;
-        else
-            return false;
-    }
-    
-    public void modifyUser(User user) throws SMException {
-        try {
+	}
+
+	private boolean isIdpEnabled()
+	{
+		final String idpEnabled = XMLPropertyHandler.getValue(Constants.IDP_ENABLED);
+		if (Constants.TRUE.equalsIgnoreCase(idpEnabled))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public void modifyUser(User user) throws SMException
+	{
+		try
+		{
 			ProvisionManager.getInstance().getUserProvisioningManager().modifyUser(user);
-            if(isIdpEnabled())
-            {
-                IdPManager idp = IdPManager.getInstance();
-                idp.addUserToQueue(CommonServiceLocator.getInstance().getAppName(), user);
-            }
-        } catch (CSException exception)
+			if (this.isIdpEnabled())
+			{
+				final IdPManager idp = IdPManager.getInstance();
+				idp.addUserToQueue(CommonServiceLocator.getInstance().getAppName(), user);
+			}
+		}
+		catch (final CSException exception)
 		{
-			String mesg = "Unable to modify user: Exception:  ";
+			final String mesg = "Unable to modify user: Exception:  ";
 			Utility.getInstance().throwSMException(exception, mesg, "sm.operation.error");
 		}
-    }
+	}
 
 }

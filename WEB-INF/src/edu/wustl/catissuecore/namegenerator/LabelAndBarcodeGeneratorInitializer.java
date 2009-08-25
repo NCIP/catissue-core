@@ -89,7 +89,7 @@ public final class LabelAndBarcodeGeneratorInitializer
 			Variables.isSpecimenLabelGeneratorAvl = true;
 		}
 		protocolParticipantIdentifierLabelGeneratorInstance = LabelGeneratorFactory
-		.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
 		if (protocolParticipantIdentifierLabelGeneratorInstance != null)
 		{
 			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;

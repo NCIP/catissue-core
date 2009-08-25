@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -48,7 +48,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getEmbeddingMedium()
 	{
-		return embeddingMedium;
+		return this.embeddingMedium;
 	}
 
 	/**
@@ -64,6 +64,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return EMBEDDED_EVENT_PARAMETERS_FORM_ID 
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID;
@@ -73,11 +74,13 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain  An AbstractDomainObject obj
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters) abstractDomain;
-		this.embeddingMedium = Utility.toString(embeddedEventParametersObject.getEmbeddingMedium());
+		final EmbeddedEventParameters embeddedEventParametersObject = (EmbeddedEventParameters) abstractDomain;
+		this.embeddingMedium = CommonUtilities.toString(embeddedEventParametersObject
+				.getEmbeddingMedium());
 	}
 
 	/**
@@ -86,20 +89,21 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
-			if (!validator.isValidOption(embeddingMedium))
+			if (!validator.isValidOption(this.embeddingMedium))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("embeddedeventparameters.embeddingMedium")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -110,6 +114,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//         super.reset();

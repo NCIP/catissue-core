@@ -75,10 +75,9 @@ public class AddAttributesForUpgrade extends BaseMetadata
 				}
 
 				sql = "INSERT INTO dyextn_abstract_metadata "
-					+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID)" +
-							" values("
-						+ nextIdOfAbstractMetadata
-						+ ",NULL,NULL,NULL,'" + attr + "',null)";
+						+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID)"
+						+ " values(" + nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + attr
+						+ "',null)";
 				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 				{
 					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
@@ -95,15 +94,14 @@ public class AddAttributesForUpgrade extends BaseMetadata
 						+ entityId + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 				final String primaryKey = this.attributePrimarkeyMap.get(attr);
-				sql = "insert into dyextn_primitive_attribute" +
-						" (IDENTIFIER,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE)"
-						+ " values (" + nextIdOfAbstractMetadata
-						+ ",NULL," + primaryKey + ",1)";
+				sql = "insert into dyextn_primitive_attribute"
+						+ " (IDENTIFIER,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE)" + " values ("
+						+ nextIdOfAbstractMetadata + ",NULL," + primaryKey + ",1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
-				sql = "insert into dyextn_attribute_type_info" +
-						" (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
-						+ nextIdAttrTypeInfo + "," + nextIdOfAbstractMetadata + ")";
+				sql = "insert into dyextn_attribute_type_info"
+						+ " (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values (" + nextIdAttrTypeInfo
+						+ "," + nextIdOfAbstractMetadata + ")";
 				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 				{
 					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
@@ -116,11 +114,10 @@ public class AddAttributesForUpgrade extends BaseMetadata
 
 				if (!dataType.equalsIgnoreCase("String") && !dataType.equalsIgnoreCase("date"))
 				{
-					sql = "insert into dyextn_numeric_type_info" +
-						" (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values ("
+					sql = "insert into dyextn_numeric_type_info"
+							+ " (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values ("
 							+ nextIdAttrTypeInfo + ",NULL,0,NULL)";
-					UpdateMetadataUtil.
-					executeInsertSQL(sql, this.connection.createStatement());
+					UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 				}
 
 				if (dataType.equalsIgnoreCase("string"))
@@ -161,8 +158,8 @@ public class AddAttributesForUpgrade extends BaseMetadata
 				}
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
-				sql = "insert into dyextn_column_properties" +
-						" (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
+				sql = "insert into dyextn_column_properties"
+						+ " (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
 						+ nextIdDatabaseproperties + "," + nextIdOfAbstractMetadata + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 			}

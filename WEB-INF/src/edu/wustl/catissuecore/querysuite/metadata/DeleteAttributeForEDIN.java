@@ -169,11 +169,9 @@ public class DeleteAttributeForEDIN extends DeleteAttribute
 		}
 
 		this.stmt = this.connection.createStatement();
-		final ResultSet rs = this.stmt
-				.executeQuery("select identifier from dyextn_data_element" +
-						" where ATTRIBUTE_TYPE_INFO_ID="
-						+ attribute.getAttributeTypeInformation().
-						getDataElement().getId());
+		final ResultSet rs = this.stmt.executeQuery("select identifier from dyextn_data_element"
+				+ " where ATTRIBUTE_TYPE_INFO_ID="
+				+ attribute.getAttributeTypeInformation().getDataElement().getId());
 		if (rs != null)
 		{
 

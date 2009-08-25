@@ -86,8 +86,6 @@ public class OrderPathologyCaseAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	
-
 	/**
 	 * function for setting the class and type.
 	 *

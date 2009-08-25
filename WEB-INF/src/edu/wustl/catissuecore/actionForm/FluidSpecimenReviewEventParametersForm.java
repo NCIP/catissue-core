@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,7 +51,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	 */
 	public String getCellCount()
 	{
-		return cellCount;
+		return this.cellCount;
 	}
 
 	/**
@@ -69,6 +69,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
@@ -78,11 +79,13 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomainObject obj
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters) abstractDomain;
-		this.cellCount = Utility.toString(fluidSpecimenReviewEventParametersObject.getCellCount());
+		final FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParametersObject = (FluidSpecimenReviewEventParameters) abstractDomain;
+		this.cellCount = CommonUtilities.toString(fluidSpecimenReviewEventParametersObject
+				.getCellCount());
 		logger.debug("############FormObject################## : ");
 		logger.debug(this.cellCount);
 		logger.debug("############################## : ");
@@ -94,22 +97,23 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 			//         // checks the cellCount
-			if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount, false))
+			if (!Validator.isEmpty(this.cellCount) && !validator.isDouble(this.cellCount, false))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties
 								.getValue("fluidspecimenrevieweventparameters.cellcount")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -121,6 +125,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	 * This method defined in ActionForm is overridden in this class.
 	 */
 
+	@Override
 	protected void reset()
 	{
 		//         super.reset();

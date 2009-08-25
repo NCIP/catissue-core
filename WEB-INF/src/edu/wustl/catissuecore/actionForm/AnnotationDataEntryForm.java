@@ -33,7 +33,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 
 	public String getSelectedStaticEntityId()
 	{
-		return selectedStaticEntityId;
+		return this.selectedStaticEntityId;
 	}
 
 	public void setSelectedStaticEntityId(String selectedStaticEntityId)
@@ -43,7 +43,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 
 	public String getSelectedStaticEntityRecordId()
 	{
-		return selectedStaticEntityRecordId;
+		return this.selectedStaticEntityRecordId;
 	}
 
 	public void setSelectedStaticEntityRecordId(String selectedStaticEntityRecordId)
@@ -53,7 +53,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 
 	public String getSelectedRecords()
 	{
-		return selectedRecords;
+		return this.selectedRecords;
 	}
 
 	public void setSelectedRecords(final String selectedRecords)
@@ -101,6 +101,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 		this.parentEntityId = parentEntityId;
 	}
 
+	@Override
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
@@ -113,6 +114,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 
 	}
 
+	@Override
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
@@ -124,7 +126,7 @@ public class AnnotationDataEntryForm extends AbstractActionForm implements Seria
 	 */
 	public String getDefinedAnnotationEntitiesXML()
 	{
-		return definedAnnotationEntitiesXML;
+		return this.definedAnnotationEntitiesXML;
 	}
 
 	/**

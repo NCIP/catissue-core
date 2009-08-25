@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -47,7 +47,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	 */
 	public String getStorageStatus()
 	{
-		return storageStatus;
+		return this.storageStatus;
 	}
 
 	/**
@@ -65,6 +65,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	 * @return CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID
 	 * 
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID;
@@ -74,11 +75,12 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An abstractDomain object. 
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		final CheckInCheckOutEventParameter checkInCheckOutEventParameterObject = (CheckInCheckOutEventParameter) abstractDomain;
-		this.storageStatus = Utility.toString(checkInCheckOutEventParameterObject
+		this.storageStatus = CommonUtilities.toString(checkInCheckOutEventParameterObject
 				.getStorageStatus());
 	}
 
@@ -88,6 +90,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
@@ -98,14 +101,14 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 		{
 			// checks the storageStatus
 			// changed from isEmpty to isValidOption as per bug 294 textbox to dropdown
-			if (!validator.isValidOption(storageStatus))
+			if (!validator.isValidOption(this.storageStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties
 								.getValue("checkincheckouteventparameter.storagestatus")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -115,6 +118,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	/**
 	 * Method to reset class Attributes
 	 */
+	@Override
 	protected void reset()
 	{
 		//      	super.reset();

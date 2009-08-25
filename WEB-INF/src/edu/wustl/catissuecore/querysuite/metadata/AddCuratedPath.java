@@ -126,188 +126,145 @@ public class AddCuratedPath
 	private void populateMapForPath()
 	{
 		this.entityList = new ArrayList<String>();
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-					"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-				"edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.Participant");
+		this.entityList.add("edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.Participant");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.StorageContainer," +
-						"edu.wustl.catissuecore.domain.SpecimenPosition," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.StorageContainer," +
-						"edu.wustl.catissuecore.domain.SpecimenPosition," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.StorageContainer," +
-						"edu.wustl.catissuecore.domain.SpecimenPosition," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.StorageContainer," +
-						"edu.wustl.catissuecore.domain.SpecimenPosition," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.StorageContainer," +
-						"edu.wustl.catissuecore.domain.SpecimenPosition," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.StorageContainer,"
+				+ "edu.wustl.catissuecore.domain.SpecimenPosition,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.StorageContainer,"
+				+ "edu.wustl.catissuecore.domain.SpecimenPosition,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.StorageContainer,"
+				+ "edu.wustl.catissuecore.domain.SpecimenPosition,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.StorageContainer,"
+				+ "edu.wustl.catissuecore.domain.SpecimenPosition,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.StorageContainer,"
+				+ "edu.wustl.catissuecore.domain.SpecimenPosition,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.Site," +
-						"edu.wustl.catissuecore.domain.SpecimenCollectionGroup," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Site,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Site,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Site,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Site,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.Site,"
+				+ "edu.wustl.catissuecore.domain.SpecimenCollectionGroup,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderDetails," +
-						"edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderDetails," +
-						"edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderDetails," +
-						"edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderDetails," +
-						"edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderDetails," +
-						"edu.wustl.catissuecore.domain.Distribution," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderDetails,"
+				+ "edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderDetails,"
+				+ "edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderDetails,"
+				+ "edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderDetails,"
+				+ "edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderDetails,"
+				+ "edu.wustl.catissuecore.domain.Distribution,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolRegistration," +
-						"edu.wustl.catissuecore.domain.Participant");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolRegistration,"
+				+ "edu.wustl.catissuecore.domain.Participant");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolEvent," +
-						"edu.wustl.catissuecore.domain.SpecimenRequirement");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolEvent," +
-						"edu.wustl.catissuecore.domain.CellSpecimenRequirement");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolEvent," +
-						"edu.wustl.catissuecore.domain.FluidSpecimenRequirement");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolEvent," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimenRequirement");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.CollectionProtocol," +
-						"edu.wustl.catissuecore.domain.CollectionProtocolEvent," +
-						"edu.wustl.catissuecore.domain.TissueSpecimenRequirement");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent,"
+				+ "edu.wustl.catissuecore.domain.SpecimenRequirement");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimenRequirement");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimenRequirement");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimenRequirement");
+		this.entityList.add("edu.wustl.catissuecore.domain.CollectionProtocol,"
+				+ "edu.wustl.catissuecore.domain.CollectionProtocolEvent,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimenRequirement");
 
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderItem," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.Specimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderItem," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.CellSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderItem," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.FluidSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderItem," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.MolecularSpecimen");
-		this.entityList
-				.add("edu.wustl.catissuecore.domain.OrderItem," +
-						"edu.wustl.catissuecore.domain.DistributedItem," +
-						"edu.wustl.catissuecore.domain.TissueSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderItem,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.Specimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderItem,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.CellSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderItem,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.FluidSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderItem,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.MolecularSpecimen");
+		this.entityList.add("edu.wustl.catissuecore.domain.OrderItem,"
+				+ "edu.wustl.catissuecore.domain.DistributedItem,"
+				+ "edu.wustl.catissuecore.domain.TissueSpecimen");
 	}
 
 	/**

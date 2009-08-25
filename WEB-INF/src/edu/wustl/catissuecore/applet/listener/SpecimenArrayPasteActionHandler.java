@@ -35,6 +35,7 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 	 * #doActionPerformed(java.awt.event.ActionEvent).
 	 * @param e : e
 	 */
+	@Override
 	protected void doActionPerformed(ActionEvent e)
 	{
 		super.doActionPerformed(e);
@@ -47,32 +48,29 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 	 * @param selectedCol : selectedCol
 	 * @param valueList : values
 	 */
+	@Override
 	protected void doPasteData(int selectedRow, int selectedCol, List valueList)
 	{
-		if ((table != null) && (!valueList.isEmpty()))
+		if ((this.table != null) && (!valueList.isEmpty()))
 		{
-			SpecimenArrayTableModel model = (SpecimenArrayTableModel) table.getModel();
+			final SpecimenArrayTableModel model = (SpecimenArrayTableModel) this.table.getModel();
 			if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_LABELBAR))
 			{
 				// update model to set copied data
 				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
 				{
 					model.getSpecimenArrayModelMap().put(
-							SpecimenArrayAppletUtil.
-							getArrayMapKey(selectedRow, selectedCol, model
+							SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 									.getColumnCount(),
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_LABEL_INDEX),
+									AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),
 							valueList.get(0));
 				}
 				else
 				{
 					model.getSpecimenArrayModelMap().put(
-							SpecimenArrayAppletUtil.
-							getArrayMapKey(selectedRow, selectedCol, model
+							SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 									.getColumnCount(),
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_BARCODE_INDEX),
+									AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),
 							valueList.get(0));
 				}
 			}
@@ -85,13 +83,11 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 					value = "";
 				}
 				model.getSpecimenArrayModelMap().put(
-						SpecimenArrayAppletUtil.
-						getArrayMapKey(selectedRow, selectedCol, model
+						SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 								.getColumnCount(),
-								AppletConstants.
-								ARRAY_CONTENT_ATTR_QUANTITY_INDEX), value);
+								AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX), value);
 				// update quantity text field details
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(this.table))
 						.getQuantityTextField().setText(value);
 				//model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.
 				//getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),
@@ -106,13 +102,11 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 					value = "";
 				}
 				model.getSpecimenArrayModelMap().put(
-						SpecimenArrayAppletUtil.
-						getArrayMapKey(selectedRow, selectedCol, model
-								.getColumnCount(),
-								AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
+						SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
 						value);
 				// update concentration text field details
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(this.table))
 						.getConcentrationTextField().setText(value);
 			}
 			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_ALL))
@@ -120,21 +114,17 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
 				{
 					model.getSpecimenArrayModelMap().put(
-							SpecimenArrayAppletUtil.
-							getArrayMapKey(selectedRow, selectedCol, model
+							SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 									.getColumnCount(),
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_LABEL_INDEX),
+									AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),
 							valueList.get(0));
 				}
 				else
 				{
 					model.getSpecimenArrayModelMap().put(
-							SpecimenArrayAppletUtil.
-							getArrayMapKey(selectedRow, selectedCol, model
+							SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 									.getColumnCount(),
-									AppletConstants.
-									ARRAY_CONTENT_ATTR_BARCODE_INDEX),
+									AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),
 							valueList.get(0));
 				}
 				String valueQuantity = (String) valueList.get(1);
@@ -144,12 +134,10 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 				}
 
 				model.getSpecimenArrayModelMap().put(
-						SpecimenArrayAppletUtil.
-						getArrayMapKey(selectedRow, selectedCol, model
+						SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
 								.getColumnCount(),
-								AppletConstants.
-								ARRAY_CONTENT_ATTR_QUANTITY_INDEX), valueQuantity);
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+								AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX), valueQuantity);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(this.table))
 						.getQuantityTextField().setText(valueQuantity);
 
 				String valueConc = (String) valueList.get(2);
@@ -158,24 +146,23 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 					valueConc = "";
 				}
 				model.getSpecimenArrayModelMap().put(
-						SpecimenArrayAppletUtil.
-						getArrayMapKey(selectedRow, selectedCol, model
-								.getColumnCount(),
-								AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
+						SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol, model
+								.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),
 						valueConc);
-				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table))
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(this.table))
 						.getConcentrationTextField().setText(valueConc);
 			}
-			doPasteDimensions(model, selectedRow, selectedCol);
+			this.doPasteDimensions(model, selectedRow, selectedCol);
 		}
 	}
 
 	/**
 	 * @return total coumn count
 	 */
+	@Override
 	protected int getColumnCount()
 	{
-		return table.getColumnCount();
+		return this.table.getColumnCount();
 	}
 
 	/**
@@ -185,11 +172,13 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler
 	 */
 	private void doPasteDimensions(SpecimenArrayTableModel model, int selectedRow, int selectedCol)
 	{
-		String posOneDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol,
-				model.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
-		String posTwoDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow, selectedCol,
-				model.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
-		Map specimenArrayModelMap = model.getSpecimenArrayModelMap();
+		final String posOneDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,
+				selectedCol, model.getColumnCount(),
+				AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
+		final String posTwoDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,
+				selectedCol, model.getColumnCount(),
+				AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
+		final Map specimenArrayModelMap = model.getSpecimenArrayModelMap();
 		System.out.println(" In doPasteDimensions() function");
 		if ((specimenArrayModelMap.get(posOneDimKey) == null)
 				|| (specimenArrayModelMap.get(posOneDimKey).toString().equals("")))

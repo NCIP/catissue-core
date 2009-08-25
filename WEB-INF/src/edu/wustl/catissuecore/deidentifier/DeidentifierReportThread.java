@@ -18,10 +18,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeidentifierReportThread extends Thread
 {
+
 	/**
 	 * looger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(DeidentifierReportThread.class);
+	private transient final Logger logger = Logger.getCommonLogger(DeidentifierReportThread.class);
 	/**
 	 * obj.
 	 */
@@ -29,11 +30,11 @@ public class DeidentifierReportThread extends Thread
 	/**
 	 * identifiedReport.
 	 */
-	private IdentifiedSurgicalPathologyReport identifiedReport;
+	private final IdentifiedSurgicalPathologyReport identifiedReport;
 	/**
 	 * deidentifier.
 	 */
-	private AbstractDeidentifier deidentifier;
+	private final AbstractDeidentifier deidentifier;
 
 	/**
 	 * constructor for the DeidReportThread thread.
@@ -55,41 +56,42 @@ public class DeidentifierReportThread extends Thread
 	 * This pipeline manages the de-identification process.
 	 * @see java.lang.Thread#run()
 	 */
+	@Override
 	public void run()
 	{
-		Long startTime = new Date().getTime();
+		final Long startTime = new Date().getTime();
 		try
 		{
-			logger.info("De-identification process started for "
-					+ identifiedReport.getId().toString());
-			DeidentifiedSurgicalPathologyReport deidentifiedReport = deidentifier
-					.deidentify(identifiedReport);
-			saveReports(deidentifiedReport);
+			this.logger.info("De-identification process started for "
+					+ this.identifiedReport.getId().toString());
+			final DeidentifiedSurgicalPathologyReport deidentifiedReport = this.deidentifier
+					.deidentify(this.identifiedReport);
+			this.saveReports(deidentifiedReport);
 		}
-		catch (Throwable ex)
+		catch (final Throwable ex)
 		{
-			logger.error("Deidentification process is failed:", ex);
+			this.logger.error("Deidentification process is failed:", ex);
 			try
 			{
 				// if any exception occures then update the status of the
 				// identified report to failed
-				identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
-				CaCoreAPIService.updateObject(identifiedReport);
-				Long endTime = new Date().getTime();
+				this.identifiedReport.setReportStatus(CaTIESConstants.DEID_PROCESS_FAILED);
+				CaCoreAPIService.updateObject(this.identifiedReport);
+				final Long endTime = new Date().getTime();
 				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString() + ","
-						+ identifiedReport.getId() + "," + CaTIESConstants.FAILURE + ","
+						+ this.identifiedReport.getId() + "," + CaTIESConstants.FAILURE + ","
 						+ ex.getMessage() + ",," + (endTime - startTime));
 			}
-			catch (Exception e)
+			catch (final Exception e)
 			{
-				logger.error("DeidReportThread: Updating Identified report status failed", e);
+				this.logger.error("DeidReportThread: Updating Identified report status failed", e);
 			}
-			logger.error("Upexpected error in DeidReportThread thread", ex);
+			this.logger.error("Upexpected error in DeidReportThread thread", ex);
 			return;
 		}
-		Long endTime = new Date().getTime();
+		final Long endTime = new Date().getTime();
 		CSVLogger.info(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString() + ","
-				+ identifiedReport.getId() + "," + CaTIESConstants.DEIDENTIFIED + ","
+				+ this.identifiedReport.getId() + "," + CaTIESConstants.DEIDENTIFIED + ","
 				+ "Report De-identified successfully," + (endTime - startTime));
 	}
 
@@ -106,19 +108,19 @@ public class DeidentifierReportThread extends Thread
 	{
 		{
 			// set default values for deidentified report
-			deidentifiedReport.setActivityStatus(identifiedReport.getActivityStatus());
+			deidentifiedReport.setActivityStatus(this.identifiedReport.getActivityStatus());
 			deidentifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
 			deidentifiedReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
-			deidentifiedReport.setSpecimenCollectionGroup(identifiedReport
+			deidentifiedReport.setSpecimenCollectionGroup(this.identifiedReport
 					.getSpecimenCollectionGroup());
 
-			logger.info("Saving deidentified report for identified report id="
-					+ identifiedReport.getId().toString());
+			this.logger.info("Saving deidentified report for identified report id="
+					+ this.identifiedReport.getId().toString());
 			// save deidentified report
 			deidentifiedReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
 					.createObject(deidentifiedReport);
-			logger.info("deidentified report saved for identified report id="
-					+ identifiedReport.getId().toString());
+			this.logger.info("deidentified report saved for identified report id="
+					+ this.identifiedReport.getId().toString());
 		}
 	}
 }

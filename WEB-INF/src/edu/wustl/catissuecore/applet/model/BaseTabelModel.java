@@ -71,6 +71,7 @@ public class BaseTabelModel extends AbstractTableModel
 	 * @param columnIndex : columnIndex
 	 * @param rowIndex : rowIndex
 	 */
+	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex)
 	{
 		return true;
@@ -81,7 +82,7 @@ public class BaseTabelModel extends AbstractTableModel
 	 */
 	public CopyPasteOperationValidatorModel getCopyPasteOperationValidatorModel()
 	{
-		return copyPasteOperationValidatorModel;
+		return this.copyPasteOperationValidatorModel;
 	}
 
 	/**

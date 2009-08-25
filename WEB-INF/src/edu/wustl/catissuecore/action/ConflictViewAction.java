@@ -112,8 +112,7 @@ public class ConflictViewAction extends SecureAction
 			{
 				sqlString = "select PARTICIPANT_NAME ," + "IDENTIFIER ,SURGICAL_PATHOLOGY_NUMBER,"
 						+ "REPORT_LOADED_DATE,STATUS ,SITE_NAME,REPORT_COLLECTION_DATE"
-						+ " from catissue_report_queue where status" +
-								"='PARTICIPANT_CONFLICT'";
+						+ " from catissue_report_queue where status" + "='PARTICIPANT_CONFLICT'";
 			}
 			else
 			{ // retrieving all the scg conflicts both partial and exact match
@@ -122,9 +121,8 @@ public class ConflictViewAction extends SecureAction
 					sqlString = "select PARTICIPANT_NAME ,IDENTIFIER ,"
 							+ "SURGICAL_PATHOLOGY_NUMBER,REPORT_LOADED_DATE,STATUS ,"
 							+ "SITE_NAME,REPORT_COLLECTION_DATE from"
-							+ " catissue_report_queue where"
-							+ " status='SCG_PARTIAL_CONFLICT'" +
-									" or status='SCG_CONFLICT'";
+							+ " catissue_report_queue where" + " status='SCG_PARTIAL_CONFLICT'"
+							+ " or status='SCG_CONFLICT'";
 				}
 
 			}

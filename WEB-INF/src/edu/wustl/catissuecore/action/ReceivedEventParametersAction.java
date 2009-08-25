@@ -26,38 +26,35 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class ReceivedEventParametersAction extends SpecimenEventParametersAction
 {
+
 	/**
 	* @param request object of HttpServletRequest
 	* @param eventParametersForm : eventParametersForm
 	* @throws Exception : Exception
 	*/
+	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception
 	{
 
 		//String operation = (String) request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
+		String formName;
 
-		boolean readOnlyValue;
-		ReceivedEventParametersForm receivedEventParametersForm =
+		final ReceivedEventParametersForm receivedEventParametersForm =
 			(ReceivedEventParametersForm) eventParametersForm;
 		if (receivedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{
 			formName = Constants.RECEIVED_EVENT_PARAMETERS_EDIT_ACTION;
-			readOnlyValue = true;
 		}
 		else
 		{
 			formName = Constants.RECEIVED_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
-			readOnlyValue = false;
 		}
 		// set the ReceivedQuality List.
-		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
+		final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute("receivedQualityList", qualityList);
 		request.setAttribute("formName", formName);
 
 	}
-
 }

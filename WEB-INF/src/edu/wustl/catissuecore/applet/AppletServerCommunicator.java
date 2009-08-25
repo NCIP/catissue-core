@@ -18,12 +18,14 @@ import java.net.URL;
 
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.common.util.logger.Logger;
+
 /**
  * @author
  *
  */
 public class AppletServerCommunicator implements Serializable
 {
+
 	/**
 	 * logger.
 	 */
@@ -52,14 +54,14 @@ public class AppletServerCommunicator implements Serializable
 			AppletModelInterface appletModelInterface) throws IOException, ClassNotFoundException
 	{
 
-		URL url = new URL(urlString);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		final URL url = new URL(urlString);
+		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		//System.out.println("connection object created");
 		connection.setRequestMethod("GET");
 		connection.setDoOutput(true);
 		//System.out.println("connection.connect() method commented");
 		//connection.connect();
-		ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
+		final ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
 		outputStream.writeObject(appletModelInterface);
 		//System.out.println(" flush() is uncommented");
 		outputStream.flush();
@@ -73,13 +75,13 @@ public class AppletServerCommunicator implements Serializable
 			appletObject = inputStream.readObject();
 			appletModelInterface = (AppletModelInterface) appletObject;
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			logger.debug(e.getMessage(), e);
 			//	System.out.println(" IO Exception " + e);
 			e.printStackTrace();
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
 			logger.debug(e.getMessage(), e);
 			e.printStackTrace();

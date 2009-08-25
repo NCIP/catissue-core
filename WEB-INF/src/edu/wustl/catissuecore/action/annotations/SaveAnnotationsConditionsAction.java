@@ -40,6 +40,7 @@ import edu.wustl.common.util.global.Constants;
  */
 public class SaveAnnotationsConditionsAction extends BaseAction
 {
+
 	/**
 	 * @param mapping
 	 *            object of ActionMapping
@@ -69,8 +70,8 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 
 		final AnnotationForm annotationForm = (AnnotationForm) form;
 
-		this.saveConditions( annotationForm, request );
-		actionfwd = mapping.findForward( Constants.SUCCESS );
+		this.saveConditions(annotationForm, request);
+		actionfwd = mapping.findForward(Constants.SUCCESS);
 
 		return actionfwd;
 	}
@@ -85,27 +86,27 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 			throws BizLogicException, DynamicExtensionsSystemException
 	{
 
-		final String containerId = request.getParameter( "containerId" );
+		final String containerId = request.getParameter("containerId");
 		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 		List dynamicList = new ArrayList();
-		dynamicList = bizLogic.getListOfStaticEntities( Long.valueOf( containerId ) );
+		dynamicList = bizLogic.getListOfStaticEntities(Long.valueOf(containerId));
 		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 				.getInstance();
 
 		if (dynamicList != null && !dynamicList.isEmpty())
 		{
-			final EntityMap entityMap = (EntityMap) dynamicList.get( 0 );
+			final EntityMap entityMap = (EntityMap) dynamicList.get(0);
 
-			final Collection < FormContext > formCollPrev = AppUtility.getFormContexts( entityMap
-					.getId() );
+			final Collection<FormContext> formCollPrev = AppUtility.getFormContexts(entityMap
+					.getId());
 
-			final Collection < FormContext > currFormColl = new HashSet < FormContext >();
+			final Collection<FormContext> currFormColl = new HashSet<FormContext>();
 			int conditionValindex = 0;
 			final AnnotationUtil util = new AnnotationUtil();
-			final Boolean check = util.checkForAll( annotationForm.getConditionVal() );
+			final Boolean check = util.checkForAll(annotationForm.getConditionVal());
 			if (formCollPrev != null && !formCollPrev.isEmpty())
 			{
-				final Iterator < FormContext > formCollIt = formCollPrev.iterator();
+				final Iterator<FormContext> formCollIt = formCollPrev.iterator();
 
 				if (annotationForm.getConditionVal() != null)
 				{
@@ -113,17 +114,17 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 					{
 						final FormContext formContext = formCollIt.next();
 
-						final Collection < EntityMapCondition > entityMapConditions = AppUtility
-								.getEntityMapConditions( formContext.getId() );
+						final Collection<EntityMapCondition> entityMapConditions = AppUtility
+								.getEntityMapConditions(formContext.getId());
 
-						if (( formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
-								.equals( "" ) )
-								&& ( formContext.getStudyFormLabel() == null || formContext
-										.getStudyFormLabel().equals( "" ) ))
+						if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
+								.equals(""))
+								&& (formContext.getStudyFormLabel() == null || formContext
+										.getStudyFormLabel().equals("")))
 						{
 							if (entityMapConditions != null && !entityMapConditions.isEmpty())
 							{
-								final Iterator < EntityMapCondition > entityMapCondIter = entityMapConditions
+								final Iterator<EntityMapCondition> entityMapCondIter = entityMapConditions
 										.iterator();
 								while (entityMapCondIter.hasNext())
 								{
@@ -135,22 +136,22 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 										{
 											final EntityMapCondition condn = entityMapCondIter
 													.next();
-											condn.setStaticRecordId( Long.valueOf( annotationForm
-													.getConditionVal()[conditionValindex] ) );
+											condn.setStaticRecordId(Long.valueOf(annotationForm
+													.getConditionVal()[conditionValindex]));
 										}
 										else
 										{//if current conditions are more than previously added then make new condn obj
 											final EntityMapCondition condn = new EntityMapCondition();
-											condn.setStaticRecordId( Long.valueOf( annotationForm
-													.getConditionVal()[conditionValindex] ) );
-											condn.setFormContext( formContext );
+											condn.setStaticRecordId(Long.valueOf(annotationForm
+													.getConditionVal()[conditionValindex]));
+											condn.setFormContext(formContext);
 											condn
-													.setTypeId( Long
-															.valueOf( catissueCoreCacheManager
+													.setTypeId(Long
+															.valueOf(catissueCoreCacheManager
 																	.getObjectFromCache(
-																			AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID )
-																	.toString() ) );
-											entityMapConditions.add( condn );
+																			AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
+																	.toString()));
+											entityMapConditions.add(condn);
 										}
 										conditionValindex++;
 									}
@@ -158,7 +159,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 											.size())
 									{//if previously added conditions were more than current one then deassociate previous
 										final EntityMapCondition condn = entityMapCondIter.next();
-										condn.setFormContext( null );
+										condn.setFormContext(null);
 									}
 								}
 							}
@@ -170,26 +171,26 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 								while (annotationForm.getConditionVal().length > conditionValindex)
 								{
 									final EntityMapCondition condn = new EntityMapCondition();
-									condn.setStaticRecordId( Long.valueOf( annotationForm
-											.getConditionVal()[conditionValindex] ) );
-									condn.setFormContext( formContext );
+									condn.setStaticRecordId(Long.valueOf(annotationForm
+											.getConditionVal()[conditionValindex]));
+									condn.setFormContext(formContext);
 									condn
-											.setTypeId( Long
-													.valueOf( catissueCoreCacheManager
+											.setTypeId(Long
+													.valueOf(catissueCoreCacheManager
 															.getObjectFromCache(
-																	AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID )
-															.toString() ) );
-									entityMapConditions.add( condn );
+																	AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
+															.toString()));
+									entityMapConditions.add(condn);
 									conditionValindex++;
 								}
 							}
-							formContext.setEntityMapConditionCollection( entityMapConditions );
-							currFormColl.add( formContext );
+							formContext.setEntityMapConditionCollection(entityMapConditions);
+							currFormColl.add(formContext);
 						}
 					}
 				}
-				entityMap.setFormContextCollection( currFormColl );
-				bizLogic.updateEntityMap( entityMap );
+				entityMap.setFormContextCollection(currFormColl);
+				bizLogic.updateEntityMap(entityMap);
 			}
 		}
 	}

@@ -347,8 +347,7 @@ public class Distribution extends AbstractDomainObject implements java.io.Serial
 							CommonUtilities.datePattern(form.getDateOfEvent()));
 					calendar.setTime(date);
 					this.timestamp = calendar.getTime();
-					calendar.set(Calendar.HOUR_OF_DAY, Integer.
-							parseInt(form.getTimeInHours()));
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(form.getTimeInHours()));
 					calendar.set(Calendar.MINUTE, Integer.parseInt(form.getTimeInMinutes()));
 					this.timestamp = calendar.getTime();
 					//this.timestamp is added twice, if there is some exception in

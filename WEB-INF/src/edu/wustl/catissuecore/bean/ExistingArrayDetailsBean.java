@@ -1,4 +1,3 @@
-
 /**
  * <p>Title: ExistingArrayDetailsBean Class>
  * <p>Description:	This class contains attributes of Existing BioSpecimenArray to display them on ArrayRequests.jsp Page</p>
@@ -14,9 +13,9 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.List;
 
-
 public class ExistingArrayDetailsBean implements Serializable
 {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -26,8 +25,8 @@ public class ExistingArrayDetailsBean implements Serializable
 	/**
 	 * String containing description
 	 */
-	private String description="";
-	
+	private String description = "";
+
 	/**
 	 * String containing assigned status
 	 */
@@ -35,8 +34,8 @@ public class ExistingArrayDetailsBean implements Serializable
 	/**
 	 * String containing the description entered by admin
 	 */
-	private String addDescription="";
-	
+	private String addDescription = "";
+
 	/**
 	 * List to store the statuses of individual existingarray order items
 	 */
@@ -49,12 +48,12 @@ public class ExistingArrayDetailsBean implements Serializable
 	 * String to store the arrayId of corresponding existing Array order item
 	 */
 	private String arrayId;
-	
+
 	/**
 	 * String containing the requested quantity of number of slides for the derived array
 	 */
 	private String requestedQuantity;
-	
+
 	/**
 	 * String containing the assigned quantity of number of slides for the derived array
 	 */
@@ -63,16 +62,15 @@ public class ExistingArrayDetailsBean implements Serializable
 	 * If array is distributed, it will have a distributedItemId.
 	 */
 	private String distributedItemId;
+
 	/**
 	 * @return the arrayId
 	 */
 	public String getArrayId()
 	{
-		return arrayId;
+		return this.arrayId;
 	}
 
-
-	
 	/**
 	 * @param arrayId the arrayId to set
 	 */
@@ -81,14 +79,14 @@ public class ExistingArrayDetailsBean implements Serializable
 		this.arrayId = arrayId;
 	}
 
-
 	/**
 	 * @return the orderItemId
 	 */
 	public String getOrderItemId()
 	{
-		return orderItemId;
+		return this.orderItemId;
 	}
+
 	/**
 	 * @param orderItemId the orderItemId to set
 	 */
@@ -103,9 +101,9 @@ public class ExistingArrayDetailsBean implements Serializable
 	 */
 	public String getAssignedStatus()
 	{
-		return assignedStatus;
+		return this.assignedStatus;
 	}
-	
+
 	/**
 	 * Sets the assignedStatus
 	 * @param assignedStatus String containing the status assigned to each of the existing arrays
@@ -114,16 +112,16 @@ public class ExistingArrayDetailsBean implements Serializable
 	{
 		this.assignedStatus = assignedStatus;
 	}
-	
+
 	/**
 	 * Returns the bioSpecimenArrayName
 	 * @return bioSpecimenArrayName 
 	 */
 	public String getBioSpecimenArrayName()
 	{
-		return bioSpecimenArrayName;
+		return this.bioSpecimenArrayName;
 	}
-	
+
 	/**
 	 * Sets the bioSpecimenArrayName
 	 * @param bioSpecimenArrayName String containing the name of the array
@@ -132,16 +130,16 @@ public class ExistingArrayDetailsBean implements Serializable
 	{
 		this.bioSpecimenArrayName = bioSpecimenArrayName;
 	}
-	
+
 	/**
 	 * Returns the description
 	 * @return description
 	 */
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
-	
+
 	/**
 	 * Sets the description
 	 * @param description String containing the description of array entered by the scientist 
@@ -156,7 +154,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	 */
 	public List getItemStatusList()
 	{
-		return itemStatusList;
+		return this.itemStatusList;
 	}
 
 	/**
@@ -166,17 +164,16 @@ public class ExistingArrayDetailsBean implements Serializable
 	{
 		this.itemStatusList = itemStatusList;
 	}
-	
-	
+
 	/**
 	 * Returns the added Description
 	 * @return addDescription
 	 */
 	public String getAddDescription()
 	{
-		return addDescription;
+		return this.addDescription;
 	}
-	
+
 	/**
 	 * Sets the added Description
 	 * @param addDescription String containing the description entered by the admin
@@ -191,9 +188,9 @@ public class ExistingArrayDetailsBean implements Serializable
 	 */
 	public String getRequestedQuantity()
 	{
-		return requestedQuantity;
+		return this.requestedQuantity;
 	}
-	
+
 	/**
 	 * @param requestedQuantity String containing the qty(i.e,no of slides) requested by the scientist
 	 */
@@ -207,7 +204,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	 */
 	public String getAssignedQuantity()
 	{
-		return assignedQuantity;
+		return this.assignedQuantity;
 	}
 
 	/**
@@ -218,20 +215,14 @@ public class ExistingArrayDetailsBean implements Serializable
 		this.assignedQuantity = assignedQuantity;
 	}
 
-
-
-	
 	/**
 	 * @return the distributedItemId
 	 */
 	public String getDistributedItemId()
 	{
-		return distributedItemId;
+		return this.distributedItemId;
 	}
 
-
-
-	
 	/**
 	 * @param distributedItemId the distributedItemId to set
 	 */

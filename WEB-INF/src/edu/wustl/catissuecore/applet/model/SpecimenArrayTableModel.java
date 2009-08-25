@@ -42,12 +42,12 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	/**
 	 * row count.
 	 */
-	private int rowCount;
+	private final int rowCount;
 
 	/**
 	 * column count.
 	 */
-	private int columnCount;
+	private final int columnCount;
 
 	/**
 	 * column count.
@@ -101,7 +101,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 */
 	public Map getSpecimenArrayModelMap()
 	{
-		return specimenArrayModelMap;
+		return this.specimenArrayModelMap;
 	}
 
 	/**
@@ -117,18 +117,20 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 * @see javax.swing.table.TableModel#getColumnCount()
 	 * @return int
 	 */
+	@Override
 	public int getColumnCount()
 	{
-		return columnCount;
+		return this.columnCount;
 	}
 
 	/**
 	 * @see javax.swing.table.TableModel#getRowCount()
 	 * @return int
 	 */
+	@Override
 	public int getRowCount()
 	{
-		return rowCount;
+		return this.rowCount;
 	}
 
 	/**
@@ -137,10 +139,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 * @param columnIndex : columnIndex
 	 * @return Object
 	 */
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		return specimenArrayModelMap.get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,
-				columnIndex, columnCount, getAttributeIndex()));
+		return this.specimenArrayModelMap.get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,
+				columnIndex, this.columnCount, this.getAttributeIndex()));
 	}
 
 	/**
@@ -149,21 +152,22 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 * @param rowIndex : rowindex
 	 * @param columnIndex : columnIndex
 	 */
+	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 	{
-		specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex,
-				columnCount, getAttributeIndex()), aValue.toString());
+		this.specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,
+				columnIndex, this.columnCount, this.getAttributeIndex()), aValue.toString());
 		// if one dimension & two dimension position is not set
-		String posOneDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex,
-				columnCount, AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
-		String posTwoDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex,
-				columnCount, AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
+		final String posOneDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex,
+				this.columnCount, AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
+		final String posTwoDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex,
+				this.columnCount, AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
 
-		if ((specimenArrayModelMap.get(posOneDimkey) == null)
-				|| (specimenArrayModelMap.get(posOneDimkey).toString().equals("")))
+		if ((this.specimenArrayModelMap.get(posOneDimkey) == null)
+				|| (this.specimenArrayModelMap.get(posOneDimkey).toString().equals("")))
 		{
-			specimenArrayModelMap.put(posOneDimkey, String.valueOf(rowIndex));
-			specimenArrayModelMap.put(posTwoDimkey, String.valueOf(columnIndex));
+			this.specimenArrayModelMap.put(posOneDimkey, String.valueOf(rowIndex));
+			this.specimenArrayModelMap.put(posTwoDimkey, String.valueOf(columnIndex));
 		}
 	}
 
@@ -173,6 +177,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 * @param columnIndex : columnIndex
 	 * @return boolean
 	 */
+	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex)
 	{
 		return true;
@@ -183,6 +188,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 * @param column : column
 	 * @return String
 	 */
+	@Override
 	public String getColumnName(int column)
 	{
 		return String.valueOf(column + 1);
@@ -194,7 +200,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	private int getAttributeIndex()
 	{
 		int attrIndex = 0;
-		if (enterSpecimenBy.equals("Label"))
+		if (this.enterSpecimenBy.equals("Label"))
 		{
 			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX;
 		}
@@ -219,7 +225,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -227,7 +233,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 */
 	public String getCopySelectedOption()
 	{
-		return copySelectedOption;
+		return this.copySelectedOption;
 	}
 
 	/**
@@ -243,7 +249,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	 */
 	public String getEnterSpecimenBy()
 	{
-		return enterSpecimenBy;
+		return this.enterSpecimenBy;
 	}
 
 	/**
@@ -271,11 +277,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 		}
 		String value = null;
 		Object valueObj = null;
-		for (int i = 0; i < rowCount; i++)
+		for (int i = 0; i < this.rowCount; i++)
 		{
-			for (int j = 0; j < columnCount; j++)
+			for (int j = 0; j < this.columnCount; j++)
 			{
-				valueObj = getValueAt(i, j);
+				valueObj = this.getValueAt(i, j);
 				if (valueObj == null)
 				{
 					value = String.valueOf("");
@@ -284,11 +290,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 				{
 					value = valueObj.toString();
 				}
-				specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i, j, columnCount,
-						attrIndex), value);
+				this.specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i, j,
+						this.columnCount, attrIndex), value);
 				// change old selction to ""
-				specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i, j, columnCount,
-						getAttributeIndex()), "");
+				this.specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i, j,
+						this.columnCount, this.getAttributeIndex()), "");
 			}
 		}
 		this.enterSpecimenBy = enterSpecimenBy;

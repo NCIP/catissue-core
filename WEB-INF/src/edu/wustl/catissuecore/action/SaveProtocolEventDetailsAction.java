@@ -23,6 +23,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class SaveProtocolEventDetailsAction extends BaseAction
 {
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -121,9 +122,9 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 				.getReceivedEventReceivedQuality());
 		collectionProtocolEventBean.setCollectionProcedure(protocolEventDetailsForm
 				.getCollectionEventCollectionProcedure());
-		
+
 		collectionProtocolEventBean.setLabelFormat(protocolEventDetailsForm.getLabelFormat());
-		
+
 	}
 
 }

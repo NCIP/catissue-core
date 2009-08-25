@@ -1,10 +1,10 @@
 /**
  * 
  */
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.Collection;
-
 
 /**
  * @author mandar_deshmukh
@@ -20,29 +20,29 @@ public class SummarySpDetails
 	{
 		super();
 	}
-	
-	private String tissueCount="0";
-	private String cellCount="0";
-	private String moleculeCount="0";
-	private String fluidCount="0";
+
+	private String tissueCount = "0";
+	private String cellCount = "0";
+	private String moleculeCount = "0";
+	private String fluidCount = "0";
 	private Collection<Object> tissueTypeDetails;
 	private Collection<Object> cellTypeDetails;
 	private Collection<Object> molTypeDetails;
 	private Collection<Object> fluidTypeDetails;
-	private String tissueQuantity="0";
-	private String cellQuantity="0";
-	private String moleculeQuantity="0";
-	private String fluidQuantity="0";
+	private String tissueQuantity = "0";
+	private String cellQuantity = "0";
+	private String moleculeQuantity = "0";
+	private String fluidQuantity = "0";
 	private Collection<Object> patStDetails;
 	private Collection<Object> tSiteDetails;
-
 
 	/**
 	 * Returns the Cell Specimen Count
 	 * @return String
 	 */
-	public String getCellCount() {
-		return cellCount;
+	public String getCellCount()
+	{
+		return this.cellCount;
 	}
 
 	/**
@@ -50,7 +50,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setCellCount(final String cellCount) {
+	public void setCellCount(final String cellCount)
+	{
 		this.cellCount = cellCount;
 	}
 
@@ -58,8 +59,9 @@ public class SummarySpDetails
 	 * Returns the Fluid Specimen Count
 	 * @return String
 	 */
-	public String getFluidCount() {
-		return fluidCount;
+	public String getFluidCount()
+	{
+		return this.fluidCount;
 	}
 
 	/**
@@ -67,7 +69,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setFluidCount(final String fluidCount) {
+	public void setFluidCount(final String fluidCount)
+	{
 		this.fluidCount = fluidCount;
 	}
 
@@ -75,8 +78,9 @@ public class SummarySpDetails
 	 * Returns the Molecular Specimen Count
 	 * @return String
 	 */
-	public String getMoleculeCount() {
-		return moleculeCount;
+	public String getMoleculeCount()
+	{
+		return this.moleculeCount;
 	}
 
 	/**
@@ -84,7 +88,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setMoleculeCount(final String moleculeCount) {
+	public void setMoleculeCount(final String moleculeCount)
+	{
 		this.moleculeCount = moleculeCount;
 	}
 
@@ -92,8 +97,9 @@ public class SummarySpDetails
 	 * Returns the Tissue Specimen Count
 	 * @return String
 	 */
-	public String getTissueCount() {
-		return tissueCount;
+	public String getTissueCount()
+	{
+		return this.tissueCount;
 	}
 
 	/**
@@ -101,7 +107,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setTissueCount(final String tissueCount) {
+	public void setTissueCount(final String tissueCount)
+	{
 		this.tissueCount = tissueCount;
 	}
 
@@ -109,8 +116,9 @@ public class SummarySpDetails
 	 * Returns the Cell Specimen Quantity
 	 * @return String
 	 */
-	public String getCellQuantity() {
-		return cellQuantity;
+	public String getCellQuantity()
+	{
+		return this.cellQuantity;
 	}
 
 	/**
@@ -118,7 +126,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setCellQuantity(final String cellQuantity) {
+	public void setCellQuantity(final String cellQuantity)
+	{
 		this.cellQuantity = cellQuantity;
 	}
 
@@ -126,16 +135,18 @@ public class SummarySpDetails
 	 * Returns the cell sub-type name and available quantity of it
 	 * @return Collection
 	 */
-	public Collection getCellTypeDetails() {
-		return cellTypeDetails;
+	public Collection getCellTypeDetails()
+	{
+		return this.cellTypeDetails;
 	}
 
 	/**
 	 * Return the available FLuid quantity
 	 * @return String
 	 */
-	public String getFluidQuantity() {
-		return fluidQuantity;
+	public String getFluidQuantity()
+	{
+		return this.fluidQuantity;
 	}
 
 	/**
@@ -143,7 +154,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setFluidQuantity(final String fluidQuantity) {
+	public void setFluidQuantity(final String fluidQuantity)
+	{
 		this.fluidQuantity = fluidQuantity;
 	}
 
@@ -151,16 +163,18 @@ public class SummarySpDetails
 	 * Returns the Fluid sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getFluidTypeDetails() {
-		return fluidTypeDetails;
+	public Collection getFluidTypeDetails()
+	{
+		return this.fluidTypeDetails;
 	}
 
 	/**
 	 * Return the available Molecular quantity
 	 * @return String
 	 */
-	public String getMoleculeQuantity() {
-		return moleculeQuantity;
+	public String getMoleculeQuantity()
+	{
+		return this.moleculeQuantity;
 	}
 
 	/**
@@ -168,7 +182,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setMoleculeQuantity(final String moleculeQuantity) {
+	public void setMoleculeQuantity(final String moleculeQuantity)
+	{
 		this.moleculeQuantity = moleculeQuantity;
 	}
 
@@ -176,16 +191,18 @@ public class SummarySpDetails
 	 * Returns the Molecular sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getMolTypeDetails() {
-		return molTypeDetails;
+	public Collection getMolTypeDetails()
+	{
+		return this.molTypeDetails;
 	}
 
 	/**
 	 * Return the available Tissue quantity
 	 * @return String
 	 */
-	public String getTissueQuantity() {
-		return tissueQuantity;
+	public String getTissueQuantity()
+	{
+		return this.tissueQuantity;
 	}
 
 	/**
@@ -193,7 +210,8 @@ public class SummarySpDetails
 	 * @param String
 	 * @return void
 	 */
-	public void setTissueQuantity(final String tissueQuantity) {
+	public void setTissueQuantity(final String tissueQuantity)
+	{
 		this.tissueQuantity = tissueQuantity;
 	}
 
@@ -201,16 +219,18 @@ public class SummarySpDetails
 	 * Returns the Tissue sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getTissueTypeDetails() {
-		return tissueTypeDetails;
-	}	
+	public Collection getTissueTypeDetails()
+	{
+		return this.tissueTypeDetails;
+	}
 
 	/**
 	 * Set the Cell sub-type name and available quantity of it
 	 * @param Collection<Object>
 	 * @return void
 	 */
-	public void setCellTypeDetails(final Collection<Object> cellTypeDetails) {
+	public void setCellTypeDetails(final Collection<Object> cellTypeDetails)
+	{
 		this.cellTypeDetails = cellTypeDetails;
 	}
 
@@ -219,7 +239,8 @@ public class SummarySpDetails
 	 * @param Collection<Object>
 	 * @return void
 	 */
-	public void setFluidTypeDetails(final Collection<Object> fluidTypeDetails) {
+	public void setFluidTypeDetails(final Collection<Object> fluidTypeDetails)
+	{
 		this.fluidTypeDetails = fluidTypeDetails;
 	}
 
@@ -228,7 +249,8 @@ public class SummarySpDetails
 	 * @param Collection<Object>
 	 * @return void
 	 */
-	public void setMolTypeDetails(final Collection<Object> moleTypeDetails) {
+	public void setMolTypeDetails(final Collection<Object> moleTypeDetails)
+	{
 		this.molTypeDetails = moleTypeDetails;
 	}
 
@@ -237,30 +259,29 @@ public class SummarySpDetails
 	 * @param Collection<Object>
 	 * @return void
 	 */
-	public void setTissueTypeDetails(final Collection<Object> tissueTypeDetails) {
+	public void setTissueTypeDetails(final Collection<Object> tissueTypeDetails)
+	{
 		this.tissueTypeDetails = tissueTypeDetails;
 	}
+
 	public Collection<Object> getPatStDetails()
 	{
-		return patStDetails;
+		return this.patStDetails;
 	}
 
-	
 	public void setPatStDetails(final Collection<Object> patStDetails)
 	{
 		this.patStDetails = patStDetails;
 	}
 
-	
 	public Collection<Object> getTSiteDetails()
 	{
-		return tSiteDetails;
+		return this.tSiteDetails;
 	}
 
-	
 	public void setTSiteDetails(final Collection<Object> siteDetails)
 	{
-		tSiteDetails = siteDetails;
+		this.tSiteDetails = siteDetails;
 	}
 
 }

@@ -70,7 +70,7 @@ public class FluidSpecimen extends Specimen implements Serializable
 		{
 			logger.error(excp.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey, null, "FluidSpecimen.java :"); 
+			throw new AssignDataException(errorKey, null, "FluidSpecimen.java :");
 		}
 	}
 

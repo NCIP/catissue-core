@@ -73,7 +73,7 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 		{
 			tableModelMap = new HashMap();
 		}
-		writeMapToResponse(response, tableModelMap);
+		this.writeMapToResponse(response, tableModelMap);
 		return null;
 	}
 
@@ -89,10 +89,10 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 	public ActionForward updateSessionData(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Map arrayContentMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
-		HttpSession session = request.getSession();
+		final Map arrayContentMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+		final HttpSession session = request.getSession();
 		session.setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY, arrayContentMap);
-		writeMapToResponse(response, arrayContentMap);
+		this.writeMapToResponse(response, arrayContentMap);
 		return null;
 	}
 
@@ -105,15 +105,16 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 	 * @return ActionForward : ActionForward
 	 * @throws Exception : Exception
 	 */
+	@Override
 	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		if (methodName.trim().length() > 0)
 		{
-			Method method = getMethod(methodName, this.getClass());
+			final Method method = this.getMethod(methodName, this.getClass());
 			if (method != null)
 			{
-				Object[] args = {mapping, form, request, response};
+				final Object[] args = {mapping, form, request, response};
 				return (ActionForward) method.invoke(this, args);
 			}
 			else

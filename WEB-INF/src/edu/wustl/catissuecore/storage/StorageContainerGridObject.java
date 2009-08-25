@@ -7,7 +7,6 @@
 
 package edu.wustl.catissuecore.storage;
 
-
 /**
  * @author gautam_shetty
  *
@@ -17,89 +16,90 @@ package edu.wustl.catissuecore.storage;
 public class StorageContainerGridObject
 {
 
-    private long id;
-    
-    private String type;
+	private long id;
 
-    private Integer oneDimensionCapacity;
+	private String type;
 
-    private Integer twoDimensionCapacity;
-    
-    private String name;
+	private Integer oneDimensionCapacity;
 
-    /**
-     * @return Returns the oneDimensionCapacity.
-     */
-    public Integer getOneDimensionCapacity()
-    {
-        return oneDimensionCapacity;
-    }
+	private Integer twoDimensionCapacity;
 
-    /**
-     * @param oneDimensionCapacity The oneDimensionCapacity to set.
-     */
-    public void setOneDimensionCapacity(Integer oneDimensionCapacity)
-    {
-        this.oneDimensionCapacity = oneDimensionCapacity;
-    }
+	private String name;
 
-    /**
-     * @return Returns the twoDimensionCapacity.
-     */
-    public Integer getTwoDimensionCapacity()
-    {
-        return twoDimensionCapacity;
-    }
+	/**
+	 * @return Returns the oneDimensionCapacity.
+	 */
+	public Integer getOneDimensionCapacity()
+	{
+		return this.oneDimensionCapacity;
+	}
 
-    /**
-     * @param twoDimensionCapacity The twoDimensionCapacity to set.
-     */
-    public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
-    {
-        this.twoDimensionCapacity = twoDimensionCapacity;
-    }
+	/**
+	 * @param oneDimensionCapacity The oneDimensionCapacity to set.
+	 */
+	public void setOneDimensionCapacity(Integer oneDimensionCapacity)
+	{
+		this.oneDimensionCapacity = oneDimensionCapacity;
+	}
 
-    /**
-     * @return Returns the id.
-     */
-    public long getId()
-    {
-        return id;
-    }
+	/**
+	 * @return Returns the twoDimensionCapacity.
+	 */
+	public Integer getTwoDimensionCapacity()
+	{
+		return this.twoDimensionCapacity;
+	}
 
-    /**
-     * @param id The id to set.
-     */
-    public void setId(long id)
-    {
-        this.id = id;
-    }
-    /**
-     * @return Returns the type.
-     */
-    public String getType()
-    {
-        return type;
-    }
-    /**
-     * @param type The type to set.
-     */
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+	/**
+	 * @param twoDimensionCapacity The twoDimensionCapacity to set.
+	 */
+	public void setTwoDimensionCapacity(Integer twoDimensionCapacity)
+	{
+		this.twoDimensionCapacity = twoDimensionCapacity;
+	}
+
+	/**
+	 * @return Returns the id.
+	 */
+	public long getId()
+	{
+		return this.id;
+	}
+
+	/**
+	 * @param id The id to set.
+	 */
+	public void setId(long id)
+	{
+		this.id = id;
+	}
+
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType()
+	{
+		return this.type;
+	}
+
+	/**
+	 * @param type The type to set.
+	 */
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	
 	/**
 	 * @return Returns the name.
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 }

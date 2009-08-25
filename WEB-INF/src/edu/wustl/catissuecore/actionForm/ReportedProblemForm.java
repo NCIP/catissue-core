@@ -68,7 +68,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 */
 	public String getAffiliation()
 	{
-		return affiliation;
+		return this.affiliation;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 */
 	public String getNameOfReporter()
 	{
-		return nameOfReporter;
+		return this.nameOfReporter;
 	}
 
 	/**
@@ -103,17 +103,18 @@ public class ReportedProblemForm extends AbstractActionForm
 	public ReportedProblemForm()
 	{
 		this.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.toString());
-		clear();
+		this.clear();
 	}
 
 	private void clear()
 	{
-		reset();
+		this.reset();
 	}
 
 	/**
 	 * Resets all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		this.from = null;
@@ -130,7 +131,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	*/
 	public String getFrom()
 	{
-		return from;
+		return this.from;
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 */
 	public String getMessageBody()
 	{
-		return messageBody;
+		return this.messageBody;
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 */
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
 	/**
@@ -188,7 +189,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	*/
 	public String getComments()
 	{
-		return comments;
+		return this.comments;
 	}
 
 	/**
@@ -204,6 +205,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 * @return the form id.
 	 * @see AbstractActionForm#getFormId()
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.REPORTED_PROBLEM_FORM_ID;
@@ -215,7 +217,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		ReportedProblem reportedProblem = (ReportedProblem) abstractDomain;
+		final ReportedProblem reportedProblem = (ReportedProblem) abstractDomain;
 		this.from = reportedProblem.getFrom();
 		this.subject = reportedProblem.getSubject();
 		this.messageBody = reportedProblem.getMessageBody();
@@ -231,10 +233,11 @@ public class ReportedProblemForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -242,7 +245,7 @@ public class ReportedProblemForm extends AbstractActionForm
 			{
 				if (this.getOperation().equals(Constants.ADD))
 				{
-					if (validator.isEmpty(from))
+					if (Validator.isEmpty(this.from))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
@@ -250,7 +253,7 @@ public class ReportedProblemForm extends AbstractActionForm
 					}
 					else
 					{
-						if (!validator.isValidEmailAddress(from))
+						if (!validator.isValidEmailAddress(this.from))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
@@ -260,27 +263,27 @@ public class ReportedProblemForm extends AbstractActionForm
 					// Mandar 10-apr-06 : bugid :353 
 					// Error messages should be in the same sequence as the sequence of fields on the page.
 
-					if (validator.isEmpty(nameOfReporter))
+					if (Validator.isEmpty(this.nameOfReporter))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
 										.getValue("fields.nameofreporter")));
 					}
-					if (validator.isEmpty(affiliation))
+					if (Validator.isEmpty(this.affiliation))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
 										.getValue("fields.affiliation")));
 					}
 
-					if (validator.isEmpty(subject))
+					if (Validator.isEmpty(this.subject))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
 										.getValue("fields.title")));
 					}
 
-					if (validator.isEmpty(messageBody))
+					if (Validator.isEmpty(this.messageBody))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
@@ -288,8 +291,8 @@ public class ReportedProblemForm extends AbstractActionForm
 					}
 
 					//to fix bug:1678
-					if (messageBody == null
-							|| messageBody.trim().length() >= Constants.MESSAGE_LENGTH)
+					if (this.messageBody == null
+							|| this.messageBody.trim().length() >= Constants.MESSAGE_LENGTH)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"reportedProblem.error.message", ApplicationProperties
@@ -310,7 +313,7 @@ public class ReportedProblemForm extends AbstractActionForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

@@ -173,8 +173,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			request.setAttribute("siteName", site.getName());
 
 			final StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
-					StorageContainer.class.getName(), storageContainer.getId(),
-					"storageType");// storageContainer
+					StorageContainer.class.getName(), storageContainer.getId(), "storageType");// storageContainer
 			// .
 			// getStorageType
 			// (
@@ -246,8 +245,7 @@ public class ShowStorageGridViewAction extends BaseAction
 				while (iterator.hasNext())
 				{
 					final Object object = iterator.next();
-					final StorageContainer childStorageContainer =
-						(StorageContainer) HibernateMetaData
+					final StorageContainer childStorageContainer = (StorageContainer) HibernateMetaData
 							.getProxyObjectImpl(object);
 					if (childStorageContainer != null
 							&& childStorageContainer.getLocatedAtPosition() != null)
@@ -257,18 +255,14 @@ public class ShowStorageGridViewAction extends BaseAction
 						final Integer positionDimensionTwo = childStorageContainer
 								.getLocatedAtPosition().getPositionDimensionTwo();
 
-						fullStatus[positionDimensionOne.intValue()]
-						           [positionDimensionTwo.intValue()] = 1;
-						childContainerIds[positionDimensionOne.intValue()]
-						           [positionDimensionTwo.intValue()] =
-						        	   childStorageContainer.getId().intValue();
-						childContainerType[positionDimensionOne.intValue()]
-						           [positionDimensionTwo.intValue()] =
-						        	   Constants.CONTAINER_LABEL_CONTAINER_MAP
+						fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
+						childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
+								.intValue()] = childStorageContainer.getId().intValue();
+						childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
+								.intValue()] = Constants.CONTAINER_LABEL_CONTAINER_MAP
 								+ childStorageContainer.getName();
-						childContainerName[positionDimensionOne.intValue()]
-						            [positionDimensionTwo.intValue()] =
-						            	childStorageContainer.getName();
+						childContainerName[positionDimensionOne.intValue()][positionDimensionTwo
+								.intValue()] = childStorageContainer.getName();
 					}
 				}
 			}
@@ -301,13 +295,11 @@ public class ShowStorageGridViewAction extends BaseAction
 					final Integer positionDimensionTwo = (Integer) obj[2];
 					final String specimenLable = (String) obj[3];
 
-					fullStatus[positionDimensionOne.intValue()]
-					           [positionDimensionTwo.intValue()] = 2;
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP
-							+ specimenLable;
+							.intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
 					contentOfContainer = Constants.ALIAS_SPECIMEN;
 
 				}
@@ -336,8 +328,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					final Integer positionDimensionTwo = (Integer) obj[2];
 					final String specimenArrayLable = obj[3].toString();
 
-					fullStatus[positionDimensionOne.intValue()]
-					           [positionDimensionTwo.intValue()] = 2;
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo

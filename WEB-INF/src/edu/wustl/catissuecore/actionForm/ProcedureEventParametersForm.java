@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -48,7 +48,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getUrl()
 	{
-		return url;
+		return this.url;
 	}
 
 	/**
@@ -79,6 +79,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return PROCEDURE_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID;
@@ -88,12 +89,13 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
-		this.url = Utility.toString(procedureEventParametersObject.getUrl());
-		this.name = Utility.toString(procedureEventParametersObject.getName());
+		final ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
+		this.url = CommonUtilities.toString(procedureEventParametersObject.getUrl());
+		this.name = CommonUtilities.toString(procedureEventParametersObject.getName());
 	}
 
 	/**
@@ -102,29 +104,30 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 			// Mandar 10-apr-06 : bugid :353 
 			// Error messages should be in the same sequence as the sequence of fields on the page.
-			if (validator.isEmpty(url))
+			if (Validator.isEmpty(this.url))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("procedureeventparameters.url")));
 			}
 
-			if (validator.isEmpty(name))
+			if (Validator.isEmpty(this.name))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("procedureeventparameters.name")));
 			}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -135,6 +138,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//        super.reset();

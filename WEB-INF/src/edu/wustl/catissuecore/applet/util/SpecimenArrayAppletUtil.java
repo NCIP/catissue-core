@@ -34,7 +34,7 @@ public final class SpecimenArrayAppletUtil
 	public static String getArrayMapKey(int row, int col, int columnCount, int attributeIndex)
 	{
 		String mapKey = null;
-		int position = (row * columnCount) + col;
+		final int position = (row * columnCount) + col;
 		mapKey = new String(AppletConstants.ARRAY_CONTENT_KEY_PREFIX + position
 				+ AppletConstants.delimiter
 				+ AppletConstants.ARRAY_CONTENT_ATTRIBUTE_NAMES[attributeIndex]);

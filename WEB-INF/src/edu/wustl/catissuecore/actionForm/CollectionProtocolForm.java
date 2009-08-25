@@ -101,11 +101,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param key  Value of Key 
 	 * @param value Value corrosponding to the Key
 	 */
+	@Override
 	public void setValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -113,30 +114,34 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @return This is used to get corresponding Value from the Map
 	 * @param key This is used to get corresponding Value from the Map   
 	 */
+	@Override
 	public Object getValue(final String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
 	 * @return values in map
 	 */
+	@Override
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
 	 * @return values
 	 */
+	@Override
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**
 	 * @param values Set the values
 	 */
+	@Override
 	public void setValues(final Map values)
 	{
 		this.values = values;
@@ -147,7 +152,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public Map getInnerLoopValues()
 	{
-		return innerLoopValues;
+		return this.innerLoopValues;
 	}
 
 	/**
@@ -165,9 +170,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setIvl(final String key, final Object value)///changes here
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			innerLoopValues.put(key, value);
+			this.innerLoopValues.put(key, value);
 		}
 	}
 
@@ -179,7 +184,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public Object getIvl(final String key)
 	{
-		return innerLoopValues.get(key);
+		return this.innerLoopValues.get(key);
 	}
 
 	/**
@@ -187,7 +192,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public int getOuterCounter()
 	{
-		return outerCounter;
+		return this.outerCounter;
 	}
 
 	/**
@@ -201,6 +206,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * Method to set class attributes
 	 */
+	@Override
 	protected void reset()
 	{
 		//		super.reset();
@@ -214,7 +220,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public long[] getProtocolCoordinatorIds()
 	{
-		return protocolCoordinatorIds;
+		return this.protocolCoordinatorIds;
 	}
 
 	/**
@@ -229,13 +235,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
 	 * @param abstractDomain An AbstractDomain object.
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		final CollectionProtocol cProtocol = (CollectionProtocol) abstractDomain;
 		if (cProtocol.getAliquotInSameContainer() != null)
 		{
-			aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
+			this.aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
 		}
 
 		//For Consent Tracking 
@@ -249,12 +256,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 			this.consentWaived = cProtocol.getConsentsWaived().booleanValue();
 		}
-		
+
 		//Bug #13312
 		this.sequenceNumber = cProtocol.getSequenceNumber();
 		this.type = cProtocol.getType();
 		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint();
-		
+
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
 
@@ -292,6 +299,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		logger.debug("OPERATION : ----- : " + this.getOperation());
@@ -303,9 +311,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			//Check for PI can not be coordinator of the protocol.
 			if (this.protocolCoordinatorIds != null && this.principalInvestigatorId != -1)
 			{
-				for (int ind = 0; ind < protocolCoordinatorIds.length; ind++)
+				for (final long protocolCoordinatorId : this.protocolCoordinatorIds)
 				{
-					if (protocolCoordinatorIds[ind] == this.principalInvestigatorId)
+					if (protocolCoordinatorId == this.principalInvestigatorId)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.pi.coordinator.same"));
@@ -314,9 +322,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 
-			logger.debug("Protocol Coordinators : " + protocolCoordinatorIds);
+			logger.debug("Protocol Coordinators : " + this.protocolCoordinatorIds);
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
@@ -330,6 +338,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Returns the id assigned to form bean
 	 * @return COLLECTION_PROTOCOL_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.COLLECTION_PROTOCOL_FORM_ID;
@@ -375,17 +384,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if ("principalInvestigator".equals(addNewFor))
 		{
-			setPrincipalInvestigatorId(addObjectIdentifier.longValue());
+			this.setPrincipalInvestigatorId(addObjectIdentifier.longValue());
 		}
 		else if ("protocolCoordinator".equals(addNewFor))
 		{
 			final long[] pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};
 
-			setProtocolCoordinatorIds(pcoordIDs);
+			this.setProtocolCoordinatorIds(pcoordIDs);
 		}
 	}
 
@@ -394,7 +404,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public boolean isAliqoutInSameContainer()
 	{
-		return aliqoutInSameContainer;
+		return this.aliqoutInSameContainer;
 	}
 
 	/**
@@ -412,7 +422,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public String getUnsignedConsentURLName()
 	{
-		return unsignedConsentURLName;
+		return this.unsignedConsentURLName;
 	}
 
 	/**
@@ -429,9 +439,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public void setConsentValue(final String key, final Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			consentValues.put(key, value);
+			this.consentValues.put(key, value);
 		}
 	}
 
@@ -441,7 +451,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public Object getConsentValue(final String key)
 	{
-		return consentValues.get(key);
+		return this.consentValues.get(key);
 	}
 
 	/**
@@ -450,7 +460,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public Map getConsentValues()
 	{
-		return consentValues;
+		return this.consentValues;
 	}
 
 	/**
@@ -466,7 +476,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	/**
@@ -484,7 +494,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public boolean isConsentWaived()
 	{
-		return consentWaived;
+		return this.consentWaived;
 	}
 
 	/**
@@ -500,30 +510,30 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	public long[] getSiteIds()
 	{
-		return siteIds;
+		return this.siteIds;
 	}
 
 	public void setSiteIds(final long[] siteIds)
 	{
 		this.siteIds = siteIds;
 	}
-	
+
 	/**
 	 * parentCollectionProtocol.
 	 * @return parentCollectionProtocol.
 	 */
 	public CollectionProtocol getParentCollectionProtocol()
 	{
-		return parentCollectionProtocol;
+		return this.parentCollectionProtocol;
 	}
 
 	/**
 	 * sequenceNumber.
 	 * @return sequence no.
 	 */
-	public Integer getSequenceNumber() 
+	public Integer getSequenceNumber()
 	{
-		return sequenceNumber;
+		return this.sequenceNumber;
 	}
 
 	/**
@@ -532,24 +542,23 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	/**
 	 * studyCalendarEventPoint.
 	 * @return studyCalendarEventPoint.
 	 */
-	public Double getStudyCalendarEventPoint() 
+	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	/**
 	 * parentCollectionProtocol.
 	 * @param parentCollectionProtocol parentCollectionProtocol.
 	 */
-	public void setParentCollectionProtocol(
-			CollectionProtocol parentCollectionProtocol) 
+	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
 	{
 		this.parentCollectionProtocol = parentCollectionProtocol;
 	}
@@ -558,7 +567,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Set sequence no.
 	 * @param sequenceNumber sequenceNumber.
 	 */
-	public void setSequenceNumber(Integer sequenceNumber) 
+	public void setSequenceNumber(Integer sequenceNumber)
 	{
 		this.sequenceNumber = sequenceNumber;
 	}
@@ -567,7 +576,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Set type.
 	 * @param type
 	 */
-	public void setType(String type) 
+	public void setType(String type)
 	{
 		this.type = type;
 	}
@@ -576,7 +585,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Set study calendar point.
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint) 
+	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
 	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
@@ -599,7 +608,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Defines the relative time point in days.
 	 */
 	protected Double studyCalendarEventPoint;
-	
+
 	/**
 	 * Parent collection protocol Identifier.
 	 */
@@ -609,19 +618,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * get parentCollecetionProtocol id.  
 	 * @return parentCollecetionProtocol id.
 	 */
-	public Long getParentCollectionProtocolId() 
+	public Long getParentCollectionProtocolId()
 	{
-		return parentCollectionProtocolId;
+		return this.parentCollectionProtocolId;
 	}
 
 	/**
 	 * Set parentCollecetionProtocol id.  
 	 * @param parentCollectionProtocolId
 	 */
-	public void setParentCollectionProtocolId(Long parentCollectionProtocolId) 
+	public void setParentCollectionProtocolId(Long parentCollectionProtocolId)
 	{
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
-	
 
 }

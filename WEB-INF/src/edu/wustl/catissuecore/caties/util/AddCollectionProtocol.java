@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -61,11 +62,11 @@ public class AddCollectionProtocol
 			}
 
 			logger.info("*** Add Collection protocol...");
-			CollectionProtocol collectionProtocol = initCollectionProtocol(site);
+			final CollectionProtocol collectionProtocol = initCollectionProtocol(site);
 			CaCoreAPIService.createObject(collectionProtocol);
 			logger.info("*** Default Collection protocol added to system...");
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.debug("Exception in AddCollectionProtocol = " + ex.getMessage(), ex);
 			System.out.println("Exception in AddCollectionProtocol = " + ex.getMessage());
@@ -80,7 +81,7 @@ public class AddCollectionProtocol
 	 */
 	public static CollectionProtocol initCollectionProtocol(Site site) throws Exception
 	{
-		CollectionProtocol collectionProtocol = new CollectionProtocol();
+		final CollectionProtocol collectionProtocol = new CollectionProtocol();
 
 		collectionProtocol.setAliquotInSameContainer(new Boolean(false));
 		collectionProtocol.setDescriptionURL("");
@@ -91,26 +92,26 @@ public class AddCollectionProtocol
 		collectionProtocol.setShortTitle(CaTIESProperties
 				.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE));
 
-		collectionProtocol.setStartDate(edu.wustl.common.util.Utility.parseDate("08/15/2003",
-				edu.wustl.common.util.Utility.datePattern("08/15/1975")));
+		collectionProtocol.setStartDate(CommonUtilities.parseDate("08/15/2003", CommonUtilities
+				.datePattern("08/15/1975")));
 
-		Collection collectionProtocolEventList = new LinkedHashSet();
-		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
+		final Collection collectionProtocolEventList = new LinkedHashSet();
+		final CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
 		setCollectionProtocolEvent(collectionProtocolEvent);
 
 		collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 		collectionProtocolEventList.add(collectionProtocolEvent);
 
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
-		User principleInvestigator = new User();
+		final User principleInvestigator = new User();
 		principleInvestigator.setId(new Long(1));
 		collectionProtocol.setPrincipalInvestigator(principleInvestigator);
 
 		/** Set site to CP **/
-		Set<Site> siteCollection = new HashSet<Site>();
+		final Set<Site> siteCollection = new HashSet<Site>();
 		siteCollection.add(site);
 
-		Collection cpCollection = site.getCollectionProtocolCollection();
+		final Collection cpCollection = site.getCollectionProtocolCollection();
 		cpCollection.add(collectionProtocol);
 
 		collectionProtocol.setSiteCollection(siteCollection);
@@ -128,18 +129,18 @@ public class AddCollectionProtocol
 	{
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
 		collectionProtocolEvent.setCollectionPointLabel("Collection Point Label 1");
-		collectionProtocolEvent.setClinicalStatus((String) CaCoreAPIService
+		collectionProtocolEvent.setClinicalStatus(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));
 		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
-		collectionProtocolEvent.setClinicalDiagnosis((String) CaCoreAPIService
+		collectionProtocolEvent.setClinicalDiagnosis(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS));
 
 		Collection specimenCollection = null;
-		CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
-		SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();
+		final CollectionProtocolEventBean cpEventBean = new CollectionProtocolEventBean();
+		final SpecimenRequirementBean specimenRequirementBean = createSpecimenBean();
 
 		cpEventBean.addSpecimenRequirementBean(specimenRequirementBean);
-		Map specimenMap = (Map) cpEventBean.getSpecimenRequirementbeanMap();
+		final Map specimenMap = cpEventBean.getSpecimenRequirementbeanMap();
 		if (specimenMap != null && !specimenMap.isEmpty())
 		{
 			specimenCollection = edu.wustl.catissuecore.util.CollectionProtocolUtil
@@ -155,17 +156,17 @@ public class AddCollectionProtocol
 	 */
 	private static SpecimenRequirementBean createSpecimenBean() throws Exception
 	{
-		SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
+		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
 		specimenRequirementBean.setUniqueIdentifier("E1_S0");
 		specimenRequirementBean.setDisplayName("Specimen_E1_S0");
 		specimenRequirementBean.setLineage("New");
 		specimenRequirementBean.setClassName(Constants.TISSUE);
 		specimenRequirementBean.setType(Constants.FIXED_TISSUE);
-		specimenRequirementBean.setTissueSide((String) CaCoreAPIService
+		specimenRequirementBean.setTissueSide(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE));
-		specimenRequirementBean.setTissueSite((String) CaCoreAPIService
+		specimenRequirementBean.setTissueSite(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_TISSUE_SITE));
-		specimenRequirementBean.setPathologicalStatus((String) CaCoreAPIService
+		specimenRequirementBean.setPathologicalStatus(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		specimenRequirementBean.setQuantity("0");
 		specimenRequirementBean.setStorageContainerForSpecimen("Virtual");
@@ -173,11 +174,11 @@ public class AddCollectionProtocol
 		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(1);
 		specimenRequirementBean.setReceivedEventUserId(1);
-		specimenRequirementBean.setCollectionEventContainer((String) CaCoreAPIService
+		specimenRequirementBean.setCollectionEventContainer(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_CONTAINER));
-		specimenRequirementBean.setReceivedEventReceivedQuality((String) CaCoreAPIService
+		specimenRequirementBean.setReceivedEventReceivedQuality(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-		specimenRequirementBean.setCollectionEventCollectionProcedure((String) CaCoreAPIService
+		specimenRequirementBean.setCollectionEventCollectionProcedure(CaCoreAPIService
 				.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 
 		specimenRequirementBean.setNoOfDeriveSpecimen(0);
@@ -192,10 +193,10 @@ public class AddCollectionProtocol
 	 */
 	private static Site initSite() throws Exception
 	{
-		User user = (User) CaCoreAPIService.getObject(User.class, "emailAddress", CaTIESProperties
-				.getValue(CaTIESConstants.USER_NAME));
+		final User user = (User) CaCoreAPIService.getObject(User.class, "emailAddress",
+				CaTIESProperties.getValue(CaTIESConstants.USER_NAME));
 
-		Site site = new Site();
+		final Site site = new Site();
 
 		site.setEmailAddress(user.getEmailAddress());
 		site.setName(CaTIESProperties.getValue(CaTIESConstants.SITE_NAME_FROM_PROPERTIES));
@@ -203,7 +204,7 @@ public class AddCollectionProtocol
 		site.setActivityStatus("Active");
 		site.setCoordinator(user);
 
-		Address address = new Address();
+		final Address address = new Address();
 		if (address.getCity() == null)
 		{
 			address.setCity(Constants.NOT_SPECIFIED);

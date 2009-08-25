@@ -265,11 +265,9 @@ public class SpecimenArray extends Container
 					this.locatedAtPosition.parentContainer.setId(Long.valueOf(specimenArrayForm
 							.getStorageContainer()));
 
-					this.locatedAtPosition.positionDimensionOne
-					= Integer.valueOf(specimenArrayForm
+					this.locatedAtPosition.positionDimensionOne = Integer.valueOf(specimenArrayForm
 							.getPositionDimensionOne());
-					this.locatedAtPosition.positionDimensionTwo
-					= Integer.valueOf(specimenArrayForm
+					this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(specimenArrayForm
 							.getPositionDimensionTwo());
 					this.locatedAtPosition.occupiedContainer = this;
 
@@ -279,8 +277,7 @@ public class SpecimenArray extends Container
 					this.locatedAtPosition.parentContainer.setName(specimenArrayForm
 							.getSelectedContainerName());
 					if (specimenArrayForm.getPos1() != null
-							&& !specimenArrayForm.getPos1().trim()
-							.equals(Constants.DOUBLE_QUOTES)
+							&& !specimenArrayForm.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
 							&& specimenArrayForm.getPos2() != null
 							&& !specimenArrayForm.getPos2().trim().equals(""))
 					{
@@ -313,11 +310,9 @@ public class SpecimenArray extends Container
 				{
 					final IFactory factory = AbstractFactoryConfig.getInstance()
 							.getBizLogicFactory();
-					final SpecimenArrayBizLogic specimenArrayBizLogic
-					= (SpecimenArrayBizLogic) factory
+					final SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic) factory
 							.getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
-					final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem
-					= specimenArrayBizLogic
+					final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenArrayBizLogic
 							.getNewSpecimenArrayOrderItem(Long.valueOf(specimenArrayForm
 									.getNewArrayOrderItemId()));
 					final Collection tempColl = new HashSet();

@@ -1,7 +1,7 @@
+
 package edu.wustl.catissuecore;
 
 import edu.wustl.common.util.logger.Logger;
-
 
 /**
  * This class provides functionality to log performance of a given task.
@@ -24,9 +24,11 @@ public final class TaskTimeCalculater
 	 * @param clazz class object for which task time calculator object to
 	 * be created.
 	 */
-	protected TaskTimeCalculater(Class clazz){
-		logger = Logger.getCommonLogger(clazz);
+	protected TaskTimeCalculater(Class clazz)
+	{
+		this.logger = Logger.getCommonLogger(clazz);
 	}
+
 	/**
 	 * Default private constructor. Used for internal purpose only.
 	 */
@@ -40,49 +42,60 @@ public final class TaskTimeCalculater
 	 */
 	protected String getTaskName()
 	{
-		return taskName;
+		return this.taskName;
 	}
+
 	/**
 	 * @param task name of the task whose performance is about to calculate.
 	 */
-	protected void setTaskName(String task){
+	protected void setTaskName(String task)
+	{
 		this.taskName = task;
 	}
+
 	/**
 	 * @return task start time
 	 */
 	protected long getStartTime()
 	{
-		return startTime;
+		return this.startTime;
 	}
+
 	/**
 	 * @param timeStamp task start time.
 	 */
-	protected void setStartTime(long timeStamp){
+	protected void setStartTime(long timeStamp)
+	{
 		this.startTime = timeStamp;
 	}
+
 	/**
 	 * @return task end time
 	 */
 	protected long getEndTime()
 	{
-		return endTime;
+		return this.endTime;
 	}
+
 	/**
 	 * @param timeStamp task end time
 	 */
-	protected void setEndTime(long timeStamp){
+	protected void setEndTime(long timeStamp)
+	{
 		this.endTime = timeStamp;
 	}
+
 	/**
 	 * @return formatted message with total time taken for the task.
 	 */
-	public String getTimeTaken(){
-		long timeTaken = getEndTime() - getStartTime();
-		String logString = getTaskName() +"," + timeTaken;
-		logger.info(logString);
+	public String getTimeTaken()
+	{
+		final long timeTaken = this.getEndTime() - this.getStartTime();
+		final String logString = this.getTaskName() + "," + timeTaken;
+		this.logger.info(logString);
 		return logString;
 	}
+
 	/**
 	 * @return formatted message with total time taken in milliseconds
 	 *  for the task.
@@ -96,14 +109,14 @@ public final class TaskTimeCalculater
 		}
 		else
 		{
-			double timeTaken = ((double)getEndTime()) - ((double)getStartTime());
-			timeTaken/=MILLIS_IN_A_SECOND;
-			logString= getTaskName() +"," + timeTaken;
-			logger.info(logString);
+			double timeTaken = ((double) this.getEndTime()) - ((double) this.getStartTime());
+			timeTaken /= MILLIS_IN_A_SECOND;
+			logString = this.getTaskName() + "," + timeTaken;
+			this.logger.info(logString);
 		}
 		return logString;
 	}
-	
+
 	/**
 	 * A static function to be used for notifying beginning of the task.
 	 * @param taskName name of the task.
@@ -113,14 +126,15 @@ public final class TaskTimeCalculater
 	{
 		return startTask(taskName, TaskTimeCalculater.class);
 	}
-	
+
 	/**
 	 * A static function to be used for notifying beginning of the task.
 	 * @param taskName name of the task.
 	 * @param clazz class object for which logger object to be created.
 	 * @return new object of TaskTimeCalculater for the given task.
 	 */
-	public static TaskTimeCalculater startTask(String taskName, Class clazz){
+	public static TaskTimeCalculater startTask(String taskName, Class clazz)
+	{
 		TaskTimeCalculater taskTimeCalculater = nullTaskCalculater;
 		if (IS_LOGGING_ON)
 		{
@@ -130,6 +144,7 @@ public final class TaskTimeCalculater
 		}
 		return taskTimeCalculater;
 	}
+
 	/**
 	 * A static function used to notify the task is finish. This function then
 	 * calculates the total time taken and returns the formatted string.
@@ -147,7 +162,7 @@ public final class TaskTimeCalculater
 		}
 		else
 		{
-			timeTaken ="";
+			timeTaken = "";
 		}
 		return timeTaken;
 	}

@@ -54,14 +54,16 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(UpdateBulkSpecimensAction.class);
 	/**
 	 * specimenSummaryForm.
 	 */
 	private ViewSpecimenSummaryForm specimenSummaryForm = null;
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -77,6 +79,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	 * @return ActionForward : ActionForward
 	 */
 
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -97,8 +100,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 					.getUserAction()))
 			{
 				// Abhishek Mehta : Performance related Changes
-				final Collection<AbstractDomainObject> specimenCollection
-				= new LinkedHashSet<AbstractDomainObject>();
+				final Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 				specimenCollection.addAll(specimenDomainCollection);
 				new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean, 0, false);
 				this.setLabelBarCodesToSessionData(eventId, request, specimenDomainCollection);
@@ -217,7 +219,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request,
 					this.specimenSummaryForm, true);
 
-			ActionErrors actionErrors = new ActionErrors();
+			final ActionErrors actionErrors = new ActionErrors();
 
 			// To delegate UserNotAuthorizedException forward
 			if (exception instanceof UserNotAuthorizedException)
@@ -248,18 +250,18 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				this.saveErrors(request, actionErrors);
 				return (mapping.findForward("multipleSpWithMenuFaliure"));
 			}
-			else if(exception instanceof ApplicationException)
+			else if (exception instanceof ApplicationException)
 			{
 				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
-						((ApplicationException)exception).getCustomizedMsg()));
+						((ApplicationException) exception).getCustomizedMsg()));
 			}
 			else
 			{
 				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
 						exception.getMessage()));
 			}
-			
-			logger.info(exception.getMessage(), exception);
+
+			this.logger.info(exception.getMessage(), exception);
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			if (request.getParameter("pageOf") != null)
@@ -295,18 +297,18 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 					String label = gSpecimen.getDisplayName();
 					//label is coming null in case of specimens added through
 					//multiple specimens page.
-					if(label==null)
+					if (label == null)
 					{
 						label = gSpecimen.getCorresSpecimen().getLabel();
 					}
-					if(specimen.getLabel()!=null && label!=null)
+					if (specimen.getLabel() != null && label != null)
 					{
-						if(specimen.getLabel().equals(label))
+						if (specimen.getLabel().equals(label))
 						{
 							specimensToPrint.add(specimen);
 						}
 					}
-				}						
+				}
 			}
 		}
 		return specimensToPrint;
@@ -328,8 +330,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
-		final CollectionProtocolEventBean eventBean
-		= (CollectionProtocolEventBean) collectionProtocolEventMap
+		final CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(eventId);
 
 		final LinkedHashMap<String, GenericSpecimen> specimenMap = (LinkedHashMap) eventBean
@@ -358,14 +359,11 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			final Iterator deriveItr = derivesCollection.iterator();
 			while (deriveItr.hasNext())
 			{
-				final SpecimenDataBean deriveSpecimenDataBean
-				= (SpecimenDataBean) deriveItr.next();
+				final SpecimenDataBean deriveSpecimenDataBean = (SpecimenDataBean) deriveItr.next();
 				final Specimen deriveSpec = deriveSpecimenDataBean.getCorresSpecimen();
 				if ((deriveSpec.getSpecimenPosition() != null)
-						&& (deriveSpec.getSpecimenPosition()
-								.getPositionDimensionOne() != null)
-						&& (deriveSpec.getSpecimenPosition()
-								.getPositionDimensionTwo() != null))
+						&& (deriveSpec.getSpecimenPosition().getPositionDimensionOne() != null)
+						&& (deriveSpec.getSpecimenPosition().getPositionDimensionTwo() != null))
 				{
 					deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec
 							.getSpecimenPosition().getPositionDimensionOne()));
@@ -434,7 +432,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		genericSpecimen.setCheckedSpecimen(specimenDataBean.getCheckedSpecimen());
 		genericSpecimen.setPrintSpecimen(specimenDataBean.getPrintSpecimen());
 		specimenDataBean.setCorresSpecimen(specimen);
-		
+
 		//specimen.setSpecimenEventCollection(specimenDataBean.getSpecimenEventCollection());
 		specimen.setAvailableQuantity(specimen.getInitialQuantity());
 		if (specimenDataBean.getSpecimenEventCollection() != null
@@ -443,20 +441,22 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			final Iterator iterator = specimenDataBean.getSpecimenEventCollection().iterator();
 			while (iterator.hasNext())
 			{
-				final SpecimenEventParameters specimenEventParameters
-				= (SpecimenEventParameters) iterator
+				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) iterator
 						.next();
 				specimenEventParameters.setSpecimen(specimen);
 				specimenEventParameters.setId(null);
 			}
 		}
-		
-		Collection<ExternalIdentifier> externalIdentifierColl = specimenDataBean.getExternalIdentifierCollection();
-		 Iterator<ExternalIdentifier> externalIdentifierCollItr = externalIdentifierColl.iterator();
-		  while (externalIdentifierCollItr.hasNext()) {
-			  ExternalIdentifier externalIdentifier  = (ExternalIdentifier) externalIdentifierCollItr.next();
-			  externalIdentifier.setId(null);
-		  }
+
+		final Collection<ExternalIdentifier> externalIdentifierColl = specimenDataBean
+				.getExternalIdentifierCollection();
+		final Iterator<ExternalIdentifier> externalIdentifierCollItr = externalIdentifierColl
+				.iterator();
+		while (externalIdentifierCollItr.hasNext())
+		{
+			final ExternalIdentifier externalIdentifier = externalIdentifierCollItr.next();
+			externalIdentifier.setId(null);
+		}
 
 	}
 

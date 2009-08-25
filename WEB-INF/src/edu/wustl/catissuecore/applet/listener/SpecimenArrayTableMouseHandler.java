@@ -25,35 +25,33 @@ public class SpecimenArrayTableMouseHandler extends MouseAdapter
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 * @param e : e
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		super.mouseClicked(e);
-		SpecimenArrayTable arrayTable = (SpecimenArrayTable) e.getSource();
-		TableModel model = arrayTable.getModel();
+		final SpecimenArrayTable arrayTable = (SpecimenArrayTable) e.getSource();
+		final TableModel model = arrayTable.getModel();
 		SpecimenArrayTableModel tableModel = null;
 
 		if (model instanceof SpecimenArrayTableModel)
 		{
 			tableModel = (SpecimenArrayTableModel) model;
-			SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil
+			final SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil
 					.getBaseApplet(arrayTable);
 
 			// enable if molecular specimen
 			if ((tableModel.getSpecimenClass() != null)
-					&& SpecimenArrayAppletUtil.
-					isMolecularSpecimen(tableModel.getSpecimenClass()))
+					&& SpecimenArrayAppletUtil.isMolecularSpecimen(tableModel.getSpecimenClass()))
 			{
-				int column = arrayTable.getSelectedColumn();
-				int row = arrayTable.getSelectedRow();
-				String concentration = (String) tableModel.getSpecimenArrayModelMap().get(
+				final int column = arrayTable.getSelectedColumn();
+				final int row = arrayTable.getSelectedRow();
+				final String concentration = (String) tableModel.getSpecimenArrayModelMap().get(
+						SpecimenArrayAppletUtil.getArrayMapKey(row, column, tableModel
+								.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX));
+				final String quantity = (String) tableModel.getSpecimenArrayModelMap().get(
 						SpecimenArrayAppletUtil.getArrayMapKey(row, column, tableModel
 								.getColumnCount(),
-								AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX));
-				String quantity = (String) tableModel.getSpecimenArrayModelMap().get(
-						SpecimenArrayAppletUtil.getArrayMapKey(row, column, tableModel
-								.getColumnCount(),
-								AppletConstants.
-								ARRAY_CONTENT_ATTR_QUANTITY_INDEX));
+								AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX));
 				arrayApplet.getConcentrationTextField().setText(concentration);
 				arrayApplet.getConcentrationTextField().setEnabled(true);
 				arrayApplet.getQuantityTextField().setText(quantity);

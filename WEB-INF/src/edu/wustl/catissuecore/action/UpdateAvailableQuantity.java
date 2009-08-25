@@ -42,28 +42,29 @@ public class UpdateAvailableQuantity extends BaseAction
 	* @return ActionForward object
 	* @throws Exception object
 	*/
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//The selected specimen Id.
-		String specimenId = (String) request.getParameter("selectedSpecimen");
+		final String specimenId = request.getParameter("selectedSpecimen");
 		//The row number.
 		//String finalSpecimenListId = (String) request.getParameter("finalSpecimenListId");
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		OrderBizLogic orderBizLogic = (OrderBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final OrderBizLogic orderBizLogic = (OrderBizLogic) factory
 				.getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 
 		String quantity = "";
 		Specimen specimen = null;
 		if (specimenId != null && !specimenId.equals("") && !specimenId.equals("#"))
 		{
-			Long specId = Long.parseLong(specimenId);
+			final Long specId = Long.parseLong(specimenId);
 			specimen = orderBizLogic.getSpecimenObject(specId);
 			quantity = specimen.getAvailableQuantity().toString();
 
 		}
 		//Writing to response
-		PrintWriter out = response.getWriter();
+		final PrintWriter out = response.getWriter();
 		out.print(quantity);
 
 		return null;

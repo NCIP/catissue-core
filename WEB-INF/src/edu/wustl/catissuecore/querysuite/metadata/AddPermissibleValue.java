@@ -29,8 +29,7 @@ public class AddPermissibleValue
 	/**
 	 * Specify entity ID Attribute List Map.
 	 */
-	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap =
-		new HashMap<Long, List<AttributeInterface>>();
+	private HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
 	/**
 	 * Specify entity Attributes To Add.
 	 */
@@ -173,12 +172,10 @@ public class AddPermissibleValue
 			}
 			stmt.close();
 
-			sql = "insert into dyextn_data_element" +
-					"(IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID) values ("
-					+ dataElementId
-					+ ","
-					+ attribute.getAttributeTypeInformation()
-					.getDataElement().getId() + ",null)";
+			sql = "insert into dyextn_data_element"
+					+ "(IDENTIFIER,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID) values ("
+					+ dataElementId + ","
+					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ",null)";
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
 				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
@@ -198,13 +195,10 @@ public class AddPermissibleValue
 			{
 				value = "'" + (String) value + "'";
 			}
-			sql = "insert into dyextn_permissible_value" +
-					"(IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID)" +
-					" values ("
-					+ permissibleValueId
-					+ ",null,"
-					+ attribute.getAttributeTypeInformation().
-					getDataElement().getId() + ",null)";
+			sql = "insert into dyextn_permissible_value"
+					+ "(IDENTIFIER,DESCRIPTION,ATTRIBUTE_TYPE_INFO_ID,CATEGORY_ATTRIBUTE_ID)"
+					+ " values (" + permissibleValueId + ",null,"
+					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ",null)";
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
 				sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,

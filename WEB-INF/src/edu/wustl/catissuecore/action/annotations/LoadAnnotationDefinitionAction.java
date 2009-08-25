@@ -196,8 +196,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				final Iterator<FormContext> formContextIterator = formContexts.iterator();
 				while (formContextIterator.hasNext())
 				{
-					FormContext formContext = formContextIterator.next();
-					Collection<EntityMapCondition> entityMapConditions = AppUtility
+					final FormContext formContext = formContextIterator.next();
+					final Collection<EntityMapCondition> entityMapConditions = AppUtility
 							.getEntityMapConditions(formContext.getId());
 					if ((formContext.getNoOfEntries() == null || formContext.getNoOfEntries()
 							.equals(""))
@@ -206,13 +206,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					{
 						if (entityMapConditions != null && !entityMapConditions.isEmpty())
 						{
-							Collection entityMapConditionColl = entityMapConditions;
+							final Collection entityMapConditionColl = entityMapConditions;
 							whereColumnValue = new String[entityMapConditionColl.size()];
-							Iterator entityMapCondIterator = entityMapConditionColl
+							final Iterator entityMapCondIterator = entityMapConditionColl
 									.iterator();
 							while (entityMapCondIterator.hasNext())
 							{
-								EntityMapCondition entityMapCondition = (EntityMapCondition) entityMapCondIterator
+								final EntityMapCondition entityMapCondition = (EntityMapCondition) entityMapCondIterator
 										.next();
 								if (entityMapCondition.getTypeId().toString().equals(
 										catissueCoreCacheManager.getObjectFromCache(

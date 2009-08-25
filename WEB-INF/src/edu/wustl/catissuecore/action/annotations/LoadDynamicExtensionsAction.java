@@ -54,17 +54,17 @@ public class LoadDynamicExtensionsAction extends BaseAction
 		}
 		if (staticEntityId == null)
 		{
-			staticEntityId = request.getParameter( "staticEntityId" );
+			staticEntityId = request.getParameter("staticEntityId");
 		}
 		final HttpSession session = request.getSession();
-		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId );
-		session.setAttribute( AnnotationConstants.SELECTED_STATIC_RECORDID, conditions );
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
+		session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);
 
 		//Get Dynamic extensions URL
-		final String dynamicExtensionsURL = this.getDynamicExtensionsURL( request );
+		final String dynamicExtensionsURL = this.getDynamicExtensionsURL(request);
 		//Set as request attribute
-		request.setAttribute( AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL );
-		return mapping.findForward( Constants.SUCCESS );
+		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL);
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
 				+ WebUIManager.getCreateContainerURL();
 
 		final SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
-				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA );
+				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 
 		final String userId = sessionbean.getUserId().toString();
 		//request.getSession().getAttribute("SESSION_DATA").toString();
@@ -88,11 +88,11 @@ public class LoadDynamicExtensionsAction extends BaseAction
 			isAuthenticatedUser = "true";
 		}
 		//append container id if any
-		if (request.getParameter( "containerId" ) != null)
+		if (request.getParameter("containerId") != null)
 		{
 			dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter( "containerId" );
+					+ request.getParameter("containerId");
 			dynamicExtensionsURL = dynamicExtensionsURL + "&"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN

@@ -44,7 +44,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	 */
 	public String getRequestStatusSelected()
 	{
-		return requestStatusSelected;
+		return this.requestStatusSelected;
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	 */
 	public int getNewRequests()
 	{
-		return newRequests;
+		return this.newRequests;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	 */
 	public int getPendingRequests()
 	{
-		return pendingRequests;
+		return this.pendingRequests;
 	}
 
 	/**
@@ -90,6 +90,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	/**
 	 * @return int Form Id
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.REQUEST_LIST_FILTERATION_FORM_ID;
@@ -98,6 +99,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	/**
 	 * @param 
 	 */
+	@Override
 	protected void reset()
 	{
 

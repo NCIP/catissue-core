@@ -73,8 +73,8 @@ public class RequestToOrderAction extends BaseAction
 		final long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
 		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
-		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(loggedInUserID, role
-				.getName(), sessionLoginInfo);
+		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
+				loggedInUserID, role.getName(), sessionLoginInfo);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 		return mapping.findForward("requestOrderPage");
 	}

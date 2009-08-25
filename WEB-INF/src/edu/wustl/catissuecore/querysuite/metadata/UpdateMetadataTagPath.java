@@ -262,8 +262,7 @@ public class UpdateMetadataTagPath
 				LOGGER.info("==" + attrName);
 				if (attribute == null)
 				{
-					throw new DynamicExtensionsApplicationException
-					(ApplicationProperties.getValue(
+					throw new DynamicExtensionsApplicationException(ApplicationProperties.getValue(
 							"attribute.doesNotExist", attrName));
 				}
 				final Element tag = tagItr.next();

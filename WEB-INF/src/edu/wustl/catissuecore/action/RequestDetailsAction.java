@@ -233,8 +233,8 @@ public class RequestDetailsAction extends BaseAction
 		final long csmUserId = new Long(sessionLoginInfo.getCsmUserId()).longValue();
 		final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
 
-		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(loggedInUserID, role
-				.getName(), sessionLoginInfo);
+		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
+				loggedInUserID, role.getName(), sessionLoginInfo);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
 
 		return mapping.findForward("success");
@@ -871,11 +871,10 @@ public class RequestDetailsAction extends BaseAction
 			isNotTissueBlock = true;
 			isDerived = true;
 		}
-		List totalChildrenSpecimenColl = 
-			getTotalChildspecimens(pathologicalCaseOrderItem,isNotTissueBlock,childrenSpecimenList);
-		
-		
-		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+		final List totalChildrenSpecimenColl = this.getTotalChildspecimens(
+				pathologicalCaseOrderItem, isNotTissueBlock, childrenSpecimenList);
+
+		final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
 		arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		arrayDetailsBean.setSpecimenCollGroupId(pathologicalCaseOrderItem
@@ -1170,7 +1169,7 @@ public class RequestDetailsAction extends BaseAction
 		{
 			isDerived = true;
 		}
-		
+
 		if (pathologicalCaseOrderItem.getSpecimenClass() != null
 				&& pathologicalCaseOrderItem.getSpecimenType() != null
 				&& !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("")
@@ -1179,17 +1178,17 @@ public class RequestDetailsAction extends BaseAction
 			isNotTissueBlock = true;
 			isDerived = true;
 		}
-		
-		final List totalChildrenSpecimenColl = 
-			getTotalChildspecimens(pathologicalCaseOrderItem,isNotTissueBlock, childrenSpecimenList);
-			
+
+		final List totalChildrenSpecimenColl = this.getTotalChildspecimens(
+				pathologicalCaseOrderItem, isNotTissueBlock, childrenSpecimenList);
+
 		// removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
 		// To display the available quantity of the selected specimen from
 		// RequestFor dropdown.
 		// request.getSession().setAttribute("finalSpecimenList"+
 		// finalSpecimenListId, totalChildrenSpecimenColl);
-		List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
+		final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
@@ -1235,8 +1234,7 @@ public class RequestDetailsAction extends BaseAction
 	 * @param childrenSpecimenList
 	 * @return
 	 */
-	private List getTotalChildspecimens(
-			PathologicalCaseOrderItem pathologicalCaseOrderItem,
+	private List getTotalChildspecimens(PathologicalCaseOrderItem pathologicalCaseOrderItem,
 			boolean isNotTissueBlock, final Collection childrenSpecimenList)
 	{
 		final Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
@@ -1246,24 +1244,22 @@ public class RequestDetailsAction extends BaseAction
 			final Specimen specimen = (Specimen) childrenSpecimenListIterator.next();
 			final List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen
 					.getChildSpecimenCollection());
-		
+
 			if (isNotTissueBlock)
 			{
 				// "Derived"
-				totalChildrenSpecimens = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection,
-								pathologicalCaseOrderItem.getSpecimenClass(),
-								pathologicalCaseOrderItem.getSpecimenType());
+				totalChildrenSpecimens = OrderingSystemUtil.getChildrenSpecimenForClassAndType(
+						childSpecimenCollection, pathologicalCaseOrderItem.getSpecimenClass(),
+						pathologicalCaseOrderItem.getSpecimenType());
 			}
 			else
 			{
 				// "Block" . Specimen class = "Tissue" , Specimen Type =
 				// "Block".
-				totalChildrenSpecimens = OrderingSystemUtil
-						.getChildrenSpecimenForClassAndType(childSpecimenCollection, "Tissue",
-								"Block");
+				totalChildrenSpecimens = OrderingSystemUtil.getChildrenSpecimenForClassAndType(
+						childSpecimenCollection, "Tissue", "Block");
 			}
-	
+
 		}
 		return totalChildrenSpecimens;
 	}

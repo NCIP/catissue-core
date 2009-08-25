@@ -49,6 +49,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -60,7 +61,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger
+	private transient final Logger logger = Logger
 			.getCommonLogger(ListSpecimenEventParametersAction.class);
 
 	/**
@@ -80,6 +81,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
@@ -92,12 +94,12 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		// request.setAttribute(Constants.OPERATION, operation);
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
 			// ************* ForwardTo implementation *************
 			// forwarded from Specimen page
-			HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
 			String specimenId = null;
 			String specimenLabel = null;
@@ -106,7 +108,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			String fromQuickEvent = (String) request.getAttribute("isQuickEvent");
 			if (fromQuickEvent == null)
 			{
-				fromQuickEvent = (String) request.getParameter("isQuickEvent");
+				fromQuickEvent = request.getParameter("isQuickEvent");
 			}
 			String eventSelected = "";
 			if (fromQuickEvent != null)
@@ -154,8 +156,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				// ForwardToProcessor
 				specimenId = (String) forwardToHashMap.get("specimenId");
 				specimenLabel = (String) forwardToHashMap.get(Constants.SPECIMEN_LABEL);
-				Logger.out.debug("SpecimenID found in " +
-						"forwardToHashMap========>>>>>>" + specimenId);
+				Logger.out.debug("SpecimenID found in " + "forwardToHashMap========>>>>>>"
+						+ specimenId);
 			}
 			// ************* ForwardTo implementation *************
 
@@ -163,7 +165,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			// will be null, following code handles that case
 			if (specimenId == null)
 			{
-				String eventId = (String) request.getParameter("eventId");
+				final String eventId = request.getParameter("eventId");
 
 				// Added by Vijay Pande. While cliking on events tab both
 				// specimenId and eventId are getting null. Since there was no
@@ -175,18 +177,17 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					Logger.out.debug("Event ID added===>" + eventId);
 					// Retrieving list of SpecimenEvents for added
 					// SpecimenEventId
-					Object object = bizLogic.retrieve(SpecimenEventParameters.class.getName(),
-							new Long(eventId));
+					final Object object = bizLogic.retrieve(
+							SpecimenEventParameters.class.getName(), new Long(eventId));
 
 					if (object != null)
 					{
 						// Getting object of specimenEventParameters from the
 						// list of SepcimenEvents
-						SpecimenEventParameters specimenEventParameters =
-							(SpecimenEventParameters) object;
+						final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) object;
 
 						// getting SpecimenId of SpecimenEventParameters
-						AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
+						final AbstractSpecimen specimen = specimenEventParameters.getSpecimen();
 						specimenId = specimen.getId().toString();
 						// specimenLabel = specimen.getLabel();
 						Logger.out.debug("Specimen of Event Added====>"
@@ -197,17 +198,17 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 			if (specimenId == null)
 			{
-				specimenId = (String) request.getParameter(Constants.SPECIMEN_ID);
-				specimenLabel = (String) request.getParameter(Constants.SPECIMEN_LABEL);
+				specimenId = request.getParameter(Constants.SPECIMEN_ID);
+				specimenLabel = request.getParameter(Constants.SPECIMEN_LABEL);
 			}
 
 			request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 
-			Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
+			final Object object = bizLogic.retrieve(Specimen.class.getName(), new Long(specimenId));
 
 			if (object != null)
 			{
-				Specimen specimen = (Specimen) object;
+				final Specimen specimen = (Specimen) object;
 				if (specimenLabel == null)
 				{
 					specimenLabel = specimen.getLabel();
@@ -216,9 +217,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 				// Ashish - 4/6/07 --- Since lazy=true, retriving the events
 				// collection.
-				Collection < SpecimenEventParameters > specimenEventCollection =
-					getSpecimenEventParametersColl(
-						specimenId, bizLogic);
+				final Collection<SpecimenEventParameters> specimenEventCollection = this
+						.getSpecimenEventParametersColl(specimenId, bizLogic);
 				/**
 				 * Name: Chetan Patil Reviewer: Sachin Lale Bug ID: Bug#4180
 				 * Patch ID: Bug#4180_1 Description: The values of event
@@ -230,26 +230,22 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				 */
 				if (specimenEventCollection != null)
 				{
-					List < Map < String , Object >> gridData =
-						new ArrayList < Map < String , Object >>();
+					final List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
 
-					for (SpecimenEventParameters eventParameters : specimenEventCollection)
+					for (final SpecimenEventParameters eventParameters : specimenEventCollection)
 					{
-						Map < String , Object > rowDataMap =
-							new HashMap < String , Object >();
+						final Map<String, Object> rowDataMap = new HashMap<String, Object>();
 						if (eventParameters != null)
 						{
-							String[] events = EventsUtil.getEvent(eventParameters);
-							rowDataMap.put(Constants.ID,
-									String.valueOf(eventParameters.getId()));
+							final String[] events = EventsUtil.getEvent(eventParameters);
+							rowDataMap.put(Constants.ID, String.valueOf(eventParameters.getId()));
 							rowDataMap.put(Constants.EVENT_NAME, events[0]);
 
 							// Ashish - 4/6/07 - retrieving User
 							// User user = eventParameters.getUser();
-							User user = getUser(eventParameters.getId(), bizLogic);
+							final User user = this.getUser(eventParameters.getId(), bizLogic);
 
-							rowDataMap.put(Constants.USER_NAME,
-									user.getLastName() + ", "
+							rowDataMap.put(Constants.USER_NAME, user.getLastName() + ", "
 									+ user.getFirstName());
 
 							// rowDataMap.put(Constants.EVENT_DATE,
@@ -257,28 +253,25 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							// (eventParameters.getTimestamp(),
 							// Constants.TIMESTAMP_PATTERN)); // Sri: Changed
 							// format for bug #463
-							rowDataMap.put(Constants.EVENT_DATE,
-									eventParameters.getTimestamp());
+							rowDataMap.put(Constants.EVENT_DATE, eventParameters.getTimestamp());
 							rowDataMap.put(Constants.PAGE_OF, events[1]);// pageOf
 							gridData.add(rowDataMap);
 						}
 					}
 
-					List < List < String >> gridDataList = getSortedGridDataList(gridData);
-					String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
-					List columnList = new ArrayList();
-					for (int i = 0; i < columnList1.length; i++)
+					final List<List<String>> gridDataList = this.getSortedGridDataList(gridData);
+					final String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
+					final List columnList = new ArrayList();
+					for (final String element : columnList1)
 					{
-						columnList.add(columnList1[i]);
+						columnList.add(element);
 					}
 					AppUtility.setGridData(gridDataList, columnList, request);
 					request.setAttribute(
-							edu.wustl.simplequery.global.
-							Constants.SPREADSHEET_DATA_LIST,
+							edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST,
 							gridDataList);
-					Integer identifierFieldIndex = new Integer(0);
-					request.setAttribute
-					("identifierFieldIndex", identifierFieldIndex.intValue());
+					final Integer identifierFieldIndex = new Integer(0);
+					request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 				}
 			}
 			if (request.getAttribute(Constants.SPECIMEN_LABEL) == null)
@@ -287,12 +280,12 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			}
 			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
 		request.setAttribute(Constants.MENU_SELECTED, new String("15"));
-		String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
 		if (pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
@@ -322,12 +315,12 @@ public class ListSpecimenEventParametersAction extends SecureAction
 						specimenEntityId);
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 		}
 		request.setAttribute("specimenEntityId", specimenEntityId);
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 
 	// Patch ID: Bug#4180_2
@@ -338,7 +331,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 *            List of the Map
 	 * @return Sorted List of the List
 	 */
-	private List < List < String >> getSortedGridDataList(List < Map < String , Object >> gridData)
+	private List<List<String>> getSortedGridDataList(List<Map<String, Object>> gridData)
 	{
 		// Comparator to sort the List of Map chronologically.
 		final Comparator EventDateComparator = new Comparator()
@@ -346,11 +339,11 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 			public int compare(Object object1, Object object2)
 			{
-				Map < String , Object > rowDataMap1 = (Map < String , Object >) object1;
-				Date date1 = (Date) rowDataMap1.get(Constants.EVENT_DATE);
+				final Map<String, Object> rowDataMap1 = (Map<String, Object>) object1;
+				final Date date1 = (Date) rowDataMap1.get(Constants.EVENT_DATE);
 
-				Map < String , Object > rowDataMap2 = (Map < String , Object >) object2;
-				Date date2 = (Date) rowDataMap2.get(Constants.EVENT_DATE);
+				final Map<String, Object> rowDataMap2 = (Map<String, Object>) object2;
+				final Date date2 = (Date) rowDataMap2.get(Constants.EVENT_DATE);
 
 				int value = 0;
 				if (date1 != null && date2 != null && date1.before(date2))
@@ -368,7 +361,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 		Collections.sort(gridData, EventDateComparator);
 
-		List < List < String >> gridDataList = getListOfRowData(gridData);
+		final List<List<String>> gridDataList = this.getListOfRowData(gridData);
 		return gridDataList;
 	}
 
@@ -378,33 +371,32 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 *            List of Map
 	 * @return List of values
 	 */
-	private List < List < String >> getListOfRowData(List < Map < String , Object >> gridData)
+	private List<List<String>> getListOfRowData(List<Map<String, Object>> gridData)
 	{
-		List < List < String >> gridDataList = new ArrayList < List < String >>();
-		for (Map < String , Object > rowDataMap : gridData)
+		final List<List<String>> gridDataList = new ArrayList<List<String>>();
+		for (final Map<String, Object> rowDataMap : gridData)
 		{
-			List < String > rowData = new ArrayList < String >();
+			final List<String> rowData = new ArrayList<String>();
 
-			String eventId = (String) rowDataMap.get(Constants.ID);
+			final String eventId = (String) rowDataMap.get(Constants.ID);
 			rowData.add(eventId);
 
-			String eventName = (String) rowDataMap.get(Constants.EVENT_NAME);
+			final String eventName = (String) rowDataMap.get(Constants.EVENT_NAME);
 			rowData.add(eventName);
 
-			String userName = (String) rowDataMap.get(Constants.USER_NAME);
+			final String userName = (String) rowDataMap.get(Constants.USER_NAME);
 			rowData.add(userName);
 
-			Date date = (Date) rowDataMap.get(Constants.EVENT_DATE);
+			final Date date = (Date) rowDataMap.get(Constants.EVENT_DATE);
 			// String eventDate =
 			// Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); //
 			// Sri: Changed format for bug #463
-			String eventDate = edu.wustl.common.util.Utility.parseDateToString(date,
-					CommonServiceLocator.getInstance().getDatePattern()
-							+ edu.wustl.catissuecore.util.
-							global.Constants.TIMESTAMP_PATTERN_MM_SS);
+			final String eventDate = CommonUtilities.parseDateToString(date, CommonServiceLocator
+					.getInstance().getDatePattern()
+					+ edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS);
 			rowData.add(eventDate);
 
-			String paggeOf = (String) rowDataMap.get(Constants.PAGE_OF);
+			final String paggeOf = (String) rowDataMap.get(Constants.PAGE_OF);
 			rowData.add(paggeOf);
 
 			gridDataList.add(rowData);
@@ -421,17 +413,17 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 */
 	private User getUser(Long eventId, IBizLogic bizLogic) throws BizLogicException
 	{
-		String[] selectColumnName = {"user"};
-		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {eventId};
-		String sourceObjectName = SpecimenEventParameters.class.getName();
+		final String[] selectColumnName = {"user"};
+		final String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {eventId};
+		final String sourceObjectName = SpecimenEventParameters.class.getName();
 
-		List userCollection = bizLogic.retrieve(sourceObjectName, selectColumnName,
+		final List userCollection = bizLogic.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue,
 				Constants.AND_JOIN_CONDITION);
 
-		User user = (User) userCollection.get(0);
+		final User user = (User) userCollection.get(0);
 		return user;
 	}
 
@@ -445,10 +437,10 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	private Collection getSpecimenEventParametersColl(String specimenId, IBizLogic bizLogic)
 			throws BizLogicException
 	{
-		String className = SpecimenEventParameters.class.getName();
-		String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
-		Long columnValue = new Long(specimenId);
-		Collection < SpecimenEventParameters > specimenEventCollection = bizLogic.retrieve(
+		final String className = SpecimenEventParameters.class.getName();
+		final String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
+		final Long columnValue = new Long(specimenId);
+		final Collection<SpecimenEventParameters> specimenEventCollection = bizLogic.retrieve(
 				className, columnName, columnValue);
 
 		return specimenEventCollection;

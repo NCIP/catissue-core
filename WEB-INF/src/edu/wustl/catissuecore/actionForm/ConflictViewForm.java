@@ -32,11 +32,13 @@ public class ConflictViewForm extends AbstractActionForm
 
 	String selectedFilter = "0";
 
+	@Override
 	public int getFormId()
 	{
 		return 0;
 	}
 
+	@Override
 	protected void reset()
 	{
 
@@ -53,7 +55,7 @@ public class ConflictViewForm extends AbstractActionForm
 	*/
 	public String getSelectedFilter()
 	{
-		return selectedFilter;
+		return this.selectedFilter;
 	}
 
 	/**

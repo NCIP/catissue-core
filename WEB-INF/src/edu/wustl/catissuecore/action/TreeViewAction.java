@@ -36,7 +36,7 @@ public class TreeViewAction extends Action
 	/**
 	 * Generic logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TreeViewAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TreeViewAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.

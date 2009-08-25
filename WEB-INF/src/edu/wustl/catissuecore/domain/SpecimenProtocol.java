@@ -294,7 +294,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 * @throws AssignDataException : AssignDataException
 	 */
 	@Override
-	public void setAllValues(IValueObject abstractForm)throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		logger.debug("SpecimenProtocol: setAllValues ");
 		try

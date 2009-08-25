@@ -124,7 +124,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	 */
 	public String getCollectionUserName()
 	{
-		return collectionUserName;
+		return this.collectionUserName;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	 */
 	public String getReceivedUserName()
 	{
-		return receivedUserName;
+		return this.receivedUserName;
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getClassName()
 	{
-		return className;
+		return this.className;
 	}
 
 	public void setClassName(String className)
@@ -183,7 +183,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getType()
 	{
-		return type;
+		return this.type;
 	}
 
 	public void setType(String type)
@@ -193,7 +193,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	public void setTissueSite(String tissueSite)
@@ -201,10 +201,9 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		this.tissueSite = tissueSite;
 	}
 
-	
 	public String getConcentration()
 	{
-		return concentration;
+		return this.concentration;
 	}
 
 	public void setConcentration(String concentration)
@@ -214,7 +213,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getQuantity()
 	{
-		return quantity;
+		return this.quantity;
 	}
 
 	public void setQuantity(String quantity)
@@ -224,7 +223,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getNoOfAliquots()
 	{
-		return noOfAliquots;
+		return this.noOfAliquots;
 	}
 
 	public void setNoOfAliquots(String noOfAliquots)
@@ -239,7 +238,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getQuantityPerAliquot()
 	{
-		return quantityPerAliquot;
+		return this.quantityPerAliquot;
 	}
 
 	public void setQuantityPerAliquot(String quantityPerAliquot)
@@ -249,7 +248,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getCollectionEventCollectionProcedure()
 	{
-		return collectionEventCollectionProcedure;
+		return this.collectionEventCollectionProcedure;
 	}
 
 	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
@@ -259,7 +258,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getCollectionEventContainer()
 	{
-		return collectionEventContainer;
+		return this.collectionEventContainer;
 	}
 
 	public void setCollectionEventContainer(String collectionEventContainer)
@@ -269,7 +268,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getReceivedEventReceivedQuality()
 	{
-		return receivedEventReceivedQuality;
+		return this.receivedEventReceivedQuality;
 	}
 
 	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
@@ -279,7 +278,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public int getNoOfDeriveSpecimen()
 	{
-		return noOfDeriveSpecimen;
+		return this.noOfDeriveSpecimen;
 	}
 
 	public void setNoOfDeriveSpecimen(int noOfDeriveSpecimen)
@@ -289,24 +288,24 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public Object getDeriveSpecimenValue(String key)
 	{
-		return deriveSpecimenValues.get(key);
+		return this.deriveSpecimenValues.get(key);
 	}
 
 	public void setDeriveSpecimenValue(String key, Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			if (deriveSpecimenValues == null)
+			if (this.deriveSpecimenValues == null)
 			{
-				deriveSpecimenValues = new LinkedHashMap();
+				this.deriveSpecimenValues = new LinkedHashMap();
 			}
-			deriveSpecimenValues.put(key, value);
+			this.deriveSpecimenValues.put(key, value);
 		}
 	}
 
 	public Map getDeriveSpecimenValues()
 	{
-		return deriveSpecimenValues;
+		return this.deriveSpecimenValues;
 	}
 
 	public void setDeriveSpecimenValues(Map deriveSpecimenValues)
@@ -319,7 +318,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	*/
 	public Collection getAllDeriveSpecimenValuess()
 	{
-		return deriveSpecimenValues.values();
+		return this.deriveSpecimenValues.values();
 	}
 
 	@Override
@@ -343,7 +342,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getLineage()
 	{
-		return lineage;
+		return this.lineage;
 	}
 
 	public void setLineage(String lineage)
@@ -353,7 +352,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public Collection getAliquotSpecimenCollection()
 	{
-		return aliquotSpecimenCollection;
+		return this.aliquotSpecimenCollection;
 	}
 
 	public void setAliquotSpecimenCollection(Collection aliquotSpecimenCollection)
@@ -363,7 +362,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public Collection getDeriveSpecimenCollection()
 	{
-		return deriveSpecimenCollection;
+		return this.deriveSpecimenCollection;
 	}
 
 	public void setDeriveSpecimenCollection(Collection deriveSpecimenCollection)
@@ -373,7 +372,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getDisplayName()
 	{
-		return displayName;
+		return this.displayName;
 	}
 
 	public void setDisplayName(String displayName)
@@ -383,7 +382,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getUnit()
 	{
-		return unit;
+		return this.unit;
 	}
 
 	public void setUnit(String unit)
@@ -393,7 +392,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getCollectionEventId()
 	{
-		return collectionEventId;
+		return this.collectionEventId;
 	}
 
 	public void setCollectionEventId(long collectionEventId)
@@ -403,7 +402,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getCollectionEventSpecimenId()
 	{
-		return collectionEventSpecimenId;
+		return this.collectionEventSpecimenId;
 	}
 
 	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
@@ -413,7 +412,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getCollectionEventUserId()
 	{
-		return collectionEventUserId;
+		return this.collectionEventUserId;
 	}
 
 	public void setCollectionEventUserId(long collectionEventUserId)
@@ -423,7 +422,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getReceivedEventId()
 	{
-		return receivedEventId;
+		return this.receivedEventId;
 	}
 
 	public void setReceivedEventId(long receivedEventId)
@@ -433,7 +432,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getReceivedEventSpecimenId()
 	{
-		return receivedEventSpecimenId;
+		return this.receivedEventSpecimenId;
 	}
 
 	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
@@ -443,7 +442,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public long getReceivedEventUserId()
 	{
-		return receivedEventUserId;
+		return this.receivedEventUserId;
 	}
 
 	public void setReceivedEventUserId(long receivedEventUserId)
@@ -453,7 +452,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getStorageLocationForSpecimen()
 	{
-		return storageLocationForSpecimen;
+		return this.storageLocationForSpecimen;
 	}
 
 	public void setStorageLocationForSpecimen(String storageLocationForSpecimen)
@@ -463,16 +462,17 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getStorageLocationForAliquotSpecimen()
 	{
-		return storageLocationForAliquotSpecimen;
+		return this.storageLocationForAliquotSpecimen;
 	}
 
 	public void setStorageLocationForAliquotSpecimen(String storageLocationForAliquotSpecimen)
 	{
 		this.storageLocationForAliquotSpecimen = storageLocationForAliquotSpecimen;
 	}
+
 	public String getTissueSide()
 	{
-		return tissueSide;
+		return this.tissueSide;
 	}
 
 	public void setTissueSide(String tissueSide)
@@ -482,7 +482,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	public void setPathologicalStatus(String pathologicalStatus)
@@ -492,8 +492,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		double aliquotQuantity = 0;
 		double initialQuantity = 0;
 		try
@@ -508,7 +508,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimen.subType")));
 			}
-			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_SPECIMEN_CLASS, null);
 			if (!Validator.isEnumeratedValue(specimenClassList, this.className))
 			{
@@ -523,14 +523,14 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.subType")));
 			}
 
-			if (!validator.isEmpty(quantity))
+			if (!validator.isEmpty(this.quantity))
 			{
 				try
 				{
-					quantity = new BigDecimal(quantity).toPlainString();
-					if (AppUtility.isQuantityDouble(className, type))
+					this.quantity = new BigDecimal(this.quantity).toPlainString();
+					if (AppUtility.isQuantityDouble(this.className, this.type))
 					{
-						if (!validator.isDouble(quantity, true))
+						if (!validator.isDouble(this.quantity, true))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.required", ApplicationProperties
@@ -539,7 +539,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					}
 					else
 					{
-						if (!validator.isNumeric(quantity, 0))
+						if (!validator.isNumeric(this.quantity, 0))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
@@ -547,7 +547,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						}
 					}
 				}
-				catch (NumberFormatException exp)
+				catch (final NumberFormatException exp)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimen.quantity")));
@@ -562,14 +562,15 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 			if (!this.quantityPerAliquot.equals(""))
 			{
-				if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
+				if (this.quantityPerAliquot != null && this.quantityPerAliquot.trim().length() != 0)
 				{
 					try
 					{
-						quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
+						this.quantityPerAliquot = new BigDecimal(this.quantityPerAliquot)
+								.toPlainString();
 						if (AppUtility.isQuantityDouble(this.className, this.type))
 						{
-							if (!validator.isDouble(quantityPerAliquot.trim()))
+							if (!validator.isDouble(this.quantityPerAliquot.trim()))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -579,7 +580,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						}
 						else
 						{
-							if (!validator.isPositiveNumeric(quantityPerAliquot.trim(), 1))
+							if (!validator.isPositiveNumeric(this.quantityPerAliquot.trim(), 1))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -587,7 +588,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							}
 						}
 					}
-					catch (NumberFormatException exp)
+					catch (final NumberFormatException exp)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
@@ -636,7 +637,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 											.getValue("cpbasedentry.quantityperaliquot")));
 						}
 					}
-					catch (NumberFormatException exp)
+					catch (final NumberFormatException exp)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("specimen.quantity")));
@@ -678,7 +679,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimen.pathologicalStatus")));
 			}
-			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_TISSUE_SITE, null);
 			if (!Validator.isEnumeratedValue(tissueSiteList, this.tissueSite))
 			{
@@ -686,7 +687,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.tissueSite")));
 			}
 
-			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_TISSUE_SIDE, null);
 			if (!Validator.isEnumeratedValue(tissueSideList, this.tissueSide))
 			{
@@ -694,7 +695,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.tissueSide")));
 			}
 
-			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
 			if (!Validator.isEnumeratedValue(pathologicalStatusList, this.pathologicalStatus))
@@ -703,7 +704,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.pathologicalStatus")));
 			}
 
-			if ((collectionEventUserId) == 0L)
+			if ((this.collectionEventUserId) == 0L)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						"Collection Event's user"));
@@ -712,46 +713,48 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			// checks the collectionProcedure
 			if (!validator.isValidOption(this.getCollectionEventCollectionProcedure()))
 			{
-				String message = ApplicationProperties
+				final String message = ApplicationProperties
 						.getValue("collectioneventparameters.collectionprocedure");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						message));
 			}
 
-			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 			if (!Validator.isEnumeratedValue(procedureList, this
 					.getCollectionEventCollectionProcedure()))
 			{
-				String message = ApplicationProperties.getValue("cpbasedentry.collectionprocedure");
+				final String message = ApplicationProperties
+						.getValue("cpbasedentry.collectionprocedure");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
 			}
 			//Container validation
 			if (!validator.isValidOption(this.getCollectionEventContainer()))
 			{
-				String message = ApplicationProperties
+				final String message = ApplicationProperties
 						.getValue("collectioneventparameters.container");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						message));
 			}
-			List containerList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List containerList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_CONTAINER, null);
 			if (!Validator.isEnumeratedValue(containerList, this.getCollectionEventContainer()))
 			{
-				String message = ApplicationProperties
+				final String message = ApplicationProperties
 						.getValue("collectioneventparameters.container");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
 			}
-			if ((receivedEventUserId) == 0L)
+			if ((this.receivedEventUserId) == 0L)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						"Received Event's user"));
 			}
-			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
+			final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_RECEIVED_QUALITY, null);
 			if (!Validator.isEnumeratedValue(qualityList, this.receivedEventReceivedQuality))
 			{
-				String message = ApplicationProperties.getValue("cpbasedentry.receivedquality");
+				final String message = ApplicationProperties
+						.getValue("cpbasedentry.receivedquality");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
 
 			}
@@ -769,11 +772,11 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
 				boolean bSpecimenClass = false;
 				boolean bSpecimenType = false;
-				Map deriveSpecimenMap = deriveSpecimenMap();
-				Iterator it = deriveSpecimenMap.keySet().iterator();
+				final Map deriveSpecimenMap = this.deriveSpecimenMap();
+				final Iterator it = deriveSpecimenMap.keySet().iterator();
 				while (it.hasNext())
 				{
-					String key = (String) it.next();
+					final String key = (String) it.next();
 					String mapValue = (String) deriveSpecimenMap.get(key);
 					if (!bSpecimenClass)
 					{
@@ -815,7 +818,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							try
 							{
 								mapValue = new BigDecimal(mapValue).toPlainString();
-								if (AppUtility.isQuantityDouble(className, type))
+								if (AppUtility.isQuantityDouble(this.className, this.type))
 								{
 									if (!validator.isDouble(mapValue, true))
 									{
@@ -838,7 +841,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 									}
 								}
 							}
-							catch (NumberFormatException exp)
+							catch (final NumberFormatException exp)
 							{
 								errors
 										.add(
@@ -859,7 +862,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -869,32 +872,32 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	public Map deriveSpecimenMap()
 	{
 		int iCount;
-		Map deriveSpecimenMap = new LinkedHashMap < String , String >();
-		for (iCount = 1; iCount <= noOfDeriveSpecimen; iCount++)
+		final Map deriveSpecimenMap = new LinkedHashMap<String, String>();
+		for (iCount = 1; iCount <= this.noOfDeriveSpecimen; iCount++)
 		{
 			String key = null;
 			key = "DeriveSpecimenBean:" + iCount + "_specimenClass";
-			String specimenClass = (String) deriveSpecimenValues.get(key);
+			final String specimenClass = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, specimenClass);
 
 			key = "DeriveSpecimenBean:" + iCount + "_id";
-			String id = (String) deriveSpecimenValues.get(key);
+			final String id = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, id);
 
 			key = "DeriveSpecimenBean:" + iCount + "_specimenType";
-			String specimenType = (String) deriveSpecimenValues.get(key);
+			final String specimenType = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, specimenType);
 
 			key = "DeriveSpecimenBean:" + iCount + "_quantity";
-			String quantity = (String) deriveSpecimenValues.get(key);
+			final String quantity = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, quantity);
 
 			key = "DeriveSpecimenBean:" + iCount + "_concentration";
-			String conc = (String) deriveSpecimenValues.get(key);
+			final String conc = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, conc);
 
 			key = "DeriveSpecimenBean:" + iCount + "_storageLocation";
-			String storageLocation = (String) deriveSpecimenValues.get(key);
+			final String storageLocation = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, storageLocation);
 		}
 		return deriveSpecimenMap;
@@ -902,7 +905,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	public String getNodeKey()
 	{
-		return nodeKey;
+		return this.nodeKey;
 	}
 
 	public void setNodeKey(String nodeKey)
@@ -916,20 +919,21 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	private String labelFormat;
 
-    /**
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
-    /**
+
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public void setLabelFormat(String labelFormat)

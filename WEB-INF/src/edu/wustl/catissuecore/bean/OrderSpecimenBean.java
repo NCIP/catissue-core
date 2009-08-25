@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
  */
 public class OrderSpecimenBean implements Serializable
 {
+
 	/**
 	 * 
 	 */
@@ -91,13 +93,13 @@ public class OrderSpecimenBean implements Serializable
 	 * OrderList
 	 */
 	private String arrayName;
-	
+
 	/**
 	 * This indicates biospecimens Distribution Site
 	 * 
 	 */
 	private String distributionSite;
-	
+
 	/**
 	 * This indicates SPR Collection Protocol 
 	 * 
@@ -108,20 +110,19 @@ public class OrderSpecimenBean implements Serializable
 	 * 
 	 */
 	private String collectionStatus;
-	
+
 	/**
 	 * This checks the availablity of specimen
 	 * 
 	 */
 	private String isAvailable;
-	
-	
+
 	/**
 	 * @return isDerived-whether specimen is existing or derived
 	 */
-	public String getIsDerived() 
+	public String getIsDerived()
 	{
-		return isDerived;
+		return this.isDerived;
 	}
 
 	/**
@@ -137,7 +138,7 @@ public class OrderSpecimenBean implements Serializable
 	 */
 	public String getUnitRequestedQuantity()
 	{
-		return unitRequestedQuantity;
+		return this.unitRequestedQuantity;
 	}
 
 	/**
@@ -153,13 +154,13 @@ public class OrderSpecimenBean implements Serializable
 	 */
 	public String getAvailableQuantity()
 	{
-		return availableQuantity;
+		return this.availableQuantity;
 	}
 
 	/**
 	 * @param availableQuantity String containing the available quantity
 	 */
-	public void setAvailableQuantity(String availableQuantity) 
+	public void setAvailableQuantity(String availableQuantity)
 	{
 		this.availableQuantity = availableQuantity;
 	}
@@ -167,15 +168,15 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return description 
 	 */
-	public String getDescription() 
+	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
 	/**
 	 * @param description String containing the description
 	 */
-	public void setDescription(String description) 
+	public void setDescription(String description)
 	{
 		this.description = description;
 	}
@@ -183,9 +184,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return requestedQuantity
 	 */
-	public String getRequestedQuantity() 
+	public String getRequestedQuantity()
 	{
-		return requestedQuantity;
+		return this.requestedQuantity;
 	}
 
 	/**
@@ -201,13 +202,13 @@ public class OrderSpecimenBean implements Serializable
 	 */
 	public String getSpecimenName()
 	{
-		return specimenName;
+		return this.specimenName;
 	}
 
 	/**
 	 * @param specimenName String containing the specimen name
 	 */
-	public void setSpecimenName(String specimenName) 
+	public void setSpecimenName(String specimenName)
 	{
 		this.specimenName = specimenName;
 	}
@@ -217,7 +218,7 @@ public class OrderSpecimenBean implements Serializable
 	 */
 	public String getSpecimenId()
 	{
-		return specimenId;
+		return this.specimenId;
 	}
 
 	/**
@@ -231,15 +232,15 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return checkedToRemove
 	 */
-	public String getCheckedToRemove() 
+	public String getCheckedToRemove()
 	{
-		return checkedToRemove;
+		return this.checkedToRemove;
 	}
 
 	/**
 	 * @param checkedToRemove String containing if the item is to be removed
 	 */
-	public void setCheckedToRemove(String checkedToRemove) 
+	public void setCheckedToRemove(String checkedToRemove)
 	{
 		this.checkedToRemove = checkedToRemove;
 	}
@@ -247,9 +248,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return specimenClass 
 	 */
-	public String getSpecimenClass() 
+	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -263,15 +264,15 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return specimenType
 	 */
-	public String getSpecimenType() 
+	public String getSpecimenType()
 	{
-		return specimenType;
+		return this.specimenType;
 	}
 
 	/**
 	 * @param specimenType String containing if the type of specimen
 	 */
-	public void setSpecimenType(String specimenType) 
+	public void setSpecimenType(String specimenType)
 	{
 		this.specimenType = specimenType;
 	}
@@ -279,9 +280,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return arrayName
 	 */
-	public String getArrayName() 
+	public String getArrayName()
 	{
-		return arrayName;
+		return this.arrayName;
 	}
 
 	/**
@@ -296,9 +297,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return typeOfItem
 	 */
-	public String getTypeOfItem() 
+	public String getTypeOfItem()
 	{
-		return typeOfItem;
+		return this.typeOfItem;
 	}
 
 	/**
@@ -312,9 +313,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return pathologicalStatus
 	 */
-	public String getPathologicalStatus() 
+	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -328,9 +329,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return tissueSite
 	 */
-	public String getTissueSite() 
+	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -344,9 +345,9 @@ public class OrderSpecimenBean implements Serializable
 	/**
 	 * @return specimenCollectionGroup
 	 */
-	public String getSpecimenCollectionGroup() 
+	public String getSpecimenCollectionGroup()
 	{
-		return specimenCollectionGroup;
+		return this.specimenCollectionGroup;
 	}
 
 	/**
@@ -357,37 +358,44 @@ public class OrderSpecimenBean implements Serializable
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 
-	public String getDistributionSite() {
-		return distributionSite;
+	public String getDistributionSite()
+	{
+		return this.distributionSite;
 	}
 
-	public void setDistributionSite(String distributionSite) {
+	public void setDistributionSite(String distributionSite)
+	{
 		this.distributionSite = distributionSite;
 	}
 
-	public String getCollectionStatus() {
-		return collectionStatus;
+	public String getCollectionStatus()
+	{
+		return this.collectionStatus;
 	}
 
-	public void setCollectionStatus(String collectionStatus) {
+	public void setCollectionStatus(String collectionStatus)
+	{
 		this.collectionStatus = collectionStatus;
 	}
 
-	public String getIsAvailable() {
-		return isAvailable;
+	public String getIsAvailable()
+	{
+		return this.isAvailable;
 	}
 
-	public void setIsAvailable(String isAvailable) {
+	public void setIsAvailable(String isAvailable)
+	{
 		this.isAvailable = isAvailable;
 	}
 
-	public String getCollectionProtocol() {
-		return collectionProtocol;
+	public String getCollectionProtocol()
+	{
+		return this.collectionProtocol;
 	}
 
-	public void setCollectionProtocol(String collectionProtocol) {
+	public void setCollectionProtocol(String collectionProtocol)
+	{
 		this.collectionProtocol = collectionProtocol;
 	}
 
-	
 }

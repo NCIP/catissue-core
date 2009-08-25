@@ -34,18 +34,19 @@ public class AliquotSummaryAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		AliquotForm aliquotForm = (AliquotForm) form;
-		String noOfAliquouts = aliquotForm.getNoOfAliquots();
-		Map aliquotMap = aliquotForm.getAliquotMap();
+		final AliquotForm aliquotForm = (AliquotForm) form;
+		final String noOfAliquouts = aliquotForm.getNoOfAliquots();
+		final Map aliquotMap = aliquotForm.getAliquotMap();
 		aliquotMap.put("noOfAliquots", noOfAliquouts);
 		String target = Constants.FAILURE;
 		if (aliquotForm.getForwardTo() != null
 				&& aliquotForm.getForwardTo().equals("sameCollectionGroup"))
 		{
-			Map forwardToHashMap = new HashMap();
+			final Map forwardToHashMap = new HashMap();
 			forwardToHashMap.put("specimenCollectionGroupId", (new Long(aliquotForm
 					.getSpCollectionGroupId())).toString());
 			forwardToHashMap.put("specimenCollectionGroupName", aliquotForm.getScgName());

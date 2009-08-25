@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.test;
 
-
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
@@ -15,6 +14,7 @@ import edu.wustl.dao.daofactory.DAOFactory;
  */
 public class MockDAOFactory extends DAOFactory
 {
+
 	private HibernateDAO hibDAO;
 	private JDBCDAO jdbcDAO;
 
@@ -30,33 +30,32 @@ public class MockDAOFactory extends DAOFactory
 	 * @param daoType type of DAO
 	 * @return DAO Interface 
 	 */
-   public DAO getDAO(int daoType)
-    {
-        DAO dao = null;
-        switch (daoType)
-        {
-            case 0 :
-                dao = hibDAO;
-                break;
+	public DAO getDAO(int daoType)
+	{
+		DAO dao = null;
+		switch (daoType)
+		{
+			case 0 :
+				dao = this.hibDAO;
+				break;
 
-            case 1 :
-                dao = jdbcDAO;
-            default :
-                break;
-        }
-        return dao;
-    }
+			case 1 :
+				dao = this.jdbcDAO;
+			default :
+				break;
+		}
+		return dao;
+	}
 
-	
-   /** 
-    * This Method set the HibernateDAO
-    * @param hibDAO
-    */
+	/** 
+	 * This Method set the HibernateDAO
+	 * @param hibDAO
+	 */
 	public void setHibernateDAO(HibernateDAO hibDAO)
 	{
 		this.hibDAO = hibDAO;
 	}
-	
+
 	/**
 	 * This Method sets the JDBCDAO
 	 * 

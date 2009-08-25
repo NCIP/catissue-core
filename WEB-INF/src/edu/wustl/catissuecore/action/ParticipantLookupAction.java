@@ -47,9 +47,9 @@ import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 
@@ -62,7 +62,7 @@ public class ParticipantLookupAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ParticipantLookupAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(ParticipantLookupAction.class);
 
 	/**
 	 * @param mapping
@@ -85,25 +85,25 @@ public class ParticipantLookupAction extends BaseAction
 		String target = null;
 		final StringBuffer partMRNColName = new StringBuffer("");
 
-		AbstractActionForm abstractForm = (AbstractActionForm) form;
+		final AbstractActionForm abstractForm = (AbstractActionForm) form;
 
-		IDomainObjectFactory factoryObj = AbstractFactoryConfig.getInstance()
+		final IDomainObjectFactory factoryObj = AbstractFactoryConfig.getInstance()
 				.getDomainObjectFactory();
 
-		AbstractDomainObject abstractDomain = factoryObj.getDomainObject(abstractForm.getFormId(),
-				abstractForm);
-		Participant participant = (Participant) abstractDomain;
+		final AbstractDomainObject abstractDomain = factoryObj.getDomainObject(abstractForm
+				.getFormId(), abstractForm);
+		final Participant participant = (Participant) abstractDomain;
 		// 11968 S
-		if (!isAuthorized(mapping, request, participant))
+		if (!this.isAuthorized(mapping, request, participant))
 		{
-			ActionErrors errors = new ActionErrors();
-			ActionError error = new ActionError("access.execute.action.denied");
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError("access.execute.action.denied");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
-			saveErrors(request, errors);
+			this.saveErrors(request, errors);
 			return mapping.findForward("failure");
 		}
 		// 11968 E
-		logger.debug("Participant Id :" + request.getParameter("participantId"));
+		this.logger.debug("Participant Id :" + request.getParameter("participantId"));
 		// checks weather participant is selected from the list and so
 		// forwarding to next action instead of participant lookup.
 		// Abhishek Mehta
@@ -114,37 +114,38 @@ public class ParticipantLookupAction extends BaseAction
 					&& !request.getParameter("participantId").equals("")
 					&& !request.getParameter("participantId").equals("0"))
 			{
-				logger.info("inside the participant mapping");
+				this.logger.info("inside the participant mapping");
 				return mapping.findForward("participantSelect");
 			}
 		}
 
-		boolean isCallToLookupLogicNeeded = isCallToLookupLogicNeeded(participant);
+		final boolean isCallToLookupLogicNeeded = this.isCallToLookupLogicNeeded(participant);
 
 		if (isCallToLookupLogicNeeded)
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			ParticipantBizLogic bizlogic = (ParticipantBizLogic) factory
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ParticipantBizLogic bizlogic = (ParticipantBizLogic) factory
 					.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-			LookupLogic participantLookupLogic = (LookupLogic) Utility.getObject(XMLPropertyHandler
-					.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
-			List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant,
-					participantLookupLogic);
+			final LookupLogic participantLookupLogic = (LookupLogic) CommonUtilities
+					.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+			final List matchingParticipantList = bizlogic.getListOfMatchingParticipants(
+					participant, participantLookupLogic);
 			if (matchingParticipantList != null && matchingParticipantList.size() > 0)
 			{
 				messages = new ActionMessages();
-				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						"participant.lookup.success",
-						"Submit was not successful because some matching" +
-						" participants found."));
+				messages
+						.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+								"participant.lookup.success",
+								"Submit was not successful because some matching"
+										+ " participants found."));
 				// Creating the column headings for Data Grid
-				List columnList = getColumnHeadingList(bizlogic, partMRNColName);
+				final List columnList = this.getColumnHeadingList(bizlogic, partMRNColName);
 				request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 				request.setAttribute(Constants.PARTICIPANT_MRN_COL_NAME, partMRNColName);
 
 				// Getitng the Participant List in Data Grid Format
-				List participantDisplayList = getParticipantDisplayList(matchingParticipantList,
-						bizlogic);
+				final List participantDisplayList = this.getParticipantDisplayList(
+						matchingParticipantList, bizlogic);
 				request.setAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST,
 						participantDisplayList);
 
@@ -183,10 +184,10 @@ public class ParticipantLookupAction extends BaseAction
 		{
 			if (messages != null)
 			{
-				saveMessages(request, messages);
+				this.saveMessages(request, messages);
 			}
 		}
-		logger.debug("target:" + target);
+		this.logger.debug("target:" + target);
 		return (mapping.findForward(target));
 	}
 
@@ -202,18 +203,18 @@ public class ParticipantLookupAction extends BaseAction
 			Participant participant)
 	{
 		DAO dao = null;
-		SessionDataBean sessionDataBean = getSessionData(request);
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		boolean authorizedFlag = false;
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			ParticipantBizLogic biz = new ParticipantBizLogic();
+			final ParticipantBizLogic biz = new ParticipantBizLogic();
 			authorizedFlag = biz.isAuthorized(dao, participant, sessionDataBean);
 
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Exception occured : " + e.getMessage(), e);
+			this.logger.error("Exception occured : " + e.getMessage(), e);
 			authorizedFlag = false;
 		}
 		finally
@@ -222,13 +223,14 @@ public class ParticipantLookupAction extends BaseAction
 			{
 				AppUtility.closeDAOSession(dao);
 			}
-			catch (ApplicationException e)
+			catch (final ApplicationException e)
 			{
-				logger.error("Exception occured : " + e.getMessage(), e);
+				this.logger.error("Exception occured : " + e.getMessage(), e);
 			}
 		}
 		return authorizedFlag;
 	}
+
 	// 11968 E
 	/**
 	 *
@@ -239,8 +241,7 @@ public class ParticipantLookupAction extends BaseAction
 	private boolean isCallToLookupLogicNeeded(Participant participant)
 	{
 		if ((participant.getFirstName() == null || participant.getFirstName().length() == 0)
-				&& (participant.getMiddleName() == null ||
-						participant.getMiddleName().length() == 0)
+				&& (participant.getMiddleName() == null || participant.getMiddleName().length() == 0)
 				&& (participant.getLastName() == null || participant.getLastName().length() == 0)
 				&& (participant.getSocialSecurityNumber() == null || participant
 						.getSocialSecurityNumber().length() == 0)
@@ -268,18 +269,18 @@ public class ParticipantLookupAction extends BaseAction
 	{
 		// Creating the column list which is used in Data grid to display column
 		// headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_MEDICAL_RECORD_NO,
+		final String[] columnHeaderList = new String[]{Constants.PARTICIPANT_MEDICAL_RECORD_NO,
 				Constants.PARTICIPANT_GENDER, Constants.PARTICIPANT_BIRTH_DATE,
 				Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER, Constants.PARTICIPANT_DEATH_DATE,
 				Constants.PARTICIPANT_VITAL_STATUS};
-		List columnList = new ArrayList();
-		logger.info("column List header size ;" + columnHeaderList.length);
-		for (int i = 0; i < columnHeaderList.length; i++)
+		final List columnList = new ArrayList();
+		this.logger.info("column List header size ;" + columnHeaderList.length);
+		for (final String element : columnHeaderList)
 		{
-			columnList.add(columnHeaderList[i]);
+			columnList.add(element);
 		}
-		logger.info("column List size ;" + columnList.size());
-		List displayList = bizlogic.getColumnList(columnList, partMRNColName);
+		this.logger.info("column List size ;" + columnList.size());
+		final List displayList = bizlogic.getColumnList(columnList, partMRNColName);
 
 		displayList.add(0, Constants.PARTICIPANT_NAME_HEADERLABEL);
 		// displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
@@ -297,13 +298,13 @@ public class ParticipantLookupAction extends BaseAction
 	private List getParticipantDisplayList(List participantList, ParticipantBizLogic bizLogic)
 			throws BizLogicException
 	{
-		List participantDisplayList = new ArrayList();
-		Iterator < DefaultLookupResult > itr = participantList.iterator();
+		final List participantDisplayList = new ArrayList();
+		final Iterator<DefaultLookupResult> itr = participantList.iterator();
 		while (itr.hasNext())
 		{
-			DefaultLookupResult result = (DefaultLookupResult) itr.next();
-			Participant participant = (Participant) result.getObject();
-			List participantInfo = getParticipantInfo(bizLogic, participant);
+			final DefaultLookupResult result = itr.next();
+			final Participant participant = (Participant) result.getObject();
+			final List participantInfo = this.getParticipantInfo(bizLogic, participant);
 			participantDisplayList.add(participantInfo);
 		}
 		return participantDisplayList;
@@ -319,38 +320,38 @@ public class ParticipantLookupAction extends BaseAction
 	private List getParticipantInfo(ParticipantBizLogic bizLogic, Participant participant)
 			throws BizLogicException
 	{
-		StringBuffer participantName = new StringBuffer();
-		List participantInfo = new ArrayList();
-		String partLastName = Utility.toString(participant.getLastName());
-		String partFirstName = Utility.toString(participant.getFirstName());
+		final StringBuffer participantName = new StringBuffer();
+		final List participantInfo = new ArrayList();
+		final String partLastName = CommonUtilities.toString(participant.getLastName());
+		final String partFirstName = CommonUtilities.toString(participant.getFirstName());
 		participantName.append(partLastName);
 		if (partLastName != null && !(("").equals(partLastName)) && partFirstName != null
 				&& !("").equals(partFirstName))
 		{
-			String stringCharAppend = "~";
+			final String stringCharAppend = "~";
 			participantName.append(stringCharAppend);
 		}
 		participantName.append(partFirstName);
 		participantInfo.add(participantName.toString());
-		String mrn = getParticipantMrnDisplay(bizLogic, participant);
-		participantInfo.add(Utility.toString(mrn));
-		participantInfo.add(Utility.toString(participant.getGender()));
+		final String mrn = this.getParticipantMrnDisplay(bizLogic, participant);
+		participantInfo.add(CommonUtilities.toString(mrn));
+		participantInfo.add(CommonUtilities.toString(participant.getGender()));
 
 		// participantInfo.add(Utility.toString(participant.getBirthDate()));
 		// Added by Geeta for date format change.
-		participantInfo.add(Utility.parseDateToString(participant.getBirthDate(),
+		participantInfo.add(CommonUtilities.parseDateToString(participant.getBirthDate(),
 				CommonServiceLocator.getInstance().getDatePattern()));
 		// End by geeta
 		if (!Variables.isSSNRemove)
 		{
-			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
+			participantInfo.add(CommonUtilities.toString(participant.getSocialSecurityNumber()));
 		}
 		// participantInfo.add(Utility.toString(participant.getDeathDate()));
 		// Added by Geeta for date format change.
-		participantInfo.add(Utility.parseDateToString(participant.getDeathDate(),
+		participantInfo.add(CommonUtilities.parseDateToString(participant.getDeathDate(),
 				CommonServiceLocator.getInstance().getDatePattern()));
 		// End by Geeta
-		participantInfo.add(Utility.toString(participant.getVitalStatus()));
+		participantInfo.add(CommonUtilities.toString(participant.getVitalStatus()));
 		participantInfo.add(participant.getId());
 		return participantInfo;
 	}
@@ -365,24 +366,24 @@ public class ParticipantLookupAction extends BaseAction
 	private String getParticipantMrnDisplay(ParticipantBizLogic bizLogic, Participant participant)
 			throws BizLogicException
 	{
-		StringBuffer mrn = new StringBuffer();
+		final StringBuffer mrn = new StringBuffer();
 		Long siteId;
 		String siteName;
 		if (participant.getParticipantMedicalIdentifierCollection() != null)
 		{
-			Iterator < ParticipantMedicalIdentifier > pmiItr = participant
+			final Iterator<ParticipantMedicalIdentifier> pmiItr = participant
 					.getParticipantMedicalIdentifierCollection().iterator();
 			while (pmiItr.hasNext())
 			{
-				ParticipantMedicalIdentifier participantMedicalIdentifier = pmiItr.next();
+				final ParticipantMedicalIdentifier participantMedicalIdentifier = pmiItr.next();
 				if (participantMedicalIdentifier.getSite() != null
 						&& participantMedicalIdentifier.getSite().getId() != null)
 				{
 					siteId = participantMedicalIdentifier.getSite().getId();
-					Site site = (Site) bizLogic.retrieve(Site.class.getName(), siteId);
+					final Site site = (Site) bizLogic.retrieve(Site.class.getName(), siteId);
 					siteName = site.getName();
 					mrn.append(siteName);
-					String stringCharAppend = ":";
+					final String stringCharAppend = ":";
 					mrn.append(stringCharAppend);
 					mrn.append(participantMedicalIdentifier.getMedicalRecordNumber());
 					mrn.append("\n" + "<br>");

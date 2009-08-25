@@ -16,14 +16,15 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StopServer extends Thread
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(StopServer.class);
+	private transient final Logger logger = Logger.getCommonLogger(StopServer.class);
 	/**
 	 * port.
 	 */
-	private String port;
+	private final String port;
 
 	/**
 	 * Constructor for the class.
@@ -37,20 +38,21 @@ public class StopServer extends Thread
 	/**
 	 * Default method for the thread, which listen to socket and stop current thread when recieve any responce.
 	 */
+	@Override
 	public void run()
 	{
 		try
 		{
 			// get port number for server from catissueCore-properties.xml file
-			int port = Integer.parseInt(CaTIESProperties.getValue(this.port));
-			ServerSocket serv = new ServerSocket(port);
+			final int port = Integer.parseInt(CaTIESProperties.getValue(this.port));
+			final ServerSocket serv = new ServerSocket(port);
 			BufferedReader r;
-			Socket sock = serv.accept();
+			final Socket sock = serv.accept();
 			r = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()), true);
-			String str = r.readLine();
+			new PrintWriter(new OutputStreamWriter(sock.getOutputStream()), true);
+			r.readLine();
 
-			logger.info("Stopping server");
+			this.logger.info("Stopping server");
 			r.close();
 			sock.close();
 			// close server socket
@@ -58,9 +60,9 @@ public class StopServer extends Thread
 			// stop server
 			System.exit(0);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error("Error stopping server ", e);
+			this.logger.error("Error stopping server ", e);
 		}
 	}
 }

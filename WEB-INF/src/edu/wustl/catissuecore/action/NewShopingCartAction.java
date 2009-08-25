@@ -218,8 +218,7 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError"
-								, count, cartnew.size()
+								"shoppingcart.duplicateObjError", count, cartnew.size()
 										+ oldCartSize - newCartSize));
 						this.saveMessages(request, messages);
 					}
@@ -236,8 +235,7 @@ public class NewShopingCartAction extends BaseAction
 					if ((cartnew.size() + oldCartSize - newCartSize) > 0)
 					{
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"shoppingcart.duplicateObjError"
-								, count, cartnew.size()
+								"shoppingcart.duplicateObjError", count, cartnew.size()
 										+ oldCartSize - newCartSize));
 						this.saveMessages(request, messages);
 					}
@@ -341,8 +339,7 @@ public class NewShopingCartAction extends BaseAction
 
 					List<String> columnList2 = new ArrayList<String>();
 					final Object[] whereColumnValue = {Long.valueOf((itr.next()).toString())};
-					final List ls1 = bizLogic.retrieve(objName, selectColumnName
-							, whereColumnName,
+					final List ls1 = bizLogic.retrieve(objName, selectColumnName, whereColumnName,
 							whereColumnCondition, whereColumnValue, null);
 					columnList2 = this.createList(ls1);
 					cartnew.add(columnList2);

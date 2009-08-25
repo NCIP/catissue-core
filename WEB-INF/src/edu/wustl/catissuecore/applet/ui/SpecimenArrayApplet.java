@@ -25,6 +25,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -49,10 +50,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class SpecimenArrayApplet extends BaseApplet
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpecimenArrayApplet.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayApplet.class);
 	/**
 	 * Default Serial Version ID.
 	 */
@@ -100,6 +102,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	/**
 	 * @see edu.wustl.catissuecore.appletui.applet.BaseApplet#doInit()
 	 */
+	@Override
 	protected void doInit()
 	{
 		super.doInit();
@@ -111,82 +114,84 @@ public class SpecimenArrayApplet extends BaseApplet
 				Map tableModelMap = new HashMap();
 				String enterSpecimenBy = "Label";
 		*/
-		session_id = getParameter("session_id");
+		this.session_id = this.getParameter("session_id");
 
-		int rowCount = new Integer(getParameter("rowCount")).intValue();
-		int columnCount = new Integer(getParameter("columnCount")).intValue();
-		String specimenClass = getParameter("specimenClass");
-		enterSpecimenBy = getParameter("enterSpecimenBy");
-		Map tableModelMap = getTableModelData();
+		final int rowCount = new Integer(this.getParameter("rowCount")).intValue();
+		final int columnCount = new Integer(this.getParameter("columnCount")).intValue();
+		final String specimenClass = this.getParameter("specimenClass");
+		this.enterSpecimenBy = this.getParameter("enterSpecimenBy");
+		final Map tableModelMap = this.getTableModelData();
 
-		JLabel concLabel = new JLabel("Concentration");
+		final JLabel concLabel = new JLabel("Concentration");
 		concLabel.setOpaque(false);
-		JLabel quantityLabel = new JLabel("Quantity");
+		final JLabel quantityLabel = new JLabel("Quantity");
 		quantityLabel.setOpaque(false);
-		concentrationTextField = new JTextField();
-		concentrationTextField.setName("concentrationTextField");
-		concentrationTextField.setEnabled(false);
-		Dimension concDimension = new Dimension(100,
-				concentrationTextField.getPreferredSize().height);
-		concentrationTextField.setPreferredSize(concDimension);
-		JPanel concPanel = new JPanel();
+		this.concentrationTextField = new JTextField();
+		this.concentrationTextField.setName("concentrationTextField");
+		this.concentrationTextField.setEnabled(false);
+		final Dimension concDimension = new Dimension(100, this.concentrationTextField
+				.getPreferredSize().height);
+		this.concentrationTextField.setPreferredSize(concDimension);
+		final JPanel concPanel = new JPanel();
 		concPanel.setOpaque(false);
 		concPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		concPanel.add(concLabel);
-		concPanel.add(concentrationTextField);
+		concPanel.add(this.concentrationTextField);
 
-		quantityTextField = new JTextField();
-		quantityTextField.setName("quantityTextField");
-		quantityTextField.setEnabled(false);
-		Dimension quantityDimension = new Dimension(100,
-				quantityTextField.getPreferredSize().height);
-		quantityTextField.setPreferredSize(quantityDimension);
+		this.quantityTextField = new JTextField();
+		this.quantityTextField.setName("quantityTextField");
+		this.quantityTextField.setEnabled(false);
+		final Dimension quantityDimension = new Dimension(100, this.quantityTextField
+				.getPreferredSize().height);
+		this.quantityTextField.setPreferredSize(quantityDimension);
 		//System.out.println(quantityTextField.getPreferredSize());
-		JPanel quantityPanel = new JPanel();
+		final JPanel quantityPanel = new JPanel();
 		quantityPanel.setOpaque(false);
 		quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		quantityPanel.add(quantityLabel);
-		quantityPanel.add(quantityTextField);
+		quantityPanel.add(this.quantityTextField);
 
-		applyButton = new JButton("Apply");
-		applyButton.setEnabled(false);
+		this.applyButton = new JButton("Apply");
+		this.applyButton.setEnabled(false);
 
-		JPanel applyPanel = new JPanel();
+		final JPanel applyPanel = new JPanel();
 		applyPanel.setBackground(AppletConstants.BG_COLOR);
 		//applyPanel.setOpaque(false);
 		applyPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		applyPanel.add(concPanel);
 		applyPanel.add(quantityPanel);
-		applyPanel.add(applyButton);
+		applyPanel.add(this.applyButton);
 
-		TableModel tableModel = new SpecimenArrayTableModel(tableModelMap, rowCount, columnCount,
-				enterSpecimenBy, specimenClass);
-		arrayTable = new SpecimenArrayTable(tableModel);
-		arrayTable.setOpaque(false);
-		arrayTable.getColumnModel().setColumnSelectionAllowed(true);
-		arrayTable.setCellSelectionEnabled(true);
-		arrayTable.setRowSelectionAllowed(true);
-		arrayTable.getColumnModel().getSelectionModel().setSelectionMode(
+		final TableModel tableModel = new SpecimenArrayTableModel(tableModelMap, rowCount,
+				columnCount, this.enterSpecimenBy, specimenClass);
+		this.arrayTable = new SpecimenArrayTable(tableModel);
+		this.arrayTable.setOpaque(false);
+		this.arrayTable.getColumnModel().setColumnSelectionAllowed(true);
+		this.arrayTable.setCellSelectionEnabled(true);
+		this.arrayTable.setRowSelectionAllowed(true);
+		this.arrayTable.getColumnModel().getSelectionModel().setSelectionMode(
 				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		JScrollPane scrollPane = new JScrollPane(arrayTable);
+		final JScrollPane scrollPane = new JScrollPane(this.arrayTable);
 		scrollPane.setPreferredSize(new Dimension(100, 100));
 		scrollPane.setOpaque(false);
 		//scrollPane.setBackground(Color.WHITE);
 		scrollPane.getViewport().setBackground(AppletConstants.BG_COLOR);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-		applyButton.addActionListener(new ApplyButtonActionHandler(arrayTable));
-		JPopupMenu popupMenu = new JPopupMenu();
-		ArrayCopyOptionActionHandler actionHandler = new ArrayCopyOptionActionHandler(arrayTable);
+		this.applyButton.addActionListener(new ApplyButtonActionHandler(this.arrayTable));
+		final JPopupMenu popupMenu = new JPopupMenu();
+		final ArrayCopyOptionActionHandler actionHandler = new ArrayCopyOptionActionHandler(
+				this.arrayTable);
 
-		JMenuItem labelMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_LABELBAR);
+		final JMenuItem labelMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_LABELBAR);
 		labelMenuItem.addActionListener(actionHandler);
-		JMenuItem quantityMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_QUANTITY);
+		final JMenuItem quantityMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_QUANTITY);
 		quantityMenuItem.addActionListener(actionHandler);
-		JMenuItem concMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION);
+		final JMenuItem concMenuItem = new JMenuItem(
+				AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION);
 		concMenuItem.addActionListener(actionHandler);
-		JMenuItem allMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_ALL);
+		final JMenuItem allMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_ALL);
 		allMenuItem.addActionListener(actionHandler);
 
 		if (!specimenClass.equalsIgnoreCase("Molecular"))
@@ -200,15 +205,15 @@ public class SpecimenArrayApplet extends BaseApplet
 		popupMenu.add(concMenuItem);
 		popupMenu.add(allMenuItem);
 
-		copyButton = new JButton("Copy");
+		this.copyButton = new JButton("Copy");
 		//copyButton.addActionListener(new SpecimenArrayCopyActionHandler(popupMenu));
-		copyButton.addMouseListener(new SpecimenArrayCopyMouseHandler(popupMenu));
-		applyPanel.add(copyButton);
-		pasteButton = new JButton("Paste");
-		pasteButton.addActionListener(new SpecimenArrayPasteActionHandler(arrayTable));
-		applyPanel.add(pasteButton);
-		copyButton.setEnabled(false);
-		pasteButton.setEnabled(false);
+		this.copyButton.addMouseListener(new SpecimenArrayCopyMouseHandler(popupMenu));
+		applyPanel.add(this.copyButton);
+		this.pasteButton = new JButton("Paste");
+		this.pasteButton.addActionListener(new SpecimenArrayPasteActionHandler(this.arrayTable));
+		applyPanel.add(this.pasteButton);
+		this.copyButton.setEnabled(false);
+		this.pasteButton.setEnabled(false);
 		//System.out.println(" decrease gap :: 10");
 		this.getContentPane().setLayout(new VerticalLayout(0, 10));
 		this.getContentPane().add(applyPanel);
@@ -223,27 +228,26 @@ public class SpecimenArrayApplet extends BaseApplet
 	private Map getTableModelData()
 	{
 		Map tableDataMap = null;
-		String urlString = serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION
-				+ ";jsessionid=" + session_id + "?" + AppletConstants.APPLET_ACTION_PARAM_NAME
+		final String urlString = this.serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION
+				+ ";jsessionid=" + this.session_id + "?" + AppletConstants.APPLET_ACTION_PARAM_NAME
 				+ "=getArrayData";
 		AppletModelInterface model = new BaseAppletModel();
 		model.setData(new HashMap());
 
 		try
 		{
-			model = (AppletModelInterface) AppletServerCommunicator.doAppletServerCommunication(
-					urlString, model);
+			model = AppletServerCommunicator.doAppletServerCommunication(urlString, model);
 			tableDataMap = model.getData();
 			//System.out.println(" getTableModelData()   tableDataMap :: " + tableDataMap);
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return tableDataMap;
@@ -255,28 +259,27 @@ public class SpecimenArrayApplet extends BaseApplet
 	public void updateSessionData()
 	{
 		// set last cell data
-		setLastCellData();
-		String urlString = serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION
-				+ ";jsessionid=" + session_id + "?" + AppletConstants.APPLET_ACTION_PARAM_NAME
+		this.setLastCellData();
+		final String urlString = this.serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION
+				+ ";jsessionid=" + this.session_id + "?" + AppletConstants.APPLET_ACTION_PARAM_NAME
 				+ "=updateSessionData";
 		AppletModelInterface model = new BaseAppletModel();
-		Map arrayContentDataMap = ((SpecimenArrayTableModel) arrayTable.getModel())
+		final Map arrayContentDataMap = ((SpecimenArrayTableModel) this.arrayTable.getModel())
 				.getSpecimenArrayModelMap();
 		model.setData(arrayContentDataMap);
 		try
 		{
-			model = (AppletModelInterface) AppletServerCommunicator.doAppletServerCommunication(
-					urlString, model);
+			model = AppletServerCommunicator.doAppletServerCommunication(urlString, model);
 			//arrayContentDataMap = model.getData();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.debug(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -289,8 +292,8 @@ public class SpecimenArrayApplet extends BaseApplet
 		try
 		{
 			System.out.println(" start setLastCellData() method");
-			int selectedRow = arrayTable.getSelectedRow();
-			int selectedColumn = arrayTable.getSelectedColumn();
+			final int selectedRow = this.arrayTable.getSelectedRow();
+			final int selectedColumn = this.arrayTable.getSelectedColumn();
 			/*
 			System.out.println("  model map:: " + ((SpecimenArrayTableModel)
 			 arrayTable.getModel()).getSpecimenArrayModelMap());
@@ -298,15 +301,15 @@ public class SpecimenArrayApplet extends BaseApplet
 			System.out.println(" selectedColumn " + selectedColumn);
 			*/
 			if ((selectedRow > -1) && (selectedColumn > -1)
-					&& (selectedRow <= arrayTable.getRowCount())
-					&& (selectedColumn <= arrayTable.getColumnCount()))
+					&& (selectedRow <= this.arrayTable.getRowCount())
+					&& (selectedColumn <= this.arrayTable.getColumnCount()))
 			{
-				arrayTable.getCellEditor(selectedRow, selectedColumn).stopCellEditing();
+				this.arrayTable.getCellEditor(selectedRow, selectedColumn).stopCellEditing();
 			}
 		}
-		catch (Exception exception)
+		catch (final Exception exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			this.logger.debug(exception.getMessage(), exception);
 			System.out.println(" Exception occurred in setLastCellData() method"
 					+ exception.getMessage());
 		}
@@ -320,10 +323,11 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public void changeEnterSpecimenBy(String enterSpecimenBy)
 	{
-		logger.info(" Enter Specimen By " + enterSpecimenBy);
+		this.logger.info(" Enter Specimen By " + enterSpecimenBy);
 		System.out.println(" Enter Specimen By " + enterSpecimenBy);
 		this.enterSpecimenBy = enterSpecimenBy;
-		((SpecimenArrayTableModel) arrayTable.getModel()).changeEnterSpecimenBy(enterSpecimenBy);
+		((SpecimenArrayTableModel) this.arrayTable.getModel())
+				.changeEnterSpecimenBy(enterSpecimenBy);
 	}
 
 	/**
@@ -331,7 +335,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public JTextField getConcentrationTextField()
 	{
-		return concentrationTextField;
+		return this.concentrationTextField;
 	}
 
 	/**
@@ -347,7 +351,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public JTextField getQuantityTextField()
 	{
-		return quantityTextField;
+		return this.quantityTextField;
 	}
 
 	/**
@@ -363,7 +367,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public JButton getApplyButton()
 	{
-		return applyButton;
+		return this.applyButton;
 	}
 
 	/**
@@ -379,7 +383,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public JButton getCopyButton()
 	{
-		return copyButton;
+		return this.copyButton;
 	}
 
 	/**
@@ -387,6 +391,6 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public JButton getPasteButton()
 	{
-		return pasteButton;
+		return this.pasteButton;
 	}
 }

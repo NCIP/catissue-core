@@ -246,7 +246,8 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 * @param abstractForm AbstractActionForm.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public MolecularSpecimenReviewParameters(AbstractActionForm abstractForm) throws AssignDataException
+	public MolecularSpecimenReviewParameters(AbstractActionForm abstractForm)
+			throws AssignDataException
 	{
 		super();
 		this.setAllValues(abstractForm);
@@ -264,8 +265,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	{
 		try
 		{
-			final MolecularSpecimenReviewParametersForm form
-			 = (MolecularSpecimenReviewParametersForm) abstractForm;
+			final MolecularSpecimenReviewParametersForm form = (MolecularSpecimenReviewParametersForm) abstractForm;
 			this.gelImageURL = CommonUtilities.toString(form.getGelImageURL());
 			this.qualityIndex = CommonUtilities.toString(form.getQualityIndex());
 			this.laneNumber = CommonUtilities.toString(form.getLaneNumber());
@@ -291,7 +291,8 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 		{
 			logger.error(excp.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey, null, "MolecularSpecimenReviewParameters.java :");
+			throw new AssignDataException(errorKey, null,
+					"MolecularSpecimenReviewParameters.java :");
 		}
 	}
 }

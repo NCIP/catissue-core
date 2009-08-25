@@ -126,7 +126,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getNewArrayOrderItemId()
 	{
-		return newArrayOrderItemId;
+		return this.newArrayOrderItemId;
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getIsDefinedArray()
 	{
-		return isDefinedArray;
+		return this.isDefinedArray;
 	}
 
 	/**
@@ -159,6 +159,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 * @return SPECIMEN_ARRAY_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.SPECIMEN_ARRAY_FORM_ID;
@@ -170,7 +171,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public long getSpecimenArrayTypeId()
 	{
-		return specimenArrayTypeId;
+		return this.specimenArrayTypeId;
 	}
 
 	/**
@@ -187,7 +188,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public long getCreatedBy()
 	{
-		return createdBy;
+		return this.createdBy;
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getSpecimenClass()
 	{
-		return specimenClass;
+		return this.specimenClass;
 	}
 
 	/**
@@ -219,7 +220,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String[] getSpecimenTypes()
 	{
-		return specimenTypes;
+		return this.specimenTypes;
 	}
 
 	/**
@@ -235,7 +236,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getStorageContainer()
 	{
-		return storageContainer;
+		return this.storageContainer;
 	}
 
 	/**
@@ -251,7 +252,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public Collection getSpecArrayContentCollection()
 	{
-		return specArrayContentCollection;
+		return this.specArrayContentCollection;
 	}
 
 	/**
@@ -266,10 +267,11 @@ public class SpecimenArrayForm extends ContainerForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomain Object
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject domainObject)
 	{
 		super.setAllValues(domainObject);
-		SpecimenArray specimenArray = (SpecimenArray) domainObject;
+		final SpecimenArray specimenArray = (SpecimenArray) domainObject;
 		this.specimenArrayTypeId = specimenArray.getSpecimenArrayType().getId().longValue();
 		this.createdBy = specimenArray.getCreatedBy().getId().longValue();
 		Container container = null;
@@ -316,7 +318,7 @@ public class SpecimenArrayForm extends ContainerForm
 		 * specArrayContentCollection is set in this form but when this collection get in action class from this form 
 		 * it is lazy loded thus iterating this collection
 		 */
-		for (Iterator iter = this.specArrayContentCollection.iterator(); iter.hasNext();)
+		for (final Iterator iter = this.specArrayContentCollection.iterator(); iter.hasNext();)
 		{
 			iter.next();
 		}
@@ -328,7 +330,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getEnterSpecimenBy()
 	{
-		return enterSpecimenBy;
+		return this.enterSpecimenBy;
 	}
 
 	/**
@@ -344,7 +346,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getSubOperation()
 	{
-		return subOperation;
+		return this.subOperation;
 	}
 
 	/**
@@ -368,7 +370,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getCreateSpecimenArray()
 	{
-		return createSpecimenArray;
+		return this.createSpecimenArray;
 	}
 
 	/**
@@ -377,10 +379,11 @@ public class SpecimenArrayForm extends ContainerForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 		try
 		{
 			if (this.getOperation().equals(Constants.ADD)
@@ -392,18 +395,18 @@ public class SpecimenArrayForm extends ContainerForm
 							ApplicationProperties.getValue("array.arrayType")));
 				}
 				//            	validate name of array
-				if (validator.isEmpty(name))
+				if (Validator.isEmpty(this.name))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("array.arrayLabel")));
 				}
 
 				// validate storage position				
-				if (stContSelection == 1)
+				if (this.stContSelection == 1)
 				{
-					if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
-							|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
-							|| !validator.isNumeric(String.valueOf(storageContainer), 1))
+					if (!validator.isNumeric(String.valueOf(this.positionDimensionOne), 1)
+							|| !validator.isNumeric(String.valueOf(this.positionDimensionTwo), 1)
+							|| !validator.isNumeric(String.valueOf(this.storageContainer), 1))
 					{
 						errors
 								.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -413,7 +416,8 @@ public class SpecimenArrayForm extends ContainerForm
 				}
 				else
 				{
-					boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+					final boolean flag = StorageContainerUtil
+							.checkPos1AndPos2(this.pos1, this.pos2);
 					if (flag)
 					{
 						errors
@@ -431,14 +435,14 @@ public class SpecimenArrayForm extends ContainerForm
 				}
 
 				// validate user 
-				if (!validator.isValidOption(String.valueOf(createdBy)))
+				if (!validator.isValidOption(String.valueOf(this.createdBy)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("array.user")));
 				}
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			logger.error(e.getMessage());
 		}
@@ -450,11 +454,12 @@ public class SpecimenArrayForm extends ContainerForm
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if (addNewFor.equals("specimenArrayTypeId"))
 		{
-			setSpecimenArrayTypeId(addObjectIdentifier.longValue());
+			this.setSpecimenArrayTypeId(addObjectIdentifier.longValue());
 		}
 	}
 
@@ -471,7 +476,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getContainerId()
 	{
-		return containerId;
+		return this.containerId;
 	}
 
 	/**
@@ -487,7 +492,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getPos1()
 	{
-		return pos1;
+		return this.pos1;
 	}
 
 	/**
@@ -506,7 +511,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getPos2()
 	{
-		return pos2;
+		return this.pos2;
 	}
 
 	/**
@@ -526,7 +531,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getSelectedContainerName()
 	{
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
 
 	/**
@@ -542,7 +547,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public int getStContSelection()
 	{
-		return stContSelection;
+		return this.stContSelection;
 	}
 
 	/**
@@ -558,7 +563,7 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getIsBarcodeEditable()
 	{
-		return isBarcodeEditable;
+		return this.isBarcodeEditable;
 	}
 
 	/**

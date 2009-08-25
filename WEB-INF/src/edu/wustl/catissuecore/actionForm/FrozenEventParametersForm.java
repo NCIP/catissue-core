@@ -21,8 +21,8 @@ import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -52,7 +52,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getMethod()
 	{
-		return method;
+		return this.method;
 	}
 
 	/**
@@ -68,6 +68,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return FROZEN_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.FROZEN_EVENT_PARAMETERS_FORM_ID;
@@ -77,11 +78,12 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomain Object
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters) abstractDomain;
-		this.method = Utility.toString(frozenEventParametersObject.getMethod());
+		final FrozenEventParameters frozenEventParametersObject = (FrozenEventParameters) abstractDomain;
+		this.method = CommonUtilities.toString(frozenEventParametersObject.getMethod());
 	}
 
 	/**
@@ -90,21 +92,22 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 			//         	// checks the method
-			if (!validator.isValidOption(method))
+			if (!validator.isValidOption(this.method))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("frozeneventparameters.method")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -116,6 +119,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	 * This method defined in ActionForm is overridden in this class.
 	 */
 
+	@Override
 	protected void reset()
 	{
 		//         super.reset();

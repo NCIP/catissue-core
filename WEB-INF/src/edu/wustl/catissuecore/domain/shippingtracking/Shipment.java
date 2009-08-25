@@ -32,6 +32,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class Shipment extends BaseShipment
 {
+
 	private static final long serialVersionUID = -4710584673076795120L;
 
 	/**

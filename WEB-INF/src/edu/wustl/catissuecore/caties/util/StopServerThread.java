@@ -16,6 +16,7 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
+
 /**
  * @author
  *
@@ -51,25 +52,26 @@ public class StopServerThread
 			System.setProperty("gov.nih.nci.security.configFile", "./catissuecore-properties"
 					+ File.separator + "ApplicationSecurityConfig.xml");
 			// get port number of DeidServer
-			int port = Integer.parseInt(args[0]);
+			final int port = Integer.parseInt(args[0]);
 			// Create client socket to connect to server
-			Socket s = new Socket("localhost", port);
-			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()), true);
+			final Socket s = new Socket("localhost", port);
+			new BufferedReader(new InputStreamReader(s.getInputStream()));
+			final PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()),
+					true);
 			// send stop command to stop the server
 			out.write("stop");
 			s.close();
 			logger.info("Message sent to stop server");
 		}
-		catch (UnknownHostException ex1)
+		catch (final UnknownHostException ex1)
 		{
 			logger.error("Host not found" + ex1);
 		}
-		catch (SocketTimeoutException ex2)
+		catch (final SocketTimeoutException ex2)
 		{
 			logger.error("Socket timed out" + ex2);
 		}
-		catch (IOException ex3)
+		catch (final IOException ex3)
 		{
 			logger.error("IO exception" + ex3);
 		}

@@ -529,8 +529,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 				this.collectionProtocolRegistration.setParticipant(participant);
 				this.collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 
-				final ParticipantMedicalIdentifier participantMedicalIdentifier
-				= new ParticipantMedicalIdentifier();
+				final ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setId(Long.valueOf(form
 						.getParticipantsMedicalIdentifierId()));
 			}
@@ -711,8 +710,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			//Setting response
 			consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
 			if (consentBean.getSpecimenCollectionGroupLevelResponseID() != null
-					&& consentBean.getSpecimenCollectionGroupLevelResponseID()
-					.trim().length() > 0)
+					&& consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length() > 0)
 			{
 				consentTierstatus.setId(Long.parseLong(consentBean
 						.getSpecimenCollectionGroupLevelResponseID()));

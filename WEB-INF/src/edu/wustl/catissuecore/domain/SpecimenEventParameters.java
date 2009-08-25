@@ -226,8 +226,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		{
 			this.specimen = new Specimen();
 		}
-		final SpecimenEventParametersForm specimenEventParametersForm
-		= (SpecimenEventParametersForm) abstractForm;
+		final SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		logger.debug("specimenEventParametersForm.getSpecimenId()"
 				+ "............................." + specimenEventParametersForm.getSpecimenId());
 		if (this.specimen != null)

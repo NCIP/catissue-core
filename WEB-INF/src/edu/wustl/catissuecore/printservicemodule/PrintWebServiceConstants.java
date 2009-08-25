@@ -1,5 +1,6 @@
 
 package edu.wustl.catissuecore.printservicemodule;
+
 /**
  * This class contains Print Web Service Constants.
  * @author prashant_bandal
@@ -15,6 +16,7 @@ public final class PrintWebServiceConstants
 	{
 
 	}
+
 	//Constants for keys in printer.properties file.
 	/**
 	 * Specify PRINTER_WEBSERVICE_CLIENT.

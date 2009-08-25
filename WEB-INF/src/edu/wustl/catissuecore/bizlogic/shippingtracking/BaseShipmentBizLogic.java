@@ -125,7 +125,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					final ShipmentRequest shipmentRequest = ((Shipment) obj).getShipmentRequest();
 					shipmentRequest.setActivityStatus(Constants.ACTIVITY_STATUS_PROCESSED);
 					shipmentRequest.setRequestProcessed(Boolean.TRUE);
-					final ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();				
+					final ShipmentRequestBizLogic shipmentRequestBizLogic = new ShipmentRequestBizLogic();
 					shipmentRequestBizLogic.update(dao, shipmentRequest, null, sessionDataBean);//bug 12557			
 
 				}
@@ -1546,18 +1546,18 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		// Get SpecimenPositionCollection for every container which has been lazily initialled.
-		Iterator<StorageContainer> containerIterator = containerCollection.iterator();
+		final Iterator<StorageContainer> containerIterator = containerCollection.iterator();
 		while (containerIterator.hasNext())
 		{
-			StorageContainer container = containerIterator.next();
-			Collection<SpecimenPosition> spPosCollection = this.retrieve(
-				SpecimenPosition.class.getName(), "storageContainer.id", container.getId());
-			Collection<SpecimenPosition> spPosObjCollection = new HashSet<SpecimenPosition>();
-			Iterator<SpecimenPosition> spPosIterator = spPosCollection.iterator();
+			final StorageContainer container = containerIterator.next();
+			final Collection<SpecimenPosition> spPosCollection = this.retrieve(
+					SpecimenPosition.class.getName(), "storageContainer.id", container.getId());
+			final Collection<SpecimenPosition> spPosObjCollection = new HashSet<SpecimenPosition>();
+			final Iterator<SpecimenPosition> spPosIterator = spPosCollection.iterator();
 			while (spPosIterator.hasNext())
 			{
-				SpecimenPosition specimenPosition = spPosIterator.next();
-				Specimen specimen = (Specimen) this.retrieveAttribute(SpecimenPosition.class
+				final SpecimenPosition specimenPosition = spPosIterator.next();
+				final Specimen specimen = (Specimen) this.retrieveAttribute(SpecimenPosition.class
 						.getName(), specimenPosition.getId(), "specimen");
 				specimenPosition.setSpecimen(specimen);
 				specimenPosition.setStorageContainer(container);

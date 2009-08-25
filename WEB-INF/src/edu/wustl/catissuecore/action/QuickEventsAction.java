@@ -41,6 +41,7 @@ public class QuickEventsAction extends BaseAction
 	 * @throws Exception generic exception
 	 * @return value for ActionForward object
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -55,18 +56,18 @@ public class QuickEventsAction extends BaseAction
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 
 		//add messages from session to request
-		HttpSession session = request.getSession(true);
+		final HttpSession session = request.getSession(true);
 		if (session != null)
 		{
-			ActionMessages messages = (ActionMessages) session.getAttribute("messages");
+			final ActionMessages messages = (ActionMessages) session.getAttribute("messages");
 			if (messages != null)
 			{
-				saveMessages(request, messages);
+				this.saveMessages(request, messages);
 				session.removeAttribute("messages");
 			}
 		}
 
-		String pageOf = Constants.SUCCESS;
+		final String pageOf = Constants.SUCCESS;
 
 		return mapping.findForward(pageOf);
 	}

@@ -23,9 +23,9 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -38,6 +38,10 @@ import edu.wustl.common.util.logger.Logger;
 public abstract class SpecimenProtocolForm extends AbstractActionForm
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2955751730317671805L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -74,9 +78,9 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setValue(String key, Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			values.put(key, value);
+			this.values.put(key, value);
 		}
 	}
 
@@ -89,7 +93,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public Object getValue(String key)
 	{
-		return values.get(key);
+		return this.values.get(key);
 	}
 
 	/**
@@ -97,7 +101,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public Collection getAllValues()
 	{
-		return values.values();
+		return this.values.values();
 	}
 
 	/**
@@ -114,7 +118,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public SpecimenProtocolForm()
 	{
-		reset();
+		this.reset();
 	}
 
 	/**
@@ -122,7 +126,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getDescriptionURL()
 	{
-		return descriptionURL;
+		return this.descriptionURL;
 	}
 
 	/**
@@ -139,7 +143,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getEndDate()
 	{
-		return endDate;
+		return this.endDate;
 	}
 
 	/**
@@ -156,7 +160,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getIrbID()
 	{
-		return irbID;
+		return this.irbID;
 	}
 
 	/**
@@ -173,7 +177,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getEnrollment()
 	{
-		return enrollment;
+		return this.enrollment;
 	}
 
 	/**
@@ -190,7 +194,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public long getPrincipalInvestigatorId()
 	{
-		return principalInvestigatorId;
+		return this.principalInvestigatorId;
 	}
 
 	/**
@@ -207,7 +211,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getShortTitle()
 	{
-		return shortTitle;
+		return this.shortTitle;
 	}
 
 	/**
@@ -224,7 +228,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getStartDate()
 	{
-		return startDate;
+		return this.startDate;
 	}
 
 	/**
@@ -241,7 +245,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public String getTitle()
 	{
-		return title;
+		return this.title;
 	}
 
 	/**
@@ -258,7 +262,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public Map getValues()
 	{
-		return values;
+		return this.values;
 	}
 
 	/**
@@ -270,7 +274,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		SpecimenProtocol protocol = (SpecimenProtocol) abstractDomain;
+		final SpecimenProtocol protocol = (SpecimenProtocol) abstractDomain;
 
 		this.setId(protocol.getId().longValue());
 
@@ -284,23 +288,24 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.principalInvestigatorId = -1;
 		}
 
-		this.title = Utility.toString(protocol.getTitle());
-		this.shortTitle = Utility.toString(protocol.getShortTitle());
-		this.startDate = Utility.parseDateToString(protocol.getStartDate(), CommonServiceLocator
-				.getInstance().getDatePattern());
-		this.endDate = Utility.parseDateToString(protocol.getEndDate(), CommonServiceLocator
-				.getInstance().getDatePattern());
-		this.irbID = Utility.toString(protocol.getIrbIdentifier());
-		this.enrollment = Utility.toString(protocol.getEnrollment());
-		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
+		this.title = CommonUtilities.toString(protocol.getTitle());
+		this.shortTitle = CommonUtilities.toString(protocol.getShortTitle());
+		this.startDate = CommonUtilities.parseDateToString(protocol.getStartDate(),
+				CommonServiceLocator.getInstance().getDatePattern());
+		this.endDate = CommonUtilities.parseDateToString(protocol.getEndDate(),
+				CommonServiceLocator.getInstance().getDatePattern());
+		this.irbID = CommonUtilities.toString(protocol.getIrbIdentifier());
+		this.enrollment = CommonUtilities.toString(protocol.getEnrollment());
+		this.descriptionURL = CommonUtilities.toString(protocol.getDescriptionURL());
 
-		this.setActivityStatus(Utility.toString(protocol.getActivityStatus()));
+		this.setActivityStatus(CommonUtilities.toString(protocol.getActivityStatus()));
 	}
 
 	/**
 	 * Resets the values of all the fields. Is called by the overridden reset
 	 * method defined in ActionForm.
 	 */
+	@Override
 	protected void reset()
 	{
 		this.principalInvestigatorId = 0;
@@ -312,7 +317,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.enrollment = null;
 		this.descriptionURL = null;
 
-		values = new LinkedHashMap();
+		this.values = new LinkedHashMap();
 	}
 
 	/**
@@ -321,10 +326,11 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 		try
 		{
 			if (this.getOperation() != null
@@ -339,13 +345,13 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 									.getValue("collectionprotocol.principalinvestigator")));
 				}
 
-				if (validator.isEmpty(this.title))
+				if (Validator.isEmpty(this.title))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("collectionprotocol.protocoltitle")));
 				}
 
-				if (validator.isEmpty(this.shortTitle))
+				if (Validator.isEmpty(this.shortTitle))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("collectionprotocol.shorttitle")));
@@ -358,7 +364,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 
 				// --- startdate
 				//  date validation according to bug id  722 and 730 and 939
-				String errorKey = validator.validateDate(startDate, false);
+				String errorKey = validator.validateDate(this.startDate, false);
 				if (errorKey.trim().length() > 0)
 				{
 					logger.debug("startdate errorKey : " + errorKey);
@@ -367,10 +373,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 				}
 
 				//  --- end date        		
-				if (!validator.isEmpty(endDate))
+				if (!Validator.isEmpty(this.endDate))
 				{
 					//  date validation according to bug id  722 and 730 and 939
-					errorKey = validator.validateDate(endDate, false);
+					errorKey = validator.validateDate(this.endDate, false);
 					if (errorKey.trim().length() > 0 && !errorKey.equals(""))
 					{
 						logger.debug("enddate errorKey: " + errorKey);
@@ -382,23 +388,23 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 				// code added as per bug id 235 
 				// code to validate startdate less than end date
 				// check the start date less than end date
-				if (validator.checkDate(startDate) && validator.checkDate(endDate))
+				if (validator.checkDate(this.startDate) && validator.checkDate(this.endDate))
 				{
-					if (!validator.compareDates(startDate, endDate))
+					if (!validator.compareDates(this.startDate, this.endDate))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"specimenprotocol.invaliddate", ApplicationProperties
 										.getValue("specimenprotocol.invaliddate")));
 					}
 				}
-				if (!validator.isEmpty(enrollment))
+				if (!Validator.isEmpty(this.enrollment))
 				{
 
 					try
 					{
 						//Integer intEnrollment = new Integer(enrollment);
 					}
-					catch (NumberFormatException e)
+					catch (final NumberFormatException e)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",
 								ApplicationProperties.getValue("collectionprotocol.participants")));
@@ -406,7 +412,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error("error in SPForm : " + excp.getMessage(), excp);
@@ -422,30 +428,30 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	 */
 	protected void setSpecimenRequirement(String[] key, DistributionSpecimenRequirement requirement)
 	{
-		values.put(key[0], requirement.getSpecimenClass());
-		values.put(key[1], AppUtility.getUnit(requirement.getSpecimenClass(), requirement
+		this.values.put(key[0], requirement.getSpecimenClass());
+		this.values.put(key[1], AppUtility.getUnit(requirement.getSpecimenClass(), requirement
 				.getSpecimenType()));
-		values.put(key[2], requirement.getSpecimenType());
-		values.put(key[3], requirement.getTissueSite());
-		values.put(key[4], requirement.getPathologyStatus());
+		this.values.put(key[2], requirement.getSpecimenType());
+		this.values.put(key[3], requirement.getTissueSite());
+		this.values.put(key[4], requirement.getPathologyStatus());
 		//values.put(key[5] , AppUtility.toString(requirement.getQuantity().getValue()));
 
 		if (!AppUtility.isQuantityDouble(requirement.getSpecimenClass(), requirement
 				.getSpecimenType()))
 		{
-			Double doubleQuantity = requirement.getQuantity();
+			final Double doubleQuantity = requirement.getQuantity();
 			if (doubleQuantity == null)
 			{
-				values.put(key[5], "0");
+				this.values.put(key[5], "0");
 			}
 			else if (doubleQuantity.toString().contains("E"))
 			{
-				values.put(key[5], doubleQuantity.toString());
+				this.values.put(key[5], doubleQuantity.toString());
 			}
 			else
 			{
-				long longQuantity = doubleQuantity.longValue();
-				values.put(key[5], new Long(longQuantity).toString());
+				final long longQuantity = doubleQuantity.longValue();
+				this.values.put(key[5], new Long(longQuantity).toString());
 
 			}
 
@@ -454,27 +460,27 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		{
 			if (requirement.getQuantity() == null)
 			{
-				values.put(key[5], "0");
+				this.values.put(key[5], "0");
 			}
 			else
 			{
-				values.put(key[5], requirement.getQuantity().toString());
+				this.values.put(key[5], requirement.getQuantity().toString());
 			}
 		}
 
-		values.put(key[6], Utility.toString(requirement.getId()));
+		this.values.put(key[6], CommonUtilities.toString(requirement.getId()));
 
 		if (requirement.getSpecimenClass().equals(Constants.TISSUE)
 				&& requirement.getQuantity() != null)
 		{
-			String tissueType = requirement.getSpecimenType();
+			final String tissueType = requirement.getSpecimenType();
 			if (tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE)
 					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
 					|| tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)
 					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
-				values.put(key[5], Utility.toString(new Integer(requirement.getQuantity()
-						.intValue())));
+				this.values.put(key[5], CommonUtilities.toString(new Integer(requirement
+						.getQuantity().intValue())));
 			}
 		}
 	}

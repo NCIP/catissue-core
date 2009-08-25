@@ -99,8 +99,7 @@ public class ConsentVerificationAction extends BaseAction
 		final DistributionForm dForm = (DistributionForm) form;
 
 		// Show Consents for Specimen
-		final String specimenConsents
-		= request.getParameter(Constants.SPECIMEN_CONSENTS); // "specimenConsents"
+		final String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); // "specimenConsents"
 
 		final String specimenIdentifier = request.getParameter(Constants.SPECIMEN_ID);
 		Long specimenId = null;
@@ -119,8 +118,7 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 			{
-				final String speciemnIdValue
-				= request.getParameter("speciemnIdValue");// barcodelabel
+				final String speciemnIdValue = request.getParameter("speciemnIdValue");// barcodelabel
 				this.labelIndexCount = request.getParameter("labelIndexCount");
 				final StringTokenizer stringToken = new StringTokenizer(speciemnIdValue, "|");
 				// StringTokenizer stringTokenForIndex = new
@@ -168,14 +166,15 @@ public class ConsentVerificationAction extends BaseAction
 		String initialURLValue = "";
 		String initialSignedConsentDateValue = "";
 		String initialWitnessValue = "";
-		
-		CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil.getCollectionProtRegistration(specimen);
+
+		final CollectionProtocolRegistration collectionProtocolRegistration = ConsentUtil
+				.getCollectionProtRegistration(specimen);
 
 		if (collectionProtocolRegistration.getConsentSignatureDate() == null)
 		{
 			initialSignedConsentDateValue = Constants.NULL;
 		}
-		
+
 		if (collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 		{
 			initialURLValue = Constants.NULL;
@@ -192,7 +191,7 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			initialWitnessValue = Constants.NULL;
 		}
-		
+
 		final List cprObjectList = new ArrayList();
 		cprObjectList.add(collectionProtocolRegistration);
 		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
@@ -211,15 +210,15 @@ public class ConsentVerificationAction extends BaseAction
 		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;
 		// Getting WitnessName,Consent Date,Signed Url using
 		// collectionProtocolRegistration object
-		String witnessName = ConsentUtil.getWitnessName( bizLogic, initialWitnessValue,
+		final String witnessName = ConsentUtil.getWitnessName(bizLogic, initialWitnessValue,
 				cprObject);
-		String consentDate  = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
+		final String consentDate = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
 				cprObject);
-    	String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
-	
-    	// Setting WitnessName,ConsentDate and Signed Consent Url
-    	dForm.setWitnessName(witnessName);
-    	dForm.setConsentDate(consentDate);
+		final String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, cprObject);
+
+		// Setting WitnessName,ConsentDate and Signed Consent Url
+		dForm.setWitnessName(witnessName);
+		dForm.setConsentDate(consentDate);
 		dForm.setSignedConsentUrl(signedConsentURL);
 
 		// Getting ConsentResponse collection for CPR level
@@ -244,20 +243,14 @@ public class ConsentVerificationAction extends BaseAction
 		{
 			// For no consents and Consent waived
 			if (this.consentTierCounter > 0
-					&& !(specimen.getActivityStatus()
-							.equalsIgnoreCase(Constants.DISABLED)))// disabled
+					&& !(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED)))// disabled
 			{
 				final String[] barcodeLabelAttribute = new String[5];
-				barcodeLabelAttribute[0] =
-					witnessName;
-				barcodeLabelAttribute[1] =
-					consentDate;
-				barcodeLabelAttribute[2] =
-					signedConsentURL;
-				barcodeLabelAttribute[3] =
-					Integer.toString(this.consentTierCounter);
-				barcodeLabelAttribute[4] =
-					barcodeLable;
+				barcodeLabelAttribute[0] = witnessName;
+				barcodeLabelAttribute[1] = consentDate;
+				barcodeLabelAttribute[2] = signedConsentURL;
+				barcodeLabelAttribute[3] = Integer.toString(this.consentTierCounter);
+				barcodeLabelAttribute[4] = barcodeLable;
 				this.listOfMap.add(tempMap);
 				this.listOfStringArray.add(barcodeLabelAttribute);
 			}
@@ -299,15 +292,13 @@ public class ConsentVerificationAction extends BaseAction
 			final Iterator consentResponseCollectionIter = participantResponseList.iterator();
 			while (consentResponseCollectionIter.hasNext())
 			{
-				final ConsentTierResponse consentTierResponse
-				= (ConsentTierResponse) consentResponseCollectionIter
+				final ConsentTierResponse consentTierResponse = (ConsentTierResponse) consentResponseCollectionIter
 						.next();
 				consentTierID = consentTierResponse.getConsentTier().getId();
 				final Iterator specimenCollectionIter = specimenLevelResponseList.iterator();
 				while (specimenCollectionIter.hasNext())
 				{
-					final ConsentTierStatus specimenConsentResponse
-					= (ConsentTierStatus) specimenCollectionIter
+					final ConsentTierStatus specimenConsentResponse = (ConsentTierStatus) specimenCollectionIter
 							.next();
 					consentID = specimenConsentResponse.getConsentTier().getId();
 					if (consentTierID.longValue() == consentID.longValue())
@@ -315,8 +306,7 @@ public class ConsentVerificationAction extends BaseAction
 						final ConsentTier consent = consentTierResponse.getConsentTier();
 						final String idKey = "ConsentBean:" + i + "_consentTierID";
 						final String statementKey = "ConsentBean:" + i + "_statement";
-						final String responseKey
-						= "ConsentBean:" + i + "_participantResponse";
+						final String responseKey = "ConsentBean:" + i + "_participantResponse";
 						final String participantResponceIdKey = "ConsentBean:" + i
 								+ "_participantResponseID";
 						final String specimenResponsekey = "ConsentBean:" + i
@@ -328,10 +318,8 @@ public class ConsentVerificationAction extends BaseAction
 						tempMap.put(statementKey, consent.getStatement());
 						tempMap.put(responseKey, consentTierResponse.getResponse());
 						tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-						tempMap.
-						put(specimenResponsekey, specimenConsentResponse.getStatus());
-						tempMap.
-						put(specimenResponseIDkey, specimenConsentResponse.getId());
+						tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
+						tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
 						i++;
 						break;
 					}

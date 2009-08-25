@@ -64,8 +64,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 			{
 				eventMapKey = st.nextToken();
 			}
-			final CollectionProtocolEventBean collectionProtocolEventBean
-			= (CollectionProtocolEventBean) collectionProtocolEventMap
+			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventMapKey);
 			final Map specimenReqMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
 			if (specimenReqMap.containsKey(collectionProtocolEventKey))

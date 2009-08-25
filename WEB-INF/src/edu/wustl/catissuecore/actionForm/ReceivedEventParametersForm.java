@@ -17,8 +17,8 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,7 +51,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	 */
 	public String getReceivedQuality()
 	{
-		return receivedQuality;
+		return this.receivedQuality;
 	}
 
 	/**
@@ -69,6 +69,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 * @return RECEIVED_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID;
@@ -78,11 +79,13 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
-		ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters) abstractDomain;
-		this.receivedQuality = Utility.toString(receivedEventParameterObject.getReceivedQuality());
+		final ReceivedEventParameters receivedEventParameterObject = (ReceivedEventParameters) abstractDomain;
+		this.receivedQuality = CommonUtilities.toString(receivedEventParameterObject
+				.getReceivedQuality());
 	}
 
 	/**
@@ -91,24 +94,25 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
 			// checks the receivedQuality
-			if (!validator.isValidOption(receivedQuality))
+			if (!validator.isValidOption(this.receivedQuality))
 			{
 				logger.debug(" not a valid option");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
 			}
-			logger.debug(receivedQuality + " is a valid option");
+			logger.debug(this.receivedQuality + " is a valid option");
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -119,6 +123,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	 * Resets the values of all the fields.
 	 * This method defined in ActionForm is overridden in this class.
 	 */
+	@Override
 	protected void reset()
 	{
 		//         super.reset();

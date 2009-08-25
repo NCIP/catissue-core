@@ -34,7 +34,7 @@ public class SpreadsheetViewAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SpreadsheetViewAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SpreadsheetViewAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -51,6 +51,7 @@ public class SpreadsheetViewAction extends BaseAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -62,10 +63,10 @@ public class SpreadsheetViewAction extends BaseAction
 		 * execution while navigating through query result pages. Here,
 		 * extending this class from BaseAction
 		 */
-		HttpSession session = request.getSession();
+		final HttpSession session = request.getSession();
 		// changes are done for check all
 		String checkAllPages = "";
-		String ch = (String) request.getParameter(Constants.CHECK_ALL_PAGES);
+		final String ch = request.getParameter(Constants.CHECK_ALL_PAGES);
 		if (ch == null || ch.equals(""))
 		{
 			checkAllPages = (String) session.getAttribute(Constants.CHECK_ALL_PAGES);
@@ -75,48 +76,50 @@ public class SpreadsheetViewAction extends BaseAction
 			checkAllPages = ch;
 		}
 		session.setAttribute(Constants.CHECK_ALL_PAGES, checkAllPages);
-		String isAjax = (String) request.getParameter("isAjax");
+		final String isAjax = request.getParameter("isAjax");
 		if (isAjax != null && isAjax.equals("true"))
 		{
 			response.setContentType("text/html");
 			response.getWriter().write(checkAllPages);
 			return null;
 		}
-		QuerySessionData querySessionData = (QuerySessionData) session
+		final QuerySessionData querySessionData = (QuerySessionData) session
 				.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
 
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		if (pageOf == null)
 		{
-			pageOf = (String) request.getParameter(Constants.PAGE_OF);
+			pageOf = request.getParameter(Constants.PAGE_OF);
 		}
 		if (request.getAttribute(AQConstants.IDENTIFIER_FIELD_INDEX) == null)
 		{
-			String identifierFieldIndex = request.getParameter(AQConstants.IDENTIFIER_FIELD_INDEX);
+			final String identifierFieldIndex = request
+					.getParameter(AQConstants.IDENTIFIER_FIELD_INDEX);
 			if (identifierFieldIndex != null && !identifierFieldIndex.equals(""))
 			{
 				request.setAttribute(AQConstants.IDENTIFIER_FIELD_INDEX, new Integer(
 						identifierFieldIndex));
 			}
 		}
-		logger.debug("Pageof in spreadsheetviewaction.........:" + pageOf);
-		Object defaultViewAttribute = request.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
+		this.logger.debug("Pageof in spreadsheetviewaction.........:" + pageOf);
+		final Object defaultViewAttribute = request
+				.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 		if (defaultViewAttribute != null)
 		{
-			List list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
-			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+			final List list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
+			final List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 			// edu.wustl.catissuecore.util.global.AppUtility.setGridData(
 			// list,columnNames, request);
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
 			request.setAttribute(AQConstants.SPREADSHEET_DATA_LIST, list);
 		}
 		List list = null;
-		String pagination = request.getParameter("isPaging");
+		final String pagination = request.getParameter("isPaging");
 		if (pagination == null || pagination.equals("false"))
 		{
 
 			list = (List) request.getAttribute(AQConstants.SPREADSHEET_DATA_LIST);
-			List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+			final List columnNames = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 			// Set the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST in the
 			// session.
@@ -129,7 +132,7 @@ public class SpreadsheetViewAction extends BaseAction
 			AppUtility.setGridData(list, columnNames, request);
 			session.setAttribute(Constants.TOTAL_RESULTS, querySessionData
 					.getTotalNumberOfRecords());
-			AdvanceSearchForm advanceSearchForm = (AdvanceSearchForm) request
+			final AdvanceSearchForm advanceSearchForm = (AdvanceSearchForm) request
 					.getAttribute("advanceSearchForm");
 			if (advanceSearchForm != null)
 			{
@@ -162,11 +165,11 @@ public class SpreadsheetViewAction extends BaseAction
 		{
 			recordsPerPageStr = request.getAttribute(Constants.RESULTS_PER_PAGE).toString();
 		}
-		int recordsPerPage = new Integer(recordsPerPageStr);
+		final int recordsPerPage = new Integer(recordsPerPageStr);
 		if (pagination != null && pagination.equalsIgnoreCase("true"))
 		{
-			paginationDataList = AppUtility.getPaginationDataList(request, getSessionData(request),
-					recordsPerPage, pageNum, querySessionData);
+			paginationDataList = AppUtility.getPaginationDataList(request, this
+					.getSessionData(request), recordsPerPage, pageNum, querySessionData);
 			request.setAttribute(Constants.PAGINATION_DATA_LIST, paginationDataList);
 			AppUtility.setGridData(paginationDataList, columnList, request);
 		}

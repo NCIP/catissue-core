@@ -20,6 +20,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DeidUtils
 {
+
 	/**
 	 * logger.
 	 */
@@ -47,26 +48,24 @@ public class DeidUtils
 			// create element as REPORT
 			reportElement = new Element(CaTIESConstants.REPORT);
 			// set participant id
-			Element patientIdElement = new Element(CaTIESConstants.PATIENT_ID);
+			final Element patientIdElement = new Element(CaTIESConstants.PATIENT_ID);
 			patientIdElement.addContent(participant.getId().toString());
 
 			// set report type
-			Element reportTypeElement = new Element(CaTIESConstants.REPORT_TYPE);
+			final Element reportTypeElement = new Element(CaTIESConstants.REPORT_TYPE);
 			reportTypeElement.addContent(CaTIESConstants.REPORT_TYPE_VALUE);
 
 			// create report header
-			Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
+			final Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(
 					CaTIESConstants.PARTICIPANT_NAME, participant.getLastName() + ","
-							+ participant.getFirstName()
-							, CaTIESConstants.PARTICIPANT_ROLE));
+							+ participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
 
-			Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
+			final Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
 			// iterate over participant medical identifier collection
-			for (ParticipantMedicalIdentifier participantMedicalIdentifier
-					: medicalIdentifierCollection)
+			for (final ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
 			{
 				mrn += " ";
 				mrn += participantMedicalIdentifier.getMedicalRecordNumber();
@@ -76,12 +75,11 @@ public class DeidUtils
 					CaTIESConstants.PARTICIPANT_MRN, mrn, CaTIESConstants.PARTICIPANT_ROLE));
 
 			// create and report text to textElement
-			Element reportTextElement = new Element(CaTIESConstants.REPORT_TEXT);
+			final Element reportTextElement = new Element(CaTIESConstants.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);
 			sprText += "\n||-"
-					+ DateFormat.getDateTimeInstance()
-					.format(ispr.getCollectionDateTime()) + "-||";
-			CDATA reportCDATA = new CDATA(sprText);
+					+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
+			final CDATA reportCDATA = new CDATA(sprText);
 			reportTextElement.addContent(reportCDATA);
 
 			// add patientId element to root element
@@ -93,7 +91,7 @@ public class DeidUtils
 			// add report text element to root element
 			reportElement.addContent(reportTextElement);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error in buildReportElement method for DeID", ex);
 		}
@@ -123,9 +121,9 @@ public class DeidUtils
 		// set role
 		headerPersonElement.setAttribute(CaTIESConstants.ROLE, role);
 		// create element variable
-		Element variableElement = new Element(CaTIESConstants.VARIABLE);
+		final Element variableElement = new Element(CaTIESConstants.VARIABLE);
 		// create element value
-		Element valueElement = new Element(CaTIESConstants.VALUE);
+		final Element valueElement = new Element(CaTIESConstants.VALUE);
 		// set variable
 		variableElement.addContent(variable);
 		// set value
@@ -156,9 +154,9 @@ public class DeidUtils
 		// create element data
 		headerDataElement = new Element(CaTIESConstants.HEADER_DATA);
 		// create element variable
-		Element variableElement = new Element(CaTIESConstants.VARIABLE);
+		final Element variableElement = new Element(CaTIESConstants.VARIABLE);
 		// create element value
-		Element valueElement = new Element(CaTIESConstants.VALUE);
+		final Element valueElement = new Element(CaTIESConstants.VALUE);
 		// set variable
 		variableElement.addContent(variable);
 		// set value
@@ -181,11 +179,11 @@ public class DeidUtils
 	public static String removeIllegalXmlCharacters(String sprText)
 	{
 		// illegal XML character
-		char illegalChar = 0x1d;
+		final char illegalChar = 0x1d;
 		String result = sprText;
 		try
 		{
-			StringBuffer sb = new StringBuffer(sprText);
+			final StringBuffer sb = new StringBuffer(sprText);
 			// loop to check each character
 			for (int idx = 0; idx < sb.length(); idx++)
 			{
@@ -198,7 +196,7 @@ public class DeidUtils
 			}
 			result = sb.toString();
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			logger.error("Error in removeIllegalXmlCharacters method", ex);
 		}

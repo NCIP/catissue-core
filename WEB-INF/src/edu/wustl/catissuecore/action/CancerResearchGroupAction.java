@@ -39,13 +39,14 @@ public class CancerResearchGroupAction extends SecureAction
 	 * @throws Exception generic exception
 	 * @return ActionForward : ActionForward
 	 * */
+	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
-		CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) form;
-		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+		final String operation = request.getParameter(Constants.OPERATION);
+		final CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm) form;
+		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		cancerResearchGroupForm.setOperation(operation);
 		cancerResearchGroupForm.setSubmittedFor(submittedFor);
 
@@ -68,6 +69,6 @@ public class CancerResearchGroupAction extends SecureAction
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 
-		return mapping.findForward((String) request.getParameter(Constants.PAGE_OF));
+		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 }

@@ -72,7 +72,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public int getColumnCount()
 	{
-		return columnCount;
+		return this.columnCount;
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public List getIgnoredRows()
 	{
-		return ignoredRows;
+		return this.ignoredRows;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public String getOperation()
 	{
-		return operation;
+		return this.operation;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public int getRowCount()
 	{
-		return rowCount;
+		return this.rowCount;
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public HashMap getCopiedData()
 	{
-		return copiedData;
+		return this.copiedData;
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public List getSelectedCopiedCols()
 	{
-		return selectedCopiedCols;
+		return this.selectedCopiedCols;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public List getSelectedCopiedRows()
 	{
-		return selectedCopiedRows;
+		return this.selectedCopiedRows;
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public List getSelectedPastedCols()
 	{
-		return selectedPastedCols;
+		return this.selectedPastedCols;
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public List getSelectedPastedRows()
 	{
-		return selectedPastedRows;
+		return this.selectedPastedRows;
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class CopyPasteOperationValidatorModel implements Serializable
 	 */
 	public int getPageIndexWhenCopied()
 	{
-		return pageIndexWhenCopied;
+		return this.pageIndexWhenCopied;
 	}
 
 	/**

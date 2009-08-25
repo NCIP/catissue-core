@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.bean;
 
 import java.util.HashMap;
@@ -12,18 +13,20 @@ import edu.wustl.common.util.tag.ScriptGenerator;
  */
 public class AliquotBean
 {
+
 	/**
 	 * constructor
 	 */
-    public AliquotBean()
+	public AliquotBean()
 	{
 		super();
 	}
-    /**
-     * @param aliquotNoParam - aliquotNoParam
-     * @param aliquotMapParam - aliquotMapParam
-     * @param dataMapParam - dataMapParam
-     */
+
+	/**
+	 * @param aliquotNoParam - aliquotNoParam
+	 * @param aliquotMapParam - aliquotMapParam
+	 * @param dataMapParam - dataMapParam
+	 */
 	public AliquotBean(int aliquotNoParam, Map aliquotMapParam, Map dataMapParam)
 	{
 		super();
@@ -93,15 +96,15 @@ public class AliquotBean
 					+ Constants.PARENT_SPECIMEN_ID + "=" + parentSPId + "')";
 		}
 
-		this.initValues[0] = (String) this.aliquotMap.get( "Specimen:" + this.aliquotNo
-				+ "_StorageContainer_id" );
-		this.initValues[1] = (String) this.aliquotMap.get( "Specimen:" + this.aliquotNo
-				+ "_positionDimensionOne" );
-		this.initValues[2] = (String) this.aliquotMap.get( "Specimen:" + this.aliquotNo
-				+ "_positionDimensionTwo" );
+		this.initValues[0] = (String) this.aliquotMap.get("Specimen:" + this.aliquotNo
+				+ "_StorageContainer_id");
+		this.initValues[1] = (String) this.aliquotMap.get("Specimen:" + this.aliquotNo
+				+ "_positionDimensionOne");
+		this.initValues[2] = (String) this.aliquotMap.get("Specimen:" + this.aliquotNo
+				+ "_positionDimensionTwo");
 
-		this.addToMap( rbKey );
-		final int radioSelected = Integer.parseInt( this.aliquotMap.get( rbKey ).toString() );
+		this.addToMap(rbKey);
+		final int radioSelected = Integer.parseInt(this.aliquotMap.get(rbKey).toString());
 		if (radioSelected == 1)
 		{
 			this.dropDownDisable = true;
@@ -126,12 +129,13 @@ public class AliquotBean
 		this.buttonOnClicked = "mapButtonClickedInAliquot('" + frameUrl + "','" + this.aliquotNo
 				+ "')";
 
-		this.jsScript = ScriptGenerator.getJSEquivalentFor( this.dataMap, this.rowNumber );
+		this.jsScript = ScriptGenerator.getJSEquivalentFor(this.dataMap, this.rowNumber);
 	}
+
 	/**
 	 *
 	 */
-    private void setOutsideData()
+	private void setOutsideData()
 	{
 		this.labelKey = "value(Specimen:" + this.aliquotNo + "_label)";
 		this.qtyKey = "value(Specimen:" + this.aliquotNo + "_quantity)";
@@ -154,21 +158,23 @@ public class AliquotBean
 		this.textBoxDisable = false;
 		this.onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";
 		this.initValues = new String[3];
-		this.rowNumber = String.valueOf( this.aliquotNo );
+		this.rowNumber = String.valueOf(this.aliquotNo);
 	}
-    /**
-     * @param rbKey - rbKey
-     */
+
+	/**
+	 * @param rbKey - rbKey
+	 */
 	private void addToMap(String rbKey)
 	{
-		if (this.aliquotMap.get( rbKey ) == null)
+		if (this.aliquotMap.get(rbKey) == null)
 		{
-			this.aliquotMap.put( rbKey, "2" );
+			this.aliquotMap.put(rbKey, "2");
 		}
 	}
-    /**
-     * @return - String
-     */
+
+	/**
+	 * @return - String
+	 */
 	public String getJsScript()
 	{
 		return this.jsScript;
@@ -182,41 +188,47 @@ public class AliquotBean
 	{
 		return this.aliquotMap;
 	}
-    /**
-     * @param aliquotMapParam - aliquotMapParam
-     */
+
+	/**
+	 * @param aliquotMapParam - aliquotMapParam
+	 */
 	public void setAliquotMap(Map aliquotMapParam)
 	{
 		this.aliquotMap = aliquotMapParam;
 	}
-    /**
-     * @return aliquotNo
-     */
+
+	/**
+	 * @return aliquotNo
+	 */
 	public int getAliquotNo()
 	{
 		return this.aliquotNo;
 	}
-    /**
-     * @param i - aliquotNo
-     */
+
+	/**
+	 * @param i - aliquotNo
+	 */
 	public void setAliquotNo(int i)
 	{
 		this.aliquotNo = i;
 	}
-    /**
-     * @return - array of String
-     */
+
+	/**
+	 * @return - array of String
+	 */
 	public String[] getAttrNames()
 	{
 		return this.attrNames;
 	}
-    /**
-     * @return - barKey
-     */
+
+	/**
+	 * @return - barKey
+	 */
 	public String getBarKey()
 	{
 		return this.barKey;
 	}
+
 	/**
 	 * @return - buttonOnClicked
 	 */
@@ -224,6 +236,7 @@ public class AliquotBean
 	{
 		return this.buttonOnClicked;
 	}
+
 	/**
 	 * @return - containerIdFromMapKey
 	 */
@@ -231,27 +244,31 @@ public class AliquotBean
 	{
 		return this.containerIdFromMapKey;
 	}
-    /**
-     * @return - containerIdStyle
-     */
+
+	/**
+	 * @return - containerIdStyle
+	 */
 	public String getContainerIdStyle()
 	{
 		return this.containerIdStyle;
 	}
-    /**
-     * @return - String
-     */
+
+	/**
+	 * @return - String
+	 */
 	public String getContainerMap()
 	{
 		return this.containerMap;
 	}
-    /**
-     * @return - String
-     */
+
+	/**
+	 * @return - String
+	 */
 	public String getContainerMapStyle()
 	{
 		return this.containerMapStyle;
 	}
+
 	/**
 	 * @return - containerNameFromMapKey
 	 */
@@ -259,55 +276,63 @@ public class AliquotBean
 	{
 		return this.containerNameFromMapKey;
 	}
-    /**
-     * @return - containerStyle
-     */
+
+	/**
+	 * @return - containerStyle
+	 */
 	public String getContainerStyle()
 	{
 		return this.containerStyle;
 	}
-    /**
-     * @return - boolean
-     */
+
+	/**
+	 * @return - boolean
+	 */
 	public boolean isDropDownDisable()
 	{
 		return this.dropDownDisable;
 	}
-    /**
-     * @return - array of String
-     */
+
+	/**
+	 * @return - array of String
+	 */
 	public String[] getInitValues()
 	{
 		return this.initValues;
 	}
-    /**
-     * @return - labelKey
-     */
+
+	/**
+	 * @return - labelKey
+	 */
 	public String getLabelKey()
 	{
 		return this.labelKey;
 	}
-    /**
-     * @return - String
-     */
+
+	/**
+	 * @return - String
+	 */
 	public String getOnChange()
 	{
 		return this.onChange;
 	}
-    /**
-     * @return - String
-     */
+
+	/**
+	 * @return - String
+	 */
 	public String getPos1FromMapKey()
 	{
 		return this.pos1FromMapKey;
 	}
-    /***
-     * @return - pos1Style
-     */
+
+	/***
+	 * @return - pos1Style
+	 */
 	public String getPos1Style()
 	{
 		return this.pos1Style;
 	}
+
 	/**
 	 * @return - pos2FromMapKey
 	 */
@@ -315,37 +340,42 @@ public class AliquotBean
 	{
 		return this.pos2FromMapKey;
 	}
-    /**
-     * @return - pos2Style
-     */
+
+	/**
+	 * @return - pos2Style
+	 */
 	public String getPos2Style()
 	{
 		return this.pos2Style;
 	}
-    /**
-     * @return - qtyKey
-     */
+
+	/**
+	 * @return - qtyKey
+	 */
 	public String getQtyKey()
 	{
 		return this.qtyKey;
 	}
-    /**
-     * @return - rowNumber
-     */
+
+	/**
+	 * @return - rowNumber
+	 */
 	public String getRowNumber()
 	{
 		return this.rowNumber;
 	}
-    /**
-     * @return - stContSelection
-     */
+
+	/**
+	 * @return - stContSelection
+	 */
 	public String getStContSelection()
 	{
 		return this.stContSelection;
 	}
-    /**
-     * @return - textBoxDisable
-     */
+
+	/**
+	 * @return - textBoxDisable
+	 */
 	public boolean isTextBoxDisable()
 	{
 		return this.textBoxDisable;

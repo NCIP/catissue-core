@@ -13,10 +13,12 @@ import javax.swing.JPopupMenu;
  */
 public class SpecimenArrayCopyMouseHandler extends MouseAdapter
 {
+
 	/**
 	 * popupMenu.
 	 */
 	JPopupMenu popupMenu;
+
 	/**
 	 * @param popupMenu : popupMenu
 	 */
@@ -30,16 +32,17 @@ public class SpecimenArrayCopyMouseHandler extends MouseAdapter
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 * @param e : e
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e)
 	{
 		super.mouseClicked(e);
-		if (!popupMenu.isShowing())
+		if (!this.popupMenu.isShowing())
 		{
-			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+			this.popupMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 		else
 		{
-			popupMenu.setVisible(false);
+			this.popupMenu.setVisible(false);
 		}
 	}
 }

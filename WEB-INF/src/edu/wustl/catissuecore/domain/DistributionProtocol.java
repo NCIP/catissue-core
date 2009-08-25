@@ -53,8 +53,7 @@ public class DistributionProtocol extends SpecimenProtocol
 	/**
 	 * Collection of specimenRequirements associated with the DistributionProtocol.
 	 */
-	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection
-	= new HashSet<DistributionSpecimenRequirement>();
+	protected Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
 
 	/**
 	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
@@ -74,7 +73,7 @@ public class DistributionProtocol extends SpecimenProtocol
 	 * @param form AbstractActionForm.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public DistributionProtocol(AbstractActionForm form)throws AssignDataException
+	public DistributionProtocol(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);

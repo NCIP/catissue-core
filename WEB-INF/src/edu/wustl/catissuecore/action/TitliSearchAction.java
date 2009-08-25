@@ -31,10 +31,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TitliSearchAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TitliSearchAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(TitliSearchAction.class);
 
 	/**
 	 * @param mapping
@@ -47,20 +48,21 @@ public class TitliSearchAction extends Action
 	 *            the response
 	 * @return action forward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 
-		TitliSearchForm titliSearchForm = (TitliSearchForm) form;
-		logger.info("Search string entered is...... :" + titliSearchForm.getSearchString());
+		final TitliSearchForm titliSearchForm = (TitliSearchForm) form;
+		this.logger.info("Search string entered is...... :" + titliSearchForm.getSearchString());
 
 		try
 		{
-			TitliInterface titli = Titli.getInstance();
-			String searchString = titliSearchForm.getSearchString().trim();
-			MatchListInterface matchList = titli.search(searchString);
+			final TitliInterface titli = Titli.getInstance();
+			final String searchString = titliSearchForm.getSearchString().trim();
+			final MatchListInterface matchList = titli.search(searchString);
 
-			SortedResultMapInterface sortedResultMap = matchList.getSortedResultMap();
+			final SortedResultMapInterface sortedResultMap = matchList.getSortedResultMap();
 
 			// set the result in the action form
 			titliSearchForm.setSortedResultMap(sortedResultMap);
@@ -91,8 +93,8 @@ public class TitliSearchAction extends Action
 			{
 				try
 				{
-					Name tableName = sortedResultMap.keySet().toArray(new Name[0])[0];
-					String label = TitliTableMapper.getInstance().getLabel(tableName);
+					final Name tableName = sortedResultMap.keySet().toArray(new Name[0])[0];
+					final String label = TitliTableMapper.getInstance().getLabel(tableName);
 
 					// set the selectedLabel to the label of the only table
 					// setting the selectedLabel is necessary for
@@ -100,22 +102,22 @@ public class TitliSearchAction extends Action
 					titliSearchForm.setSelectedLabel(label);
 
 				}
-				catch (Exception e)
+				catch (final Exception e)
 				{
-					logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+					this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
 				}
 
-				String path = TitliSearchConstants.TITLI_FETCH_ACTION;
-				return getActionForward(TitliSearchConstants.TITLI_SINGLE_RESULT, path);
+				final String path = TitliSearchConstants.TITLI_FETCH_ACTION;
+				return this.getActionForward(TitliSearchConstants.TITLI_SINGLE_RESULT, path);
 
 			}
 
 		}
-		catch (TitliException e)
+		catch (final TitliException e)
 		{
-			logger.error("TitliException in TitliSearchAction : " + e.getMessage(), e);
+			this.logger.error("TitliException in TitliSearchAction : " + e.getMessage(), e);
 		}
-		logger.info("from titli search action..............!!");
+		this.logger.info("from titli search action..............!!");
 		// System.out.println("from titli search action..............!!");
 		return mapping.findForward(Constants.SUCCESS);
 	}
@@ -129,7 +131,7 @@ public class TitliSearchAction extends Action
 	 */
 	private ActionForward getActionForward(String name, String path)
 	{
-		ActionForward actionForward = new ActionForward();
+		final ActionForward actionForward = new ActionForward();
 		actionForward.setName(name);
 		actionForward.setPath(path);
 

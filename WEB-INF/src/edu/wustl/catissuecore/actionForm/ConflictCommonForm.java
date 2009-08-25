@@ -57,11 +57,13 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	protected String birthDate;
 
+	@Override
 	public int getFormId()
 	{
 		return 0;
 	}
 
+	@Override
 	protected void reset()
 	{
 
@@ -86,7 +88,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getSurgicalPathologyNumber()
 	{
-		return surgicalPathologyNumber;
+		return this.surgicalPathologyNumber;
 	}
 
 	/**
@@ -95,7 +97,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getSiteName()
 	{
-		return siteName;
+		return this.siteName;
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getReportDate()
 	{
-		return reportDate;
+		return this.reportDate;
 	}
 
 	/**
@@ -129,7 +131,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getParticipantName()
 	{
-		return participantName;
+		return this.participantName;
 	}
 
 	/**
@@ -146,7 +148,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getBirthDate()
 	{
-		return birthDate;
+		return this.birthDate;
 	}
 
 	/**
@@ -163,7 +165,7 @@ public class ConflictCommonForm extends AbstractActionForm
 	 */
 	public String getSocialSecurityNumber()
 	{
-		return socialSecurityNumber;
+		return this.socialSecurityNumber;
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class ConflictCommonForm extends AbstractActionForm
 
 	public String getReportCollectionDate()
 	{
-		return reportCollectionDate;
+		return this.reportCollectionDate;
 	}
 
 	/**

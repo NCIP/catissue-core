@@ -19,8 +19,7 @@ public class DeleteBaseMetadata
 	/**
 	 * Specify entity ID Attribute List Map.
 	 */
-	HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap =
-		new HashMap<Long, List<AttributeInterface>>();
+	HashMap<Long, List<AttributeInterface>> entityIDAttributeListMap = new HashMap<Long, List<AttributeInterface>>();
 	/**
 	 * Specify entity Attributes To Delete.
 	 */

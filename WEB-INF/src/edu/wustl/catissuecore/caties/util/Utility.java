@@ -36,6 +36,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
+
 /**
  * @author
  *
@@ -50,7 +51,7 @@ public class Utility
 	public static void init() throws Exception
 	{
 		// Initialization methods
-		String appHome = System.getProperty("user.dir");
+		final String appHome = System.getProperty("user.dir");
 
 		// Configuring logger properties
 		LoggerConfig.configureLogger(appHome);
@@ -58,6 +59,7 @@ public class Utility
 		// initializing caties property configurator
 		CaTIESProperties.initBundle("caTIES");
 	}
+
 	/**
 	 * @param configFileName : configFileName
 	 * @return Map
@@ -65,19 +67,18 @@ public class Utility
 	 */
 	public static Map initializeReportSectionHeaderMap(String configFileName) throws Exception
 	{
-		HashMap<String, String> abbrToHeader = new LinkedHashMap<String, String>();
+		final HashMap<String, String> abbrToHeader = new LinkedHashMap<String, String>();
 		Logger.out.info("Initializing section header map");
 		// Function call to set up section header configuration from SectionHeaderConfig.txt file
 		try
 		{
 			// set bufferedReader to read file
-			BufferedReader br = new BufferedReader(new FileReader(configFileName));
+			final BufferedReader br = new BufferedReader(new FileReader(configFileName));
 
 			String line = null;
 			StringTokenizer st;
 			String name;
 			String abbr;
-			String priority;
 			// iterate while file EOF
 			while ((line = br.readLine()) != null)
 			{
@@ -86,14 +87,14 @@ public class Utility
 				st = new StringTokenizer(line, "|");
 				name = st.nextToken().trim();
 				abbr = st.nextToken().trim();
-				priority = st.nextToken().trim();
+				st.nextToken().trim();
 
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);
 			}
 			Logger.out.info("Section Headers set successfully to the map");
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
 			Logger.out.error("Error in setting Section header Priorities", ex);
 			throw new Exception(ex.getMessage());
@@ -115,14 +116,14 @@ public class Utility
 	{
 		String result = "";
 		// instnatiate XMLOutputter
-		XMLOutputter outputDocument = new XMLOutputter();
+		final XMLOutputter outputDocument = new XMLOutputter();
 		if (format != null)
 		{
 			// set format to XMLOutputter
 			outputDocument.setFormat(format);
 		}
 		// instantiate ByteArrayOutputStream
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		// convert doc to byte array
 		outputDocument.output(doc, byteArrayOutputStream);
 		// convert byte array to string
@@ -151,7 +152,7 @@ public class Utility
 			if (deIDResponse != null && deIDResponse.trim().length() > 0)
 			{
 				// instantiate SAXBuilder
-				SAXBuilder builder = new SAXBuilder();
+				final SAXBuilder builder = new SAXBuilder();
 				// set EntityResolver to use local dtd file instead of the one
 				//that is specified in the xml document
 				builder.setEntityResolver(new EntityResolver()
@@ -169,22 +170,23 @@ public class Utility
 				builder.setFeature("http://xml.org/sax/features/namespaces", true);
 
 				// convert string to byte array
-				byte[] byteArray = deIDResponse.getBytes();
+				final byte[] byteArray = deIDResponse.getBytes();
 				// convert byte array to ByteArrayInputStream
-				ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+				final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+						byteArray);
 				// create document using ByteArrayInputStream
-				Document deIDResponseDocument = builder.build(byteArrayInputStream);
+				final Document deIDResponseDocument = builder.build(byteArrayInputStream);
 
 				// set XPath to query on XML document
-				XPath xpath = XPath.newInstance(xPath);
+				final XPath xpath = XPath.newInstance(xPath);
 				// fire query on the document
-				List deIdResults = xpath.selectNodes(deIDResponseDocument);
-				Iterator deIdIterator = deIdResults.iterator();
+				final List deIdResults = xpath.selectNodes(deIDResponseDocument);
+				final Iterator deIdIterator = deIdResults.iterator();
 				// iterate to extract report text
 				while (deIdIterator.hasNext())
 				{
 					// get next element
-					Element deIdReportElement = (Element) deIdIterator.next();
+					final Element deIdReportElement = (Element) deIdIterator.next();
 					// get report text
 					deidSprText = deIdReportElement.getChild(reportTextTagName).getText();
 				}
@@ -194,12 +196,12 @@ public class Utility
 				Logger.out.info("NO DeID response");
 			}
 		}
-		catch (JDOMException ex)
+		catch (final JDOMException ex)
 		{
 			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
 			throw ex;
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
 			throw ex;
@@ -219,10 +221,10 @@ public class Utility
 	{
 
 		ReportLoaderQueue reportLoaderQueue = null;
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
-		Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),
+		final Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),
 				new Long(reportQueueId));
 		if (object != null)
 		{
@@ -248,10 +250,10 @@ public class Utility
 		reportLoaderQueue = getReportQueueObject(reportQueueId);
 
 		//retrieve site
-		String siteName = reportLoaderQueue.getSiteName();
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		SiteBizLogic siteBizLogic = (SiteBizLogic) factory.getBizLogic(Site.class.getName());
-		List siteList = (List) siteBizLogic.retrieve(Site.class.getName(), Constants.SYSTEM_NAME,
+		final String siteName = reportLoaderQueue.getSiteName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final SiteBizLogic siteBizLogic = (SiteBizLogic) factory.getBizLogic(Site.class.getName());
+		final List siteList = siteBizLogic.retrieve(Site.class.getName(), Constants.SYSTEM_NAME,
 				siteName);
 
 		if ((siteList != null) && siteList.size() > 0)
@@ -260,8 +262,8 @@ public class Utility
 		}
 
 		//retrive the PID
-		String pidLine = ReportLoaderUtil.getLineFromReport(reportLoaderQueue.getReportText(),
-				CaTIESConstants.PID);
+		final String pidLine = ReportLoaderUtil.getLineFromReport(
+				reportLoaderQueue.getReportText(), CaTIESConstants.PID);
 
 		//Participant Object
 		participant = HL7ParserUtil.parserParticipantInformation(pidLine, site);

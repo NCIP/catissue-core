@@ -27,12 +27,13 @@ public class RequestToOrderSubmitAction extends BaseAction
 	 * @return ActionForward object
 	 * @throws Exception object
 	 */
+	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
-		OrderForm requestOrder = (OrderForm) form;
-		HttpSession session = request.getSession();
+		final OrderForm requestOrder = (OrderForm) form;
+		final HttpSession session = request.getSession();
 
 		session.setAttribute("OrderForm", requestOrder);
 		return mapping.findForward("orderExistingAction");

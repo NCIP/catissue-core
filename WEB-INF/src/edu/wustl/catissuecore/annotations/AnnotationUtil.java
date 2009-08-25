@@ -44,7 +44,7 @@ public class AnnotationUtil
 
 {
 
-	private transient final Logger logger = Logger.getCommonLogger( AnnotationUtil.class );
+	private transient final Logger logger = Logger.getCommonLogger(AnnotationUtil.class);
 	/**
 	 * This method updates module map by parsing xml file
 	 * @param xmlFileName file to be parsed
@@ -53,27 +53,27 @@ public class AnnotationUtil
 	 */
 	public static Map map = new HashMap();
 
-	public final List < NameValueBean > populateStaticEntityList(String xmlFileName,
-			String displayNam) throws DataTypeFactoryInitializationException
+	public final List<NameValueBean> populateStaticEntityList(String xmlFileName, String displayNam)
+			throws DataTypeFactoryInitializationException
 	{
 		final List list = new ArrayList();
 
 		final SAXReader saxReader = new SAXReader();
 		final InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(
-				xmlFileName );
+				xmlFileName);
 
 		Document document = null;
 
 		try
 		{
-			document = saxReader.read( inputStream );
+			document = saxReader.read(inputStream);
 			Element className = null;
 			Element displayName = null;
 			Element conditionInvoker = null;
 
 			final Element primitiveAttributesElement = document.getRootElement();
 			final Iterator primitiveAttributeElementIterator = primitiveAttributesElement
-					.elementIterator( "static-entity" );
+					.elementIterator("static-entity");
 
 			Element primitiveAttributeElement = null;
 
@@ -81,19 +81,20 @@ public class AnnotationUtil
 			{
 				primitiveAttributeElement = (Element) primitiveAttributeElementIterator.next();
 
-				className = primitiveAttributeElement.element( "name" );
-				displayName = primitiveAttributeElement.element( "displayName" );
-				conditionInvoker = primitiveAttributeElement.element( "conditionInvoker" );
-				list.add( new NameValueBean( displayName.getStringValue() , className
-						.getStringValue() ) );
+				className = primitiveAttributeElement.element("name");
+				displayName = primitiveAttributeElement.element("displayName");
+				conditionInvoker = primitiveAttributeElement.element("conditionInvoker");
+				list
+						.add(new NameValueBean(displayName.getStringValue(), className
+								.getStringValue()));
 
 				if (displayNam != null)
 				{
-					if (className.getText().equals( displayNam ))
+					if (className.getText().equals(displayNam))
 					{
-						map.put( "name", className.getText() );
-						map.put( "displayName", displayName.getText() );
-						map.put( "conditionInvoker", conditionInvoker.getText() );
+						map.put("name", className.getText());
+						map.put("displayName", displayName.getText());
+						map.put("conditionInvoker", conditionInvoker.getText());
 					}
 				}
 
@@ -101,8 +102,8 @@ public class AnnotationUtil
 		}
 		catch (final DocumentException documentException)
 		{
-			this.logger.debug( documentException.getMessage(), documentException );
-			throw new DataTypeFactoryInitializationException( documentException );
+			this.logger.debug(documentException.getMessage(), documentException);
+			throw new DataTypeFactoryInitializationException(documentException);
 		}
 
 		return list;
@@ -150,30 +151,30 @@ public class AnnotationUtil
 				/*Here every time new formcontext can be created for each condition 
 				 *though form is one , just to make different formcontext as "noOfEntries" attribute
 				 *for form Context can change or can be assigned in future */
-				formContext.setEntityMap( entityMapObj );
-				final boolean check = this.checkForAll( conditions );
+				formContext.setEntityMap(entityMapObj);
+				final boolean check = this.checkForAll(conditions);
 				if (!check)
 				{
-					if (!conditions[i].equals( new Integer( Constants.SELECT_OPTION_VALUE )
-							.toString() )
-							&& !conditions[i].equals( Constants.ALL ))
+					if (!conditions[i]
+							.equals(new Integer(Constants.SELECT_OPTION_VALUE).toString())
+							&& !conditions[i].equals(Constants.ALL))
 					{
 						final EntityMapCondition entityMapCondition = new EntityMapCondition();
-						entityMapCondition.setFormContext( formContext );
-						entityMapCondition.setStaticRecordId( new Long( conditions[i] ) );
-						entityMapCondition.setTypeId( new Long( catissueCoreCacheManager
+						entityMapCondition.setFormContext(formContext);
+						entityMapCondition.setStaticRecordId(new Long(conditions[i]));
+						entityMapCondition.setTypeId(new Long(catissueCoreCacheManager
 								.getObjectFromCache(
-										AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID )
-								.toString() ) );
-						entityMapConditionCollection.add( entityMapCondition );
-						formContext.setEntityMapConditionCollection( entityMapConditionCollection );
+										AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID)
+								.toString()));
+						entityMapConditionCollection.add(entityMapCondition);
+						formContext.setEntityMapConditionCollection(entityMapConditionCollection);
 
 					}
 				}
 
 			}
 		}
-		formContextCollection.add( formContext );
+		formContextCollection.add(formContext);
 		return formContextCollection;
 
 	}
@@ -184,7 +185,7 @@ public class AnnotationUtil
 		{
 			for (final String condition : conditions)
 			{
-				if (condition.equals( Constants.ALL ))
+				if (condition.equals(Constants.ALL))
 				{
 					return true;
 				}
@@ -204,13 +205,13 @@ public class AnnotationUtil
 	public static List getSystemEntityList() throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, CacheException
 	{
-		final List < NameValueBean > systemEntityList = new ArrayList < NameValueBean >();
+		final List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
 		final AnnotationUtil util = new AnnotationUtil();
-		final List < NameValueBean > staticEntityInformationList = util.populateStaticEntityList(
-				"StaticEntityInformation.xml", null );
+		final List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList(
+				"StaticEntityInformation.xml", null);
 		final CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();
-		systemEntityList.add( new NameValueBean( Constants.SELECT_OPTION ,
-				Constants.SELECT_OPTION_VALUE ) );
+		systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
+				Constants.SELECT_OPTION_VALUE));
 		String key = "";
 		if (staticEntityInformationList != null && !staticEntityInformationList.isEmpty())
 		{
@@ -218,11 +219,11 @@ public class AnnotationUtil
 			while (listIterator.hasNext())
 			{
 				final NameValueBean nameValueBean = (NameValueBean) listIterator.next();
-				key = getKeyFromEntityName( nameValueBean.getValue() );
-				if (key != null && !key.equals( "" ))
+				key = getKeyFromEntityName(nameValueBean.getValue());
+				if (key != null && !key.equals(""))
 				{
-					systemEntityList.add( new NameValueBean( nameValueBean.getName() , cache
-							.getObjectFromCache( key ) ) );
+					systemEntityList.add(new NameValueBean(nameValueBean.getName(), cache
+							.getObjectFromCache(key)));
 				}
 			}
 		}
@@ -239,15 +240,15 @@ public class AnnotationUtil
 		String key = "";
 		if (entityName != null)
 		{
-			if (entityName.equals( AnnotationConstants.ENTITY_NAME_PARTICIPANT ))
+			if (entityName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT))
 			{
 				key = AnnotationConstants.PARTICIPANT_ENTITY_ID;
 			}
-			else if (entityName.equals( AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP ))
+			else if (entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP))
 			{
 				key = AnnotationConstants.SCG_ENTITY_ID;
 			}
-			else if (entityName.equals( AnnotationConstants.ENTITY_NAME_SPECIMEN ))
+			else if (entityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN))
 			{
 				key = AnnotationConstants.SPECIMEN_ENTITY_ID;
 			}

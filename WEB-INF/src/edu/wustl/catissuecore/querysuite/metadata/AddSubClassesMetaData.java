@@ -81,18 +81,16 @@ public class AddSubClassesMetaData extends BaseMetadata
 					nextIdDatabaseproperties = maxId + 1;
 				}
 
-				sql = "INSERT INTO dyextn_abstract_metadata" +
-					"(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
-						+ nextIdOfAbstractMetadata
-						+ ",NULL,NULL,NULL,'" + entityName + "',null)";
+				sql = "INSERT INTO dyextn_abstract_metadata"
+						+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
+						+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName + "',null)";
 				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 				{
 					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
 							"dyextn_abstract_metadata");
 				}
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-				sql = "INSERT INTO dyextn_abstract_entity values("
-					+ nextIdOfAbstractMetadata + ")";
+				sql = "INSERT INTO dyextn_abstract_entity values(" + nextIdOfAbstractMetadata + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
 				final int parEId = UpdateMetadataUtil.getEntityIdByName(key, this.connection

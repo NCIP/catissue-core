@@ -36,7 +36,7 @@ public class DashboardForm extends ActionForm
 	protected int incomingShipmentReqsTotalRecords = 0;
 
 	protected int outgoingShipmentReqsTotalRecords = 0;
-	
+
 	protected int incomingShipmentsTotalPages = 1;
 
 	protected int outgoingShipmentsTotalPages = 1;
@@ -45,49 +45,41 @@ public class DashboardForm extends ActionForm
 
 	protected int outgoingShipmentReqsTotalPages = 1;
 
-	
 	public int getIncomingShipmentsTotalPages()
 	{
-		return incomingShipmentsTotalPages;
+		return this.incomingShipmentsTotalPages;
 	}
 
-	
 	public void setIncomingShipmentsTotalPages(int incomingShipmentsTotalPages)
 	{
 		this.incomingShipmentsTotalPages = incomingShipmentsTotalPages;
 	}
 
-	
 	public int getOutgoingShipmentsTotalPages()
 	{
-		return outgoingShipmentsTotalPages;
+		return this.outgoingShipmentsTotalPages;
 	}
 
-	
 	public void setOutgoingShipmentsTotalPages(int outgoingShipmentsTotalPages)
 	{
 		this.outgoingShipmentsTotalPages = outgoingShipmentsTotalPages;
 	}
 
-	
 	public int getIncomingShipmentReqsTotalPages()
 	{
-		return incomingShipmentReqsTotalPages;
+		return this.incomingShipmentReqsTotalPages;
 	}
 
-	
 	public void setIncomingShipmentReqsTotalPages(int incomingShipmentReqsTotalPages)
 	{
 		this.incomingShipmentReqsTotalPages = incomingShipmentReqsTotalPages;
 	}
 
-	
 	public int getOutgoingShipmentReqsTotalPages()
 	{
-		return outgoingShipmentReqsTotalPages;
+		return this.outgoingShipmentReqsTotalPages;
 	}
 
-	
 	public void setOutgoingShipmentReqsTotalPages(int outgoingShipmentReqsTotalPages)
 	{
 		this.outgoingShipmentReqsTotalPages = outgoingShipmentReqsTotalPages;

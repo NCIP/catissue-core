@@ -26,8 +26,8 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -92,7 +92,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public StorageTypeForm()
 	{
-		reset();
+		this.reset();
 	}
 
 	/**
@@ -101,54 +101,56 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		StorageType storageType = (StorageType) abstractDomain;
+		final StorageType storageType = (StorageType) abstractDomain;
 		logger
 				.info("in storege type form :"
 						+ storageType.getHoldsSpecimenClassCollection().size());
 		this.setId(storageType.getId().longValue());
 		this.type = storageType.getName();
-		this.defaultTemperature = Utility.toString(storageType.getDefaultTempratureInCentigrade());
+		this.defaultTemperature = CommonUtilities.toString(storageType
+				.getDefaultTempratureInCentigrade());
 		this.oneDimensionCapacity = storageType.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = storageType.getOneDimensionLabel();
 		this.twoDimensionLabel = storageType.getTwoDimensionLabel();
 		//      Populating the storage type-id array
-		Collection storageTypeCollection = storageType.getHoldsStorageTypeCollection();
+		final Collection storageTypeCollection = storageType.getHoldsStorageTypeCollection();
 
 		if (storageTypeCollection != null)
 		{
-			holdsStorageTypeIds = new long[storageTypeCollection.size()];
+			this.holdsStorageTypeIds = new long[storageTypeCollection.size()];
 			int i = 0;
 
-			Iterator it = storageTypeCollection.iterator();
+			final Iterator it = storageTypeCollection.iterator();
 			while (it.hasNext())
 			{
-				StorageType holdStorageType = (StorageType) it.next();
-				holdsStorageTypeIds[i] = holdStorageType.getId().longValue();
+				final StorageType holdStorageType = (StorageType) it.next();
+				this.holdsStorageTypeIds[i] = holdStorageType.getId().longValue();
 				i++;
 			}
 		}
 		//      Populating the specimen class type-id array
-		Collection specimenClassTypeCollection = storageType.getHoldsSpecimenClassCollection();
+		final Collection specimenClassTypeCollection = storageType
+				.getHoldsSpecimenClassCollection();
 
 		if (specimenClassTypeCollection != null)
 		{
 			if (specimenClassTypeCollection.size() == AppUtility.getSpecimenClassTypes().size())
 			{
-				holdsSpecimenClassTypes = new String[1];
-				holdsSpecimenClassTypes[0] = "-1";
+				this.holdsSpecimenClassTypes = new String[1];
+				this.holdsSpecimenClassTypes[0] = "-1";
 				this.specimenOrArrayType = "Specimen";
 			}
 			else
 			{
-				holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
+				this.holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
 				int i = 0;
 
-				Iterator it = specimenClassTypeCollection.iterator();
+				final Iterator it = specimenClassTypeCollection.iterator();
 				while (it.hasNext())
 				{
-					String specimenClass = (String) it.next();
-					holdsSpecimenClassTypes[i] = specimenClass;
+					final String specimenClass = (String) it.next();
+					this.holdsSpecimenClassTypes[i] = specimenClass;
 					i++;
 					this.specimenOrArrayType = "Specimen";
 
@@ -156,18 +158,19 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 		}
 		//      Populating the specimen array type-id array
-		Collection specimenArrayTypeCollection = storageType.getHoldsSpecimenArrayTypeCollection();
+		final Collection specimenArrayTypeCollection = storageType
+				.getHoldsSpecimenArrayTypeCollection();
 
 		if (specimenArrayTypeCollection != null)
 		{
-			holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
+			this.holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
 			int i = 0;
 
-			Iterator it = specimenArrayTypeCollection.iterator();
+			final Iterator it = specimenArrayTypeCollection.iterator();
 			while (it.hasNext())
 			{
-				SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
-				holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
+				final SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
+				this.holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
 				i++;
 				this.specimenOrArrayType = "SpecimenArray";
 			}
@@ -302,7 +305,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public long[] getHoldsStorageTypeIds()
 	{
-		return holdsStorageTypeIds;
+		return this.holdsStorageTypeIds;
 	}
 
 	/**
@@ -322,7 +325,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public String[] getHoldsSpecimenClassTypes()
 	{
-		return holdsSpecimenClassTypes;
+		return this.holdsSpecimenClassTypes;
 	}
 
 	/**
@@ -342,7 +345,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public long[] getHoldsSpecimenArrTypeIds()
 	{
-		return holdsSpecimenArrTypeIds;
+		return this.holdsSpecimenArrTypeIds;
 	}
 
 	/**
@@ -358,6 +361,7 @@ public class StorageTypeForm extends AbstractActionForm
 	/**
 	 * @return Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.STORAGE_TYPE_FORM_ID;
@@ -367,6 +371,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 		/*this.oneDimensionLabel = null;
@@ -382,38 +387,39 @@ public class StorageTypeForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
-			setRedirectValue(validator);
-			if (validator.isEmpty(type))
+			this.setRedirectValue(validator);
+			if (Validator.isEmpty(this.type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageType.type")));
 			}
 			else
 			{
-				String s = new String("- _");
-				String delimitedString = validator.delimiterExcludingGiven(s);
-				if (validator.containsSpecialCharacters(type, delimitedString))
+				final String s = new String("- _");
+				final String delimitedString = validator.delimiterExcludingGiven(s);
+				if (validator.containsSpecialCharacters(this.type, delimitedString))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.data",
 							ApplicationProperties.getValue("storageType.type")));
 				}
 
 			}
-			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+			if (Validator.isEmpty(String.valueOf(this.oneDimensionCapacity)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
 			}
 			else
 			{
-				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+				if (!validator.isNumeric(String.valueOf(this.oneDimensionCapacity)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
 							ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
@@ -422,47 +428,47 @@ public class StorageTypeForm extends AbstractActionForm
 			// Mandar 10-apr-06 : bugid :353 
 			// Error messages should be in the same sequence as the sequence of fields on the page.
 
-			if (validator.isEmpty(oneDimensionLabel))
+			if (Validator.isEmpty(this.oneDimensionLabel))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageType.oneDimensionLabel")));
 			}
 
-			if (holdsStorageTypeIds != null)
+			if (this.holdsStorageTypeIds != null)
 			{
-				checkValidSelectionForAny(holdsStorageTypeIds, "storageType.holdsStorageType",
-						errors);
+				this.checkValidSelectionForAny(this.holdsStorageTypeIds,
+						"storageType.holdsStorageType", errors);
 			}
 			//checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
-			if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
+			if (Validator.isEmpty(String.valueOf(this.twoDimensionCapacity)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
 			}
 			else
 			{
-				if (!validator.isNumeric(String.valueOf(twoDimensionCapacity)))
+				if (!validator.isNumeric(String.valueOf(this.twoDimensionCapacity)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
 							ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
 				}
 			}
 
-			if (validator.isEmpty(twoDimensionLabel) && (twoDimensionCapacity > 1))
+			if (Validator.isEmpty(this.twoDimensionLabel) && (this.twoDimensionCapacity > 1))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.labelRequired",
 						ApplicationProperties.getValue("storageType.twoDimensionLabel")));
 			}
 			// code as per bug id 233 
 			// checking for double value if present
-			if (!validator.isEmpty(defaultTemperature)
-					&& !validator.isDouble(defaultTemperature, false))
+			if (!Validator.isEmpty(this.defaultTemperature)
+					&& !validator.isDouble(this.defaultTemperature, false))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageType.defaultTemperature")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -478,9 +484,9 @@ public class StorageTypeForm extends AbstractActionForm
 	{
 		if (Ids.length > 1)
 		{
-			for (int i = 0; i < Ids.length; i++)
+			for (final long id2 : Ids)
 			{
-				if (Ids[i] == 1)
+				if (id2 == 1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue(message)));
@@ -495,7 +501,7 @@ public class StorageTypeForm extends AbstractActionForm
 	 */
 	public String getSpecimenOrArrayType()
 	{
-		return specimenOrArrayType;
+		return this.specimenOrArrayType;
 	}
 
 	/**

@@ -26,10 +26,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TitliInitialiseSearchAction extends Action
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(TitliInitialiseSearchAction.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger(TitliInitialiseSearchAction.class);
 
 	/**
 	 * @param mapping
@@ -43,6 +45,7 @@ public class TitliInitialiseSearchAction extends Action
 	 * @return action forward
 	 *
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
@@ -51,9 +54,10 @@ public class TitliInitialiseSearchAction extends Action
 			Titli.getInstance();
 
 		}
-		catch (TitliException e)
+		catch (final TitliException e)
 		{
-			logger.error("TitliException in InitialiseTitliSearchAction : " + e.getMessage(), e);
+			this.logger.error("TitliException in InitialiseTitliSearchAction : " + e.getMessage(),
+					e);
 		}
 
 		TitliTableMapper.getInstance();

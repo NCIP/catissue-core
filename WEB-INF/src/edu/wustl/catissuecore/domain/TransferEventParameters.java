@@ -264,10 +264,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 				fromObj.setId(Long.valueOf(form.getFromStorageContainerId()));
 				this.fromStorageContainer = fromObj;
 
-				this.fromPositionDimensionOne
-				= Integer.valueOf(form.getFromPositionDimensionOne());
-				this.fromPositionDimensionTwo
-				= Integer.valueOf(form.getFromPositionDimensionTwo());
+				this.fromPositionDimensionOne = Integer.valueOf(form.getFromPositionDimensionOne());
+				this.fromPositionDimensionTwo = Integer.valueOf(form.getFromPositionDimensionTwo());
 			}
 			super.setAllValues(form);
 		}

@@ -175,9 +175,8 @@ public class CaCoreAppServicesDelegator
 
 			if (object == null)
 			{
-				throw new Exception(
-						"No such domain object found for update !! " +
-						"Please enter valid domain object for edit");
+				throw new Exception("No such domain object found for update !! "
+						+ "Please enter valid domain object for edit");
 			}
 			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) object;
 
@@ -307,8 +306,8 @@ public class CaCoreAppServicesDelegator
 	 * @return filteredObjects filtered objects
 	 * @throws Exception exception
 	 */
-	private List filterDisabledObjects(List list,
-			String userName,boolean isUserisAdmin) throws Exception
+	private List filterDisabledObjects(List list, String userName, boolean isUserisAdmin)
+			throws Exception
 	{
 		final long st = System.currentTimeMillis();
 		final List result = new ArrayList();
@@ -326,8 +325,7 @@ public class CaCoreAppServicesDelegator
 				final AbstractDomainObject abstractDomainObject = (AbstractDomainObject) object;
 				try
 				{
-					final Method activityStatusMethod =
-						abstractDomainObject.getClass().getMethod(
+					final Method activityStatusMethod = abstractDomainObject.getClass().getMethod(
 							"getActivityStatus", null);
 					final String activityStatus = (String) activityStatusMethod.invoke(
 							abstractDomainObject, null);
@@ -345,10 +343,9 @@ public class CaCoreAppServicesDelegator
 			}
 			else if (!isUserisAdmin)
 			{
-				throw new Exception(
-						"caTissue doesnot support queries which returns result " +
-						"list containing instances of classes other than " +
-						"caTissue domain model");
+				throw new Exception("caTissue doesnot support queries which returns result "
+						+ "list containing instances of classes other than "
+						+ "caTissue domain model");
 			}
 			else
 			{
@@ -382,8 +379,7 @@ public class CaCoreAppServicesDelegator
 	 * @return The filtered list of objects according to the privilege of the user.
 	 * @throws Exception exception
 	 */
-	private List filterObjects(String userName,
-			List objectList) throws Exception
+	private List filterObjects(String userName, List objectList) throws Exception
 	{
 		// boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean isReadDenied = false;
@@ -436,8 +432,7 @@ public class CaCoreAppServicesDelegator
 					}
 					else if (classObject.equals(SpecimenEventParameters.class))
 					{
-						final SpecimenEventParameters spe =
-							(SpecimenEventParameters) abstractDomainObject;
+						final SpecimenEventParameters spe = (SpecimenEventParameters) abstractDomainObject;
 						if (spe.getSpecimenCollectionGroup() != null)
 						{
 							objectName = SpecimenCollectionGroup.class.getName();
@@ -452,15 +447,13 @@ public class CaCoreAppServicesDelegator
 					else if (classObject.equals(ParticipantMedicalIdentifier.class))
 					{
 						objectName = Participant.class.getName();
-						final ParticipantMedicalIdentifier pmi =
-							(ParticipantMedicalIdentifier) abstractDomainObject;
+						final ParticipantMedicalIdentifier pmi = (ParticipantMedicalIdentifier) abstractDomainObject;
 						identifier = pmi.getParticipant().getId();
 					}
 					else if (classObject.equals(SpecimenArrayContent.class))
 					{
 						objectName = Specimen.class.getName();
-						final SpecimenArrayContent sac =
-							(SpecimenArrayContent) abstractDomainObject;
+						final SpecimenArrayContent sac = (SpecimenArrayContent) abstractDomainObject;
 						identifier = sac.getSpecimen().getId();
 					}
 				}
@@ -480,12 +473,11 @@ public class CaCoreAppServicesDelegator
 					 * If has no read privilege on identified data,
 					 *  set the identified attributes as NULL.
 					**/
-					hasPHIAccess = accessPrivilegeMap.get(
-							edu.wustl.query.util.global.AQConstants.HAS_PHI_ACCESS);
+					hasPHIAccess = accessPrivilegeMap
+							.get(edu.wustl.query.util.global.AQConstants.HAS_PHI_ACCESS);
 					if (!hasPHIAccess)
 					{
-						this.removeIdentifiedDataFromObject
-						(abstractDomainObject, objectName,
+						this.removeIdentifiedDataFromObject(abstractDomainObject, objectName,
 								identifier, sessionDataBean);
 					}
 					filteredObjects.add(abstractDomainObject);
@@ -600,8 +592,7 @@ public class CaCoreAppServicesDelegator
 		{
 			for (final CollectionProtocolRegistration collectionProtocolRegistration : cpCollection)
 			{
-				final CollectionProtocolRegistration collectionProtReg =
-					collectionProtocolRegistration;
+				final CollectionProtocolRegistration collectionProtReg = collectionProtocolRegistration;
 				this.removeCollectionProtocolRegistrationIdentifiedData(collectionProtReg);
 			}
 		}
@@ -839,8 +830,7 @@ public class CaCoreAppServicesDelegator
 	*/
 	private void removeIdentifiedReportIdentifiedData(Object object)
 	{
-		final IdentifiedSurgicalPathologyReport identiPathologyReport =
-			(IdentifiedSurgicalPathologyReport) object;
+		final IdentifiedSurgicalPathologyReport identiPathologyReport = (IdentifiedSurgicalPathologyReport) object;
 		identiPathologyReport.setCollectionDateTime(null);
 		identiPathologyReport.setId(null);
 		identiPathologyReport.setActivityStatus(null);
@@ -857,8 +847,7 @@ public class CaCoreAppServicesDelegator
 	 */
 	private void removeDeIdentifiedReportIdentifiedData(Object object)
 	{
-		final DeidentifiedSurgicalPathologyReport deIdentiPathologyReport =
-			(DeidentifiedSurgicalPathologyReport) object;
+		final DeidentifiedSurgicalPathologyReport deIdentiPathologyReport = (DeidentifiedSurgicalPathologyReport) object;
 		deIdentiPathologyReport.setCollectionDateTime(null);
 		deIdentiPathologyReport.setId(null);
 		deIdentiPathologyReport.setActivityStatus(null);
@@ -917,8 +906,7 @@ public class CaCoreAppServicesDelegator
 	 * @param sessionData sessiondata
 	 * @throws Exception exception
 	 */
-	private void insertQuery(String sqlQuery,
-			SessionDataBean sessionData) throws Exception
+	private void insertQuery(String sqlQuery, SessionDataBean sessionData) throws Exception
 	{
 
 		JDBCDAO jdbcDAO = null;
@@ -958,17 +946,10 @@ public class CaCoreAppServicesDelegator
 						}
 					}
 				}
-				final String sqlForAudiEvent = "insert into catissue_audit_event" +
-						"(IDENTIFIER,IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) " +
-						"values ('"
-						+ no
-						+ "','"
-						+ ipAddr
-						+ "',to_date('"
-						+ timeStamp
-						+ "','yyyy-mm-dd HH24:MI:SS'),'"
-						+ userId + "','" + comments
-						+ "')";
+				final String sqlForAudiEvent = "insert into catissue_audit_event"
+						+ "(IDENTIFIER,IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) "
+						+ "values ('" + no + "','" + ipAddr + "',to_date('" + timeStamp
+						+ "','yyyy-mm-dd HH24:MI:SS'),'" + userId + "','" + comments + "')";
 				this.logger.info("sqlForAuditLog:" + sqlForAudiEvent);
 				jdbcDAO.executeUpdate(sqlForAudiEvent);
 
@@ -991,14 +972,13 @@ public class CaCoreAppServicesDelegator
 						}
 					}
 				}
-				final String sqlForQueryLog = "insert into " +
-						"catissue_audit_event_query_log" +
-						"(IDENTIFIER,QUERY_DETAILS,AUDIT_EVENT_ID) "
-						+ "values (" + queryNo + ",EMPTY_CLOB(),'" + no + "')";
+				final String sqlForQueryLog = "insert into " + "catissue_audit_event_query_log"
+						+ "(IDENTIFIER,QUERY_DETAILS,AUDIT_EVENT_ID) " + "values (" + queryNo
+						+ ",EMPTY_CLOB(),'" + no + "')";
 				jdbcDAO.executeUpdate(sqlForQueryLog);
-				final String sql1 = "select QUERY_DETAILS from " +
-						"catissue_audit_event_query_log where IDENTIFIER="
-						+ queryNo + " for update";
+				final String sql1 = "select QUERY_DETAILS from "
+						+ "catissue_audit_event_query_log where IDENTIFIER=" + queryNo
+						+ " for update";
 				list = jdbcDAO.executeQuery(sql1);
 
 				CLOB clob = null;
@@ -1028,15 +1008,13 @@ public class CaCoreAppServicesDelegator
 			}
 			else
 			{
-				final String sqlForAudiEvent = "insert into catissue_audit_event" +
-						"(IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('"
-						+ ipAddr + "','" + timeStamp + "','" + userId +
-						"','" + comments + "')";
+				final String sqlForAudiEvent = "insert into catissue_audit_event"
+						+ "(IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) values ('" + ipAddr
+						+ "','" + timeStamp + "','" + userId + "','" + comments + "')";
 				jdbcDAO.executeUpdate(sqlForAudiEvent);
 
-				final String sql = "select max(identifier) from catissue_audit_event " +
-						"where USER_ID='"
-						+ userId + "'";
+				final String sql = "select max(identifier) from catissue_audit_event "
+						+ "where USER_ID='" + userId + "'";
 
 				final List list = jdbcDAO.executeQuery(sql);
 
@@ -1053,9 +1031,9 @@ public class CaCoreAppServicesDelegator
 						}
 					}
 				}
-				final String sqlForQueryLog = "insert into catissue_audit_event_query_log" +
-						"(QUERY_DETAILS,AUDIT_EVENT_ID) values ('"
-						+ sqlQuery1 + "','" + no + "')";
+				final String sqlForQueryLog = "insert into catissue_audit_event_query_log"
+						+ "(QUERY_DETAILS,AUDIT_EVENT_ID) values ('" + sqlQuery1 + "','" + no
+						+ "')";
 				this.logger.debug("sqlForQueryLog:" + sqlForQueryLog);
 				jdbcDAO.executeUpdate(sqlForQueryLog);
 				jdbcDAO.commit();
@@ -1081,8 +1059,8 @@ public class CaCoreAppServicesDelegator
 	 * @return returnList return list
 	 * @throws Exception exception
 	 */
-	public List createTargetObjectList(String targetClassName,
-			List<Field> fields, List rows) throws Exception
+	public List createTargetObjectList(String targetClassName, List<Field> fields, List rows)
+			throws Exception
 	{
 		List returnList = new ArrayList();
 		try
@@ -1176,31 +1154,31 @@ public class CaCoreAppServicesDelegator
 		return Integer.valueOf(XMLPropertyHandler
 				.getValue(Constants.MAX_RECORDS_PER_CACORE_QUERY_ALLOWED));
 	}
-	
+
 	/**
-     * register participant   
-     * @param domainObject
-     * @param cpid
-     * @param userName
-     * @return
-     * @throws Exception
-     */
-    public Object delegateRegisterParticipant(Object domainObject, Long cpid,
-            String userName)  throws Exception
-    {
-        try
-        {
-            checkNullObject(domainObject, "Domain Object");
-            ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
-            participantBizLogic.registerParticipant(domainObject, cpid, userName);            
-            logger.info(" Domain Object has been successfully registered " + domainObject);
-        }
-        catch (Exception e)
-        {
-            logger.error("Delegate Add-->" + e.getMessage());
-            throw e;
-        }
-        return domainObject;
-    }
+	 * register participant   
+	 * @param domainObject
+	 * @param cpid
+	 * @param userName
+	 * @return
+	 * @throws Exception
+	 */
+	public Object delegateRegisterParticipant(Object domainObject, Long cpid, String userName)
+			throws Exception
+	{
+		try
+		{
+			this.checkNullObject(domainObject, "Domain Object");
+			final ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
+			participantBizLogic.registerParticipant(domainObject, cpid, userName);
+			this.logger.info(" Domain Object has been successfully registered " + domainObject);
+		}
+		catch (final Exception e)
+		{
+			this.logger.error("Delegate Add-->" + e.getMessage());
+			throw e;
+		}
+		return domainObject;
+	}
 
 }

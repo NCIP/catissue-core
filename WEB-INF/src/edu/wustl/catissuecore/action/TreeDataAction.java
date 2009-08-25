@@ -70,7 +70,7 @@ public class TreeDataAction extends BaseAction
 		try
 		{
 			final String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGE_OF));
-			TreeDataInterface bizLogic = new StorageContainerBizLogic();
+			final TreeDataInterface bizLogic = new StorageContainerBizLogic();
 			Vector dataList = new Vector();
 
 			// Map containerMap = new HashMap(), containerRelationMap = new
@@ -82,7 +82,7 @@ public class TreeDataAction extends BaseAction
 				final String cdeName = request.getParameter(Constants.CDE_NAME);
 				dataList = cdeBizLogic.getTreeViewData(cdeName);
 			}
-			else*/ if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
+			else*/if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_SPECIMEN)
 					|| pageOf.equals(Constants.PAGE_OF_ALIQUOT))

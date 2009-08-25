@@ -73,8 +73,8 @@ public class AddEntity
 			}
 			rs.close();
 
-			sql = "INSERT INTO dyextn_abstract_metadata" +
-				" (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
+			sql = "INSERT INTO dyextn_abstract_metadata"
+					+ " (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
 					+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + entityName + "',null)";
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
@@ -96,8 +96,7 @@ public class AddEntity
 				final int parEId = UpdateMetadataUtil.getEntityIdByName(parentEntity,
 						this.connection.createStatement());
 				sql = "INSERT INTO dyextn_entity values(" + nextIdOfAbstractMetadata + ",3,"
-						+ isAbstract + ","
-						+ parEId + "," + inheritanceStrategy + ",NULL,NULL,1)";
+						+ isAbstract + "," + parEId + "," + inheritanceStrategy + ",NULL,NULL,1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 			}
 

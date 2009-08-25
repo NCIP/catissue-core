@@ -32,9 +32,9 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.util.HibernateMetaData;
@@ -224,7 +224,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getNextForwardTo()
 	{
-		return nextForwardTo;
+		return this.nextForwardTo;
 	}
 
 	public void setNextForwardTo(String nextForwardTo)
@@ -234,7 +234,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getPrintCheckbox()
 	{
-		return printCheckbox;
+		return this.printCheckbox;
 	}
 
 	public void setPrintCheckbox(String printCheckbox)
@@ -244,7 +244,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getCreateCpChildCheckBox()
 	{
-		return createCpChildCheckBox;
+		return this.createCpChildCheckBox;
 	}
 
 	public void setCreateCpChildCheckBox(String createCpChildCheckBox)
@@ -257,7 +257,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getRestrictSCGCheckbox()
 	{
-		return restrictSCGCheckbox;
+		return this.restrictSCGCheckbox;
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 * */
 	public String getParentSpecimenId()
 	{
-		return parentSpecimenId;
+		return this.parentSpecimenId;
 	}
 
 	/**
@@ -295,9 +295,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public void setBiohazardValue(String key, Object value)
 	{
-		if (isMutable())
+		if (this.isMutable())
 		{
-			biohazard.put(key, value);
+			this.biohazard.put(key, value);
 		}
 	}
 
@@ -308,7 +308,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Object getBiohazardValue(String key)
 	{
-		return biohazard.get(key);
+		return this.biohazard.get(key);
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Collection getAllBiohazards()
 	{
-		return biohazard.values();
+		return this.biohazard.values();
 	}
 
 	/**
@@ -340,7 +340,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getPathologicalStatus()
 	{
-		return pathologicalStatus;
+		return this.pathologicalStatus;
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getSpecimenCollectionGroupId()
 	{
-		return specimenCollectionGroupId;
+		return this.specimenCollectionGroupId;
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getTissueSide()
 	{
-		return tissueSide;
+		return this.tissueSide;
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getTissueSite()
 	{
-		return tissueSite;
+		return this.tissueSite;
 	}
 
 	/**
@@ -402,6 +402,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//        super.reset();
@@ -414,7 +415,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getNumberOfSpecimens()
 	{
-		return numberOfSpecimens;
+		return this.numberOfSpecimens;
 	}
 
 	public void setNumberOfSpecimens(String numberOfSpecimens)
@@ -425,6 +426,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	/**
 	 * @return NEW_SPECIMEN_FORM_ID Returns the id assigned to form bean.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.NEW_SPECIMEN_FORM_ID;
@@ -434,70 +436,73 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 * This function Copies the data from an site object to a SiteForm object.
 	 * @param abstractDomain An object containing the information about site.  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 
-		Specimen specimen = (Specimen) abstractDomain;
+		final Specimen specimen = (Specimen) abstractDomain;
 
 		this.parentPresent = false;
-		AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen
+		final AbstractSpecimenCollectionGroup absspecimenCollectionGroup = specimen
 				.getSpecimenCollectionGroup();
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) HibernateMetaData
+		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) HibernateMetaData
 				.getProxyObjectImpl(absspecimenCollectionGroup);
 
 		if (specimenCollectionGroup != null)
 		{
-			this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
+			this.specimenCollectionGroupId = CommonUtilities.toString(specimenCollectionGroup
+					.getId());
 			/**For Migration Start**/
-			this.specimenCollectionGroupName = Utility.toString(specimenCollectionGroup.getName());
+			this.specimenCollectionGroupName = CommonUtilities.toString(specimenCollectionGroup
+					.getName());
 			/**For Migration End**/
 		}
 		if (specimen.getParentSpecimen() != null)
 		{
 			logger.debug("ParentSpecimen : -- " + specimen.getParentSpecimen());
 			this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
-			this.parentSpecimenName = Utility.toString(((Specimen) specimen.getParentSpecimen())
-					.getLabel());
+			this.parentSpecimenName = CommonUtilities.toString(((Specimen) specimen
+					.getParentSpecimen()).getLabel());
 			this.parentPresent = true;
 		}
 
 		//    	this.aliquot = specimen.getIsAliquot().booleanValue();
 
-		SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
+		final SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
 		this.pathologicalStatus = specimen.getPathologicalStatus();
 		this.tissueSide = characteristic.getTissueSide();
 		this.tissueSite = characteristic.getTissueSite();
 		this.lineage = specimen.getLineage();
 
-		Collection biohazardCollection = specimen.getBiohazardCollection();
-		bhCounter = 1;
+		final Collection biohazardCollection = specimen.getBiohazardCollection();
+		this.bhCounter = 1;
 
 		if (biohazardCollection != null && biohazardCollection.size() != 0)
 		{
-			biohazard = new HashMap();
+			this.biohazard = new HashMap();
 
 			int i = 1;
 
-			Iterator it = biohazardCollection.iterator();
+			final Iterator it = biohazardCollection.iterator();
 			while (it.hasNext())
 			{
-				String key1 = "Biohazard:" + i + "_type";
-				String key2 = "Biohazard:" + i + "_id";
-				String key3 = "Biohazard:" + i + "_persisted";
+				final String key1 = "Biohazard:" + i + "_type";
+				final String key2 = "Biohazard:" + i + "_id";
+				final String key3 = "Biohazard:" + i + "_persisted";
 
-				Biohazard hazard = (Biohazard) it.next();
+				final Biohazard hazard = (Biohazard) it.next();
 
-				biohazard.put(key1, hazard.getType());
-				biohazard.put(key2, hazard.getId());
+				this.biohazard.put(key1, hazard.getType());
+				this.biohazard.put(key2, hazard.getId());
 
 				//boolean for showing persisted value
-				biohazard.put(key3, "true");
+				this.biohazard.put(key3, "true");
 
 				i++;
 			}
 
-			bhCounter = biohazardCollection.size();
+			this.bhCounter = biohazardCollection.size();
 		}
 		//        
 		//        if(abstractDomain instanceof AliquotSpecimen)
@@ -509,7 +514,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		/**
 		 * For Consent Tracking setting UI attributes (Virender Mehta)
 		 */
-		User witness = specimenCollectionGroup.getCollectionProtocolRegistration()
+		final User witness = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getConsentWitness();
 		if (witness == null || witness.getFirstName() == null)
 		{
@@ -517,14 +522,14 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		}
 		else
 		{
-			this.witnessName = Utility.toString(witness.getFirstName());
+			this.witnessName = CommonUtilities.toString(witness.getFirstName());
 		}
-		this.signedConsentUrl = Utility.toString(specimenCollectionGroup
+		this.signedConsentUrl = CommonUtilities.toString(specimenCollectionGroup
 				.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		this.consentDate = Utility.parseDateToString(specimenCollectionGroup
+		this.consentDate = CommonUtilities.parseDateToString(specimenCollectionGroup
 				.getCollectionProtocolRegistration().getConsentSignatureDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
-		this.collectionStatus = Utility.toString(specimen.getCollectionStatus());
+		this.collectionStatus = CommonUtilities.toString(specimen.getCollectionStatus());
 	}
 
 	/**
@@ -548,7 +553,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getBiohazardName()
 	{
-		return biohazardName;
+		return this.biohazardName;
 	}
 
 	/**
@@ -565,10 +570,11 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -577,7 +583,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 			{
 				if (this.getOperation().equals(Constants.EDIT))
 				{
-					if (collectionStatus.trim().length() <= 0)
+					if (this.collectionStatus.trim().length() <= 0)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
@@ -585,8 +591,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 					}
 				}
 				/**For Migration Start**/
-				if (specimenCollectionGroupName != null
-						&& specimenCollectionGroupName.trim().equals(""))
+				if (this.specimenCollectionGroupName != null
+						&& this.specimenCollectionGroupName.trim().equals(""))
 				{
 					errors
 							.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -598,25 +604,25 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 				//             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown", ApplicationProperties.getValue("specimen.specimenCollectionGroup")));
 				//             	}
 				/**For Migration End**/
-				if (parentPresent && !validator.isValidOption(parentSpecimenName))
+				if (this.parentPresent && !validator.isValidOption(this.parentSpecimenName))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("createSpecimen.parent")));
 				}
 
-				if (tissueSite.equals("-1"))
+				if (this.tissueSite.equals("-1"))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.tissueSite")));
 				}
 
-				if (tissueSide.equals("-1"))
+				if (this.tissueSide.equals("-1"))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.tissueSide")));
 				}
 
-				if (pathologicalStatus.equals("-1"))
+				if (this.pathologicalStatus.equals("-1"))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.pathologicalStatus")));
@@ -626,32 +632,34 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 				if (this.getOperation().equalsIgnoreCase(Constants.ADD))
 				{
 					//             		Time validation
-					String collectionTime = this.collectionEventTimeInHours + ":"
+					final String collectionTime = this.collectionEventTimeInHours + ":"
 							+ this.collectionEventTimeInMinutes + ":00";
-					String receivedTime = this.receivedEventTimeInHours + ":"
+					final String receivedTime = this.receivedEventTimeInHours + ":"
 							+ this.receivedEventTimeInMinutes + ":00";
 					//CollectionEvent validation.
-					EventsUtil.validateCollectionEvent(errors, validator, collectionEventUserId,
-							collectionEventdateOfEvent, collectionEventCollectionProcedure,
-							collectionTime);
+					EventsUtil.validateCollectionEvent(errors, validator,
+							this.collectionEventUserId, this.collectionEventdateOfEvent,
+							this.collectionEventCollectionProcedure, collectionTime);
 					//ReceivedEvent validation
-					EventsUtil.validateReceivedEvent(errors, validator, receivedEventUserId,
-							receivedEventDateOfEvent, receivedEventReceivedQuality, receivedTime);
+					EventsUtil.validateReceivedEvent(errors, validator, this.receivedEventUserId,
+							this.receivedEventDateOfEvent, this.receivedEventReceivedQuality,
+							receivedTime);
 				}
 				//Validation for aliquot quantity, resolved bug# 4040 (Virender)	
-				if (checkedButton)
+				if (this.checkedButton)
 				{
-					if (!validator.isNumeric(noOfAliquots, 1))
+					if (!validator.isNumeric(this.noOfAliquots, 1))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("aliquots.noOfAliquots")));
 					}
 
-					if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
+					if (this.quantityPerAliquot != null
+							&& this.quantityPerAliquot.trim().length() != 0)
 					{
-						if (AppUtility.isQuantityDouble(className, type))
+						if (AppUtility.isQuantityDouble(this.className, this.type))
 						{
-							if (!validator.isDouble(quantityPerAliquot.trim(), true))
+							if (!validator.isDouble(this.quantityPerAliquot.trim(), true))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -660,7 +668,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 						}
 						else
 						{
-							if (!validator.isNumeric(quantityPerAliquot.trim(), 1))
+							if (!validator.isNumeric(this.quantityPerAliquot.trim(), 1))
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
@@ -670,10 +678,10 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 					}
 				}
 
-				if (derivedClicked)
+				if (this.derivedClicked)
 				{
 					//For Derived Specimen             	
-					if (!validator.isNumeric(numberOfSpecimens, 1))
+					if (!validator.isNumeric(this.numberOfSpecimens, 1))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("aliquots.derivedCount")));
@@ -681,21 +689,21 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 				}
 
 				//Validations for Biohazard Add-More Block
-				String className = "Biohazard:";
-				String key1 = "_type";
-				String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
-				String key3 = "_persisted";
+				final String className = "Biohazard:";
+				final String key1 = "_type";
+				final String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
+				final String key3 = "_persisted";
 				int index = 1;
 
 				while (true)
 				{
-					String keyOne = className + index + key1;
-					String keyTwo = className + index + key2;
-					String keyThree = className + index + key3;
+					final String keyOne = className + index + key1;
+					final String keyTwo = className + index + key2;
+					final String keyThree = className + index + key3;
 
-					String value1 = (String) biohazard.get(keyOne);
-					String value2 = (String) biohazard.get(keyTwo);
-					String value3 = (String) biohazard.get(keyThree);
+					final String value1 = (String) this.biohazard.get(keyOne);
+					final String value2 = (String) this.biohazard.get(keyTwo);
+					final String value3 = (String) this.biohazard.get(keyThree);
 
 					if (value1 == null && value2 == null && value3 == null)
 					{
@@ -703,9 +711,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 					}
 					else if (!validator.isValidOption(value1) && !validator.isValidOption(value2))
 					{
-						biohazard.remove(keyOne);
-						biohazard.remove(keyTwo);
-						biohazard.remove(keyThree);
+						this.biohazard.remove(keyOne);
+						this.biohazard.remove(keyTwo);
+						this.biohazard.remove(keyThree);
 					}
 					else if ((validator.isValidOption(value1) && !validator.isValidOption(value2))
 							|| (!validator.isValidOption(value1) && validator.isValidOption(value2)))
@@ -723,7 +731,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -735,7 +743,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public int getBhCounter()
 	{
-		return bhCounter;
+		return this.bhCounter;
 	}
 
 	/**
@@ -751,7 +759,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public boolean isParentPresent()
 	{
-		return parentPresent;
+		return this.parentPresent;
 	}
 
 	/**
@@ -767,7 +775,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getSpecimenEventParameter()
 	{
-		return specimenEventParameter;
+		return this.specimenEventParameter;
 	}
 
 	/**
@@ -783,13 +791,14 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 * @param addNewFor - FormBean ID of the object inserted
 	 * @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if (addNewFor.equals("specimenCollectionGroupId"))
 		{
 			logger.debug("Setting SCG ID in NewSpecimenForm#####" + addObjectIdentifier);
 
-			setSpecimenCollectionGroupId(addObjectIdentifier.toString());
+			this.setSpecimenCollectionGroupId(addObjectIdentifier.toString());
 		}
 	}
 
@@ -800,7 +809,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getNoOfAliquots()
 	{
-		return noOfAliquots;
+		return this.noOfAliquots;
 	}
 
 	/**
@@ -820,7 +829,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getQuantityPerAliquot()
 	{
-		return quantityPerAliquot;
+		return this.quantityPerAliquot;
 	}
 
 	/**
@@ -840,7 +849,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public boolean isCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -857,7 +866,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public boolean isDerivedClicked()
 	{
-		return derivedClicked;
+		return this.derivedClicked;
 	}
 
 	public void setDerivedClicked(boolean derivedClicked)
@@ -870,7 +879,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventCollectionProcedure()
 	{
-		return collectionEventCollectionProcedure;
+		return this.collectionEventCollectionProcedure;
 	}
 
 	/**
@@ -886,7 +895,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventComments()
 	{
-		return collectionEventComments;
+		return this.collectionEventComments;
 	}
 
 	/**
@@ -902,7 +911,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventContainer()
 	{
-		return collectionEventContainer;
+		return this.collectionEventContainer;
 	}
 
 	/**
@@ -918,7 +927,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventdateOfEvent()
 	{
-		return collectionEventdateOfEvent;
+		return this.collectionEventdateOfEvent;
 	}
 
 	/**
@@ -934,7 +943,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getCollectionEventSpecimenId()
 	{
-		return collectionEventSpecimenId;
+		return this.collectionEventSpecimenId;
 	}
 
 	/**
@@ -950,7 +959,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getCollectionEventId()
 	{
-		return collectionEventId;
+		return this.collectionEventId;
 	}
 
 	/**
@@ -966,7 +975,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventTimeInHours()
 	{
-		return collectionEventTimeInHours;
+		return this.collectionEventTimeInHours;
 	}
 
 	/**
@@ -982,7 +991,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getCollectionEventTimeInMinutes()
 	{
-		return collectionEventTimeInMinutes;
+		return this.collectionEventTimeInMinutes;
 	}
 
 	/**
@@ -998,7 +1007,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getCollectionEventUserId()
 	{
-		return collectionEventUserId;
+		return this.collectionEventUserId;
 	}
 
 	/**
@@ -1020,7 +1029,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getReceivedEventComments()
 	{
-		return receivedEventComments;
+		return this.receivedEventComments;
 	}
 
 	/**
@@ -1036,7 +1045,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getReceivedEventDateOfEvent()
 	{
-		return receivedEventDateOfEvent;
+		return this.receivedEventDateOfEvent;
 	}
 
 	/**
@@ -1052,7 +1061,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getReceivedEventReceivedQuality()
 	{
-		return receivedEventReceivedQuality;
+		return this.receivedEventReceivedQuality;
 	}
 
 	/**
@@ -1068,7 +1077,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getReceivedEventSpecimenId()
 	{
-		return receivedEventSpecimenId;
+		return this.receivedEventSpecimenId;
 	}
 
 	/**
@@ -1084,7 +1093,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getReceivedEventId()
 	{
-		return receivedEventId;
+		return this.receivedEventId;
 	}
 
 	/**
@@ -1100,7 +1109,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getReceivedEventTimeInHours()
 	{
-		return receivedEventTimeInHours;
+		return this.receivedEventTimeInHours;
 	}
 
 	/**
@@ -1116,7 +1125,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getReceivedEventTimeInMinutes()
 	{
-		return receivedEventTimeInMinutes;
+		return this.receivedEventTimeInMinutes;
 	}
 
 	/**
@@ -1132,7 +1141,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public long getReceivedEventUserId()
 	{
-		return receivedEventUserId;
+		return this.receivedEventUserId;
 	}
 
 	/**
@@ -1154,7 +1163,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getLineage()
 	{
-		return lineage;
+		return this.lineage;
 	}
 
 	/**
@@ -1174,7 +1183,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getSpecimenCollectionGroupName()
 	{
-		return specimenCollectionGroupName;
+		return this.specimenCollectionGroupName;
 	}
 
 	/**
@@ -1191,7 +1200,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public int getNumberOfSpecimen()
 	{
-		return numberOfSpecimen;
+		return this.numberOfSpecimen;
 	}
 
 	/**
@@ -1208,7 +1217,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getParentSpecimenName()
 	{
-		return parentSpecimenName;
+		return this.parentSpecimenName;
 	}
 
 	/**
@@ -1225,7 +1234,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Map getConsentResponseForSpecimenValues()
 	{
-		return consentResponseForSpecimenValues;
+		return this.consentResponseForSpecimenValues;
 	}
 
 	/**
@@ -1242,8 +1251,10 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public void setConsentResponseForSpecimenValue(String key, Object value)
 	{
-		if (isMutable())
-			consentResponseForSpecimenValues.put(key, value);
+		if (this.isMutable())
+		{
+			this.consentResponseForSpecimenValues.put(key, value);
+		}
 	}
 
 	/**
@@ -1252,7 +1263,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Object getConsentResponseForSpecimenValue(String key)
 	{
-		return consentResponseForSpecimenValues.get(key);
+		return this.consentResponseForSpecimenValues.get(key);
 	}
 
 	/**
@@ -1260,7 +1271,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Collection getAllConsentResponseForSpecimenValue()
 	{
-		return consentResponseForSpecimenValues.values();
+		return this.consentResponseForSpecimenValues.values();
 	}
 
 	/**
@@ -1268,7 +1279,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getConsentDate()
 	{
-		return consentDate;
+		return this.consentDate;
 	}
 
 	/**
@@ -1284,7 +1295,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public int getConsentTierCounter()
 	{
-		return consentTierCounter;
+		return this.consentTierCounter;
 	}
 
 	/**
@@ -1300,7 +1311,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getSignedConsentUrl()
 	{
-		return signedConsentUrl;
+		return this.signedConsentUrl;
 	}
 
 	/**
@@ -1316,7 +1327,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getWitnessName()
 	{
-		return witnessName;
+		return this.witnessName;
 	}
 
 	/**
@@ -1333,7 +1344,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getWithdrawlButtonStatus()
 	{
-		return withdrawlButtonStatus;
+		return this.withdrawlButtonStatus;
 	}
 
 	/**
@@ -1350,7 +1361,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getApplyChangesTo()
 	{
-		return applyChangesTo;
+		return this.applyChangesTo;
 	}
 
 	/**
@@ -1366,7 +1377,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public String getStringOfResponseKeys()
 	{
-		return stringOfResponseKeys;
+		return this.stringOfResponseKeys;
 	}
 
 	/**
@@ -1383,9 +1394,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	 */
 	public Collection getConsentTiers()
 	{
-		Collection consentTiersList = new ArrayList();
+		final Collection consentTiersList = new ArrayList();
 		String[] strArray = null;
-		int noOfConsents = this.getConsentTierCounter();
+		final int noOfConsents = this.getConsentTierCounter();
 		for (int counter = 0; counter < noOfConsents; counter++)
 		{
 			strArray = new String[6];
@@ -1418,7 +1429,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getCollectionStatus()
 	{
-		return collectionStatus;
+		return this.collectionStatus;
 	}
 
 	public void setCollectionStatus(String collectionStatus)
@@ -1428,7 +1439,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getPrinterLocation()
 	{
-		return printerLocation;
+		return this.printerLocation;
 	}
 
 	public void setPrinterLocation(String printerLocation)
@@ -1438,7 +1449,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 
 	public String getPrinterType()
 	{
-		return printerType;
+		return this.printerType;
 	}
 
 	public void setPrinterType(String printerType)

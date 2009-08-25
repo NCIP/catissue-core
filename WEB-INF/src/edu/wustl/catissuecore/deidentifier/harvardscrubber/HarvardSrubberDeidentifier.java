@@ -29,45 +29,50 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.global.CommonUtilities;
+
 /**
  * @author
  *
  */
 public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 {
+
 	/**
 	 * scrubber.
 	 */
 	private static Scrubber scrubber;
+
 	/**
 	 * @param identifiedReport : identifiedReport
 	 * @throws Exception : Exception
 	 * @return DeidentifiedSurgicalPathologyReport
 	 */
+	@Override
 	public DeidentifiedSurgicalPathologyReport deidentify(
 			IdentifiedSurgicalPathologyReport identifiedReport) throws Exception
 	{
 		String scrubbed;
 		synchronized (scrubber)
 		{
-			File fileTosScrub = getFileToScrub(identifiedReport);
+			final File fileTosScrub = this.getFileToScrub(identifiedReport);
 			scrubbed = scrubber.scrub(fileTosScrub);
 			fileTosScrub.delete();
 		}
 
-		String deidReportText = Utility.extractReport(scrubbed, CaTIESProperties
+		final String deidReportText = Utility.extractReport(scrubbed, CaTIESProperties
 				.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME),
 				CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
 
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport
-		= new DeidentifiedSurgicalPathologyReport();
-		TextContent textContent = new TextContent();
+		final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
+		final TextContent textContent = new TextContent();
 		textContent.setData(deidReportText);
 		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
 
 		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
 		return deidentifiedSurgicalPathologyReport;
 	}
+
 	/**
 	 * @param identifiedReport : identifiedReport
 	 * @return : File
@@ -76,67 +81,72 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 	private File getFileToScrub(IdentifiedSurgicalPathologyReport identifiedReport)
 			throws Exception
 	{
-		org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(
+		final org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element(
 				CaTIESConstants.TAG_ENVELOPE));
-		Element reportHeader = buildReportHeader(identifiedReport);
+		final Element reportHeader = this.buildReportHeader(identifiedReport);
 		currentRequestDocument.getRootElement().addContent(reportHeader);
 
-		DocType docType = new DocType("HarvardScrubber", "file:///"
+		final DocType docType = new DocType("HarvardScrubber", "file:///"
 				+ CaTIESProperties.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME));
 
 		currentRequestDocument.setDocType(docType);
 
-		Element reportBody = buildReportBody(identifiedReport);
+		final Element reportBody = this.buildReportBody(identifiedReport);
 		currentRequestDocument.getRootElement().addContent(reportBody);
 
-		File fileTosScrub = new File("fileTosScrub.xml");
-		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileTosScrub));
+		final File fileTosScrub = new File("fileTosScrub.xml");
+		final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileTosScrub));
 		bufferedWriter.write(Utility.convertDocumentToString(currentRequestDocument, Format
 				.getPrettyFormat()));
 		bufferedWriter.close();
 
 		return fileTosScrub;
 	}
+
 	/**
 	 * @throws Exception : Exception
 	 */
+	@Override
 	public void initialize() throws Exception
 	{
-		JDOMTools jdom = new JDOMTools();
-		File configurationFile = new File(CaTIESProperties
+		final JDOMTools jdom = new JDOMTools();
+		final File configurationFile = new File(CaTIESProperties
 				.getValue(CaTIESConstants.HARVARD_SCRUBBER_CONFIG_FILENAME));
 		jdom.buildDoc(configurationFile);
-		Document document = jdom.getDocument();
+		final Document document = jdom.getDocument();
 		scrubber = ScrubberBuilder.makeScrubber(document);
 		scrubber.init();
 	}
+
 	/**
 	 * @throws Exception : Exception
 	 */
+	@Override
 	public void shutdown() throws Exception
 	{
 		scrubber.shutdown();
 	}
+
 	/**
 	 * @param identifiedReport : identifiedReport
 	 * @return Element
 	 */
 	private Element buildReportBody(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
-		Participant participant = identifiedReport.getSpecimenCollectionGroup()
+		final Participant participant = identifiedReport.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getParticipant();
 
-		Element body = new Element(CaTIESConstants.TAG_BODY);
-		Element pathologyCase = new Element(CaTIESConstants.TAG_PATHOLOGY_CASE);
+		final Element body = new Element(CaTIESConstants.TAG_BODY);
+		final Element pathologyCase = new Element(CaTIESConstants.TAG_PATHOLOGY_CASE);
 		pathologyCase.setAttribute(CaTIESConstants.TAG_TISSUE_ACQUISITION_DATE, identifiedReport
 				.getCollectionDateTime().toString());
 
-		Element codes = getElement(CaTIESConstants.TAG_CODES, null);
-		Element clinical = new Element(CaTIESConstants.TAG_CLINICAL);
-		Element patient = new Element(CaTIESConstants.TAG_PATIENT);
-		Element age = new Element(CaTIESConstants.TAG_AGE);
+		final Element codes = this.getElement(CaTIESConstants.TAG_CODES, null);
+		final Element clinical = new Element(CaTIESConstants.TAG_CLINICAL);
+		final Element patient = new Element(CaTIESConstants.TAG_PATIENT);
+		final Element age = new Element(CaTIESConstants.TAG_AGE);
 
-		Date birthDate = participant.getBirthDate();
+		final Date birthDate = participant.getBirthDate();
 		int ageOfParticipant = 0;
 		if (birthDate != null)
 		{
@@ -157,15 +167,15 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		{
 			genderOfParticipant = "U";
 		}
-		Element gender = getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
-		List<Element> patientChild = new ArrayList<Element>();
+		final Element gender = this.getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
+		final List<Element> patientChild = new ArrayList<Element>();
 		patientChild.add(age);
 		patientChild.add(gender);
 
 		patient.setContent(patientChild);
 		clinical.setContent(patient);
 
-		Element fullReportText = new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
+		final Element fullReportText = new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
 		CDATA reportText = new CDATA("");
 		if (identifiedReport.getTextContent() != null)
 		{
@@ -173,7 +183,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		}
 		fullReportText.setContent(reportText);
 
-		List<Element> pathologyCaseChild = new ArrayList<Element>();
+		final List<Element> pathologyCaseChild = new ArrayList<Element>();
 		pathologyCaseChild.add(codes);
 		pathologyCaseChild.add(clinical);
 		pathologyCaseChild.add(fullReportText);
@@ -182,36 +192,40 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		body.addContent(pathologyCase);
 		return body;
 	}
+
 	/**
 	 * @param identifiedReport : identifiedReport
 	 * @return Element
 	 */
 	private Element buildReportHeader(final IdentifiedSurgicalPathologyReport identifiedReport)
 	{
-		Participant participant = identifiedReport.getSpecimenCollectionGroup()
+		final Participant participant = identifiedReport.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getParticipant();
 
-		Element header = new Element(CaTIESConstants.TAG_HEADER);
-		Element identifier = new Element(CaTIESConstants.TAG_IDENTIFIERS);
+		final Element header = new Element(CaTIESConstants.TAG_HEADER);
+		final Element identifier = new Element(CaTIESConstants.TAG_IDENTIFIERS);
 
-		Element firstName = getElement(CaTIESConstants.TAG_FIRST_NAME, participant.getFirstName());
-		Element lastName = getElement(CaTIESConstants.TAG_LAST_NAME, participant.getLastName());
-		Element dateOfBirth = getElement(CaTIESConstants.TAG_DATE_OF_BIRTH,
-				edu.wustl.common.util.Utility.toString(participant.getBirthDate()));
-		Element ssn = getElement(CaTIESConstants.TAG_SSN, participant.getSocialSecurityNumber());
-		Element accessionNumber = getElement(CaTIESConstants.TAG_ACCESSION_NUMBER, identifiedReport
-				.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
-		Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
+		final Element firstName = this.getElement(CaTIESConstants.TAG_FIRST_NAME, participant
+				.getFirstName());
+		final Element lastName = this.getElement(CaTIESConstants.TAG_LAST_NAME, participant
+				.getLastName());
+		final Element dateOfBirth = this.getElement(CaTIESConstants.TAG_DATE_OF_BIRTH,
+				CommonUtilities.toString(participant.getBirthDate()));
+		final Element ssn = this.getElement(CaTIESConstants.TAG_SSN, participant
+				.getSocialSecurityNumber());
+		final Element accessionNumber = this.getElement(CaTIESConstants.TAG_ACCESSION_NUMBER,
+				identifiedReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
+		final Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = participant
 				.getParticipantMedicalIdentifierCollection();
-		List<Element> localMRNList = new ArrayList<Element>();
-		for (ParticipantMedicalIdentifier pmi : participantMedicalIdentifierCollection)
+		final List<Element> localMRNList = new ArrayList<Element>();
+		for (final ParticipantMedicalIdentifier pmi : participantMedicalIdentifierCollection)
 		{
-			Element localMRN = getElement(CaTIESConstants.TAG_LOCALMRN, pmi
+			final Element localMRN = this.getElement(CaTIESConstants.TAG_LOCALMRN, pmi
 					.getMedicalRecordNumber());
 			localMRNList.add(localMRN);
 		}
-		Element source = getElement(CaTIESConstants.TAG_SOURCE, identifiedReport.getReportSource()
-				.getName());
+		final Element source = this.getElement(CaTIESConstants.TAG_SOURCE, identifiedReport
+				.getReportSource().getName());
 
 		identifier.addContent(firstName);
 		identifier.addContent(lastName);
@@ -224,6 +238,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 
 		return header;
 	}
+
 	/**
 	 * @param elementName : elementName
 	 * @param value : value
@@ -231,7 +246,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 	 */
 	private Element getElement(String elementName, String value)
 	{
-		Element element = new Element(elementName);
+		final Element element = new Element(elementName);
 		element.setText(value);
 		return element;
 	}

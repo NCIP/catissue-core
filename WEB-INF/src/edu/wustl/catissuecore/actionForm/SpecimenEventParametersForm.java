@@ -25,6 +25,10 @@ import edu.wustl.common.domain.AbstractDomainObject;
 public abstract class SpecimenEventParametersForm extends EventParametersForm
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1203936563003265664L;
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
@@ -39,7 +43,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	 */
 	public long getSpecimenId()
 	{
-		return specimenId;
+		return this.specimenId;
 	}
 
 	/**
@@ -53,6 +57,7 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//	 	super.reset();
@@ -63,15 +68,16 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	  * Populates all the fields from the domain object to the form bean.
 	  * @param abstractDomain An AbstractDomain Object  
 	  */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 
-		SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) abstractDomain;
+		final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) abstractDomain;
 
 		if (specimenEventParameters.getSpecimen() != null)
 		{
-			specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+			this.specimenId = specimenEventParameters.getSpecimen().getId().longValue();
 		}
 	}
 
@@ -81,11 +87,12 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	* @param mapping Actionmapping instance
 	* @param request HttpServletRequest instance
 	*/
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
+		final ActionErrors errors = super.validate(mapping, request);
 
-		if (specimenId == -1L)
+		if (this.specimenId == -1L)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					"Specimen Id"));

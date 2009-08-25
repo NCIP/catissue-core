@@ -61,45 +61,42 @@ public class ApplyButtonActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
-		SpecimenArrayTable arrayTable = (SpecimenArrayTable) table;
-		JApplet applet = CommonAppletUtil.getBaseApplet(arrayTable);
+		final SpecimenArrayTable arrayTable = (SpecimenArrayTable) this.table;
+		final JApplet applet = CommonAppletUtil.getBaseApplet(arrayTable);
 
 		if (applet instanceof SpecimenArrayApplet)
 		{
-			SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) applet;
-			String conc = arrayApplet.getConcentrationTextField().getText();
-			String quantity = arrayApplet.getQuantityTextField().getText();
+			final SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) applet;
+			final String conc = arrayApplet.getConcentrationTextField().getText();
+			final String quantity = arrayApplet.getQuantityTextField().getText();
 			//Validator validator = new Validator();
 
 			if ((!CommonAppletUtil.isDoubleNumeric(conc))
 					|| (!CommonAppletUtil.isDoubleNumeric(quantity)))
 			{
-				JFrame frame = new JFrame();
+				final JFrame frame = new JFrame();
 				JOptionPane.showMessageDialog(frame,
 						"Please enter valid numeric value for concentration & quantity",
 						"Invalid Numeric Value", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
-			int[] rows = arrayTable.getSelectedRows();
-			int[] columns = arrayTable.getSelectedColumns();
-			SpecimenArrayTableModel model = (SpecimenArrayTableModel) arrayTable.getModel();
+			final int[] rows = arrayTable.getSelectedRows();
+			final int[] columns = arrayTable.getSelectedColumns();
+			final SpecimenArrayTableModel model = (SpecimenArrayTableModel) arrayTable.getModel();
 			String concKey = null;
 			String quantityKey = null;
-			Map modelMap = model.getSpecimenArrayModelMap();
+			final Map modelMap = model.getSpecimenArrayModelMap();
 
-			for (int i = 0; i < rows.length; i++)
+			for (final int row : rows)
 			{
-				for (int j = 0; j < columns.length; j++)
+				for (final int column : columns)
 				{
-					concKey = SpecimenArrayAppletUtil.getArrayMapKey(rows[i], columns[j], model
-							.getColumnCount(), AppletConstants.
-							ARRAY_CONTENT_ATTR_CONC_INDEX);
+					concKey = SpecimenArrayAppletUtil.getArrayMapKey(row, column, model
+							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX);
 					modelMap.put(concKey, conc);
-					quantityKey = SpecimenArrayAppletUtil.getArrayMapKey(rows[i],
-							columns[j], model
-							.getColumnCount(), AppletConstants.
-							ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
+					quantityKey = SpecimenArrayAppletUtil.getArrayMapKey(row, column, model
+							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX);
 					modelMap.put(quantityKey, quantity);
 					/*				System.out.println(" rows [" + i + "] :
 					 * : " + rows[i]);

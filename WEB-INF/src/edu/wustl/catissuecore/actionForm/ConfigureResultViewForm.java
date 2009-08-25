@@ -37,7 +37,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public Long getDistributionId()
 	{
-		return distributionId;
+		return this.distributionId;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public String[] getColumnNames()
 	{
-		return columnNames;
+		return this.columnNames;
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public String[] getSelectedColumnNames()
 	{
-		return selectedColumnNames;
+		return this.selectedColumnNames;
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public String getTableName()
 	{
-		return tableName;
+		return this.tableName;
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public String getNextAction()
 	{
-		return nextAction;
+		return this.nextAction;
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class ConfigureResultViewForm extends ActionForm
 	 */
 	public boolean isReportAction()
 	{
-		return reportAction;
+		return this.reportAction;
 	}
 
 	/**

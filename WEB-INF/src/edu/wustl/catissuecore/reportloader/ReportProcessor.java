@@ -24,7 +24,7 @@ public class ReportProcessor implements Observer
 	/**
 	 * Logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(ReportProcessor.class);
+	private transient final Logger logger = Logger.getCommonLogger(ReportProcessor.class);
 	/**
 	 * Represents parser manager.
 	 */
@@ -94,18 +94,15 @@ public class ReportProcessor implements Observer
 						final Long startTime = new Date().getTime();
 						this.parser.parse(this.inputFileDir + File.separator + file);
 						final Long endTime = new Date().getTime();
-						this.logger.info("parsing of file " + file
-								+ " finished. Time required:"
+						this.logger.info("parsing of file " + file + " finished. Time required:"
 								+ (endTime - startTime));
 					}
 					else
 					{
-						this.logger
-							.info("Bad file found." +
-								" Moving file to bad files directory. Filename:"
-							+ this.inputFileDir + File.separator + file);
-						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,
-								"Bad file found "
+						this.logger.info("Bad file found."
+								+ " Moving file to bad files directory. Filename:"
+								+ this.inputFileDir + File.separator + file);
+						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "Bad file found "
 								+ this.inputFileDir + File.separator + file);
 						this.moveToBadFileDir(file);
 					}

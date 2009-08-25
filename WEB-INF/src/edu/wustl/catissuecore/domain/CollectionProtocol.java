@@ -79,8 +79,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Collection of CollectionProtocol associated with the Parent
 	 * CollectionProtocol.
 	 */
-	protected Collection<CollectionProtocol> childCollectionProtocolCollection
-	= new LinkedHashSet<CollectionProtocol>();
+	protected Collection<CollectionProtocol> childCollectionProtocolCollection = new LinkedHashSet<CollectionProtocol>();
 
 	/**
 	 * Parent Collection Protocol.
@@ -196,7 +195,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * @param form
 	 *            This is abstract action form
 	 */
-	public CollectionProtocol(AbstractActionForm form)throws AssignDataException
+	public CollectionProtocol(AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);

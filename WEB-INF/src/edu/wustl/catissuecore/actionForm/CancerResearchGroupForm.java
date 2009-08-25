@@ -59,8 +59,8 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) abstractDomain;
-		setId(cancerResearchGroup.getId().longValue());
+		final CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) abstractDomain;
+		this.setId(cancerResearchGroup.getId().longValue());
 		this.name = cancerResearchGroup.getName();
 	}
 
@@ -86,15 +86,17 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	 * Checks the operation to be performed is add operation.
 	 * @return Returns true if operation is equal to "add", else it returns false
 	 * */
+	@Override
 	public boolean isAddOperation()
 	{
-		return getOperation().equals(Constants.ADD);
+		return this.getOperation().equals(Constants.ADD);
 	}
 
 	/**
 	 * Returns the id assigned to form bean
 	 * @return CANCER_RESEARCH_GROUP_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.CANCER_RESEARCH_GROUP_FORM_ID;
@@ -104,6 +106,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 	}
@@ -114,19 +117,20 @@ public class CancerResearchGroupForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 		try
 		{
-			if (validator.isEmpty(name))
+			if (Validator.isEmpty(this.name))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("cancerResearchGroup.name")));
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}

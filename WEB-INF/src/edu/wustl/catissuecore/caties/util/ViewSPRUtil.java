@@ -25,6 +25,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.CommonUtilities;
+
 /**
  * @author
  *
@@ -41,37 +43,36 @@ public class ViewSPRUtil
 			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 			throws BizLogicException
 	{
-		List conceptBeanList = new ArrayList();
+		final List conceptBeanList = new ArrayList();
 		if (deidentifiedSurgicalPathologyReport != null)
 		{
-			DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
-			Collection conceptReferentColl = (Set) defaultBizLogic.retrieveAttribute(
+			final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+			final Collection conceptReferentColl = (Set) defaultBizLogic.retrieveAttribute(
 					DeidentifiedSurgicalPathologyReport.class.getName(),
 					deidentifiedSurgicalPathologyReport.getId(),
 					Constants.COLUMN_NAME_CONCEPT_REF_COLL);
 			//temporary map to make a list of concept referent classification objects
-			Map tempMap = new HashMap();
+			final Map tempMap = new HashMap();
 			if (conceptReferentColl != null)
 			{
-				Iterator iter = conceptReferentColl.iterator();
+				final Iterator iter = conceptReferentColl.iterator();
 				while (iter.hasNext())
 				{
-					ConceptReferent conceptReferent = (ConceptReferent) iter.next();
-					ConceptReferentClassification conceptReferentClassification =
-						conceptReferent.getConceptReferentClassification();
+					final ConceptReferent conceptReferent = (ConceptReferent) iter.next();
+					final ConceptReferentClassification conceptReferentClassification = conceptReferent
+							.getConceptReferentClassification();
 					ConceptHighLightingBean conceptHighLightingBean = null;
-					if (tempMap.get(conceptReferentClassification.
-							getName().toUpperCase()) == null)
+					if (tempMap.get(conceptReferentClassification.getName().toUpperCase()) == null)
 					{ // if concept classification obj is not present in the list
 						conceptHighLightingBean = new ConceptHighLightingBean();
-						conceptHighLightingBean.setClassificationName
-						(conceptReferentClassification.getName());
-						conceptHighLightingBean.setConceptName
-						(conceptReferent.getConcept().getName());
-						conceptHighLightingBean.setStartOffsets
-						(conceptReferent.getStartOffset().toString());
-						conceptHighLightingBean.setEndOffsets
-						(conceptReferent.getEndOffset().toString());
+						conceptHighLightingBean.setClassificationName(conceptReferentClassification
+								.getName());
+						conceptHighLightingBean.setConceptName(conceptReferent.getConcept()
+								.getName());
+						conceptHighLightingBean.setStartOffsets(conceptReferent.getStartOffset()
+								.toString());
+						conceptHighLightingBean.setEndOffsets(conceptReferent.getEndOffset()
+								.toString());
 
 						tempMap.put(conceptReferentClassification.getName().toUpperCase(),
 								conceptHighLightingBean);
@@ -79,8 +80,7 @@ public class ViewSPRUtil
 					else
 					{
 						conceptHighLightingBean = (ConceptHighLightingBean) tempMap
-								.get(conceptReferentClassification.getName().
-										toUpperCase());
+								.get(conceptReferentClassification.getName().toUpperCase());
 
 						conceptHighLightingBean.setConceptName(conceptHighLightingBean
 								.getConceptName()
@@ -97,8 +97,8 @@ public class ViewSPRUtil
 					}
 				}
 
-				Set keySet = tempMap.keySet();
-				Iterator keySetIter = keySet.iterator();
+				final Set keySet = tempMap.keySet();
+				final Iterator keySetIter = keySet.iterator();
 				while (keySetIter.hasNext())
 				{
 					conceptBeanList.add(tempMap.get(keySetIter.next()));
@@ -119,7 +119,7 @@ public class ViewSPRUtil
 	{
 		String sysnthesizedReportText = "";
 
-		String configFileName = CommonServiceLocator.getInstance().getPropDirPath()
+		final String configFileName = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "SectionHeaderConfig.txt";
 
 		//initialize section header map
@@ -132,51 +132,51 @@ public class ViewSPRUtil
 
 		//retrieved the identified report
 		IdentifiedSurgicalPathologyReport report = null;
-		report = (IdentifiedSurgicalPathologyReport) IdentifiedReportGenerator.getIdentifiedReport(
-				reportMap, (HashMap<String, String>) abbrToHeader);
+		report = IdentifiedReportGenerator.getIdentifiedReport(reportMap, abbrToHeader);
 		sysnthesizedReportText = report.getTextContent().getData();
 
 		return sysnthesizedReportText;
 
 	}
+
 	/**
 	 * @param medicalIdentifierNumbers : medicalIdentifierNumbers
 	 * @return Map
 	 */
 	public static Map getMedicalIdentifierNumbers(Collection medicalIdentifierNumbers)
 	{
-		HashMap values = new HashMap();
+		final HashMap values = new HashMap();
 		int i = 1;
 
-		Iterator it = medicalIdentifierNumbers.iterator();
+		final Iterator it = medicalIdentifierNumbers.iterator();
 		while (it.hasNext())
 		{
-			ParticipantMedicalIdentifier participantMedicalIdentifier =
-				(ParticipantMedicalIdentifier) it.next();
+			final ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) it
+					.next();
 
-			String key1 = "ParticipantMedicalIdentifier:" + i + "_Site_id";
-			String key2 = "ParticipantMedicalIdentifier:" + i + "_medicalRecordNumber";
-			String key3 = "ParticipantMedicalIdentifier:" + i + "_id";
+			final String key1 = "ParticipantMedicalIdentifier:" + i + "_Site_id";
+			final String key2 = "ParticipantMedicalIdentifier:" + i + "_medicalRecordNumber";
+			final String key3 = "ParticipantMedicalIdentifier:" + i + "_id";
 
-			Site site = participantMedicalIdentifier.getSite();
+			final Site site = participantMedicalIdentifier.getSite();
 			if (site != null)
 			{
-				values.put(key1, edu.wustl.common.util.Utility.toString(site.getName()));
+				values.put(key1, CommonUtilities.toString(site.getName()));
 			}
 			else
 			{
-				values.put(key1, edu.wustl.common.util.Utility.toString(Constants.SELECT_OPTION));
+				values.put(key1, CommonUtilities.toString(Constants.SELECT_OPTION));
 			}
 
-			values.put(key2, edu.wustl.common.util.Utility.toString(participantMedicalIdentifier
+			values.put(key2, CommonUtilities.toString(participantMedicalIdentifier
 					.getMedicalRecordNumber()));
-			values.put(key3, edu.wustl.common.util.Utility.toString(participantMedicalIdentifier
-					.getId()));
+			values.put(key3, CommonUtilities.toString(participantMedicalIdentifier.getId()));
 
 			i++;
 		}
 		return values;
 	}
+
 	/**
 	 * @param reportQueueId : reportQueueId
 	 * @return String
@@ -185,13 +185,13 @@ public class ViewSPRUtil
 	public static String getSynthesizedTextForReportQueue(String reportQueueId) throws Exception
 
 	{
-		ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = new ReportLoaderQueueBizLogic();
+		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = new ReportLoaderQueueBizLogic();
 
 		List reportQueueDataList = null;
 
 		ReportLoaderQueue reportLoaderQueue = null;
 
-		reportQueueDataList = (List) reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
+		reportQueueDataList = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class
 
 		.getName(), Constants.SYSTEM_IDENTIFIER, Long.valueOf(reportQueueId));
 

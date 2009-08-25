@@ -4,15 +4,16 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 /**
  * @author janhavi_hasabnis
  */
 public class CollectionProtocolEventBean implements Serializable
 {
 
-/**
- *
- */
+	/**
+	 *
+	 */
 	private static final long serialVersionUID = 8381530294059504778L;
 
 	private String uniqueIdentifier;
@@ -28,20 +29,23 @@ public class CollectionProtocolEventBean implements Serializable
 	private Map specimenRequirementbeanMap = new LinkedHashMap();
 	private long id = -1;
 	private long specimenCollRequirementGroupId = -1;
-    /**
-     * @return - studyCalenderEventPoint
-     */
+
+	/**
+	 * @return - studyCalenderEventPoint
+	 */
 	public Double getStudyCalenderEventPoint()
 	{
 		return this.studyCalenderEventPoint;
 	}
-    /**
-     * @param studyCalenderEventPointParam - studyCalenderEventPointParam
-     */
+
+	/**
+	 * @param studyCalenderEventPointParam - studyCalenderEventPointParam
+	 */
 	public void setStudyCalenderEventPoint(Double studyCalenderEventPointParam)
 	{
 		this.studyCalenderEventPoint = studyCalenderEventPointParam;
 	}
+
 	/**
 	 * @return - collectionPointLabel
 	 */
@@ -49,6 +53,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.collectionPointLabel;
 	}
+
 	/**
 	 * @param collectionPointLabelParam - collectionPointLabelParam
 	 */
@@ -56,6 +61,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.collectionPointLabel = collectionPointLabelParam;
 	}
+
 	/**
 	 * @return - clinicalDiagnosis
 	 */
@@ -63,20 +69,23 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.clinicalDiagnosis;
 	}
-    /**
-     * @param clinicalDiagnosisParam - clinicalDiagnosisParam
-     */
+
+	/**
+	 * @param clinicalDiagnosisParam - clinicalDiagnosisParam
+	 */
 	public void setClinicalDiagnosis(String clinicalDiagnosisParam)
 	{
 		this.clinicalDiagnosis = clinicalDiagnosisParam;
 	}
-    /**
-     * @return - clinicalStatus
-     */
+
+	/**
+	 * @return - clinicalStatus
+	 */
 	public String getClinicalStatus()
 	{
 		return this.clinicalStatus;
 	}
+
 	/**
 	 * @param clinicalStatusParam - clinicalStatusParam
 	 */
@@ -84,13 +93,15 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.clinicalStatus = clinicalStatusParam;
 	}
-    /**
-     * @return - collectionProcedure
-     */
+
+	/**
+	 * @return - collectionProcedure
+	 */
 	public String getCollectionProcedure()
 	{
 		return this.collectionProcedure;
 	}
+
 	/**
 	 * @param collectionProcedureParam - collectionProcedureParam
 	 */
@@ -98,6 +109,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.collectionProcedure = collectionProcedureParam;
 	}
+
 	/**
 	 * @return - collectionContainer
 	 */
@@ -105,6 +117,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.collectionContainer;
 	}
+
 	/**
 	 * @param collectionContainerParam - collectionContainerParam
 	 */
@@ -112,6 +125,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.collectionContainer = collectionContainerParam;
 	}
+
 	/**
 	 * @return - receivedQuality
 	 */
@@ -119,6 +133,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.receivedQuality;
 	}
+
 	/**
 	 * @param receivedQualityParam - receivedQualityParam
 	 */
@@ -126,6 +141,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.receivedQuality = receivedQualityParam;
 	}
+
 	/**
 	 * @return - collectedEventComments
 	 */
@@ -133,6 +149,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.collectedEventComments;
 	}
+
 	/**
 	 * @param collectedEventCommentsParam - collectedEventCommentsParam
 	 */
@@ -140,6 +157,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.collectedEventComments = collectedEventCommentsParam;
 	}
+
 	/**
 	 * @return - receivedEventComments
 	 */
@@ -147,6 +165,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.receivedEventComments;
 	}
+
 	/**
 	 * @param receivedEventCommentsParam - receivedEventCommentsParam
 	 */
@@ -154,6 +173,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.receivedEventComments = receivedEventCommentsParam;
 	}
+
 	/**
 	 * @return - Map
 	 */
@@ -165,6 +185,7 @@ public class CollectionProtocolEventBean implements Serializable
 		}
 		return this.specimenRequirementbeanMap;
 	}
+
 	/**
 	 * @param specimenRequirementbeanMapParam - specimenRequirementbeanMapParam
 	 */
@@ -172,6 +193,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.specimenRequirementbeanMap = specimenRequirementbeanMapParam;
 	}
+
 	/**
 	 * @param specimenRequirementBean - specimenRequirementBean
 	 */
@@ -179,11 +201,12 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		if (this.specimenRequirementbeanMap == null)
 		{
-			this.specimenRequirementbeanMap = new LinkedHashMap < String, SpecimenRequirementBean >();
+			this.specimenRequirementbeanMap = new LinkedHashMap<String, SpecimenRequirementBean>();
 		}
-		this.specimenRequirementbeanMap.put( specimenRequirementBean.getUniqueIdentifier(),
-				specimenRequirementBean );
+		this.specimenRequirementbeanMap.put(specimenRequirementBean.getUniqueIdentifier(),
+				specimenRequirementBean);
 	}
+
 	/**
 	 * @return - uniqueIdentifier
 	 */
@@ -191,6 +214,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.uniqueIdentifier;
 	}
+
 	/**
 	 * @param uniqueIdentifierParam - uniqueIdentifierParam
 	 */
@@ -198,6 +222,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.uniqueIdentifier = uniqueIdentifierParam;
 	}
+
 	/**
 	 * @return - serialVersionUID
 	 */
@@ -205,6 +230,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return serialVersionUID;
 	}
+
 	/**
 	 * @return - id
 	 */
@@ -212,6 +238,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.id;
 	}
+
 	/**
 	 * @param idParam - idParam
 	 */
@@ -219,6 +246,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.id = idParam;
 	}
+
 	/**
 	 * @return - specimenCollRequirementGroupId
 	 */
@@ -226,6 +254,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		return this.specimenCollRequirementGroupId;
 	}
+
 	/**
 	 * @param specimenCollRequirementGroupIdParam - specimenCollRequirementGroupIdParam
 	 */
@@ -233,20 +262,21 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		this.specimenCollRequirementGroupId = specimenCollRequirementGroupIdParam;
 	}
-		
-		/**
-	 * For SCG labeling,this will be exposed through API and not in the model.
-	 */
+
+	/**
+	* For SCG labeling,this will be exposed through API and not in the model.
+	*/
 	private String labelFormat;
 
-    /**
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
-    /**
+
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public void setLabelFormat(String labelFormat)

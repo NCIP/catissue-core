@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
  */
 public class CollectionProtocolDTO
 {
+
 	/**
 	 * collectionProtocol.
 	 */
@@ -25,13 +26,15 @@ public class CollectionProtocolDTO
 	 * rowIdBeanMap.
 	 */
 	Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = new HashMap<String, SiteUserRolePrivilegeBean>();
+
 	/**
 	 * @return CollectionProtocol
 	 */
 	public CollectionProtocol getCollectionProtocol()
 	{
-		return collectionProtocol;
+		return this.collectionProtocol;
 	}
+
 	/**
 	 * @param collectionProtocol : collectionProtocol
 	 */
@@ -39,13 +42,15 @@ public class CollectionProtocolDTO
 	{
 		this.collectionProtocol = collectionProtocol;
 	}
+
 	/**
 	 * @return Map
 	 */
 	public Map<String, SiteUserRolePrivilegeBean> getRowIdBeanMap()
 	{
-		return rowIdBeanMap;
+		return this.rowIdBeanMap;
 	}
+
 	/**
 	 * @param rowIdBeanMap : rowIdBeanMap
 	 */

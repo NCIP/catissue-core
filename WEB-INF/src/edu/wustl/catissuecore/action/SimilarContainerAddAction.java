@@ -28,10 +28,12 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SimilarContainerAddAction extends CommonAddEditAction
 {
+
 	/**
 	 * logger.
 	 */
-	private transient Logger logger = Logger.getCommonLogger(SimilarContainerAddAction.class);
+	private transient final Logger logger = Logger.getCommonLogger(SimilarContainerAddAction.class);
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param form
@@ -46,54 +48,55 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 * @return ActionForward : ActionForward
 	 */
+	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
-		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
-		logger.info("Map in similarContainerAction:"
+		final StorageContainerForm storageContainerForm = (StorageContainerForm) form;
+		this.logger.info("Map in similarContainerAction:"
 				+ storageContainerForm.getSimilarContainersMap());
-		ActionForward forward = super.execute(mapping, form, request, response);
-		logger.info("forward in similar container add action:" + forward.getName());
+		final ActionForward forward = super.execute(mapping, form, request, response);
+		this.logger.info("forward in similar container add action:" + forward.getName());
 
-		List list = new ArrayList();
-		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		final List list = new ArrayList();
+		final ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 
-		logger.info("Errors:" + errors);
+		this.logger.info("Errors:" + errors);
 		if (errors == null || errors.size() == 0)
 		{
 			ActionMessages messages = null;
 			messages = new ActionMessages();
-			messages.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage(
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"similarContaienrs.add.success", new Integer(storageContainerForm
 							.getNoOfContainers()).toString()));
 			if (messages != null)
 			{
-				saveMessages(request, messages);
+				this.saveMessages(request, messages);
 			}
-			logger.info("Map in similarContainerAction after insert:"
+			this.logger.info("Map in similarContainerAction after insert:"
 					+ storageContainerForm.getSimilarContainersMap());
 
-			int noOfContainers = storageContainerForm.getNoOfContainers();
-			Map simMap = storageContainerForm.getSimilarContainersMap();
+			final int noOfContainers = storageContainerForm.getNoOfContainers();
+			final Map simMap = storageContainerForm.getSimilarContainersMap();
 
 			for (int i = 1; i <= noOfContainers; i++)
 			{
-				String simContPrefix = "simCont:" + i + "_";
-				String contName = (String) simMap.get(simContPrefix + "name");
-				String Id = (String) simMap.get(simContPrefix + "Id");
-				logger.info("contName:" + contName);
+				final String simContPrefix = "simCont:" + i + "_";
+				final String contName = (String) simMap.get(simContPrefix + "name");
+				final String Id = (String) simMap.get(simContPrefix + "Id");
+				this.logger.info("contName:" + contName);
 				/*
 				 * String Id = new Long(storageContainerForm.getId() -
 				 * (noOfContainers - i)).toString();
 				 */
-				logger.info("Id:" + Id);
+				this.logger.info("Id:" + Id);
 				list.add(new NameValueBean(contName, Id));
 			}
 			request.setAttribute("similarContainerList", list);
 
 		}
-		logger.info("Forward:" + forward.getName());
+		this.logger.info("Forward:" + forward.getName());
 		return forward;
 
 	}

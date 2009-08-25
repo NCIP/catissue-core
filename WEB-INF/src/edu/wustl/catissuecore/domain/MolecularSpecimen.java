@@ -125,7 +125,6 @@ public class MolecularSpecimen extends Specimen implements Serializable
 	public MolecularSpecimen(SpecimenRequirement molecularReqSpecimen)
 	{
 		super(molecularReqSpecimen);
-		this.concentrationInMicrogramPerMicroliter
-		= ((MolecularSpecimenRequirement) molecularReqSpecimen).concentrationInMicrogramPerMicroliter;
+		this.concentrationInMicrogramPerMicroliter = ((MolecularSpecimenRequirement) molecularReqSpecimen).concentrationInMicrogramPerMicroliter;
 	}
 }

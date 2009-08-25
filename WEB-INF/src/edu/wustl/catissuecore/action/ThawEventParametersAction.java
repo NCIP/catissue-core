@@ -28,8 +28,8 @@ public class ThawEventParametersAction extends SpecimenEventParametersAction
 		// TODO Auto-generated method stub
 		// String operation = (String)
 		// request.getAttribute(Constants.OPERATION);
-		String formName, specimenId = null;
-		ThawEventParametersForm thawEventParametersForm = (ThawEventParametersForm) eventParametersForm;
+		String formName;
+		final ThawEventParametersForm thawEventParametersForm = (ThawEventParametersForm) eventParametersForm;
 
 		boolean readOnlyValue;
 		if (thawEventParametersForm.getOperation().equals(Constants.EDIT))
@@ -40,10 +40,9 @@ public class ThawEventParametersAction extends SpecimenEventParametersAction
 		else
 		{
 			formName = Constants.THAW_EVENT_PARAMETERS_ADD_ACTION;
-			specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			readOnlyValue = false;
 		}
-		String changeAction = "setFormAction('" + formName + "');";
+		final String changeAction = "setFormAction('" + formName + "');";
 		request.setAttribute("formName", formName);
 		request.setAttribute("readOnlyValue", readOnlyValue);
 		request.setAttribute("changeAction", changeAction);

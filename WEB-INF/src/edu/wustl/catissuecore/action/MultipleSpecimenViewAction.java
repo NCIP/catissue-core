@@ -57,8 +57,7 @@ public class MultipleSpecimenViewAction extends BaseAction
 		final HttpSession session = request.getSession();
 		try
 		{
-			final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap
-			= new LinkedHashMap<String, CollectionProtocolEventBean>();
+			final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean>();
 			final CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
 			eventBean.setUniqueIdentifier("EventID-1");

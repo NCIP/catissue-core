@@ -34,8 +34,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.util.HibernateMetaData;
@@ -233,18 +233,18 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 
-		StorageContainer container = (StorageContainer) abstractDomain;
+		final StorageContainer container = (StorageContainer) abstractDomain;
 
 		this.setId(container.getId().longValue());
-		this.setActivityStatus(Utility.toString(container.getActivityStatus()));
+		this.setActivityStatus(CommonUtilities.toString(container.getActivityStatus()));
 		this.containerName = container.getName();
-		isFull = AppUtility.initCap(Utility.toString(container.isFull()));
-		logger.debug("isFULL />/>/> " + isFull);
+		this.isFull = AppUtility.initCap(CommonUtilities.toString(container.isFull()));
+		logger.debug("isFULL />/>/> " + this.isFull);
 
 		this.typeId = container.getStorageType().getId().longValue();
 		this.typeName = container.getStorageType().getName();
 
-		ContainerPosition cntPos = container.getLocatedAtPosition();
+		final ContainerPosition cntPos = container.getLocatedAtPosition();
 		Container parent = null;
 		if (cntPos != null)
 		{
@@ -255,7 +255,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.parentContainerId = parent.getId().longValue();
 			this.parentContainerSelected = "Auto";
 
-			StorageContainer parentContainer = (StorageContainer) HibernateMetaData
+			final StorageContainer parentContainer = (StorageContainer) HibernateMetaData
 					.getProxyObjectImpl(parent);
 			if (container != null && container.getLocatedAtPosition() != null)
 			{
@@ -281,12 +281,12 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.siteName = container.getSite().getName();
 		}
 
-		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
+		this.defaultTemperature = CommonUtilities.toString(container.getTempratureInCentigrade());
 		this.oneDimensionCapacity = container.getCapacity().getOneDimensionCapacity().intValue();
 		this.twoDimensionCapacity = container.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
-		this.twoDimensionLabel = Utility
-				.toString(container.getStorageType().getTwoDimensionLabel());
+		this.twoDimensionLabel = CommonUtilities.toString(container.getStorageType()
+				.getTwoDimensionLabel());
 
 		if (container.getNoOfContainers() != null)
 		{
@@ -298,20 +298,20 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
 		}
 
-		this.barcode = Utility.toString(container.getBarcode());
+		this.barcode = CommonUtilities.toString(container.getBarcode());
 
 		//Populating the collection protocol id array
-		Collection collectionProtocolCollection = container.getCollectionProtocolCollection();
+		final Collection collectionProtocolCollection = container.getCollectionProtocolCollection();
 
 		if (collectionProtocolCollection != null && collectionProtocolCollection.size() > 0)
 		{
 			this.collectionIds = new long[collectionProtocolCollection.size()];
 			int i = 0;
 
-			Iterator it = collectionProtocolCollection.iterator();
+			final Iterator it = collectionProtocolCollection.iterator();
 			while (it.hasNext())
 			{
-				CollectionProtocol cp = (CollectionProtocol) it.next();
+				final CollectionProtocol cp = (CollectionProtocol) it.next();
 				this.collectionIds[i] = cp.getId().longValue();
 				i++;
 			}
@@ -319,31 +319,31 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		}
 
 		//Populating the storage type-id array
-		Collection storageTypeCollection = container.getHoldsStorageTypeCollection();
+		final Collection storageTypeCollection = container.getHoldsStorageTypeCollection();
 
 		if (storageTypeCollection != null)
 		{
 			this.holdsStorageTypeIds = new long[storageTypeCollection.size()];
 			int i = 0;
 
-			Iterator it = storageTypeCollection.iterator();
+			final Iterator it = storageTypeCollection.iterator();
 			while (it.hasNext())
 			{
-				StorageType storageType = (StorageType) it.next();
+				final StorageType storageType = (StorageType) it.next();
 				this.holdsStorageTypeIds[i] = storageType.getId().longValue();
 				i++;
 			}
 		}
 
 		//Populating the specimen class type-id array
-		Collection specimenClassCollection = container.getHoldsSpecimenClassCollection();
+		final Collection specimenClassCollection = container.getHoldsSpecimenClassCollection();
 
 		if (specimenClassCollection != null)
 		{
 			if (specimenClassCollection.size() == AppUtility.getSpecimenClassTypes().size())
 			{
-				holdsSpecimenClassTypes = new String[1];
-				holdsSpecimenClassTypes[0] = "-1";
+				this.holdsSpecimenClassTypes = new String[1];
+				this.holdsSpecimenClassTypes[0] = "-1";
 				this.specimenOrArrayType = "Specimen";
 			}
 			else
@@ -351,10 +351,10 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 				this.holdsSpecimenClassTypes = new String[specimenClassCollection.size()];
 				int i = 0;
 
-				Iterator it = specimenClassCollection.iterator();
+				final Iterator it = specimenClassCollection.iterator();
 				while (it.hasNext())
 				{
-					String specimenClass = (String) it.next();
+					final String specimenClass = (String) it.next();
 					this.holdsSpecimenClassTypes[i] = specimenClass;
 					i++;
 					this.specimenOrArrayType = "Specimen";
@@ -362,18 +362,19 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			}
 		}
 		//      Populating the specimen array type-id array
-		Collection specimenArrayTypeCollection = container.getHoldsSpecimenArrayTypeCollection();
+		final Collection specimenArrayTypeCollection = container
+				.getHoldsSpecimenArrayTypeCollection();
 
 		if (specimenArrayTypeCollection != null)
 		{
-			holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
+			this.holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
 			int i = 0;
 
-			Iterator it = specimenArrayTypeCollection.iterator();
+			final Iterator it = specimenArrayTypeCollection.iterator();
 			while (it.hasNext())
 			{
-				SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
-				holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
+				final SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
+				this.holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
 				i++;
 				this.specimenOrArrayType = "SpecimenArray";
 			}
@@ -396,7 +397,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getContainerId()
 	{
-		return containerId;
+		return this.containerId;
 	}
 
 	/**
@@ -409,7 +410,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	public String getParentContainerSelected()
 	{
-		return parentContainerSelected;
+		return this.parentContainerSelected;
 	}
 
 	public void setParentContainerSelected(String parentContainerSelected)
@@ -422,7 +423,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getPos1()
 	{
-		return pos1;
+		return this.pos1;
 	}
 
 	/**
@@ -438,7 +439,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getPos2()
 	{
-		return pos2;
+		return this.pos2;
 	}
 
 	/**
@@ -454,7 +455,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getSelectedContainerName()
 	{
-		return selectedContainerName;
+		return this.selectedContainerName;
 	}
 
 	/**
@@ -470,7 +471,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public int getStContSelection()
 	{
-		return stContSelection;
+		return this.stContSelection;
 	}
 
 	/**
@@ -491,7 +492,6 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.typeId = typeId;
 	}
 
-	
 	/**
 	 * Returns the capacity of dimension one.
 	 * @return int the capacity of dimension one.
@@ -579,7 +579,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public long getParentContainerId()
 	{
-		return parentContainerId;
+		return this.parentContainerId;
 	}
 
 	/**
@@ -597,7 +597,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getPositionInParentContainer()
 	{
-		return positionInParentContainer;
+		return this.positionInParentContainer;
 	}
 
 	/**
@@ -615,7 +615,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public long getSiteId()
 	{
-		return siteId;
+		return this.siteId;
 	}
 
 	/**
@@ -635,7 +635,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getSiteName()
 	{
-		return siteName;
+		return this.siteName;
 	}
 
 	/**
@@ -651,10 +651,11 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/**
 	 * @return Returns the id assigned to form bean
 	 */
+	@Override
 	public int getFormId()
 	{
 		int formId;
-		if (getNoOfContainers() > 1)
+		if (this.getNoOfContainers() > 1)
 		{
 			formId = Constants.SIMILAR_CONTAINERS_FORM_ID;
 		}
@@ -669,6 +670,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.  
 	 * */
+	@Override
 	protected void reset()
 	{
 
@@ -679,7 +681,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public int getNoOfContainers()
 	{
-		return noOfContainers;
+		return this.noOfContainers;
 	}
 
 	/**
@@ -695,7 +697,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getStartNumber()
 	{
-		return startNumber;
+		return this.startNumber;
 	}
 
 	/**
@@ -711,7 +713,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getBarcode()
 	{
-		return barcode;
+		return this.barcode;
 	}
 
 	/**
@@ -727,7 +729,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getKey()
 	{
-		return key;
+		return this.key;
 	}
 
 	/**
@@ -743,7 +745,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public int getCheckedButton()
 	{
-		return checkedButton;
+		return this.checkedButton;
 	}
 
 	/**
@@ -759,7 +761,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getIsFull()
 	{
-		return isFull;
+		return this.isFull;
 	}
 
 	/**
@@ -838,7 +840,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public int getPositionDimensionOne()
 	{
-		return positionDimensionOne;
+		return this.positionDimensionOne;
 	}
 
 	/**
@@ -854,7 +856,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public int getPositionDimensionTwo()
 	{
-		return positionDimensionTwo;
+		return this.positionDimensionTwo;
 	}
 
 	/**
@@ -889,7 +891,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String[] getHoldsSpecimenClassTypes()
 	{
-		return holdsSpecimenClassTypes;
+		return this.holdsSpecimenClassTypes;
 	}
 
 	/**
@@ -907,7 +909,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public long[] getHoldsStorageTypeIds()
 	{
-		return holdsStorageTypeIds;
+		return this.holdsStorageTypeIds;
 	}
 
 	/**
@@ -936,7 +938,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	*/
 	public long[] getHoldsSpecimenArrTypeIds()
 	{
-		return holdsSpecimenArrTypeIds;
+		return this.holdsSpecimenArrTypeIds;
 	}
 
 	/**
@@ -947,7 +949,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	public Map getSimilarContainersMap()
 	{
 		//System.out.println("AliquotForm : getAliquotMap "+similarContainersMap);
-		return similarContainersMap;
+		return this.similarContainersMap;
 	}
 
 	/**
@@ -969,7 +971,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	public void setSimilarContainerMapValue(String key, Object value)
 	{
 		//System.out.println("simCont: setValue -> "+key+" "+value);
-		similarContainersMap.put(key, value);
+		this.similarContainersMap.put(key, value);
 	}
 
 	/**
@@ -980,7 +982,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	public Object getSimilarContainerMapValue(String key)
 	{
 		//System.out.println("simCont: getValue <- "+key+" "+similarContainersMap.get(key));
-		return similarContainersMap.get(key);
+		return this.similarContainersMap.get(key);
 	}
 
 	/**
@@ -988,15 +990,16 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
+	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
 		if ("storageType".equals(addNewFor))
 		{
-			setTypeId(addObjectIdentifier.longValue());
+			this.setTypeId(addObjectIdentifier.longValue());
 		}
 		else if ("site".equals(addNewFor))
 		{
-			setSiteId(addObjectIdentifier.longValue());
+			this.setSiteId(addObjectIdentifier.longValue());
 		}
 	}
 
@@ -1006,10 +1009,11 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -1021,25 +1025,25 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.type")));
 			}
-			if (!validator.isValidOption(isFull) && this.noOfContainers == 1)
+			if (!validator.isValidOption(this.isFull) && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("storageContainer.isContainerFull")));
 			}
 
-			if (parentContainerSelected.equals(Constants.SITE) && siteId == -1
+			if (this.parentContainerSelected.equals(Constants.SITE) && this.siteId == -1
 					&& this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.site")));
 			}
-			else if ("Auto".equals(parentContainerSelected) && this.noOfContainers == 1)
+			else if ("Auto".equals(this.parentContainerSelected) && this.noOfContainers == 1)
 			{
-				if ("Auto".equals(parentContainerSelected))
+				if ("Auto".equals(this.parentContainerSelected))
 				{
-					if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
-							|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
-							|| !validator.isNumeric(String.valueOf(parentContainerId), 1))
+					if (!validator.isNumeric(String.valueOf(this.positionDimensionOne), 1)
+							|| !validator.isNumeric(String.valueOf(this.positionDimensionTwo), 1)
+							|| !validator.isNumeric(String.valueOf(this.parentContainerId), 1))
 					{
 						errors
 								.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -1049,14 +1053,14 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 				}
 				else
 				{
-					checkPositionForParent(errors);
+					this.checkPositionForParent(errors);
 				}
 
 			}
-			else if (parentContainerSelected.equals("Manual") && this.noOfContainers >= 1)
+			else if (this.parentContainerSelected.equals("Manual") && this.noOfContainers >= 1)
 			{
 
-				checkPositionForParent(errors);
+				this.checkPositionForParent(errors);
 				/*	if (!validator.isNumeric(String.valueOf(pos1), 1)
 							|| !validator.isNumeric(String.valueOf(pos2), 1))
 					{
@@ -1067,24 +1071,24 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 			/*if (this.noOfContainers == 1)
 			{*/
-			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
-					errors, validator);
+			this.checkValidNumber(String.valueOf(this.noOfContainers),
+					"storageContainer.noOfContainers", errors, validator);
 			/*}*/
 			//validations for Container name
 			//Modified by falguni
 			if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl
-					&& validator.isEmpty(containerName) && this.noOfContainers == 1)
+					&& Validator.isEmpty(this.containerName) && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.name")));
 			}
 
 			//validation for collection protocol
-			if (collectionIds.length > 1)
+			if (this.collectionIds.length > 1)
 			{
-				for (int i = 0; i < collectionIds.length; i++)
+				for (final long collectionId : this.collectionIds)
 				{
-					if (collectionIds[i] == -1)
+					if (collectionId == -1)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties
@@ -1095,7 +1099,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			}
 
 			//validation for holds storage type
-			checkValidSelectionForAny(holdsStorageTypeIds, "storageContainer.containerType", errors);
+			this.checkValidSelectionForAny(this.holdsStorageTypeIds,
+					"storageContainer.containerType", errors);
 			//validation for holds specimen class
 			/*new chnage checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
 					errors);*/
@@ -1107,30 +1112,30 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 						ApplicationProperties.getValue("site.activityStatus")));
 			}
 			// validations for temperature
-			if (!validator.isEmpty(defaultTemperature)
-					&& (!validator.isDouble(defaultTemperature, false)))
+			if (!Validator.isEmpty(this.defaultTemperature)
+					&& (!validator.isDouble(this.defaultTemperature, false)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageContainer.temperature")));
 			}
 
 			//VALIDATIONS FOR 1 DIMENSION of container
-			if (validator.isEmpty(String.valueOf(oneDimensionCapacity)))
+			if (Validator.isEmpty(String.valueOf(this.oneDimensionCapacity)))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.oneDimension")));
 			}
 			else
 			{
-				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
+				if (!validator.isNumeric(String.valueOf(this.oneDimensionCapacity)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.oneDimension")));
 				}
 			}
 			//Validations for 2 dimension of container.
-			if (!validator.isEmpty(String.valueOf(twoDimensionCapacity))
-					&& (!validator.isNumeric(String.valueOf(twoDimensionCapacity))))
+			if (!Validator.isEmpty(String.valueOf(this.twoDimensionCapacity))
+					&& (!validator.isNumeric(String.valueOf(this.twoDimensionCapacity))))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("storageContainer.twoDimension")));
@@ -1139,43 +1144,47 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			if (this.noOfContainers > 1 && this.getSimilarContainersMap().size() > 0)
 			{
 
-				String containerPrefixKey = "simCont:";
+				final String containerPrefixKey = "simCont:";
 
 				for (int i = 1; i <= this.noOfContainers; i++)
 				{
-					String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i
-							+ "_barcode"); //simCont:1_barcode
+					final String iBarcode = (String) this.getSimilarContainerMapValue("simCont:"
+							+ i + "_barcode"); //simCont:1_barcode
 					if (iBarcode != null && iBarcode.equals("")) // this is done because barcode is empty string set by struts
 					{ // but barcode in DB is unique but can be null.
 						this.setSimilarContainerMapValue("simCont:" + i + "_barcode", null);
 					}
 
-					int checkedButtonStatus = Integer
-							.parseInt((String) getSimilarContainerMapValue("checkedButton"));
-					String containerName = (String) getSimilarContainerMapValue("simCont:" + i
-							+ "_name");
+					final int checkedButtonStatus = Integer.parseInt((String) this
+							.getSimilarContainerMapValue("checkedButton"));
+					final String containerName = (String) this
+							.getSimilarContainerMapValue("simCont:" + i + "_name");
 					if (!edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl
-							&& validator.isEmpty(containerName))
+							&& Validator.isEmpty(containerName))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
 										.getValue("storageContainer.name")));
 					}
-					String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
+					final String siteId = (String) this.getSimilarContainerMapValue("simCont:" + i
+							+ "_siteId");
 					if (checkedButtonStatus == 2 || siteId == null)
 					{
 
-						String radioButonKey = "radio_" + i;
-						String containerIdKey = containerPrefixKey + i + "_parentContainerId";
+						final String radioButonKey = "radio_" + i;
+						final String containerIdKey = containerPrefixKey + i + "_parentContainerId";
 						//String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
-						String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
-						String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
+						final String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
+						final String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
 
-						if (((String) getSimilarContainerMapValue(radioButonKey)).equals("1"))
+						if (((String) this.getSimilarContainerMapValue(radioButonKey)).equals("1"))
 						{
-							String parentContId = (String) getSimilarContainerMapValue(containerIdKey);
-							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key);
-							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key);
+							final String parentContId = (String) this
+									.getSimilarContainerMapValue(containerIdKey);
+							final String positionDimensionOne = (String) this
+									.getSimilarContainerMapValue(posDim1Key);
+							final String positionDimensionTwo = (String) this
+									.getSimilarContainerMapValue(posDim2Key);
 
 							if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
 									|| positionDimensionTwo.equals("-1"))
@@ -1188,10 +1197,10 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 						}
 						else
 						{
-							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key
-									+ "_fromMap");
-							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key
-									+ "_fromMap");
+							final String positionDimensionOne = (String) this
+									.getSimilarContainerMapValue(posDim1Key + "_fromMap");
+							final String positionDimensionTwo = (String) this
+									.getSimilarContainerMapValue(posDim2Key + "_fromMap");
 
 							if (positionDimensionOne != null
 									&& !positionDimensionOne.trim().equals("")
@@ -1223,7 +1232,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			//}
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage(), excp);
 		}
@@ -1235,7 +1244,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	private void checkPositionForParent(ActionErrors errors)
 	{
-		boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+		final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 		if (flag)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
@@ -1254,9 +1263,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		if (Ids != null && Ids.length > 1)
 		{
-			for (int i = 0; i < Ids.length; i++)
+			for (final long id2 : Ids)
 			{
-				if (Ids[i] == 1)
+				if (id2 == 1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue(message)));
@@ -1271,7 +1280,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getSiteForParentContainer()
 	{
-		return siteForParentContainer;
+		return this.siteForParentContainer;
 	}
 
 	/**
@@ -1287,7 +1296,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getSpecimenOrArrayType()
 	{
-		return specimenOrArrayType;
+		return this.specimenOrArrayType;
 	}
 
 	/**
@@ -1300,10 +1309,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	public String getNextForwardTo()
 	{
-		return nextForwardTo;
+		return this.nextForwardTo;
 	}
 
-	
 	public void setPrinterLocation(String printerLocation)
 	{
 		this.printerLocation = printerLocation;
@@ -1311,7 +1319,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	public String getPrinterType()
 	{
-		return printerType;
+		return this.printerType;
 	}
 
 	public void setPrinterType(String printerType)
@@ -1324,7 +1332,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 */
 	public String getIsBarcodeEditable()
 	{
-		return isBarcodeEditable;
+		return this.isBarcodeEditable;
 	}
 
 	/** 
@@ -1334,6 +1342,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		this.isBarcodeEditable = isBarcodeEditable;
 	}
+
 	/**
 	 * Sets an name which refers to the type of the storage.
 	 * @param typeName An id which refers to the type of the storage.
@@ -1373,7 +1382,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		this.defaultTemperature = defaultTemperature;
 	}
-	
+
 	public void setNextForwardTo(String nextForwardTo)
 	{
 		this.nextForwardTo = nextForwardTo;
@@ -1381,7 +1390,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	public String getPrintCheckbox()
 	{
-		return printCheckbox;
+		return this.printCheckbox;
 	}
 
 	public void setPrintCheckbox(String printCheckbox)
@@ -1391,8 +1400,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	public String getPrinterLocation()
 	{
-		return printerLocation;
+		return this.printerLocation;
 	}
-
 
 }

@@ -40,7 +40,7 @@ public class BaseTable extends JTable
 	public BaseTable()
 	{
 		super();
-		initUI();
+		this.initUI();
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class BaseTable extends JTable
 	public BaseTable(TableModel tableModel)
 	{
 		super(tableModel);
-		initUI();
+		this.initUI();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class BaseTable extends JTable
 	public BaseTable(TableModel tableModel, TableColumnModel tableColumnModel)
 	{
 		super(tableModel, tableColumnModel);
-		initUI();
+		this.initUI();
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class BaseTable extends JTable
 			ListSelectionModel listSelectionModel)
 	{
 		super(tableModel, tableColumnModel, listSelectionModel);
-		initUI();
+		this.initUI();
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class BaseTable extends JTable
 	 */
 	private void initUI()
 	{
-		getTableHeader().setReorderingAllowed(false);
+		this.getTableHeader().setReorderingAllowed(false);
 		//this.selectionBackground = AppletConstants.CELL_SELECTION_COLOR;
 	}
 

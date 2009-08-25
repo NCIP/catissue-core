@@ -42,10 +42,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CheckConsents extends BaseAction
 {
-/**
- * logger.
- */
-	private transient Logger logger = Logger.getCommonLogger(CheckConsents.class);
+
+	/**
+	 * logger.
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(CheckConsents.class);
 
 	/**
 	* Overrides the execute method in Action class.
@@ -60,13 +61,13 @@ public class CheckConsents extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		PrintWriter out = response.getWriter();
-		String showConsents = request.getParameter(Constants.SHOW_CONSENTS);
+		final PrintWriter out = response.getWriter();
+		final String showConsents = request.getParameter(Constants.SHOW_CONSENTS);
 		if (showConsents != null && showConsents.equalsIgnoreCase(Constants.YES))
 		{
 			// Checking consent for participant page in collection protocol registration
 			//Abhishek Mehta
-			String collectionProtocolId = request.getParameter(Constants.CP_SEARCH_CP_ID);
+			final String collectionProtocolId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 			if (collectionProtocolId != null)
 			{
 				if (collectionProtocolId.equalsIgnoreCase("-1"))
@@ -75,19 +76,16 @@ public class CheckConsents extends BaseAction
 				}
 				else
 				{
-					IFactory factory = AbstractFactoryConfig.
-					getInstance().getBizLogicFactory();
-					CollectionProtocolBizLogic collectionProtocolBizLogic =
-						(CollectionProtocolBizLogic) factory
+					final IFactory factory = AbstractFactoryConfig.getInstance()
+							.getBizLogicFactory();
+					final CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
 							.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-					Object object = collectionProtocolBizLogic.
-					retrieve(CollectionProtocol.class
-							.getName(), new Long(collectionProtocolId));
-					CollectionProtocol collectionProtocol = (CollectionProtocol) object;
-					Collection consentTierCollection = (Collection) collectionProtocolBizLogic
+					final Object object = collectionProtocolBizLogic.retrieve(
+							CollectionProtocol.class.getName(), new Long(collectionProtocolId));
+					final CollectionProtocol collectionProtocol = (CollectionProtocol) object;
+					final Collection consentTierCollection = (Collection) collectionProtocolBizLogic
 							.retrieveAttribute(CollectionProtocol.class.getName(),
-									collectionProtocol.getId(),
-									"elements(consentTierCollection)");
+									collectionProtocol.getId(), "elements(consentTierCollection)");
 
 					if (consentTierCollection.isEmpty())
 					{
@@ -106,10 +104,9 @@ public class CheckConsents extends BaseAction
 			{
 				String barcodeLable = null;
 				int barcodeLabelBasedDistribution = 1;
-				String labelBarcodeDistributionValue = request
+				final String labelBarcodeDistributionValue = request
 						.getParameter(Constants.DISTRIBUTION_ON);//lableBarcode
-				if (labelBarcodeDistributionValue.equalsIgnoreCase
-						(Constants.BARCODE_DISTRIBUTION))//"1"
+				if (labelBarcodeDistributionValue.equalsIgnoreCase(Constants.BARCODE_DISTRIBUTION))//"1"
 				{
 					barcodeLabelBasedDistribution = 1;
 				}
@@ -118,44 +115,43 @@ public class CheckConsents extends BaseAction
 					barcodeLabelBasedDistribution = 2;
 				}
 				barcodeLable = request.getParameter(Constants.BARCODE_LABLE);
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				DistributionBizLogic bizLogic = (DistributionBizLogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final DistributionBizLogic bizLogic = (DistributionBizLogic) factory
 						.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 				try
 				{
 					bizLogic.getSpecimenId(barcodeLable, barcodeLabelBasedDistribution);
 				}
-				catch (BizLogicException dao)
+				catch (final BizLogicException dao)
 				{
-					logger.info(dao.getMessage(), dao);
-					ActionErrors errors = new ActionErrors();
-					ActionError error = new ActionError(dao.getMessage());
+					this.logger.info(dao.getMessage(), dao);
+					final ActionErrors errors = new ActionErrors();
+					final ActionError error = new ActionError(dao.getMessage());
 					errors.add(ActionErrors.GLOBAL_ERROR, error);
-					saveErrors(request, errors);
+					this.saveErrors(request, errors);
 					out.print(Constants.INVALID);//Invalid
 					return null;
 				}
 				//Getting SpecimenCollectionGroup object
-				Specimen specimen = getConsentListForSpecimen(barcodeLable,
+				final Specimen specimen = this.getConsentListForSpecimen(barcodeLable,
 						barcodeLabelBasedDistribution);
-				Long specimenId = (Long) specimen.getId();
+				final Long specimenId = specimen.getId();
 
-				String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"
-						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup" +
-								" as scg,"
+				final String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol"
+						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+						+ " as scg,"
 						+ " edu.wustl.catissuecore.domain.Specimen as spec "
-						+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="
-						+ specimenId;
+						+ " where spec.specimenCollectionGroup.id=scg.id and spec.id=" + specimenId;
 
-				List collectionProtocolList = AppUtility.executeQuery(colProtHql);
+				final List collectionProtocolList = AppUtility.executeQuery(colProtHql);
 				CollectionProtocol collectionProtocol = null;
 				if (collectionProtocolList != null)
 				{
 					collectionProtocol = (CollectionProtocol) collectionProtocolList.get(0);
 				}
-				Collection consentTierStatusCollection = (Collection) bizLogic.retrieveAttribute(
-						Specimen.class.getName(), specimen.getId(),
-						"elements(consentTierStatusCollection)");
+				final Collection consentTierStatusCollection = (Collection) bizLogic
+						.retrieveAttribute(Specimen.class.getName(), specimen.getId(),
+								"elements(consentTierStatusCollection)");
 				if (specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))//disabled
 				{
 					out.print(Constants.DISABLED);//disabled
@@ -188,8 +184,8 @@ public class CheckConsents extends BaseAction
 	private Specimen getConsentListForSpecimen(String barcodeLabel,
 			int barcodeLabelBasedDistribution) throws BizLogicException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
 				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName = null;
 		if (barcodeLabelBasedDistribution == Constants.BARCODE_BASED_DISTRIBUTION)
@@ -201,9 +197,9 @@ public class CheckConsents extends BaseAction
 		{
 			colName = Constants.SYSTEM_LABEL;//"label"
 		}
-		List specimenList = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName,
+		final List specimenList = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName,
 				barcodeLabel);
-		Specimen specimen = (Specimen) specimenList.get(0);
+		final Specimen specimen = (Specimen) specimenList.get(0);
 		return specimen;
 	}
 }

@@ -12,13 +12,14 @@ package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
 import java.util.List;
+
 /**
  * @author janhavi_hasabnis
  */
 public class DefinedArrayRequestBean implements Serializable
 {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private String noOfItems;
 	/**
 	 * To determine when to enable or disable create array button.

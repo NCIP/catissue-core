@@ -22,8 +22,14 @@ public class ThawEventParametersForm extends SpecimenEventParametersForm
 {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5926826650182436670L;
+
+	/**
 	 * @return THAW_EVENT_PARAMETERS_FORM_ID
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.THAW_EVENT_PARAMETERS_FORM_ID;
@@ -33,6 +39,7 @@ public class ThawEventParametersForm extends SpecimenEventParametersForm
 	 * Populates all the fields from the domain object to the form bean.
 	 * @param abstractDomain An AbstractDomain Object  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
@@ -42,6 +49,7 @@ public class ThawEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Resets the values of all the fields.
 	 */
+	@Override
 	protected void reset()
 	{
 		//	 	super.reset();

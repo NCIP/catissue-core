@@ -104,9 +104,10 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	/**
 	 * This method is to reset Class attributes
 	 */
+	@Override
 	protected void reset()
 	{
-		if (reset == true)
+		if (this.reset == true)
 		{
 			super.reset();
 			this.parentSpecimenId = null;
@@ -116,6 +117,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	/**
 	 * @return CREATE_SPECIMEN_FORM_ID Returns the id assigned to form bean.
 	 */
+	@Override
 	public int getFormId()
 	{
 		return Constants.CREATE_SPECIMEN_FORM_ID;
@@ -125,9 +127,10 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 * This function Copies the data from an site object to a SiteForm object.
 	 * @param abstractDomain An object containing the information about site.  
 	 */
+	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		Specimen specimen = (Specimen) abstractDomain;
+		final Specimen specimen = (Specimen) abstractDomain;
 		super.setAllValues(specimen);
 	}
 
@@ -137,10 +140,11 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request);
-		Validator validator = new Validator();
+		final ActionErrors errors = super.validate(mapping, request);
+		final Validator validator = new Validator();
 
 		try
 		{
@@ -151,7 +155,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 				{
 					if (this.getRadioButton().equals("1"))
 					{
-						if (validator.isEmpty(parentSpecimenLabel))
+						if (Validator.isEmpty(this.parentSpecimenLabel))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.required", ApplicationProperties
@@ -160,7 +164,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 					}
 					else
 					{
-						if (validator.isEmpty(parentSpecimenBarcode))
+						if (Validator.isEmpty(this.parentSpecimenBarcode))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.required", ApplicationProperties
@@ -169,7 +173,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 					}
 				}
 				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-						&& validator.isEmpty(label) && this.label.trim().equals(""))
+						&& Validator.isEmpty(this.label) && this.label.trim().equals(""))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.label")));
@@ -177,7 +181,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 				}
 			}
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			logger.error(excp.getMessage());
 		}
@@ -189,7 +193,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 */
 	public String getRadioButton()
 	{
-		return radioButton;
+		return this.radioButton;
 	}
 
 	/**
@@ -205,7 +209,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 */
 	public String getParentSpecimenBarcode()
 	{
-		return parentSpecimenBarcode;
+		return this.parentSpecimenBarcode;
 	}
 
 	/**
@@ -221,7 +225,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 */
 	public String getParentSpecimenLabel()
 	{
-		return parentSpecimenLabel;
+		return this.parentSpecimenLabel;
 	}
 
 	/**
@@ -237,7 +241,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	 */
 	public boolean getReset()
 	{
-		return reset;
+		return this.reset;
 	}
 
 	/**
@@ -251,13 +255,14 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	/**
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public Object clone()
 	{
 		try
 		{
 			return super.clone();
 		}
-		catch (CloneNotSupportedException e)
+		catch (final CloneNotSupportedException e)
 		{
 			logger.error("Error in Clone method of CreateSpecimenForm:" + e);
 		}
@@ -266,7 +271,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	public String getNextForwardTo()
 	{
-		return nextForwardTo;
+		return this.nextForwardTo;
 	}
 
 	public void setNextForwardTo(String nextForwardTo)
@@ -276,7 +281,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	public String getPrintCheckbox()
 	{
-		return printCheckbox;
+		return this.printCheckbox;
 	}
 
 	public void setPrintCheckbox(String printCheckbox)
@@ -286,7 +291,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	public boolean getDisposeParentSpecimen()
 	{
-		return disposeParentSpecimen;
+		return this.disposeParentSpecimen;
 	}
 
 	public void setDisposeParentSpecimen(boolean disposeParentSpecimen)
@@ -296,7 +301,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	public String getPrinterLocation()
 	{
-		return printerLocation;
+		return this.printerLocation;
 	}
 
 	public void setPrinterLocation(String printerLocation)
@@ -306,7 +311,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	public String getPrinterType()
 	{
-		return printerType;
+		return this.printerType;
 	}
 
 	public void setPrinterType(String printerType)

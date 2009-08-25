@@ -37,8 +37,7 @@ public class FixedEventParametersAction extends SpecimenEventParametersAction
 	{
 		String formName = null;
 		boolean readOnlyValue;
-		final FixedEventParametersForm fixedEventParametersForm
-		= (FixedEventParametersForm) eventParametersForm;
+		final FixedEventParametersForm fixedEventParametersForm = (FixedEventParametersForm) eventParametersForm;
 
 		if (fixedEventParametersForm.getOperation().equals(Constants.EDIT))
 		{

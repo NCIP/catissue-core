@@ -86,12 +86,12 @@ public class DeletePermissibleValue extends DeleteBaseMetadata
 		final String dataType = this.getDataTypeOfAttribute(attribute.getName());
 		if (dataType.equals("string"))
 		{
-			sql = "select * from dyextn_string_concept_value" +
-					" where IDENTIFIER in (select PERMISSIBLE_VALUE_ID" +
-					" from dyextn_userdef_de_value_rel where USER_DEF_DE_ID" +
-					" in (select identifier from dyextn_userdefined_de" +
-					" where  identifier in (select identifier from dyextn_data_element" +
-					" where ATTRIBUTE_TYPE_INFO_ID="
+			sql = "select * from dyextn_string_concept_value"
+					+ " where IDENTIFIER in (select PERMISSIBLE_VALUE_ID"
+					+ " from dyextn_userdef_de_value_rel where USER_DEF_DE_ID"
+					+ " in (select identifier from dyextn_userdefined_de"
+					+ " where  identifier in (select identifier from dyextn_data_element"
+					+ " where ATTRIBUTE_TYPE_INFO_ID="
 					+ attribute.getAttributeTypeInformation().getDataElement().getId() + ")))";
 			final Statement stmt = this.connection.createStatement();
 			final ResultSet rs = stmt.executeQuery(sql);
@@ -109,8 +109,7 @@ public class DeletePermissibleValue extends DeleteBaseMetadata
 					sql = "delete from dyextn_semantic_property where ABSTRACT_VALUE_ID="
 							+ rs.getLong(1);
 					deleteSQL.add(sql);
-					sql = "delete from dyextn_permissible_value where IDENTIFIER="
-						+ rs.getLong(1);
+					sql = "delete from dyextn_permissible_value where IDENTIFIER=" + rs.getLong(1);
 					deleteSQL.add(sql);
 
 				}
@@ -221,11 +220,9 @@ public class DeletePermissibleValue extends DeleteBaseMetadata
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_OTHER AND ILL-DEFINED SITES", 1);
 		this.numberOfOccurenceToDeleteMap.put(
 				"tissueSite_OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX", 1);
-		this.numberOfOccurenceToDeleteMap
-				.put(
-					"tissueSite_OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM" +
-						" AND INTRATHORACIC ORGANS",
-						1);
+		this.numberOfOccurenceToDeleteMap.put(
+				"tissueSite_OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM"
+						+ " AND INTRATHORACIC ORGANS", 1);
 		this.numberOfOccurenceToDeleteMap.put(
 				"tissueSite_OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS", 1);
 		this.numberOfOccurenceToDeleteMap.put(
@@ -258,11 +255,8 @@ public class DeletePermissibleValue extends DeleteBaseMetadata
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_RETROPERITONEUM AND PERITONEUM", 1);
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_SKIN", 1);
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_SMALL INTESTINE", 1);
-		this.numberOfOccurenceToDeleteMap
-				.put(
-				"tissueSite_SPINAL CORD, CRANIAL NERVES," +
-				" AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM",
-						1);
+		this.numberOfOccurenceToDeleteMap.put("tissueSite_SPINAL CORD, CRANIAL NERVES,"
+				+ " AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM", 1);
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_STOMACH", 1);
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_TESTIS", 1);
 		this.numberOfOccurenceToDeleteMap.put("tissueSite_THYROID AND OTHER ENDOCRINE GLANDS", 1);

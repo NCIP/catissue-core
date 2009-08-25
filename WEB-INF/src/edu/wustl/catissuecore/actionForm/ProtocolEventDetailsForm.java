@@ -86,7 +86,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getClinicalDiagnosis()
 	{
-		return clinicalDiagnosis;
+		return this.clinicalDiagnosis;
 	}
 
 	public void setClinicalDiagnosis(String clinicalDiagnosis)
@@ -96,7 +96,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getClinicalStatus()
 	{
-		return clinicalStatus;
+		return this.clinicalStatus;
 	}
 
 	public void setClinicalStatus(String clinicalStatus)
@@ -106,7 +106,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getCollectionPointLabel()
 	{
-		return collectionPointLabel;
+		return this.collectionPointLabel;
 	}
 
 	public void setCollectionPointLabel(String collectionPointLabel)
@@ -116,7 +116,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public Double getStudyCalendarEventPoint()
 	{
-		return studyCalendarEventPoint;
+		return this.studyCalendarEventPoint;
 	}
 
 	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
@@ -126,7 +126,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getCollectionEventId()
 	{
-		return collectionEventId;
+		return this.collectionEventId;
 	}
 
 	public void setCollectionEventId(long collectionEventId)
@@ -136,7 +136,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getCollectionEventSpecimenId()
 	{
-		return collectionEventSpecimenId;
+		return this.collectionEventSpecimenId;
 	}
 
 	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
@@ -146,7 +146,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getCollectionEventUserId()
 	{
-		return collectionEventUserId;
+		return this.collectionEventUserId;
 	}
 
 	public void setCollectionEventUserId(long collectionEventUserId)
@@ -156,7 +156,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getCollectionEventCollectionProcedure()
 	{
-		return collectionEventCollectionProcedure;
+		return this.collectionEventCollectionProcedure;
 	}
 
 	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
@@ -166,7 +166,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getCollectionEventContainer()
 	{
-		return collectionEventContainer;
+		return this.collectionEventContainer;
 	}
 
 	public void setCollectionEventContainer(String collectionEventContainer)
@@ -176,7 +176,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getCollectionEventComments()
 	{
-		return collectionEventComments;
+		return this.collectionEventComments;
 	}
 
 	public void setCollectionEventComments(String collectionEventComments)
@@ -186,7 +186,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getReceivedEventId()
 	{
-		return receivedEventId;
+		return this.receivedEventId;
 	}
 
 	public void setReceivedEventId(long receivedEventId)
@@ -196,7 +196,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getReceivedEventSpecimenId()
 	{
-		return receivedEventSpecimenId;
+		return this.receivedEventSpecimenId;
 	}
 
 	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
@@ -206,7 +206,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public long getReceivedEventUserId()
 	{
-		return receivedEventUserId;
+		return this.receivedEventUserId;
 	}
 
 	public void setReceivedEventUserId(long receivedEventUserId)
@@ -216,7 +216,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getReceivedEventReceivedQuality()
 	{
-		return receivedEventReceivedQuality;
+		return this.receivedEventReceivedQuality;
 	}
 
 	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
@@ -226,7 +226,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getReceivedEventComments()
 	{
-		return receivedEventComments;
+		return this.receivedEventComments;
 	}
 
 	public void setReceivedEventComments(String receivedEventComments)
@@ -236,7 +236,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 	public String getCollectionProtocolEventkey()
 	{
-		return collectionProtocolEventkey;
+		return this.collectionProtocolEventkey;
 	}
 
 	public void setCollectionProtocolEventkey(String collectionProtocolEventkey)
@@ -250,27 +250,28 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
 	 */
+	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
-		Validator validator = new Validator();
+		final Validator validator = new Validator();
 		try
 		{
-			setRedirectValue(validator);
-			HttpSession session = request.getSession();
-			Map collectionProtocolEventMap = (Map) session
+			this.setRedirectValue(validator);
+			final HttpSession session = request.getSession();
+			final Map collectionProtocolEventMap = (Map) session
 					.getAttribute("collectionProtocolEventMap");
 			if (collectionProtocolEventMap != null)
 			{
-				Collection collectionProtocolEventBeanCollection = (Collection) collectionProtocolEventMap
+				final Collection collectionProtocolEventBeanCollection = collectionProtocolEventMap
 						.values();
-				Iterator collectionProtocolEventBeanCollectionItr = collectionProtocolEventBeanCollection
+				final Iterator collectionProtocolEventBeanCollectionItr = collectionProtocolEventBeanCollection
 						.iterator();
 				while (collectionProtocolEventBeanCollectionItr.hasNext())
 				{
-					CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
+					final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventBeanCollectionItr
 							.next();
-					String collectionPointLabel = collectionProtocolEventBean
+					final String collectionPointLabel = collectionProtocolEventBean
 							.getCollectionPointLabel();
 					if (!collectionProtocolEventBean.getUniqueIdentifier().equals(
 							this.collectionProtocolEventkey))
@@ -286,13 +287,13 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 				}
 			}
 
-			double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
+			final double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
 			if (Double.isNaN(dblValue))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
 						ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
 			}
-			if (validator.isEmpty(this.collectionPointLabel.toString()))
+			if (Validator.isEmpty(this.collectionPointLabel.toString()))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("collectionprotocol.collectionpointlabel")));
@@ -307,7 +308,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 			}
 
 			// Mandatory Field : clinical Status
-			if (!validator.isValidOption(clinicalStatus))
+			if (!validator.isValidOption(this.clinicalStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
@@ -357,7 +358,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 			}*/
 
 		}
-		catch (Exception excp)
+		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
 			logger.error(excp.getMessage(), excp);
@@ -372,20 +373,21 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 		// TODO Auto-generated method stub
 
 	}
-	
-		/**
-	 * For SCG labeling,this will be exposed through API and not in the model.
-	 */
+
+	/**
+	* For SCG labeling,this will be exposed through API and not in the model.
+	*/
 	private String labelFormat;
 
-    /**
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public String getLabelFormat()
 	{
-		return labelFormat;
+		return this.labelFormat;
 	}
-    /**
+
+	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	public void setLabelFormat(String labelFormat)
