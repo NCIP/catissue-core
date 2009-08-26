@@ -1242,6 +1242,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		final AbstractSpecimen specimen = spe.getSpecimen();
 		List<Long> list = null;
 		Long siteId = null;
+		SpecimenPosition specimenPosition = null;
 		try
 		{
 			/*	
@@ -1266,23 +1267,29 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						}
 					}
 			 */
-
-			// bug id #13455 start 
-			final String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
-					+ "specimen.id = '" + specimen.getId() + "'";
-			list = dao.executeQuery(query);
-			final Iterator<Long> itr = list.iterator();
-			while (itr.hasNext())
+			// bug id 13887 
+			Specimen specimen1 = (Specimen) specimen;
+			specimenPosition = specimen1.getSpecimenPosition();
+			
+			if(specimenPosition != null) // Specimen is NOT Virtually Located
 			{
-				siteId = itr.next();
-			}
-			final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
-					.getUserId());
-
-			if (!siteIdSet.contains(siteId))
-			{
-				throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
-						.getObjectId(), domainObject.getClass().getSimpleName());
+				// bug id #13455 start 
+				final String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
+						+ "specimen.id = '" + specimen.getId() + "'";
+				list = dao.executeQuery(query);
+				final Iterator<Long> itr = list.iterator();
+				while (itr.hasNext())
+				{
+					siteId = itr.next();
+				}
+				final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
+						.getUserId());
+	
+				if (!siteIdSet.contains(siteId))
+				{
+					throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
+							.getObjectId(), domainObject.getClass().getSimpleName());
+				}
 			}
 		}
 		catch (final DAOException e)
