@@ -109,7 +109,7 @@ function gotoAdvanceQuery()
 	document.forms[0].submit();
 }
 
-function onSubmit()
+function onSubmit(orderedString)
 {
 	if(document.forms[0].chkName[2].checked == true)
 	{
@@ -133,7 +133,7 @@ function onSubmit()
 	}
 	else if(document.forms[0].chkName[0].checked == true)
 	{
-		addToOrderList();
+		addToOrderList(orderedString);
 	}
 	else if(document.forms[0].chkName[3].checked == true)
 	{
@@ -238,8 +238,9 @@ function dobulkDisposals()
 			}
 		}
 
-function addToOrderList()
-		{			
+function addToOrderList(orderedString)
+		{
+			orderedString.value = mygrid.getCheckedRows(0);
 		    var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
@@ -470,7 +471,7 @@ function checkAll(element)
 <tr>
 			<td class="bottomtd"></td></tr>
 <tr>
-       <td colspan="2" class="buttonbg"> <html:button styleClass="blue_ar_b" property="proceed" onclick="onSubmit()" disabled="<%=disabledButton%>" >
+       <td colspan="2" class="buttonbg"> <html:button styleClass="blue_ar_b" property="proceed" onclick="onSubmit(this.form.orderedString)" disabled="<%=disabledButton%>" >
 				<bean:message key="buttons.submit"/>	
 			</html:button></td>
       </tr>
@@ -499,6 +500,11 @@ function checkAll(element)
 			</td>
 	</tr>	
  <%}%>
+    <tr>
+		<td>
+			<input type=hidden name=orderedString>
+		</td>
+    </tr>
   </table>
 	</body>
 	</html:form>

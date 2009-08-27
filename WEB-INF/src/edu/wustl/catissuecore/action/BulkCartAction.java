@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -335,12 +334,13 @@ public class BulkCartAction extends QueryShoppingCartAction
 	private Map<String, Set<String>> getEntityMap()
 	{
 		final Map<String, Set<String>> entityIdsMap = new LinkedHashMap<String, Set<String>>();
-		entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, new HashSet<String>());
+		entityIdsMap.put(Constants.SPECIMEN_ARRAY_CLASS_NAME, new LinkedHashSet<String>());
 		entityIdsMap.put(Constants.IDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-				new HashSet<String>());
+				new LinkedHashSet<String>());
 		entityIdsMap.put(Constants.DEIDENTIFIED_SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
-				new HashSet<String>());
-		entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME, new HashSet<String>());
+				new LinkedHashSet<String>());
+		entityIdsMap.put(Constants.SURGICAL_PATHALOGY_REPORT_CLASS_NAME,
+				new LinkedHashSet<String>());
 		entityIdsMap.put(Constants.SPECIMEN_NAME, new LinkedHashSet<String>());
 		return entityIdsMap;
 	}

@@ -15,6 +15,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,11 +42,37 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 public class AdvanceSearchForm extends ActionForm
 {
 
+	/**
+	 * Specify serial Version UID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(AdvanceSearchForm.class);
+	private static Logger logger = Logger.getCommonLogger(AdvanceSearchForm.class);
+
+	/**
+	 * Specify order of selected specimens.
+	 */
+	private String orderedString = "";
+
+	/**
+	 * This method get Ordered string.
+	 * @return ordered String
+	 */
+	public String getOrderedString()
+	{
+		return this.orderedString;
+	}
+
+	/**
+	 * This method set Ordered String.
+	 * @param orderedString ordered String
+	 */
+	public void setOrderedString(String orderedString)
+	{
+		this.orderedString = orderedString;
+	}
 
 	/**
 	 * @return Returns the columnNames.
@@ -98,7 +125,7 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * A map that handles all the values of Advanced Search pages
 	 */
-	private Map values = new HashMap();
+	private Map values = new LinkedHashMap();
 
 	/**
 	 * A map that handles event parameters' data

@@ -101,15 +101,28 @@ abstract public class QueryShoppingCartAction extends BaseAction
 	 */
 	protected List<Integer> getCheckboxValues(AdvanceSearchForm searchForm)
 	{
-		final Map map = searchForm.getValues();
-		final Set chkBoxValuesSet = map.keySet();
 		final List<Integer> chkBoxValues = new ArrayList<Integer>();
-		for (final Object checkedValue : chkBoxValuesSet)
+		//This maintains order of selected specimens.
+		if (searchForm.getOrderedString() != null && searchForm.getOrderedString().trim() != "")
 		{
-			chkBoxValues.add(this.getIndex(checkedValue));
+			final String[] orderedString = (searchForm.getOrderedString()).split(",");
+			for (final String element : orderedString)
+			{
+				final int index = Integer.parseInt(element);
+				chkBoxValues.add(index - 1);
+			}
 		}
-		// Sorting indices so that the order is retained
-		Collections.sort(chkBoxValues);
+		else
+		{
+			final Map map = searchForm.getValues();
+			final Set chkBoxValuesSet = map.keySet();
+			for (final Object checkedValue : chkBoxValuesSet)
+			{
+				chkBoxValues.add(this.getIndex(checkedValue));
+			}
+			// Sorting indices so that the order is retained
+			Collections.sort(chkBoxValues);
+		}
 		return chkBoxValues;
 	}
 
