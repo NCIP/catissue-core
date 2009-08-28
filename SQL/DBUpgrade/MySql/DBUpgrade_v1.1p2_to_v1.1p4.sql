@@ -26,3 +26,5 @@ ALTER TABLE catissue_participant ADD EMPI_ID varchar(50);
 
 /*This SQL need to run on mysql P2 dump to make IDENTIFIER column auto increment. Its not required for fresh or rc4 upgrade, but there wont be any error/side effect if this query will execute. That's why kept in this file.*/
 ALTER TABLE dyextn_form_ctrl_notes CHANGE IDENTIFIER IDENTIFIER bigint(20) NOT NULL  auto_increment
+/* Inserting a PUBLIC group for supporting Sharing queries to ALL */
+INSERT INTO `CSM_PROTECTION_GROUP` (`PROTECTION_GROUP_ID`,`PROTECTION_GROUP_NAME`,`PROTECTION_GROUP_DESCRIPTION`,`APPLICATION_ID`,`LARGE_ELEMENT_COUNT_FLAG`,`UPDATE_DATE`,`PARENT_PROTECTION_GROUP_ID`) VALUES (25,'PUBLIC_QUERY_PROTECTION_GROUP',NULL,1,0,'2009-08-06',NULL);
