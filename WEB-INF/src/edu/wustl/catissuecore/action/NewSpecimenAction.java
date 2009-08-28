@@ -643,7 +643,7 @@ public class NewSpecimenAction extends SecureAction
 							// "calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---"
 							// );
 
-							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
 									spClass, 0, exceedingMaxLimit, sessionData, dao);
 							// Logger.out.debug(
 							// "exceedingMaxLimit in action for Boolean:"
@@ -768,7 +768,7 @@ public class NewSpecimenAction extends SecureAction
 								specimenForm.setVirtuallyLocated(false);
 							}
 
-							containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
 									spClass, 0, exceedingMaxLimit, sessionData, dao);
 
 							Logger.out

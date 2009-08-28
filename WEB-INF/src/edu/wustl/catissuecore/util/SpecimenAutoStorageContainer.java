@@ -147,7 +147,7 @@ public class SpecimenAutoStorageContainer {
 				StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-				containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(
+				containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
 						collectionProtocolId.longValue(), className, 0, "false", bean, dao);
 				populateStorageLocations(specimenDataBeanList,
 						collectionProtocolId.longValue(), containerMap, bean, className);

@@ -977,7 +977,7 @@ public class ViewSpecimenSummaryAction extends Action
 
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,
+			containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId, className, 0,
 					exceedingMaxLimit, sessionData, dao);
 			/*
 			 * String containerName = ((NameValueBean)

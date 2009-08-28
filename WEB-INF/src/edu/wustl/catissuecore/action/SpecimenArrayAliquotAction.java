@@ -170,7 +170,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					// int aliquotCount =
 					// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(
+					containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(
 							id.longValue(), 0, sessionData, exceedingMaxLimit, dao);
 					this.populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
@@ -237,7 +237,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 						final int aliquotCount = Integer.parseInt(specimenArrayAliquotForm
 								.getAliquotCount());
 						final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id
+						containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(id
 								.longValue(), 0, sessionData, exceedingMaxLimit, dao);
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);

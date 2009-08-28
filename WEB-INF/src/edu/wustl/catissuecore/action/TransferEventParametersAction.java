@@ -199,7 +199,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, className);
 						this.logger.info("Spcimen Class:" + className);
 
-						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+						containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
 								className, 0, exceedingMaxLimit, sessionData, dao);
 						initialValues = this.setInitialValue(request, transferEventParametersForm,
 								containerMap);

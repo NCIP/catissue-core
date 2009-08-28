@@ -90,7 +90,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	/**
 	 * Logger object.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(StorageContainerBizLogic.class);
+	private final transient Logger logger = Logger.getCommonLogger(StorageContainerBizLogic.class);
 
 	/**
 	 * Getting containersMaxLimit from the xml file in static variable.
@@ -125,7 +125,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			// Setting the Parent Container if applicable
 			int posOneCapacity = 1, posTwoCapacity = 1;
 			int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
-			boolean fullStatus[][] = null;
+			boolean[][] fullStatus = null;
 
 			final int noOfContainers = container.getNoOfContainers().intValue();
 
@@ -337,7 +337,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public List getRepositorySiteList(String sourceObjectName, String[] displayNameFields,
-			String valueField, String activityStatusArr[], boolean isToExcludeDisabled)
+			String valueField, String[] activityStatusArr, boolean isToExcludeDisabled)
 			throws BizLogicException
 	{
 		String[] whereColumnName = null;
@@ -365,7 +365,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public List getSiteList(String[] displayNameFields, String valueField,
-			String activityStatusArr[], Long userId) throws BizLogicException
+			String[] activityStatusArr, Long userId) throws BizLogicException
 	{
 		final List siteResultList = this.getRepositorySiteList(Site.class.getName(),
 				displayNameFields, valueField, activityStatusArr, false);
@@ -746,7 +746,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 			if (container.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
-				final Long containerIDArr[] = {container.getId()};
+				final Long[] containerIDArr = {container.getId()};
 				if (this.isContainerAvailableForDisabled(dao, containerIDArr))
 				{
 					final List disabledConts = new ArrayList();
@@ -2531,7 +2531,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean,
-			Long storageContainerIDArr[]) throws BizLogicException
+			Long[] storageContainerIDArr) throws BizLogicException
 	{
 		try
 		{
@@ -3542,7 +3542,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		final List containers = new ArrayList();
 		try
 		{
-			final String queries[] = this
+			final String[] queries = this
 					.getStorageContainerQueries(holdsType, cpId, spClass, aliquotCount,
 							sessionData, containerTypeId, specimenArrayTypeId, exceedingLimit);
 
@@ -3553,7 +3553,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			{
 				this.logger.debug(String.format("Firing query: query%d", i));
 				this.logger.debug(queries[i]);
-
 				final List resultList = dao.executeQuery(queries[i]);
 
 				if (resultList == null || resultList.size() == 0)
@@ -3917,7 +3916,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @return TreeMap of allocated containers
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public TreeMap getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit,
+	public TreeMap getAllocatedContainerMapForContainer(long type_id, String exceedingMaxLimit,
 			String selectedContainerName, SessionDataBean sessionDataBean, DAO dao)
 			throws BizLogicException, DAOException
 	{
@@ -3966,7 +3965,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 * @throws DAOException throws DAOException
 	 */
-	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass,
+	public TreeMap getAllocatedContainerMapForSpecimen(long cpId, String specimenClass,
 			int aliquotCount, String exceedingMaxLimit, SessionDataBean sessionData, DAO dao)
 			throws BizLogicException, DAOException
 	{
@@ -4064,7 +4063,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 *             throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id,
+	public TreeMap getAllocatedContainerMapForSpecimenArray(long specimen_array_type_id,
 			int noOfAliqoutes, SessionDataBean sessionData, String exceedingMaxLimit, DAO dao)
 			throws BizLogicException
 	{
@@ -4583,20 +4582,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		final Collection specimenArrayTypes = (Collection) this.retrieveAttribute(
 				StorageContainer.class.getName(), storageContainer.getId(),
 				"elements(holdsSpecimenArrayTypeCollection)");// storageContainer.getHoldsSpArrayTypeCollection();
-		// if (!specimenArrayTypes.isEmpty())
+		final Iterator itr = specimenArrayTypes.iterator();
+		canHold = false;
+		while (itr.hasNext())
 		{
-			final Iterator itr = specimenArrayTypes.iterator();
-			canHold = false;
-			while (itr.hasNext())
-			{
-				final SpecimenArrayType specimenarrayType = (SpecimenArrayType) itr.next();
-				final long arraytypeId = specimenarrayType.getId().longValue();
+			final SpecimenArrayType specimenarrayType = (SpecimenArrayType) itr.next();
+			final long arraytypeId = specimenarrayType.getId().longValue();
 
-				if (arraytypeId == Constants.ALL_SPECIMEN_ARRAY_TYPE_ID
-						|| arraytypeId == specimenArrayTypeId)
-				{
-					return true;
-				}
+			if (arraytypeId == Constants.ALL_SPECIMEN_ARRAY_TYPE_ID
+					|| arraytypeId == specimenArrayTypeId)
+			{
+				return true;
 			}
 		}
 		return canHold;
@@ -4853,27 +4849,35 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		}
 		final StringBuilder sb = new StringBuilder();
 		sb
-				.append("SELECT t1.IDENTIFIER,t1.name,c.one_dimension_capacity , c.two_dimension_capacity ");
+				.append("SELECT VIEW1.IDENTIFIER, VIEW1.NAME, VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY from ");
+		sb.append("(");
 		sb
-				.append(" from CATISSUE_CONTAINER t1 join catissue_capacity c on t1.capacity_id=c.identifier ");
-		sb.append(" join CATISSUE_STORAGE_CONTAINER t2 on t2.identifier=t1.identifier ");
-		sb.append(" join catissue_site S on S.identifier = t2.SITE_ID");
-		sb.append(" where t2.IDENTIFIER IN ");
+				.append(" SELECT t1.IDENTIFIER,t1.name,c.one_dimension_capacity , c.two_dimension_capacity, (c.ONE_DIMENSION_CAPACITY * c.TWO_DIMENSION_CAPACITY)  CAPACITY ");
 		sb
-				.append(" (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4  where t4.SPECIMEN_ARRAY_TYPE_ID = '");
-		sb.append(specimen_array_type_id);
-		sb.append("'");
+				.append(" FROM CATISSUE_CONTAINER t1 JOIN CATISSUE_CAPACITY c on t1.CAPACITY_ID=c.IDENTIFIER ");
+		sb.append(" LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 on t2.IDENTIFIER=t1.IDENTIFIER ");
+		sb
+				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON t1.IDENTIFIER = K.CONTAINER_ID ");
+		sb
+				.append(" LEFT OUTER JOIN CATISSUE_CONTAINER_POSITION L ON t1.IDENTIFIER = L.PARENT_CONTAINER_ID ");
+		sb.append(" LEFT OUTER join catissue_site S on S.IDENTIFIER = t2.SITE_ID ");
+		sb.append(" WHERE t2.IDENTIFIER IN ");
+		sb
+				.append(" (SELECT t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4  where t4.SPECIMEN_ARRAY_TYPE_ID = '"
+						+ specimen_array_type_id + "'");
 		sb.append(includeAllIdQueryStr);
-		sb.append(") ");
+		sb.append(")");
 		if (!sessionData.isAdmin())
 		{
-			sb.append(" and t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
+			sb.append(" AND t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
 					+ sessionData.getUserId() + ")");
 		}
 		sb.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE
-				+ "' and t1.CONT_FULL=0 ");
+				+ "' and t1.CONT_FULL=0) VIEW1 ");
+		sb
+				.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY ");
+		sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0");
 		sb.append(" order by IDENTIFIER");
-
 		return new String[]{sb.toString()};
 	}
 

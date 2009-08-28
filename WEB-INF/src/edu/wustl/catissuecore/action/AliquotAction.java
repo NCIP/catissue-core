@@ -166,7 +166,7 @@ public class AliquotAction extends SecureAction
 				aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 			}
 
-			containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getColProtId(),
+			containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm.getColProtId(),
 					aliquotForm.getClassName(), aliquotCount, exceedingMaxLimit, sessionData, dao);
 
 			this.populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
@@ -458,14 +458,14 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+						containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 								.getColProtId(), aliquotForm.getClassName(), Integer
 								.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
 								sessionData, dao);
 					}
 					else
 					{
-						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+						containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 								.getColProtId(), aliquotForm.getClassName(), 0, exceedingMaxLimit,
 								sessionData, dao);
 					}
@@ -559,14 +559,14 @@ public class AliquotAction extends SecureAction
 						TreeMap containerMap = null;
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 									.getColProtId(), aliquotForm.getClassName(), Integer
 									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
 									sessionData, dao);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 									.getColProtId(), aliquotForm.getClassName(), 0,
 									exceedingMaxLimit, sessionData, dao);
 						}
@@ -674,14 +674,14 @@ public class AliquotAction extends SecureAction
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
 
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 									.getColProtId(), aliquotForm.getClassName(), Integer
 									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
 									sessionData, dao);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
 									.getColProtId(), aliquotForm.getClassName(), 0,
 									exceedingMaxLimit, sessionData, dao);
 						}

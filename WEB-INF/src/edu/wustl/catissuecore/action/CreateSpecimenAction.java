@@ -261,7 +261,7 @@ public class CreateSpecimenAction extends SecureAction
 										.getBizLogicFactory();
 								final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
 										.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-								containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+								containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
 										spClass, 0, exceedingMaxLimit, sessionData, dao);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);

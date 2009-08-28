@@ -377,7 +377,7 @@ public class SimilarContainersAction extends SecureAction
 			{
 				similarContainersForm.setSelectedContainerName(null);
 			}
-			final TreeMap containerMap = bizLogic.getAllocatedContaienrMapForContainer(new Long(
+			final TreeMap containerMap = bizLogic.getAllocatedContainerMapForContainer(new Long(
 					request.getParameter("typeId")).longValue(), exceedingMaxLimit,
 					similarContainersForm.getSelectedContainerName(), sessionDataBean, dao);
 

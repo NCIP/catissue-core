@@ -212,7 +212,7 @@ public class SpecimenArrayAction extends SecureAction
 			}
 			final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(
+			containerMap = storageContainerBizLogic.getAllocatedContainerMapForSpecimenArray(
 					specimenArrayForm.getSpecimenArrayTypeId(), 0, sessionData, exceedingMaxLimit,
 					dao);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
