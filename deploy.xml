@@ -2807,7 +2807,7 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
 			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>
-
+		<antcall target="replace_app_dao_prop_file"/>
 		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">
 			<arg value="${permissibleValuesFile}"/>
 			<classpath>
