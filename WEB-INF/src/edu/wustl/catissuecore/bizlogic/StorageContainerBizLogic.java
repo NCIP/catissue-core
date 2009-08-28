@@ -4873,7 +4873,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					+ sessionData.getUserId() + ")");
 		}
 		sb.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE
-				+ "' and t1.CONT_FULL=0) VIEW1 ");
+				+ "' and S.ACTIVITY_STATUS='Active' and t1.CONT_FULL=0) VIEW1 ");
 		sb
 				.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY ");
 		sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0");
@@ -5009,7 +5009,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			sb.append(" ) ");
 			sb.append(" AND ");
 		}
-		sb.append("  L.ACTIVITY_STATUS = 'Active' and D.CONT_FULL=0 "); //Added cont_full condition by Preeti
+		sb.append("  L.ACTIVITY_STATUS = 'Active' and D.ACTIVITY_STATUS='Active' and D.CONT_FULL=0 "); //Added cont_full condition by Preeti
 		sb.append(") VIEW1  ");
 		sb.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
 		sb.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
