@@ -1661,7 +1661,6 @@
 				</antcall>
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
-				<antcall target="upgrade_saved_queries" /> 
 		</target>
 		
 	
@@ -3850,29 +3849,6 @@ Thanking You,
 			</java>
 		<delete dir="${temp.dir}" />
 	</target>
-	
-	<!-- This target is used to upgrade the saved queries of rc4 -->
-		<target name="upgrade_saved_queries" >
-			<echo message="Upgrading saved queries...."/>
-			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-			<copy file="${base.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-			<antcall target="replacecfgfiles" />
-			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="ApplicationSecurityConfig.xml" />
-				<replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
-			</replace>
-			<java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
-				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
-				<classpath refid="temp.classpath" />
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-				<arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
-			</java>
-			 <delete dir="${temp.dir}" /> 
-		</target>
 	
 	<target name="update_metaPhone_data_for_participant">
 				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
