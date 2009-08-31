@@ -2869,8 +2869,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
 				}
 				else
-				{
-					absScg.setConsentTierStatusCollection(absScg.getConsentTierStatusCollection());
+				{ 
+					absScg.setConsentTierStatusCollection(null);
 				}
 				registration.setCollectionProtocol(collectionProtocol);
 				absScg.setCollectionProtocolRegistration(registration);
