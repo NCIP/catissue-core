@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.hibernate.LazyInitializationException;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -2869,8 +2869,19 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					absScg.setConsentTierStatusCollection(consentTierStatusCollection);
 				}
 				else
-				{ 
-					absScg.setConsentTierStatusCollection(null);
+				{
+					try
+					{
+						// This is to handle API test cases. While running from API test cases, this collection is prepopulated
+						if((absScg.getConsentTierStatusCollection()!=null)&&(!absScg.getConsentTierStatusCollection().isEmpty()))
+						{
+							absScg.setConsentTierStatusCollection(absScg.getConsentTierStatusCollection());
+						}
+					}
+					catch(LazyInitializationException e)	
+					{
+						absScg.setConsentTierStatusCollection(consentTierStatusCollection);
+					}
 				}
 				registration.setCollectionProtocol(collectionProtocol);
 				absScg.setCollectionProtocolRegistration(registration);
