@@ -68,7 +68,7 @@ create table QUERY_OPERAND (IDENTIFIER number(19,0) not null, OPND_TYPE varchar2
 create table QUERY_OUTPUT_ATTRIBUTE (IDENTIFIER number(19,0) not null, EXPRESSION_ID number(19,0), ATTRIBUTE_ID number(19,0) not null, PARAMETERIZED_QUERY_ID number(19,0), POSITION number(10,0), primary key (IDENTIFIER));
 create table QUERY_OUTPUT_TERM (IDENTIFIER number(19,0) not null, NAME varchar2(255 char), TIME_INTERVAL varchar2(255 char), TERM_ID number(19,0), primary key (IDENTIFIER));
 create table QUERY_PARAMETER (IDENTIFIER number(19,0) not null, NAME varchar2(255 char), OBJECT_CLASS varchar2(255 char), OBJECT_ID number(19,0), primary key (IDENTIFIER));
-create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER number(19,0) not null, QUERY_NAME varchar2(255 char) unique, DESCRIPTION varchar2(1024 char), primary key (IDENTIFIER));
+create table QUERY_PARAMETERIZED_QUERY (IDENTIFIER number(19,0) not null, QUERY_NAME varchar2(255 char) not null unique, DESCRIPTION varchar2(1024 char), primary key (IDENTIFIER));
 create table QUERY_QUERY_ENTITY (IDENTIFIER number(19,0) not null, ENTITY_ID number(19,0) not null, primary key (IDENTIFIER));
 create table QUERY_RULE_COND (RULE_ID number(19,0) not null, CONDITION_ID number(19,0) not null, POSITION number(10,0) not null, primary key (RULE_ID, POSITION));
 create table QUERY_SUBEXPR_OPERAND (IDENTIFIER number(19,0) not null, EXPRESSION_ID number(19,0), primary key (IDENTIFIER));
