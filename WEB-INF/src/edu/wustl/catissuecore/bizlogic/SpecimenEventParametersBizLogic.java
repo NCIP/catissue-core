@@ -1268,10 +1268,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					}
 			 */
 			// bug id 13887 
-			Specimen specimen1 = (Specimen) specimen;
-			specimenPosition = specimen1.getSpecimenPosition();
-			
-			if(specimenPosition != null) // Specimen is NOT Virtually Located
+			List specimenPositionlist = dao.retrieveAttribute(Specimen.class, "id", specimen
+					.getId(), "specimenPosition");
+			if (specimenPositionlist.size() > 0) // Specimen is NOT Virtually Located
 			{
 				// bug id #13455 start 
 				final String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
@@ -1284,7 +1283,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 				final Set<Long> siteIdSet = new UserBizLogic().getRelatedSiteIds(sessionDataBean
 						.getUserId());
-	
+
 				if (!siteIdSet.contains(siteId))
 				{
 					throw AppUtility.getUserNotAuthorizedException(Constants.Association, specimen
