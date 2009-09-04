@@ -169,8 +169,8 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/StorageContainerAdd");
 		setActionForm(storageContainerForm);
 		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();	
+		verifyForward("failure");
+		verifyActionErrors(new String[]{"errors.item"});
 	}
 	
 	/**
