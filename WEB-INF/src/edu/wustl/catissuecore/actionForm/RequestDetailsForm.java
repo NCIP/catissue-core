@@ -280,7 +280,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	}
 
 	/**
-	 * @return int formId 
+	 * @return int formId.
 	 */
 	public int getFormId()
 	{
@@ -289,7 +289,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param 
+	 * reset.
 	 */
 	protected void reset()
 	{
@@ -298,9 +298,10 @@ public class RequestDetailsForm extends AbstractActionForm
 
 	/**
 	 * @param abstractDomain object
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	public void setAllValuesForOrder(AbstractDomainObject abstractDomain,
-			HttpServletRequest request, DAO dao)
+			HttpServletRequest request, DAO dao) throws BizLogicException
 	{
 		int requestDetailsBeanCounter = 0;
 		int existingArrayBeanCounter = 0;
@@ -479,9 +480,10 @@ public class RequestDetailsForm extends AbstractActionForm
 
 	/**
 	 * @param definedArrayMap
+	 * @throws BizLogicException 
 	 */
 	private void makeValuesMapForDefinedArray(Map definedArrayMap,
-			List totalSpecimenListInRequestForDropDown, DAO dao)
+			List totalSpecimenListInRequestForDropDown, DAO dao) throws BizLogicException
 	{
 		final Set keySet = definedArrayMap.keySet();
 		final Iterator iter = keySet.iterator();
@@ -579,9 +581,11 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param arrayDetailsBeanCounter
 	 * @param specimenOrderItem
 	 * @param totalSpecimenListInRequestForDropDown
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void makeKeysForDefinedArrayContents(int arrayDetailsBeanCounter,
 			SpecimenOrderItem specimenOrderItem, List totalSpecimenListInRequestForDropDown, DAO dao)
+			throws BizLogicException
 	{
 		final String assignStatus = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
 				+ "_assignedStatus";
@@ -669,6 +673,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param availableQty
 	 * @param specimenClass
 	 * @param specimenType
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void populateValuesMap(OrderItem orderItem, String requestedItem, String availableQty,
 			String specimenClass, String specimenType, String requestFor, String specimenId,
@@ -677,6 +682,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			String actualSpecimenType, String assignStatus, String consentVerificationkey,
 			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
 			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, DAO dao)
+			throws BizLogicException
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
 		{
@@ -793,10 +799,8 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			else
 			{
-
 				allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
 						.getParentSpecimen());
-
 			}
 
 			final SpecimenComparator comparator = new SpecimenComparator();

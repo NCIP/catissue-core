@@ -1345,8 +1345,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final Object object = dao
 					.retrieveById(OrderDetails.class.getName(), Long.parseLong(id));
 
-			final OrderDetails OrderDetails = (OrderDetails) object;
-			return OrderDetails;
+			final OrderDetails orderDetails = (OrderDetails) object;
+			return orderDetails;
 		}
 		catch (final NumberFormatException e)
 		{

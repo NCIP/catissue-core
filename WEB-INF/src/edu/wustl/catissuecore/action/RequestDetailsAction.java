@@ -481,9 +481,10 @@ public class RequestDetailsAction extends BaseAction
 	 * @param requestDetailsForm : requestDetailsForm
 	 * @param orderDetails : orderDetails
 	 * @throws DAOException : DAOException
+	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void populateRequestForMap(RequestDetailsForm requestDetailsForm,
-			OrderDetails orderDetails) throws DAOException
+			OrderDetails orderDetails) throws DAOException, BizLogicException
 	{
 		final Map valuesMap = requestDetailsForm.getValues();
 		final Set keySet = valuesMap.keySet();
