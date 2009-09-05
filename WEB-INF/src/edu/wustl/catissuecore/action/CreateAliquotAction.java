@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -46,6 +47,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
@@ -122,6 +124,7 @@ public class CreateAliquotAction extends BaseAction
 			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
 		}
 		this.calculateAvailableQuantityForParent(specimenList, aliquotForm);
+		this.updateParentSpecimen(parentSpecimen, Double.parseDouble(aliquotForm.getAvailableQuantity()));
 		aliquotForm.setSpecimenList(specimenList);
 		// mapping.findforward
 		return this.getFindForward(mapping, request, aliquotForm, fromPrintAction,
@@ -528,5 +531,15 @@ public class CreateAliquotAction extends BaseAction
 				aliquotForm.setAvailableQuantity(availableQuantity.toString());
 			}
 		}
+	}
+	
+	private void updateParentSpecimen(Specimen parentSpecimen, Double quantity) throws Exception
+	{
+		DAO dao = AppUtility.openDAOSession(null);
+		Object pSpec =  dao.retrieveById(AbstractSpecimen.class.getName(),  parentSpecimen.getId());
+		((Specimen)pSpec).setAvailableQuantity(quantity);
+		dao.update(pSpec); 
+		dao.commit();
+		dao.closeSession();
 	}
 }
