@@ -15,10 +15,6 @@ public class MaskData
 {
 
 	/**
-	 * configure Logger.
-	 */
-	//LoggerConfig.configureLogger(System.getProperty("user.dir"));
-	/**
 	 * Runtime instance.
 	 */
 	private Runtime runtime;
@@ -29,6 +25,7 @@ public class MaskData
 	 */
 	public static void main(String[] args)
 	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 		MaskData mig = new MaskData();
 		mig.init();
 		try

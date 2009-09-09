@@ -135,6 +135,7 @@
 
 		<target name="dropTempTable">
 			<echo message="dropTempTable" />
+			<!--
 			<if>
 				<equals arg1="${databaseType}" arg2="mysql" />
 				<then>
@@ -148,6 +149,7 @@
 					</sql> 
 				</then>
 			</if>
+			-->	
 			<if>
 				<equals arg1="${databaseType}" arg2="oracle" />
 				<then>
@@ -219,7 +221,8 @@
 	<target name="replaceToken" >
 		<copy file="./conf/hibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
-		
+		<copy file="./conf/MySQLDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
+		<copy file="./conf/OracleDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
 		<if>
 			<equals arg1="${databaseType}" arg2="mysql"/>
 			<then>

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.LoggerConfig;
 
 /**
  *
@@ -15,11 +16,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
  */
 public class PrivateToPublicMigrator
 {
-
-	/**
-	 * configure Logger.
-	 */
-	//LoggerConfig.configureLogger(System.getProperty("user.dir"));
 
 	/**
 	 * Runtime instance.
@@ -32,6 +28,7 @@ public class PrivateToPublicMigrator
 	 */
 	public static void main(String[] args)
 	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 		final PrivateToPublicMigrator mig = new PrivateToPublicMigrator();
 		mig.init();
 		try

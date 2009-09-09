@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.privatepublicmigrator;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Random;
@@ -18,6 +19,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.TaggedValueInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  *
@@ -48,19 +50,19 @@ public class MaskUsingDEMetatdata
 	public void maskIdentifiedData()
 	{
 		final Random generator = new Random();
-		randomNumber = generator.nextInt(50);
+		while (randomNumber == 0)
+		{
+			randomNumber = generator.nextInt(200);
+		}
 
 		try
 		{
-			System.out.println("In maskIdentifiedData ");
+
 			final EntityManagerInterface entityManager = EntityManager.getInstance();
 			final Collection<EntityInterface> entities = entityManager.getAllEntities();
 			final int totalNoOfEntities = entities.size();
 			System.out.println("No Of entities:" + totalNoOfEntities);
-			if (totalNoOfEntities == 0)
-			{
-				throw new Exception();
-			}
+
 			final Configuration cfg = new Configuration();
 			final File file = new File(".//classes//hibernate.cfg.xml");
 			final File file1 = new File(file.getAbsolutePath());
@@ -80,7 +82,6 @@ public class MaskUsingDEMetatdata
 					// updated code for derived attributes
 					if (!this.isTagPresent(attribute, "Derived")) //Please verify the tag value used to identify whether the attributes is inherited or not
 					{
-						//	System.out.println("Name "+entity.getName());
 						if (!entity.getName().contains("Deprecated"))
 						{
 							if (attribute.getIsIdentified() != null
@@ -95,6 +96,11 @@ public class MaskUsingDEMetatdata
 									.equalsIgnoreCase("Date"))
 							{
 								this.maskDate(attribute.getColumnProperties().getName(), entity
+										.getTableProperties().getName(), session);
+							}
+							else if (this.isCommentFiled(attribute))
+							{
+								this.maskString(attribute.getColumnProperties().getName(), entity
 										.getTableProperties().getName(), session);
 							}
 						}
@@ -114,6 +120,30 @@ public class MaskUsingDEMetatdata
 			sqlString = "truncate table CATISSUE_REPORT_PARTICIP_REL";
 			this.executeQuery(sqlString, session);
 
+			/* Delete audit related tables starts */
+
+			// Disable constraints on audit tables.
+			this.disableAuditTables(session);
+
+			sqlString = "truncate table catissue_audit_event_details";
+			this.executeQuery(sqlString, session);
+
+			sqlString = "truncate table catissue_audit_event_query_log";
+			this.executeQuery(sqlString, session);
+
+			sqlString = "truncate table catissue_audit_event_log";
+			this.executeQuery(sqlString, session);
+
+			sqlString = "update catissue_audit_event set USER_ID=null";
+			this.executeQuery(sqlString, session);
+			sqlString = "truncate table catissue_audit_event";
+			this.executeQuery(sqlString, session);
+
+			// Enable constraints on audit tables.
+			this.enableAuditTables(session);
+
+			/* Delete audit related tables ends */
+
 			this.maskReportText(session);
 
 			tx.commit();
@@ -121,6 +151,7 @@ public class MaskUsingDEMetatdata
 		}
 		catch (final Throwable e)
 		{
+			e.printStackTrace();
 			throw new RuntimeException("Error in maskIdentifiedData");
 		}
 	}
@@ -135,19 +166,27 @@ public class MaskUsingDEMetatdata
 	private void maskDate(String columnName, String tableName, Session session) throws Exception
 	{
 		String sqlString = null;
-		final String dbType = session.connection().getMetaData().getDatabaseProductName();
+		if (!tableName.equalsIgnoreCase("CATISSUE_PASSWORD"))
+		{
+			final String dbType = session.connection().getMetaData().getDatabaseProductName();
 
-		if (dbType.equalsIgnoreCase("oracle"))
-		{
-			sqlString = "update " + tableName + " set " + columnName + "=add_months(" + columnName
-					+ ", " + randomNumber + ")";
+			if (dbType.equalsIgnoreCase("oracle"))
+			{
+				sqlString = "update " + tableName + " set " + columnName + "=add_months("
+						+ columnName + ", -" + randomNumber + ")";
+			}
+			if (dbType.equalsIgnoreCase("mysql"))
+			{
+				sqlString = "update " + tableName + " set " + columnName + "=date_add("
+						+ columnName + ", INTERVAL -" + randomNumber + " MONTH);";
+			}
+			if (dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE))
+			{
+				sqlString = "update " + tableName + " set " + columnName + "=dateadd(\"MONTH\", "
+						+ randomNumber + ", " + columnName + ");";
+			}
+			this.executeQuery(sqlString, session);
 		}
-		if (dbType.equalsIgnoreCase("mysql"))
-		{
-			sqlString = "update " + tableName + " set " + columnName + "=date_add(" + columnName
-					+ ", INTERVAL " + randomNumber + " MONTH);";
-		}
-		this.executeQuery(sqlString, session);
 	}
 
 	/**
@@ -159,11 +198,7 @@ public class MaskUsingDEMetatdata
 	 */
 	private void maskString(String columnName, String tableName, Session session) throws Exception
 	{
-		String sqlString = "update " + tableName + " set " + columnName + "=null";
-		if (tableName.equals("CATISSUE_PART_MEDICAL_ID"))
-		{
-			sqlString = "truncate table CATISSUE_PART_MEDICAL_ID";
-		}
+		final String sqlString = "update " + tableName + " set " + columnName + "=null";
 		this.executeQuery(sqlString, session);
 	}
 
@@ -177,7 +212,8 @@ public class MaskUsingDEMetatdata
 		String sqlString = null;
 		final String dbType = session.connection().getMetaData().getDatabaseProductName();
 
-		if (dbType.equalsIgnoreCase("oracle"))
+		if (dbType.equalsIgnoreCase("oracle")
+				|| dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE))
 		{
 			sqlString = "update catissue_report_content set report_data=NULL where identifier in(select a.identifier from catissue_report_content a join catissue_report_textcontent b on a.identifier=b.identifier join catissue_pathology_report c on c.identifier=b.report_id where c.REPORT_STATUS in ('DEIDENTIFIED','DEID_PROCESS_FAILED','PENDING_FOR_DEID'))";
 		}
@@ -203,21 +239,166 @@ public class MaskUsingDEMetatdata
 			final Statement stmt = con.createStatement();
 			stmt.execute(sqlString);
 		}
-		catch (final Exception e)
+		catch (final Exception exception)
 		{
 			System.out.println("Error in executeQuery ");
-			throw e;
+			throw exception;
 		}
 	}
 
 	/**
-	 * updated code for derived attributes.
-	 * @param entity AbstractMetadataInterface
-	 * @param tag tag
-	 * @return true or false
-	 * @throws Exception generic Exception
+	 * Checks is Comment Filed.
+	 * @param attribute AttributeInterface
+	 * @return true/false.
 	 */
-	private boolean isTagPresent(AbstractMetadataInterface entity, String tag) throws Exception
+	private boolean isCommentFiled(AttributeInterface attribute)
+	{
+		boolean flag = false;
+		if (attribute.getEntity().getName().equals("edu.wustl.catissuecore.domain.Specimen")
+				&& attribute.getName().equals("comment"))
+		{
+			flag = true;
+		}
+		else if (attribute.getEntity().getName().equals(
+				"edu.wustl.catissuecore.domain.SpecimenCollectionGroup")
+				&& attribute.getName().equals("comment"))
+		{
+			flag = true;
+		}
+		return flag;
+	}
+
+	/**
+	 * Disable audit related tables constraints.
+	 * @param session session
+	 * @throws Exception Exception
+	 */
+	private void disableAuditTables(Session session) throws Exception
+	{
+		final String dbType = session.connection().getMetaData().getDatabaseProductName();
+
+		if (dbType.equalsIgnoreCase(Constants.ORACLE_DATABASE))
+		{
+			// oracle db.
+			this.disableAuditTablesOracleConstraints(session);
+		}
+		else if (dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE))
+		{
+			// mssqlserver db.
+			this.disableAuditTablesMsSqlServerConstraints(session);
+		}
+	}
+
+	/**
+	 * Enable audit related tables constraints.
+	 * @param session session
+	 * @throws Exception Exception
+	 */
+	private void enableAuditTables(Session session) throws Exception
+	{
+		final String dbType = session.connection().getMetaData().getDatabaseProductName();
+
+		if (dbType.equalsIgnoreCase(Constants.ORACLE_DATABASE))
+		{
+			// oracle db.
+			this.enableAuditTablesOracleConstraints(session);
+		}
+		else if (dbType.equalsIgnoreCase(Constants.MSSQLSERVER_DATABASE))
+		{
+			// mssqlserver db.
+			this.enableAuditTablesMsSqlServerConstraints(session);
+		}
+	}
+
+	/**
+	 * Disable constraints on audit tables for oracle db.
+	 * @param session session
+	 * @throws Exception Exception
+	 */
+	private void disableAuditTablesOracleConstraints(Session session) throws Exception
+	{
+		String sqlString = "ALTER TABLE catissue_audit_event_details DISABLE CONSTRAINT FK5C07745D34FFD77F";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE catissue_audit_event_query_log DISABLE CONSTRAINT FK62DC439DBC7298A9";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DISABLE CONSTRAINT FK8BB672DF77F0B904";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
+		this.executeQuery(sqlString, session);
+	}
+
+	/**
+	 * Enable Audit Tables Oracle Constraints
+	 * @param session session
+	 * @throws Exception Exception
+	 */
+	private void enableAuditTablesOracleConstraints(Session session) throws Exception
+	{
+		String sqlString = "ALTER TABLE catissue_audit_event_details ENABLE CONSTRAINT FK5C07745D34FFD77F";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE catissue_audit_event_query_log ENABLE CONSTRAINT FK62DC439DBC7298A9";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT_LOG ENABLE CONSTRAINT FK8BB672DF77F0B904";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
+		this.executeQuery(sqlString, session);
+	}
+
+	/**
+	 * Disable audit related tables constraints if MsSQLServer DB.
+	 * To disable all constraints - ALTER TABLE <Table_Name> NOCHECK CONSTRAINT ALL
+	 * @param session session
+	 * @exception Exception Exception
+	 */
+	private void disableAuditTablesMsSqlServerConstraints(Session session) throws Exception
+	{
+		String sqlString = "ALTER TABLE catissue_audit_event_details NOCHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE catissue_audit_event_query_log NOCHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT_LOG NOCHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT NOCHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+	}
+
+	/**
+	 * Enable audit related tables constraints if MsSQLServer DB.
+	 * To enable all constraints - ALTER TABLE <Table_Name> CHECK CONSTRAINT ALL
+	 * @param session session
+	 * @exception Exception Exception
+	 */
+	private void enableAuditTablesMsSqlServerConstraints(Session session) throws Exception
+	{
+		String sqlString = "ALTER TABLE catissue_audit_event_details CHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE catissue_audit_event_query_log CHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT_LOG CHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+
+		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT CHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+	}
+
+	/**
+	 * updated code for derived attributes.
+	 * @param entity entity
+	 * @param tag tag
+	 * @return is Tag Present boolean value true/false
+	 */
+	private boolean isTagPresent(AbstractMetadataInterface entity, String tag)
 	{
 		boolean isTagPresent = false;
 		final Collection<TaggedValueInterface> taggedValueCollection = entity
