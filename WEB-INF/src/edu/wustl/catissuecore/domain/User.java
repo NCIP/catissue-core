@@ -44,9 +44,9 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 {
 
 	/**
-	 * logger Logger - Generic logger.
+	 * Common Logger for Login Action.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(User.class);
+	private transient final Logger logger = Logger.getCommonLogger(User.class);
 
 	/**
 	 * Serial Version ID of the class.
@@ -164,6 +164,11 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	protected Collection passwordCollection = new HashSet();
 
 	/**
+	 * WUSTLkey of a user.
+	 */
+	private String wustlKey = null;
+
+	/**
 	 * Initialize a new User instance.
 	 * Note: Hibernate invokes this constructor through reflection API.
 	 */
@@ -175,6 +180,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	/**
 	 * This Constructor Copies the data from an UserForm object to a User object.
 	 * @param uform - user An UserForm object containing the information about the user.
+	 * @throws AssignDataException AssignDataException
 	 */
 	public User(UserForm uform) throws AssignDataException
 	{
@@ -558,7 +564,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 		}
 		catch (final SMException e)
 		{
-			logger.error(e);
+			this.logger.error(e);
 		}
 
 		return roleId;
@@ -608,7 +614,6 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	 * @param abstractForm - user An UserForm object containing the information about the user.
 	 * @throws AssignDataException : AssignDataException
 	 * */
-	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
@@ -755,11 +760,15 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 				{
 					this.csmUserId = uform.getCsmUserId();
 				}
+				if (uform.getWustlKey() != null && !uform.getWustlKey().equals(""))
+				{
+					this.wustlKey = uform.getWustlKey();
+				}
 			}
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			this.logger.error(excp.getMessage());
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "User.java :");
 		}
@@ -854,5 +863,21 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	public void setSiteCollection(Collection<Site> siteCollection)
 	{
 		this.siteCollection = siteCollection;
+	}
+
+	/**
+	 * @return wustlKey
+	 */
+	public String getWustlKey()
+	{
+		return this.wustlKey;
+	}
+
+	/**
+	 * @param wustlKey WustlKey of a user
+	 */
+	public void setWustlKey(String wustlKey)
+	{
+		this.wustlKey = wustlKey;
 	}
 }
