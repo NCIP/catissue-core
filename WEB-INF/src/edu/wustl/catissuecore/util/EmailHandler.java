@@ -51,10 +51,15 @@ public class EmailHandler
 			        
         //Send login details email to the user.
         sendLoginDetailsEmail(user, body);
-			        
-		body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.thank.body.end") +
-			        "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
-        
+        String migratedToWustlkey = "";
+		if(user.getWustlKey()!=null)
+		{
+			migratedToWustlkey = ApplicationProperties.getValue("migration.msg");
+		}
+		
+		body = body + "\n\n" + migratedToWustlkey + "\n\n" +ApplicationProperties.getValue("userRegistration.thank.body.end") +
+		"\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+
 		//Send the user registration details email to the administrator.
         boolean emailStatus = sendEmailToAdministrator(subject, body);
 		

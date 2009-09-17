@@ -44,6 +44,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -64,6 +65,7 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeUtility;
+import edu.wustl.wustlkey.util.global.WUSTLKeyUtility;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -1031,6 +1033,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				}
 				
 			}  */
+			if(!oldUser.getEmailAddress().equals(user.getEmailAddress()))
+			{
+				updateWustlKey(user);
+			}
 		}
 		catch (final SMException smExp)
 		{
@@ -2274,4 +2280,30 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			throw AppUtility.handleSMException(e);
 		}
 	}
+	/**
+	 * This method will migrate user to WUSTLKey.
+	 * @param user
+	 * 			Object of USER
+	 * @throws BizLogicException Object of BizLogicException
+	 */
+	private void updateWustlKey(User user) throws BizLogicException
+	{
+		try
+		{
+			if(user.getWustlKey()!=null)
+			{
+				String queryStr ="UPDATE CSM_MIGRATE_USER SET LOGIN_NAME='"+user.getLoginName()+"' "+
+				"WHERE WUSTLKEY ='"+user.getWustlKey()+"'";
+				WUSTLKeyUtility.executeQueryUsingDataSource
+				(queryStr,true,edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
+			}
+		}
+		catch (ApplicationException e)
+		{
+			this.logger.debug(e.getMessage(), e);
+			throw new BizLogicException(ErrorKey.getErrorKey("db.update.data.error"), e,
+			"Error in database operation");
+		}
+	}
+
 }

@@ -1270,5 +1270,10 @@
 	<!-- For Admini View -->
 	
 	<definition name=".catissuecore.SpecimenCollectionRequirementGroupEditDef" path="/pages/content/common/success.jsp">
+	
 	</definition>
+		<definition name=".catissuecore.wustlkeyDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/WustlKey/MigrateUser.jsp" />
+	</definition>
+	
 </tiles-definitions>

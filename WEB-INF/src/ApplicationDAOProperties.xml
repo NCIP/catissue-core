@@ -32,4 +32,19 @@
 			
 		</DAOFactory>
 	 </Application>
+	 <Application name = "WUSTLKey">
+		<DAOFactory name="edu.wustl.dao.daofactory.DAOFactory">
+	
+			<DefaultDAO>
+				<Class-name name = "edu.wustl.dao.HibernateDAOImpl"/>
+				<Config-file name = "hibernate.cfg.xml"/>
+				<DefaultConnectionManager name = "edu.wustl.dao.connectionmanager.ConnectionManager"/>
+			</DefaultDAO>
+		
+			<JDBCDAO>
+				<DBPropertyFile name ="OracleDataSourceDAOProperties.xml"/>
+			</JDBCDAO>
+			
+		</DAOFactory>
+	 </Application>
 </Applications>

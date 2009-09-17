@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
@@ -76,7 +78,6 @@ public class UserAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
-	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -88,7 +89,8 @@ public class UserAction extends SecureAction
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		final String openInCPFrame = request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
 		final UserForm userForm = (UserForm) form;
-
+		//WustlKey Check
+		checkForWustlKey(userForm, request);
 		// method to get myProfile-Add Privilege
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// String readOnlyForPrivOnEdit = "";
@@ -204,9 +206,8 @@ public class UserAction extends SecureAction
 		}
 		if (pageOf.equals(Constants.PAGE_OF_APPROVE_USER)
 				&& (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString())
-						|| userForm.getStatus()
-								.equals(Status.APPROVE_USER_REJECT_STATUS.toString()) || userForm
-						.getStatus().equals(Constants.SELECT_OPTION)))
+					|| userForm.getStatus().equals(Status.APPROVE_USER_REJECT_STATUS.toString())
+					|| userForm.getStatus().equals(Constants.SELECT_OPTION)))
 		{
 			roleStatus = true;
 			if (userForm.getStatus().equals(Status.APPROVE_USER_PENDING_STATUS.toString()))
@@ -409,8 +410,8 @@ public class UserAction extends SecureAction
 				final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user
 						.getLoginName());
 				privilegeCache.refresh();
-				final Map<String, SiteUserRolePrivilegeBean> privilegeMap = CaTissuePrivilegeUtility
-						.getAllPrivileges(privilegeCache);
+				final Map<String, SiteUserRolePrivilegeBean> privilegeMap =
+					CaTissuePrivilegeUtility.getAllPrivileges(privilegeCache);
 				session.setAttribute(Constants.USER_ROW_ID_BEAN_MAP, privilegeMap);
 			}
 		}
@@ -454,5 +455,37 @@ public class UserAction extends SecureAction
 			return super.getSessionData(request);
 		}
 		return new SessionDataBean();
+	}
+	/**
+	 * @param form
+	 * 			Object of user form
+	 * @param request
+	 * 			Object of HttpServletRequest
+	 */
+	private void checkForWustlKey(UserForm form, HttpServletRequest request)
+	{
+		String userFrom = (String)request.getParameter("userFrom");
+ 		String errorPage = (String)request.getParameter(Constants.ERROR);
+		if(userFrom!=null)
+		{
+			String wustlKey =
+				(String)request.getAttribute(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY);
+			form.setWustlKey(wustlKey);
+			request.setAttribute("wustlKey", wustlKey);
+			form.setFirstName((String)request.
+					getAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME));
+			form.setLastName((String)request.
+					getAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME));
+			ActionMessages messages = new ActionMessages();
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("app.washuuser"));
+			saveMessages(request, messages);
+		}
+		if(Constants.TRUE.equals(errorPage))
+		{
+			if(form.getWustlKey()!=null && !"".equals(form.getWustlKey()))
+			{
+				request.setAttribute("wustlKey", edu.wustl.wustlkey.util.global.Constants.WASHU);
+			}
+		}
 	}
 }

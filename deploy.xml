@@ -1606,7 +1606,7 @@
 	<!-- Removing unnecessary PE -->
 	
 	<target name="upgrade_db">
-		<echo message="Upgrading Database v1.1 to v1.1p4" />
+		<echo message="Upgrading Database v1.1 to v1.1p5" />
 	   <if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -1627,6 +1627,7 @@
 			<param name="buildVersion" value="1.1_to_p2"/>
 		</antcall>
 	<antcall target="upgrade_db_from_p2_to_p4"/>
+	<antcall target="upgrade_db_from_p4_to_p5"/>
 	</target>
 	
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
@@ -1662,7 +1663,30 @@
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
 		</target>
-		
+	
+	<target name="upgrade_all_from_p4_to_p5">
+			<antcall target="upgrade_app"/>
+			<antcall target="upgrade_db_from_p4_to_p5"/>
+	</target>
+	
+	<target name="upgrade_db_from_p4_to_p5">
+		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
+		    <if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_mysql_from_v1.1p4_to_v1.1p5" />
+				</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<antcall target="upgrade_oracle_from_v1.1p4_to_v1.1p5" />
+					</then>
+				</elseif>
+				<else>
+					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+				</else>
+			</if>
+		</target>
 	
 
 	<!-- Removing unnecessary PE Mysql-->
@@ -1710,6 +1734,20 @@
 		<antcall target="upgrade_metadata_for_constraintproperties" />
 	</target>
 	
+	<!-- Upgrading from Suite1.1 p4 to p5 - MySQL -->
+	<target name="upgrade_mysql_from_v1.1p4_to_v1.1p5">
+			<echo message="Upgrading MySQL Database." />
+			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+		</target>
+	
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
 	<target name="upgrade_oracle_from_v1.1p2_to_v1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
@@ -1726,7 +1764,21 @@
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
    </target>	
-	
+
+	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
+	<target name="upgrade_oracle_from_v1.1p4_to_v1.1p5">
+		<echo message="Upgrading Oracle Database." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+   </target>	
+
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<domains>
+	<domain name="WashULDAP">
+		<class name="edu.wustl.domauthmgr.authdomain.LDAPAuthenticationManager" />
+		<LDAP-configuration>
+			<initContextFactory>com.sun.jndi.ldap.LdapCtxFactory</initContextFactory>
+			<securityAuthetication>simple</securityAuthetication>
+			<securityProtocol></securityProtocol>
+			<directory>ldap://10.88.25.248:10389/</directory>
+			<searchbase>ou=users,ou=system</searchbase>
+			<searchfilter>CN=Users</searchfilter>
+			<stringToReplace>Users</stringToReplace>
+			<bindUser>uid=admin,ou=system</bindUser>
+			<bindPassword>secret</bindPassword>
+		</LDAP-configuration>
+		<error-codes>
+			<error code="525" message="User not found" />
+			<error code="52e" message="Invalid credentials" />
+			<error code="530" message="Not permitted to logon at this time" />
+			<error code="532" message="Password expired,contact system administrator" />
+			<error code="533" message="Account disabled,contact system administrator" />
+			<error code="773" message="User must reset password batch update,contact system administrator" />
+			<error code="701" message="Account expired, contact system administrator" />
+		</error-codes>
+		<user-attributes>
+			<firstName>givenname</firstName>
+			<lastName>sn</lastName>
+		</user-attributes>
+	</domain>
+	<domain name="CIDER LDAP">
+		<class name="edu.wustl.domauthmgr.authdomain.LDAPAuthenticationManager" />
+		<LDAP-configuration>
+			<initContextFactory>com.sun.jndi.ldap.LdapCtxFactory</initContextFactory>
+			<securityAuthetication>simple</securityAuthetication>
+			<securityProtocol></securityProtocol>
+			<directory>ldap://10.88.26.32:10389/</directory>
+			<searchbase>ou=users,ou=system</searchbase>
+			<searchfilter>CN=Users</searchfilter>
+			<stringToReplace>Users</stringToReplace>
+			<bindUser>uid=admin,ou=system</bindUser>
+			<bindPassword>secret</bindPassword>
+		</LDAP-configuration>
+		<error-codes>
+		</error-codes>
+		<user-attributes>
+			<firstName>givenname</firstName>
+			<lastName>sn</lastName>
+		</user-attributes>
+	</domain>
+	<domain name="CSM">
+		<class name="edu.wustl.domauthmgr.authdomain.RDBMSAuthenticationManager" />
+			<CSM-configuration>
+			</CSM-configuration>
+			<error-codes>
+			</error-codes>
+			<user-attributes>
+			</user-attributes>
+	</domain>
+</domains>

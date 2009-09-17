@@ -108,8 +108,7 @@ PUBLIC
 		<form-bean name="shipmentForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm"/>
 		<form-bean name="shipmentReceivingForm" type="edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm" />
 <!-- end of shipping tracking form beans-->		
-		
-				
+		<form-bean name="wustlLoginForm" type="edu.wustl.wustlkey.actionForm.WustlLoginForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -1113,22 +1112,33 @@ PUBLIC
 
 
         <!-- Login Module Actions Begin -->
-        
-        
         <action path="/Login"
 			type="edu.wustl.catissuecore.action.LoginAction"
 			name="loginForm"
 			validate="true"
 			input=".catissuecore.mainTitlePageDef"
 			scope="request">
-			<forward name="success" path="/Home.do" />
+			<forward name="success" path="/WustlConnect.do" />
+			<forward name="pageOfNonWashU" path="/Home.do" />
 			<forward name="pageOfAdministrator" path="/ManageAdministrativeData.do" />
 			<forward name="pageOfSupervisor" path="/CpBasedSearch.do?menuSelected=22" />
 			<!--forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" /-->
 			<forward name="pageOfTechnician" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
-			<!--  <forward name="pageOfScientist" path="/RetrieveQueryAction.do" />-->
+			<forward name="pageOfScientist" path="/RetrieveQueryAction.do" />
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
+			<forward name="WashU" path="/SignUp.do?userFrom=WashU&amp;pageOf=pageOfSignUp&amp;operation=add" />
+		</action>
+
+		<action path="/WustlConnect"
+					type="edu.wustl.wustlkey.action.WustlKeyMigrateAction"
+					name ="wustlLoginForm"
+					validate="false"
+					scope="request">					
+		 			<forward name="success" path=".catissuecore.wustlkeyDef" /> 
+		 			<forward name="login" path="/Home.do" />
+		 			<forward name="migrated" path=".catissuecore.reportProblemSuccessDef" />
+		 			<forward name="failure" path=".catissuecore.wustlkeyDef" />
 		</action>
         
         <action path="/SignUp"
@@ -1144,10 +1154,10 @@ PUBLIC
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="userForm"
 			validate="true"
-			input="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
+			input="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp&amp;error=true"
 			scope="request">
 			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
-			<forward name="failure" path="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp" />
+			<forward name="failure" path="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp&amp;error=true" />
 		</action>
 
 		<action path="/Logout"

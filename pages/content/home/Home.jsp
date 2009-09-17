@@ -1,8 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page
-	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.XMLPropertyHandler,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
 
 <style type="text/css">
 table#browserDetailsContainer
@@ -12,6 +11,37 @@ table#browserDetailsContainer
 	padding-left:10px;
 }
 </style>
+<script language="JavaScript"> 
+function wustlkey()
+{
+	  var answer=confirm("WASHINGTON UNIVERSITY USERS: Please press Cancel and first log into caTissue using your WUSTL Key and password. After successfully logging in,you will be able to request for your account to be activated in caTissue. \n\nALL OTHER USERS: Please press OK to proceed.");
+	  var url;
+	  var currentURL = window.location;
+	  if(answer==false)
+	  {
+		 url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/Home.do?";
+	  }
+	  else
+	  {
+			url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/SignUp.do?operation=add&pageOf=pageOfSignUp"
+	  }
+	  window.location.href = url;
+  }
+
+	function forgotId()
+	{
+		var url= "https://connect.wustl.edu/login/wuforgotID.aspx";
+		window.open(url,'WustlLoginForm','height=630,width=800,scrollbars=1,resizable=1');
+	}
+
+	function forgotPassword()
+	{
+		var url= "https://connect.wustl.edu/login/wuforgotpwd.aspx";
+		window.open(url,'WustlLoginForm','height=630,width=800,scrollbars=1,resizable=1');
+	}
+
+
+</script> 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
@@ -163,7 +193,7 @@ table#browserDetailsContainer
 								action="/Login.do">
 								<table width="98%" border="0" cellpadding="4" cellspacing="0">
 									<tr>
-										<td class="black_ar"><bean:message key="app.loginId" />
+										<td class="black_ar"><bean:message key="app.UserID" />
 										</td>
 										<td><html:text styleClass="black_ar" property="loginName"
 											size="20"/></td>
@@ -185,9 +215,25 @@ table#browserDetailsContainer
 												<td><img src="images/uIEnhancementImages/or_dot.gif"
 												 alt="Divider line"
 													width="1" height="15" hspace="5" /></td>
-												<td><a
+											<%
+												if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
+												{
+											%>	
+											  <td>
+												<a href="#"
+													class="view" onclick="wustlkey();"><bean:message key="app.signup" /></a>
+												</td>
+											<%
+												}
+												else{
+													%>
+												
+													<td><a
 													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
-													class="view"><bean:message key="app.signup" /></a></td>
+													class="view"><bean:message key="app.signup" /></a>
+													</td>
+											<%} %>
+	
 											</tr>
 										</table>
 										</td>
@@ -233,6 +279,48 @@ table#browserDetailsContainer
 				alt="Shadow Corner"
 					width="5" height="5" /></td>
 			</tr>
+<%
+	if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
+	{
+%>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td class="black_new">
+					<div><b>To get your Login ID and password:</b></div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td class="black_new">
+					<div>For <b>Washington University</b> users:</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="black_new">
+					<a href="#"	class="view" onclick="forgotId();"><bean:message key="forgotId.wustlkey" /></a>
+				</td>
+			</tr>
+			<tr>
+				<td class="black_new">
+					<a href="#"	class="view" onclick="forgotPassword();"><bean:message key="forgotpassword.wustlkeypassword" /></a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+<%
+	}
+%>
 		</table>
 
 		</td>

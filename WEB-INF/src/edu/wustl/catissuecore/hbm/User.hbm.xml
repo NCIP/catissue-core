@@ -266,7 +266,14 @@
 
         </set>
 
-
+ 		<property
+            name="wustlKey"
+            type="string"
+            update="true"
+            insert="true"
+            column="WUSTLKEY"
+            length="100"
+        />
            <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-User.xml

@@ -57,6 +57,7 @@
 	<html:form action='${requestScope.formName}'>
 		<html:hidden property="operation" styleId="operation" />
 		<html:hidden property="submittedFor" />
+		<html:hidden property="wustlKey" />
 		<html:hidden property="pageOf" />
 		<html:hidden property="id" />
 		<html:hidden property="csmUserId" />
@@ -64,6 +65,11 @@
 		<logic:equal name="pageOf" value='${requestScope.pageOfSignUp}'>
 			<html:hidden property="activityStatus" />
 		</logic:equal>
+
+		<logic:notEqual name="wustlKey" value=''>
+			<html:hidden property="lastName"/>
+			<html:hidden property="firstName"/>
+		</logic:notEqual>
 
 		<tr>
 			<td class="td_color_bfdcf3">
@@ -187,7 +193,7 @@
 							<td width="19%" align="left"><html:text
 								styleClass="black_ar" maxlength="255" size="30"
 								styleId="emailAddress" property="emailAddress"
-								readonly='${requestScope.readOnlyEmail}' /></td>
+								readonly='${requestScope.readOnlyEmail}'/></td>
 							<td width="13%" align="left">&nbsp;</td>
 
 							<logic:notEqual name="pageOf"
@@ -209,6 +215,34 @@
 								<td width="32%" align="left" colspan="3" valign="top">&nbsp;</td>
 							</logic:equal>
 						</tr>
+						<logic:notEqual name="wustlKey" value=''>
+						<tr>
+							<td align="center" class="black_ar"><span class="blue_ar_b"><img
+								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+								width="6" height="6" hspace="0" vspace="0" /></span></td>
+							<td align="left" class="black_ar"><bean:message
+								key="user.lastName" /></td>
+							<td width="22%" align="left" class="black_ar">
+								<label>
+								 	${requestScope.userForm.lastName}
+								</label>
+							</td>
+							<td align="left" class="black_ar">&nbsp;</td>
+							<td align="center" class="black_ar"><span class="blue_ar_b"><img
+								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+								width="6" height="6" hspace="0" vspace="0" /></span></td>
+							<td align="left" class="black_ar"><bean:message
+								key="user.firstName" /></td>
+							<td width="22%" align="left" class="black_ar">
+
+								<label>
+									${requestScope.userForm.firstName}
+								</label>
+							</td>
+							<td align="left" valign="top">&nbsp;</td>
+						</tr>
+						</logic:notEqual>
+						<logic:equal name="wustlKey" value=''>
 						<tr>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -228,6 +262,8 @@
 								property="firstName" /></td>
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
+						</logic:equal>
+						
 						<logic:equal name="pageOf" value='${requestScope.pageOfUserAdmin}'>
 							<logic:equal name="operation" value='${requestScope.editforJSP}'>
 								<tr>
@@ -377,6 +413,19 @@
 							</logic:notEqual></a></td>
 						</tr>
 						
+						<logic:notEqual name="wustlKey" value=''>
+							<tr id="autoDiv">
+									<td align="center" class="black_ar">&nbsp;</td>
+									<td styleId="abc" align="left" class="black_ar"><bean:message
+										key="app.wustlkey" /></td>
+									<td width="22%" align="left" class="black_ar">
+										<label>
+											${requestScope.userForm.wustlKey}
+										</label>
+									</td>
+									<td align="left" class="black_ar">&nbsp;</td>
+							</tr>
+						</logic:notEqual>
 					</table>
 					</td>
 				</tr>

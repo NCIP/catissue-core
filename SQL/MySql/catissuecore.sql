@@ -742,6 +742,7 @@ create table CATISSUE_USER (
    CSM_USER_ID bigint,
    STATUS_COMMENT text,
    FIRST_TIME_LOGIN bit default 1,
+   WUSTLKEY varchar(100) UNIQUE,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_TIS_SPE_EVENT_PARAM (
