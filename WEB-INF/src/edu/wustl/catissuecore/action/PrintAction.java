@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -30,6 +31,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -45,7 +48,6 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  */
 public class PrintAction extends Action
 {
-
 	/**
 	 * logger.
 	 */
@@ -71,7 +73,7 @@ public class PrintAction extends Action
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+			ServletException,BizLogicException
 	{
 
 		String nextforwardTo = request.getParameter("nextForwardTo");
@@ -81,7 +83,7 @@ public class PrintAction extends Action
 		{
 			printerType = " ";
 		}
-		if (printerLocation == null || printerLocation.equals(""))
+		if (printerLocation == null || printerLocation.trim().equals(""))
 		{
 			printerLocation = " ";
 		}
@@ -270,6 +272,64 @@ public class PrintAction extends Action
 				}
 				this.setStatusMessage(printStauts, request);
 			}
+			else if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
+					&& forwardToPrintMap.get( Constants.PRINT_SPECIMEN_FROM_LISTVIEW )!= null)
+			{
+		
+				 boolean printStauts = false;
+				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
+						Constants.APPLICATION_NAME).getDAO();
+				try 
+				{
+				dao.openSession(null);
+				List<String> specimenIds = this.getSpecimenIDListFromMap( Constants.PRINT_SPECIMEN_FROM_LISTVIEW, forwardToPrintMap );
+				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,specimenIds );
+				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
+			    printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
+						objUser, printerType, printerLocation);
+				
+				nextforwardTo = Constants.SUCCESS ; 
+				}
+				catch (final DAOException exception)
+				{
+					this.logger.debug(exception.getMessage(), exception);
+					throw exception;
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				this.setStatusMessage(printStauts, request);
+				
+			}
+			else if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
+					&& forwardToPrintMap.get( Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT )!= null)
+			{
+				 boolean printStauts = false;
+				List<String> specimenIds = this.getSpecimenIDListFromMap( Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT, forwardToPrintMap );
+				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
+						Constants.APPLICATION_NAME).getDAO();
+				try 
+				{
+				dao.openSession(null);
+				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,specimenIds );
+				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
+				 printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
+						objUser, printerType, printerLocation);
+				
+				nextforwardTo = Constants.SUCCESS;
+				}
+				catch (final DAOException exception)
+				{
+					this.logger.debug(exception.getMessage(), exception);
+					throw exception;
+				}
+				finally
+				{
+					dao.closeSession();
+				}
+				this.setStatusMessage(printStauts, request);
+			}
 		}
 		catch (final Exception e)
 		{
@@ -288,7 +348,107 @@ public class PrintAction extends Action
 
 		return mapping.findForward(nextforwardTo);
 	}
-
+	/**
+	 * This method will return list of Specimen objects
+	 * @param specimenDomainCollection - specimenDomainCollection
+	 * @return list of AbstractDomainObject objects
+	 */
+	private List < AbstractDomainObject > getSpecimenList(HashSet specimenDomainCollection)
+	{
+		Iterator iterator = specimenDomainCollection.iterator();
+		List < AbstractDomainObject > specimenList = new ArrayList();
+		while (iterator.hasNext())
+		{
+			Specimen objSpecimen = (Specimen) iterator.next();
+			specimenList.add(objSpecimen);
+		}
+		return specimenList;
+	}
+	/**
+	 * This method will return object of Specimen
+	 * @param dao - DAO
+	 * @param forwardToPrintMap - forwardToPrintMap
+	 * @return Specimen object
+	 * @throws DAOException - DAOException
+	 */
+	private Specimen getSpecimenForPrint(DAO dao, HashMap forwardToPrintMap) throws DAOException
+	{
+		String specimenId = (String) forwardToPrintMap.get("specimenId");
+		Specimen objSpecimen = null;
+		try
+		{
+			//dao.openSession(null);
+			objSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+					new Long(specimenId));			
+		}
+		catch (DAOException exception)
+		{
+			logger.debug(exception.getMessage(), exception);
+			throw exception;
+		}
+		return objSpecimen;
+	}
+	/**
+	 * Print labels
+	 * @param specimenIdList - specimenIdList
+	 * @param strIpAddress - strIpAddress
+	 * @param printerType - Printer type
+	 * @param printerLocation - Printer Location
+	 * @param objUser - objUser
+	 * @return boolean 
+	 * @throws Exception - Exception
+	 */
+	private List<AbstractDomainObject> getSpecimenList(DAO dao,List<String> specimenIdList) throws Exception
+	{
+		
+		List < AbstractDomainObject > specimenList = new ArrayList < AbstractDomainObject >();
+		try
+		{
+			for(String id : specimenIdList)
+			{
+				Object object = dao.retrieveById(Specimen.class.getName(),
+						new Long(id));
+				if (object != null)
+				{
+					Specimen specimenObj = (Specimen) object;
+					specimenList.add(specimenObj);
+				}
+			}
+		}
+		catch (DAOException daoException)
+		{
+			logger.debug(daoException.getMessage(), daoException);
+			throw new BizLogicException(daoException.getErrorKey(), daoException, daoException
+					.getMsgValues());
+		}
+		return specimenList;
+	}
+	/**
+	 * This method is used to get specimen ids from Map.
+	 * @param key - Map key
+	 * @param forwardToPrintMap - Map
+	 * @return List of specimen ids 
+	 */
+	private List<String> getSpecimenIDListFromMap(String key,HashMap forwardToPrintMap)
+	{
+		List<String> specimenList = new ArrayList<String>();
+		if(key.equals( Constants.PRINT_SPECIMEN_FROM_LISTVIEW ))
+		{
+			LinkedHashSet<String> specimenIds = (LinkedHashSet) forwardToPrintMap
+			.get(key);
+			Iterator it = specimenIds.iterator();
+			while(it.hasNext())
+			{
+				specimenList.add(it.next().toString());				
+			}
+		}
+		else
+		{
+			specimenList = (List) forwardToPrintMap.get(key);
+		}
+		return specimenList;
+	}	
+    
 	/**
 	 *
 	 * @param form : form

@@ -66,7 +66,11 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	protected String[] getColumnNames(String[] selectedColumnsList)
 	{
 		final String[] columnNames = new String[selectedColumnsList.length];
-		for (int i = 0; i < selectedColumnsList.length; i++)
+		//bug 13605
+		int i=0;
+		columnNames[i] = selectedColumnsList[i];	
+		i++;
+		for (; i < selectedColumnsList.length; i++)
 		{
 			/*
 			 * Split the string which is in the form
@@ -232,7 +236,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 
 		// Set the resultViewVector
 		final Vector vector = new Vector();
-		for (i = 0; i < selectedColumns.length; i++)
+		for (i = 1; i < selectedColumns.length; i++)
 		{
 			final StringTokenizer st = new StringTokenizer(selectedColumns[i], ".");
 			final DataElement dataElement = new DataElement();

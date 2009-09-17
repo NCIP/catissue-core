@@ -39,7 +39,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
  * This Class is used to encapsulate all the request parameters passed from Search Pages.
  * @author aniruddha_phadnis
  */
-public class AdvanceSearchForm extends ActionForm
+public class AdvanceSearchForm extends ActionForm implements IPrinterTypeLocation
 {
 
 	/**
@@ -50,7 +50,8 @@ public class AdvanceSearchForm extends ActionForm
 	 * logger Logger - Generic logger.
 	 */
 	private static Logger logger = Logger.getCommonLogger(AdvanceSearchForm.class);
-
+    private String printerType;
+	private String printerLocation;
 	/**
 	 * Specify order of selected specimens.
 	 */
@@ -593,5 +594,24 @@ public class AdvanceSearchForm extends ActionForm
 				}
 			}
 		}
+	}
+	public String getPrinterLocation()
+	{
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation)
+	{
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType()
+	{
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType)
+	{
+		this.printerType = printerType;
 	}
 }

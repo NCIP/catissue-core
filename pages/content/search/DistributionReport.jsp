@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page import="edu.wustl.common.util.SendFile"%>
 <%
         List dataList = (List)request.getAttribute(Constants.DISTRIBUTED_ITEMS_DATA);
@@ -41,6 +42,22 @@
 		selectOptions(document.forms[0].selectedColumnNames);
 		setFormAction("<%=reportSaveAction%>");
    }
+
+   function printLabels()
+   {
+	    var specimenIdsStr = "";
+	    for(var ii=0; ii < <%=dataList.size()%>; ii++) 
+		{ 
+	    	if(document.getElementsByName("print")[ii].checked)
+		    {  
+				specimenIdsStr = specimenIdsStr + document.getElementsByName("print")[ii].id;
+				specimenIdsStr = specimenIdsStr + ":";							       
+		    }		 
+		}
+		document.forms[0].specimenIdString.value = specimenIdsStr;
+		setFormAction("DistributionReport.do?forward=printLabels");
+		document.forms[0].submit();        
+   }
 	
 	function changeActionOnConfig()
 	{
@@ -55,12 +72,28 @@
 		<%}%>
 			document.forms[0].submit();
 	}
-	
+	function ChangePrintCheckBoxStatus()
+	{
+		var countOfCheckboxes = document.getElementsByName("print").length;
+         for(var ii=0; ii < countOfCheckboxes; ii++) 
+		 {
+			 if(document.forms[0].printAll.checked)
+			 {
+               document.forms[0].print[ii].checked = true;
+			 }
+			 else
+			 {
+                document.forms[0].print[ii].checked = false;
+			 }
+
+		 }  
+		
+	}
 	function selectOptions(element)
 	{
 		for(i=0;i<element.length;i++) 
 		{
-			element.options[i].selected=true;
+			element.options[i].selected=true;			
 		}
 	}
 	
@@ -75,14 +108,15 @@
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
-
 <html:form action="<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>">
 <html:hidden property="distributionId" />
+<html:hidden property="specimenIdString" />
 			<html:hidden property="nextAction"/>
 			<html:hidden property="reportAction" value="true"/>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
+	
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="distribution.name"/>
 		</span></td>
@@ -116,6 +150,11 @@
         <tr>
           <td colspan="3" align="left" class="toptd"></td>
         </tr>
+		<tr>
+					<td colspan="2" align="left" class="toptd"><%@ include
+						file="/pages/content/common/ActionErrors.jsp"%>
+					</td>
+				</tr>
         <tr>
           <td colspan="3" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
 			<bean:message key="distribution.reportTitle"/>
@@ -197,7 +236,13 @@
 		  <table width="100%" border="0" cellspacing="0" cellpadding="3">
 			<tr>
 			<td>&nbsp;</td>
-			<td colspan="<%=columnNames.length%>" align="right" nowrap >
+			<td colspan="<%=(columnNames.length-1)%>" align="left" nowrap >
+		  		<input type="checkbox" name="printAll"
+						onclick="ChangePrintCheckBoxStatus()" />
+                    <span class="black_ar"> <bean:message
+						key="buttons.selectAll" /> </span>
+			</td>
+			<td colspan="<%=(columnNames.length-1)%>" align="right" nowrap >
 		  
 						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 						<a href="#" onclick="changeActionOnConfig()" class="view">
@@ -234,41 +279,62 @@
 						 <%			
 							
 				 			List rowElements = (List)innerItr.next();							
-				 			Iterator elementItr= rowElements.iterator();
-				 			int j=0;
-				 			while(elementItr.hasNext() && j<columnNames.length)
+				 			//Iterator elementItr= rowElements.iterator();
+				 			//int j=0;
+				 			//while(elementItr.hasNext() && j<columnNames.length)
+							for(int j=0;j<columnNames.length;j++)
 				 			{
-								
-
+								if(j==0)
+								{
+                                   
 				 %>
-                    <td class="<%=fontStyle%>"><label><%=elementItr.next()%></label></td>
-						<%
-								j++;
+ <td align="left" class="<%=fontStyle%>">
+       <%if(rowElements.get(0).equals("true")){ %>
+		<input name="print" id="<%=rowElements.get(columnNames.length)%>" type="checkbox" checked="checked">
+        <%}else { %>
+        <input name="print" id="<%=rowElements.get(columnNames.length)%>" type="checkbox">
+         <%} %>
+		  </td> <%} else {%>
+                    <td class="<%=fontStyle%>"><label><%=rowElements.get(j)%></label></td>
+						<% }
+								//j++;
 				 			}
 				 			i1++;
 				 	%>
                   </tr>
 				<%
 				 		}
-				 	%>
-				 	
-				
+				 	%>				
                 </table>
 				</div></td>
-              </tr>
-			   <tr>
-          <td colspan="3" class="toptd"></td>
-        </tr>
+              </tr>		  
+		<tr>
+		
+		<td>
+		 <table><tr><td>
+
+		   <%@ include	file="/pages/content/common/PrinterLocationTypeComboboxes.jsp"%>
+		   </td></tr></table>
+		   </td>
+		</tr>
 			    <tr>
-          <td colspan="3" class="buttonbg">
+          <td colspan="4" class="buttonbg">
 				<span class="blue_ar_b">
 					<html:submit property="expButton" onclick="changeAction()" >
 							<bean:message  key="buttons.export" />
 					</html:submit>
 					</span>
-			</td>
+					<span class="blue_ar_b">
+					<html:button styleId="printCheckbox" property="printButton" onclick="printLabels()" >
+							<bean:message  key="print.checkboxLabel" />
+					</html:button>
+					</span>								
+			</td>			
         </tr>
       </table></td>
   </tr>
 </table>
+<script language="JavaScript" type="text/javascript">
+displayPrinterTypeLocation();
+</script>
 </html:form>			

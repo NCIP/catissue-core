@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.querysuite.QueryShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
@@ -19,6 +20,7 @@
 .active-column-6 {width:150px}
 </style>
 <%
+    AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");  
 	String checkAllPages = (String)session.getAttribute("checkAllPages");
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String isSpecimenIdPresent = (String)request.getAttribute(Constants.IS_SPECIMENID_PRESENT);
@@ -101,7 +103,11 @@ function showEvents()
 		 
    }
 }
-
+function showHideComponents()
+{
+   showEvents();
+   showPriterTypeLocation();
+}
 function gotoAdvanceQuery()
 {
 	var action = "QueryWizard.do?";
@@ -149,6 +155,10 @@ function onSubmit(orderedString)
 	{
 		//distribute Order
 		distributeOrder();
+	}
+	else if(document.forms[0].chkName[6].checked == true)
+	{
+		printSpecimensLabels();
 	}
 }
 
@@ -318,7 +328,22 @@ function distributeOrder()
 	}
 	
 }
-
+function printSpecimensLabels()
+{
+	var isChecked = updateHiddenFields();
+	   
+	if(isChecked == "true")
+	{
+		var action = "BulkCart.do?operation=printLabels";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+	else
+	{
+		alert("Please select at least one checkbox");
+	}
+	
+}
 function checkAll(element)
 {
 	mygrid.setEditable(true);
@@ -431,12 +456,12 @@ function checkAll(element)
         <td colspan="2" class="black_ar">
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
           <tr>
-			 <td class="black_ar" width="2%"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showEvents()" checked=true <%=disabledOrder%> ></td>
+			 <td class="black_ar" width="2%"><input type="radio" name="chkName"      value="OrderSpecimen" onclick="showHideComponents()" checked=true <%=disabledOrder%> ></td>
              <td class="black_ar" width="23%" ><bean:message key="mylist.label.orderBioSpecimen"/></td>
-			 <td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName' onclick="showEvents()" value="Specimenpage" <%=disabled%> ></td>
+			 <td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName' onclick="showHideComponents()" value="Specimenpage" <%=disabled%> ></td>
 			 <td class="black_ar" width="23%" ><bean:message key="mylist.label.multipleSpecimenPage"/>
                </td>
-			<td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showEvents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
+			<td class="black_ar" width="2%"><INPUT TYPE='RADIO' NAME='chkName'     onclick="showHideComponents()" id="ch1" value="Events" <%=disabled%> ></INPUT></td>
             
 			<td class="black_ar" width="15%" ><bean:message key="mylist.label.specimenEvent"/> </td>
 			 
@@ -455,16 +480,20 @@ function checkAll(element)
 		  </tr>
 		
           <tr>
-			<td class="black_ar"><input type="radio" name="chkName" onclick="showEvents()" value="requestShipment" <%=disabledShipping%> ></td>
+			<td class="black_ar"><input type="radio" name="chkName" onclick="showHideComponents()" value="requestShipment" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.request"/></td>			
-			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showEvents()" <%=disabledShipping%> ></td>
+			<td class="black_ar"><input type="radio" name="chkName"  value="createShipment" onclick="showHideComponents()" <%=disabledShipping%> ></td>
             <td class="black_ar" ><bean:message key="shipment.create"/></td>
             
             
-            		<td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showEvents()" <%=disabledShipping%> ></td>
+            		<td class="black_ar"><input type="radio" name="chkName"  value="distributeOrder" onclick="showHideComponents()" <%=disabledShipping%> ></td>
             <td class="black_ar" >Distribute</td>
             
-			<td colspan="3">&nbsp;</td>
+			<td class="black_ar"><input type="radio" name="chkName"
+								value="printLabels" id="printCheckbox"
+								onclick="showHideComponents()"><bean:message
+								key="mylist.label.printLabels" /></td>
+							<td>
 		  </tr>
         </table>          
       </tr>
@@ -506,6 +535,9 @@ function checkAll(element)
 		</td>
     </tr>
   </table>
+<script language="JavaScript" type="text/javascript">
+	showHideComponents();
+</script>
 	</body>
 	</html:form>
 </html:html>

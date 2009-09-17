@@ -20,7 +20,7 @@ import org.apache.struts.action.ActionForm;
  *@version 1.0
  */
 
-public class ConfigureResultViewForm extends ActionForm
+public class ConfigureResultViewForm extends ActionForm implements IPrinterTypeLocation
 {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +31,11 @@ public class ConfigureResultViewForm extends ActionForm
 	private String nextAction;
 	private Long distributionId;
 	private boolean reportAction = true;
-
+	private String printerType;
+	private String printerLocation;
+	private String specimenIdString;
+	
+	
 	/**
 	 * @return distributionId Returns the distributionId.
 	 */
@@ -127,4 +131,34 @@ public class ConfigureResultViewForm extends ActionForm
 	{
 		this.reportAction = reportAction;
 	}
+	public String getPrinterLocation()
+	{
+		return printerLocation;
+	}
+
+	public void setPrinterLocation(String printerLocation)
+	{
+		this.printerLocation = printerLocation;
+	}
+
+	public String getPrinterType()
+	{
+		return printerType;
+	}
+
+	public void setPrinterType(String printerType)
+	{
+		this.printerType = printerType;
+	}
+	public String getSpecimenIdString()
+	{
+		return specimenIdString;
+	}
+
+	
+	public void setSpecimenIdString(String specimenIdString)
+	{
+		this.specimenIdString = specimenIdString;
+	}
+
 }

@@ -3,6 +3,8 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -52,7 +54,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	{
 		final AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		final HttpSession session = request.getSession();
-		String target = null;
+		String target = Constants.SUCCESS;
 		final String operation = request.getParameter(Constants.OPERATION);
 
 		final QueryShoppingCart cart = (QueryShoppingCart) session
@@ -81,10 +83,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 		{
 			target = this.createShipment(searchForm, session, operation);
 		}
-		else if ("requestToDistribute".equals(operation))
+		else if (Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
 		{
 			this.getOrderableEntityIds(searchForm, session, cart);
-			target = "requestToDistribute";
+			target = Constants.REQUEST_TO_DISTRIBUTE;
+		}
+		else if (Constants.PRINT_LABELS.equals(operation))
+		{
+			target = this.printSpecimensFromListView(searchForm, session, operation,request);
 		}
 
 		return mapping.findForward(target);
@@ -235,6 +241,19 @@ public class BulkCartAction extends QueryShoppingCartAction
 			String operation)
 	{
 		String target;
+		session.setAttribute(Constants.SPECIMEN_ID, this.getSpecimenIDs( searchForm, session, operation ));		
+		target = new String(operation);
+		return target;
+	}
+	/**
+	 * This method is used to create set of specimen IDs.
+	* @param searchForm - AdvanceSearchForm
+	 * @param session - HttpSession
+	 * @param operation - operation
+	 * @return set of specimen IDs
+	 */
+	private Set<String> getSpecimenIDs(AdvanceSearchForm searchForm, HttpSession session,String operation)
+	{
 		if (session.getAttribute(Constants.SPECIMEN_ID) != null)
 		{
 			session.removeAttribute(Constants.SPECIMEN_ID);
@@ -244,13 +263,29 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		final Set<String> specimenIds = new LinkedHashSet<String>(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
-		session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));		
+		return specimenIds;
 
+	}
+	/**
+	 *  This method creates map which contains specimen IDs to print. 
+	 * @param searchForm - AdvanceSearchForm
+	 * @param session - HttpSession
+	 * @param operation - operation
+	 * @param request - HttpServletRequest
+	 * @return target
+	 */
+	private String printSpecimensFromListView(AdvanceSearchForm searchForm, HttpSession session,
+			String operation,HttpServletRequest request)
+	{
+		String target;
+		session.setAttribute(Constants.SPECIMEN_ID, this.getSpecimenIDs( searchForm, session, operation ));
+		final HashMap forwardToPrintMap = new HashMap();
+		forwardToPrintMap.put(Constants.PRINT_SPECIMEN_FROM_LISTVIEW, this.getSpecimenIDs( searchForm, session, operation ));
+		request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 		target = new String(operation);
 		return target;
 	}
-
 	/**
 	 * @param request
 	 *            : request

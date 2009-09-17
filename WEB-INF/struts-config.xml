@@ -840,6 +840,7 @@ PUBLIC
 			name="advanceSearchForm"
 			validate="false"
 			scope="request">
+			<forward name="success" path=".catissuecore.shoppingCartDef" />	
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 			<forward name="requestToDistribute" path="/RequestToDistribute.do"/>
 			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15"/>
@@ -847,8 +848,21 @@ PUBLIC
 			<forward name="createShipmentRequest" path="/ProcessMyListCreateShipmentRequest.do?menuSelected=15"/>
 			<forward name="createShipment" path="/ProcessMyListCreateShipment.do?menuSelected=15"/>
 			<forward name="editMultipleSp" path="/MultipleSpecimenFlexInitAction.do?operation=edit"/>
+			<forward name="printLabels" path="/PrintSpecimensFromListView.do"/>
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+		</action>
+		
+		<action path="/PrintSpecimensFromListView"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/BulkCart.do?operation=success" />			
+		</action>
+		
+			<action path="/PrintSpecimensFromDistribution"
+			type="edu.wustl.catissuecore.action.PrintAction"
+			scope="request">
+			<forward name="success" path="/DistributionReport.do?forward=Success" />			
 		</action>
 		
 		<action path="/AddSpecimenToCart"
@@ -3443,7 +3457,8 @@ PUBLIC
 			scope="request">
 			<forward name="Success" path=".catissuecore.distributionReportSuccessDef" />
 			<forward name="pageOfArrayDistribution" path="/ArrayDistributionReport.do"/>
-		</action>
+		   <forward name="printLabels" path="/PrintSpecimensFromDistribution.do"/>
+	</action>
 
 		<action path="/ArrayDistributionReport"
 			type="edu.wustl.catissuecore.action.ArrayDistributionReportAction"

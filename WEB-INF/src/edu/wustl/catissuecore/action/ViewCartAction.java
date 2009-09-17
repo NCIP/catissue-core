@@ -9,7 +9,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.query.util.global.AQConstants;
 
@@ -44,7 +46,8 @@ public class ViewCartAction extends QueryShoppingCartAction
 
 		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
-
+		AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
+		AppUtility.setDefaultPrinterTypeLocation(searchForm);
 		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		this.setCartView(request, cart);
 		target = new String(Constants.VIEW);
@@ -61,6 +64,7 @@ public class ViewCartAction extends QueryShoppingCartAction
 			}
 		}
 		request.setAttribute("eventArray", newEvenetArray);
+		request.setAttribute("advanceSearchForm", searchForm);
 		return mapping.findForward(target);
 	}
 }

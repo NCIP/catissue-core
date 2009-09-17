@@ -1119,7 +1119,8 @@ public class Constants
 	public static final String ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION = "ArrayDistributionReportSave.do";
 
 	//bug#4981 :kalpana
-	public static final String SELECTED_COLUMNS[] = {"Specimen.LABEL.Label : Specimen",
+	public static final String SELECTED_COLUMNS[] = {"Print : Specimen",
+			"Specimen.LABEL.Label : Specimen",
 			"AbstractSpecimen.SPECIMEN_TYPE.Type : Specimen",
 			"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 			"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
@@ -2162,6 +2163,8 @@ public class Constants
 	public static final String BULK_DISPOSALS = "bulkDisposals";
 
 	public static final String EDIT_MULTIPLE_SPECIMEN = "editMultipleSp";
+	public static final String PRINT_LABELS = "printLabels";
+	public static final String REQUEST_TO_DISTRIBUTE = "requestToDistribute";
 	public static final int CATISSUE_ENTITY_GROUP = 1;
 
 	//Query-CSM related constants
@@ -2292,7 +2295,9 @@ public class Constants
 	public static final String ADD_MULTIPLE_SPECIMEN_TO_CART = "addMltipleSpecimenToCart";
 	public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_WITHOUT_MENU = "addMltipleSpecimenToCartWithoutMenu";
 	public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT = "addMltipleSpecimenToCartAndPrint";
-	public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
+    public static final String PRINT_SPECIMEN_FROM_LISTVIEW = "printSpecimenLabelFromListView";
+    public static final String PRINT_SPECIMEN_DISTRIBUTION_REPORT = "printSpecimenLabelFromDistribution";
+    public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close";
 
 	public static final String shortTitle = "shortTitle";

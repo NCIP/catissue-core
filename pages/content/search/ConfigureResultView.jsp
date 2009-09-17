@@ -54,6 +54,12 @@
     	columnNames=new String[selectedColumns.length];
     	for(int i=0;i<selectedColumns.length;i++)
     	{
+			if(i==0)
+			{
+				columnNames[i] = selectedColumns[i];
+			}
+			else
+			{
     		//Split the string which is in the form TableAlias.columnNames.columnDisplayNames
     		StringTokenizer st= new StringTokenizer(selectedColumns[i],".");
     		while (st.hasMoreTokens())
@@ -65,6 +71,7 @@
 	    			st.nextToken();
 
     		}
+			}
     	}
     }
 %>
