@@ -19,13 +19,13 @@ function wustlkey()
 	  var currentURL = window.location;
 	  if(answer==false)
 	  {
-		 url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/Home.do?";
+		window.close();
 	  }
 	  else
 	  {
-			url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/SignUp.do?operation=add&pageOf=pageOfSignUp"
+		url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/SignUp.do?operation=add&pageOf=pageOfSignUp"
+		window.location.href = url;
 	  }
-	  window.location.href = url;
   }
 
 	function forgotId()
