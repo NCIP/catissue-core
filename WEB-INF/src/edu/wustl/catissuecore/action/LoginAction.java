@@ -312,10 +312,15 @@ public class LoginAction extends Action
 			request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CHANGE_PASSWORD);
 			return mapping.findForward(Constants.ACCESS_DENIED);
 		}
-		final String forwardToPage = WUSTLKeyUtility.migrate(request, loginForm.getLoginName(),
-				edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
+		String forwardToPage = edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
+		if(Boolean.parseBoolean(XMLPropertyHandler
+				.getValue(Constants.IDP_ENABLED)))
+		{
+			forwardToPage = WUSTLKeyUtility.migrate(request, loginForm.getLoginName(),
+					edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
+		}
 		return mapping.findForward(forwardToPage);
-			}
+	}
 	/**
 	 * This method will check the expiry of the password.
 	 * @param loginForm LoginForm
