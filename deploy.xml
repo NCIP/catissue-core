@@ -1127,6 +1127,7 @@
 			<replacefilter token="@@app-security-file@@" value="${jboss.server.url}/catissuecore-properties/ApplicationSecurityConfig.xml" />
 			<replacefilter token="@@app-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml" />
 			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
+			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/AuthenticationDomain.xml" />
 		</replace>
 
 

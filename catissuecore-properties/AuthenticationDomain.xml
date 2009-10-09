@@ -6,13 +6,13 @@
 		<LDAP-configuration>
 			<initContextFactory>com.sun.jndi.ldap.LdapCtxFactory</initContextFactory>
 			<securityAuthetication>simple</securityAuthetication>
-			<securityProtocol></securityProtocol>
-			<directory>ldap://10.88.25.248:10389/</directory>
-			<searchbase>ou=users,ou=system</searchbase>
-			<searchfilter>CN=Users</searchfilter>
-			<stringToReplace>Users</stringToReplace>
-			<bindUser>uid=admin,ou=system</bindUser>
-			<bindPassword>secret</bindPassword>
+			<securityProtocol>ssl</securityProtocol>
+			<directory>ldap://10.39.225.39:636/</directory>
+			<searchbase>OU=Faculty,OU=Current,OU=People,DC=wuaddev,DC=wustl,DC=edu</searchbase>
+			<searchfilter>(sAMAccountName=name)</searchfilter>
+			<stringToReplace>name</stringToReplace>
+			<bindUser>CN=cider binduser,OU=medical school,OU=service accounts,DC=wuaddev,DC=wustl,DC=edu</bindUser>
+			<bindPassword>TLdUGv2wS385QxXRo9Km</bindPassword>
 		</LDAP-configuration>
 		<error-codes>
 			<error code="525" message="User not found" />
@@ -28,7 +28,7 @@
 			<lastName>sn</lastName>
 		</user-attributes>
 	</domain>
-	<domain name="CIDER LDAP">
+	<domain name="CIDERLDAP">
 		<class name="edu.wustl.domauthmgr.authdomain.LDAPAuthenticationManager" />
 		<LDAP-configuration>
 			<initContextFactory>com.sun.jndi.ldap.LdapCtxFactory</initContextFactory>

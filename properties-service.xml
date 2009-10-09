@@ -67,6 +67,7 @@
 		gov.nih.nci.sdk.applications.session.timeout=3000
 		gov.nih.nci.security.configFile=@@app-security-file@@
 		app.propertiesFile=@@app-properties-file@@
+		app.domainAuthFilePath=@@auth-properties-file@@
     </attribute>
 
   </mbean>

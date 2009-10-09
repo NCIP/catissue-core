@@ -144,13 +144,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				.setProperty("app.propertiesDir", CommonServiceLocator.getInstance()
 						.getPropDirPath());
 		
-		//Setting DOMAIN AUTHENTICATION FILE Name
-		String domainAuthFilePath = CommonServiceLocator.getInstance().getAppHome() + File.separator +
-		edu.wustl.wustlkey.util.global.Constants.WEB_INF+ File.separator
-		+ edu.wustl.wustlkey.util.global.Constants.CLASSES+ File.separator + 
-		edu.wustl.wustlkey.util.global.Constants.DOMAIN_AUTHENTICATION_FILE;
-		System.setProperty("app.domainAuthFilePath",domainAuthFilePath);
-		
 		/*Class.forName(DBUtil.class.getName());
 		Variables.databaseName=HibernateMetaData.getDataBaseName();
 		QueryBizLogic.initializeQueryData();
