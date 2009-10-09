@@ -101,14 +101,18 @@
 	
 	function onCheckboxClicked() 
 	{
-	    var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
-		document.forms[0].submittedFor.value = "ForwardTo";
-		document.forms[0].action = action + "?pageOf=" + '${requestScope.PAGEOF_CREATE_ALIQUOT}' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
-		
-		<logic:notEmpty name="CPQuery">
-			document.forms[0].action = '${requestScope.action3}';
-		</logic:notEmpty>
-	    document.forms[0].submit();
+		var checkbox = document.getElementById("aliquotchk");
+		if(checkbox.checked)
+		{
+			var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
+			document.forms[0].submittedFor.value = "ForwardTo";
+			document.forms[0].action = action + "?pageOf=" + '${requestScope.PAGEOF_CREATE_ALIQUOT}' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
+			
+			<logic:notEmpty name="CPQuery">
+				document.forms[0].action = '${requestScope.action3}';
+			</logic:notEmpty>
+			document.forms[0].submit();
+		}
 	}
 	
 	function setVirtuallyLocated(element)
@@ -618,14 +622,14 @@ ${aliquotBean.jsScript}
         </tr>
 		<tr>
           <td align="left" class="black_ar">
-			<html:checkbox property="aliqoutInSameContainer" onclick="onCheckboxClicked()">
-		<bean:message key="aliquots.storeAllAliquotes" />
-		</html:checkbox>
-		&nbsp;&nbsp;
-		<html:checkbox property="disposeParentSpecimen" >
-		<bean:message key="aliquots.disposeParentSpecimen" />
-		</html:checkbox>
-		</td>
+			<html:checkbox property="aliqoutInSameContainer" styleId = "aliquotchk" onclick="onCheckboxClicked()">
+				<bean:message key="aliquots.storeAllAliquotes" />
+			</html:checkbox>
+				&nbsp;&nbsp;
+			<html:checkbox property="disposeParentSpecimen" >
+				<bean:message key="aliquots.disposeParentSpecimen" />
+			</html:checkbox>
+		 </td>
 		</tr>	
         <tr>
 		<td colspan="3" align="left" class="dividerline">
