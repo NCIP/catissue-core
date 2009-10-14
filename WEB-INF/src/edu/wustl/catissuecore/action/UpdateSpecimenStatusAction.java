@@ -445,7 +445,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		{
 			final GenericSpecimen specimenVO = (GenericSpecimen) iterator.next();
 			Specimen specimen = null;
-			if (!specimenVO.getReadOnly())
+			if (!specimenVO.getReadOnly() && specimenVO.getCheckedSpecimen())
 			{
 				specimen = this.createSpecimenDomainObject(specimenVO);
 				specimen
@@ -481,7 +481,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			{
 				final GenericSpecimen aliquotSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = null;
-				if (!aliquotSpecimen.getReadOnly())
+				if (!aliquotSpecimen.getReadOnly()&& aliquotSpecimen.getCheckedSpecimen())
 				{
 					specimen = this.createSpecimenDomainObject(aliquotSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
@@ -506,7 +506,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			{
 				final GenericSpecimen derivedSpecimen = (GenericSpecimen) iterator.next();
 				Specimen specimen = null;
-				if (!derivedSpecimen.getReadOnly())
+				if (!derivedSpecimen.getReadOnly() && derivedSpecimen.getCheckedSpecimen())
 				{
 					specimen = this.createSpecimenDomainObject(derivedSpecimen);
 					specimen.setParentSpecimen(parentSpecimen);
