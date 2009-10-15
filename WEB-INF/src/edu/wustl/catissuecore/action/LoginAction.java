@@ -334,10 +334,42 @@ public class LoginAction extends Action
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
 		.getBizLogic(Constants.USER_FORM_ID);
+		if(Boolean.parseBoolean(XMLPropertyHandler
+				.getValue(Constants.IDP_ENABLED)))
+		{
+			result = wustlLogicForPass(loginForm, validUser, result, userBizLogic);
+		}
+		else
+		{
+			result = userBizLogic.checkFirstLoginAndExpiry(validUser);
+		}
+		return result;
+	}
+	/**
+	 * WustlKey logic for password checking.
+	 * @param loginForm LoginForm
+	 * @param validUser user object
+	 * @param result result String
+	 * @param userBizLogic user Bizlogic object
+	 * @return result
+	 */
+	private String wustlLogicForPass(LoginForm loginForm, final User validUser, String result,
+			final UserBizLogic userBizLogic)
+	{
 		if (edu.wustl.wustlkey.util.global.Constants.NON_WASHU.equals(WUSTLKeyUtility
 				.getUserFrom(loginForm.getLoginName())))
 		{
 			result = userBizLogic.checkFirstLoginAndExpiry(validUser);
+		}
+		else if (edu.wustl.wustlkey.util.global.Constants.WASHU.equals(WUSTLKeyUtility
+				.getUserFrom(loginForm.getLoginName())))
+		{
+			result = Constants.SUCCESS;
+			boolean firstTimeLogin = userBizLogic.getFirstLogin(validUser);
+			if (firstTimeLogin)
+			{
+				result="errors.changePassword.changeFirstLogin";
+			}
 		}
 		return result;
 	}

@@ -1612,11 +1612,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			//Get the last updated date of the password
 			final Date lastestUpdateDate = ((Password) oldPwdList.get(0)).getUpdateDate();
-			boolean firstTimeLogin = false;
-			if (oldUser.getFirstTimeLogin() != null)
-			{
-				firstTimeLogin = oldUser.getFirstTimeLogin().booleanValue();
-			}
+			boolean firstTimeLogin = getFirstLogin(oldUser);
 			if (!firstTimeLogin)
 			{
 				if (this.checkPwdUpdatedOnSameDay(lastestUpdateDate))
@@ -1676,11 +1672,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	{
 		final List passwordList = new ArrayList(user.getPasswordCollection());
 
-		boolean firstTimeLogin = false;
-		if (user.getFirstTimeLogin() != null)
-		{
-			firstTimeLogin = user.getFirstTimeLogin().booleanValue();
-		}
+		boolean firstTimeLogin = getFirstLogin(user);
 		// If user has logged in for the first time, return key of Change password on first login
 		if (firstTimeLogin)
 		{
@@ -1703,6 +1695,22 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		return Constants.SUCCESS;
 
 	}
+	/**
+	 * This function will check if the user is First time logging.
+	 * @param user user object
+	 * @return firstTimeLogin
+	 */
+	public boolean getFirstLogin(User user)
+	{
+		boolean firstTimeLogin = false;
+		if (user.getFirstTimeLogin() != null)
+		{
+			firstTimeLogin = user.getFirstTimeLogin().booleanValue();
+		}
+		return firstTimeLogin;
+	}
+	
+	
 
 	private boolean checkPwdNotSameAsLastN(String newPassword, List oldPwdList)
 	{
