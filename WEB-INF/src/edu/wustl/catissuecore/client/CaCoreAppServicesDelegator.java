@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
+import edu.wustl.catissuecore.namegenerator.DefaultSCGLabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -807,8 +808,14 @@ public class CaCoreAppServicesDelegator
 	public String delegateGetSpecimenCollectionGroupLabel(String userName, Object obj)
 			throws Exception
 	{
-		final LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
+		LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
 				.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
+		if(specimenCollectionGroupLableGenerator == null)
+		{
+			DefaultSCGLabelGenerator defaultSCGLabelGenerator = new DefaultSCGLabelGenerator();
+			defaultSCGLabelGenerator.getLabel(obj);
+			specimenCollectionGroupLableGenerator = (LabelGenerator)defaultSCGLabelGenerator;
+		}
 		return specimenCollectionGroupLableGenerator.getLabel(obj);
 	}
 
