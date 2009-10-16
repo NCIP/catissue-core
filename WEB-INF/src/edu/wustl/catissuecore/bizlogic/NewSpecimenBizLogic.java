@@ -1148,7 +1148,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			final Specimen specimen = (Specimen) specimenIterator.next();
 			this.postInsert(specimen, dao, sessionDataBean);
 			final Collection childSpecimens = specimen.getChildSpecimenCollection();
-			if (childSpecimens != null)
+			if (!childSpecimens.isEmpty() && childSpecimens != null)
 			{
 				this.postInsert(childSpecimens, dao, sessionDataBean);
 			}
