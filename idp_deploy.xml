@@ -117,6 +117,20 @@
 	</elseif>
 	</if>	
 	</target>
+	
+	<target name="upgrade_idp_db_to_support_wustlkey">
+			<echo message="Creating table in IDP database..." />
+				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}" userid="${csm.database.username}" password="${csm.database.password}" onerror="continue" rdbms="oracle">
+					<transaction src="${oracle.sql.dir}/idpUpgrade.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+		</target>
+	
 	<!-- IDP settings ends-->
 </project>
 	
