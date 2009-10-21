@@ -1653,18 +1653,6 @@ public class FlexInterface
 	}
 
 	/**
-	 * create DAG Node
-	 * @param strToCreateQueryObject
-	 * @param entityName
-	 */
-	public DAGNode createNode(String strToCreateQueryObject, String entityName)
-	{
-		final DAGNode dagNode = this.dagPanel.createQueryObject(strToCreateQueryObject, entityName,
-				"Add");
-		return dagNode;
-	}
-
-	/**
 	 * @param expressionId
 	 * @return
 	 */
@@ -1675,19 +1663,6 @@ public class FlexInterface
 		final IExpression expression = (IExpression) map.get(DAGConstant.EXPRESSION);
 		this.dagPanel.setExpression(expression);
 		return htmlStr;
-	}
-
-	/**
-	 * Edit Node
-	 * @param strToCreateQueryObject
-	 * @param entityName
-	 * @return
-	 */
-	public DAGNode editNode(String strToCreateQueryObject, String entityName)
-	{
-		final DAGNode dagNode = this.dagPanel.createQueryObject(strToCreateQueryObject, entityName,
-				"Edit");
-		return dagNode;
 	}
 
 	/**
