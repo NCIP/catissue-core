@@ -31,6 +31,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domauthmgr.AuthenticationManagerFactory;
@@ -125,7 +126,7 @@ public class LoginAction extends Action
 	 * @return return UserStatus
 	 * @throws ApplicationException object of ApplicationException
 	 */
-	private String getUserStatus(String loginName) throws ApplicationException
+	private String getUserStatus(final String loginName) throws ApplicationException
 	{
 		String userStatus = edu.wustl.wustlkey.util.global.Constants.CSM;
 		final boolean isIDPEnabled = Boolean.parseBoolean(XMLPropertyHandler
@@ -153,12 +154,12 @@ public class LoginAction extends Action
 	 * @throws InitializationException InitializationException
 	 * @throws NamingException  NamingException
 	 * @throws AuthenticationException  AuthenticationException
-	 * @throws SMException SMException
+	 * @throws ApplicationException  ApplicationException
 	 */
 	private String authenticateUser(HttpServletRequest request, LoginForm loginForm,
 			String userStatus) throws IOException, InitializationException,
-			ParserConfigurationException, SAXException, SMException, AuthenticationException,
-			NamingException
+			ParserConfigurationException, SAXException, AuthenticationException,
+			NamingException, ApplicationException
 			{
 		String forwardTo = Constants.SUCCESS;
 		AuthenticationManager authManager = null;
@@ -173,7 +174,6 @@ public class LoginAction extends Action
 		}
 		else
 		{
-
 			factory = AuthenticationManagerFactory.getAuthenticationManagerFactory();
 			authManager = factory.getAuthenticationManager(authType, absolutePath);
 			loginOK = authManager.authenticate(loginForm.getLoginName(), loginForm.getPassword());
@@ -181,17 +181,7 @@ public class LoginAction extends Action
 			{
 				if (edu.wustl.wustlkey.util.global.Constants.NEW_WASHU_USER.equals(userStatus))
 				{
-					final Map<String, String> userAttrs =
-						authManager.getUserAttributes(loginForm.getLoginName());
-					final String firstName = userAttrs.get(Constants.FIRSTNAME);
-					final String lastName = userAttrs.get(Constants.LASTNAME);
-					request.setAttribute(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY,
-							loginForm.getLoginName());
-					request.setAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME,
-							firstName);
-					request.setAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME,
-							lastName);
-					forwardTo = edu.wustl.wustlkey.util.global.Constants.WASHU;
+					forwardTo = checkForNewUser(request, loginForm, authManager);
 				}
 			}
 			else
@@ -204,6 +194,73 @@ public class LoginAction extends Action
 		}
 		return forwardTo;
 			}
+
+	/**
+	 * This method will check if user got administrator approval.
+	 * @param request HttpServletRequest
+	 * @param loginForm loginForm object
+	 * @param authManager AuthenticationManager object
+	 * @return String ForwordTo
+	 * @throws ApplicationException ApplicationException
+	 * @throws NamingException NamingException
+	 */
+	private String checkForNewUser(HttpServletRequest request, LoginForm loginForm,
+			AuthenticationManager authManager) throws ApplicationException, NamingException
+	{
+		String forwardTo = null;
+		final List<List<String>> resultList = executeSQL(loginForm);
+		if (null == resultList)
+		{
+			forwardTo = setSignUpPageAttributes(request,
+					loginForm, authManager);
+		}
+		else
+		{
+			logger.info("User " + loginForm.getLoginName()
+					+ " does not have role in the application");
+			handleError(request, "errors.noRole");
+			forwardTo = Constants.FAILURE;
+		}
+		return forwardTo;
+	}
+
+	/**
+	 * This method will execute the SQL to determine the LoginName for a WUSTLKey.
+	 * @param loginForm loginForm object
+	 * @return rerultList
+	 * @throws ApplicationException ApplicationException
+	 */
+	private List<List<String>> executeSQL(LoginForm loginForm) throws ApplicationException
+	{
+		final String queryStr = "SELECT LOGIN_NAME FROM CATISSUE_USER WHERE WUSTLKEY = " + "'"
+		+ loginForm.getLoginName() + "'";
+		final String applicationName = CommonServiceLocator.getInstance().getAppName();
+		return WUSTLKeyUtility.executeQueryUsingDataSource(queryStr, false,applicationName);
+	}
+
+	/**
+	 * This method will set attributes like firstname, lastname in user sign up page.
+	 * @param request HttpServletRequest
+	 * @param loginForm loginform object
+	 * @param authManager AuthenticationManager object
+	 * @return String
+	 * @throws NamingException NamingException
+	 */
+	private String setSignUpPageAttributes(HttpServletRequest request, LoginForm loginForm,
+			AuthenticationManager authManager) throws NamingException
+	{
+		final Map<String, String> userAttrs =
+			authManager.getUserAttributes(loginForm.getLoginName());
+		final String firstName = userAttrs.get(Constants.FIRSTNAME);
+		final String lastName = userAttrs.get(Constants.LASTNAME);
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY,
+				loginForm.getLoginName());
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME,
+				firstName);
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME,
+				lastName);
+		return edu.wustl.wustlkey.util.global.Constants.WASHU;
+	}
 
 	/**
 	 * This method will determine the type of AuthenticationManager i.e. WASHU_LDAP or CSM
@@ -295,7 +352,7 @@ public class LoginAction extends Action
 		logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
 		session.setAttribute(Constants.SESSION_DATA, sessionData);
 		session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
-		String result = passExpCheck(loginForm, validUser);
+		final String result = passExpCheck(loginForm, validUser);
 		setSecurityParamsInSessionData(validUser, sessionData);
 		final String validRole = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
 		if (validRole != null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
@@ -337,7 +394,7 @@ public class LoginAction extends Action
 		if(Boolean.parseBoolean(XMLPropertyHandler
 				.getValue(Constants.IDP_ENABLED)))
 		{
-			result = wustlLogicForPass(loginForm, validUser, result, userBizLogic);
+			result = wustlLogicForPass(loginForm, validUser, userBizLogic);
 		}
 		else
 		{
@@ -353,9 +410,10 @@ public class LoginAction extends Action
 	 * @param userBizLogic user Bizlogic object
 	 * @return result
 	 */
-	private String wustlLogicForPass(LoginForm loginForm, final User validUser, String result,
+	private String wustlLogicForPass(LoginForm loginForm, final User validUser,
 			final UserBizLogic userBizLogic)
 	{
+		String result = null;
 		if (edu.wustl.wustlkey.util.global.Constants.NON_WASHU.equals(WUSTLKeyUtility
 				.getUserFrom(loginForm.getLoginName())))
 		{
@@ -365,7 +423,7 @@ public class LoginAction extends Action
 				.getUserFrom(loginForm.getLoginName())))
 		{
 			result = Constants.SUCCESS;
-			boolean firstTimeLogin = userBizLogic.getFirstLogin(validUser);
+			final boolean firstTimeLogin = userBizLogic.getFirstLogin(validUser);
 			if (firstTimeLogin)
 			{
 				result="errors.changePassword.changeFirstLogin";
