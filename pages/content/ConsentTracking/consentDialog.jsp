@@ -71,8 +71,9 @@ function getButtonStatus(element)
 					<%}%>
 			}
 		}
+		var selfDocFormName = parent.opener.document.forms[0].name;
 		parent.opener.document.forms[0].submit();
-		if(parent.opener.document.forms[0].name == "consentForm")
+		if("consentForm" == selfDocFormName)
 		{
 			parent.opener.self.close();
 		}
