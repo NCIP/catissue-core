@@ -212,13 +212,16 @@ function vieMapTabSelected(){
 	<td class="td_tab_bg" ><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 	<!----Add tab hidden for the Specimen Search----->
 	<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
-		<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">
-        <td valign="bottom"><html:link href="#" onclick="callSerachAction('CommonTab.do')">
-		<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
+		<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_ARRAY%>">
+			<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">			
+        		<td valign="bottom"><html:link href="#" onclick="callSerachAction('CommonTab.do')">
+				<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>		
+       		</logic:notEqual>
+			
+			<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 		</logic:notEqual>
-       
-		<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 	</logic:notEqual>
+
 		<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_USER_ADMIN%>">
         <td valign="bottom"><html:link page="/ApproveUserShow.do?pageNum=1"><img src="images/uIEnhancementImages/tab_approve_user.jpg" alt="Approve New Users" width="139" height="22" border="0" /></html:link></td>
 		</logic:equal>
