@@ -3,35 +3,40 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
+import edu.wustl.catissuecore.printservicemodule.SpecimenLabelPrinterImpl;
+import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -75,7 +80,7 @@ public class PrintAction extends Action
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException,BizLogicException
 	{
-
+		final AdvanceSearchForm searchForm = (AdvanceSearchForm) form;
 		String nextforwardTo = request.getParameter("nextForwardTo");
 		String printerType = request.getParameter("printerType");
 		String printerLocation = request.getParameter("printerLocation");
@@ -276,18 +281,22 @@ public class PrintAction extends Action
 					&& forwardToPrintMap.get( Constants.PRINT_SPECIMEN_FROM_LISTVIEW )!= null)
 			{
 		
-				 boolean printStauts = false;
+				boolean printStauts = false;
+				final HttpSession session = request.getSession();
+				final QueryShoppingCart cart = (QueryShoppingCart) session
+				.getAttribute(Constants.QUERY_SHOPPING_CART);
+				final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+				final List<String> gridSspecimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
+				Arrays.asList(Constants.specimenNameArray), getGridValue(searchForm)));		
 				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDAO();
 				try 
 				{
 				dao.openSession(null);
-				List<String> specimenIds = this.getSpecimenIDListFromMap( Constants.PRINT_SPECIMEN_FROM_LISTVIEW, forwardToPrintMap );
-				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,specimenIds );
-				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
-			    printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
-						objUser, printerType, printerLocation);
-				
+				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,gridSspecimenIds );
+				SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
+						objUser, printerType, printerLocation, Constants.PRINT_SPECIMEN_FROM_LISTVIEW);
 				nextforwardTo = Constants.SUCCESS ; 
 				}
 				catch (final DAOException exception)
@@ -347,6 +356,25 @@ public class PrintAction extends Action
 		}
 
 		return mapping.findForward(nextforwardTo);
+	}
+	/**
+	 * This method will return gridValues.
+	 * @param adSearchForm AdvanceSearch object
+	 * @return gridValues
+	 */
+	private List<Integer> getGridValue(final AdvanceSearchForm adSearchForm)
+	{
+		List<Integer> gridValues = new LinkedList<Integer>();
+		if (adSearchForm.getOrderedString() != null && adSearchForm.getOrderedString().trim() != "")
+		{
+			final String[] gridOrdered = (adSearchForm.getOrderedString()).split(",");
+			for (final String element : gridOrdered)
+			{
+				final int gridOrderedIndex = Integer.parseInt(element);
+				gridValues.add(gridOrderedIndex - 1);
+			}
+		}
+		return gridValues;
 	}
 	/**
 	 * This method will return list of Specimen objects

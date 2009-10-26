@@ -207,7 +207,7 @@ public class StorageContainerAction extends SecureAction
 			{
 				final long start = System.currentTimeMillis();
 				containerMap = bizLogic.getAllocatedContainerMapForContainer(storageContainerForm
-						.getTypeId(), exceedingMaxLimit, null, sessionDataBean, dao);
+						.getTypeId(), exceedingMaxLimit, null, sessionDataBean, dao,storageContainerForm.getParentContainerSelected() );
 				final long end = System.currentTimeMillis();
 
 				System.out.println("Time taken for getAllocatedMapForCOntainer:" + (end - start));
@@ -223,7 +223,7 @@ public class StorageContainerAction extends SecureAction
 					final Long typeId = storageType.getId();
 					final long start = System.currentTimeMillis();
 					containerMap = bizLogic.getAllocatedContainerMapForContainer(typeId,
-							exceedingMaxLimit, null, sessionDataBean, dao);
+							exceedingMaxLimit, null, sessionDataBean, dao,storageContainerForm.getParentContainerSelected());
 					final long end = System.currentTimeMillis();
 					System.out.println("Time taken for getAllocatedMapForCOntainer:"
 							+ (end - start));

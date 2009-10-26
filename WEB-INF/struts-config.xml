@@ -855,12 +855,14 @@ PUBLIC
 		
 		<action path="/PrintSpecimensFromListView"
 			type="edu.wustl.catissuecore.action.PrintAction"
+			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path="/BulkCart.do?operation=success" />			
 		</action>
 		
 			<action path="/PrintSpecimensFromDistribution"
 			type="edu.wustl.catissuecore.action.PrintAction"
+			name="advanceSearchForm"
 			scope="request">
 			<forward name="success" path="/DistributionReport.do?forward=Success" />			
 		</action>

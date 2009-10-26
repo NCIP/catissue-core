@@ -3536,7 +3536,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 */
 	private List getStorageContainerList(String holdsType, final Long cpId, final String spClass,
 			int aliquotCount, final SessionDataBean sessionData, Long containerTypeId,
-			Long specimenArrayTypeId, String exceedingLimit) throws BizLogicException, DAOException
+			Long specimenArrayTypeId, String exceedingLimit, String storageType) throws BizLogicException, DAOException
 	{
 		final JDBCDAO dao = this.openJDBCSession();
 		final List containers = new ArrayList();
@@ -3560,8 +3560,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 					// skip to the next query, if any
 					continue;
 				}
-
-				if (resultList.size() >= remainingContainersNeeded)
+				if(!"Manual".equals(storageType) && resultList.size() >= remainingContainersNeeded)
 				{
 					containers.addAll(resultList.subList(0, remainingContainersNeeded));
 					break;
@@ -3917,12 +3916,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public TreeMap getAllocatedContainerMapForContainer(long type_id, String exceedingMaxLimit,
-			String selectedContainerName, SessionDataBean sessionDataBean, DAO dao)
+			String selectedContainerName, SessionDataBean sessionDataBean, DAO dao, String storageType)
 			throws BizLogicException, DAOException
 	{
 		final Long startTime = System.currentTimeMillis();
 		final List containerList = this.getStorageContainerList(TYPE_CONTAINER, null, null, 0,
-				sessionDataBean, type_id, null, null);
+				sessionDataBean, type_id, null, null, storageType);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
@@ -3973,7 +3972,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		final Long startTime = System.currentTimeMillis();
 
 		final List containerList = this.getStorageContainerList(TYPE_SPECIMEN, cpId, specimenClass,
-				aliquotCount, sessionData, null, null, null);
+				aliquotCount, sessionData, null, null, null,null);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
 		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
@@ -4072,7 +4071,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		{
 			final Long startTime = System.currentTimeMillis();
 			final List containerList = this.getStorageContainerList(TYPE_SPECIMEN_ARRAY, null,
-					null, 0, sessionData, null, specimen_array_type_id, null);
+					null, 0, sessionData, null, specimen_array_type_id, null, null);
 			final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 			final Long endTime = System.currentTimeMillis();
 

@@ -106,14 +106,8 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	{
 		//Bug 11509
 		Collections.sort(abstractDomainObjectList, new IdComparator());
-		for (final AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
-		{
-			if (abstractDomainObject instanceof Specimen)
-			{
-				final Specimen obj = (Specimen) abstractDomainObject;
-				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress);
-			}
-		}
+		iterateSpecimenList(abstractDomainObjectList, ipAddress, printerType, printerLocation,
+				listMap);
 	}
 
 	/**
@@ -197,6 +191,56 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 				final Specimen specimen = (Specimen) itr.next();
 				specimenList.add(specimen);
 				this.getAllSpecimenList(specimen, specimenList);
+			}
+		}
+	}
+	
+	/**
+	 * This method prints label.
+	 * @param abstractDomainObjectList abstract Domain Object list.
+	 * @param ipAddress IP Address
+	 * @param userObj user Object
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @return true or false status.
+	 * @see edu.wustl.catissuecore.print.LabelPrinter#printLabel
+	 * (java.util.List, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
+	 */
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList,
+			String ipAddress, User userObj, String printerType, String printerLocation, String printSpecimanlabel)
+	{
+		//Iterate through all objects in List ,crate map of each object.
+		final ArrayList listMap = new ArrayList();
+		iterateSpecimenList(abstractDomainObjectList, ipAddress, printerType, printerLocation,
+				listMap);
+		try
+		{
+			final PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
+			return objParser.callPrintService(listMap);
+		}
+		catch (final Exception exp)
+		{
+			this.logger.info(exp.getMessage(), exp);
+			return false;
+		}
+	}
+	/**
+	 * This mehtod will iterate over specimenlist
+	 * @param abstractDomainObjectList Specimen object list
+	   @param userObj user Object
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @param listMap ArrayList
+	 */
+	private void iterateSpecimenList(List<AbstractDomainObject> abstractDomainObjectList,
+			String ipAddress, String printerType, String printerLocation, final ArrayList listMap)
+	{
+		for (final AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
+		{
+			if (abstractDomainObject instanceof Specimen)
+			{
+				final Specimen obj = (Specimen) abstractDomainObject;
+				this.addDataToPrint(obj, listMap, printerType, printerLocation, ipAddress);
 			}
 		}
 	}
