@@ -45,21 +45,9 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 
 		final ArrayList listMap = new ArrayList();
 		//createObjectMap(abstractDomainObject,listMap);
-		this
-				.createObjectMap(abstractDomainObject, listMap, printerType, printerLocation,
+		this.createObjectMap(abstractDomainObject, listMap, printerType, printerLocation,
 						ipAddress);
-		try
-		{
-			final PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			return objParser.callPrintService(listMap);
-
-		}
-		catch (final Exception exp)
-		{
-			this.logger.info(exp.getMessage(), exp);
-			return false;
-
-		}
+		return callToPrinter(listMap);
 
 	}
 
@@ -81,6 +69,16 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		final ArrayList listMap = new ArrayList();
 		this.createObjectMap(abstractDomainObjectList, listMap, printerType, printerLocation,
 				ipAddress);
+		return callToPrinter(listMap);
+	}
+
+	/**
+	 * This method will call PrintServiceInputParserInterface for printing.
+	 * @param listMap List of objects
+	 * @return boolean
+	 */
+	private boolean callToPrinter(final ArrayList listMap)
+	{
 		try
 		{
 			final PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
@@ -194,7 +192,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 			}
 		}
 	}
-	
+
 	/**
 	 * This method prints label.
 	 * @param abstractDomainObjectList abstract Domain Object list.
@@ -202,35 +200,26 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param userObj user Object
 	 * @param printerType printer Type
 	 * @param printerLocation printer Location
+	 * @param printSpecimanlabel Specimen Label
 	 * @return true or false status.
-	 * @see edu.wustl.catissuecore.print.LabelPrinter#printLabel
-	 * (java.util.List, java.lang.String, gov.nih.nci.security.authorization.domainobjects.User)
 	 */
 	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList,
-			String ipAddress, User userObj, String printerType, String printerLocation, String printSpecimanlabel)
+			String ipAddress, User userObj, String printerType,
+			String printerLocation, String printSpecimanlabel)
 	{
 		//Iterate through all objects in List ,crate map of each object.
 		final ArrayList listMap = new ArrayList();
 		iterateSpecimenList(abstractDomainObjectList, ipAddress, printerType, printerLocation,
 				listMap);
-		try
-		{
-			final PrintServiceInputParserInterface objParser = new PrintServiceInputXMLParser();
-			return objParser.callPrintService(listMap);
-		}
-		catch (final Exception exp)
-		{
-			this.logger.info(exp.getMessage(), exp);
-			return false;
-		}
+		return callToPrinter(listMap);
 	}
 	/**
-	 * This mehtod will iterate over specimenlist
+	 * This method will iterate over specimen list.
 	 * @param abstractDomainObjectList Specimen object list
-	   @param userObj user Object
 	 * @param printerType printer Type
 	 * @param printerLocation printer Location
 	 * @param listMap ArrayList
+	 * @param ipAddress ipAddress of system
 	 */
 	private void iterateSpecimenList(List<AbstractDomainObject> abstractDomainObjectList,
 			String ipAddress, String printerType, String printerLocation, final ArrayList listMap)

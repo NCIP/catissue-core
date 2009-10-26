@@ -73,9 +73,9 @@ public class PrintAction extends Action
 	 *             I/O exception
 	 * @throws ServletException
 	 *             servlet exception
+	 *  @throws     BizLogicException BizLogicException
 	 * @return value for ActionForward object
 	 */
-	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException,BizLogicException
@@ -112,8 +112,8 @@ public class PrintAction extends Action
 				try
 				{
 					dao.openSession(null);
-					final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(),
-							new Long(scgId));
+					final Object object =
+					dao.retrieveById(SpecimenCollectionGroup.class.getName(),new Long(scgId));
 
 					if (object != null)
 					{
@@ -155,7 +155,8 @@ public class PrintAction extends Action
 					final Specimen objSpecimen = (Specimen) dao.retrieveById(Specimen.class
 							.getName(), new Long(specimenId));
 
-					final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
+					final LabelPrinter labelPrinter =
+						LabelPrinterFactory.getInstance("specimen");
 					printStauts = labelPrinter.printLabel(objSpecimen, strIpAddress, objUser,
 							printerType, printerLocation);
 
@@ -242,7 +243,8 @@ public class PrintAction extends Action
 							.get("StorageContainerObjID");
 					if (containerId != null)
 					{
-						final NameValueBean bean = new NameValueBean(containerId, containerId);
+						final NameValueBean bean = new
+						NameValueBean(containerId, containerId);
 						similarContainerList = new ArrayList();
 						similarContainerList.add(bean);
 					}
@@ -250,16 +252,19 @@ public class PrintAction extends Action
 				try
 				{
 					dao.openSession(null);
-					final List<AbstractDomainObject> containerList = new ArrayList<AbstractDomainObject>();
+					final List<AbstractDomainObject> containerList =
+						new ArrayList<AbstractDomainObject>();
 					for (int i = 0; i < similarContainerList.size(); i++)
 					{
-						final NameValueBean bean = (NameValueBean) similarContainerList.get(i);
+						final NameValueBean bean = (NameValueBean)
+						similarContainerList.get(i);
 						final String value = bean.getValue();
-						final Object object = dao.retrieveById(StorageContainer.class.getName(),
-								new Long(value));
+						final Object object = dao.retrieveById
+						(StorageContainer.class.getName(),new Long(value));
 						if (object != null)
 						{
-							final StorageContainer containerObj = (StorageContainer) object;
+							final StorageContainer containerObj =
+								(StorageContainer) object;
 							containerList.add(containerObj);
 						}
 					}
@@ -280,24 +285,27 @@ public class PrintAction extends Action
 			else if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
 					&& forwardToPrintMap.get( Constants.PRINT_SPECIMEN_FROM_LISTVIEW )!= null)
 			{
-		
+
 				boolean printStauts = false;
 				final HttpSession session = request.getSession();
 				final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 				final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-				final List<String> gridSspecimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), getGridValue(searchForm)));		
+				final List<String> gridSspecimenIds = new LinkedList<String>
+				(bizLogic.getEntityIdsList(cart,
+				Arrays.asList(Constants.specimenNameArray), getGridValue(searchForm)));
 				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDAO();
-				try 
+				try
 				{
 				dao.openSession(null);
-				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,gridSspecimenIds );
+				List < AbstractDomainObject > specimenList = this.getSpecimenList
+				(dao,gridSspecimenIds );
 				SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
 				printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
-						objUser, printerType, printerLocation, Constants.PRINT_SPECIMEN_FROM_LISTVIEW);
-				nextforwardTo = Constants.SUCCESS ; 
+						objUser, printerType,
+						printerLocation, Constants.PRINT_SPECIMEN_FROM_LISTVIEW);
+				nextforwardTo = Constants.SUCCESS ;
 				}
 				catch (final DAOException exception)
 				{
@@ -309,23 +317,26 @@ public class PrintAction extends Action
 					dao.closeSession();
 				}
 				this.setStatusMessage(printStauts, request);
-				
+
 			}
 			else if (forwardToPrintMap != null && forwardToPrintMap.size() > 0
-					&& forwardToPrintMap.get( Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT )!= null)
+					&& forwardToPrintMap.get
+					(Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT )!= null)
 			{
 				 boolean printStauts = false;
-				List<String> specimenIds = this.getSpecimenIDListFromMap( Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT, forwardToPrintMap );
+				List<String> specimenIds = this.getSpecimenIDListFromMap
+				(Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT, forwardToPrintMap );
 				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDAO();
-				try 
+				try
 				{
 				dao.openSession(null);
-				List < AbstractDomainObject > specimenList = this.getSpecimenList( dao,specimenIds );
+				List < AbstractDomainObject > specimenList = this.getSpecimenList
+				(dao,specimenIds );
 				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
 				 printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
 						objUser, printerType, printerLocation);
-				
+
 				nextforwardTo = Constants.SUCCESS;
 				}
 				catch (final DAOException exception)
@@ -377,7 +388,7 @@ public class PrintAction extends Action
 		return gridValues;
 	}
 	/**
-	 * This method will return list of Specimen objects
+	 * This method will return list of Specimen objects.
 	 * @param specimenDomainCollection - specimenDomainCollection
 	 * @return list of AbstractDomainObject objects
 	 */
@@ -393,42 +404,15 @@ public class PrintAction extends Action
 		return specimenList;
 	}
 	/**
-	 * This method will return object of Specimen
-	 * @param dao - DAO
-	 * @param forwardToPrintMap - forwardToPrintMap
-	 * @return Specimen object
-	 * @throws DAOException - DAOException
-	 */
-	private Specimen getSpecimenForPrint(DAO dao, HashMap forwardToPrintMap) throws DAOException
-	{
-		String specimenId = (String) forwardToPrintMap.get("specimenId");
-		Specimen objSpecimen = null;
-		try
-		{
-			//dao.openSession(null);
-			objSpecimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
-					new Long(specimenId));			
-		}
-		catch (DAOException exception)
-		{
-			logger.debug(exception.getMessage(), exception);
-			throw exception;
-		}
-		return objSpecimen;
-	}
-	/**
-	 * Print labels
+	 * Print labels.
 	 * @param specimenIdList - specimenIdList
-	 * @param strIpAddress - strIpAddress
-	 * @param printerType - Printer type
-	 * @param printerLocation - Printer Location
-	 * @param objUser - objUser
-	 * @return boolean 
+	 * @param dao DAO object
+	 * @return boolean
 	 * @throws Exception - Exception
 	 */
 	private List<AbstractDomainObject> getSpecimenList(DAO dao,List<String> specimenIdList) throws Exception
 	{
-		
+
 		List < AbstractDomainObject > specimenList = new ArrayList < AbstractDomainObject >();
 		try
 		{
@@ -455,7 +439,7 @@ public class PrintAction extends Action
 	 * This method is used to get specimen ids from Map.
 	 * @param key - Map key
 	 * @param forwardToPrintMap - Map
-	 * @return List of specimen ids 
+	 * @return List of specimen id's
 	 */
 	private List<String> getSpecimenIDListFromMap(String key,HashMap forwardToPrintMap)
 	{
@@ -467,7 +451,7 @@ public class PrintAction extends Action
 			Iterator it = specimenIds.iterator();
 			while(it.hasNext())
 			{
-				specimenList.add(it.next().toString());				
+				specimenList.add(it.next().toString());
 			}
 		}
 		else
@@ -475,8 +459,8 @@ public class PrintAction extends Action
 			specimenList = (List) forwardToPrintMap.get(key);
 		}
 		return specimenList;
-	}	
-    
+	}
+
 	/**
 	 *
 	 * @param form : form
