@@ -371,7 +371,7 @@
 	
 	<property>
 		<name>defaultReceivedQuality</name>
-		<value>Not Specified</value>
+		<value>Acceptable</value>
 	</property>
 	
 	<property>
