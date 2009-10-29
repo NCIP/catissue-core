@@ -87,7 +87,7 @@ public class XMIExporter
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			XMIExporter.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

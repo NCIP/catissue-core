@@ -234,6 +234,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			catch (final BizLogicException e)
 			{
 				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 		}
 
@@ -332,8 +333,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			}
 			catch (final BizLogicException e)
 			{
-				this.logger.debug("Got exception while creating entity map record....");
-				this.logger.error(e.getMessage(), e);
+				//this.logger.debug("Got exception while creating entity map record....");
+				this.logger.error("Got exception while creating" +
+						" entity map record...."+e.getMessage(), e);
+				e.printStackTrace() ;
 			}
 		}
 		else
@@ -393,10 +396,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				catch (final NumberFormatException e)
 				{
 					this.logger.error(e.getMessage(), e);
+					e.printStackTrace() ;
 				}
 				catch (final BizLogicException e)
 				{
 					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 				}
 				for (final EntityMap entityMap : entityMapColl)
 				{
@@ -643,6 +648,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return urlForEditRecord;
 
@@ -873,8 +879,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		catch (final DAOException e)
 		{
-
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		if ((deContainerId != null) && (deEntityName != null))
 		{
@@ -974,20 +980,24 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		catch (final DataTypeFactoryInitializationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final InstantiationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 		catch (final IllegalAccessException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return annoCondn;
 

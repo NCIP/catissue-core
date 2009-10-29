@@ -134,7 +134,8 @@ public class BulkOperationSubmitAction extends BaseAction
 			final ActionError error = new ActionError("errors.item", excp.getCustomizedMsg());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
-			this.logger.error(excp.getCustomizedMsg());
+			this.logger.error(excp.getCustomizedMsg(),excp);
+			excp.printStackTrace();
 		}
 
 		return mapping.findForward(target);

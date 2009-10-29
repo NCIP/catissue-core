@@ -102,7 +102,7 @@ public class AnnotationUtil
 		}
 		catch (final DocumentException documentException)
 		{
-			this.logger.debug(documentException.getMessage(), documentException);
+			this.logger.error(documentException.getMessage(), documentException);
 			throw new DataTypeFactoryInitializationException(documentException);
 		}
 

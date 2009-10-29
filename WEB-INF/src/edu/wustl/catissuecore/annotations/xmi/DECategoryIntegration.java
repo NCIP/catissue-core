@@ -128,7 +128,7 @@ public class DECategoryIntegration
 		}
 		catch (final Exception ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			DECategoryIntegration.logger.error(ex.getMessage(), ex);
 			//System.out.println("Exception: " + ex.getMessage());
 			throw new RuntimeException(ex);
 		}

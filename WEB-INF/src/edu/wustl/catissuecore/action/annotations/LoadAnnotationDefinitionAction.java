@@ -316,7 +316,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					}
 					catch (final HibernateException excep)
 					{
-						this.logger.debug(excep.getMessage(), excep);
+						this.logger.error(excep.getMessage(), excep);
 						excep.printStackTrace();
 						throw new ApplicationException(ErrorKey.getErrorKey("hibernate.exception"),
 								excep, "LoadAnnotationDefinitionAction.java");
@@ -355,7 +355,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 					}
 					catch (final BizLogicException excep)
 					{
-						this.logger.debug(excep.getMessage(), excep);
+						this.logger.error(excep.getMessage(), excep);
 						excep.printStackTrace();
 						throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(),
 								excep.getMsgValues());
@@ -368,14 +368,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			catch (final NumberFormatException excep)
 			{
-				this.logger.debug(excep.getMessage(), excep);
+				this.logger.error(excep.getMessage(), excep);
 				excep.printStackTrace();
 				throw AppUtility.getApplicationException(excep, "number.format.exp",
 						"LoadAnnotationDefinitionAction.java");
 			}
 			catch (final DAOException excep)
 			{
-				this.logger.debug(excep.getMessage(), excep);
+				this.logger.error(excep.getMessage(), excep);
 				excep.printStackTrace();
 				throw AppUtility.getApplicationException(excep, excep.getErrorKeyName(), excep
 						.getMsgValues());
@@ -415,7 +415,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			catch (final SQLException excep)
 			{
-				this.logger.debug(excep.getMessage(), excep);
+				this.logger.error(excep.getMessage(), excep);
+				excep.printStackTrace() ;
 				throw new ApplicationException(ErrorKey.getErrorKey("SQL.exp"), excep,
 						"LoadAnnotationDefinitionAction.java");
 			}
@@ -428,6 +429,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				}
 				catch (final SQLException e)
 				{
+					this.logger.error(e.getMessage(),e);
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -521,12 +523,12 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 		catch (final SQLException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -994,7 +996,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return conditionalInstancesList;
 	}

@@ -136,12 +136,12 @@ public class ShowDashboardAction extends SecureAction
 		//		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final ApplicationException appException)
 		{
-			logger.debug(appException.getMessage(), appException);
+			logger.error(appException.getMessage(), appException);
 			appException.printStackTrace();
 		}
 		finally
@@ -152,7 +152,7 @@ public class ShowDashboardAction extends SecureAction
 			}
 			catch (final ApplicationException e)
 			{
-				logger.debug(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}

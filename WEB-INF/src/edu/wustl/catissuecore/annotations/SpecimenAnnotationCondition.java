@@ -55,7 +55,7 @@ public class SpecimenAnnotationCondition implements ICPCondition
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

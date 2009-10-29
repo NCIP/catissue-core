@@ -35,6 +35,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
@@ -43,7 +44,11 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
  */
 public class SaveDraftShipmentRequestAction extends SecureAction
 {
-
+	/**
+	 * Logger object.
+	 */
+	private Logger logger =
+		 Logger.getCommonLogger(SaveDraftShipmentRequestAction.class);
 	/**
 	 * action method for save draft.
 	 * @param mapping the object of ActionMapping class.
@@ -157,12 +162,16 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 		}
 		catch (final AssignDataException assignDataException)
 		{
+			this.logger.error(assignDataException.getMessage(),
+					assignDataException);
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
 					assignDataException.getMessage()));
 		}
 		catch (final ApplicationException appException)//Bug 13489
 		{
+			this.logger.error(appException.getMessage(),
+					appException);
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appException
 					.getMessage()));

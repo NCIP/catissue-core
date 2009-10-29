@@ -224,10 +224,10 @@ public class ImportXmi
 		}
 		catch (final Exception e)
 		{
-			logger.info("Fatal error reading XMI.");
-			logger.info("------------------------ERROR:--------------------------------\n");
-			logger.info(e.getMessage(), e);
-			logger.info("\n--------------------------------------------------------------");
+			ImportXmi.logger.error("Fatal error reading XMI.");
+			ImportXmi.logger.error("------------------------ERROR:--------------------------------\n");
+			ImportXmi.logger.error(e.getMessage(), e);
+			ImportXmi.logger.error("\n--------------------------------------------------------------");
 		}
 		finally
 		{
@@ -240,7 +240,8 @@ public class ImportXmi
 			}
 			catch (final IOException io)
 			{
-				logger.info("Error. Specified file does not exist.");
+				ImportXmi.logger.error("Error. Specified file " +
+						"does not exist."+io.getMessage(),io);
 			}
 			XMIUtilities.cleanUpRepository();
 

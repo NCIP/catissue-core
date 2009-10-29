@@ -185,7 +185,8 @@ public class ViewRequestSummaryAction extends SecureAction
 			target = edu.wustl.catissuecore.util.global.Constants.FAILURE;
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", appExcep
 					.getMessage()));
-			this.logger.debug(appExcep.getMessage(), appExcep);
+			this.logger.error(appExcep.getMessage(), appExcep);
+			appExcep.printStackTrace();
 		}
 		finally
 		{
@@ -195,6 +196,8 @@ public class ViewRequestSummaryAction extends SecureAction
 			}
 			catch (final ApplicationException exception)
 			{
+				this.logger.error(exception.getMessage(),exception);
+				exception.printStackTrace();
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
 						exception.getMessage()));
 			}

@@ -223,7 +223,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 					catch (final ApplicationException e)
 					{
 						collectionProtocolId = "";
-						logger.debug(e.getMessage(), e);
+						logger.error(e.getMessage(), e);
+						e.printStackTrace();
 					}
 					finally
 					{
@@ -233,7 +234,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 						}
 						catch (final ApplicationException e)
 						{
-							logger.debug(e.getMessage(), e);
+							logger.error(e.getMessage(), e);
 							e.printStackTrace();
 						}
 					}

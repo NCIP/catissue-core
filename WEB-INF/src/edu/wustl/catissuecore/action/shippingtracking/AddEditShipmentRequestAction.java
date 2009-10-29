@@ -25,6 +25,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 
 /**
@@ -32,7 +33,11 @@ import edu.wustl.dao.DAO;
  */
 public class AddEditShipmentRequestAction extends SecureAction
 {
-
+	/**
+	 * Logger object.
+	 */
+	private Logger logger = 
+		Logger.getCommonLogger(AddEditShipmentRequestAction.class);
 	/**
 	 * action method for shipment add/edit.
 	 * @param mapping object of ActionMapping class.
@@ -109,6 +114,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 						}
 						catch (final Exception ex)
 						{
+							this.logger.error(ex.getMessage(),ex);
 							ex.printStackTrace();
 						}
 						finally
@@ -119,6 +125,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 							}
 							catch (final ApplicationException e)
 							{
+								this.logger.error(e.getMessage(),e);
 								e.printStackTrace();
 							}
 						}
@@ -142,6 +149,7 @@ public class AddEditShipmentRequestAction extends SecureAction
 		//to be verified...
 		catch (final ApplicationException ex)
 		{
+			this.logger.error(ex.getMessage(),ex);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ex.getFormattedMessage()));
 		}
 		finally
