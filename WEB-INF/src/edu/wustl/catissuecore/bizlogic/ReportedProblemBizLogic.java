@@ -69,13 +69,15 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException auditExp)
 		{
-			this.logger.debug(auditExp.getMessage(), auditExp);
+			this.logger.error(auditExp.getMessage(), auditExp);
+			auditExp.printStackTrace();
 			throw this.getBizLogicException(auditExp, auditExp.getErrorKeyName(), auditExp
 					.getMsgValues());
 		}
@@ -121,13 +123,15 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final AuditException auditException)
 		{
-			this.logger.debug(auditException.getMessage(), auditException);
+			this.logger.error(auditException.getMessage(), auditException);
+			auditException.printStackTrace();
 			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
 					auditException.getMsgValues());
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}

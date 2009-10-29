@@ -320,13 +320,15 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -509,13 +511,15 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExption)
 		{
-			this.logger.debug(daoExption.getMessage(), daoExption);
+			this.logger.error(daoExption.getMessage(), daoExption);
+			daoExption.printStackTrace();
 			throw this.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption
 					.getMsgValues());
 		}
 		catch (final AuditException auditException)
 		{
-			this.logger.debug(auditException.getMessage(), auditException);
+			this.logger.error(auditException.getMessage(), auditException);
+			auditException.printStackTrace();
 			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
 					auditException.getMsgValues());
 		}
@@ -837,7 +841,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -860,7 +865,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -925,7 +931,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return list;
@@ -984,6 +991,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
+			this.logger.error(daoExp.getMessage(),daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1080,7 +1089,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new BizLogicException(e);
 		}
 		return objectId;
@@ -1162,7 +1172,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1223,7 +1234,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException appExp)
 		{
-			this.logger.debug(appExp.getMessage(), appExp);
+			this.logger.error(appExp.getMessage(), appExp);
+			appExp.printStackTrace();
 			throw this
 					.getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
 		}
@@ -1293,6 +1305,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
+			this.logger.error(e.getMessage(),e) ;
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 

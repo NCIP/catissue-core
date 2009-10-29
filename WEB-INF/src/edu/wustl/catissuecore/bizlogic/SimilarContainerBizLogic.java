@@ -235,18 +235,21 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final NameGeneratorException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, "utility.error", "");
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -308,7 +311,8 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		super.postInsert(obj, dao, sessionDataBean);
 	}
@@ -384,7 +388,8 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return true;
@@ -456,7 +461,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			// throw getBizLogicException(daoExp, "dao.error", "");
 		}

@@ -97,11 +97,13 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		finally
 		{
@@ -137,7 +139,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return pValDNme;
 	}
@@ -191,7 +194,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return pValDNme;
 	}
@@ -305,7 +309,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return userData;
 
@@ -331,7 +336,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return pValDNme;
 
@@ -451,7 +457,8 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		return nameValuePairs;

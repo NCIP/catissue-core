@@ -75,13 +75,15 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			StorageTypeBizLogic.logger.debug(daoExp.getMessage(), daoExp);
+			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			StorageTypeBizLogic.logger.debug(e.getMessage(), e);
+			StorageTypeBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -125,13 +127,15 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			StorageTypeBizLogic.logger.debug(daoExp.getMessage(), daoExp);
+			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			StorageTypeBizLogic.logger.debug(e.getMessage(), e);
+			StorageTypeBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}

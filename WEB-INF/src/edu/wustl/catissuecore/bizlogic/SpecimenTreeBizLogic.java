@@ -115,7 +115,7 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 		}
 		catch (final BizLogicException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 		}
 		return allNodes;

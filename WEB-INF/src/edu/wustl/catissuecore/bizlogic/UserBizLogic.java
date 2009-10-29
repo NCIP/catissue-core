@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import sun.security.krb5.internal.s;
+
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -53,6 +55,7 @@ import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -78,8 +81,11 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
  */
 public class UserBizLogic extends CatissueDefaultBizLogic
 {
-
-	private transient final Logger logger = Logger.getCommonLogger(UserBizLogic.class);
+	static
+	{
+		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+	}
+	private static Logger logger = Logger.getCommonLogger(UserBizLogic.class);
 	public static final int FAIL_SAME_AS_LAST_N = 8;
 	public static final int FAIL_FIRST_LOGIN = 9;
 	public static final int FAIL_EXPIRE = 10;
@@ -243,20 +249,22 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			// added to format constrainviolation message
 			this.deleteCSMUser(csmUser);
 			throw this.getBizLogicException(e, "sm.check.priv", "");
 		}
 		catch (final PasswordEncryptionException exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			UserBizLogic.logger.error(exception.getMessage(), exception);
 			this.deleteCSMUser(csmUser);
 			throw this.getBizLogicException(exception, "pwd.encrytion.error", "");
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			this.deleteCSMUser(csmUser);
 			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
@@ -292,7 +300,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final SMException e)
 				{
-					this.logger.debug(e.getMessage(), e);
+					UserBizLogic.logger.error(e.getMessage(), e);
+					e.printStackTrace() ;
 					throw this.getBizLogicException(e, "user.roleNotFound", "");
 				}
 				int i = 0;
@@ -332,7 +341,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException smExp)
 		{
-			this.logger.debug(smExp.getMessage(), smExp);
+			UserBizLogic.logger.error(smExp.getMessage(), smExp);
+			smExp.printStackTrace();
 			throw this.getBizLogicException(smExp, "sm.operation.error",
 					"Error in checking has privilege");
 		}
@@ -590,11 +600,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			catch (final SMException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				UserBizLogic.logger.error(e.getMessage(), e);
+				e.printStackTrace() ;
 			}
 			catch (final ApplicationException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				UserBizLogic.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -698,11 +709,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final SMException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				UserBizLogic.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 			catch (final ApplicationException e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				UserBizLogic.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -756,7 +768,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 	}
@@ -983,6 +996,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final CSObjectNotFoundException e)
 				{
+					UserBizLogic.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					flag = false;
 					privilegeManager.insertAuthorizationData(authorizationData, protectionObjects,
 							null, user.getObjectId());
@@ -1040,18 +1055,21 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException smExp)
 		{
-			this.logger.debug(smExp.getMessage(), smExp);
+			UserBizLogic.logger.error(smExp.getMessage(), smExp);
+			smExp.printStackTrace();
 			throw this.getBizLogicException(smExp, "sm.operation.error",
 					"Error in checking has privilege");
 		}
 		catch (final PasswordEncryptionException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, "pwd.encrytion.error", "");
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
@@ -1227,7 +1245,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException smExp)
 		{
-			this.logger.debug(smExp.getMessage(), smExp);
+			UserBizLogic.logger.error(smExp.getMessage(), smExp);
+			smExp.printStackTrace();
 			throw this.getBizLogicException(smExp, "sm.check.priv", "");
 		}
 
@@ -1300,13 +1319,15 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			UserBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1854,7 +1875,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			UserBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1870,8 +1892,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm)
 			throws BizLogicException
 	{
-		this.logger.info("Inside prePopulateUIBean method of UserBizLogic...");
-
+		UserBizLogic.logger.info("Inside prePopulateUIBean method of UserBizLogic...");
+	
 		final User user = (User) domainObj;
 		Role role = null;
 		if (user.getCsmUserId() != null)
@@ -1889,7 +1911,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final SMException e)
 			{
-				this.logger.error("SMException in prePopulateUIBean method of UserBizLogic..." + e);
+				UserBizLogic.logger.error("SMException in " +
+						"prePopulateUIBean method of UserBizLogic..." +e.getMessage(),e);
+				e.printStackTrace();
 				//throw new BizLogicException(e.getMessage());
 			}
 		}
@@ -1995,11 +2019,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -2033,7 +2059,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e1)
 		{
-			this.logger.debug(e1.getMessage(), e1);
+			UserBizLogic.logger.error(e1.getMessage(), e1);
+			e1.printStackTrace();
 			throw this.getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
 		finally
@@ -2086,7 +2113,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final BizLogicException e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				UserBizLogic.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2284,7 +2311,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}*/
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
 	}
@@ -2308,7 +2336,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			UserBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new BizLogicException(ErrorKey.getErrorKey("db.update.data.error"), e,
 			"Error in database operation");
 		}

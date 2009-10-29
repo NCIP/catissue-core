@@ -274,7 +274,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -347,7 +348,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -437,7 +439,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -476,7 +479,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -516,7 +520,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		super.postInsert(obj, dao, sessionDataBean);
 	}
@@ -575,7 +580,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

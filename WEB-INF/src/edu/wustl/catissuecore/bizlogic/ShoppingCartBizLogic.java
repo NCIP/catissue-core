@@ -60,7 +60,8 @@ public class ShoppingCartBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException appExp)
 		{
-			this.logger.debug(appExp.getMessage(), appExp);
+			this.logger.error(appExp.getMessage(), appExp);
+			appExp.printStackTrace();
 			throw this
 					.getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
 		}
