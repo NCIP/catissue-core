@@ -107,12 +107,14 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
@@ -146,7 +148,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException ex)
 		{
-			this.logger.debug(ex.getMessage(), ex);
+			this.logger.error(ex.getMessage(), ex);
+			ex.printStackTrace() ;
 			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		return distributed;
@@ -188,12 +191,14 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 
@@ -305,13 +310,15 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -568,7 +575,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -686,7 +694,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -731,7 +740,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -970,6 +980,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			return null;
 		}
 		finally

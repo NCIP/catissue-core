@@ -159,7 +159,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -771,7 +772,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final NameGeneratorException e)
 				{
-					this.logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw this.getBizLogicException(e, "name.generator.exp", "");
 				}
 			}
@@ -870,7 +872,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -991,7 +994,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1070,7 +1074,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final NameGeneratorException e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
@@ -1186,7 +1191,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final Exception e)
 			{
-				this.logger.debug("Exception occured while updating aliquots");
+				this.logger.error("Exception occured while updating aliquots"+e.getMessage(),e);
+				e.printStackTrace();
 			}
 			finally
 			{
@@ -1221,7 +1227,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return dynamicGroups;
@@ -1382,7 +1389,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1423,6 +1431,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException doexp)
 		{
+			this.logger.error(doexp.getMessage(),doexp);
+			doexp.printStackTrace();
 			throw this.getBizLogicException(doexp, doexp.getErrorKeyName(), doexp.getMsgValues());
 		}
 	}
@@ -1481,13 +1491,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1598,7 +1610,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1810,13 +1823,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -2046,7 +2061,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -2145,7 +2161,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
 	}
@@ -2205,7 +2222,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2572,7 +2590,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return result;
@@ -2692,7 +2711,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					String message = exp.getMessage();
 					message += " (This message is for Derived Specimen " + j
 							+ " of Parent Specimen number )";
-					this.logger.debug(message, exp);
+					this.logger.error(message, exp);
+					exp.printStackTrace();
 					throw this.getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j)
 							.toString());
 				}
@@ -2906,7 +2926,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -2968,7 +2989,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -3108,7 +3130,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 
@@ -3211,7 +3234,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final CloneNotSupportedException exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return deriveEventCollection;
@@ -3243,7 +3266,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 
@@ -3287,7 +3310,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -3336,7 +3360,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -3464,14 +3489,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
+			exception.printStackTrace();
 			try
 			{
 				dao.rollback();
 			}
 			catch (final DAOException e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 
@@ -3669,6 +3696,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
+			this.logger.error(exp.getMessage(),exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -3720,7 +3749,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
+			exception.printStackTrace();
 			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
 		}
@@ -3839,7 +3869,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -4001,12 +4032,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final DAOException e)
 				{
-					this.logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw this.getBizLogicException(e, "ext.mult.spec.nt.updated", "");
 				}
 				catch (final AuditException e)
 				{
-					this.logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 				}
 			}
@@ -4288,7 +4321,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
+			exception.printStackTrace();
 			throw this.getBizLogicException(exception, "failed.spec.details", " "
 					+ exception.getMessage());
 		}
@@ -4359,7 +4393,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -4384,7 +4419,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final BizLogicException ex)
 			{
-				this.logger.debug(ex.getMessage(), ex);
+				this.logger.error(ex.getMessage(), ex);
+				ex.printStackTrace();
 				final ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 						.getMessage()));
@@ -4448,7 +4484,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			Logger.out.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 		if (cpId != null)
@@ -4691,7 +4728,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
 		return isAuthorized;
@@ -4777,10 +4815,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final DAOException e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		if (result != null)
 		{
@@ -4837,6 +4877,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
+			this.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 			throw new BizLogicException(e);
 		}

@@ -130,7 +130,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
 			final ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
 			throw new BizLogicException(errorKey, exp, "");
@@ -401,7 +401,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (ApplicationException e)
 			{
-				logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
 				new UserBizLogic().deleteCSMUser(csmUser);
 				throw new BizLogicException(ErrorKey.getErrorKey("db.insert.data.error"), e,
 				"Error in database operation");

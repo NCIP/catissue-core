@@ -52,7 +52,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -113,7 +114,8 @@ public class IdentifiedSurgicalPathologyReportBizLogic extends CatissueDefaultBi
 		{
 			this.logger
 					.error("Error occured while updating IdentifiedSurgicalPathologyReport domain object"
-							+ ex);
+							+ ex.getMessage(),ex);
+			ex.printStackTrace() ;
 		}
 	}
 

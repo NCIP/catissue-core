@@ -73,7 +73,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	/**
 	 * logger instance of the class.
 	 */
-	private static final transient Logger logger = Logger
+	private final transient Logger logger = Logger
 			.getCommonLogger(CollectionProtocolRegistrationBizLogic.class);
 	/**
 	 * Saves the user object in the database.
@@ -152,12 +152,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -182,7 +184,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final NameGeneratorException nameGeneratorException)
 		{
-			logger.debug(nameGeneratorException.getMessage(), nameGeneratorException);
+			this.logger.error(nameGeneratorException.getMessage(), nameGeneratorException);
+			nameGeneratorException.printStackTrace();
 			throw this.getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
 	}
@@ -496,7 +499,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return id;
@@ -552,7 +555,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -667,7 +671,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -739,7 +744,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -801,12 +807,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -1169,14 +1177,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			auditManager.updateAudit(dao, obj, oldObj);
 
 			// Disable all specimen Collection group under this registration.
-			logger.debug("collectionProtocolRegistration.getActivityStatus() "
+			this.logger.debug("collectionProtocolRegistration.getActivityStatus() "
 					+ collectionProtocolRegistration.getActivityStatus());
 			if (collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(
 					Constants.WITHDRAW_RESPONSE_RETURN)
 					|| collectionProtocolRegistration.getConsentWithdrawalOption()
 							.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 			{
-				logger.debug("collectionProtocolRegistration.getActivityStatus() "
+				this.logger.debug("collectionProtocolRegistration.getActivityStatus() "
 						+ collectionProtocolRegistration.getActivityStatus());
 				final Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration
 						.getId()};
@@ -1189,13 +1197,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();	
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -1306,12 +1316,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, "class.notFound.exp", "");
 		}
 
@@ -1334,7 +1346,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -1649,19 +1662,19 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						/*// if list is not empty the Constraint Violation occurs
 						logger.debug("Unique Constraint Violated: " + l.get(0));
 						errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);*/
-						logger.debug("Unique Constraint Violated: " + errMsg);
+						this.logger.debug("Unique Constraint Violated: " + errMsg);
 						final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
 						throw new BizLogicException(errorKey, null,
 								"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
 					}
 					else
 					{
-						logger.debug("Unique Constraint Passed");
+						this.logger.debug("Unique Constraint Passed");
 					}
 				}
 				else
 				{
-					logger.debug("Unique Constraint Passed");
+					this.logger.debug("Unique Constraint Passed");
 				}
 
 			}
@@ -1720,7 +1733,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					logger.debug("Unique Constraint Violated: " + l.get(0));
 					errMsg = new DefaultExceptionFormatter().getErrorMessage(
 					"Err.ConstraintViolation", arguments);*/
-					logger.debug("Unique Constraint Violated: " + errMsg);
+					this.logger.debug("Unique Constraint Violated: " + errMsg);
 					final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
 					throw new BizLogicException(errorKey, null,
 							"Collection Protocol Registration : "
@@ -1728,14 +1741,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				}
 				else
 				{
-					logger.debug("Unique Constraint Passed");
+					this.logger.debug("Unique Constraint Passed");
 				}
 			}
 
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1766,7 +1780,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		{
 			dao = this.openDAOSession(null);
 			final List list = dao.executeQuery(hql);
-			logger.info("list size -------------:" + list.size());
+			this.logger.info("list size -------------:" + list.size());
 			// Iterating over each Collection Protocol and finding out all its registerd participant
 			if (list != null)
 			{
@@ -1827,7 +1841,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1909,7 +1924,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -1996,7 +2012,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -2090,7 +2107,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2222,7 +2240,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 			catch (final NameGeneratorException e)
 			{
-				logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
@@ -2252,7 +2271,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		{
 			dao = this.openDAOSession(null);
 			final List list = dao.executeQuery(hql);
-			logger.info("list size -----------:" + list.size());
+			this.logger.info("list size -----------:" + list.size());
 
 			// Iterating over each Collection Protocol and finding out all its
 			// registerd participant
@@ -2271,7 +2290,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}

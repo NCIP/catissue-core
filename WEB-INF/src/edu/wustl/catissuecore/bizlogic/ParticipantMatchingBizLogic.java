@@ -69,7 +69,8 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally

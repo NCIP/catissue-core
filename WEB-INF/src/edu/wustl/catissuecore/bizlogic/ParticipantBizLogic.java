@@ -160,13 +160,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
@@ -336,7 +338,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final CacheException e)
 		{
-			this.logger.debug("Exception occured while getting instance of cachemanager");
+			this.logger.error("Exception occured while getting instance of cachemanager");
 			e.printStackTrace();
 		}
 
@@ -474,13 +476,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -954,7 +958,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1037,7 +1042,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
@@ -1091,7 +1097,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
@@ -1116,7 +1123,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1197,12 +1205,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw AppUtility.handleSMException(e);
 		}
 		finally
@@ -1306,6 +1316,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				catch (final DAOException e)
 				{
 					this.logger.error(e.getMessage(), e);
+					e.printStackTrace() ;
 				}
 				final Collection<CollectionProtocol> cpCollection = user
 						.getAssignedProtocolCollection();
@@ -1383,7 +1394,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e1)
 		{
-			this.logger.debug(e1.getMessage(), e1);
+			this.logger.error(e1.getMessage(), e1);
 			e1.printStackTrace();
 		}
 		return isAuthorized;
@@ -1440,7 +1451,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			this.logger.error("Error occured while retrieving Specimen List", e);
+			this.logger.error("Error occured while retrieving Specimen List"+e.getMessage(), e);
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -1506,7 +1518,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException exp)
 		{
-			this.logger.debug(exp.getMessage());
+			this.logger.error(exp.getMessage());
+			exp.printStackTrace();
 		}
 	}
 
@@ -1552,9 +1565,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				this.addEditParticipant(participant, cpid, userName, operation);
 			}
 		}
-		catch (final DAOException e)
+		catch (final DAOException daoEx)
 		{
-			throw new BizLogicException(e);
+			this.logger.error(daoEx.getMessage(),daoEx);
+			daoEx.printStackTrace();
+			throw new BizLogicException(daoEx);
 		}
 
 	}
@@ -1612,6 +1627,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
+			this.logger.error(e.getMessage(),e) ;
+			e.printStackTrace() ;
 			throw new BizLogicException(ErrorKey.getErrorKey("common.errors.item"), e,
 					"Error while opening the session");
 		}
@@ -1623,6 +1640,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final Exception e)
 			{
+				this.logger.error(e.getMessage(),e) ;
+				e.printStackTrace();
 				throw new BizLogicException(ErrorKey.getErrorKey("common.errors.item"), e,
 						"Failed while updating ");
 			}

@@ -63,7 +63,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -123,7 +123,8 @@ public class DeidentifiedSurgicalPathologyReportBizLogic extends CatissueDefault
 		{
 			this.logger
 					.error("Error occured while updating DeidentifiedSurgicalPathologyReport domain object"
-							+ ex);
+							+ ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 	}
 

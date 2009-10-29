@@ -132,7 +132,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final SMException exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
+			exception.printStackTrace();
 			throw this.getBizLogicException(exception, exception.getErrorKeyAsString(), exception
 					.getLogMessage());
 		}
@@ -183,7 +184,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -201,7 +203,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -219,7 +222,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -237,7 +241,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -313,9 +318,11 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			}
 
 		}
-		catch (final SMException e)
+		catch (final SMException smEx)
 		{
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			this.logger.error(smEx.getMessage(),smEx);
+			smEx.printStackTrace();
+			throw this.getBizLogicException(smEx, smEx.getErrorKeyName(), smEx.getMsgValues());
 		}
 		return true;
 	}
@@ -354,6 +361,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			this.logger.error("Titli search index cound not be refreshed for opeartion."
 					+ operation, excep);
+			excep.printStackTrace();
 		}
 
 	}
@@ -387,7 +395,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final BizLogicException bizLogicExp)
 		{
-
+			this.logger.error(bizLogicExp.getMessage(),bizLogicExp);
+			bizLogicExp.printStackTrace();
 		}
 	}
 

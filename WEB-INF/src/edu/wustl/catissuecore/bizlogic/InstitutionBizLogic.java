@@ -87,6 +87,8 @@ public class InstitutionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoexp)
 		{
+			this.logger.error(daoexp.getMessage(),daoexp);
+			daoexp.printStackTrace();
 			throw this
 					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}

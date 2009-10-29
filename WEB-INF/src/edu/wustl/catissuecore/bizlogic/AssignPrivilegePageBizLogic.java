@@ -230,7 +230,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 
@@ -399,7 +399,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 
 		}
@@ -477,7 +477,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		finally
@@ -750,7 +751,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final SMException e)
 				{
-					logger.debug(e.getMessage(), e);
+					AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw this.getBizLogicException(e, "error.privileges.from.given.role", roleId);
 				}
 			}
@@ -1110,7 +1112,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						}
 						catch (final CSException e)
 						{
-							logger.debug(e.getMessage(), e);
+							AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
 							final ErrorKey errorKey = ErrorKey.getErrorKey("role.nt.retrieved");
 							throw new BizLogicException(errorKey, e, "");
 						}
@@ -1152,14 +1154,16 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AssignPrivilegePageBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			daoExp.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
 		catch (final SMException smExp)
 		{
-			logger.debug(smExp.getMessage(), smExp);
+			AssignPrivilegePageBizLogic.logger.error(smExp.getMessage(), smExp);
+			smExp.printStackTrace();
 			throw this.getBizLogicException(smExp, smExp.getErrorKeyName(), smExp.getMsgValues());
 		}
 		finally
@@ -1618,7 +1622,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		finally
@@ -1868,7 +1873,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, "error.privileges.from.given.role", actionId);
 		}
 		return actionBeanList;

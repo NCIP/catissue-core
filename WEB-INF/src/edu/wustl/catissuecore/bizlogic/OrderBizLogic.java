@@ -114,13 +114,15 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -170,7 +172,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -211,7 +214,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -647,7 +651,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1026,12 +1031,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw AppUtility.handleSMException(e);
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace() ;
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
@@ -1143,7 +1150,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return (List) siteCollWithDistriPri;
@@ -1183,7 +1191,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, "sm.priv.error", objectId);
 		}
 	}
@@ -1247,7 +1256,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, "sm.priv.error", objectId);
 		}
 
@@ -1350,12 +1360,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final NumberFormatException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, "number.format.exp", "");
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -1379,6 +1391,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -1426,6 +1439,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			return null;
 		}
 		finally
@@ -1479,7 +1493,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1539,7 +1554,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1670,7 +1686,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -1715,7 +1732,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -1740,7 +1757,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return specimen;
@@ -1765,7 +1782,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1799,7 +1817,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();			
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1833,7 +1852,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -1873,7 +1893,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1914,7 +1934,8 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2071,7 +2092,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return hasDistributionPrivilege;

@@ -136,15 +136,17 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				cpDetailsList.addAll(list);
 			}
 		}
-		catch (final BizLogicException e)
+		catch (final BizLogicException bizEx)
 		{
+			CpBasedViewBizLogic.logger.error(bizEx.getMessage(),bizEx);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			bizEx.printStackTrace();
 		}
-		catch (final SMException e)
+		catch (final SMException smEx)
 		{
+			CpBasedViewBizLogic.logger.error(smEx.getMessage(),smEx);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			smEx.printStackTrace();
 		}
 		return cpDetailsList;
 	}
@@ -184,10 +186,11 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-		catch (final BizLogicException e)
+		catch (final BizLogicException bizEx)
 		{
+			CpBasedViewBizLogic.logger.error(bizEx.getMessage(),bizEx);
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			bizEx.printStackTrace();
 		}
 		return collectionProtocolBeanList;
 	}
@@ -267,18 +270,22 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CpBasedViewBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final ApplicationException e)
+		catch (final ApplicationException appEx)
 		{
+			CpBasedViewBizLogic.logger.error(appEx.getMessage(),appEx);
+			appEx.printStackTrace();
 			// TODO Auto-generated catch block
-			throw new ApplicationException(e.getErrorKey(), e, e.getMsgValues());
+			throw new ApplicationException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
 		}
-		catch (final Exception e)
+		catch (final Exception exp)
 		{
-			e.printStackTrace();
+			CpBasedViewBizLogic.logger.error(exp.getMessage(),exp);
+			exp.printStackTrace();
 		}
 		return participantInfoList;
 	}

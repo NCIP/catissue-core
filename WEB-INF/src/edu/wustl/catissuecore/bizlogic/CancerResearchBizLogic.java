@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -27,7 +28,11 @@ import edu.wustl.dao.exception.DAOException;
 
 public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 {
-
+	/**
+	 * logger instance of the class.
+	 */
+	private transient final Logger logger =
+			Logger.getCommonLogger(CancerResearchBizLogic.class);
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
@@ -79,6 +84,7 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoexp)
 		{
+			this.logger.error(daoexp.getMessage(),daoexp);
 			throw this
 					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}

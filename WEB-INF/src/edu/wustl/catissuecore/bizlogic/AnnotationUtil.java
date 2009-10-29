@@ -119,7 +119,7 @@ public class AnnotationUtil
 		}
 		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			AnnotationUtil.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
@@ -132,7 +132,7 @@ public class AnnotationUtil
 			}
 			catch (final DAOException exp)
 			{
-				logger.debug(exp.getMessage(), exp);
+				AnnotationUtil.logger.error(exp.getMessage(), exp);
 				exp.printStackTrace();
 				// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
@@ -205,14 +205,16 @@ public class AnnotationUtil
 		}
 		catch (final DynamicExtensionsSystemException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
 			throw new BizLogicException(null, null, e.getMessage());
 
 		}
 		catch (final DynamicExtensionsApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
 			throw new BizLogicException(null, null, e.getMessage());
 
@@ -264,7 +266,7 @@ public class AnnotationUtil
 
 		catch (final DAOException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			AnnotationUtil.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
@@ -279,7 +281,7 @@ public class AnnotationUtil
 
 			catch (final DAOException exp)
 			{
-				logger.debug(exp.getMessage(), exp);
+				AnnotationUtil.logger.error(exp.getMessage(), exp);
 				exp.printStackTrace();
 				// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 				throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
@@ -347,7 +349,7 @@ public class AnnotationUtil
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AnnotationUtil.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
 		finally
@@ -358,7 +360,7 @@ public class AnnotationUtil
 			}
 			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -411,12 +413,12 @@ public class AnnotationUtil
 		}
 		catch (final DAOException daoEx)
 		{
-			logger.debug(daoEx.getMessage(), daoEx);
+			AnnotationUtil.logger.error(daoEx.getMessage(), daoEx);
 			daoEx.printStackTrace();
 		}
 		catch (final SQLException sqlEx)
 		{
-			logger.debug(sqlEx.getMessage(), sqlEx);
+			AnnotationUtil.logger.error(sqlEx.getMessage(), sqlEx);
 			sqlEx.printStackTrace();
 		}
 		finally
@@ -427,7 +429,7 @@ public class AnnotationUtil
 			}
 			catch (final ApplicationException appException)
 			{
-				logger.error(appException.getLogMessage(), appException);
+				AnnotationUtil.logger.error(appException.getLogMessage(), appException);
 				appException.printStackTrace();
 			}
 		}
@@ -575,7 +577,7 @@ public class AnnotationUtil
 			}
 			catch (final Exception e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 			finally
@@ -589,12 +591,12 @@ public class AnnotationUtil
 				}
 				catch (final HibernateException e)
 				{
-					logger.debug(e.getMessage(), e);
+					AnnotationUtil.logger.error(e.getMessage(), e);
 					e.printStackTrace();
 				}
 				catch (final SQLException e)
 				{
-					logger.debug(e.getMessage(), e);
+					AnnotationUtil.logger.error(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}
@@ -654,7 +656,7 @@ public class AnnotationUtil
 		}
 		catch (final DynamicExtensionsSystemException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			AnnotationUtil.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			// ErrorKey errorKey = ErrorKey.getErrorKey("de.error");
 			throw new BizLogicException(null, null, exp.getMessage());
@@ -747,12 +749,12 @@ public class AnnotationUtil
 		}
 		catch (final SQLException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AnnotationUtil.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
 		finally
@@ -764,12 +766,12 @@ public class AnnotationUtil
 			}
 			catch (final SQLException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 			catch (final DAOException daoExp)
 			{
-				logger.debug(daoExp.getMessage(), daoExp);
+				AnnotationUtil.logger.error(daoExp.getMessage(), daoExp);
 				daoExp.printStackTrace();
 			}
 
@@ -825,7 +827,7 @@ public class AnnotationUtil
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -836,7 +838,7 @@ public class AnnotationUtil
 			}
 			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -963,11 +965,13 @@ public class AnnotationUtil
 		}// while
 		catch (final SQLException e)
 		{
+			AnnotationUtil.logger.error(e.getMessage(),e);
 			throw new DynamicExtensionsSystemException(
 					"SQL Exception while adding paths for derived entity.", e);
 		}
 		catch (final DAOException e)
 		{
+			AnnotationUtil.logger.error(e.getMessage(),e);
 			throw new DynamicExtensionsSystemException(
 					"SQL Exception while adding paths for derived entity.", e);
 		}
@@ -1032,7 +1036,7 @@ public class AnnotationUtil
 		}
 		catch (final SQLException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -1044,7 +1048,7 @@ public class AnnotationUtil
 			}
 			catch (final SQLException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 
@@ -1111,7 +1115,7 @@ public class AnnotationUtil
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -1141,7 +1145,7 @@ public class AnnotationUtil
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationUtil.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
@@ -1154,12 +1158,12 @@ public class AnnotationUtil
 			}
 			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 			catch (final SQLException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AnnotationUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}

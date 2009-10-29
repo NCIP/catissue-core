@@ -64,13 +64,15 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final SMException ex)
 		{
-			this.logger.info("Review Role not found!");
+			this.logger.error("Review Role not found!"+ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 		// Since PathologyReportReviewParameter is in PUBLIC_DATA_GROUP
 		// protection objects not required
@@ -82,7 +84,8 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		 * null); } catch (SMException e) { throw handleSMException(e); }
 		 */catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -112,7 +115,8 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		{
 			this.logger
 					.error("Error occured while updating object of PathologyReportReviewParameter"
-							+ ex);
+							+ ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 	}
 }

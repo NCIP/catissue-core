@@ -134,7 +134,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -229,7 +229,8 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final DynamicExtensionsSystemException exception)
 			{
-				logger.debug(exception.getMessage(), exception);
+				AnnotationBizLogic.logger.error(exception.getMessage(), exception);
+				exception.printStackTrace();
 				throw new BizLogicException(null, null, exception.getMessage());
 			}
 		}
@@ -288,7 +289,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -312,7 +313,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -334,7 +335,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -369,7 +370,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final BizLogicException e)
 				{
-					logger.debug(e.getMessage(), e);
+					AnnotationBizLogic.logger.error(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}
@@ -406,7 +407,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -427,7 +428,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			/*   throw new BizLogicException(ApplicationProperties
 			           .getValue("app.annotatations.errors.deleteRecord"), e);*/
@@ -449,7 +450,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -535,7 +536,8 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -555,7 +557,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -573,7 +575,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AnnotationBizLogic.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

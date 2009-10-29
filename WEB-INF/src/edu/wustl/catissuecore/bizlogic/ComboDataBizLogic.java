@@ -105,6 +105,8 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
+			this.logger.error(exp.getMessage(),exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		finally
@@ -172,9 +174,9 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
-			System.out.println(e);
+			//System.out.println(e);
 		}
 		return jsonObject;
 	}

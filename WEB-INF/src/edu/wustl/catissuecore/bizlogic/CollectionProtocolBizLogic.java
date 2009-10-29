@@ -141,7 +141,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final ApplicationException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			CollectionProtocolBizLogic.logger.error(exception.getMessage(), exception);
 			//ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
@@ -359,12 +359,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (final SMException e)
 			{
-				logger.debug(e.getMessage(), e);
+				CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
 				throw new BizLogicException(null, null, "Error in checking has privilege");
 			}
 			catch (final ApplicationException e)
 			{
-				logger.debug(e.getLogMessage(), e);
+				CollectionProtocolBizLogic.logger.error(e.getLogMessage(), e);
 				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 		}
@@ -414,7 +414,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
@@ -504,13 +504,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -553,7 +555,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -605,7 +608,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final ApplicationException smExp)
 		{
-			logger.debug(smExp.getMessage(), smExp);
+			CollectionProtocolBizLogic.logger.error(smExp.getMessage(), smExp);
+			smExp.printStackTrace();
 			throw this.getBizLogicException(smExp, smExp.getErrorKeyName(), smExp.getMsgValues());
 
 		}
@@ -627,7 +631,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return collectionProtocolOld;
@@ -736,14 +741,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -804,7 +809,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -829,13 +835,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -858,7 +866,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -907,7 +916,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1248,7 +1258,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException e1)
 		{
-			logger.debug(e1.getMessage(), e1);
+			CollectionProtocolBizLogic.logger.error(e1.getMessage(), e1);
+			e1.printStackTrace() ;
 			throw this.getBizLogicException(e1, e1.getErrorKeyName(), e1.getMsgValues());
 		}
 		finally
@@ -1397,7 +1408,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1445,7 +1457,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (final DAOException daoExp)
 			{
-				logger.debug(daoExp.getMessage(), daoExp);
+				CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+				daoExp.printStackTrace();
 				throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp
 						.getMsgValues());
 			}
@@ -1472,7 +1485,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1485,7 +1498,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			catch (final DAOException daoExp)
 			{
-				logger.debug(daoExp.getMessage(), daoExp);
+				CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+				daoExp.printStackTrace();
 				throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp
 						.getMsgValues());
 			}

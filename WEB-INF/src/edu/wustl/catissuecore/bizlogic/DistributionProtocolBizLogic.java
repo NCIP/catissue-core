@@ -94,13 +94,15 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException auditException)
 		{
-			this.logger.debug(auditException.getMessage(), auditException);
+			this.logger.error(auditException.getMessage(), auditException);
+			auditException.printStackTrace();
 			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
 					auditException.getMsgValues());
 		}
@@ -180,13 +182,15 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.debug(daoExp.getMessage(), daoExp);
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace()	;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -517,7 +521,8 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw AppUtility.handleSMException(e);
 		}
 		return isAuthorized;
