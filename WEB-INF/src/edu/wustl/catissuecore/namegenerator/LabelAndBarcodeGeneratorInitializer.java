@@ -41,7 +41,7 @@ public final class LabelAndBarcodeGeneratorInitializer
 		}
 		catch (final Exception e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			LabelAndBarcodeGeneratorInitializer.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}

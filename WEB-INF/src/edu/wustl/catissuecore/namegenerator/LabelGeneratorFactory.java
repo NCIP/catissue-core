@@ -58,25 +58,29 @@ public final class LabelGeneratorFactory
 		}
 		catch (final IllegalAccessException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final InstantiationException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final ClassNotFoundException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final Exception ex)
 		{
-			LOGGER.debug(ex.getMessage(), ex);
+			LabelGeneratorFactory.LOGGER.error(ex.getMessage(), ex);
+			ex.printStackTrace() ;
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This  class which contains the default SCG barcode implementation.
@@ -14,7 +15,11 @@ import edu.wustl.common.exception.ApplicationException;
  */
 public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private transient final Logger logger
+		= Logger.getCommonLogger(DefaultSCGBarcodeGenerator.class);
 	/**
 	 * Current barcode.
 	 */
@@ -37,6 +42,7 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 		}
 		catch (final ApplicationException e)
 		{
+			this.logger.error(e.getMessage(),e) ;
 			e.printStackTrace();
 		}
 

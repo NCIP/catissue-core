@@ -41,7 +41,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class BaseShipment extends AbstractDomainObject implements Serializable, IActivityStatus
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger =
+							Logger.getCommonLogger(BaseShipment.class);
 	/**
 	 * Required field if implements Serializable.
 	 */
@@ -725,7 +729,8 @@ public class BaseShipment extends AbstractDomainObject implements Serializable, 
 		}
 		catch (final ParseException e)
 		{
-			Logger.out.error(e.getMessage());
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");
 		}
 

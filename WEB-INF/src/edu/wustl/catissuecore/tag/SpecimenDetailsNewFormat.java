@@ -217,7 +217,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 		catch (final IOException ioe)
 		{
-			this.logger.debug(ioe.getMessage(), ioe);
+			this.logger.error(ioe.getMessage(), ioe);
+			ioe.printStackTrace();
 			throw new JspTagException("Error:IOException while writing to the user");
 		}
 		return SKIP_BODY;

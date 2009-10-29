@@ -57,8 +57,9 @@ public class UpdateSchemaForConstraintProperties
 		}
 		catch (final Exception e)
 		{
+			UpdateSchemaForConstraintProperties.logger.error("Could not update the metadata" +
+					" For constraint properties"+e.getMessage(), e);
 			e.printStackTrace();
-			Logger.out.debug("Could not update the metadata For constraint properties", e);
 
 		}
 		System.out.println("UpdateSchemaForConstraintProperties.main()=====END");
@@ -216,6 +217,7 @@ public class UpdateSchemaForConstraintProperties
 		}
 		catch (final Exception e)
 		{
+			UpdateSchemaForConstraintProperties.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		System.out.println("UpdateSchemaForConstraintProperties.updateCompositeKeyRelationTable()");
@@ -390,6 +392,7 @@ public class UpdateSchemaForConstraintProperties
 		}
 		catch (final Exception e)
 		{
+			UpdateSchemaForConstraintProperties.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 

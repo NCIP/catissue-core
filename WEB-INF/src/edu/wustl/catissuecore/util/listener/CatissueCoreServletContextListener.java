@@ -100,7 +100,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final Exception e)
 		{
-			logger.error("Application failed to initialize");
+			CatissueCoreServletContextListener.logger.error("Application failed to initialize"
+					+e.getMessage(),e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 
 		}
@@ -229,7 +230,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final Exception e)
 		{
-			logger.debug("Exception occured while initialising entity cache");
+			CatissueCoreServletContextListener.logger.error("Exception occured while initialising " +
+					"entity cache"+e.getMessage(),e);
+			e.printStackTrace();
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
@@ -277,8 +280,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Could not initialized application, Error in creating CDE manager.");
-			logger.error(ex.getMessage(), ex);
+			CatissueCoreServletContextListener.logger.error("Could not initialized application, " +
+					"Error in creating CDE manager.");
+			CatissueCoreServletContextListener.logger.error(ex.getMessage(), ex);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -430,7 +434,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (final CacheException e)
 		{
-			logger.debug("Exception occured while shutting instance of CatissueCoreCacheManager");
+			CatissueCoreServletContextListener.logger.error("Exception occured while shutting " +
+					"instance of CatissueCoreCacheManager"
+					+e.getMessage(),e);
 			e.printStackTrace();
 		}
 	}

@@ -35,7 +35,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ShipmentRequest extends BaseShipment
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger = Logger.getCommonLogger(ShipmentRequest.class);
 	/**
 	 * represents the collection ofspecimens.
 	 */
@@ -218,7 +221,8 @@ public class ShipmentRequest extends BaseShipment
 		}
 		catch (final ParseException e)
 		{
-			Logger.out.error(e.getMessage());
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new AssignDataException(ErrorKey.getErrorKey("errors.item"), e, "item missing");
 		}
 	}

@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.castor.persist.ProposedObject;
+
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -55,7 +57,7 @@ public final class PropertyHandler
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			PropertyHandler.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

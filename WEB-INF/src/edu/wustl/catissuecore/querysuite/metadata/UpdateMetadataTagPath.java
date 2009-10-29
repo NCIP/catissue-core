@@ -105,7 +105,7 @@ public class UpdateMetadataTagPath
 	{
 		try
 		{
-			LOGGER.info("UpdateMetadataTagPath start");
+			UpdateMetadataTagPath.LOGGER.info("UpdateMetadataTagPath start");
 			if (args.length < 1)
 			{
 				throw new Exception("Please Specify the xml filename");
@@ -118,7 +118,9 @@ public class UpdateMetadataTagPath
 		}
 		catch (final Exception e)
 		{
-			LOGGER.info("error in UpdateMetadataTagPath" + e.getMessage());
+			UpdateMetadataTagPath.LOGGER.error("error in UpdateMetadataTagPath"
+					+ e.getMessage(),e);
+			e.printStackTrace();
 		}
 	}
 
@@ -155,18 +157,19 @@ public class UpdateMetadataTagPath
 						.getEntityGroupByName(entityGroupName);
 				if (entityGroup == null)
 				{
-					LOGGER.info("entitygroup.doesNotExist" + entityGroupName);
+					UpdateMetadataTagPath.LOGGER.info("entitygroup.doesNotExist" + entityGroupName);
 				}
 				else
 				{
 					readEntities(entityGrpEle, entitygroupId);
 				}
 			}
-			LOGGER.info("=TAGGED VALUES ADDED SUCCESSFULLY!!!");
+			UpdateMetadataTagPath.LOGGER.info("=TAGGED VALUES ADDED SUCCESSFULLY!!!");
 		}
 		catch (final Exception e)
 		{
-			LOGGER.info("=error in readTaggedValues !" + e.getMessage());
+			UpdateMetadataTagPath.LOGGER.error("=error in readTaggedValues !" + e.getMessage(),e);
+			e.printStackTrace();
 		}
 	}
 
@@ -235,7 +238,10 @@ public class UpdateMetadataTagPath
 		}
 		catch (final Exception ex)
 		{
-			throw new RuntimeException("error in saving object!!!!", ex);
+			UpdateMetadataTagPath.LOGGER.error(ex.getMessage(),ex);
+			ex.printStackTrace();
+			throw new RuntimeException("error in saving " +
+					"object!!!!"+ex.getMessage(), ex);
 		}
 	}
 

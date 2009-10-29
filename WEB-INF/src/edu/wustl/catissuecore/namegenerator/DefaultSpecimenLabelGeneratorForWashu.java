@@ -55,7 +55,8 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		}
 		catch (final Exception ex)
 		{
-			LOGGER.debug(ex.getMessage(), ex);
+			DefaultSpecimenLabelGeneratorForWashu.LOGGER.error(ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 	}
 

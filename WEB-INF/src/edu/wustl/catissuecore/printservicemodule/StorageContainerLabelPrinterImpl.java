@@ -51,7 +51,8 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch (final Exception exp)
 		{
-			this.logger.info(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace() ;
 			return false;
 
 		}
@@ -84,7 +85,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		}
 		catch (final Exception exp)
 		{
-			this.logger.info(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			return false;
 		}

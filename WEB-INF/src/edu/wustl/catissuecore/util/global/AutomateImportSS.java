@@ -36,7 +36,7 @@ public class AutomateImportSS
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
-	private static Logger logger = Logger.getCommonLogger(AutomateImportSS.class);
+	static Logger logger = Logger.getCommonLogger(AutomateImportSS.class);
 	// The Name of the server for the database. For example : localhost
 	static String DATABASE_SERVER_NAME;
 	// The Port number of the server for the database.
@@ -179,6 +179,8 @@ public class AutomateImportSS
 		}
 		catch (final Exception e)
 		{
+			AutomateImportSS.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		finally
@@ -192,6 +194,7 @@ public class AutomateImportSS
 				}
 				catch (final SQLException e)
 				{
+					AutomateImportSS.logger.error(e.getMessage(),e);
 					e.printStackTrace();
 				}
 			}
@@ -486,7 +489,8 @@ public class AutomateImportSS
 		}
 		catch (final SQLException exception)
 		{
-			logger.debug(exception.getMessage(), exception);
+			AutomateImportSS.logger.info(exception.getMessage(), exception);
+			exception.printStackTrace() ;
 			throw exception;
 		}
 		finally
@@ -539,7 +543,8 @@ public class AutomateImportSS
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			AutomateImportSS.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		finally
@@ -577,6 +582,7 @@ class StreamGobbler extends Thread
 		}
 		catch (final IOException ioe)
 		{
+			AutomateImportSS.logger.info(ioe.getMessage(),ioe);
 			ioe.printStackTrace();
 		}
 	}

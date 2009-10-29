@@ -54,7 +54,8 @@ public final class LabelPrinterFactory
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			LabelPrinterFactory.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw e;
 
 		}

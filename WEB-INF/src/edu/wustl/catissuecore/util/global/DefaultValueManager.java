@@ -119,7 +119,7 @@ public class DefaultValueManager
 					}
 					catch (final Exception e)
 					{
-						logger.debug(e.getMessage(), e);
+						DefaultValueManager.logger.error(e.getMessage(), e);
 						e.printStackTrace();
 					}
 				}

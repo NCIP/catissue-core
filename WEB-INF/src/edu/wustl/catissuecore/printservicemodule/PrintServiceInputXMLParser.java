@@ -88,7 +88,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			return false;
 		}
@@ -113,7 +113,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		}
 		catch (final TransformerException ex)
 		{
-			this.logger.debug(ex.getMessage(), ex);
+			this.logger.error(ex.getMessage(), ex);
 			ex.printStackTrace();
 			return null;
 		}
@@ -135,7 +135,7 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		}
 		catch (final ParserConfigurationException parserException)
 		{
-			this.logger.debug(parserException.getMessage(), parserException);
+			this.logger.error(parserException.getMessage(), parserException);
 			parserException.printStackTrace();
 		}
 		// create root element for Document

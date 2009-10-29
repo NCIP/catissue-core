@@ -60,17 +60,31 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 			fileTosScrub.delete();
 		}
 
-		final String deidReportText = Utility.extractReport(scrubbed, CaTIESProperties
+		String deidReportText = Utility.extractReport(scrubbed, CaTIESProperties
 				.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME),
 				CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
 
 		final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
 		final TextContent textContent = new TextContent();
+		deidReportText = updateTextForConceptCoder(deidReportText);
 		textContent.setData(deidReportText);
 		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
 
 		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
 		return deidentifiedSurgicalPathologyReport;
+	}
+
+	/**Method to update report text to add two initial new line characters since they are required for concept coding.
+	 * Sometime harvard-scrubber removes the initial two new line characters. Exact scenario is not know now.
+	 * @param deidReportText de-identified report text
+	 */
+	private String updateTextForConceptCoder(String deidReportText) 
+	{
+		if(!deidReportText.startsWith("\n\n"))
+		{
+			deidReportText = "\n\n" + deidReportText;
+		}
+		return deidReportText;
 	}
 
 	/**

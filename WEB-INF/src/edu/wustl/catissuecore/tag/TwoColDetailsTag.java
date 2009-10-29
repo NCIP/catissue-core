@@ -103,7 +103,8 @@ public class TwoColDetailsTag extends TagSupport
 		}
 		catch (final IOException ioe)
 		{
-			logger.error(ioe.getMessage(), ioe);
+			TwoColDetailsTag.logger.error(ioe.getMessage(), ioe);
+			ioe.printStackTrace() ;
 			throw new JspTagException("Error:IOException while writing to the user");
 		}
 		return SKIP_BODY;
@@ -218,7 +219,8 @@ public class TwoColDetailsTag extends TagSupport
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			TwoColDetailsTag.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return strb.toString();
 	}

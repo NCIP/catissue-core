@@ -58,25 +58,29 @@ public final class BarcodeGeneratorFactory
 		}
 		catch (final IllegalAccessException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final InstantiationException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final ClassNotFoundException e)
 		{
-			LOGGER.debug(e.getMessage(), e);
+			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final Exception ex)
 		{
-			LOGGER.debug(ex.getMessage(), ex);
+			BarcodeGeneratorFactory.LOGGER.error(ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

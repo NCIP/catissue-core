@@ -37,6 +37,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 
+import sun.security.krb5.internal.crypto.e;
+
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Category;
@@ -648,7 +650,8 @@ public class AppUtility
 		}
 		catch (final Exception e)
 		{
-			logger.error(e);
+			AppUtility.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			final Calendar calendar = Calendar.getInstance();
 			return calendar;
 		}
@@ -1309,10 +1312,13 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 		}
 		catch (final ApplicationException e)
 		{
+			AppUtility.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			// TODO Auto-generated catch block
 			throw new ApplicationException(e.getErrorKey(), e, e.getMessage());
 		}
@@ -1342,7 +1348,8 @@ public class AppUtility
 		}
 		catch (final SMException exception)
 		{
-			logger.debug("Security Exception:", exception);
+			AppUtility.logger.error("Security Exception:"+exception.getMessage(), exception);
+			exception.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("sm.operation.error");
 			throw new DAOException(errorKey, exception, "");
 		}
@@ -1444,9 +1451,9 @@ public class AppUtility
 			}
 			catch (final ParseException e)
 			{
-				logger
-						.error("Can not parse the given date in getAttributeValuesInProperOrder() method :"
-								+ e.getMessage());
+				AppUtility.logger.error("Can not parse the given date" +
+						" in getAttributeValuesInProperOrder() method :"
+								+ e.getMessage(),e);
 				e.printStackTrace();
 			}
 		}
@@ -1741,7 +1748,8 @@ public class AppUtility
 		catch (final ApplicationException e)
 		{
 			// TODO Auto-generated catch block
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			return null;
 		}
 		return specimen;
@@ -2047,7 +2055,8 @@ public class AppUtility
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -2057,7 +2066,7 @@ public class AppUtility
 			}
 			catch (final DAOException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AppUtility.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2191,17 +2200,20 @@ public class AppUtility
 		}
 		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();			
 			handleSMException(e);
 		}
 		catch (final CSTransactionException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw getApplicationException(e, "utility.error", "");
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw getApplicationException(e, "clz.not.found.error", "");
 		}
 	}
@@ -2275,12 +2287,12 @@ public class AppUtility
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final CSTransactionException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -2438,7 +2450,7 @@ public class AppUtility
 			}
 			catch (final ApplicationException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AppUtility.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2474,7 +2486,7 @@ public class AppUtility
 		}
 		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return true;
@@ -2565,7 +2577,8 @@ public class AppUtility
 		}
 		catch (final ApplicationException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		finally
 		{
@@ -2575,7 +2588,7 @@ public class AppUtility
 			}
 			catch (final ApplicationException e)
 			{
-				logger.debug(e.getMessage(), e);
+				AppUtility.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -2647,7 +2660,8 @@ public class AppUtility
 			}
 			catch (final Exception e)
 			{
-				logger.debug(e.getMessage(), e);
+				AppUtility.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -2696,7 +2710,8 @@ public class AppUtility
 		}
 		catch (final SMException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			handleSMException(e);
 		}
 		if (!isAuthorized)
@@ -2979,6 +2994,7 @@ public class AppUtility
 		}
 		catch (final DAOException exception)
 		{
+			AppUtility.logger.error(exception.getMessage(),exception);
 			exception.printStackTrace();
 			throw exception;
 		}
@@ -3010,7 +3026,7 @@ public class AppUtility
 		}
 		catch (final BizLogicException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppUtility.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -3039,7 +3055,7 @@ public class AppUtility
 		}
 		catch (final BizLogicException exp)
 		{
-			logger.error("Bizlogic  : exp : " + exp);
+			AppUtility.logger.error("Bizlogic  : exp : " + exp.getMessage(),exp);
 			exp.printStackTrace();
 		}
 		return entityMapConditions;
@@ -3100,7 +3116,7 @@ public class AppUtility
 		}
 		catch (final Exception exp)
 		{
-			logger.error("IsValidDatePattern : exp : " + exp);
+			AppUtility.logger.error("IsValidDatePattern : exp : " + exp.getMessage(),exp);
 			return false;
 		}
 		//System.out.println("dtCh : " +dtCh );
@@ -3166,7 +3182,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp
 					.getErrorKeyName());
 		}
@@ -3184,7 +3201,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
@@ -3201,7 +3219,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return dao;
@@ -3218,7 +3237,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
@@ -3377,7 +3397,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
 		finally
@@ -3490,7 +3511,8 @@ public class AppUtility
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			AppUtility.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
 			// TODO Auto-generated catch block
 			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
@@ -3525,6 +3547,8 @@ public class AppUtility
 			}
 			catch (final ApplicationException e)
 			{
+				AppUtility.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 			}
 			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))

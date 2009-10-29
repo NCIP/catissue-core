@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.idp.IdPManager;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.ProvisionManager;
 import edu.wustl.security.global.Utility;
@@ -22,7 +23,10 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
 
 public class SecurityManager extends edu.wustl.security.manager.SecurityManager
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger = Logger.getCommonLogger(SecurityManager.class);
 	@Override
 	public void createUser(User user) throws SMException
 	{
@@ -39,6 +43,8 @@ public class SecurityManager extends edu.wustl.security.manager.SecurityManager
 		}
 		catch (final CSTransactionException exception)
 		{
+			this.logger.error(exception.getMessage(),exception) ;
+			exception.printStackTrace() ;
 			final String mesg = "Unable to create user " + user.getEmailId();
 			Utility.getInstance().throwSMException(exception, mesg, "sm.operation.error");
 		}
@@ -71,6 +77,8 @@ public class SecurityManager extends edu.wustl.security.manager.SecurityManager
 		}
 		catch (final CSException exception)
 		{
+			this.logger.error(exception.getMessage(),exception) ;
+			exception.printStackTrace() ;
 			final String mesg = "Unable to modify user: Exception:  ";
 			Utility.getInstance().throwSMException(exception, mesg, "sm.operation.error");
 		}

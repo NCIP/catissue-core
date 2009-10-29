@@ -106,8 +106,9 @@ public class BiohazardBean implements Externalizable
 		}
 		catch (final Exception excp)
 		{
-			this.logger.debug(excp.getMessage(), excp);
-			this.logger.error(excp.getMessage());
+			//this.logger.debug(excp.getMessage(), excp);
+			this.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 	}
 

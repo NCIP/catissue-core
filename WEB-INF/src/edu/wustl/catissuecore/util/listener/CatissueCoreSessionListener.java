@@ -74,6 +74,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener
 		{
 			this.logger.error("Could not delete the Advance Search temporary table."
 					+ ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 		final String tempTableNameForQuery = Constants.TEMP_OUPUT_TREE_TABLE_NAME
 				+ sessionData.getUserId() + randomNumber;
@@ -90,6 +91,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener
 		{
 			this.logger.error("Could not delete the Query Module Search temporary table."
 					+ ex.getMessage(), ex);
+			ex.printStackTrace() ;
 		}
 	}
 }

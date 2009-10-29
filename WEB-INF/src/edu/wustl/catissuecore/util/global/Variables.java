@@ -159,12 +159,12 @@ public class Variables
 		}
 		catch (final FileNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			Variables.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final IOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			Variables.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
