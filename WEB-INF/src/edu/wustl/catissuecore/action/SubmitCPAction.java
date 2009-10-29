@@ -100,7 +100,7 @@ public class SubmitCPAction extends BaseAction
 		}
 		catch (final ApplicationException ex)
 		{
-			this.logger.debug(ex.getMessage(), ex);
+			this.logger.error(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			// String errorMsg = ex.getFormattedMessage();
 			// resultMap.put(Constants.ERROR_DETAIL, errorMsg);

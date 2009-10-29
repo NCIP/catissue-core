@@ -320,10 +320,11 @@ public class SpecimenArrayAction extends SecureAction
 				}
 			}
 		}
-		catch (final DAOException e)
+		catch (final DAOException excep)
 		{
-			e.printStackTrace();
-			throw new BizLogicException(e);
+			this.logger.error(excep.getMessage(),excep);
+			excep.printStackTrace();
+			throw new BizLogicException(excep);
 		}
 		return specimenTypeList;
 	}

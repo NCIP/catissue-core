@@ -236,7 +236,7 @@ public class ShoppingCartAction extends BaseAction
 				}
 				catch (final BizLogicException bizEx)
 				{
-					this.logger.debug(bizEx.getMessage(), bizEx);
+					this.logger.error(bizEx.getMessage(), bizEx);
 					final ActionErrors errors = new ActionErrors();
 					final ActionError error = new ActionError("shoppingcart.error", bizEx
 							.getMessage());

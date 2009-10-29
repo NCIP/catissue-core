@@ -226,6 +226,7 @@ public class ParticipantLookupAction extends BaseAction
 			catch (final ApplicationException e)
 			{
 				this.logger.error("Exception occured : " + e.getMessage(), e);
+				e.printStackTrace() ;
 			}
 		}
 		return authorizedFlag;

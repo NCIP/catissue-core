@@ -139,6 +139,7 @@ public class NewSpecimenEventParametersAction extends SecureAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));

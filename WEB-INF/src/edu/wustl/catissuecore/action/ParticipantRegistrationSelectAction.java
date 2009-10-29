@@ -151,7 +151,8 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.info(e.getMessage());
+			this.logger.error(e.getMessage());
+			e.printStackTrace() ;
 		}
 
 		return forward;

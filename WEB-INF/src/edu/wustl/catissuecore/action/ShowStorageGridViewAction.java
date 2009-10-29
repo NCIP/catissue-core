@@ -139,7 +139,8 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 			catch (final Exception ex)
 			{
-				this.logger.debug(ex.getMessage(), ex);
+				this.logger.error(ex.getMessage(), ex);
+				ex.printStackTrace() ;
 				// Will not select anything
 				positionOne = null;
 				positionTwo = null;

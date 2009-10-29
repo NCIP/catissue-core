@@ -128,7 +128,8 @@ public class PrintAction extends Action
 				}
 				catch (final DAOException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					this.logger.error(exception.getMessage(), exception);
+					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -163,7 +164,8 @@ public class PrintAction extends Action
 				}
 				catch (final DAOException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					this.logger.error(exception.getMessage(), exception);
+					exception.printStackTrace() ;
 					throw exception;
 				}
 				finally
@@ -273,7 +275,8 @@ public class PrintAction extends Action
 				}
 				catch (final DAOException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					this.logger.error(exception.getMessage(), exception);
+					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -309,7 +312,8 @@ public class PrintAction extends Action
 				}
 				catch (final DAOException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					this.logger.error(exception.getMessage(), exception);
+					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -341,7 +345,8 @@ public class PrintAction extends Action
 				}
 				catch (final DAOException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					this.logger.error(exception.getMessage(), exception);
+					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -355,7 +360,8 @@ public class PrintAction extends Action
 		{
 			// Any other exception
 			// e.printStackTrace();
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
 			{
@@ -429,7 +435,8 @@ public class PrintAction extends Action
 		}
 		catch (DAOException daoException)
 		{
-			logger.debug(daoException.getMessage(), daoException);
+			this.logger.error(daoException.getMessage(), daoException);
+			daoException.printStackTrace();
 			throw new BizLogicException(daoException.getErrorKey(), daoException, daoException
 					.getMsgValues());
 		}
@@ -480,7 +487,7 @@ public class PrintAction extends Action
 		}
 		catch (final SMException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
@@ -495,7 +502,7 @@ public class PrintAction extends Action
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw new Exception("Error Printing label");
 		}

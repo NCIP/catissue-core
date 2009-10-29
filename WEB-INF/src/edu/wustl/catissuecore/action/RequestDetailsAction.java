@@ -436,6 +436,7 @@ public class RequestDetailsAction extends BaseAction
 		catch (final DAOException e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 
 		}
 		finally
@@ -447,7 +448,7 @@ public class RequestDetailsAction extends BaseAction
 			catch (final DAOException daoEx)
 			{
 				this.logger.error(daoEx.getMessage(), daoEx);
-
+				daoEx.printStackTrace() ;
 			}
 		}
 	}

@@ -27,8 +27,8 @@ public class ShowAssignPrivilegePageAction extends BaseAction
 	 * Overrides the execute method of Action class. Initializes the various
 	 * fields in AssignPrivilege.jsp Page.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CatissueCoreServletContextListener.class);
+	private static Logger logger = Logger
+			.getCommonLogger(CatissueCoreServletContextListener.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.

@@ -90,7 +90,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			}
 			catch (final Exception e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
 				final ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 						.getMessage()));
@@ -142,7 +142,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 

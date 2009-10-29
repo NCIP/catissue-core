@@ -171,7 +171,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 		}
 		catch (final Exception ex)
 		{
-			this.logger.debug(ex.getMessage(), ex);
+			this.logger.error(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			if (pageOf != null && pageOf.equals("pageOfMultipleSpWithMenu"))
 			{
@@ -403,6 +403,7 @@ public class SubmitSpecimenCPAction extends BaseAction
 		}
 		catch (final AssignDataException e1)
 		{
+			this.logger.error(e1.getMessage(),e1);
 			e1.printStackTrace();
 			return null;
 		}
@@ -423,8 +424,9 @@ public class SubmitSpecimenCPAction extends BaseAction
 		{
 			value = Double.parseDouble(s);
 		}
-		catch (final NumberFormatException e)
+		catch (final NumberFormatException numFormatEx)
 		{
+			this.logger.error(numFormatEx.getMessage(),numFormatEx);
 			value = 0;
 		}
 

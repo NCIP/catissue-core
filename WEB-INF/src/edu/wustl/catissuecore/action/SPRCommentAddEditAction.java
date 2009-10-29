@@ -81,7 +81,7 @@ public class SPRCommentAddEditAction extends BaseAction
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error("Error occured in SPRCommentAddEditAction " + ex);
+			this.logger.error("Error occured in SPRCommentAddEditAction "+ex,ex);
 			return (mapping.findForward(Constants.FAILURE));
 		}
 		// OnSubmit

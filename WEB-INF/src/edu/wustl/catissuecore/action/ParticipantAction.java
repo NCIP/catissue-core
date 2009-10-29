@@ -860,7 +860,8 @@ public class ParticipantAction extends SecureAction
 			}
 			catch (final Exception e)
 			{
-				this.logger.debug(e.getMessage(), e);
+				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				return null;
 			}
 			finally
@@ -871,7 +872,7 @@ public class ParticipantAction extends SecureAction
 				}
 				catch (final ApplicationException e)
 				{
-					this.logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
 					e.printStackTrace();
 				}
 			}

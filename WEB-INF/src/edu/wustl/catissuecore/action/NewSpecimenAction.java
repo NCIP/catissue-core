@@ -867,6 +867,7 @@ public class NewSpecimenAction extends SecureAction
 		}
 		catch (final DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}

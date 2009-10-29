@@ -677,10 +677,11 @@ public class StorageContainerAction extends SecureAction
 					.getParentContainerId(), storageContainerForm.getPositionDimensionOne(),
 					storageContainerForm.getPositionDimensionTwo(), dao);
 		}
-		catch (final DAOException e)
+		catch (final DAOException daoEx)
 		{
-			e.printStackTrace();
-			throw new BizLogicException(e);
+			this.logger.error(daoEx.getMessage(),daoEx);
+			daoEx.printStackTrace();
+			throw new BizLogicException(daoEx);
 		}
 	}
 

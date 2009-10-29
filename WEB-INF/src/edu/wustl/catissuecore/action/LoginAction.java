@@ -88,13 +88,13 @@ public class LoginAction extends Action
 	{
 		if (form == null)
 		{
-			logger.debug("Form is Null");
+			LoginAction.logger.debug("Form is Null");
 			return mapping.findForward(Constants.FAILURE);
 		}
 		try
 		{
 			cleanSession(request);
-			logger.info("Inside Login Action, Just before validation");
+			LoginAction.logger.info("Inside Login Action, Just before validation");
 			final LoginForm loginForm = (LoginForm) form;
 			String loginName = loginForm.getLoginName();
 			final String userStatus = getUserStatus(loginName);
@@ -114,7 +114,7 @@ public class LoginAction extends Action
 		}
 		catch (final Exception ex)
 		{
-			logger.info("Exception: " + ex.getMessage(), ex);
+			LoginAction.logger.error("Exception: " + ex.getMessage(), ex);
 			cleanSession(request);
 			handleError(request, "errors.incorrectLoginIDPassword");
 			return mapping.findForward(Constants.FAILURE);
@@ -186,7 +186,7 @@ public class LoginAction extends Action
 			}
 			else
 			{
-				logger.info("User " + loginForm.getLoginName()
+				LoginAction.logger.info("User " + loginForm.getLoginName()
 						+ " Invalid user. Sending back to the login Page");
 				handleError(request, "errors.incorrectLoginIDPassword");
 				forwardTo = Constants.FAILURE;
@@ -316,7 +316,7 @@ public class LoginAction extends Action
 		}
 		else
 		{
-			logger.debug("User " + loginName + " Invalid user. Sending back to the login Page");
+			LoginAction.logger.debug("User " + loginName + " Invalid user. Sending back to the login Page");
 			handleError(request, "errors.incorrectLoginIDPassword");
 			return mapping.findForward(Constants.FAILURE);
 		}
@@ -340,7 +340,7 @@ public class LoginAction extends Action
 			LoginForm loginForm, final User validUser) throws ApplicationException
 			{
 		PrivilegeManager.getInstance().getPrivilegeCache(validUser.getLoginName());
-		logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
+		LoginAction.logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 		final HttpSession session = request.getSession(true);
 		final String ipAddress = request.getRemoteAddr();
 		boolean adminUser = false;
@@ -349,7 +349,7 @@ public class LoginAction extends Action
 			adminUser = true;
 		}
 		final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, adminUser);
-		logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
+		LoginAction.logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
 		session.setAttribute(Constants.SESSION_DATA, sessionData);
 		session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
 		final String result = passExpCheck(loginForm, validUser);

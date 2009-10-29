@@ -434,7 +434,7 @@ public class SimilarContainersAction extends SecureAction
 						}
 						catch (final Exception e)
 						{
-							this.logger.debug(e.getMessage(), e);
+							this.logger.error(e.getMessage(), e);
 							ActionErrors errors = (ActionErrors) request
 									.getAttribute(Globals.ERROR_KEY);
 							if (errors == null || errors.size() == 0)
