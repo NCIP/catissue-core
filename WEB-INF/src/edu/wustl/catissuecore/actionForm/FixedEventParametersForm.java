@@ -39,8 +39,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(FixedEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(FixedEventParametersForm.class);
 
 	/**
 	 * Type of the fixation.
@@ -117,7 +116,8 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FixedEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 
@@ -155,7 +155,8 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FixedEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

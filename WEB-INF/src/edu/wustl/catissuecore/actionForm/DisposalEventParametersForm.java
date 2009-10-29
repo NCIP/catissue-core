@@ -37,8 +37,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(DisposalEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(DisposalEventParametersForm.class);
 
 	/**
 	 * reason for disposal of specimen it.
@@ -137,7 +136,8 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			DisposalEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

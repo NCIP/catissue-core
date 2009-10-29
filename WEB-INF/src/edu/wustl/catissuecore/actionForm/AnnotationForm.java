@@ -33,7 +33,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(AnnotationForm.class);
+	private static Logger logger = Logger.getCommonLogger(AnnotationForm.class);
 	/**
 	 * 
 	 */
@@ -163,7 +163,8 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			AnnotationForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

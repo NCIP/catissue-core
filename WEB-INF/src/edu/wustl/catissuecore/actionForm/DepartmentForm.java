@@ -41,7 +41,7 @@ public class DepartmentForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DepartmentForm.class);
+	private static Logger logger = Logger.getCommonLogger(DepartmentForm.class);
 
 	/**
 	 * Name of the Department.
@@ -124,7 +124,8 @@ public class DepartmentForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			DepartmentForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

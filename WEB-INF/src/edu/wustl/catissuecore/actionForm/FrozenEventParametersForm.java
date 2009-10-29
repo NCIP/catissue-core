@@ -39,9 +39,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(FrozenEventParametersForm.class);
-
+	private static Logger logger = Logger.getCommonLogger(FrozenEventParametersForm.class);
 	/**
 	 * Method applied on specimen to freeze it.
 	 */
@@ -109,7 +107,8 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FrozenEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

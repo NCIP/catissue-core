@@ -340,7 +340,9 @@ public class ConflictParticipantDataDetailsForm extends AbstractActionForm
 		}
 		catch (final Exception ex)
 		{
-			logger.error("viewSPR:Participant information is null");
+			ConflictParticipantDataDetailsForm.logger.
+			error("viewSPR:Participant information is null"+ex.getMessage(),ex);
+			ex.printStackTrace() ;
 		}
 	}
 

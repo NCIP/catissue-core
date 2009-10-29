@@ -41,8 +41,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CollectionProtocolRegistrationForm.class);
+	private static Logger logger = Logger.getCommonLogger(CollectionProtocolRegistrationForm.class);
 
 	protected Map values = new HashMap();
 	/**
@@ -370,7 +369,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			CollectionProtocolRegistrationForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

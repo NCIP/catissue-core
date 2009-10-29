@@ -34,8 +34,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CreateSpecimenTemplateForm.class);
+	private static Logger logger = Logger.getCommonLogger(CreateSpecimenTemplateForm.class);
 
 	/**
 	 * Display Name
@@ -549,6 +548,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				}
 				catch (final NumberFormatException exp)
 				{
+					CreateSpecimenTemplateForm.logger.info(exp.getMessage(),exp);
+					exp.printStackTrace();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimen.quantity")));
 				}
@@ -590,6 +591,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					}
 					catch (final NumberFormatException exp)
 					{
+						CreateSpecimenTemplateForm.logger.error(exp.getMessage(),exp);
+						exp.printStackTrace() ;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("aliquots.qtyPerAliquot")));
 					}
@@ -639,6 +642,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 					}
 					catch (final NumberFormatException exp)
 					{
+						CreateSpecimenTemplateForm.logger.error(exp.getMessage(),exp);
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("specimen.quantity")));
 					}
@@ -843,6 +847,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							}
 							catch (final NumberFormatException exp)
 							{
+								CreateSpecimenTemplateForm.logger.error(exp.getMessage(),exp);
 								errors
 										.add(
 												ActionErrors.GLOBAL_ERROR,
@@ -864,7 +869,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			CreateSpecimenTemplateForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

@@ -22,7 +22,7 @@ public class DistributionReportForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionReportForm.class);
+	private static Logger logger = Logger.getCommonLogger(DistributionReportForm.class);
 	/**
 	 * System generated unique identifier.
 	 * */

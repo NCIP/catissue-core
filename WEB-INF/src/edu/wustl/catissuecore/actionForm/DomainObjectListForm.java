@@ -38,7 +38,7 @@ public class DomainObjectListForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DomainObjectListForm.class);
+	private static Logger logger = Logger.getCommonLogger(DomainObjectListForm.class);
 	/**
 	 * Map of users whose registration is to be approved/rejected.
 	 */
@@ -159,7 +159,8 @@ public class DomainObjectListForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			DomainObjectListForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

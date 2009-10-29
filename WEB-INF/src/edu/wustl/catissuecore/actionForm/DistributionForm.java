@@ -53,7 +53,7 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DistributionForm.class);
+	private static Logger logger = Logger.getCommonLogger(DistributionForm.class);
 
 	private long specimenId;
 	/**
@@ -365,7 +365,8 @@ public class DistributionForm extends AbstractActionForm implements ConsentTierD
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			DistributionForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 
 		return errors;

@@ -30,6 +30,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This Class is used to encapsulate all the request parameters passed from Aliquot.jsp page.
@@ -37,7 +38,11 @@ import edu.wustl.common.util.global.Validator;
  * */
 public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocation
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger = 
+			Logger.getCommonLogger(AliquotForm.class);
 	/**
 	 * 
 	 */
@@ -546,6 +551,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					}
 					catch (final NumberFormatException exp)
 					{
+						this.logger.error(exp.getMessage(),exp) ;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("specimen.quantity")));
 					}

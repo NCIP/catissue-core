@@ -544,7 +544,7 @@ public class AdvanceSearchForm extends ActionForm implements IPrinterTypeLocatio
 		}
 		catch (final Exception e)
 		{
-			logger.debug("Exception in AdvanceSearchForm ", e);
+			AdvanceSearchForm.logger.error("Exception in AdvanceSearchForm "+e.getMessage(), e);
 		}
 
 		for (int i = 1; i <= this.eventCounter; i++)

@@ -47,8 +47,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(DistributionProtocolForm.class);
+	private static Logger logger = Logger.getCommonLogger(DistributionProtocolForm.class);
 
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality.
@@ -269,6 +268,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 						}
 						catch (final NumberFormatException exp)
 						{
+							DistributionProtocolForm.logger.error(exp.getMessage(),exp);
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
 											.getValue("distributionprotocol.quantity")));
@@ -280,7 +280,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			DistributionProtocolForm.logger.error(excp.getMessage(), excp);
 			errors = new ActionErrors();
 		}
 		return errors;

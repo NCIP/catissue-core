@@ -41,7 +41,7 @@ public abstract class EventParametersForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(EventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(EventParametersForm.class);
 	/**
 	 * Time in hours for the Event Parameter.
 	 * */
@@ -179,7 +179,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			EventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

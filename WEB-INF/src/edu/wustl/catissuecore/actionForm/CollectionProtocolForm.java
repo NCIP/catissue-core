@@ -43,7 +43,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocolForm.class);
+	private static Logger logger = Logger.getCommonLogger(CollectionProtocolForm.class);
 
 	protected long[] protocolCoordinatorIds;
 
@@ -327,8 +327,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error(excp.getMessage(), excp);
-			logger.debug(excp);
+			CollectionProtocolForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
+			//logger.debug(excp);
 			errors = new ActionErrors();
 		}
 		return errors;

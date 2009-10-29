@@ -38,8 +38,7 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(EmbeddedEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(EmbeddedEventParametersForm.class);
 	private String embeddingMedium = (String) DefaultValueManager
 			.getDefaultValue(Constants.DEFAULT_EMBEDDING_MEDIUM);
 
@@ -105,7 +104,8 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			EmbeddedEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

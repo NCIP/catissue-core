@@ -37,8 +37,7 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(FluidSpecimenReviewEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(FluidSpecimenReviewEventParametersForm.class);
 	/**
 	 * Cell Count.
 	 */
@@ -115,7 +114,8 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FluidSpecimenReviewEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

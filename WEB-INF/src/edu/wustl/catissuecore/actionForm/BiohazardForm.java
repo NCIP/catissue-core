@@ -36,7 +36,7 @@ public class BiohazardForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(BiohazardForm.class);
+	private static Logger logger = Logger.getCommonLogger(BiohazardForm.class);
 	/**
 	 * A string containing the type of Biohazard.
 	 */
@@ -227,7 +227,8 @@ public class BiohazardForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			BiohazardForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

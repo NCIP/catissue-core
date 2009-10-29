@@ -39,8 +39,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CollectionEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(CollectionEventParametersForm.class);
 
 	/**
 	 * Name : Virender Mehta
@@ -151,7 +150,9 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CollectionEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
+			
 		}
 		return errors;
 	}

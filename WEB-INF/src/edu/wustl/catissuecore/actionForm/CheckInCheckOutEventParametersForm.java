@@ -110,7 +110,8 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CheckInCheckOutEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

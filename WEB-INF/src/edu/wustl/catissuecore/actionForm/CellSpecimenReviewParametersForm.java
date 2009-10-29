@@ -151,7 +151,8 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CellSpecimenReviewParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

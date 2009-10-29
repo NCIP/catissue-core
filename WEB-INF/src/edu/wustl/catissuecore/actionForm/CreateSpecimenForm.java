@@ -38,7 +38,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CreateSpecimenForm.class);
+	private static Logger logger = Logger.getCommonLogger(CreateSpecimenForm.class);
 	/**
 	 * Identifier of the Parent Speciemen.
 	 * */
@@ -183,7 +183,8 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CreateSpecimenForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}
@@ -264,7 +265,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 		}
 		catch (final CloneNotSupportedException e)
 		{
-			logger.error("Error in Clone method of CreateSpecimenForm:" + e);
+			logger.info("Error in Clone method of CreateSpecimenForm:" + e,e);
 		}
 		return null;
 	}
