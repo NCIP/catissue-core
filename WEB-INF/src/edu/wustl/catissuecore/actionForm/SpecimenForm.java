@@ -54,7 +54,7 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenForm.class);
 
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -839,6 +839,8 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					catch (final NumberFormatException exp)
 					{
+						SpecimenForm.logger.error(exp.getMessage(),exp);
+						exp.printStackTrace();
 						isQuantityValid = false;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("specimen.quantity")));
@@ -910,6 +912,7 @@ public class SpecimenForm extends AbstractActionForm
 						}
 						catch (final NumberFormatException exp)
 						{
+							SpecimenForm.logger.error(exp.getMessage(),exp);
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"errors.item.format", ApplicationProperties
 											.getValue("specimen.availableQuantity")));
@@ -1004,7 +1007,8 @@ public class SpecimenForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			SpecimenForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

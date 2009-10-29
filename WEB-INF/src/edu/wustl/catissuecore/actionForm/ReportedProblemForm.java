@@ -39,7 +39,7 @@ public class ReportedProblemForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ReportedProblemForm.class);
+	private static Logger logger = Logger.getCommonLogger(ReportedProblemForm.class);
 	/**
 	 * The subject of the reported problem.
 	 */
@@ -315,7 +315,8 @@ public class ReportedProblemForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			ReportedProblemForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

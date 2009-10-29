@@ -41,7 +41,7 @@ public class StorageTypeForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageTypeForm.class);
+	private static Logger logger = Logger.getCommonLogger(StorageTypeForm.class);
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * A string containing the type of the storage.
@@ -470,7 +470,8 @@ public class StorageTypeForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			StorageTypeForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

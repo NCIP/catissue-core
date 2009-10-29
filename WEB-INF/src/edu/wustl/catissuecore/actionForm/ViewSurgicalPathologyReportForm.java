@@ -32,8 +32,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ViewSurgicalPathologyReportForm.class);
+	private static Logger logger = Logger.getCommonLogger(ViewSurgicalPathologyReportForm.class);
 
 	protected long participantIdForReport;
 	/**
@@ -463,7 +462,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch (final Exception e)
 		{
-			logger.error("Exception in setAllValues of ViewSurgicalPathologyReportForm" + e);
+			ViewSurgicalPathologyReportForm.logger.error("Exception in setAllValues" +
+					" of ViewSurgicalPathologyReportForm" + e.getMessage(),e);
+			e.printStackTrace() ;
 		}
 	}
 
@@ -485,7 +486,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch (final Exception ex)
 		{
-			logger.error("viewSPR:De-identified Report information is null");
+			ViewSurgicalPathologyReportForm.logger.error("viewSPR:De-identified " +
+					"Report information is null"+ex.getMessage(),ex);
+			ex.printStackTrace();
 			if (this.deIdentifiedReportTextContent == null)
 			{
 				this.deIdentifiedReportTextContent = Constants.DEID_REPORT_NOT_FOUND_MSG;//De-Identified Report Not Found !
@@ -508,7 +511,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch (final Exception ex)
 		{
-			logger.error("viewSPR:Identified Report information is null");
+			ViewSurgicalPathologyReportForm.logger.error("viewSPR:Identified" +
+					" Report information is null"+ex.getMessage(),ex);
+			ex.printStackTrace();
 			if (this.identifiedReportTextContent == null)
 			{
 				this.identifiedReportTextContent = Constants.IDENTIFIED_REPORT_NOT_FOUND_MSG;
@@ -562,7 +567,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		}
 		catch (final Exception ex)
 		{
-			logger.error("viewSPR:Participant information is null");
+			ViewSurgicalPathologyReportForm.logger.info("viewSPR:Participant" +
+					" information is null"+ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 	}
 

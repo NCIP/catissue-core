@@ -38,8 +38,7 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ProcedureEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(ProcedureEventParametersForm.class);
 	private String url;
 	private String name;
 
@@ -129,7 +128,8 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			ProcedureEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

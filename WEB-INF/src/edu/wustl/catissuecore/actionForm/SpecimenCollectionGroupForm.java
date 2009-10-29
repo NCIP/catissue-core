@@ -56,8 +56,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(SpecimenCollectionGroupForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupForm.class);
 	private String clinicalDiagnosis = (String) DefaultValueManager
 			.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
 
@@ -912,7 +911,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error(excp.getMessage(), excp);
+			SpecimenCollectionGroupForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace(); 
 			errors = new ActionErrors();
 		}
 		return errors;

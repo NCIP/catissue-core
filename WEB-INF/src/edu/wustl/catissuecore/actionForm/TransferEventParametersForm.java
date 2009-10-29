@@ -38,8 +38,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(TransferEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(TransferEventParametersForm.class);
 	/**
 	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
 	 */
@@ -288,7 +287,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TransferEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 	}
 
@@ -348,7 +348,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TransferEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

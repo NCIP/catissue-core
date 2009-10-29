@@ -42,7 +42,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenArrayTypeForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenArrayTypeForm.class);
 	/**
 	 * name of array type  
 	 */
@@ -288,7 +288,8 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getMessage());
+			SpecimenArrayTypeForm.logger.error(e.getMessage(),e);
+			e.printStackTrace() ;
 		}
 		return errors;
 	}

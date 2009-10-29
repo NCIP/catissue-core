@@ -38,8 +38,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(TissueSpecimenReviewEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(TissueSpecimenReviewEventParametersForm.class);
 	/**
 	 * Percentage of histologically evident neoplastic cells present in the tissue specimen.
 	 */
@@ -293,7 +292,8 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TissueSpecimenReviewEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

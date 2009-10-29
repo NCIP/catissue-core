@@ -66,7 +66,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(RequestDetailsForm.class);
+	private static Logger logger = Logger.getCommonLogger(RequestDetailsForm.class);
 	// The status which the user wants to update in one go.
 	private String status;
 	// The Map containg submitted values for 'assigned quantity', 'assigned status' and 'request for'. 
@@ -1095,7 +1095,9 @@ public class RequestDetailsForm extends AbstractActionForm
 		}
 		catch (final Exception e)
 		{
-			logger.debug("in request details form: map data parser exception:" + e);
+			RequestDetailsForm.logger.info("in request details form:" +
+					" map data parser exception:" + e.getMessage(), e);
+			e.printStackTrace();
 		}
 		final Iterator iter = beanObjSet.iterator();
 
@@ -1175,12 +1177,13 @@ public class RequestDetailsForm extends AbstractActionForm
 					}
 					catch (final BizLogicException e)
 					{
-						Logger.out.debug("Bizlogic exception while getting IFactory instance:" + e);
+						RequestDetailsForm.logger.error("Bizlogic exception while getting " +
+								"IFactory instance:" + e, e);
 						e.printStackTrace();
 					}
 					catch (final NumberFormatException e)
 					{
-						logger.debug("RequestDetailsForm.java", e);
+						RequestDetailsForm.logger.error("RequestDetailsForm.java"+e, e);
 						e.printStackTrace();
 					}
 				}

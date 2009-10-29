@@ -38,7 +38,7 @@ public class SiteForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SiteForm.class);
+	private static Logger logger = Logger.getCommonLogger(SiteForm.class);
 	/**
 	 * Name of the site.
 	 */
@@ -485,7 +485,8 @@ public class SiteForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			SiteForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

@@ -37,7 +37,7 @@ public class InstitutionForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(InstitutionForm.class);
+	private static Logger logger = Logger.getCommonLogger(InstitutionForm.class);
 	/**
 	 * A string containing the name of the institute.
 	 */
@@ -122,7 +122,8 @@ public class InstitutionForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			InstitutionForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

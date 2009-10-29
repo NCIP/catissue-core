@@ -38,7 +38,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpunEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpunEventParametersForm.class);
 	/**
 	 * Rotational force applied to specimen.
 	 */
@@ -118,7 +118,8 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			SpunEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 
@@ -173,7 +174,8 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			SpunEventParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

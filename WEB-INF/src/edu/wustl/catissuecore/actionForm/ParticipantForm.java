@@ -62,7 +62,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ParticipantForm.class);
+	private static Logger logger = Logger.getCommonLogger(ParticipantForm.class);
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -199,7 +199,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 			}
 			catch (final Exception ex)
 			{
-				logger.debug(ex.getMessage(), ex);
+				ParticipantForm.logger.error(ex.getMessage(), ex);
+				ex.printStackTrace();
 				this.socialSecurityNumberPartA = "";
 				this.socialSecurityNumberPartB = "";
 				this.socialSecurityNumberPartC = "";
@@ -442,7 +443,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e.getMessage(), e);
+			ParticipantForm.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 	}
 
@@ -897,7 +899,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			ParticipantForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 
 		return errors;

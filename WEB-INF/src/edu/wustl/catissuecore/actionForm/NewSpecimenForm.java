@@ -52,7 +52,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(NewSpecimenForm.class);
+	private static Logger logger = Logger.getCommonLogger(NewSpecimenForm.class);
 	//Consent Tracking Module (Virender Mehta)
 	/**
 	 * Map for Storing responses for Consent Tiers.
@@ -733,7 +733,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			NewSpecimenForm.logger.info(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

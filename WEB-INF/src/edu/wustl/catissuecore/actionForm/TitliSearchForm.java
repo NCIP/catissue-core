@@ -36,7 +36,7 @@ public class TitliSearchForm extends ActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(TitliSearchForm.class);
+	private static Logger logger = Logger.getCommonLogger(TitliSearchForm.class);
 
 	private String searchString;
 
@@ -124,8 +124,8 @@ public class TitliSearchForm extends ActionForm
 		}
 		catch (final Exception e)
 		{
-			logger.error("Exception in TitliSearchForm : " + e.getMessage(), e);
-
+			TitliSearchForm.logger.error("Exception in TitliSearchForm : " + e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 		return new TitliResultGroup(i);

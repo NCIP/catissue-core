@@ -38,8 +38,7 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(MolecularSpecimenReviewParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(MolecularSpecimenReviewParametersForm.class);
 	/**
 	 * A reference to the location of an electrophoretic gel image of the specimen.
 	 */
@@ -342,7 +341,8 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			MolecularSpecimenReviewParametersForm.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

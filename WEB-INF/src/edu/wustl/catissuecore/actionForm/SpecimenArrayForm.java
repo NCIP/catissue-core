@@ -44,7 +44,7 @@ public class SpecimenArrayForm extends ContainerForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenArrayForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenArrayForm.class);
 
 	/**
 	 * Specify the specimenArrayTypeId field 
@@ -444,7 +444,8 @@ public class SpecimenArrayForm extends ContainerForm
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getMessage());
+			SpecimenArrayForm.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 		}
 		return errors;
 	}

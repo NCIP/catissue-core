@@ -37,7 +37,7 @@ public class SimilarContainersForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SimilarContainersForm.class);
+	private static Logger logger = Logger.getCommonLogger(SimilarContainersForm.class);
 
 	private String storageContainerId;
 
@@ -606,7 +606,8 @@ public class SimilarContainersForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			SimilarContainersForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

@@ -45,7 +45,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenProtocolForm.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenProtocolForm.class);
 	protected long principalInvestigatorId;
 
 	protected String irbID;
@@ -406,6 +406,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					}
 					catch (final NumberFormatException e)
 					{
+						SpecimenProtocolForm.logger.error(e.getMessage(),e);
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",
 								ApplicationProperties.getValue("collectionprotocol.participants")));
 					}
@@ -415,7 +416,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error("error in SPForm : " + excp.getMessage(), excp);
+			SpecimenProtocolForm.logger.error("error in SPForm : " + excp.getMessage(), excp);
+			excp.printStackTrace();
 			errors = new ActionErrors();
 		}
 		return errors;

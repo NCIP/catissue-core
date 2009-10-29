@@ -50,7 +50,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageContainerForm.class);
+	private static Logger logger = Logger.getCommonLogger(StorageContainerForm.class);
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * An id which refers to the type of the storage.
@@ -1234,7 +1234,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			StorageContainerForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

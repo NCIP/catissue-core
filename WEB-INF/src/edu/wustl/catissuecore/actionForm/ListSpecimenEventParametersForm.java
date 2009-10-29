@@ -23,8 +23,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ListSpecimenEventParametersForm.class);
+	private static Logger logger = Logger.getCommonLogger(ListSpecimenEventParametersForm.class);
 	private String specimenId;
 
 	private String specimenEventParameter;
@@ -121,7 +120,8 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			ListSpecimenEventParametersForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

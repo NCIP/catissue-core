@@ -678,7 +678,8 @@ public class UserForm extends AbstractActionForm
 				}
 				catch (final SMException e)
 				{
-					logger.error(e.getMessage(), e);
+					UserForm.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 				}
 			}
 			if (Constants.PAGE_OF_USER_PROFILE.equals(this.getPageOf()))
@@ -889,7 +890,8 @@ public class UserForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			UserForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 		}
 		return errors;
 	}

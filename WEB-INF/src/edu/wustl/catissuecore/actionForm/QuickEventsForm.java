@@ -42,7 +42,7 @@ public class QuickEventsForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(QuickEventsForm.class);
+	private static Logger logger = Logger.getCommonLogger(QuickEventsForm.class);
 	/**
 	 * Label of Specimen to search.
 	 */
@@ -191,7 +191,8 @@ public class QuickEventsForm extends AbstractActionForm
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			QuickEventsForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
 		}
 		return errors;
 	}

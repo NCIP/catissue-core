@@ -31,8 +31,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ProtocolEventDetailsForm.class);
+	private static Logger logger = Logger.getCommonLogger(ProtocolEventDetailsForm.class);
 	private String clinicalDiagnosis;
 
 	private String clinicalStatus;
@@ -361,7 +360,8 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error(excp.getMessage(), excp);
+			ProtocolEventDetailsForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			errors = new ActionErrors();
 		}
 		return errors;
