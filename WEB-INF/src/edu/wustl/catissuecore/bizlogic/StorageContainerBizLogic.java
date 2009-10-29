@@ -3593,11 +3593,18 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				}
 				if(!"Manual".equals(storageType) && resultList.size() >= remainingContainersNeeded)
 				{
-					containers.addAll(resultList.subList(0, remainingContainersNeeded));
-					break;
+					List subListOfCont = resultList.subList(0, remainingContainersNeeded);
+					if(!containers.containsAll( subListOfCont ))
+					{
+					  containers.addAll(subListOfCont);
+					  break;
+					}
 				}
-				containers.addAll(resultList);
-				remainingContainersNeeded = containersMaxLimit - resultList.size();
+				if(!containers.containsAll( resultList ))
+				{
+				   containers.addAll(resultList);
+				}
+				remainingContainersNeeded = remainingContainersNeeded - resultList.size();
 			}
 		}
 
@@ -3957,8 +3964,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				sessionDataBean, type_id, null, null, storageType);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
-		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
-				+ ((endTime - startTime) / 1000));
+		/*System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+				+ ((endTime - startTime) / 1000));*/
 		return tm;
 	}
 
@@ -4008,8 +4015,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				aliquotCount, sessionData, null, null, null,null);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
-		System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
-				+ ((endTime - startTime) / 1000));
+		/*System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+				+ ((endTime - startTime) / 1000));*/
 		return tm;
 	}
 
@@ -4109,8 +4116,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 			final Long endTime = System.currentTimeMillis();
 
-			System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
-					+ ((endTime - startTime) / 1000));
+		/*	System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
+					+ ((endTime - startTime) / 1000));*/
 			return tm;
 
 		}
@@ -4977,19 +4984,22 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 		// Containers allowing Only this CP but other Specimen Classes also
 		final String q1 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
 				sessionData.isAdmin(), IS_CP_UNIQUE, IS_SPCLASS_NONUNIQUE);
-		// Containers allowing Other CPs also but just this Specimen Class
+		// Containers no CP restriction and just this Specimen Class
 		final String q2 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+				sessionData.isAdmin(), null, IS_SPCLASS_UNIQUE);
+		// Containers allowing Other CPs also but just this Specimen Class
+		final String q3 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
 				sessionData.isAdmin(), IS_CP_NONUNIQUE, IS_SPCLASS_UNIQUE);
 		// Containers allowing Others CPs also and other Specimen Classes too
-		final String q3 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+		final String q4 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
 				sessionData.isAdmin(), IS_CP_NONUNIQUE, IS_SPCLASS_NONUNIQUE);
 		//Containers allowing any CP and other Specimen Classes too
-		final String q4 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+		final String q5 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
 				sessionData.isAdmin(), null, IS_SPCLASS_NONUNIQUE);
 		//Containers allowing any CP and any Specimen Class
-		final String q5 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
+		final String q6 = this.createSCQuery(cpId, spClass, aliquotCount, sessionData.getUserId(),
 				sessionData.isAdmin(), null, null);
-		return new String[]{q0, q1, q2, q3, q4, q5};
+		return new String[]{q0, q1, q2, q3, q4, q5, q6};
 	}
 
 	/**

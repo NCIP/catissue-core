@@ -201,10 +201,10 @@ public class Shipment extends BaseShipment
 							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("position2_"
 									+ specimen.getId());
 						}
-						if ((containerId != null || containerName != null) && pos1 != null
-								&& pos2 != null && !pos2.trim().equals(""))
+						StorageContainer spPosContainer = null;
+						if (containerId != null || containerName != null)
 						{
-							final StorageContainer spPosContainer = new StorageContainer();
+							spPosContainer = new StorageContainer();
 							if (storageLocationSelection != null
 									&& storageLocationSelection.trim().equals("3"))
 							{
@@ -215,8 +215,21 @@ public class Shipment extends BaseShipment
 							{
 								spPosContainer.setId(Long.parseLong(containerId));
 							}
+						}
+						//Bug 14267
+						//pos1 and pos2 will be "" in case of manual option selection on shipment receiving page.
+						if (pos1 != null && pos2 != null && !pos2.trim().equals(""))
+						{
 							spPosition.setPositionDimensionOne(Integer.parseInt(pos1));
-							spPosition.setPositionDimensionTwo(Integer.parseInt(pos2));
+							spPosition.setPositionDimensionTwo(Integer.parseInt(pos2));							
+						}
+						else // if 0 was not set then it will show positions from in transit container 
+						{
+							spPosition.setPositionDimensionOne(0);
+							spPosition.setPositionDimensionTwo(0);	
+						}
+						if(spPosContainer!=null)
+						{
 							spPosition.setStorageContainer(spPosContainer);
 						}
 						// Set the user selected activity status for specimen.

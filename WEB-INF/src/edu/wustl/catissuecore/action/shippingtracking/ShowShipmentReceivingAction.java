@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.action.shippingtracking;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -9,6 +8,9 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -19,12 +21,14 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -63,42 +67,58 @@ public class ShowShipmentReceivingAction extends SecureAction
 		// Get the Shipment details.
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final ShipmentBizLogic shipmentBizLogic = (ShipmentBizLogic) factory
-				.getBizLogic(Constants.SHIPMENT_FORM_ID);
+		.getBizLogic(Constants.SHIPMENT_FORM_ID);
 		final String requestFor = request.getParameter("requestFor");
 		if (requestFor == null || (requestFor != null && !requestFor.equals("storageLocation")))
 		{
 			shipment = shipmentBizLogic.getShipmentObject(shipmentId);
 			shipmentReceivingForm.setAllValues(shipment);
 		}
-		final TreeMap containerMap = new TreeMap();
-		//String exceedingMaxLimit = "false";
-
+		Map containerMap = new TreeMap();
 		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
-		// Get storageType for a "Shipment container".
-		/*StorageType st = ((List < StorageType >) bizLogic.retrieve(StorageType.class.getName(),
-				Constants.NAME, Constants.SHIPMENT_CONTAINER_TYPE_NAME)).get(0);*/
-		//long shipmentContainerStorageTypeId = st.getId();
+		.getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
-
-		// Commented due to removing 'auto' functionality.
-		/*
+		// Uncommented due to addition of 'auto' functionality.
+        // Bug 14263 
 		if(sessionDataBean!=null)
 		{
-			long start = System.currentTimeMillis();
-			ShipmentReceivingBizLogic shipmentReceivingBizLogic = new ShipmentReceivingBizLogic();
-			containerMap = (TreeMap)shipmentReceivingBizLogic.getAvailableContainerMap(shipmentBizLogic
-				.getPermittedSiteIdsForUser(sessionDataBean.getUserId(),
-					sessionDataBean.isAdmin()), shipmentContainerStorageTypeId);
-			long end = System.currentTimeMillis();
+			DAO dao = null;
+			try 
+			{
+				dao = AppUtility.openDAOSession(sessionDataBean);
+				String operation = request.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
+				if (operation == null || operation.trim().equals(""))
+				{
+					operation = edu.wustl.catissuecore.util.global.Constants.ADD;
+				}
+				request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
+				String stContSelection = request.getParameter("stContSelection");
+				request.setAttribute("stContSelection", stContSelection);
+				String specimenId = request.getParameter("specimenId");
+				if(specimenId!=null)
+				{
+					String specimenClass = (String)shipmentBizLogic.retrieveAttribute(Specimen.class.getName(), Long.valueOf( specimenId ), "specimenClass");
+					if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
+							&& requestFor != null && !requestFor.trim().equals("") && stContSelection != null)
+					{
+						String collectionProtocolId = getCPIdFromSpecimen(specimenId,dao);
+						request.setAttribute(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
+								collectionProtocolId);
+						if(!collectionProtocolId.trim().equals( "" ))
+						{
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen( Long.valueOf( collectionProtocolId ).longValue(), specimenClass, 0, "false", sessionDataBean, dao );
+						}
+					}
+					this.setContainerStorageInformation(containerMap, bizLogic, request, shipmentReceivingForm);
+				}
+				this.setSpecimenStorageInformation(bizLogic, containerMap, request, shipmentReceivingForm,
+						shipment);				
+			}
+			finally 
+			{
+				dao.closeSession();
+			}
 		}
-		*/
-
-		this.setContainerStorageInformation(containerMap, bizLogic, request, shipmentReceivingForm);
-
-		this.setSpecimenStorageInformation(bizLogic, containerMap, request, shipmentReceivingForm,
-				shipment);
-
 		// For ParentStorageContainer Site
 		final String[] siteDisplayField = {"name"};
 		final String valueField = "id";
@@ -115,7 +135,39 @@ public class ShowShipmentReceivingAction extends SecureAction
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.SITELIST, list);
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
-
+    /**
+     * This method will return collectionProtocolId. 
+     * @param specimenId - specimen id
+     * @param dao - DAO obj
+     * @return collectionProtocolId - collectionProtocolId
+     * @throws BizLogicException - BizLogicException
+     */
+    private String getCPIdFromSpecimen(String specimenId,DAO dao) throws BizLogicException
+    {
+    	String collectionProtocolId = "";
+		if (specimenId != null && !specimenId.trim().equals(""))
+		{
+			final Specimen specimen = new Specimen();
+			specimen.setId(Long.parseLong(specimenId));
+			try
+			{
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+				collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
+				if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
+				{
+					collectionProtocolId = collectionProtocolId.split("_")[1];
+				}
+			}
+			catch (final ApplicationException appEx)
+			{
+				collectionProtocolId = "";
+				throw new BizLogicException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
+			}			
+		}
+		return collectionProtocolId;
+    }
 	/**
 	 * sets the storage container information.
 	 * @param containerMap the treemap.
@@ -123,7 +175,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param request the request to be processed.
 	 * @param shipmentReceivingForm form containing all values.
 	 */
-	private void setContainerStorageInformation(TreeMap containerMap,
+	private void setContainerStorageInformation(Map containerMap,
 			StorageContainerBizLogic bizLogic, HttpServletRequest request,
 			ShipmentReceivingForm shipmentReceivingForm)
 	{
@@ -158,107 +210,24 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param shipmentReceivingForm form containing all values.
 	 */
 	private void setSpecimenStorageInformation(StorageContainerBizLogic bizLogic,
-			TreeMap containerMap, HttpServletRequest request,
+			Map containerMap, HttpServletRequest request,
 			ShipmentReceivingForm shipmentReceivingForm, Shipment shipment)
 	{
 		//		For Storage Location Allocation
-		final Logger logger = Logger.getCommonLogger(ShowShipmentReceivingAction.class);
-		final String requestFor = request.getParameter("requestFor");
-		// Removing 'auto' in shipment receiving.
-		//List<NameValueBean> storagePositionList =  Utility.getStoragePositionTypeList();
-		final List<NameValueBean> storagePositionList = this.getStoragePositionTypeList();
+		/*final Logger logger = Logger.getCommonLogger(ShowShipmentReceivingAction.class);
+		final String requestFor = request.getParameter("requestFor");*/
+		// Removing 'auto' in shipment receiving. Bug 14263
+		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		final String exceedingMaxLimit = "";
-		String operation = request
-				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
-		if (operation == null || operation.trim().equals(""))
-		{
-			operation = edu.wustl.catissuecore.util.global.Constants.ADD;
-		}
-		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
-		//String virtuallyLocated = request.getParameter("virtualLocated");
-		//
-		//		if (virtuallyLocated != null && virtuallyLocated.equals("false"))
-		//		{
-		//			//specimenForm.setVirtuallyLocated(false);
-		//		}
-		final String specimenId = request.getParameter("specimenId");
 		final List initialValues = null;
-		final String stContSelection = request.getParameter("stContSelection");
-		request.setAttribute("stContSelection", stContSelection);
-		int specimenCount = 0;
-		if (shipmentReceivingForm != null && shipmentReceivingForm.getSpecimenCollection() != null)
-		{
-			specimenCount = shipmentReceivingForm.getSpecimenCollection().size();
-		}
-		this.checkForSufficientAvailablePositions(request, containerMap, specimenCount,
-				ApplicationProperties.getValue("shipment.contentsSpecimens"));
 		this.populateSpecimenStorageLocations(shipmentReceivingForm, containerMap);
-		if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
-				&& requestFor != null && !requestFor.trim().equals("") && stContSelection != null)
-		{
-			if (stContSelection.equals("3"))
-			{
-				String collectionProtocolId = "";
-				if (specimenId != null && !specimenId.trim().equals(""))
-				{
-					final Specimen specimen = new Specimen();
-					specimen.setId(Long.parseLong(specimenId));
-					DAO dao = null;
-					try
-					{
-						//Create DAO
-						dao = AppUtility.openDAOSession(null);
-						final IFactory factory = AbstractFactoryConfig.getInstance()
-								.getBizLogicFactory();
-						final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-								.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
-
-						collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
-						if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
-						{
-							collectionProtocolId = collectionProtocolId.split("_")[1];
-						}
-					}
-					catch (final ApplicationException e)
-					{
-						collectionProtocolId = "";
-						logger.error(e.getMessage(), e);
-						e.printStackTrace();
-					}
-					finally
-					{
-						try
-						{
-							AppUtility.closeDAOSession(dao);
-						}
-						catch (final ApplicationException e)
-						{
-							logger.error(e.getMessage(), e);
-							e.printStackTrace();
-						}
-					}
-				}
-				request.setAttribute(
-						edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
-						collectionProtocolId);
-			}
-		}
-		//		else
-		//		{
-		//		}
-		if (specimenId != null && !specimenId.trim().equals(""))
-		{
-			request.setAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_ID,
-					specimenId);
-		}
-		request.setAttribute("initValues", initialValues);
+				request.setAttribute("initValues", initialValues);
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.EXCEEDS_MAX_LIMIT,
 				exceedingMaxLimit);
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.AVAILABLE_CONTAINER_MAP,
 				containerMap);
 	}
-
 	/**
 	 * This function populates the availability map with available storage locations.
 	 * @param form object of AliquotForm.
@@ -365,8 +334,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 	private void checkForSufficientAvailablePositions(HttpServletRequest request, Map containerMap,
 			int storableCount, String objectName)
 	{
-		// Commented due to removing 'auto' functionality.
-		/*
+		// Uncommented due to addition of 'auto' functionality.  Bug 14263
 		int counter = 0;
 		if(!containerMap.isEmpty())
 		{
@@ -374,14 +342,14 @@ public class ShowShipmentReceivingAction extends SecureAction
 		}
 		// Check whether to store more contents than available positions.
 		//if (containerMap.isEmpty() || counter<storableCount)
-		if(counter < storableCount) {
+		if(counter < storableCount) 
+		{
 			ActionErrors errors = getActionErrors(request);
-
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 				"errors.locations.notSufficient.shipmentReceive",objectName));
 			saveErrors(request, errors);
 		}
-		*/
+		
 	}
 
 	/**
@@ -389,24 +357,22 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param request gives the error key.
 	 * @return errors.
 	 */
-	/*private ActionErrors getActionErrors(HttpServletRequest request)
+	private ActionErrors getActionErrors(HttpServletRequest request)
 	{
 		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-
 		if (errors == null)
 		{
 			errors = new ActionErrors();
 		}
-
 		return errors;
-	}*/
+	}
 
 	/* Method returns the storage position list - without 'Auto'*/
 	/**
 	 * gets the list of storage position type.
 	 * @return list.
 	 */
-	private List getStoragePositionTypeList()
+	/*private List getStoragePositionTypeList()
 	{
 		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
 		storagePositionTypeList.add(new NameValueBean(
@@ -416,5 +382,5 @@ public class ShowShipmentReceivingAction extends SecureAction
 				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_MANUAL,
 				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_MANUAL_VALUE));
 		return storagePositionTypeList;
-	}
+	}*/
 }
