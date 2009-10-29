@@ -287,7 +287,8 @@ public final class EventsUtil
 			}
 			catch (ParseException e)
 			{
-				logger.debug("Exception in Parsing Date" + e);
+				EventsUtil.logger.error("Exception in Parsing Date" + e.getMessage(),e);
+				e.printStackTrace();
 			}
 		}
 		else

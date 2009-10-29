@@ -129,6 +129,8 @@ public class SpecimenAutoStorageContainer {
 		}
 		catch(DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
+			daoException.printStackTrace();
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(), daoException.getMsgValues());
 		}
 		finally
@@ -154,7 +156,8 @@ public class SpecimenAutoStorageContainer {
 
 			} catch (ApplicationException exception) 
 			{
-				logger.debug(exception.getMessage(), exception);
+				this.logger.error(exception.getMessage(), exception);
+				exception.printStackTrace();
 				throw AppUtility.getApplicationException( exception,exception.getErrorKeyName(),
 						exception.getMsgValues());
 			}

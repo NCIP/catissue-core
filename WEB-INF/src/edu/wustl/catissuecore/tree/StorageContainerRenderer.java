@@ -46,22 +46,21 @@ public class StorageContainerRenderer extends DefaultTreeCellRenderer
 	 * @param hasFocus hasFocus.
 	 * @return Component.
 	 */
-	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
 			boolean expanded, boolean leaf, int row, boolean hasFocus)
 	{
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-		final StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node.getUserObject();
-		Icon icon = this.createImageIcon("disabled.gif");
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		StorageContainerTreeNode treeNode = (StorageContainerTreeNode) node.getUserObject();
+		Icon icon = createImageIcon("disabled.gif");
 		if (treeNode.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
-			icon = this.createImageIcon("enabled.gif");
-			this.setIcon(icon);
+			icon = createImageIcon("enabled.gif");
+			setIcon(icon);
 		}
-		this.setIcon(icon);
+		setIcon(icon);
 		return this;
 	}
 
@@ -72,7 +71,7 @@ public class StorageContainerRenderer extends DefaultTreeCellRenderer
 	 */
 	protected Icon createImageIcon(String name)
 	{
-		final Icon newLeafIcon = new ImageIcon(Thread.currentThread().getContextClassLoader()
+		Icon newLeafIcon = new ImageIcon(Thread.currentThread().getContextClassLoader()
 				.getResource("images/" + name));
 		return newLeafIcon;
 	}

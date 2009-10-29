@@ -719,8 +719,11 @@ public class CollectionProtocolUtil
 		Integer enrollmentNo=null;
 		try{
 			enrollmentNo = Integer.valueOf(cpBean.getEnrollment());
-		}catch(NumberFormatException e){
-			logger.debug(e.getMessage(), e);
+		}
+		catch(NumberFormatException e)
+		{
+			CollectionProtocolUtil.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			enrollmentNo = Integer.valueOf(0);
 		}
 		collectionProtocol.setEnrollment(enrollmentNo);
@@ -1021,7 +1024,9 @@ public class CollectionProtocolUtil
 		} 
 		catch (Exception e1) 
 		{
-			logger.error("Error in setting Section header Priorities",e1);
+			CollectionProtocolUtil.logger.error("Error in setting Section " +
+					"header Priorities"+e1.getMessage(),e1);
+			e1.printStackTrace();
 			return null;
 		}
 		

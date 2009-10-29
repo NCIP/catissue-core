@@ -107,7 +107,8 @@ public class ReportLoaderQueueProcessor extends Thread
 						}
 						catch (final Exception ex)
 						{
-							this.logger.debug(ex.getMessage(), ex);
+							this.logger.error(ex.getMessage(), ex);
+							ex.printStackTrace();
 							endTime = new Date().getTime();
 							reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
 							if (ex.getMessage().equalsIgnoreCase(
@@ -136,15 +137,21 @@ public class ReportLoaderQueueProcessor extends Thread
 			}
 			catch (final NumberFormatException ex)
 			{
-				this.logger.error("Error stopping ReportLoaderQueueThread ", ex);
+				this.logger.error("Error stopping ReportLoaderQueueThread "
+						+ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 			catch (final InterruptedException ex)
 			{
-				this.logger.error("Error stopping ReportLoaderQueueThread ", ex);
+				this.logger.error("Error stopping ReportLoaderQueueThread "
+						+ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error("Error in processing of ReportLoaderQueueThread ", ex);
+				this.logger.error("Error in processing of ReportLoaderQueueThread "
+						+ex.getMessage(), ex);
+				ex.printStackTrace();
 				try
 				{
 					this.logger.info("Report loader Queue server is going to sleep for "
@@ -155,7 +162,9 @@ public class ReportLoaderQueueProcessor extends Thread
 				catch (final Exception e)
 				{
 					this.logger.error("Error while calling Thread.sleep"
-							+ " for ReportLoaderQueueProcessor thread", e);
+							+ " for ReportLoaderQueueProcessor thread"
+							+ex.getMessage(), e);
+					e.printStackTrace();
 				}
 			}
 		}

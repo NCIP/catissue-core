@@ -59,7 +59,8 @@ public class CSMValidator implements IValidator {
 			} 
 			catch (Exception e1) 
 			{
-				logger.debug(e1.getMessage(), e1);
+				this.logger.error(e1.getMessage(), e1);
+				e1.printStackTrace();
 			}
 
 		return hasPrivilege;

@@ -63,7 +63,7 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	 */
 	public String getType()
 	{
-		return this.type;
+		return type;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	 */
 	public String getSpecimenClass()
 	{
-		return this.specimenClass;
+		return specimenClass;
 	}
 
 	/**
@@ -99,7 +99,6 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	 * overrides edu.wustl.common.tree.TreeNodeImpl.toString.
 	 * @return value.
 	 */
-	@Override
 	public String toString()
 	{
 		return this.getValue();
@@ -111,7 +110,7 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	 */
 	public String getParentIdentifier()
 	{
-		return this.parentIdentifier;
+		return parentIdentifier;
 	}
 
 	/**
@@ -129,7 +128,7 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	 */
 	public String getParentValue()
 	{
-		return this.parentValue;
+		return parentValue;
 	}
 
 	/**
@@ -140,23 +139,19 @@ public class SpecimenTreeNode extends TreeNodeImpl implements Serializable
 	{
 		this.parentValue = parentValue;
 	}
-
 	/**
 	 * overrides TreeNodeImpl.equals method .
 	 * @param obj Object.
 	 * @return true if equal else false.
 	 */
-	@Override
 	public boolean equals(Object obj)
 	{
 		return super.equals(obj);
 	}
-
 	/**
 	 * overrides TreeNodeImpl.hashCode method.
 	 * @return hashCode.
 	 */
-	@Override
 	public int hashCode()
 	{
 		return super.hashCode();

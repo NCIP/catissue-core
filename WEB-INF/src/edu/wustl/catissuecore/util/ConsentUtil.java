@@ -155,7 +155,8 @@ public final class ConsentUtil
 		}
 		catch(DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			ConsentUtil.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
 			throw AppUtility.getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
@@ -250,7 +251,8 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			logger.error(excp);
+			ConsentUtil.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 
@@ -291,7 +293,8 @@ public final class ConsentUtil
 		}
 		catch(Exception excp)
 		{
-			logger.error(excp);
+			ConsentUtil.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 	
@@ -316,7 +319,7 @@ public final class ConsentUtil
 				}
 			}
 		} catch (DAOException daoExp) {
-			logger.debug(daoExp.getMessage(), daoExp);
+			ConsentUtil.logger.error(daoExp.getMessage(), daoExp);
 			throw AppUtility.getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}

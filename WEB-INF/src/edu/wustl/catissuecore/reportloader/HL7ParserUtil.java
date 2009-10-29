@@ -76,7 +76,8 @@ public final class HL7ParserUtil
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7ParserUtil.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return isValid;
 	}
@@ -140,7 +141,9 @@ public final class HL7ParserUtil
 		}
 		catch (final Exception e)
 		{
-			logger.error("Error while parsing the report map", e);
+			HL7ParserUtil.logger.error("Error while parsing the" +
+					" report map"+e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -277,11 +280,12 @@ public final class HL7ParserUtil
 					medicalId.setSite(site);
 				}
 			}
-			logger.info("Participant Object Created ");
+			HL7ParserUtil.logger.info("Participant Object Created ");
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7ParserUtil.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return participant;
 	}
@@ -293,7 +297,7 @@ public final class HL7ParserUtil
 	 */
 	public static Map<String, Set> getReportMap(String reportText)
 	{
-		logger.debug("Inside parseString method");
+		HL7ParserUtil.logger.debug("Inside parseString method");
 		String[] lines = null;
 		StringTokenizer strTokenizer = null;
 		String token = null;
@@ -394,7 +398,9 @@ public final class HL7ParserUtil
 					}
 					catch (final Exception ex)
 					{
-						logger.error("Site name not found in config file: " + siteName);
+						HL7ParserUtil.logger.error("Site name not found in config file: " + siteName +
+								ex.getMessage(),ex);
+						ex.printStackTrace();
 					}
 					if (siteName != null)
 					{
@@ -403,7 +409,7 @@ public final class HL7ParserUtil
 								siteName);
 						if (siteObj == null)
 						{
-							logger.error("Site name " + siteName + " not found in"
+							HL7ParserUtil.logger.error("Site name " + siteName + " not found in"
 									+ " the database!");
 						}
 					}
@@ -413,7 +419,8 @@ public final class HL7ParserUtil
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7ParserUtil.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return siteObj;
 	}

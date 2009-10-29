@@ -109,12 +109,15 @@ public class ReportProcessor implements Observer
 				}
 				catch (final IOException ex)
 				{
-					this.logger.error("Error while reading file ", ex);
+					this.logger.error("Error while reading file "
+							+ex.getMessage(), ex);
+					ex.printStackTrace();
 				}
 				catch (final Exception ex)
 				{
 					this.moveToBadFileDir(file);
-					this.logger.error("Bad File ", ex);
+					this.logger.error("Bad File "+ex.getMessage(), ex);
+					ex.printStackTrace();
 				}
 				this.moveToProcessedFileDir(file);
 			}
@@ -122,7 +125,9 @@ public class ReportProcessor implements Observer
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error("Error while initializing parser manager ", ex);
+			this.logger.error("Error while initializing parser manager "
+					+ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 	}
 

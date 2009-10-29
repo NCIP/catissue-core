@@ -49,7 +49,7 @@ public class MailUtility
 		}
 		catch (final MessagingException e)
 		{
-			logger.debug(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		final boolean emailStatus = email.sendMail(emailDetails);

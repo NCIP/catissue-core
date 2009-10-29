@@ -214,7 +214,7 @@ public class EmailHandler
         }
         catch(SMException smExp)
         {
-        	logger.debug(smExp.getMessage(), smExp);
+        	this.logger.error(smExp.getMessage(), smExp);
             throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
         }
         
@@ -230,13 +230,13 @@ public class EmailHandler
 	{
 		if (emailStatus)
 		{
-			logger.info(ApplicationProperties
+			this.logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.success")
 			    + user.getLastName() + " " + user.getFirstName());
 		}
 		else
 		{
-			logger.info(ApplicationProperties
+			this.logger.info(ApplicationProperties
 			    .getValue("user.loginDetails.email.failure")
 			    + user.getLastName() + " " + user.getFirstName());
 		}
@@ -261,12 +261,12 @@ public class EmailHandler
         
         if (emailStatus)
 		{
-			logger.info(ApplicationProperties
+			this.logger.info(ApplicationProperties
 			    .getValue("reportedProblem.email.success"));
 		}
 		else
 		{
-			logger.info(ApplicationProperties
+			this.logger.info(ApplicationProperties
 			    .getValue("reportedProblem.email.failure"));
 		}
     }
@@ -304,7 +304,7 @@ public class EmailHandler
  		catch (MessagingException messExcp)
  		{
  			emailStatus=false;
- 			logger.info(messExcp.getMessage());
+ 			this.logger.error(messExcp.getMessage(),messExcp);
  		}
          return emailStatus;
     }
@@ -344,7 +344,7 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			logger.info(messExcp.getMessage());
+			this.logger.error(messExcp.getMessage(),messExcp);
 		}
         return emailStatus;
     }
@@ -382,7 +382,7 @@ public class EmailHandler
  		catch (MessagingException messExcp)
  		{
  			emailStatus=false;
- 			logger.info(messExcp.getMessage());
+ 			this.logger.error(messExcp.getMessage(),messExcp);
  		}
          return emailStatus;
     }
@@ -419,7 +419,7 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			logger.info(messExcp.getMessage());
+			this.logger.error(messExcp.getMessage(),messExcp);
 		}
     	return emailStatus;
     }
@@ -452,10 +452,10 @@ public class EmailHandler
 		catch (MessagingException messExcp)
 		{
 			emailStatus=false;
-			logger.info(messExcp.getMessage());
+			this.logger.error(messExcp.getMessage(),messExcp);
 		}
     	
-    	logger.info("EmailStatus  "  + emailStatus);
+    	this.logger.info("EmailStatus  "  + emailStatus);
         return emailStatus;
     }
     

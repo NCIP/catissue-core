@@ -110,7 +110,8 @@ public final class ReportLoaderUtil
 		}
 		catch (final Exception exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			ReportLoaderUtil.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			return buff.toString();
 		}
 		return buff.toString();

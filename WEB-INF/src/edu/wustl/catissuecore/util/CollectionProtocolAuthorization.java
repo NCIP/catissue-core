@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -40,7 +41,11 @@ import gov.nih.nci.security.exceptions.CSException;
  */
 public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.util.Roles
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger =
+					Logger.getCommonLogger(CollectionProtocolAuthorization.class) ;
 	public void authenticate(CollectionProtocol collectionProtocol, HashSet protectionObjects,
 			Map<String,SiteUserRolePrivilegeBean> rowIdMap) throws ApplicationException
 	{
@@ -57,6 +62,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		}
 		catch (SMException e)
 		{
+			this.logger.error(e.getMessage(),e);
 			throw AppUtility.handleSMException(e);
 		}
 		finally

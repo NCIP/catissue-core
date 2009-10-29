@@ -128,7 +128,8 @@ public class ContainerMap extends NLevelCustomCombo {
 			out.println("</tr></table> ");
 		}catch(IOException io)
 		{
-			logger.error(io);
+			this.logger.error(io.getMessage(),io);
+			io.printStackTrace();
 		}
 		// Call to NLevelCustomCombo's doEndTag();
 		return super.doEndTag();
@@ -136,7 +137,7 @@ public class ContainerMap extends NLevelCustomCombo {
 	
 	private void print(String[] strArray)
 	{
-		 logger.info("-------------" + strArray.length + "-----------");
+		 this.logger.info("-------------" + strArray.length + "-----------");
 		for(int i = 0; i< strArray.length; i++)
 		{
 			logger.info(i + " : " + strArray[i]);

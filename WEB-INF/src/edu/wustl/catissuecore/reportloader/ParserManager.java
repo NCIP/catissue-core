@@ -53,18 +53,24 @@ public final class ParserManager
 		}
 		catch (final InstantiationException e)
 		{
-			logger.error("InstantiationException while instantiating class "
-					+ CaTIESConstants.PARSER_CLASS, e);
+			ParserManager.logger.error("InstantiationException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS
+					+ e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final IllegalAccessException e)
 		{
-			logger.error("IllegalAccessException while instantiating class "
-					+ CaTIESConstants.PARSER_CLASS, e);
+			ParserManager.logger.error("IllegalAccessException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS
+					+ e.getMessage(), e);
+			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.error("ClassNotFoundException while instantiating class "
-					+ CaTIESConstants.PARSER_CLASS, e);
+			ParserManager.logger.error("ClassNotFoundException while instantiating class "
+					+ CaTIESConstants.PARSER_CLASS
+					+ e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return parser;
 	}

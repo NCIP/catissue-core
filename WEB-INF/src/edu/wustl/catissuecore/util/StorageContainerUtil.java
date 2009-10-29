@@ -535,7 +535,8 @@ public final class StorageContainerUtil
 			}
 			catch (final Exception e)
 			{
-				logger.debug(e.getMessage(), e);
+				StorageContainerUtil.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				flag = true;
 
 			}
@@ -553,7 +554,8 @@ public final class StorageContainerUtil
 			}
 			catch (final Exception e)
 			{
-				logger.debug(e.getMessage(), e);
+				StorageContainerUtil.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 				flag = true;
 
 			}
@@ -668,6 +670,7 @@ public final class StorageContainerUtil
 			}
 			catch (final DAOException e)
 			{
+				StorageContainerUtil.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 				throw new BizLogicException(e);
 			}

@@ -100,13 +100,22 @@ public final class CaTissuePrivilegeUtility {
 					setSitePrivileges(map, dao, user, entry);
 				}
 			}
-		} catch (DAOException e) {
-			logger.debug(e.getMessage(), e);
-		} finally {
-			try {
+		}
+		catch (DAOException e)
+		{
+			CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
 				dao.closeSession();
-			} catch (DAOException e) {
-				logger.debug(e.getMessage(), e);
+			}
+			catch (DAOException e)
+			{
+				CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 		}
 
@@ -302,8 +311,11 @@ public final class CaTissuePrivilegeUtility {
 			map = getCPPrivileges(privilegeCache);
 			map.putAll(getSitePrivileges(privilegeCache));
 
-		} catch (DAOException e) {
-			logger.error(e);
+		}
+		catch (DAOException e)
+		{
+			CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 		}
 
 		return map;
@@ -425,8 +437,11 @@ public final class CaTissuePrivilegeUtility {
 			}
 			updatePrivilegeMap(privilegeOnCPMap, siteCollection,
 					siteIdSetSpecific);
-		} catch (Exception e) {
-			logger.debug(e.getMessage(), e);
+		}
+		catch (Exception e)
+		{
+			CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			// return null;
 		} 
 		finally
@@ -437,7 +452,8 @@ public final class CaTissuePrivilegeUtility {
 			}
 			catch (DAOException e) 
 			{
-				logger.debug(e.getMessage(), e);
+				CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+				e.printStackTrace();
 			}
 		}
 
@@ -595,8 +611,11 @@ public final class CaTissuePrivilegeUtility {
 					}
 				}
 			}
-		} catch (Exception e) {
-			logger.error(e);
+		}
+		catch (Exception e)
+		{
+			CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			return null;
 		} 
 		finally 
@@ -607,7 +626,8 @@ public final class CaTissuePrivilegeUtility {
 			} 
 			catch (DAOException e) 
 			{
-				logger.error(e);
+				CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+				e.printStackTrace();
 
 			}
 		}

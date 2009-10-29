@@ -95,11 +95,12 @@ public final class IdentifiedReportGenerator
 			{
 				report.getTextContent().setReportSectionCollection(reportSectionSet);
 			}
-			logger.info("Report created");
+			IdentifiedReportGenerator.logger.info("Report created");
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			IdentifiedReportGenerator.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return report;
 	}
@@ -162,7 +163,8 @@ public final class IdentifiedReportGenerator
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			IdentifiedReportGenerator.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return section;
 	}
@@ -218,7 +220,9 @@ public final class IdentifiedReportGenerator
 		}
 		catch (final Exception e)
 		{
-			logger.error("Error while parsing the report map", e);
+			IdentifiedReportGenerator.logger.error("Error while parsing" +
+					" the report map"+e.getMessage(), e);
+			e.printStackTrace();
 		}
 		return report;
 	}
@@ -268,7 +272,8 @@ public final class IdentifiedReportGenerator
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			IdentifiedReportGenerator.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 		}
 		return docText;
 	}

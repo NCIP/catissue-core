@@ -131,7 +131,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}
@@ -154,7 +155,8 @@ public class XMLParser extends DefaultHandler
 					}
 					catch (DynamicExtensionsSystemException e)
 					{
-						logger.debug(e.getMessage(), e);
+						this.logger.error(e.getMessage(), e);
+						e.printStackTrace();
 						throw new SAXException(e);
 					}
 				}
@@ -175,7 +177,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}
@@ -192,7 +195,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 
@@ -211,7 +215,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}
@@ -228,7 +233,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}
@@ -269,7 +275,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}
@@ -293,7 +300,8 @@ public class XMLParser extends DefaultHandler
 				}
 				catch (DynamicExtensionsSystemException e)
 				{
-					logger.debug(e.getMessage(), e);
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw new SAXException(e);
 				}
 			}

@@ -158,7 +158,9 @@ public class ReportLoader
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error("Failed to process report " + ex);
+			this.logger.error("Failed to process report "
+					+ex.getMessage(),ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 	}
@@ -231,7 +233,9 @@ public class ReportLoader
 				catch (final Exception ex)
 				{
 					this.logger.error("Error: Could not save object"
-							+ " of CollectionProtocolRegistration", ex);
+							+ " of CollectionProtocolRegistration"
+							+ex.getMessage(), ex);
+					ex.printStackTrace();
 					throw new Exception("Could not save object of"
 							+ " CollectionProtocolRegistration :" + ex.getMessage());
 				}
@@ -291,7 +295,9 @@ public class ReportLoader
 		catch (final ApplicationException appEx)
 		{
 			this.logger.error("Error while retrieving List for "
-					+ CollectionProtocolRegistration.class.getName() + appEx);
+					+ CollectionProtocolRegistration.class.getName()
+					+ appEx.getMessage(),appEx);
+			appEx.printStackTrace();
 		}
 		this.logger.info("No Existing CPR found for participant id=" + participant.getId()
 				+ " collectionProtocol id=" + cp.getId());
@@ -386,7 +392,9 @@ public class ReportLoader
 			}
 			catch (final ApplicationException ex)
 			{
-				this.logger.error("Error while updating old report!", ex);
+				this.logger.error("Error while updating old report!"
+						+ex.getMessage(), ex);
+				ex.printStackTrace();
 				throw new Exception(ex.getMessage());
 			}
 		}

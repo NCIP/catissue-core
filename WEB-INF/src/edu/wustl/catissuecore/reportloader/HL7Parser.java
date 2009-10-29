@@ -130,7 +130,7 @@ public class HL7Parser implements Parser
 				else
 				{
 					//create instance of ReportLoader to load report into the DB
-					logger.debug("Instantiating report loader to load report");
+					HL7Parser.logger.debug("Instantiating report loader to load report");
 					reportLoader = new ReportLoader(participant, report, site, scg, spn);
 				}
 				// initiate reportLoader to load report
@@ -139,7 +139,9 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while parsing the report map", ex);
+			HL7Parser.logger.error("Error while parsing the " +
+					"report map"+ex.getMessage(), ex);
+			ex.printStackTrace() ;
 		}
 	}
 
@@ -153,7 +155,7 @@ public class HL7Parser implements Parser
 	public void parseString(Participant participant, String reportText,
 			SpecimenCollectionGroup scg, HashMap<String, String> abbrToHeader)
 	{
-		logger.debug("Inside parseString method");
+		HL7Parser.logger.debug("Inside parseString method");
 		Map<String, Set> reportMap = null;
 		try
 		{
@@ -173,7 +175,9 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while creating report map ", ex);
+			HL7Parser.logger.error("Error while creating" +
+					" report map "+ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 	}
 
@@ -250,31 +254,37 @@ public class HL7Parser implements Parser
 				}
 			}
 			fileParseEndTime = new Date().getTime();
-			logger.info("Parsing File " + fileName + ": Finished at " + new Date().toString());
+			HL7Parser.logger.info("Parsing File " + fileName + ": Finished at " + new Date().toString());
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "Total " + counter
 					+ " reports are added to report queue from file " + fileName + " Time "
 					+ "reuired for parsing:" + (fileParseEndTime - fileParseStartTime));
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while reading HL7 file ", ex);
+			HL7Parser.logger.error("Error while reading" +
+					" HL7 file "+ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 		finally
 		{
 			try
 			{
-				logger.info("Final Count of the reports that are added to queue is=" + counter);
+				HL7Parser.logger.info("Final Count of the reports that are added to queue is=" + counter);
 				// close handle to file
 				bufferedReader.close();
 				fileReader.close();
 			}
 			catch (final IOException ex)
 			{
-				logger.error("Error while closing file handle ", ex);
+				HL7Parser.logger.error("Error while closing file handle "+
+						ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 			catch (final Exception ex)
 			{
-				logger.error("Error while closing file handle ", ex);
+				HL7Parser.logger.error("Error while closing file handle "+
+						ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -305,7 +315,9 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while parsing Site information", ex);
+			HL7Parser.logger.error("Error while parsing Site information"+
+					ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 		ReportLoaderQueue queue = new ReportLoaderQueue();
 		if (site == null)
@@ -385,14 +397,15 @@ public class HL7Parser implements Parser
 				else
 				{
 					status = CaTIESConstants.INVALID_REPORT_SECTION;
-					logger.error("Report section under process is not valid");
+					HL7Parser.logger.error("Report section under process is not valid");
 					queue.setParticipantCollection(participantList);
 					queue.setStatus(status);
 				}
 			}
 			catch (final Exception ex)
 			{
-				logger.error("Error occured while creating participant", ex);
+				HL7Parser.logger.error("Error occured while creating participant"+
+						ex.getMessage(), ex);
 				status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
 				queue.setStatus(status);
 			}
@@ -471,7 +484,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -532,7 +546,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -578,14 +593,15 @@ public class HL7Parser implements Parser
 						+ "Exact matched and other" + " is null and SCG exact match---Action-3");
 				status = CaTIESConstants.NEW;
 			}
-			logger.info("********Use existing participant --");
+			HL7Parser.logger.info("********Use existing participant --");
 			participantList.add(existingParticipant);
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -599,7 +615,7 @@ public class HL7Parser implements Parser
 	private static ReportLoaderQueue getQueueForSSNPMIPartial(
 			List<DefaultLookupResult> defaultLookUPResultList, String status)
 	{
-		logger.info("********Between SSN and PMI one matches and other mismatches OR "
+		HL7Parser.logger.info("********Between SSN and PMI one matches and other mismatches OR "
 				+ "Between SSN and PMI one matches and other null and"
 				+ " more than 1 participants -Action4");
 
@@ -614,7 +630,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -694,7 +711,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -741,7 +759,7 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				logger.info("********Participant 60>weight>0 partially match and SCG"
+				HL7Parser.logger.info("********Participant 60>weight>0 partially match and SCG"
 						+ " mis or no match -Action-4");
 				participantList = ReportLoaderUtil.getParticipantList(defaultLookUPResultList);
 				status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
@@ -751,7 +769,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -792,7 +811,7 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				logger.info("********Participant weight<60 partially match and SCG "
+				HL7Parser.logger.info("********Participant weight<60 partially match and SCG "
 						+ "exact match-Action4");
 				status = CaTIESConstants.STATUS_PARTICIPANT_CONFLICT;
 			}
@@ -803,7 +822,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -845,7 +865,7 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				logger.info("*******Participant Exact match and SCG exact match");
+				HL7Parser.logger.info("*******Participant Exact match and SCG exact match");
 				status = CaTIESConstants.NEW;
 			}
 			queue.setParticipantCollection(participantList);
@@ -853,7 +873,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -880,7 +901,7 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				logger.info("******** UI Participant has null fields and SCG exact match");
+				HL7Parser.logger.info("******** UI Participant has null fields and SCG exact match");
 				final Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
 				participantList = new HashSet<Participant>();
 				participantList.add(scgParticipant);
@@ -891,7 +912,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return queue;
 	}
@@ -908,7 +930,7 @@ public class HL7Parser implements Parser
 		try
 		{
 			// No matching participant found Create new participant
-			logger.debug("No conflicts found. Creating new Participant ");
+			HL7Parser.logger.debug("No conflicts found. Creating new Participant ");
 			// this.setSiteToParticipant(participant, site);
 			logger.debug("Creating new Participant");
 			participant = (Participant) CaCoreAPIService.createObject(participant);
@@ -918,7 +940,9 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception e)
 		{
-			logger.error("Error while creating participant", e);
+			HL7Parser.logger.error("Error while creating participant"+
+					e.getMessage(), e);
+			e.printStackTrace();
 			status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
 		}
 		return participantList;
@@ -986,7 +1010,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			HL7Parser.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 		return pListBasedOnWt;
 	}
@@ -1026,7 +1051,9 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while creating queue", ex);
+			HL7Parser.logger.error("Error while creating queue"+
+					ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 	}
 

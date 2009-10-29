@@ -79,26 +79,25 @@ public class StorageContainerTreeNode extends TreeNodeImpl implements Serializab
 	}
 
 	/**
-	 * Parameterized constructor.
-	 * @param identifier identifier to set.
+     * Parameterized constructor.
+     * @param identifier identifier to set.
 	 * @param value value to set.
 	 * @param type type to set.
 	 * @param activityStatus activity Status to set. 
-	 */
-	public StorageContainerTreeNode(Long identifier, String value, String type,
-			String activityStatus)
-	{
-		super(identifier, value);
-		this.type = type;
-		this.activityStatus = activityStatus;
-	}
-
+     */
+    public StorageContainerTreeNode(Long identifier, String value, String type, String activityStatus)
+    {
+        super(identifier, value);
+        this.type = type;
+        this.activityStatus = activityStatus;
+    }
+	
 	/**
 	 * @return Returns the toolTip.
 	 */
 	public String getToolTip()
 	{
-		return this.toolTip;
+		return toolTip;
 	}
 
 	/**
@@ -106,7 +105,7 @@ public class StorageContainerTreeNode extends TreeNodeImpl implements Serializab
 	 */
 	public String getType()
 	{
-		return this.type;
+		return type;
 	}
 
 	/**
@@ -122,7 +121,7 @@ public class StorageContainerTreeNode extends TreeNodeImpl implements Serializab
 	 */
 	public String getActivityStatus()
 	{
-		return this.activityStatus;
+		return activityStatus;
 	}
 
 	/**
@@ -140,7 +139,6 @@ public class StorageContainerTreeNode extends TreeNodeImpl implements Serializab
 	 * overrides edu.wustl.common.tree.TreeNodeImpl.toString.
 	 * @return node Name.
 	 */
-	@Override
 	public String toString()
 	{
 		return this.getValue();
@@ -153,26 +151,22 @@ public class StorageContainerTreeNode extends TreeNodeImpl implements Serializab
 	 */
 	public int compareTo(Object tmpobj)
 	{
-		final StorageContainerTreeNode treeNode = (StorageContainerTreeNode) tmpobj;
+		StorageContainerTreeNode treeNode = (StorageContainerTreeNode) tmpobj;
 		return this.getIdentifier().compareTo(treeNode.getIdentifier());
 	}
-
 	/**
 	 * overrides TreeNodeImpl.equals method.
 	 * @param obj Object.
 	 * @return true if equal.
 	 */
-	@Override
 	public boolean equals(Object obj)
 	{
 		return super.equals(obj);
 	}
-
 	/**
 	 * overrides TreeNodeImpl.hashCode method.
 	 * @return hashCode.
 	 */
-	@Override
 	public int hashCode()
 	{
 		return super.hashCode();

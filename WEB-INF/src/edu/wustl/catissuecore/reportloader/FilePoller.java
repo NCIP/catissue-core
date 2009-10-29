@@ -81,7 +81,9 @@ public class FilePoller implements Observable
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error occured while inializing File Poller ", ex);
+			FilePoller.logger.error("Error occured while inializing File Poller "
+					+ex.getMessage(), ex);
+			ex.printStackTrace();
 			return;
 		}
 		try
@@ -97,11 +99,15 @@ public class FilePoller implements Observable
 		}
 		catch (final IOException ex)
 		{
-			logger.error("Error while creating directories ", ex);
+			FilePoller.logger.error("Error while creating directories "+
+					ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while creating directories ", ex);
+			FilePoller.logger.error("Error while creating directories "+
+					ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 		try
 		{
@@ -124,7 +130,9 @@ public class FilePoller implements Observable
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error while initializing parser manager ", ex);
+			FilePoller.logger.error("Error while initializing parser manager "+
+					ex.getMessage(), ex);
+			ex.printStackTrace() ;
 		}
 	}
 

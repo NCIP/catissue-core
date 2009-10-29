@@ -76,20 +76,19 @@ public class SpecimenTreeRenderer extends DefaultTreeCellRenderer
 	* @param hasFocus hasFocus.
 	* @return Component.
 	*/
-	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
 			boolean expanded, boolean leaf, int row, boolean hasFocus)
 	{
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 
-		final SpecimenTreeNode treeNode = (SpecimenTreeNode) node.getUserObject();
+		SpecimenTreeNode treeNode = (SpecimenTreeNode) node.getUserObject();
 
 		//If the clicked node is root node
 		//(i.e, label for specimen tree),then dont display Specimen.gif icon.
-		Icon icon = this.createImageIcon("Specimen.gif");
+		Icon icon = createImageIcon("Specimen.gif");
 
 		if (!treeNode.toString().equals(Constants.SPECIMEN_TREE_ROOT_NAME))
 		{
@@ -100,19 +99,19 @@ public class SpecimenTreeRenderer extends DefaultTreeCellRenderer
 			 * display disabled.gif.
 			 */
 
-			if (treeNode.getType().equalsIgnoreCase(this.specimenType)
-					&& treeNode.getSpecimenClass().equalsIgnoreCase(this.specimenClass))
+			if (treeNode.getType().equalsIgnoreCase(specimenType)
+					&& treeNode.getSpecimenClass().equalsIgnoreCase(specimenClass))
 			{
-				icon = this.createImageIcon("enabled.gif");
-				this.setIcon(icon);
+				icon = createImageIcon("enabled.gif");
+				setIcon(icon);
 			}
 			else
 			{
-				icon = this.createImageIcon("disabled.gif");
+				icon = createImageIcon("disabled.gif");
 			}
 
 		}
-		this.setIcon(icon);
+		setIcon(icon);
 		return this;
 	}
 
@@ -123,7 +122,7 @@ public class SpecimenTreeRenderer extends DefaultTreeCellRenderer
 	 */
 	protected Icon createImageIcon(String name)
 	{
-		final Icon newLefIcon = new ImageIcon(Thread.currentThread().getContextClassLoader()
+		Icon newLefIcon = new ImageIcon(Thread.currentThread().getContextClassLoader()
 				.getResource("images/" + name));
 
 		return newLefIcon;

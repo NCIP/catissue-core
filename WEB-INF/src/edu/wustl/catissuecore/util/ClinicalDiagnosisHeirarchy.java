@@ -20,7 +20,7 @@ public class ClinicalDiagnosisHeirarchy
 	/**
 	 * Logger. 
 	 */
-	private org.apache.log4j.Logger logger = Logger.getLogger(ConstraintViolationFormatter.class);
+	private Logger logger = Logger.getCommonLogger(ConstraintViolationFormatter.class);
 	
 	static String DATABASE_SERVER_NAME;
 	static String DATABASE_SERVER_PORT_NUMBER;
@@ -128,16 +128,18 @@ public class ClinicalDiagnosisHeirarchy
 		}
 		catch (SQLException e)
 		{
-			clinicalDiagnosisHeirarchy.logger.error("SQLException",e);
-
+			clinicalDiagnosisHeirarchy.logger.
+			error("SQLException"+e.getMessage(),e);
+			e.printStackTrace();
 			try
 			{
 				connection.rollback();
 			}
 			catch (SQLException e1)
 			{
-				clinicalDiagnosisHeirarchy.logger.error("SQLException",e1);
-
+				clinicalDiagnosisHeirarchy.logger.
+				error("SQLException"+e1.getMessage(),e1);
+				e1.printStackTrace();
 			}
 		}
 		finally
@@ -148,7 +150,9 @@ public class ClinicalDiagnosisHeirarchy
 			}
 			catch (SQLException e)
 			{
-				clinicalDiagnosisHeirarchy.logger.error("SQLException",e);
+				clinicalDiagnosisHeirarchy.logger.
+				error("SQLException"+e.getMessage(),e);
+				e.printStackTrace();
 			}
 		}
 	}
