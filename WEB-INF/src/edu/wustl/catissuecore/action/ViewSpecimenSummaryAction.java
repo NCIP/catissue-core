@@ -1020,7 +1020,7 @@ public class ViewSpecimenSummaryAction extends Action
 	 */
 	private String checkForFreeInitialValues(Map containerMap, Set asignedPositonSet)
 	{
-		System.out.println("containerMap :: " + containerMap + "\n\n");
+		//System.out.println("containerMap :: " + containerMap + "\n\n");
 		if (containerMap.size() > 0)
 		{
 			StringBuffer mainKey = null;
@@ -1030,7 +1030,7 @@ public class ViewSpecimenSummaryAction extends Action
 			{
 				mainKey = new StringBuffer();
 				final NameValueBean containerMapkey = (NameValueBean) containerMapkeySetitr.next();
-				System.out.println("\t" + containerMapkey);
+				//System.out.println("\t" + containerMapkey);
 				mainKey.append(containerMapkey.getName());
 				mainKey.append("#");
 				mainKey.append(containerMapkey.getValue());
@@ -1044,7 +1044,7 @@ public class ViewSpecimenSummaryAction extends Action
 				{
 					final NameValueBean maincontainerMapvaluemap1key = (NameValueBean) maincontainerMapvaluemap1keySetitr
 							.next();
-					System.out.println("\t\t" + maincontainerMapvaluemap1key);
+					//System.out.println("\t\t" + maincontainerMapvaluemap1key);
 					final StringBuffer pos1 = new StringBuffer();
 					pos1.append(maincontainerMapvaluemap1key.getValue());
 					pos1.append("#");
@@ -1055,7 +1055,7 @@ public class ViewSpecimenSummaryAction extends Action
 					{
 						final NameValueBean maincontainerMapvaluemap1value = (NameValueBean) list
 								.get(i);
-						System.out.println("\t\t\t\t" + maincontainerMapvaluemap1value);
+						//System.out.println("\t\t\t\t" + maincontainerMapvaluemap1value);
 						final StringBuffer pos2 = new StringBuffer();
 						pos2.append(maincontainerMapvaluemap1value.getValue());
 						final StringBuffer availablePos = new StringBuffer();
