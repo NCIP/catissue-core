@@ -413,7 +413,7 @@ public class LoginAction extends Action
 	private String wustlLogicForPass(LoginForm loginForm, final User validUser,
 			final UserBizLogic userBizLogic)
 	{
-		String result = null;
+		String result = Constants.SUCCESS;
 		if (edu.wustl.wustlkey.util.global.Constants.NON_WASHU.equals(WUSTLKeyUtility
 				.getUserFrom(loginForm.getLoginName())))
 		{
@@ -422,7 +422,6 @@ public class LoginAction extends Action
 		else if (edu.wustl.wustlkey.util.global.Constants.WASHU.equals(WUSTLKeyUtility
 				.getUserFrom(loginForm.getLoginName())))
 		{
-			result = Constants.SUCCESS;
 			final boolean firstTimeLogin = userBizLogic.getFirstLogin(validUser);
 			if (firstTimeLogin)
 			{
