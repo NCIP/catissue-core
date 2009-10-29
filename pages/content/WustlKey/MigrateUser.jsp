@@ -6,16 +6,6 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>	
 <script language="JavaScript">
-		function getWustlKey()
-		{
-			var url = "http://10.39.153.18:8080/catissuecore/WustlConnect.do";
-			//location.href;
-	        var loginform = document.getElementById("wustlLoginForm");
-			var actionUrl= "https://connectdev.wustl.edu/login/hrlogin/hrlogin.ashx?rf=";
-			actionUrl = actionUrl + url;
-			alert(actionUrl);
-			loginForm.action = actionUrl;
-		}
 		function doNotAskAgain()
 		{
 			var action = "WustlConnect.do?operation=doNotAskAgain";
