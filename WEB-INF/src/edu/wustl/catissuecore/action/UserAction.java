@@ -417,7 +417,7 @@ public class UserAction extends SecureAction
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getLogMessage(), e);
+			this.logger.error(e.getLogMessage(), e);
 			e.printStackTrace();
 		}
 	}

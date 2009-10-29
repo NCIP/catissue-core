@@ -93,7 +93,7 @@ public class UpdateCollectionProtocolAction extends BaseAction
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			final ActionErrors actionErrors = new ActionErrors();
 
 			if (exception instanceof UserNotAuthorizedException)

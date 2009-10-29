@@ -131,7 +131,8 @@ public class SummaryAction extends Action
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getMessage(), e);
+			SummaryAction.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		request.setAttribute("summaryForm", summaryForm);
 		if (true)

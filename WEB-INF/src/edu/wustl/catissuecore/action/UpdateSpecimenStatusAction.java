@@ -212,7 +212,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		catch (final Exception exception)
 		{
 			exception.printStackTrace();
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					false);
@@ -348,7 +348,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw new BizLogicException(null, e, e.getMessage());
 		}
@@ -360,6 +360,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (final ApplicationException e)
 			{
+				this.logger.error(e.getMessage(),e);
 				e.printStackTrace();
 				throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 			}
@@ -541,7 +542,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (final AssignDataException e1)
 		{
-			this.logger.debug(e1.getMessage(), e1);
+			this.logger.error(e1.getMessage(), e1);
 			e1.printStackTrace();
 			return null;
 		}
@@ -555,7 +556,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (final Exception exception)
 			{
-				this.logger.debug(exception.getMessage(), exception);
+				this.logger.error(exception.getMessage(), exception);
+				exception.printStackTrace();
 				concentration = new Double(0);
 			}
 			((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter(concentration);
@@ -651,7 +653,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (final NumberFormatException exception)
 			{
-				this.logger.debug(exception.getMessage(), exception);
+				this.logger.error(exception.getMessage(), exception);
 				specPos.setPositionDimensionOne(null);
 			}
 		}
@@ -663,7 +665,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			catch (final NumberFormatException exception)
 			{
-				this.logger.debug(exception.getMessage(), exception);
+				this.logger.error(exception.getMessage(), exception);
 				specPos.setPositionDimensionTwo(null);
 			}
 		}
@@ -753,6 +755,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (final Exception e)
 		{
+			this.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 	}
@@ -784,6 +787,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		}
 		catch (final Exception e)
 		{
+			this.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		return timeStamp;

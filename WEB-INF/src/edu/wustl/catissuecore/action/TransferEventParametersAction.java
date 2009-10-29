@@ -206,6 +206,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					}
 					catch (final DAOException daoException)
 					{
+						this.logger.error(daoException.getMessage(),daoException);
 						throw AppUtility.getApplicationException(daoException, daoException
 								.getErrorKeyName(), daoException.getMsgValues());
 					}

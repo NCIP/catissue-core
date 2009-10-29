@@ -58,6 +58,7 @@ public class TitliInitialiseSearchAction extends Action
 		{
 			this.logger.error("TitliException in InitialiseTitliSearchAction : " + e.getMessage(),
 					e);
+			e.printStackTrace() ;
 		}
 
 		TitliTableMapper.getInstance();

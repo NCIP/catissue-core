@@ -148,10 +148,12 @@ public class TitliFetchAction extends Action
 		catch (final TitliFetchException e)
 		{
 			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		catch (final Exception e)
 		{
 			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 
 		return mapping.findForward(Constants.SUCCESS);
@@ -228,14 +230,17 @@ public class TitliFetchAction extends Action
 		catch (final TitliException e)
 		{
 			this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		catch (final DAOException e)
 		{
 			this.logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		catch (final ClassNotFoundException e)
 		{
 			this.logger.error("ClassNotFoundException in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		return simpleConditionsNodeCollection;
 	}
@@ -360,10 +365,12 @@ public class TitliFetchAction extends Action
 		catch (final DAOException e)
 		{
 			this.logger.error("DAOException in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		catch (final SQLException e)
 		{
 			this.logger.error("SQLException in TitliFetchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 
 	}

@@ -214,7 +214,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request,
 					this.specimenSummaryForm, true);

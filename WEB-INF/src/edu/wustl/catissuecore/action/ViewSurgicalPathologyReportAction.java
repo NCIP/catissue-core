@@ -214,7 +214,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error(ex);
+				this.logger.error(ex.getMessage(),ex);
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -364,7 +365,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		catch (final Exception ex)
 		{
-			this.logger.debug(ex.getMessage(), ex);
+			this.logger.error(ex.getMessage(), ex);
+			ex.printStackTrace();
 			return null;
 		}
 	}

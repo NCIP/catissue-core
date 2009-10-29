@@ -105,6 +105,7 @@ public class TitliSearchAction extends Action
 				catch (final Exception e)
 				{
 					this.logger.error("Exception in TitliFetchAction : " + e.getMessage(), e);
+					e.printStackTrace() ;
 				}
 
 				final String path = TitliSearchConstants.TITLI_FETCH_ACTION;
@@ -116,6 +117,7 @@ public class TitliSearchAction extends Action
 		catch (final TitliException e)
 		{
 			this.logger.error("TitliException in TitliSearchAction : " + e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 		this.logger.info("from titli search action..............!!");
 		// System.out.println("from titli search action..............!!");

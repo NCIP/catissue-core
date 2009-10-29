@@ -325,7 +325,7 @@ public class SubmitUserAction extends Action
 			}
 			catch (final Exception ex)
 			{
-				this.logger.debug(ex.getMessage(), ex);
+				this.logger.error(ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 			final HttpSession session = request.getSession();
@@ -340,7 +340,7 @@ public class SubmitUserAction extends Action
 			}
 			catch (final Exception ex)
 			{
-				this.logger.debug(ex.getMessage(), ex);
+				this.logger.error(ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 
@@ -594,6 +594,7 @@ public class SubmitUserAction extends Action
 		}
 		catch (final BizLogicException exception)
 		{
+			this.logger.error(exception.getMessage(),exception);
 			// logger.error(
 			// "Failed to get QueryBizLogic object from BizLogic Factory");
 			throw new ApplicationException(ErrorKey.getErrorKey("errors.item"), exception,

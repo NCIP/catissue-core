@@ -111,6 +111,7 @@ public class TreeDataAction extends BaseAction
 		catch (final Exception exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 		}
 		finally
 		{

@@ -254,7 +254,7 @@ public class ViewSpecimenSummaryAction extends Action
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			// exception.printStackTrace();
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
@@ -1001,6 +1001,7 @@ public class ViewSpecimenSummaryAction extends Action
 
 		catch (final DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
