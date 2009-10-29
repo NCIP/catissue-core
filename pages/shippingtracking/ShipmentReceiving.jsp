@@ -14,6 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>caTissue Suite v 1.1</title>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link href="css/addl_s_t.css" rel="stylesheet" type="text/css">
 
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
