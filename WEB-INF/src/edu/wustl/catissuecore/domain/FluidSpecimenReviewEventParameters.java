@@ -31,8 +31,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(FluidSpecimenReviewEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(FluidSpecimenReviewEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -111,7 +110,8 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FluidSpecimenReviewEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null,
 					"FluidSpecimenReviewEventParameters.java :");

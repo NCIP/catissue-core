@@ -38,7 +38,7 @@ public class Biohazard extends AbstractDomainObject
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(Biohazard.class);
+	private static Logger logger = Logger.getCommonLogger(Biohazard.class);
 
 	/**
 	 * System generated unique id.
@@ -236,7 +236,8 @@ public class Biohazard extends AbstractDomainObject
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp);
+			Biohazard.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace() ;
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Biohazard.java :");
 		}

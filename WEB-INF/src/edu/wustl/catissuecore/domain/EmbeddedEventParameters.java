@@ -35,7 +35,7 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(EmbeddedEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(EmbeddedEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -107,7 +107,8 @@ public class EmbeddedEventParameters extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			EmbeddedEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "EmbeddedEventParameters.java :");
 

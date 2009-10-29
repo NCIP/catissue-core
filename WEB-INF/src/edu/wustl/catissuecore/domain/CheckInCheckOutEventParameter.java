@@ -29,8 +29,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CheckInCheckOutEventParameter.class);
+	private static Logger logger = Logger.getCommonLogger(CheckInCheckOutEventParameter.class);
 	/**
 	 * Serial Version Id of the class.
 	 */
@@ -97,7 +96,8 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CheckInCheckOutEventParameter.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 }

@@ -30,10 +30,8 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 {
 
 	/**
-	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(MolecularSpecimenReviewParameters.class);
+	private static Logger logger = Logger.getCommonLogger(MolecularSpecimenReviewParameters.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -289,7 +287,8 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			MolecularSpecimenReviewParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null,
 					"MolecularSpecimenReviewParameters.java :");

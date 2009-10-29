@@ -37,7 +37,7 @@ public class DomainObjectFactory implements IDomainObjectFactory
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DomainObjectFactory.class);
+	private static Logger logger = Logger.getCommonLogger(DomainObjectFactory.class);
 
 	/**
 	 * Returns the fully qualified name of the class according to the form bean type.

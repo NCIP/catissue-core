@@ -29,7 +29,7 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimenRequirement.class);
+	private static Logger logger = Logger.getCommonLogger(CellSpecimenRequirement.class);
 
 	/**
 	 * Serial Version Id of the class.
@@ -69,7 +69,8 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			CellSpecimenRequirement.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "CellSpecimenRequirment.java :");
 		}

@@ -30,7 +30,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(MolecularSpecimen.class);
+	private static Logger logger = Logger.getCommonLogger(MolecularSpecimen.class);
 
 	/**
 	 * Serial Version ID.
@@ -103,7 +103,7 @@ public class MolecularSpecimen extends Specimen implements Serializable
 			final SpecimenForm form = (SpecimenForm) abstractForm;
 			if (Constants.DOUBLE_QUOTES.equals(form.getConcentration()))
 			{
-				logger.debug("Concentration is " + form.getConcentration());
+				MolecularSpecimen.logger.debug("Concentration is " + form.getConcentration());
 			}
 			else
 			{
@@ -112,7 +112,8 @@ public class MolecularSpecimen extends Specimen implements Serializable
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			MolecularSpecimen.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "MolecularSpecimen.java :");
 		}

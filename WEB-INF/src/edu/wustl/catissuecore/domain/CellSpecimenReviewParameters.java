@@ -29,8 +29,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CellSpecimenReviewParameters.class);
+	private static Logger logger = Logger.getCommonLogger(CellSpecimenReviewParameters.class);
 	/**
 	 * Serial Version Id for the class.
 	 */
@@ -129,7 +128,8 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			CellSpecimenReviewParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 		}
 	}
 

@@ -28,8 +28,7 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(FluidSpecimenRequirement.class);
+	private static Logger logger = Logger.getCommonLogger(FluidSpecimenRequirement.class);
 
 	/**
 	 * Serial Version ID.
@@ -69,7 +68,8 @@ public class FluidSpecimenRequirement extends SpecimenRequirement implements Ser
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FluidSpecimenRequirement.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "FluidSpecimenRequirement.java :");
 		}

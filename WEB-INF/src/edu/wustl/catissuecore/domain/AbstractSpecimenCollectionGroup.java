@@ -32,8 +32,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(AbstractSpecimenCollectionGroup.class);
+	private static Logger logger = Logger.getCommonLogger(AbstractSpecimenCollectionGroup.class);
 
 	/**
 	 * System generated unique id.

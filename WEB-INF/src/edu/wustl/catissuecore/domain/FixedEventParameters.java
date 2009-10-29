@@ -27,10 +27,9 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FixedEventParameters.class);
-
+	private static Logger logger = Logger.getCommonLogger(FixedEventParameters.class);
 	/**
-	 * Serail Version ID.
+	 * Serial Version ID.
 	 */
 	private static final long serialVersionUID = 1234567890L;
 
@@ -126,7 +125,8 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FixedEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "EmbeddedEventParameters.java :");
 		}

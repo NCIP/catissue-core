@@ -29,7 +29,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(DisposalEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(DisposalEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -103,7 +103,8 @@ public class DisposalEventParameters extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			DisposalEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "DisposalEventParameters.java :");
 		}

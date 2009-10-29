@@ -43,8 +43,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(CollectionProtocolRegistration.class);
+	private static Logger logger = Logger.getCommonLogger(CollectionProtocolRegistration.class);
 	/**
 	 * Serial Version ID of the class.
 	 */
@@ -459,6 +458,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 		}
 		catch (final ParseException e)
 		{
+			CollectionProtocolRegistration.logger.error(e.getMessage(),e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -472,6 +472,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 		}
 		catch (final ParseException e)
 		{
+			CollectionProtocolRegistration.logger.error(e.getMessage(),e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -513,6 +514,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 		}
 		catch (final Exception e)
 		{
+			CollectionProtocolRegistration.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		final Iterator iter = beanObjColl.iterator();

@@ -48,7 +48,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CollectionProtocol.class);
+	private static Logger logger = Logger.getCommonLogger(CollectionProtocol.class);
 
 	/**
 	 * Serial Version Id of the class.
@@ -411,7 +411,8 @@ public class CollectionProtocol extends SpecimenProtocol
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error(excp.getMessage(), excp);
+			CollectionProtocol.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "CollectionProtocol.java :");
 		}

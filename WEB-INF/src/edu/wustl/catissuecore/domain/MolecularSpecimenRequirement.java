@@ -30,8 +30,7 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(MolecularSpecimenRequirement.class);
+	private static Logger logger = Logger.getCommonLogger(MolecularSpecimenRequirement.class);
 
 	/**
 	 * Serial Version ID.
@@ -86,7 +85,8 @@ public class MolecularSpecimenRequirement extends SpecimenRequirement implements
 		}
 		catch (final Exception exception)
 		{
-			logger.error(exception.getMessage());
+			MolecularSpecimenRequirement.logger.error(exception.getMessage(),exception);
+			exception.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "MolecularSpecimenRequirement.java :");
 		}

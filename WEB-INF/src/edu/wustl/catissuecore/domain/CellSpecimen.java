@@ -34,7 +34,7 @@ public class CellSpecimen extends Specimen implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(CellSpecimen.class);
+	private static Logger logger = Logger.getCommonLogger(CellSpecimen.class);
 
 	/**
 	 * Default Constructor.
@@ -69,7 +69,8 @@ public class CellSpecimen extends Specimen implements Serializable
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			CellSpecimen.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "CellSpecimen.java :");
 		}

@@ -29,7 +29,7 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(FrozenEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(FrozenEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -100,7 +100,8 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			FrozenEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "FrozenEventParameters.java :");
 		}
