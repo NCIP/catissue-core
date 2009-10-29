@@ -17,6 +17,7 @@ import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author gautam_shetty
@@ -27,6 +28,11 @@ import edu.wustl.common.factory.IFactory;
 public class SpecimenArray extends Container
 {
 
+	/**
+	 * Logger instance.
+	 */
+	private transient final Logger logger =
+		Logger.getCommonLogger(SpecimenArray.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -324,11 +330,13 @@ public class SpecimenArray extends Container
 		}
 		catch (final BizLogicException e)
 		{
+			this.logger.error(e.getMessage(),e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (final NumberFormatException e)
 		{
+			this.logger.error(e.getMessage(),e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

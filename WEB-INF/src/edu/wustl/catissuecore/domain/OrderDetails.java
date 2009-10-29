@@ -21,6 +21,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.exolab.castor.xml.schema.Order;
+
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
@@ -55,7 +57,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(OrderDetails.class);
+	private static Logger logger = Logger.getCommonLogger(OrderDetails.class);
 
 	/**
 	 * To show custom message for add and edit.
@@ -313,6 +315,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final BizLogicException exp)
 		{
+			OrderDetails.logger.error(exp.getMessage(),exp);
 			exp.printStackTrace();
 		}
 	}
@@ -358,7 +361,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e);
+			OrderDetails.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 		}
 
 		final Collection orderItemsSet = new LinkedHashSet();
@@ -869,6 +873,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final BizLogicException e)
 		{
+			OrderDetails.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 
@@ -992,7 +997,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			}
 			catch (final BizLogicException exception)
 			{
-				logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
+				OrderDetails.logger.error("Not able to retrieve" +
+						" SpecimenCollectionGroup."
+						+exception.getMessage(), exception);
+				exception.printStackTrace();
 			}
 			pathologicalCaseOrderItem.setSpecimenCollectionGroup(specimenCollectionGroup);
 			pathologicalCaseOrderItem.setSpecimenClass(requestDetailsBean.getClassName());
@@ -1111,7 +1119,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final BizLogicException exception)
 		{
-			logger.debug("Not able to retrieve SpecimenCollectionGroup.", exception);
+			OrderDetails.logger.error("Not able to retrieve" +
+					" SpecimenCollectionGroup."
+					+exception.getMessage(), exception);
+			exception.printStackTrace();
 		}
 
 		if (specOrderItem instanceof ExistingSpecimenOrderItem)
@@ -1203,7 +1214,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final BizLogicException exception)
 		{
-			logger.debug("Not able to retrieve Order item.", exception);
+			OrderDetails.logger.error("Not able to retrieve Order item."+
+					exception.getMessage(), exception);
+			exception.printStackTrace() ;
 		}
 
 		//Updating Description and Status.
@@ -1325,7 +1338,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		catch (final Exception e)
 		{
-			logger.debug(e);
+			OrderDetails.logger.error(e.getMessage(),e);
+			e.printStackTrace() ;
 		}
 		return beanObjSet;
 	}

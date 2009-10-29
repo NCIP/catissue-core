@@ -32,7 +32,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenProtocol.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenProtocol.class);
 
 	/**
 	 * Serial Version ID.
@@ -329,7 +329,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage(), excp);
+			SpecimenProtocol.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpecimenProtocol.java :");
 		}

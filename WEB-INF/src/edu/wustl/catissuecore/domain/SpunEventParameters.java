@@ -29,7 +29,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpunEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(SpunEventParameters.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -136,7 +136,8 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			SpunEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpunEventParameters.java :");
 		}

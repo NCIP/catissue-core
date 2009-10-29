@@ -52,7 +52,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(Specimen.class);
+	private static Logger logger = Logger.getCommonLogger(Specimen.class);
 
 	/**
 	 * specimenPosition.
@@ -885,7 +885,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		catch (final Exception excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			Specimen.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Specimen.java :");
 
@@ -971,7 +972,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getStackTrace());
+			Specimen.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		final Iterator iter = beanObjColl.iterator();

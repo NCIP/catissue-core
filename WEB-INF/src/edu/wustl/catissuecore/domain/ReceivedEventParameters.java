@@ -29,7 +29,7 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(ReceivedEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(ReceivedEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -101,7 +101,8 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			ReceivedEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "ReceivedEventParameters.java :");
 		}

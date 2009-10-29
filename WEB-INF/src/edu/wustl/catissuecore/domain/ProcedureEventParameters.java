@@ -30,8 +30,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ProcedureEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(ProcedureEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -128,7 +127,8 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			ProcedureEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "ProcedureEventParameters.java :");
 		}

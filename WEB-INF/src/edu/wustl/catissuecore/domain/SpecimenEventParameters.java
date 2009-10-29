@@ -39,7 +39,7 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenEventParameters.class);
 
 	/**
 	 * Serial Version ID.
@@ -255,7 +255,8 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 		}
 		catch (final ParseException excp)
 		{
-			Logger.out.error(excp.getMessage(), excp);
+			SpecimenEventParameters.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpecimenEventParameters.java :");
 		}

@@ -29,8 +29,7 @@ public class TissueSpecimenRequirement extends SpecimenRequirement implements Se
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(TissueSpecimenRequirement.class);
+	private static Logger logger = Logger.getCommonLogger(TissueSpecimenRequirement.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -69,7 +68,8 @@ public class TissueSpecimenRequirement extends SpecimenRequirement implements Se
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TissueSpecimenRequirement.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "TissueSpecimenRequirment.java :");
 		}

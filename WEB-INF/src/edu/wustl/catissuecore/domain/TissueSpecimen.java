@@ -29,7 +29,7 @@ public class TissueSpecimen extends Specimen implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(TissueSpecimen.class);
+	private static Logger logger = Logger.getCommonLogger(TissueSpecimen.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -68,7 +68,8 @@ public class TissueSpecimen extends Specimen implements Serializable
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TissueSpecimen.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "TissueSpecimen.java :");
 		}

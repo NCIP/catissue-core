@@ -36,7 +36,7 @@ public class StorageContainer extends Container implements IActivityStatus
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(StorageContainer.class);
+	private static Logger logger = Logger.getCommonLogger(StorageContainer.class);
 	/**
 	 * Serial Version ID.
 	 */

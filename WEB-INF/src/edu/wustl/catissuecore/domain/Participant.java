@@ -54,7 +54,7 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(Participant.class);
+	private static Logger logger = Logger.getCommonLogger(Participant.class);
 
 	/**
 	 * Serial Version ID.
@@ -705,7 +705,8 @@ public class Participant extends AbstractDomainObject
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			logger.error(excp.getMessage(), excp);
+			Participant.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Participant.java :");
 		}

@@ -30,7 +30,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(TransferEventParameters.class);
+	private static Logger logger = Logger.getCommonLogger(TransferEventParameters.class);
 	/**
 	 * Serial Version ID of the class.
 	 */
@@ -271,7 +271,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			TransferEventParameters.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "TransferEventParameters.java :");
 		}

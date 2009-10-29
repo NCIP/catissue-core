@@ -33,7 +33,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(Site.class);
+	private static Logger logger = Logger.getCommonLogger(Site.class);
 
 	/**
 	 * Serial Version ID.
@@ -325,7 +325,8 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 		}
 		catch (final Exception excp)
 		{
-			logger.error(excp.getMessage());
+			Site.logger.error(excp.getMessage(),excp);
+			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Site.java :");
 		}

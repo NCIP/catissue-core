@@ -45,7 +45,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger.getLogger(SpecimenCollectionGroup.class);
+	private static Logger logger = Logger.getCommonLogger(SpecimenCollectionGroup.class);
 
 	/**
 	 * Serial Version ID.
@@ -572,7 +572,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		catch (final Exception e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			SpecimenCollectionGroup.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpecimenCollectionGroup.java :");
 		}
@@ -698,7 +699,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		catch (final Exception e)
 		{
-			logger.error(e.getMessage());
+			SpecimenCollectionGroup.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 		final Iterator iter = beanObjColl.iterator();
