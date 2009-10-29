@@ -1,5 +1,7 @@
 import java.io.File;
 
+import edu.wustl.common.util.logger.Logger;
+
 import titli.controller.Name;
 import titli.controller.interfaces.TitliInterface;
 import titli.model.Titli;
@@ -8,7 +10,10 @@ import titli.model.util.IndexUtility;
 
 public class TitliIndexer 
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private static final Logger logger = Logger.getCommonLogger(TitliIndexer.class);
 	/**
 	 * @param args
 	 */
@@ -35,6 +40,7 @@ public class TitliIndexer
 		}
 		catch (TitliException e)
 		{
+			TitliIndexer.logger.error(e.getMessage(),e) ;
 			System.out.println("Exception occured while initialising TiTLi Search");
 			e.printStackTrace();
 		}

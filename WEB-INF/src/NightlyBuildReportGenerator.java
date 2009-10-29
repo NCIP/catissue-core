@@ -27,6 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * This class used to generate nightly build report
  * 
@@ -34,7 +36,7 @@ import org.xml.sax.SAXException;
  */
 public class NightlyBuildReportGenerator
 {
-
+	private static final Logger logger = Logger.getCommonLogger(NightlyBuildReportGenerator.class);
 	private static Document document = null;
 	public static String TOTAL_NO_OF_FAILURES ="0";
 	public static String TOTAL_NO_OF_TESTS ="0";
@@ -118,14 +120,20 @@ public class NightlyBuildReportGenerator
 		}
 		catch (SAXException e)
 		{
+			NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		catch (IOException e)
 		{
+			NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			FileExist=false;
 		}
 		catch (ParserConfigurationException e)
 		{
+			NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 	}

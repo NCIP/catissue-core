@@ -98,9 +98,10 @@ public class JniDeID
 			System.load(dllPath);
 			logger.info("Loading dll file at " + dllPath);
 		}
-		catch (final Exception x)
+		catch (final Exception excep)
 		{
-			logger.error("Error in method loadUsingAbsolutePath of JniDeID");
+			logger.error("Error in method loadUsingAbsolutePath of JniDeID",excep);
+			excep.printStackTrace();
 		}
 	}
 
@@ -126,9 +127,10 @@ public class JniDeID
 					"D:\\testcodes\\caTIES_v2\\classes\\com\\deid");
 			new BufferedReader(new FileReader(f2));
 		}
-		catch (final Exception x)
+		catch (final Exception excep)
 		{
-			logger.error("Error in main method of JniDeID");
+			logger.error("Error in main method of JniDeID",excep);
+			excep.printStackTrace() ;
 		}
 
 	}
