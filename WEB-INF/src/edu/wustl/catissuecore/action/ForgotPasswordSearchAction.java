@@ -95,6 +95,7 @@ public class ForgotPasswordSearchAction extends Action
 		{
 			target = new String(Constants.FAILURE);
 			this.logger.error(excp.getMessage());
+			excp.printStackTrace() ;
 		}
 
 		return (mapping.findForward(target));

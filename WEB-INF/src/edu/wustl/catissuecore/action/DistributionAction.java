@@ -407,7 +407,7 @@ public class DistributionAction extends SecureAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;// (

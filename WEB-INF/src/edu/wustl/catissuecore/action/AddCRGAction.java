@@ -67,10 +67,11 @@ public class AddCRGAction extends CommonAddEditAction
 				crgId = bizlogic.getLatestCRG(crgName);
 				responseString = crgId + Constants.RESPONSE_SEPARATOR + crgName;
 			}
-			catch (final BizLogicException e)
+			catch (final BizLogicException bizExcep)
 			{
-				this.logger.error("Exception occurred in retrieving Cancer Research Group");
-				e.printStackTrace();
+				this.logger.error("Exception occurred in retrieving" +
+						" Cancer Research Group"+bizExcep.getMessage(),bizExcep);
+				bizExcep.printStackTrace();
 			}
 		}
 

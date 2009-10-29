@@ -68,10 +68,10 @@ public class AddInstitutionAction extends CommonAddEditAction
 				institutionId = bizlogic.getLatestInstitution(institutionName);
 				responseString = institutionId + Constants.RESPONSE_SEPARATOR + institutionName;
 			}
-			catch (final BizLogicException e)
+			catch (final BizLogicException bizEx)
 			{
-				this.logger.error("Exception occurred in retrieving Institution");
-				e.printStackTrace();
+				this.logger.error("Exception occurred in retrieving Institution",bizEx);
+				bizEx.printStackTrace();
 			}
 		}
 		final PrintWriter out = response.getWriter();

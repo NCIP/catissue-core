@@ -40,8 +40,8 @@ public class ConsentResponseSubmitAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private static org.apache.log4j.Logger logger = Logger
-			.getLogger(ConsentResponseSubmitAction.class);
+	private static Logger logger =
+		Logger.getCommonLogger(ConsentResponseSubmitAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.

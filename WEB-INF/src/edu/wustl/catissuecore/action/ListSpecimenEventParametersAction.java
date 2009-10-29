@@ -283,6 +283,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		request.setAttribute(Constants.MENU_SELECTED, new String("15"));
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
@@ -318,6 +319,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 		request.setAttribute("specimenEntityId", specimenEntityId);
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));

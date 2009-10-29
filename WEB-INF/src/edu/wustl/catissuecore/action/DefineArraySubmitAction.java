@@ -84,6 +84,7 @@ public class DefineArraySubmitAction extends BaseAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 		}
 
 		// added for checking if array of same name exists

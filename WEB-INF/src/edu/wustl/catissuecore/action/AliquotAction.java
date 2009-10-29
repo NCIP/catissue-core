@@ -60,6 +60,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -73,7 +74,11 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class AliquotAction extends SecureAction
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private final transient Logger logger =
+		 				Logger.getCommonLogger(AliquotAction.class);
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * 
@@ -180,6 +185,7 @@ public class AliquotAction extends SecureAction
 		}
 		catch (final DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -714,6 +720,7 @@ public class AliquotAction extends SecureAction
 		}
 		catch (final DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -1269,6 +1276,7 @@ public class AliquotAction extends SecureAction
 			}
 			catch (final NumberFormatException exp)
 			{
+				this.logger.error(exp.getMessage(),exp);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("specimen.quantity")));
 				this.saveErrors(request, errors);

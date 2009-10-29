@@ -115,8 +115,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			}
 			catch (final ClassCastException exp)
 			{
-				this.logger.debug("Class cast Exception in"
+				this.logger.error("Class cast Exception in"
 						+ " CollectionProtocolRegistrationAction :" + exp);
+				exp.printStackTrace() ;
 			}
 		}
 		selectedCollectionProtocolId = String.valueOf(collectionProtocolRegistrationForm
@@ -240,8 +241,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 				catch (final ClassCastException exp)
 				{
-					this.logger.debug("Class cast Exception in"
+					this.logger.error("Class cast Exception in"
 							+ " CollectionProtocolRegistrationAction ~>" + exp);
+					exp.printStackTrace() ;
 				}
 			}
 		}
@@ -376,7 +378,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 				catch (final NumberFormatException e)
 				{
-					this.logger.debug("NumberFormatException Occured :" + e);
+					this.logger.error("NumberFormatException Occured :" + e);
+					e.printStackTrace() ;
 				}
 			}
 
@@ -399,7 +402,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				}
 				catch (final NumberFormatException e)
 				{
-					this.logger.debug("NumberFormatException Occured :" + e);
+					this.logger.error("NumberFormatException Occured :" + e);
+					e.printStackTrace();
 				}
 			}
 		}

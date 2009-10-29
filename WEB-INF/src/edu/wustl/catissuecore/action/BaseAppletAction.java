@@ -89,9 +89,11 @@ public abstract class BaseAppletAction extends SecureAction
 			final Map inputMap = this.readMapFromRequest(request);
 			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
 		}
-		catch (final Exception e)
+		catch (final Exception excep)
 		{
 			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+			this.logger.error(excep.getMessage(),excep);
+			excep.printStackTrace() ;
 		}
 	}
 
@@ -193,14 +195,17 @@ public abstract class BaseAppletAction extends SecureAction
 		catch (final NoSuchMethodException excp1)
 		{
 			this.logger.error(excp1.getMessage(), excp1);
+			excp1.printStackTrace();
 		}
 		catch (final NullPointerException excp2)
 		{
 			this.logger.error(excp2.getMessage(), excp2);
+			excp2.printStackTrace() ;
 		}
 		catch (final SecurityException excp3)
 		{
 			this.logger.error(excp3.getMessage(), excp3);
+			excp3.printStackTrace() ;
 		}
 		return null;
 	}

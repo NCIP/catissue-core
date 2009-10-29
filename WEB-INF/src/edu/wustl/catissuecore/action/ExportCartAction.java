@@ -86,7 +86,7 @@ public class ExportCartAction extends QueryShoppingCartAction
 		}
 		catch (final IOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			final ActionErrors errors = new ActionErrors();
 			final ActionError error = new ActionError("shoppingcart.exportfilexception");
 			errors.add(ActionErrors.GLOBAL_ERROR, error);

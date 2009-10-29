@@ -52,6 +52,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -65,7 +66,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class CreateSpecimenAction extends SecureAction
 {
-
+	private Logger logger = Logger.getCommonLogger(CreateSpecimenAction.class);
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -379,6 +380,7 @@ public class CreateSpecimenAction extends SecureAction
 		}
 		catch (final DAOException daoException)
 		{
+			this.logger.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -495,10 +497,11 @@ public class CreateSpecimenAction extends SecureAction
 				cpId = (Long) cpList.get(0);
 			}
 		}
-		catch (final DAOException e)
+		catch (final DAOException excep)
 		{
-			e.printStackTrace();
-			throw new BizLogicException(e);
+			this.logger.error(excep.getMessage(),excep);
+			excep.printStackTrace();
+			throw new BizLogicException(excep);
 		}
 		return cpId;
 	}

@@ -49,6 +49,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
@@ -57,7 +58,10 @@ import edu.wustl.dao.exception.DAOException;
  */
 public class CreateArrayInitAction extends BaseAction
 {
-
+	/**
+	 * Logger object.
+	 */
+	private Logger logger = Logger.getCommonLogger(CreateArrayInitAction.class);
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -282,10 +286,11 @@ public class CreateArrayInitAction extends BaseAction
 				specimensObjList.add(object);
 			}
 		}
-		catch (final DAOException e)
+		catch (final DAOException excep)
 		{
-			e.printStackTrace();
-			throw new BizLogicException(e);
+			this.logger.error(excep.getMessage(),excep);
+			excep.printStackTrace();
+			throw new BizLogicException(excep);
 		}
 		return specimensObjList;
 	}
@@ -386,10 +391,11 @@ public class CreateArrayInitAction extends BaseAction
 			// Set specimenType in the form
 			specimenArrayForm.setSpecimenTypes(specimenTypeArr);
 		}
-		catch (final DAOException e)
+		catch (final DAOException excep)
 		{
-			e.printStackTrace();
-			throw new BizLogicException(e);
+			this.logger.error(excep.getMessage(),excep);
+			excep.printStackTrace();
+			throw new BizLogicException(excep);
 		}
 		return specimenTypeList;
 	}

@@ -319,7 +319,7 @@ public class DirectDistributeInitAction extends BaseAction
 		}
 		catch (final SMException smExp)
 		{
-			this.logger.debug(smExp.getMessage(), smExp);
+			this.logger.error(smExp.getMessage(), smExp);
 			throw AppUtility.getApplicationException(smExp, "sm.operation.error",
 					"Error in checking has privilege");
 		}

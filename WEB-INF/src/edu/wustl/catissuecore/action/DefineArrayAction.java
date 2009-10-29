@@ -88,6 +88,7 @@ public class DefineArrayAction extends BaseAction
 			catch (final Exception e)
 			{
 				this.logger.error(e.getMessage(), e);
+				e.printStackTrace() ;
 				return null;
 			}
 

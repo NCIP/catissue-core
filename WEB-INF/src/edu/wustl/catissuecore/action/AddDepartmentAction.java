@@ -70,10 +70,10 @@ public class AddDepartmentAction extends CommonAddEditAction
 				departmentId = bizlogic.getLatestDepartment(departmentName);
 				responseString = departmentId + Constants.RESPONSE_SEPARATOR + departmentName;
 			}
-			catch (final BizLogicException e)
+			catch (final BizLogicException bizEx)
 			{
-				this.logger.error("Exception occurred in retrieving Department");
-				e.printStackTrace();
+				this.logger.error("Exception occurred in retrieving Department",bizEx);
+				bizEx.printStackTrace();
 			}
 		}
 

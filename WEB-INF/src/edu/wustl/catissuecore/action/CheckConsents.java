@@ -124,7 +124,8 @@ public class CheckConsents extends BaseAction
 				}
 				catch (final BizLogicException dao)
 				{
-					this.logger.info(dao.getMessage(), dao);
+					this.logger.error(dao.getMessage(), dao);
+					dao.printStackTrace() ;
 					final ActionErrors errors = new ActionErrors();
 					final ActionError error = new ActionError(dao.getMessage());
 					errors.add(ActionErrors.GLOBAL_ERROR, error);

@@ -81,7 +81,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return super.execute(mapping, abstractForm, request, response);

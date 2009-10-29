@@ -66,7 +66,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			final ActionErrors errors = new ActionErrors();
 			final ActionError error = new ActionError(e.getMessage());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);

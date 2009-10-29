@@ -98,7 +98,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.info(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getMessage()));
@@ -211,7 +211,8 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.info(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getMessage()));
@@ -221,7 +222,8 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final DAOException e)
 		{
-			this.logger.info(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getMessage()));
@@ -231,6 +233,8 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final UserNotAuthorizedException e)
 		{
+			this.logger.error(e.getMessage(),e);
+			e.printStackTrace() ;
 			String userName = "";
 			if (sessionDataBean != null)
 			{
@@ -474,7 +478,7 @@ public class CreateAliquotAction extends BaseAction
 			}
 			catch (final ParseException e)
 			{
-				this.logger.debug("Invalid Date Parser Exception: " + e.getMessage(), e);
+				this.logger.error("Invalid Date Parser Exception: " + e.getMessage(), e);
 				// System.out.println("Invalid Date Parser Exception ");
 				e.printStackTrace();
 			}
