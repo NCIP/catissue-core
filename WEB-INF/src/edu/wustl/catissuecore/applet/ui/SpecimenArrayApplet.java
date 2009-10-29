@@ -242,12 +242,12 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final IOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return tableDataMap;
@@ -274,12 +274,12 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final IOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 	}
@@ -309,7 +309,7 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final Exception exception)
 		{
-			this.logger.debug(exception.getMessage(), exception);
+			this.logger.error(exception.getMessage(), exception);
 			System.out.println(" Exception occurred in setLastCellData() method"
 					+ exception.getMessage());
 		}

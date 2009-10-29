@@ -62,7 +62,8 @@ public class StopServer extends Thread
 		}
 		catch (final Exception e)
 		{
-			this.logger.error("Error stopping server ", e);
+			this.logger.error("Error stopping server "+e.getMessage(), e);
+			e.printStackTrace();
 		}
 	}
 }

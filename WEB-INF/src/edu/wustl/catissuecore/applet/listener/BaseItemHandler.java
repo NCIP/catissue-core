@@ -135,8 +135,9 @@ public class BaseItemHandler implements ItemListener
 		}
 		catch (final Exception excp)
 		{
-			this.logger.debug(excp.getMessage(), excp);
-			System.out.println("Error: " + excp.getMessage());
+			this.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace(); 
+			//System.out.println("Error: " + excp.getMessage());
 		}
 		try
 		{
@@ -144,8 +145,9 @@ public class BaseItemHandler implements ItemListener
 		}
 		catch (final Exception excp)
 		{
-			this.logger.debug(excp.getMessage(), excp);
-			System.out.println("Error in table update: " + excp.getMessage());
+			this.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace();
+			//System.out.println("Error in table update: " + excp.getMessage());
 		}
 
 	}

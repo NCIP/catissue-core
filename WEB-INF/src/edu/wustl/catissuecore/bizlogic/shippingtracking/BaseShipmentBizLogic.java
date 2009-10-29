@@ -61,7 +61,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * common logger for BaseShipmentBizLogic class.
 	 */
-	Logger logger = Logger.getCommonLogger(BaseShipmentBizLogic.class);
+	private static Logger logger = 
+		Logger.getCommonLogger(BaseShipmentBizLogic.class);
 
 	/**
 	 * Saves the baseShipment object in the database.
@@ -134,13 +135,13 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoException)
 		{
-			this.logger.debug(daoException.getMessage(), daoException);
+			BaseShipmentBizLogic.logger.error(daoException.getMessage(), daoException);
 			throw new BizLogicException(daoException.getErrorKey(), daoException, daoException
 					.getMsgValues()); //DAOException(bizLogicException.getMessage());
 		}
 		catch (final AuditException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			BaseShipmentBizLogic.logger.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -316,7 +317,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					}
 					catch (final Exception e1)
 					{
-						this.logger.debug(e1.getMessage(), e1);
+						BaseShipmentBizLogic.logger.error(e1.getMessage(), e1);
 						e1.printStackTrace();
 					}
 					if (disabledCont == null)
@@ -343,7 +344,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					}
 					catch (final CacheException e)
 					{
-						this.logger.debug(e.getMessage(), e);
+						BaseShipmentBizLogic.logger.error(e.getMessage(), e);
 						e.printStackTrace();
 					}
 				}
@@ -643,7 +644,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final ApplicationException exception)
 				{
-					this.logger.debug(exception.getMessage(), exception);
+					BaseShipmentBizLogic.logger.error(exception.getMessage(), exception);
 					throw this.getBizLogicException(exception, exception.getErrorKeyName(),
 							exception.getMsgValues());
 					//throw new BizLogicException(exception.getErrorKey(),exception,exception.getMsgValues()); 
@@ -787,7 +788,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			BaseShipmentBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 
 		}
@@ -1031,7 +1033,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			BaseShipmentBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,errorMsg.toString());
 		}
@@ -1240,12 +1243,13 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			final boolean mailStatus = this.sendNotification(shipment, sessionDataBean);
 			if (!mailStatus)
 			{
-				this.logger.debug("failed to send email...");
+				logger.debug("failed to send email...");
 			}
 		}
 		catch (final DAOException daoException)
 		{
-			this.logger.debug(daoException.getMessage(), daoException);
+			BaseShipmentBizLogic.logger.error(daoException.getMessage(), daoException);
+			daoException.printStackTrace();
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
 			throw this.getBizLogicException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
@@ -1302,7 +1306,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException appException)
 		{
-			this.logger.debug(appException.getMessage(), appException);
+			BaseShipmentBizLogic.logger.error(appException.getMessage(), appException);
 			appException.printStackTrace();
 		}
 		finally
@@ -1313,6 +1317,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final ApplicationException e)
 			{
+				BaseShipmentBizLogic.logger.error(e.getMessage(), e) ;
 				e.printStackTrace();
 			}
 		}
@@ -1359,6 +1364,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException excp)
 		{
+			BaseShipmentBizLogic.logger.error(excp.getMessage(),excp);
 			recordCount = 0;
 			excp.printStackTrace();
 		}
@@ -1370,6 +1376,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final ApplicationException e)
 			{
+				BaseShipmentBizLogic.logger.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
 		}

@@ -83,7 +83,8 @@ public class DeIDPipelineManager
 		catch (final Exception ex)
 		{
 			this.logger.error("Initialization of deidentification process"
-					+ " failed or error in main thread", ex);
+					+ " failed or error in main thread"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 	}
@@ -114,10 +115,11 @@ public class DeIDPipelineManager
 		}
 		catch (final ClassCastException ex)
 		{
-			this.logger
-					.error("Class not found:"
-							+ CaTIESProperties.getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME
-									+ "\n" + ex));
+			this.logger.error("Class not found:"
+					+ CaTIESProperties.
+					getValue(CaTIESConstants.DEIDENTIFIER_CLASSNAME
+					+ "\n" + ex.getMessage()),ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 		this.deidentifier.initialize();
@@ -150,9 +152,10 @@ public class DeIDPipelineManager
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error("Unexpected Exception in deid Pipeline ", ex);
-				this.logger.info("Deidentification process finished at " + new Date().toString()
+				this.logger.error("Unexpected Exception in deid Pipeline "+ex.getMessage(), ex);
+				this.logger.error("Deidentification process finished at " + new Date().toString()
 						+ ". Thread is going to sleep.");
+				ex.printStackTrace();
 				Thread.sleep(Integer.parseInt(CaTIESProperties
 						.getValue(CaTIESConstants.DEID_SLEEPTIME)));
 			}
@@ -215,7 +218,8 @@ public class DeIDPipelineManager
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error("Deidentification pipeline is failed:", ex);
+				this.logger.error("Deidentification pipeline is failed:"+ex.getMessage(), ex);
+				ex.printStackTrace();
 				// shut down the thread pool manager
 				deidExecutor.shutdown();
 				throw ex;

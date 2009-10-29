@@ -93,7 +93,9 @@ public class DeidUtils
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error in buildReportElement method for DeID", ex);
+			DeidUtils.logger.error("Error in buildReportElement method for DeID"+ex.getMessage(), ex);
+			ex.printStackTrace();
+			
 		}
 		return reportElement;
 	}
@@ -190,7 +192,7 @@ public class DeidUtils
 				// check for illegal character
 				if (sb.charAt(idx) == illegalChar)
 				{
-					logger.error("Found bad character.");
+					DeidUtils.logger.error("Found bad character.");
 					sb.setCharAt(idx, ' ');
 				}
 			}
@@ -198,7 +200,8 @@ public class DeidUtils
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error in removeIllegalXmlCharacters method", ex);
+			DeidUtils.logger.error("Error in removeIllegalXmlCharacters method"+ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 
 		return result;

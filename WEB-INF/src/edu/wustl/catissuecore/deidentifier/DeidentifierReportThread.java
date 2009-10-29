@@ -70,7 +70,8 @@ public class DeidentifierReportThread extends Thread
 		}
 		catch (final Throwable ex)
 		{
-			this.logger.error("Deidentification process is failed:", ex);
+			this.logger.error("Deidentification process is failed:"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			try
 			{
 				// if any exception occures then update the status of the
@@ -84,7 +85,9 @@ public class DeidentifierReportThread extends Thread
 			}
 			catch (final Exception e)
 			{
-				this.logger.error("DeidReportThread: Updating Identified report status failed", e);
+				this.logger.error("DeidReportThread:Updating Identified" +
+						" report status failed"+e.getMessage(), e);
+				e.printStackTrace();
 			}
 			this.logger.error("Upexpected error in DeidReportThread thread", ex);
 			return;

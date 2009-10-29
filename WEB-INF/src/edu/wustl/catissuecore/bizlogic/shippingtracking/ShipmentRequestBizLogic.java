@@ -222,7 +222,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		catch (final DAOException ex)
 		{
-			logger.debug(ex.getMessage(), ex);
+			ShipmentRequestBizLogic.logger.error(ex.getMessage(), ex);
+			ex.printStackTrace();
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,errorMsg.toString());
 			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
@@ -375,7 +376,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		catch (final DAOException daoException)
 		{
-			logger.debug(daoException.getMessage(), daoException);
+			ShipmentRequestBizLogic.logger.error(daoException.getMessage(), daoException);
 			//			throw new DAOException(bizLogicException.getMessage());
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
 			throw this.getBizLogicException(daoException, daoException.getErrorKeyName(),
@@ -383,7 +384,8 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		catch (final AuditException e)
 		{
-			logger.debug(e.getMessage(), e);
+			ShipmentRequestBizLogic.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -827,7 +829,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		catch (final DAOException daoException)
 		{
-			logger.debug(daoException.getMessage(), daoException);
+			ShipmentRequestBizLogic.logger.error(daoException.getMessage(), daoException);
 			//throw new DAOException(bizLogicException.getMessage());
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
 			throw this.getBizLogicException(daoException, daoException.getErrorKeyName(),
@@ -889,7 +891,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			logger.debug(daoExp.getMessage(), daoExp);
+			ShipmentRequestBizLogic.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
 		finally

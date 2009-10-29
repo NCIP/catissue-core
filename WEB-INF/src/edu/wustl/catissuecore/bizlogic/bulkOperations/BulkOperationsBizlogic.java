@@ -58,7 +58,8 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 		}
 		catch (final ParseException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			throw this.getBizLogicException(exp, "db.date.parse.error", "");
 		}
 

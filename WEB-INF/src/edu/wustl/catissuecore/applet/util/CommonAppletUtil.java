@@ -91,7 +91,8 @@ public final class CommonAppletUtil
 		}
 		catch (final NumberFormatException exp)
 		{
-			logger.debug(exp.getMessage(), exp);
+			CommonAppletUtil.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
 			return false;
 		}
 	}

@@ -87,8 +87,10 @@ public class ConceptCodeManager
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Initialization of concept coding process failed or error in main thread",
-					ex);
+			ConceptCodeManager.logger.error("Initialization of concept coding" +
+					"process failed or error in main thread" +
+					ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 	}
 
@@ -166,7 +168,8 @@ public class ConceptCodeManager
 		}
 		catch (final Exception x)
 		{
-			logger.fatal(x.getMessage());
+			ConceptCodeManager.logger.error(x.getMessage(),x);
+			x.printStackTrace();
 		}
 	}
 
@@ -182,7 +185,8 @@ public class ConceptCodeManager
 		}
 		catch (final Exception x)
 		{
-			logger.fatal(x.getMessage());
+			ConceptCodeManager.logger.error(x.getMessage(),x);
+			x.printStackTrace();
 		}
 	}
 
@@ -196,14 +200,15 @@ public class ConceptCodeManager
 		{
 			try
 			{
-				logger.info("Concept Coding process started at " + new Date().toString());
+				ConceptCodeManager.logger.info("Concept Coding process started at " + new Date().toString());
 				final List deidReportIDList = this.getReportIDList();
 				this.processReports(deidReportIDList);
 			}
 			catch (final Exception ex)
 			{
-				logger.error("Unexpected Exception in Concept Code Pipeline ", ex);
-				logger.info("Concept Coding process finished at " + new Date().toString()
+				
+				ConceptCodeManager.logger.error("Unexpected Exception in Concept Code Pipeline"+ex.getMessage(), ex);
+				ConceptCodeManager.logger.info("Concept Coding process finished at " + new Date().toString()
 						+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties
 						.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
@@ -248,12 +253,13 @@ public class ConceptCodeManager
 			}
 			catch (final Exception ex)
 			{
-				logger.error("Concept Coding pipeline failed:", ex);
+				ConceptCodeManager.logger.error("Concept Coding pipeline failed:"+ex.getMessage(), ex);
+				ex.printStackTrace();
 			}
 		}
 		else
 		{
-			logger.info("Concept Coding process finished at " + new Date().toString()
+			ConceptCodeManager.logger.info("Concept Coding process finished at " + new Date().toString()
 					+ ". Thread is going to sleep.");
 			Thread.sleep(Integer.parseInt(CaTIESProperties
 					.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
@@ -291,7 +297,8 @@ public class ConceptCodeManager
 		}
 		catch (final Exception ex)
 		{
-			Logger.out.error("Concept code manager failed");
+			ConceptCodeManager.logger.error("Concept code manager failed"+ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 	}
 }

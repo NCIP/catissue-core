@@ -264,13 +264,18 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		catch (final IOException ex)
 		{
 			this.logger.error("File system error occured while creating"
-					+ " or deleting temporary files for deidentification", ex);
+					+ " or deleting temporary files " +
+					"for deidentification"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 		catch (final Exception ex)
 		{
 			this.logger.error(
-					"Severe error occured in the native method call for deidentification", ex);
+					"Severe error occured in the " +
+					"native method call for" +
+					" deidentification"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 		return output;

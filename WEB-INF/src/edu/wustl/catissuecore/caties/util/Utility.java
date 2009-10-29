@@ -43,6 +43,10 @@ import edu.wustl.common.util.logger.LoggerConfig;
  */
 public class Utility
 {
+	/**
+	 * Logger instance.
+	 */
+	private final static transient Logger logger = Logger.getCommonLogger(Utility.class);
 
 	/**
 	 * Generic Initialization process for caTIES servers.
@@ -68,7 +72,7 @@ public class Utility
 	public static Map initializeReportSectionHeaderMap(String configFileName) throws Exception
 	{
 		final HashMap<String, String> abbrToHeader = new LinkedHashMap<String, String>();
-		Logger.out.info("Initializing section header map");
+		logger.info("Initializing section header map");
 		// Function call to set up section header configuration from SectionHeaderConfig.txt file
 		try
 		{
@@ -92,11 +96,12 @@ public class Utility
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);
 			}
-			Logger.out.info("Section Headers set successfully to the map");
+			logger.info("Section Headers set successfully to the map");
 		}
 		catch (final IOException ex)
 		{
-			Logger.out.error("Error in setting Section header Priorities", ex);
+			Utility.logger.error("Error in setting Section header Priorities"+ex.getMessage(), ex);
+			ex.printStackTrace();			
 			throw new Exception(ex.getMessage());
 		}
 		return abbrToHeader;
@@ -193,17 +198,21 @@ public class Utility
 			}
 			else
 			{
-				Logger.out.info("NO DeID response");
+				Utility.logger.info("NO DeID response");
 			}
 		}
 		catch (final JDOMException ex)
 		{
-			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
+			Utility.logger.error("Failed parsing response \n"
+					+ deIDResponse + "\n\n\n"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 		catch (final Exception ex)
 		{
-			Logger.out.error("Failed parsing response \n" + deIDResponse + "\n\n\n", ex);
+			Utility.logger.error("Failed parsing response \n" 
+					+ deIDResponse + "\n\n\n"+ex.getMessage(), ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 		return deidSprText;

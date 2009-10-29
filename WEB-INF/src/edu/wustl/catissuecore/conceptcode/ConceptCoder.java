@@ -86,7 +86,7 @@ public class ConceptCoder
 		{
 			final Long endTime = new Date().getTime();
 			this.logger.error("Concept coding process failed for report id:"
-					+ this.deidPathologyReport.getId() + " " + ex.getMessage());
+					+ this.deidPathologyReport.getId() + " " + ex.getMessage(),ex);
 			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
 			this.deidPathologyReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
 					.updateObject(this.deidPathologyReport);
@@ -110,12 +110,59 @@ public class ConceptCoder
 	/**
 	 * @throws Exception - Exception
 	 */
-	private void processPathologyReport() throws Exception
-	{
-		this.tiesResponse = this.executeTiesPipeDirect();
-		this.disassembleTiesResponse();
-		this.extractCodesFromChirps();
-	}
+    private void processPathologyReport() throws Exception
+    {
+          this.currentReportText=removeIllegalXmlCharacters();
+          this.tiesResponse = executeTiesPipeDirect();
+          disassembleTiesResponse();
+          extractCodesFromChirps();     
+    }
+    /**
+     * 
+     * @return String values.
+     */
+    public String removeIllegalXmlCharacters() 
+    {
+    	   String sprText="\n\n"+this.currentReportText;
+    	   //this.logger.info("ReportText:"+sprText) ;
+    	   //System.out.println("ReportText:"+sprText) ;
+          // illegal XML character
+    	  String result = sprText;
+    	  this.logger.info("Before Removing illegal Char:"+result+"\n\n");
+          char[] illegalChar={0x1d,0xc,'\\',':'};
+          try 
+          {
+                StringBuffer sb = new StringBuffer(sprText);
+                // loop to check each character
+                for (int idx = 0; idx < sb.length(); idx++) 
+                {
+                      for(int i=0;i<illegalChar.length;i++)
+                      {
+                            // check for illegal character
+                            if (sb.charAt(idx) == illegalChar[i]) 
+                            {
+//                                Logger.out.error("Found bad character.");
+                                  sb.setCharAt(idx, ' ');
+                            }
+                      }
+                }
+                result = sb.toString();
+//                result.replaceAll("__", "  ");
+                result=result.replaceAll("     ", "    .");
+//                result.replaceAll("\\(\\+\\)", "(.)");
+                result.replaceAll("\\.br+\\)", ".   ");
+//              result.replaceAll("\\", " ");
+//              System.out.println(result);
+                this.logger.info("After Removing illegal Char:"+result);
+//               System.out.println("After Removing illegal Char:"+result);
+          }
+          catch (Exception ex) 
+          {
+        	  this.logger.error("Error in removeIllegalXmlCharacters method"+ex.getMessage(),ex);
+        	  ex.printStackTrace();
+          }
+          return result+"\n\n";
+    }
 
 	/**
 	 * Method executeTiesPipeDirect.
@@ -167,7 +214,9 @@ public class ConceptCoder
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error("Error occured while updating deidentified pathology report");
+			this.logger.error("Error occured while updating deidentified" +
+					" pathology report"+ex.getMessage(),ex);
+			ex.printStackTrace();
 			throw ex;
 		}
 	}
@@ -217,15 +266,17 @@ public class ConceptCoder
 		catch (final JDOMParseException ex)
 		{
 			this.logger.error("Error in disassembleTiesResponse()");
-			this.logger.error("Error in parsing TIES response. Not in XML format" + ex);
+			this.logger.error("Error in parsing TIES response. Not in XML format" + ex.getMessage(),ex);
+			ex.printStackTrace();
 			throw new Exception("Error in parsing TIES response. Not in XML format");
 		}
 		catch (final Exception ex)
 		{
 			this.logger.error("Error in disassembleTiesResponse()");
-			this.logger.error("Failed to parse the pay load XML." + ex);
+			this.logger.error("Failed to parse the pay load XML." + ex.getMessage(),ex);
 			this.gateXML = "";
 			this.chirpsXML = "";
+			ex.printStackTrace();
 			throw new Exception("Failed to parse the pay load XML");
 		}
 	}
@@ -327,7 +378,7 @@ public class ConceptCoder
 		catch (final Exception ex)
 		{
 			ex.printStackTrace();
-			this.logger.error("Exception in deserialize" + ex);
+			this.logger.error("Exception in deserialize" + ex.getMessage(),ex);
 			throw ex;
 		}
 		return conceptReferentSet;

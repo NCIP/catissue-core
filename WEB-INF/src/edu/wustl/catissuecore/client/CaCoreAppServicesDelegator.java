@@ -147,7 +147,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.logger.error("Delegate Add-->" + e.getMessage());
+			this.logger.error("Delegate Add-->" + e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		return domainObject;
@@ -192,7 +193,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.logger.error("Delegate Edit" + e.getMessage());
+			this.logger.error("Delegate Edit" + e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		finally
@@ -273,7 +275,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final SMException ex)
 		{
-			Logger.out.info("Review Role not found!");
+			this.logger.error("Review Role not found!"+ex.getMessage(),ex);
+			ex.printStackTrace();
 		}
 		return isUserisAdmin;
 	}
@@ -339,6 +342,7 @@ public class CaCoreAppServicesDelegator
 				{
 					// Exception occured if Domain Oject is not having ActivityStatus field
 					this.logger.error("in CaCoreAppServicesDelegator" + ex.getMessage());
+					ex.printStackTrace();
 					result.add(abstractDomainObject);
 				}
 			}
@@ -492,7 +496,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception exp)
 		{
-			Logger.out.debug(exp.getMessage(), exp);
+			this.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw exp;
 		}
@@ -686,15 +690,18 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final NoSuchMethodException noMetExp)
 		{
-			this.logger.debug(noMetExp.getMessage(), noMetExp);
+			this.logger.error(noMetExp.getMessage(), noMetExp);
+			noMetExp.printStackTrace();
 		}
 		catch (final IllegalAccessException illAccExp)
 		{
-			this.logger.debug(illAccExp.getMessage(), illAccExp);
+			this.logger.error(illAccExp.getMessage(), illAccExp);
+			illAccExp.printStackTrace();
 		}
 		catch (final InvocationTargetException invoTarExp)
 		{
-			this.logger.debug(invoTarExp.getMessage(), invoTarExp);
+			this.logger.error(invoTarExp.getMessage(), invoTarExp);
+			invoTarExp.printStackTrace();
 		}
 
 		return childObject;
@@ -1048,7 +1055,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.logger.debug(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
 		finally
@@ -1146,7 +1154,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final ClassCastException e)
 		{
-			Logger.out.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
 			returnList = rows;
 		}
 		return returnList;
@@ -1182,7 +1191,8 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.logger.error("Delegate Add-->" + e.getMessage());
+			this.logger.error("Delegate Add-->" + e.getMessage(),e);
+			e.printStackTrace();
 			throw e;
 		}
 		return domainObject;

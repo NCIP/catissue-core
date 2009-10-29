@@ -63,17 +63,20 @@ public class SiteInfoHandler
 		}
 		catch (final SAXException e)
 		{
-			logger.error(e.getMessage(), e);
+			SiteInfoHandler.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw e;
 		}
 		catch (final IOException e)
 		{
-			logger.error(e.getMessage(), e);
+			SiteInfoHandler.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw e;
 		}
 		catch (final ParserConfigurationException e)
 		{
-			logger.error("Could not locate a JAXP parser: " + e.getMessage(), e);
+			SiteInfoHandler.logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
 			throw e;
 		}
 	}
@@ -218,7 +221,8 @@ public class SiteInfoHandler
 		}
 		catch (final Exception ex)
 		{
-			logger.error("Error occured while", ex);
+			SiteInfoHandler.logger.error(ex.getMessage(), ex);
+			ex.printStackTrace() ;
 		}
 		return null;
 	}

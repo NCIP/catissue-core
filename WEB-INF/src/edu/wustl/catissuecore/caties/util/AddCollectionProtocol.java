@@ -68,8 +68,9 @@ public class AddCollectionProtocol
 		}
 		catch (final Exception ex)
 		{
-			logger.debug("Exception in AddCollectionProtocol = " + ex.getMessage(), ex);
-			System.out.println("Exception in AddCollectionProtocol = " + ex.getMessage());
+			AddCollectionProtocol.logger.error("Exception in AddCollectionProtocol = " + ex.getMessage(), ex);
+			//System.out.println("Exception in AddCollectionProtocol = " + ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 

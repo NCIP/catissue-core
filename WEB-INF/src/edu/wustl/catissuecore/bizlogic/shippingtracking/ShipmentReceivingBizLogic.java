@@ -164,14 +164,15 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		}
 		catch (final DAOException ex)
 		{
-			this.logger.debug("DAO related problem occurred", ex);
+			this.logger.error("DAO related problem" +
+					" occurred"+ex.getMessage(), ex);
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
 			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
 		}
 		final boolean mailStatus = this.sendNotification(shipment, sessionDataBean);
 		if (!mailStatus)
 		{
-			this.logger.debug("failed to send email..");
+			this.logger.info("failed to send email..");
 			//			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
 		}
 	}
@@ -523,8 +524,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				}
 				catch (final DAOException e)
 				{
-					this.logger.debug(e.getMessage(), e);
-					//e.printStackTrace();
+					this.logger.error(e.getMessage(), e);
+					e.printStackTrace();
 					throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 				}
 			}

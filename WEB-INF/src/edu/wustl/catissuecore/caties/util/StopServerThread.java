@@ -65,15 +65,18 @@ public class StopServerThread
 		}
 		catch (final UnknownHostException ex1)
 		{
-			logger.error("Host not found" + ex1);
+			StopServerThread.logger.error("Host not found" + ex1.getMessage(),ex1);
+			ex1.printStackTrace();
 		}
 		catch (final SocketTimeoutException ex2)
 		{
-			logger.error("Socket timed out" + ex2);
+			StopServerThread.logger.error("Socket timed out" + ex2.getMessage(),ex2);
+			ex2.printStackTrace();
 		}
 		catch (final IOException ex3)
 		{
-			logger.error("IO exception" + ex3);
+			StopServerThread.logger.error("IO exception" + ex3.getMessage(),ex3);
+			ex3.printStackTrace();
 		}
 	}
 }

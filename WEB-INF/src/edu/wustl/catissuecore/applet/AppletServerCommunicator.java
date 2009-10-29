@@ -77,13 +77,13 @@ public class AppletServerCommunicator implements Serializable
 		}
 		catch (final IOException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppletServerCommunicator.logger.error(e.getMessage(), e);
 			//	System.out.println(" IO Exception " + e);
 			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.debug(e.getMessage(), e);
+			AppletServerCommunicator.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
