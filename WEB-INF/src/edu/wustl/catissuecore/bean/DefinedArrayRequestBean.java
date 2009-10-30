@@ -18,59 +18,64 @@ import java.util.List;
  */
 public class DefinedArrayRequestBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * noOfItems.
+	 */
 	private String noOfItems;
 	/**
 	 * To determine when to enable or disable create array button.
 	 */
 	private String createArrayButtonDisabled;
 	/**
-	 * String containing the name of the user who requested for the array
+	 * String containing the name of the user who requested for the array.
 	 */
 	private String arrayName;
 	/**
-	 * String indicating the first dimension of defined array
+	 * String indicating the first dimension of defined array.
 	 */
 	private String oneDimensionCapacity;
 	/**
-	 * String indicating the second dimension of defined array
+	 * String indicating the second dimension of defined array.
 	 */
 	private String twoDimensionCapacity;
 	/**
-	 * String indicating class of defined array
+	 * String indicating class of defined array.
 	 */
 	private String arrayClass;
 	/**
-	 * String containing the name of the array type selected
+	 * String containing the name of the array type selected.
 	 */
 	private String arrayType;
 	/**
-	 * String containing the id of the array type selected
+	 * String containing the id of the array type selected.
 	 */
 	private String arrayTypeId;
 	/**
-	 * String containing status of each of the defined arrays
+	 * String containing status of each of the defined arrays.
 	 */
 	private String assignedStatus;
 	/**
-	 * String containing the orderItemId of each of the defined arrays
+	 * String containing the orderItemId of each of the defined arrays.
 	 */
 	private String orderItemId;
 	/**
-	 * List containing the next possible statuses of each of the defined arrays
+	 * List containing the next possible statuses of each of the defined arrays.
 	 */
 	private List arrayStatusList;
 	/**
-	 * String containing the id of the each of the defined arrays
+	 * String containing the id of the each of the defined arrays.
 	 */
 	private String arrayId;
 	/**
-	 * String containing the name of the user who had requested for the array
+	 * String containing the name of the user who had requested for the array.
 	 */
 	private String userName = "";
 	/**
-	 * String containing the userId who had requested for the array
+	 * String containing the userId who had requested for the array.
 	 */
 	private Long userId;
 	/**
@@ -79,7 +84,7 @@ public class DefinedArrayRequestBean implements Serializable
 	private String distributedItemId;
 
 	/**
-	* String returning the id of the user who created the array
+	* String returning the id of the user who created the array.
 	* @return userId
 	*/
 	public Long getUserId()
@@ -160,7 +165,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the class of the defined array
+	 * Returns the class of the defined array.
 	 * @return arrayClass
 	 */
 	public String getArrayClass()
@@ -169,7 +174,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the class of the defined array
+	 * Sets the class of the defined array.
 	 * @param arrayClassParam String indicating class of defined array
 	 */
 	public void setArrayClass(String arrayClassParam)
@@ -178,7 +183,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the name of defined array
+	 * Returns the name of defined array.
 	 * @return arrayName
 	 */
 	public String getArrayName()
@@ -187,7 +192,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the name of defined array
+	 * Sets the name of defined array.
 	 * @param arrayNameParam String containing the name of defined array
 	 */
 	public void setArrayName(String arrayNameParam)
@@ -196,7 +201,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the type of Defined array
+	 * Returns the type of Defined array.
 	 * @return arrayType
 	 */
 	public String getArrayType()
@@ -205,7 +210,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the type of defined array
+	 * Sets the type of defined array.
 	 * @param arrayTypeParam String indicating the type of defined array
 	 */
 	public void setArrayType(String arrayTypeParam)
@@ -214,7 +219,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the first dimension of defined array
+	 * Returns the first dimension of defined array.
 	 * @return oneDimensionCapacity
 	 */
 	public String getOneDimensionCapacity()
@@ -223,7 +228,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the first dimension of defined array
+	 * Sets the first dimension of defined array.
 	 * @param oneDimensionCapacityParam String indicating the first dimension of defined array
 	 */
 	public void setOneDimensionCapacity(String oneDimensionCapacityParam)
@@ -232,7 +237,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the second dimension of defined array
+	 * Returns the second dimension of defined array.
 	 * @return twoDimensionCapacity
 	 */
 	public String getTwoDimensionCapacity()
@@ -241,7 +246,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the second dimension of defined array
+	 * Sets the second dimension of defined array.
 	 * @param twoDimensionCapacityParam String indicating the second dimension of defined array
 	 */
 	public void setTwoDimensionCapacity(String twoDimensionCapacityParam)
@@ -250,7 +255,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Returns the status list for individual defined arrays
+	 * Returns the status list for individual defined arrays.
 	 * @return arrayStatusList List
 	 */
 	public List getArrayStatusList()
@@ -259,7 +264,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the status list for individual defined arrays
+	 * Sets the status list for individual defined arrays.
 	 * @param arrayStatusListParam List
 	 */
 	public void setArrayStatusList(List arrayStatusListParam)
@@ -268,7 +273,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * arrayTypeId
+	 * arrayTypeId.
 	 * @return arrayTypeId
 	 */
 	public String getArrayTypeId()
@@ -277,7 +282,7 @@ public class DefinedArrayRequestBean implements Serializable
 	}
 
 	/**
-	 * Sets the arrayTypeId in the form
+	 * Sets the arrayTypeId in the form.
 	 * @param arrayTypeIdParam String indicating the id of array type parameter
 	 */
 	public void setArrayTypeId(String arrayTypeIdParam)
@@ -332,5 +337,4 @@ public class DefinedArrayRequestBean implements Serializable
 	{
 		this.noOfItems = noOfItemsParam;
 	}
-
 }

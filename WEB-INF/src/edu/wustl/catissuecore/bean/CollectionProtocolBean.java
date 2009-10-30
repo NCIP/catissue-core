@@ -14,31 +14,57 @@ import edu.wustl.common.util.global.Status;
  */
 public class CollectionProtocolBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * identifier.
+	 */
 	private Long identifier = null;
-
+	/**
+	 * protocolCoordinatorIds.
+	 */
 	private long[] protocolCoordinatorIds;
-
+	/**
+	 * principalInvestigatorId.
+	 */
 	private long principalInvestigatorId;
-
+	/**
+	 * irbID.
+	 */
 	private String irbID;
-
+	/**
+	 * descriptionURL.
+	 */
 	private String descriptionURL;
-
+	/**
+	 * title.
+	 */
 	private String title;
-
+	/**
+	 * shortTitle.
+	 */
 	private String shortTitle;
-
+	/**
+	 * startDate.
+	 */
 	private String startDate;
-
+	/**
+	 * endDate.
+	 */
 	protected String endDate;
-
+	/**
+	 * enrollment.
+	 */
 	private String enrollment;
-
+	/**
+	 * siteIds.
+	 */
 	private long[] siteIds;
-
+	/**
+	 * isParticiapantReg.
+	 */
 	private boolean isParticiapantReg = false;
 
 	/**
@@ -58,7 +84,7 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
-	 * whether Aliquote in same container
+	 * whether Aliquote in same container.
 	 */
 	protected boolean aliqoutInSameContainer = false;
 	/**
@@ -67,7 +93,7 @@ public class CollectionProtocolBean implements Serializable
 	protected String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 
 	/**
-	 * Unsigned Form Url for the Consents
+	 * Unsigned Form Url for the Consents.
 	 */
 	private String unsignedConsentURLName;
 
@@ -77,18 +103,20 @@ public class CollectionProtocolBean implements Serializable
 	private Map consentValues = new LinkedHashMap();//bug 8905
 
 	/**
-	 * No of Consent Tier
+	 * No of Consent Tier.
 	 */
 	private int consentTierCounter;
 	/**
-	 * CheckBox for consent is checked or not
+	 * CheckBox for consent is checked or not.
 	 */
 	private boolean consentWaived = false;
-
+	/**
+	 * operation.
+	 */
 	private String operation = "Add";
 
 	/**
-	 * @return - array of long
+	 * @return - array of long.
 	 */
 	public long[] getProtocolCoordinatorIds()
 	{
@@ -394,7 +422,7 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
-	 * type .
+	 * type.
 	 * @return type.
 	 */
 	public String getType()
@@ -488,5 +516,4 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
-
 }

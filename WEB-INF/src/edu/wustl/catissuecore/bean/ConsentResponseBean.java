@@ -20,36 +20,38 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class ConsentResponseBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * collection protocol Id
+	 * collection protocol Id.
 	 */
 	protected long collectionProtocolID;
 
 	/**
-	 * Signed Consent URL
+	 * Signed Consent URL.
 	 */
 	protected String signedConsentUrl;
 
 	/**
-	 * Witness name that may be PI
+	 * Witness name that may be PI.
 	 */
 	protected long witnessId;
 
 	/**
-	 * Consent Date, Date on which Consent is Signed
+	 * Consent Date, Date on which Consent is Signed.
 	 */
 	protected String consentDate;
 
 	/**
-	 * Consent Withdraw status
+	 * Consent Withdraw status.
 	 */
 	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
 
 	/**
-	 * Consent response
+	 * Consent response.
 	 */
 	protected Collection<ConsentBean> consentResponse;
 

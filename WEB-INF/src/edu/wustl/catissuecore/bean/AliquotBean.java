@@ -15,7 +15,7 @@ public class AliquotBean
 {
 
 	/**
-	 * constructor
+	 * constructor.
 	 */
 	public AliquotBean()
 	{
@@ -35,35 +35,105 @@ public class AliquotBean
 		this.dataMap = dataMapParam;
 	}
 
+	/**
+	 * aliquotNo.
+	 */
 	private int aliquotNo;
+	/**
+	 * aliquotMap.
+	 */
 	private Map aliquotMap = new HashMap();
+	/**
+	 * dataMap.
+	 */
 	private Map dataMap = new HashMap();
-
+	/**
+	 * dataMap.
+	 */
 	private String labelKey = "";
+	/**
+	 * qtyKey.
+	 */
 	private String qtyKey = "";
+	/**
+	 * barKey.
+	 */
 	private String barKey = "";
+	/**
+	 * containerMap.
+	 */
 	private String containerMap = "";
+	/**
+	 * containerMapStyle.
+	 */
 	private String containerMapStyle = "";
-	//Keys for container if selected from Map
+	/**
+	 * Keys for container if selected from Map.
+	 */
 	private String containerIdFromMapKey = "";
+	/**
+	 * containerNameFromMapKey.
+	 */
 	private String containerNameFromMapKey = "";
+	/**
+	 * pos1FromMapKey.
+	 */
 	private String pos1FromMapKey = "";
+	/**
+	 * pos2FromMapKey.
+	 */
 	private String pos2FromMapKey = "";
+	/**
+	 * stContSelection.
+	 */
 	private String stContSelection = "";
+	/**
+	 * containerStyle.
+	 */
 	private String containerStyle = "";
+	/**
+	 * containerIdStyle.
+	 */
 	private String containerIdStyle = "";
+	/**
+	 * pos1Style.
+	 */
 	private String pos1Style = "";
+	/**
+	 * pos2Style.
+	 */
 	private String pos2Style = "";
-
+	/**
+	 * dropDownDisable.
+	 */
 	private boolean dropDownDisable = false;
+	/**
+	 * textBoxDisable.
+	 */
 	private boolean textBoxDisable = false;
-
+	/**
+	 * attrNames.
+	 */
 	private String[] attrNames = null;
+	/**
+	 * buttonOnClicked.
+	 */
 	private String buttonOnClicked = null;
-
+	/**
+	 * onChange.
+	 */
 	private String onChange = "";
+	/**
+	 * initValues.
+	 */
 	private String[] initValues = null;
+	/**
+	 * rowNumber.
+	 */
 	private String rowNumber = "";
+	/**
+	 * jsScript.
+	 */
 	private String jsScript = "";
 
 	/**
@@ -76,10 +146,7 @@ public class AliquotBean
 	public void setAllData(String parentSPId, String collectionProtocolId, String className,
 			String CPQuery)
 	{
-		// ------------------ used outside the bean
 		this.setOutsideData();
-
-		//------- internal use only
 		final String containerKey = "value(Specimen:" + this.aliquotNo + "_StorageContainer_id)";
 		final String pos1Key = "value(Specimen:" + this.aliquotNo + "_positionDimensionOne)";
 		final String pos2Key = "value(Specimen:" + this.aliquotNo + "_positionDimensionTwo)";
@@ -89,10 +156,11 @@ public class AliquotBean
 		this.attrNames[0] = containerKey;
 		this.attrNames[1] = pos1Key;
 		this.attrNames[2] = pos2Key;
-
 		if (CPQuery != null)
 		{
-			this.onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&CPQuery=true&"
+			this.onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?" +
+					"pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=" +
+					"executeContainerChange&CPQuery=true&"
 					+ Constants.PARENT_SPECIMEN_ID + "=" + parentSPId + "')";
 		}
 
@@ -102,7 +170,6 @@ public class AliquotBean
 				+ "_positionDimensionOne");
 		this.initValues[2] = (String) this.aliquotMap.get("Specimen:" + this.aliquotNo
 				+ "_positionDimensionTwo");
-
 		this.addToMap(rbKey);
 		final int radioSelected = Integer.parseInt(this.aliquotMap.get(rbKey).toString());
 		if (radioSelected == 1)
@@ -118,17 +185,14 @@ public class AliquotBean
 		{
 			this.dropDownDisable = true;
 		}
-
 		frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId="
 				+ this.containerIdStyle + "&amp;xDimStyleId=" + this.pos1Style
 				+ "&amp;yDimStyleId=" + this.pos2Style + "&amp;containerStyle="
 				+ this.containerStyle + "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS + "="
 				+ className + "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL + "="
 				+ collectionProtocolId;
-
 		this.buttonOnClicked = "mapButtonClickedInAliquot('" + frameUrl + "','" + this.aliquotNo
 				+ "')";
-
 		this.jsScript = ScriptGenerator.getJSEquivalentFor(this.dataMap, this.rowNumber);
 	}
 
@@ -156,7 +220,9 @@ public class AliquotBean
 		this.pos2Style = "pos2_" + this.aliquotNo + "_2";
 		this.dropDownDisable = false;
 		this.textBoxDisable = false;
-		this.onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";
+		this.onChange = "onCustomListBoxChangeInAliquot(this," +
+			"'CreateAliquots.do?pageOf=pageOfCreateAliquot&" +
+			"operation=add&menuSelected=15&method=executeContainerChange')";
 		this.initValues = new String[3];
 		this.rowNumber = String.valueOf(this.aliquotNo);
 	}

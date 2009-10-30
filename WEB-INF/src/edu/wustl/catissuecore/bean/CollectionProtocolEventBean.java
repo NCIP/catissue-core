@@ -12,22 +12,60 @@ public class CollectionProtocolEventBean implements Serializable
 {
 
 	/**
-	 *
+	 * serialVersionUID.
 	 */
 	private static final long serialVersionUID = 8381530294059504778L;
-
+	/**
+	 * uniqueIdentifier.
+	 */
 	private String uniqueIdentifier;
+	/**
+	 * studyCalenderEventPoint.
+	 */
 	private Double studyCalenderEventPoint;
+	/**
+	 * collectionPointLabel.
+	 */
 	private String collectionPointLabel;
+	/**
+	 * clinicalDiagnosis.
+	 */
 	private String clinicalDiagnosis;
+	/**
+	 * clinicalStatus.
+	 */
 	private String clinicalStatus;
+	/**
+	 * collectionProcedure.
+	 */
 	private String collectionProcedure;
+	/**
+	 * collectionContainer.
+	 */
 	private String collectionContainer;
+	/**
+	 * receivedQuality.
+	 */
 	private String receivedQuality;
+	/**
+	 * collectedEventComments.
+	 */
 	private String collectedEventComments;
+	/**
+	 * receivedEventComments.
+	 */
 	private String receivedEventComments;
+	/**
+	 * specimenRequirementbeanMap.
+	 */
 	private Map specimenRequirementbeanMap = new LinkedHashMap();
+	/**
+	 * id.
+	 */
 	private long id = -1;
+	/**
+	 * specimenCollRequirementGroupId.
+	 */
 	private long specimenCollRequirementGroupId = -1;
 
 	/**
@@ -270,6 +308,7 @@ public class CollectionProtocolEventBean implements Serializable
 
 	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
+	 * @return String
 	 */
 	public String getLabelFormat()
 	{
@@ -278,6 +317,7 @@ public class CollectionProtocolEventBean implements Serializable
 
 	/**
 	 * For SCG labeling,this will be exposed through API and not in the model.
+	 * @param labelFormat String.
 	 */
 	public void setLabelFormat(String labelFormat)
 	{

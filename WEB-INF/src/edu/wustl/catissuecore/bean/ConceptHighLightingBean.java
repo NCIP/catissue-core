@@ -1,6 +1,7 @@
 /**
  * <p>Title: ConceptHighLightingBean Class>
- * <p>Description:	This class contains attributes to display on ViewSurgicalPathologyReport.jsp Page in Concept Highlighting part</p>
+ * <p>Description:	This class contains attributes to display on
+ * ViewSurgicalPathologyReport.jsp Page in Concept Highlighting part</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Ashish Gupta
@@ -16,10 +17,21 @@ package edu.wustl.catissuecore.bean;
  */
 public class ConceptHighLightingBean
 {
-
+	/**
+	 * conceptName.
+	 */
 	private String conceptName;
+	/**
+	 * startOffsets.
+	 */
 	private String startOffsets;
+	/**
+	 * endOffsets.
+	 */
 	private String endOffsets;
+	/**
+	 * classificationName.
+	 */
 	private String classificationName;
 
 	/**

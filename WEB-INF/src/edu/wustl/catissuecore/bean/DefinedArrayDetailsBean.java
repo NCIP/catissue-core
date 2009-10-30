@@ -1,6 +1,7 @@
 /**
  * <p>Title: DefinedArrayDetailsBean Class>
- * <p>Description:	This class contains attributes of defined array details to display on ArrayRequests.jsp Page</p>
+ * <p>Description:	This class contains attributes of defined array details
+ * to display on ArrayRequests.jsp Page</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Ramya Nagraj
@@ -21,12 +22,12 @@ public class DefinedArrayDetailsBean implements Serializable
 {
 
 	/**
-	 * Default Serial Verison Id
+	 * Default Serial Verison Id.
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * String containing the specimen id
+	 * String containing the specimen id.
 	 */
 	private String specimenId = "";
 
@@ -36,7 +37,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	private String specimenCollGroupId = "";
 
 	/**
-	 * String containing the item requested for
+	 * String containing the item requested for.
 	 */
 	private String requestFor;
 
@@ -46,26 +47,26 @@ public class DefinedArrayDetailsBean implements Serializable
 	private String requestedItem;
 
 	/**
-	 * String containing the requested quantity of specimens
+	 * String containing the requested quantity of specimens.
 	 */
 	private String requestedQuantity;
 
 	/**
-	 * String containing the available quantity of specimens
+	 * String containing the available quantity of specimens.
 	 */
 	private String availableQuantity;
 
 	/**
-	 * String containing the assigned quantity for each specimen
+	 * String containing the assigned quantity for each specimen.
 	 */
 	private String assignedQuantity;
 	/**
-	 * String containing the assigned status for each specimen
+	 * String containing the assigned status for each specimen.
 	 */
 	private String assignedStatus;
 
 	/**
-	 * List containing the list of derived specimens for a given specimen id
+	 * List containing the list of derived specimens for a given specimen id.
 	 */
 	private List specimenList;
 
@@ -193,7 +194,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the orderItem id
+	 * Returns the orderItem id.
 	 * @return orderItemId
 	 */
 	public String getOrderItemId()
@@ -202,7 +203,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the orderItemId
+	 * Sets the orderItemId.
 	 * @param orderItemIdParam String containing the id of the orderitem
 	 */
 	public void setOrderItemId(String orderItemIdParam)
@@ -243,7 +244,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the assigned quantity
+	 * Returns the assigned quantity.
 	 * @return assignedQuantity
 	 */
 	public String getAssignedQuantity()
@@ -252,7 +253,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the assigned quantity
+	 * Sets the assigned quantity.
 	 * @param assignedQuantityParam String containing the value of qty assigned by admin
 	 */
 	public void setAssignedQuantity(String assignedQuantityParam)
@@ -261,7 +262,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the assignedStatus
+	 * Returns the assignedStatus.
 	 * @return assignedStatus
 	 */
 	public String getAssignedStatus()
@@ -270,7 +271,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the assignedStatus
+	 * Sets the assignedStatus.
 	 * @param assignedStatusParam String containing the status of individual order item within defined array
 	 */
 	public void setAssignedStatus(String assignedStatusParam)
@@ -279,7 +280,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the availableQuantity
+	 * Returns the availableQuantity.
 	 * @return availableQuantity
 	 */
 	public String getAvailableQuantity()
@@ -288,7 +289,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the availableQuantity
+	 * Sets the availableQuantity.
 	 * @param availableQuantityParam String containing the available qty of orderitem in the system
 	 */
 	public void setAvailableQuantity(String availableQuantityParam)
@@ -297,7 +298,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the requestedQuantity
+	 * Returns the requestedQuantity.
 	 * @return requestedQuantity
 	 */
 	public String getRequestedQuantity()
@@ -306,8 +307,9 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the requestedQuantity
-	 * @param requestedQuantityParam String containing the requested qty for individual orderitem by the scientist
+	 * Sets the requestedQuantity.
+	 * @param requestedQuantityParam String containing the requested
+	 * qty for individual orderitem by the scientist
 	 */
 	public void setRequestedQuantity(String requestedQuantityParam)
 	{
@@ -315,7 +317,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the item requested for
+	 * Returns the item requested for.
 	 * @return requestFor
 	 */
 	public String getRequestFor()
@@ -324,8 +326,9 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the item requested for
-	 * @param requestForParam String indicating whether specimen derivative is requested or it is requested as is by the user
+	 * Sets the item requested for.
+	 * @param requestForParam String indicating whether specimen derivative
+	 * is requested or it is requested as is by the user
 	 */
 	public void setRequestFor(String requestForParam)
 	{
@@ -333,7 +336,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the specimen list
+	 * Returns the specimen list.
 	 * @return specimenList
 	 */
 	public List getSpecimenList()
@@ -342,7 +345,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the specimenList
+	 * Sets the specimenList.
 	 * @param specimenListParam List containing the list of specimens
 	 */
 	public void setSpecimenList(List specimenListParam)
@@ -351,7 +354,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the itemStatusList
+	 * Returns the itemStatusList.
 	 * @return itemStatusList
 	 */
 	public List getItemStatusList()
@@ -360,7 +363,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the itemStatusList
+	 * Sets the itemStatusList.
 	 * @param itemStatusListParam List coontaining the next possible statuses of individual order item
 	 */
 	public void setItemStatusList(List itemStatusListParam)
@@ -393,7 +396,9 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * @param instanceOfParam String to indicate whether individual orderitem is instanceof ExistingSpeicmenOrderItem or DerivedSpecimenOrderItem
+	 * @param instanceOfParam String to indicate whether individual
+	 * orderitem is instanceof ExistingSpeicmenOrderItem or
+	 * DerivedSpecimenOrderItem
 	 */
 	public void setInstanceOf(String instanceOfParam)
 	{
@@ -431,5 +436,4 @@ public class DefinedArrayDetailsBean implements Serializable
 	{
 		this.specimenCollGroupId = specimenCollGroupIdParam;
 	}
-
 }

@@ -11,15 +11,21 @@ import java.io.ObjectOutput;
  */
 public class CpAndParticipentsBean implements Externalizable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * name.
+	 */
 	private String name;
-
+	/**
+	 * value.
+	 */
 	private String value;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public CpAndParticipentsBean()
 	{

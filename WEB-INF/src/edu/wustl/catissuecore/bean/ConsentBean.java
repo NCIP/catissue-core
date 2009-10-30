@@ -18,10 +18,12 @@ import java.io.Serializable;
  */
 public class ConsentBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * The comments is for Id associated with every Consen Tier .
+	 * The comments is for Id associated with every Consen Tier.
 	 */
 	protected String consentTierID;
 	/**
@@ -71,7 +73,8 @@ public class ConsentBean implements Serializable
 	}
 
 	/**
-	 * @return participantResponse The comments associated with Participant Response at CollectionProtocolRegistration
+	 * @return participantResponse The comments associated with Participant
+	 * Response at CollectionProtocolRegistration
 	 */
 	public String getParticipantResponse()
 	{
@@ -79,7 +82,8 @@ public class ConsentBean implements Serializable
 	}
 
 	/**
-	 * @param participantResponseParam The comments associated with Participant Response at CollectionProtocolRegistration
+	 * @param participantResponseParam The comments associated with
+	 * Participant Response at CollectionProtocolRegistration
 	 */
 	public void setParticipantResponse(String participantResponseParam)
 	{
@@ -87,7 +91,8 @@ public class ConsentBean implements Serializable
 	}
 
 	/**
-	 * @return specimenCollectionGroupLevelResponse The comments associated with Participant Response at Specimen Collection Group level
+	 * @return specimenCollectionGroupLevelResponse The comments associated
+	 * with Participant Response at Specimen Collection Group level
 	 */
 	public String getSpecimenCollectionGroupLevelResponse()
 	{
@@ -95,7 +100,8 @@ public class ConsentBean implements Serializable
 	}
 
 	/**
-	 * @param specimenCollectionGroupLevelResponseParam The comments associated with Participant Response at Specimen Collection Group level
+	 * @param specimenCollectionGroupLevelResponseParam The comments
+	 * associated with Participant Response at Specimen Collection Group level
 	 */
 	public void setSpecimenCollectionGroupLevelResponse(
 			String specimenCollectionGroupLevelResponseParam)
