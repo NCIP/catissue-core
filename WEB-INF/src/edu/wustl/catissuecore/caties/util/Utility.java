@@ -77,21 +77,21 @@ public class Utility
 		try
 		{
 			// set bufferedReader to read file
-			final BufferedReader br = new BufferedReader(new FileReader(configFileName));
+			final BufferedReader bufferedReader = new BufferedReader(new FileReader(configFileName));
 
 			String line = null;
-			StringTokenizer st;
+			StringTokenizer stringTokenizer;
 			String name;
 			String abbr;
 			// iterate while file EOF
-			while ((line = br.readLine()) != null)
+			while ((line = bufferedReader.readLine()) != null)
 			{
 				// sepearete values for section header name,
 				//abbreviation of section header and its priority
-				st = new StringTokenizer(line, "|");
-				name = st.nextToken().trim();
-				abbr = st.nextToken().trim();
-				st.nextToken().trim();
+				stringTokenizer = new StringTokenizer(line, "|");
+				name = stringTokenizer.nextToken().trim();
+				abbr = stringTokenizer.nextToken().trim();
+				stringTokenizer.nextToken().trim();
 
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);
@@ -265,7 +265,7 @@ public class Utility
 		final List siteList = siteBizLogic.retrieve(Site.class.getName(), Constants.SYSTEM_NAME,
 				siteName);
 
-		if ((siteList != null) && siteList.size() > 0)
+		if ((siteList != null) && !siteList.isEmpty())
 		{
 			site = (Site) siteList.get(0);
 		}

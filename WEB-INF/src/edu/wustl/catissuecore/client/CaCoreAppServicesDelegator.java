@@ -313,7 +313,7 @@ public class CaCoreAppServicesDelegator
 	private List filterDisabledObjects(List list, String userName, boolean isUserisAdmin)
 			throws Exception
 	{
-		final long st = System.currentTimeMillis();
+		final long startTime = System.currentTimeMillis();
 		final List result = new ArrayList();
 		final int resultCount = list.size();
 
@@ -359,18 +359,18 @@ public class CaCoreAppServicesDelegator
 				result.add(object);
 			}
 		}
-		final long et = System.currentTimeMillis();
+		final long endTime = System.currentTimeMillis();
 		final long msec = 1000;
-		Logger.out.info("Time to filer disable objects:" + (et - st) / msec);
+		Logger.out.info("Time to filer disable objects:" + (endTime - startTime) / msec);
 
 		List filteredObjects = new ArrayList();
-		if (!isUserisAdmin)
+		if (isUserisAdmin)
 		{
-			filteredObjects = this.filterObjects(userName, result);
+			filteredObjects = result;
 		}
 		else
 		{
-			filteredObjects = result;
+			filteredObjects = this.filterObjects(userName, result);
 		}
 		return filteredObjects;
 	}
@@ -928,7 +928,7 @@ public class CaCoreAppServicesDelegator
 		{
 
 			final String sqlQuery1 = sqlQuery.replaceAll("'", "''");
-			long no = 1;
+			long number = 1;
 			jdbcDAO = AppUtility.openJDBCSession();
 			final SimpleDateFormat fSDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			final String timeStamp = fSDateFormat.format(new Date());
@@ -953,16 +953,16 @@ public class CaCoreAppServicesDelegator
 					if (!columnList.isEmpty())
 					{
 						final String str = (String) columnList.get(0);
-						if (!str.equals(""))
+						if (!"".equals(str))
 						{
-							no = Long.parseLong(str);
+							number = Long.parseLong(str);
 
 						}
 					}
 				}
 				final String sqlForAudiEvent = "insert into catissue_audit_event"
 						+ "(IDENTIFIER,IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) "
-						+ "values ('" + no + "','" + ipAddr + "',to_date('" + timeStamp
+						+ "values ('" + number + "','" + ipAddr + "',to_date('" + timeStamp
 						+ "','yyyy-mm-dd HH24:MI:SS'),'" + userId + "','" + comments + "')";
 				this.logger.info("sqlForAuditLog:" + sqlForAudiEvent);
 				jdbcDAO.executeUpdate(sqlForAudiEvent);
@@ -979,7 +979,7 @@ public class CaCoreAppServicesDelegator
 					if (!columnList.isEmpty())
 					{
 						final String str = (String) columnList.get(0);
-						if (!str.equals(""))
+						if (!"".equals(str))
 						{
 							queryNo = Long.parseLong(str);
 
@@ -988,7 +988,7 @@ public class CaCoreAppServicesDelegator
 				}
 				final String sqlForQueryLog = "insert into " + "catissue_audit_event_query_log"
 						+ "(IDENTIFIER,QUERY_DETAILS,AUDIT_EVENT_ID) " + "values (" + queryNo
-						+ ",EMPTY_CLOB(),'" + no + "')";
+						+ ",EMPTY_CLOB(),'" + number + "')";
 				jdbcDAO.executeUpdate(sqlForQueryLog);
 				final String sql1 = "select QUERY_DETAILS from "
 						+ "catissue_audit_event_query_log where IDENTIFIER=" + queryNo
@@ -1007,8 +1007,8 @@ public class CaCoreAppServicesDelegator
 					}
 				}
 				//get output stream from the CLOB object
-				final OutputStream os = clob.getAsciiOutputStream();
-				final OutputStreamWriter osw = new OutputStreamWriter(os);
+				final OutputStream outputStream = clob.getAsciiOutputStream();
+				final OutputStreamWriter osw = new OutputStreamWriter(outputStream);
 
 				//use that output stream to write character data
 				//to the Oracle data store
@@ -1016,7 +1016,7 @@ public class CaCoreAppServicesDelegator
 				//write data and commit
 				osw.flush();
 				osw.close();
-				os.close();
+				outputStream.close();
 				jdbcDAO.commit();
 				this.logger.info("sqlForQueryLog:" + sqlForQueryLog);
 			}
@@ -1038,15 +1038,15 @@ public class CaCoreAppServicesDelegator
 					if (!columnList.isEmpty())
 					{
 						final String str = (String) columnList.get(0);
-						if (!str.equals(""))
+						if (!"".equals(str))
 						{
-							no = Long.parseLong(str);
+							number = Long.parseLong(str);
 
 						}
 					}
 				}
 				final String sqlForQueryLog = "insert into catissue_audit_event_query_log"
-						+ "(QUERY_DETAILS,AUDIT_EVENT_ID) values ('" + sqlQuery1 + "','" + no
+						+ "(QUERY_DETAILS,AUDIT_EVENT_ID) values ('" + sqlQuery1 + "','" + number
 						+ "')";
 				this.logger.debug("sqlForQueryLog:" + sqlForQueryLog);
 				jdbcDAO.executeUpdate(sqlForQueryLog);
@@ -1109,37 +1109,37 @@ public class CaCoreAppServicesDelegator
 			{
 				final Object[] row = (Object[]) rows.get(i);
 				final Object temp = targetClass.newInstance();
-				int j = 0;
-				for (j = 0; j < fields.size(); j++)
+				int counter_j = 0;
+				for (counter_j = 0; counter_j < fields.size(); counter_j++)
 				{
-					final Field field = fields.get(j);
+					final Field field = fields.get(counter_j);
 					field.setAccessible(true);
-					field.set(temp, row[j]);
+					field.set(temp, row[counter_j]);
 				}
 				if (isParticipantMedicalIdentifier)
 				{
-					final Long participantIdentifier = (Long) row[j];
-					final Participant p = new Participant();
-					p.setId(participantIdentifier);
-					((ParticipantMedicalIdentifier) temp).setParticipant(p);
+					final Long participantIdentifier = (Long) row[counter_j];
+					final Participant participant = new Participant();
+					participant.setId(participantIdentifier);
+					((ParticipantMedicalIdentifier) temp).setParticipant(participant);
 				}
 				else if (isSpecimenArrayContent)
 				{
-					final Long specimenIdentifier = (Long) row[j];
+					final Long specimenIdentifier = (Long) row[counter_j];
 					final Specimen specimen = new Specimen();
 					specimen.setId(specimenIdentifier);
 					((SpecimenArrayContent) temp).setSpecimen(specimen);
 				}
 				else if (isSpecimenEventParameters)
 				{
-					final Long scjIdentifier = (Long) row[j++];
+					final Long scjIdentifier = (Long) row[counter_j++];
 					if (scjIdentifier != null)
 					{
 						final SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 						scg.setId(scjIdentifier);
 						((SpecimenEventParameters) temp).setSpecimenCollectionGroup(scg);
 					}
-					final Long specimenIdentifier = (Long) row[j];
+					final Long specimenIdentifier = (Long) row[counter_j];
 					if (specimenIdentifier != null)
 					{
 						final Specimen specimen = new Specimen();

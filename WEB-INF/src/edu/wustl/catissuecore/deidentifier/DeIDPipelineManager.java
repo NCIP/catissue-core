@@ -182,7 +182,7 @@ public class DeIDPipelineManager
 				new LinkedBlockingQueue<Runnable>(), Executors.defaultThreadFactory(),
 				this.rejectedExecutionHandler);
 
-		if (isprIDList != null || isprIDList.size() > 0)
+		if (isprIDList != null || !isprIDList.isEmpty())
 		{
 			// if report list contains more than or equal to one reports then
 			// process reports
@@ -210,10 +210,10 @@ public class DeIDPipelineManager
 					// instantiate a thread to process the report
 					this.logger.info("Instantiating thread for report id="
 							+ identifiedReport.getId());
-					final Thread th = new DeidentifierReportThread(identifiedReport,
+					final Thread thread = new DeidentifierReportThread(identifiedReport,
 							this.deidentifier);
 					// add thread to thread pool manager
-					deidExecutor.execute(th);
+					deidExecutor.execute(thread);
 				}
 			}
 			catch (final Exception ex)
@@ -256,7 +256,7 @@ public class DeIDPipelineManager
 		final List participantList = (List) CaCoreAPIService.executeQuery(hqlQuery,
 				Participant.class.getName());
 		Participant participant = null;
-		if (participantList != null && participantList.size() > 0)
+		if (participantList != null && !participantList.isEmpty())
 		{
 			participant = (Participant) participantList.get(0);
 

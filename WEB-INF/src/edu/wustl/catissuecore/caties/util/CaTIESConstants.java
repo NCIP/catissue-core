@@ -7,7 +7,6 @@ package edu.wustl.catissuecore.caties.util;
  */
 public abstract class CaTIESConstants
 {
-
 	/**
 	 * MSH.
 	 */

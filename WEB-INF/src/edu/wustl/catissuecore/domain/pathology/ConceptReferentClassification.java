@@ -49,7 +49,7 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	 */
 	public ConceptReferentClassification()
 	{
-
+		super();
 	}
 
 	/**
@@ -83,12 +83,12 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	}
 
 	/**
-	 * @param id sets system generated id
+	 * @param identifier sets system generated id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**

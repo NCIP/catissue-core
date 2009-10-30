@@ -74,7 +74,7 @@ public class ConceptReferent extends AbstractDomainObject
 	 */
 	public ConceptReferent()
 	{
-
+		super();
 	}
 
 	/**
@@ -171,13 +171,13 @@ public class ConceptReferent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param id
+	 * @param identifier
 	 *            sets system generated id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**

@@ -42,13 +42,13 @@ public class ReportContent extends AbstractDomainObject
 	}
 
 	/**
-	 * @param id
+	 * @param identifier
 	 *            sets system generated id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class ReportContent extends AbstractDomainObject
 	 */
 	public ReportContent()
 	{
-
+		super();
 	}
 
 	/**

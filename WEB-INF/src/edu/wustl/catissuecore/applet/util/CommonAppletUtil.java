@@ -270,13 +270,11 @@ public final class CommonAppletUtil
 	 */
 	public static boolean isNull(Object obj)
 	{
+		boolean flag = false;
 		if (obj == null)
 		{
-			return true;
+			flag = true;
 		}
-		else
-		{
-			return false;
-		}
+		return flag;
 	}
 }

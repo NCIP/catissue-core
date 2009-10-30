@@ -126,8 +126,7 @@ public class SiteInfoHandler
 
 					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_ABBRIVIATION))
 					{
-						final String pValue = subchildNode.getFirstChild().getNodeValue();
-						return pValue;
+						return subchildNode.getFirstChild().getNodeValue();
 					}
 				}
 			}
@@ -179,8 +178,7 @@ public class SiteInfoHandler
 
 					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_NAME))
 					{
-						final String pValue = subchildNode.getFirstChild().getNodeValue();
-						return pValue;
+						return subchildNode.getFirstChild().getNodeValue();
 					}
 				}
 			}

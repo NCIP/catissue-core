@@ -185,18 +185,18 @@ public class DeidUtils
 		String result = sprText;
 		try
 		{
-			final StringBuffer sb = new StringBuffer(sprText);
+			final StringBuffer stringBuffer = new StringBuffer(sprText);
 			// loop to check each character
-			for (int idx = 0; idx < sb.length(); idx++)
+			for (int idx = 0; idx < stringBuffer.length(); idx++)
 			{
 				// check for illegal character
-				if (sb.charAt(idx) == illegalChar)
+				if (stringBuffer.charAt(idx) == illegalChar)
 				{
 					DeidUtils.logger.error("Found bad character.");
-					sb.setCharAt(idx, ' ');
+					stringBuffer.setCharAt(idx, ' ');
 				}
 			}
-			result = sb.toString();
+			result = stringBuffer.toString();
 		}
 		catch (final Exception ex)
 		{

@@ -63,7 +63,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 */
 	public QuarantineEventParameter()
 	{
-
+		super();
 	}
 
 	/**
@@ -150,12 +150,12 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	}
 
 	/**
-	 * @param id : id
+	 * @param identifier : id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 		if (form.getDeIdentifiedReportId() != 0)
 		{
 			final DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
-			deidReport.setId(new Long(form.getDeIdentifiedReportId()));
+			deidReport.setId(Long.valueOf(form.getDeIdentifiedReportId()));
 			this.setDeIdentifiedSurgicalPathologyReport(deidReport);
 			this.setQuarantineStatus(false);
 		}
@@ -222,6 +222,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	 */
 	public QuarantineEventParameter(AbstractActionForm form) throws AssignDataException
 	{
+		super();
 		this.setAllValues(form);
 	}
 
@@ -232,7 +233,7 @@ public class QuarantineEventParameter extends AbstractDomainObject implements ja
 	@Override
 	public String getMessageLabel()
 	{
-		return (" De-Identified Report.");
+		return " De-Identified Report.";
 
 	}
 

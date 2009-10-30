@@ -54,13 +54,13 @@ public class StopServerThread
 			// get port number of DeidServer
 			final int port = Integer.parseInt(args[0]);
 			// Create client socket to connect to server
-			final Socket s = new Socket("localhost", port);
-			new BufferedReader(new InputStreamReader(s.getInputStream()));
-			final PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()),
+			final Socket socket = new Socket("localhost", port);
+			new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			final PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),
 					true);
 			// send stop command to stop the server
 			out.write("stop");
-			s.close();
+			socket.close();
 			logger.info("Message sent to stop server");
 		}
 		catch (final UnknownHostException ex1)

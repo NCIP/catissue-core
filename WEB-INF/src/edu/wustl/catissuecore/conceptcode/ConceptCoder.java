@@ -132,21 +132,21 @@ public class ConceptCoder
           char[] illegalChar={0x1d,0xc,'\\',':'};
           try 
           {
-                StringBuffer sb = new StringBuffer(sprText);
+                StringBuffer stringBuffer = new StringBuffer(sprText);
                 // loop to check each character
-                for (int idx = 0; idx < sb.length(); idx++) 
+                for (int idx = 0; idx < stringBuffer.length(); idx++) 
                 {
                       for(int i=0;i<illegalChar.length;i++)
                       {
                             // check for illegal character
-                            if (sb.charAt(idx) == illegalChar[i]) 
+                            if (stringBuffer.charAt(idx) == illegalChar[i]) 
                             {
 //                                Logger.out.error("Found bad character.");
-                                  sb.setCharAt(idx, ' ');
+                                  stringBuffer.setCharAt(idx, ' ');
                             }
                       }
                 }
-                result = sb.toString();
+                result = stringBuffer.toString();
 //                result.replaceAll("__", "  ");
                 result=result.replaceAll("     ", "    .");
 //                result.replaceAll("\\(\\+\\)", "(.)");

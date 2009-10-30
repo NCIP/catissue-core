@@ -83,7 +83,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public SurgicalPathologyReport()
 	{
-
+		super();
 	}
 
 	/**
@@ -143,13 +143,13 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	/**
 	 * Sets id.
-	 * @param id
+	 * @param identifier
 	 *            sets system generated id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -310,7 +310,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
-
+		//
 	}
 
 	/**

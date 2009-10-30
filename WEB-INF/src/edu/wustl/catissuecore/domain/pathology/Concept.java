@@ -59,7 +59,7 @@ public class Concept extends AbstractDomainObject
 	 */
 	public Concept()
 	{
-
+		super();
 	}
 
 	/**
@@ -110,12 +110,12 @@ public class Concept extends AbstractDomainObject
 	}
 
 	/**
-	 * @param id sests system generated id
+	 * @param identifier sets system generated id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**

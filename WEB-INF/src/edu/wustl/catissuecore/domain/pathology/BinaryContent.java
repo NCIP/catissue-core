@@ -23,7 +23,7 @@ public class BinaryContent extends ReportContent
 	 */
 	public BinaryContent()
 	{
-
+		super();
 	}
 
 	/**

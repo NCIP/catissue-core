@@ -34,7 +34,7 @@ public class CaCoreAPIService
 	/**
 	 * cs.
 	 */
-	private static ClientSession cs;
+	private static ClientSession clientSession;
 
 	/**
 	 * Default constructor declared as private to make is SingleTone.
@@ -58,10 +58,10 @@ public class CaCoreAPIService
 			System.setProperty("javax.net.ssl.trustStore", CaTIESProperties
 					.getValue(CaTIESConstants.KEYSTORE_FILE_PATH));
 			appService = ApplicationServiceProvider.getRemoteInstance();
-			cs = ClientSession.getInstance();
+			clientSession = ClientSession.getInstance();
 			try
 			{
-				cs.startSession(CaTIESProperties.getValue(CaTIESConstants.USER_NAME),
+				clientSession.startSession(CaTIESProperties.getValue(CaTIESConstants.USER_NAME),
 						CaTIESProperties.getValue(CaTIESConstants.PASSWORD));
 			}
 			catch (final Exception ex)
@@ -92,7 +92,7 @@ public class CaCoreAPIService
 		try
 		{
 			final List resultList = getList(targertClass, columnName, columnValue);
-			if (resultList != null && resultList.size() > 0)
+			if (resultList != null && !resultList.isEmpty())
 			{
 				return resultList.get(0);
 			}

@@ -474,12 +474,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	 */
 	private String generateRowOutput() throws IOException
 	{
-		final StringBuffer sb = new StringBuffer();
-		sb.append("");
+		final StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("");
 		final List specimenList = this.getDataList();
 		if (this.dataListTypes[1].equalsIgnoreCase(this.dataListType))
 		{
-			sb.append("<TABLE border=0 width='100%'>");
+			stringBuffer.append("<TABLE border=0 width='100%'>");
 		}
 		for (int counter = 0; counter < specimenList.size(); counter++)
 		{
@@ -487,24 +487,25 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			if (Constants.TRUE.equalsIgnoreCase(this.isReadOnly) || specimen.getReadOnly())
 			{
 				//				 addReadOnlyRow(sb, counter, specimen);
-				this.addEditableRow(sb, counter, specimen, true);
+				this.addEditableRow(stringBuffer, counter, specimen, true);
 			}
 			else
 			{
-				this.addEditableRow(sb, counter, specimen, false);
+				this.addEditableRow(stringBuffer, counter, specimen, false);
 			}
 		} // outer most loop for specimenList
-		sb.append("");
+		stringBuffer.append("");
 		if (this.dataListTypes[1].equalsIgnoreCase(this.dataListType))
 		{
-			sb.append("</TABLE>");
+			stringBuffer.append("</TABLE>");
 		}
 
 		//String output =sb.toString();				
-		return sb.toString();
+		return stringBuffer.toString();
 	}
 
-	private void addEditableRow(StringBuffer sb, int counter, GenericSpecimen specimen,
+	private void addEditableRow(StringBuffer stringBuffer,
+			int counter, GenericSpecimen specimen,
 			boolean isTextRow)
 	{
 		// ------------ Mandar : 2Dec08 New Code for new formatUI start----------------
@@ -513,32 +514,32 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			final String elementNamePrefix = this.elementPrefixPart1 + counter + "].";
 			if (counter == 0)
 			{
-				this.createHeaderRow1(sb, TR_GRAY, specimen); // row1 containing headers for first half (editable fields) 
+				this.createHeaderRow1(stringBuffer, TR_GRAY, specimen); // row1 containing headers for first half (editable fields) 
 			}
-			this.createFieldRow(sb, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
+			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
 		}
 		else
 		{
 			final String elementNamePrefix = this.elementPrefixPart1 + counter + "].";
 			if ((counter + 1) % 2 == 0)
 			{
-				sb.append(TR_BLUE);
+				stringBuffer.append(TR_BLUE);
 			}
 			else
 			{
-				sb.append(TR_GRAY);
+				stringBuffer.append(TR_GRAY);
 			}
 
-			sb.append(TD_OPEN);
-			sb.append("<TABLE border=0 width='100%'>");
-			this.createHeaderRow1(sb, TR_OPEN, specimen); // row1 containing headers for first half (editable fields)
-			this.createFieldRow(sb, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
-			this.createHeaderRow2(sb); // row3 containing headers for second half (text fields)
-			this.createTextFieldRow(sb, counter, specimen, elementNamePrefix); // row containing text data (second half)
+			stringBuffer.append(TD_OPEN);
+			stringBuffer.append("<TABLE border=0 width='100%'>");
+			this.createHeaderRow1(stringBuffer, TR_OPEN, specimen); // row1 containing headers for first half (editable fields)
+			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
+			this.createHeaderRow2(stringBuffer); // row3 containing headers for second half (text fields)
+			this.createTextFieldRow(stringBuffer, counter, specimen, elementNamePrefix); // row containing text data (second half)
 
-			sb.append("</TABLE>");
-			sb.append(TD_CLOSE);
-			sb.append(TR_CLOSE);
+			stringBuffer.append("</TABLE>");
+			stringBuffer.append(TD_CLOSE);
+			stringBuffer.append(TR_CLOSE);
 		}
 
 		// ------------ Mandar : 2Dec08 New Code for new formatUI end----------------
@@ -546,52 +547,55 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	// ------------ Mandar : 2Dec08 New Code for new formatUI start----------------
-	private void createParentComponent(StringBuffer sb, GenericSpecimen specimen,
+	private void createParentComponent(StringBuffer stringBuffer,
+			GenericSpecimen specimen,
 			String elementNamePrefix, boolean isTextRow)
 	{
 		final String nameValue[] = this.get1EleDetAt(0, specimen, elementNamePrefix);
-		if (!this.showParentId)
+		if (this.showParentId)
 		{
-			sb.append("<TD rowspan=3 width='" + this.pWd + "%'>");
-			nameValue[1] = this.getFormattedValue(specimen.getUniqueIdentifier());
-			this.createParentRadioComponent(sb, nameValue);
-		}
-		else
-		{
-			sb.append(TD_1HLF + this.pWd + TD_2HLF);
+			stringBuffer.append(TD_1HLF + this.pWd + TD_2HLF);
 			if (isTextRow)
 			{
-				sb.append("<SPAN class=" + STYLE_CLASS + ">" + nameValue[1] + "</SPAN>");
+				stringBuffer.append("<SPAN class=" + STYLE_CLASS + ">" + nameValue[1] + "</SPAN>");
 			}
 			else
 			{
-				this.createTextComponent(sb, nameValue, STYLE_CLASS, 8);
+				this.createTextComponent(stringBuffer, nameValue, STYLE_CLASS, 8);
 			}
 		}
-		sb.append(TD_CLOSE);
+		else
+		{
+			stringBuffer.append("<TD rowspan=3 width='" + this.pWd + "%'>");
+			nameValue[1] = this.getFormattedValue(specimen.getUniqueIdentifier());
+			this.createParentRadioComponent(stringBuffer, nameValue);
+		}
+		stringBuffer.append(TD_CLOSE);
 	}
 
-	private void createParentRadioComponent(StringBuffer sb, String[] nameValue)
+	private void createParentRadioComponent(StringBuffer stringBufffer,
+			String[] nameValue)
 	{
 		//		 sb.append("<td class=\"black_ar_md\" >");
 		if (this.specimenSummaryForm.getSelectedSpecimenId().equalsIgnoreCase(nameValue[1]))
 		{
-			sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\"" + nameValue[1]
+			stringBufffer.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\"" + nameValue[1]
 					+ "\" checked=\"checked\" onclick=\"onParentRadioBtnClick()\">");
 		}
 		else
 		{
-			sb.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\"" + nameValue[1]
+			stringBufffer.append("<input type=\"radio\" name=\"selectedSpecimenId\" value=\"" + nameValue[1]
 					+ "\" onclick=\"onParentRadioBtnClick()\">");
 		}
 		//		 sb.append(TD_CLOSE);
 	}
 
-	private void createTextComponent(StringBuffer sb, String[] nameValue, String styleClass,
+	private void createTextComponent(StringBuffer stringBuffer,
+			String[] nameValue, String styleClass,
 			int size)
 	{
 		//		 sb.append("<td class=\"black_ar_md\" >"); 
-		sb.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
 				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");
 		//		 if(nameValue.length == 3)
 		//		 {
@@ -600,9 +604,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		//	 sb.append(TD_CLOSE);
 	}
 
-	private void createHeaderRow1(StringBuffer sb, String tr, GenericSpecimen specimen)
+	private void createHeaderRow1(StringBuffer stringBuffer,
+			String string, GenericSpecimen specimen)
 	{
-		sb.append(tr);
+		stringBuffer.append(string);
 		int tmpd = 0, tmpcwd = 0;
 		if (this.dataListType.equalsIgnoreCase(this.dataListTypes[2]))
 		{
@@ -632,25 +637,25 @@ public class SpecimenDetailsNewFormat extends TagSupport
 						|| (cnt == 2 && !(this.specimenSummaryForm.getShowbarCode() && specimen
 								.getShowBarcode())))
 				{
-					sb.append(TD_1HLF + "1" + TD_2HLF);
-					sb.append(SPACE);
+					stringBuffer.append(TD_1HLF + "1" + TD_2HLF);
+					stringBuffer.append(SPACE);
 				}
 				else if (cnt == 6)//Location
 				{
-					sb.append("<TD colspan=4 width=" + (50 - this.pWd + tmpd) + "%>");// 3 35
-					sb.append("<SPAN class=black_ar_b>"
+					stringBuffer.append("<TD colspan=4 width=" + (50 - this.pWd + tmpd) + "%>");// 3 35
+					stringBuffer.append("<SPAN class=black_ar_b>"
 							+ ApplicationProperties.getValue((String) this.columnHeaderList.get(6))
 							+ "</SPAN>");
 				}
 				else if (cnt == 7 && !this.specimenSummaryForm.getShowCheckBoxes())//Collected
 				{
-					sb.append(TD_1HLF + 3 + TD_2HLF);//bug 11169
-					sb.append(SPACE);
+					stringBuffer.append(TD_1HLF + 3 + TD_2HLF);//bug 11169
+					stringBuffer.append(SPACE);
 				}
 				else if (cnt == 8)//print bug 11169
 				{
-					sb.append(TD_1HLF + 3 + TD_2HLF);
-					sb.append("<center><SPAN class=black_ar_b>"
+					stringBuffer.append(TD_1HLF + 3 + TD_2HLF);
+					stringBuffer.append("<center><SPAN class=black_ar_b>"
 							+ ApplicationProperties.getValue((String) this.columnHeaderList.get(8))
 							+ "</SPAN></center>");
 				}
@@ -659,15 +664,15 @@ public class SpecimenDetailsNewFormat extends TagSupport
 					//bug 11169 start
 					if (cnt == 7)
 					{
-						sb.append(TD_1HLF + 3 + TD_2HLF);
-						sb.append("<center><SPAN class=black_ar_b>"
+						stringBuffer.append(TD_1HLF + 3 + TD_2HLF);
+						stringBuffer.append("<center><SPAN class=black_ar_b>"
 								+ ApplicationProperties.getValue((String) this.columnHeaderList
 										.get(cnt)) + "</SPAN></center>");
 					}
 					else
 					{
-						sb.append(TD_1HLF + this.cWd + TD_2HLF);
-						sb.append("<SPAN class=black_ar_b>"
+						stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
+						stringBuffer.append("<SPAN class=black_ar_b>"
 								+ ApplicationProperties.getValue((String) this.columnHeaderList
 										.get(cnt)) + "</SPAN>");
 					}
@@ -677,15 +682,15 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			}
 			else
 			{
-				sb.append(TD_1HLF + this.pWd + TD_2HLF);
-				sb.append(SPACE);
+				stringBuffer.append(TD_1HLF + this.pWd + TD_2HLF);
+				stringBuffer.append(SPACE);
 			}
-			sb.append(TD_CLOSE);
+			stringBuffer.append(TD_CLOSE);
 		}
-		sb.append(TR_CLOSE);
+		stringBuffer.append(TR_CLOSE);
 	}
 
-	private void createHeaderRow2(StringBuffer sb)
+	private void createHeaderRow2(StringBuffer stringBuffer)
 	{
 		String colspan = "";
 		int cols = 0;
@@ -695,33 +700,33 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			colspan = "colspan=2";
 			colsp = 2;
 		}
-		sb.append(TR_OPEN);
+		stringBuffer.append(TR_OPEN);
 		for (int cnt = 0; cnt < H2COL_LBLS.length; cnt++)
 		{
 			if (this.dataListType.equalsIgnoreCase(this.dataListTypes[2]) && cnt > 1)
 			{
-				sb.append("<TD colspan=2 width=22%>&nbsp;</TD>");
+				stringBuffer.append("<TD colspan=2 width=22%>&nbsp;</TD>");
 				cols = cols + 2;
 			}
 			else if (cnt == 1)
 			{
-				sb.append("<TD colspan=2 width=22%>");
-				sb.append("<SPAN class=black_ar_b>"
+				stringBuffer.append("<TD colspan=2 width=22%>");
+				stringBuffer.append("<SPAN class=black_ar_b>"
 						+ ApplicationProperties.getValue(H2COL_LBLS[cnt]) + "</SPAN>");
-				sb.append(TD_CLOSE);
+				stringBuffer.append(TD_CLOSE);
 				cols = cols + 2;
 			}
 			else
 			{
-				sb.append("<TD " + colspan + " width=" + (colsp * 15) + "% >");
-				sb.append("<SPAN class=black_ar_b>"
+				stringBuffer.append("<TD " + colspan + " width=" + (colsp * 15) + "% >");
+				stringBuffer.append("<SPAN class=black_ar_b>"
 						+ ApplicationProperties.getValue(H2COL_LBLS[cnt]) + "</SPAN>");
-				sb.append(TD_CLOSE);
+				stringBuffer.append(TD_CLOSE);
 				cols = cols + colsp;
 			}
 		}
-		sb.append("<TD colspan=" + (this.colNum - cols) + ">&nbsp;</TD>");
-		sb.append(TR_CLOSE);
+		stringBuffer.append("<TD colspan=" + (this.colNum - cols) + ">&nbsp;</TD>");
+		stringBuffer.append(TR_CLOSE);
 	}
 
 	private String[] get1EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix)
@@ -834,7 +839,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	private final int[] sizes = {8, 8, 8, 8, 8, 5, 8, 8, 8, 8};
 
-	private void createFieldRow(StringBuffer sb, int counter, GenericSpecimen specimen,
+	private void createFieldRow(StringBuffer stringBuffer,
+			int counter, GenericSpecimen specimen,
 			String elementNamePrefix, boolean isTextRow)
 	{
 		int tmpd = 0, tmpcwd = 0;
@@ -845,8 +851,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 		tmpcwd = this.cWd;
 
-		sb.append(TR_OPEN);
-		this.createParentComponent(sb, specimen, elementNamePrefix, isTextRow);
+		stringBuffer.append(TR_OPEN);
+		this.createParentComponent(stringBuffer, specimen, elementNamePrefix, isTextRow);
 		for (int columnCounter = 1; columnCounter < this.columnList.size(); columnCounter++)
 		{
 			if (columnCounter == 5)
@@ -872,33 +878,33 @@ public class SpecimenDetailsNewFormat extends TagSupport
 					|| (columnCounter == 2 && !(this.specimenSummaryForm.getShowbarCode() && specimen
 							.getShowBarcode())))
 			{
-				sb.append(TD_1HLF + "1" + TD_2HLF);
-				sb.append(SPACE);
+				stringBuffer.append(TD_1HLF + "1" + TD_2HLF);
+				stringBuffer.append(SPACE);
 			}
 			else if (columnCounter == 6)
 			{
 
 				if (isTextRow)
 				{
-					sb.append("<TD colspan=4 width=" + (60 - this.pWd + tmpd) + "% class='"
+					stringBuffer.append("<TD colspan=4 width=" + (60 - this.pWd + tmpd) + "% class='"
 							+ STYLE_CLASS + "'>");//bug 11169
 					if (nameValue[1].trim().length() > 0)
 					{
-						sb.append(nameValue[1]);
-						sb.append(":");
-						sb.append(nameValue[3]);
-						sb.append(",");
-						sb.append(nameValue[5]);
+						stringBuffer.append(nameValue[1]);
+						stringBuffer.append(":");
+						stringBuffer.append(nameValue[3]);
+						stringBuffer.append(",");
+						stringBuffer.append(nameValue[5]);
 					}
 					else
 					{
-						sb.append(this.getHTMLFormattedValue(specimen
+						stringBuffer.append(this.getHTMLFormattedValue(specimen
 								.getStorageContainerForSpecimen()));
 					}
 				}
 				else
 				{
-					sb.append("<TD colspan=4 width=" + (50 - this.pWd + tmpd) + "% class='"
+					stringBuffer.append("<TD colspan=4 width=" + (50 - this.pWd + tmpd) + "% class='"
 							+ STYLE_CLASS + "'>");//bug 11169
 					if (this.dataListTypes[0].equalsIgnoreCase(this.dataListType)
 							&& (this.specimenSummaryForm.isMultipleSpEditMode() && !this.specimenSummaryForm
@@ -906,32 +912,32 @@ public class SpecimenDetailsNewFormat extends TagSupport
 					{
 						if (nameValue[1].trim().length() > 0)
 						{
-							sb.append(nameValue[1]);
-							sb.append(":");
-							sb.append(nameValue[3]);
-							sb.append(",");
-							sb.append(nameValue[5]);
+							stringBuffer.append(nameValue[1]);
+							stringBuffer.append(":");
+							stringBuffer.append(nameValue[3]);
+							stringBuffer.append(",");
+							stringBuffer.append(nameValue[5]);
 						}
 						else
 						{
-							sb.append(this.getHTMLFormattedValue(specimen
+							stringBuffer.append(this.getHTMLFormattedValue(specimen
 									.getStorageContainerForSpecimen()));
 						}
 						for (int ind1 = 0; ind1 < 9; ind1 += 2)
 						{
 							final String[] tmpAr = {nameValue[ind1], nameValue[ind1 + 1]};
-							this.createHiddenElement(sb, tmpAr);
+							this.createHiddenElement(stringBuffer, tmpAr);
 						}
 					}
 					else
 					{
-						this.createNewStorageComponent(sb, nameValue, specimen);
+						this.createNewStorageComponent(stringBuffer, nameValue, specimen);
 					}
 				}
 			}
 			else if (columnCounter == 7)
 			{
-				sb.append(TD_1HLF + 3 + TD_2HLF);//bug 11169
+				stringBuffer.append(TD_1HLF + 3 + TD_2HLF);//bug 11169
 				if (this.isParentList
 						&& this.specimenSummaryForm.getSelectedSpecimenId().equals(
 								specimen.getUniqueIdentifier()))
@@ -942,45 +948,45 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				{
 					this.functionCall = "";
 				}
-				this.createCollectedComponent(sb, nameValue, isTextRow);
+				this.createCollectedComponent(stringBuffer, nameValue, isTextRow);
 				//addRemainingSpecimenElements(sb,elementNamePrefix,specimen, isTextRow);
 			}
 			//bug 11169 start
 			else if (columnCounter == 8)
 			{
-				sb.append(TD_1HLF + 3 + TD_2HLF);
+				stringBuffer.append(TD_1HLF + 3 + TD_2HLF);
 				this.functionCall = "";
-				this.createPrintComponent(sb, nameValue);
-				this.addRemainingSpecimenElements(sb, elementNamePrefix, specimen, isTextRow);
+				this.createPrintComponent(stringBuffer, nameValue);
+				this.addRemainingSpecimenElements(stringBuffer, elementNamePrefix, specimen, isTextRow);
 			}
 			//bug 11169 end
 			else
 			{
 				if (isTextRow && columnCounter == 1)
 				{
-					sb.append(TD_1HLF + 5 + TD_2HLF);
+					stringBuffer.append(TD_1HLF + 5 + TD_2HLF);
 				}
 				else
 				{
-					sb.append(TD_1HLF + this.cWd + TD_2HLF);
+					stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
 				}
 				if (isTextRow || columnCounter == 3)
 				{
-					sb.append("<SPAN class=" + STYLE_CLASS + ">"
+					stringBuffer.append("<SPAN class=" + STYLE_CLASS + ">"
 							+ this.getHTMLFormattedValue(nameValue[1]) + "</SPAN>");
 				}
 				else
 				{
-					this.createTextComponent(sb, nameValue, STYLE_CLASS, this.sizes[columnCounter]);
+					this.createTextComponent(stringBuffer, nameValue, STYLE_CLASS, this.sizes[columnCounter]);
 				}
 			}
-			sb.append(TD_CLOSE);
+			stringBuffer.append(TD_CLOSE);
 		}
-		sb.append(TR_CLOSE);
+		stringBuffer.append(TR_CLOSE);
 	}
 
-	private void createNewStorageComponent(StringBuffer sb, String[] nameValue,
-			GenericSpecimen specimen)
+	private void createNewStorageComponent(StringBuffer stringBuffer,
+			String[] nameValue, GenericSpecimen specimen)
 	{
 
 		//		 sb.append("<td class=\"black_ar_md\" >");
@@ -1002,93 +1008,94 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		final String sid = specimen.getUniqueIdentifier();
 		String isDisabled = "";
 
-		sb.append("<table style=\"font-size:1em\" size=\"100%\">");
-		sb.append(TR_OPEN);
-		sb.append(TD_OPEN);
-		sb.append("");
+		stringBuffer.append("<table style=\"font-size:1em\" size=\"100%\">");
+		stringBuffer.append(TR_OPEN);
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("");
 
-		sb.append("<select name=\"" + nameValue[8]
+		stringBuffer.append("<select name=\"" + nameValue[8]
 				+ "\" size=\"1\" onchange=\"scForSpecimen(this,'" + sid + "','" + specimenClassName
 				+ "')\" class=\"black_new_md\" id=\"" + nameValue[8] + "\">");
 
 		if ("Virtual".equals(specimen.getStorageContainerForSpecimen()))
 		{
-			sb.append("<option value=\"Virtual\" selected=\"selected\">Virtual</option>");
+			stringBuffer.append("<option value=\"Virtual\" selected=\"selected\">Virtual</option>");
 			isDisabled = "disabled='disabled'";
 		}
 		else
 		{
-			sb.append("<option value=\"Virtual\">Virtual</option>");
+			stringBuffer.append("<option value=\"Virtual\">Virtual</option>");
 		}
 		if ("Auto".equals(specimen.getStorageContainerForSpecimen()))
 		{
-			sb.append("<option value=\"Auto\" selected=\"selected\">Auto</option>");
+			stringBuffer.append("<option value=\"Auto\" selected=\"selected\">Auto</option>");
 		}
 		else
 		{
-			sb.append("<option value=\"Auto\">Auto</option>");
+			stringBuffer.append("<option value=\"Auto\">Auto</option>");
 		}
 		if ("Manual".equals(specimen.getStorageContainerForSpecimen()))
 		{
-			sb.append("<option value=\"Manual\" selected=\"selected\">Manual</option>");
+			stringBuffer.append("<option value=\"Manual\" selected=\"selected\">Manual</option>");
 		}
 		else
 		{
-			sb.append("<option value=\"Manual\">Manual</option>");
+			stringBuffer.append("<option value=\"Manual\">Manual</option>");
 		}
-		sb.append("</select>");
-		sb.append(TD_CLOSE);
+		stringBuffer.append("</select>");
+		stringBuffer.append(TD_CLOSE);
 
-		sb.append(TD_OPEN);
-		sb.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
 				+ "\" size=\"" + scSize
 				+ "\" class=\"black_ar_md\" onmouseover=\" showTip(this.id)\"  id=\""
 				+ selectedContainerName + "\" " + isDisabled + " >");
-		sb.append(TD_CLOSE);
-		sb.append(TD_OPEN);
-		sb.append("<input type=\"text\" name=\"" + nameValue[2] + "\" value=\"" + nameValue[3]
+		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[2] + "\" value=\"" + nameValue[3]
 				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionOne + "\" "
 				+ isDisabled + " >");
-		sb.append(TD_CLOSE);
-		sb.append(TD_OPEN);
-		sb.append("<input type=\"text\" name=\"" + nameValue[4] + "\" value=\"" + nameValue[5]
+		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[4] + "\" value=\"" + nameValue[5]
 				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionTwo + "\" "
 				+ isDisabled + " >");
-		sb.append(TD_CLOSE);
-		sb.append(TD_OPEN);
-		sb.append("<a href=\"#\" onclick=\"" + functionCall + "\">");
-		sb
+		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("<a href=\"#\" onclick=\"" + functionCall + "\">");
+		stringBuffer
 				.append("<img src=\"images/Tree.gif\" border=\"0\" width=\"13\" height=\"15\" title=\'View storage locations\'>");
-		sb.append("</a>");
-		sb.append("<input type=\"hidden\" name=\"" + nameValue[6] + "\" value=\"" + nameValue[7]
+		stringBuffer.append("</a>");
+		stringBuffer.append("<input type=\"hidden\" name=\"" + nameValue[6] + "\" value=\"" + nameValue[7]
 				+ "\" id=\"" + containerId + "\">");
-		sb.append(TD_CLOSE);
-		sb.append(TR_CLOSE);
-		sb.append("</table>");
+		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TR_CLOSE);
+		stringBuffer.append("</table>");
 	}
 
-	private void createPrintComponent(StringBuffer sb, String[] nameValue)
+	private void createPrintComponent(StringBuffer stringBuffer, String[] nameValue)
 	{
 		if (this.specimenSummaryForm.getShowCheckBoxes())
 		{
 			if (Constants.TRUE.equalsIgnoreCase(nameValue[1]))
 			{
-				sb.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
+				stringBuffer.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
 						+ "\" value=\"true\" checked=\"checked\"></center>");
 			}
 			else
 			{
-				sb.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
+				stringBuffer.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
 						+ "\" value=\"on\"></center>");
 			}
 		}
 		else
 		{
-			this.createHiddenElement(sb, nameValue);
+			this.createHiddenElement(stringBuffer, nameValue);
 		}
 	}
 
-	private void createCollectedComponent(StringBuffer sb, String[] nameValue, boolean isTextRow)
+	private void createCollectedComponent(StringBuffer stringBuffer,
+			String[] nameValue, boolean isTextRow)
 	{
 		//		 sb.append("<td class=\"black_ar_md\" >");
 		if (this.specimenSummaryForm.getShowCheckBoxes())
@@ -1096,20 +1103,20 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			//			 if("getTextElement".equalsIgnoreCase(calledFrom))
 			if (isTextRow)
 			{
-				sb.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
+				stringBuffer.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
 						+ "\" value=\"true\" disabled=\"true\" checked=\"checked\"></center>");
 			}
 			else
 			{
 				if (Constants.TRUE.equalsIgnoreCase(nameValue[1]))
 				{
-					sb.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
+					stringBuffer.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
 							+ "\" value=\"on\" checked=\"checked\" " + this.functionCall
 							+ "></center>");
 				}
 				else
 				{
-					sb.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
+					stringBuffer.append("<center><input type=\"checkbox\" name=\"" + nameValue[0]
 							+ "\" value=\"on\" " + this.functionCall + "></center>");
 				}
 			}
@@ -1117,13 +1124,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		else
 		{
 			//sb.append(getHTMLFormattedValue(""));
-			this.createHiddenElement(sb, nameValue);
+			this.createHiddenElement(stringBuffer, nameValue);
 		}
 		//			 sb.append(TD_CLOSE);
 	}
 
 	// Mandar : 4Dec08
-	private void createTextFieldRow(StringBuffer sb, int counter, GenericSpecimen specimen,
+	private void createTextFieldRow(StringBuffer stringBuffer,
+			int counter, GenericSpecimen specimen,
 			String elementNamePrefix)
 	{
 
@@ -1135,82 +1143,82 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			colspan = "colspan=2";
 			colsp = 2;
 		}
-		sb.append(TR_OPEN);
+		stringBuffer.append(TR_OPEN);
 		for (int cnt = 0; cnt < H2COL_LBLS.length; cnt++)
 		{
 			final String nameValue[] = this.get2EleDetAt(cnt, specimen, elementNamePrefix);
 
 			if (this.dataListType.equalsIgnoreCase(this.dataListTypes[2]) && cnt > 1)
 			{
-				sb.append("<TD colspan=2 class='black_ar'>&nbsp;</TD>");
+				stringBuffer.append("<TD colspan=2 class='black_ar'>&nbsp;</TD>");
 				cols = cols + 2;
 			}
 			else if (cnt == 1)
 			{
-				sb.append("<TD colspan=2 class='black_ar'>");
-				sb.append(nameValue[1]);
-				sb.append(TD_CLOSE);
+				stringBuffer.append("<TD colspan=2 class='black_ar'>");
+				stringBuffer.append(nameValue[1]);
+				stringBuffer.append(TD_CLOSE);
 				cols = cols + 2;
 			}
 			else
 			{
-				sb.append("<TD " + colspan + " class='black_ar'>");
-				sb.append(nameValue[1]);
-				sb.append(TD_CLOSE);
+				stringBuffer.append("<TD " + colspan + " class='black_ar'>");
+				stringBuffer.append(nameValue[1]);
+				stringBuffer.append(TD_CLOSE);
 				cols = cols + colsp;
 			}
 		}
-		sb.append("<TD colspan=" + (this.colNum - cols) + " class='black_ar'>&nbsp;");
+		stringBuffer.append("<TD colspan=" + (this.colNum - cols) + " class='black_ar'>&nbsp;");
 		//			addRemainingSpecimenElements(sb,elementNamePrefix,specimen);
-		sb.append(TD_CLOSE);
-		sb.append(TR_CLOSE);
+		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TR_CLOSE);
 
 	}
 
-	private void addRemainingSpecimenElements(StringBuffer sb, String elementNamePrefix,
+	private void addRemainingSpecimenElements(StringBuffer stringBuffer, String elementNamePrefix,
 			GenericSpecimen specimen, boolean isTextRow)
 	{
 		final String nameValue[][] = this.getRemainingSpecimenElementsData(specimen,
 				elementNamePrefix);
 		for (final String[] element : nameValue)
 		{
-			sb.append("<input type=\"hidden\" name=\"" + element[0] + "\" value=\"" + element[1]
+			stringBuffer.append("<input type=\"hidden\" name=\"" + element[0] + "\" value=\"" + element[1]
 					+ "\" id=\"" + element[0] + "\">");
 		}
 
 		if (isTextRow)
 		{
-			String nV[] = this.get1EleDetAt(1, specimen, elementNamePrefix);
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
+			String stringArrayNV[] = this.get1EleDetAt(1, specimen, elementNamePrefix);
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
 
-			nV = this.get1EleDetAt(2, specimen, elementNamePrefix);
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
+			stringArrayNV = this.get1EleDetAt(2, specimen, elementNamePrefix);
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
 
-			nV = this.get1EleDetAt(4, specimen, elementNamePrefix);
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
+			stringArrayNV = this.get1EleDetAt(4, specimen, elementNamePrefix);
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
 
-			nV = this.get1EleDetAt(6, specimen, elementNamePrefix);
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
-			sb.append("<input type=\"hidden\" name=\"" + nV[2] + "\" value=\"" + nV[3] + "\" id=\""
-					+ nV[2] + "\">");
-			sb.append("<input type=\"hidden\" name=\"" + nV[4] + "\" value=\"" + nV[5] + "\" id=\""
-					+ nV[4] + "\">");
-			sb.append("<input type=\"hidden\" name=\"" + nV[6] + "\" value=\"" + nV[7] + "\" id=\""
-					+ nV[6] + "\">");
-			sb.append("<input type=\"hidden\" name=\"" + nV[8] + "\" value=\"" + nV[9] + "\" id=\""
-					+ nV[8] + "\">");
+			stringArrayNV = this.get1EleDetAt(6, specimen, elementNamePrefix);
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[2] + "\" value=\"" + stringArrayNV[3] + "\" id=\""
+					+ stringArrayNV[2] + "\">");
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[4] + "\" value=\"" + stringArrayNV[5] + "\" id=\""
+					+ stringArrayNV[4] + "\">");
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[6] + "\" value=\"" + stringArrayNV[7] + "\" id=\""
+					+ stringArrayNV[6] + "\">");
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[8] + "\" value=\"" + stringArrayNV[9] + "\" id=\""
+					+ stringArrayNV[8] + "\">");
 
-			nV = this.get1EleDetAt(7, specimen, elementNamePrefix);
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
+			stringArrayNV = this.get1EleDetAt(7, specimen, elementNamePrefix);
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
 
-			nV = this.get1EleDetAt(8, specimen, elementNamePrefix);//bug 11169
-			sb.append("<input type=\"hidden\" name=\"" + nV[0] + "\" value=\"" + nV[1] + "\" id=\""
-					+ nV[0] + "\">");
+			stringArrayNV = this.get1EleDetAt(8, specimen, elementNamePrefix);//bug 11169
+			stringBuffer.append("<input type=\"hidden\" name=\"" + stringArrayNV[0] + "\" value=\"" + stringArrayNV[1] + "\" id=\""
+					+ stringArrayNV[0] + "\">");
 		}
 	}
 
@@ -1254,10 +1262,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
-	private void createHiddenElement(StringBuffer sb, String[] nameValue)
+	private void createHiddenElement(StringBuffer stringBuffer,
+			String[] nameValue)
 	{
 		//		 sb.append("<input type=\"hidden\" name=\""+nameValue[0]+"\" value=\""+nameValue[1]+"\">");
-		sb.append("<input type=\"hidden\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+		stringBuffer.append("<input type=\"hidden\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
 				+ "\" id=\"" + nameValue[0] + "\">");
 	}
 

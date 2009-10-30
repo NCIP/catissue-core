@@ -197,15 +197,15 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		// instnatiate deidentified report
 		final DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
 
-		final TextContent tc = new TextContent();
+		final TextContent textContent = new TextContent();
 		// set deidentified text to text content
-		tc.setData(deidText);
+		textContent.setData(deidText);
 		// set identified report to deidentified report
-		tc.setSurgicalPathologyReport(deidReport);
+		textContent.setSurgicalPathologyReport(deidReport);
 
 		// set text content which contains deidentified text to deidentified
 		// report
-		deidReport.setTextContent(tc);
+		deidReport.setTextContent(textContent);
 		// set default value for flag for review
 		deidReport.setIsFlagForReview(new Boolean(false));
 
@@ -234,26 +234,26 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				// temp file for processing input file
 				final File postdeidFile = new File("postdeid.tmp");
 
-				final FileWriter fw = new FileWriter(predeidFile);
+				final FileWriter fileWriter = new FileWriter(predeidFile);
 				// write contents to input xml file
-				fw.write(text);
-				fw.close();
+				fileWriter.write(text);
+				fileWriter.close();
 				this.logger.info("Calling native call");
 				deid.createDeidentifier(predeidFile.getAbsolutePath(), postdeidFile
 						.getAbsolutePath()
 						+ "?XML", configFileName);
 				this.logger.info("Native call success");
-				final BufferedReader br = new BufferedReader(new FileReader(postdeidFile));
+				final BufferedReader bufferedReader = new BufferedReader(new FileReader(postdeidFile));
 
 				// read all contents from output file
 				String line = "";
-				while ((line = br.readLine()) != null)
+				while ((line = bufferedReader.readLine()) != null)
 				{
 					// add content to output string
 					output += line + "\n";
 				}
 				this.logger.info("Deleting temp files");
-				br.close();
+				bufferedReader.close();
 				// delete temporary input and output files
 				predeidFile.delete();
 				postdeidFile.delete();

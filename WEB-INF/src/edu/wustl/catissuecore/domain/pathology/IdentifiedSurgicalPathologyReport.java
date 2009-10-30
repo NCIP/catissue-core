@@ -32,7 +32,7 @@ public class IdentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 */
 	public IdentifiedSurgicalPathologyReport()
 	{
-
+		super();
 	}
 
 	/**

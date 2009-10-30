@@ -32,6 +32,7 @@ public class StopServer extends Thread
 	 */
 	public StopServer(String port)
 	{
+		super();
 		this.port = port;
 	}
 
@@ -46,14 +47,14 @@ public class StopServer extends Thread
 			// get port number for server from catissueCore-properties.xml file
 			final int port = Integer.parseInt(CaTIESProperties.getValue(this.port));
 			final ServerSocket serv = new ServerSocket(port);
-			BufferedReader r;
+			BufferedReader bufferedReader;
 			final Socket sock = serv.accept();
-			r = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			bufferedReader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			new PrintWriter(new OutputStreamWriter(sock.getOutputStream()), true);
-			r.readLine();
+			bufferedReader.readLine();
 
 			this.logger.info("Stopping server");
-			r.close();
+			bufferedReader.close();
 			sock.close();
 			// close server socket
 			serv.close();

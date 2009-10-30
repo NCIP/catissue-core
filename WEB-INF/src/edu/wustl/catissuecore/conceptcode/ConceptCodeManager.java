@@ -223,7 +223,7 @@ public class ConceptCodeManager
 	 */
 	private void processReports(List deidReportIDList) throws Exception
 	{
-		if (deidReportIDList != null && deidReportIDList.size() > 0)
+		if (deidReportIDList != null && !deidReportIDList.isEmpty())
 		{
 			logger.info(deidReportIDList.size() + " reports found for Concept Coding");
 			try
@@ -238,15 +238,15 @@ public class ConceptCodeManager
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 				DeidentifiedSurgicalPathologyReport deidReport = null;
-				ConceptCoder cc = null;
+				ConceptCoder conceptCoder = null;
 				for (int i = 0; i < deidReportIDList.size(); i++)
 				{
 					deidReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService.getObject(
 							DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER,
 							deidReportIDList.get(i));
-					cc = new ConceptCoder(deidReport, this.exporterPR, this.tiesPipe);
+					conceptCoder = new ConceptCoder(deidReport, this.exporterPR, this.tiesPipe);
 					logger.info("Concept coding of report serial no " + i + " started....");
-					cc.process();
+					conceptCoder.process();
 					System.gc();
 					logger.info("Concept coding of report serial no " + i + " finished.");
 				}

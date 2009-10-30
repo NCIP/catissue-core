@@ -37,7 +37,7 @@ public class DoNothingDeidentifier extends AbstractDeidentifier
 	@Override
 	public void initialize()
 	{
-
+		//
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class DoNothingDeidentifier extends AbstractDeidentifier
 	@Override
 	public void shutdown()
 	{
-
+		//
 	}
 
 }

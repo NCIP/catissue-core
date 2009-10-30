@@ -45,7 +45,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 */
 	public DeidentifiedSurgicalPathologyReport()
 	{
-
+		super();
 	}
 
 	/**

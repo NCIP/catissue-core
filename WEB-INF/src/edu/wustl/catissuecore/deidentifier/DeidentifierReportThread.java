@@ -47,6 +47,7 @@ public class DeidentifierReportThread extends Thread
 	public DeidentifierReportThread(IdentifiedSurgicalPathologyReport ispr,
 			AbstractDeidentifier deidentifier) throws Exception
 	{
+		super();
 		this.identifiedReport = ispr;
 		this.deidentifier = deidentifier;
 	}

@@ -32,7 +32,7 @@ public class TextContent extends ReportContent
 	 */
 	public TextContent()
 	{
-
+		super();
 	}
 
 	/**

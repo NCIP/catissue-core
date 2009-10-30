@@ -86,7 +86,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public ReportLoaderQueue()
 	{
-
+		super();
 	}
 
 	/**
@@ -96,6 +96,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 	 */
 	public ReportLoaderQueue(String text)
 	{
+		super();
 		// this.id=new Long(4);
 		this.reportText = text;
 	}
@@ -115,13 +116,13 @@ public class ReportLoaderQueue extends AbstractDomainObject
 
 	/**
 	 * Set id of the object.
-	 * @param id
+	 * @param identifier
 	 *            of the object
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**

@@ -52,13 +52,13 @@ public class SemanticType extends AbstractDomainObject
 
 	/**
 	 * Set identifier of the sematic type.
-	 * @param id
+	 * @param identifier
 	 *            sets identifier
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class SemanticType extends AbstractDomainObject
 	 */
 	public SemanticType()
 	{
-
+		super();
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class SemanticType extends AbstractDomainObject
 	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
-
+		//
 	}
 
 }

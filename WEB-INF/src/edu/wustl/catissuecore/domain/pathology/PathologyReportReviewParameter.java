@@ -100,12 +100,12 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	}
 
 	/**
-	 * @param id : id
+	 * @param identifier : id
 	 */
 	@Override
-	public void setId(Long id)
+	public void setId(Long identifier)
 	{
-		this.id = id;
+		this.id = identifier;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	 */
 	public PathologyReportReviewParameter()
 	{
-
+		super();
 	}
 
 	/**
@@ -196,14 +196,14 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 		if (!form.getIdentifiedReportId().equals(""))
 		{
 			final IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
-			report.setId(new Long(form.getIdentifiedReportId()));
+			report.setId(Long.valueOf(form.getIdentifiedReportId()));
 			this.setSurgicalPathologyReport(report);
 
 		}
 		else if (form.getDeIdentifiedReportId() != 0)
 		{
 			final DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
-			deidReport.setId(new Long(form.getDeIdentifiedReportId()));
+			deidReport.setId(Long.valueOf(form.getDeIdentifiedReportId()));
 			this.setSurgicalPathologyReport(deidReport);
 		}
 
@@ -216,6 +216,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	 */
 	public PathologyReportReviewParameter(AbstractActionForm form) throws AssignDataException
 	{
+		super();
 		this.setAllValues(form);
 	}
 
@@ -226,7 +227,7 @@ public class PathologyReportReviewParameter extends AbstractDomainObject
 	@Override
 	public String getMessageLabel()
 	{
-		return (" Pathology Report.");
+		return " Pathology Report.";
 	}
 
 	/**

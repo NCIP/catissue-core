@@ -24,7 +24,7 @@ public class XMLContent extends ReportContent
 	 */
 	public XMLContent()
 	{
-
+		super();
 	}
 
 	/**

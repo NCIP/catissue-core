@@ -146,17 +146,17 @@ public class ViewSPRUtil
 	public static Map getMedicalIdentifierNumbers(Collection medicalIdentifierNumbers)
 	{
 		final HashMap values = new HashMap();
-		int i = 1;
+		int integer = 1;
 
-		final Iterator it = medicalIdentifierNumbers.iterator();
-		while (it.hasNext())
+		final Iterator iterator = medicalIdentifierNumbers.iterator();
+		while (iterator.hasNext())
 		{
-			final ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) it
+			final ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) iterator
 					.next();
 
-			final String key1 = "ParticipantMedicalIdentifier:" + i + "_Site_id";
-			final String key2 = "ParticipantMedicalIdentifier:" + i + "_medicalRecordNumber";
-			final String key3 = "ParticipantMedicalIdentifier:" + i + "_id";
+			final String key1 = "ParticipantMedicalIdentifier:" + integer + "_Site_id";
+			final String key2 = "ParticipantMedicalIdentifier:" + integer + "_medicalRecordNumber";
+			final String key3 = "ParticipantMedicalIdentifier:" + integer + "_id";
 
 			final Site site = participantMedicalIdentifier.getSite();
 			if (site != null)
@@ -172,7 +172,7 @@ public class ViewSPRUtil
 					.getMedicalRecordNumber()));
 			values.put(key3, CommonUtilities.toString(participantMedicalIdentifier.getId()));
 
-			i++;
+			integer++;
 		}
 		return values;
 	}
