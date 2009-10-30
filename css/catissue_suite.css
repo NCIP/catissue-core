@@ -62,6 +62,14 @@ body {
 	font-weight: bold;
 }
 
+.black_ar_disabled {
+	font-family: verdana;
+	font-size: 11px;
+	color: #323232;
+	vertical-align:middle;
+	background-color:#E6E6E6;
+}
+
 .wh_ar_s {
 	font-family: verdana;
 	font-size: 0.7em;
