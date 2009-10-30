@@ -3544,6 +3544,9 @@ public class AppUtility
 			try
 			{
 				user = getUser(userName);
+			    if (user == null)
+                    throw new BizLogicException(ErrorKey.getErrorKey("user.not.exists"),
+                            null,"User does not exist");
 			}
 			catch (final ApplicationException e)
 			{
