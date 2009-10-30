@@ -158,7 +158,7 @@ function onSubmit(orderedString)
 	}
 	else if(document.forms[0].chkName[6].checked == true)
 	{
-		printSpecimensLabels();
+		printSpecimensLabels(orderedString);
 	}
 }
 
@@ -328,8 +328,9 @@ function distributeOrder()
 	}
 	
 }
-function printSpecimensLabels()
+function printSpecimensLabels(orderedString)
 {
+   orderedString.value = mygrid.getCheckedRows(0);
 	var isChecked = updateHiddenFields();
 	   
 	if(isChecked == "true")
