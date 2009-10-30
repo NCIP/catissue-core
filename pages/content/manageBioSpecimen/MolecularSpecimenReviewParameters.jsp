@@ -17,13 +17,33 @@
 	</script>
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
-<SCRIPT>var imgsrc="images/";</SCRIPT>
+<SCRIPT>var imgsrc="images/";
+
+function calculateAbsorbanceRatio()
+{
+	var absorbanceAt260 = document.getElementById('absorbanceAt260').value;
+	var absorbanceAt280 = document.getElementById('absorbanceAt280').value;
+	var ratio = absorbanceAt260/absorbanceAt280;
+	if(isNaN(parseInt(ratio)))
+	{
+		if(!((document.getElementById('absorbanceAt260').value == "") || (document.getElementById('absorbanceAt280').value == "")))
+		{
+			alert('<bean:message key="molecularspecimenreviewparameters.absorbanceRatioOf260/280.validationMsg"/>');
+		}
+		document.getElementById('absorbanceRatioOf260/280').value  = "";
+		return;
+	}
+	document.getElementById('absorbanceRatioOf260/280').value = ratio;
+}
+
+
+</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
 </head>
-	<body>
+	<body onLoad = calculateAbsorbanceRatio();>
 		
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
@@ -132,10 +152,10 @@
 				<tr>  
 				  <td align="center" class="black_ar">&nbsp;</td>
 				  <td align="left" class="black_ar"><bean:message key="molecularspecimenreviewparameters.absorbanceat260"/> </td>
-                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt260" property="absorbanceAt260" /></td>
+                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt260" property="absorbanceAt260" onkeyup="calculateAbsorbanceRatio();"/></td>
                   <td align="left">&nbsp;</td>
 				  <td align="left" class="black_ar"><bean:message key="molecularspecimenreviewparameters.absorbanceat280"/> </td>
-                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt280" property="absorbanceAt280" /></td>
+                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt280" property="absorbanceAt280" onkeyup="calculateAbsorbanceRatio();"/></td>
 				
 				</tr>
 				
@@ -143,13 +163,14 @@
 				
 				
 				 <tr>
-                  <td align="center" class="black_ar">&nbsp;</td>
+				  <td align="center" class="black_ar">&nbsp;</td>
+				  <td align="left" class="black_ar"><bean:message key="molecularspecimenreviewparameters.absorbanceRatioOf260/280"/></td>
+                  <td align="left">
+					<input type="text" class="black_ar_disabled" maxlength="10"  size="30" id="absorbanceRatioOf260/280" readOnly> </input>
+				  </td>
+                  <td align="left">&nbsp;</td>
 				  <td align="left" class="black_ar"><LABEL for="molecularspecimenreviewparameters.ratio28STo18S"><bean:message key="molecularspecimenreviewparameters.ratio28STo18S"/> </LABEL></td>
                   <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="ratio28STo18S" property="ratio28STo18S" /></td>
-				
-                  <td align="left">&nbsp;</td>
-                  <td align="left">&nbsp;</td>
-                  <td align="left">&nbsp;</td>
                 </tr>
                 
 
