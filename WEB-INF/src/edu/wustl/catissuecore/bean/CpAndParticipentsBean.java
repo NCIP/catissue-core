@@ -102,6 +102,6 @@ public class CpAndParticipentsBean implements Externalizable
 	@Override
 	public String toString()
 	{
-		return new String("name:" + this.name.toString() + " value:" + this.value.toString());
+		return new String("name:" + this.name + " value:" + this.value);
 	}
 }

@@ -444,7 +444,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	public String getQuantity()
 	{
 		// TODO Auto-generated method stub
-		return this.initialQuantity.toString();
+		return this.initialQuantity;
 	}
 
 	/* (non-Javadoc)
