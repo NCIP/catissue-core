@@ -1684,6 +1684,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		persistentSpecimen.setLabel(specimen.getLabel());
 		persistentSpecimen.setBarcode(specimen.getBarcode());
 		persistentSpecimen.setCreatedOn(specimen.getCreatedOn());
+		persistentSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 		// bug #8039
 		/*
 		 * if
