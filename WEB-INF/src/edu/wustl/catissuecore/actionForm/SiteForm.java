@@ -157,6 +157,16 @@ public class SiteForm extends AbstractActionForm
 	{
 		return this.type;
 	}
+	
+	/**
+	 * Returns the Street Address of the site.
+	 * @return String representing mailing address of the site.
+	 * @see #setStreet(String)
+	 */
+	public String getStreet()
+	{
+		return this.street;
+	}
 
 	/**
 	 * Sets the type of the site.
@@ -166,6 +176,15 @@ public class SiteForm extends AbstractActionForm
 	public void setType(String type)
 	{
 		this.type = type;
+	}
+	/**
+	 * Sets the emailAddress address of the site.
+	 * @param emailAddress String representing emailAddress address of the site.
+	 * @see #getEmailAddress()
+	 */
+	public void setEmailAddress(String emailAddress)
+	{
+		this.emailAddress = emailAddress;
 	}
 
 	/**
@@ -193,36 +212,6 @@ public class SiteForm extends AbstractActionForm
 	public String getEmailAddress()
 	{
 		return this.emailAddress;
-	}
-
-	/**
-	 * Sets the emailAddress address of the site.
-	 * @param emailAddress String representing emailAddress address of the site.
-	 * @see #getEmailAddress()
-	 */
-	public void setEmailAddress(String emailAddress)
-	{
-		this.emailAddress = emailAddress;
-	}
-
-	/**
-	 * Returns the Street Address of the site.
-	 * @return String representing mailing address of the site.
-	 * @see #setStreet(String)
-	 */
-	public String getStreet()
-	{
-		return this.street;
-	}
-
-	/**
-	 * Sets the Street Address of the site.
-	 * @param street String representing mailing address of the site.
-	 * @see #getStreet()
-	 */
-	public void setStreet(String street)
-	{
-		this.street = street;
 	}
 
 	/**
@@ -284,6 +273,15 @@ public class SiteForm extends AbstractActionForm
 	{
 		this.country = country;
 	}
+	/**
+	 * Sets the Street Address of the site.
+	 * @param street String representing mailing address of the site.
+	 * @see #getStreet()
+	 */
+	public void setStreet(String street)
+	{
+		this.street = street;
+	}
 
 	/**
 	 * Returns the zip code of the city where the site is. 
@@ -337,12 +335,12 @@ public class SiteForm extends AbstractActionForm
 
 	/**
 	 * Sets the fax number of the site.
-	 * @param faxNumber The fax number of the site.
+	 * @param faxNum The fax number of the site.
 	 * @see #getFax()
 	 */
-	public void setFaxNumber(String faxNumber)
+	public void setFaxNumber(String faxNum)
 	{
-		this.faxNumber = faxNumber;
+		this.faxNumber = faxNum;
 	}
 
 	/**

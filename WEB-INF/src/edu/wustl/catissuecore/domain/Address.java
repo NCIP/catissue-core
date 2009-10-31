@@ -80,15 +80,6 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	}
 
 	/**
-	 * @param identifier Unique identifier to be assigned to the address.
-	 */
-	@Override
-	public void setId(Long identifier)
-	{
-		this.id = identifier;
-	}
-
-	/**
 	 * Returns the Street of the address.
 	 * @hibernate.property name="street" type="string" column="STREET" length="50"
 	 * @return Street of the address.
@@ -96,6 +87,15 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	public String getStreet()
 	{
 		return this.street;
+	}
+
+	/**
+	 * @param identifier Unique identifier to be assigned to the address.
+	 */
+	@Override
+	public void setId(Long identifier)
+	{
+		this.id = identifier;
 	}
 
 	/**
