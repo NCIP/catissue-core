@@ -264,24 +264,39 @@ public class SummarySpDetails
 		this.tissueTypeDetails = tissueTypeDetails;
 	}
 
+	/**
+	 * Get PatStDetails.
+	 * @return Collection ob Object
+	 */
 	public Collection<Object> getPatStDetails()
 	{
 		return this.patStDetails;
 	}
 
+	/**
+	 * Set PatStDetails.
+	 * @param patStDetails Collection of Object.
+	 */
 	public void setPatStDetails(final Collection<Object> patStDetails)
 	{
 		this.patStDetails = patStDetails;
 	}
 
+	/**
+	 * Get TSiteDetails.
+	 * @return Collection of Object
+	 */
 	public Collection<Object> getTSiteDetails()
 	{
 		return this.tSiteDetails;
 	}
 
+	/**
+	 * Set TSiteDetails.
+	 * @param siteDetails Collection of Object
+	 */
 	public void setTSiteDetails(final Collection<Object> siteDetails)
 	{
 		this.tSiteDetails = siteDetails;
 	}
-
 }

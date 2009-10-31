@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wustl.common.util.global.Status;
-
+/**
+ * Storage Container Bean Class.
+ * @author sagar_baldwa
+ * @version 1.0
+ */
 public class StorageContainerBean implements Serializable
 {
 
@@ -199,19 +203,25 @@ public class StorageContainerBean implements Serializable
 
 	/**
 	 * For parent container type.
+	 * @return String
 	 */
 	public String getParentContainerSelected()
 	{
 		return this.parentContainerSelected;
 	}
 
+	/**
+	 * Set ParentContainerSelected.
+	 * @param parentContainerSelected String
+	 */
 	public void setParentContainerSelected(String parentContainerSelected)
 	{
 		this.parentContainerSelected = parentContainerSelected;
 	}
 
 	/**
-	 * @return Returns the selectedContainerName.
+	 * Get SelectedContainerName.
+	 * @return String
 	 */
 	public String getSelectedContainerName()
 	{
@@ -219,7 +229,8 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * @param selectedContainerName The selectedContainerName to set.
+	 * Set SelectedContainerName.
+	 * @param selectedContainerName String
 	 */
 	public void setSelectedContainerName(String selectedContainerName)
 	{
