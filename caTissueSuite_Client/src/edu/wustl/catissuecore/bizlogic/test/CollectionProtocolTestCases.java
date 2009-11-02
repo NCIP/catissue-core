@@ -530,7 +530,23 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	 		e.printStackTrace();
 	 		assertTrue("Failed to create Collection Protocol object", true);
 	    }
-	}
+	} 
 	
-
+	public void testEditeCP() {
+		try{
+			ExcelTestCaseUtility.cpEditMigration();
+			assertTrue("Domain object updated successfully", true);
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	    	//System.err.println("Exception in cpEditMigration ");
+	    	e.printStackTrace();
+	    	//assertFalse("Failed to update object",true);
+	    	fail("Failed to update object");
+	    }
+	} 
+	
+	
+	
 }
