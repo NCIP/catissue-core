@@ -1931,4 +1931,16 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to update activity status from closed to active of specimen", true);
 		}
 	}
+	
+	 public void testEditSiteUserCPAssociation() {
+		Logger.out.info("updating domain object site ------->");
+		try {
+			ExcelTestCaseUtility.shiftSpecimenInSCG();
+			assertTrue("Domain object successfully updated ---->", true);
+		} catch (Exception e) {
+			Logger.out.error(e.getMessage(), e);
+			e.printStackTrace();
+			assertFalse("failed to update Object", true);
+		}
+	}
 }
