@@ -212,5 +212,20 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 			e.printStackTrace();
 			assertTrue("Invalid fax number entered, correct format is xxx-xxx-xxxx", true);
 		}		
+	} 
+
+	public void testEditSiteUserCPAssociation()
+	{
+    	Logger.out.info("updating domain object site ------->");
+	    try 
+		{
+			ExcelTestCaseUtility.siteAssociation();
+			assertTrue("Domain object successfully updated ---->", true);
+	    } 
+	    catch (Exception e) {
+	       	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	 		assertFalse("failed to update Object", true);
+	    }
 	}
 }
