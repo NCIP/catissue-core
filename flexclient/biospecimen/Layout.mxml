@@ -3,8 +3,8 @@
 	height="90%" backgroundColor="#FFFFFF" creationComplete="initApp();" xmlns:Components="Components.*">
   <mx:Script>
   	<![CDATA[
-  		
-  		import mx.managers.PopUpManager;  		  	  				
+
+  		import mx.managers.PopUpManager;
 		import util.Utility;
   		import mx.messaging.channels.SecureAMFChannel;
   		import mx.messaging.channels.AMFChannel;
@@ -23,16 +23,16 @@
 		import flash.utils.getQualifiedClassName;
 	    import mx.collections.XMLListCollection;
 		import flash.xml.*;
-		
+
 
     [Bindable]
 		public var cpCollection:ArrayCollection = new ArrayCollection();
-       
-		[Bindable]       
-	    public var pCollection:ArrayCollection = new ArrayCollection(); 
-        
+
+		[Bindable]
+	    public var pCollection:ArrayCollection = new ArrayCollection();
+
 	        private var xmlString:XML = new XML();
-        
+
 	       private var treeData:XMLListCollection = new XMLListCollection();
 
        [Bindable]
@@ -42,78 +42,78 @@
 
       [Bindable]
                  [Embed(source='/images/nolines_minus.gif')]
-                 private var minusIcon:Class; 
-	    
+                 private var minusIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/nolines_plus.gif')]
-                 private var plusIcon:Class;  
- 
+                 private var plusIcon:Class;
+
      [Bindable]
                 [Embed(source='/images/SpecimenCollectionGroup.gif')]
-                private var scgIcon:Class;  
+                private var scgIcon:Class;
 
     [Bindable]
-         		[Embed(source='/images/Specimen.gif')] 
-         		public var spIcon:Class;  
-     [Bindable] 
+         		[Embed(source='/images/Specimen.gif')]
+         		public var spIcon:Class;
+     [Bindable]
                 [Embed(source="/images/graydot.gif")]
-                public var fscgIcon:Class;  
+                public var fscgIcon:Class;
 	 [Bindable]
                  [Embed(source='/images/pendingSpecimen.gif')]
-                 private var pendingSpecimenIcon:Class;  		
+                 private var pendingSpecimenIcon:Class;
 	 [Bindable]
                  [Embed(source='/images/pendingAliquot.gif')]
-                 private var pendingAliquotIcon:Class;  
+                 private var pendingAliquotIcon:Class;
 	  [Bindable]
                  [Embed(source='/images/pendingDerive.gif')]
-                 private var pendingDerivedIcon:Class;  
+                 private var pendingDerivedIcon:Class;
 	 [Bindable]
                  [Embed(source='/images/pendingSCG.gif')]
-                 private var pendingSCGIcon:Class;  
-                 
+                 private var pendingSCGIcon:Class;
+
 	 [Bindable]
                  [Embed(source='/images/Phase_col.gif')]
-                 private var phaseCPIcon:Class;  
-    
+                 private var phaseCPIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/Phase_blk.gif')]
-                 private var pendingPhaseCPIcon:Class;  
-    
+                 private var pendingPhaseCPIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/Cycle_col.gif')]
-                 private var cycleCPIcon:Class;  
-    
+                 private var cycleCPIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/Cycle_blk.gif')]
-                 private var pendingCycleCPIcon:Class;  
-    
+                 private var pendingCycleCPIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/Arm_col.gif')]
-                 private var armCPIcon:Class;  
-    
+                 private var armCPIcon:Class;
+
      [Bindable]
                  [Embed(source='/images/Arm_blk.gif')]
-                 private var pendingArmCPIcon:Class;  
-    
+                 private var pendingArmCPIcon:Class;
+
     [Bindable]
-  	       private var title:String = "Specimen Details for"; 
+  	       private var title:String = "Specimen Details for";
   			// Store the specified node id to show as selected
-			private var nodeIdToSelect:String; 
+			private var nodeIdToSelect:String;
 			// Store the inode id of previously selected node
-			private var previouslySelectednodeId:String; 
+			private var previouslySelectednodeId:String;
 			// Store previously Selected Particiapnt ID
-			private var previouslySelectedParticipantId:String; 
-			private var previouslySelectedParticipantBean:NameValueBean; 
- 		
+			private var previouslySelectedParticipantId:String;
+			private var previouslySelectedParticipantBean:NameValueBean;
+
               public var selectedNode:Object = new Object;
- 
+
               public var parentNode :Object = new Object;
               public var isEventHandled:Boolean = false;
 	          public var selectedParticipantIndex:Number = 0;
 		      public var tempCollection:ArrayCollection = new ArrayCollection();
-	  
+
 	  		  public var myChannelSet:ChannelSet = new ChannelSet();
-	
+
 
 
     		public function initApp():void
@@ -122,9 +122,9 @@
 	 			 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
 				 ExternalInterface.addCallback("editParticipant",editParticipant);
 		    }
-    
+
     /**
-     iterateTreeNode function iterate over the childrens of cuurentNode recursively, 
+     iterateTreeNode function iterate over the childrens of cuurentNode recursively,
      in Depth First search pattern
     */
 
@@ -144,19 +144,19 @@
 	 {
 		if(iterateTreeNode(descendantsList[j],currentNode))
 		{
-			// expand the cuurentNode. this is required because to show the selected node all parent nodes 
+			// expand the cuurentNode. this is required because to show the selected node all parent nodes
 			//has to be expanded
 			specimenTree.expandItem(currentNode,true);
 			return true;
 		}
-		
+
 	 }
 	return false;
     }
 
 	/**
-	This function iterated opver all SCG in tree. GEt one SCG and then call itereateode to iterate and find the 
-	appropriate node to select. This function also expand teh Root paretn node, This is require to show the 
+	This function iterated opver all SCG in tree. GEt one SCG and then call itereateode to iterate and find the
+	appropriate node to select. This function also expand teh Root paretn node, This is require to show the
 	seleceted node on UI else teh parent will not get expand but internally the node is in select state
 	*/
     private function selectTreeNode():void
@@ -165,7 +165,7 @@
 		selectedNode=null;
 		parentNode=null;
 		/*
-		nodeIdToSelect==""||nodeIdToSelect=="1" this case occurs when user goes from SCg page 
+		nodeIdToSelect==""||nodeIdToSelect=="1" this case occurs when user goes from SCg page
 		to Speciemn summary page. IN this case select the SCG
 		*/
 		if((nodeIdToSelect==""||nodeIdToSelect=="1")&&previouslySelectednodeId!=null)
@@ -197,33 +197,33 @@
 					 specimenTree.scrollToIndex(scrollToTreeIndex);
 		       }
 		}
-    }    
+    }
 
     private function treeHandler(tevent:ResultEvent):void
-    {  
+    {
 	    var str:String = tevent.result as String;
 	    xmlString = new XML(str);
 	    treeData =  new XMLListCollection(xmlString.node);
 	    specimenTree.dataProvider = treeData;
         // validate the tree after changing teh dataProvider
-		specimenTree.validateNow();  	   
+		specimenTree.validateNow();
         for(var j:Number=0; j<treeData.length; j++)
    	    {
        		var xmlNode:XML = treeData.getItemAt(j) as XML;
-       		setIcons(xmlNode);    	 
+       		setIcons(xmlNode);
 	    }
 	    // call methid to show specidifed node selected
 		selectTreeNode();
     }
 	 /*
-       This method is invoked from javaScript function when a new Participant is registered 
-     
+       This method is invoked from javaScript function when a new Participant is registered
+
      */
     [Bindable]
     public var cpCombo:Object;
     public function refreshParticipants():void
     {
-		//Alert.show("In refresh Participants Method");    	
+		//Alert.show("In refresh Participants Method");
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
@@ -243,7 +243,7 @@
     */
     public function refreshTree(nodeId:String):void
     {
-   	   // set nodeIdToSelect to Id got from javaScript call. 
+   	   // set nodeIdToSelect to Id got from javaScript call.
    	   // This nodeIdToSelect is used in selectNode and iterateNode function
 
    	    nodeIdToSelect = nodeId;
@@ -253,25 +253,25 @@
    	    if(nodeId==""&&previouslySelectedParticipantBean!=null)
    	    {
 	    	selectedParticipant = previouslySelectedParticipantBean;
-	    } 
+	    }
 	    else
 	    {
 	    	selectedParticipant = spCombo as NameValueBean;
 	    }
-	
+
         var selectedCp : NameValueBean = new NameValueBean();
 	    selectedCp =  cpCombo as NameValueBean;
 		if(selectedParticipant != null && selectedCp != null)
 		{
-        var selectedParticipantId :String = selectedParticipant.value; 
+        var selectedParticipantId :String = selectedParticipant.value;
 	    var selectedCpId :String = selectedCp.value;
-        //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data 
-         var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
-      
-        //Making a selected node appear when tree is displayed when dataProvider changes in cases of refresh 
+        //Here we can get data for updating specimen tree details for particular SCG/specimen instead of retrieving whole data
+         var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);
 
-       //Selecting a particular tree node on the basis of "id" attribute of  previously selected node  
-  //        specimenTree.callLater(expandTree, [selectedNode, parentNode]); 
+        //Making a selected node appear when tree is displayed when dataProvider changes in cases of refresh
+
+       //Selecting a particular tree node on the basis of "id" attribute of  previously selected node
+  //        specimenTree.callLater(expandTree, [selectedNode, parentNode]);
   }
    	}
 
@@ -280,7 +280,7 @@
        	specimenTree.expandChildrenOf(pNode, true);
    	   	specimenTree.selectedItem = node;
   	}
-  
+
     private function getContextRootUrl():String {
 		 var urlStr:Array = Application.application.url.split("/");
 		 var contextRootUrl:String = urlStr[0]+"//"+urlStr[2]+"/"+urlStr[3];
@@ -316,18 +316,25 @@
   	{
 		remoteObj.getCpList();
   	}
-  	
+
   	/*
-  	   Collection Protocol	Event Handler Method 
+  	   Collection Protocol	Event Handler Method
   	*/
   	public function cpEventHandler(event:ResultEvent):void
   	{
   		var bean : NameValueBean = new NameValueBean();
-		cpCollection = event.result as ArrayCollection;	
+		cpCollection = event.result as ArrayCollection;
+		if(cpCollection.length==1)
+		{
+			var selectedCp : NameValueBean = cpCollection[0] as NameValueBean;
+			Cp.inputArea.text = selectedCp.name;
+			cpCombo=selectedCp;
+			onCpChange();
+		}
   	}
-  	
+
    	/*
-   		This Method is invoked on change of Collection Protocol & retrieves the associated Participants 
+   		This Method is invoked on change of Collection Protocol & retrieves the associated Participants
    	*/
   	public function onCpChange():void
 	{
@@ -346,22 +353,33 @@
 
 		specimenTree.dataProvider = null;
 		spDetailsLabel.text = title;
+
+		var url : URLRequest = new URLRequest("javascript: clearFrame()");
+		navigateToURL(url,"_self");
 	}
-	
+
 	/*
-	  Event Handler for Participants 
+	  Event Handler for Participants
 	*/
 	public function participantHandler(pevent:ResultEvent):void
 	{
 	    var bean : NameValueBean = new NameValueBean();
-		pCollection = pevent.result as ArrayCollection;	
+		pCollection = pevent.result as ArrayCollection;
 //		pCombo.dataProvider = pCollection;
+		if(pCollection.length==1)
+		{
+			var selectedP : NameValueBean = pCollection[0] as NameValueBean;
+			Sp.inputArea.text = selectedP.name;
+			spCombo=selectedP;
+			onParticipantClick();
+		}
+
 	}
 	/*
 	  Event Handler for Temp Collection
 	*/
    	public function tempHandler(pevent:ResultEvent):void
-	{	  
+	{
 	    var bean : NameValueBean = null;
 		tempCollection = pevent.result as ArrayCollection;
 		var isRefresTree:Boolean = false;
@@ -375,8 +393,8 @@
 				if(selectedParticipantIndex<tempCollection.length)
 				{
 					bean = tempCollection[selectedParticipantIndex] as NameValueBean;
-					isRefresTree=true;		
-				}	
+					isRefresTree=true;
+				}
 		    }
 		    else
 		    {
@@ -388,7 +406,7 @@
 	 				{
 	 					selectedParticipantIndex=i;
 	 					isRefresTree=true;
-	 					break;	
+	 					break;
 	 				}
 	 			}
 		    }
@@ -399,15 +417,15 @@
 		    }
 		    pCollection=null;
 		    pCollection = tempCollection;
-		   
+
 //		    pCombo.dataProvider = tempCollection;
 //		    pCombo.validateNow();
 		    if(bean!=null)
 		    {
 				// Sachin : select particpant in the list and scorl the list position
-				spCombo = bean;				
+				spCombo = bean;
 //				pCombo.scrollToIndex(selectedParticipantIndex);
-				
+
 				if(isRefresTree)
 				{
 					previouslySelectedParticipantBean=bean;
@@ -415,11 +433,11 @@
 					// nodeIdToSelect is obtainer from editParticipant() fucntion
 					refreshTree(nodeIdToSelect);
 					Sp.inputArea.text = previouslySelectedParticipantBean.name;
-				}	
-			}				
+				}
+			}
 //			pCombo.validateNow();
 		}
-			
+
 	}
     /*
       This mehtod invoked when a Participant is clicked
@@ -432,30 +450,30 @@
 	    selectedParticipant = spCombo as NameValueBean
 		if(selectedParticipant != null)
 		{
-	 	   var selectedParticipantId :String = selectedParticipant.value; 
-	 	 
+	 	   var selectedParticipantId :String = selectedParticipant.value;
+
 	 	   // Sachin : on particpant click set previosly selcetd node and participant to NULL
 	 	   previouslySelectedParticipantId = null;
 	 	   previouslySelectedParticipantBean=null;
 	 	   previouslySelectednodeId=null;
-	  	 
+
 	  	   var selectedCp : NameValueBean = new NameValueBean();
 	  	  	selectedCp =  cpCombo as NameValueBean;
 		    var selectedCpId :String = selectedCp.value;
     	    selectedParticipantIndex = spComboSelectedIndex;
-	  
+
 		   // title  = title +" "+selectedParticipant.name;
 		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
-          
-		   //Here we can get data for specimen tree details 
-	
 
-    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
+		   //Here we can get data for specimen tree details
 
-		     var refreshParticipants:String = "false";  
-	   
-         
-	    
+
+    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);
+
+		     var refreshParticipants:String = "false";
+
+
+
 		    //invoking the java script method
 	    	var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
 			navigateToURL(url,"_self");
@@ -471,30 +489,30 @@
 	    selectedParticipant = spCombo as NameValueBean
 		if(selectedParticipant != null)
 		{
-	 	   var selectedParticipantId :String = selectedParticipant.value; 
-	 	 
+	 	   var selectedParticipantId :String = selectedParticipant.value;
+
 	 	   // Sachin : on particpant click set previosly selcetd node and participant to NULL
 	 	   previouslySelectedParticipantId = null;
 	 	   previouslySelectedParticipantBean=null;
 	 	   previouslySelectednodeId=null;
-	  	 
+
 	  	   var selectedCp : NameValueBean = new NameValueBean();
 	  	  	selectedCp =  cpCombo as NameValueBean;
 		    var selectedCpId :String = selectedCp.value;
     	    selectedParticipantIndex = spComboSelectedIndex;
-	  
+
 		   // title  = title +" "+selectedParticipant.name;
 		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
-          
-		   //Here we can get data for specimen tree details 
-	
 
-    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);  
+		   //Here we can get data for specimen tree details
 
-		     var refreshParticipants:String = "false";  
-	   
-         
-	    
+
+    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);
+
+		     var refreshParticipants:String = "false";
+
+
+
 		    //invoking the java script method
 	    	var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
 			navigateToURL(url,"_self");
@@ -503,14 +521,14 @@
 		{
 			Alert.show("Please select a Participant");
 		}
-	}	
-    
+	}
+
  /*
      Tree Handler  Method
     */
-    
 
-    
+
+
     private function setIcons(xmlNode:XML) : void
     {
 		var nodeType:String = xmlNode.@type;
@@ -525,33 +543,33 @@
 		{
 			if(participantRegStatus.match("Pending"))
        		{
-				specimenTree.setItemIcon(xmlNode, pendingPhaseCPIcon, pendingPhaseCPIcon);	  
+				specimenTree.setItemIcon(xmlNode, pendingPhaseCPIcon, pendingPhaseCPIcon);
        		}
        		else
        		{
-				specimenTree.setItemIcon(xmlNode, phaseCPIcon, phaseCPIcon);	  
+				specimenTree.setItemIcon(xmlNode, phaseCPIcon, phaseCPIcon);
        		}
 		}
 		if(nodeType.match("Arm"))
 		{
 			if(participantRegStatus.match("Pending"))
        		{
-       			specimenTree.setItemIcon(xmlNode, pendingArmCPIcon, pendingArmCPIcon);	  
+       			specimenTree.setItemIcon(xmlNode, pendingArmCPIcon, pendingArmCPIcon);
        		}
        		else
        		{
-				specimenTree.setItemIcon(xmlNode, armCPIcon, armCPIcon);	  
+				specimenTree.setItemIcon(xmlNode, armCPIcon, armCPIcon);
        		}
 		}
 		if(nodeType.match("Cycle"))
 		{
 			if(participantRegStatus.match("Pending"))
        		{
-       			specimenTree.setItemIcon(xmlNode, pendingCycleCPIcon, pendingCycleCPIcon);	  
+       			specimenTree.setItemIcon(xmlNode, pendingCycleCPIcon, pendingCycleCPIcon);
        		}
        		else
        		{
-				specimenTree.setItemIcon(xmlNode, cycleCPIcon, cycleCPIcon);	  
+				specimenTree.setItemIcon(xmlNode, cycleCPIcon, cycleCPIcon);
        		}
 		}
 		if(nodeType.match("SpecimenCollectionGroup"))
@@ -559,11 +577,11 @@
 	    	var scgNodeId:String = xmlNode.@scgCollectionStatus;
 			if(scgNodeId.match("Pending") || scgNodeId.match("Not Collected"))
        		{
-       			specimenTree.setItemIcon(xmlNode, pendingSCGIcon, pendingSCGIcon);	  
+       			specimenTree.setItemIcon(xmlNode, pendingSCGIcon, pendingSCGIcon);
 			}
 			else
 			{
-				specimenTree.setItemIcon(xmlNode, scgIcon, scgIcon);	  
+				specimenTree.setItemIcon(xmlNode, scgIcon, scgIcon);
 			}
 		}
 		if(nodeType.match("Specimen"))
@@ -571,9 +589,9 @@
 			var childNodeId:String = xmlNode.@collectionStatus;
 			if(childNodeId.match("Pending"))
        	  	{
-       	  		specimenTree.setItemIcon(xmlNode, pendingSpecimenIcon, pendingSpecimenIcon);	  
+       	  		specimenTree.setItemIcon(xmlNode, pendingSpecimenIcon, pendingSpecimenIcon);
        	  	}
-			
+
 		}
     	  	 //check for all descendents of SCG
     	 var descendantsList:XMLList = XMLList(xmlNode.descendants());
@@ -583,14 +601,14 @@
        	   	var childNode:XML = XML(descendantsList[k]);
        	   	setIcons(childNode);
 		 }
-		
+
 
 
     }
     /*
       Sachin: Fuction to be called To refresh Participant Name after edit participant
     */
-    public function editParticipant(selectedParticipantId:String,treeNodeId:String):void 
+    public function editParticipant(selectedParticipantId:String,treeNodeId:String):void
     {
     	// store participant id which is occurred by registering  or editing particpant selected by user
     	if(selectedParticipantId!=null && selectedParticipantId !="")
@@ -598,9 +616,9 @@
     		previouslySelectedParticipantId=selectedParticipantId;
     	}
     	// treeNodeId will be "" when user submit particpant OR click on register New Participant
-    	// treeNodeId will conatind nodeid to select when user submit on SCG page 
+    	// treeNodeId will conatind nodeid to select when user submit on SCG page
     	nodeIdToSelect=treeNodeId;
-    	
+
     	var selectedCp : NameValueBean = new NameValueBean();
  		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
@@ -611,33 +629,33 @@
 		}
 		else
 		{
-			//Jignesh : tree and list will not be populate when registering a New Participant to CP 
+			//Jignesh : tree and list will not be populate when registering a New Participant to CP
 			if(newRegisteration!=false){
-				remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);								
-			} 
-			newRegisteration=true;  
-        }       
-        
+				remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);
+			}
+			newRegisteration=true;
+        }
+
     }
-	
+
 	 /*
-            This function is to register a New Participant to CP  
+            This function is to register a New Participant to CP
   	 */
 	 private function addNewParticipant():void
 	 {
-         newRegisteration=false;   
+         newRegisteration=false;
 	     var selectedCp : NameValueBean = new NameValueBean();
 	     selectedCp =  cpCombo as NameValueBean;
 	     if(selectedCp != null)
 	     {
-	     
-		     var selectedCpId :String = selectedCp.value;         
+
+		     var selectedCpId :String = selectedCp.value;
 	    	 // Set previosly node select to null.
-	         previouslySelectednodeId=null;            
+	         previouslySelectednodeId=null;
 		     var refreshParticipants:String = "true";
 	    	//invoking the java script method
 		    var url : URLRequest = new URLRequest("javascript: RegisterParticipants('"+ selectedCpId +"','"+refreshParticipants+"')");
-		    navigateToURL(url,"_self");  
+		    navigateToURL(url,"_self");
 	    }
 	    else
 	    {
@@ -663,13 +681,13 @@
 	    	}
 	    	else
 	    	{
-		   		//Retrieving the selected node id 
+		   		//Retrieving the selected node id
 		 	    var id : String = specimenTree.selectedItem.@id;
 		 	    previouslySelectednodeId=id;
 				//Selected CP and selected participants
 		 	   var selectedParticipant:NameValueBean= new NameValueBean();
 	    	   selectedParticipant = spCombo as NameValueBean
-		  	   var selectedParticipantId :String = selectedParticipant.value; 
+		  	   var selectedParticipantId :String = selectedParticipant.value;
 		   	   var selectedCp : NameValueBean = new NameValueBean();
 	    	   selectedCp =  cpCombo as NameValueBean;
 			   var selectedCpId :String = selectedCp.value;
@@ -677,16 +695,16 @@
 		    	var displayName : String = specimenTree.selectedItem.@name;
 		    	if(type.match("SpecimenCollectionGroup"))
 			    	displayName = displayName+"@"+specimenTree.selectedItem.@evtDate;
-	    	
+
 
 	    	   //invoking java script method
 		    	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
-		    	navigateToURL(url,"_self"); 
-			
+		    	navigateToURL(url,"_self");
+
 			}
-		 } 
+		 }
 	}
-          
+
      private function chkForCollectionProtocolType(type:String):void
      {
 		var id : String = specimenTree.selectedItem.@id;
@@ -694,30 +712,30 @@
 		 //Selected CP and selected participants
 		var selectedParticipant:NameValueBean= new NameValueBean();
 	    selectedParticipant = spCombo as NameValueBean
-		var selectedParticipantId :String = selectedParticipant.value; 
+		var selectedParticipantId :String = selectedParticipant.value;
 	   	var type:String = specimenTree.selectedItem.@type;
 		var selectedCpId:String = "-1";
 	   	var index:int =id.indexOf("_");
 	   	if(index != -1)
 	   	{
 	   		selectedCpId = id.substr(index+1);
- 	
+
 	   	}
 		if(type.match("Arm"))
-		{	
+		{
 			remoteObj.chkArmShifting(selectedCpId,selectedParticipantId);
 		}
 		else
 		{
 			onCollectionProtolcolNodeClick();
 		}
-		
-     }     
+
+     }
     	/*
 	  Event Handler for Temp Collection
 	*/
    	public function armChkHandler(pevent:ResultEvent):void
-	{	  
+	{
 	    var chk : Boolean = pevent.result as Boolean;
 	    if(chk == true)
 	    {
@@ -727,9 +745,9 @@
 	    else
 	    {
 	    	onCollectionProtolcolNodeClick();
-	    	
+
 	    }
-			
+
 	}
 	private function onCollectionProtolcolNodeClick():void
 	{
@@ -737,7 +755,7 @@
 		    //Selected CP and selected participants
 		    var selectedParticipant:NameValueBean= new NameValueBean();
 	    	selectedParticipant = spCombo as NameValueBean
-		    var selectedParticipantId :String = selectedParticipant.value; 
+		    var selectedParticipantId :String = selectedParticipant.value;
 
 			 var selectedParentCp : NameValueBean = new NameValueBean();
 	    	 selectedParentCp =  cpCombo as NameValueBean;
@@ -748,24 +766,24 @@
 	    	if(index != -1)
 	    	{
 	    		selectedCpId = id.substr(index+1);
- 		
+
 	    	}
 	    	var displayName:String = selectedParentCpId+":"+specimenTree.selectedItem.@regDate;
-				
-	    	
+
+
           	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
-		    navigateToURL(url,"_self"); 
+		    navigateToURL(url,"_self");
 	}
-	private function armChkHandlerAlertListener(eventObj:CloseEvent):void             
+	private function armChkHandlerAlertListener(eventObj:CloseEvent):void
 	{
          // Check to see if the OK button was pressed.
-          if (eventObj.detail==Alert.OK) 
+          if (eventObj.detail==Alert.OK)
           {
           	 onCollectionProtolcolNodeClick();
           }
     }
 
-      
+
           /*
              To resize the frames
 	  */
@@ -779,12 +797,12 @@
 		     	pPanel.percentHeight=19.5;
 		     	sdPanel.percentHeight=68;
 		     	pCombo.height=20;
-			   
+
 	        }
 	      	else
 	      	{
 	         	cpPanel.percentHeight = 12.5;
-	         	resizeButton.setStyle("icon",minusIcon) 
+	         	resizeButton.setStyle("icon",minusIcon)
 		 	resizeButton.toolTip = "Click to collapse";
 			sdPanel.percentHeight = 10;
 			pPanel.percentHeight = 77.5;
@@ -793,16 +811,16 @@
 	 } */
 
 
-  	 
+
   	 /*
   	  Fault Handler
   	*/
-  	public function faultHandler (event:FaultEvent):void 
+  	public function faultHandler (event:FaultEvent):void
 	{
 		// Deal with event.fault.faultString
 		Alert.show(event.fault.faultString, 'Error');
 	}
-	
+
    /* public function openSelectedNode():void
     {
     	Alert("In open selected node method");
@@ -816,19 +834,19 @@
     		Alert.show("Selected node is null");
     	}
     }*/
-   
-    	
+
+
     /*
        This mehod is for adding toolTip for each tree node
     */
-    
+
     public function addToolTip(item:Object):String
     {
     	 var node:XML = XML(item);
-         var s:String = node.@toolTip;       	 
+         var s:String = node.@toolTip;
        	 if(s != null && s.length >0)
 	     {
-	        var toolTipArray :Array = s.split(";");	
+	        var toolTipArray :Array = s.split(";");
 	        var toolTip:String = "";
 	        for(var i:int=0; i<toolTipArray.length; i++)
 	    	{
@@ -840,34 +858,34 @@
        	 {
        	 	return null;
        	 }
-       	
+
     }
 	/**
 	  Creating the Drop down factory
 	*/
 /*  private function initClassFactory():void
-    {			
+    {
 	myDropdownFactory = new ClassFactory(List);
 	myDropdownFactory.properties = {showDataTips:true, dataTipFunction:myDataTipFunction};
     } */
-	
+
     private function myDataTipFunction(item:Object):String
     {
 	var nameValueBean:NameValueBean = NameValueBean(item);
 	var toolTopString1:String = nameValueBean.name.slice(0,40);
 	var toolTopString2:String = nameValueBean.name.slice(40,nameValueBean.name.length);
-		
+
 	//Alert.show("The tooltip lenght is:"+name.length);
 	//return nameValueBean.name.slice(0,40);
 	return toolTopString1 + "\n" +toolTopString2;
-    } 
-    
+    }
+
     /**
-   	 	closeDropDownList function is traping MouseEvent for dropdownlist close.   			 	
+   	 	closeDropDownList function is traping MouseEvent for dropdownlist close.
    	*/
     private function closeDropDownList(event:Event):void{
-	    if(String(event.target.name.toString()).search("SpriteAsset") == -1){    
-	    	if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){   
+	    if(String(event.target.name.toString()).search("SpriteAsset") == -1){
+	    	if(event.target.className != "ScrollThumb" && event.target.className != "ApplicationControlBar" && event.target.className != "UITextField" && event.target.className != "Button"){
 		    	if(Cp.dropList != null){
 		    		PopUpManager.removePopUp(Cp.dropList);
 		    		Cp.dropList=null;
@@ -887,7 +905,7 @@
 		<mx:method name="getCpList" result="cpEventHandler(event)"/>
 		<mx:method name="chkArmShifting" result="armChkHandler(event)"/>
 	</mx:RemoteObject>
-	
+
 	<mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
 		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
 	</mx:RemoteObject>
@@ -896,37 +914,37 @@
       	<mx:VBox backgroundAlpha="0.1" height="5%" backgroundColor="#FFFFFF" width="100%"  >
              <mx:Label text="Collection Protocol:" width="100%" color="black" fontWeight="bold"/>
              <!-- Jignesh: AutoCompeleteDropDown component -->
-			 <Components:AutoCompeleteDropDownList id="Cp" name="compCp" width="100%" height="5%" cDataProvider="{cpCollection.toArray()}" parentInstance="Cp"/>              
-        </mx:VBox>        
+			 <Components:AutoCompeleteDropDownList id="Cp" name="compCp" width="100%" height="5%" cDataProvider="{cpCollection.toArray()}" parentInstance="Cp"/>
+        </mx:VBox>
         <mx:VBox width="100%" height="95%">
 		<mx:HBox width="100%" id="pVbox" borderSides="black">
 			<mx:VBox width="50%">
-                     		<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/> 
+                     		<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/>
 			</mx:VBox>
 			<mx:VBox width="50%">
 	                     	<mx:Button toolTip="Click to register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
                    	</mx:VBox>
 		</mx:HBox>
 		<mx:HBox width="100%">
-			<!-- Jignesh: AutoCompeleteDropDown component -->                   	
+			<!-- Jignesh: AutoCompeleteDropDown component -->
 			<Components:AutoCompeleteDropDownList id="Sp" name="compSpec" width="100%" height="5%" cDataProvider="{pCollection.toArray()}" parentInstance="Sp"/>
 		</mx:HBox>
-                 
+
 		<mx:HBox width="100%" borderSides="black">
-			<mx:VBox width="50%"> 
-                     		<mx:Label text="" color="black" fontWeight="bold" height="15"/> 
+			<mx:VBox width="50%">
+                     		<mx:Label text="" color="black" fontWeight="bold" height="15"/>
 			</mx:VBox>
 			<mx:VBox width="50%">
                      		<mx:Button toolTip="Click to view selected Participant Details" label="View Participant" color="black" click="viewParticipantDetails();" height="15" />
-                   	</mx:VBox>                   						
+                   	</mx:VBox>
                  </mx:HBox>
 
 		 <mx:VBox height="100%" width="100%" id="spDetailVbox">
                    	<mx:Label id="spDetailsLabel" text="{title}" color="black" width="250" height="15" fontWeight="bold" />
-                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()" 
-                   		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')" 
-                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')" 
-                   		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true" 
+                   	<mx:Tree id="specimenTree" labelField="@name" width="100%" height="100%" itemClick="onNodeClick()"
+                   		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')"
+                   		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
+                   		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true"
                    		 dataTipFunction="addToolTip" />
 				</mx:VBox>
 
@@ -936,7 +954,7 @@
 	<mx:Style>
 		Tree
 		{
-			folderClosedIcon:Embed(source='/images/Specimen.gif'); 
+			folderClosedIcon:Embed(source='/images/Specimen.gif');
 			folderOpenIcon:Embed(source='/images/Specimen.gif');
 			defaultLeafIcon:Embed(source='/images/Specimen.gif');
 			disclosureClosedIcon:Embed(source='/images/nolines_plus.gif');
