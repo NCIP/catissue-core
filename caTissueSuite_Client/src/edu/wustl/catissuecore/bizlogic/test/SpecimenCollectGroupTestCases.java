@@ -506,6 +506,19 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		
 	}
 	
+	public void testEditeCP() {
+		try {
+			ExcelTestCaseUtility.addAnticipatedSCGInParticipant();
+			assertTrue("Domain object updated successfully", true);
+		} catch (Exception e) {
+			Logger.out.error(e.getMessage(), e);
+			e.printStackTrace();
+			// assertFalse("Failed to update object",true);
+			fail("Failed to update SCG object");
+		}
+	}
+	
+	
 	/*public void testVerifyConsentResponseAndConsentStatusAtSCG()
 	{	
         System.out.println("Inside ConsentsVerificationTestCases:");
