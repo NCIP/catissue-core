@@ -40,7 +40,8 @@ import edu.wustl.dao.exception.DAOException;
 public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 {
 
-	Logger logger = Logger.getCommonLogger(ShipmentReceivingBizLogic.class);
+	private transient final Logger logger = Logger
+			.getCommonLogger( ShipmentReceivingBizLogic.class );
 
 	/**
 	 * Overridden method
@@ -54,10 +55,10 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		super.validate(obj, dao, operation);
+		super.validate( obj, dao, operation );
 		boolean isValid = true;
 		final Shipment shipment = (Shipment) obj;
-		isValid = this.validateDuplicateSpecimenPositionsInShipment(shipment);
+		isValid = this.validateDuplicateSpecimenPositionsInShipment( shipment );
 		return isValid;
 	}
 
@@ -73,48 +74,51 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			throws BizLogicException
 	{
 		final boolean isValid = true;
-		final Collection<StorageContainer> containerCollection = shipment.getContainerCollection();
+		final Collection < StorageContainer > containerCollection = shipment
+				.getContainerCollection();
 		for (final StorageContainer storageContainer : containerCollection)
 		{
 			final StorageType storageType = storageContainer.getStorageType();
 			if (storageType != null
-					&& ((storageType.getName() != null) && (Constants.SHIPMENT_CONTAINER_TYPE_NAME
-							.equals(storageType.getName().trim()))))
+					&& ( ( storageType.getName() != null ) && ( Constants.SHIPMENT_CONTAINER_TYPE_NAME
+							.equals( storageType.getName().trim() ) ) ))
 			{
-				final Collection<SpecimenPosition> spPosCollection = storageContainer
+				final Collection < SpecimenPosition > spPosCollection = storageContainer
 						.getSpecimenPositionCollection();
 				if (spPosCollection.size() > 1)
 				{
-					final Iterator<SpecimenPosition> it = spPosCollection.iterator();
-					final List<String> specimenPosList = new ArrayList<String>();
+					final Iterator < SpecimenPosition > it = spPosCollection.iterator();
+					final List < String > specimenPosList = new ArrayList < String >();
 					while (it.hasNext())
 					{
 						final SpecimenPosition pos = it.next();
 						if (pos != null)
 						{
 							final StorageContainer st = pos.getStorageContainer();
-							if(pos.getPositionDimensionOne()!=0 || pos.getPositionDimensionTwo()!=0)
+							if (pos.getPositionDimensionOne() != 0
+									|| pos.getPositionDimensionTwo() != 0)
 							{
 								String storageValue = "";
-								if(st.getName()!=null)
+								if (st.getName() != null)
 								{
-								    storageValue = StorageContainerUtil.getStorageValueKey(st
-										.getName(), null, pos.getPositionDimensionOne(), pos
-										.getPositionDimensionTwo());
+									storageValue = StorageContainerUtil.getStorageValueKey( st
+											.getName(), null, pos.getPositionDimensionOne(), pos
+											.getPositionDimensionTwo() );
 								}
 								else
 								{
-									 storageValue = StorageContainerUtil.getStorageValueKey(null, st.getId().toString(), pos.getPositionDimensionOne(), pos
-												.getPositionDimensionTwo());
+									storageValue = StorageContainerUtil.getStorageValueKey( null,
+											st.getId().toString(), pos.getPositionDimensionOne(),
+											pos.getPositionDimensionTwo() );
 								}
-								if (!specimenPosList.contains(storageValue))
+								if (!specimenPosList.contains( storageValue ))
 								{
-									specimenPosList.add(storageValue);
+									specimenPosList.add( storageValue );
 								}
 								else
 								{
-									throw this.getBizLogicException(null,
-											"shipment.samePositionForSpecimens", null);
+									throw this.getBizLogicException( null,
+											"shipment.samePositionForSpecimens", null );
 								}
 							}
 						}
@@ -138,17 +142,17 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		if (!(obj instanceof Shipment))
+		if (!( obj instanceof Shipment ))
 		{
-			this.logger.debug("Invalid object is passed to bizlogic.");
-			throw new BizLogicException(ErrorKey.getErrorKey("errors.invalid.object.passed"), null,
-					"Object is not the instance of Shipment class.");
+			this.logger.debug( "Invalid object is passed to bizlogic." );
+			throw new BizLogicException( ErrorKey.getErrorKey( "errors.invalid.object.passed" ) ,
+					null , "Object is not the instance of Shipment class." );
 		}
 		final Shipment shipment = (Shipment) obj;
 		//Shipment oldShipment = (Shipment) oldObj;
 		try
 		{
-			final Collection<StorageContainer> containerCollection = shipment
+			final Collection < StorageContainer > containerCollection = shipment
 					.getContainerCollection();
 
 			final boolean shipmentContainer = false;
@@ -156,39 +160,38 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			{
 				final StorageType storageType = storageContainer.getStorageType();
 				if (!shipmentContainer
-						&& (storageType != null)
-						&& ((storageType.getName() != null) && (storageType.getName().trim()
-								.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+						&& ( storageType != null )
+						&& ( ( storageType.getName() != null ) && ( storageType.getName().trim()
+								.equals( Constants.SHIPMENT_CONTAINER_TYPE_NAME ) ) ))
 				{
 					// This is the container created for specimens
 					// Update the specimens and dispose this container
-					this.processInTransitContainer(dao, sessionDataBean, storageContainer);
+					this.processInTransitContainer( dao, sessionDataBean, storageContainer );
 				}
 				else
 				{
 					// containers
-					this.processContainedContainer(dao, sessionDataBean, storageContainer);
+					this.processContainedContainer( dao, sessionDataBean, storageContainer );
 				}
 			}
-			shipment.setActivityStatus(Constants.ACTIVITY_STATUS_RECEIVED);
+			shipment.setActivityStatus( Constants.ACTIVITY_STATUS_RECEIVED );
 
-			dao.update(shipment);
+			dao.update( shipment );
 
 			//	Add mailing functionality
 
 		}
 		catch (final DAOException ex)
 		{
-			this.logger.error("DAO related problem" +
-					" occurred"+ex.getMessage(), ex);
+			this.logger.error( "DAO related problem" + " occurred" + ex.getMessage(), ex );
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
-			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());//janu
+			throw this.getBizLogicException( ex, ex.getErrorKeyName(), ex.getMsgValues() );//janu
 		}
-		final boolean mailStatus = this.sendNotification(shipment, sessionDataBean);
+		final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
 		if (!mailStatus)
 		{
-			this.logger.info("failed to send email..");
-			//			logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));				
+			this.logger.info( "failed to send email.." );
+			//logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),AppUtility.getApplicationException(null, "errors.mail.sending.failed", "Mail sending operation failed."));
 		}
 	}
 
@@ -200,7 +203,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	@Override
 	protected String getNotificationMailBody(BaseShipment shipment)
 	{
-		return ShipmentMailFormatterUtility.formatShipmentReceivedMailBody((Shipment) shipment);
+		return ShipmentMailFormatterUtility.formatShipmentReceivedMailBody( (Shipment) shipment );
 	}
 
 	/**
@@ -211,7 +214,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	@Override
 	protected String getNotificationMailSubject(BaseShipment shipment)
 	{
-		return ShipmentMailFormatterUtility.getShipmentReceivedMailSubject((Shipment) shipment);
+		return ShipmentMailFormatterUtility.getShipmentReceivedMailSubject( (Shipment) shipment );
 	}
 
 	/**
@@ -227,85 +230,86 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	{
 		if (storageContainer != null && storageContainer.getActivityStatus() != null)
 		{
-			if (storageContainer.getActivityStatus().equals(Constants.ACCEPT))
+			if (storageContainer.getActivityStatus().equals( Constants.ACCEPT ))
 			{
 				if (storageContainer.getLocatedAtPosition() != null
 						&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
 				{
 					StorageContainer parentContainer = null;
-					List<StorageContainer> containerList = null;
+					List < StorageContainer > containerList = null;
 					final Long parentContianerId = storageContainer.getLocatedAtPosition()
 							.getParentContainer().getId();
 					if (parentContianerId != null)
 					{
-						containerList = dao.retrieve(StorageContainer.class.getName(),
+						containerList = dao.retrieve( StorageContainer.class.getName(),
 								edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
 								storageContainer.getLocatedAtPosition().getParentContainer()
-										.getId());
+										.getId() );
 						if (containerList != null && containerList.size() == 1)
 						{
-							parentContainer = containerList.get(0);
+							parentContainer = containerList.get( 0 );
 						}
 					}
 					else if (storageContainer.getLocatedAtPosition().getParentContainer().getName() != null)
 					{
-						containerList = dao.retrieve(StorageContainer.class.getName(), "name",
+						containerList = dao.retrieve( StorageContainer.class.getName(), "name",
 								storageContainer.getLocatedAtPosition().getParentContainer()
-										.getName());
+										.getName() );
 						if (containerList != null && containerList.size() == 1)
 						{
-							parentContainer = containerList.get(0);
+							parentContainer = containerList.get( 0 );
 						}
 					}
 					if (parentContainer != null)
 					{
-						storageContainer.getLocatedAtPosition().setParentContainer(parentContainer);
-						storageContainer.setSite(parentContainer.getSite());
+						storageContainer.getLocatedAtPosition()
+								.setParentContainer( parentContainer );
+						storageContainer.setSite( parentContainer.getSite() );
 					}
 				}
 				else if (storageContainer.getSite() != null
 						&& storageContainer.getSite().getId() != null)
 				{
-					final List siteList = dao.retrieve(Site.class.getName(),
+					final List siteList = dao.retrieve( Site.class.getName(),
 							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-							storageContainer.getSite().getId());
+							storageContainer.getSite().getId() );
 					if (siteList != null && siteList.size() == 1)
 					{
-						storageContainer.setSite((Site) siteList.get(0));
+						storageContainer.setSite( (Site) siteList.get( 0 ) );
 					}
-					storageContainer.setLocatedAtPosition(null);
+					storageContainer.setLocatedAtPosition( null );
 				}
-				storageContainer.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());//bug 12820
-				dao.update(storageContainer);
+				storageContainer.setActivityStatus( Status.ACTIVITY_STATUS_ACTIVE.toString() );//bug 12820
+				dao.update( storageContainer );
 			}
-			else if (storageContainer.getActivityStatus().equals(Constants.REJECT_AND_DESTROY))
+			else if (storageContainer.getActivityStatus().equals( Constants.REJECT_AND_DESTROY ))
 			{
 				// Reject and Destroy - Disable container
 				final StorageContainer container = (StorageContainer) dao.retrieve(
 						StorageContainer.class.getName(),
 						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-						storageContainer.getId()).get(0);
-				container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-				dao.update(container);
+						storageContainer.getId() ).get( 0 );
+				container.setActivityStatus( Status.ACTIVITY_STATUS_DISABLED.toString() );
+				dao.update( container );
 			}
 			//bug 12820
-			else if (Constants.REJECT_AND_RESEND.equals(storageContainer.getActivityStatus()))
+			else if (Constants.REJECT_AND_RESEND.equals( storageContainer.getActivityStatus() ))
 			{
 				final StorageContainer container = (StorageContainer) dao.retrieve(
 						StorageContainer.class.getName(),
 						edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-						storageContainer.getId()).get(0);
-				container.setActivityStatus(Status.ACTIVITY_STATUS_REJECT.toString());
-				dao.update(container);
+						storageContainer.getId() ).get( 0 );
+				container.setActivityStatus( Status.ACTIVITY_STATUS_REJECT.toString() );
+				dao.update( container );
 			}
 		}
 		else
 		{
 			//			throw new DAOException("storage continer or storage container's activity_status found null.");
 			this.logger
-					.debug("storage continer or storage container's activity_status found null.");
-			throw new BizLogicException(ErrorKey
-					.getErrorKey("storagecontainer.or.activitystatus.null"), null, "");
+					.debug( "storage continer or storage container's activity_status found null." );
+			throw new BizLogicException( ErrorKey
+					.getErrorKey( "storagecontainer.or.activitystatus.null" ) , null , "" );
 			//throw AppUtility.getApplicationException(null, "errors.mail.sending.failed", "storage continer or storage container's activity_status found null.");
 		}
 	}
@@ -321,59 +325,60 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	private void processInTransitContainer(DAO dao, SessionDataBean sessionDataBean,
 			StorageContainer storageContainer) throws DAOException, BizLogicException
 	{
-		final Collection<SpecimenPosition> spPosCollection = storageContainer
+		final Collection < SpecimenPosition > spPosCollection = storageContainer
 				.getSpecimenPositionCollection();
-		HashSet<String> storageContainerIds = new HashSet<String>();
+		final HashSet < String > storageContainerIds = new HashSet < String >();
 		for (final SpecimenPosition specimenPosition : spPosCollection)
 		{
 			SpecimenPosition retrievedSpPos = null;
 			Specimen specimen = null;
-			final List<SpecimenPosition> spPosList = dao.retrieve(SpecimenPosition.class.getName(),
-					edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-					specimenPosition.getId());
+			final List < SpecimenPosition > spPosList = dao.retrieve( SpecimenPosition.class
+					.getName(), edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
+					specimenPosition.getId() );
 			if (spPosList != null && spPosList.size() == 1)
 			{
-				retrievedSpPos = spPosList.get(0);
+				retrievedSpPos = spPosList.get( 0 );
 				specimen = retrievedSpPos.getSpecimen();
 				//Bug 14263
-				this.setSpecimenPositionContents(dao, specimen, specimenPosition,storageContainerIds);
-				this.setSpecimenActivityStatus(specimen, specimenPosition);
+				this.setSpecimenPositionContents( dao, specimen, specimenPosition,
+						storageContainerIds );
+				this.setSpecimenActivityStatus( specimen, specimenPosition );
 			}
 			if (specimen != null && specimen.getActivityStatus() != null)
 			{
-				if (!specimen.getActivityStatus().equals(Constants.REJECT_AND_DESTROY))
+				if (!specimen.getActivityStatus().equals( Constants.REJECT_AND_DESTROY ))
 				{
 					// Set specimen's Activity_status to "Active"
-					specimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+					specimen.setActivityStatus( Status.ACTIVITY_STATUS_ACTIVE.toString() );
 				}
 				else
 				{
 					// Specimen - Rejected and Destroyed.
-					specimen.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
-					specimen.setIsAvailable(false);
-					specimen.setSpecimenPosition(null);
+					specimen.setActivityStatus( Status.ACTIVITY_STATUS_CLOSED.toString() );
+					specimen.setIsAvailable( false );
+					specimen.setSpecimenPosition( null );
 				}
-				dao.update(specimen);
+				dao.update( specimen );
 				if (specimen.getSpecimenPosition() == null)
 				{
 					// specimen located virtually or specimen is 'rejected and destroyed'
-					final SpecimenPosition specimenPositionTemp = (SpecimenPosition) (dao.retrieve(
-							SpecimenPosition.class.getName(), "specimen.id", specimen.getId()))
-							.get(0);
-					dao.delete(specimenPositionTemp);
+					final SpecimenPosition specimenPositionTemp = (SpecimenPosition) ( dao
+							.retrieve( SpecimenPosition.class.getName(), "specimen.id", specimen
+									.getId() ) ).get( 0 );
+					dao.delete( specimenPositionTemp );
 				}
 				else
 				{
 					// update specimen position accordingly.
-					dao.update(specimen.getSpecimenPosition());
+					dao.update( specimen.getSpecimenPosition() );
 					// Update catch - the position is now occupied.
 				}
 			}
 			else
 			{
-				this.logger.debug("specimen or specimen's activity_status found null.");
-				throw new DAOException(ErrorKey.getErrorKey("specimen.or.activitystatus.null"),
-						null, "");
+				this.logger.debug( "specimen or specimen's activity_status found null." );
+				throw new DAOException( ErrorKey.getErrorKey( "specimen.or.activitystatus.null" ) ,
+						null , "" );
 
 			}
 		}
@@ -381,32 +386,34 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		final StorageContainer container = (StorageContainer) dao.retrieve(
 				StorageContainer.class.getName(),
 				edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-				storageContainer.getId()).get(0);
-		container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-		this.disposeShipmentContainer(container, dao, sessionDataBean);
+				storageContainer.getId() ).get( 0 );
+		container.setActivityStatus( Status.ACTIVITY_STATUS_DISABLED.toString() );
+		this.disposeShipmentContainer( container, dao, sessionDataBean );
 	}
 
 	/**
 	 * sets the specimen position contents.
-	 * @param dao the object of DAO class.
-	 * @param specimen contents to be set.
-	 * @param specimenPosition position of specimen.
-	 * @throws ApplicationException
+	 * @param dao - the object of DAO class.
+	 * @param specimen - contents to be set.
+	 * @param specimenPosition - position of specimen.
+	 * @param storageContainerIds - storageContainer Ids
+	 * @throws BizLogicException - BizLogicException
 	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
-			SpecimenPosition specimenPosition,HashSet<String> storageContainerIds) throws BizLogicException
+			SpecimenPosition specimenPosition, HashSet < String > storageContainerIds)
+			throws BizLogicException
 	{
 		try
 		{
-			List<StorageContainer> containerList = null;
+			List < StorageContainer > containerList = null;
 			StorageContainer container = null;
 			final StorageType storageType = specimenPosition.getStorageContainer() != null
-			? specimenPosition.getStorageContainer().getStorageType()
+					? specimenPosition.getStorageContainer().getStorageType()
 					: null;
 
-			if ((storageType != null)
-					&& ((storageType.getName() != null) && (storageType.getName().trim()
-							.equals(Constants.SHIPMENT_CONTAINER_TYPE_NAME))))
+			if (( storageType != null )
+					&& ( ( storageType.getName() != null ) && ( storageType.getName().trim()
+							.equals( Constants.SHIPMENT_CONTAINER_TYPE_NAME ) ) ))
 			{
 				// Storage Location is Virtual.
 				container = null;
@@ -414,20 +421,20 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			else
 			{
 				// Storage Location is either Auto or Manual.
-				if ((specimenPosition.getStorageContainer().getName() != null))
+				if (( specimenPosition.getStorageContainer().getName() != null ))
 				{
-					containerList = dao.retrieve(StorageContainer.class.getName(), "name",
-							specimenPosition.getStorageContainer().getName());
+					containerList = dao.retrieve( StorageContainer.class.getName(), "name",
+							specimenPosition.getStorageContainer().getName() );
 				}
 				else if (specimenPosition.getStorageContainer().getId() != null)
 				{
-					containerList = dao.retrieve(StorageContainer.class.getName(),
+					containerList = dao.retrieve( StorageContainer.class.getName(),
 							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-							specimenPosition.getStorageContainer().getId());
+							specimenPosition.getStorageContainer().getId() );
 				}
 				if (containerList != null && containerList.size() == 1)
 				{
-					container = containerList.get(0);
+					container = containerList.get( 0 );
 				}
 			}
 			if (container != null)
@@ -447,84 +454,94 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				{
 					containerId = container.getId().toString();
 				}
-				if (specimenPosition.getPositionDimensionOne() == null || specimenPosition.getPositionDimensionOne()== 0
-						|| specimenPosition.getPositionDimensionTwo() == null || specimenPosition.getPositionDimensionTwo()== 0)
+				if (specimenPosition.getPositionDimensionOne() == null
+						|| specimenPosition.getPositionDimensionOne() == 0
+						|| specimenPosition.getPositionDimensionTwo() == null
+						|| specimenPosition.getPositionDimensionTwo() == 0)
 				{
-					Position position = StorageContainerUtil
-					.getFirstAvailablePositionsInContainer(container,storageContainerIds,dao);
-					setPositionDataToSpecimen(position.getXPos(),position.getYPos(),container,specimen);
-					addStorageValues(specimen,storageContainerIds,container);
+					final Position position = StorageContainerUtil
+							.getFirstAvailablePositionsInContainer( container, storageContainerIds,
+									dao );
+					this.setPositionDataToSpecimen( position.getXPos(), position.getYPos(),
+							container, specimen );
+					this.addStorageValues( specimen, storageContainerIds, container );
 				}
 				else
 				{
-					final boolean isAvailable = scBizLogic.isPositionAvailable(jdbcdao, containerId,
-							container.getName(), specimenPosition.getPositionDimensionOne().toString(),
-							specimenPosition.getPositionDimensionTwo().toString());
+					final boolean isAvailable = scBizLogic.isPositionAvailable( jdbcdao,
+							containerId, container.getName(), specimenPosition
+									.getPositionDimensionOne().toString(), specimenPosition
+									.getPositionDimensionTwo().toString() );
 					// Storage Location is either Auto or Manual.
-					this.closeJDBCSession(jdbcdao);
+					this.closeJDBCSession( jdbcdao );
 					if (isAvailable)
 					{
-						setPositionDataToSpecimen(specimenPosition.getPositionDimensionOne(),specimenPosition.getPositionDimensionTwo(),container,specimen);
+						this.setPositionDataToSpecimen( specimenPosition.getPositionDimensionOne(),
+								specimenPosition.getPositionDimensionTwo(), container, specimen );
 					}
 					else
 					{
-						throw this.getBizLogicException(null, "shipment.samePositionForSpecimens", null);
+						throw this.getBizLogicException( null, "shipment.samePositionForSpecimens",
+								null );
 					}
 				}
 			}
 			else
 			{
 				// Storage Location is Virtual.
-				specimen.setSpecimenPosition(null);
+				specimen.setSpecimenPosition( null );
 			}
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.debug(exp.getMessage(), exp);
-			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+			this.logger.debug( exp.getMessage(), exp );
+			throw this.getBizLogicException( exp, exp.getErrorKeyName(), exp.getMsgValues() );
 		}
 
 	}
-   /**
-    * Sets storage positions
-    * @param pos1 - position 1
-    * @param pos2 - position 2
-    * @param container - StorageContainer obj
-    * @param specimen - Specimen obj
-    */
-   private void setPositionDataToSpecimen(Integer pos1,Integer pos2,StorageContainer container,Specimen specimen)
-   {
-	    specimen.getSpecimenPosition().setStorageContainer(container);
-		specimen.getSpecimenPosition().setPositionDimensionOne(pos1);
-		specimen.getSpecimenPosition().setPositionDimensionTwo(pos2);
-   }
-   /**
-    * Add storage values as container name or id : pos1,pos2
-    * @param specimen - Specimen obj
-    * @param storageContainerIds - Hashset containing storagevalues
-    * @param storageContainerObj - StorageContainer obj
-    */
-	private void addStorageValues(Specimen specimen,HashSet<String> storageContainerIds,StorageContainer storageContainerObj)
+
+	/**
+	 * Sets storage positions
+	 * @param pos1 - position 1
+	 * @param pos2 - position 2
+	 * @param container - StorageContainer obj
+	 * @param specimen - Specimen obj
+	 */
+	private void setPositionDataToSpecimen(Integer pos1, Integer pos2, StorageContainer container,
+			Specimen specimen)
+	{
+		specimen.getSpecimenPosition().setStorageContainer( container );
+		specimen.getSpecimenPosition().setPositionDimensionOne( pos1 );
+		specimen.getSpecimenPosition().setPositionDimensionTwo( pos2 );
+	}
+
+	/**
+	 * Add storage values as container name or id : pos1,pos2
+	 * @param specimen - Specimen obj
+	 * @param storageContainerIds - Hashset containing storagevalues
+	 * @param storageContainerObj - StorageContainer obj
+	 */
+	private void addStorageValues(Specimen specimen, HashSet < String > storageContainerIds,
+			StorageContainer storageContainerObj)
 	{
 		String storageValue = null;
 		final Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
 		final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 		final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-		final String containerName = specimen.getSpecimenPosition().getStorageContainer()
-				.getName();
+		final String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
 		if (containerName != null)
 		{
-			storageValue = StorageContainerUtil.getStorageValueKey(containerName, null,
-					pos1, pos2);
+			storageValue = StorageContainerUtil
+					.getStorageValueKey( containerName, null, pos1, pos2 );
 		}
 		else
 		{
-			storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(),
-					pos1, pos2);
+			storageValue = StorageContainerUtil
+					.getStorageValueKey( null, id.toString(), pos1, pos2 );
 		}
-		if (!storageContainerIds.contains(storageValue))
+		if (!storageContainerIds.contains( storageValue ))
 		{
-			storageContainerIds.add(storageValue);
+			storageContainerIds.add( storageValue );
 		}
 	}
 
@@ -535,7 +552,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 */
 	private void setSpecimenActivityStatus(Specimen specimen, SpecimenPosition specimenPosition)
 	{
-		specimen.setActivityStatus(specimenPosition.getSpecimen().getActivityStatus());
+		specimen.setActivityStatus( specimenPosition.getSpecimen().getActivityStatus() );
 	}
 
 	/**
@@ -548,8 +565,8 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	private void disposeShipmentContainer(StorageContainer storageContainer, DAO dao,
 			SessionDataBean sessionDataBean) throws DAOException
 	{
-		storageContainer.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-		dao.update(storageContainer);
+		storageContainer.setActivityStatus( Status.ACTIVITY_STATUS_DISABLED.toString() );
+		dao.update( storageContainer );
 	}
 
 	/**
@@ -564,7 +581,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	protected void postUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		super.postUpdate(dao, obj1, obj2, sessionDataBean);
+		super.postUpdate( dao, obj1, obj2, sessionDataBean );
 	}
 
 	/**
@@ -585,22 +602,22 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			if (shipment.getShipmentRequest() != null
 					&& shipment.getShipmentRequest().getId() != null)
 			{
-				List<ShipmentRequest> requestList;
+				List < ShipmentRequest > requestList;
 				try
 				{
-					requestList = dao.retrieve(ShipmentRequest.class.getName(),
+					requestList = dao.retrieve( ShipmentRequest.class.getName(),
 							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-							shipment.getShipmentRequest().getId());
+							shipment.getShipmentRequest().getId() );
 					if (requestList != null && requestList.size() == 1)
 					{
-						shipment.setShipmentRequest(requestList.get(0));
+						shipment.setShipmentRequest( requestList.get( 0 ) );
 					}
 				}
 				catch (final DAOException e)
 				{
-					this.logger.error(e.getMessage(), e);
+					this.logger.error( e.getMessage(), e );
 					e.printStackTrace();
-					throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+					throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
 				}
 			}
 		}
@@ -619,14 +636,14 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		final StringBuffer sb = new StringBuffer();
 		if (baseShipment.getReceiverSite() != null)
 		{
-			sb.append(Site.class.getName()).append("_").append(
-					baseShipment.getReceiverSite().getId().toString());
+			sb.append( Site.class.getName() ).append( "_" ).append(
+					baseShipment.getReceiverSite().getId().toString() );
 			return sb.toString();
 		}
 		else
 		{
 			return null;
 		}
-	}	
+	}
 
 }

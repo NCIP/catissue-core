@@ -25,7 +25,6 @@ import edu.wustl.common.util.global.CommonConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * Manipulate Shipment information into the database using Hibernate.
@@ -34,7 +33,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
 public class ShipmentBizLogic extends BaseShipmentBizLogic
 {
 
-	Logger logger = Logger.getCommonLogger(ShipmentBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger( ShipmentBizLogic.class );
 
 	/*
 	 * (non-Javadoc)
@@ -51,7 +50,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	@Override
 	protected String getNotificationMailSubject(BaseShipment shipment)
 	{
-		return ShipmentMailFormatterUtility.getCreateShipmentMailSubject((Shipment) shipment);
+		return ShipmentMailFormatterUtility.getCreateShipmentMailSubject( (Shipment) shipment );
 	}
 
 	/*
@@ -91,7 +90,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	@Override
 	protected String getNotificationMailBody(BaseShipment shipment)
 	{
-		return ShipmentMailFormatterUtility.formatCreateShipmentMailBody((Shipment) shipment);
+		return ShipmentMailFormatterUtility.formatCreateShipmentMailBody( (Shipment) shipment );
 	}
 
 	/**
@@ -105,24 +104,24 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		Shipment shipment = null;
 		try
 		{
-			final List shipmentList = this.retrieve(Shipment.class.getName(), "id", identifier);
-			shipment = (Shipment) shipmentList.get(0);
+			final List shipmentList = this.retrieve( Shipment.class.getName(), "id", identifier );
+			shipment = (Shipment) shipmentList.get( 0 );
 
 			// Retrieve containerCollection which has been lazy initialed
-			final Collection<StorageContainer> containerCollection = (Collection<StorageContainer>) this
-					.retrieveAttribute(Shipment.class.getName(), identifier,
-							"elements(containerCollection)");
+			final Collection < StorageContainer > containerCollection = (Collection < StorageContainer >) this
+					.retrieveAttribute( Shipment.class.getName(), identifier,
+							"elements(containerCollection)" );
 
 			shipment.getContainerCollection().clear();
-			shipment.getContainerCollection().addAll(containerCollection);
+			shipment.getContainerCollection().addAll( containerCollection );
 
-			this.getSpecimenPositionCollection(containerCollection);
+			this.getSpecimenPositionCollection( containerCollection );
 		}
 		catch (final BizLogicException bizLogicException)
 		{
-			this.logger.error(bizLogicException.getMessage(), bizLogicException);
-			throw this.getBizLogicException(bizLogicException, bizLogicException.getErrorKeyName(),
-					bizLogicException.getMsgValues());//janu
+			this.logger.error( bizLogicException.getMessage(), bizLogicException );
+			throw this.getBizLogicException( bizLogicException,
+					bizLogicException.getErrorKeyName(), bizLogicException.getMsgValues() );//janu
 		}
 		return shipment;
 	}
@@ -138,14 +137,14 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * @return list of shipment objects.
 	 * @throws BizLogicException if some bizlogic operation fails.
 	 */
-	public List<Object[]> getShipments(String selectColumnName, String columnName,
+	public List < Object[] > getShipments(String selectColumnName, String columnName,
 			String orderByField, Long[] siteId, int startIndex, int numOfRecords)
 			throws BizLogicException
 	{
-		final String whereClauseString = this.getWhereClauseForShipment(siteId, columnName);
-		List<Object[]> shipmentsList = null;
-		shipmentsList = this.getShipmentDetails(Shipment.class.getName(), selectColumnName,
-				whereClauseString, siteId, orderByField, startIndex, numOfRecords);
+		final String whereClauseString = this.getWhereClauseForShipment( siteId, columnName );
+		List < Object[] > shipmentsList = null;
+		shipmentsList = this.getShipmentDetails( Shipment.class.getName(), selectColumnName,
+				whereClauseString, siteId, orderByField, startIndex, numOfRecords );
 		return shipmentsList;
 	}
 
@@ -162,9 +161,9 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	public int getShipmentsCount(String columnName, String orderByField, Long[] siteId,
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
-		final String whereClauseString = this.getWhereClauseForShipment(siteId, columnName);
-		final int count = getShipmentsCount(Shipment.class.getName(), whereClauseString, siteId,
-				orderByField, startIndex, numOfRecords);
+		final String whereClauseString = this.getWhereClauseForShipment( siteId, columnName );
+		final int count = getShipmentsCount( Shipment.class.getName(), whereClauseString, siteId,
+				orderByField, startIndex, numOfRecords );
 		return count;
 	}
 
@@ -176,15 +175,15 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	private String getWhereClauseForShipment(Long[] siteId, String columnName)
 	{
 		final StringBuffer whereClause = new StringBuffer();
-		whereClause.append(" shipment.activityStatus!='" + Constants.ACTIVITY_STATUS_RECEIVED
-				+ "' " + CommonConstants.AND_JOIN_CONDITION + " (");
+		whereClause.append( " shipment.activityStatus!='" + Constants.ACTIVITY_STATUS_RECEIVED
+				+ "' " + CommonConstants.AND_JOIN_CONDITION + " (" );
 		for (final Long element : siteId)
 		{
-			whereClause.append(" shipment." + columnName + "=? "
-					+ CommonConstants.OR_JOIN_CONDITION);
+			whereClause.append( " shipment." + columnName + "=? "
+					+ CommonConstants.OR_JOIN_CONDITION );
 		}
 		String whereClauseString = whereClause.toString();
-		whereClauseString = whereClauseString.substring(0, (whereClauseString.length() - 2));
+		whereClauseString = whereClauseString.substring( 0, ( whereClauseString.length() - 2 ) );
 		whereClauseString = whereClauseString + ")";
 		return whereClauseString;
 	}
@@ -200,7 +199,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		super.postInsert(obj, dao, sessionDataBean);
+		super.postInsert( obj, dao, sessionDataBean );
 	}
 
 	/**
@@ -209,13 +208,12 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * @param arg2 the object of Object class.
 	 * @param arg3 containing the session details.
 	 * @throws BizLogicException thrown if some bizlogic operation fails.
-	 * @throws UserNotAuthorizedException thrown if user is not found authorized.
 	 */
 	@Override
 	protected void postUpdate(DAO arg0, Object arg1, Object arg2, SessionDataBean arg3)
 			throws BizLogicException
 	{
-		super.postUpdate(arg0, arg1, arg2, arg3);
+		super.postUpdate( arg0, arg1, arg2, arg3 );
 	}
 
 	/**
@@ -236,24 +234,23 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 				if (shipment.getShipmentRequest() != null
 						&& shipment.getShipmentRequest().getId() != null)
 				{
-					final List<ShipmentRequest> requestList = dao.retrieve(ShipmentRequest.class
-							.getName(),
+					final List < ShipmentRequest > requestList = dao.retrieve(
+							ShipmentRequest.class.getName(),
 							edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-							shipment.getShipmentRequest().getId());
+							shipment.getShipmentRequest().getId() );
 					if (requestList != null && requestList.size() == 1)
 					{
-						shipment.setShipmentRequest(requestList.get(0));
+						shipment.setShipmentRequest( requestList.get( 0 ) );
 					}
 				}
 			}
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error("Database " +
-					"operation failed."+e.getMessage(), e);
+			this.logger.error( "Database " + "operation failed." + e.getMessage(), e );
 			e.printStackTrace();
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,"Database operation failed.");
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
 		}
 	}
 
@@ -263,13 +260,12 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 	 * @param obj2 the object of Object class.
 	 * @param sessionDataBean containing the session details.
 	 * @throws BizLogicException thrown if some bizlogic operation fails.
-	 * @throws UserNotAuthorizedException thrown if user is not found authorized.
 	 */
 	@Override
 	protected void preUpdate(DAO dao, Object obj1, Object obj2, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		this.preInsert(obj1, dao, sessionDataBean);
+		this.preInsert( obj1, dao, sessionDataBean );
 	}
 
 }
