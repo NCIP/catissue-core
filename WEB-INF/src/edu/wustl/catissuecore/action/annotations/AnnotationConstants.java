@@ -216,4 +216,8 @@ public class AnnotationConstants
 	 * EDIT.
 	 */
 	public static final String EDIT = "Edit";
-}
+	
+	public static  final String CELL_START = "<cell>";
+	
+	public static  final String CELL_END = "</cell>";
+	}

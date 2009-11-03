@@ -54,17 +54,17 @@ public class LoadDynamicExtensionsAction extends BaseAction
 		}
 		if (staticEntityId == null)
 		{
-			staticEntityId = request.getParameter("staticEntityId");
+			staticEntityId = request.getParameter( "staticEntityId" );
 		}
 		final HttpSession session = request.getSession();
-		session.setAttribute(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
-		session.setAttribute(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);
+		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId );
+		session.setAttribute( AnnotationConstants.SELECTED_STATIC_RECORDID, conditions );
 
 		//Get Dynamic extensions URL
-		final String dynamicExtensionsURL = this.getDynamicExtensionsURL(request);
+		final String dynamicExtensionsURL = this.getDynamicExtensionsURL( request );
 		//Set as request attribute
-		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL);
-		return mapping.findForward(Constants.SUCCESS);
+		request.setAttribute( AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL );
+		return mapping.findForward( Constants.SUCCESS );
 	}
 
 	/**
@@ -74,11 +74,12 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	private String getDynamicExtensionsURL(HttpServletRequest request)
 	{
 		//Get Dynamic extensions URL
-		String dynamicExtensionsURL = request.getContextPath()
+		final String dynamicExtensionsURL = request.getContextPath()
 				+ WebUIManager.getCreateContainerURL();
-
+		final StringBuffer dynExturl = new StringBuffer();
+		dynExturl.append( dynamicExtensionsURL );
 		final SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
-				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
+				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA );
 
 		final String userId = sessionbean.getUserId().toString();
 		//request.getSession().getAttribute("SESSION_DATA").toString();
@@ -88,23 +89,40 @@ public class LoadDynamicExtensionsAction extends BaseAction
 			isAuthenticatedUser = "true";
 		}
 		//append container id if any
-		if (request.getParameter("containerId") != null)
+		if (request.getParameter( "containerId" ) != null)
 		{
-			dynamicExtensionsURL = dynamicExtensionsURL + "?"
+			dynExturl.append( '?' );
+			dynExturl.append( WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME );
+			dynExturl.append( '=' );
+			dynExturl.append( request.getParameter( "containerId" ) );
+			/*dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter("containerId");
-			dynamicExtensionsURL = dynamicExtensionsURL + "&"
+					+ request.getParameter("containerId");*/
+			dynExturl.append( '&' );
+			dynExturl.append( WebUIManager.getCallbackURLParamName() );
+			dynExturl.append( '=' );
+			dynExturl.append( request.getContextPath() );
+			dynExturl.append( "&isAuthenticatedUser=" );
+			dynExturl.append( isAuthenticatedUser );
+			/*dynamicExtensionsURL = dynamicExtensionsURL + "&"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
-					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
+					+ "&isAuthenticatedUser=" + isAuthenticatedUser;*/
 		}
 		else
 		{
 			//append callback parameter
-			dynamicExtensionsURL = dynamicExtensionsURL + "?"
+			dynExturl.append( '?' );
+			dynExturl.append( WebUIManager.getCallbackURLParamName() );
+			dynExturl.append( '=' );
+			dynExturl.append( request.getContextPath() );
+			dynExturl.append( AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN );
+			dynExturl.append( "&isAuthenticatedUser=" );
+			dynExturl.append( isAuthenticatedUser );
+			/*dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
-					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
+					+ "&isAuthenticatedUser=" + isAuthenticatedUser;*/
 		}
 		return dynamicExtensionsURL;
 	}
