@@ -175,7 +175,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				this.updateCache( request );
 			}
 			final String editOperation = request.getParameter( "editOperation" );
-			if (editOperation != null && !editOperation.isEmpty()
+			if (editOperation != null && editOperation.trim().length() > 0
 					&& ( editOperation.contains( AnnotationConstants.EDIT_SELECTED_ANNOTATION ) ))
 			{
 				final String[] parameters = editOperation.split( "@" );
