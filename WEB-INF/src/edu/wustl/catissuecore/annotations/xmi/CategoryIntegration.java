@@ -20,9 +20,9 @@ public class CategoryIntegration
 	 */
 	static
 	{
-		LoggerConfig.configureLogger(System.getProperty("user.dir"));
+		LoggerConfig.configureLogger( System.getProperty( "user.dir" ) );
 	}
-	private static Logger logger = Logger.getCommonLogger(CategoryIntegration.class);
+	private static Logger logger = Logger.getCommonLogger( CategoryIntegration.class );
 
 	/**
 	 * @param args - args
@@ -30,8 +30,8 @@ public class CategoryIntegration
 	public static void main(String[] args)
 	{
 
-		final List<HashMap> categoryList = CategoryCreator.createCategory(args);
-		DECategoryIntegration.categoryIntegration(categoryList);
+		final List < HashMap > categoryList = CategoryCreator.createCategory( args );
+		DECategoryIntegration.categoryIntegration( categoryList );
 
 	}
 

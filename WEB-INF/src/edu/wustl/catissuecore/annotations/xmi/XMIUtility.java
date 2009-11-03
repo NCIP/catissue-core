@@ -48,8 +48,8 @@ public class XMIUtility
 	{
 		if (groupName != null)
 		{
-			System.out.println("Searching " + groupName);
-			return entityManager.getEntityGroupByName(groupName);
+			//System.out.println( "Searching " + groupName );
+			return entityManager.getEntityGroupByName( groupName );
 		}
 		return null;
 	}
@@ -65,17 +65,17 @@ public class XMIUtility
 			BizLogicException
 	{
 		//ContainerInterface mainContainer = getMainContainer(entityGroup);
-		final Collection<ContainerInterface> mainContainers = entityGroup
+		final Collection < ContainerInterface > mainContainers = entityGroup
 				.getMainContainerCollection();
 		if (mainContainers != null)
 		{
 			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 			for (final ContainerInterface mainContainer : mainContainers)
 			{
-				System.out.println(mainContainer.getId());
+				//System.out.println( mainContainer.getId() );
 				final Collection entityMapsForContainer = annotationBizLogic
-						.getEntityMapsForContainer(mainContainer.getId());
-				System.out.println("entityMapsForContainer " + entityMapsForContainer);
+						.getEntityMapsForContainer( mainContainer.getId() );
+				//System.out.println( "entityMapsForContainer " + entityMapsForContainer );
 				if (entityMapsForContainer != null)
 				{
 					final Iterator entityMapsForContainerIter = entityMapsForContainer.iterator();
@@ -83,37 +83,37 @@ public class XMIUtility
 					while (entityMapsForContainerIter.hasNext())
 					{
 						final Object entityMap = entityMapsForContainerIter.next();
-						System.out.println();
 						if (entityMap != null)
 						{
-							final Long staticEntityId = ((EntityMap) entityMap).getStaticEntityId();
+							final Long staticEntityId = ( (EntityMap) entityMap )
+									.getStaticEntityId();
 							final EntityInterface staticEntity = entityManager
-									.getEntityByIdentifier(staticEntityId);
+									.getEntityByIdentifier( staticEntityId );
 							if (staticEntity != null)
 							{
 								EntityInterface xmiStaticEntity = null;
 								final AssociationInterface association = getHookEntityAssociation(
-										staticEntity, mainContainer.getAbstractEntity());
-								final Collection<EntityInterface> entityColl = entityGroup
+										staticEntity, mainContainer.getAbstractEntity() );
+								final Collection < EntityInterface > entityColl = entityGroup
 										.getEntityCollection();
 								for (final EntityInterface entity : entityColl)
 								{
-									if (entity.getId().compareTo(staticEntity.getId()) == 0)
+									if (entity.getId().compareTo( staticEntity.getId() ) == 0)
 									{
 										xmiStaticEntity = entity;
 										break;
 									}
 								}
 
-								if (xmiStaticEntity != null)
+								if (xmiStaticEntity == null)
 								{
-									xmiStaticEntity.addAssociation(association);
+									xmiStaticEntity = getHookEntityDetailsForXMI( staticEntity,
+											mainContainer.getAbstractEntity() );
+									entityGroup.addEntity( xmiStaticEntity );
 								}
 								else
 								{
-									xmiStaticEntity = getHookEntityDetailsForXMI(staticEntity,
-											mainContainer.getAbstractEntity());
-									entityGroup.addEntity(xmiStaticEntity);
+									xmiStaticEntity.addAssociation( association );
 								}
 							}
 						}
@@ -136,12 +136,12 @@ public class XMIUtility
 	{
 		//For XMI : add only id , name and table properties
 		final EntityInterface xmiEntity = new Entity();
-		xmiEntity.setName(getHookEntityName(srcEntity.getName()));
-		xmiEntity.setDescription(srcEntity.getDescription());
-		xmiEntity.setTableProperties(srcEntity.getTableProperties());
-		xmiEntity.setId(srcEntity.getId());
-		xmiEntity.addAttribute(getIdAttribute(srcEntity));
-		xmiEntity.addAssociation(getHookEntityAssociation(srcEntity, targetEntity));
+		xmiEntity.setName( getHookEntityName( srcEntity.getName() ) );
+		xmiEntity.setDescription( srcEntity.getDescription() );
+		xmiEntity.setTableProperties( srcEntity.getTableProperties() );
+		xmiEntity.setId( srcEntity.getId() );
+		xmiEntity.addAttribute( getIdAttribute( srcEntity ) );
+		xmiEntity.addAssociation( getHookEntityAssociation( srcEntity, targetEntity ) );
 
 		return xmiEntity;
 	}
@@ -154,7 +154,7 @@ public class XMIUtility
 	{
 		//Return last token from name
 		String hookEntityname = null;
-		final StringTokenizer strTokenizer = new StringTokenizer(name, ".");
+		final StringTokenizer strTokenizer = new StringTokenizer( name , "." );
 		while (strTokenizer.hasMoreElements())
 		{
 			hookEntityname = strTokenizer.nextToken();
@@ -173,9 +173,9 @@ public class XMIUtility
 			AbstractEntityInterface targetEntity) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException
 	{
-		if ((srcEntity != null) && (targetEntity != null))
+		if (( srcEntity != null ) && ( targetEntity != null ))
 		{
-			final Collection<AssociationInterface> associations = srcEntity.getAllAssociations();
+			final Collection < AssociationInterface > associations = srcEntity.getAllAssociations();
 			if (associations != null)
 			{
 				final Iterator assocIter = associations.iterator();
@@ -183,14 +183,14 @@ public class XMIUtility
 				{
 					final AssociationInterface association = (AssociationInterface) assocIter
 							.next();
-					if (association.getTargetEntity().equals(targetEntity))
+					if (association.getTargetEntity().equals( targetEntity ))
 					{
-						final String srcEntityName = getHookEntityName(srcEntity.getName());
+						final String srcEntityName = getHookEntityName( srcEntity.getName() );
 						//Change name of association
-						association
-								.setName("Assoc_" + srcEntityName + "_" + targetEntity.getName());
-						association.getSourceRole().setName(srcEntityName);
-						association.getTargetRole().setName(targetEntity.getName() + "Collection");
+						association.setName( "Assoc_" + srcEntityName + "_"
+								+ targetEntity.getName() );
+						association.getSourceRole().setName( srcEntityName );
+						association.getTargetRole().setName( targetEntity.getName() + "Collection" );
 						return association;
 					}
 				}
@@ -223,16 +223,16 @@ public class XMIUtility
 	{
 		if (entity != null)
 		{
-			final Collection<AttributeInterface> attributes = entity.getAllAttributes();
+			final Collection < AttributeInterface > attributes = entity.getAllAttributes();
 			if (attributes != null)
 			{
 				final Iterator attributesIter = attributes.iterator();
 				while (attributesIter.hasNext())
 				{
 					final AttributeInterface attribute = (AttributeInterface) attributesIter.next();
-					if ((attribute != null)
-							&& (EntityManagerConstantsInterface.ID_ATTRIBUTE_NAME.equals(attribute
-									.getName())))
+					if (( attribute != null )
+							&& ( EntityManagerConstantsInterface.ID_ATTRIBUTE_NAME
+									.equals( attribute.getName() ) ))
 					{
 						return attribute;
 					}
@@ -250,18 +250,17 @@ public class XMIUtility
 	{
 		if (entityGroup != null)
 		{
-			final Collection<ContainerInterface> mainContainers = entityGroup
+			final Collection < ContainerInterface > mainContainers = entityGroup
 					.getMainContainerCollection();
 			if (mainContainers != null)
 			{
 				final Iterator mainContainerIter = mainContainers.iterator();
-				System.out.println("1");
 				if (mainContainerIter.hasNext())
 				{
 					//Return just the forst main container
 					final ContainerInterface mainContainer = (ContainerInterface) mainContainerIter
 							.next();
-					System.out.println("mainContainer " + mainContainer);
+					//System.out.println( "mainContainer " + mainContainer );
 					return mainContainer;
 				}
 			}
