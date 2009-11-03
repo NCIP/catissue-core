@@ -1,11 +1,8 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,30 +10,19 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.test.ExcelFileReader;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.namegenerator.LabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
-	private static String shortTitle = "test_cp_for_edit2";
+	private static String shortTitle = "test_cp_for_edit"; 
 
 	public static void createCP() throws Exception {
 		System.out
@@ -305,27 +291,23 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 		}
 	}
 
-	public static void debounDataMigration() throws Exception { // CollectionProtocolTestcase
-		// .java
-
-		try {
-			System.out
-					.println("---------IN ExcelTestCaseUtility.debounDataMigration-----------");
-			System.out.println("user.dir  " + System.getProperty("user.dir"));
-			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/DeBaunMasterList.xls";
-			ExcelFileReader EX_CP = new ExcelFileReader();
-			String allexcel[][] = EX_CP.setInfo(excelFilePath);
-			new DebounDataMigration().setCPRAndSCG(allexcel);
-			System.out
-					.println("---------END ExcelTestCaseUtility.debounDataMigration-----------");
-		} catch (Exception e) {
-			System.out.println("Exception in debounDataMigration ");
-			System.err.println("Exception in debounDataMigration ");
-			e.printStackTrace();
-			throw e;
-		}
-	}
+	/*
+	 * public static void debounDataMigration() throws Exception { //
+	 * CollectionProtocolTestcase // .java
+	 * 
+	 * try { System.out
+	 * .println("---------IN ExcelTestCaseUtility.debounDataMigration-----------"
+	 * ); System.out.println("user.dir  " + System.getProperty("user.dir"));
+	 * String excelFilePath = System.getProperty("user.dir") +
+	 * "/excelFiles/DeBaunMasterList.xls"; ExcelFileReader EX_CP = new
+	 * ExcelFileReader(); String allexcel[][] = EX_CP.setInfo(excelFilePath);
+	 * new DebounDataMigration().setCPRAndSCG(allexcel); System.out
+	 * .println("---------END ExcelTestCaseUtility.debounDataMigration-----------"
+	 * ); } catch (Exception e) {
+	 * System.out.println("Exception in debounDataMigration ");
+	 * System.err.println("Exception in debounDataMigration ");
+	 * e.printStackTrace(); throw e; } }
+	 */
 
 	public static void addAnticipatedSCGInParticipant() throws Exception {
 
