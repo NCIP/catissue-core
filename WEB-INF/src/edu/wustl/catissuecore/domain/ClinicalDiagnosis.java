@@ -5,30 +5,31 @@ import java.io.Serializable;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-
+/**
+ * @author kalpana_thakur
+ */
 public class ClinicalDiagnosis extends AbstractDomainObject implements Serializable, Comparable
 {
 
 	/**
-	 * 
+	 * Serial id.
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * System generated unique id.
 	 */
-	protected Long id;
-	
+	private Long id;
 	/**
 	 * Clinical Diagnosis value.
 	 */
-	protected String clinicalDiagnosis;
-	
+	private String clinicalDiagnosis;
+
 	/**
 	 * Collection Protocol instance.
 	 */
-	protected CollectionProtocol collectionProtocol;
-	
+	private CollectionProtocol collectionProtocol;
+
 	/**
 	 * The collection protocol.
 	 * @return the collection protocol.
@@ -39,8 +40,8 @@ public class ClinicalDiagnosis extends AbstractDomainObject implements Serializa
 	}
 
 	/**
-	 * Set the collection protocol
-	 * @param collectionProtocol
+	 * Set the collection protocol.
+	 * @param collectionProtocol collectionProtocol
 	 */
 	public void setCollectionProtocol(CollectionProtocol collectionProtocol)
 	{
@@ -48,8 +49,8 @@ public class ClinicalDiagnosis extends AbstractDomainObject implements Serializa
 	}
 
 	/**
-	 * 
-	 * @return clinicalDiagnosis.
+	 * This method is called to get the clinical Diagnosis.
+	 * @return clinicalDiagnosis clinicalDiagnosis.
 	 */
 	public String getClinicalDiagnosis()
 	{
@@ -58,41 +59,51 @@ public class ClinicalDiagnosis extends AbstractDomainObject implements Serializa
 
 	/**
 	 * set clinicalDiagnosis.
-	 * @param clinicalDiagnosis
+	 * @param clinicalDiagnosis clinicalDiagnosis
 	 */
 	public void setClinicalDiagnosis(String clinicalDiagnosis)
 	{
 		this.clinicalDiagnosis = clinicalDiagnosis;
 	}
 
-	
-	
     /**
-     * @return id. 
+     * This method called to get the Identifier.
+     * @return id identifier.
      */
 	public Long getId()
 	{
-		
 		return id;
 	}
 
 	/**
+	 * @param clinDiagId clinical Diagnosis Identifier.
 	 * set identifier.
 	 */
 	public void setId(Long clinDiagId)
 	{
 		id = clinDiagId;
 	}
-	
-	
 
-	@Override
-	public void setAllValues(IValueObject arg0) throws AssignDataException {
+
+
+	/**
+	 * Set all values.
+	 * @param arg0  IValueObject
+	 * @throws AssignDataException AssignDataException
+	 */
+	public void setAllValues(IValueObject arg0) throws AssignDataException
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public int compareTo(Object o) {
+	/**
+	 * To compare objects.
+	 * @param object object.
+	 * @return object.
+	 */
+	public int compareTo(Object object)
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
