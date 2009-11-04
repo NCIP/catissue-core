@@ -25,7 +25,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * protocolCoordinatorIds.
 	 */
-	private long[] protocolCoordinatorIds;
+	private long[] coordinatorIds;
 	/**
 	 * principalInvestigatorId.
 	 */
@@ -66,6 +66,29 @@ public class CollectionProtocolBean implements Serializable
 	 * isParticiapantReg.
 	 */
 	private boolean isParticiapantReg = false;
+	
+	/**
+	 * clinicalDiagnosis values.
+	 */
+	private String[] clinicalDiagnosis;
+
+	/**
+	 * This will return the clinicalDiagnosis values.
+	 * @return clinicalDiagnosis clinicalDiagnosis.
+	 */
+	public String[] getClinicalDiagnosis() 
+	{
+		return clinicalDiagnosis;
+	}
+
+	/**
+	 * This will be called to set clinicalDiagnosis.
+	 * @param clinicalDiagnosis clinicalDiagnosis.
+	 */
+	public void setClinicalDiagnosis(String[] clinicalDiagnosis)
+	{
+		this.clinicalDiagnosis = clinicalDiagnosis;
+	}
 
 	/**
 	 * @return - boolean
@@ -118,17 +141,17 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * @return - array of long.
 	 */
-	public long[] getProtocolCoordinatorIds()
+	public long[] getCoordinatorIds()
 	{
-		return this.protocolCoordinatorIds;
+		return this.coordinatorIds;
 	}
 
 	/**
-	 * @param protocolCoordinatorIdsParam - protocolCoordinatorIdsParam
+	 * @param coordinatorIdsParam - coordinatorIdsParam
 	 */
-	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIdsParam)
+	public void setCoordinatorIds(long[] coordinatorIdsParam)
 	{
-		this.protocolCoordinatorIds = protocolCoordinatorIdsParam;
+		this.coordinatorIds = coordinatorIdsParam;
 	}
 
 	/**

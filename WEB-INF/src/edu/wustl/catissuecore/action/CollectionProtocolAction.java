@@ -35,7 +35,9 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
@@ -89,6 +91,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		final String tabSel = request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
+		List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
+		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosis);
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		String invokeFunction = request.getParameter("invokeFunction");
@@ -389,8 +393,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		collectionProtocolForm.setPrincipalInvestigatorId(collectionProtocolBean
 				.getPrincipalInvestigatorId());
-		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean
-				.getProtocolCoordinatorIds());
+		collectionProtocolForm.setCoordinatorIds(collectionProtocolBean
+				.getCoordinatorIds());
+		/**For Clinical Diagnosis Subset  **/
+		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean.getClinicalDiagnosis());
+		CollectionProtocolUtil.updateClinicalDiagnosis(request, collectionProtocolBean);
+
 		collectionProtocolForm.setTitle(collectionProtocolBean.getTitle());
 		collectionProtocolForm.setShortTitle(collectionProtocolBean.getShortTitle());
 		collectionProtocolForm.setStartDate(collectionProtocolBean.getStartDate());

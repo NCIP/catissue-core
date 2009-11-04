@@ -1255,3 +1255,15 @@ ALTER TABLE `CATISSUE_COLL_PROT_REG` change `BARCODE` `BARCODE` varchar (255) BI
 /* for adding the mataPhone for participant last name*/ 
 ALTER TABLE CATISSUE_PARTICIPANT ADD LNAME_METAPHONE varchar(50); 
 
+/**  Bug 13225 -  Clinical Diagnosis subset at CP definition level 
+ */
+drop table if exists CATISSUE_CLINICAL_DIAGNOSIS;
+create table CATISSUE_CLINICAL_DIAGNOSIS (
+   IDENTIFIER BIGINT not null auto_increment,
+   CLINICAL_DIAGNOSIS varchar(255),
+   COLLECTION_PROTOCOL_ID BIGINT,
+   primary key (IDENTIFIER),
+   CONSTRAINT FK_CD_COLPROT FOREIGN KEY (COLLECTION_PROTOCOL_ID) REFERENCES CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER)
+);
+
+

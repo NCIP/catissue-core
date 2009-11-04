@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
+import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -42,6 +44,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -92,15 +95,19 @@ public class CollectionProtocolUtil
 	public static CollectionProtocolBean getCollectionProtocolBean(CollectionProtocol collectionProtocol)
 	{
 		CollectionProtocolBean collectionProtocolBean;
-		long[] protocolCoordinatorIds = null;
+		long[] coordinatorIds = null;
 		collectionProtocolBean = new CollectionProtocolBean();
 		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
 		Long id = Long.valueOf(collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(id);
 		
-		protocolCoordinatorIds = getProtocolCordnateIds(collectionProtocol, protocolCoordinatorIds);
+		coordinatorIds = getProtocolCordnateIds(collectionProtocol, coordinatorIds);
 		
-		collectionProtocolBean.setProtocolCoordinatorIds(protocolCoordinatorIds);
+		collectionProtocolBean.setCoordinatorIds(coordinatorIds);
+		
+		/**For Clinical Diagnosis subset **/
+		collectionProtocolBean.setClinicalDiagnosis(getClinicalDiagnosis(collectionProtocol));
+		
 		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
 		Date date = collectionProtocol.getStartDate();
 		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
@@ -139,28 +146,53 @@ public class CollectionProtocolUtil
 
 	/**
 	 * @param collectionProtocol
-	 * @param protocolCoordinatorIds
+	 * @param coordinatorIds
 	 * @return
 	 */
 	private static long[] getProtocolCordnateIds(CollectionProtocol collectionProtocol,
-			long[] protocolCoordinatorIds)
+			long[] coordinatorIds)
 	{
 		Collection userCollection = collectionProtocol.getCoordinatorCollection();
 		if(userCollection != null)
 		{
-			protocolCoordinatorIds = new long[userCollection.size()];
+			coordinatorIds = new long[userCollection.size()];
 			int i=0;
 			Iterator it = userCollection.iterator();
 			while(it.hasNext())
 			{
 				User user = (User)it.next();
-				protocolCoordinatorIds[i] = user.getId().longValue();
+				coordinatorIds[i] = user.getId().longValue();
 				i++;
 			}
 		}
-		return protocolCoordinatorIds;
+		return coordinatorIds;
 	}
 
+	/**
+	 * @param collectionProtocol
+	 * @param coordinatorIds
+	 * @return
+	 */
+	private static String[] getClinicalDiagnosis(CollectionProtocol collectionProtocol)
+	{
+		String[] clinicalDiagnosisArr = null; 
+		Collection<ClinicalDiagnosis> clinicDiagnosisCollection = collectionProtocol.getClinicalDiagnosisSet();
+		if(clinicDiagnosisCollection != null)
+		{
+			clinicalDiagnosisArr = new String[clinicDiagnosisCollection.size()];
+			int index=0;
+			Iterator<ClinicalDiagnosis> it = clinicDiagnosisCollection.iterator();
+			while(it.hasNext())
+			{
+				ClinicalDiagnosis clinicalDiagnosis = (ClinicalDiagnosis)it.next();
+				clinicalDiagnosisArr[index] = clinicalDiagnosis.getClinicalDiagnosis();
+				index++;
+			}
+		}
+		return clinicalDiagnosisArr;
+	}
+	
+	
 	public static Map prepareConsentTierMap(Collection consentTierColl)
 	{
 		Map tempMap = new LinkedHashMap();//bug 8905
@@ -709,9 +741,14 @@ public class CollectionProtocolUtil
 		collectionProtocol.setConsentTierCollection(collectionProtocol.prepareConsentTierCollection(cpBean.getConsentValues()));
 		Collection coordinatorCollection = new LinkedHashSet();
 		Collection<Site> siteCollection = new LinkedHashSet<Site>();
+		Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
+		
 		setCoordinatorColl(collectionProtocol,
 				coordinatorCollection, cpBean);
 		
+		/**For Clinical Diagnosis Subset **/
+		setClinicalDiagnosis(collectionProtocol,
+				clinicalDiagnosisCollection, cpBean);
 		
 		setSiteColl(collectionProtocol, siteCollection, cpBean);
 
@@ -811,7 +848,7 @@ public class CollectionProtocolUtil
 			CollectionProtocol collectionProtocol,
 			Collection coordinatorCollection, CollectionProtocolBean cpBean) 
 	{
-		long[] coordinatorsArr = cpBean.getProtocolCoordinatorIds();
+		long[] coordinatorsArr = cpBean.getCoordinatorIds();
 		if (coordinatorsArr != null) 
 		{
 			for (int i = 0; i < coordinatorsArr.length; i++) {
@@ -825,6 +862,33 @@ public class CollectionProtocolUtil
 		}
 	}
 
+	/**
+	 * 
+	 * @param collectionProtocol
+	 * @param clinicalDiagnosis
+	 * @param coordinatorsArr
+	 */
+	private static void setClinicalDiagnosis(
+			CollectionProtocol collectionProtocol,
+			Collection clinicalDiagnosis, CollectionProtocolBean cpBean) 
+	{
+		String[] clinicalDiagnosisArr = cpBean.getClinicalDiagnosis();
+		
+		
+		if (clinicalDiagnosisArr != null) 
+		{
+			for (int i = 0; i < clinicalDiagnosisArr.length; i++) {
+				if (!"".equals(clinicalDiagnosisArr[i]))
+				{
+					final ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
+					clinicalDiagnosisObj.setClinicalDiagnosis(clinicalDiagnosisArr[i]);
+					clinicalDiagnosisObj.setCollectionProtocol(collectionProtocol);
+					clinicalDiagnosis.add(clinicalDiagnosisObj);
+				}
+			}
+			collectionProtocol.setClinicalDiagnosisSet(clinicalDiagnosis);
+		}
+	}
 	
 	/**
 	* This function used to create CollectionProtocolEvent domain object
@@ -1099,4 +1163,32 @@ public class CollectionProtocolUtil
 		}
 		return idMap;
 	}
+	
+	/**
+	 * Update the Clinical Diagnosis value.
+	 * @param request request
+	 * @param collectionProtocolBean collectionProtocolBean
+	 */
+	public static  void updateClinicalDiagnosis(HttpServletRequest request,
+			final CollectionProtocolBean collectionProtocolBean)
+	{
+		Collection<NameValueBean> clinicalDiagnosisBean = new LinkedHashSet<NameValueBean>();
+		Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
+	
+        Object[] clinicalDiagnosis =  collectionProtocolBean.getClinicalDiagnosis();
+        if(clinicalDiagnosis != null)
+        {
+        	for (int i=0 ;i<clinicalDiagnosis.length;i++)
+        	{
+        		NameValueBean nvb = new NameValueBean(clinicalDiagnosis[i],clinicalDiagnosis[i]) ;
+
+        		nvb.getName().toLowerCase(locale);
+
+        		clinicalDiagnosisBean.add(nvb);
+
+        	}
+        }
+		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBean);
+	}
+	
 }

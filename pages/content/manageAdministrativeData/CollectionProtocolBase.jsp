@@ -5,10 +5,33 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<script>var imgsrc="/de/images/";</script>
+<script language="JavaScript" type="text/javascript" src="de/jss/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/scr.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/combobox.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/combos.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ajax.js"></script>
+
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
+	function selectAllClinicalDiagnosis()
+	{
+	 	var clinicalDiag = window.frames['SpecimenRequirementView'].document.getElementById('protocolCoordinatorIds');
+		if (clinicalDiag != null)
+		{
+			for (i = clinicalDiag.options.length-1; i >= 0; i--)
+			{
+			   
+				clinicalDiag.options[i].selected=true;
+			}
+		}
+	 }
+
 	function openEventPage()
 	{
+		selectAllClinicalDiagnosis();
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
 		if(formId!=null)
 		{
@@ -30,6 +53,7 @@
 
 	function saveCP()
 	{
+		selectAllClinicalDiagnosis();
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 	    if(formId!=null)
 		{

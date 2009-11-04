@@ -8,10 +8,15 @@
 
 Ext.onReady(function(){
    Ext.QuickTips.init();
-
+   
+   var collectionProtocolId;
+   if(document.getElementById('collectionProtocolId') != null)
+   	collectionProtocolId = document.getElementById('collectionProtocolId').value
+  
+  var myUrl= 'ComboDataAction.do?collectionProtocolId='+collectionProtocolId;
   var ds = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: 'ComboDataAction.do'
+            url: myUrl
         }),
         reader: new Ext.data.JsonReader({
             root: 'row',

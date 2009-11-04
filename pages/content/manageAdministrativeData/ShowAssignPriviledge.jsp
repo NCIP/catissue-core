@@ -62,7 +62,7 @@ function updateCPTree()
 		<html:hidden property="descriptionURL" />
 		<html:hidden property="enrollment" />
 		<html:hidden property="endDate" />
-		<html:hidden property="protocolCoordinatorIds" />
+		<html:hidden property="coordinatorIds" />
 		<html:hidden property="outerCounter" />
 		<html:hidden property="aliqoutInSameContainer" />
 		<html:hidden property="unsignedConsentURLName" />
@@ -208,7 +208,7 @@ function updateCPTree()
 								src="images/uIEnhancementImages/number_3.gif" alt="Number 3"
 								width="18" height="18" align="absmiddle"></td>
 							<td align="left" class="black_ar_t"><label
-								for="protocolCoordinatorIds"><bean:message
+								for="coordinatorIds"><bean:message
 								key="user.role" /></label></td>
 							<td align="left" class="black_ar_t"><select
 								class="formFieldSizedNew" id="roleIds"

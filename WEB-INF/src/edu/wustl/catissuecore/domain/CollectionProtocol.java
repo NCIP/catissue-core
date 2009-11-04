@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -67,7 +68,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
-	protected Collection coordinatorCollection = new LinkedHashSet();
+	protected Collection<User> coordinatorCollection = new LinkedHashSet<User>();
 
 	/**
 	 * Collection of CollectionProtocolEvents associated with the
@@ -237,7 +238,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 *                                    column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
 	 */
-	public Collection getCoordinatorCollection()
+	public Collection<User> getCoordinatorCollection()
 	{
 		return this.coordinatorCollection;
 	}
@@ -348,7 +349,28 @@ public class CollectionProtocol extends SpecimenProtocol
 			this.coordinatorCollection.clear();
 			this.siteCollection.clear();
 			this.collectionProtocolEventCollection.clear();
-			final long[] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
+			this.clinicalDiagnosisSet.clear();
+
+			/**For Clinical Diagnosis Subset **/
+			/*String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
+			this.setClinicalDiagnosisSet(new LinkedHashSet<String>((Arrays.asList(clinicalDiagnosisArr))));*/
+		
+			final String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
+			if (clinicalDiagnosisArr != null)
+			{
+				for (final String clinicalDiagnosis : clinicalDiagnosisArr)
+				{
+					if (!"".equals(clinicalDiagnosis))
+					{
+						final ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
+						clinicalDiagnosisObj.setClinicalDiagnosis(clinicalDiagnosis);
+						clinicalDiagnosisObj.setCollectionProtocol(this);
+						this.clinicalDiagnosisSet.add(clinicalDiagnosisObj);
+					}
+				}
+			}
+
+			final long[] coordinatorsArr = cpForm.getCoordinatorIds();
 			if (coordinatorsArr != null)
 			{
 				for (final long element : coordinatorsArr)
@@ -629,7 +651,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Get the Child Collection Protocol.
 	 * @return Collection.
 	 */
-	public Collection getChildCollectionProtocolCollection()
+	public Collection<CollectionProtocol> getChildCollectionProtocolCollection()
 	{
 		return this.childCollectionProtocolCollection;
 	}
@@ -638,7 +660,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Set the child collection protocol.
 	 * @param childCollectionProtocolCollection which is a Collection.
 	 */
-	public void setChildCollectionProtocolCollection(Collection childCollectionProtocolCollection)
+	public void setChildCollectionProtocolCollection(Collection<CollectionProtocol> childCollectionProtocolCollection)
 	{
 		this.childCollectionProtocolCollection = childCollectionProtocolCollection;
 	}
@@ -726,4 +748,23 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		this.siteCollection = siteCollection;
 	}
+	protected Collection<ClinicalDiagnosis> clinicalDiagnosisSet = new LinkedHashSet<ClinicalDiagnosis>();
+	/**
+	 * Fetch the clinical diagnosis set.
+	 * @return clinicalDiagnosisSet.
+	 */
+	public Collection<ClinicalDiagnosis> getClinicalDiagnosisSet() 
+	{
+		return clinicalDiagnosisSet;
+	}
+
+	/**
+	 * Set the clinical diagnosis set.
+	 * @param clinicalDiagnosisSet clinicalDiagnosisSet
+	 */
+	public void setClinicalDiagnosisSet(Collection<ClinicalDiagnosis> clinicalDiagnosisSet)
+	{
+		this.clinicalDiagnosisSet = clinicalDiagnosisSet;
+	}
+	
 }

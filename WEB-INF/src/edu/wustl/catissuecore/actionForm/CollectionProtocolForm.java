@@ -45,7 +45,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	private static Logger logger = Logger.getCommonLogger(CollectionProtocolForm.class);
 
-	protected long[] protocolCoordinatorIds;
+	protected long[] coordinatorIds;
 
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. outer block
@@ -210,7 +210,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	protected void reset()
 	{
 		//		super.reset();
-		//		protocolCoordinatorIds = null;
+		//		coordinatorIds = null;
 		//		this.outerCounter = 1;
 		//		this.values  = new HashMap();
 	}
@@ -218,17 +218,17 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * @return Returns the protocolcoordinator ids.
 	 */
-	public long[] getProtocolCoordinatorIds()
+	public long[] getCoordinatorIds()
 	{
-		return this.protocolCoordinatorIds;
+		return this.coordinatorIds;
 	}
 
 	/**
-	 * @param protocolCoordinatorIds The protocolCoordinatorIds to set.
+	 * @param coordinatorIds The coordinatorIds to set.
 	 */
-	public void setProtocolCoordinatorIds(long[] protocolCoordinatorIds)
+	public void setCoordinatorIds(long[] coordinatorIds)
 	{
-		this.protocolCoordinatorIds = protocolCoordinatorIds;
+		this.coordinatorIds = coordinatorIds;
 	}
 
 	/**
@@ -309,9 +309,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 
 			//Check for PI can not be coordinator of the protocol.
-			if (this.protocolCoordinatorIds != null && this.principalInvestigatorId != -1)
+			if (this.coordinatorIds != null && this.principalInvestigatorId != -1)
 			{
-				for (final long protocolCoordinatorId : this.protocolCoordinatorIds)
+				for (final long protocolCoordinatorId : this.coordinatorIds)
 				{
 					if (protocolCoordinatorId == this.principalInvestigatorId)
 					{
@@ -322,7 +322,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 
-			logger.debug("Protocol Coordinators : " + this.protocolCoordinatorIds);
+			logger.debug("Protocol Coordinators : " + this.coordinatorIds);
 		}
 		catch (final Exception excp)
 		{
@@ -396,7 +396,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 			final long[] pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};
 
-			this.setProtocolCoordinatorIds(pcoordIDs);
+			this.setCoordinatorIds(pcoordIDs);
 		}
 	}
 
@@ -633,4 +633,28 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
 
+	/**
+	 * protocolCoordinatorIds : This will hold the clinical Diagnosis values.
+	 */
+	private String[] protocolCoordinatorIds;
+
+	/**
+	 * This will give the clinical diagnosis values.
+	 * @return protocolCoordinatorIds : clinicalDiagnosis.
+	 */
+	public String[] getProtocolCoordinatorIds()
+	{
+		return protocolCoordinatorIds;
+	}
+
+	/**
+	 * This will set the clinical diagnosis values.
+	 * @param protocolCoordinatorIds clinicalDiagnosis.
+	 */
+	public void setProtocolCoordinatorIds(String[] protocolCoordinatorIds)
+	{
+		this.protocolCoordinatorIds = protocolCoordinatorIds;
+	}
+	
+	
 }

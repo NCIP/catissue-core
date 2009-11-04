@@ -158,9 +158,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	private void validateCollectionProtocol(DAO dao, CollectionProtocol collectionProtocol,
 			String errorName) throws BizLogicException
 	{
-		final Collection childCPCollection = collectionProtocol
+		final Collection<CollectionProtocol> childCPCollection = collectionProtocol
 				.getChildCollectionProtocolCollection();
-		final Iterator cpIterator = childCPCollection.iterator();
+		final Iterator<CollectionProtocol> cpIterator = childCPCollection.iterator();
 		while (cpIterator.hasNext())
 		{
 			final CollectionProtocol cp = (CollectionProtocol) cpIterator.next();
@@ -219,9 +219,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throws BizLogicException
 	{
 
-		final Collection childCPCollection = collectionProtocol
+		final Collection<CollectionProtocol> childCPCollection = collectionProtocol
 				.getChildCollectionProtocolCollection();
-		final Iterator cpIterator = childCPCollection.iterator();
+		final Iterator<CollectionProtocol> cpIterator = childCPCollection.iterator();
 		while (cpIterator.hasNext())
 		{
 			final CollectionProtocol cp = (CollectionProtocol) cpIterator.next();
@@ -647,7 +647,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	private void checkCoordinatorStatus(DAO dao, CollectionProtocol collectionProtocol,
 			CollectionProtocol collectionProtocolOld) throws BizLogicException
 	{
-		final Iterator it = collectionProtocol.getCoordinatorCollection().iterator();
+		final Iterator<User> it = collectionProtocol.getCoordinatorCollection().iterator();
 		while (it.hasNext())
 		{
 			final User coordinator = (User) it.next();

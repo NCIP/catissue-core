@@ -59,6 +59,7 @@ public class DefineEventsAction extends BaseAction
 		if (cpForm.getShortTitle() != null)
 		{
 			this.populateCollectionProtocolBean(cpForm, cpBean);
+			CollectionProtocolUtil.updateClinicalDiagnosis(request, cpBean);
 		}
 		final Long cpIdentifier = cpBean.getIdentifier();
 		session.setAttribute("CP_IDENTIFIER", cpIdentifier);
@@ -75,7 +76,9 @@ public class DefineEventsAction extends BaseAction
 			CollectionProtocolBean cpBean)
 	{
 		cpBean.setPrincipalInvestigatorId(cpForm.getPrincipalInvestigatorId());
-		cpBean.setProtocolCoordinatorIds(cpForm.getProtocolCoordinatorIds());
+		cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
+		/**For Clinical Diagnosis Subset  **/
+		cpBean.setClinicalDiagnosis(cpForm.getProtocolCoordinatorIds());
 		cpBean.setTitle(cpForm.getTitle());
 		cpBean.setShortTitle(cpForm.getShortTitle());
 		cpBean.setStartDate(cpForm.getStartDate());

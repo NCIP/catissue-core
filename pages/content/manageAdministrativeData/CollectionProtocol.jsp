@@ -2,6 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ taglib uri="/WEB-INF/dynamicExtensions.tld" prefix="dynamicExtensions" %>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
@@ -17,7 +19,112 @@
 <script src="jss/calendarComponent.js" language="JavaScript" type="text/javascript"></script>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
-<SCRIPT>var imgsrc="images/";</SCRIPT>
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
+
+<script>var imgsrc="/de/images/";</script>
+<script language="JavaScript" type="text/javascript" src="de/jss/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/scr.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/combobox.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/combos.js"></script>
+<script language="JavaScript" type="text/javascript" src="de/jss/ajax.js"></script>
+
+
+<%
+	String selectText = "--Select--";
+%>
+
+
+<script>Ext.onReady(function(){var myUrl= 'ClinicalDiagnosisData.do?';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
+
+ 
+
+<script>
+
+Ext.onReady(function(){
+
+      var myUrl= 'ClinicalDiagnosisData.do?';
+
+      var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),
+
+      reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+
+      var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'principalInvestigatorId',displayField:'excerpt',valueField: 'id',typeAhead: 'true',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',lazyInit:'true',triggerAction: 'all',minChars : 3,emptyText:'<%=selectText%>',selectOnFocus:'true',applyTo: 'txtprincipalInvestigatorId' });
+
+      var firsttimePI="true"; 
+
+      combo.on("expand", function() {
+
+            if(Ext.isIE || Ext.isIE7)
+
+            {
+
+                  combo.list.setStyle("width", "250");
+
+                  combo.innerList.setStyle("width", "250");
+
+            }
+
+            else
+
+            {
+
+                  combo.list.setStyle("width", "auto");
+
+                  combo.innerList.setStyle("width", "auto");
+
+            }           
+
+            },          {single: true}); 
+
+            ds.on('load',function(){
+
+                  if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase()))
+
+                  {combo.typeAheadDelay=50;
+
+                  } 
+
+                  else
+
+                  {combo.typeAheadDelay=60000}
+
+                  });
+
+            <%    /*if (opr.equals(Constants.EDIT) ||  (showErrMsg  && piId!=0) || (deloperation && piId!=0) )
+
+                  {*/
+
+ 
+
+            %>    
+
+                  ds.load({params:{start:0, limit:9999,query:''}});
+
+            ds.on('load',function(){
+
+                        
+
+                               if(firsttimePI == "true")
+
+                              { combo.setValue('',false); firsttimePI="false";}
+
+            });
+
+            <%
+
+                  //}
+
+            %>                                  
+
+                  });
+
+</script>
+
+
+
 <script>
 
 if('${requestScope.tabSel}'=="consentTab"){
@@ -88,8 +195,8 @@ function updateCPTree()
                      </tr>
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
-                        <td align="left" valign="top" class="black_ar"><label for="protocolCoordinatorIds"><bean:message key="collectionprotocol.protocolcoordinator" /></label></td>
-                        <td align="left"><label><html:select property="protocolCoordinatorIds" styleClass="formFieldSizedNew" styleId="protocolCoordinatorIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/></html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=protocolCoordinator&forwardTo=collectionProtocol&addNewFor=protocolCoordinator')"><bean:message key="buttons.addNew" /></html:link></label></td>
+                        <td align="left" valign="top" class="black_ar"><label for="coordinatorIds"><bean:message key="collectionprotocol.protocolcoordinator" /></label></td>
+                        <td align="left"><label><html:select property="coordinatorIds" styleClass="formFieldSizedNew" styleId="coordinatorIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/></html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=protocolCoordinator&forwardTo=collectionProtocol&addNewFor=protocolCoordinator')"><bean:message key="buttons.addNew" /></html:link></label></td>
                       </tr>
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/></td>
@@ -163,7 +270,20 @@ function updateCPTree()
 							</td>
 						</tr>
 					</logic:equal>
+
 					   </table>
+					   <table cellpadding="0" cellspacing="0" border="0" width = "100%" >
+					   <tr>
+					 	  <td align="center" class="black_ar">&nbsp;&nbsp;</td>
+					 	 <td align="left" class="black_ar">
+					  		<bean:message key="specimenCollectionGroup.clinicalDiagnosis" />
+					   	 </td>
+					   	  <td align="center" class="black_ar">&nbsp;&nbsp;&nbsp;</td>
+					   	 <td align="left" class="black_ar"> 
+					    		 <dynamicExtensions:multiSelectUsingCombo/>
+					   	 </td>
+					  </tr>
+					  </table>	
 					  
 					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
                       <tr>

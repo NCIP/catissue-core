@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 * @throws BizLogicException
 	 */
-	private List getClinicalDiagnosisList(String query) throws BizLogicException
+	public List getClinicalDiagnosisList(String query) throws BizLogicException
 	{
 		// populating clinical Diagnosis field
 		//		
@@ -131,7 +132,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 *            for autocomplete feature
 	 * @return JSONObject which holds the list to eb poplulated on UI front
 	 */
-	public JSONObject getClinicalDiagnosisData(Integer limitFetch, Integer startFetch, String query)
+	public JSONObject getClinicalDiagnosisData(Integer limitFetch, Integer startFetch, String query,Collection<NameValueBean> clinicalDiagnosisBean)
 	{
 		JSONObject jsonObject = null;
 		JSONArray jsonArray = null;
@@ -139,7 +140,15 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		{
 			jsonArray = new JSONArray();
 			jsonObject = new JSONObject();
-			final List clinicalDiagnosisList = this.getClinicalDiagnosisList(query);
+			final List clinicalDiagnosisList;
+			if (clinicalDiagnosisBean == null || clinicalDiagnosisBean.isEmpty())
+			{
+				clinicalDiagnosisList = this.getClinicalDiagnosisList(query);
+			}
+			else
+			{
+			  clinicalDiagnosisList = (List) clinicalDiagnosisBean;
+			}
 			jsonObject.put("totalCount", new Integer(clinicalDiagnosisList.size()));
 			final ListIterator iterator = clinicalDiagnosisList.listIterator(startFetch + 1);
 			final Integer total = limitFetch + startFetch;

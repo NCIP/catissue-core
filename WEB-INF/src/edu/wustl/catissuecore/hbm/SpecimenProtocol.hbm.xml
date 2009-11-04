@@ -139,6 +139,30 @@
         />
 
 
+		<set
+            name="clinicalDiagnosisSet"
+            table="CATISSUE_CLINICAL_DIAGNOSIS"
+            fetch="join" lazy="false" 
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.ClinicalDiagnosis"
+            />
+
+        </set>
+		
+
+
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
