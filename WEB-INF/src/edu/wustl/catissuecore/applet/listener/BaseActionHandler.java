@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is base Handler class for all of the component in tissuecore.
@@ -18,7 +19,11 @@ import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
  */
 public class BaseActionHandler implements ActionListener
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private static final Logger LOGGER =
+				Logger.getCommonLogger(BaseActionHandler.class);
 	/**
 	 * table.
 	 */
@@ -57,17 +62,17 @@ public class BaseActionHandler implements ActionListener
 	 */
 	protected void preActionPerformed(ActionEvent event)
 	{
-		System.out.println("inside BaseActionHandler: - preActionPerformed");
+		LOGGER.info("inside BaseActionHandler: - preActionPerformed");
 		this.table.getSelectedColumn();
 		//	 	table.getColumnModel().getColumn(colNo).getCellEditor().stopCellEditing();
 		this.table.getModel().setValueAt(this.getSelectedValue(event), this.table.getSelectedRow(),
 				this.table.getSelectedColumn());
-		System.out.println("table.getModel().setValueAt(getSelectedValue(event) : "
+		LOGGER.info("table.getModel().setValueAt(getSelectedValue(event) : "
 				+ this.table.getModel().getValueAt(this.table.getSelectedRow(),
 						this.table.getSelectedColumn()) + " table.getSelectedRow() : "
 				+ this.table.getSelectedRow() + " table.getSelectedColumn() : "
 				+ this.table.getSelectedColumn());
-		System.out.println("inside BaseActionHandler: - preActionPerformed done");
+		LOGGER.info("inside BaseActionHandler: - preActionPerformed done");
 	}
 
 	/**
@@ -77,6 +82,7 @@ public class BaseActionHandler implements ActionListener
 	 */
 	protected void postActionPerformed(ActionEvent event)
 	{
+		//Empty postActionPerformed method.
 	}
 
 	/**
@@ -96,42 +102,42 @@ public class BaseActionHandler implements ActionListener
 	 */
 	protected void handleAction(ActionEvent event)
 	{
-
+		//Empty handleAction method.
 	}
 
 	/**
 	 * @return boolean
 	 */
-	private boolean isPasteOperation()
-	{
-		boolean result = false;
-
-		final CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(
-				this.table).getCopyPasteOperationValidatorModel();
-		if (!CommonAppletUtil.isNull(validatorModel))
-		{
-			final String operationInValidatorModel = validatorModel.getOperation();
-			if (!CommonAppletUtil.isNull(operationInValidatorModel))
-			{
-				if (operationInValidatorModel.equals(AppletConstants.PASTE_OPERATION))
-				{
-					result = true;
-				}
-				else
-				{
-					result = false;
-				}
-
-				System.out.println("operationInValidatorModel : " + operationInValidatorModel
-						+ " , Result : " + result);
-			}
-			else
-			{
-				result = false;
-			}
-		}
-		return result;
-	}
+//	private boolean isPasteOperation()
+//	{
+//		boolean result = false;
+//
+//		final CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(
+//				this.table).getCopyPasteOperationValidatorModel();
+//		if (!CommonAppletUtil.isNull(validatorModel))
+//		{
+//			final String operationInValidatorModel = validatorModel.getOperation();
+//			if (CommonAppletUtil.isNull(operationInValidatorModel))
+//			{
+//				result = false;
+//			}
+//			else
+//			{
+//				if (operationInValidatorModel.equals(AppletConstants.PASTE_OPERATION))
+//				{
+//					result = true;
+//				}
+//				else
+//				{
+//					result = false;
+//				}
+//
+//				LOGGER.info("operationInValidatorModel : " + operationInValidatorModel
+//						+ " , Result : " + result);
+//			}
+//		}
+//		return result;
+//	}
 	//	/**
 	//	 * specific to MultipleSpecimen.
 	//	 * @return

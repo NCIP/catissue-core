@@ -32,25 +32,25 @@ public class SpecimenArrayCopyActionHandler implements ActionListener
 
 	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
-	public void actionPerformed(ActionEvent e)
+	public void actionPerformed(ActionEvent actionEvent)
 	{
-		final Component c = (Component) e.getSource();
+		final Component comp = (Component) actionEvent.getSource();
 
-		final int px = c.getX();
-		final int py = c.getY() + c.getHeight() + 50;
-		final Point point = new Point(px, py);
+		final int pointX = comp.getX();
+		final int pointY = comp.getY() + comp.getHeight() + 50;
+		final Point point = new Point(pointX, pointY);
 		//Point point = c.getLocation();
-		SwingUtilities.convertPointFromScreen(point, c);
+		SwingUtilities.convertPointFromScreen(point, comp);
 
-		if (!this.popupMenu.isShowing())
+		if (this.popupMenu.isShowing())
 		{
-			this.popupMenu.show(c, point.x, point.y);
+			this.popupMenu.setVisible(false);
 		}
 		else
 		{
-			this.popupMenu.setVisible(false);
+			this.popupMenu.show(comp, point.x, point.y);
 		}
 	}
 

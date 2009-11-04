@@ -24,25 +24,26 @@ public class SpecimenArrayCopyMouseHandler extends MouseAdapter
 	 */
 	public SpecimenArrayCopyMouseHandler(JPopupMenu popupMenu)
 	{
+		super();
 		this.popupMenu = null;
 		this.popupMenu = popupMenu;
 	}
 
 	/**
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e)
+	public void mouseClicked(MouseEvent actionEvent)
 	{
-		super.mouseClicked(e);
-		if (!this.popupMenu.isShowing())
+		super.mouseClicked(actionEvent);
+		if (this.popupMenu.isShowing())
 		{
-			this.popupMenu.show(e.getComponent(), e.getX(), e.getY());
+			this.popupMenu.setVisible(false);
 		}
 		else
 		{
-			this.popupMenu.setVisible(false);
+			this.popupMenu.show(actionEvent.getComponent(), actionEvent.getX(), actionEvent.getY());
 		}
 	}
 }

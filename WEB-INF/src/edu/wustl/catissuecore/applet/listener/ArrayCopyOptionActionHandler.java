@@ -33,14 +33,14 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 
 	/**
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#doActionPerformed()
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
 	@Override
-	protected void doActionPerformed(ActionEvent e)
+	protected void doActionPerformed(ActionEvent actionEvent)
 	{
-		final JMenuItem menuItem = (JMenuItem) e.getSource();
+		final JMenuItem menuItem = (JMenuItem) actionEvent.getSource();
 		((SpecimenArrayTableModel) this.table.getModel()).setCopySelectedOption(menuItem.getText());
-		super.doActionPerformed(e);
+		super.doActionPerformed(actionEvent);
 		// enable paste button
 		final SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil
 				.getBaseApplet(this.table);
@@ -88,18 +88,20 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	private String getCopiedLabelOrBarcode(SpecimenArrayTableModel model, int rowIndex,
 			int columnIndex)
 	{
+		String modelMap = "" ;
 		if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
 		{
-			return (String) model.getSpecimenArrayModelMap().get(
+			modelMap = (String) model.getSpecimenArrayModelMap().get(
 					SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
 							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX));
 		}
 		else
 		{
-			return (String) model.getSpecimenArrayModelMap().get(
+			modelMap = (String) model.getSpecimenArrayModelMap().get(
 					SpecimenArrayAppletUtil.getArrayMapKey(rowIndex, columnIndex, model
 							.getColumnCount(), AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX));
 		}
+		return modelMap ;
 	}
 
 	/**
@@ -164,5 +166,17 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	protected int getColumnCount()
 	{
 		return this.table.getColumnCount();
+	}
+
+	@Override
+	protected void postActionPerformed(ActionEvent actionEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void preActionPerformed(ActionEvent actionEvent) {
+		// TODO Auto-generated method stub
+		
 	}
 }

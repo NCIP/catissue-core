@@ -54,7 +54,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(SpecimenArrayApplet.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenArrayApplet.class);
 	/**
 	 * Default Serial Version ID.
 	 */
@@ -116,8 +116,10 @@ public class SpecimenArrayApplet extends BaseApplet
 		*/
 		this.session_id = this.getParameter("session_id");
 
-		final int rowCount = new Integer(this.getParameter("rowCount")).intValue();
-		final int columnCount = new Integer(this.getParameter("columnCount")).intValue();
+		//final int rowCount = new Integer(this.getParameter("rowCount")).intValue();
+		final int rowCount = Integer.valueOf(this.getParameter("rowCount")).intValue();
+		//final int columnCount = new Integer(this.getParameter("columnCount")).intValue();
+		final int columnCount = Integer.valueOf(this.getParameter("columnCount")).intValue();
 		final String specimenClass = this.getParameter("specimenClass");
 		this.enterSpecimenBy = this.getParameter("enterSpecimenBy");
 		final Map tableModelMap = this.getTableModelData();
@@ -242,12 +244,12 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final IOException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			SpecimenArrayApplet.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			SpecimenArrayApplet.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		return tableDataMap;
@@ -274,13 +276,11 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final IOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			SpecimenArrayApplet.LOGGER.error(e.getMessage(), e);
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			SpecimenArrayApplet.LOGGER.error(e.getMessage(), e);
 		}
 	}
 
@@ -291,7 +291,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	{
 		try
 		{
-			System.out.println(" start setLastCellData() method");
+			SpecimenArrayApplet.LOGGER.info(" start setLastCellData() method");
 			final int selectedRow = this.arrayTable.getSelectedRow();
 			final int selectedColumn = this.arrayTable.getSelectedColumn();
 			/*
@@ -309,11 +309,11 @@ public class SpecimenArrayApplet extends BaseApplet
 		}
 		catch (final Exception exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
-			System.out.println(" Exception occurred in setLastCellData() method"
+			SpecimenArrayApplet.LOGGER.info(" Exception occurred in setLastCellData() method"
 					+ exception.getMessage());
+			SpecimenArrayApplet.LOGGER.error(exception.getMessage(), exception);
 		}
-		System.out.println(" end setLastCellData() method");
+		SpecimenArrayApplet.LOGGER.info(" end setLastCellData() method");
 		//System.out.println("  after stopping model map:: " +
 		//((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
 	}
@@ -323,8 +323,7 @@ public class SpecimenArrayApplet extends BaseApplet
 	 */
 	public void changeEnterSpecimenBy(String enterSpecimenBy)
 	{
-		this.logger.info(" Enter Specimen By " + enterSpecimenBy);
-		System.out.println(" Enter Specimen By " + enterSpecimenBy);
+		SpecimenArrayApplet.LOGGER.info(" Enter Specimen By " + enterSpecimenBy);
 		this.enterSpecimenBy = enterSpecimenBy;
 		((SpecimenArrayTableModel) this.arrayTable.getModel())
 				.changeEnterSpecimenBy(enterSpecimenBy);

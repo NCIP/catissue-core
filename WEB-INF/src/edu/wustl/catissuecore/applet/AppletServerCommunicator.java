@@ -29,7 +29,7 @@ public class AppletServerCommunicator implements Serializable
 	/**
 	 * logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(AppletServerCommunicator.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(AppletServerCommunicator.class);
 	/**
 	 * Serial version ID.
 	 */
@@ -53,50 +53,42 @@ public class AppletServerCommunicator implements Serializable
 	public static AppletModelInterface doAppletServerCommunication(String urlString,
 			AppletModelInterface appletModelInterface) throws IOException, ClassNotFoundException
 	{
-
+		AppletModelInterface modelInterface = appletModelInterface ;
 		final URL url = new URL(urlString);
 		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		//System.out.println("connection object created");
 		connection.setRequestMethod("GET");
 		connection.setDoOutput(true);
-		//System.out.println("connection.connect() method commented");
-		//connection.connect();
-		final ObjectOutputStream outputStream = new ObjectOutputStream(connection.getOutputStream());
-		outputStream.writeObject(appletModelInterface);
-		//System.out.println(" flush() is uncommented");
+		final ObjectOutputStream outputStream =
+			new ObjectOutputStream(connection.getOutputStream());
+		//outputStream.writeObject(appletModelInterface);
+		outputStream.writeObject(modelInterface);
 		outputStream.flush();
 		outputStream.close();
-
 		ObjectInputStream inputStream = null;
 		Object appletObject = null;
 		try
 		{
 			inputStream = new ObjectInputStream(connection.getInputStream());
 			appletObject = inputStream.readObject();
-			appletModelInterface = (AppletModelInterface) appletObject;
+			//appletModelInterface = (AppletModelInterface) appletObject;
+			modelInterface = (AppletModelInterface) appletObject;
 		}
 		catch (final IOException e)
 		{
-			AppletServerCommunicator.logger.error(e.getMessage(), e);
-			//	System.out.println(" IO Exception " + e);
-			e.printStackTrace();
+			AppletServerCommunicator.LOGGER.error(e.getMessage(), e);
 		}
 		catch (final ClassNotFoundException e)
 		{
-			AppletServerCommunicator.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			AppletServerCommunicator.LOGGER.error(e.getMessage(), e);
 		}
 		finally
 		{
-			//System.out.println("Before disconnect in finally");
 			connection.disconnect();
 		}
 		if (inputStream != null)
 		{
 			inputStream.close();
 		}
-
-		//System.out.println("After close() ");
-		return appletModelInterface;
+		return modelInterface;
 	}
 }

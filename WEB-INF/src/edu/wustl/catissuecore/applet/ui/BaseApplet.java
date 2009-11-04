@@ -31,7 +31,7 @@ public class BaseApplet extends JApplet
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(BaseApplet.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(BaseApplet.class);
 	/**
 	 * Default Serial Version ID.
 	 */
@@ -78,6 +78,7 @@ public class BaseApplet extends JApplet
 	 */
 	protected void doInit()
 	{
+		//Empty doInit method.
 	}
 
 	/**
@@ -85,6 +86,7 @@ public class BaseApplet extends JApplet
 	 */
 	protected void postInit()
 	{
+		//Empty postInit method.
 	}
 
 	/**
@@ -98,23 +100,19 @@ public class BaseApplet extends JApplet
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			BaseApplet.LOGGER.error(e.getMessage(), e);
 		}
 		catch (final InstantiationException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			BaseApplet.LOGGER.error(e.getMessage(), e);
 		}
 		catch (final IllegalAccessException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			BaseApplet.LOGGER.error(e.getMessage(), e);
 		}
 		catch (final UnsupportedLookAndFeelException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			BaseApplet.LOGGER.error(e.getMessage(), e);
 		}
 	}
 

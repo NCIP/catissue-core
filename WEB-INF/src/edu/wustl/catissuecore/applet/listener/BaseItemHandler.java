@@ -25,9 +25,9 @@ public class BaseItemHandler implements ItemListener
 {
 
 	/**
-	 * logger.
+	 * Logger instance..
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(BaseItemHandler.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(BaseItemHandler.class);
 	/**
 	 * table.
 	 */
@@ -47,7 +47,7 @@ public class BaseItemHandler implements ItemListener
 	 */
 	protected void preActionPerformed()
 	{
-
+		//Empty preActionPerformed method.
 	}
 
 	/**
@@ -57,9 +57,9 @@ public class BaseItemHandler implements ItemListener
 	 */
 	protected void postActionPerformed(ItemEvent event)
 	{
-		System.out.println("\n ************** In BaseItemHandler \n  : "
+		BaseItemHandler.LOGGER.info("\n ************** In BaseItemHandler \n  : "
 				+ this.getSelectedValue(event));
-		System.out.println("getSelectedValue(event) : " + this.getSelectedValue(event)
+		BaseItemHandler.LOGGER.info("getSelectedValue(event) : " + this.getSelectedValue(event)
 				+ " table.getSelectedRow() : " + this.table.getSelectedRow()
 				+ " table.getSelectedColumn() : " + this.table.getSelectedColumn());
 		//fireEditingStopped();
@@ -117,27 +117,12 @@ public class BaseItemHandler implements ItemListener
 			final JRadioButton selectedRadio = (JRadioButton) event.getSource();
 			if (selectedRadio != null)
 			{
-				final Component[] comps = selectedRadio.getParent().getComponents();
-				for (final Component comp : comps)
-				{
-					if (comp instanceof JTextField) // for parent specimen
-					{
-						comp.setEnabled(selectedRadio.isSelected());
-					}
-					if (comp instanceof JComboBox) // for collection group
-					{
-						comp.setEnabled(selectedRadio.isSelected());
-						comp.setFocusable(selectedRadio.isSelected());
-					}
-
-				}
+				setComponents(selectedRadio);
 			}
 		}
 		catch (final Exception excp)
 		{
-			this.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace(); 
-			//System.out.println("Error: " + excp.getMessage());
+			LOGGER.error(excp.getMessage(), excp);
 		}
 		try
 		{
@@ -145,11 +130,35 @@ public class BaseItemHandler implements ItemListener
 		}
 		catch (final Exception excp)
 		{
-			this.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace();
-			//System.out.println("Error in table update: " + excp.getMessage());
+			LOGGER.error(excp.getMessage(), excp);
 		}
-
 	}
+	/**
+	 * Set the Components.
+	 * @param selectedRadio Selected Radio Button
+	 */
+	protected void setComponents(JRadioButton selectedRadio)
+	{
+		try
+		{
+			final Component[] comps = selectedRadio.getParent().getComponents();
 
+			for (final Component comp : comps)
+			{
+				if (comp instanceof JTextField) // for parent specimen
+				{
+					comp.setEnabled(selectedRadio.isSelected());
+				}
+				if (comp instanceof JComboBox) // for collection group
+				{
+					comp.setEnabled(selectedRadio.isSelected());
+					comp.setFocusable(selectedRadio.isSelected());
+				}
+			}
+		}
+		catch(Exception exception)
+		{
+			LOGGER.error("EXception :" + exception.getMessage(),exception);
+		}
+	}
 }

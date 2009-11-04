@@ -12,13 +12,19 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * @author mandar_deshmukh
  * This class handles all the events related to TextFields.
  */
 public class TextFieldHandler extends BaseActionHandler
 {
-
+	/**
+	 * Logger instance.
+	 */
+	private static final Logger LOGGER =
+			Logger.getCommonLogger(TextFieldHandler.class);
 	/*
 	 * (non-Javadoc)
 	 * @see edu.wustl.catissuecore.appletui.listener.caTissueHandler#handleAction(java.awt.event.ActionEvent)
@@ -30,7 +36,7 @@ public class TextFieldHandler extends BaseActionHandler
 	protected void handleAction(ActionEvent event)
 	{
 		super.handleAction(event);
-		System.out.println("Inside TextFieldHandler");
+		TextFieldHandler.LOGGER.info("Inside TextFieldHandler");
 	}
 
 	/**

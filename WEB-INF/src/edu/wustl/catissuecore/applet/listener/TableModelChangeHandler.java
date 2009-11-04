@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * @author mandar_deshmukh
  *
@@ -20,7 +22,11 @@ import javax.swing.event.TableModelListener;
  */
 public class TableModelChangeHandler implements TableModelListener
 {
-
+	/**
+	 * Logger Instance.
+	 */
+	private static final Logger LOGGER =
+				Logger.getCommonLogger(TableModelChangeHandler.class);
 	/**
 	 * table.
 	 */
@@ -38,11 +44,11 @@ public class TableModelChangeHandler implements TableModelListener
 	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
 	 */
 	/**
-	 * @param e : e
+	 * @param modelEvent : e
 	 */
-	public void tableChanged(TableModelEvent e)
+	public void tableChanged(TableModelEvent modelEvent)
 	{
-		System.out.println("in TableModelChangeHandler");
+		TableModelChangeHandler.LOGGER.info("in TableModelChangeHandler");
 		// Get anchor cell location
 		final int rAnchor = this.table.getSelectionModel().getAnchorSelectionIndex();
 		final int vcAnchor = this.table.getColumnModel().getSelectionModel()
@@ -53,9 +59,9 @@ public class TableModelChangeHandler implements TableModelListener
 		final int mcAnchor = this.toModel(this.table, vcAnchor);
 
 		// Get affected rows and columns
-		final int firstRow = e.getFirstRow();
-		final int lastRow = e.getLastRow();
-		final int mColIndex = e.getColumn();
+		final int firstRow = modelEvent.getFirstRow();
+		final int lastRow = modelEvent.getLastRow();
+		final int mColIndex = modelEvent.getColumn();
 
 		if (firstRow != TableModelEvent.HEADER_ROW && rAnchor >= firstRow && rAnchor <= lastRow
 				&& (mColIndex == TableModelEvent.ALL_COLUMNS || mColIndex == mcAnchor))
@@ -72,7 +78,6 @@ public class TableModelChangeHandler implements TableModelListener
 			//                	JComboBox combo = (JComboBox)obj;
 			//                	combo.setModel( )
 			//                }
-
 		}
 	}
 
@@ -83,11 +88,16 @@ public class TableModelChangeHandler implements TableModelListener
 	 */
 	public int toModel(JTable table, int vColIndex)
 	{
+		int returnValue  ;
 		if (vColIndex >= table.getColumnCount())
 		{
-			return -1;
+			returnValue = -1;
 		}
-		return table.getColumnModel().getColumn(vColIndex).getModelIndex();
+		else
+		{
+			returnValue = table.getColumnModel().getColumn(vColIndex).getModelIndex();
+		}
+		return returnValue ;
 	}
 
 }

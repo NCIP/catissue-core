@@ -21,22 +21,18 @@ import java.awt.Color;
  */
 public interface AppletConstants
 {
-
 	/**
 	 * Array grid component key used in map.
 	 */
 	String ARRAY_GRID_COMPONENT_KEY = "arrayGridComponentKey";
-
 	/**
 	 * selected cell color.
 	 */
 	Color CELL_SELECTION_COLOR = Color.blue;
-
 	/**
 	 * delimiter.
 	 */
 	String delimiter = "_";
-
 	/**
 	 * key prefix.
 	 */
@@ -45,12 +41,10 @@ public interface AppletConstants
 	 * Arrau specimen prefix.
 	 */
 	String SPECIMEN_PREFIX = "Specimen:";
-
 	/**
 	 * Array specimen prefix.
 	 */
 	String ARRAY_CONTENT_SPECIMEN_PREFIX = "Specimen_";
-
 	/**
 	 * Array specimen prefix.
 	 */
@@ -59,7 +53,6 @@ public interface AppletConstants
 	 * VIRTUALLY_LOCATED_CHECKBOX.
 	 */
 	String VIRTUALLY_LOCATED_CHECKBOX = "virtuallyLocatedCheckBox";
-
 	/**
 	 * array attributes name.
 	 */
@@ -68,37 +61,30 @@ public interface AppletConstants
 			"concentrationInMicrogramPerMicroliter", "positionDimensionOne",
 			"positionDimensionTwo", "id"};
 	// ,ARRAY_CONTENT_SPECIMEN_PREFIX + "id"
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_LABEL_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_LABEL_INDEX = 0;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_BARCODE_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_BARCODE_INDEX = 1;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_QUANTITY_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_QUANTITY_INDEX = 2;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_CONC_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_CONC_INDEX = 3;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX = 4;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX = 5;
-
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_ID_INDEX field.
 	 */
@@ -108,12 +94,10 @@ public interface AppletConstants
 	 * Specify the ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX field.
 	 */
 	int ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX = 7;
-
 	/**
 	 * Specify the SPECIMEN_ARRAY_APPLET_ACTION field.
 	 */
 	String SPECIMEN_ARRAY_APPLET_ACTION = "/SpecimenArrayAppletAction.do";
-
 	/**
 	 * Specify the ADD_TO_LIMIT_ACTION field.
 	 */
@@ -150,84 +134,80 @@ public interface AppletConstants
 	 * Specify the ADD_TO_LIMIT_ACTION field.
 	 */
 	String ENTITY_STR = "entity_str";
-
 	/**
 	 * Specimen Attributes Row Nos.
 	 * */
-	short SPECIMEN_CHECKBOX_ROW_NO = 0; //	FOR CHECKBOXES
+	int SPECIMEN_CHECKBOX_ROW_NO = 0; //	FOR CHECKBOXES
 	/**
 	 * SPECIMEN_COLLECTION_GROUP_ROW_NO.
 	 */
-	short SPECIMEN_COLLECTION_GROUP_ROW_NO = 1;
+	int SPECIMEN_COLLECTION_GROUP_ROW_NO = 1;
 	/**
 	 * SPECIMEN_PARENT_ROW_NO.
 	 */
-	short SPECIMEN_PARENT_ROW_NO = 2;
+	int SPECIMEN_PARENT_ROW_NO = 2;
 	/**
 	 * SPECIMEN_LABEL_ROW_NO.
 	 */
-	short SPECIMEN_LABEL_ROW_NO = 3;
+	int SPECIMEN_LABEL_ROW_NO = 3;
 	/**
 	 * SPECIMEN_BARCODE_ROW_NO.
 	 */
-	short SPECIMEN_BARCODE_ROW_NO = 4;
+	int SPECIMEN_BARCODE_ROW_NO = 4;
 	/**
 	 * SPECIMEN_CLASS_ROW_NO.
 	 */
-	short SPECIMEN_CLASS_ROW_NO = 5;
+	int SPECIMEN_CLASS_ROW_NO = 5;
 	/**
 	 * SPECIMEN_TYPE_ROW_NO.
 	 */
-	short SPECIMEN_TYPE_ROW_NO = 6;
+	int SPECIMEN_TYPE_ROW_NO = 6;
 	/**
 	 * SPECIMEN_TISSUE_SITE_ROW_NO.
 	 */
-	short SPECIMEN_TISSUE_SITE_ROW_NO = 7;
+	int SPECIMEN_TISSUE_SITE_ROW_NO = 7;
 	/**
 	 * SPECIMEN_TISSUE_SIDE_ROW_NO.
 	 */
-	short SPECIMEN_TISSUE_SIDE_ROW_NO = 8;
-
+	int SPECIMEN_TISSUE_SIDE_ROW_NO = 8;
 	/**
 	 * Patch ID: 3835_1_14
 	 * See also: 1_1 to 1_5
 	 * Description : Added created date row and changed below row no accordingly.
 	 */
-
-	short SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO = 9;
+	int SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO = 9;
 	/**
 	 * SPECIMEN_CREATED_DATE_ROW_NO.
 	 */
-	short SPECIMEN_CREATED_DATE_ROW_NO = 10;
+	int SPECIMEN_CREATED_DATE_ROW_NO = 10;
 	/**
 	 * SPECIMEN_QUANTITY_ROW_NO.
 	 */
-	short SPECIMEN_QUANTITY_ROW_NO = 11;
+	int SPECIMEN_QUANTITY_ROW_NO = 11;
 	/**
 	 * SPECIMEN_CONCENTRATION_ROW_NO.
 	 */
-	short SPECIMEN_CONCENTRATION_ROW_NO = 12;
+	int SPECIMEN_CONCENTRATION_ROW_NO = 12;
 	/**
 	 * SPECIMEN_COMMENTS_ROW_NO.
 	 */
-	short SPECIMEN_COMMENTS_ROW_NO = 13;
+	int SPECIMEN_COMMENTS_ROW_NO = 13;
 	/**
 	 * SPECIMEN_EVENTS_ROW_NO.
 	 */
-	short SPECIMEN_EVENTS_ROW_NO = 14;
+	int SPECIMEN_EVENTS_ROW_NO = 14;
 	/**
 	 * SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO.
 	 */
-	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 15;
+	int SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 15;
 	/**
 	 * SPECIMEN_BIOHAZARDS_ROW_NO.
 	 */
-	short SPECIMEN_BIOHAZARDS_ROW_NO = 16;
+	int SPECIMEN_BIOHAZARDS_ROW_NO = 16;
 	/**
 	 * SPECIMEN_DERIVE_ROW_NO.
 	 */
-	short SPECIMEN_DERIVE_ROW_NO = 17;
-
+	int SPECIMEN_DERIVE_ROW_NO = 17;
 	//	Mandar: 06Nov06: location removed since auto allocation will take place.
 	//	short SPECIMEN_STORAGE_LOCATION_ROW_NO = 11;
 	/**
@@ -385,7 +365,6 @@ public interface AppletConstants
 	 * MULTIPLE_SPECIMEN_CHECKBOX_LABEL.
 	 */
 	String MULTIPLE_SPECIMEN_CHECKBOX_LABEL = "Specimen ";
-
 	// Dagviewapplet constants
 	/**
 	 * QUERY_OBJECT.
@@ -474,15 +453,18 @@ public interface AppletConstants
 	/**
 	 * EMPTY_LIMIT_ERROR_MESSAGE.
 	 */
-	String EMPTY_LIMIT_ERROR_MESSAGE = "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
+	String EMPTY_LIMIT_ERROR_MESSAGE = "<li><font color='red'>" +
+			"Please enter at least one condition to add a limit to limit set.</font></li>";
 	/**
 	 * EMPTY_DAG_ERROR_MESSAGE.
 	 */
-	String EMPTY_DAG_ERROR_MESSAGE = "<li><font color='red'>Limit set should contain at least one limit.</font></li>";
+	String EMPTY_DAG_ERROR_MESSAGE = "<li><font color='red'>" +
+			"Limit set should contain at least one limit.</font></li>";
 	/**
 	 * MULTIPLE_ROOTS_EXCEPTION.
 	 */
-	String MULTIPLE_ROOTS_EXCEPTION = "<li><font color='red'>Expression graph should be a connected graph.</font></li>";
+	String MULTIPLE_ROOTS_EXCEPTION = "<li><font color='red'>" +
+			"Expression graph should be a connected graph.</font></li>";
 	/**
 	 * EDIT_LIMITS.
 	 */

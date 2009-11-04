@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.io.Serializable;
@@ -27,10 +26,10 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	private final int min = 0;
 
 	/** Horizontal Gap. */
-	int hgap;
+	private int hgap;
 
 	/** Vertical Gap. */
-	int vgap;
+	private int vgap;
 
 	/**
 	 * Constructs a new vertical layout with no gaps between components.
@@ -92,6 +91,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public void addLayoutComponent(Component comp, Object constraints)
 	{
+		//Empty addLayoutComponent method.
 	}
 
 	/**
@@ -105,6 +105,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public void addLayoutComponent(String name, Component comp)
 	{
+		//Empty addLayoutComponent method.
 	}
 
 	/**
@@ -116,6 +117,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public void removeLayoutComponent(Component comp)
 	{
+		//Empty removeLayoutComponent method.
 	}
 
 	/**
@@ -156,6 +158,7 @@ public class VerticalLayout implements LayoutManager2, Serializable
 	 */
 	public void invalidateLayout(Container target)
 	{
+		//Empty invalidateLayout method.
 	}
 
 	/**
@@ -204,9 +207,9 @@ public class VerticalLayout implements LayoutManager2, Serializable
 			for (int i = 0; i < parent.getComponentCount(); i++)
 			{
 				final Component child = parent.getComponent(i);
-				final Dimension d = child.getPreferredSize();
-				width = Math.max(width, d.width);
-				height += d.height + this.vgap;
+				final Dimension dim = child.getPreferredSize();
+				width = Math.max(width, dim.width);
+				height += dim.height + this.vgap;
 			}
 			return new Dimension(insets.left + width + insets.right + this.hgap * 2, insets.top
 					+ height + insets.bottom);

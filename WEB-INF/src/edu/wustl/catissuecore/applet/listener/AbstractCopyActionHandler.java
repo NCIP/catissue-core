@@ -43,6 +43,7 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	public AbstractCopyActionHandler()
 	{
+		//Empty AbstractCopyActionHandler.
 	}
 
 	/**
@@ -56,41 +57,37 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 
 	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
-	public void actionPerformed(ActionEvent e)
+	public void actionPerformed(ActionEvent actionEvent)
 	{
-		this.preActionPerformed(e);
-		this.doActionPerformed(e);
-		this.postActionPerformed(e);
+		this.preActionPerformed(actionEvent);
+		this.doActionPerformed(actionEvent);
+		this.postActionPerformed(actionEvent);
 	}
 
 	/**
 	 * Pre action performed method for copy operation.
-	 * @param e : e
+	 * @param actionEvent : actionEvent
 	 */
-	protected void preActionPerformed(ActionEvent e)
-	{
-	}
+	protected abstract void preActionPerformed(ActionEvent actionEvent);
 
 	/**
 	 * do action performed method for copy operation.
 	 * Other copy listeners should override this method for specific operations.
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
-	protected void doActionPerformed(ActionEvent e)
+	protected void doActionPerformed(ActionEvent actionEvent)
 	{
 		this.populateValidatorModel();
 	}
 
 	/**
 	 * Post action performed method for copy operation.
-	 * @param e : e
+	 * @param actionEvent : e
 	 */
-	protected void postActionPerformed(ActionEvent e)
-	{
-	}
-
+	protected abstract void postActionPerformed(ActionEvent actionEvent);
+	
 	/**
 	 * Protected method populateValidatorModel.
 	 */
@@ -110,44 +107,14 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			this.populateValidatorModel(validatorModel, selectedRows, selectedColumns);
 
 		}
-		/*else
-		 {
-		 populateValidatorModel(validatorModel, intSelectedRows, intSelectedCols);
-		 List selectedCopiedColumns = validatorModel.getSelectedCopiedCols();
-		 TableColumnModel columnModel = table.getColumnModel();
-		 for (int i = 0; i < selectedCopiedColumns.size(); i++)
-		 {
-		 int copiedColumn = ((Integer) selectedCopiedColumns.get(i)).intValue();
-		 SpecimenColumnModel scm =
-		  (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellEditor();
-		 scm.updateComponentValue(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO, "false");
-		 SpecimenColumnModel scmRenderer =
-		  (SpecimenColumnModel) columnModel.getColumn(copiedColumn).getCellRenderer();
-		 scmRenderer.updateComponent(AppletConstants.SPECIMEN_CHECKBOX_ROW_NO);
-		 }
-		 SwingUtilities.updateComponentTreeUI(table);
-
-		 }*/
 		BaseCopyPasteValidator validator = null;
 		String validationMessage = null;
 
-		if (this.table != null)
-		{
-			if (this.table.getModel() instanceof SpecimenArrayTableModel)
-			{
-				validator = new SpecimenArrayCopyPasteValidator(validatorModel);
-			}
-			/*else if (table.getModel() instanceof MultipleSpecimenTableModel)
-			 {
-			 //TODO put same as above construstor
-			 validator = new MultipleSpecimenCopyPasteValidator(table, validatorModel);
-			 }*/
-		}
-
+		validator = getValidator(validatorModel) ;
 		if (validator != null)
 		{
 			validationMessage = validator.validate();
-			if (validationMessage.equals(""))
+			if ("".equals(validationMessage))
 			{
 				this.isValidateSuccess = true;
 				CommonAppletUtil.getBaseTableModel(this.table).setCopyPasteOperationValidatorModel(
@@ -156,14 +123,33 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			else
 			{
 				this.isValidateSuccess = false;
-				System.out.println(" validationMessage:: " + validationMessage);
+				//System.out.println(" validationMessage:: " + validationMessage);
 				final Object[] paramArray = {validationMessage};
 				CommonAppletUtil.callJavaScriptFunction(this.table, this.getJSMethodName(),
 						paramArray);
 			}
 		}
 	}
-
+	/**
+	 * Returns the validator object.
+	 * @param validatorModel CopyPasteOperationValidatorModel object.
+	 * @return  validator object.
+	 */
+	private BaseCopyPasteValidator getValidator(CopyPasteOperationValidatorModel validatorModel)
+	{
+		BaseCopyPasteValidator validator = null ;
+		if (( this.table != null) &&
+				 (this.table.getModel() instanceof SpecimenArrayTableModel))
+		{
+			validator = new SpecimenArrayCopyPasteValidator(validatorModel);
+			/*else if (table.getModel() instanceof MultipleSpecimenTableModel)
+			 {
+			 //TODO put same as above construstor
+			 validator = new MultipleSpecimenCopyPasteValidator(table, validatorModel);
+			 }*/
+		}
+		return validator ;
+	}
 	/**
 	 * @param validatorModel model
 	 * @param selectedRows rows

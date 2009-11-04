@@ -267,7 +267,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel
 	public void changeEnterSpecimenBy(String enterSpecimenBy)
 	{
 		int attrIndex = 0;
-		if (enterSpecimenBy.equals("Label"))
+		if ("Label".equals(enterSpecimenBy))
 		{
 			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX;
 		}

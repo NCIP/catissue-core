@@ -27,7 +27,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 */
 	public BaseCopyPasteValidator()
 	{
-
+		//Empty Constructor.
 	}
 
 	/**
@@ -47,11 +47,11 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	{
 		String message = "";
 		message = this.preValidate();
-		if (message.equals(""))
+		if ("".equals(message))
 		{
 			message = this.doValidate();
 		}
-		if (message.equals(""))
+		if ("".equals(message))
 		{
 			message = this.postValidate();
 		}
@@ -69,10 +69,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 */
 	protected String preValidate()
 	{
-
-		// TODO null or empty list
 		String message = "";
-
 		List selectedRows = null;
 		List selectedCols = null;
 
@@ -87,7 +84,6 @@ public abstract class BaseCopyPasteValidator implements Serializable
 			selectedRows = this.validatorModel.getSelectedPastedRows();
 			selectedCols = this.validatorModel.getSelectedPastedCols();
 		}
-
 		/**
 		 *  -- Number of rows/columns selected for copy and paste should match
 		 *  -- If a single row/column is selected while paste operation,
@@ -96,35 +92,38 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		if (this.validatorModel.getOperation().equals("paste"))
 		{
 			message = this.validateRowsForPaste(selectedRows, this.validatorModel);
-			if (!message.equals(""))
+			if ("".equals(message))
 			{
-				return message;
-			}
-			message = this.validateColsForPaste(selectedCols, this.validatorModel);
-			if (!message.equals(""))
-			{
-				return message;
+				message = getMessage(selectedRows, selectedCols) ;
 			}
 		}
-
-		/**
-		 * -- Selection of number of rows in a column should be contiguous
-		 */
-
-		message = this.validateRows(selectedRows);
-		if (!message.equals(""))
-		{
-			return message;
-		}
-
-		/**
-		 * -- Selection of number of columns should be contiguous
-		 */
-		message = this.validateCols(selectedCols);
-
 		return message;
 	}
-
+	/**
+	 * This function returns the message.
+	 * @param selectedRows List of Selected Rows.
+	 * @param selectedCols List of Selected Columns.
+	 * @return String message.
+	 */
+	private String getMessage(List selectedRows, List selectedCols)
+	{
+		String message = this.validateColsForPaste(selectedCols, this.validatorModel);
+		if ("".equals(message))
+		{
+			/**
+			 * -- Selection of number of rows in a column should be contiguous
+			 */
+			message = this.validateRows(selectedRows);
+			if ("".equals(message))
+			{
+				/**
+				 * -- Selection of number of columns should be contiguous
+				 */
+				message = this.validateCols(selectedCols);
+			}
+		}
+		return message ;
+	}
 	/**
 	 * This method checks Selection of number of rows in a column should be contiguous.
 	 * @param selectedRows - list
@@ -133,6 +132,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	private String validateRows(List selectedRows)
 	{
 		int rowValue = 0;
+		String message = "" ;
 		for (int i = 0; i < selectedRows.size(); i++)
 		{
 			final Integer row = (Integer) selectedRows.get(i);
@@ -143,10 +143,13 @@ public abstract class BaseCopyPasteValidator implements Serializable
 			}
 			if ((row.intValue()) != rowValue + i)
 			{
-				return "Please select contiguous rows";
+				// return "Please select contiguous rows";
+				message = "Please select contiguous rows";
+				break ;
 			}
 		}
-		return "";
+		//return "";
+		return message ;
 	}
 
 	/**
@@ -157,6 +160,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	private String validateCols(List selectedCols)
 	{
 		int colValue = 0;
+		String message = "" ;
 		for (int i = 0; i < selectedCols.size(); i++)
 		{
 			final Integer col = (Integer) selectedCols.get(i);
@@ -167,11 +171,13 @@ public abstract class BaseCopyPasteValidator implements Serializable
 			}
 			if ((col.intValue()) != colValue + i)
 			{
-				return "Please select contiguous columns";
+				//return "Please select contiguous columns";
+				message = "Please select contiguous columns";
+				break ;
 			}
 		}
-
-		return "";
+		//return "";
+		return message ;
 	}
 
 	/**
@@ -187,23 +193,27 @@ public abstract class BaseCopyPasteValidator implements Serializable
 			CopyPasteOperationValidatorModel validatorModel)
 	{
 		final int numberOfRowsCopied = validatorModel.getSelectedCopiedRows().size();
+		String message = "" ;
 		if (selectedRows.size() == 1)
 		{
 			final Integer row = (Integer) selectedRows.get(0);
 			final int rowValue = row.intValue();
 			if (validatorModel.getRowCount() - rowValue < numberOfRowsCopied)
 			{
-				return "There are not enough rows to paste the copied data";
+				//return "There are not enough rows to paste the copied data";
+				message = "There are not enough rows to paste the copied data";
 			}
 		}
 		else
 		{
 			if (selectedRows.size() != numberOfRowsCopied)
 			{
-				return "Number of rows selected for copy and paste operation do not match";
+				//return "Number of rows selected for copy and paste operation do not match";
+				message = "Number of rows selected for copy and paste operation do not match";
 			}
 		}
-		return "";
+		//return "";
+		return message ;
 	}
 
 	/**
@@ -219,23 +229,27 @@ public abstract class BaseCopyPasteValidator implements Serializable
 			CopyPasteOperationValidatorModel validatorModel)
 	{
 		final int numberOfColsCopied = validatorModel.getSelectedCopiedCols().size();
+		String message = "" ;
 		if (selectedCols.size() == 1)
 		{
 			final Integer col = (Integer) selectedCols.get(0);
 			final int colValue = col.intValue();
 			if (validatorModel.getColumnCount() - colValue < numberOfColsCopied)
 			{
-				return "There are not enough columns to paste the copied data";
+				//return "There are not enough columns to paste the copied data";
+				message = "There are not enough columns to paste the copied data";
 			}
 		}
 		else
 		{
 			if (selectedCols.size() != numberOfColsCopied) // && numberOfColsCopied!=1)
 			{
-				return "Number of columns selected for copy and paste operation do not match";
+				//return "Number of columns selected for copy and paste operation do not match";
+				message = "Number of columns selected for copy and paste operation do not match";
 			}
 		}
-		return "";
+		//return "";
+		return message ;
 	}
 
 	/**
@@ -253,5 +267,5 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	{
 		final String message = "";
 		return message;
-	}
+ 	}
 }

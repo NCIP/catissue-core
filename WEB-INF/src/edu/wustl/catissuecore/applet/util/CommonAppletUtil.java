@@ -34,24 +34,29 @@ public final class CommonAppletUtil
 	/**
 	 * logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(CommonAppletUtil.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(CommonAppletUtil.class);
 
 	/**
 	 * gets the base applet from a given component.
 	 * @param component component
 	 * @return applet
 	 */
-	public static JApplet getBaseApplet(Component component)
-	{
+     public static JApplet getBaseApplet(final Component component)
+     {
+        Component comp = null;
 		while (component != null)
 		{
 			if (component instanceof JApplet)
 			{
-				return ((JApplet) component);
+				//return ((JApplet) component);
+				comp = ((JApplet) component);
+				break ;
 			}
-			component = component.getParent();
+			//component = component.getParent();
+			comp = component.getParent();
 		}
-		return null;
+		//return null;
+		return (JApplet)comp ;
 	}
 
 	/**
@@ -79,22 +84,29 @@ public final class CommonAppletUtil
 	 * */
 	public static boolean isDoubleNumeric(String numString)
 	{
+		boolean flag ;
 		try
 		{
 			final double doubleValue = Double.parseDouble(numString);
 			if (doubleValue <= 0)
 			{
-				return false;
+				//return false;
+				flag = false ;
 			}
-
-			return true;
+			else
+			{
+				flag = true ;
+			}
+			//return true;
 		}
 		catch (final NumberFormatException exp)
 		{
-			CommonAppletUtil.logger.error(exp.getMessage(), exp);
+			CommonAppletUtil.LOGGER.error(exp.getMessage(), exp);
 			exp.printStackTrace();
-			return false;
+			//return false;
+			flag = false;
 		}
+		return flag ;
 	}
 
 	//Mandar : 11Oct06 used to get the model in various handler classes.
@@ -123,21 +135,27 @@ public final class CommonAppletUtil
 	 */
 	public static BaseTabelModel getBaseTableModel(JTable table)
 	{
+		BaseTabelModel  model = null ;
+
 		if (table != null)
 		{
 			if (table instanceof BaseTable && table.getModel() instanceof BaseTabelModel)
 			{
-				return (BaseTabelModel) table.getModel();
+				//return (BaseTabelModel) table.getModel();
+				model = (BaseTabelModel) table.getModel();
 			}
 			else
 			{
-				return null;
+				//return null;
+				model = null ;
 			}
 		}
 		else
 		{
-			return null;
+			//return null;
+			model = null;
 		}
+		return model ;
 	}
 
 	/**
@@ -163,7 +181,8 @@ public final class CommonAppletUtil
 		{
 			for (final int element : array)
 			{
-				list.add(new Integer(element));
+				//list.add(new Integer(element));
+				list.add(Integer.valueOf(element));
 			}
 		}
 		return list;
@@ -174,12 +193,12 @@ public final class CommonAppletUtil
 	 */
 	public static void printArray(int[] array)
 	{
-		System.out.println("\n------- Printing Array -------\n");
+		CommonAppletUtil.LOGGER.info("\n------- Printing Array -------\n");
 		for (final int element : array)
 		{
-			System.out.print("  " + element);
+			CommonAppletUtil.LOGGER.info("  " + element);
 		}
-		System.out.println("\n-------Printing Array Done ------\n");
+		CommonAppletUtil.LOGGER.info("\n-------Printing Array Done ------\n");
 	}
 
 	/**

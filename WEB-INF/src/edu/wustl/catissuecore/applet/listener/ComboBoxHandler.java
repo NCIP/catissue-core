@@ -47,7 +47,7 @@ public class ComboBoxHandler extends BaseActionHandler
 	protected void handleAction(ActionEvent event)
 	{
 		super.handleAction(event);
-		System.out.println("Inside ComboBoxHandler");
+		//System.out.println("Inside ComboBoxHandler");
 	}
 
 	/**
