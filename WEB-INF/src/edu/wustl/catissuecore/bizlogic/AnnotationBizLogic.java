@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.ehcache.CacheException;
+
 import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
@@ -23,7 +23,7 @@ import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -37,7 +37,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
+
 
 /**
  * @author sandeep_chinta
@@ -57,12 +57,12 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
 	/**
-	 * logger object
+	 * logger object.
 	 */
-	private static Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
+	private static final Logger logger = Logger.getCommonLogger(AnnotationBizLogic.class);
 
 	/**
-	 *  public constructor
+	 *  public constructor.
 	 */
 	public AnnotationBizLogic()
 	{
@@ -70,17 +70,18 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param staticEntityId.
+	 * @param staticEntityIdentifier staticEntityId.
 	 * @return List of all dynamic entities id from a given static entity
+	 * @throws BizLogicException BizLogicException.
 	 * eg: returns all dynamic entity id from a Participant,Specimen etc
 	 */
-	public List getListOfDynamicEntitiesIds(long staticEntityId) throws BizLogicException
+	public List getListOfDynamicEntitiesIds(long staticEntityIdentifier) throws BizLogicException
 	{
 		List<EntityMap> dynamicList = new ArrayList<EntityMap>();
 
 		final List list = new ArrayList();
-		dynamicList = this.retrieve(EntityMap.class.getName(), "staticEntityId", new Long(
-				staticEntityId));
+		dynamicList = this.retrieve(EntityMap.class.getName(),
+				"staticEntityId", Long.valueOf(staticEntityIdentifier));
 		if (dynamicList != null && !dynamicList.isEmpty())
 		{
 			for (final EntityMap entityMap : dynamicList)
@@ -93,17 +94,17 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param staticEntityId.
+	 * @param staticEntityId staticEntityId.
 	 * @return List of all dynamic entities Objects from a given static entity
 	 * eg: returns all dynamic entity objects from a Participant,Specimen etc
-	 * @throws DynamicExtensionsApplicationException
+	 * @throws BizLogicException BizLogicException
 	 */
 	public List getListOfDynamicEntities(long staticEntityId) throws BizLogicException
 	{
 		List dynamicList = new ArrayList();
 
-		dynamicList = this.retrieve(EntityMap.class.getName(), "staticEntityId", new Long(
-				staticEntityId));
+		dynamicList = this.retrieve(EntityMap.class.getName(),
+				"staticEntityId", Long.valueOf(staticEntityId));
 
 		return dynamicList;
 	}
@@ -123,8 +124,8 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		final String[] selectColumnName = {"containerId"};
 		final String[] whereColumnName = {"staticEntityId", "typeId", "staticRecordId"};
 		final String[] whereColumnCondition = {"=", "=", "="};
-		final Object[] whereColumnValue = {new Long(staticEntityId), new Long(typeId),
-				new Long(staticRecordId)};
+		final Object[] whereColumnValue = {Long.valueOf(staticEntityId), Long.valueOf(typeId),
+				Long.valueOf(staticRecordId)};
 		final String joinCondition = Constants.AND_JOIN_CONDITION;
 
 		try
@@ -135,7 +136,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return dynamicList;
@@ -145,7 +145,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * Updates the Entity Record object in database.
 	 * @param entityRecord : entityRecord
 	 * @throws BizLogicException :BizLogicException
-	 * 
 	 */
 	public void updateEntityRecord(EntityMapRecord entityRecord) throws BizLogicException
 	{
@@ -165,15 +164,16 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		final Long staticEntityRecordId = entityRecord.getStaticEntityRecordId();
 		final Long dynExtRecordId = entityRecord.getDynamicEntityRecordId();
 		this
-				.associateRecords(entityMapId, new Long(staticEntityRecordId), new Long(
-						dynExtRecordId));
+				.associateRecords(entityMapId, Long.valueOf(staticEntityRecordId)
+						, Long.valueOf(dynExtRecordId));
 	}
 
 	/**
-	 * @param entityMapId
-	 * @param long1
-	 * @param long2
-	 * @throws BizLogicException 
+	 * This method called to associate records.
+	 * @param entityMapId entityMapId
+	 * @param staticEntityRecordId staticEntityRecordId
+	 * @param dynamicEntityRecordId dynamicEntityRecordId
+	 * @throws BizLogicException BizLogicException
 	 */
 	private void associateRecords(Long entityMapId, Long staticEntityRecordId,
 			Long dynamicEntityRecordId) throws BizLogicException
@@ -230,15 +230,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			catch (final DynamicExtensionsSystemException exception)
 			{
 				AnnotationBizLogic.logger.error(exception.getMessage(), exception);
-				exception.printStackTrace();
 				throw new BizLogicException(null, null, exception.getMessage());
 			}
 		}
 	}
 
 	/**
-	 * 
-	 * @param entityMap
+	 * @param entityMap entityMap
+	 * @throws BizLogicException BizLogicException
 	 * Updates the Entity Map object in database
 	 */
 	public void updateEntityMap(EntityMap entityMap) throws BizLogicException
@@ -249,8 +248,9 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * 
-	 * @param entityMap
+	 * This method called to insert Entity Map.
+	 * @param entityMap entityMap
+	 * @throws BizLogicException BizLogicException
 	 * Inserts a new EntityMap record in Database
 	 */
 	public void insertEntityMap(EntityMap entityMap) throws BizLogicException
@@ -267,10 +267,9 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	* 
-	* @param dynamicEntityContainerId
+	 * This method returns the Static Entity Containers.
+	* @param dynamicEntityContainerId dynamicEntityContainerId
 	* @return List of Static Entity Id from a given Dynamic Entity Id
-	* 
 	*/
 	public List getListOfStaticEntitiesIds(long dynamicEntityContainerId)
 	{
@@ -279,7 +278,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		final String[] selectColumnName = {"staticEntityId"};
 		final String[] whereColumnName = {"containerId"};
 		final String[] whereColumnCondition = {"="};
-		final Object[] whereColumnValue = {new Long(dynamicEntityContainerId)};
+		final Object[] whereColumnValue = {Long.valueOf(dynamicEntityContainerId)};
 		final String joinCondition = null;
 
 		try
@@ -290,17 +289,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return dynamicList;
 	}
 
-	/**
-	 * 
-	 * @param dynamicEntityContainerId
-	 * @return List of Static Entity Objects from a given Dynamic Entity Id
-	 * 
+	/**This method returns the Static Entities.
+	 * @param dynamicEntityContainerId dynamicEntityContainerId.
+	 * @return List of Static Entity Objects from a given Dynamic Entity Id.
 	 */
 	public List getListOfStaticEntities(long dynamicEntityContainerId)
 	{
@@ -308,22 +304,21 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 
 		try
 		{
-			dynamicList = this.retrieve(EntityMap.class.getName(), "containerId", new Long(
+			dynamicList = this.retrieve(EntityMap.class.getName(), "containerId", Long.valueOf(
 					dynamicEntityContainerId));
 		}
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return dynamicList;
 	}
 
 	/**
-	 * 
-	 * @param entityMapId
-	 * @return EntityMap object for its given id
+	 * This method is called to get entity Map Id.
+	 * @param entityMapId entityMapId.
+	 * @return EntityMap object for its given id.
 	 */
 	public EntityMap getEntityMap(long entityMapId)
 	{
@@ -336,12 +331,18 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+
 		}
 
 		return map;
 	}
 
+	/**
+	 * This method called to get Entity Map.
+	 * @param entityMapids entityMapids
+	 * @param staticRecordId staticRecordId
+	 * @return getEntityMapRecordList.
+	 */
 	public List getEntityMapRecordList(List entityMapids, long staticRecordId)
 	{
 		final List dynamicList = new ArrayList();
@@ -357,7 +358,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			final Long entityMapId = (Long) iter.next();
 			if (entityMapId != null)
 			{
-				final Object[] whereColumnValue = {new Long(staticRecordId), entityMapId};
+				final Object[] whereColumnValue = {Long.valueOf(staticRecordId), entityMapId};
 				try
 				{
 					final List list = this.retrieve(EntityMapRecord.class.getName(),
@@ -371,7 +372,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				catch (final BizLogicException e)
 				{
 					AnnotationBizLogic.logger.error(e.getMessage(), e);
-					e.printStackTrace();
 				}
 			}
 
@@ -380,17 +380,21 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		return dynamicList;
 	}
 
+	/**
+	 * This method called to delete Entity Map.
+	 * @param entityMapId entityMapId
+	 * @param dynamicEntityRecordId dynamicEntityRecordId.
+	 */
 	public void deleteEntityMapRecord(long entityMapId, long dynamicEntityRecordId)
 	{
 		try
 		{
 			List dynamicList = new ArrayList();
-
 			final String[] selectColumnName = null;
 			final String[] whereColumnName = {"formContext.entityMap.id", "dynamicEntityRecordId"};
 			final String[] whereColumnCondition = {"=", "="};
-			final Object[] whereColumnValue = {new Long(entityMapId),
-					new Long(dynamicEntityRecordId)};
+			final Object[] whereColumnValue = {Long.valueOf(entityMapId),
+					Long.valueOf(dynamicEntityRecordId)};
 			final String joinCondition = Constants.AND_JOIN_CONDITION;
 
 			dynamicList = this.retrieve(EntityMapRecord.class.getName(), selectColumnName,
@@ -408,15 +412,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 
-	 * @param containerId : containerId
-	 * @param recordIdList : recordIdList
-	 * @throws BizLogicException : BizLogicException
+	 * This method called to delete deleteAnnotationRecords.
+	 * @param containerId : containerId.
+	 * @param recordIdList : recordIdList.
+	 * @throws BizLogicException : BizLogicException.
 	 */
 	public void deleteAnnotationRecords(Long containerId, List<Long> recordIdList)
 			throws BizLogicException
@@ -429,17 +432,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			/*   throw new BizLogicException(ApplicationProperties
-			           .getValue("app.annotatations.errors.deleteRecord"), e);*/
 		}
 	}
 
 	/**
 	 * Deletes an object from the database.
 	 * @param obj The object to be deleted.
+	 * @param dao dao
 	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException TODO
 	 */
 	@Override
 	protected void delete(Object obj, DAO dao)
@@ -451,7 +451,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
@@ -487,8 +486,8 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 					{
 						if (entityMapConditions != null && !entityMapConditions.isEmpty())
 						{
-							final boolean check = this.checkStaticRecId(entityMapConditions,
-									cpIdList);
+							final boolean check = this.checkStaticRecId(
+									entityMapConditions,cpIdList);
 							if (check)
 							{
 								dynEntitiesIdList.add(entityMap.getContainerId());
@@ -507,14 +506,16 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param entityMapConditionCollection
-	 * @param cpIdList
-	 * @return boolean
-	 * @throws CacheException
+	 * This method called to check Static Record Identifier.
+	 * @param entityMapConditionCollection entityMapConditionCollection
+	 * @param cpIdList cpIdList
+	 * @return boolean boolean
+	 * @throws CacheException CacheException
 	 */
 	private boolean checkStaticRecId(Collection entityMapConditionCollection, List cpIdList)
 	{
 		final Iterator entityMapCondIterator = entityMapConditionCollection.iterator();
+
 		try
 		{
 			final CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();
@@ -522,11 +523,11 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			{
 				while (entityMapCondIterator.hasNext())
 				{
-					final EntityMapCondition entityMapCond = (EntityMapCondition) entityMapCondIterator
-							.next();
+					final EntityMapCondition entityMapCond = (EntityMapCondition)
+					entityMapCondIterator.next();
 					if (entityMapCond.getTypeId().toString().equals(
 							cache.getObjectFromCache(
-									AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString())
+							AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID).toString())
 							&& cpIdList.contains(entityMapCond.getStaticRecordId()))
 					{
 						return true;
@@ -537,13 +538,13 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		return false;
 	}
 
 	/**
-	 * @param entityMapId
+	 * Method called to get Entity Map.
+	 * @param containerId containerId
 	 * @return EntityMap object for its given id
 	 */
 	public List getEntityMapOnContainer(long containerId)
@@ -552,20 +553,20 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 
 		try
 		{
-			dynamicList = this.retrieve(EntityMap.class.getName(), "containerId", new Long(
+			dynamicList = this.retrieve(EntityMap.class.getName(), "containerId",Long.valueOf(
 					containerId));
 		}
 		catch (final BizLogicException e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return dynamicList;
 	}
 
 	/**
-	 * @param entityMapCondition
+	 * This method called to insert Entity Map Condition.
+	 * @param entityMapCondition entityMapCondition
 	 */
 	public void insertEntityMapCondition(EntityMapCondition entityMapCondition)
 	{
@@ -576,12 +577,17 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		catch (final Exception e)
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 	}
 
 	//Function added by Preeti :  to get all entitymap entries for a dynamic entity container
+	/**
+	 * This method called to get Entity Maps for Containers.
+	 * @param deContainerId deContainerId
+	 * @throws BizLogicException BizLogicException
+	 * @return entityMaps entityMaps
+	 */
 	public Collection getEntityMapsForContainer(Long deContainerId) throws BizLogicException
 	{
 		final List entityMaps = this.retrieve(EntityMap.class.getName(), "containerId",
