@@ -22,6 +22,7 @@
 		import mx.validators.ValidationResult;
 		import flash.utils.getQualifiedClassName;
 	    import mx.collections.XMLListCollection;
+	    import mx.managers.CursorManager;
 		import flash.xml.*;
 
 
@@ -667,11 +668,22 @@
 	 	spDetailsLabel.text = title;
 	 }
 
-         /*
+	 /*
            This method is invoked on click of specimen tree node
 	 */
 	 private function onNodeClick():void
 	 {
+	 	CursorManager.setBusyCursor();
+	 	loadNodeInfo();
+	 	CursorManager.removeBusyCursor();
+	 }
+
+     /*
+           This method is invoked on click of specimen tree node
+	 */
+	 private function loadNodeInfo():void
+	 {
+		//CursorManager.setBusyCursor();
 		if(specimenTree.selectedItem != null)
 		{
 	    	var type:String = specimenTree.selectedItem.@type;
@@ -703,6 +715,7 @@
 
 			}
 		 }
+		 //CursorManager.removeBusyCursor();
 	}
 
      private function chkForCollectionProtocolType(type:String):void

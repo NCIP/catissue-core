@@ -17,6 +17,7 @@
 			import mx.events.CollectionEvent;
 			import util.PagedArrayCollection;
 			import valueobjects.NameValueBean;
+			import mx.managers.CursorManager;
 
 			[Bindable]
 			public var filteredListArray:Array;
@@ -111,7 +112,9 @@
 	  				PopUpManager.removePopUp(this);
 	  				this.parentApplication.Cp.dropList=null;
 		  			this.parentApplication.cpCombo = collection[dropDownList.selectedIndex];
+		  			CursorManager.setBusyCursor();
 		  			this.parentApplication.onCpChange();
+		  			CursorManager.removeBusyCursor();
 		  			this.parentApplication.Sp.inputArea.text="";
 	  		}
 
@@ -139,7 +142,9 @@
 		 				}
 		 			}
 
+					CursorManager.setBusyCursor();
 	  				this.parentApplication.onParticipantClick();
+	  				CursorManager.removeBusyCursor();
 	  		}
 
 	  		/**
