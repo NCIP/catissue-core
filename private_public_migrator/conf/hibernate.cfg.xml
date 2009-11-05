@@ -108,7 +108,8 @@
 		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
 
-		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
+		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>	
+		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>		
 		
 		<!-- Shipping Tracking Merge Himanshu-->
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>

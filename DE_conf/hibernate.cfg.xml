@@ -103,7 +103,7 @@
 		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
 		
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>	
-
+		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>	
     </session-factory>
     
 </hibernate-configuration>
