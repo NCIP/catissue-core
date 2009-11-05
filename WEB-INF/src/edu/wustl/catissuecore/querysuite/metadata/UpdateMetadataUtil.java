@@ -53,7 +53,6 @@ public class UpdateMetadataUtil
 		catch (final SQLException e)
 		{
 			UpdateMetadataUtil.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			if (failureWriter == null)
 			{
 				failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
@@ -91,7 +90,6 @@ public class UpdateMetadataUtil
 		catch (final SQLException e)
 		{
 			UpdateMetadataUtil.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			if (failureWriter == null)
 			{
 				failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
@@ -135,7 +133,6 @@ public class UpdateMetadataUtil
 				catch (final SQLException e)
 				{
 					UpdateMetadataUtil.logger.error(e.getMessage(), e);
-					e.printStackTrace();
 					if (failureWriter == null)
 					{
 						failureWriter = new BufferedWriter(new FileWriter(new File(errorFileName)));
