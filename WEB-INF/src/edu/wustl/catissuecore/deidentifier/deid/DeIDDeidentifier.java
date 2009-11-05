@@ -233,32 +233,26 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 				final File predeidFile = new File("predeid.xml");
 				// temp file for processing input file
 				final File postdeidFile = new File("postdeid.tmp");
-
 				final FileWriter fileWriter = new FileWriter(predeidFile);
-				// write contents to input xml file
-				fileWriter.write(text);
+				fileWriter.write(text);// write contents to input xml file
 				fileWriter.close();
 				this.logger.info("Calling native call");
 				deid.createDeidentifier(predeidFile.getAbsolutePath(), postdeidFile
-						.getAbsolutePath()
-						+ "?XML", configFileName);
+						.getAbsolutePath() + "?XML", configFileName);
 				this.logger.info("Native call success");
-				final BufferedReader bufferedReader = new BufferedReader(new FileReader(postdeidFile));
-
+				final BufferedReader bufferedReader = new BufferedReader(
+						new FileReader(postdeidFile));
 				// read all contents from output file
 				String line = "";
 				while ((line = bufferedReader.readLine()) != null)
-				{
-					// add content to output string
+				{// add content to output string
 					output += line + "\n";
 				}
 				this.logger.info("Deleting temp files");
 				bufferedReader.close();
-				// delete temporary input and output files
-				predeidFile.delete();
+				predeidFile.delete();// delete temporary input and output files
 				postdeidFile.delete();
-				// notify on object to process next waiting call
-				this.notifyAll();
+				this.notifyAll();// notify on object to process next waiting call
 			}
 		}
 		catch (final IOException ex)
@@ -271,8 +265,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error(
-					"Severe error occured in the " +
+			this.logger.error("Severe error occured in the " +
 					"native method call for" +
 					" deidentification"+ex.getMessage(), ex);
 			ex.printStackTrace();

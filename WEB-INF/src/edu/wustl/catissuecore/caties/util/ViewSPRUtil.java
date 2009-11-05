@@ -59,44 +59,12 @@ public class ViewSPRUtil
 				while (iter.hasNext())
 				{
 					final ConceptReferent conceptReferent = (ConceptReferent) iter.next();
-					final ConceptReferentClassification conceptReferentClassification = conceptReferent
-							.getConceptReferentClassification();
-					ConceptHighLightingBean conceptHighLightingBean = null;
-					if (tempMap.get(conceptReferentClassification.getName().toUpperCase()) == null)
-					{ // if concept classification obj is not present in the list
-						conceptHighLightingBean = new ConceptHighLightingBean();
-						conceptHighLightingBean.setClassificationName(conceptReferentClassification
-								.getName());
-						conceptHighLightingBean.setConceptName(conceptReferent.getConcept()
-								.getName());
-						conceptHighLightingBean.setStartOffsets(conceptReferent.getStartOffset()
-								.toString());
-						conceptHighLightingBean.setEndOffsets(conceptReferent.getEndOffset()
-								.toString());
-
-						tempMap.put(conceptReferentClassification.getName().toUpperCase(),
-								conceptHighLightingBean);
-					}
-					else
-					{
-						conceptHighLightingBean = (ConceptHighLightingBean) tempMap
-								.get(conceptReferentClassification.getName().toUpperCase());
-
-						conceptHighLightingBean.setConceptName(conceptHighLightingBean
-								.getConceptName()
-								+ "," + conceptReferent.getConcept().getName());
-						conceptHighLightingBean.setStartOffsets(conceptHighLightingBean
-								.getStartOffsets()
-								+ "," + conceptReferent.getStartOffset());
-						conceptHighLightingBean.setEndOffsets(conceptHighLightingBean
-								.getEndOffsets()
-								+ "," + conceptReferent.getEndOffset());
-
-						tempMap.put(conceptReferentClassification.getName().toUpperCase(),
-								conceptHighLightingBean);
-					}
+					final ConceptReferentClassification
+							conceptReferentClassification =
+								conceptReferent.getConceptReferentClassification();
+					populateTempMap(tempMap, conceptReferent,
+							conceptReferentClassification);
 				}
-
 				final Set keySet = tempMap.keySet();
 				final Iterator keySetIter = keySet.iterator();
 				while (keySetIter.hasNext())
@@ -106,6 +74,50 @@ public class ViewSPRUtil
 			}
 		}
 		return conceptBeanList;
+	}
+
+	/**
+	 * @param tempMap map
+	 * @param conceptReferent ConceptReferent object
+	 * @param conceptReferentClassification ConceptReferentClassification
+	 */
+	private static void populateTempMap(final Map tempMap,
+			final ConceptReferent conceptReferent,
+			final ConceptReferentClassification conceptReferentClassification)
+	{
+		ConceptHighLightingBean conceptHighLightingBean = null;
+		if (tempMap.get(conceptReferentClassification.getName().
+					toUpperCase())== null)
+		{ // if concept classification obj is not present in the list
+			conceptHighLightingBean = new ConceptHighLightingBean();
+			conceptHighLightingBean.setClassificationName(
+					conceptReferentClassification.getName());
+			conceptHighLightingBean.setConceptName(conceptReferent.getConcept()
+					.getName());
+			conceptHighLightingBean.setStartOffsets(
+					conceptReferent.getStartOffset().toString());
+			conceptHighLightingBean.setEndOffsets(
+					conceptReferent.getEndOffset().toString());
+			tempMap.put(conceptReferentClassification.getName().toUpperCase(),
+					conceptHighLightingBean);
+		}
+		else
+		{
+			conceptHighLightingBean = (ConceptHighLightingBean) tempMap
+				.get(conceptReferentClassification.getName()
+						.toUpperCase());
+			conceptHighLightingBean.setConceptName(conceptHighLightingBean
+					.getConceptName()
+					+ "," + conceptReferent.getConcept().getName());
+			conceptHighLightingBean.setStartOffsets(conceptHighLightingBean
+					.getStartOffsets()
+					+ "," + conceptReferent.getStartOffset());
+			conceptHighLightingBean.setEndOffsets(conceptHighLightingBean
+					.getEndOffsets()
+					+ "," + conceptReferent.getEndOffset());
+			tempMap.put(conceptReferentClassification.getName().toUpperCase(),
+					conceptHighLightingBean);
+		}
 	}
 
 	/**
@@ -151,8 +163,8 @@ public class ViewSPRUtil
 		final Iterator iterator = medicalIdentifierNumbers.iterator();
 		while (iterator.hasNext())
 		{
-			final ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier) iterator
-					.next();
+			final ParticipantMedicalIdentifier participantMedicalIdentifier =
+				(ParticipantMedicalIdentifier) iterator.next();
 
 			final String key1 = "ParticipantMedicalIdentifier:" + integer + "_Site_id";
 			final String key2 = "ParticipantMedicalIdentifier:" + integer + "_medicalRecordNumber";

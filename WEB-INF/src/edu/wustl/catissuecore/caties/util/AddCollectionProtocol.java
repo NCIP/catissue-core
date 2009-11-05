@@ -25,7 +25,6 @@ import edu.wustl.common.util.logger.LoggerConfig;
  */
 public class AddCollectionProtocol
 {
-
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
@@ -68,7 +67,8 @@ public class AddCollectionProtocol
 		}
 		catch (final Exception ex)
 		{
-			AddCollectionProtocol.logger.error("Exception in AddCollectionProtocol = " + ex.getMessage(), ex);
+			AddCollectionProtocol.logger.error("Exception in AddCollectionProtocol = "
+					+ ex.getMessage(), ex);
 			//System.out.println("Exception in AddCollectionProtocol = " + ex.getMessage());
 			ex.printStackTrace();
 		}

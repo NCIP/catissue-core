@@ -64,7 +64,8 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 				.getValue(CaTIESConstants.HARVARD_SCRUBBER_DTD_FILENAME),
 				CaTIESConstants.HARVARD_SCRUBBER_XPATH, CaTIESConstants.TAG_FULL_REPORT_TEXT);
 
-		final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
+		final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport
+						= new DeidentifiedSurgicalPathologyReport();
 		final TextContent textContent = new TextContent();
 		deidReportText = updateTextForConceptCoder(deidReportText);
 		textContent.setData(deidReportText);
@@ -74,11 +75,13 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		return deidentifiedSurgicalPathologyReport;
 	}
 
-	/**Method to update report text to add two initial new line characters since they are required for concept coding.
+	/**Method to update report text to add two initial new line characters
+	 * since they are required for concept coding.
 	 * Sometime harvard-scrubber removes the initial two new line characters. Exact scenario is not know now.
 	 * @param deidReportText de-identified report text
+	 * @return String
 	 */
-	private String updateTextForConceptCoder(String deidReportText) 
+	private String updateTextForConceptCoder(String deidReportText)
 	{
 		if(!deidReportText.startsWith("\n\n"))
 		{
@@ -149,17 +152,14 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 	{
 		final Participant participant = identifiedReport.getSpecimenCollectionGroup()
 				.getCollectionProtocolRegistration().getParticipant();
-
 		final Element body = new Element(CaTIESConstants.TAG_BODY);
 		final Element pathologyCase = new Element(CaTIESConstants.TAG_PATHOLOGY_CASE);
 		pathologyCase.setAttribute(CaTIESConstants.TAG_TISSUE_ACQUISITION_DATE, identifiedReport
 				.getCollectionDateTime().toString());
-
 		final Element codes = this.getElement(CaTIESConstants.TAG_CODES, null);
 		final Element clinical = new Element(CaTIESConstants.TAG_CLINICAL);
 		final Element patient = new Element(CaTIESConstants.TAG_PATIENT);
 		final Element age = new Element(CaTIESConstants.TAG_AGE);
-
 		final Date birthDate = participant.getBirthDate();
 		int ageOfParticipant = 0;
 		if (birthDate != null)
@@ -169,6 +169,37 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		age.setAttribute("Units", "years");
 		age.setText(String.valueOf(ageOfParticipant));
 		String genderOfParticipant = "";
+		genderOfParticipant = getGenderForParticipant(participant, genderOfParticipant);
+		final Element gender = this.getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
+		final List<Element> patientChild = new ArrayList<Element>();
+		patientChild.add(age);
+		patientChild.add(gender);
+		patient.setContent(patientChild);
+		clinical.setContent(patient);
+		final Element fullReportText = new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
+		CDATA reportText = new CDATA("");
+		if (identifiedReport.getTextContent() != null)
+		{
+			reportText = new CDATA(identifiedReport.getTextContent().getData());
+		}
+		fullReportText.setContent(reportText);
+		final List<Element> pathologyCaseChild = new ArrayList<Element>();
+		pathologyCaseChild.add(codes);
+		pathologyCaseChild.add(clinical);
+		pathologyCaseChild.add(fullReportText);
+		pathologyCase.addContent(pathologyCaseChild);
+		body.addContent(pathologyCase);
+		return body;
+	}
+
+	/**
+	 * @param participant Participant
+	 * @param genderOfParticipant String
+	 * @return String
+	 */
+	private String getGenderForParticipant(final Participant participant,
+			String genderOfParticipant)
+	{
 		if (participant.getGender().equalsIgnoreCase(CaTIESConstants.MALE_GENDER))
 		{
 			genderOfParticipant = "M";
@@ -181,30 +212,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		{
 			genderOfParticipant = "U";
 		}
-		final Element gender = this.getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
-		final List<Element> patientChild = new ArrayList<Element>();
-		patientChild.add(age);
-		patientChild.add(gender);
-
-		patient.setContent(patientChild);
-		clinical.setContent(patient);
-
-		final Element fullReportText = new Element(CaTIESConstants.TAG_FULL_REPORT_TEXT);
-		CDATA reportText = new CDATA("");
-		if (identifiedReport.getTextContent() != null)
-		{
-			reportText = new CDATA(identifiedReport.getTextContent().getData());
-		}
-		fullReportText.setContent(reportText);
-
-		final List<Element> pathologyCaseChild = new ArrayList<Element>();
-		pathologyCaseChild.add(codes);
-		pathologyCaseChild.add(clinical);
-		pathologyCaseChild.add(fullReportText);
-
-		pathologyCase.addContent(pathologyCaseChild);
-		body.addContent(pathologyCase);
-		return body;
+		return genderOfParticipant;
 	}
 
 	/**

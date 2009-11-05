@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
  */
 public class CaTIESProperties
 {
-
 	/**
 	 * ResourceBunder object.
 	 */

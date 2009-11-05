@@ -101,7 +101,7 @@ public class Utility
 		catch (final IOException ex)
 		{
 			Utility.logger.error("Error in setting Section header Priorities"+ex.getMessage(), ex);
-			ex.printStackTrace();			
+			ex.printStackTrace();
 			throw new Exception(ex.getMessage());
 		}
 		return abbrToHeader;
@@ -149,50 +149,31 @@ public class Utility
 	public static String extractReport(String deIDResponse, final String dtdFilename,
 			final String xPath, final String reportTextTagName) throws Exception
 	{
-
 		String deidSprText = "";
 		try
 		{
-			// check for valid deid responce text
 			if (deIDResponse != null && deIDResponse.trim().length() > 0)
 			{
-				// instantiate SAXBuilder
 				final SAXBuilder builder = new SAXBuilder();
-				// set EntityResolver to use local dtd file instead of the one
-				//that is specified in the xml document
 				builder.setEntityResolver(new EntityResolver()
 				{
-
 					public InputSource resolveEntity(String publicId, String systemId)
 					{
-						// local dtd file name that has to be used
 						return new InputSource(dtdFilename);
 					}
 				});
-
-				// set default feature values to sax builder
 				builder.setFeature("http://apache.org/xml/features/validation/schema", true);
 				builder.setFeature("http://xml.org/sax/features/namespaces", true);
-
-				// convert string to byte array
 				final byte[] byteArray = deIDResponse.getBytes();
-				// convert byte array to ByteArrayInputStream
 				final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 						byteArray);
-				// create document using ByteArrayInputStream
 				final Document deIDResponseDocument = builder.build(byteArrayInputStream);
-
-				// set XPath to query on XML document
 				final XPath xpath = XPath.newInstance(xPath);
-				// fire query on the document
 				final List deIdResults = xpath.selectNodes(deIDResponseDocument);
 				final Iterator deIdIterator = deIdResults.iterator();
-				// iterate to extract report text
 				while (deIdIterator.hasNext())
 				{
-					// get next element
 					final Element deIdReportElement = (Element) deIdIterator.next();
-					// get report text
 					deidSprText = deIdReportElement.getChild(reportTextTagName).getText();
 				}
 			}
@@ -210,7 +191,7 @@ public class Utility
 		}
 		catch (final Exception ex)
 		{
-			Utility.logger.error("Failed parsing response \n" 
+			Utility.logger.error("Failed parsing response \n"
 					+ deIDResponse + "\n\n\n"+ex.getMessage(), ex);
 			ex.printStackTrace();
 			throw ex;
@@ -239,7 +220,6 @@ public class Utility
 		{
 			reportLoaderQueue = (ReportLoaderQueue) object;
 		}
-
 		return reportLoaderQueue;
 	}
 

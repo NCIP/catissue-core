@@ -27,16 +27,16 @@ public class DeidUtils
 	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
 
 	/**
-	 * This mathod takes the identified report, its participant and converts all.
+	 * This method takes the identified report, its participant and converts all.
 	 * the information into an appropriate xml document
 	 * @param participant
 	 *            participant
 	 * @param ispr
 	 *            identified surgical pathology report
 	 * @param sprText
-	 *            sysnthesized text
-	 * @return Elelment which contains other all the report element as
-	 *         childnodes
+	 *            Synthesized text
+	 * @return Element which contains other all the report element as
+	 *         child nodes
 	 */
 	protected static Element buildReportElement(final Participant participant,
 			final IdentifiedSurgicalPathologyReport ispr, String sprText)
@@ -50,22 +50,20 @@ public class DeidUtils
 			// set participant id
 			final Element patientIdElement = new Element(CaTIESConstants.PATIENT_ID);
 			patientIdElement.addContent(participant.getId().toString());
-
 			// set report type
 			final Element reportTypeElement = new Element(CaTIESConstants.REPORT_TYPE);
 			reportTypeElement.addContent(CaTIESConstants.REPORT_TYPE_VALUE);
-
 			// create report header
 			final Element reportHeaderElement = new Element(CaTIESConstants.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(
 					CaTIESConstants.PARTICIPANT_NAME, participant.getLastName() + ","
-							+ participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
+						+ participant.getFirstName(), CaTIESConstants.PARTICIPANT_ROLE));
 			// get participant medical identifier collection
-
 			final Collection<ParticipantMedicalIdentifier> medicalIdentifierCollection = participant
 					.getParticipantMedicalIdentifierCollection();
 			// iterate over participant medical identifier collection
-			for (final ParticipantMedicalIdentifier participantMedicalIdentifier : medicalIdentifierCollection)
+			for (final ParticipantMedicalIdentifier participantMedicalIdentifier
+						: medicalIdentifierCollection)
 			{
 				mrn += " ";
 				mrn += participantMedicalIdentifier.getMedicalRecordNumber();
@@ -73,29 +71,22 @@ public class DeidUtils
 			// add above processed collection string to header element
 			reportHeaderElement.addContent(buildHeaderPersonElement(
 					CaTIESConstants.PARTICIPANT_MRN, mrn, CaTIESConstants.PARTICIPANT_ROLE));
-
 			// create and report text to textElement
 			final Element reportTextElement = new Element(CaTIESConstants.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);
-			sprText += "\n||-"
-					+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
+			sprText += "\n||-"+ DateFormat.getDateTimeInstance().format(
+						ispr.getCollectionDateTime()) + "-||";
 			final CDATA reportCDATA = new CDATA(sprText);
 			reportTextElement.addContent(reportCDATA);
-
-			// add patientId element to root element
-			reportElement.addContent(patientIdElement);
-			// add report type element to root element
-			reportElement.addContent(reportTypeElement);
-			// add report header element to root element
-			reportElement.addContent(reportHeaderElement);
-			// add report text element to root element
-			reportElement.addContent(reportTextElement);
+			reportElement.addContent(patientIdElement);//add patientId element to root element
+			reportElement.addContent(reportTypeElement);//add report type element to root element
+			reportElement.addContent(reportHeaderElement);//add report header element to root element
+			reportElement.addContent(reportTextElement);// add report text element to root element
 		}
 		catch (final Exception ex)
 		{
 			DeidUtils.logger.error("Error in buildReportElement method for DeID"+ex.getMessage(), ex);
 			ex.printStackTrace();
-			
 		}
 		return reportElement;
 	}
@@ -134,7 +125,6 @@ public class DeidUtils
 		headerPersonElement.addContent(variableElement);
 		// add value element to person element
 		headerPersonElement.addContent(valueElement);
-
 		return headerPersonElement;
 	}
 
@@ -167,9 +157,7 @@ public class DeidUtils
 		headerDataElement.addContent(variableElement);
 		// add value element to data element
 		headerDataElement.addContent(valueElement);
-
 		return headerDataElement;
-
 	}
 
 	/**
@@ -203,8 +191,6 @@ public class DeidUtils
 			DeidUtils.logger.error("Error in removeIllegalXmlCharacters method"+ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
-
 		return result;
-
 	}
 }

@@ -107,5 +107,4 @@ public class QueryShoppingCart
 	{
 		this.columnList = columnList;
 	}
-
 }

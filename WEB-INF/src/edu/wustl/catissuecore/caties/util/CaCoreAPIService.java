@@ -22,7 +22,6 @@ import gov.nih.nci.system.comm.client.ClientSession;
  */
 public class CaCoreAPIService
 {
-
 	/**
 	 * logger.
 	 */
@@ -67,7 +66,8 @@ public class CaCoreAPIService
 			catch (final Exception ex)
 			{
 				//System.out.println("Please check your login information!");
-				CaCoreAPIService.logger.error("Error in initializing CaCoreAPIService " + ex.getMessage(),ex);
+				CaCoreAPIService.logger.error("Error in initializing CaCoreAPIService "
+						+ ex.getMessage(),ex);
 				ex.printStackTrace() ;
 				throw ex;
 			}
@@ -99,7 +99,8 @@ public class CaCoreAPIService
 		}
 		catch (final Exception e)
 		{
-			CaCoreAPIService.logger.error("Error while retrieving object " + targertClass + e.getMessage(),e);
+			CaCoreAPIService.logger.error("Error while retrieving object "
+					+ targertClass + e.getMessage(),e);
 			e.printStackTrace() ;
 		}
 		return null;
@@ -149,8 +150,9 @@ public class CaCoreAPIService
 		}
 		catch (final ApplicationException ex)
 		{
-			CaCoreAPIService.logger.error("Error while executing query " + hqlQuery + ex.getMessage(),ex);
-			ex.printStackTrace();		
+			CaCoreAPIService.logger.error("Error while executing query "
+					+ hqlQuery + ex.getMessage(),ex);
+			ex.printStackTrace();
 			throw new Exception("Error while executing query " + ex.getMessage());
 		}
 	}
@@ -194,7 +196,8 @@ public class CaCoreAPIService
 		}
 		catch (final ApplicationException e)
 		{
-			CaCoreAPIService.logger.error("Error occured while adding object using CaCoreAPI for object:"
+			CaCoreAPIService.logger.error("Error occured while adding object" +
+					"using CaCoreAPI for object:"
 					+ object.getClass()+e.getMessage(),e);
 			e.printStackTrace() ;
 			throw new Exception("Error occured while adding object using CaCoreAPI "
@@ -217,7 +220,8 @@ public class CaCoreAPIService
 		}
 		catch (final ApplicationException e)
 		{
-			CaCoreAPIService.logger.error("Error occured while updating object using CaCoreAPI for object:"
+			CaCoreAPIService.logger.error("Error occured while updating object" +
+					"using CaCoreAPI for object:"
 					+ object.getClass()+e.getMessage(),e);
 			e.printStackTrace() ;
 			throw new Exception("Error occured while updating object using CaCoreAPI "
@@ -238,7 +242,8 @@ public class CaCoreAPIService
 		}
 		catch (final ApplicationException e)
 		{
-			CaCoreAPIService.logger.error("Error occured while updating object using CaCoreAPI for object:"
+			CaCoreAPIService.logger.error("Error occured while updating object" +
+					"using CaCoreAPI for object:"
 					+ object.getClass()+e.getMessage(),e);
 			e.printStackTrace();
 			throw new Exception("Error occured while updating object using CaCoreAPI "
@@ -262,7 +267,7 @@ public class CaCoreAPIService
 		catch (final ApplicationException e)
 		{
 			CaCoreAPIService.logger.error("Error occured while retrieving SCG label"+e.getMessage(),e);
-			e.printStackTrace();			
+			e.printStackTrace();
 			throw new Exception("Error occured while retrieving SCG label " + e.getMessage());
 		}
 	}

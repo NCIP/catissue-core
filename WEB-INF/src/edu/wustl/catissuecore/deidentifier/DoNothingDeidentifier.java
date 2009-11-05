@@ -20,7 +20,8 @@ public class DoNothingDeidentifier extends AbstractDeidentifier
 	public DeidentifiedSurgicalPathologyReport deidentify(
 			IdentifiedSurgicalPathologyReport identifiedReport)
 	{
-		final DeidentifiedSurgicalPathologyReport deidentifiedReport = new DeidentifiedSurgicalPathologyReport();
+		final DeidentifiedSurgicalPathologyReport
+			deidentifiedReport = new DeidentifiedSurgicalPathologyReport();
 		final TextContent textContent = new TextContent();
 		if (identifiedReport.getTextContent() != null)
 		{

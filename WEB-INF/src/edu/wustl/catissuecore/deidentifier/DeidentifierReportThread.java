@@ -81,7 +81,8 @@ public class DeidentifierReportThread extends Thread
 				CaCoreAPIService.updateObject(this.identifiedReport);
 				final Long endTime = new Date().getTime();
 				CSVLogger.error(CaTIESConstants.LOGGER_DEID_SERVER, new Date().toString() + ","
-						+ this.identifiedReport.getId() + "," + CaTIESConstants.FAILURE + ","
+						+ this.identifiedReport.getId() + ","
+						+ CaTIESConstants.FAILURE + ","
 						+ ex.getMessage() + ",," + (endTime - startTime));
 			}
 			catch (final Exception e)
@@ -110,21 +111,19 @@ public class DeidentifierReportThread extends Thread
 	private void saveReports(DeidentifiedSurgicalPathologyReport deidentifiedReport)
 			throws Exception
 	{
-		{
-			// set default values for deidentified report
-			deidentifiedReport.setActivityStatus(this.identifiedReport.getActivityStatus());
-			deidentifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
-			deidentifiedReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
-			deidentifiedReport.setSpecimenCollectionGroup(this.identifiedReport
-					.getSpecimenCollectionGroup());
+		// set default values for deidentified report
+		deidentifiedReport.setActivityStatus(this.identifiedReport.getActivityStatus());
+		deidentifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
+		deidentifiedReport.setIsQuarantined(Status.ACTIVITY_STATUS_ACTIVE.toString());
+		deidentifiedReport.setSpecimenCollectionGroup(this.identifiedReport
+				.getSpecimenCollectionGroup());
 
-			this.logger.info("Saving deidentified report for identified report id="
-					+ this.identifiedReport.getId().toString());
-			// save deidentified report
-			deidentifiedReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
-					.createObject(deidentifiedReport);
-			this.logger.info("deidentified report saved for identified report id="
-					+ this.identifiedReport.getId().toString());
-		}
+		this.logger.info("Saving deidentified report for identified report id="
+				+ this.identifiedReport.getId().toString());
+		// save deidentified report
+		deidentifiedReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
+				.createObject(deidentifiedReport);
+		this.logger.info("deidentified report saved for identified report id="
+				+ this.identifiedReport.getId().toString());
 	}
 }

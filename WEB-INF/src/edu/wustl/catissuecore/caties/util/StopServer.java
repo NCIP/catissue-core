@@ -16,7 +16,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StopServer extends Thread
 {
-
 	/**
 	 * logger.
 	 */

@@ -154,7 +154,8 @@ public class AddAssociations
 			roleId = nextIdOfDERole + 1;
 			sql = "insert into dyextn_role"
 					+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) "
-					+ "values (" + nextIdOfDERole + ",'" + associationType + "'," + maxCardinality
+					+ "values (" + nextIdOfDERole + ",'" + associationType +
+					"'," + maxCardinality
 					+ ",0,'" + roleName + "')";
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
@@ -165,14 +166,14 @@ public class AddAssociations
 			if (isSystemGenerated == 0)
 			{
 				sql = "insert into dyextn_role"
-						+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) "
-						+ "values (" + roleId + ",'ASSOCIATION',2,0,'" + roleNameTable + "')";
+					+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME) "
+					+ "values (" + roleId + ",'ASSOCIATION',2,0,'" + roleNameTable + "')";
 			}
 			else
 			{
 				sql = "insert into dyextn_role"
-						+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME)"
-						+ " values (" + roleId + ",'ASSOCIATION',1,0,'" + roleNameTable + "')";
+					+ "(IDENTIFIER,ASSOCIATION_TYPE,MAX_CARDINALITY,MIN_CARDINALITY,NAME)"
+					+ " values (" + roleId + ",'ASSOCIATION',1,0,'" + roleNameTable + "')";
 			}
 			if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 			{
@@ -218,25 +219,27 @@ public class AddAssociations
 			if (targetAssociationId == null)
 			{
 				sql = "insert into dyextn_constraint_properties"
-						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties + ",null,'" + srcAssociationId + "',"
-						+ nextIdOfAbstractMetadata + ")";
+					+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,"
+					+ "ASSOCIATION_ID) values("	+ nextIdOfDBProperties + ",null,'"
+					+ srcAssociationId + "'," + nextIdOfAbstractMetadata + ")";
 			}
 			else
 			{
 				if (srcAssociationId == null)
 				{
 					sql = "insert into dyextn_constraint_properties"
-							+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID)"
-							+ " values(" + nextIdOfDBProperties + ",'" + targetAssociationId + "',"
-							+ srcAssociationId + "," + nextIdOfAbstractMetadata + ")";
+						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,"
+						+ "ASSOCIATION_ID)" + " values(" + nextIdOfDBProperties
+						+ ",'" + targetAssociationId + "'," + srcAssociationId
+						+ "," + nextIdOfAbstractMetadata + ")";
 				}
 				else
 				{
 					sql = "insert into dyextn_constraint_properties"
-							+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-							+ nextIdOfDBProperties + ",'" + targetAssociationId + "','"
-							+ srcAssociationId + "'," + nextIdOfAbstractMetadata + ")";
+						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,"
+						+ "ASSOCIATION_ID) values("	+ nextIdOfDBProperties + ",'"
+						+ targetAssociationId + "','" + srcAssociationId + "',"
+						+ nextIdOfAbstractMetadata + ")";
 				}
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
@@ -246,9 +249,9 @@ public class AddAssociations
 			if (targetAssociationId == null)
 			{
 				sql = "insert into dyextn_constraint_properties"
-						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties + ",'" + srcAssociationId + "',null,"
-						+ nextIdOfAbstractMetadata + ")";
+					+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,"
+					+ "ASSOCIATION_ID) values(" + nextIdOfDBProperties + ",'"
+					+ srcAssociationId + "',null," + nextIdOfAbstractMetadata + ")";
 			}
 			else
 			{
@@ -257,9 +260,10 @@ public class AddAssociations
 					srcAssociationId = "'" + srcAssociationId + "'";
 				}
 				sql = "insert into dyextn_constraint_properties"
-						+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,ASSOCIATION_ID) values("
-						+ nextIdOfDBProperties + "," + srcAssociationId + ",'"
-						+ targetAssociationId + "'," + nextIdOfAbstractMetadata + ")";
+					+ " (IDENTIFIER,SOURCE_ENTITY_KEY,TARGET_ENTITY_KEY,"
+					+ "ASSOCIATION_ID) values(" + nextIdOfDBProperties + ","
+					+ srcAssociationId + ",'" + targetAssociationId + "',"
+					+ nextIdOfAbstractMetadata + ")";
 			}
 			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 		}

@@ -41,7 +41,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ConceptCoder
 {
-
+	/**
+	 * logger.
+	 */
 	private transient final Logger logger = Logger.getCommonLogger(ConceptCoder.class);
 
 	/**
@@ -69,7 +71,8 @@ public class ConceptCoder
 	/**
 	 * @throws Exception - Exception
 	 */
-	public void process() throws Exception // change name to process if this class need not to be a thread, then do not catch exception here, throw it upward
+	public void process() throws Exception // change name to process if this class
+	//need not to be a thread, then do not catch exception here, throw it upward
 	{
 		final Long startTime = new Date().getTime();
 		try
@@ -91,7 +94,8 @@ public class ConceptCoder
 			this.deidPathologyReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService
 					.updateObject(this.deidPathologyReport);
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString() + ","
-					+ this.deidPathologyReport.getId() + "," + CaTIESConstants.CC_PROCESS_FAILED
+					+ this.deidPathologyReport.getId() + ","
+					+ CaTIESConstants.CC_PROCESS_FAILED
 					+ "," + ex.getMessage() + "," + (endTime - startTime));
 		}
 		if (!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(
@@ -100,7 +104,8 @@ public class ConceptCoder
 			final Long endTime = new Date().getTime();
 			this.logger.info("Report is updated");
 			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString() + ","
-					+ this.deidPathologyReport.getId() + "," + CaTIESConstants.CONCEPT_CODED + ","
+					+ this.deidPathologyReport.getId() + ","
+					+ CaTIESConstants.CONCEPT_CODED + ","
 					+ "Report Concept Coded successfully," + (endTime - startTime));
 		}
 		this.deidPathologyReport = null;
@@ -115,13 +120,13 @@ public class ConceptCoder
           this.currentReportText=removeIllegalXmlCharacters();
           this.tiesResponse = executeTiesPipeDirect();
           disassembleTiesResponse();
-          extractCodesFromChirps();     
+          extractCodesFromChirps();
     }
     /**
-     * 
+     * Remove IllegalXmlCharacters.
      * @return String values.
      */
-    public String removeIllegalXmlCharacters() 
+    public String removeIllegalXmlCharacters()
     {
     	   String sprText="\n\n"+this.currentReportText;
     	   //this.logger.info("ReportText:"+sprText) ;
@@ -130,16 +135,16 @@ public class ConceptCoder
     	  String result = sprText;
     	  this.logger.info("Before Removing illegal Char:"+result+"\n\n");
           char[] illegalChar={0x1d,0xc,'\\',':'};
-          try 
+          try
           {
                 StringBuffer stringBuffer = new StringBuffer(sprText);
                 // loop to check each character
-                for (int idx = 0; idx < stringBuffer.length(); idx++) 
+                for (int idx = 0; idx < stringBuffer.length(); idx++)
                 {
                       for(int i=0;i<illegalChar.length;i++)
                       {
                             // check for illegal character
-                            if (stringBuffer.charAt(idx) == illegalChar[i]) 
+                            if (stringBuffer.charAt(idx) == illegalChar[i])
                             {
 //                                Logger.out.error("Found bad character.");
                                   stringBuffer.setCharAt(idx, ' ');
@@ -156,7 +161,7 @@ public class ConceptCoder
                 this.logger.info("After Removing illegal Char:"+result);
 //               System.out.println("After Removing illegal Char:"+result);
           }
-          catch (Exception ex) 
+          catch (Exception ex)
           {
         	  this.logger.error("Error in removeIllegalXmlCharacters method"+ex.getMessage(),ex);
         	  ex.printStackTrace();
@@ -186,7 +191,7 @@ public class ConceptCoder
 	}
 
 	/**
-	* Method updateReport
+	* Method updateReport.
 	* @throws Exception - Exception
 	*/
 	private void updateReport() throws Exception
@@ -227,9 +232,6 @@ public class ConceptCoder
 	 */
 	private void disassembleTiesResponse() throws Exception
 	{
-		//
-		// Extract Gate XML and CHIRPS
-		//
 		try
 		{
 			this.logger.info("Extracting GATE XML and chirps");
@@ -242,20 +244,17 @@ public class ConceptCoder
 			final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
 			final org.jdom.Document responseDocument = builder.build(byteArrayInputStream);
 			final Element responseRootElement = responseDocument.getRootElement();
-
 			final Element reportCodesElement = responseRootElement
 					.getChild(CaTIESConstants.TAG_REPORTCODES); //"ReportCodes");
 			this.reportCodesAccumulator = new CaTIES_ConceptAccumulator();
 			this.reportCodesAccumulator.xmlDeSerialize(reportCodesElement);
-
 			final Collection<ConceptReferent> conceptReferentCollection = this
 					.xmlDeSerializeLocal(reportCodesElement);
 			this.deidPathologyReport.setConceptReferentCollection(conceptReferentCollection);
-
-			Element gateXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_GATEXML); //"GateXML");
-			gateXMLElement = gateXMLElement.getChild(CaTIESConstants.TAG_GATEDOCUMENT); //"GateDocument");
-			Element chirpsXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_CHIRPSXML); //"ChirpsXML");
-			chirpsXMLElement = chirpsXMLElement.getChild(CaTIESConstants.TAG_ENVELOPE); //"Envelope");
+			Element gateXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_GATEXML);
+			gateXMLElement = gateXMLElement.getChild(CaTIESConstants.TAG_GATEDOCUMENT);
+			Element chirpsXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_CHIRPSXML);
+			chirpsXMLElement = chirpsXMLElement.getChild(CaTIESConstants.TAG_ENVELOPE);
 			final Document gateXMLDocument = new Document((Element) gateXMLElement.clone());
 			final Document chirpsXMLDocument = new Document((Element) chirpsXMLElement.clone());
 			this.gateXML = CaTIES_JDomUtils.convertDocumentToString(gateXMLDocument, null);
@@ -266,7 +265,8 @@ public class ConceptCoder
 		catch (final JDOMParseException ex)
 		{
 			this.logger.error("Error in disassembleTiesResponse()");
-			this.logger.error("Error in parsing TIES response. Not in XML format" + ex.getMessage(),ex);
+			this.logger.error("Error in parsing TIES response. Not in XML format"
+					+ ex.getMessage(),ex);
 			ex.printStackTrace();
 			throw new Exception("Error in parsing TIES response. Not in XML format");
 		}
@@ -306,11 +306,14 @@ public class ConceptCoder
 		final Collection indexedConceptElements = conceptSetElement
 				.getChildren(CaTIESConstants.TAG_INDEXED_CONCEPT); //"IndexedConcept") ;
 		final Map<String, Concept> conceptCodeMap = new HashMap<String, Concept>();
-		final Map<String, ConceptReferentClassification> conceptReferrentClassicificationMap = new HashMap<String, ConceptReferentClassification>();
+		final Map<String, ConceptReferentClassification>
+							conceptReferrentClassicificationMap =
+							new HashMap<String, ConceptReferentClassification>();
 		final Collection<ConceptReferent> conceptReferentSet = new HashSet<ConceptReferent>();
 		try
 		{
-			for (final Iterator indexedConceptIterator = indexedConceptElements.iterator(); indexedConceptIterator
+			for (final Iterator indexedConceptIterator =
+					indexedConceptElements.iterator(); indexedConceptIterator
 					.hasNext();)
 			{
 				// IndexedConcept
@@ -318,20 +321,25 @@ public class ConceptCoder
 
 				// ConceptReferent
 				final Element conceptReferentElement = indexedConceptElement
-						.getChild(CaTIESConstants.TAG_CONCEPT_REFERENT); //"ConceptReferent") ;
+						.getChild(CaTIESConstants.TAG_CONCEPT_REFERENT);
+				//"ConceptReferent") ;
 				final ConceptReferent conceptReferentToAdd = new ConceptReferent();
 				conceptReferentToAdd.setEndOffset(new Long(conceptReferentElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET))); //"endOffset")));
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET)));
+				//"endOffset")));
 				conceptReferentToAdd.setStartOffset(new Long(conceptReferentElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET))); //"startOffset")));
-				//			conceptReferentToAdd.setDocumentFragment(conceptReferentElement.getAttributeValue("documentFragment"));
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET)));
+				//"startOffset")));
+				//conceptReferentToAdd.setDocumentFragment(
+				//conceptReferentElement.getAttributeValue("documentFragment"));
 				conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER))); //"isModifier")));
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER)));
+				//"isModifier")));
 				conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED))); //"isNegated")));
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED)));
+				//"isNegated")));
 				conceptReferentToAdd
 						.setDeIdentifiedSurgicalPathologyReport(this.deidPathologyReport);
-
 				// Concept
 				final Element conceptElement = indexedConceptElement
 						.getChild(CaTIESConstants.TAG_CONCEPT); //"Concept");
@@ -339,15 +347,18 @@ public class ConceptCoder
 				conceptToAdd.setConceptUniqueIdentifier(conceptElement
 						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_CUI)); //"cui"));
 				conceptToAdd.setName(conceptElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME)); //"name")) ;
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));
+							//"name")) ;
 				final SemanticType semanticType = new SemanticType();
 				semanticType.setLabel(conceptElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_SEMANTICTYPE)); //"semanticType"));
+					.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_SEMANTICTYPE));
+				//"semanticType"));
 				conceptToAdd.setSemanticType(semanticType);
 				conceptToAdd.setConceptReferentCollection(new HashSet());
 				if (conceptCodeMap.get(conceptToAdd.getConceptUniqueIdentifier()) != null)
 				{
-					conceptToAdd = conceptCodeMap.get(conceptToAdd.getConceptUniqueIdentifier());
+					conceptToAdd = conceptCodeMap.get(
+							conceptToAdd.getConceptUniqueIdentifier());
 				}
 				(conceptToAdd.getConceptReferentCollection()).add(conceptReferentToAdd);
 				conceptCodeMap.put(conceptToAdd.getConceptUniqueIdentifier().toUpperCase(),
@@ -355,12 +366,16 @@ public class ConceptCoder
 
 				// ConceptClassification
 				final Element conceptClassificationElement = indexedConceptElement
-						.getChild(CaTIESConstants.TAG_CONCEPT_CLASSIFICATION); //"ConceptClassification");
-				ConceptReferentClassification conceptClassificationToAdd = new ConceptReferentClassification();
+						.getChild(CaTIESConstants.TAG_CONCEPT_CLASSIFICATION);
+				//"ConceptClassification");
+				ConceptReferentClassification conceptClassificationToAdd =
+						new ConceptReferentClassification();
 				conceptClassificationToAdd.setName(conceptClassificationElement
-						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME)); //"name"));
+						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));
+				//"name"));
 				conceptClassificationToAdd.setConceptReferentCollection(new HashSet());
-				if (conceptReferrentClassicificationMap.get(conceptClassificationToAdd.getName()) != null)
+				if (conceptReferrentClassicificationMap.get(
+						conceptClassificationToAdd.getName()) != null)
 				{
 					conceptClassificationToAdd = conceptReferrentClassicificationMap
 							.get(conceptClassificationToAdd.getName());
@@ -392,7 +407,9 @@ public class ConceptCoder
 	 * Field tiesResponse.
 	 */
 	private String tiesResponse = "";
-
+	/**
+	 * reportCodesAccumulator.
+	 */
 	private CaTIES_ConceptAccumulator reportCodesAccumulator = null;
 
 	/**
@@ -422,6 +439,8 @@ public class ConceptCoder
 	 * Field exporterPR.
 	 */
 	private CaTIES_ExporterPR exporterPR = null;
-
+	/**
+	 * deidPathologyReport.
+	 */
 	private DeidentifiedSurgicalPathologyReport deidPathologyReport;
 }

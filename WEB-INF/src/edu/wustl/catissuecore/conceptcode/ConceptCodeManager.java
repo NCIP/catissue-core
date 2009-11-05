@@ -19,17 +19,23 @@ import edu.wustl.common.util.logger.LoggerConfig;
 import gate.Gate;
 
 /**
- * This class is responsible to fetch de-identified reports and to spawn a sepearate thread to generate concept codes for de-identified reports.
+ * This class is responsible to fetch de-identified reports and to spawn
+ * a sepearate thread to generate concept codes for de-identified reports.
  * This class manages the thread pool so that excessive threads will not be spawned.
  * @author vijay_pande
  */
 public class ConceptCodeManager
 {
-
+	/**
+	 * logger.
+	 */
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
+	/**
+	 * logger.
+	 */
 	private static Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
 	/**
 	 * Field coderVersion.
@@ -77,7 +83,7 @@ public class ConceptCodeManager
 	private CaTIES_ExporterPR exporterPR = null;
 
 	/**
-	 * Default constructor of the class
+	 * Default constructor of the class.
 	 */
 	public ConceptCodeManager()
 	{
@@ -95,7 +101,8 @@ public class ConceptCodeManager
 	}
 
 	/**
-	 * This method is responsible for creating prerequisite environment that is required for initialization of the concept coding process
+	 * This method is responsible for creating prerequisite environment that
+	 * is required for initialization of the concept coding process.
 	 * @throws Exception throws exception occured in the initialization process.
 	 */
 	private void initCoder() throws Exception
@@ -191,7 +198,7 @@ public class ConceptCodeManager
 	}
 
 	/**
-	 * This method is responsible for managing the overall process of de-identification
+	 * This method is responsible for managing the overall process of de-identification.
 	 * @throws InterruptedException - InterruptedException
 	 */
 	public void startProcess() throws InterruptedException
@@ -200,15 +207,17 @@ public class ConceptCodeManager
 		{
 			try
 			{
-				ConceptCodeManager.logger.info("Concept Coding process started at " + new Date().toString());
+				ConceptCodeManager.logger.info("Concept Coding process started at "
+						+ new Date().toString());
 				final List deidReportIDList = this.getReportIDList();
 				this.processReports(deidReportIDList);
 			}
 			catch (final Exception ex)
 			{
-				
-				ConceptCodeManager.logger.error("Unexpected Exception in Concept Code Pipeline"+ex.getMessage(), ex);
-				ConceptCodeManager.logger.info("Concept Coding process finished at " + new Date().toString()
+				ConceptCodeManager.logger.error(
+					"Unexpected Exception in Concept Code Pipeline"+ex.getMessage(), ex);
+				ConceptCodeManager.logger.info("Concept Coding process finished at "
+						+ new Date().toString()
 						+ ". Thread is going to sleep.");
 				Thread.sleep(Integer.parseInt(CaTIESProperties
 						.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
@@ -217,7 +226,8 @@ public class ConceptCodeManager
 	}
 
 	/**
-	 * This method is responsible for managing the pool of thread, fetching individual reports by ID and intiating the de-identification rpocess.
+	 * This method is responsible for managing the pool of thread, fetching individual
+	 * reports by ID and intiating the de-identification rpocess.
 	 * @param deidReportIDList deidentified surgical pathology report ID list
 	 * @throws Exception generic exception
 	 */
@@ -229,7 +239,8 @@ public class ConceptCodeManager
 			try
 			{
 				CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER,
-						CaTIESConstants.CSVLOGGER_DATETIME + CaTIESConstants.CSVLOGGER_SEPARATOR
+						CaTIESConstants.CSVLOGGER_DATETIME
+								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_DEIDENTIFIED_REPORT
 								+ CaTIESConstants.CSVLOGGER_SEPARATOR
 								+ CaTIESConstants.CSVLOGGER_STATUS
@@ -241,10 +252,13 @@ public class ConceptCodeManager
 				ConceptCoder conceptCoder = null;
 				for (int i = 0; i < deidReportIDList.size(); i++)
 				{
-					deidReport = (DeidentifiedSurgicalPathologyReport) CaCoreAPIService.getObject(
-							DeidentifiedSurgicalPathologyReport.class, Constants.SYSTEM_IDENTIFIER,
+					deidReport = (DeidentifiedSurgicalPathologyReport)
+							CaCoreAPIService.getObject(
+							DeidentifiedSurgicalPathologyReport.class,
+							Constants.SYSTEM_IDENTIFIER,
 							deidReportIDList.get(i));
-					conceptCoder = new ConceptCoder(deidReport, this.exporterPR, this.tiesPipe);
+					conceptCoder = new ConceptCoder(
+							deidReport, this.exporterPR, this.tiesPipe);
 					logger.info("Concept coding of report serial no " + i + " started....");
 					conceptCoder.process();
 					System.gc();
@@ -253,13 +267,15 @@ public class ConceptCodeManager
 			}
 			catch (final Exception ex)
 			{
-				ConceptCodeManager.logger.error("Concept Coding pipeline failed:"+ex.getMessage(), ex);
+				ConceptCodeManager.logger.error("Concept Coding pipeline failed:"
+						+ ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 		}
 		else
 		{
-			ConceptCodeManager.logger.info("Concept Coding process finished at " + new Date().toString()
+			ConceptCodeManager.logger.info("Concept Coding process finished at "
+					+ new Date().toString()
 					+ ". Thread is going to sleep.");
 			Thread.sleep(Integer.parseInt(CaTIESProperties
 					.getValue(CaTIESConstants.CONCEPT_CODER_SLEEPTIME)));
@@ -267,13 +283,15 @@ public class ConceptCodeManager
 	}
 
 	/**
-	 * This method fetche a list of ID's of identified surgical pathology reports pending for de-indetification
+	 * This method fetche a list of ID's of identified surgical pathology reports
+	 * pending for de-indetification.
 	 * @return deidReportIDList De-identified report ID list
 	 * @throws Exception generic exception
 	 */
 	private List getReportIDList() throws Exception
 	{
-		final String hqlQuery = "select id from edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport where "
+		final String hqlQuery = "select id from edu.wustl.catissuecore.domain." +
+				"pathology.DeidentifiedSurgicalPathologyReport where "
 				+ CaTIESConstants.COLUMN_NAME_REPORT_STATUS
 				+ "='"
 				+ CaTIESConstants.PENDING_FOR_XML + "'";
@@ -283,7 +301,7 @@ public class ConceptCodeManager
 	}
 
 	/**
-	 * Main method for the ConceptCodeManager class
+	 * Main method for the ConceptCodeManager class.
 	 * @param args commandline arguments
 	 */
 	public static void main(String[] args)
@@ -300,5 +318,4 @@ public class ConceptCodeManager
 			ConceptCodeManager.logger.error("Concept code manager failed"+ex.getMessage(),ex);
 			ex.printStackTrace();
 		}
-	}
-}
+	}}

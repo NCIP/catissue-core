@@ -32,7 +32,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SiteInfoHandler
 {
-
 	/**
 	 * logger.
 	 */
