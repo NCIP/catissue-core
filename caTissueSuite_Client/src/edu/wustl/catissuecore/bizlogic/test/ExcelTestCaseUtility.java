@@ -76,7 +76,7 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 		try {
 			System.out
 					.println("---------IN ExcelTestCaseUtility.shiftSpecimenInSCG-----------");
-			createCP();
+			//createCP();
 			registerParticipant();
 			String excelFilePath = System.getProperty("user.dir")
 					+ "/excelFiles/SCG.xls";
@@ -271,6 +271,7 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 		try {
 			System.out
 					.println("---------IN ExcelTestCaseUtility.siteAssociation-----------");
+			createCP();
 			createUser();
 			createSite();
 			System.out.println("user.dir  " + System.getProperty("user.dir"));
