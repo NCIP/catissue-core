@@ -119,8 +119,7 @@ public class CaCoreAPIService
 		criteria.add(Restrictions.eq(columnName, columnValue));
 		try
 		{
-			final List resultList = appService.query(criteria, targertClass.getName());
-			return resultList;
+			return appService.query(criteria, targertClass.getName());
 		}
 		catch (final Exception e)
 		{
@@ -150,10 +149,11 @@ public class CaCoreAPIService
 		}
 		catch (final ApplicationException ex)
 		{
-			CaCoreAPIService.logger.error("Error while executing query "
+			String errorMessage = "Error while executing query ";
+			CaCoreAPIService.logger.error(errorMessage
 					+ hqlQuery + ex.getMessage(),ex);
 			ex.printStackTrace();
-			throw new Exception("Error while executing query " + ex.getMessage());
+			throw new Exception(errorMessage + ex.getMessage());
 		}
 	}
 

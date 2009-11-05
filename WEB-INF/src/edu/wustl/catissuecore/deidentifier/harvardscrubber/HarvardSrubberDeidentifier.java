@@ -168,8 +168,7 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 		}
 		age.setAttribute("Units", "years");
 		age.setText(String.valueOf(ageOfParticipant));
-		String genderOfParticipant = "";
-		genderOfParticipant = getGenderForParticipant(participant, genderOfParticipant);
+		String genderOfParticipant = getGenderForParticipant(participant);
 		final Element gender = this.getElement(CaTIESConstants.TAG_GENDER, genderOfParticipant);
 		final List<Element> patientChild = new ArrayList<Element>();
 		patientChild.add(age);
@@ -197,9 +196,9 @@ public class HarvardSrubberDeidentifier extends AbstractDeidentifier
 	 * @param genderOfParticipant String
 	 * @return String
 	 */
-	private String getGenderForParticipant(final Participant participant,
-			String genderOfParticipant)
+	private String getGenderForParticipant(final Participant participant)
 	{
+		String genderOfParticipant = "";
 		if (participant.getGender().equalsIgnoreCase(CaTIESConstants.MALE_GENDER))
 		{
 			genderOfParticipant = "M";

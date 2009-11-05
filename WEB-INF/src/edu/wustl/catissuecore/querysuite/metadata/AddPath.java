@@ -171,13 +171,13 @@ public class AddPath
 					"edu.wustl.catissuecore.domain.SpecimenEventParameters", associationsList);
 		}
 		final List<String> insertPathSQL = new ArrayList<String>();
-		ResultSet rs;
+		ResultSet resultSet;
 		stmt = connection.createStatement();
 
-		rs = stmt.executeQuery("select max(PATH_ID) from path");
-		if (rs.next())
+		resultSet = stmt.executeQuery("select max(PATH_ID) from path");
+		if (resultSet.next())
 		{
-			this.identifier = rs.getInt(1) + 1;
+			this.identifier = resultSet.getInt(1) + 1;
 		}
 		String sql;
 		String entityId = null;
@@ -191,10 +191,10 @@ public class AddPath
 			sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
 					+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key + "'";
 			stmt = connection.createStatement();
-			rs = stmt.executeQuery(sql);
-			if (rs.next())
+			resultSet = stmt.executeQuery(sql);
+			if (resultSet.next())
 			{
-				entityId = String.valueOf(rs.getLong(1));
+				entityId = String.valueOf(resultSet.getLong(1));
 
 				final List<String> associationsList = superClassAndAssociationsMap.get(key);
 				for (final String associatedEntityName : associationsList)
@@ -203,19 +203,19 @@ public class AddPath
 							+ UpdateMetadataUtil.getDBCompareModifier() + "'"
 							+ associatedEntityName + "'";
 					final Statement stmt4 = connection.createStatement();
-					rs = stmt4.executeQuery(sql);
-					if (rs.next())
+					resultSet = stmt4.executeQuery(sql);
+					if (resultSet.next())
 					{
-						associatedEntityId = String.valueOf(rs.getLong(1));
+						associatedEntityId = String.valueOf(resultSet.getLong(1));
 
 						sql = "Select INTERMEDIATE_PATH from PATH where FIRST_ENTITY_ID = "
 								+ entityId + " and LAST_ENTITY_ID = " + associatedEntityId;
 						final Statement stmt5 = connection.createStatement();
-						rs = stmt5.executeQuery(sql);
+						resultSet = stmt5.executeQuery(sql);
 
-						while (rs.next())
+						while (resultSet.next())
 						{
-							final String intermediatePathId = rs.getString(1);
+							final String intermediatePathId = resultSet.getString(1);
 							final List<String> subClassList = superClassAndSubClassesMap.get(key);
 							for (final String subClassEntity : subClassList)
 							{
@@ -255,10 +255,10 @@ public class AddPath
 									+ " from PATH where FIRST_ENTITY_ID = " + associatedEntityId
 									+ " and LAST_ENTITY_ID = " + entityId;
 							final Statement stmt2 = connection.createStatement();
-							rs = stmt2.executeQuery(sql);
-							while (rs.next())
+							resultSet = stmt2.executeQuery(sql);
+							while (resultSet.next())
 							{
-								final String intermediatePathId = rs.getString(1);
+								final String intermediatePathId = resultSet.getString(1);
 								final List<String> subClassList = superClassAndSubClassesMap
 										.get(key);
 								for (final String subClassEntity : subClassList)
@@ -386,10 +386,10 @@ public class AddPath
 					String keyId = null;
 					sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
 							+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key + "'";
-					final ResultSet rs = stmt.executeQuery(sql);
-					if (rs.next())
+					final ResultSet resultSet = stmt.executeQuery(sql);
+					if (resultSet.next())
 					{
-						keyId = String.valueOf(rs.getLong(1));
+						keyId = String.valueOf(resultSet.getLong(1));
 					}
 
 					final List<String> classList = associationsMap.get(key);

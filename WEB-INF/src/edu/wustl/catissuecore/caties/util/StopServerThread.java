@@ -34,7 +34,7 @@ public class StopServerThread
 	/**
 	 * logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(StopServerThread.class);
+	private static final Logger logger = Logger.getCommonLogger(StopServerThread.class);
 
 	/**
 	 * Main method to stop caTIES servers.

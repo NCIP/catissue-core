@@ -111,6 +111,7 @@ public class AddRaceMetadata extends BaseMetadata
 	 */
 	public AddRaceMetadata(Connection connection) throws SQLException
 	{
+		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}

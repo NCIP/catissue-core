@@ -265,10 +265,10 @@ public class ShowShipmentReceivingAction extends SecureAction
 				if (!xDimMap.isEmpty())
 				{
 					final Object[] xDim = xDimMap.keySet().toArray();
-					for (int j = 0; j < xDim.length; j++)
+					for (int countJ = 0; countJ < xDim.length; countJ++)
 					{
-						final List yDimList = (List) xDimMap.get(xDim[j]);
-						for (int k = 0; k < yDimList.size(); k++)
+						final List yDimList = (List) xDimMap.get(xDim[countJ]);
+						for (int countK = 0; countK < yDimList.size(); countK++)
 						{
 							if (counter <= number)
 							{
@@ -276,14 +276,14 @@ public class ShowShipmentReceivingAction extends SecureAction
 										+ "_initialValues";
 								final String[] initialValues = new String[3];
 								initialValues[0] = ((NameValueBean) containerId[i]).getValue();
-								initialValues[1] = ((NameValueBean) xDim[j]).getValue();
-								initialValues[2] = ((NameValueBean) yDimList.get(k)).getValue();
+								initialValues[1] = ((NameValueBean) xDim[countJ]).getValue();
+								initialValues[2] = ((NameValueBean) yDimList.get(countK)).getValue();
 								map.put(initailValuesKey, initialValues);
 								counter++;
 							}
 							else
 							{
-								j = xDim.length;
+								countJ = xDim.length;
 								i = containerId.length;
 								break;
 							}

@@ -324,18 +324,18 @@ public class ConceptCoder
 						.getChild(CaTIESConstants.TAG_CONCEPT_REFERENT);
 				//"ConceptReferent") ;
 				final ConceptReferent conceptReferentToAdd = new ConceptReferent();
-				conceptReferentToAdd.setEndOffset(new Long(conceptReferentElement
+				conceptReferentToAdd.setEndOffset(Long.valueOf(conceptReferentElement
 						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET)));
 				//"endOffset")));
-				conceptReferentToAdd.setStartOffset(new Long(conceptReferentElement
+				conceptReferentToAdd.setStartOffset(Long.valueOf(conceptReferentElement
 						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET)));
 				//"startOffset")));
 				//conceptReferentToAdd.setDocumentFragment(
 				//conceptReferentElement.getAttributeValue("documentFragment"));
-				conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement
+				conceptReferentToAdd.setIsModifier(Boolean.valueOf(conceptReferentElement
 						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER)));
 				//"isModifier")));
-				conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement
+				conceptReferentToAdd.setIsNegated(Boolean.valueOf(conceptReferentElement
 						.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED)));
 				//"isNegated")));
 				conceptReferentToAdd

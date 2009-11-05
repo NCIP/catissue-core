@@ -103,6 +103,7 @@ public class AddAbstractPositionMetadata extends BaseMetadata
 	 */
 	public AddAbstractPositionMetadata(Connection connection) throws SQLException
 	{
+		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}

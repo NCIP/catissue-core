@@ -86,7 +86,7 @@ public class Utility
 			// iterate while file EOF
 			while ((line = bufferedReader.readLine()) != null)
 			{
-				// sepearete values for section header name,
+				// seperate values for section header name,
 				//abbreviation of section header and its priority
 				stringTokenizer = new StringTokenizer(line, "|");
 				name = stringTokenizer.nextToken().trim();
@@ -96,6 +96,7 @@ public class Utility
 				// add abbreviation to section header maping in hash map
 				abbrToHeader.put(abbr, name);
 			}
+			bufferedReader.close();
 			logger.info("Section Headers set successfully to the map");
 		}
 		catch (final IOException ex)
@@ -152,7 +153,8 @@ public class Utility
 		String deidSprText = "";
 		try
 		{
-			if (deIDResponse != null && deIDResponse.trim().length() > 0)
+			int stringSize = deIDResponse.trim().length();
+			if (deIDResponse != null && stringSize > 0)
 			{
 				final SAXBuilder builder = new SAXBuilder();
 				builder.setEntityResolver(new EntityResolver()
@@ -215,7 +217,7 @@ public class Utility
 		final ReportLoaderQueueBizLogic reportLoaderQueueBizLogic = (ReportLoaderQueueBizLogic) factory
 				.getBizLogic(ReportLoaderQueue.class.getName());
 		final Object object = reportLoaderQueueBizLogic.retrieve(ReportLoaderQueue.class.getName(),
-				new Long(reportQueueId));
+				Long.valueOf(reportQueueId));
 		if (object != null)
 		{
 			reportLoaderQueue = (ReportLoaderQueue) object;
@@ -259,5 +261,4 @@ public class Utility
 
 		return participant;
 	}
-
 }

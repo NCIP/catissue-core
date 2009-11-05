@@ -168,13 +168,15 @@ public class SiteInfoHandler
 					{
 						final String pName = subchildNode.getFirstChild().getNodeValue();
 						//Logger.out.debug("pName : "+pName);
-						if (abbr.equals(pName))
+						if(pName != null && abbr != null)
 						{
-							//Logger.out.debug("pName : "+pName);
-							isNameFound = true;
+							if (abbr.equals(pName))
+							{
+								//Logger.out.debug("pName : "+pName);
+								isNameFound = true;
+							}
 						}
 					}
-
 					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_NAME))
 					{
 						return subchildNode.getFirstChild().getNodeValue();

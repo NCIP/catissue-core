@@ -1184,42 +1184,41 @@ public class AliquotAction extends SecureAction
 	private void populateAliquotsStorageLocations(AliquotForm form, Map containerMap)
 	{
 		final Map aliquotMap = form.getAliquotMap();
-		int counter = 1;
+		int int_counter = 1;
 		if (!containerMap.isEmpty())
 		{
-			final Object[] containerId = containerMap.keySet().toArray();
-			for (int i = 0; i < containerId.length; i++)
+			final Object[] storageContainerId = containerMap.keySet().toArray();
+			for (int count = 0; count < storageContainerId.length; count++)
 			{
-				final Map xDimMap = (Map) containerMap.get(containerId[i]);
-				if (!xDimMap.isEmpty())
+				final Map xDimensionMap = (Map) containerMap.get(storageContainerId[count]);
+				if (!xDimensionMap.isEmpty())
 				{
-					final Object[] xDim = xDimMap.keySet().toArray();
-					for (int j = 0; j < xDim.length; j++)
+					final Object[] xDimension = xDimensionMap.keySet().toArray();
+					for (int j = 0; j < xDimension.length; j++)
 					{
-						final List yDimList = (List) xDimMap.get(xDim[j]);
-						for (int k = 0; k < yDimList.size(); k++)
+						final List yDimensionList = (List) xDimensionMap.get(xDimension[j]);
+						for (int k = 0; k < yDimensionList.size(); k++)
 						{
-							if (counter <= Integer.parseInt(form.getNoOfAliquots()))
+							if (int_counter <= Integer.parseInt(form.getNoOfAliquots()))
 							{
-								final String containerKey = "Specimen:" + counter
+								final String containerKey = "Specimen:" + int_counter
 										+ "_StorageContainer_id";
-								final String pos1Key = "Specimen:" + counter
+								final String pos1Key = "Specimen:" + int_counter
 										+ "_positionDimensionOne";
-								final String pos2Key = "Specimen:" + counter
+								final String pos2Key = "Specimen:" + int_counter
 										+ "_positionDimensionTwo";
 
-								aliquotMap.put(containerKey, ((NameValueBean) containerId[i])
+								aliquotMap.put(containerKey, ((NameValueBean) storageContainerId[count])
 										.getValue());
-								aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
-								aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k))
+								aliquotMap.put(pos1Key, ((NameValueBean) xDimension[j]).getValue());
+								aliquotMap.put(pos2Key, ((NameValueBean) yDimensionList.get(k))
 										.getValue());
-
-								counter++;
+								int_counter++;
 							}
 							else
 							{
-								j = xDim.length;
-								i = containerId.length;
+								j = xDimension.length;
+								count = storageContainerId.length;
 								break;
 							}
 						}

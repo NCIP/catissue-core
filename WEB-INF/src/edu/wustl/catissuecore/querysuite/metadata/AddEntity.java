@@ -55,23 +55,23 @@ public class AddEntity
 		{
 			//insert statements
 			String sql = "select max(identifier) from dyextn_abstract_metadata";
-			ResultSet rs = stmt.executeQuery(sql);
+			ResultSet resultSet = stmt.executeQuery(sql);
 			int nextIdOfAbstractMetadata = 0;
-			if (rs.next())
+			if (resultSet.next())
 			{
-				final int maxId = rs.getInt(1);
+				final int maxId = resultSet.getInt(1);
 				nextIdOfAbstractMetadata = maxId + 1;
 			}
-			rs.close();
+			resultSet.close();
 			int nextIdDatabaseproperties = 0;
 			sql = "select max(identifier) from dyextn_database_properties";
-			rs = stmt.executeQuery(sql);
-			if (rs.next())
+			resultSet = stmt.executeQuery(sql);
+			if (resultSet.next())
 			{
-				final int maxId = rs.getInt(1);
+				final int maxId = resultSet.getInt(1);
 				nextIdDatabaseproperties = maxId + 1;
 			}
-			rs.close();
+			resultSet.close();
 
 			sql = "INSERT INTO dyextn_abstract_metadata"
 					+ " (IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,NAME,PUBLIC_ID) values("
@@ -85,7 +85,7 @@ public class AddEntity
 			sql = "INSERT INTO dyextn_abstract_entity values(" + nextIdOfAbstractMetadata + ")";
 			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
-			if (parentEntity.equals("NULL"))
+			if ("NULL".equals(parentEntity))
 			{
 				sql = "INSERT INTO dyextn_entity values(" + nextIdOfAbstractMetadata + ",3,"
 						+ isAbstract + ",NULL," + inheritanceStrategy + ",NULL,NULL,1)";

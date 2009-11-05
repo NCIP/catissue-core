@@ -61,46 +61,46 @@ public class AddAssociations
 	{
 		final Statement stmt = this.connection.createStatement();
 		String sql = "select max(identifier) from dyextn_abstract_metadata";
-		ResultSet rs = stmt.executeQuery(sql);
+		ResultSet resultSet = stmt.executeQuery(sql);
 
 		int nextIdOfAbstractMetadata = 0;
-		if (rs.next())
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIdOfAbstractMetadata = maxId + 1;
 		}
 		int nextIdOfDERole = 0;
 		sql = "select max(identifier) from dyextn_role";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIdOfDERole = maxId + 1;
 		}
 		int nextIdOfDBProperties = 0;
 
 		sql = "select max(identifier) from dyextn_database_properties";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIdOfDBProperties = maxId + 1;
 		}
 		int nextIDintraModelAssociation = 0;
 		sql = "select max(ASSOCIATION_ID) from intra_model_association";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIDintraModelAssociation = maxId + 1;
 		}
 
 		int nextIdPath = 0;
 		sql = "select max(PATH_ID) from path";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIdPath = maxId + 1;
 		}
 
@@ -108,10 +108,10 @@ public class AddAssociations
 
 		sql = "select identifier from dyextn_abstract_metadata where name like '" + entityName
 				+ "'";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			entityId = rs.getInt(1);
+			entityId = resultSet.getInt(1);
 		}
 		if (entityId == 0)
 		{
@@ -122,11 +122,13 @@ public class AddAssociations
 
 		sql = "select identifier from dyextn_abstract_metadata where name like '"
 				+ associatedEntityName + "'";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			associatedEntityId = rs.getInt(1);
+			associatedEntityId = resultSet.getInt(1);
 		}
+		resultSet.close();
+		stmt.close();
 		if (associatedEntityId == 0)
 		{
 			System.out.println("Entity not found of name ");
@@ -182,15 +184,7 @@ public class AddAssociations
 			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 		}
 
-		if (!isSwap)
-		{
-			final int lastIdOfDERole = nextIdOfDERole - 2;
-			final int idOfDERole = nextIdOfDERole - 1;
-			sql = "insert into dyextn_association values (" + nextIdOfAbstractMetadata + ",'"
-					+ direction + "'," + associatedEntityId + "," + lastIdOfDERole + ","
-					+ idOfDERole + "," + isSystemGenerated + ",0)";
-		}
-		else
+		if (isSwap)
 		{
 			if (isSystemGenerated == 0)
 			{
@@ -204,6 +198,14 @@ public class AddAssociations
 						+ direction + "'," + associatedEntityId + "," + roleId + ","
 						+ nextIdOfDERole + ",1,0)";
 			}
+		}
+		else
+		{
+			final int lastIdOfDERole = nextIdOfDERole - 2;
+			final int idOfDERole = nextIdOfDERole - 1;
+			sql = "insert into dyextn_association values (" + nextIdOfAbstractMetadata + ",'"
+					+ direction + "'," + associatedEntityId + "," + lastIdOfDERole + ","
+					+ idOfDERole + "," + isSystemGenerated + ",0)";
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 		sql = "insert into dyextn_database_properties(IDENTIFIER,NAME) values ("

@@ -48,32 +48,33 @@ public class AddAttribute extends BaseMetadata
 			{
 				stmt = this.connection.createStatement();
 				String sql = "select max(identifier) from dyextn_abstract_metadata";
-				ResultSet rs = stmt.executeQuery(sql);
+				ResultSet resultSet = stmt.executeQuery(sql);
 				int nextIdOfAbstractMetadata = 0;
-				if (rs.next())
+				if (resultSet.next())
 				{
-					final int maxId = rs.getInt(1);
+					final int maxId = resultSet.getInt(1);
 					nextIdOfAbstractMetadata = maxId + 1;
 				}
 
 				int nextIdAttrTypeInfo = 0;
 				sql = "select max(identifier) from dyextn_attribute_type_info";
-				rs = stmt.executeQuery(sql);
-				if (rs.next())
+				resultSet = stmt.executeQuery(sql);
+				if (resultSet.next())
 				{
-					final int maxId = rs.getInt(1);
+					final int maxId = resultSet.getInt(1);
 					nextIdAttrTypeInfo = maxId + 1;
 				}
 
 				int nextIdDatabaseproperties = 0;
 				sql = "select max(identifier) from dyextn_database_properties";
-				rs = stmt.executeQuery(sql);
-				if (rs.next())
+				resultSet = stmt.executeQuery(sql);
+				if (resultSet.next())
 				{
-					final int maxId = rs.getInt(1);
+					final int maxId = resultSet.getInt(1);
 					nextIdDatabaseproperties = maxId + 1;
 				}
-
+				resultSet.close();
+				stmt.close();
 				sql = "INSERT INTO dyextn_abstract_metadata "
 						+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,"
 						+ "NAME,PUBLIC_ID)"	+ " values("
@@ -277,9 +278,9 @@ public class AddAttribute extends BaseMetadata
 	 */
 	public AddAttribute(Connection connection) throws SQLException
 	{
+		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
-
 		this.populateEntityList();
 		this.populateEntityAttributeMap();
 		this.populateAttributeColumnNameMap();
@@ -300,8 +301,10 @@ public class AddAttribute extends BaseMetadata
 			HashMap<String, List<String>> entityNameAttributeNameMap,
 			HashMap<String, String> attributeColumnNameMap,
 			HashMap<String, String> attributeDatatypeMap,
-			HashMap<String, String> attributePrimarkeyMap, List<String> entityList)
+			HashMap<String, String> attributePrimarkeyMap,
+			List<String> entityList)
 	{
+		super();
 		this.connection = connection;
 		this.entityNameAttributeNameMap = entityNameAttributeNameMap;
 		this.attributeColumnNameMap = attributeColumnNameMap;

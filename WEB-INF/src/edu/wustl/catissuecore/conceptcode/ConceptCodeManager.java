@@ -36,7 +36,7 @@ public class ConceptCodeManager
 	/**
 	 * logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
+	private static final Logger logger = Logger.getCommonLogger(ConceptCodeManager.class);
 	/**
 	 * Field coderVersion.
 	 */

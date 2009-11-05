@@ -102,29 +102,27 @@ public class AddPermissibleValue
 
 		final String dataType = this.getDataTypeOfAttribute(attribute.getName());
 		String tableName = null;
-		if (dataType.equals("long"))
+		if ("long".equals(dataType))
 		{
 			tableName = "dyextn_long_concept_value";
 		}
-		else if (dataType.equals("string"))
+		else if ("string".equals(dataType))
 		{
 			tableName = "dyextn_string_concept_value";
 		}
-		else if (dataType.equals("integer"))
+		else if ("integer".equals(dataType))
 		{
 			tableName = "dyextn_integer_concept_value";
 		}
-		else if (dataType.equals("double"))
+		else if ("double".equals(dataType))
 		{
 			tableName = "dyextn_double_concept_value";
 		}
-		else if (dataType.equals("boolean"))
+		else if ("boolean".equals(dataType))
 		{
 			tableName = "dyextn_boolean_concept_value";
 		}
-
 		this.insertPermissibleValue(tableName, attribute);
-
 		return deleteSQL;
 	}
 
@@ -143,20 +141,20 @@ public class AddPermissibleValue
 		long dataElementId = 0;
 		sql = "select max(IDENTIFIER) from dyextn_permissible_value";
 		Statement stmt = this.connection.createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-		if (rs.next())
+		ResultSet resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			permissibleValueId = rs.getLong(1) + 1;
+			permissibleValueId = resultSet.getLong(1) + 1;
 		}
 		stmt.close();
 
 		sql = "select IDENTIFIER from dyextn_data_element where ATTRIBUTE_TYPE_INFO_ID = "
 				+ attribute.getAttributeTypeInformation().getDataElement().getId();
 		stmt = this.connection.createStatement();
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			dataElementId = rs.getLong(1);
+			dataElementId = resultSet.getLong(1);
 		}
 		stmt.close();
 
@@ -165,10 +163,10 @@ public class AddPermissibleValue
 			stmt = this.connection.createStatement();
 			sql = "select max(IDENTIFIER) from dyextn_data_element";
 			stmt = this.connection.createStatement();
-			rs = stmt.executeQuery(sql);
-			if (rs.next())
+			resultSet = stmt.executeQuery(sql);
+			if (resultSet.next())
 			{
-				dataElementId = rs.getLong(1) + 1;
+				dataElementId = resultSet.getLong(1) + 1;
 			}
 			stmt.close();
 
@@ -311,10 +309,10 @@ public class AddPermissibleValue
 		{
 			sql = "select identifier from dyextn_abstract_metadata where name "
 					+ UpdateMetadataUtil.getDBCompareModifier() + "'" + entityName + "'";
-			final ResultSet rs = this.executeQuery(sql);
-			if (rs.next())
+			final ResultSet resultSet = this.executeQuery(sql);
+			if (resultSet.next())
 			{
-				final Long identifier = rs.getLong(1);
+				final Long identifier = resultSet.getLong(1);
 				this.entityIDMap.put(entityName, identifier);
 			}
 		}
@@ -329,8 +327,7 @@ public class AddPermissibleValue
 	private ResultSet executeQuery(String sql) throws SQLException
 	{
 		final Statement stmt = this.connection.createStatement();
-		final ResultSet rs = stmt.executeQuery(sql);
-		return rs;
+		return stmt.executeQuery(sql);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class DeidUtils
 	/**
 	 * logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(DeidUtils.class);
+	private static final Logger logger = Logger.getCommonLogger(DeidUtils.class);
 
 	/**
 	 * This method takes the identified report, its participant and converts all.

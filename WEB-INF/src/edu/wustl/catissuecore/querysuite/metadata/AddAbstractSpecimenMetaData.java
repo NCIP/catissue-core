@@ -110,6 +110,7 @@ public class AddAbstractSpecimenMetaData extends BaseMetadata
 	 */
 	public AddAbstractSpecimenMetaData(Connection connection) throws SQLException
 	{
+		super();
 		this.connection = connection;
 		this.stmt = connection.createStatement();
 	}

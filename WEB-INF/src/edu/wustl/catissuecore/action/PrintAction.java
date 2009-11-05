@@ -382,7 +382,7 @@ public class PrintAction extends Action
 	private List<Integer> getGridValue(final AdvanceSearchForm adSearchForm)
 	{
 		List<Integer> gridValues = new LinkedList<Integer>();
-		if (adSearchForm.getOrderedString() != null && adSearchForm.getOrderedString().trim() != "")
+		if (adSearchForm.getOrderedString() != null && !"".equals(adSearchForm.getOrderedString().trim()))
 		{
 			final String[] gridOrdered = (adSearchForm.getOrderedString()).split(",");
 			for (final String element : gridOrdered)

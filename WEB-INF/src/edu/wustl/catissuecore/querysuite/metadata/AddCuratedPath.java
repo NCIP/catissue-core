@@ -47,7 +47,7 @@ public class AddCuratedPath
 	public void addCurratedPath() throws IOException, SQLException
 	{
 		this.populateMapForPath();
-		StringTokenizer st;
+		StringTokenizer stringTokenizer;
 		String sourceEntity;
 		String targetEntity;
 		String intermediatePath;
@@ -57,28 +57,28 @@ public class AddCuratedPath
 		int nextIdPath = 0;
 		String sql = "select max(PATH_ID) from path";
 		final Statement stmt = connection.createStatement();
-		final ResultSet rs = stmt.executeQuery(sql);
-		if (rs.next())
+		final ResultSet resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			final int maxId = rs.getInt(1);
+			final int maxId = resultSet.getInt(1);
 			nextIdPath = maxId + 1;
 		}
 		stmt.close();
 		for (final String key : this.entityList)
 		{
 			intermediatePath = "";
-			st = new StringTokenizer(key, ",");
-			sourceEntity = st.nextToken();
+			stringTokenizer = new StringTokenizer(key, ",");
+			sourceEntity = stringTokenizer.nextToken();
 			sourceEntityId = UpdateMetadataUtil.getEntityIdByName(sourceEntity, connection
 					.createStatement());
 			mainEntityId = sourceEntityId;
-			while (st.hasMoreTokens())
+			while (stringTokenizer.hasMoreTokens())
 			{
-				targetEntity = st.nextToken();
+				targetEntity = stringTokenizer.nextToken();
 				targetEntityId = UpdateMetadataUtil.getEntityIdByName(targetEntity, connection
 						.createStatement());
 				final String tempPath = this.getIntermediatePath(sourceEntityId, targetEntityId);
-				if (intermediatePath.equals(""))
+				if ("".equals(intermediatePath))
 				{
 					intermediatePath = tempPath;
 				}
@@ -107,14 +107,14 @@ public class AddCuratedPath
 			throws SQLException
 	{
 		String inetrmediatePath = null;
-		ResultSet rs;
+		ResultSet resultSet;
 		final Statement stmt = connection.createStatement();
 		final String sql = "select INTERMEDIATE_PATH from path where FIRST_ENTITY_ID ='"
 				+ sourceEntityId + "'  and LAST_ENTITY_ID = '" + intermediateEntityId + "'";
-		rs = stmt.executeQuery(sql);
-		if (rs.next())
+		resultSet = stmt.executeQuery(sql);
+		if (resultSet.next())
 		{
-			inetrmediatePath = rs.getString(1);
+			inetrmediatePath = resultSet.getString(1);
 		}
 		stmt.close();
 		return inetrmediatePath;

@@ -207,7 +207,7 @@ public class DeIDDeidentifier extends AbstractDeidentifier
 		// report
 		deidReport.setTextContent(textContent);
 		// set default value for flag for review
-		deidReport.setIsFlagForReview(new Boolean(false));
+		deidReport.setIsFlagForReview(Boolean.FALSE);
 
 		return deidReport;
 	}
