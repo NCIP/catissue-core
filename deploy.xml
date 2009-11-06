@@ -50,9 +50,12 @@
 	<property name="oracle_home" value="${env.ORACLE_HOME}"/>
 	<property name="jboss.bin.run.jar" value="${jboss.home.dir}/bin/run.jar"/>
 	<property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
-	
+
 	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
+
+	<property file="idpInstall.properties" />
+	<var name="database.url" value="" />
 	
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
@@ -192,7 +195,7 @@
 				<fail message="The property 'first.admin.password' can not be empty" />
 			</then>
 		</if>
-		
+
 		<if>
 			<equals arg1="" arg2="${email.administrative.emailAddress}" />
 			<then>
@@ -211,7 +214,7 @@
 				<echo>email.mailServer can be left blank.</echo>
 			</then>
 		</if>
-		
+
 		<!-- Validation of database schema name for MsSqlServer-->
 		<if>
 			<equals arg1="mssqlserver" arg2="${database.type}" />
@@ -219,7 +222,7 @@
 				<antcall target="validate_schema_name" />
 			</then>
 		</if>
-		
+
 		<!-- Check whether JAVA_HOME environment variable set or not -->
 		<if>
 			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
@@ -276,7 +279,7 @@
 							</sql>
 						</then>
 						</elseif>
-						
+
 				</if>
 		</try>
 		<catch>
@@ -408,11 +411,11 @@
 			<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
 		</replace>
 
-		
+
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
 			<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
 		</replace>
-		
+
 		<replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 			<replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
@@ -648,11 +651,11 @@
 			<include name="openide-util.jar" />
 			<include name="acrobat-core.jar" />
 			<!-- removed to work printwebservice -->
-			<include name="jaxrpc.jar" /> 
-			<include name="saaj.jar" /> 
-			<include name="jboss-jaxws.jar" /> 		        
-			
-		</fileset>		
+			<include name="jaxrpc.jar" />
+			<include name="saaj.jar" />
+			<include name="jboss-jaxws.jar" />
+
+		</fileset>
 
 	</delete>
 </target>
@@ -660,18 +663,18 @@
 	<target name="Configure_Printservice">
 	 <if>
 	   <and>
-		 <equals arg1="" arg2="${jboss.server.host}" />	
-		 <equals arg1="" arg2="${jboss.container.secure}"/>	
+		 <equals arg1="" arg2="${jboss.server.host}" />
+		 <equals arg1="" arg2="${jboss.container.secure}"/>
 		 <equals arg1="" arg2="${jboss.server.port}"/>
-		</and>		
+		</and>
 	 <then>
 	 	<replace file="${temp.dir}/catissuecore-properties/PrintServiceImplementor.properties">
 		<replacefilter token="http://localhost:8080/" value="https://${jboss.server.host}:${jboss.server.port}/" />
-		</replace>	
-	</then>	 
-	</if>				
+		</replace>
+	</then>
+	</if>
 	</target>
-				
+
 	<target name="copy_files">
 		<echo message="Copying caTISSUECore Application Components..." />
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
@@ -742,7 +745,7 @@
 		<antcall target="deploy_app" />
 		<antcall target="deploy_db" />
 		<antcall target="server_security" />
-		
+
 		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
 		<if>
 			<equals arg1="${configure.IIS.properties}" arg2="true" />
@@ -841,16 +844,16 @@
 	<!--Start of Integrating the Advance Query Module  -->
 	<target name="integrate_advanced_query">
 		<echo>Integrating the  Advance Query Module</echo>
-			<antcall target="unzip_aq_installable" />		
-			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">			
-				<property name="parent.base.dir" value="${base.dir}" />	
+			<antcall target="unzip_aq_installable" />
+			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_integrate_app">
+				<property name="parent.base.dir" value="${base.dir}" />
 				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
 				<property name="war.dir" value="catissuecore"/>
 				<property name="datasource" value="${catissue.datasource}" />
 				<property name="database.type" value="${database.type}" />
 				<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
 				<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-			</ant> 
+			</ant>
 	</target>
 	<!--End of Integrating the Advance Query Module  -->
 	<target name="jboss_configuration">
@@ -860,8 +863,8 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>
 		<antcall target="config_jboss_files" />
-	</target>	
-	
+	</target>
+
 		<!--Target for fresh deployment of caTissue application-->
 	<target name="deploy_app">
 			<antcall target="pre_initialization" />
@@ -874,7 +877,7 @@
 			<antcall target="send_mail" />
 			<delete dir="${temp.dir}" />
 		</target>
-	
+
 	<target name="de_check_prerequisite">
 		<!-- Check dynamicextensions.zip file exists or not in base directory. -->
 		<available file="${base.dir}/dynamicextensions.zip" property="file.exists" value="false" />
@@ -890,7 +893,7 @@
 			</else>
 		</if>
 	</target>
-	
+
 	<!-- Modify dynamicExtensions configuration For MySQL -->
 	<target name="de_mysql_config">
 		<replace file="${temp.dir}/dynamicextensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
@@ -906,7 +909,7 @@
 			<replacefilter token="${mssqlserver.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 	</target>
-	
+
 	<!-- Modify dynamicextensions configuration For MsSQLServer -->
 	<target name="de_mssqlserver_config">
 		<replace file="${temp.dir}/dynamicextensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
@@ -1030,11 +1033,11 @@
 		<concat
 			destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties"
 			append="true" >
-			<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />	
+			<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
 		</concat>
 		<copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 	</target>
-	
+
 	<target name="CopyCAModelWars">
 		<antcall target="assert" />
 		<antcall target="modifyDEWars">
@@ -1103,7 +1106,7 @@
 				</fileset>
 			</war>
 		<echo>Copying ${warName}.war....</echo>
-	
+
 		<copy todir="${jboss.server.url}/deploy" file="${temp.dir}/${warName}.war" overwrite="true" />
 			<delete file="${temp.dir}/${warName}.war" />
 			<delete includeemptydirs="true">
@@ -1153,7 +1156,7 @@
 					<antcall target="deploy_db_oracle" />
 				</then>
 			</elseif>
-			<!-- mssqlserver db --> 
+			<!-- mssqlserver db -->
 			<elseif>
 				<equals arg1="mssqlserver" arg2="${database.type}" />
 				<then>
@@ -1164,9 +1167,9 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
-		
+
 		<antcall target="firstUser" />
-		
+
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
@@ -1186,7 +1189,7 @@
 		</antcall>
 		<antcall target="import_permissible_values">
 			<param name="permissibleValuesFile" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/LOINC_PV.csv"/>
-		</antcall> 
+		</antcall>
 		<antcall target="show_hide_forms">
 		</antcall>
 		<antcall target="show_hide_forms_based_on_CPs">
@@ -1211,7 +1214,6 @@
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<!-- <transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
 			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
-
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1235,8 +1237,17 @@
 		</sql>
 		<antcall target="update_metadata_for_model_changes">
 			 <param name="isUpgrade" value="false"/>
-		</antcall>	
+		</antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 	</target>
 	<target name="insert_entity_group_metadata_mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1422,6 +1433,15 @@
 		<antcall target="update_metadata_for_CA_model_changes" />
 		<antcall target="alter_CA_model_Tables" />
     	<antcall target="reset_sequences" />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
 	</target>
 
 	<target name="insertQueryMetadata">
@@ -1513,7 +1533,7 @@
 				<echo message="Associated selected Forms..." />
 			</then>
 			<else>
-				<echo message="Value of show_hide_forms is set to false" />		
+				<echo message="Value of show_hide_forms is set to false" />
 			</else>
 		</if>
 	</target>
@@ -1605,7 +1625,7 @@
 	<!--<target name="upgrade_all_from_Suite1.1_to_1.1p" depends="upgrade_app,upgrade_from_Suite1.1_to_1.1p4"> -->
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
-	
+
 	<target name="upgrade_db">
 		<echo message="Upgrading Database v1.1 to v1.1p5" />
 	   <if>
@@ -1630,14 +1650,14 @@
 	<antcall target="upgrade_db_from_p2_to_p4"/>
 	<antcall target="upgrade_db_from_p4_to_p5"/>
 	</target>
-	
+
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
 	<target name="upgrade_all_from_p2_to_p4">
-	
+
 		<antcall target="upgrade_app"/>
 		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
-	
+
 	<target name="upgrade_db_from_p2_to_p4">
 		<echo message="Upgrading Database v1.1p2 to v1.1p4" />
 			        <if>
@@ -1664,7 +1684,10 @@
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
 		</target>
+<<<<<<< .working
 	
+=======
+>>>>>>> .merge-right.r23389
 	<target name="upgrade_all_from_p4_to_p5">
 			<antcall target="upgrade_app"/>
 			<antcall target="upgrade_db_from_p4_to_p5"/>
@@ -1690,6 +1713,8 @@
 		</target>
 	
 
+
+
 	<!-- Removing unnecessary PE Mysql-->
 	<target name="upgrade_mysql_from_v1.1_to_v1.1p2">
 		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
@@ -1703,7 +1728,7 @@
 			</classpath>
 		</sql>
 	</target>
-	
+
 	<!-- Removing unnecessary PE Oracle-->
 	<target name="upgrade_oracle_from_v1.1_to_v1.1p2">
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
@@ -1725,6 +1750,7 @@
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p2_to_v1.1p4.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1734,7 +1760,7 @@
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
 	</target>
-	
+
 	<!-- Upgrading from Suite1.1 p4 to p5 - MySQL -->
 	<target name="upgrade_mysql_from_v1.1p4_to_v1.1p5">
 			<echo message="Upgrading MySQL Database." />
@@ -1756,6 +1782,7 @@
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1p2_to_v1.1p4.sql" />
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/Oracle/deupgrade_to_v1.2.0.rc1.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Common/DBUpgrade_v1.1p2_to_v1.1p4_indexes.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1764,6 +1791,7 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
+<<<<<<< .working
    </target>	
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
@@ -1780,6 +1808,11 @@
 		</sql>
    </target>	
 
+=======
+		<antcall target="upgrade_saved_queries"></antcall>
+   </target>
+
+>>>>>>> .merge-right.r23389
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -1808,7 +1841,7 @@
 					<antcall target="update_metadata_for_model_changes_mssqlserver">
 						 <param name="isUpgrade" value="${isUpgrade}"/>
 						 <param name="buildVersion" value="${buildVersion}"/>
-					</antcall>					
+					</antcall>
 				</then>
 			</elseif>
 			<else>
@@ -1864,7 +1897,7 @@
 				</sql>
 			</then>
 			</elseif>
-				
+
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -1890,7 +1923,7 @@
 			<arg value="${database.password}"/>
 			<arg value="${mysql.driver.string}"/>
 			<arg value="${isUpgrade}"/>
-			<arg value="${buildVersion}"/>			
+			<arg value="${buildVersion}"/>
 		</java>
 	</target>
 
@@ -1912,11 +1945,11 @@
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
 			<arg value="${isUpgrade}"/>
-			<arg value="${buildVersion}"/>	
+			<arg value="${buildVersion}"/>
 		</java>
 		<antcall target="reset_sequences" />
 	</target>
-	
+
 
 	<target name="Export_Clinical_diagnosis">
 		<if>
@@ -1988,9 +2021,9 @@
 								<fileset dir="${lib.dir}">
 									<include name="*.jar" />
 								</fileset>
-							</classpath>								
+							</classpath>
 						</sql>
-					
+
 					</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
@@ -2004,13 +2037,13 @@
 										</fileset>
 									</classpath>
 								</sql>
-							
+
 						</then>
 				</elseif>
 				<else>
 					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 				</else>
-			</if>	
+			</if>
 		<antcall target="Delete_old _Clinical_diagnosis" />
 	</target>
 	<target name="Delete_old _Clinical_diagnosis">
@@ -2031,7 +2064,7 @@
 		<delete dir="${temp.dir}" />
 	</target>
 -->
-	
+
 	<!--Data import for CAModel -->
 	<target name="CAModel_import_data">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -2076,7 +2109,7 @@
 			<arg value="${basedir}/SQL/DBUpgrade/Common/CAModelCSVs/"/>
 		</java>
 	</target>
-	
+
 	<target name="CAModel_import_data_oracle">
 		<echo message="Importing CA models data for caTISSUE Suite Application to Oracle Database ..." />
 		<java classname="edu.wustl.common.util.impexp.AutomateImport"  fork="true" >
@@ -2482,15 +2515,15 @@ Thanking You,
 		</delete>
 
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		
+
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
 		</replace>
-		
+
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		
+
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2541,7 +2574,7 @@ Thanking You,
 						<include name="*.jar" />
 				</fileset>
 			</classpath>
-		</java>	
+		</java>
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
@@ -2683,7 +2716,7 @@ Thanking You,
 		</else>
 		</if>
 	</target>
-	
+
 	<!--MySQL Database Upgradation -->
 	<target name="upgrade_db_demodel_mysql">
 		<echo message="Upgrading MySQL Database for DE model Application ..." />
@@ -2733,7 +2766,7 @@ Thanking You,
 			</fileset>
 		</delete>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		
+
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
@@ -2782,7 +2815,7 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
 			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>
-		
+
 		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">
 			<arg value="${categoryDefinitionFilePath}"/>
 				<classpath>
@@ -2796,7 +2829,7 @@ Thanking You,
 					</fileset>
 			    </classpath>
 		</java>
-		
+
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
@@ -2852,7 +2885,7 @@ Thanking You,
 				</replace>
 				</then>
 			</elseif>
-			
+
 		</if>
 		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 			<include name="*.cfg.xml" />
@@ -2882,7 +2915,7 @@ Thanking You,
 	</target>
 
 	<!--  ShippingTracking - start -->
-	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists 
+	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists
 	<target name="st_check_prerequisite"> -->
 		<!-- Check shippingtracking.zip file exists or not in base directory.
 		<available file="${base.dir}/shippingtracking.zip" property="file.exists" value="false" />
@@ -2891,7 +2924,7 @@ Thanking You,
 			   <isset property="file.exists"/>
 			</not>
 			<then> -->
-			   <!-- <fail message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." />  
+			   <!-- <fail message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." />
 			   <echo message="ShippingTracking.zip file not found. It should be in base directory to deploy shippingtracking." level="error" />
 			</then>
 			<else>
@@ -2900,7 +2933,7 @@ Thanking You,
 		</if>
 	</target>
 	-->
-	<!-- Integrating shipping tracking application with catissue 
+	<!-- Integrating shipping tracking application with catissue
 	<target name="st_integrate_app" depends="st_check_prerequisite" if="file.exists" >
 		<echo message="Integrating shippingtracking app ...." />
 		<unzip src="shippingtracking.zip" dest="${temp.dir}/shippingtracking" overwrite="true" />
@@ -2925,7 +2958,7 @@ Thanking You,
 			</elseif>
 		</if>
 	 	-->
-		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib 
+		<!-- 1) Copy shippingtracking.jar -> copy it to catissue/WEB-INF/Lib
 		<copy file="${temp.dir}/shippingtracking/shippingtracking.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 		-->
 		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders
@@ -2955,38 +2988,38 @@ Thanking You,
 			<fileset dir="${temp.dir}/shippingtracking/images" />
 		</copy>
 		 -->
-		<!-- 3) Inject st-struts-config.xml entry in catisssue -> web.xml 
+		<!-- 3) Inject st-struts-config.xml entry in catisssue -> web.xml
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/shippingtracking-struts-config.xml" />
 		</replace>
 		-->
-		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties 
+		<!-- 4) Inject db-util.properties entry in catissue -> db-util.properties
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, ShippingTrackingHibernate.cfg.xml" />
 		</replace>
 		-->
-		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml 
+		<!-- 5) Inject "/WEB-INF/ShippingTracking-tiles-defs.xml" entry in catisssue -> struts-config.xml
 		<replace file="${temp.dir}/catissuecore/WEB-INF/${catissue.struts.config.file}">
 			<replacefilter token="/WEB-INF/${catissue.tiles.def.file}" value="/WEB-INF/${catissue.tiles.def.file}, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		</replace>
 
 	</target>
 	-->
-	<!-- Modify shippingtracking configuration For MySQL 
+	<!-- Modify shippingtracking configuration For MySQL
 	<target name="st_mysql_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
 	</target>
 	-->
-	<!-- Modify shippingtracking configuration For ORACLE 
+	<!-- Modify shippingtracking configuration For ORACLE
 	<target name="st_oracle_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
 	</target>
 	-->
-	<!-- Modify shippingtracking configuration For MsSQLServer 
+	<!-- Modify shippingtracking configuration For MsSQLServer
 	<target name="st_mssqlserver_config">
 		<replace file="${temp.dir}/shippingtracking/ShippingTrackingHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
@@ -3050,7 +3083,7 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
-	
+
 	<!-- Deploying shippingtracking db for mssqlserver -->
 	<target name="st_deploy_db_mssqlserver">
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}" onerror="continue">
@@ -3064,7 +3097,7 @@ Thanking You,
 		</sql>
 	</target>
 	<!--  ShippingTracking - end -->
-	
+
 	<target name="alter_CA_model_Tables">
 		<echo message="Upgrading Oracle Database for DE model Application ..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
@@ -3147,9 +3180,9 @@ Thanking You,
 	</target>
 	-->
 	<!-- MSR Migration - end -->
-	
+
 	<!-- ACORN - mssqlserver migration - start -->
-	
+
 	<!--MsSQLServer Database Creation -->
 	<target name="deploy_db_mssqlserver">
 
@@ -3157,8 +3190,8 @@ Thanking You,
 
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="@@schema@@" value="${database.schemaname}" />
-		</replace>	
-				
+		</replace>
+
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
 			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
 			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
@@ -3175,7 +3208,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
 			<transaction src="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql" />
 
-			<!-- 
+			<!--
 			<transaction>commit;</transaction>
 			-->
 			<classpath>
@@ -3184,11 +3217,11 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</sql>
-		
+
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="${database.schemaname}" value="@@schema@@" />
 		</replace>
-		
+
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
@@ -3198,9 +3231,9 @@ Thanking You,
 			 <param name="isUpgrade" value="false"/>
 	    </antcall>
 		<antcall target="update_metadata_for_CA_model_changes" />
-		
+
 	</target>
-	
+
 	<target name="Export_Clinical_diagnosis_mssqlserver">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -3222,7 +3255,7 @@ Thanking You,
 		</java>
 		<delete dir="${temp.dir}" />
 	</target>
-	
+
 	<!--MsSQL server Database Upgradation -->
 	<target name="upgrade_db_demodel_mssqlserver">
 		<echo message="Upgrading MsSQLServer Database for DE model Application ..." />
@@ -3235,11 +3268,11 @@ Thanking You,
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
-				</fileset> 
+				</fileset>
 			</classpath>
 		</sql>
 	</target>
-	
+
 	<target name="CAModel_import_data_mssqlserver">
 		<echo message="Importing CA models data for caTISSUE Suite Application to MsSQLSever Database ..." />
 		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS"  fork="true" maxmemory="512m">
@@ -3281,7 +3314,7 @@ Thanking You,
 			<arg value="${buildVersion}"/>
 		</java>
 	</target>
-	
+
 	<target name="temp_update_metadata_for_clob_support_mssqlserver">
 		<echo message="Upgrading MsSQLServer Database for supporting query on clob type attributes..." />
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
@@ -3294,7 +3327,7 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
-	
+
 	<target name="insert_entity_group_metadata_mssqlserver">
 		<echo message="Inserting entity group metadata for MsSqlServer..." />
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
@@ -3307,7 +3340,7 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
-		
+
 	<target name="firstUser_mssqlserver">
 		<echo message="Encoding Password..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -3325,7 +3358,7 @@ Thanking You,
 
 		<echo message="Modifying caTISSUECore SQL file for user information..."/>
 		<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
-			
+
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
 			<include name="createUser.sql"/>
 			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
@@ -3334,7 +3367,7 @@ Thanking You,
 			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
 			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
 		</replace>
-				
+
 		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
 			<transaction src="${temp.dir}/createUser.sql" />
 			<!--<transaction>commit;</transaction> -->
@@ -3345,9 +3378,9 @@ Thanking You,
 			</classpath>
 		</sql>
 		<delete dir="${temp.dir}" />
-						
+
 	</target>
-		
+
 	<!--Modify Configuration For MsSqlServer-->
 	<target name="mssqlserver_config">
 			<echo message="Modifying caTISSUECore MsSqlServer specific Configuration File..." />
@@ -3416,9 +3449,9 @@ Thanking You,
 
 
 		</target>
-			
+
 	<!-- ACORN - mssqlserver migration - end -->
-	
+
 	<target name="show_hide_forms_based_on_CPs">
 		<if>
 			<equals arg1="${show.hide.forms.based.on.CPs}" arg2="true" />
@@ -3430,11 +3463,11 @@ Thanking You,
 				<echo message="Associated selected Forms with Cps..." />
 			</then>
 			<else>
-				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />		
+				<echo message="Value of show_hide_forms_based_on_CPs is set to false" />
 			</else>
 		</if>
 	</target>
-		
+
 	<!-- Associating forms/entities with CPs  - start -->
 	<target name="Associate_forms_to_CPs">
 		<delete quiet="true" includeemptydirs="true">
@@ -3451,7 +3484,7 @@ Thanking You,
 
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-			
+
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -3502,29 +3535,29 @@ Thanking You,
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
-		</java>	
+		</java>
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
 			</fileset>
 		</delete>
-	</target>	
-	
+	</target>
+
 		<!-- Associating forms/entities with CPs  - end -->
-		
+
 		<!-- Indexing tables for TiTLi - start-->
-	
+
 	<target name="runTitliIndexer" >
 		<property name="mysql.driver" value="com.mysql.jdbc.Driver" ></property>
 		<echo message="Indexing tables for TiTLi search....." />
 		<property name="tempTiTLi" value="${basedir}/tempTiTLi"></property>
 		<unwar src="${base.dir}/catissuecore.war" dest="${tempTiTLi}" />
-		
+
 		<antcall target="configure_titli" >
 			<param name="tempPath" value="${tempTiTLi}/WEB-INF/classes" />
 			<param name="mysqlDriver" value="${mysql.driver}" />
 		</antcall>
-		
+
 		<java classname="TitliIndexer"  fork="true" maxmemory="512m">
 				<classpath>
 					<pathelement location="${tempTiTLi}/WEB-INF/classes"/>
@@ -3537,7 +3570,7 @@ Thanking You,
 	</target>
 
 	<!-- Indexing tables for TiTLi - end-->
-		
+
 	<!--Target for validation of database schema name for MsSqlServer-->
 	<target name="validate_schema_name">
 		<trycatch>
@@ -3557,11 +3590,11 @@ Thanking You,
 			</catch>
 		</trycatch>
 	</target>
-	
+
 	<!-- IIS properties configuration -->
 	<target name="configure_IIS_properties">
 		<echo message="Configuring IIS properties..." />
-		
+
 		<!-- Check whether JAVA_HOME environment variable is set or not -->
 		<if>
 			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
@@ -3569,7 +3602,7 @@ Thanking You,
 				<fail message="JAVA_HOME is not set. Please make sure to set JAVA_HOME environment variable to the directory of your local JDK." />
 			</then>
 		</if>
-		
+
 		<!-- Modify registry file -->
 		<pathconvert property="IISSettings.home.registry" dirsep="\\">
 			<path path="${basedir}\IISSettings"/>
@@ -3578,7 +3611,7 @@ Thanking You,
 		<replace file="${base.dir}/IISSettings/iis_redirect.reg">
 			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home.registry}" />
 		</replace>
-		
+
 		<!-- Modify property file -->
 		<pathconvert property="IISSettings.home">
 			<path path="${basedir}\IISSettings"/>
@@ -3587,7 +3620,7 @@ Thanking You,
 		<replace file="${base.dir}/IISSettings/worker.properties">
 			<replacefilter token="@@IISSettings_HOME@@" value="${IISSettings.home}" />
 		</replace>
-		
+
 		<!-- Replace java home -->
 		<echo>${env.JAVA_HOME}</echo>
 		<replace file="${base.dir}/IISSettings/worker.properties">
@@ -3609,15 +3642,15 @@ Thanking You,
 					<not>
 						<isset property="file.exists" />
 					</not>
-					<then>				
+					<then>
 						<echo
 							message="AdvanceQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
 							level="error" />
-					</then>			
+					</then>
 				</if>
 			</target>
 	<!-- Query Integration targets End -->
-	
+
 	<target name="commondbconfig">
 	<delete quiet="true" includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
@@ -3669,10 +3702,10 @@ Thanking You,
 
 		</replace>
 	</target>
-	
+
 	<!-- call this task in Feb End release while upgrading Db -->
 	<target name="upgrade_metadata_for_constraintproperties" depends="commondbconfig">
-	
+
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -3687,7 +3720,7 @@ Thanking You,
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
-		</if>			
+		</if>
 	</target>
 
 	<target name="upgrade_metadata_for_constraintproperties_mysql">
@@ -3751,7 +3784,7 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
-	
+
 	<!-- upgrade category entity names from RC4 or from suite v1.1 to suite v1.1p-->
 	<target name="upgrade_category_entity_names">
 		<delete quiet="true" includeemptydirs="true">
@@ -3806,7 +3839,7 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
 			<replacefilter token="${token.database.password}" value="${database.password}"/>
 		</replace>
-		
+
 		<java classname="edu.common.dynamicextensions.util.UpgradeCategoryEntityName" fork="true" maxmemory="1024M">
 			<arg value="${categoryDefinitionFilePath}"/>
 				<classpath>
@@ -3820,7 +3853,7 @@ Thanking You,
 					</fileset>
 			    </classpath>
 		</java>
-		
+
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
@@ -3833,7 +3866,6 @@ Thanking You,
 	<target name="replacecfgfiles">
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/QueryHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -3871,7 +3903,7 @@ Thanking You,
 			<then>
 				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml">
 					<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
-				</replace>	
+				</replace>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
@@ -3881,10 +3913,10 @@ Thanking You,
 					</replace>
 				</then>
 			</elseif>
-		</if>		
+		</if>
 	</target>
-	
-	
+
+
 	<target name="update_metadata_for_tagged_values" depends="commondbconfig">
 		<echo message="Updating Tagged Values....." />
 			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadataTagPath" fork="true" maxmemory="1024M" failonerror="true">
@@ -3902,7 +3934,7 @@ Thanking You,
 			</java>
 		<delete dir="${temp.dir}" />
 	</target>
-	
+
 	<target name="update_metaPhone_data_for_participant">
 				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		 	    <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
@@ -3925,7 +3957,7 @@ Thanking You,
 		</target>
 
    <target name="update_metaPhoneData_for_participant_mysql">
-		   	
+
 		<echo message="Updating metaPhone information for participant last name (mysql)....." />
 		<java classname="UpdateParticipantMetaPhoneInfo"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -3940,9 +3972,9 @@ Thanking You,
 		</java>
   </target>
 
-	
+
 	<target name="update_metaPhoneData_for_participant_oracle">
-		
+
 		<echo message="Updating metaPhone information for participant last name (oracle)....." />
 		<java classname="UpdateParticipantMetaPhoneInfo"  fork="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -3955,5 +3987,76 @@ Thanking You,
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
 		</java>
-	</target>	
+	</target>
+	
+	<target name="replaceQuerycfgfile">
+		<copy file="${base.dir}/DE_conf/QueryHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+				</replace>
+			<var name="database.url" value="jdbc:mysql://"/>
+			</then>	
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+					</replace>
+					<var name="database.url" value="jdbc:oracle:thin:@" />
+				</then>
+			</elseif>
+			</if>
+			<echo message="Database url is  ${database.url}......" />
+			<if>
+				<equals arg1="true" arg2="${idp.enabled}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="*.cfg.xml" />
+					<replacefilter token="@@URL@@" value="${database.url}${csm.database.host}:${csm.database.port}:${csm.database.name}" />
+					<replacefilter token="@@DATABASE_USERNAME@@" value="${csm.database.username}" />
+					<replacefilter token="@@DATABASE_PASSWORD@@" value="${csm.database.password}" />
+			</replace>
+			</then>
+			<elseif>
+				<equals arg1="false" arg2="${idp.enabled}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+				</replace>
+			</then>
+			</elseif>
+			</if>
+	</target>
+	<target name="upgrade_saved_queries" >
+          <echo message="Upgrading saved queries...."/>
+          <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+          <copy file="${base.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+          <antcall target="replacecfgfiles" />
+		  <antcall target="replaceQuerycfgfile" />
+          <replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+                <include name="ApplicationSecurityConfig.xml" />
+                <replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
+          </replace>
+          <java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
+                <classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+                <classpath refid="temp.classpath" />
+                <classpath>
+                      <fileset dir="${lib.dir}">
+                            <include name="*.jar" />
+                      </fileset>
+                </classpath>
+                <arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
+          </java>
+		<delete dir="${temp.dir}" />
+    </target>
 </project>

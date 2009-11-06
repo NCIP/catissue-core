@@ -258,9 +258,10 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		else
 		{
 			final List<AttributeInterface> oldAttributeList = cart.getCartAttributeList();
-			final QueryShoppingCartBizLogic queryShoppingCartBizLogic = new QueryShoppingCartBizLogic();
-			final int indexArray[] = queryShoppingCartBizLogic.getNewAttributeListIndexArray(
-					oldAttributeList, attributeList);
+			final QueryShoppingCartBizLogic queryShoppingCartBizLogic =
+				new QueryShoppingCartBizLogic();
+			final int indexArray[] = queryShoppingCartBizLogic.
+			getNewAttributeListIndexArray(oldAttributeList, attributeList);
 			if (indexArray != null)
 			{
 				final List<List<String>> tempdataList = this.getManipulatedDataList(dataList,
@@ -295,38 +296,76 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		final int addRecordCount = bizLogic.add(cart, dataList, chkBoxValues);
 		int duplicateRecordCount = 0;
 
-		if (chkBoxValues != null)
-		{
-			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
-		}
-		else
+		if (chkBoxValues == null)
 		{
 			duplicateRecordCount = dataList.size() - addRecordCount;
 		}
+		else
+		{
+			duplicateRecordCount = chkBoxValues.size() - addRecordCount;
+		}
 		//ActionErrors changed to ActionMessages
 		final ActionMessages messages = new ActionMessages();
-		// Check if no. of duplicate records is not zero then set a error message.
 
+		setActionMessages(addRecordCount, duplicateRecordCount, messages);
+		session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
+		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
+		this.saveMessages(request, messages);
+	}
+
+	/**
+	 * Set action messages according to the addRecordCount and duplicateRecordCount values.
+	 * @param addRecordCount addRecordCount
+	 * @param duplicateRecordCount duplicateRecordCount
+	 * @param messages messages
+	 */
+	private void setActionMessages(final int addRecordCount,
+			int duplicateRecordCount, final ActionMessages messages)
+	{
 		if (addRecordCount == 0 && duplicateRecordCount != 0)
 		{
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-					"shoppingcart.HashedOutError", addRecordCount));
+			if(duplicateRecordCount == 1)
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"shoppingcart.oneHashedOutError", duplicateRecordCount));
+			}
+			else
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"shoppingcart.HashedOutError", duplicateRecordCount));
+			}
 		}
 		else if (addRecordCount != 0 && duplicateRecordCount != 0)
 		{
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-					"shoppingCart.addMessage", addRecordCount));
+			if(duplicateRecordCount == 1 && addRecordCount == 1)
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+				"shoppingcart.duplicateOneObjError", addRecordCount, duplicateRecordCount));
+			}
+			else if(duplicateRecordCount == 1)
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"shoppingcart.duplicateObjError", addRecordCount, duplicateRecordCount));
+			}
+			else
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+				"shoppingcart.duplicateObjsError", addRecordCount, duplicateRecordCount));
+			}
 		}
 		else if (addRecordCount != 0 && duplicateRecordCount == 0)
 		{
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-					"shoppingcart.duplicateObjError", addRecordCount, duplicateRecordCount));
+			if(addRecordCount ==1)
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"shoppingCart.addOneRecordMessage", addRecordCount));
+			}
+			else
+			{
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"shoppingCart.addMessage", addRecordCount));
+			}
 		}
-
-		session.setAttribute(Constants.QUERY_SHOPPING_CART, cart);
-		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
-
-		this.saveMessages(request, messages);
 	}
 
 	/**

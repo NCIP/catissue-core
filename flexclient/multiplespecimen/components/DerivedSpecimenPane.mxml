@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" autoLayout="true" xmlns:components="components.*" preinitialize="preInit()" creationComplete="init()" width="500" height="500" borderStyle="outset" backgroundColor="#E2EFFF">
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" horizontalScrollPolicy="on" verticalScrollPolicy="on" autoLayout="true" xmlns:components="components.*" preinitialize="preInit()" creationComplete="init()" width="500" height="450" borderStyle="outset" backgroundColor="#E2EFFF">
 <mx:Script source="../script/validate.as"/>
 	<mx:Script>
 		<![CDATA[

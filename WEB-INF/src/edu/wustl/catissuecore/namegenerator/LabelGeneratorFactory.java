@@ -45,7 +45,7 @@ public final class LabelGeneratorFactory
 			if (labelgeneratorMap.get(generatorType) == null)
 			{
 				final String className = PropertyHandler.getValue(generatorType);
-				if (className != null)
+				if (className != null && !"".equals(className))
 				{
 					labelgeneratorMap.put(generatorType, Class.forName(className).newInstance());
 				}

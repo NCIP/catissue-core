@@ -147,7 +147,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
 
-			if (collectionProtocolRegistrationCollection == null)
+			if (collectionProtocolRegistrationCollection == null || 
+					collectionProtocolRegistrationCollection.isEmpty())
 			{
 
 				this.insertAuthData(participant);

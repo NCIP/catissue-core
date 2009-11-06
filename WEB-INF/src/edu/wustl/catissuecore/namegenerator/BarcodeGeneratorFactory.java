@@ -45,7 +45,7 @@ public final class BarcodeGeneratorFactory
 			if (generatorMap.get(generatorType) == null)
 			{
 				final String className = PropertyHandler.getValue(generatorType);
-				if (className != null)
+				if (className != null && !"".equals(className))
 				{
 					generatorMap.put(generatorType, Class.forName(className).newInstance());
 				}

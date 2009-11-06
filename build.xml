@@ -375,6 +375,7 @@
 				<exclude name="**/META-INF/**" />
 				<exclude name="Happy.jsp" />
 				<exclude name="Criteria.jsp" />
+				<exclude name="**/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
 			</fileset>
 		</war>
 
