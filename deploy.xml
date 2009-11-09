@@ -1684,10 +1684,7 @@
 				<antcall target="update_metadata_for_tagged_values"/>
 				<antcall target="update_metaPhone_data_for_participant"/>
 		</target>
-<<<<<<< .working
-	
-=======
->>>>>>> .merge-right.r23389
+
 	<target name="upgrade_all_from_p4_to_p5">
 			<antcall target="upgrade_app"/>
 			<antcall target="upgrade_db_from_p4_to_p5"/>
@@ -1791,7 +1788,6 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
-<<<<<<< .working
    </target>	
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
@@ -1808,11 +1804,6 @@
 		</sql>
    </target>	
 
-=======
-		<antcall target="upgrade_saved_queries"></antcall>
-   </target>
-
->>>>>>> .merge-right.r23389
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
