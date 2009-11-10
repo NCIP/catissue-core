@@ -1283,13 +1283,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// Set checkbox status depending upon the days of study calendar
 			// event point. If it is zero, then unset the restrict
 			// checkbox, otherwise set the restrict checkbox
-			final Double studyCalendarEventPoint = collectionProtocolEvent
+			//Bug 14487
+			/*final Double studyCalendarEventPoint = collectionProtocolEvent
 					.getStudyCalendarEventPoint();
 			if (studyCalendarEventPoint.doubleValue() == 0)
 			{
 				specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
 			}
-			else
+			else*/
 			{
 				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
 			}

@@ -783,10 +783,18 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			// For order status
 			if (oldOrderItem.getStatus().trim()
-					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW)
-					&& ((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
+					.equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))					
 			{
-				this.orderStatusNew++;
+				//As oldOrderItem is instanceof NewSpecimenArrayOrderItem
+				//casting it in SpecimenOrderItem is giving java.lang.ClassCastException.
+				if(oldOrderItem instanceof SpecimenOrderItem)//Bug 14316
+				{
+					if(((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
+					{
+					  this.orderStatusNew++;
+					}
+				}
+				
 			}// kalpana bug #5839 If the specimens inside the specimen Array and
 			// if it's status is
 			// ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION then mark it
