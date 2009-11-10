@@ -21,7 +21,7 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_CLINICAL_DIAGNOSIS_SEQ</param>
+                <param name="sequence">CATISSUE_CLINICAL_DIAG_SEQ</param>
               <!--  
                   To add non XDoclet generator parameters, create a file named 
                   hibernate-generator-params-Password.xml 
