@@ -25,35 +25,35 @@ public class ConsentBean implements Serializable
 	/**
 	 * The comments is for Id associated with every Consen Tier.
 	 */
-	protected String consentTierID;
+	private String consentTierID;
 	/**
 	 * The comments is for Id associated with every Participant response.
 	 */
-	protected String participantResponseID;
+	private String participantResponseID;
 	/**
 	 * The comments is for Id associated with every SCG response.
 	 */
-	protected String specimenCollectionGroupLevelResponseID;
+	private String specimenCollectionGroupLevelResponseID;
 	/**
 	 * The comments is for Id associated with every SCG response.
 	 */
-	protected String specimenLevelResponseID;
+	private String specimenLevelResponseID;
 	/**
 	 * The comments associated with the Consent Tier.
 	 */
-	protected String statement;
+	private String statement;
 	/**
 	 * The comments associated with Participant Response at CollectionProtocolRegistration.
 	 */
-	protected String participantResponse;
+	private String participantResponse;
 	/**
 	 * The comments associated with Participant Response at Specimen Collection Group level.
 	 */
-	protected String specimenCollectionGroupLevelResponse;
+	private String specimenCollectionGroupLevelResponse;
 	/**
 	 * The comments associated with Participant Response at Specimen Level.
 	 */
-	protected String specimenLevelResponse;
+	private String specimenLevelResponse;
 
 	/**
 	 * @return statement The comment associated with the Consent Tier

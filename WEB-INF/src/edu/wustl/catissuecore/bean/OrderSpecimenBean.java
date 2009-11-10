@@ -5,120 +5,119 @@ import java.io.Serializable;
 
 /**
  * @author deepti_phadnis
- * 
+ *
  */
 public class OrderSpecimenBean implements Serializable
 {
 
 	/**
-	 * 
+	 *serialVersionUID
 	 */
-	// private static final long serialVersionUID = -2341248587334533979L;
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * String containg specimenId
+	 * String containg specimenId.
 	 */
 	private String specimenId;
 
 	/**
-	 * String containing specimen name
+	 * String containing specimen name.
 	 */
 	private String specimenName;
 
 	/**
-	 * String containing requested quantity
+	 * String containing requested quantity.
 	 */
 	private String requestedQuantity;
 
 	/**
-	 * String containing available quantity
+	 * String containing available quantity.
 	 */
 	private String availableQuantity;
 
 	/**
-	 * String containing description
+	 * String containing description.
 	 */
 	private String description;
 
 	/**
-	 * String containing unit of requested quantity
+	 * String containing unit of requested quantity.
 	 */
 	private String unitRequestedQuantity;
 
 	/**
-	 * String containing whether specimen is derived
+	 * String containing whether specimen is derived.
 	 */
 	private String isDerived;
 
 	/**
-	 * String containing whether item is to be removed
+	 * String containing whether item is to be removed.
 	 */
 	private String checkedToRemove = "off";
 
 	/**
-	 * String containing type of specimen
+	 * String containing type of specimen.
 	 */
 	private String specimenType;
 
 	/**
-	 * String containing class of specimen
+	 * String containing class of specimen.
 	 */
 	private String specimenClass;
 
 	/**
-	 * String containing pathological status os the item 
+	 * String containing pathological status os the item.
 	 */
 	private String pathologicalStatus;
 
 	/**
-	 * String containing tissue site of item
+	 * String containing tissue site of item.
 	 */
 	private String tissueSite;
 
 	/**
-	 * String containing specimenCollectionGroup
+	 * String containing specimenCollectionGroup.
 	 */
 	private String specimenCollectionGroup;
 
 	/**
 	 * This indicates whether item to be added is an Array ,Specimen or
-	 * Pathalogical case
+	 * Pathalogical case.
 	 */
 
 	private String typeOfItem;
 
 	/**
 	 * This indicates whether biospecimens are to be added to Array or to
-	 * OrderList
+	 * OrderList.
 	 */
 	private String arrayName;
 
 	/**
-	 * This indicates biospecimens Distribution Site
-	 * 
+	 * This indicates biospecimens Distribution Site.
+	 *
 	 */
 	private String distributionSite;
 
 	/**
-	 * This indicates SPR Collection Protocol 
-	 * 
+	 * This indicates SPR Collection Protocol.
+	 *
 	 */
 	private String collectionProtocol;
 	/**
-	 * This indicates biospecimens collection status
-	 * 
+	 * This indicates biospecimens collection status.
+	 *
 	 */
 	private String collectionStatus;
 
 	/**
-	 * This checks the availablity of specimen
-	 * 
+	 * This checks the availablity of specimen.
+	 *
 	 */
 	private String isAvailable;
 
 	/**
-	 * @return isDerived-whether specimen is existing or derived
+	 * @return isDerived-whether specimen is existing or derived.
 	 */
 	public String getIsDerived()
 	{
@@ -126,7 +125,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @param isDerived String containing whether item is derived or existing
+	 * @param isDerived String containing whether item is derived or existing.
 	 */
 	public void setIsDerived(String isDerived)
 	{
@@ -134,7 +133,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @return unitRequestedQuantity-unit of requested quantity
+	 * @return unitRequestedQuantity-unit of requested quantity.
 	 */
 	public String getUnitRequestedQuantity()
 	{
@@ -142,7 +141,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @param unitRequestedQuantity String containing the unit of requested quantity
+	 * @param unitRequestedQuantity String containing the unit of requested quantity.
 	 */
 	public void setUnitRequestedQuantity(String unitRequestedQuantity)
 	{
@@ -150,7 +149,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @return availableQuantity
+	 * @return availableQuantity.
 	 */
 	public String getAvailableQuantity()
 	{
@@ -158,7 +157,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @param availableQuantity String containing the available quantity
+	 * @param availableQuantity String containing the available quantity.
 	 */
 	public void setAvailableQuantity(String availableQuantity)
 	{
@@ -166,7 +165,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @return description 
+	 * @return description
 	 */
 	public String getDescription()
 	{
@@ -174,7 +173,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @param description String containing the description
+	 * @param description String containing the description.
 	 */
 	public void setDescription(String description)
 	{
@@ -182,7 +181,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @return requestedQuantity
+	 * @return requestedQuantity.
 	 */
 	public String getRequestedQuantity()
 	{
@@ -190,7 +189,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @param requestedQuantity String containing the requested Quantity
+	 * @param requestedQuantity String containing the requested Quantity.
 	 */
 	public void setRequestedQuantity(String requestedQuantity)
 	{
@@ -246,7 +245,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * @return specimenClass 
+	 * @return specimenClass
 	 */
 	public String getSpecimenClass()
 	{
@@ -286,7 +285,7 @@ public class OrderSpecimenBean implements Serializable
 	}
 
 	/**
-	 * 
+	 *
 	 * @param arrayName String containing name of array
 	 */
 	public void setArrayName(String arrayName)
@@ -357,42 +356,67 @@ public class OrderSpecimenBean implements Serializable
 	{
 		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
-
+	/**
+	 *
+	 * @return distributionSite distributionSite
+	 */
 	public String getDistributionSite()
 	{
 		return this.distributionSite;
 	}
 
+	/**
+	 *
+	 * @param distributionSite distributionSite
+	 */
 	public void setDistributionSite(String distributionSite)
 	{
 		this.distributionSite = distributionSite;
 	}
-
+	/**
+	 *
+	 * @return collectionStatus
+	 */
 	public String getCollectionStatus()
 	{
 		return this.collectionStatus;
 	}
-
+	/**
+	 *
+	 * @param collectionStatus collectionStatus
+	 */
 	public void setCollectionStatus(String collectionStatus)
 	{
 		this.collectionStatus = collectionStatus;
 	}
-
+	/**
+	 *
+	 * @return isAvailable
+	 */
 	public String getIsAvailable()
 	{
 		return this.isAvailable;
 	}
-
+	/**
+	 *
+	 * @param isAvailable isAvailable
+	 */
 	public void setIsAvailable(String isAvailable)
 	{
 		this.isAvailable = isAvailable;
 	}
-
+	/**
+	 *
+	 * @return collectionProtocol
+	 */
 	public String getCollectionProtocol()
 	{
 		return this.collectionProtocol;
 	}
-
+	/**
+	 *
+	 * @param collectionProtocol collectionProtocol
+	 */
 	public void setCollectionProtocol(String collectionProtocol)
 	{
 		this.collectionProtocol = collectionProtocol;

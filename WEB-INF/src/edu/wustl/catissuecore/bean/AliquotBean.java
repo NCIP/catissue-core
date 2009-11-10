@@ -27,7 +27,8 @@ public class AliquotBean
 	 * @param aliquotMapParam - aliquotMapParam
 	 * @param dataMapParam - dataMapParam
 	 */
-	public AliquotBean(int aliquotNoParam, Map aliquotMapParam, Map dataMapParam)
+	public AliquotBean(int aliquotNoParam, Map<String, String>
+	aliquotMapParam, Map<String, String> dataMapParam)
 	{
 		super();
 		this.aliquotNo = aliquotNoParam;
@@ -42,11 +43,11 @@ public class AliquotBean
 	/**
 	 * aliquotMap.
 	 */
-	private Map aliquotMap = new HashMap();
+	private Map<String, String> aliquotMap = new HashMap<String, String>();
 	/**
 	 * dataMap.
 	 */
-	private Map dataMap = new HashMap();
+	private Map<String, String> dataMap = new HashMap<String, String>();
 	/**
 	 * dataMap.
 	 */
@@ -141,10 +142,10 @@ public class AliquotBean
 	 * @param parentSPId - parentSPId
 	 * @param collectionProtocolId - collectionProtocolId
 	 * @param className -className
-	 * @param CPQuery - CPQuery
+	 * @param cpQuery - CPQuery
 	 */
 	public void setAllData(String parentSPId, String collectionProtocolId, String className,
-			String CPQuery)
+			String cpQuery)
 	{
 		this.setOutsideData();
 		final String containerKey = "value(Specimen:" + this.aliquotNo + "_StorageContainer_id)";
@@ -156,7 +157,7 @@ public class AliquotBean
 		this.attrNames[0] = containerKey;
 		this.attrNames[1] = pos1Key;
 		this.attrNames[2] = pos2Key;
-		if (CPQuery != null)
+		if (cpQuery != null)
 		{
 			this.onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?" +
 					"pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=" +
@@ -250,7 +251,7 @@ public class AliquotBean
 	/**
 	 * @return - Map
 	 */
-	public Map getAliquotMap()
+	public Map<String, String> getAliquotMap()
 	{
 		return this.aliquotMap;
 	}
@@ -258,7 +259,7 @@ public class AliquotBean
 	/**
 	 * @param aliquotMapParam - aliquotMapParam
 	 */
-	public void setAliquotMap(Map aliquotMapParam)
+	public void setAliquotMap(Map<String, String> aliquotMapParam)
 	{
 		this.aliquotMap = aliquotMapParam;
 	}

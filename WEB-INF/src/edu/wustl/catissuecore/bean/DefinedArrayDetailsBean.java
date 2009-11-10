@@ -14,6 +14,8 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.wustl.common.beans.NameValueBean;
+
 /**
  * @author janhavi_hasabnis
  *
@@ -32,7 +34,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	private String specimenId = "";
 
 	/**
-	 * Specimen Coll group id associated with the Specimen Collection Group.
+	 * Specimen Collection group id associated with the Specimen Collection Group.
 	 */
 	private String specimenCollGroupId = "";
 
@@ -68,12 +70,12 @@ public class DefinedArrayDetailsBean implements Serializable
 	/**
 	 * List containing the list of derived specimens for a given specimen id.
 	 */
-	private List specimenList;
+	private List<List<NameValueBean>> specimenList;
 
 	/**
 	 * List containing the next possible status of individual specimen items.
 	 */
-	private List itemStatusList;
+	private List<List<NameValueBean>> itemStatusList;
 
 	/**
 	 * The requested item class.
@@ -339,7 +341,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	 * Returns the specimen list.
 	 * @return specimenList
 	 */
-	public List getSpecimenList()
+	public List<List<NameValueBean>> getSpecimenList()
 	{
 		return this.specimenList;
 	}
@@ -348,7 +350,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	 * Sets the specimenList.
 	 * @param specimenListParam List containing the list of specimens
 	 */
-	public void setSpecimenList(List specimenListParam)
+	public void setSpecimenList(List<List<NameValueBean>> specimenListParam)
 	{
 		this.specimenList = specimenListParam;
 	}
@@ -357,16 +359,16 @@ public class DefinedArrayDetailsBean implements Serializable
 	 * Returns the itemStatusList.
 	 * @return itemStatusList
 	 */
-	public List getItemStatusList()
+	public List<List<NameValueBean>> getItemStatusList()
 	{
 		return this.itemStatusList;
 	}
 
 	/**
 	 * Sets the itemStatusList.
-	 * @param itemStatusListParam List coontaining the next possible statuses of individual order item
+	 * @param itemStatusListParam List containing the next possible statuses of individual order item
 	 */
-	public void setItemStatusList(List itemStatusListParam)
+	public void setItemStatusList(List<List<NameValueBean>> itemStatusListParam)
 	{
 		this.itemStatusList = itemStatusListParam;
 	}

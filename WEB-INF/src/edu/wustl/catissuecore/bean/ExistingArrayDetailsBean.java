@@ -1,6 +1,7 @@
 /**
- * <p>Title: ExistingArrayDetailsBean Class>
- * <p>Description:	This class contains attributes of Existing BioSpecimenArray to display them on ArrayRequests.jsp Page</p>
+ * Title: ExistingArrayDetailsBean Class>
+ * Description:	This class contains attributes of Existing BioSpecimenArray
+ * to display them on ArrayRequests.jsp Page</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Ramya Nagraj
@@ -13,49 +14,57 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.wustl.common.beans.NameValueBean;
+/**
+ *
+ * @author virender_mehta
+ * @created-on Nov 9, 2009
+ */
 public class ExistingArrayDetailsBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * String containing the name of existing biospecimen array
+	 * String containing the name of existing biospecimen array.
 	 */
 	private String bioSpecimenArrayName;
 	/**
-	 * String containing description
+	 * String containing description.
 	 */
 	private String description = "";
 
 	/**
-	 * String containing assigned status
+	 * String containing assigned status.
 	 */
 	private String assignedStatus;
 	/**
-	 * String containing the description entered by admin
+	 * String containing the description entered by admin.
 	 */
 	private String addDescription = "";
 
 	/**
-	 * List to store the statuses of individual existingarray order items
+	 * List to store the statuses of individual existingarray order items.
 	 */
-	private List itemStatusList;
+	private List<List<NameValueBean>> itemStatusList;
 	/**
-	 * String to store the id of corresponding orderitems
+	 * String to store the id of corresponding orderitems.
 	 */
 	private String orderItemId;
 	/**
-	 * String to store the arrayId of corresponding existing Array order item
+	 * String to store the arrayId of corresponding existing Array order item.
 	 */
 	private String arrayId;
 
 	/**
-	 * String containing the requested quantity of number of slides for the derived array
+	 * String containing the requested quantity of number of slides for the derived array.
 	 */
 	private String requestedQuantity;
 
 	/**
-	 * String containing the assigned quantity of number of slides for the derived array
+	 * String containing the assigned quantity of number of slides for the derived array.
 	 */
 	private String assignedQuantity;
 	/**
@@ -96,8 +105,8 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the assignedStatus
-	 * @return assignedStatus 
+	 * Returns the assignedStatus.
+	 * @return assignedStatus
 	 */
 	public String getAssignedStatus()
 	{
@@ -105,7 +114,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the assignedStatus
+	 * Sets the assignedStatus.
 	 * @param assignedStatus String containing the status assigned to each of the existing arrays
 	 */
 	public void setAssignedStatus(String assignedStatus)
@@ -114,8 +123,8 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the bioSpecimenArrayName
-	 * @return bioSpecimenArrayName 
+	 * Returns the bioSpecimenArrayName.
+	 * @return bioSpecimenArrayName
 	 */
 	public String getBioSpecimenArrayName()
 	{
@@ -123,7 +132,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the bioSpecimenArrayName
+	 * Sets the bioSpecimenArrayName.
 	 * @param bioSpecimenArrayName String containing the name of the array
 	 */
 	public void setBioSpecimenArrayName(String bioSpecimenArrayName)
@@ -132,7 +141,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Returns the description
+	 * Returns the description.
 	 * @return description
 	 */
 	public String getDescription()
@@ -141,8 +150,8 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the description
-	 * @param description String containing the description of array entered by the scientist 
+	 * Sets the description.
+	 * @param description String containing the description of array entered by the scientist
 	 */
 	public void setDescription(String description)
 	{
@@ -152,7 +161,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	/**
 	 * @return itemStatusList
 	 */
-	public List getItemStatusList()
+	public List<List<NameValueBean>> getItemStatusList()
 	{
 		return this.itemStatusList;
 	}
@@ -160,13 +169,13 @@ public class ExistingArrayDetailsBean implements Serializable
 	/**
 	 * @param itemStatusList List containing the next possible statuses of each of the existing arrays
 	 */
-	public void setItemStatusList(List itemStatusList)
+	public void setItemStatusList(List<List<NameValueBean>> itemStatusList)
 	{
 		this.itemStatusList = itemStatusList;
 	}
 
 	/**
-	 * Returns the added Description
+	 * Returns the added Description.
 	 * @return addDescription
 	 */
 	public String getAddDescription()
@@ -175,7 +184,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * Sets the added Description
+	 * Sets the added Description.
 	 * @param addDescription String containing the description entered by the admin
 	 */
 	public void setAddDescription(String addDescription)

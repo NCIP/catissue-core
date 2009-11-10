@@ -4,19 +4,44 @@ package edu.wustl.catissuecore.bean;
 import java.util.Map;
 
 import edu.wustl.common.util.Utility;
-
+/**
+ *
+ * @author virender_mehta
+ * @created-on Nov 9, 2009
+ */
 public class ExternalIdentifierBean
 {
-
-	int xtrnId;
-	Map map;
-
-	String exName = "";
-	String exValue = "";
-	String exIdentifier = "";
-	String check = "";
-	String exCondition = "";
-
+	/**
+	 * ExternalIdentifier Id.
+	 */
+	private int xtrnId;
+	/**
+	 * ExternalIdentifier map.
+	 */
+	private Map<Object,Object> map;
+	/**
+	 * ExternalIdentifier name.
+	 */
+	private String exName = "";
+	/**
+	 * ExternalIdentifier value.
+	 */
+	private String exValue = "";
+	/**
+	 * ExternalIdentifier Id.
+	 */
+	private String exIdentifier = "";
+	/**
+	 * check condition.
+	 */
+	private String check = "";
+	/**
+	 * ExternalIdentifier condition.
+	 */
+	private String exCondition = "";
+	/**
+	 *  generate ExternalIdentifier keys.
+	 */
 	private void processData()
 	{
 		this.exName = "externalIdentifierValue(ExternalIdentifier:" + this.xtrnId + "_name)";
@@ -30,13 +55,20 @@ public class ExternalIdentifierBean
 			this.exCondition = "disabled='disabled'";
 		}
 	}
-
+	/**
+	 * Default constructor.
+	 */
 	public ExternalIdentifierBean()
 	{
 		super();
 	}
 
-	public ExternalIdentifierBean(int xid, Map map)
+	/**
+	 *
+	 * @param xid ExternalIdentifier.
+	 * @param map ExternalIdentifier map.
+	 */
+	public ExternalIdentifierBean(int xid, Map<Object,Object> map)
 	{
 		super();
 		this.xtrnId = xid;
@@ -44,31 +76,50 @@ public class ExternalIdentifierBean
 		this.processData();
 	}
 
+	/**
+	 *
+	 * @return check.
+	 */
 	public String getCheck()
 	{
 		return this.check;
 	}
-
+	/**
+	 *
+	 * @return exCondition.
+	 */
 	public String getExCondition()
 	{
 		return this.exCondition;
 	}
-
+	/**
+	 *
+	 * @return exIdentifier.
+	 */
 	public String getExIdentifier()
 	{
 		return this.exIdentifier;
 	}
-
+	/**
+	 *
+	 * @return exName.
+	 */
 	public String getExName()
 	{
 		return this.exName;
 	}
-
+	/**
+	 *
+	 * @return exValue
+	 */
 	public String getExValue()
 	{
 		return this.exValue;
 	}
-
+	/**
+	 *
+	 * @return xtrnId
+	 */
 	public int getXtrnId()
 	{
 		return this.xtrnId;

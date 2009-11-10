@@ -28,32 +28,32 @@ public class ConsentResponseBean implements Serializable
 	/**
 	 * collection protocol Id.
 	 */
-	protected long collectionProtocolID;
+	private long collectionProtocolID;
 
 	/**
 	 * Signed Consent URL.
 	 */
-	protected String signedConsentUrl;
+	private String signedConsentUrl;
 
 	/**
 	 * Witness name that may be PI.
 	 */
-	protected long witnessId;
+	private long witnessId;
 
 	/**
 	 * Consent Date, Date on which Consent is Signed.
 	 */
-	protected String consentDate;
+	private String consentDate;
 
 	/**
 	 * Consent Withdraw status.
 	 */
-	protected String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
+	private String consentWithdrawalOption = Constants.WITHDRAW_RESPONSE_NOACTION;
 
 	/**
 	 * Consent response.
 	 */
-	protected Collection<ConsentBean> consentResponse;
+	private Collection<ConsentBean> consentResponse;
 
 	/**
 	 * @param collectionProtocolIDParam - collectionProtocolIDParam

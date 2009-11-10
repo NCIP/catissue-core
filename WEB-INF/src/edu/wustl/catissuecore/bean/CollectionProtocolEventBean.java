@@ -58,7 +58,8 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * specimenRequirementbeanMap.
 	 */
-	private Map specimenRequirementbeanMap = new LinkedHashMap();
+	private Map<String, GenericSpecimen> specimenRequirementbeanMap = 
+		new LinkedHashMap<String, GenericSpecimen>();
 	/**
 	 * id.
 	 */
@@ -215,11 +216,11 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * @return - Map
 	 */
-	public Map getSpecimenRequirementbeanMap()
+	public Map<String, GenericSpecimen>  getSpecimenRequirementbeanMap()
 	{
 		if (this.specimenRequirementbeanMap == null)
 		{
-			this.specimenRequirementbeanMap = new LinkedHashMap();
+			this.specimenRequirementbeanMap = new LinkedHashMap<String, GenericSpecimen> ();
 		}
 		return this.specimenRequirementbeanMap;
 	}
@@ -227,7 +228,7 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * @param specimenRequirementbeanMapParam - specimenRequirementbeanMapParam
 	 */
-	public void setSpecimenRequirementbeanMap(Map specimenRequirementbeanMapParam)
+	public void setSpecimenRequirementbeanMap(Map<String, GenericSpecimen>  specimenRequirementbeanMapParam)
 	{
 		this.specimenRequirementbeanMap = specimenRequirementbeanMapParam;
 	}
@@ -239,7 +240,7 @@ public class CollectionProtocolEventBean implements Serializable
 	{
 		if (this.specimenRequirementbeanMap == null)
 		{
-			this.specimenRequirementbeanMap = new LinkedHashMap<String, SpecimenRequirementBean>();
+			this.specimenRequirementbeanMap = new LinkedHashMap<String, GenericSpecimen>();
 		}
 		this.specimenRequirementbeanMap.put(specimenRequirementBean.getUniqueIdentifier(),
 				specimenRequirementBean);

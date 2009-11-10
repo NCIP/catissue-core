@@ -18,34 +18,34 @@ public class DeriveSpecimenBean implements Serializable
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid.
 	 */
-	protected String specimenClass;
+	private String specimenClass;
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
 	 */
-	protected Long id;
+	private Long id;
 
 	/**
 	 * Sub Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
 	 */
-	protected String specimenType;
+	private String specimenType;
 
 	/**
 	 * Virtual , manual and Auto.
 	 */
-	protected String storageLocation;
+	private String storageLocation;
 	/**
 	 * Concentration of specimen.
 	 */
-	protected String concentration;
+	private String concentration;
 
 	/**
 	 * Amount of Specimen.
 	 */
-	protected String quantity;
+	private String quantity;
 	/**
 	 * Display Name.
 	 */
-	protected String displayName;
+	private String displayName;
 
 	/**
 	 * A historical information about the specimen i.e. whether the specimen is a new specimen
@@ -99,12 +99,12 @@ public class DeriveSpecimenBean implements Serializable
 	/**
 	 * Collection of aliquot specimens derived from this specimen.
 	 */
-	protected Collection aliquotSpecimenCollection;
+	private Collection<GenericSpecimen> aliquotSpecimenCollection;
 
 	/**
 	 * Collection of derive specimens derived from this specimen.
 	 */
-	protected Collection deriveSpecimenCollection;
+	private Collection<GenericSpecimen>  deriveSpecimenCollection;
 	/**
 	 * Get SpecimenClass.
 	 * @return String
@@ -350,7 +350,7 @@ public class DeriveSpecimenBean implements Serializable
 	 * Get AliquotSpecimenCollection.
 	 * @return Collection
 	 */
-	public Collection getAliquotSpecimenCollection()
+	public Collection<GenericSpecimen>  getAliquotSpecimenCollection()
 	{
 		return this.aliquotSpecimenCollection;
 	}
@@ -358,7 +358,7 @@ public class DeriveSpecimenBean implements Serializable
 	 * Set AliquotSpecimenCollection.
 	 * @param aliquotSpecimenCollection aliquotSpecimenCollection.
 	 */
-	public void setAliquotSpecimenCollection(Collection aliquotSpecimenCollection)
+	public void setAliquotSpecimenCollection(Collection<GenericSpecimen>  aliquotSpecimenCollection)
 	{
 		this.aliquotSpecimenCollection = aliquotSpecimenCollection;
 	}
@@ -366,7 +366,7 @@ public class DeriveSpecimenBean implements Serializable
 	 * Get DeriveSpecimenCollection.
 	 * @return Collection
 	 */
-	public Collection getDeriveSpecimenCollection()
+	public Collection<GenericSpecimen>  getDeriveSpecimenCollection()
 	{
 		return this.deriveSpecimenCollection;
 	}
@@ -374,7 +374,7 @@ public class DeriveSpecimenBean implements Serializable
 	 * Set DeriveSpecimenCollection.
 	 * @param deriveSpecimenCollection Collection
 	 */
-	public void setDeriveSpecimenCollection(Collection deriveSpecimenCollection)
+	public void setDeriveSpecimenCollection(Collection<GenericSpecimen>  deriveSpecimenCollection)
 	{
 		this.deriveSpecimenCollection = deriveSpecimenCollection;
 	}

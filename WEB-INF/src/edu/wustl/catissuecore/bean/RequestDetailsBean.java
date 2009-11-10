@@ -14,9 +14,17 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import edu.wustl.common.beans.NameValueBean;
+/**
+ *
+ * @author virender_mehta
+ * @created-on Nov 10, 2009
+ */
 public class RequestDetailsBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -42,7 +50,7 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * The possible status List.
 	 */
-	private List itemsStatusList = null;
+	private List<List<NameValueBean>> itemsStatusList = null;
 	/**
 	 * The requested item class.
 	 */
@@ -62,7 +70,7 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * List of specimens(both parent and derivative specimens).
 	 */
-	private Collection specimenList = null;
+	private Collection<List<NameValueBean>> specimenList = null;
 	/**
 	 * The order item id.
 	 */
@@ -76,7 +84,7 @@ public class RequestDetailsBean implements Serializable
 	 */
 	private String specimenId = "";
 	/**
-	 * Specimen Coll group id associated with the Specimen Collection Group. 
+	 * Specimen Coll group id associated with the Specimen Collection Group.
 	 */
 	private String specimenCollGroupId = "";
 	/**
@@ -98,23 +106,29 @@ public class RequestDetailsBean implements Serializable
 	private String selectedSpecimenType;
 
 	/**
-	 * Selected specimen Unit
+	 * Selected specimen Unit.
 	 */
 	private String specimenQuantityUnit;
 
 	/**
-	 * Selected specimen Quantity
+	 * Selected specimen Quantity.
 	 */
 	private String selectedSpecimenQuantity;
 
 	/**
-	 * For consent View form
-	 * 
+	 * For consent View form.
+	 *
 	 */
 	private String consentVerificationkey;
 
+	/**
+	 * rowStatuskey is the Status of row selected.
+	 */
 	private String rowStatuskey;
 
+	/**
+	 * flag to check.
+	 */
 	private String canDistribute;
 
 	/**
@@ -152,7 +166,7 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * @return the itemsStatusList
 	 */
-	public List getItemsStatusList()
+	public List<List<NameValueBean>> getItemsStatusList()
 	{
 		return this.itemsStatusList;
 	}
@@ -160,7 +174,7 @@ public class RequestDetailsBean implements Serializable
 	/**
 	 * @param itemsStatusList the itemsStatusList to set
 	 */
-	public void setItemsStatusList(List itemsStatusList)
+	public void setItemsStatusList(List<List<NameValueBean>> itemsStatusList)
 	{
 		this.itemsStatusList = itemsStatusList;
 	}
@@ -246,10 +260,10 @@ public class RequestDetailsBean implements Serializable
 	}
 
 	/**
-	 * Return the Specimen list
+	 * Return the Specimen list.
 	 * @return List
 	 */
-	public Collection getSpecimenList()
+	public Collection<List<NameValueBean>> getSpecimenList()
 	{
 		return this.specimenList;
 	}
@@ -258,7 +272,7 @@ public class RequestDetailsBean implements Serializable
 	 * Sets the specimen List.
 	 * @param specimenList List containing existing and derived specimens is set in the bean
 	 */
-	public void setSpecimenList(Collection specimenList)
+	public void setSpecimenList(Collection<List<NameValueBean>> specimenList)
 	{
 		this.specimenList = specimenList;
 	}
@@ -406,62 +420,98 @@ public class RequestDetailsBean implements Serializable
 	{
 		this.actualSpecimenType = actualSpecimenType;
 	}
-
+	/**
+	 *
+	 * @return consentVerificationkey
+	 */
 	public String getConsentVerificationkey()
 	{
 		return this.consentVerificationkey;
 	}
-
+	/**
+	 *
+	 * @param consentVerificationkey consentVerificationkey
+	 */
 	public void setConsentVerificationkey(String consentVerificationkey)
 	{
 		this.consentVerificationkey = consentVerificationkey;
 	}
-
+	/**
+	 *
+	 * @return rowStatuskey
+	 */
 	public String getRowStatuskey()
 	{
 		return this.rowStatuskey;
 	}
-
+	/**
+	 *
+	 * @param rowStatuskey rowStatuskey
+	 */
 	public void setRowStatuskey(String rowStatuskey)
 	{
 		this.rowStatuskey = rowStatuskey;
 	}
-
+	/**
+	 *
+	 * @return canDistribute
+	 */
 	public String getCanDistribute()
 	{
 		return this.canDistribute;
 	}
-
+	/**
+	 *
+	 * @param canDistribute canDistribute
+	 */
 	public void setCanDistribute(String canDistribute)
 	{
 		this.canDistribute = canDistribute;
 	}
-
+	/**
+	 *
+	 * @return selectedSpecimenType
+	 */
 	public String getSelectedSpecimenType()
 	{
 		return this.selectedSpecimenType;
 	}
-
+	/**
+	 *
+	 * @param selectedSpecimenType selectedSpecimenType
+	 */
 	public void setSelectedSpecimenType(String selectedSpecimenType)
 	{
 		this.selectedSpecimenType = selectedSpecimenType;
 	}
-
+	/**
+	 *
+	 * @return specimenQuantityUnit
+	 */
 	public String getSpecimenQuantityUnit()
 	{
 		return this.specimenQuantityUnit;
 	}
-
+	/**
+	 *
+	 * @param specimenQuantityUnit specimenQuantityUnit
+	 */
 	public void setSpecimenQuantityUnit(String specimenQuantityUnit)
 	{
 		this.specimenQuantityUnit = specimenQuantityUnit;
 	}
-
+	/**
+	 *
+	 * @return selectedSpecimenQuantity
+	 */
 	public String getSelectedSpecimenQuantity()
 	{
 		return this.selectedSpecimenQuantity;
 	}
-
+	/**
+	 *
+	 * @param selectedSpecimenQuantity selectedSpecimenQuantity
+	 */
 	public void setSelectedSpecimenQuantity(String selectedSpecimenQuantity)
 	{
 		this.selectedSpecimenQuantity = selectedSpecimenQuantity;

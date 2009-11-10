@@ -135,7 +135,7 @@ public class SummarySpDetails
 	 * Returns the cell sub-type name and available quantity of it
 	 * @return Collection
 	 */
-	public Collection getCellTypeDetails()
+	public Collection<Object> getCellTypeDetails()
 	{
 		return this.cellTypeDetails;
 	}
@@ -163,7 +163,7 @@ public class SummarySpDetails
 	 * Returns the Fluid sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getFluidTypeDetails()
+	public Collection<Object> getFluidTypeDetails()
 	{
 		return this.fluidTypeDetails;
 	}
@@ -191,7 +191,7 @@ public class SummarySpDetails
 	 * Returns the Molecular sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getMolTypeDetails()
+	public Collection<Object> getMolTypeDetails()
 	{
 		return this.molTypeDetails;
 	}
@@ -219,7 +219,7 @@ public class SummarySpDetails
 	 * Returns the Tissue sub-type name and available quantity of it
 	 * @return Collection<Object>
 	 */
-	public Collection getTissueTypeDetails()
+	public Collection<Object> getTissueTypeDetails()
 	{
 		return this.tissueTypeDetails;
 	}

@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.wustl.common.beans.NameValueBean;
+
 /**
  * @author janhavi_hasabnis
  */
@@ -65,7 +67,7 @@ public class DefinedArrayRequestBean implements Serializable
 	/**
 	 * List containing the next possible statuses of each of the defined arrays.
 	 */
-	private List arrayStatusList;
+	private List<List<NameValueBean>> arrayStatusList;
 	/**
 	 * String containing the id of the each of the defined arrays.
 	 */
@@ -258,7 +260,7 @@ public class DefinedArrayRequestBean implements Serializable
 	 * Returns the status list for individual defined arrays.
 	 * @return arrayStatusList List
 	 */
-	public List getArrayStatusList()
+	public List<List<NameValueBean>> getArrayStatusList()
 	{
 		return this.arrayStatusList;
 	}
@@ -267,7 +269,7 @@ public class DefinedArrayRequestBean implements Serializable
 	 * Sets the status list for individual defined arrays.
 	 * @param arrayStatusListParam List
 	 */
-	public void setArrayStatusList(List arrayStatusListParam)
+	public void setArrayStatusList(List<List<NameValueBean>> arrayStatusListParam)
 	{
 		this.arrayStatusList = arrayStatusListParam;
 	}

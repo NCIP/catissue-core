@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 
 public class SpecimenDataBean implements GenericSpecimen
 {
@@ -52,17 +55,17 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * Collection of attributes of a Specimen that renders it potentially harmful to a User.
 	 */
-	protected Collection biohazardCollection = new HashSet();
+	protected Collection<Biohazard> biohazardCollection = new HashSet<Biohazard>();
 
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen. 
 	 */
-	protected Collection specimenEventCollection = new HashSet();
+	protected Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
 
 	/**
 	 * Collection of a pre-existing, externally defined id associated with a specimen.
 	 */
-	protected Collection externalIdentifierCollection = new HashSet();
+	protected Collection<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
 
 	/**
 	 * An event that results in the collection of one or more specimen from a participant.
@@ -119,7 +122,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @return Returns the biohazardCollection.
 	 */
-	public Collection getBiohazardCollection()
+	public Collection<Biohazard> getBiohazardCollection()
 	{
 		return this.biohazardCollection;
 	}
@@ -127,7 +130,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @param biohazardCollection The biohazardCollection to set.
 	 */
-	public void setBiohazardCollection(Collection biohazardCollection)
+	public void setBiohazardCollection(Collection<Biohazard> biohazardCollection)
 	{
 		this.biohazardCollection = biohazardCollection;
 	}
@@ -193,7 +196,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @return Returns the externalIdentifierCollection.
 	 */
-	public Collection getExternalIdentifierCollection()
+	public Collection<ExternalIdentifier> getExternalIdentifierCollection()
 	{
 		return this.externalIdentifierCollection;
 	}
@@ -201,7 +204,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @param externalIdentifierCollection The externalIdentifierCollection to set.
 	 */
-	public void setExternalIdentifierCollection(Collection externalIdentifierCollection)
+	public void setExternalIdentifierCollection(Collection<ExternalIdentifier> externalIdentifierCollection)
 	{
 		this.externalIdentifierCollection = externalIdentifierCollection;
 	}
@@ -330,7 +333,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @return Returns the specimenEventCollection.
 	 */
-	public Collection getSpecimenEventCollection()
+	public Collection<SpecimenEventParameters> getSpecimenEventCollection()
 	{
 		return this.specimenEventCollection;
 	}
@@ -338,7 +341,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	/**
 	 * @param specimenEventCollection The specimenEventCollection to set.
 	 */
-	public void setSpecimenEventCollection(Collection specimenEventCollection)
+	public void setSpecimenEventCollection(Collection<SpecimenEventParameters> specimenEventCollection)
 	{
 		this.specimenEventCollection = specimenEventCollection;
 	}

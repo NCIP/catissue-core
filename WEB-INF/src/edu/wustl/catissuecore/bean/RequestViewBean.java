@@ -11,10 +11,16 @@
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
-
+/**
+ *
+ * @author virender_mehta
+ * @created-on Nov 10, 2009
+ */
 public class RequestViewBean implements Serializable
 {
-
+	/**
+	 * serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The serial number to display.
@@ -129,7 +135,7 @@ public class RequestViewBean implements Serializable
 		return this.requestedDate;
 	}
 
-	/** 
+	/**
 	 * @param requestedDate The date on which the request order was placed.
 	 */
 	public void setRequestedDate(String requestedDate)

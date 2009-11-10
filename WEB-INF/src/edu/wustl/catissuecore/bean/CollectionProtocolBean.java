@@ -53,7 +53,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * endDate.
 	 */
-	protected String endDate;
+	private String endDate;
 	/**
 	 * enrollment.
 	 */
@@ -66,7 +66,7 @@ public class CollectionProtocolBean implements Serializable
 	 * isParticiapantReg.
 	 */
 	private boolean isParticiapantReg = false;
-	
+
 	/**
 	 * clinicalDiagnosis values.
 	 */
@@ -76,7 +76,7 @@ public class CollectionProtocolBean implements Serializable
 	 * This will return the clinicalDiagnosis values.
 	 * @return clinicalDiagnosis clinicalDiagnosis.
 	 */
-	public String[] getClinicalDiagnosis() 
+	public String[] getClinicalDiagnosis()
 	{
 		return clinicalDiagnosis;
 	}
@@ -109,11 +109,11 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * whether Aliquote in same container.
 	 */
-	protected boolean aliqoutInSameContainer = false;
+	private boolean aliqoutInSameContainer = false;
 	/**
 	* Activity Status.
 	*/
-	protected String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
+	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 
 	/**
 	 * Unsigned Form Url for the Consents.
@@ -123,7 +123,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * Map for Storing Values of Consent Tiers.
 	 */
-	private Map consentValues = new LinkedHashMap();//bug 8905
+	private Map<String, String> consentValues = new LinkedHashMap<String, String>();//bug 8905
 
 	/**
 	 * No of Consent Tier.
@@ -285,7 +285,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * @return - consentValues
 	 */
-	public Map getConsentValues()
+	public Map<String, String> getConsentValues()
 	{
 		return this.consentValues;
 	}
@@ -293,7 +293,7 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * @param consentValuesParam - consentValuesParam
 	 */
-	public void setConsentValues(Map consentValuesParam)
+	public void setConsentValues(Map<String, String> consentValuesParam)
 	{
 		this.consentValues = consentValuesParam;
 	}
@@ -501,26 +501,26 @@ public class CollectionProtocolBean implements Serializable
 	/**
 	 * Parent Collection Protocol.
 	 */
-	protected CollectionProtocol parentCollectionProtocol;
+	private CollectionProtocol parentCollectionProtocol;
 
 	/**
 	 * Sequence Number.
 	 */
-	protected Integer sequenceNumber;
+	private Integer sequenceNumber;
 	/**
 	 * Collection Protocol type - Arm, Cycle, Phase.
 	 */
-	protected String type;
+	private String type;
 
 	/**
 	 * Defines the relative time point in days.
 	 */
-	protected Double studyCalendarEventPoint;
+	private Double studyCalendarEventPoint;
 
 	/**
 	 * Parent collection protocol Identifier.
 	 */
-	protected Long parentCollectionProtocolId;
+	private Long parentCollectionProtocolId;
 
 	/**
 	 * This method will be called to get parentCollectionProtocolId.

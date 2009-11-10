@@ -93,16 +93,16 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	/**
 	 * Collection of aliquot specimens derived from this specimen. 
 	 */
-	protected Map aliquotSpecimenCollection = new LinkedHashMap();
+	protected Map<String, GenericSpecimen> aliquotSpecimenCollection = new LinkedHashMap<String, GenericSpecimen>();
 
 	/**
 	 * Collection of derive specimens derived from this specimen. 
 	 */
-	protected Map deriveSpecimenCollection = new LinkedHashMap();
+	protected Map<String, GenericSpecimen> deriveSpecimenCollection = new LinkedHashMap<String, GenericSpecimen>();
 
 	private int noOfDeriveSpecimen = 0;
 
-	private Map deriveSpecimen = new HashMap();
+	private Map<String, GenericSpecimen> deriveSpecimen = new HashMap<String, GenericSpecimen>();
 
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -289,12 +289,12 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.noOfDeriveSpecimen = noOfDeriveSpecimen;
 	}
 
-	public Map getDeriveSpecimen()
+	public Map<String, GenericSpecimen> getDeriveSpecimen()
 	{
 		return this.deriveSpecimen;
 	}
 
-	public void setDeriveSpecimen(Map deriveSpecimen)
+	public void setDeriveSpecimen(Map<String, GenericSpecimen> deriveSpecimen)
 	{
 		this.deriveSpecimen = deriveSpecimen;
 	}
@@ -344,9 +344,9 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		return serialVersionUID;
 	}
 
-	public LinkedHashMap getAliquotSpecimenCollection()
+	public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection()
 	{
-		return (LinkedHashMap) this.aliquotSpecimenCollection;
+		return (LinkedHashMap<String, GenericSpecimen>) this.aliquotSpecimenCollection;
 	}
 
 	public void addAliquotSpecimenBean(SpecimenRequirementBean specimenRequirementBean)
@@ -375,9 +375,9 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.collectionEventSpecimenId = collectionEventSpecimenId;
 	}
 
-	public LinkedHashMap getDeriveSpecimenCollection()
+	public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection()
 	{
-		return (LinkedHashMap) this.deriveSpecimenCollection;
+		return (LinkedHashMap<String, GenericSpecimen>) this.deriveSpecimenCollection;
 	}
 
 	public String getDisplayName()
