@@ -120,7 +120,6 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This method fetches the required number of records from Clinical
 	 * Diagnosis List and poplulates in the Combo Box on UI.
-	 * 
 	 * @param limitFetch
 	 *            is the limit to fetch and display the Clinical Diagnosis
 	 *            records in Combo Box on UI
@@ -132,7 +131,8 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 *            for autocomplete feature
 	 * @return JSONObject which holds the list to eb poplulated on UI front
 	 */
-	public JSONObject getClinicalDiagnosisData(Integer limitFetch, Integer startFetch, String query,Collection<NameValueBean> clinicalDiagnosisBean)
+	public JSONObject getClinicalDiagnosisData(Integer limitFetch, Integer startFetch, String query,
+			Collection<NameValueBean> clinicalDiagnosisBean,boolean isShowAll)
 	{
 		JSONObject jsonObject = null;
 		JSONArray jsonArray = null;
@@ -141,7 +141,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			jsonArray = new JSONArray();
 			jsonObject = new JSONObject();
 			final List clinicalDiagnosisList;
-			if (clinicalDiagnosisBean == null || clinicalDiagnosisBean.isEmpty())
+			if (clinicalDiagnosisBean == null || clinicalDiagnosisBean.isEmpty() || isShowAll)
 			{
 				clinicalDiagnosisList = this.getClinicalDiagnosisList(query);
 			}

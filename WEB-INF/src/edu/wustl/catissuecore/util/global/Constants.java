@@ -35,6 +35,7 @@ public class Constants
 	 * Specify SELECT_OPTION.
 	 */
 	public static final String SELECT_OPTION = "-- Select --";
+	public static final String SHOW_ALL_VALUES = "Show all values";
 	public static final String APPLICATION_NAME = CommonServiceLocator.getInstance().getAppName();
 	//caTissue DataSource name added.
 	public static final String DATASOURCE = "DataSource";

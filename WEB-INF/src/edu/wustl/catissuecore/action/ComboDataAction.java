@@ -56,14 +56,15 @@ public class ComboDataAction extends BaseAction
         final String limit = request.getParameter("limit");
 		final String query = request.getParameter("query");
 		final String start = request.getParameter("start");
+		final String  showAllValue = request.getParameter("showAll");
 		final Integer limitFetch = Integer.parseInt(limit);
 		final Integer startFetch = Integer.parseInt(start);
 		Long collectionProtocolId = null;
+		boolean isShowAll = false;
 		if(!"undefined".equals(request.getParameter("collectionProtocolId")) && !"".equals(request.getParameter("collectionProtocolId")))
 		{
 		  collectionProtocolId = Long.parseLong(request.getParameter("collectionProtocolId"));
 		}
-		System.out.println("collectionProtocolId ::: :"+collectionProtocolId);
 		final HttpSession newSession = request.getSession();
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) newSession
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
@@ -77,16 +78,20 @@ public class ComboDataAction extends BaseAction
 						"clinicalDiag.collectionProtocol.id="+collectionProtocolId;
 			final List<Object[]> dataList = AppUtility.executeQuery(cprHQL);
 		    List clinicalDiagnosisValues = dataList;
-			getClinicalDiagnosisBean(clinicalDiagnosisBean, clinicalDiagnosisValues);
+		    if(showAllValue != null && Constants.SHOW_ALL_VALUES.equals(showAllValue))
+		    {
+		    	isShowAll = true;
+		    }
+		  	getClinicalDiagnosisBean(clinicalDiagnosisBean, clinicalDiagnosisValues,true);
 			
 		}else if(collectionProtocolBean != null && collectionProtocolBean.getClinicalDiagnosis() != null && (collectionProtocolBean.getClinicalDiagnosis()).length != 0)
 		{
 			List<String> dataList = Arrays.asList(collectionProtocolBean.getClinicalDiagnosis());
-			getClinicalDiagnosisBean(clinicalDiagnosisBean, dataList);
+			getClinicalDiagnosisBean(clinicalDiagnosisBean, dataList,false);
 		}	
 		final ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
 		final JSONObject jsonObject = comboDataBizObj.getClinicalDiagnosisData(limitFetch,
-				startFetch, query,clinicalDiagnosisBean);
+				startFetch, query,clinicalDiagnosisBean,isShowAll);
 
 		response.setContentType("text/javascript");
 		final PrintWriter out = response.getWriter();
@@ -101,24 +106,29 @@ public class ComboDataAction extends BaseAction
 	 */
 	private void getClinicalDiagnosisBean(
 			Collection<NameValueBean> clinicalDiagnosisBean,
-			final List<String> dataList)
+			final List<String> dataList,boolean isShowAllSet)
 	
 	{
 		final Iterator<String> iterator = dataList.iterator();
-
-		if(dataList.size() != 0)
+		
+		if(!dataList.isEmpty())
 		{
-			// CDEBizLogic cdeBizLogic = (CDEBizLogic)
-			// BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-			clinicalDiagnosisBean.add(new NameValueBean(Constants.SELECT_OPTION, ""
-					+ Constants.SELECT_OPTION_VALUE));
-
+			clinicalDiagnosisBean.add(new NameValueBean(Constants.SELECT_OPTION, ""+Constants.SELECT_OPTION_VALUE));
+			if(isShowAllSet)
+			{
+				clinicalDiagnosisBean.add(new NameValueBean(Constants.SHOW_ALL_VALUES+"Start", Constants.SHOW_ALL_VALUES));
+			}
 			while (iterator.hasNext())
 			{
 				final String clinicaDiagnosisvalue = (String)iterator.next();
 				clinicalDiagnosisBean.add(new NameValueBean(clinicaDiagnosisvalue,
 						clinicaDiagnosisvalue));
 
+			}
+
+			if(isShowAllSet)
+			{
+				clinicalDiagnosisBean.add(new NameValueBean(Constants.SHOW_ALL_VALUES+"End", Constants.SHOW_ALL_VALUES));
 			}
 		}
 	}
