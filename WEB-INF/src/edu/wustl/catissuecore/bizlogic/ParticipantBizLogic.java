@@ -147,7 +147,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
 					.getCollectionProtocolRegistrationCollection();
 
-			if (collectionProtocolRegistrationCollection == null || 
+			if (collectionProtocolRegistrationCollection == null ||
 					collectionProtocolRegistrationCollection.isEmpty())
 			{
 
@@ -1586,11 +1586,18 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	private void addEditParticipant(Participant participant, Long cpid, String userName,
 			String operation) throws BizLogicException, ApplicationException
 	{
+	    final Collection<CollectionProtocolRegistration> cprColl=participant.getCollectionProtocolRegistrationCollection();
+        String protocolParticipantIdentifier ="";
+        for (CollectionProtocolRegistration collectionProtocolRegistration : cprColl)
+        {
+            protocolParticipantIdentifier=collectionProtocolRegistration.getProtocolParticipantIdentifier();
+        }
 		final CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 		cpr.setActivityStatus(Constants.ACTIVITY_STATUS_VALUES[1]);
 		final CollectionProtocol collectionProtocol = new CollectionProtocol();
 		collectionProtocol.setId(cpid);
 		cpr.setCollectionProtocol(collectionProtocol);
+		cpr.setProtocolParticipantIdentifier(protocolParticipantIdentifier);
 		cpr.setParticipant(participant);
 		final Collection<CollectionProtocolRegistration> colProtoRegColn = new HashSet<CollectionProtocolRegistration>();
 		colProtoRegColn.add(cpr);
