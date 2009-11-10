@@ -22,7 +22,7 @@
 	{
 		frame1Ysize = "180";
 		frame2Ysize = "180";
-		frame3Ysize = "650";
+		frame3Ysize = "520";
 	 
 
 		if(access != null && access.equals("Denied"))
@@ -31,6 +31,11 @@
 			frame2Ysize = "320";
 		}
 	}
+	else
+	{
+		frame3Ysize = "650";
+	}
+	
 %>
 <script type="text/javascript">
 </script>

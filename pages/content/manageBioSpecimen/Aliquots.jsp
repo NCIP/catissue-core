@@ -358,11 +358,11 @@
 				<td align="left" width="15%">
 					<html:text styleClass="black_ar"  maxlength="50"  size="10" styleId="noOfAliquots" property="noOfAliquots" style="text-align:right"/></td>
 				<td width="20%">&nbsp;</td>
-				<td class="black_ar" width="25%">	
+				<td class="black_ar" width="25%" noWrap>	
 					<bean:message key="aliquots.qtyPerAliquot"/>
 				</td>
-				<td width="40%">
-
+				<td width="5%">&nbsp;</td>
+				<td width="40%" >
 					<html:text styleClass="black_ar"  maxlength="50"  size="10" styleId="quantityPerAliquot" property="quantityPerAliquot" style="text-align:right"/>
 				</td>
 				</tr>
