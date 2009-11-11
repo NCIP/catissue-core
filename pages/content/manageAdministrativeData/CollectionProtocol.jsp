@@ -271,19 +271,22 @@ function updateCPTree()
 						</tr>
 					</logic:equal>
 
-					   </table>
-					   <table cellpadding="0" cellspacing="0" border="0" width = "100%" >
-					   <tr>
-					 	  <td align="center" class="black_ar">&nbsp;&nbsp;</td>
-					 	 <td align="left" class="black_ar">
+						<tr>
+			
+					 	  <td align="center" class="black_ar">&nbsp;</td>
+
+						  <td align="left" class="black_ar">
 					  		<bean:message key="specimenCollectionGroup.clinicalDiagnosis" />
-					   	 </td>
-					   	  <td align="center" class="black_ar">&nbsp;&nbsp;&nbsp;</td>
-					   	 <td align="left" class="black_ar"> 
-					    		 <dynamicExtensions:multiSelectUsingCombo/>
-					   	 </td>
-					  </tr>
-					  </table>	
+					   	  </td>
+					   	  
+						  <td align="left" class="black_ar"> 
+					    	 <dynamicExtensions:multiSelectUsingCombo/>
+					   	  </td>
+						
+						</tr>
+
+					 </table>
+
 					  
 					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
                       <tr>
