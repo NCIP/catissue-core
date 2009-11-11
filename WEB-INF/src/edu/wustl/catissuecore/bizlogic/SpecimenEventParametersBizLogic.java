@@ -124,21 +124,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
-
-			final Object object = dao.retrieveById(User.class.getName(),
-					specimenEventParametersObject.getUser().getId());
-			if (object != null)
-			{
-				final User user = (User) object;
-				// check for closed User
-				this.checkStatus(dao, user, "User");
-
-				specimenEventParametersObject.setUser(user);
-			}
+			SpecimenEventParameters specimenEventParametersObject =
+							(SpecimenEventParameters) obj;
+			checkStatusAndGetUserId(specimenEventParametersObject, dao);
 			//			Ashish - 6/6/07 - performance improvement
-			final Object specimenObject = dao.retrieveById(Specimen.class.getName(),
-					specimenEventParametersObject.getSpecimen().getId());
+			Object specimenObject = null;
+			specimenObject = retrieveSpecimenLabelName(dao,
+					specimenEventParametersObject);
+
 			final Specimen specimen = (Specimen) specimenObject;
 			// check for closed Specimen
 
@@ -330,6 +323,81 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+	}
+
+	/**
+	 * Retrieve specimen by label name.
+	 * @param dao DAO
+	 * @param specimenEventParametersObjectSpecimenEventParameters
+	 * @return Object
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private Object retrieveSpecimenLabelName(DAO dao,
+			SpecimenEventParameters specimenEventParametersObject)
+			throws DAOException, BizLogicException
+	{
+		Object specimenObject = null;
+		if(specimenEventParametersObject.getSpecimen().getId() != null)
+		{
+			specimenObject = dao.retrieveById(Specimen.class.getName(),
+					specimenEventParametersObject.getSpecimen().getId());
+		}
+		else if(specimenEventParametersObject.getSpecimen().getLabel() != null
+				|| specimenEventParametersObject.getSpecimen().getLabel().length() > 0)
+		{	
+			String column = "label";
+			List list = null;
+			list = dao.retrieve(Specimen.class.getName(), column, 
+					specimenEventParametersObject.getSpecimen().getLabel());
+			if(!list.isEmpty())
+			{
+				specimenObject = list.get(0);
+			}
+			else
+			{
+				throw this.getBizLogicException(null, "invalid.label",
+						specimenEventParametersObject.getSpecimen().getLabel());
+			}
+		}
+		return specimenObject;
+	}
+
+	/**
+	 * Check Status And Get UserId.
+	 * @param specimenEventParameter SpecimenEventParameters
+	 * @param dao DAO
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkStatusAndGetUserId(SpecimenEventParameters
+			specimenEventParameter, DAO dao) throws DAOException, BizLogicException
+	{		
+		Object object = null;
+		if(specimenEventParameter.getUser().getId() != null)
+		{
+			object = dao.retrieveById(User.class.getName(),
+					specimenEventParameter.getUser().getId());
+		}
+		else if(specimenEventParameter.getUser().getLoginName() != null ||
+				specimenEventParameter.getUser().getLoginName().length() > 0 )
+		{
+			String column = "loginName";
+			List list = null;
+			list = dao.retrieve(User.class.getName(), column, 
+					specimenEventParameter.getUser().getLoginName());
+			if(!list.isEmpty())
+			{
+				object = list.get(0);
+			}				
+		}			
+		if (object != null)
+		{
+			final User user = (User) object;
+			// check for closed User
+			this.checkStatus(dao, user, "User");
+			specimenEventParameter.setUser(user);
 		}
 	}
 

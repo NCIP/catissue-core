@@ -130,7 +130,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				participantMedicalIdentifier.setSite(null);
 				pmiCollection.add(participantMedicalIdentifier);
 			}
-
+			//For Bulk Operations: retrieving site_id from site_name
+			checkForSiteIdentifierInPMI(dao, pmiCollection);
 			//Inserting medical identifiers in the database after setting the participant associated.
 			final Iterator iterator = pmiCollection.iterator();
 			while (iterator.hasNext())
@@ -173,6 +174,44 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 
+	}
+
+	/**
+	 * Check For Site Identifier In PMI.
+	 * @param dao DAO
+	 * @param pmiCollection Collection of ParticipantMedicalIdentifier
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkForSiteIdentifierInPMI(DAO dao,
+			Collection<ParticipantMedicalIdentifier> pmiCollection)
+			throws DAOException, BizLogicException
+	{
+		final Iterator pmiIterator = pmiCollection.iterator();
+		while (pmiIterator.hasNext())
+		{
+			final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) pmiIterator
+					.next();
+			if(pmIdentifier.getSite() != null && pmIdentifier.getSite().getId() == null
+					&& pmIdentifier.getSite().getName() != null)
+			{
+				Site site = pmIdentifier.getSite();
+				final String sourceObjectName = Site.class.getName();
+				final String[] selectColumnName = {"id"};
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new EqualClause("name", site.getName()));
+				final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				if (!list.isEmpty())
+				{
+					site.setId((Long)list.get(0));
+					pmIdentifier.setSite(site);
+				}
+				else
+				{
+					throw this.getBizLogicException(null, "invalid.site.name", site.getName());
+				}
+			}
+		}
 	}
 
 	/**
@@ -758,7 +797,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						.next();
 				final Site site = participantIdentifier.getSite();
 				final String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
-				if (validator.isEmpty(medicalRecordNo) || site == null || site.getId() == null)
+				if (validator.isEmpty(medicalRecordNo) || site == null
+						|| (site.getId() == null && site.getName() ==null))
 				{
 					throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
 				}
@@ -779,19 +819,22 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				if (collectionProtocolRegistrationIdentifier.getCollectionProtocol() != null
 						&& !collectionProtocolRegistrationIdentifier.equals(""))
 				{
-					final long collectionProtocolTitle = collectionProtocolRegistrationIdentifier
-							.getCollectionProtocol().getId().longValue();
 					final String collectionProtocolRegistrationDate = Utility.parseDateToString(
 							collectionProtocolRegistrationIdentifier.getRegistrationDate(),
 							CommonServiceLocator.getInstance().getDatePattern());
 					final String errorKey = validator.validateDate(
 							collectionProtocolRegistrationDate, true);
-					if (collectionProtocolTitle <= 0 || errorKey.trim().length() > 0)
+					if ((collectionProtocolRegistrationIdentifier.
+							getCollectionProtocol().getId() == null
+								&& collectionProtocolRegistrationIdentifier.
+									getCollectionProtocol().getTitle() == null)
+									|| errorKey.trim().length() > 0)
 					{
 						throw this.getBizLogicException(null,
 								"errors.participant.collectionProtocolRegistration.missing", "");
 					}
-
+					checkForCollectionProtocolIdentifier(dao,
+							collectionProtocolRegistrationIdentifier);
 				}
 				//				check the activity status of all the specimens associated to the collection protocol registration
 				if (collectionProtocolRegistrationIdentifier.getActivityStatus() != null
@@ -910,6 +953,41 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 		}
 		return true;
+	}
+
+	/**
+	 * Check For Collection Protocol Identifier.
+	 * @param dao DAO
+	 * @param collectionProtocolRegistrationIdentifier CollectionProtocolRegistration
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkForCollectionProtocolIdentifier(
+			DAO dao,
+			final CollectionProtocolRegistration collectionProtocolRegistrationIdentifier)
+			throws BizLogicException
+	{
+		try
+		{	
+			if(collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId() == null
+					&& collectionProtocolRegistrationIdentifier.getCollectionProtocol().getTitle() != null)
+			{
+				String collectionProtocolTitle = collectionProtocolRegistrationIdentifier.
+							getCollectionProtocol().getTitle();
+				final String sourceObjectName = CollectionProtocol.class.getName();
+				final String[] selectColumnName = {"id"};
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new EqualClause("title", collectionProtocolTitle));
+				final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				if (!list.isEmpty())
+				{
+					collectionProtocolRegistrationIdentifier.getCollectionProtocol().setId((Long)list.get(0));
+				}
+			}
+		}
+		catch (DAOException e)
+		{
+			throw this.getBizLogicException(null, "cp.nt.found", "");
+		}
 	}
 
 	/**

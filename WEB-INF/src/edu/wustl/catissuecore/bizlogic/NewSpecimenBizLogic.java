@@ -1900,6 +1900,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean)
 			throws BizLogicException, SMException
 	{
+		this.setSpecimenEventParameterUserIdentifier(specimen, dao);
 		this.setSpecimenEvents(specimen, sessionDataBean);
 		this.setDefaultExternalIdentifiers(specimen);
 		if (specimen.getLineage() == null)
@@ -1918,6 +1919,47 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
 		{
 			specimen.setBarcode(null);
+		}
+	}
+
+	/**
+	 * Set Specimen Event Parameter User Identifier.
+	 * @param specimen Specimen
+	 * @param dao DAO
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setSpecimenEventParameterUserIdentifier(Specimen specimen,
+			DAO dao) throws BizLogicException
+	{	
+		Collection<SpecimenEventParameters> specimenEventCollection =
+			specimen.getSpecimenEventCollection();
+		for(SpecimenEventParameters parameters : specimenEventCollection)
+		{
+			if(parameters.getUser().getId() == null && parameters.getUser().getLoginName() != null)
+			{
+				try
+				{
+					final String sourceObjectName = User.class.getName();
+					final String[] selectColumnName = { "id" };
+					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+					queryWhereClause.addCondition(new EqualClause("loginName",
+							parameters.getUser().getLoginName()));
+					final List list = dao
+							.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+					if(!list.isEmpty())
+					{
+						Long userIdentifier = (Long)list.get(0);
+						parameters.getUser().setId(userIdentifier);
+					}
+				}
+				catch (final DAOException daoExp)
+				{
+					this.logger.error(daoExp.getMessage(), daoExp);
+					daoExp.printStackTrace();
+					throw this.getBizLogicException(null, "user.not.exists",
+							parameters.getUser().getLoginName());
+				}
+			}
 		}
 	}
 

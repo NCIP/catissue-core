@@ -170,8 +170,11 @@ public final class EventsUtil
 			/* Bug id: 4179
 			 patch id: 4179_3*/
 			//Collector validation
-			if (collectionEventParameters.getUser() != null &&( collectionEventParameters.getUser().getId() == null
-					|| collectionEventParameters.getUser().getId() == 0))
+			if (collectionEventParameters.getUser() != null &&
+					((collectionEventParameters.getUser().getId() == null
+						|| collectionEventParameters.getUser().getId() == 0)
+							&& (collectionEventParameters.getUser().getLoginName() == null
+								|| collectionEventParameters.getUser().getLoginName().length() == 0)))
 			{
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
 				throw AppUtility.getApplicationException(null,"errors.item.required",  message);
@@ -230,8 +233,11 @@ public final class EventsUtil
 			AbstractSpecimen specimen = receivedEventParameters.getSpecimen();
 			/* Bug id: 4179
 			 patch id: 4179_4*/
-			if (receivedEventParameters.getUser() != null &&( receivedEventParameters.getUser().getId() == null
-					|| receivedEventParameters.getUser().getId() == 0))
+			if (receivedEventParameters.getUser() != null &&
+					((receivedEventParameters.getUser().getId() == null
+						|| receivedEventParameters.getUser().getId() == 0)
+							&& (receivedEventParameters.getUser().getLoginName() == null
+								|| receivedEventParameters.getUser().getLoginName().length() == 0)))
 			{
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
 				throw AppUtility.getApplicationException( null,"errors.item.required", message);
