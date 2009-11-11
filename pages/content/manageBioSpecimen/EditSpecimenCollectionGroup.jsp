@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
 <link rel="stylesheet" type="text/css" href="css/combo.css" />
 <link rel="stylesheet" type="text/css" href="css/examples.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
 	/**
  			* Name : Ashish Gupta
@@ -212,15 +213,15 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						</html:select>&nbsp;
 						<bean:message key="collectionprotocol.studycalendarcomment"/>
 		        	</td>
-					<td class="black_ar_t"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="3" /></td>
-                    <td align="left" class="black_ar_t"><bean:message key="specimenCollectionGroup.site"/></td>
+					<td class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
+                    <td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.site"/></td>
 					<td align="left"  class="black_ar">
 					 <autocomplete:AutoCompleteTag property="siteId"
 										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
 										  initialValue="<%=new Long(form.getSiteId())%>"
-										  styleClass="formFieldSizedAutoSCG"
-
+										  styleClass="black_ar"
 										  staticField="false"
+										  size="28"
 									    />
 
 
