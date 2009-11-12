@@ -244,10 +244,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
 					.next();
-			cpr.setParticipant(participant);
-			cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
-			cprBizLogic.insert(cpr, dao, sessionDataBean);
-			this.cprIdList.add(cpr.getId());
+			//bug 14497
+			if(cpr.getCollectionProtocol()!=null)
+			{
+				cpr.setParticipant(participant);
+				cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+				cprBizLogic.insert(cpr, dao, sessionDataBean);
+				this.cprIdList.add(cpr.getId());
+			}
 		}
 	}
 

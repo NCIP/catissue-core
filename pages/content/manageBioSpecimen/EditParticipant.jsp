@@ -95,7 +95,6 @@ function participantRegRow(subdivtag)
 			cprRegistrationDate.colSpan=1;
 			sname="";
 			var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_registrationDate)";
-			//sname = "<input type='text' name='" + name + "' class='formFieldSized15' id='" + name + "' value = 'MM-DD-YYYY or MM/DD/YYYY' onclick = \"this.value = ''\" onblur = \"if(this.value=='') {this.value = 'MM-DD-YYYY or MM/DD/YYYY';}\" onkeypress=\"return titliOnEnter(event, this, document.getElementById('" + name + "'))\">";
 			sname = "<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "' value = '<%=registrationDate%>'>";
 			cprRegistrationDate.innerHTML=sname;
 			cellNo +=1;
@@ -138,13 +137,9 @@ function participantRegRow(subdivtag)
 			spanTag.appendChild(anchorTag);
 			consent.appendChild(spanTag);
 			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
-			
-			
-			
+	
 		}
-
-
-		function setSubmittedForParticipant(submittedFor,forwardTo)
+    	function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
@@ -701,10 +696,8 @@ function participantRegRow(subdivtag)
 						<div id="add_participant_registeration" style="display:block">
 				</logic:notEqual>
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
-
-
 				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
+						value="<%=Constants.EDIT%>">					
 					<tr class="tableheading">
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="18%" align="left" class="black_ar_b"><bean:message
@@ -732,7 +725,7 @@ function participantRegRow(subdivtag)
 					</tr>
 				</logic:equal>
 				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">
+						value="<%=Constants.EDIT%>">						
 					<tr class="tableheading">
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="25%" align="left" class="black_ar_b"><bean:message
@@ -741,6 +734,16 @@ function participantRegRow(subdivtag)
 							<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 							</td>
+							<%
+							if(!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl)
+							{
+						%>
+							<td width="13%" align="left" class="black_ar_b"><bean:message
+								key="participant.collectionProtocolReg.barcode" />
+							</td>
+						<%
+							}
+						%>
 						
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
@@ -961,8 +964,6 @@ function participantRegRow(subdivtag)
 			<tr>
 				<td colspan="2" class="bottomtd"></td>
 			</tr>
-
-			<!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 			<%
 				if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0) {
@@ -983,21 +984,12 @@ function participantRegRow(subdivtag)
 							key="participant.lookup" /></td>
 					</tr>
 					<tr height=110 valign=top>
-						<td valign=top class="formFieldAllBorders"><!--  **************  Code for New Grid  *********************** -->
+						<td valign=top class="formFieldAllBorders">
 						<script>
 					function participant(id)
 					{
-						//do nothing
-						//mandar for grid
 						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
 						var pid = cl.getValue();
-						//alert(pid);
-						/* 
-							 Resolved bug# 4240
-	                    	 Name: Virender Mehta
-	                    	 Reviewer: Sachin Lale
-	                    	 Description: removed URL On  onclick
-	                     */
 						 document.forms[0].submittedFor.value = "AddNew";
 						 var pageOf = "<%=pageOf%>";
 						if(pageOf == "<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>")
@@ -1020,8 +1012,6 @@ function participantRegRow(subdivtag)
 					var wdt = getWidth(90);
 					if(wdt>1000)wdt=getWidth(63.5);
 			</script> <%@ include file="/pages/content/search/AdvanceGrid.jsp"%>
-						<!--  **************  Code for New Grid  *********************** -->
-
 						</td>
 					</tr>
 					<tr>
@@ -1039,9 +1029,6 @@ function participantRegRow(subdivtag)
 			<%
 					}
 					%>
-			<!--Participant Lookup end-->
-
-			<!-----action buttons-->
 			<tr>
 				<td colspan="2" class="buttonbg">
 				<% String changeAction = "setFormAction('" + formName + "')";
