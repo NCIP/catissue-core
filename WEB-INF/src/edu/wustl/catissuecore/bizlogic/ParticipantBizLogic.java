@@ -245,6 +245,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) itcprCollection
 					.next();
 			//bug 14497
+			/**
+			 * If label generation is off for CPR then cprCollection will return a CPR with null CP.
+			 * so while inserting CPR it will give NullPointerException.
+			 */
 			if(cpr.getCollectionProtocol()!=null)
 			{
 				cpr.setParticipant(participant);
