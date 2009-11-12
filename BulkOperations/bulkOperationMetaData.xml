@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass templateName="editSpecimen" className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" isOneToManyAssociation="false"
+		cardinality="" roleName="specimen">
+		<attributeCollection name="label" csvColumnName="Label" updateBasedOn="true"  dataType="java.lang.String"/>
+		<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="createdOn" csvColumnName="Created On" updateBasedOn="false"  dataType="java.util.Date"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="comment" csvColumnName="Comment" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false" dataType="java.lang.Boolean"/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="initialQuantity" csvColumnName="Initial Quantity" updateBasedOn="false"  dataType="java.lang.Double"/>
+		<attributeCollection name="availableQuantity" csvColumnName="Available Quantity" updateBasedOn="false"  dataType="java.lang.Double"/>
+		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false"  dataType="java.lang.String"/>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			relationShipType="association" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenPosition" templateName="editSpecimen">
+				<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false"  dataType="java.lang.Integer"/>
+				<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false"  dataType="java.lang.Integer"/>
+			<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="association" isOneToManyAssociation=""
+			cardinality="1" roleName="storageContainer" templateName="editSpecimen">
+				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="true"  dataType="java.lang.String"/>
+			</referenceAssociationCollection>
+		</containmentAssociationCollection>
+	</BulkOperationClass>
+	  
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" isOneToManyAssociation="false" cardinality=""
+		roleName="" templateName="createDerivative">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+			relationShipType="association" cardinality="1" roleName="specimenCollectionGroup"
+			templateName="createDerivative" isOneToManyAssociation="">
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen" relationShipType="association"
+			templateName="createDerivative" isOneToManyAssociation="" cardinality="1"
+			roleName="parentSpecimen">
+				<attributeCollection name="label" csvColumnName="Parent Specimen label" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			relationShipType="association" templateName="createDerivative" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenPosition" >
+				<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false" dataType="java.lang.Integer"/>
+				<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false" dataType="java.lang.Integer"/>
+			<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="association" templateName="createDerivative" isOneToManyAssociation=""
+			cardinality="1" roleName="storageContainer" >
+				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="false" dataType="java.lang.String"/>
+			</referenceAssociationCollection>			
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+			relationShipType="containment" templateName="createDerivative" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenCharacteristics">
+		</containmentAssociationCollection>
+		<attributeCollection name="label" csvColumnName="Label" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="createdOn" csvColumnName="Created On" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="comment" csvColumnName="Comment" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false" dataType="java.lang.Boolean"/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="initialQuantity" csvColumnName="Initial Quantity" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="availableQuantity" csvColumnName="Available Quantity" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false" dataType="java.lang.String"/>
+	</BulkOperationClass>	 
+	
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" templateName="createSpecimen" isOneToManyAssociation="true"
+		cardinality="" roleName="specimen">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+			relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenCollectionGroup">
+				<attributeCollection name="name" csvColumnName="SCG name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenPosition" >			
+			<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="storageContainer" >
+				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="true" dataType="java.lang.String"/>
+			</referenceAssociationCollection>
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+			relationShipType="containment" templateName="createSpecimen" isOneToManyAssociation=""
+			cardinality="1" roleName="specimenCharacteristics">
+			<attributeCollection name="tissueSite" csvColumnName="Tissue Site" updateBasedOn="false" dataType="java.lang.String"/>
+			<attributeCollection name="tissueSide" csvColumnName="Tissue Side" updateBasedOn="false" dataType="java.lang.String"/>
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+			relationShipType="containment" templateName="createSpecimen" isOneToManyAssociation=""
+			cardinality="*" roleName="specimenEventCollection">
+			<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
+			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="collectionEventParameters">
+				<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.User"
+				relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+				cardinality="1" roleName="user">
+					<attributeCollection name="loginName" csvColumnName="Collected User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+				</referenceAssociationCollection>
+				<attributeCollection name="comment" csvColumnName="Collected Comments" updateBasedOn="false" dataType="java.lang.String"/>								
+				<attributeCollection name="collectionProcedure" csvColumnName="Procedure" updateBasedOn="false" dataType="java.lang.String"/>
+				<attributeCollection name="container" csvColumnName="Container" updateBasedOn="false" dataType="java.lang.String"/>
+				<attributeCollection name="timestamp" csvColumnName="Collected Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+			</containmentAssociationCollection>
+			<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
+			relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
+			cardinality="1" roleName="receivedEventParameters">
+				<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.User"
+				relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
+				cardinality="1" roleName="user">
+					<attributeCollection name="loginName" csvColumnName="Received User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+				</referenceAssociationCollection>
+				<attributeCollection name="comment" csvColumnName="Received Comments" updateBasedOn="false" dataType="java.lang.String"/>								
+				<attributeCollection name="receivedQuality" csvColumnName="Quality" updateBasedOn="false" dataType="java.lang.String"/>				
+				<attributeCollection name="timestamp" csvColumnName="Received Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+			</containmentAssociationCollection>
+		</containmentAssociationCollection>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="comment" csvColumnName="Comment" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false" dataType="java.lang.Boolean"/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="initialQuantity" csvColumnName="Initial Quantity" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="availableQuantity" csvColumnName="Available Quantity" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false" dataType="java.lang.String"/>		
+	</BulkOperationClass>
+	
+	  
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
+		relationShipType="main" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="false"
+		cardinality="" roleName="">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="" 
+			cardinality="1" roleName="user">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createMolecularSpecimenEvent" isOneToManyAssociation=""
+			cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="gelImageURL" csvColumnName="Gel Image URL" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="qualityIndex" csvColumnName="Quality Index" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="gelNumber" csvColumnName="Gel Number" updateBasedOn="false" dataType="java.lang.Integer"/>
+		<attributeCollection name="laneNumber" csvColumnName="Lane Number" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="absorbanceAt260" csvColumnName="Absorbance at 260" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="absorbanceAt280" csvColumnName="Absorbance at 280" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="ratio28STo18S" csvColumnName="Ratio 28S to 16S" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
+	</BulkOperationClass>
+	
+	
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters"
+		relationShipType="main" templateName="createTissueSpecimenReviewParameters"
+		isOneToManyAssociation="false" cardinality="" roleName="">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createTissueSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createTissueSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="neoplasticCellularityPercentage" csvColumnName="Neo Plastic Cellularity Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="necrosisPercentage" csvColumnName="Necrosis Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="lymphocyticPercentage" csvColumnName="Lymphocytic Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="totalCellularityPercentage" csvColumnName="Total Cellularity percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="histologicalQuality" csvColumnName="Histological Quality" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
+	</BulkOperationClass>	
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
+		relationShipType="main" templateName="createFluidSpecimenReviewParameters"
+		isOneToManyAssociation="false" cardinality="" roleName="">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="cellCount" csvColumnName="Cell count" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
+	</BulkOperationClass>	
+	
+	
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
+		relationShipType="main" templateName="createCellSpecimenReviewParameters"
+		isOneToManyAssociation="false" cardinality="" roleName="">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="neoplasticCellularityPercentage" csvColumnName="Neo Plastic Cellularity Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="viableCellPercentage" csvColumnName="Viable Cell Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
+	</BulkOperationClass>
+	
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
+		relationShipType="main" cardinality="" roleName="participant"
+		templateName="createParticipant" isOneToManyAssociation="true">
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Race" relationShipType="association"
+			templateName="createParticipant" isOneToManyAssociation="false"
+			cardinality="*" roleName="raceCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.Race"
+				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+				cardinality="1" roleName="race">
+				<attributeCollection name="raceName" csvColumnName="Race1" updateBasedOn="false" dataType="java.lang.String"/>		
+			</containmentAssociationCollection>
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.Race"
+				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+				cardinality="1" roleName="race">
+				<attributeCollection name="raceName" csvColumnName="Race2" updateBasedOn="false" dataType="java.lang.String"/>		
+			</containmentAssociationCollection>
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+			relationShipType="containment" templateName="createParticipant" isOneToManyAssociation="false"
+			cardinality="*" roleName="participantMedicalIdentifierCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+				cardinality="1" roleName="participantMedicalIdentifier">
+				<attributeCollection name="medicalRecordNumber" csvColumnName="MRN1" updateBasedOn="false" dataType="java.lang.String"/>
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Site" relationShipType="association"
+					templateName="createParticipant" isOneToManyAssociation="false"
+					cardinality="1" roleName="site">
+					<attributeCollection name="name" csvColumnName="Site1" updateBasedOn="false" dataType="java.lang.String"/>					
+				</referenceAssociationCollection>		
+			</containmentAssociationCollection>
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+				cardinality="1" roleName="participantMedicalIdentifier">
+				<attributeCollection name="medicalRecordNumber" csvColumnName="MRN2" updateBasedOn="false" dataType="java.lang.String"/>
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Site" relationShipType="association"
+					templateName="createParticipant" isOneToManyAssociation="false"
+					cardinality="1" roleName="site">
+					<attributeCollection name="name" csvColumnName="Site2" updateBasedOn="false" dataType="java.lang.String"/>
+				</referenceAssociationCollection>		
+			</containmentAssociationCollection>			
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+			cardinality="*" roleName="collectionProtocolRegistrationCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
+				cardinality="1" roleName="collectionProtocolRegistration">
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.CollectionProtocol" relationShipType="association"
+					templateName="createParticipant" isOneToManyAssociation="false"
+					cardinality="1" roleName="collectionProtocol">
+					<attributeCollection name="title" csvColumnName="CP name" updateBasedOn="false" dataType="java.lang.String"/>
+				</referenceAssociationCollection>
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Participant" relationShipType="association"
+					templateName="createParticipant" isOneToManyAssociation="false"
+					cardinality="1" roleName="participant">
+				</referenceAssociationCollection>
+				<attributeCollection name="registrationDate" csvColumnName="Registration Date" updateBasedOn="false" dataType="java.util.Date"/>
+				<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false" dataType="java.lang.String"/>					
+			</containmentAssociationCollection>			
+		</containmentAssociationCollection>
+		<attributeCollection name="socialSecurityNumber" csvColumnName="Social Security Number" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="lastName" csvColumnName="Last Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="firstName" csvColumnName="First Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="middleName" csvColumnName="Middle Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="birthDate" csvColumnName="Birth Date" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="vitalStatus" csvColumnName="Vital Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="deathDate" csvColumnName="Death Date" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="gender" csvColumnName="Gender" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="sexGenotype" csvColumnName="Sex-Genotype" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="ethnicity" csvColumnName="Ethinicity" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String"/>
+	</BulkOperationClass>
+	<!--
+	<MigrationClass className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" isToMigrate="Yes" isToSetNull="No"
+		cardinality="" roleName="" sql="createAliquot">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="specimenCollectionGroup">
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen" relationShipType="association"
+			isToMigrate="Yes" isToSetNull="No" cardinality="1"
+			roleName="parentSpecimen">
+				<attributeCollection name="label" csvColumnName="Parent Specimen Label" updateBasedOn="false"  dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="specimenPosition" >
+			<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false"  dataType="java.lang.Integer"/>
+			<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false"  dataType="java.lang.Integer"/>			 
+			<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="storageContainer" >
+				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="false"  dataType="java.lang.String"/>
+			</referenceAssociationCollection>			
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+			relationShipType="containment" isToMigrate="Yes" isToSetNull="No"
+			cardinality="1" roleName="specimenCharacteristics">
+		</containmentAssociationCollection>
+		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="initialQuantity" csvColumnName="Quantity per aliquot" updateBasedOn="false"  dataType="java.lang.Double"/>
+		<attributeCollection name="availableQuantity" csvColumnName="Quantity per aliquot" updateBasedOn="false"  dataType="java.lang.Double"/>
+		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false"  dataType="java.lang.Boolean"/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false"  dataType="java.lang.String"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false"  dataType="java.lang.String"/>
+	</MigrationClass>
+	-->
+</BulkOperationMetadata>
