@@ -620,6 +620,9 @@
 		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
 		</copy>
+		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
+			<fileset dir="${base.dir}/BulkOperations" />
+		</copy>
 		<copy todir="${zip.dir}/minimalDataSharing" overwrite="true">
 			<fileset dir="${base.dir}/minimalDataSharing" />
 		</copy>
