@@ -1210,7 +1210,7 @@
 			<transaction src="${common.sql.dir}/indexes.sql" />
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
+			<!--<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" /> -->
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<!-- <transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
 			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
@@ -1221,6 +1221,16 @@
 				</fileset>
 			</classpath>
 		</sql>
+		
+		<antcall target="unzip_aq_installable" />
+			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+				<property name="database.type" value="${database.type}" />
+				<property name="database.driver" value="${mysql.driver.string}" />
+				<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+				<property name="database.username" value="${database.username}" />
+				<property name="database.password" value="${database.password}" />
+			</ant>
+		
 		<antcall  target="Export_Clinical_diagnosis_mysql"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
@@ -1385,7 +1395,7 @@
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+			<!--<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" /> -->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1394,6 +1404,16 @@
 			</classpath>
 		</sql>
 
+		<antcall target="unzip_aq_installable" />
+					<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+						<property name="database.type" value="${database.type}" />
+						<property name="database.driver" value="${oracle.driver.string}" />
+						<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						<property name="database.username" value="${database.username}" />
+						<property name="database.password" value="${database.password}" />
+						<property name="rdbms" value="oracle" />
+					</ant>
+		
 		<antcall target="insertQueryMetadata" />
 
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row">
@@ -1788,6 +1808,7 @@
 			</classpath>
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
+		<antcall target="upgrade_saved_queries"></antcall>
    </target>	
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
@@ -3194,7 +3215,7 @@ Thanking You,
 			<transaction src="${mssqlserver.sql.dir}/Common/indexes.sql" />
 			<transaction src="${mssqlserver.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mssqlserver.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />
+			<!--<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" /> -->
 			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
 			<transaction src="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql" />
@@ -3212,7 +3233,16 @@ Thanking You,
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="${database.schemaname}" value="@@schema@@" />
 		</replace>
-
+		
+		<antcall target="unzip_aq_installable" />
+							<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+								<property name="database.type" value="${database.type}" />
+								<property name="database.driver" value="${oracle.driver.string}" />
+								<property name="database.url" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+								<property name="database.username" value="${database.username}" />
+								<property name="database.password" value="${database.password}" />
+							</ant>
+		
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
@@ -4028,26 +4058,73 @@ Thanking You,
 			</elseif>
 			</if>
 	</target>
+	
 	<target name="upgrade_saved_queries" >
-          <echo message="Upgrading saved queries...."/>
-          <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-          <copy file="${base.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-          <antcall target="replacecfgfiles" />
-		  <antcall target="replaceQuerycfgfile" />
-          <replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-                <include name="ApplicationSecurityConfig.xml" />
-                <replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
-          </replace>
-          <java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
-                <classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
-                <classpath refid="temp.classpath" />
-                <classpath>
-                      <fileset dir="${lib.dir}">
-                            <include name="*.jar" />
-                      </fileset>
-                </classpath>
-                <arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
-          </java>
-		<delete dir="${temp.dir}" />
-    </target>
+				<echo message="Upgrading saved queries...."/>
+				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+				<copy file="${base.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+				<antcall target="replacecfgfiles" />
+		  		<antcall target="replaceQuerycfgfile" />
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="ApplicationSecurityConfig.xml" />
+					<replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
+				</replace>
+				<java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
+					<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+					<classpath refid="temp.classpath" />
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+					<arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
+				</java>
+				 <delete dir="${temp.dir}" /> 
+			</target>
+	
+	<target name="insertPaths">
+				<antcall target="create_temp_loggger_properties_file" />
+				<antcall target="unzip_aq_installable" />
+				<unwar src="${base.dir}/clinportal.war" dest="${temp.dir}/clinportal" />
+				<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/clinportal/WEB-INF/classes" overwrite="true" />
+				<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/clinportal/WEB-INF/classes" overwrite="true" />
+				<antcall target="update_DE_CONF_for_CSM">
+				</antcall>
+				<if>
+					<equals arg1="mysql" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/clinportal/WEB-INF/classes">
+							<include name="*.cfg.xml" />
+							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+						</replace>
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" />
+						<then>
+							<replace dir="${temp.dir}/clinportal/WEB-INF/classes">
+								<include name="*.cfg.xml" />
+								<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+							</replace>
+						</then>
+					</elseif>
+				</if>
+				<replace dir="${temp.dir}/clinportal/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+					<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+				</replace>
+				<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="insertPaths">
+					<property name="parent.base.dir" value="${base.dir}" />
+					<property name="deploy.temp.dir" value="${basedir}/tempClinPortal" />
+					<property name="war.dir" value="clinportal" />
+					<property name="lib.dir" value="${basedir}/lib" />
+					<property name="property.file" value="${basedir}/ClinPortalInstall.properties" />
+				</ant>
+				<delete dir="${temp.dir}" />
+				<delete file="${base.dir}/log4j.properties" />
+			</target>
 </project>
