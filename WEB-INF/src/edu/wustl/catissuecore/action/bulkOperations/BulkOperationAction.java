@@ -1,10 +1,10 @@
 
 package edu.wustl.catissuecore.action.bulkOperations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,15 +53,13 @@ public abstract class BulkOperationAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Get Specimen Ids from request. If not there then get all from cart
-		List specimenIds = (List) request.getAttribute(Constants.SPECIMEN_ID);
+		LinkedList<String> specimenIds = (LinkedList<String>)request.getAttribute(Constants.SPECIMEN_ID);
 		if (specimenIds == null || specimenIds.size() == 0)
 		{
 			specimenIds = this.getSpecimenIds(request);
 		}
-
 		// Set common request parameters for all events
 		this.setCommonRequestParameters(request, specimenIds);
-
 		final BulkEventOperationsForm eventParametersForm = (BulkEventOperationsForm) form;
 		// Set operation
 		final String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -81,6 +79,8 @@ public abstract class BulkOperationAction extends SecureAction
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 
+		setOrderedSpId(specimenIds, eventParametersForm);
+
 		// Set event specific request params
 		this.setEventSpecificRequestParameters(eventParametersForm, request, specimenIds);
 
@@ -99,6 +99,23 @@ public abstract class BulkOperationAction extends SecureAction
 		}
 		return mapping.findForward(Constants.SUCCESS);
 	}
+	/**
+	 *
+	 * @param specimenIds Specimen Id's
+	 * @param eventParametersForm eventParametersForm object
+	 */
+	private void setOrderedSpId(LinkedList<String> specimenIds,
+			final BulkEventOperationsForm eventParametersForm)
+	{
+		final StringBuffer orderedSpecimenIdsString = new StringBuffer();
+		for (int iCount = 0; iCount < specimenIds.size()-1; iCount++)
+		{
+			orderedSpecimenIdsString.append(specimenIds.get(iCount));
+			orderedSpecimenIdsString.append(",");
+		}
+		orderedSpecimenIdsString.append(specimenIds.get(specimenIds.size()-1));
+		eventParametersForm.setOrderedString(orderedSpecimenIdsString.toString());
+	}
 
 	/**
 	 * This method sets all the common parameters for the SpecimenEventParameter
@@ -107,7 +124,7 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @param specimenIds : specimenIds
 	 * @throws Exception : Exception
 	 */
-	private void setCommonRequestParameters(HttpServletRequest request, List specimenIds)
+	private void setCommonRequestParameters(HttpServletRequest request, LinkedList<String> specimenIds)
 			throws Exception
 	{
 		// Set the minutesList attribute
@@ -134,7 +151,7 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @throws Exception : Exception
 	 */
 	private void setEventSpecificRequestParameters(BulkEventOperationsForm eventParametersForm,
-			HttpServletRequest request, List specimenIds) throws Exception
+			HttpServletRequest request, LinkedList<String> specimenIds) throws Exception
 	{
 
 		if (specimenIds != null && specimenIds.size() > 0)
@@ -142,9 +159,8 @@ public abstract class BulkOperationAction extends SecureAction
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final SpecimenEventParametersBizLogic bizlogic = (SpecimenEventParametersBizLogic) factory
 					.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
-			System.out.println("");
 			final List specimenDataList = bizlogic.getSpecimenDataForBulkOperations(
-					eventParametersForm.getOperation(), specimenIds, this.getSessionData(request));
+			eventParametersForm.getOperation(), specimenIds, this.getSessionData(request));
 			List specimenRow = null;
 			String specimenId = null;
 			for (int i = 0; i < specimenDataList.size(); i++)
@@ -161,19 +177,19 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @param request : request
 	 * @return List : List
 	 */
-	private List getSpecimenIds(HttpServletRequest request)
+	private LinkedList<String> getSpecimenIds(HttpServletRequest request)
 	{
-		List specimenIds = new ArrayList();
+		LinkedList<String> specimenIds = new LinkedList<String>();
 		final QueryShoppingCart cart = (QueryShoppingCart) request.getSession().getAttribute(
 				Constants.QUERY_SHOPPING_CART);
 		if (cart != null)
 		{
 			final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart, Arrays
+			specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart, Arrays
 					.asList(Constants.specimenNameArray), null));
 			if (specimenIds == null)
 			{
-				specimenIds = new ArrayList();
+				specimenIds = new LinkedList<String>();
 			}
 		}
 		return specimenIds;

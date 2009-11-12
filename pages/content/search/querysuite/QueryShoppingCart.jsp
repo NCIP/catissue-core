@@ -121,7 +121,7 @@ function onSubmit(orderedString)
 	{
 		if(document.getElementById('specimenEventParameter').value == "Transfer")
 		{
-		    dobulkTransferOperations();
+		    dobulkTransferOperations(orderedString);
 		}
 		else if(document.getElementById('specimenEventParameter').value == "Disposal")
 		{
@@ -216,8 +216,9 @@ function onExport()
 			}
 		}
 		
-function dobulkTransferOperations()
+function dobulkTransferOperations(orderedString)
 		{
+			orderedString.value = mygrid.getCheckedRows(0);
 			var isChecked = updateHiddenFields();
 		    
 		    if(isChecked == "true")

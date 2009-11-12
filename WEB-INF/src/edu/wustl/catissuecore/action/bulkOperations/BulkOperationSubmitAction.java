@@ -1,8 +1,8 @@
 
 package edu.wustl.catissuecore.action.bulkOperations;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ public class BulkOperationSubmitAction extends BaseAction
 {
 
 	/**
-	 * logger
+	 * logger.
 	 */
 	private transient final Logger logger = Logger.getCommonLogger(BulkOperationSubmitAction.class);
 
@@ -52,7 +52,6 @@ public class BulkOperationSubmitAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-
 		// Get Specimen Ids for which bulk events should be added
 		final BulkEventOperationsForm bulkEventOperationsForm = (BulkEventOperationsForm) form;
 		String target = bulkEventOperationsForm.getOperation();
@@ -60,11 +59,7 @@ public class BulkOperationSubmitAction extends BaseAction
 		{
 			target = Constants.SUCCESS;
 		}
-
-		final List<String> specimenIds = new ArrayList<String>(bulkEventOperationsForm
-				.getSpecimenIds().keySet());
-		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
-
+		LinkedList<String> specimenIds = getSortedSpecimenIds(request, bulkEventOperationsForm);
 		try
 		{
 			if (specimenIds != null && specimenIds.size() > 0)
@@ -74,17 +69,18 @@ public class BulkOperationSubmitAction extends BaseAction
 				final BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
 						.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
 				bizlogic.insertEvents(bulkEventOperationsForm.getOperation(), this
-						.getSessionData(request), specimenIds, bulkEventOperationsForm.getUserId(),
+						.getSessionData(request), specimenIds,
+						bulkEventOperationsForm.getUserId(),
 						bulkEventOperationsForm.getDateOfEvent(), bulkEventOperationsForm
-								.getTimeInHours(), bulkEventOperationsForm.getTimeInMinutes(),
+						.getTimeInHours(), bulkEventOperationsForm.getTimeInMinutes(),
 						bulkEventOperationsForm.getComments(), bulkEventOperationsForm
 								.getEventSpecificData());
-
 				ActionMessages messages = null;
 				ActionErrors errors = null;
 				if (specimenIds != null && specimenIds.size() > 0)
 				{
-					if (bulkEventOperationsForm.getOperation().equals(Constants.BULK_TRANSFERS))
+					if (bulkEventOperationsForm.getOperation().
+							equals(Constants.BULK_TRANSFERS))
 					{
 						messages = new ActionMessages();
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -107,26 +103,6 @@ public class BulkOperationSubmitAction extends BaseAction
 				this.saveErrors(request, errors);
 			}
 		}
-
-		/*
-		 * catch (UserNotAuthorizedException ex) { SessionDataBean
-		 * sessionDataBean = getSessionData(request); String userName = "";
-		 * if(sessionDataBean != null) { userName =
-		 * sessionDataBean.getUserName(); } UserNotAuthorizedException excp =
-		 * (UserNotAuthorizedException) ex; String className = new
-		 * CommonAddEditAction
-		 * ().getActualClassName(SpecimenEventParameters.class.getName());
-		 * String decoratedPrivilegeName =
-		 * Utility.getDisplayLabelForUnderscore(excp.getPrivilegeName()); String
-		 * baseObject = ""; if (excp.getBaseObject() != null &&
-		 * excp.getBaseObject().trim().length() != 0) { baseObject =
-		 * excp.getBaseObject(); } else { baseObject = className; } ActionErrors
-		 * errors = new ActionErrors(); ActionError error = new
-		 * ActionError("access.addedit.object.denied", userName,
-		 * className,decoratedPrivilegeName,baseObject);
-		 * errors.add(ActionErrors.GLOBAL_ERROR, error); saveErrors(request,
-		 * errors); }
-		 */
 		catch (final BizLogicException excp)
 		{
 			this.logger.debug(excp.getCustomizedMsg());
@@ -139,6 +115,24 @@ public class BulkOperationSubmitAction extends BaseAction
 		}
 
 		return mapping.findForward(target);
+	}
+	/**
+	 * @param request HttpServletRequest
+	 * @param bulkEventOperationsForm BulkEventOperationsForm
+	 * @return LinkedList
+	 */
+	private LinkedList<String> getSortedSpecimenIds(HttpServletRequest request,
+			final BulkEventOperationsForm bulkEventOperationsForm)
+	{
+		LinkedList<String> specimenIds = new LinkedList<String>();
+		StringTokenizer st = new StringTokenizer(bulkEventOperationsForm.getOrderedString(), ",");
+		while(st.hasMoreTokens())
+		{
+			specimenIds.add(st.nextToken());
+		}
+
+		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+		return specimenIds;
 	}
 
 }

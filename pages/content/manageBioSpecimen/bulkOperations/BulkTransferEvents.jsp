@@ -90,7 +90,7 @@ String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField
  
   
  <tr>
-
+<html:hidden property="orderedString" />
 <html:hidden property="<%=specimenFromLocIDField%>" /> <html:hidden property="<%=specimenFromLocPos1Field%>" /> <html:hidden property="<%=specimenFromLocPos2Field%>" /> <html:hidden property="<%=specimenList%>" /> <html:hidden property="<%=specimenFromLocField%>" />
 
 <td class="black_ar" width="20%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" /> </label> </td> <td class="black_ar" width="31%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenFromLocField%>" /> </label> <!--html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" /--> </td>

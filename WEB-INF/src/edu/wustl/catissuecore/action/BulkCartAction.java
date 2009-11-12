@@ -4,9 +4,9 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -204,7 +204,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 			}
 
 			if ((Constants.SYSTEM_NAME.equals(attribute.getName()))
-					&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
+			&& attribute.getEntity().getName().equals(StorageContainer.class.getName()))
 			{
 				final String entityName = attribute.getEntity().getName();
 
@@ -241,7 +241,8 @@ public class BulkCartAction extends QueryShoppingCartAction
 			String operation)
 	{
 		String target;
-		session.setAttribute(Constants.SPECIMEN_ID, this.getSpecimenIDs( searchForm, session, operation ));		
+		session.setAttribute(Constants.SPECIMEN_ID,
+		this.getSpecimenIDs( searchForm, session, operation ));
 		target = new String(operation);
 		return target;
 	}
@@ -263,12 +264,13 @@ public class BulkCartAction extends QueryShoppingCartAction
 
 		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 		final Set<String> specimenIds = new LinkedHashSet<String>(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));		
+				Arrays.asList(Constants.specimenNameArray),
+				this.getCheckboxValues(searchForm)));
 		return specimenIds;
 
 	}
 	/**
-	 *  This method creates map which contains specimen IDs to print. 
+	 *  This method creates map which contains specimen IDs to print.
 	 * @param searchForm - AdvanceSearchForm
 	 * @param session - HttpSession
 	 * @param operation - operation
@@ -281,7 +283,8 @@ public class BulkCartAction extends QueryShoppingCartAction
 		String target;
 		session.setAttribute(Constants.SPECIMEN_ID, this.getSpecimenIDs( searchForm, session, operation ));
 		final HashMap forwardToPrintMap = new HashMap();
-		forwardToPrintMap.put(Constants.PRINT_SPECIMEN_FROM_LISTVIEW, this.getSpecimenIDs( searchForm, session, operation ));
+		forwardToPrintMap.put(Constants.PRINT_SPECIMEN_FROM_LISTVIEW,
+		this.getSpecimenIDs( searchForm, session, operation ));
 		request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 		target = new String(operation);
 		return target;
@@ -303,7 +306,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 		final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		final List<String> specimenIds = new ArrayList<String>(bizLogic.getEntityIdsList(cart,
+		final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
 				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 		request.setAttribute(Constants.OPERATION, operation);
