@@ -17,12 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-
-
 
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -1353,7 +1350,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
-		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization
 		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
 		 * So we removed default class level initialization on domain object and are initializing in method
 		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
@@ -1361,14 +1358,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
 		ApiSearchUtil.setUserDefault(user);
-		//End:- Change for API Search    	
-
-		//Added by Ashish Gupta
-		/*
-		if (user == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
-			*/
-		//END	
 		if (Constants.PAGE_OF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
 			// if condition added by Geeta for ECMC 
@@ -1391,18 +1380,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			if (Constants.PAGE_OF_USER_ADMIN.equals(user.getPageOf()))
 			{
-				//				try
-				//				{
-				//					if (!Validator.isEnumeratedValue(getRoles(), user.getRoleId()))
-				//					{
-				//						throw new DAOException(ApplicationProperties.getValue("user.role.errMsg"));
-				//					}
-				//				}
-				//				catch (SMException e)
-				//				{
-				//					throw handleSMException(e);
-				//				}
-
 				if (operation.equals(Constants.ADD))
 				{
 					if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
@@ -1461,7 +1438,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			/**
 			 * Name : Vijay_Pande
 			 * Reviewer : Sntosh_Chandak
-			 * Bug ID: 4185_2 
+			 * Bug ID: 4185_2
 			 * Patch ID: 1-2
 			 * See also: 1
 			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
@@ -1478,7 +1455,16 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "Err.ConstraintViolation", "User :"
 						+ ApplicationProperties.getValue("user.emailAddress"));
 			}
-			/** -- patch ends here -- */
+			if( null != user.getWustlKey() && !"".equals(user.getWustlKey()))
+			{
+			  if(!user.getEmailAddress().endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
+			  && !user.getEmailAddress().
+			  endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
+			  {
+				  message = ApplicationProperties.getValue("email.washu.user");
+				  throw this.getBizLogicException(null, "errors.item.required", message);
+			  }
+			}
 		}
 		if (validator.isEmpty(user.getLastName()))
 		{
@@ -1516,37 +1502,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 		}
-		/*
-		 * Commented by Geeta to remove the validationnon zip code
-			if (validator.isEmpty(user.getAddress().getZipCode()))
-			{
-				message = ApplicationProperties.getValue("user.zipCode");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-			}
-			else
-			{
-				if (!validator.isValidZipCode(user.getAddress().getZipCode()))
-				{
-					message = ApplicationProperties.getValue("user.zipCode");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
-				}
-			}
-		*/
 		if (!validator.isValidOption(user.getAddress().getCountry())
 				|| validator.isEmpty(user.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("user.country");
 			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
-		// Commented by Geeta 
-		/*
-		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
-		{
-			message = ApplicationProperties.getValue("user.phoneNumber");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		}
-		*/
-
 		if (user.getInstitution().getId() == null || user.getInstitution().getId().longValue() <= 0)
 		{
 			message = ApplicationProperties.getValue("user.institution");
@@ -1565,57 +1526,17 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			message = ApplicationProperties.getValue("user.cancerResearchGroup");
 			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
-
-		//		if (user.getRoleId() != null)
-		//		{
-		//			if (!validator.isValidOption(user.getRoleId()) || validator.isEmpty(String.valueOf(user.getRoleId())))
-		//			{
-		//				message = ApplicationProperties.getValue("user.role");
-		//				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		//			}
-		//		}
 		return validate;
 	}
-
-	//END
-	/**
-	 * Returns a list of all roles that can be assigned to a user.
-	 * @return a list of all roles that can be assigned to a user.
-	 * @throws SMException
-	 */
-	private List getRoles() throws SMException
-	{
-		//Sets the roleList attribute to be used in the Add/Edit User Page.
-		final List roleList = SecurityManagerFactory.getSecurityManager().getRoles();
-
-		final List roleNameValueBeanList = new ArrayList();
-		NameValueBean nameValueBean = new NameValueBean();
-		nameValueBean.setName(Constants.SELECT_OPTION);
-		nameValueBean.setValue("-1");
-		roleNameValueBeanList.add(nameValueBean);
-
-		final ListIterator iterator = roleList.listIterator();
-		while (iterator.hasNext())
-		{
-			final Role role = (Role) iterator.next();
-			nameValueBean = new NameValueBean();
-			nameValueBean.setName(role.getName());
-			nameValueBean.setValue(String.valueOf(role.getId()));
-			roleNameValueBeanList.add(nameValueBean);
-		}
-		return roleNameValueBeanList;
-	}
-
 	/**
 	 * @param oldUser User object
 	 * @param newPassword New Password value
 	 * @param validator VAlidator object
 	 * @param oldPassword Old Password value
-	 * @return SUCCESS (constant int 0) if all condition passed 
-	 *   else return respective error code (constant int) value  
-	 * @throws PasswordEncryptionException 
+	 * @return SUCCESS (constant int 0) if all condition passed
+	 *   else return respective error code (constant int) value
+	 * @throws PasswordEncryptionException
 	 */
-
 	private int validatePassword(User oldUser, String newPassword, String oldPassword)
 			throws PasswordEncryptionException
 	{
@@ -1640,19 +1561,20 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 
 					this.logger
-							.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
+					.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 					return FAIL_CHANGED_WITHIN_SOME_DAY;
 				}
 			}
 
 			/**	
-			 * to check password does not contain user name,surname,email address.  if same return FAIL_SAME_NAME_SURNAME_EMAIL
+			 * to check password does not contain user name,surname,email address.
+			 * if same return FAIL_SAME_NAME_SURNAME_EMAIL
 			 *  eg. username=XabcY@abc.com newpassword=abc is not valid
 			 */
 
 			String emailAddress = oldUser.getEmailAddress();
 			final int usernameBeforeMailaddress = emailAddress.indexOf('@');
-			// get substring of emailAddress before '@' character    
+			// get substring of emailAddress before '@' character
 			emailAddress = emailAddress.substring(0, usernameBeforeMailaddress);
 			final String userFirstName = oldUser.getFirstName();
 			final String userLastName = oldUser.getLastName();
@@ -1684,9 +1606,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This function checks whether user has logged in for first time or whether user's password is expired. 
+	 * This function checks whether user has logged in for
+	 * first time or whether user's password is expired.
 	 * In both these case user needs to change his password so Error key is returned
 	 * @param user - user object
+	 * @return String
 	 * @throws BizLogicException - throws BizLogicException
 	 */
 	public String checkFirstLoginAndExpiry(User user)
@@ -1730,9 +1654,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		return firstTimeLogin;
 	}
-	
-	
-
+	/**
+	 * @param newPassword newPassword
+	 * @param oldPwdList oldPwdList
+	 * @return boolean
+	 */
 	private boolean checkPwdNotSameAsLastN(String newPassword, List oldPwdList)
 	{
 		int noOfPwdNotSameAsLastN = 0;
@@ -1756,7 +1682,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 		return isSameFound;
 	}
-
+	/**
+	 * @param lastUpdateDate Date last updated
+	 * @return boolean
+	 */
 	private boolean checkPwdUpdatedOnSameDay(Date lastUpdateDate)
 	{
 		final Validator validator = new Validator();
@@ -1773,7 +1702,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param errorCode int value return by validatePassword() method
-	 * @return String error message with respect to error code 
+	 * @param parameters List of strings
+	 * @return String error message with respect to error code
 	 */
 	private String getPasswordErrorMsg(int errorCode, List<String> parameters)
 	{
@@ -1785,11 +1715,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						+ Integer.parseInt(XMLPropertyHandler
 								.getValue("password.not_same_as_last_n"));
 				parameters.add(dayCount);
-				//errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn",parameters);
 				errMsg = "errors.newPassword.sameAsLastn";
 				break;
 			case FAIL_FIRST_LOGIN :
-				//errMsg = ApplicationProperties.getValue("errors.changePassword.changeFirstLogin");
 				errMsg = "errors.changePassword.changeFirstLogin";
 				break;
 			case FAIL_EXPIRE :
@@ -1806,7 +1734,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					//errMsg = ApplicationProperties.getValue("errors.changePassword.afterSomeDays",parameters);
 					errMsg = "errors.changePassword.afterSomeDays";
 				}
 				break;
@@ -1825,16 +1752,17 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Name : Vijay_Pande
 	 * Reviewer : Sntosh_Chandak
-	 * Bug ID: 4185_2 
+	 * Bug ID: 4185_2
 	 * Patch ID: 1-2
 	 * See also: 1
 	 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
-	 * Following method is provided to verify whether the email address is already present in the system or not. 
+	 * Following method is provided to verify whether the email address is already present in the system or not.
 	 */
 	/**
 	 * Method to check whether email address already exist or not
 	 * @param emailAddress email address to be check
 	 * @param dao an object of DAO
+	 * @param userId User identifier
 	 * @return isUnique boolean value to indicate presence of similar email address
 	 * @throws BizLogicException database exception
 	 */
@@ -1878,7 +1806,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			UserBizLogic.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return isUnique;
 	}
@@ -1907,58 +1835,19 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				{
 					user.setRoleId(role.getId().toString());
 				}
-				//	logger.debug("In USer biz logic.............role........id......." + role.getId().toString());
 			}
 			catch (final SMException e)
 			{
 				UserBizLogic.logger.error("SMException in " +
 						"prePopulateUIBean method of UserBizLogic..." +e.getMessage(),e);
 				e.printStackTrace();
-				//throw new BizLogicException(e.getMessage());
 			}
 		}
 	}
 
-	//					     //method to return a comma seperated list of emails of administrators of a particular institute
-	//					     
-	//					     private String getInstitutionAdmins(Long instID) throws BizLogicException,SMException 
-	//					     {
-	//					     	String retStr="";
-	//					     	String[] userEmail;
-	//					     	
-	//					     	Long[] csmAdminIDs = SecurityManager.getInstance(UserBizLogic.class).getAllAdministrators() ; 
-	//					     	  if (csmAdminIDs != null )
-	//					     	  {
-	//					         	for(int cnt=0;cnt<csmAdminIDs.length ;cnt++  )
-	//					         	{
-	//					             	String sourceObjectName = User.class.getName();
-	//					             	String[] selectColumnName = null;
-	//					             	String[] whereColumnName = {"institution","csmUserId"};
-	//					                 String[] whereColumnCondition = {"=","="};
-	//					                 Object[] whereColumnValue = {instID, csmAdminIDs[cnt] };
-	//					                 String joinCondition = Constants.AND_JOIN_CONDITION;
-	//					         		
-	//					                 //Retrieve the users for given institution and who are administrators.
-	//					                 List users = retrieve(sourceObjectName, selectColumnName, whereColumnName,
-	//					                         whereColumnCondition, whereColumnValue, joinCondition);
-	//					                 
-	//					                 if(!users.isEmpty() )
-	//					                 {
-	//					                 	User adminUser = (User)users.get(0);
-	//					                 	retStr = retStr + "," + adminUser.getEmailAddress();
-	//					                 	logger.debug(retStr);
-	//					                 }
-	//					         	}
-	//					         	retStr = retStr.substring(retStr.indexOf(",")+1 );
-	//					         	Logger.out.debug(retStr);
-	//					     	  }
-	//					     	return retStr;
-	//					     }
-	//					     
-
 	/**
-	 * To Sort CP's in CP based view according to the 
-	 * Privilges of User on CP
+	 * To Sort CP's in CP based view according to the
+	 * Privilges of User on CP.
 	 * Done for MSR functionality change
 	 * @author ravindra_jain 
 	 */
@@ -2034,7 +1923,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		return cpIds;
 	}
-
+	/**
+	 * @param userId user Id
+	 * @return Set
+	 * @throws BizLogicException BizLogicException
+	 */
 	public Set<Long> getRelatedSiteIds(Long userId) throws BizLogicException
 	{
 		DAO dao = null;
@@ -2073,9 +1966,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Custom method for Add User Case
-	 * @param dao
-	 * @param domainObject
-	 * @param sessionDataBean
+	 * @param dao DAO object
+	 * @param domainObject Domain object
+	 * @param sessionDataBean SessionDataBean object
 	 * @return
 	 */
 	public String getObjectId(DAO dao, Object domainObject)
@@ -2129,9 +2022,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				siteCollection.add(siteUserRolePrivilegeBean.getSiteList().get(0));
 			}
 		}
-
-		// Collection<Site> siteCollection = user.getSiteCollection();
-
 		final StringBuffer sb = new StringBuffer();
 		boolean hasUserProvisioningPrivilege = false;
 

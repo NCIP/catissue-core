@@ -667,7 +667,7 @@ public class UserForm extends AbstractActionForm
 			this.setUserData(user);
 			this.setDptCRG(user);
 			this.setAddr(user);
-			//Populate the activity status, comments and role for approve user and user edit.  
+			//Populate the activity status, comments and role for approve user and user edit.
 			this.setUserData(user);
 			if (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))
 			{
@@ -877,15 +877,17 @@ public class UserForm extends AbstractActionForm
 					{
 						this.chkValOpt(errors, validator,
 								"user.approveOperation", this.status);
-						this.chkValOpt(errors, validator, "user.approveOperation", this.status);
+						this.chkValOpt(errors, validator, "user.approveOperation",
+						this.status);
 					}
 					//Bug- 1516:
 					this.adminEdit(request, errors, validator);
 					// Mandar 10-apr-06 : bugid :353 end
-					//Bug- 1516:  
+					//Bug- 1516:
 					this.adminEdit(request, errors, validator);
-					// Mandar 10-apr-06 : bugid :353 end 
+					// Mandar 10-apr-06 : bugid :353 end
 				}
+				validateWashUEmailAddress(errors);
 			}
 		}
 		catch (final Exception excp)
@@ -894,6 +896,27 @@ public class UserForm extends AbstractActionForm
 			excp.printStackTrace();
 		}
 		return errors;
+	}
+	/**
+	 * @param errors ActionErrors
+	 */
+	private void validateWashUEmailAddress(final ActionErrors errors)
+	{
+		if(!"".equals(wustlKey))
+		{
+		  if(!emailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
+		  && !emailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
+		  {
+		        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+		        ApplicationProperties.getValue("email.washu.user")));
+		  }
+		  if(!confirmEmailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
+		  && !confirmEmailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
+		  {
+		        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+		        ApplicationProperties.getValue("confirm.washu.user")));
+		  }
+		}
 	}
 
 	/**
@@ -1082,7 +1105,6 @@ public class UserForm extends AbstractActionForm
 
 			if (result != PasswordManager.SUCCESS)
 			{
-				// get error message of validation failure where param is result of validate() method
 				final String errorMessage = PasswordManager.getErrorMessage(result);
 				logger.debug("error from Password validate " + errorMessage);
 				errors.add(ActionErrors.GLOBAL_ERROR,
