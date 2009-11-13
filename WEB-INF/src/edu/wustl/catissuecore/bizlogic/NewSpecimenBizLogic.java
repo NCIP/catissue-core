@@ -4632,25 +4632,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 								&& ((Constants.DERIVED_SPECIMEN).equals(specimen.getLineage()) || (Constants.ALIQUOT)
 										.equals(specimen.getLineage())))
 						{
-							if (specimen.getParentSpecimen().getLabel() != null
-									&& !specimen.getParentSpecimen().getLabel().equals(""))
+							//bug 13288
+							/**
+							 * To edit specimen of lineage derivative/aliquot, if the parent specimen is located at site 
+							 * at which the user does not have association privileges.
+							 */
+							if (specimen.getLabel() != null
+									&& !specimen.getLabel().equals(""))
 							{
 								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
 										+ "specimen.label = '"
-										+ specimen.getParentSpecimen().getLabel() + "'";
+										+ specimen.getLabel() + "'";
 							}
-							else if (parentSpecimen.getBarcode() != null
-									&& !parentSpecimen.getBarcode().equals(""))
+							else if (specimen.getBarcode() != null
+									&& !specimen.getBarcode().equals(""))
 							{
 								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
 										+ "specimen.barcode = '"
-										+ parentSpecimen.getBarcode()
+										+ specimen.getBarcode()
 										+ "'";
 							}
 							else
 							{
 								query = "select specimen.specimenPosition.storageContainer.site from edu.wustl.catissuecore.domain.Specimen as specimen where "
-										+ " specimen.id = " + specimen.getParentSpecimen().getId();
+										+ " specimen.id = " + specimen.getId();
 							}
 
 							if (query != null)
