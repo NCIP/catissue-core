@@ -93,7 +93,7 @@
 			cardinality="1" roleName="specimenPosition" >			
 			<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.StorageContainer"
-			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
 			cardinality="1" roleName="storageContainer" >
 				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="true" dataType="java.lang.String"/>
 			</referenceAssociationCollection>
@@ -111,11 +111,11 @@
 			cardinality="*" roleName="specimenEventCollection">
 			<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
-			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+			relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
 			cardinality="1" roleName="collectionEventParameters">
 				<referenceAssociationCollection
 				className="edu.wustl.catissuecore.domain.User"
-				relationShipType="association" isToMigrate="Yes" isToSetNull="No"
+				relationShipType="association" templateName="createSpecimen" isOneToManyAssociation=""
 				cardinality="1" roleName="user">
 					<attributeCollection name="loginName" csvColumnName="Collected User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
 				</referenceAssociationCollection>
@@ -150,7 +150,6 @@
 		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false" dataType="java.lang.String"/>
 		<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false" dataType="java.lang.String"/>		
 	</BulkOperationClass>
-	
 	  
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
 		relationShipType="main" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="false"
@@ -177,7 +176,6 @@
 		<attributeCollection name="ratio28STo18S" csvColumnName="Ratio 28S to 16S" updateBasedOn="false" dataType="java.lang.Double"/>
 		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
 	</BulkOperationClass>
-	
 	
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters"
 		relationShipType="main" templateName="createTissueSpecimenReviewParameters"
@@ -223,7 +221,6 @@
 		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
 	</BulkOperationClass>	
 	
-	
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
 		relationShipType="main" templateName="createCellSpecimenReviewParameters"
 		isOneToManyAssociation="false" cardinality="" roleName="">
@@ -256,13 +253,7 @@
 				className="edu.wustl.catissuecore.domain.Race"
 				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
 				cardinality="1" roleName="race">
-				<attributeCollection name="raceName" csvColumnName="Race1" updateBasedOn="false" dataType="java.lang.String"/>		
-			</containmentAssociationCollection>
-			<containmentAssociationCollection
-				className="edu.wustl.catissuecore.domain.Race"
-				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
-				cardinality="1" roleName="race">
-				<attributeCollection name="raceName" csvColumnName="Race2" updateBasedOn="false" dataType="java.lang.String"/>		
+				<attributeCollection name="raceName" csvColumnName="Race" updateBasedOn="false" dataType="java.lang.String"/>		
 			</containmentAssociationCollection>
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
@@ -278,21 +269,9 @@
 					className="edu.wustl.catissuecore.domain.Site" relationShipType="association"
 					templateName="createParticipant" isOneToManyAssociation="false"
 					cardinality="1" roleName="site">
-					<attributeCollection name="name" csvColumnName="Site1" updateBasedOn="false" dataType="java.lang.String"/>					
+					<attributeCollection name="name" csvColumnName="Site" updateBasedOn="false" dataType="java.lang.String"/>					
 				</referenceAssociationCollection>		
 			</containmentAssociationCollection>
-			<containmentAssociationCollection
-				className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
-				relationShipType="association" templateName="createParticipant" isOneToManyAssociation="false"
-				cardinality="1" roleName="participantMedicalIdentifier">
-				<attributeCollection name="medicalRecordNumber" csvColumnName="MRN2" updateBasedOn="false" dataType="java.lang.String"/>
-				<referenceAssociationCollection
-					className="edu.wustl.catissuecore.domain.Site" relationShipType="association"
-					templateName="createParticipant" isOneToManyAssociation="false"
-					cardinality="1" roleName="site">
-					<attributeCollection name="name" csvColumnName="Site2" updateBasedOn="false" dataType="java.lang.String"/>
-				</referenceAssociationCollection>		
-			</containmentAssociationCollection>			
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
@@ -329,47 +308,5 @@
 		<attributeCollection name="ethnicity" csvColumnName="Ethinicity" updateBasedOn="false" dataType="java.lang.String"/>
 		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String"/>
 	</BulkOperationClass>
-	<!--
-	<MigrationClass className="edu.wustl.catissuecore.domain.Specimen"
-		relationShipType="main" isToMigrate="Yes" isToSetNull="No"
-		cardinality="" roleName="" sql="createAliquot">
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
-			cardinality="1" roleName="specimenCollectionGroup">
-		</referenceAssociationCollection>
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.Specimen" relationShipType="association"
-			isToMigrate="Yes" isToSetNull="No" cardinality="1"
-			roleName="parentSpecimen">
-				<attributeCollection name="label" csvColumnName="Parent Specimen Label" updateBasedOn="false"  dataType="java.lang.String"/>
-		</referenceAssociationCollection>
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenPosition"
-			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
-			cardinality="1" roleName="specimenPosition" >
-			<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false"  dataType="java.lang.Integer"/>
-			<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false"  dataType="java.lang.Integer"/>			 
-			<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.StorageContainer"
-			relationShipType="association" isToMigrate="Yes" isToSetNull="No"
-			cardinality="1" roleName="storageContainer" >
-				<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="false"  dataType="java.lang.String"/>
-			</referenceAssociationCollection>			
-		</containmentAssociationCollection>
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-			relationShipType="containment" isToMigrate="Yes" isToSetNull="No"
-			cardinality="1" roleName="specimenCharacteristics">
-		</containmentAssociationCollection>
-		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false"  dataType="java.lang.String"/>
-		<attributeCollection name="initialQuantity" csvColumnName="Quantity per aliquot" updateBasedOn="false"  dataType="java.lang.Double"/>
-		<attributeCollection name="availableQuantity" csvColumnName="Quantity per aliquot" updateBasedOn="false"  dataType="java.lang.Double"/>
-		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false"  dataType="java.lang.Boolean"/>
-		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false"  dataType="java.lang.String"/>
-		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false"  dataType="java.lang.String"/>
-		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false"  dataType="java.lang.String"/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false"  dataType="java.lang.String"/>
-	</MigrationClass>
-	-->
+
 </BulkOperationMetadata>
