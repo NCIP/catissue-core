@@ -633,14 +633,18 @@ public final class StorageContainerUtil
 
 	/**
 	 * 
-	 * @param containerMap
-	 * @param containerId
-	 * @throws BizLogicException 
+	 * @param containerMap - containerMap
+	 * @param containerId - containerId
+	 * @param xPos - xPos
+	 * @param yPos - yPos
+	 * @param dao - dao
+	 * @throws BizLogicException - BizLogicException
 	 */
 	public static void addAllocatedPositionToMap(TreeMap containerMap, long containerId, int xPos,
 			int yPos, DAO dao) throws BizLogicException
 	{
-		final Long relevanceCnt = 1L;
+	    //bug 14826
+		long relevanceCnt = 1;
 		if ((containerId != 0) && (xPos != 0) && (yPos != 0))
 		{
 			List parentContainerNameList;
@@ -651,8 +655,18 @@ public final class StorageContainerUtil
 				if ((parentContainerNameList != null) && (parentContainerNameList.size() > 0))
 				{
 					final String parentContainerName = (String) parentContainerNameList.get(0);
-					Map positionMap = (Map) containerMap.get(new NameValueBean(parentContainerName,
-							containerId, relevanceCnt));
+					Set keySet = containerMap.keySet();
+					for (final Iterator itr = keySet.iterator(); itr.hasNext();)
+					{
+						NameValueBean containerName = (NameValueBean) itr.next();
+						if(containerName.getName().equals( parentContainerName ))
+						{
+							relevanceCnt = containerName.getRelevanceCounter();
+							break;
+						}
+					}					
+					NameValueBean nvBean = new NameValueBean(parentContainerName,Long.valueOf( containerId ),relevanceCnt);
+					Map positionMap = (Map) containerMap.get(nvBean);
 					if (positionMap == null)
 					{
 						positionMap = new TreeMap();
@@ -662,10 +676,10 @@ public final class StorageContainerUtil
 					{
 						list = new ArrayList();
 					}
-					list.add(new NameValueBean(yPos, yPos));
+					list.add(0,new NameValueBean(yPos, yPos));
 					positionMap.put(new NameValueBean(xPos, xPos), list);
-					containerMap.put(new NameValueBean(parentContainerName, containerId,
-							relevanceCnt), positionMap);
+					containerMap.put(new NameValueBean(parentContainerName, Long.valueOf( containerId ),relevanceCnt), positionMap);
+				
 				}
 			}
 			catch (final DAOException e)
