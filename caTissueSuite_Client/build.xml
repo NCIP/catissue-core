@@ -3,7 +3,7 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 
 <project name="caTissueSuite Client" default="compile_junit_TestCases" >
-	
+	<property file="../caTissueInstall.properties"/>
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>
 	<property name="target.dir" value="./classes" />
@@ -74,12 +74,13 @@
 		</target>
 
 	<target name="runJunitTestCases" depends="compile_junit_TestCases">
-        <mkdir dir="${report.dir}/Nightly_Build_Report" />
-		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
-			
+		<mkdir dir="${target.dir}/reports" />
+		<mkdir dir="${target.dir}/reports/junit" />
+
 		<junit printsummary="yes" fork="yes" haltonfailure="no">
 			<formatter type="xml" />
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
+			<sysproperty key="net.sourceforge.cobertura.datafile"
+				file="${jboss.home.dir}/bin/cobertura.ser" />
 			<classpath>				
 				<pathelement path="${base.dir}/conf" />
 				<fileset dir="./lib">

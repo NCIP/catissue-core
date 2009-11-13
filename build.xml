@@ -264,7 +264,8 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,common_build_war,build_client_jar">
+	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,
+		common_build_war,build_client_jar">
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
 		Note: database type is not replaced 
@@ -850,42 +851,59 @@
   <!-- =================================================================== -->
   <!-- Cobertura code coverage report                                      -->
   <!-- =================================================================== -->
-
-	<taskdef classpathref="junit.classpath" resource="tasks.properties" />
-
+	<path id="cobertura.classpath">
+		<pathelement location="${junit.jar}" />
+		<pathelement location="${target.dir}" />
+		<pathelement location="${base.dir}/cobertura/cobertura.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/jakarta-oro-2.0.8.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/asm-2.2.1.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/asm-tree-2.2.1.jar" />
+		<path refid="app.classpath" />
+	</path>
+	
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
 	<target name="instrument">
-
-		<mkdir dir="${cobertura.dir}" />
+		<delete dir="./cobertura/instrumented" />
+		<delete file="${jboss.home.dir}/bin/cobertura.ser" />
+		<mkdir dir="./cobertura/instrumented" />
 		<!--
 	       Instrument the application classes, writing the
 	       instrumented classes into ${build.instrumented.dir}.
 	    -->
-		<cobertura-instrument datafile="${cobertura.dir}/coverage.ser" todir="${cobertura.dir}">
-			<!--
+		<cobertura-instrument datafile="${jboss.home.dir}/bin/cobertura.ser"
+			todir="./cobertura/instrumented">
+		<!--
 	         The following line causes instrument to ignore any
 	         source line containing a reference to log4j, for the
 	         purposes of coverage reporting.
 	      -->
 			<ignore regex="org.apache.log4j.*" />
-
-			<fileset dir="${target.dir}">
+			<classpath refid="cobertura.classpath" />
+			<fileset dir="./WEB-INF/classes">
 				<include name="**/*.class" />
-				<exclude name="**/*Test.class" />
-				<exclude name="**/Mock*.class" />
 			</fileset>
+
 		</cobertura-instrument>
+		<echo>Copying instrumented class files to classes folder</echo>
+		<copy todir="./WEB-INF/classes">
+			<fileset dir="./cobertura/instrumented">
+				<include name="**/*.class" />
+			</fileset>
+		</copy>
 	</target>
 
+	<target name="build_war_cobertura" depends="init, compile, instrument, 
+		build_war_cobertura_post_compilation">
+	</target>
+
+	<target name="build_war_cobertura_post_compilation" depends="unpack_cacore_war,replace_database_type,
+		common_build_war,build_client_jar">
+	</target>
 
 	<target name="gen_report_cobertura">
-		<antcall target="clean" />
-		<antcall target="compile" />
-		<antcall target="instrument" />
-		<antcall target="run_junit_testcases" />
-
-		<cobertura-report datafile="${cobertura.dir}/coverage.ser" srcdir="${src.dir}" destdir="${report.dir}/reports/coverage" />
-
-		<delete file="${cobertura.dir}/coverage.ser" />
+		<cobertura-report datafile="./cobertura/cobertura.ser" 
+			srcdir="${src.dir}" destdir="./cobertura/reports/coverage" format="html" />
+		<delete file="./cobertura/cobertura.ser" />
 	</target>
 	
  <!-- Create the Applet JAR Begins-->
@@ -1456,7 +1474,5 @@
 		<antcall target="struts_coverage_report"/>
 		
 	</target>
-		
-	
-	
+
 </project>
