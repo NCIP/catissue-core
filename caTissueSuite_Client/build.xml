@@ -74,8 +74,8 @@
 		</target>
 
 	<target name="runJunitTestCases" depends="compile_junit_TestCases">
-		<mkdir dir="${target.dir}/reports" />
-		<mkdir dir="${target.dir}/reports/junit" />
+		<mkdir dir="${report.dir}/Nightly_Build_Report" />
+		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
 
 		<junit printsummary="yes" fork="yes" haltonfailure="no">
 			<formatter type="xml" />
