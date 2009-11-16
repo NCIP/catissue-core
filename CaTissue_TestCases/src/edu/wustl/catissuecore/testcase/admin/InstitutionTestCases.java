@@ -31,7 +31,6 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testInstitutionAdd()
 	{
-
 		InstitutionForm institutionForm = new InstitutionForm();
 		institutionForm.setName("Inst_"+UniqueKeyGeneratorUtil.getUniqueKey());
 		institutionForm.setOperation("add");
@@ -53,7 +52,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 
 	/**
 	 * Test Institution Add With existing Name.
-	 * Negative test.
+	 * Negative test Case.
 	 */
 	@Test
 	public void testInstitutionAddWithSameName()
@@ -75,7 +74,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 
 	/**
 	 * Test Institution Add With Blank Name.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testInstitutionAddWithNullName()
@@ -97,7 +96,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 
 	/**
 	 * Test Institution Add With null object.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testInstitutionBizLogicAddWithNullObject()
@@ -109,15 +108,15 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		}
 		catch(BizLogicException e)
 		{
+			logger.error("Exception in InstitutionTestCase :" + e.getMessage());
 			e.printStackTrace();
-			System.out.println("InstitutionTestCases.testInstitutionBizLogicAddWithNullObject(): " + e.getMessage());
 			assertEquals("domain.object.null.err.msg", e.getErrorKeyAsString());
 			
 		}
 	}
 	/**
-	 * Test Institution Add With Blank Name.
-	 * Negative Test
+	 * Test Institution Add With NULL Name.
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testInstitutionBizLogicAddWithNullName()
@@ -132,14 +131,12 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		}
 		catch(BizLogicException e)
 		{
+			logger.error("Exception in InstitutionTestCase :" + e.getMessage());
 			e.printStackTrace();
-			
-			System.out.println("InstitutionTestCases.testInstitutionBizLogicAddWithNullName(): " + e.getMessage());
 			assertEquals("Name is required.", e.getMessage());
 			assertEquals("errors.item.required", e.getErrorKeyAsString());
 			
 		}
-		
 	}
 	
 	/**
@@ -203,7 +200,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		
 	}
 	/**
-	 * 
+	 * Test Institution Edit.
 	 */
 	@Test
 	public void testInstitutionEdit()
@@ -233,7 +230,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	}
 	/**
 	 * Test Institution Search With wrong Identifier.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testInstitutionSearchOnWrongSearchString()
@@ -255,5 +252,27 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		//verify action error
 		String errormsg[] = new String[]{"simpleQuery.noRecordsFound"};
 		verifyActionErrors(errormsg);
+	}
+
+	/**
+	 * Test Institution Search With valid name using Institution BizLogic.
+	 */
+	@Test
+	public void testInstitutionBizLogicSearchWithGivenInstitutionName()
+	{
+		try
+		{
+			InstitutionBizLogic institutionBizLogic = new InstitutionBizLogic();
+			Institution inst = (Institution) TestCaseUtility.getNameObjectMap("Institution");
+			logger.info(" ::: Inst Name ::: " + inst.getName());
+			String instId = institutionBizLogic.getLatestInstitution(inst.getName()) ;
+			logger.info(" ::: Inst ID ::: " + instId);
+			assertTrue("Institution Name Found ",true);
+		}
+		catch(BizLogicException e)
+		{
+			logger.error("Exception in InstitutionTestCase :" + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

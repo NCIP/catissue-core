@@ -31,8 +31,8 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	public void testSetUtility()
 	{
 		StorageType storageType = new StorageType();
-		storageType.setName("srType_1247811042027");
-		storageType.setId(300L);
+		storageType.setName("TissueStorageType_1257421218783");
+		storageType.setId(6L);
 		TestCaseUtility.setNameObjectMap("StorageType", storageType);
 		
 		Site s = new Site();
@@ -48,6 +48,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
+		logger.info("----StorageTypeId : " + storageType.getId());
 		storageContainerForm.setTypeName(storageType.getName());
 		
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
@@ -59,9 +60,9 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setOneDimensionLabel("row");
 		storageContainerForm.setTwoDimensionLabel("row");
 		storageContainerForm.setDefaultTemperature("29");
-		
 		/*addRequestParameter("holdsSpecimenClassTypes", "Cell");
 		addRequestParameter("specimenOrArrayType", "SpecimenArray");*/
+		
 		String[] holdsSpecimenClassCollection = new String[4];
 		holdsSpecimenClassCollection[0]="Fluid";
 		holdsSpecimenClassCollection[1]="Tissue";
@@ -90,22 +91,31 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    storageContainer.setCapacity(capacity);
 	    
 	    storageContainer.setId(form.getId());
-	    
+	    logger.info("----StorageContainerId : " + storageContainer.getId());
 	    Collection<String> holdsSpecimenClassCollection1 = new HashSet<String>();
 	    String[] specimenClassTypes = form.getHoldsSpecimenClassTypes();
 	    holdsSpecimenClassCollection1.add(specimenClassTypes[0]);
 	    storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection1);
 	    
-	    
+	    final StorageType storageTypeAny = new StorageType();
+		storageTypeAny.setId(new Long("1"));
+		storageTypeAny.setName("All");
+		Collection<StorageType> coll = new HashSet<StorageType>() ;
+		coll.add(storageTypeAny);
+		storageContainer.getHoldsStorageTypeCollection().clear();
+		storageContainer.setHoldsStorageTypeCollection(coll);
 	    TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);	    
 	}
 	//bug 11546
+	/**
+	 * Test Storage Container Add Freezer Container.
+	 */
 	@Test
 	public void testAddFreezerContainer()
 	{
 		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
-		
+			
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
 		storageContainerForm.setTypeName(storageType.getName());
@@ -136,6 +146,10 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();	
 	}
+	/**
+	 * Test Storage Container Add invalid parent container.
+	 * Negative Test Case.
+	 */
 	@Test
 	public void testAddChildContainerWithInvalidParentContainer()
 	{

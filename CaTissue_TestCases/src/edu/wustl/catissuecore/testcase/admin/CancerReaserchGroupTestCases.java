@@ -5,15 +5,16 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
-import edu.wustl.catissuecore.actionForm.InstitutionForm;
+import edu.wustl.catissuecore.bizlogic.CancerResearchBizLogic;
+import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 
 /**
@@ -48,7 +49,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	}
 	/**
 	 * Test CancerResearchGroup Add With existing Name.
-	 * Negative test.
+	 * Negative test Case.
 	 */
 	@Test
 	public void testCancerResearchGroupAddWithSameName()
@@ -69,7 +70,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	}
 	/**
 	 * Test CancerResearchGroup Add With Blank Name.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testCancerResearchGroupAddWithNullName()
@@ -89,7 +90,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		assertEquals(CancerResearchGroupForm.class.getName(),getActionForm().getClass().getName());
 	}
 	/**
-	 * Test Cancer Research Group Edit.
+	 * Test Cancer Research Group Search.
 	 */
 	@Test
 	public void testCancerResearchGroupSearch()
@@ -143,7 +144,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
-	 * 
+	 * Test Cancer Research Group Edit.
 	 */
 	@Test
 	public void testCancerResearchGroupEdit()
@@ -174,7 +175,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	
 	/**
 	 * Test CancerResearchGroup Search on Wrong Search Value.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testCancerResearchGroupSearchOnWrongSearchValue()
@@ -198,24 +199,74 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		verifyActionErrors(errormsg);
 	}
 	/**
-	 * 
+	 * Test Cancer Research Group Add with NULL object.
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testCRGBizLogicAddWithNullObject()
 	{
-		//TODO
-		fail("Need to write test case");
+//		//TODO
+//		fail("Need to write test case");
+		try
+		{
+			CancerResearchBizLogic cancerBizLogic = new CancerResearchBizLogic() ;
+			cancerBizLogic.insert(null, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("Null Cancer Research Group object getting inserted",true) ;
+		}
+		catch (BizLogicException e)
+		{
+			logger.error("Exception in CRGTestCase :" + e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * 
+	 * Test Cancer Research Group Add with NULL name.
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testCRGBizLogicAddWithNullName()
 	{
-		//TODO
-		fail("Need to write test case");
+//		//TODO
+//		fail("Need to write test case");
+		
+		try
+		{
+			CancerResearchGroup cancGroup = new CancerResearchGroup();
+			cancGroup.setName(null) ;
+			CancerResearchBizLogic cancerBizLogic = new CancerResearchBizLogic() ;
+			cancerBizLogic.insert(cancGroup, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("Cancer Research Group getting inserted with Null values",true) ;
+		}
+		catch (BizLogicException e)
+		{
+			logger.error("Exception in CRGTestCase :" + e.getMessage());
+			e.printStackTrace() ;
+			// TODO: handle exception
+		}
 	}
-		
-		
+	/**
+	 * Test Cancer Research Group search.
+	 * with given name using CRG BizLogic.
+	 */
+	@Test
+	public void testCRGSearchWithGivenCRGName()
+	{
+		try
+		{
+			CancerResearchBizLogic cancerBizLogic = new CancerResearchBizLogic() ;
+			CancerResearchGroup crg = (CancerResearchGroup)
+					TestCaseUtility.getNameObjectMap("CancerResearchGroup");
+			
+			String crgID = cancerBizLogic.getLatestCRG(crg.getName()) ;
+			logger.info(" ::: CancerResearchGroup ID ::: " + crgID);
+			assertTrue("CancerResearchGroup Name Found ",true);
+		}
+		catch(BizLogicException e)
+		{
+			logger.error("Exception in CRGTestCase :" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }

@@ -5,15 +5,14 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
-import edu.wustl.catissuecore.actionForm.InstitutionForm;
+import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
 import edu.wustl.catissuecore.domain.Department;
-import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 
 
@@ -49,7 +48,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	}
 	/**
 	 * Test Department Add With existing Name.
-	 * Negative test.
+	 * Negative test Case..
 	 */
 	@Test
 	public void testDepartmentAddWithSameName()
@@ -71,7 +70,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	}
 	/**
 	 * Test Department Add With Blank Name.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testDepartmentAddWithNullName()
@@ -91,7 +90,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		assertEquals(DepartmentForm.class.getName(),getActionForm().getClass().getName());
 	}
 	/**
-	 * Test Department Edit.
+	 * Test Department Search.
 	 */
 	@Test
 	public void testDepartmentSearch()
@@ -99,9 +98,12 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 
 		SimpleQueryInterfaceForm simpleQueryInterfaceForm = new SimpleQueryInterfaceForm(); 
 		simpleQueryInterfaceForm.setAliasName("Institution");
-		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "Department");
-		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "Department.NAME.varchar");
-		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
+		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_" +
+						"DataElement_table", "Department");
+		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_" +
+						"DataElement_field", "Department.NAME.varchar");
+		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_" +
+						"Operator_operator", "Starts With");
 		simpleQueryInterfaceForm.setValue("SimpleConditionsNode:1_Condition_value", "");
 		simpleQueryInterfaceForm.setPageOf("pageOfDepartment");
 		
@@ -146,7 +148,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
-	 * 
+	 * Test Department Edit.
 	 */
 	@Test
 	public void testDepartmentEdit()
@@ -177,7 +179,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	
 	/**
 	 * Test Department Search With wrong Identifier.
-	 * Negative Test
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testDepartmentSearchOnWrongSearchValue()
@@ -203,19 +205,72 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
+	 * Test Department Add With NULL Object.
+	 * Negative Test Case.
 	 */
 	@Test
 	public void testDepartmentBizLogicAddWithNullObject()
 	{
-		//TODO
-		fail("Need to write test case");
+//		//TODO
+//		fail("Need to write test case");
+		
+		DepartmentBizLogic bizLogic = new DepartmentBizLogic() ;
+		try
+		{
+			bizLogic.insert(null, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("Department Object is NULL while inserting through BizLogic ", true) ;
+		}
+		catch (BizLogicException e)
+		{
+			logger.error("Exception in DepartmentTestCase :" + e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
+	 * Test Department Add with NULL Department name.
+	 * Negative test Case.
 	 */
 	@Test
 	public void testDepartmentBizLogicAddWithNullName()
 	{
-		//TODO
-		fail("Need to write test case");
+//		//TODO
+//		fail("Need to write test case");
+		Department department = new Department() ;
+		DepartmentBizLogic bizLogic = new DepartmentBizLogic() ;
+		department.setName(null) ;
+		try
+		{
+			bizLogic.insert(department, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("Department Object is NULL while inserting through BizLogic ", true) ;
+		}
+		catch (BizLogicException e)
+		{
+			logger.error("Exception in DepartmentTestCase :" + e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Test Department search with valid Department.
+	 * name using Department BizLogic.
+	 */
+	@Test
+	public void testDepartmentSearchWithGivenDepartmentName()
+	{
+		try
+		{
+			DepartmentBizLogic bizLogic = new DepartmentBizLogic() ;
+			Department dept = (Department) TestCaseUtility.getNameObjectMap("Department");
+			
+			String depId = bizLogic.getLatestDepartment(dept.getName()) ;
+			logger.info(" ::: Dept ID ::: " + depId);
+			assertTrue("Department Name Found ",true);
+		}
+		catch(BizLogicException e)
+		{
+			logger.error("Exception in Department :" + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }
