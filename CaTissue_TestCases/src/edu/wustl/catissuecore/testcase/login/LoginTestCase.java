@@ -1,8 +1,11 @@
 package edu.wustl.catissuecore.testcase.login;
 import org.junit.Test;
 
+import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
+import edu.wustl.common.audit.LoginAuditManager;
+import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.beans.SessionDataBean;
 /**
 *
@@ -11,42 +14,117 @@ import edu.wustl.common.beans.SessionDataBean;
  */
 public class LoginTestCase extends CaTissueSuiteBaseTest
 {
-/**
- * Negative test case
- * bug 10997
- */
+	/**
+	 * Negative Test Case.
+	 * Test Login with empty Login name.
+	 */
+	@Test
+	public void testLoginWithEmptyLoginName()
+	{
+		setRequestPathInfo("/Login") ;
+		LoginForm loginForm = new LoginForm() ;
+		loginForm.setLoginName("") ;
+		loginForm.setPassword("Test") ;
+		setActionForm(loginForm) ;
+		actionPerform();
+		//verifyForward("/Home.do");
+		verifyForward("failure");
+
+		//verify action errors
+		String errormsg[] = new String[] {"errors.item.required"};
+		verifyActionErrors(errormsg);
+	}
+	
+	/**
+	 * Negative Test Case.
+	 * Test Login with empty Password.
+	 */
+	@Test
+	public void testLoginWithEmptyLoginPassword()
+	{
+		setRequestPathInfo("/Login") ;
+		LoginForm loginForm = new LoginForm() ;
+		loginForm.setLoginName("admin@admin.com") ;
+		loginForm.setPassword("") ;
+		setActionForm(loginForm) ;
+		actionPerform();
+		//verifyForward("/Home.do");
+		verifyForward("failure");
+
+		//verify action errors
+		String errormsg[] = new String[] {"errors.item.required"};
+		verifyActionErrors(errormsg);
+	}
+	
+	/**
+	 * Negative Test Case.
+	 * Test Login with Invalid Format of Login and Password.
+	 */
+	@Test
+	public void testLoginWithInvalidFormatLogin()
+	{
+		setRequestPathInfo("/Login") ;
+		LoginForm loginForm = new LoginForm() ;
+		loginForm.setLoginName("@admin@admin.com") ;
+		loginForm.setPassword("Test") ;
+		setActionForm(loginForm) ;
+		actionPerform();
+		//verifyForward("/Home.do");
+		verifyForward("failure");
+
+		//verify action errors
+		String errormsg[] = new String[] {"errors.item.format"};
+		verifyActionErrors(errormsg);
+	}
+
+	/**
+	 * Negative test case.
+	 * Test Login with Invalid Login name and password.
+	 * bug 10997
+	 */
 	@Test
 	public void testInvalidLogin()
-	  {
-		   	addRequestParameter("loginName","admin@admin.com");
-	        addRequestParameter("password","Test");
-	        setRequestPathInfo("/Login.do");
-	        actionPerform();
-	        //verifyForward("/Home.do");
-	         verifyForward("failure");
-			
-			//verify action errors
-			String errormsg[] = new String[] {"errors.incorrectLoginNamePassword"};
-			verifyActionErrors(errormsg);
-	  }
-	/**
-	 * Test successful Login.
-	 */
-		@Test
-		public void testSuccessfulLogin()
-		  {
-			   	addRequestParameter("loginName","admin@admin.com");
-		        addRequestParameter("password","Test123");
-		        setRequestPathInfo("/Login.do");
-		        actionPerform();
-		        //verifyForward("/Home.do");
-		        verifyForward("success");
+	{
+		/**
+		 * reset method is modified for running successfully.
+		 * this test case using Login Form. 
+		 */
+		setRequestPathInfo("/Login") ;
+		LoginForm loginForm = new LoginForm() ;
+		loginForm.setLoginName("admin@admin.com") ;
+		loginForm.setPassword("Test") ;
+		setActionForm(loginForm) ;
+		actionPerform();
+		//verifyForward("/Home.do");
+		verifyForward("failure");
 
-		        SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		        assertEquals("user name should be equal to loggedinusername","admin@admin.com",bean.getUserName());
-		        CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
-		        verifyNoActionErrors();
-		  }
+		//verify action errors
+		String errormsg[] = new String[] {"errors.incorrectLoginIDPassword"};
+		verifyActionErrors(errormsg);
+		LoginDetails loginDetails = new LoginDetails(loginForm.getLoginName(),1L,"",false) ;
+		LoginAuditManager loginManager = new LoginAuditManager(loginDetails) ;
+		loginManager.audit(false, loginDetails);
+	}
+	/**
+	 * Test Login with Valid Login name and Password.
+	 */
+	@Test
+	public void testSuccessfulLogin()
+	{
+		setRequestPathInfo("/Login") ;
+		LoginForm loginForm = new LoginForm() ;
+		loginForm.setLoginName("admin@admin.com") ;
+		loginForm.setPassword("Shri123") ;
+		setActionForm(loginForm) ;
+		actionPerform();
+		//verifyForward("/Home.do");
+		verifyForward("success");
+
+		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		assertEquals("user name should be equal to loggedinusername","admin@admin.com",bean.getUserName());
+		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
+		verifyNoActionErrors();
+	}
 	
 /**
  * Test CLick Administrative->Site menu.

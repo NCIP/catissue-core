@@ -1,29 +1,23 @@
 package edu.wustl.catissuecore.testcase.biospecimen;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 /**
  * This class contains test cases for Specimen Collection Group add/edit
  * @author Himanshu Aseeja
@@ -36,58 +30,56 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSpecimenCollectionGroupAdd()
 	{
+		SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm();
+		speCollForm.setClinicalDiagnosis("Not Specified") ;
+		speCollForm.setClinicalStatus("Not Specified") ;
+		speCollForm.setCollectionStatus("Complete");
 		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
+		
+		speCollForm.setCollectionProtocolName(collectionProtocol.getTitle()) ;
+		
 		setRequestPathInfo("/CPQuerySpecimenCollectionGroupAdd");
-		addRequestParameter("clinicalDiagnosis", "Not Specified");
-		addRequestParameter("clinicalStatus", "Not Specified");
-		addRequestParameter("collectionStatus", "Complete");
-		addRequestParameter("collectionProtocolName", collectionProtocol.getTitle());
 		
 		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
 		String participantNameWithProtocolId = ""+participant.getLastName()+", "+participant.getFirstName()+"("+collectionProtocol.getId()+")";
-		
-		addRequestParameter("participantNameWithProtocolId", participantNameWithProtocolId);
-		
+		speCollForm.setParticipantNameWithProtocolId(participantNameWithProtocolId) ;
+	
 		Site specimenCollectionSite = (Site) TestCaseUtility.getNameObjectMap("Site");
-		addRequestParameter("siteId", "" + specimenCollectionSite.getId());
-		
-		addRequestParameter("collectionProtocolId","" + collectionProtocol.getId());
+		speCollForm.setSiteId(specimenCollectionSite.getId());
+		speCollForm.setCollectionProtocolId(collectionProtocol.getId());
 				
 		Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 		CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
 	
-		addRequestParameter("collectionProtocolEventId", ""+event.getId());
-		addRequestParameter("collectionEventId","0");		
-		addRequestParameter("participantId", "" + participant.getId());
 		String participantName = ""+participant.getLastName()+","+participant.getFirstName();
-		addRequestParameter("participantName", participantName);
 		
-		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
-		addRequestParameter("protocolParticipantIdentifier", "" + participant.getId());
+		speCollForm.setCollectionProtocolEventId(event.getId()) ;
+		speCollForm.setCollectionEventId(0L);
+		speCollForm.setParticipantId(participant.getId());
+		speCollForm.setParticipantName(participantName);
 		
-		addRequestParameter("collectionEventSpecimenId", "0");
-		addRequestParameter("collectionEventdateOfEvent", "01-28-2009");
-		addRequestParameter("collectionEventTimeInHours", "11");
-		addRequestParameter("collectionEventTimeInMinutes", "2");
-		addRequestParameter("collectionEventUserId","1");
-		addRequestParameter("collectionEventCollectionProcedure","Use CP Defaults");
-		addRequestParameter("collectionEventContainer","Use CP Defaults");
+		speCollForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");
+		speCollForm.setProtocolParticipantIdentifier(""+participant.getId()) ;
 		
-		addRequestParameter("receivedEventId", "" + event.getId());
-		addRequestParameter("receivedEventDateOfEvent", "01-28-2009");
-		addRequestParameter("receivedEventTimeInHours", "11");
-		addRequestParameter("receivedEventTimeInMinutes", "2");
-		addRequestParameter("receivedEventUserId","1");
-		addRequestParameter("receivedEventCollectionProcedure","Use CP Defaults");
-		addRequestParameter("receivedEventContainer","Use CP Defaults");
-		addRequestParameter("receivedEventReceivedQuality", "Acceptable");
-		addRequestParameter("receivedEventUserId","1");
+		speCollForm.setCollectionEventSpecimenId(0L);
+		speCollForm.setCollectionEventdateOfEvent("01-28-2009");
+		speCollForm.setCollectionEventTimeInHours("11") ;
+		speCollForm.setCollectionEventTimeInMinutes("2") ;
+		speCollForm.setCollectionEventUserId(1L) ;
+		speCollForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+		speCollForm.setCollectionEventContainer("Use CP Defaults") ;
 		
-		addRequestParameter("name","cp_specimen_" + UniqueKeyGeneratorUtil.getUniqueKey());
-
-		addRequestParameter("operation", "add");
-
+		speCollForm.setReceivedEventId(event.getId());
+		speCollForm.setReceivedEventDateOfEvent("01-28-2009");
+		speCollForm.setReceivedEventTimeInHours("11") ;
+		speCollForm.setReceivedEventTimeInMinutes("2") ;
+		speCollForm.setReceivedEventUserId(1L) ;
+		speCollForm.setReceivedEventReceivedQuality("Acceptable");
+		
+		speCollForm.setName("cp_specimen_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		speCollForm.setOperation("add") ;
+		setActionForm(speCollForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
@@ -120,14 +112,18 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	{
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
-		addRequestParameter("aliasName","SpecimenCollectionGroup");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "SpecimenCollectionGroup");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","SpecimenCollectionGroup.NAME.varchar");
-		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","c");
-		addRequestParameter("pageOf","pageOfSpecimenCollectionGroup");
-		addRequestParameter("operation","search");
+		
+		SimpleQueryInterfaceForm simpleForm = new SimpleQueryInterfaceForm();
+		simpleForm.setAliasName("SpecimenCollectionGroup") ;
+		simpleForm.setPageOf("pageOfSpecimenCollectionGroup");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "SpecimenCollectionGroup");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "SpecimenCollectionGroup.NAME.varchar");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "c");
+		
+		setActionForm(simpleForm) ;
 		actionPerform();
+		verifyNoActionErrors();
 		
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
 		DefaultBizLogic bizLogic = new DefaultBizLogic();
@@ -169,70 +165,77 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 
 		/*Edit Action*/
-		specimenCollectionGroup.setComment("abc");
-		addRequestParameter("comment", specimenCollectionGroup.getComment());
 		setRequestPathInfo("/SpecimenCollectionGroupEdit");
-		addRequestParameter("operation", "edit");
+		SpecimenCollectionGroupForm specGroupForm = (SpecimenCollectionGroupForm)getActionForm();
+		specGroupForm.setComment("New Comment Added For SCG") ;
+		specGroupForm.setName("Shri_cp_specimen_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		setActionForm(specGroupForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
 		
+		specimenCollectionGroup.setName(specGroupForm.getName());
+		specimenCollectionGroup.setComment(specGroupForm.getComment());
+		
 		TestCaseUtility.setNameObjectMap("SpecimenCollectionGroup",specimenCollectionGroup);
 	}
-	
+	/**
+	 * Test Specimen Collection Group Edit.
+	 */	
 	@Test
-
     public void testEditSCGAndAnticipatorySpecimen()
 
     {
           SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
           scg.setIsCPBasedSpecimenEntryChecked(true);
           setRequestPathInfo("/CPQuerySpecimenCollectionGroupEdit");
-          addRequestParameter("id", "" + scg.getId());
-          addRequestParameter("collectionStatus", scg.getCollectionStatus());
-          addRequestParameter("clinicalStatus", scg.getClinicalStatus());
-          addRequestParameter("clinicalDiagnosis", scg.getClinicalDiagnosis());
-          addRequestParameter("restrictSCGCheckbox", "true");
-          addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
           
+          SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm() ;
+          speCollForm.setId(scg.getId()) ;
+          speCollForm.setClinicalDiagnosis(scg.getClinicalDiagnosis()) ;
+          speCollForm.setClinicalStatus(scg.getClinicalStatus()) ;
+          speCollForm.setCollectionStatus(scg.getCollectionStatus());
+          speCollForm.setRestrictSCGCheckbox("true") ;
+          speCollForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");
+  		
           CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
           Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
   		  String participantNameWithProtocolId = ""+participant.getLastName()+", "+participant.getFirstName()+"("+collectionProtocol.getId()+")";
-          addRequestParameter("participantId", "" + participant.getId());
   		  String participantName = ""+participant.getLastName()+","+participant.getFirstName();
-  		  addRequestParameter("participantName", participantName);
-  		  addRequestParameter("participantNameWithProtocolId", participantNameWithProtocolId);
   		  
+  		  speCollForm.setCollectionEventId(0L);
+  		  speCollForm.setParticipantId(participant.getId());
+  		  speCollForm.setParticipantName(participantName);
+  		  speCollForm.setParticipantNameWithProtocolId(participantNameWithProtocolId) ;
+  		
   		  Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 		  CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
 	 
-		  addRequestParameter("collectionProtocolId", "" + collectionProtocol.getId());
+		  speCollForm.setCollectionProtocolEventId(event.getId()) ;
+		  speCollForm.setCollectionProtocolId(collectionProtocol.getId());
 		  
-		  addRequestParameter("collectionProtocolEventId", ""+event.getId());
-  		
   		  Site specimenCollectionSite = (Site) TestCaseUtility.getNameObjectMap("Site");
-		  addRequestParameter("siteId", "" + specimenCollectionSite.getId());
-  		
-		  StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
-		 	  
-		
-		  addRequestParameter("collectionEventdateOfEvent", "01-28-2009");
-  		  addRequestParameter("collectionEventCollectionProcedure", "Use CP Defaults");
-  		  addRequestParameter("collectionEventTimeInHours", "11");
-		  addRequestParameter("collectionEventTimeInMinutes", "2");
-		  addRequestParameter("collectionEventContainer", "Use CP Defaults");
-		  
-		  addRequestParameter("receivedEventDateOfEvent", "01-28-2009");
-		  addRequestParameter("receivedEventTimeInHours", "11");
-		  addRequestParameter("receivedEventTimeInMinutes", "2");
-		  addRequestParameter("receivedEventUserId","1");
-		  addRequestParameter("receivedEventCollectionProcedure","Use CP Defaults");
-		  addRequestParameter("receivedEventContainer","Use CP Defaults");
-		  addRequestParameter("receivedEventReceivedQuality", "Acceptable");
-		  
-		  addRequestParameter("name",scg.getName());
-			  
-		  addRequestParameter("operation", "edit");
+  		  speCollForm.setSiteId(specimenCollectionSite.getId());
+
+		  speCollForm.setCollectionEventSpecimenId(0L);
+		  speCollForm.setCollectionEventdateOfEvent("01-28-2009");
+		  speCollForm.setCollectionEventTimeInHours("11") ;
+		  speCollForm.setCollectionEventTimeInMinutes("2") ;
+		  speCollForm.setCollectionEventUserId(1L) ;
+		  speCollForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+		  speCollForm.setCollectionEventContainer("Use CP Defaults") ;
+
+		  speCollForm.setReceivedEventId(event.getId());
+		  speCollForm.setReceivedEventDateOfEvent("01-28-2009");
+		  speCollForm.setReceivedEventTimeInHours("11") ;
+		  speCollForm.setReceivedEventTimeInMinutes("2") ;
+		  speCollForm.setReceivedEventUserId(1L) ;
+		  speCollForm.setReceivedEventReceivedQuality("Acceptable");
+
+		  speCollForm.setName(scg.getName());
+		  speCollForm.setOperation("edit");
+
+		  setActionForm(speCollForm);
           actionPerform();
           verifyForward("success");
     }

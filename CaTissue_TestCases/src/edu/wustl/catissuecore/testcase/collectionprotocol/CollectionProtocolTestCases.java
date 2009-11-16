@@ -42,19 +42,21 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 	public void testCollectionProtocolAdd()
 	{
 		/*Collection Protocol Details*/
+		CollectionProtocolForm collForm = new CollectionProtocolForm();
+		collForm.setPrincipalInvestigatorId(1L) ;
+		collForm.setTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collForm.setOperation("add") ;
+		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collForm.setStartDate("01-12-2009");
 		setRequestPathInfo("/OpenCollectionProtocol");
-		addRequestParameter("isParticiapantReg", "true");
-		addRequestParameter("principalInvestigatorId", "1");
-		addRequestParameter("title", "cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		addRequestParameter("shortTitle", "cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		addRequestParameter("startDate", "01-12-2009");
-		addRequestParameter("pageOf","pageOfCollectionProtocol");
+		setActionForm(collForm);
 		actionPerform();
         verifyForward("success");
+        //verifyForward("/pages/Layout.jsp");
         
         /*Event Details*/
         setRequestPathInfo("/DefineEvents");
-		addRequestParameter("pageOf", "pageOfDefineEvents");
+        addRequestParameter("pageOf", "pageOfDefineEvents");
 		addRequestParameter("operation", "add");
 		actionPerform();
 		verifyForward("pageOfDefineEvents");
