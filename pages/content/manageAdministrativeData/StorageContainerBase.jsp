@@ -13,7 +13,7 @@ var activityStatus=null;
 var isConatinerChanged='no';
 function selectTab(operation)
 {
-	var treeFrame = document.getElementById('SCTreeView');	
+	var treeFrame = document.getElementById('SCTreeView');
 	var addEditTabRow = document.getElementById('addEditTabRow');
 	var tableDiv = document.getElementById("tableDiv");
 	var cellSpace="<td  width=4% class=td_tab_bg><img src=images/spacer.gif alt=spacer width=50 height=1></td>";
@@ -22,7 +22,7 @@ function selectTab(operation)
 		var cellAddImage="<td  valign=bottom><link><img src=images/uIEnhancementImages/tab_add_selected.jpg alt=Add width=57 height=22 /></link></td>";
 
 		var cellEditImage="<td  valign=bottom><a href=# onclick=switchToEditTab()><link><img src=images/uIEnhancementImages/tab_edit_notSelected.jpg alt=Edit width=59 height=22 border=0 /></link></a></td>";
-	
+
 		var cellViewImage="<td valign=bottom><a href=# onclick=switchToViewMapTab()><img src=images/uIEnhancementImages/view_map2.gif alt=View Map width=76 height=22 border=0 /></a></td>";
 	}
 	else if(operation == "edit" && selectedTabName != "viewMapTab" && treeFrame == null)
@@ -30,16 +30,16 @@ function selectTab(operation)
 		var cellAddImage="<td  valign=bottom><a href=# onclick=switchToAddTab()><link><img src=images/uIEnhancementImages/tab_add_notSelected.jpg alt=Add width=57 height=22 /></link></a></td>";
 
 		var cellEditImage="<td valign=bottom><link><img src=images/uIEnhancementImages/tab_edit_selected.jpg alt=Edit width=59 height=22 border=0/></link></td>";
-	
-		var cellViewImage="<td valign=bottom><a href=# onclick=switchToViewMapTab()><img src=images/uIEnhancementImages/view_map2.gif alt=View Map width=76 height=22 border=0 /></a></td>";	
+
+		var cellViewImage="<td valign=bottom><a href=# onclick=switchToViewMapTab()><img src=images/uIEnhancementImages/view_map2.gif alt=View Map width=76 height=22 border=0 /></a></td>";
 	}
-	else 
+	else
 	{
 		var cellAddImage="<td  valign=bottom><a href=#  onclick=switchToAddTab()><link>	<img src=images/uIEnhancementImages/tab_add_notSelected.jpg alt=Add width=57 height=22 /></link></a></td>";
 
 		var cellEditImage="<td valign=bottom><a href=# onclick=switchToEditTab()><link><img src=images/uIEnhancementImages/tab_edit_notSelected.jpg alt=Edit width=59 height=22 border=0/></link></a></td>";
-	
-		var cellViewImage="<td valign=bottom><img src=images/uIEnhancementImages/view_map.gif alt=View Map width=76 height=22 border=0 /></td>";	
+
+		var cellViewImage="<td valign=bottom><img src=images/uIEnhancementImages/view_map.gif alt=View Map width=76 height=22 border=0 /></td>";
 
 	}
 	var addTable ="<table width='100%' border='0' cellpadding='0' cellspacing='0'>";
@@ -83,7 +83,7 @@ function getSelectedTab(){
 }
 
 //Set the alope for the IFrame
-if ( document.getElementById && !(document.all) ) 
+if ( document.getElementById && !(document.all) )
 {
 	var slope=25;
 }
@@ -155,8 +155,12 @@ else
 									Your Browser doesn't support IFrames.
 								</iframe>
 							 </td>
-							 </logic:equal>
 							 <td width="75%" valign="top">
+							 </logic:equal>
+
+							 <logic:notEqual parameter="operation"	value='showEditAPageAndMap'>
+							 <td width="100%" valign="top">
+							 </logic:notEqual>
 								<logic:equal parameter="operation"	value='add'>
 							 	<iframe name="StorageContainerView"	id="StorageContainerView" src="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer" scrolling="auto" frameborder="0" width="100%" >
 									Your Browser doesn't support IFrames.
@@ -183,7 +187,7 @@ else
 								</iframe>
 								</logic:equal>
 							 </td>
-						</tr>	
+						</tr>
           </table>
 	  </td>
    </tr>
