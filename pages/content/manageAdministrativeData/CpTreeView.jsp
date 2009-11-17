@@ -50,7 +50,7 @@
 		  <tr>
 			<td align="left" colspan="2">
 			<div id="treeboxbox_tree"
-				style="width: 180px; height: 368px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;" />
+				style="width: 180px; height: 410px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;" />
 			</td>
 		  </tr>
 		</td>

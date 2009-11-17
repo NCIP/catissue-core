@@ -33,27 +33,16 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * This method would return the Clinical Diagnosis List
-	 * 
 	 * @return List which contains the Clinical Diagnosis Data
 	 * @throws BizLogicException
 	 * @throws BizLogicException
 	 */
-	public List getClinicalDiagnosisList(String query) throws BizLogicException
+	public List getClinicalDiagnosisList(String query,boolean showSubset) throws BizLogicException
 	{
 		// populating clinical Diagnosis field
-		//		
 		final List clinicalDiagnosisList = new ArrayList();
 		final String sourceObjectName = PermissibleValueImpl.class.getName();
 		final String[] selectColumnName = {"value"};
-		// DAO hibernateDao = DAOFactory.getInstance().getDAO(0);
-		// hibernateDao.openSession(null);
-		//		
-		//		
-		// List list1 =
-		// bizLogic.retrieve(PermissibleValueImpl.class.getName(),"cde.publicId"
-		// ,"Clinical_Diagnosis_PID");
-		// Logger.out.info("************************"+list1.size());
-		//		
 		DAO dao = null;
 		try
 		{
@@ -81,6 +70,10 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, ""
 					+ Constants.SELECT_OPTION_VALUE));
 
+			if(showSubset)
+			{
+				clinicalDiagnosisList.add(new NameValueBean(Constants.SHOW_SUBSET+"start", Constants.SHOW_SUBSET));
+			}
 			while (iterator.hasNext())
 			{
 				final String clinicaDiagnosisvalue = iterator.next();
@@ -88,7 +81,11 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 						clinicaDiagnosisvalue));
 
 			}
-			Collections.sort(clinicalDiagnosisList);
+			if(showSubset)
+			{
+				clinicalDiagnosisList.add(new NameValueBean(Constants.SHOW_SUBSET+"end",Constants.SHOW_SUBSET));
+			}
+			//Collections.sort(clinicalDiagnosisList);
 			// cdeBizLogic.getFilteredCDE( new HashSet(list),
 			// clinicalDiagnosisList);
 
@@ -132,7 +129,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 * @return JSONObject which holds the list to eb poplulated on UI front
 	 */
 	public JSONObject getClinicalDiagnosisData(Integer limitFetch, Integer startFetch, String query,
-			Collection<NameValueBean> clinicalDiagnosisBean,boolean isShowAll)
+			Collection<NameValueBean> clinicalDiagnosisBean,String showOption)
 	{
 		JSONObject jsonObject = null;
 		JSONArray jsonArray = null;
@@ -141,9 +138,16 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			jsonArray = new JSONArray();
 			jsonObject = new JSONObject();
 			final List clinicalDiagnosisList;
-			if (clinicalDiagnosisBean == null || clinicalDiagnosisBean.isEmpty() || isShowAll)
+			boolean showSubset = false;
+						
+			if(!clinicalDiagnosisBean.isEmpty() && Constants.SHOW_ALL_VALUES.equals(showOption))
 			{
-				clinicalDiagnosisList = this.getClinicalDiagnosisList(query);
+				showSubset = true;
+			}
+
+			if (clinicalDiagnosisBean == null || clinicalDiagnosisBean.isEmpty() || Constants.SHOW_ALL_VALUES.equals(showOption))
+			{
+				clinicalDiagnosisList = this.getClinicalDiagnosisList(query,showSubset);
 			}
 			else
 			{

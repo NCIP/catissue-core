@@ -56,11 +56,10 @@ public class ComboDataAction extends BaseAction
         final String limit = request.getParameter("limit");
 		final String query = request.getParameter("query");
 		final String start = request.getParameter("start");
-		final String  showAllValue = request.getParameter("showAll");
+		final String  showOption = request.getParameter("showOption");
 		final Integer limitFetch = Integer.parseInt(limit);
 		final Integer startFetch = Integer.parseInt(start);
 		Long collectionProtocolId = null;
-		boolean isShowAll = false;
 		if(!"undefined".equals(request.getParameter("collectionProtocolId")) && !"".equals(request.getParameter("collectionProtocolId")))
 		{
 		  collectionProtocolId = Long.parseLong(request.getParameter("collectionProtocolId"));
@@ -78,11 +77,7 @@ public class ComboDataAction extends BaseAction
 						"clinicalDiag.collectionProtocol.id="+collectionProtocolId;
 			final List<Object[]> dataList = AppUtility.executeQuery(cprHQL);
 		    List clinicalDiagnosisValues = dataList;
-		    if(showAllValue != null && Constants.SHOW_ALL_VALUES.equals(showAllValue))
-		    {
-		    	isShowAll = true;
-		    }
-		  	getClinicalDiagnosisBean(clinicalDiagnosisBean, clinicalDiagnosisValues,true);
+		    getClinicalDiagnosisBean(clinicalDiagnosisBean, clinicalDiagnosisValues,true);
 			
 		}else if(collectionProtocolBean != null && collectionProtocolBean.getClinicalDiagnosis() != null && (collectionProtocolBean.getClinicalDiagnosis()).length != 0)
 		{
@@ -91,7 +86,7 @@ public class ComboDataAction extends BaseAction
 		}	
 		final ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
 		final JSONObject jsonObject = comboDataBizObj.getClinicalDiagnosisData(limitFetch,
-				startFetch, query,clinicalDiagnosisBean,isShowAll);
+				startFetch, query,clinicalDiagnosisBean,showOption);
 
 		response.setContentType("text/javascript");
 		final PrintWriter out = response.getWriter();

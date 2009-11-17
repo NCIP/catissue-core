@@ -79,7 +79,7 @@ public class ClinicalDiagnosisDataAction extends BaseAction
 	private List getClinicalDiagnosisValues(HttpServletRequest request, String query) throws BizLogicException 
 	{
 		ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
-		List clinicalDiagnosisValues = comboDataBizObj.getClinicalDiagnosisList(query);
+		List clinicalDiagnosisValues = comboDataBizObj.getClinicalDiagnosisList(query,false);
 		return clinicalDiagnosisValues;
 	}
 

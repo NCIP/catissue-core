@@ -133,18 +133,18 @@
 		
        		<tr>
 				<td width="20%"  valign="top">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="400" >
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="450" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>
 							 <td width="80%" valign="top" >
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="400" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="450" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="400" >
+								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="450" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>	

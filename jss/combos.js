@@ -54,10 +54,10 @@ Ext.onReady(function(){
 			
 				//this will change rel cpe combo's url to updated colprotoid
 				var appli = Ext.getCmp('idjs_cp').getValue();
-				if("Show all values" == appli)
+				if("-- Show all clinical diagnosis values --" == appli || "-- Show subset --" == appli)
 				{
 					var form = Ext.getCmp('idjs_cp');
-					form.store.proxy.conn.url = 'ComboDataAction.do?collectionProtocolId='+collectionProtocolId+'&showAll='+appli;
+					form.store.proxy.conn.url = 'ComboDataAction.do?collectionProtocolId='+collectionProtocolId+'&showOption='+appli;
 					form.store.reload();
 				}
  	});
