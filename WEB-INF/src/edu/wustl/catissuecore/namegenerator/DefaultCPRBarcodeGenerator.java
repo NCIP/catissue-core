@@ -6,7 +6,6 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This  class which contains the default CPR barcode implementation.
@@ -15,11 +14,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultCPRBarcodeGenerator implements BarcodeGenerator
 {
-
-	/**
-	 * Creating Logger instance.
-	 */
-	private static final Logger LOGGER = Logger.getCommonLogger(DefaultCPRBarcodeGenerator.class);
 
 	/**
 	 * Current barcode.

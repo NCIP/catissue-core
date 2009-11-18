@@ -24,11 +24,11 @@ public class NameGeneratorException extends Exception
 
 	/**
 	 * @param string String
-	 * @param th Class that is superclass of all errors
+	 * @param throwable Class that is superclass of all errors
 	 */
-	public NameGeneratorException(String string, Throwable th)
+	public NameGeneratorException(String string, Throwable throwable)
 	{
-		super(string, th);
+		super(string, throwable);
 	}
 
 }

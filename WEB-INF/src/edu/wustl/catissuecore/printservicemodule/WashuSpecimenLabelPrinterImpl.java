@@ -1,8 +1,9 @@
 
 package edu.wustl.catissuecore.printservicemodule;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -24,10 +25,10 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 	 * @param ipAddress IP Address
 	 */
 	@Override
-	protected void addDataToPrint(Specimen specimen, ArrayList listMap, String printerType,
+	protected void addDataToPrint(Specimen specimen, List listMap, String printerType,
 			String printerLocation, String ipAddress)
 	{
-		final LinkedHashMap dataMap = new LinkedHashMap();
+		final Map<String, String> dataMap = new LinkedHashMap<String, String>();
 		dataMap.put("class", specimen.getClassName());
 		dataMap.put("id", specimen.getId().toString());
 		String label = specimen.getLabel();

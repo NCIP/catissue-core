@@ -6,7 +6,6 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This  class which contains the default StorageContainer bar code implementation.
@@ -15,12 +14,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultStorageContainerBarcodeGenerator implements BarcodeGenerator
 {
-
-	/**
-	 * Logger object.
-	 */
-	private static final transient Logger LOGGER = Logger
-			.getCommonLogger(DefaultStorageContainerBarcodeGenerator.class);
 	/**
 	 * Current label.
 	 */

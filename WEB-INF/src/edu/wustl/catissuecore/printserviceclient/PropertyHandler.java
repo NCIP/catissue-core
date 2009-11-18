@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.castor.persist.ProposedObject;
+//import org.castor.persist.ProposedObject;
 
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -22,7 +22,7 @@ public final class PropertyHandler
 	/**
 	 * Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(PropertyHandler.class);
+	private static final Logger logger = Logger.getCommonLogger(PropertyHandler.class);
 	/**
 	 * printimplClass Properties.
 	 */
@@ -58,7 +58,6 @@ public final class PropertyHandler
 		catch (final Exception e)
 		{
 			PropertyHandler.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 	}

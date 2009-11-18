@@ -10,7 +10,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
@@ -21,14 +20,9 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 {
 
-	/**
-	 * logger object.
-	 */
-	private static final transient Logger LOGGER = Logger
-			.getCommonLogger(DefaultSpecimenBarcodeGenerator.class);
-	/**
-	 * Current Barcode.
-	 */
+	 /**
+	  * Current Barcode.
+	  */
 	protected Long currentBarcode;
 
 	/**
@@ -154,10 +148,10 @@ public class DefaultSpecimenBarcodeGenerator implements BarcodeGenerator
 		{
 			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
 					.getChildSpecimenCollection();
-			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
-			while (it.hasNext())
+			final Iterator<AbstractSpecimen> specCollItr = specimenCollection.iterator();
+			while (specCollItr.hasNext())
 			{
-				final Specimen objChildSpecimen = (Specimen) it.next();
+				final Specimen objChildSpecimen = (Specimen) specCollItr.next();
 				this.setBarcode(objChildSpecimen);
 			}
 		}

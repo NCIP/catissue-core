@@ -44,20 +44,17 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 				aliquotChildCount--;
 			}
 		}
-		StringBuffer buffy = null;
-		final StringBuffer prefixBuffy = new StringBuffer();
-		String sp = null;
-
+		 
 		if (parentSpecimenLabel != null)
 		{
-			parentSpecimenLabel = parentSpecimenLabel;
-			final int dash = parentSpecimenLabel.lastIndexOf("-");
+			final StringBuffer prefixBuffy = new StringBuffer();
+			final int dash = parentSpecimenLabel.lastIndexOf('-');
 			prefixBuffy.append(parentSpecimenLabel.substring(0, dash + 1));
-			sp = parentSpecimenLabel.substring(dash + 1, dash + 2);
-			buffy = new StringBuffer();
+			String srumPlasma = parentSpecimenLabel.substring(dash + 1, dash + 2);
+			StringBuffer buffy = new StringBuffer();
 			buffy.append(prefixBuffy);
 			buffy.append(++aliquotChildCount);
-			buffy.append(this.determineSerumPlasma(sp, aliquotChildCount));
+			buffy.append(this.determineSerumPlasma(srumPlasma, aliquotChildCount));
 			specimenObject.setLabel(buffy.toString());
 		}
 	}
@@ -69,20 +66,20 @@ public class SpecimenLabelGeneratorForIU extends DefaultSpecimenLabelGenerator
 	 */
 	private String determineSerumPlasma(String type, long num)
 	{
-		String sp = null;
-		if (type.equals("S"))
+		String srumPlasma = null;
+		if (("S").equals(type))
 		{
-			sp = type;
+			srumPlasma = type;
 		}
 		else if (num > 5)
 		{
-			sp = "PNP";
+			srumPlasma = "PNP";
 		}
 		else
 		{
-			sp = "P";
+			srumPlasma = "P";
 		}
-		return sp;
+		return srumPlasma;
 	}
 
 }

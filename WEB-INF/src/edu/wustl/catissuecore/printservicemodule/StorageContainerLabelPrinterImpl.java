@@ -52,9 +52,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		catch (final Exception exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace() ;
 			return false;
-
 		}
 	}
 
@@ -86,7 +84,6 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 		catch (final Exception exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			return false;
 		}
 	}
@@ -106,7 +103,7 @@ public class StorageContainerLabelPrinterImpl implements LabelPrinter
 	 * @param printerType printer Type
 	 * @param printerLocation printer Location
 	 */
-	void createObjectMap(AbstractDomainObject abstractDomainObject, ArrayList listMap,
+	void createObjectMap(AbstractDomainObject abstractDomainObject, List listMap,
 			String printerType, String printerLocation)
 	{
 

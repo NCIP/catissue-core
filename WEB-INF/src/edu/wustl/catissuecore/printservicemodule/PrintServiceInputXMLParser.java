@@ -76,9 +76,9 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			final Document doc = this.generateXMLDoc((List) listData);
 			final String strXMLData = this.getStringFromDocument(doc);
 			final String endpointURL = PropertyHandler.getValue("printWebServiceEndPoint");
-			final PrintWebService p = new PrintWebService(new URL(endpointURL), new QName(
+			final PrintWebService printWebService = new PrintWebService(new URL(endpointURL), new QName(
 					"http://print.catissuecore.webservice.wustl.edu/", "PrintWebService"));
-			final PrintService pservice = p.getPrintServicePort();
+			final PrintService pservice = printWebService.getPrintServicePort();
 			final String msg = pservice.print(strXMLData);
 			if (msg.equals(PRINT_FAILED))
 			{
@@ -105,16 +105,14 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 			final DOMSource domSource = new DOMSource(doc);
 			final StringWriter writer = new StringWriter();
 			final StreamResult result = new StreamResult(writer);
-			final TransformerFactory tf = TransformerFactory.newInstance();
-			final Transformer transformer = tf.newTransformer();
+			final TransformerFactory tfactory = TransformerFactory.newInstance();
+			final Transformer transformer = tfactory.newTransformer();
 			transformer.transform(domSource, result);
-			System.out.println(writer.toString());
 			return writer.toString();
 		}
 		catch (final TransformerException ex)
 		{
 			this.logger.error(ex.getMessage(), ex);
-			ex.printStackTrace();
 			return null;
 		}
 	}
@@ -136,7 +134,6 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		catch (final ParserConfigurationException parserException)
 		{
 			this.logger.error(parserException.getMessage(), parserException);
-			parserException.printStackTrace();
 		}
 		// create root element for Document
 		final Element root = this.document.createElement("Properties");
@@ -151,18 +148,18 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 
 			if (objMap != null)
 			{
-				final Iterator it = objMap.keySet().iterator();
+				final Iterator itr = objMap.keySet().iterator();
 
-				if (it.hasNext())
+				if (itr.hasNext())
 				{
 					final String classname = (String) objMap.get("class");
 					final String id = (String) objMap.get("id");
 					// add child element
 					final Node objectNode = this.createObjectNode(this.document, classname, id);
 					root.appendChild(objectNode);
-					while (it.hasNext())
+					while (itr.hasNext())
 					{
-						this.key = (String) it.next();
+						this.key = (String) itr.next();
 						this.value = (String) objMap.get(this.key);
 						final Node property = this.createPropertyNode(this.document, this.key,
 								this.value);
@@ -235,9 +232,9 @@ public class PrintServiceInputXMLParser implements PrintServiceInputParserInterf
 		final LinkedHashMap map = new LinkedHashMap();
 		map.put("class", "Specimen");
 		map.put("id", "12");
-		final ArrayList l = new ArrayList();
-		l.add(map);
-		print.callPrintService(l);
+		final ArrayList arrList = new ArrayList();
+		arrList.add(map);
+		print.callPrintService(arrList);
 
 	}
 }

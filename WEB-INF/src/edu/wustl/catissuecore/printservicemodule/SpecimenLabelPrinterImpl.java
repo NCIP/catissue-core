@@ -77,7 +77,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param listMap List of objects
 	 * @return boolean
 	 */
-	private boolean callToPrinter(final ArrayList listMap)
+	private boolean callToPrinter(final List listMap)
 	{
 		try
 		{
@@ -87,7 +87,6 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 		catch (final Exception exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace() ;
 			return false;
 		}
 	}
@@ -100,7 +99,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param printerLocation printer Location
 	 * @param ipAddress IP Address
 	 */
-	void createObjectMap(List<AbstractDomainObject> abstractDomainObjectList, ArrayList listMap,
+	void createObjectMap(List<AbstractDomainObject> abstractDomainObjectList, List listMap,
 			String printerType, String printerLocation, String ipAddress)
 	{
 		//Bug 11509
@@ -117,7 +116,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param printerLocation printer Location
 	 * @param ipAddress IP Address
 	 */
-	protected void addDataToPrint(Specimen specimen, ArrayList listMap, String printerType,
+	protected void addDataToPrint(Specimen specimen, List listMap, String printerType,
 			String printerLocation, String ipAddress)
 	{
 		final LinkedHashMap dataMap = new LinkedHashMap();
@@ -151,7 +150,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param printerLocation printer Location
 	 * @param ipAddress IP Address
 	 */
-	void createObjectMap(AbstractDomainObject abstractDomainObject, ArrayList listMap,
+	void createObjectMap(AbstractDomainObject abstractDomainObject, List listMap,
 			String printerType, String printerLocation, String ipAddress)
 	{
 
@@ -181,7 +180,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	{
 
 		final Collection childSpecimen = objSpecimen.getChildSpecimenCollection();
-		if (childSpecimen != null && childSpecimen.size() > 0)
+		if (childSpecimen != null && !childSpecimen.isEmpty())
 		{
 
 			final Iterator itr = childSpecimen.iterator();
@@ -223,7 +222,7 @@ public class SpecimenLabelPrinterImpl implements LabelPrinter
 	 * @param ipAddress ipAddress of system
 	 */
 	private void iterateSpecimenList(List<AbstractDomainObject> abstractDomainObjectList,
-			String ipAddress, String printerType, String printerLocation, final ArrayList listMap)
+			String ipAddress, String printerType, String printerLocation, final List listMap)
 	{
 		for (final AbstractDomainObject abstractDomainObject : abstractDomainObjectList)
 		{

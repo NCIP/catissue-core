@@ -9,8 +9,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
-
 /**
  * This  class contains the default implementation for SpecimenCollectionGroup Label generation.
  * @author Abhijit_Naik
@@ -18,11 +16,6 @@ import edu.wustl.common.util.logger.Logger;
 public class DefaultSCGLabelGenerator implements LabelGenerator
 {
 
-	/**
-	 * logger Generic logger.
-	 */
-	private static final transient Logger LOGGER = Logger
-			.getCommonLogger(DefaultSCGLabelGenerator.class);
 	/**
 	 * Current label.
 	 */
@@ -105,6 +98,6 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 	{
 		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		this.setLabel(specimenCollectionGroup);
-		return (specimenCollectionGroup.getName());
+		return specimenCollectionGroup.getName();
 	}
 }

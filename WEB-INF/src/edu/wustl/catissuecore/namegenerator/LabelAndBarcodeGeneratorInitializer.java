@@ -42,7 +42,6 @@ public final class LabelAndBarcodeGeneratorInitializer
 		catch (final Exception e)
 		{
 			LabelAndBarcodeGeneratorInitializer.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 	}
 
@@ -52,19 +51,19 @@ public final class LabelAndBarcodeGeneratorInitializer
 	 */
 	private static void setStorageContainerGeneratorInstance() throws NameGeneratorException
 	{
-		LabelGenerator storageContainerGeneratorInstance;
+		LabelGenerator sCGeneratorInstance;
 
-		BarcodeGenerator storageContainerBarcodeGeneratorInstance;
-		storageContainerGeneratorInstance = LabelGeneratorFactory
+		BarcodeGenerator sCBarcodeGeneratorInstance;
+		sCGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
-		if (storageContainerGeneratorInstance != null)
+		if (sCGeneratorInstance != null)
 		{
 			Variables.isStorageContainerLabelGeneratorAvl = true;
 		}
 
-		storageContainerBarcodeGeneratorInstance = BarcodeGeneratorFactory
+		sCBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
-		if (storageContainerBarcodeGeneratorInstance != null)
+		if (sCBarcodeGeneratorInstance != null)
 		{
 			Variables.isStorageContainerBarcodeGeneratorAvl = true;
 		}
@@ -77,45 +76,45 @@ public final class LabelAndBarcodeGeneratorInitializer
 	private static void setSpcimenLabelBarcodeGentorInstances() throws NameGeneratorException
 	{
 		LabelGenerator specimenGeneratorInstance;
-		LabelGenerator specimenCollectionGroupLableGeneratorInstance;
-		LabelGenerator protocolParticipantIdentifierLabelGeneratorInstance;
-		BarcodeGenerator specimenBarcodeGeneratorInstance;
-		BarcodeGenerator specimenCollectionGroupBarcodeGeneratorInstance;
-		BarcodeGenerator collectionProtocolRegistrationBarcodeGeneratorInstance;
+		LabelGenerator scgLableGeneratorInstance;
+		LabelGenerator ppiLabelGeneratorInstance;
+		BarcodeGenerator specBarcodeGeneratorInstance;
+		BarcodeGenerator scgBarcodeGeneratorInstance;
+		BarcodeGenerator cprBarcodeGeneratorInstance;
 		specimenGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 		if (specimenGeneratorInstance != null)
 		{
 			Variables.isSpecimenLabelGeneratorAvl = true;
 		}
-		protocolParticipantIdentifierLabelGeneratorInstance = LabelGeneratorFactory
+		ppiLabelGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
-		if (protocolParticipantIdentifierLabelGeneratorInstance != null)
+		if (ppiLabelGeneratorInstance != null)
 		{
 			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;
 		}
 
-		specimenBarcodeGeneratorInstance = BarcodeGeneratorFactory
+		specBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
-		if (specimenBarcodeGeneratorInstance != null)
+		if (specBarcodeGeneratorInstance != null)
 		{
 			Variables.isSpecimenBarcodeGeneratorAvl = true;
 		}
-		specimenCollectionGroupLableGeneratorInstance = LabelGeneratorFactory
+		scgLableGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
-		if (specimenCollectionGroupLableGeneratorInstance != null)
+		if (scgLableGeneratorInstance != null)
 		{
 			Variables.isSpecimenCollGroupLabelGeneratorAvl = true;
 		}
-		specimenCollectionGroupBarcodeGeneratorInstance = BarcodeGeneratorFactory
+		scgBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.SPECIMEN_COLL_GROUP_BARCODE_GENERATOR_PROPERTY_NAME);
-		if (specimenCollectionGroupBarcodeGeneratorInstance != null)
+		if (scgBarcodeGeneratorInstance != null)
 		{
 			Variables.isSpecimenCollGroupBarcodeGeneratorAvl = true;
 		}
-		collectionProtocolRegistrationBarcodeGeneratorInstance = BarcodeGeneratorFactory
+		cprBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
-		if (collectionProtocolRegistrationBarcodeGeneratorInstance != null)
+		if (cprBarcodeGeneratorInstance != null)
 		{
 			Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
 		}

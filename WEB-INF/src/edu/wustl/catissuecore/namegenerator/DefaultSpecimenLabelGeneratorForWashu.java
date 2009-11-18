@@ -56,7 +56,6 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		catch (final Exception ex)
 		{
 			DefaultSpecimenLabelGeneratorForWashu.LOGGER.error(ex.getMessage(), ex);
-			ex.printStackTrace();
 		}
 	}
 
@@ -170,10 +169,10 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		{
 			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
 					.getChildSpecimenCollection();
-			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
-			while (it.hasNext())
+			final Iterator<AbstractSpecimen> specCollItr = specimenCollection.iterator();
+			while (specCollItr.hasNext())
 			{
-				final Specimen objChildSpecimen = (Specimen) it.next();
+				final Specimen objChildSpecimen = (Specimen) specCollItr.next();
 				this.setLabel(objChildSpecimen);
 			}
 		}
@@ -217,13 +216,10 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		}
 
 		else if (!this.labelCountTreeMap.containsKey(objSpecimen)
-				&& objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
+				&& objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN) && objSpecimen.getLabel() == null)
 		{
-			if (objSpecimen.getLabel() == null)
-			{
 				labelCtr = this.setNextAvailableDeriveSpecimenlabel((Specimen) objSpecimen
 						.getParentSpecimen(), objSpecimen, labelCtr, prefix);
-			}
 		}
 
 		return labelCtr;
@@ -237,7 +233,7 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	public synchronized void setLabel(List objSpecimenList)
 	{
 
-		final List specimenList = objSpecimenList;
+		final List<Specimen> specimenList = objSpecimenList;
 		for (int index = 0; index < specimenList.size(); index++)
 		{
 			final Specimen objSpecimen = (Specimen) specimenList.get(index);
@@ -257,6 +253,6 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 		final Specimen objSpecimen = (Specimen) obj;
 		this.setLabel(objSpecimen);
 
-		return (objSpecimen.getLabel());
+		return objSpecimen.getLabel();
 	}
 }

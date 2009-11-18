@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -28,7 +29,7 @@ public final class BarcodeGeneratorFactory
 	/**
 	 * Singleton instance of BarcodeGenerator.
 	 */
-	private static HashMap<String, Object> generatorMap = new HashMap<String, Object>();
+	private static Map<String, Object> generatorMap = new HashMap<String, Object>();
 
 	/**
 	 * Get singleton instance of BarcodeGenerator.
@@ -59,28 +60,24 @@ public final class BarcodeGeneratorFactory
 		catch (final IllegalAccessException e)
 		{
 			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final InstantiationException e)
 		{
 			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final ClassNotFoundException e)
 		{
 			BarcodeGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw new NameGeneratorException("Could not create BarcodeGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final Exception ex)
 		{
 			BarcodeGeneratorFactory.LOGGER.error(ex.getMessage(), ex);
-			ex.printStackTrace();
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

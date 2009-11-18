@@ -6,7 +6,6 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class contains the default  Storage container label  implementation.
@@ -15,12 +14,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 {
-
-	/**
-	 * Logger Object.
-	 */
-	private static final transient Logger LOGGER = Logger
-			.getCommonLogger(DefaultStorageContainerLabelGenerator.class);
 
 	/**
 	 * Current label.
@@ -71,7 +64,7 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		{
 			maxTypeName = maxTypeName.substring(0, 39);
 		}
-		containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(this.currentLabel);
+		containerName = maxSiteName + "_" + maxTypeName + "_" + this.currentLabel;
 		objStorageContainer.setName(containerName);
 	}
 
@@ -98,6 +91,6 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 	{
 		final StorageContainer objStorageContainer = (StorageContainer) obj;
 		this.setLabel(objStorageContainer);
-		return (objStorageContainer.getName());
+		return objStorageContainer.getName();
 	}
 }

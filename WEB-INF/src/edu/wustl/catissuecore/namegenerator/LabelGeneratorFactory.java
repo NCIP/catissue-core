@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -28,7 +29,7 @@ public final class LabelGeneratorFactory
 	/**
 	 * Singleton instance of SpecimenLabelGenerator.
 	 */
-	private static HashMap<String, Object> labelgeneratorMap = new HashMap<String, Object>();
+	private static Map<String, Object> labelgeneratorMap = new HashMap<String, Object>();
 
 	/**
 	 * Get singleton instance of SpecimenLabelGenerator.
@@ -59,28 +60,24 @@ public final class LabelGeneratorFactory
 		catch (final IllegalAccessException e)
 		{
 			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final InstantiationException e)
 		{
 			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final ClassNotFoundException e)
 		{
 			LabelGeneratorFactory.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			throw new NameGeneratorException("Could not create LabelGenerator instance: "
 					+ e.getMessage());
 		}
 		catch (final Exception ex)
 		{
 			LabelGeneratorFactory.LOGGER.error(ex.getMessage(), ex);
-			ex.printStackTrace() ;
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
 	}

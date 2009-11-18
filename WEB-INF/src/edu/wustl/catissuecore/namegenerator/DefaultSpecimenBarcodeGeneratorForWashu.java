@@ -123,10 +123,10 @@ public class DefaultSpecimenBarcodeGeneratorForWashu extends DefaultSpecimenBarc
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
 			final Collection specimenCollection = objSpecimen.getChildSpecimenCollection();
-			final Iterator it = specimenCollection.iterator();
-			while (it.hasNext())
+			final Iterator<Specimen> specColItr = specimenCollection.iterator();
+			while (specColItr.hasNext())
 			{
-				final Specimen objChildSpecimen = (Specimen) it.next();
+				final Specimen objChildSpecimen = (Specimen) specColItr.next();
 				this.setBarcode(objChildSpecimen);
 			}
 		}

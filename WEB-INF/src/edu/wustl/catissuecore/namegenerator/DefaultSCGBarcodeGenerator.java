@@ -43,7 +43,6 @@ public class DefaultSCGBarcodeGenerator implements BarcodeGenerator
 		catch (final ApplicationException e)
 		{
 			this.logger.error(e.getMessage(),e) ;
-			e.printStackTrace();
 		}
 
 	}

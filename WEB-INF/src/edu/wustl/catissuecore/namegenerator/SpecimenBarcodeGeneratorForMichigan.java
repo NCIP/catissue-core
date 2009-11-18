@@ -8,7 +8,7 @@ import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
+//import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Barcode Generator for Michigan University.
@@ -20,8 +20,8 @@ public class SpecimenBarcodeGeneratorForMichigan extends DefaultSpecimenBarcodeG
 	/**
 	 * Logger object.
 	 */
-	private transient final Logger logger = Logger
-			.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
+	//private transient final Logger logger = Logger
+		//	.getCommonLogger(SpecimenBarcodeGeneratorForMichigan.class);
 
 	/**
 	 * Default Constructor.

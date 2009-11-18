@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.printserviceclient;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.wustl.common.util.logger.Logger;
 
@@ -16,7 +17,7 @@ public final class LabelPrinterFactory
 	/**
 	 * Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(LabelPrinterFactory.class);
+	private static final Logger logger = Logger.getCommonLogger(LabelPrinterFactory.class);
 
 	/**
 	 * private constructor.
@@ -29,7 +30,7 @@ public final class LabelPrinterFactory
 	/**
 	 * Map of class.
 	 */
-	private static HashMap printClassMap = new HashMap();
+	private static Map printClassMap = new HashMap();
 
 	/**
 	 * @param objectType  Property key name for specific Object's  Label Printer class
@@ -41,13 +42,14 @@ public final class LabelPrinterFactory
 		try
 		{
 			final String className = PropertyHandler.getValue(objectType);
-			if (className != null)
+			if (className == null)
 			{
-				printClassMap.put(objectType, Class.forName(className).newInstance());
+				return null;
 			}
 			else
 			{
-				return null;
+				printClassMap.put(objectType, Class.forName(className).newInstance());
+
 			}
 			return (LabelPrinter) printClassMap.get(objectType);
 
@@ -55,7 +57,6 @@ public final class LabelPrinterFactory
 		catch (final Exception e)
 		{
 			LabelPrinterFactory.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			throw e;
 
 		}

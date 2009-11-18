@@ -10,19 +10,12 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is the Specimen Label Generator for Michigan University.
  */
 public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGenerator
 {
-
-	/**
-	 * Logger Object.
-	 */
-	private static final transient Logger LOGGER = Logger
-			.getCommonLogger(SpecimenLabelGeneratorForMichigan.class);
 
 	/**
 	 * Default Constructor.
@@ -55,8 +48,8 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 	 */
 	private String format(long input, String pattern)
 	{
-		final DecimalFormat df = new DecimalFormat(pattern);
-		return df.format(input);
+		final DecimalFormat decFormat = new DecimalFormat(pattern);
+		return decFormat.format(input);
 	}
 
 	/**
@@ -93,10 +86,10 @@ public class SpecimenLabelGeneratorForMichigan extends DefaultSpecimenLabelGener
 		{
 			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
 					.getChildSpecimenCollection();
-			final Iterator<AbstractSpecimen> it = specimenCollection.iterator();
-			while (it.hasNext())
+			final Iterator<AbstractSpecimen> specCollItr = specimenCollection.iterator();
+			while (specCollItr.hasNext())
 			{
-				final Specimen objChildSpecimen = (Specimen) it.next();
+				final Specimen objChildSpecimen = (Specimen) specCollItr.next();
 				this.setLabel(objChildSpecimen);
 			}
 
