@@ -26,14 +26,26 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
+/**
+ * CancerResearchBizLogic.
+ * @author kalpana_thakur
+ *
+ */
 public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 {
 	/**
 	 * logger instance of the class.
 	 */
-	private transient final Logger logger =
+	private transient static final Logger canResLogger =
 			Logger.getCommonLogger(CancerResearchBizLogic.class);
-	@Override
+    /**
+     * Validate method.
+     *  @param obj obj
+     *  @param dao dao
+     *  @param operation operation
+     *  @throws  BizLogicException BizLogicException
+     *  @return boolean validatesuccess
+     */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		final CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) obj;
@@ -56,12 +68,11 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method returns the Id of the CRG corresponding to the CRG name
-	 * 
+	 * This method returns the Id of the CRG corresponding to the CRG name.
 	 * @param crgName
 	 *            CancerResearchGroup name
 	 * @return the id of the CancerResearchGroup
-	 * @throws DAOException
+	 * @throws BizLogicException BizLogicException
 	 */
 	public String getLatestCRG(String crgName) throws BizLogicException
 	{
@@ -84,32 +95,29 @@ public class CancerResearchBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoexp)
 		{
-			this.logger.error(daoexp.getMessage(),daoexp);
-			throw this
-					.getBizLogicException(daoexp, daoexp.getErrorKeyName(), daoexp.getMsgValues());
+			this.canResLogger.error(daoexp.getMessage(),daoexp);
+			throw this.getBizLogicException(daoexp,
+					daoexp.getErrorKeyName(), daoexp.getMsgValues());
 		}
 	}
 
 	/**
-	 * Called from DefaultBizLogic to get ObjectId for authorization check
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
-	 *      java.lang.Object)
+	 * Called from DefaultBizLogic to get ObjectId for authorization check.
+	 * @param dao dao
+	 * @param domainObject domainObject
+	 * @return String ADMIN_PROTECTION_ELEMENT
 	 */
-	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		return Constants.ADMIN_PROTECTION_ELEMENT;
 	}
 
 	/**
-	 * To get PrivilegeName for authorization check from
+	 * To get PrivilegeName for authorization check from.
 	 * 'PermissionMapDetails.xml' (non-Javadoc)
-	 * 
-	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
+	 * @param domainObject domainObject
+	 * @return String ADD_EDIT_CRG
 	 */
-	@Override
 	protected String getPrivilegeKey(Object domainObject)
 	{
 

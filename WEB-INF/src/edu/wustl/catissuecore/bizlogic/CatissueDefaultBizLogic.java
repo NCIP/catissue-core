@@ -35,30 +35,30 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * This is a default biz logic class for catissue. All BizLogic classes should extend from this.
  * @author deepti_shelar
- *
- */
+  */
 public class CatissueDefaultBizLogic extends DefaultBizLogic
 {
 
+	/**
+	 * logger.
+	 */
 	private transient final Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
 
 	/**
-	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized
+	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized.
 	 * @param dao The dao object.
 	 * @param domainObject domain Object
 	 * @param sessionDataBean session specific Data
 	 * @return isAuthorized
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
+	 * @throws BizLogicException User Not BizLogicException
 	 * @ generic DAOException
 	 */
-	@Override
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
@@ -95,7 +95,6 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		try
 		{
 			PrivilegeCache privilegeCache = null;
-			//Checking whether the logged in user has the required privilege on the given protection element
 
 			if (!isAuthorized)
 			{
@@ -142,8 +141,9 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	}
 
 	/**
-	* @param name
-	* @return
+	 * This method is called to get actual class name.
+	* @param name name.
+	* @return String name.
 	*/
 	public String getActualClassName(String name)
 	{
@@ -162,8 +162,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	/**
 	 * This method gets the instance of privilege cache which is used for authorization.
 	 * @param sessionDataBean session specific Data
-	 * @return privilegeCache
-	 * @throws SMException 
+	 * @return privilegeCache privilegeCache
+	 * @throws SMException  SMException
 	 */
 	private PrivilegeCache getPrivilegeCache(SessionDataBean sessionDataBean) throws SMException
 	{
@@ -173,6 +173,11 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		return privilegeCache;
 	}
 
+	/**
+	 * This method called to get JDBCDAO instance.
+	 * @return JDBCDAO instance.
+	 * @throws BizLogicException BizLogicException
+	 */
 	protected JDBCDAO openJDBCSession() throws BizLogicException
 	{
 		JDBCDAO jdbcDAO = null;
@@ -186,12 +191,17 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp,
+					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return jdbcDAO;
 	}
 
+	/**
+	 * This method called to close JDBC session.
+	 * @param jdbcDAO jdbcDAO
+	 * @throws BizLogicException BizLogicException
+	 */
 	protected void closeJDBCSession(JDBCDAO jdbcDAO) throws BizLogicException
 	{
 		try
@@ -205,12 +215,18 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp,
+					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
 
+	/**
+	 * This method called to open dao session.
+	 * @param sessionDataBean sessionDataBean
+	 * @return DAO dao.
+	 * @throws BizLogicException BizLogicException
+	 */
 	protected DAO openDAOSession(SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		DAO dao = null;
@@ -224,12 +240,17 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp,
+					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return dao;
 	}
 
+	/**
+	 * This method called to close dao session.
+	 * @param dao dao
+	 * @throws BizLogicException BizLogicException
+	 */
 	protected void closeDAOSession(DAO dao) throws BizLogicException
 	{
 		try
@@ -243,13 +264,19 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp,
+					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
 
-	@Override
+	/**
+	 * This method called to view privilege.
+	 * @param objName objName
+	 * @param identifier identifier
+	 * @param sessionDataBean sessionDataBean
+	 * @throws BizLogicException BizLogicException
+	 */
 	public boolean hasPrivilegeToView(String objName, Long identifier,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
@@ -294,8 +321,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 					if ((privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
 							privilegeNames[0])))
 					{
-						isPresent = privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
-								privilegeNames[1]);
+						isPresent = privilegeCache.hasPrivilege(sb.toString()
+								+ cpId.toString(),privilegeNames[1]);
 						isPresent = !isPresent;
 					}
 				}
@@ -306,8 +333,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 				}
 
 				if (privilegeName != null
-						&& privilegeName
-								.equalsIgnoreCase(edu.wustl.security.global.Permissions.READ_DENIED))
+						&& privilegeName.equalsIgnoreCase(
+								edu.wustl.security.global.Permissions.READ_DENIED))
 				{
 					isPresent = !isPresent;
 				}
@@ -366,6 +393,12 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 
 	}
 
+	/**
+	 * This method called to refreshTitliSearchIndexMultiple.
+	 * @param objCollection objCollection
+	 * @param  operation operation
+	 * @throws BizLogicException BizLogicException
+	 */
 	public void refreshTitliSearchIndexMultiple(Collection<AbstractDomainObject> objCollection,
 			String operation) throws BizLogicException
 	{
@@ -375,6 +408,11 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 	}
 
+	/**
+	 * This method called to refreshTitliSearchIndex.
+	 * @param operation operation
+	 * @param obj obj
+	 */
 	protected void refreshTitliSearchIndex(String operation, Object obj)
 	{
 		try
@@ -383,7 +421,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			{
 				if (obj instanceof LinkedHashSet)
 				{
-					this.refreshTitliSearchIndexMultiple((LinkedHashSet<AbstractDomainObject>) obj,
+					this.refreshTitliSearchIndexMultiple(
+						(LinkedHashSet<AbstractDomainObject>) obj,
 							operation);
 				}
 				else
@@ -484,7 +523,6 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	/**
 	 * Deletes an object from the database.
 	 * @param obj The object to be deleted.
-	 * @param dao The dao object.
 	 * @throws BizLogicException Generic BizLogic Exception
 	 */
 	@Override
