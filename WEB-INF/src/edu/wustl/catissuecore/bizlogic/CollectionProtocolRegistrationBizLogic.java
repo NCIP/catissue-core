@@ -1166,6 +1166,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				}
 
 			}
+
+			if (!collectionProtocolRegistration.getCollectionProtocol().getId().equals(0L)
+					&& !persistentCPR.getCollectionProtocol().getId().equals(
+							collectionProtocolRegistration.getCollectionProtocol().getId()))
+			{
+				persistentCPR.setCollectionProtocol(collectionProtocolRegistration
+						.getCollectionProtocol());
+			}
 			/* offset changes end */
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) end

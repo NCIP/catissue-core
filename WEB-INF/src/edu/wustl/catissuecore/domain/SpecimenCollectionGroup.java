@@ -824,35 +824,42 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		final Collection scgConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 
-		if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
+		try
 		{
-			final Iterator iterator = consentTierResponseCollection.iterator();
-			Iterator scgIterator = null;
-			if (scgConsTierColl != null)
+			if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
 			{
-				scgIterator = scgConsTierColl.iterator();
-				hasMoreConsents = scgIterator.hasNext();
-			}
-			while (iterator.hasNext())
-			{
-				final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator
-						.next();
-				ConsentTierStatus consentTierstatusN;
-				if (hasMoreConsents)
+				final Iterator iterator = consentTierResponseCollection.iterator();
+				Iterator scgIterator = null;
+				if (scgConsTierColl != null)
 				{
-					consentTierstatusN = (ConsentTierStatus) scgIterator.next();
+					scgIterator = scgConsTierColl.iterator();
+					hasMoreConsents = scgIterator.hasNext();
 				}
-				else
+				while (iterator.hasNext())
 				{
-					consentTierstatusN = new ConsentTierStatus();
-					consentTierStatusCollectionN.add(consentTierstatusN);
-				}
-				final ConsentTier consentTier = new ConsentTier(consentTierResponse
-						.getConsentTier());
-				consentTierstatusN.setConsentTier(consentTier);
-				consentTierstatusN.setStatus(consentTierResponse.getResponse());
+					final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator
+							.next();
+					ConsentTierStatus consentTierstatusN;
+					if (hasMoreConsents)
+					{
+						consentTierstatusN = (ConsentTierStatus) scgIterator.next();
+					}
+					else
+					{
+						consentTierstatusN = new ConsentTierStatus();
+						consentTierStatusCollectionN.add(consentTierstatusN);
+					}
+					final ConsentTier consentTier = new ConsentTier(consentTierResponse
+							.getConsentTier());
+					consentTierstatusN.setConsentTier(consentTier);
+					consentTierstatusN.setStatus(consentTierResponse.getResponse());
 
+				}
 			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 		this.setConsentTierStatusCollection(consentTierStatusCollectionN);
 	}

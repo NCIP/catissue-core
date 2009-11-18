@@ -794,11 +794,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 
-		final Collection paticipantMedicicalCollection = participant
+		final Collection participantMedicalCollection = participant
 				.getParticipantMedicalIdentifierCollection();
-		if (paticipantMedicicalCollection != null && !paticipantMedicicalCollection.isEmpty())
+		//Created a new PMI collection for bulk operation functionality.
+		Collection newPMICollection = new LinkedHashSet(); 
+		if (participantMedicalCollection != null && !participantMedicalCollection.isEmpty())
 		{
-			final Iterator itr = paticipantMedicicalCollection.iterator();
+			final Iterator itr = participantMedicalCollection.iterator();
 			while (itr.hasNext())
 			{
 				final ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) itr
@@ -806,12 +808,20 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				final Site site = participantIdentifier.getSite();
 				final String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
 				if (validator.isEmpty(medicalRecordNo) || site == null
-						|| (site.getId() == null && site.getName() ==null))
+						|| (site.getId() == null && site.getName() == null))
 				{
-					throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
+					if(participantIdentifier.getId() == null)
+					{
+						throw this.getBizLogicException(null, "errors.participant.extiden.missing", "");
+					}
+				}
+				else
+				{
+					newPMICollection.add(participantIdentifier);
 				}
 			}
 		}
+		participant.setParticipantMedicalIdentifierCollection(newPMICollection);
 
 		final Collection collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
