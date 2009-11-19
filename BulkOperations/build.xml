@@ -23,7 +23,7 @@
 	</target>
 
 	<target name="unjar" depends="clean">
-		<unjar src="../WEB-INF/lib/bulkoperator.jar" dest="${bin.dir}/" />
+		<unjar src="../caTissueSuite_Client/lib/bulkoperator.jar" dest="${bin.dir}/" />
 	</target>
 
 	<property name="jbossHome" value="" />

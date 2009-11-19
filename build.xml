@@ -1036,7 +1036,7 @@
             	<include name="DAO.jar"/>
             	<include name="SimpleQuery.jar"/>
             	<include name="securityManager.jar"/>
-            	
+            	<include name="bulkoperator.jar"/>
             </fileset>
 			<fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
