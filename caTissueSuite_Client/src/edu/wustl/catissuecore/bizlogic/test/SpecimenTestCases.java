@@ -1688,7 +1688,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		c3.setResponse("Withdrawn");
 
 		collectionProtocolRegistration.setConsentWithdrawalOption("Discard");
-		collectionProtocolRegistration.getCollectionProtocol().setId(collectionProtocolRegistration.getId());
+		//collectionProtocolRegistration.getCollectionProtocol().setId(collectionProtocolRegistration.getId());
 		collectionProtocolRegistration.setParticipant(participant);
 		try
 		{
