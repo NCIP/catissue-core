@@ -254,8 +254,21 @@ public final class StorageContainerUtil
 			containerId = (String) similarContainerMap.get(containerIdKey);
 			posDim1 = (String) similarContainerMap.get(posDim1Key);
 			posDim2 = (String) similarContainerMap.get(posDim2Key);
-			usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
-					+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
+			String position = containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
+				+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2;
+			/**
+			 * bug 12881
+			 * If same positions are applied to more than one aliquot.
+			 */
+			 if(!usedPositionsList.contains( position ))
+             {
+			   usedPositionsList.add(position);
+             }
+             else
+             {
+             	throw AppUtility.getApplicationException(null,
+             			"errors.storageContainer.inUse", "StorageContainerUtil.java");
+             }
 
 		}
 		else if (similarContainerMap.get(radioButonKey) != null
@@ -290,15 +303,24 @@ public final class StorageContainerUtil
 			}
 			else
 			{
-
-				usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
-						+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
-				similarContainerMap.put(containerIdKey, containerId);
-				similarContainerMap.put(posDim1Key, posDim1);
-				similarContainerMap.put(posDim2Key, posDim2);
-				similarContainerMap.remove(containerIdKey + "_fromMap");
-				similarContainerMap.remove(posDim1Key + "_fromMap");
-				similarContainerMap.remove(posDim2Key + "_fromMap");
+                String position = containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1
+				+ Constants.STORAGE_LOCATION_SAPERATOR + posDim2;
+               // bug 12881
+                if(!usedPositionsList.contains( position ))
+                {
+                	usedPositionsList.add(position);
+                	similarContainerMap.put(containerIdKey, containerId);
+                	similarContainerMap.put(posDim1Key, posDim1);
+                	similarContainerMap.put(posDim2Key, posDim2);
+                	similarContainerMap.remove(containerIdKey + "_fromMap");
+                	similarContainerMap.remove(posDim1Key + "_fromMap");
+                	similarContainerMap.remove(posDim2Key + "_fromMap");
+                }
+                else
+                {
+                	throw AppUtility.getApplicationException(null,
+                			"errors.storageContainer.inUse", "StorageContainerUtil.java");
+                }
 			}
 
 		}
