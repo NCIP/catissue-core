@@ -22,19 +22,12 @@
 
 <script language="JavaScript" type="text/javascript">
 
-
 function beforeApplyAll()
  {
  	var specimencount = "<%= count %>";
 	  if(specimencount >1)
 	 {
-		  var answer= confirm("Are you sure you want to apply first destination container to all specimen?");
-
-		  if(answer)
-		 {
-			  ApplyToAll();
-		 }
-
+		ApplyToAll();
 	 }
 	 else
 	 {
@@ -60,18 +53,25 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 </script> <html:form action="BulkTransferEventsSubmit.do" > <jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
 
 <tr> <td colspan="3">
-
-<table width="100%" border="0" cellspacing="0" cellpadding="4"> <tr> 
+<bean:define id="firstSpecimen" value="true" />
+<table width="100%" border="0" cellspacing="0" cellpadding="2"> <tr> 
   <td width="20%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
 
   <td width="30%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td> 
 
-  <td width="20%" class="tableheading"><strong><bean:message key="specimenDestContainer"/></strong></td> 
+  <td width="8%" class="tableheading" nowrap><strong><bean:message key="specimenDestContainer"/></strong></td>
 
-   <td width="30%" class="tableheading">&nbsp;</td>
+  <!--  if first Specimen in the list add "Apply to All" Link -->
+  <td class="tableheading" width="5%">
+  <logic:equal name="firstSpecimen"  value="true" >
+   <html:link href="#" styleClass="black_ar" onmouseover="Tip('Apply first location to all',WIDTH,280)" onclick="javascript:beforeApplyAll();" > <bean:message key="aliquots.applyFirstToAll"/> </html:link>  <bean:define id="firstSpecimen" value="false"/>
+  </logic:equal> 
+  <logic:notEqual name="firstSpecimen" value="true" > &nbsp;
+  <bean:define id="onlyoneSpecimen" value="false" />
+  </logic:notEqual>
+ </td>
                                                          
  </tr> </table> </td> </tr>
-  <bean:define id="firstSpecimen" value="true" />
 
  <tr> <td colspan="3">
    <div style="height: 170px; background-color: #ffffff;overflow: auto;">
@@ -79,15 +79,21 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
   <table width="100%" border="0" cellspacing="0" cellpadding="4">
 
 <logic:iterate id="specimenId" name="<%=Constants.SPECIMEN_ID_LIST%>" scope="request" indexId="id"> 
-<% String specimenLabelField = "fieldValue(ID_"+specimenId+"_LABEL)"; String specimenFromLocField = "fieldValue(ID_"+specimenId+"_FROMLOC)"; String specimenFromLocIDField = "fieldValue(ID_"+specimenId+"_FROMLOCID)"; String specimenFromLocPos1Field = "fieldValue(ID_"+specimenId+"_FROMLOCPOS1)"; String specimenFromLocPos2Field = "fieldValue(ID_"+specimenId+"_FROMLOCPOS2)"; String specimenToSCLabelField = "fieldValue(ID_"+specimenId+"_TOSCLABEL)"; String specimenToSCIDField = "fieldValue(ID_"+specimenId+"_TOSCID)"; String specimenToSCPos1Field = "fieldValue(ID_"+specimenId+"_TOSCPOS1)"; String specimenToSCPos2Field = "fieldValue(ID_"+specimenId+"_TOSCPOS2)";
+<% String specimenLabelField = "fieldValue(ID_"+specimenId+"_LABEL)"; 
+String specimenFromLocField = "fieldValue(ID_"+specimenId+"_FROMLOC)";
+String specimenFromLocIDField = "fieldValue(ID_"+specimenId+"_FROMLOCID)";
+String specimenFromLocPos1Field = "fieldValue(ID_"+specimenId+"_FROMLOCPOS1)"; 
+String specimenFromLocPos2Field = "fieldValue(ID_"+specimenId+"_FROMLOCPOS2)"; 
+String specimenToSCLabelField = "fieldValue(ID_"+specimenId+"_TOSCLABEL)"; 
+String specimenToSCIDField = "fieldValue(ID_"+specimenId+"_TOSCID)"; 
+String specimenToSCPos1Field = "fieldValue(ID_"+specimenId+"_TOSCPOS1)";
+String specimenToSCPos2Field = "fieldValue(ID_"+specimenId+"_TOSCPOS2)";
 
 String containerId = "Cont"+specimenId; String selContainerId = "SelCont"+specimenId; String pos1Id = "Pos1Id"+specimenId; String pos2Id = "Pos2Id"+specimenId;
 
 String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField = "fieldValue(ID_"+specimenId+"_TOVirLoc)"; String methodCall = "virtualLocationSelChanged("+specimenId+")"; String virLoc = "VirLocChk"+specimenId;
 
 %>
- 
- 
   
  <tr>
 <html:hidden property="orderedString" />
@@ -97,33 +103,25 @@ String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField
 
 <!-- To Container Field starts -->
 
-
-
-<td class="black_ar" width="20%"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" > <html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" /></logic:equal> <logic:notEqual name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" > <html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="false" />			</logic:notEqual> </td>	
-
-<!--  if first Specimen in the list add "Apply to All" Link -->
-
-
- <td class="black_ar" width="29%">
-  <logic:equal name="firstSpecimen"  value="true" >
-   <html:link href="#" styleClass="view" onmouseover="Tip('Apply first destination container to all specimen',WIDTH,280)" onclick="javascript:beforeApplyAll();" > <bean:message key="applytoall"/> </html:link>  <bean:define id="firstSpecimen" value="false"/>
-  </logic:equal> 
-  <logic:notEqual name="firstSpecimen" value="true" > &nbsp;
-  <bean:define id="onlyoneSpecimen" value="false" />
-  </logic:notEqual>
- </td>
-
-
-<!-- To Container Field ends -->
-
-<!--td> <html:text styleId="<%=pos1Id%>" property="<%=specimenToSCPos1Field%>" disabled="false" />			</td> <td> <html:text styleId="<%=pos2Id%>" property="<%=specimenToSCPos2Field%>" disabled="false" /> </td> <td>
-
 <%String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME); if (className==null) className="";
 
-String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID); if (collectionProtocolId==null) collectionProtocolId=""; String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+specimenToSCIDField+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+containerId + "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+Constants.TISSUE + "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=1";		
+String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID); if (collectionProtocolId==null) collectionProtocolId=""; String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId + "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+Constants.TISSUE + "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=1";		
 
-String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%> <html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>"> <bean:message key="buttons.map"/> </html:button> </td-->
+String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%> 
 
+<td class="black_ar" width="30%"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" > 
+<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" /></logic:equal>
+
+
+<logic:notEqual name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
+<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="false" />			</logic:notEqual> 
+<html:text styleId="<%=pos1Id%>" styleClass="black_ar" size="4" property="<%=specimenToSCPos1Field%>" disabled="false" />	
+<html:text styleId="<%=pos2Id%>" styleClass="black_ar" size="4" property="<%=specimenToSCPos2Field%>" disabled="false" />	
+
+<a href="#" onclick="<%=buttonOnClicked%>"><img src="images/Tree.gif" border="0" width="13" height="15" title='View storage locations'></a>
+</td>	
+
+<!-- To Container Field ends -->
 </tr></div> </logic:iterate> </table></td> </tr> </table> <tr> 
 <td colspan="3" class="buttonbg">
 <html:submit styleClass="blue_ar_b"/>

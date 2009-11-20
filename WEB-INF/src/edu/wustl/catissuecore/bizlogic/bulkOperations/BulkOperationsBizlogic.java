@@ -144,6 +144,15 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 
 			toContainer = new StorageContainer();
 			toContainer.setName(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"));
+			//bug 14417 start
+			String pos1 = eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1");
+			String pos2 = eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2");
+			if(pos1!=null && pos2!=null && !pos1.trim().equals( "" ) && !pos2.trim().equals( "" ))
+			{
+				transferEventParameters.setToPositionDimensionOne(Integer.valueOf(pos1));
+				transferEventParameters.setToPositionDimensionTwo(Integer.valueOf(pos2));
+			}
+			//bug 14417 end
 			transferEventParameters.setToStorageContainer(toContainer);
 
 			events.add(transferEventParameters);

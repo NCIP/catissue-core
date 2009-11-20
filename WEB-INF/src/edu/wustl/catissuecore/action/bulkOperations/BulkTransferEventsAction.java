@@ -44,6 +44,10 @@ public class BulkTransferEventsAction extends BulkOperationAction
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCPOS2", specimenRow.get(5)
 				.toString());
+		//bug 14417
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS1","");
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS2", "");
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCLABEL", "");
 		eventParametersForm.setSpecimenId(specimenId, specimenId);
 	}
 }
