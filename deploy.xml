@@ -4015,17 +4015,14 @@ Thanking You,
 					<replacefilter token="@@DATABASE_PASSWORD@@" value="${csm.database.password}" />
 			</replace>
 			</then>
-			<elseif>
-				<equals arg1="false" arg2="${idp.enabled}" />
-			<then>
+			<else>	
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 					<include name="*.cfg.xml" />
-					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					<replacefilter token="@@URL@@" value="${database.url}${database.host}:${database.port}:${database.name}" />
 					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 				</replace>
-			</then>
-			</elseif>
+			</else>
 			</if>
 	</target>
 	<target name="upgrade_saved_queries" >
