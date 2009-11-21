@@ -20,6 +20,7 @@ PUBLIC
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>
 		<form-bean name="consentForm" type="edu.wustl.catissuecore.actionForm.ConsentResponseForm"/>
         <form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
+        <form-bean name="bulkOperationForm" type="edu.wustl.catissuecore.actionForm.BulkOperationForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
@@ -1473,7 +1474,22 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.changePasswordDef" />
 			<forward name="access_denied" path="/Home.do" />
 		</action>
-		
+
+		<action path="/BulkOperation" type="edu.wustl.catissuecore.action.BulkOperationAction"
+		   name="bulkOperationForm" validate="false" scope="request">
+		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
+	   </action>
+
+		<action path="/FileUpload" type="edu.wustl.catissuecore.action.FileUploadAction"
+			name="bulkOperationForm" scope="request" validate="true">
+		     <forward name="success" path="/BulkOperation.do"/>
+		</action>
+
+	   	<action path="/DownloadCSV" type="edu.wustl.catissuecore.action.BulkOperationAction"
+		   name="bulkOperationForm" validate="false" scope="request">
+		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
+	   </action>
+
 		<action path="/UpdatePassword"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="userForm"
@@ -5639,7 +5655,7 @@ PUBLIC
 	   		<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef"></forward>
 	   </action>
 	   
-	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>	
+	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>
 	   <action path="/ClinicalDiagnosisData" type="edu.wustl.catissuecore.action.ClinicalDiagnosisDataAction" scope="request"/>					
 
 	</action-mappings>

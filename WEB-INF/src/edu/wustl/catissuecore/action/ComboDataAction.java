@@ -5,9 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.dao.DAO;
 
 /**
  *

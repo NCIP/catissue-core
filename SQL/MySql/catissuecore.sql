@@ -125,6 +125,7 @@ drop table if exists catissue_tissue_req_specimen;
 
 drop table if exists catissue_mol_req_specimen;
 drop table if exists catissue_molecular_specimen;
+drop table if exists catissue_catissue_bulk_operation;
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -1273,3 +1274,13 @@ alter table catissue_audit_event_query_log add column TEMP_TABLE_NAME varchar(15
 alter table catissue_audit_event_query_log add column IF_TEMP_TABLE_DELETED tinyint(1) default false;
 alter table catissue_audit_event_query_log add column ROOT_ENTITY_NAME varchar(150) default null;
 alter table catissue_audit_event_query_log add column COUNT_OF_ROOT_RECORDS bigint(20) default null;
+
+/*Bulk Operations from UI*/
+create table catissue_bulk_operation (
+	IDENTIFIER BIGINT(20) not null auto_increment,
+	OPERATION VARCHAR(100) not null,
+	CSV_TEMPLATE VARCHAR(5000) not null,
+	XML_TEMPALTE VARCHAR(15000) not null,
+	DROPDOWN_NAME VARCHAR(100) not null,
+	PRIMARY KEY  (`IDENTIFIER`), UNIQUE KEY OPERATION (`OPERATION`), UNIQUE KEY DROPDOWN_NAME (`DROPDOWN_NAME`)
+);

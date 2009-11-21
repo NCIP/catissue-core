@@ -72,8 +72,11 @@
 	<definition name=".catissuecore.changePasswordDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/home/ChangePassword.jsp" />
 	</definition>
-	
-	
+
+	<definition name=".catissuecore.bulkOperationDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/bulkOperations/BulkOperation.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.userProfileSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>

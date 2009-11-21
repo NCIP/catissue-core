@@ -365,6 +365,11 @@ Ext.onReady(function(){
                 text: 'Shipping And Tracking',
 				tooltip:'Shipping And Tracking Dashboard',
 				href : 'ShowDashboardAction.do'
+            },
+            {
+                text: 'Bulk Operations',
+				tooltip:'Bulk Operations',
+                href:'BulkOperation.do?pageOf=pageOfBulkOperation'
             }
         ]
     });

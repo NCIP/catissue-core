@@ -707,6 +707,11 @@ public class Constants
 	public static final String QUICKEVENTS_ACTION = "QuickEventsSearch.do";
 	public static final String QUICKEVENTSPARAMETERS_ACTION = "ListSpecimenEventParameters.do";
 
+	//Constants related to Bulk Operation functionality
+	public static final String CATISSUE_INTSALL_PROPERTIES_FILE = "./caTissueInstall.properties";
+	public static final String PAGE_OF_BULK_OPERATION = "pageOfBulkOperation";
+	public static final String BULK_OPERATION_ACTION = "BulkOperation.do";
+
 	//SimilarContainers Action
 	public static final String SIMILAR_CONTAINERS_ACTION = "SimilarContainers.do";
 	public static final String CREATE_SIMILAR_CONTAINERS_ACTION = "CreateSimilarContainers.do";
@@ -987,6 +992,8 @@ public class Constants
 			"23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
 			"37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
 			"51", "52", "53", "54", "55", "56", "57", "58", "59"};
+
+	public static final String BULK_OPEARTION_LIST = "bulkOperationList";
 
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
