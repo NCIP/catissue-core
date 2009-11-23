@@ -38,7 +38,7 @@ public class Biohazard extends AbstractDomainObject
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(Biohazard.class);
+	private static final Logger logger = Logger.getCommonLogger(Biohazard.class);
 
 	/**
 	 * System generated unique id.
@@ -84,7 +84,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @param form AbstractActionForm.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public Biohazard(AbstractActionForm form) throws AssignDataException
+	public Biohazard(final AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -94,7 +94,7 @@ public class Biohazard extends AbstractDomainObject
 	 * Parameterized constructor.
 	 * @param bioHazard Biohazard.
 	 */
-	public Biohazard(Biohazard bioHazard)
+	public Biohazard(final Biohazard bioHazard)
 	{
 		super();
 		this.comment = bioHazard.getComment();
@@ -123,7 +123,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @see #getId()
 	 * */
 	@Override
-	public void setId(Long identifier)
+	public void setId(final Long identifier)
 	{
 		this.id = identifier;
 	}
@@ -145,7 +145,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @param name the name of the biohazardous agent.
 	 * @see #getName()
 	 */
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
@@ -167,7 +167,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @param comment the comments about the biohazard.
 	 * @see #getComment()
 	 */
-	public void setComment(String comment)
+	public void setComment(final String comment)
 	{
 		this.comment = comment;
 	}
@@ -189,7 +189,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @param type the type of biohazard (Infectious, Radioactive, Toxic, Carcinogen, Mutagen).
 	 * @see #getType()
 	 */
-	public void setType(String type)
+	public void setType(final String type)
 	{
 		this.type = type;
 	}
@@ -212,11 +212,11 @@ public class Biohazard extends AbstractDomainObject
 	}
 
 	/**
-	 * @param specimenCollection The specimen to set.
+	 * @param spColl The specimen to set.
 	 */
-	public void setSpecimenCollection(Collection specimenCollection)
+	public void setSpecimenCollection(final Collection spColl)
 	{
-		this.specimenCollection = specimenCollection;
+		this.specimenCollection = spColl;
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class Biohazard extends AbstractDomainObject
 	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm) throws AssignDataException
+	public void setAllValues(final IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -238,8 +238,9 @@ public class Biohazard extends AbstractDomainObject
 		{
 			Biohazard.logger.error(excp.getMessage(),excp);
 			excp.printStackTrace() ;
-			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
-			throw new AssignDataException(errorKey, null, "Biohazard.java :");
+			throw new AssignDataException(
+			ErrorKey.getErrorKey("assign.data.error"), 
+			null, "Biohazard.java :");
 		}
 	}
 
@@ -256,7 +257,7 @@ public class Biohazard extends AbstractDomainObject
 	 * Set if persisted.
 	 * @param persisted boolean value.
 	 */
-	public void setPersisted(Boolean persisted)
+	public void setPersisted(final Boolean persisted)
 	{
 		this.persisted = persisted;
 	}

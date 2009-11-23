@@ -34,7 +34,7 @@ public class CellSpecimen extends Specimen implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(CellSpecimen.class);
+	private static final Logger logger = Logger.getCommonLogger(CellSpecimen.class);
 
 	/**
 	 * Default Constructor.
@@ -49,7 +49,7 @@ public class CellSpecimen extends Specimen implements Serializable
 	 * @param form AbstractActionForm.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	public CellSpecimen(AbstractActionForm form) throws AssignDataException
+	public CellSpecimen(final AbstractActionForm form) throws AssignDataException
 	{
 		super();
 		this.setAllValues(form);
@@ -61,7 +61,7 @@ public class CellSpecimen extends Specimen implements Serializable
 	 * @throws AssignDataException : AssignDataException
 	 * */
 	@Override
-	public void setAllValues(IValueObject abstractForm) throws AssignDataException
+	public void setAllValues(final IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -80,7 +80,7 @@ public class CellSpecimen extends Specimen implements Serializable
 	 * Parameterized Constructor.
 	 * @param cellReqSpecimen of type SpecimenRequirement.
 	 */
-	public CellSpecimen(SpecimenRequirement cellReqSpecimen)
+	public CellSpecimen(final SpecimenRequirement cellReqSpecimen)
 	{
 		super(cellReqSpecimen);
 	}

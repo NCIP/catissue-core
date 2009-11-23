@@ -29,7 +29,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(CellSpecimenReviewParameters.class);
+	private static final Logger logger = Logger.getCommonLogger(CellSpecimenReviewParameters.class);
 	/**
 	 * Serial Version Id for the class.
 	 */

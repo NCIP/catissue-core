@@ -18,6 +18,7 @@ import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @hibernate.class table="CATISSUE_ABSTRACT_SPECIMEN"
@@ -29,7 +30,10 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 			Serializable,
 			IActivityStatus
 {
-
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static final Logger logger = Logger.getCommonLogger(AbstractSpecimen.class);
 	/**
 	 * This is the serial version ID generated for the class.
 	 */
@@ -89,9 +93,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * @throws AssignDataException assignDataException.
 	 */
 	@Override
-	public void setAllValues(IValueObject valueObject) throws AssignDataException
+	public void setAllValues(final IValueObject valueObject) throws AssignDataException
 	{
-		//
+		logger.debug("Empty implementation of setAllValue");
 	}
 
 	/**
@@ -100,6 +104,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
+		logger.debug("Empty implementation of getActivityStatus");
 		return null;
 	}
 
@@ -107,9 +112,9 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Abstract method which would set the Activity Status.
 	 * @param activityStatus of String type
 	 */
-	public void setActivityStatus(String activityStatus)
+	public void setActivityStatus(final String activityStatus)
 	{
-		//
+		logger.debug("Empty implementation of setActivityStatus");
 	}
 
 	/**
@@ -127,7 +132,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * @param identifier which is of Long type.
 	 */
 	@Override
-	public void setId(Long identifier)
+	public void setId(final Long identifier)
 	{
 		this.id = identifier;
 	}
@@ -146,13 +151,13 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 
 	/**
 	 * Sets the combined anatomic state and pathological disease classification of a specimen.
-	 * @param specimenCharacteristics the combined anatomic state and pathological disease 
+	 * @param spChar the combined anatomic state and pathological disease 
 	 * classification of a specimen.
 	 * @see #getSpecimenCharacteristics()
 	 */
-	public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
+	public void setSpecimenCharacteristics(final SpecimenCharacteristics spChar)
 	{
-		this.specimenCharacteristics = specimenCharacteristics;
+		this.specimenCharacteristics = spChar;
 	}
 
 	/**
@@ -168,7 +173,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Set the pathological status.
 	 * @param pathologicalStatus of type String.
 	 */
-	public void setPathologicalStatus(String pathologicalStatus)
+	public void setPathologicalStatus(final String pathologicalStatus)
 	{
 		this.pathologicalStatus = pathologicalStatus;
 	}
@@ -186,7 +191,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Set the lineage.
 	 * @param lineage of type String.
 	 */
-	public void setLineage(String lineage)
+	public void setLineage(final String lineage)
 	{
 		this.lineage = lineage;
 	}
@@ -213,7 +218,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Set the initial quantity.
 	 * @param initialQuantity which is of Double type.
 	 */
-	public void setInitialQuantity(Double initialQuantity)
+	public void setInitialQuantity(final Double initialQuantity)
 	{
 		this.initialQuantity = initialQuantity;
 	}
@@ -232,7 +237,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Set the specimen type.
 	 * @param specimenType SpecimenType)
 	 */
-	public void setSpecimenType(String specimenType)
+	public void setSpecimenType(final String specimenType)
 	{
 		this.specimenType = specimenType;
 	}
@@ -254,7 +259,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * @param parentSpecimen the parent specimen from which this specimen is derived.
 	 * @see #getParentSpecimen()
 	 */
-	public void setParentSpecimen(AbstractSpecimen parentSpecimen)
+	public void setParentSpecimen(final AbstractSpecimen parentSpecimen)
 	{
 		this.parentSpecimen = parentSpecimen;
 	}
@@ -279,7 +284,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * derived from this specimen.
 	 * @see #getChildrenSpecimen()
 	 */
-	public void setChildSpecimenCollection(Collection<AbstractSpecimen> childrenSpecimen)
+	public void setChildSpecimenCollection(final Collection<AbstractSpecimen> childrenSpecimen)
 	{
 		this.childSpecimenCollection = childrenSpecimen;
 	}
@@ -304,7 +309,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * associated with this specimen.
 	 * @see #getSpecimenEventCollection()
 	 */
-	public void setSpecimenEventCollection(Collection specimenEventCollection)
+	public void setSpecimenEventCollection(final Collection specimenEventCollection)
 	{
 		this.specimenEventCollection = specimenEventCollection;
 	}
@@ -349,7 +354,7 @@ public abstract class AbstractSpecimen extends AbstractDomainObject
 	 * Set the specimen class.
 	 * @param specimenClass SpecimenClass.
 	 */
-	public void setSpecimenClass(String specimenClass)
+	public void setSpecimenClass(final String specimenClass)
 	{
 		this.specimenClass = specimenClass;
 	}

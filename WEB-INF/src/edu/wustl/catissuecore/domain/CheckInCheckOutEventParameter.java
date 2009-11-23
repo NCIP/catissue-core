@@ -29,7 +29,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(CheckInCheckOutEventParameter.class);
+	private static final Logger logger = Logger.getCommonLogger(CheckInCheckOutEventParameter.class);
 	/**
 	 * Serial Version Id of the class.
 	 */
@@ -54,7 +54,7 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 * Sets the storageStatus of the event.
 	 * @param storageStatus storageStatus of the event.
 	 */
-	public void setStorageStatus(String storageStatus)
+	public void setStorageStatus(final String storageStatus)
 	{
 		this.storageStatus = storageStatus;
 	}

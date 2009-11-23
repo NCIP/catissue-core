@@ -29,7 +29,7 @@ public class CellSpecimenRequirement extends SpecimenRequirement implements Seri
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(CellSpecimenRequirement.class);
+	private static final Logger logger = Logger.getCommonLogger(CellSpecimenRequirement.class);
 
 	/**
 	 * Serial Version Id of the class.

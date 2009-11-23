@@ -32,7 +32,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(AbstractSpecimenCollectionGroup.class);
+	private static final Logger logger = Logger.getCommonLogger(AbstractSpecimenCollectionGroup.class);
 
 	/**
 	 * System generated unique id.
@@ -58,14 +58,6 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * storage, processing, or utilization.
 	 */
 	protected Site specimenCollectionSite;
-
-	/**
-	 * Default Constructor.
-	 */
-	public AbstractSpecimenCollectionGroup()
-	{
-		super();
-	}
 
 	/**
 	 * An abstract function should be overridden by the child
@@ -107,7 +99,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @param identifier as long.
 	 */
 	@Override
-	public void setId(Long identifier)
+	public void setId(final Long identifier)
 	{
 		this.id = identifier;
 	}
@@ -133,7 +125,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * this collection event (e.g. Prostate Adenocarcinoma).
 	 * @see #getClinicalDiagnosis()
 	 */
-	public void setClinicalDiagnosis(String clinicalDiagnosis)
+	public void setClinicalDiagnosis(final String clinicalDiagnosis)
 	{
 		this.clinicalDiagnosis = clinicalDiagnosis;
 	}
@@ -157,7 +149,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @param clinicalStatus the clinical status of the participant at the time of specimen collection.
 	 * @see #getClinicalStatus()
 	 */
-	public void setClinicalStatus(String clinicalStatus)
+	public void setClinicalStatus(final String clinicalStatus)
 	{
 		this.clinicalStatus = clinicalStatus;
 	}
@@ -181,7 +173,7 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @param activityStatus Active if this record can be queried else returns InActive.
 	 * @see #getActivityStatus()
 	 */
-	public void setActivityStatus(String activityStatus)
+	public void setActivityStatus(final String activityStatus)
 	{
 		this.activityStatus = activityStatus;
 	}
@@ -203,13 +195,13 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	/**
 	 * Sets the physical location associated with biospecimen collection,
 	 * storage, processing, or utilization.
-	 * @param specimenCollectionSite Site physical location associated with
+	 * @param cpCollSite Site physical location associated with
 	 * biospecimen collection, storage, processing, or utilization.
 	 * @see #getSpecimenCollectionSite()
 	 */
-	public void setSpecimenCollectionSite(Site specimenCollectionSite)
+	public void setSpecimenCollectionSite(final Site cpCollSite)
 	{
-		this.specimenCollectionSite = specimenCollectionSite;
+		this.specimenCollectionSite = cpCollSite;
 	}
 
 	/**
@@ -218,8 +210,9 @@ public abstract class AbstractSpecimenCollectionGroup extends AbstractDomainObje
 	 * @throws AssignDataException assignDataException.
 	 */
 	@Override
-	public void setAllValues(IValueObject valueObject) throws AssignDataException
+	public void setAllValues(final IValueObject valueObject) throws AssignDataException
 	{
+		logger.debug("Inside setAllValues");
 		final AbstractActionForm abstractForm = (AbstractActionForm) valueObject;
 		final SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm) abstractForm;
 		this.setClinicalDiagnosis(form.getClinicalDiagnosis());
