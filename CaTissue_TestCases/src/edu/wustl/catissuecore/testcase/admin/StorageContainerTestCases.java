@@ -30,14 +30,14 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSetUtility()
 	{
-		StorageType storageType = new StorageType();
-		storageType.setName("TissueStorageType_1257421218783");
-		storageType.setId(6L);
-		TestCaseUtility.setNameObjectMap("StorageType", storageType);
-		
-		Site s = new Site();
-		s.setId(1L);
-		TestCaseUtility.setNameObjectMap("Site", s);
+//		StorageType storageType = new StorageType();
+//		storageType.setName("TissueStorageType_1257421218783");
+//		storageType.setId(6L);
+//		TestCaseUtility.setNameObjectMap("StorageType", storageType);
+//		
+//		Site s = new Site();
+//		s.setId(1L);
+//		TestCaseUtility.setNameObjectMap("Site", s);
 	}
 	/**
 	 * Test Storage Container Add.
@@ -97,13 +97,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    holdsSpecimenClassCollection1.add(specimenClassTypes[0]);
 	    storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection1);
 	    
-	    final StorageType storageTypeAny = new StorageType();
-		storageTypeAny.setId(new Long("1"));
-		storageTypeAny.setName("All");
-		Collection<StorageType> coll = new HashSet<StorageType>() ;
-		coll.add(storageTypeAny);
-		storageContainer.getHoldsStorageTypeCollection().clear();
-		storageContainer.setHoldsStorageTypeCollection(coll);
 	    TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);	    
 	}
 	//bug 11546
@@ -113,8 +106,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testAddFreezerContainer()
 	{
-		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
-		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
+		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Freezer_StorageType");
 			
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
@@ -134,11 +126,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setSpecimenOrArrayType("Specimen");
 		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
 		storageContainerForm.setActivityStatus("Active");
-		
-		storageContainerForm.setParentContainerSelected("Container (Manual)");
-		storageContainerForm.setContainerId(parentStorageContainer.getId().toString());
-		storageContainerForm.setPos1("1");
-		storageContainerForm.setPos2("1");
 		storageContainerForm.setOperation("add");	
 		setRequestPathInfo("/StorageContainerAdd");
 		setActionForm(storageContainerForm);

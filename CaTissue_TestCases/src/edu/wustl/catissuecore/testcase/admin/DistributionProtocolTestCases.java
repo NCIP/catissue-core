@@ -112,16 +112,17 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 			fail(e.getMessage());
 		}
 		
-		if(distributionProtocolList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else if(distributionProtocolList.size() == 1)
+		if(distributionProtocolList.size() == 1)
 		{
 			verifyForwardPath("/SearchObject.do?pageOf=pageOfDistributionProtocol&operation=search&id=" + distributionProtocol.getId());
 			verifyNoActionErrors();
 		}
+		else if(distributionProtocolList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		
 		else
 		{
 			verifyForward("failure");

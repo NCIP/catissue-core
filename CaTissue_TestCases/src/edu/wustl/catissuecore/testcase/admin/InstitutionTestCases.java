@@ -12,6 +12,7 @@ import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
@@ -275,4 +276,13 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testInstitutionBizLogicgetObjectIdMethod()
+	{
+		InstitutionBizLogic institutionBizLogic = new InstitutionBizLogic();
+		String objectId = institutionBizLogic.getObjectId(null, null);
+		assertEquals(Constants.ADMIN_PROTECTION_ELEMENT, objectId);
+	}
+	
 }

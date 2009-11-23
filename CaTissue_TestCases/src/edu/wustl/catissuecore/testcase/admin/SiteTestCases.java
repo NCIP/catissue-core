@@ -303,19 +303,18 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	public void testSiteBizLogicAddWithNullObject()
 	{
 		//TODO
-		fail("Need to write test case");
-//		SiteBizLogic siteBizLogic = new SiteBizLogic() ;
-//		try
-//		{
-//			siteBizLogic.insert(null, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
-//			assertFalse("Site Object Is NULL while inserting through SiteBizLogic", true);
-//		}
-//		catch (BizLogicException e)
-//		{
-//			logger.info("Site Object Is NULL: " + e.getMessage()) ;
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		SiteBizLogic siteBizLogic = new SiteBizLogic() ;
+		try
+		{
+			siteBizLogic.insert(null, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("Site Object Is NULL while inserting through SiteBizLogic", true);
+		}
+		catch (BizLogicException e)
+		{
+			logger.info("Site Object Is NULL: " + e.getMessage()) ;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Test Site Add with NULL name.

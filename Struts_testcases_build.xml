@@ -115,17 +115,32 @@
 			
 	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
 	            <src path="${cat.test.src.dir}"/>
-	            <classpath>
-	       		  <fileset dir="${lib.dir}">
-	        			<include name="**/*.jar"/>
-	        	  </fileset>
-	            
-	            	<fileset dir="${cat.test.lib.dir}">
-	                	<include name="**/*.jar"/>
-	            	</fileset>
-	           	            		
-	            </classpath>
-	        	
+	    	  
+	    	<classpath>
+	    						
+	    						<pathelement path= "${target.dir}" /> 
+	    						<pathelement path="${cat.test.src.dir}" />
+	    						<pathelement path= "${cat.test.classes.dir}" />
+	    						
+	    						<fileset dir="${cat.test.lib.dir}">
+	    							<exclude name="catissuecore.jar"/>
+	    						    <include name="**/*.jar"/>
+	    					   	</fileset>
+	    						
+	    						<fileset dir="${lib.dir}">
+	    							<include name="**/*.jar"/>
+	    						</fileset>
+	    											
+	    						
+	    						<fileset dir="${base.dir}/WEB-INF/">
+	    							<include name="**/*.properties"/>
+	    							<include name="**/*.xml" />
+	    							<include name="**/*.tld" />
+	    						</fileset>
+	    						
+	    					</classpath>
+
+	    					<classpath refid="cobertura.classpath" />
 	    </javac>
 	</target>
 	
@@ -268,7 +283,7 @@
 	<target name="run_testcases_with_coveragereport">
 	
 		<antcall target="instrument_junit_testcases"/>
-		<antcall target="run_junit_testcases"/>
+		<antcall target="run_junit_nightlyBuild"/>
 		<antcall target="code_coverage_report"/>
 		
 	</target>

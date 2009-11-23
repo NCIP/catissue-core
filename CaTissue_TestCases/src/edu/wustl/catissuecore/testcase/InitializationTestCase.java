@@ -94,8 +94,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 			System.setProperty("java.naming.factory.initial", NamingContextFactory.class.getName());
 			System.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
 			// start JNDI server
-			NamingBeanImpl server = new
-			NamingBeanImpl();
+			NamingBeanImpl server = new NamingBeanImpl();
 			server.start();
 			// Create the initial context from the properties we just created
 			Context initialContext = new InitialContext();
@@ -143,6 +142,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 						applicationHome+"/catissuecore-properties/caTissueCore_Properties.xml");
 				System.setProperty("java.security.auth.login.config",
 						applicationHome+"/CaTissue_TestCases/test_login.conf");
+				System.setProperty("app.domainAuthFilePath",applicationHome+"/catissuecore-properties/AuthenticationDomain.xml");
 				if (!initComplete)
 				{
 					initComplete = true;

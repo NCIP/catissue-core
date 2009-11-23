@@ -10,6 +10,11 @@ import edu.wustl.catissuecore.testcase.admin.SiteTestCases;
 import edu.wustl.catissuecore.testcase.admin.SpecimenArrayTypeTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageTypeTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.ParticipantTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.SpecimenCollectionGroupTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.SpecimenTestCases;
+import edu.wustl.catissuecore.testcase.collectionprotocol.CollectionProtocolTestCases;
+import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 
 /**
@@ -49,22 +54,22 @@ public class CaTissueSuiteTestSuite
 		//daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
 		
 		strutsSuite.addTestSuite(InitializationTestCase.class);
-//		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
+		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
 		strutsSuite.addTestSuite(LoginTestCase.class);
-//		strutsSuite.addTestSuite(InstitutionTestCases.class);
-//		strutsSuite.addTestSuite(DepartmentTestCases.class);
-//		strutsSuite.addTestSuite(CancerReaserchGroupTestCases.class);
-//		strutsSuite.addTestSuite(SiteTestCases.class);
-//		strutsSuite.addTestSuite(BiohazardTestCases.class);
-//		strutsSuite.addTestSuite(DistributionProtocolTestCases.class);
-//		strutsSuite.addTestSuite(SpecimenArrayTypeTestCases.class);
-//		strutsSuite.addTestSuite(StorageTypeTestCases.class);
+		strutsSuite.addTestSuite(InstitutionTestCases.class);
+		strutsSuite.addTestSuite(DepartmentTestCases.class);
+		strutsSuite.addTestSuite(CancerReaserchGroupTestCases.class);
+		strutsSuite.addTestSuite(SiteTestCases.class);
+		strutsSuite.addTestSuite(BiohazardTestCases.class);
+		strutsSuite.addTestSuite(DistributionProtocolTestCases.class);
+		strutsSuite.addTestSuite(SpecimenArrayTypeTestCases.class);
+		strutsSuite.addTestSuite(StorageTypeTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerTestCases.class);
-/*		strutsSuite.addTestSuite(CollectionProtocolTestCases.class);
+		strutsSuite.addTestSuite(CollectionProtocolTestCases.class);
 		strutsSuite.addTestSuite(ParticipantTestCases.class);
 		strutsSuite.addTestSuite(SpecimenCollectionGroupTestCases.class);
 		strutsSuite.addTestSuite(SpecimenTestCases.class);
-*/		return strutsSuite;
+		return strutsSuite;
 	}
 
 

@@ -1,4 +1,5 @@
 package edu.wustl.catissuecore.testcase.login;
+import org.apache.struts.action.ActionErrors;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
@@ -22,10 +23,8 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	public void testLoginWithEmptyLoginName()
 	{
 		setRequestPathInfo("/Login") ;
-		LoginForm loginForm = new LoginForm() ;
-		loginForm.setLoginName("") ;
-		loginForm.setPassword("Test") ;
-		setActionForm(loginForm) ;
+		addRequestParameter("loginName", "");
+		addRequestParameter("password", "Test");
 		actionPerform();
 		//verifyForward("/Home.do");
 		verifyForward("failure");
@@ -43,14 +42,11 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	public void testLoginWithEmptyLoginPassword()
 	{
 		setRequestPathInfo("/Login") ;
-		LoginForm loginForm = new LoginForm() ;
-		loginForm.setLoginName("admin@admin.com") ;
-		loginForm.setPassword("") ;
-		setActionForm(loginForm) ;
+		addRequestParameter("loginName", "admin@admin.com");
+		addRequestParameter("password", "");
 		actionPerform();
 		//verifyForward("/Home.do");
 		verifyForward("failure");
-
 		//verify action errors
 		String errormsg[] = new String[] {"errors.item.required"};
 		verifyActionErrors(errormsg);
@@ -64,10 +60,8 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	public void testLoginWithInvalidFormatLogin()
 	{
 		setRequestPathInfo("/Login") ;
-		LoginForm loginForm = new LoginForm() ;
-		loginForm.setLoginName("@admin@admin.com") ;
-		loginForm.setPassword("Test") ;
-		setActionForm(loginForm) ;
+		addRequestParameter("loginName", "@admin");
+		addRequestParameter("password", "Test");
 		actionPerform();
 		//verifyForward("/Home.do");
 		verifyForward("failure");
@@ -90,10 +84,8 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		 * this test case using Login Form. 
 		 */
 		setRequestPathInfo("/Login") ;
-		LoginForm loginForm = new LoginForm() ;
-		loginForm.setLoginName("admin@admin.com") ;
-		loginForm.setPassword("Test") ;
-		setActionForm(loginForm) ;
+		addRequestParameter("loginName", "admin@admin.com");
+		addRequestParameter("password", "Test");
 		actionPerform();
 		//verifyForward("/Home.do");
 		verifyForward("failure");
@@ -101,9 +93,6 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		//verify action errors
 		String errormsg[] = new String[] {"errors.incorrectLoginIDPassword"};
 		verifyActionErrors(errormsg);
-		LoginDetails loginDetails = new LoginDetails(loginForm.getLoginName(),1L,"",false) ;
-		LoginAuditManager loginManager = new LoginAuditManager(loginDetails) ;
-		loginManager.audit(false, loginDetails);
 	}
 	/**
 	 * Test Login with Valid Login name and Password.
@@ -112,94 +101,15 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	public void testSuccessfulLogin()
 	{
 		setRequestPathInfo("/Login") ;
-		LoginForm loginForm = new LoginForm() ;
-		loginForm.setLoginName("admin@admin.com") ;
-		loginForm.setPassword("Shri123") ;
-		setActionForm(loginForm) ;
+		addRequestParameter("loginName", "admin@admin.com");
+		addRequestParameter("password", "Test123");
 		actionPerform();
 		//verifyForward("/Home.do");
-		verifyForward("success");
+		verifyForward("pageOfNonWashU");
 
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		assertEquals("user name should be equal to loggedinusername","admin@admin.com",bean.getUserName());
+		assertEquals("user name should be equal to logged in username","admin@admin.com",bean.getUserName());
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
 		verifyNoActionErrors();
-	}
-	
-/**
- * Test CLick Administrative->Site menu.
- */
-//	@Test
-//	 public void testSiteClick()
-//	  {
-//			addRequestParameter("operation", "add");
-//			addRequestParameter("pageOf", "pageOfSite");
-//			setRequestPathInfo("/Site");
-//			actionPerform();
-//			verifyForward("pageOfSite");
-//			List stateList = (List)getRequest().getAttribute(Constants.STATELIST);
-//			assertNotNull("State List should not be null",stateList);
-//			actionPerform();
-//			setRequestPathInfo("/Site");
-//			addRequestParameter("isOnChange", "true");
-//			addRequestParameter("coordinatorId", "1");
-//			actionPerform();
-//			verifyForward("pageOfSite");
-//	  }
-
-//	public void testInstitutionEdit()
-//	{
-//		setRequestPathInfo("/SimpleSearch");
-//		addRequestParameter("aliasName", "Institution");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_table)", "Institution");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_DataElement_field)","Institution.Name.varchar");
-//		addRequestParameter("value(SimpleConditionsNode:1_Condition_Operator_operator)","Starts With");
-//		addRequestParameter("value(SimpleConditionsNode:1__Condition_value)","I");
-//		addRequestParameter("counter","1");
-//		addRequestParameter("pageOf","pageOfInstitution");
-//		addRequestParameter("operation","search");
-//		actionPerform();
-//
-//		verifyForward("success");
-//	}
-	/**
-	 * TEst institution add.
-	 */
-//	@Test
-//	public void testAddInstitution()
-//	{
-//		InstitutionForm form = new InstitutionForm();
-//		form.setName("");
-//		form.setOperation(Constants.ADD);
-//		getRequest().setAttribute("institutionForm", form);
-//		setRequestPathInfo("/InstitutionAdd");
-//		actionPerform();
-//		verifyForward("success");
-//
-//	}
-
-	/**
-	 * Test institution edit.
-	 */
-//	@Test
-//	public void testInstitutionEdit()
-//	{
-//		setRequestPathInfo("/SimpleSearch");
-//		SimpleQueryInterfaceForm simpleQueryInterfaceform = new SimpleQueryInterfaceForm();
-//		simpleQueryInterfaceform.setAliasName("Institution");
-//		Map valueMap = new HashMap();
-//		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_table", "Institution");
-//		valueMap.put("SimpleConditionsNode:1_Condition_DataElement_field","Institution.Name.varchar");
-//		valueMap.put("SimpleConditionsNode:1_Condition_Operator_operator","Starts With");
-//		valueMap.put("SimpleConditionsNode:1__Condition_value","");
-//		addRequestParameter("counter","1");
-//		addRequestParameter("pageOf","pageOfInstitution");
-//		addRequestParameter("operation","search");
-//		simpleQueryInterfaceform.setCounter("1");
-//		simpleQueryInterfaceform.setValues(valueMap);
-//		getRequest().setAttribute("simpleQueryInterfaceForm", simpleQueryInterfaceform);
-//		actionPerform();
-//
-//		verifyForward("success");
-//	}
+	} 
 }
