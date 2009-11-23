@@ -130,13 +130,6 @@
 	    						<fileset dir="${lib.dir}">
 	    							<include name="**/*.jar"/>
 	    						</fileset>
-	    											
-	    						
-	    						<fileset dir="${base.dir}/WEB-INF/">
-	    							<include name="**/*.properties"/>
-	    							<include name="**/*.xml" />
-	    							<include name="**/*.tld" />
-	    						</fileset>
 	    						
 	    					</classpath>
 
