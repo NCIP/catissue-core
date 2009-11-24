@@ -49,7 +49,7 @@ public class DBManagerImpl
 			if(Constants.ORACLE_DATABASE.equalsIgnoreCase(databaseType))
 			{
 				databaseDriver = "oracle.jdbc.driver.OracleDriver";
-				databaseURL = "jdbc:oracle:thin@"+databaseHost+":"+databasePort+":"+databaseName;
+				databaseURL = "jdbc:oracle:thin:@"+databaseHost+":"+databasePort+":"+databaseName;
 			}
 			else if(Constants.MYSQL_DATABASE.equalsIgnoreCase(databaseType))
 			{
