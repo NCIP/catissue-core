@@ -12,6 +12,7 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
@@ -102,7 +103,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		
 		TestCaseUtility.setNameObjectMap("Participant",participant);
 	}
-
+	
 	/**
 	 * Test Participant Edit.
 	 */
@@ -288,4 +289,163 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		verifyActionErrors(new String[]{"errors.item"});
 	}
+	/**
+	 * Test Participant Add with invalid SSN.
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testParticipantAddWithInvalidSSN()
+	{
+		//Participant add and registration
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName("First_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("Last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Male") ;
+		partForm.setRaceTypes(new String[] {"Asian"});
+		partForm.setSocialSecurityNumberPartA("111") ;
+		partForm.setSocialSecurityNumberPartB("2") ;
+		partForm.setSocialSecurityNumberPartC("3333") ;
+		partForm.setOperation("add") ;
+
+		setRequestPathInfo("/ParticipantAdd");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("failure");
+		String errormsg[] = new String[]{"errors.invalid"};
+		verifyActionErrors(errormsg);
+	}
+	/**
+	 * Test Participant Add with invalid BirthDate.
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testParticipantAddWithInvalidBirthDate()
+	{
+		//Participant add and registration
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName("First_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("Last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Male") ;
+		partForm.setRaceTypes(new String[] {"Asian"});
+		partForm.setBirthDate( "30-06-1982" );
+		partForm.setOperation("add") ;
+
+		setRequestPathInfo("/ParticipantAdd");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("failure");
+		String errormsg[] = new String[]{"errors.date.format"};
+		verifyActionErrors(errormsg);
+	}
+	/**
+	 * Test Participant Add with invalid Gender.
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testParticipantAddWithInvalidGender()
+	{
+		
+		//Participant add and registration
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName("First_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("Last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Test") ;
+		partForm.setVitalStatus("Alive") ;
+		partForm.setGenotype("Unknown");
+		partForm.setBirthDate("01-12-1988");
+		partForm.setEthnicity("Unknown");
+		partForm.setSocialSecurityNumberPartA("111") ;
+		partForm.setSocialSecurityNumberPartB("22") ;
+		partForm.setSocialSecurityNumberPartC("3333") ;
+		partForm.setRaceTypes(new String[] {"Asian"});
+		partForm.setOperation("add") ;
+		setRequestPathInfo("/ParticipantAdd");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("failure");
+		String errormsg[] = new String[]{"errors.item"};
+		verifyActionErrors(errormsg);
+	}
+	/**
+	 * Test Participant Add with invalid Ethnicity.
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testParticipantAddWithInvalidEthnicity()
+	{
+		//Participant add and registration
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName("First_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("Last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Male Gender") ;
+		partForm.setRaceTypes(new String[] {"Asian"});
+		partForm.setBirthDate( "11-06-1982" );
+		partForm.setEthnicity( "Unknown Ethnicity" );
+		partForm.setOperation("add") ;
+
+		setRequestPathInfo("/ParticipantAdd");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("failure");
+		String errormsg[] = new String[]{"errors.item"};
+		verifyActionErrors(errormsg);
+	}
+	/**
+	 * Test disabled Participant
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testRegisterParticicpantAndDisable()
+	{
+		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName(participant.getFirstName()) ;
+		partForm.setLastName(participant.getLastName()) ;
+		partForm.setGender( participant.getGender() );
+		partForm.setId( participant.getId() );
+		partForm.setRaceTypes( new String[] {"Asian"} );
+		participant.setCollectionProtocolRegistrationCollection(participant.getCollectionProtocolRegistrationCollection());
+		partForm.setActivityStatus( "Disabled" );
+		partForm.setOperation("edit") ;
+		setRequestPathInfo("/ParticipantEdit");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("failure");
+		/**
+		 * error msg will be "Unable to disable Participant : 
+		 * Before disabling it, dispose all the associated Specimens."
+		 */
+		String errormsg[] = new String[]{"errors.item"};
+		verifyActionErrors(errormsg);
+	}
+	/**
+	 * Test Participant with PMI
+	 */
+	@Test
+	public void testRegisterParticpantWithPMI()
+	{
+		//Participant add and registration
+		ParticipantForm partForm = new ParticipantForm() ;
+		partForm.setFirstName("participant_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("participant_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Male Gender") ;
+		partForm.setVitalStatus("Alive") ;
+		partForm.setGenotype("Klinefelter's Syndrome");
+		partForm.setBirthDate("01-12-1985");
+		partForm.setEthnicity("Hispanic or Latino");
+		partForm.setRaceTypes(new String[] {"Asian"});
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+		Map values = new LinkedHashMap();
+		values.put( "ParticipantMedicalIdentifier:1_id", "" );
+		values.put( "ParticipantMedicalIdentifier:1_medicalRecordNumber", "12" );
+		values.put( "ParticipantMedicalIdentifier:1_Site_id", site.getId().toString() );
+		partForm.setValues( values );
+		partForm.setOperation("add");
+		setRequestPathInfo("/ParticipantAdd");
+		setActionForm(partForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();		
+	}
+
 }
