@@ -158,7 +158,11 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		System.out.println(getActualForward());
 		verifyForward("pageOfCancerResearchGroup");
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfCancerResearchGroup");
+		addRequestParameter("menuSelected", "4");
 		actionPerform();
+		verifyNoActionErrors();
 			   
 		CancerResearchGroupForm form = (CancerResearchGroupForm)getActionForm();
 		/*Edit Action*/

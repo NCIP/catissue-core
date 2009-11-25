@@ -604,7 +604,11 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("pageOfSite");
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfSite");
+		addRequestParameter("menuSelected", "5");
 		actionPerform();
+		verifyNoActionErrors();
 
 		SiteForm siteForm = (SiteForm) getActionForm() ;
 		

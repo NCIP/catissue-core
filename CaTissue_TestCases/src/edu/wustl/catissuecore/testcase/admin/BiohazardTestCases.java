@@ -258,7 +258,12 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/BiohazardSearch") ;
 		actionPerform() ;
 		verifyNoActionErrors() ;
-		
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfBioHazard");
+		addRequestParameter("menuSelected", "8");
+		actionPerform();
+		verifyNoActionErrors();
 		BiohazardForm biohazardForm = (BiohazardForm) getActionForm() ;
 		biohazardForm.setName("ShriToxicBiohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		biohazardForm.setOperation("edit") ;

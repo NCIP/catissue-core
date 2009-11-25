@@ -474,7 +474,11 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfStorageType");
 		verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfStorageType");
+		addRequestParameter("menuSelected", "6");
 		actionPerform();
+		verifyNoActionErrors();
 
 		StorageTypeForm form = (StorageTypeForm)getActionForm();
 		form.setSpecimenOrArrayType("Specimen") ;
@@ -518,7 +522,11 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfStorageType");
 		verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfStorageType");
+		addRequestParameter("menuSelected", "6");
 		actionPerform();
+		verifyNoActionErrors();
 
 		StorageTypeForm form = (StorageTypeForm)getActionForm();
 		form.setType("Freezer_15_15_StorageType" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -564,7 +572,11 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfStorageType");
 		verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfStorageType");
+		addRequestParameter("menuSelected", "6");
 		actionPerform();
+		verifyNoActionErrors();
 
 		StorageTypeForm form = (StorageTypeForm)getActionForm();
 		form.setType("Box_5_10_StorageType" + UniqueKeyGeneratorUtil.getUniqueKey());

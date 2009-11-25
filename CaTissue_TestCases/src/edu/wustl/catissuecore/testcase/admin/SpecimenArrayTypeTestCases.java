@@ -134,7 +134,11 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfSpecimenArrayType");
 		verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfSpecimenArrayType");
+		addRequestParameter("menuSelected", "21");
 		actionPerform();
+		verifyNoActionErrors();
 
 		/*Edit Action*/
 		SpecimenArrayTypeForm form = (SpecimenArrayTypeForm) getActionForm() ;

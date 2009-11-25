@@ -216,7 +216,11 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfInstitution");
 	
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfInstitution");
+		addRequestParameter("menuSelected", "2");
 		actionPerform();
+		verifyNoActionErrors();
 	
 		InstitutionForm form = (InstitutionForm)getActionForm();
 		/*Edit Action*/

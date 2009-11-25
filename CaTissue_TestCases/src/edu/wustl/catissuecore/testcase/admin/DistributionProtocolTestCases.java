@@ -140,7 +140,11 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfDistributionProtocol");	
 		//verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfDistributionProtocol");
+		addRequestParameter("menuSelected", "10");
 		actionPerform();
+		verifyNoActionErrors();
 
 		DistributionProtocolForm form = (DistributionProtocolForm) getActionForm();
 	
