@@ -312,11 +312,11 @@
 					Label&nbsp;&nbsp;&nbsp;
 					
 					<logic:equal name="aliquotForm" property="checkedButton" value="1">
-						<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="specimenLabel" property="specimenLabel" disabled="false"/>
+						<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" property="specimenLabel" disabled="false" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 					</logic:equal>
 		
 					<logic:equal name="aliquotForm" property="checkedButton" value="2">
-						<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="specimenLabel" property="specimenLabel" disabled="true"/>
+						<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" property="specimenLabel" disabled="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 					</logic:equal>
 					</span>
 				</td>
@@ -333,11 +333,11 @@
 					&nbsp;
 					<span class="black_ar">
 				<logic:equal name="aliquotForm" property="checkedButton" value="1">
-					<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="barcode" property="barcode" disabled="true"/>
+					<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode" property="barcode" disabled="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:equal>
 		
 				<logic:equal name="aliquotForm" property="checkedButton" value="2">
-					<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="barcode" property="barcode"/>
+					<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode" property="barcode" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:equal>
 				</span>
 				</td>
@@ -542,16 +542,16 @@ ${aliquotBean.jsScript}
 	    </td>
 		<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
 		   <td >
-				<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="label" property="${aliquotBean.labelKey}" disabled="false"/>
+				<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="${aliquotBean.labelKey}" property="${aliquotBean.labelKey}" disabled="false" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 	    </logic:equal>
 	    <logic:equal name="isSpecimenBarcodeGeneratorAvl" value="false">
 		    <td >
-				<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="barcodes" property="${aliquotBean.barKey}" disabled="false"/>
+				<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="${aliquotBean.barKey}" property="${aliquotBean.barKey}" disabled="false" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 	    </logic:equal>
 		<td >
-			<html:text styleClass="black_ar"  maxlength="50"  size="2" styleId="quantity" property="${aliquotBean.qtyKey}" disabled="false" style="text-align:right"/>
+			<html:text styleClass="black_ar"  maxlength="50"  size="2" styleId="${aliquotBean.qtyKey}" property="${aliquotBean.qtyKey}" disabled="false" style="text-align:right" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			<span class="black_ar_t" valign="center" >${requestScope.unit}</span>
 		</td>
 		<td colspan='${requestScope.colspanValue1+1}' >

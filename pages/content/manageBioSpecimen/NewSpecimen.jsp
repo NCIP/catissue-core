@@ -1247,7 +1247,7 @@
 								</label>
 							</td>
 							<td align="left">
-								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" property="label" />
+								<html:text styleClass="black_ar" size="30" maxlength="255"  styleId="label" property="label" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 							</td>
 							
 							<td align="center" class="black_ar">&nbsp;</td>
@@ -1278,13 +1278,13 @@
 								</logic:equal>
 								<logic:notEqual name="newSpecimenForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 								<td align="left">
-									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 								</td>
 								</logic:notEqual>
 							</logic:equal>
 							<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 								<td align="left">
-									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" />
+									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 								</td>
 							</logic:notEqual>
 						</tr>
