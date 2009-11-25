@@ -399,7 +399,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws BizLogicException - BizLogicException
 	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
-			SpecimenPosition specimenPosition, Set < String > storageContainerIds)
+			SpecimenPosition specimenPosition, HashSet< String > storageContainerIds)
 			throws BizLogicException
 	{
 		try
