@@ -115,7 +115,6 @@ public class AddEditShipmentRequestAction extends SecureAction
 						catch (final Exception ex)
 						{
 							this.logger.error(ex.getMessage(),ex);
-							ex.printStackTrace();
 						}
 						finally
 						{
@@ -126,7 +125,6 @@ public class AddEditShipmentRequestAction extends SecureAction
 							catch (final ApplicationException e)
 							{
 								this.logger.error(e.getMessage(),e);
-								e.printStackTrace();
 							}
 						}
 					}

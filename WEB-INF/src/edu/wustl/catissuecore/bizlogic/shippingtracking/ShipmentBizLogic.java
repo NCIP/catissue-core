@@ -248,7 +248,6 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 		catch (final DAOException e)
 		{
 			this.logger.error( "Database " + "operation failed." + e.getMessage(), e );
-			e.printStackTrace();
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),e,"Database operation failed.");
 			throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
 		}

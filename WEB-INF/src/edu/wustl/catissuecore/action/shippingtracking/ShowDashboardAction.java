@@ -32,6 +32,15 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public class ShowDashboardAction extends SecureAction
 {
+	private static final String CREATED_DATE = "createdDate";
+	private static final String RECEIVERSITE_ID = "receiverSite.id";
+	private static final String REQUEST_FOR = "requestFor";
+	private static final String SEND_DATE = "sendDate";
+	private static final String SENDER_SITE_ID = "senderSite.id";
+	private static final String INCOMING_SHIP_PAGE_NUM = "incomingShipCurrentPageNo";
+	private static final String OUTGOING_SHIP_PAGE_NUM = "outgoingShipCurrentPageNo";
+	private static final String REQUEST_SENT_PAGE_NUM = "reqSentCurrentPageNo";
+	
 
 	/**
 	 * action method for shipment add/edit.
@@ -69,11 +78,18 @@ public class ShowDashboardAction extends SecureAction
 			if (sessionDataBean != null)
 			{
 				loggedInUserId = sessionDataBean.getUserId();
-				if (loggedInUserId != null)
+				if (loggedInUserId == null)
+				{
+					logger.debug("user is not authorized for the operation");
+					throw new UserNotAuthorizedException(ErrorKey
+							.getErrorKey("access.execute.action.denied"), null,
+							"user is not authorized for the operation");					
+				}
+				else
 				{
 					final List<Long> siteIds = bizLogic.getPermittedSiteIdsForUser(loggedInUserId,
 							sessionDataBean.isAdmin());
-					if (siteIds != null && siteIds.size() > 0)
+					if (siteIds != null && !siteIds.isEmpty())
 					{
 						loggedInUserSiteId = new Long[siteIds.size()];
 						loggedInUserSiteId = siteIds.toArray(loggedInUserSiteId);
@@ -110,23 +126,16 @@ public class ShowDashboardAction extends SecureAction
 						request.setAttribute("identifierFieldIndex", 0);
 						request.setAttribute("isAdmin", sessionDataBean.isAdmin());
 						this.setRecordsPerPageToRequest(request, recordsPerPage);
-						final String requestFor = request.getParameter("requestFor");
+						final String requestFor = request.getParameter(REQUEST_FOR);
 						if (requestFor != null)
 						{
-							request.setAttribute("requestFor", requestFor);
+							request.setAttribute(REQUEST_FOR, requestFor);
 						}
 					}
 					else
 					{
 						this.setEmptyDashboardData(request);
 					}
-				}
-				else
-				{
-					logger.debug("user is not authorized for the operation");
-					throw new UserNotAuthorizedException(ErrorKey
-							.getErrorKey("access.execute.action.denied"), null,
-							"user is not authorized for the operation");
 				}
 			}
 		}
@@ -137,12 +146,10 @@ public class ShowDashboardAction extends SecureAction
 		catch (final BizLogicException e)
 		{
 			logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		catch (final ApplicationException appException)
 		{
 			logger.error(appException.getMessage(), appException);
-			appException.printStackTrace();
 		}
 		finally
 		{
@@ -153,7 +160,6 @@ public class ShowDashboardAction extends SecureAction
 			catch (final ApplicationException e)
 			{
 				logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
@@ -176,17 +182,17 @@ public class ShowDashboardAction extends SecureAction
 		Integer totalRecords = (Integer) request.getSession().getAttribute(
 				"incomingShipTotalRecords");
 		Integer totalPages = (Integer) request.getSession().getAttribute("incomingShipTotalPages");
-		final String columnNamesShipmentsReceived[] = {"receiverSite.id", "createdDate"};
+		final String columnNamesShipmentsReceived[] = {RECEIVERSITE_ID, CREATED_DATE};
 		totalRecords = this.getTotalNumberOfRecords(bizLogic, loggedInUserSiteId, recordsPerPage,
 				columnNamesShipmentsReceived);
 		int numOfRecords = 1;
-		if (recordsPerPage != null)
+		if (recordsPerPage == null)
 		{
-			numOfRecords = recordsPerPage.intValue();
+			numOfRecords = 5;
 		}
 		else
 		{
-			numOfRecords = 5;
+			numOfRecords = recordsPerPage.intValue();
 		}
 		totalPages = this.getTotalNumberOfPages(numOfRecords, totalRecords);
 		form.setIncomingShipmentsTotalPages(totalPages);
@@ -196,7 +202,7 @@ public class ShowDashboardAction extends SecureAction
 				"outgoingShipTotalRecords");
 		Integer totalPagesOutgoing = (Integer) request.getSession().getAttribute(
 				"outgoingShipTotalPages");
-		final String columnNamesOutgoingShipments[] = {"senderSite.id", "createdDate"};
+		final String columnNamesOutgoingShipments[] = {SENDER_SITE_ID, CREATED_DATE};
 		totalRecordsOutgoing = this.getTotalNumberOfRecords(bizLogic, loggedInUserSiteId,
 				recordsPerPage, columnNamesOutgoingShipments);
 		totalPagesOutgoing = this.getTotalNumberOfPages(numOfRecords, totalRecordsOutgoing);
@@ -222,20 +228,20 @@ public class ShowDashboardAction extends SecureAction
 		Integer totalRecords = (Integer) request.getSession().getAttribute(
 				"reqReceivedTotalRecords");
 		Integer totalPages = (Integer) request.getSession().getAttribute("reqReceivedTotalPages");
-		final String columnNamesRequestsReceived[] = {"receiverSite.id", "sendDate"};
+		final String columnNamesRequestsReceived[] = {RECEIVERSITE_ID, SEND_DATE};
 		if (totalRecords == null)
 		{
 			totalRecords = this.getTotalNumberOfRecords(requestBizLogic, loggedInUserSiteId,
 					recordsPerPage, columnNamesRequestsReceived);
 		}
 		int numOfRecords = 1;
-		if (recordsPerPage != null)
+		if (recordsPerPage == null)
 		{
-			numOfRecords = recordsPerPage.intValue();
+			numOfRecords = 5;			
 		}
 		else
 		{
-			numOfRecords = 5;
+			numOfRecords = recordsPerPage.intValue();
 		}
 		if (totalPages == null)
 		{
@@ -247,7 +253,7 @@ public class ShowDashboardAction extends SecureAction
 		Integer totalRecordsSent = (Integer) request.getSession().getAttribute(
 				"reqSentTotalRecords");
 		Integer totalPagesSent = (Integer) request.getSession().getAttribute("reqSentTotalPages");
-		final String columnNamesRequestsSent[] = {"senderSite.id", "createdDate"};
+		final String columnNamesRequestsSent[] = {SENDER_SITE_ID, CREATED_DATE};
 		if (totalRecordsSent == null)
 		{
 			totalRecordsSent = this.getTotalNumberOfRecords(requestBizLogic, loggedInUserSiteId,
@@ -270,7 +276,7 @@ public class ShowDashboardAction extends SecureAction
 		this.setRecordsPerPageToRequest(request, 5);
 		request.setAttribute("identifierFieldIndex", 0);
 		request.setAttribute("isAdmin", false);
-		final String requestFor = request.getParameter("requestFor");
+		final String requestFor = request.getParameter(REQUEST_FOR);
 		final List<Object[]> emptyList = new ArrayList<Object[]>();
 		request.setAttribute("requestsReceivedHeader", this.getRequestsReceivedHeader());
 		request.setAttribute("requestsReceivedList", emptyList);
@@ -288,7 +294,7 @@ public class ShowDashboardAction extends SecureAction
 		request.setAttribute("outgoingShipUserNameIndex", 5);
 		if (requestFor != null)
 		{
-			request.setAttribute("requestFor", requestFor);
+			request.setAttribute(REQUEST_FOR, requestFor);
 		}
 	}
 
@@ -307,15 +313,15 @@ public class ShowDashboardAction extends SecureAction
 	{
 		final List<String> requestsSentHeader = this.getRequestsSentHeader();
 		List<Object[]> requestsSentList = null;
-		final String pageNoFromReq = request.getParameter("reqSentCurrentPageNo");
-		Integer currentPageNo = new Integer(1);
+		final String pageNoFromReq = request.getParameter(REQUEST_SENT_PAGE_NUM);
+		Integer currentPageNo = Integer.valueOf( 1 );//new Integer(1);
 		if (pageNoFromReq != null)
 		{
 			currentPageNo = Integer.parseInt(pageNoFromReq);
 		}
-		else if (request.getSession().getAttribute("reqSentCurrentPageNo") != null)
+		else if (request.getSession().getAttribute(REQUEST_SENT_PAGE_NUM) != null)
 		{
-			currentPageNo = (Integer) request.getSession().getAttribute("reqSentCurrentPageNo");
+			currentPageNo = (Integer) request.getSession().getAttribute(REQUEST_SENT_PAGE_NUM);
 		}
 		else
 		{
@@ -332,7 +338,7 @@ public class ShowDashboardAction extends SecureAction
 		requestsSentList = this.getRequestsSentList(bizLogic, loggedInUserSiteId, startIndex,
 				numOfRecords);
 		recordsPerPage = numOfRecords;
-		this.setPagenationInfoToSession(request, "reqSentCurrentPageNo", currentPageNo,
+		this.setPagenationInfoToSession(request, REQUEST_SENT_PAGE_NUM, currentPageNo,
 				"reqSentTotalRecords", dashboardForm.getOutgoingShipmentReqsTotalRecords(),
 				"reqSentTotalPages", dashboardForm.getOutgoingShipmentReqsTotalPages(),
 				"reqSentRecordsPerPage", recordsPerPage);
@@ -381,7 +387,7 @@ public class ShowDashboardAction extends SecureAction
 			Long[] loggedInUserSiteId, int startIndex, int numOfRecords) throws BizLogicException
 	{
 		final String selectColumnName = "shipment.id,shipment.senderContactPerson.lastName, shipment.label, shipment.receiverSite.name, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
-		return bizLogic.getShipmentRequests(selectColumnName, "senderSite.id", "createdDate",
+		return bizLogic.getShipmentRequests(selectColumnName, SENDER_SITE_ID, CREATED_DATE,
 				loggedInUserSiteId, startIndex, numOfRecords, " shipment.activityStatus <> '"
 						+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
 	}
@@ -437,16 +443,16 @@ public class ShowDashboardAction extends SecureAction
 		final List<String> incomingShipmentsHeader = this.getIncomingShipmentsHeader();
 		// Pass the siteiID array of logged in user
 		List<Object[]> incomingShipmentsList = null;
-		final String pageNoFromReq = request.getParameter("incomingShipCurrentPageNo");
-		Integer currentPageNo = new Integer(1);
+		final String pageNoFromReq = request.getParameter(INCOMING_SHIP_PAGE_NUM);
+		Integer currentPageNo = Integer.valueOf( 1 );//new Integer(1);
 		if (pageNoFromReq != null)
 		{
 			currentPageNo = Integer.parseInt(pageNoFromReq);
 		}
-		else if (request.getSession().getAttribute("incomingShipCurrentPageNo") != null)
+		else if (request.getSession().getAttribute(INCOMING_SHIP_PAGE_NUM) != null)
 		{
 			currentPageNo = (Integer) request.getSession()
-					.getAttribute("incomingShipCurrentPageNo");
+					.getAttribute(INCOMING_SHIP_PAGE_NUM);
 		}
 		else
 		{
@@ -463,7 +469,7 @@ public class ShowDashboardAction extends SecureAction
 		incomingShipmentsList = this.getIncomingShipmentsList(bizLogic, loggedInUserSiteId,
 				startIndex, numOfRecords);
 		recordsPerPage = numOfRecords;
-		this.setPagenationInfoToSession(request, "incomingShipCurrentPageNo", currentPageNo,
+		this.setPagenationInfoToSession(request, INCOMING_SHIP_PAGE_NUM, currentPageNo,
 				"incomingShipTotalRecords", dashboardForm.getIncomingShipmentsTotalRecords(),
 				"incomingShipTotalPages", dashboardForm.getIncomingShipmentsTotalPages(),
 				"incomingShipRecordsPerPage", recordsPerPage);
@@ -557,7 +563,7 @@ public class ShowDashboardAction extends SecureAction
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
 		final String selectColumnName = "shipment.id,shipment.senderContactPerson.lastName, shipment.senderSite.name, shipment.label, shipment.barcode, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
-		return bizLogic.getShipments(selectColumnName, "receiverSite.id", "sendDate", siteId,
+		return bizLogic.getShipments(selectColumnName, RECEIVERSITE_ID, SEND_DATE, siteId,
 				startIndex, numOfRecords);
 	}
 
@@ -577,16 +583,16 @@ public class ShowDashboardAction extends SecureAction
 	{
 		final List<String> outgoingShipmentsHeader = this.getOutgoingShipmentsHeader();
 		List<Object[]> outgoingShipmentsList = null;
-		final String pageNoFromReq = request.getParameter("outgoingShipCurrentPageNo");
-		Integer currentPageNo = new Integer(1);
+		final String pageNoFromReq = request.getParameter(OUTGOING_SHIP_PAGE_NUM);
+		Integer currentPageNo = Integer.valueOf( 1 );
 		if (pageNoFromReq != null)
 		{
 			currentPageNo = Integer.parseInt(pageNoFromReq);
 		}
-		else if (request.getSession().getAttribute("outgoingShipCurrentPageNo") != null)
+		else if (request.getSession().getAttribute(OUTGOING_SHIP_PAGE_NUM) != null)
 		{
 			currentPageNo = (Integer) request.getSession()
-					.getAttribute("outgoingShipCurrentPageNo");
+					.getAttribute(OUTGOING_SHIP_PAGE_NUM);
 		}
 		else
 		{
@@ -603,7 +609,7 @@ public class ShowDashboardAction extends SecureAction
 		outgoingShipmentsList = this.getOutgoingShipmentsList(bizLogic, loggedInUserSiteId,
 				startIndex, numOfRecords);
 		recordsPerPage = numOfRecords;
-		this.setPagenationInfoToSession(request, "outgoingShipCurrentPageNo", currentPageNo,
+		this.setPagenationInfoToSession(request, OUTGOING_SHIP_PAGE_NUM, currentPageNo,
 				"outgoingShipTotalRecords", dashboardForm.getOutgoingShipmentsTotalRecords(),
 				"outgoingShipTotalPages", dashboardForm.getOutgoingShipmentsTotalPages(),
 				"outgoingShipRecordsPerPage", recordsPerPage);
@@ -625,7 +631,7 @@ public class ShowDashboardAction extends SecureAction
 			int startIndex, int numOfRecords) throws BizLogicException
 	{
 		final String selectColumnName = "shipment.id,shipment.senderContactPerson.lastName, shipment.receiverSite.name, shipment.label, shipment.barcode, shipment.senderContactPerson.firstName, shipment.sendDate, shipment.activityStatus";
-		return bizLogic.getShipments(selectColumnName, "senderSite.id", "createdDate", siteId,
+		return bizLogic.getShipments(selectColumnName, SENDER_SITE_ID, CREATED_DATE, siteId,
 				startIndex, numOfRecords);
 	}
 
@@ -663,7 +669,8 @@ public class ShowDashboardAction extends SecureAction
 		final List<String> requestsReceivedHeader = this.getRequestsReceivedHeader();
 		List<Object[]> requestsReceivedList = null;
 		final String pageNoFromReq = request.getParameter("reqReceivedCurrentPageNo");
-		Integer currentPageNo = new Integer(1);
+		//Integer currentPageNo = new Integer(1);
+		Integer currentPageNo = Integer.valueOf( 1 );
 		if (pageNoFromReq != null)
 		{
 			currentPageNo = Integer.parseInt(pageNoFromReq);
@@ -740,13 +747,13 @@ public class ShowDashboardAction extends SecureAction
 		 */
 		if (isAdmin)
 		{
-			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
+			return bizLogic.getShipmentRequests(selectColumnName, RECEIVERSITE_ID, SEND_DATE,
 					loggedInUserSiteIds, startIndex, numOfRecords, " shipment.activityStatus != '"
 							+ Status.ACTIVITY_STATUS_CLOSED.toString() + "' AND ");
 		}
 		else
 		{
-			return bizLogic.getShipmentRequests(selectColumnName, "receiverSite.id", "sendDate",
+			return bizLogic.getShipmentRequests(selectColumnName, RECEIVERSITE_ID, SEND_DATE,
 					loggedInUserSiteIds, startIndex, numOfRecords,
 					" shipment.senderSite <> shipment.receiverSite AND ");
 		}

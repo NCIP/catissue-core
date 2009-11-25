@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
@@ -87,38 +88,38 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 						.getSpecimenPositionCollection();
 				if (spPosCollection.size() > 1)
 				{
-					final Iterator < SpecimenPosition > it = spPosCollection.iterator();
+					final Iterator < SpecimenPosition > iterator = spPosCollection.iterator();
 					final List < String > specimenPosList = new ArrayList < String >();
-					while (it.hasNext())
+					while (iterator.hasNext())
 					{
-						final SpecimenPosition pos = it.next();
+						final SpecimenPosition pos = iterator.next();
 						if (pos != null)
 						{
-							final StorageContainer st = pos.getStorageContainer();
+							final StorageContainer container = pos.getStorageContainer();
 							if (pos.getPositionDimensionOne() != 0
 									|| pos.getPositionDimensionTwo() != 0)
 							{
 								String storageValue = "";
-								if (st.getName() != null)
+								if (container.getName() == null)
 								{
-									storageValue = StorageContainerUtil.getStorageValueKey( st
+									storageValue = StorageContainerUtil.getStorageValueKey( null,
+											container.getId().toString(), pos.getPositionDimensionOne(),
+											pos.getPositionDimensionTwo() );
+								}
+								else
+								{
+									storageValue = StorageContainerUtil.getStorageValueKey( container
 											.getName(), null, pos.getPositionDimensionOne(), pos
 											.getPositionDimensionTwo() );
 								}
-								else
-								{
-									storageValue = StorageContainerUtil.getStorageValueKey( null,
-											st.getId().toString(), pos.getPositionDimensionOne(),
-											pos.getPositionDimensionTwo() );
-								}
-								if (!specimenPosList.contains( storageValue ))
-								{
-									specimenPosList.add( storageValue );
-								}
-								else
+								if (specimenPosList.contains( storageValue ))
 								{
 									throw this.getBizLogicException( null,
 											"shipment.samePositionForSpecimens", null );
+								}
+								else
+								{
+									specimenPosList.add( storageValue );									
 								}
 							}
 						}
@@ -166,12 +167,12 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				{
 					// This is the container created for specimens
 					// Update the specimens and dispose this container
-					this.processInTransitContainer( dao, sessionDataBean, storageContainer );
+					this.processInTransitContainer( dao, storageContainer );
 				}
 				else
 				{
 					// containers
-					this.processContainedContainer( dao, sessionDataBean, storageContainer );
+					this.processContainedContainer( dao, storageContainer );
 				}
 			}
 			shipment.setActivityStatus( Constants.ACTIVITY_STATUS_RECEIVED );
@@ -220,12 +221,11 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	/**
 	 * processes the container contained within the shipment.
 	 * @param dao the object of DAO class.
-	 * @param sessionDataBean containing the session details.
 	 * @param storageContainer the container to be processed.
 	 * @throws BizLogicException - BizLogicException
 	 * @throws DAOException if some database error occurs.
 	 */
-	private void processContainedContainer(DAO dao, SessionDataBean sessionDataBean,
+	private void processContainedContainer(DAO dao,
 			StorageContainer storageContainer) throws BizLogicException, DAOException
 	{
 		if (storageContainer != null && storageContainer.getActivityStatus() != null)
@@ -317,13 +317,11 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	/**
 	 * processes the container in InTransit state.
 	 * @param dao the object of DAO class.
-	 * @param sessionDataBean containing the session details.
 	 * @param storageContainer object of StorageContainer class to be processed.
 	 * @throws DAOException if some database operation fails.
 	 * @throws BizLogicException - BizLogicException
 	 */
-	private void processInTransitContainer(DAO dao, SessionDataBean sessionDataBean,
-			StorageContainer storageContainer) throws DAOException, BizLogicException
+	private void processInTransitContainer(DAO dao,StorageContainer storageContainer) throws DAOException, BizLogicException
 	{
 		final Collection < SpecimenPosition > spPosCollection = storageContainer
 				.getSpecimenPositionCollection();
@@ -346,17 +344,18 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			}
 			if (specimen != null && specimen.getActivityStatus() != null)
 			{
-				if (!specimen.getActivityStatus().equals( Constants.REJECT_AND_DESTROY ))
+				if (specimen.getActivityStatus().equals( Constants.REJECT_AND_DESTROY ))
 				{
-					// Set specimen's Activity_status to "Active"
-					specimen.setActivityStatus( Status.ACTIVITY_STATUS_ACTIVE.toString() );
-				}
-				else
-				{
+					
 					// Specimen - Rejected and Destroyed.
 					specimen.setActivityStatus( Status.ACTIVITY_STATUS_CLOSED.toString() );
 					specimen.setIsAvailable( false );
 					specimen.setSpecimenPosition( null );
+				}
+				else
+				{
+					// Set specimen's Activity_status to "Active"
+					specimen.setActivityStatus( Status.ACTIVITY_STATUS_ACTIVE.toString() );
 				}
 				dao.update( specimen );
 				if (specimen.getSpecimenPosition() == null)
@@ -388,7 +387,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
 				storageContainer.getId() ).get( 0 );
 		container.setActivityStatus( Status.ACTIVITY_STATUS_DISABLED.toString() );
-		this.disposeShipmentContainer( container, dao, sessionDataBean );
+		this.disposeShipmentContainer( container, dao );
 	}
 
 	/**
@@ -400,7 +399,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws BizLogicException - BizLogicException
 	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
-			SpecimenPosition specimenPosition, HashSet < String > storageContainerIds)
+			SpecimenPosition specimenPosition, Set < String > storageContainerIds)
 			throws BizLogicException
 	{
 		try
@@ -464,7 +463,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 									dao );
 					this.setPositionDataToSpecimen( position.getXPos(), position.getYPos(),
 							container, specimen );
-					this.addStorageValues( specimen, storageContainerIds, container );
+					this.addStorageValues( specimen, storageContainerIds );
 				}
 				else
 				{
@@ -519,13 +518,11 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * Add storage values as container name or id : pos1,pos2
 	 * @param specimen - Specimen obj
 	 * @param storageContainerIds - Hashset containing storagevalues
-	 * @param storageContainerObj - StorageContainer obj
 	 */
-	private void addStorageValues(Specimen specimen, HashSet < String > storageContainerIds,
-			StorageContainer storageContainerObj)
+	private void addStorageValues(Specimen specimen, Set < String > storageContainerIds)
 	{
 		String storageValue = null;
-		final Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+		final Long containerId = specimen.getSpecimenPosition().getStorageContainer().getId();
 		final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 		final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 		final String containerName = specimen.getSpecimenPosition().getStorageContainer().getName();
@@ -537,7 +534,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		else
 		{
 			storageValue = StorageContainerUtil
-					.getStorageValueKey( null, id.toString(), pos1, pos2 );
+					.getStorageValueKey( null, containerId.toString(), pos1, pos2 );
 		}
 		if (!storageContainerIds.contains( storageValue ))
 		{
@@ -559,11 +556,9 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * Dispose/Disable shipment container.
 	 * @param storageContainer container to dispose.
 	 * @param dao object of DAO class.
-	 * @param sessionDataBean containing session details.
 	 * @throws DAOException if some database error occurs.
 	*/
-	private void disposeShipmentContainer(StorageContainer storageContainer, DAO dao,
-			SessionDataBean sessionDataBean) throws DAOException
+	private void disposeShipmentContainer(StorageContainer storageContainer, DAO dao ) throws DAOException
 	{
 		storageContainer.setActivityStatus( Status.ACTIVITY_STATUS_DISABLED.toString() );
 		dao.update( storageContainer );
@@ -616,7 +611,6 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				catch (final DAOException e)
 				{
 					this.logger.error( e.getMessage(), e );
-					e.printStackTrace();
 					throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
 				}
 			}
@@ -633,17 +627,19 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	public String getObjectId(DAO dao, Object domainObject)
 	{
 		final BaseShipment baseShipment = (BaseShipment) domainObject;
-		final StringBuffer sb = new StringBuffer();
-		if (baseShipment.getReceiverSite() != null)
+		final StringBuffer buffer = new StringBuffer();
+		String objId=null;
+		if (baseShipment.getReceiverSite() == null)
 		{
-			sb.append( Site.class.getName() ).append( "_" ).append(
-					baseShipment.getReceiverSite().getId().toString() );
-			return sb.toString();
+			objId = null;
 		}
 		else
 		{
-			return null;
+			buffer.append( Site.class.getName() ).append( '_' ).append(
+					baseShipment.getReceiverSite().getId().toString() );
+			objId = buffer.toString();
 		}
+		return objId;
 	}
 
 }
