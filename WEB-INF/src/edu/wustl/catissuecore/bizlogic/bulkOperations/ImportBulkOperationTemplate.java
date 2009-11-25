@@ -6,11 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import au.com.bytecode.opencsv.CSVReader;
 import edu.wustl.bulkoperator.util.BulkOperationException;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * Import Bulk Operation from UI back end target.
@@ -30,6 +33,21 @@ import edu.wustl.bulkoperator.util.BulkOperationException;
  */
 public class ImportBulkOperationTemplate
 {
+	/**
+	 * Import Bulk Operation Template.
+	 * @param operationName String.
+	 * @param dropdownName String.
+	 * @param csvFilePath String.
+	 * @param xmlFilePath String.
+	 * @throws Exception Exception.
+	 */
+	public ImportBulkOperationTemplate(String operationName, String dropdownName,
+			String csvFilePath, String xmlFilePath) throws Exception
+	{
+		String[] args = {operationName, dropdownName, csvFilePath, xmlFilePath}; 
+		validate(args);
+		initiateProcess(args);
+	}
 	/**
 	 * Main method.
 	 * @param args Array of Strings. 
@@ -45,13 +63,7 @@ public class ImportBulkOperationTemplate
 			String csvFileData = getCSVTemplateFileData(csvFile);
 			String xmlFileData = getXMLTemplateFileData(xmlFile);*/
 			validate(args);
-			String operationName = args[0];
-			String dropdownName = args[1];
-			String csvFile = args[2];
-			String xmlFile = args[3];
-			String csvFileData = getCSVTemplateFileData(csvFile);
-			String xmlFileData = getXMLTemplateFileData(xmlFile);
-			addTemplateInDatabase(operationName, dropdownName, csvFileData, xmlFileData);
+			initiateProcess(args);
 		}
 		catch (Exception e)
 		{
@@ -62,6 +74,24 @@ public class ImportBulkOperationTemplate
 			System.out.println("------------------------ERROR:--------------------------------");
 			System.out.println("------------------------ERROR:--------------------------------");
 		}
+	}
+	/**
+	 * Initiate Process.
+	 * @param args Array of String.
+	 * @throws Exception Exception.
+	 * @throws BulkOperationException BulkOperationException.
+	 * @throws SQLException SQLException.
+	 */
+	private static void initiateProcess(String[] args) throws Exception,
+			BulkOperationException, SQLException
+	{
+		String operationName = args[0];
+		String dropdownName = args[1];
+		String csvFile = args[2];
+		String xmlFile = args[3];
+		String csvFileData = getCSVTemplateFileData(csvFile);
+		String xmlFileData = getXMLTemplateFileData(xmlFile);
+		addTemplateInDatabase(operationName, dropdownName, csvFileData, xmlFileData);
 	}
 	
 	/**
@@ -92,7 +122,6 @@ public class ImportBulkOperationTemplate
 				addTemplate(connection, operationName, dropdownName,
 						csvFileData, xmlFileData);
 			}
-			connection.close();
 		}
 		catch (Exception e)
 		{
@@ -103,26 +132,55 @@ public class ImportBulkOperationTemplate
 			connection.close();
 		}
 	}
-	
+
+	/**
+	 * Edit Template.
+	 * @param connection Connection.
+	 * @param operationName String.
+	 * @param dropdownName String.
+	 * @param csvFileData String.
+	 * @param xmlFileData String.
+	 * @throws BulkOperationException BulkOperationException.
+	 * @throws SQLException SQLException.
+	 */
 	private static void editTemplate(Connection connection,
 			String operationName, String dropdownName, String csvFileData,
 			String xmlFileData) throws BulkOperationException, SQLException
 	{		
 		PreparedStatement preparedStatement = null;
+		String databaseType = null;
 		try
 		{
-			String query = "update catissue_bulk_operation set csv_template = ?, " +
-					"xml_tempalte = ?, OPERATION = ?, DROPDOWN_NAME = ? " +
-					"where OPERATION = ? or DROPDOWN_NAME= ?";
-			preparedStatement = connection.prepareStatement(query);			
-			preparedStatement.setString(1, csvFileData);
-			preparedStatement.setString(2, xmlFileData);
-			preparedStatement.setString(3, operationName);
-			preparedStatement.setString(4, dropdownName);
-			preparedStatement.setString(5, operationName);
-			preparedStatement.setString(6, dropdownName);
+			databaseType = BulkOperationUtility.getDatabaseType();
+			if(Constants.ORACLE_DATABASE.equalsIgnoreCase(databaseType))
+			{
+				String query = "update catissue_bulk_operation set OPERATION = ?, " +
+				"CSV_TEMPLATE = ?, XML_TEMPALTE = ?,  DROPDOWN_NAME = ? " +
+				"where OPERATION = ? or DROPDOWN_NAME= ? ";
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1, operationName);
+				preparedStatement.setString(2, csvFileData);
+				StringReader reader = new StringReader(xmlFileData);
+				preparedStatement.setCharacterStream(3, reader, xmlFileData.length());
+				preparedStatement.setString(4, dropdownName);
+				preparedStatement.setString(5, operationName);
+				preparedStatement.setString(6, dropdownName);
+			}
+			else if(Constants.MYSQL_DATABASE.equalsIgnoreCase(databaseType))
+			{
+				String query = "update catissue_bulk_operation set OPERATION = ?, " +
+				"CSV_TEMPLATE = ?, XML_TEMPALTE = ?,  DROPDOWN_NAME = ? " +
+				"where OPERATION = ? or DROPDOWN_NAME= ? ";
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1, operationName);
+				preparedStatement.setString(2, csvFileData);
+				preparedStatement.setString(3, xmlFileData);
+				preparedStatement.setString(4, dropdownName);
+				preparedStatement.setString(5, operationName);
+				preparedStatement.setString(6, dropdownName);
+			}			
 			int rowCount = preparedStatement.executeUpdate();
-			//System.out.println("Total rows in tables now : " + rowCount);
+			System.out.println("Total rows in tables now : " + rowCount);
 			if(rowCount > 0)
 			{
 				System.out.println("Data updated successfully. " + rowCount + " rows edited");
@@ -159,13 +217,45 @@ public class ImportBulkOperationTemplate
 		PreparedStatement preparedStatement = null;
 		try
 		{
-			String query = "insert into catissue_bulk_operation (OPERATION, DROPDOWN_NAME, " +
-					"csv_template, xml_tempalte) values (?,?,?,?)";
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, operationName);
-			preparedStatement.setString(2, dropdownName);
-			preparedStatement.setString(3, csvFileData);
-			preparedStatement.setString(4, xmlFileData);
+			if(Constants.ORACLE_DATABASE.equalsIgnoreCase(
+					BulkOperationUtility.getDatabaseType()))
+			{
+				String sequenceQuery = "select CATISSUE_BULK_OPERATION_SEQ.NEXTVAL from dual";
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sequenceQuery);
+				int sequenceNumber = 0;
+				if(resultSet.next())
+				{
+					sequenceNumber = resultSet.getInt(1);
+					if(sequenceNumber > 0)
+					{
+						String query = "insert into catissue_bulk_operation (IDENTIFIER, OPERATION, " +
+						"CSV_TEMPLATE, XML_TEMPALTE, DROPDOWN_NAME ) values (?, ?, ?, ?, ?)";
+	
+						preparedStatement = connection.prepareStatement(query);
+						preparedStatement.setInt(1, sequenceNumber);
+						preparedStatement.setString(2, operationName);
+						preparedStatement.setString(3, csvFileData);
+						StringReader reader = new StringReader(xmlFileData);
+						preparedStatement.setCharacterStream(4, reader, xmlFileData.length());
+						preparedStatement.setString(5, dropdownName);
+					}
+				}
+				resultSet.close();
+				statement.close();
+			}
+			else if(Constants.MYSQL_DATABASE.equalsIgnoreCase(
+					BulkOperationUtility.getDatabaseType()))
+			{
+				String query = "insert into catissue_bulk_operation (OPERATION, " +
+						"CSV_TEMPLATE, XML_TEMPALTE, DROPDOWN_NAME ) values (?, ?, ?, ?)";
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1, operationName);
+				preparedStatement.setString(2, csvFileData);
+				preparedStatement.setString(3, " " + xmlFileData);
+				preparedStatement.setString(4, dropdownName);
+			}
+			
 			int rowCount = preparedStatement.executeUpdate();
 			System.out.println("Total rows in tables now : " + rowCount);
 			System.out.println("Data inserted successfully");
@@ -185,7 +275,7 @@ public class ImportBulkOperationTemplate
 	 * @param connection Connection.
 	 * @param operationName String.
 	 * @param dropdownName String.
-	 * @return boolean.
+	 * @return boolean Boolean.
 	 * @throws Exception Exception.
 	 */
 	private static boolean checkIfEditCase(Connection connection,

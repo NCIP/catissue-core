@@ -1,12 +1,16 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import oracle.sql.CLOB;
 
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Unmarshaller;
@@ -160,11 +164,27 @@ public class BulkOperationBizLogic
 			if(!list.isEmpty())
 			{
 				List innerList = (List)list.get(0);
-				Iterator iterator = innerList.iterator();
-				while(iterator.hasNext())
+				if(!innerList.isEmpty())
 				{
-					String innerString = (String)iterator.next();
-					returnList.add(innerString);
+					String innerString1 = (String)innerList.get(0);
+					returnList.add(innerString1);
+					if(innerList.get(1) instanceof CLOB)
+					{
+						CLOB clob = (CLOB)innerList.get(1);
+						Reader reader = clob.getCharacterStream();
+						CharArrayWriter writer=new CharArrayWriter();
+						int i = -1;
+						while ( (i=reader.read())!=-1)
+						{
+							writer.write(i);
+						}
+						returnList.add(new String(writer.toCharArray()));
+					}
+					else
+					{
+						String innerString2 = (String)innerList.get(1);
+						returnList.add(innerString2);
+					}
 				}
 			}
 		}

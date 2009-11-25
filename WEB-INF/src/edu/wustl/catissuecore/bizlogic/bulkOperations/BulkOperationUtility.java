@@ -37,4 +37,14 @@ public class BulkOperationUtility
 		}
 		return props;
 	}
+
+	/**
+	 * Get Database Type.
+	 * @return String.
+	 */
+	public static String getDatabaseType()
+	{
+		Properties properties = getCatissueInstallProperties();
+		return properties.getProperty("database.type");		
+	}
 }

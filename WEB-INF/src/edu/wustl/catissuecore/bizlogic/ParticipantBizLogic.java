@@ -602,8 +602,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @param collectionProtocolRegistrationCollection - Coolection of cpr objects
 	 * @return boolean value based on duplicate collection protocol
 	 */
-	private boolean isDuplicateCollectionProtocol(
-			Collection collectionProtocolRegistrationCollection)
+	private boolean isDuplicateCollectionProtocol(	Collection collectionProtocolRegistrationCollection)
 	{
 		final Collection newCollectionProtocolRegistrationCollection = new LinkedHashSet();
 		final Iterator itCollectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection
@@ -999,6 +998,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				if (!list.isEmpty())
 				{
 					collectionProtocolRegistrationIdentifier.getCollectionProtocol().setId((Long)list.get(0));
+				}
+				else
+				{
+					throw this.getBizLogicException(null, "cp.nt.found", "");
 				}
 			}
 		}

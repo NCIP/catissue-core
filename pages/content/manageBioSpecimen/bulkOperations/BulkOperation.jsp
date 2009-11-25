@@ -31,16 +31,24 @@ function onDownLoadTemplate()
 
 function onUploadClick()
 {
-	var uploadFileName = document.getElementById('file').value;
-	var fileNameArray = uploadFileName.split(".");
-	var arraySize = fileNameArray.length;
-	if(fileNameArray[arraySize -1] != 'csv')
+	var dropdownName =	document.getElementById('operationName').value;
+	if (dropdownName == null || dropdownName == 'undefined' || dropdownName == "")
 	{
-		alert("Please upload a comma seperated file (.csv).");
+		alert("Please select a Template Name.");
 	}
 	else
 	{
-		document.forms[0].submit();
+		var uploadFileName = document.getElementById('file').value;
+		var fileNameArray = uploadFileName.split(".");
+		var arraySize = fileNameArray.length;
+		if(fileNameArray[arraySize -1] != 'csv')
+		{
+			alert("Please upload a comma seperated file (.csv).");
+		}
+		else
+		{
+			document.forms[0].submit();
+		}
 	}
 }
 

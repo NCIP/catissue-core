@@ -51,49 +51,56 @@ public class BulkOperationAction extends SecureAction
 		
 		List<NameValueBean> bulkOperationList =
 					bulkOperationBizLogic.getTemplateNameDropDownList();
-		NameValueBean nameValueBean = bulkOperationList.get(0);
-		String initialDropdownValue = nameValueBean.getValue();
-		
-		request.setAttribute(Constants.BULK_OPEARTION_LIST, bulkOperationList);
-		request.setAttribute("dropdownName", initialDropdownValue);
-		File file = (File)request.getAttribute("resultFile");
-		String dropdownNameFromUI = (String)request.getParameter("dropdownName");
-		String dropdownName = bulkOperationForm.getOperationName();
-		
-		if((dropdownName != null && !"".equals(dropdownName)) ||
-				(dropdownNameFromUI != null && !"".equals(dropdownNameFromUI)))
+		if(bulkOperationList != null && !bulkOperationList.isEmpty())
 		{
-			if(file != null)
+			NameValueBean nameValueBean = bulkOperationList.get(0);
+			String initialDropdownValue = nameValueBean.getValue();
+			
+			request.setAttribute(Constants.BULK_OPEARTION_LIST, bulkOperationList);
+			request.setAttribute("dropdownName", initialDropdownValue);
+			File file = (File)request.getAttribute("resultFile");
+			String dropdownNameFromUI = (String)request.getParameter("dropdownName");
+			String dropdownName = bulkOperationForm.getOperationName();
+			
+			if((dropdownName != null && !"".equals(dropdownName)) ||
+					(dropdownNameFromUI != null && !"".equals(dropdownNameFromUI)))
 			{
-				request.setAttribute("resultFile", file);
-				ActionMessages messages = new ActionMessages();
-				messages.add(ActionMessages.GLOBAL_MESSAGE,
-						new ActionMessage("bulk.success.message"));
-				saveMessages(request, messages);
-				
-				HttpSession session = request.getSession();
-				session.setAttribute("resultFile", file);
-				request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
-				request.setAttribute(Constants.SUCCESS, Constants.SUCCESS);
-				request.setAttribute("report", "report");
-				mappingForward = Constants.PAGE_OF_BULK_OPERATION;
-				//createResponse(response, file);
+				if(file != null)
+				{
+					request.setAttribute("resultFile", file);
+					ActionMessages messages = new ActionMessages();
+					messages.add(ActionMessages.GLOBAL_MESSAGE,
+							new ActionMessage("bulk.success.message"));
+					saveMessages(request, messages);
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("resultFile", file);
+					request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
+					request.setAttribute(Constants.SUCCESS, Constants.SUCCESS);
+					request.setAttribute("report", "report");
+					mappingForward = Constants.PAGE_OF_BULK_OPERATION;
+					//createResponse(response, file);
+				}
+				else if(request.getParameter(Constants.PAGE_OF) == null && file == null
+						&& (dropdownNameFromUI == null && !"".equals(dropdownNameFromUI)))
+				{
+					request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
+					mappingForward = Constants.PAGE_OF_BULK_OPERATION;
+				}
+				else
+				{
+					File csvFile = bulkOperationBizLogic.getCSVFile(dropdownNameFromUI);
+					createResponse(response, csvFile);
+				}
 			}
-			else if(request.getParameter(Constants.PAGE_OF) == null && file == null
-					&& (dropdownNameFromUI == null && !"".equals(dropdownNameFromUI)))
+			else if(request.getParameter(Constants.PAGE_OF) != null)
 			{
-				request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
-				mappingForward = Constants.PAGE_OF_BULK_OPERATION;
-			}
-			else
-			{
-				File csvFile = bulkOperationBizLogic.getCSVFile(dropdownNameFromUI);
-				createResponse(response, csvFile);
+				mappingForward = request.getParameter(Constants.PAGE_OF); 
 			}
 		}
-		else if(request.getParameter(Constants.PAGE_OF) != null)
+		else
 		{
-			mappingForward = request.getParameter(Constants.PAGE_OF); 
+			mappingForward = Constants.PAGE_OF_BULK_OPERATION;
 		}
 		return mapping.findForward(mappingForward);
 	}
