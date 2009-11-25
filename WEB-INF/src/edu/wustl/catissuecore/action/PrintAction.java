@@ -337,9 +337,15 @@ public class PrintAction extends Action
 				dao.openSession(null);
 				List < AbstractDomainObject > specimenList = this.getSpecimenList
 				(dao,specimenIds );
-				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
-				 printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
-						objUser, printerType, printerLocation);
+				//final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
+				 /*printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
+						objUser, printerType, printerLocation);*/
+				//bug 14974
+				SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
+						objUser, printerType,
+						printerLocation, Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT);
+						
 
 				nextforwardTo = Constants.SUCCESS;
 				}
