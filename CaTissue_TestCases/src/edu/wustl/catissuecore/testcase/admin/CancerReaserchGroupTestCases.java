@@ -157,7 +157,9 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		System.out.println(getActualForward());
 		verifyForward("pageOfCancerResearchGroup");
-					   
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+			   
 		CancerResearchGroupForm form = (CancerResearchGroupForm)getActionForm();
 		/*Edit Action*/
 		form.setName("CRG1_" + UniqueKeyGeneratorUtil.getUniqueKey());

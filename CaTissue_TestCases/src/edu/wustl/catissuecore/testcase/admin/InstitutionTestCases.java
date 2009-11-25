@@ -214,7 +214,10 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		System.out.println(getActualForward());
 		verifyForward("pageOfInstitution");
-					   
+	
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+	
 		InstitutionForm form = (InstitutionForm)getActionForm();
 		/*Edit Action*/
 		form.setName("Inst1_" + UniqueKeyGeneratorUtil.getUniqueKey());

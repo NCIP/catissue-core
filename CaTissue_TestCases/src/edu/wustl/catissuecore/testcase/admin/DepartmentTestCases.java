@@ -161,7 +161,9 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		System.out.println(getActualForward());
 		verifyForward("pageOfDepartment");
-					   
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+			   
 		DepartmentForm form = (DepartmentForm)getActionForm();
 		/*Edit Action*/
 		form.setName("Dept1_" + UniqueKeyGeneratorUtil.getUniqueKey());

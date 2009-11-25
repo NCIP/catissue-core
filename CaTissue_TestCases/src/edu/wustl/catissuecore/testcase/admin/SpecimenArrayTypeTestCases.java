@@ -133,6 +133,8 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
      	actionPerform();
 		verifyForward("pageOfSpecimenArrayType");
 		verifyNoActionErrors();
+		setRequestPathInfo(getActualForward());
+		actionPerform();
 
 		/*Edit Action*/
 		SpecimenArrayTypeForm form = (SpecimenArrayTypeForm) getActionForm() ;

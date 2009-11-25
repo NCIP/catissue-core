@@ -603,17 +603,19 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		actionPerform();
 		verifyForward("pageOfSite");
-		
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+
 		SiteForm siteForm = (SiteForm) getActionForm() ;
 		
-		siteForm.setName("ShrishailLaboratorySite_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		siteForm.setName("LaboratorySite_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		siteForm.setOperation("edit");
 		setRequestPathInfo("/SiteEdit");
 		setActionForm(siteForm);
 		actionPerform();
 		
 		verifyForward("success");
-		verifyNoActionErrors();
+
 		verifyActionMessages(new String[]{"object.edit.successOnly"});
 		
 		site.setName(siteForm.getName()) ;
