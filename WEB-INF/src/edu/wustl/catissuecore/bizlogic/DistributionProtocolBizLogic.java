@@ -309,6 +309,12 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		 * are setting the default values same as we were setting in
 		 * setAllValues() method of domainObject.
 		 */
+		if (protocol == null)
+		{
+			throw this.getBizLogicException(null, "domain.object.null.err.msg",
+					"Distribution Protocol");
+		}
+
 		ApiSearchUtil.setSpecimenProtocolDefault(protocol);
 		// End:- Change for API Search
 
@@ -316,12 +322,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 
 		final Validator validator = new Validator();
 		String message = "";
-		if (protocol == null)
-		{
-			throw this.getBizLogicException(null, "domain.object.null.err.msg",
-					"Distribution Protocol");
-		}
-
+		
 		if (protocol.getPrincipalInvestigator() == null)
 		{
 			throw this.getBizLogicException(null, "errors.item.required", "Principal Investigator");

@@ -157,9 +157,7 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		final SpecimenArrayType specimenArrayType = (SpecimenArrayType) obj;
-		String message = "";
-		if (specimenArrayType == null)
+		if (obj == null)
 		{
 			throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
 			/*
@@ -167,6 +165,9 @@ public class SpecimenArrayTypeBizLogic extends CatissueDefaultBizLogic
 			 * String[]{"Specimen Array Type"});
 			 */
 		}
+		final SpecimenArrayType specimenArrayType = (SpecimenArrayType) obj;
+		String message = "";
+		
 		final Validator validator = new Validator();
 
 		if (specimenArrayType.getActivityStatus() == null)

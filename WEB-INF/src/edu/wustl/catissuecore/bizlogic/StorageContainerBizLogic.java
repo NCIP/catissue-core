@@ -3218,6 +3218,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 
 		try
 		{
+			if (obj == null)
+			{
+				throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
+			}
+
 			final StorageContainer container = (StorageContainer) obj;
 
 			/**
@@ -3231,11 +3236,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 			// End:- Change for API Search
 
 			String message = "";
-			if (container == null)
-			{
-				throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
-			}
-
+			
 			final Validator validator = new Validator();
 			if (container.getStorageType() == null)
 			{

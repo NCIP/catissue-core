@@ -142,7 +142,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 
 		/*Edit Action*/
 		SpecimenArrayTypeForm form = (SpecimenArrayTypeForm) getActionForm() ;
-		form.setName("ShriArray_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		form.setName("Array_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		form.setOperation("edit");
 		setRequestPathInfo("/SpecimenArrayTypeEdit");
 		actionPerform();
@@ -342,8 +342,8 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/SpecimenArrayTypeAdd");
 		setActionForm(spForm);
 		actionPerform();
-		verifyForward("failure");
-		verifyActionErrors(new String[]{"errors.item.required"});
+		verifyForward("success");
+		verifyNoActionErrors();
 	}
 	/**
 	 * Test Specimen Array Type with empty name.

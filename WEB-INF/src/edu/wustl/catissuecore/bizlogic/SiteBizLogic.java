@@ -273,6 +273,13 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
+		String message = "";
+		if (obj == null)
+		{
+			message = ApplicationProperties.getValue("app.site");
+
+			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
+		}
 		final Site site = (Site) obj;
 
 		/**
@@ -291,13 +298,7 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		// End:- Change for API Search
 
 		// added by Ashish
-		String message = "";
-		if (site == null)
-		{
-			message = ApplicationProperties.getValue("app.site");
-
-			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
-		}
+		
 		final Validator validator = new Validator();
 		if (Validator.isEmpty(site.getName()))
 		{

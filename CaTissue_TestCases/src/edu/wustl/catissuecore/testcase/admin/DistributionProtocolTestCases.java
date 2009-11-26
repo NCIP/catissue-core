@@ -148,8 +148,8 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 
 		DistributionProtocolForm form = (DistributionProtocolForm) getActionForm();
 	
-		form.setTitle("ShriDP_" +UniqueKeyGeneratorUtil.getUniqueKey()) ;
-		form.setShortTitle("ShriDP_" +UniqueKeyGeneratorUtil.getUniqueKey());
+		form.setTitle("DP_" +UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		form.setShortTitle("DP_" +UniqueKeyGeneratorUtil.getUniqueKey());
 		form.setOperation("edit");
 		setRequestPathInfo("/DistributionProtocolEdit");
 		actionPerform() ;
@@ -468,20 +468,18 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testDistributionProtocolBizLogicAddWithNullObject()
 	{
-		//TODO
-		fail("Need to write test case");
-//		DistributionProtocolBizLogic bizLogic = new DistributionProtocolBizLogic();
-//		try
-//		{
-//			bizLogic.insert(null,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
-//			assertFalse("DP Object Is NULL while inserting through BizLogic",true);
-//		}
-//		catch (BizLogicException e)
-//		{
-//			logger.error("Exception in DPTestCase :" + e.getMessage());
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		DistributionProtocolBizLogic bizLogic = new DistributionProtocolBizLogic();
+		try
+		{
+			bizLogic.insert(null,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("DP Object Is NULL while inserting through BizLogic",true);
+		}
+		catch (BizLogicException e)
+		{
+			logger.error("Exception in DPTestCase :" + e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	@Test
 	/**
@@ -578,17 +576,20 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testDistributionProtoclBizLogicUpdateWithStatusDisabled()
 	{
-		DistributionProtocol protocolCurrent =(DistributionProtocol) 
-								TestCaseUtility.getNameObjectMap("DistributionProtocol") ;
-	
-		DistributionProtocol protocolOld =(DistributionProtocol) 
-			TestCaseUtility.getNameObjectMap("DistributionProtocol") ;
-		
-		protocolCurrent.setActivityStatus("Disabled") ;
-		DistributionProtocolBizLogic bizLogic = new DistributionProtocolBizLogic();
 		try
 		{
-			bizLogic.update(protocolCurrent,protocolOld,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			DefaultBizLogic bizLogic = new DefaultBizLogic();
+			DistributionProtocol dp = (DistributionProtocol) 
+			TestCaseUtility.getNameObjectMap("DistributionProtocol") ;
+			DistributionProtocol protocolCurrent = (DistributionProtocol)bizLogic.retrieve("DistributionProtocol", dp.getId());
+			
+		
+			DistributionProtocol protocolOld = (DistributionProtocol)bizLogic.retrieve("DistributionProtocol", dp.getId());
+			
+			protocolCurrent.setActivityStatus("Disabled") ;
+			DistributionProtocolBizLogic distributionProtocolBizLogic = new DistributionProtocolBizLogic();
+			distributionProtocolBizLogic.update(protocolCurrent,protocolOld,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("DP Object is not getting disabled",true);
 		}
 		catch (BizLogicException e)
 		{

@@ -153,12 +153,14 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
-		final StorageType storageType = (StorageType) obj;
-		String message = "";
-		if (storageType == null)
+		if (obj == null)
 		{
 			throw this.getBizLogicException(null, "domain.object.null.err.msg", "");
 		}
+		
+		final StorageType storageType = (StorageType) obj;
+		String message = "";
+		
 
 		//throw new DAOException("domain.object.null.err.msg", new String[]{"Storage Type"});
 		final Validator validator = new Validator();

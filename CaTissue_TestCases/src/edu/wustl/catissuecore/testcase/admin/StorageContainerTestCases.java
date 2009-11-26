@@ -6,11 +6,14 @@ import java.util.List;
 
 import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -111,6 +114,10 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
 		storageContainerForm.setTypeName(storageType.getName());
+		
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+		storageContainerForm.setSiteId(site.getId());
+		
 		storageContainerForm.setNoOfContainers(1);
 		storageContainerForm.setOneDimensionCapacity(5);
 		storageContainerForm.setTwoDimensionCapacity(5);
@@ -173,7 +180,27 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		verifyActionErrors(new String[]{"errors.item"});
 	}
-	
+	@Test
+	public void testStorageContainerBizLogicAddWithNullObject()
+	{
+//		//TODO
+//		fail("Need to write test case");
+		
+		StorageContainerBizLogic bizLogic = new StorageContainerBizLogic() ;
+		
+		try
+		{
+			bizLogic.insert(null,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+			assertFalse("StorageType Object is NULL while inserting " +
+					"through BizLogic",true);
+		} 
+		catch (BizLogicException e)
+		{
+			logger.info("Exception in StorageContainer :" + e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Test Storage Container Edit.
 	 */
