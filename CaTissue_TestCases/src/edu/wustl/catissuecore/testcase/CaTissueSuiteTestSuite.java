@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.testcase.admin.SiteTestCases;
 import edu.wustl.catissuecore.testcase.admin.SpecimenArrayTypeTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageTypeTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.BulkOperationTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.ParticipantTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenCollectionGroupTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenTestCases;
@@ -63,6 +64,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(CancerReaserchGroupTestCases.class);
 		strutsSuite.addTestSuite(SiteTestCases.class);
 		strutsSuite.addTestSuite(BiohazardTestCases.class);
+		strutsSuite.addTestSuite(BulkOperationTestCases.class);
 		strutsSuite.addTestSuite(DistributionProtocolTestCases.class);
 		strutsSuite.addTestSuite(SpecimenArrayTypeTestCases.class);
 		strutsSuite.addTestSuite(StorageTypeTestCases.class);
