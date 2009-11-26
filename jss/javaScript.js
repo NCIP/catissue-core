@@ -1426,3 +1426,17 @@ function setFrameHeight(frameId, h ,slope) {
         }
 	}
 }
+
+function setDivWidth()
+{
+	window_Viewport.getWinWidth();
+	//alert(window_Viewport.width);
+	  if ( document.getElementById && !(document.all) )
+		  {
+		document.getElementById('treeboxbox_tree').style.width=window_Viewport.width+15;
+		  }
+		  else
+	{
+		document.getElementById('treeboxbox_tree').style.width=window_Viewport.width;
+	}
+}

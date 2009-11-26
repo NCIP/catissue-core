@@ -58,11 +58,19 @@ else
 	var slope=0;
 }
 
-window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}
-window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
+window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);setDivWidth('treeboxbox_tree');}
+window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); setDivWidth('treeboxbox_tree');}
 
-	
+
 </script>
+<style>
+div
+{
+width:125px;
+height:150px;
+overflow:scroll;
+}
+</style>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 			
 			<tr>
