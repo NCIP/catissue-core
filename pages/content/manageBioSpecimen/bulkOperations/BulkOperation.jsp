@@ -13,7 +13,6 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <SCRIPT>
-
 function onDownLoadTemplate()
 {
 	var dropdownName =	document.getElementById('operationName').value;
@@ -98,7 +97,9 @@ function getCSVOutputReport()
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperations" /></span></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+        <td align="left" valign="top" class="showhide">
+		<c:if test="${requestScope.noTemplates == null }">
+		<table width="100%" border="0" cellpadding="3" cellspacing="0">
               <tr>
                 <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"></span></td>
                 <td width="20%" align="left" class="black_ar"><b><bean:message key="bulk.download.template" /></b></td>
@@ -139,8 +140,18 @@ function getCSVOutputReport()
 						</html:button>
 				</td>										
               </tr>
-
-        </table></td>
+        </table>
+		</c:if>
+		<c:if test="${requestScope.noTemplates != null }">
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">      
+				<tr height="40">
+				    <td align="left" class="black_ar">
+						<b><bean:message key="bulk.no.templates.loaded.message" /></b>
+					</td>
+				</tr>
+			</table>
+		</c:if>
+		</td>
       </tr>
     </table></td>
   </tr>
