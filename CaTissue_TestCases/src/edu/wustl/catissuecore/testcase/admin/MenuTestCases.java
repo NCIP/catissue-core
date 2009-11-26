@@ -9,7 +9,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 {
 
 	@Test
-	public void testUserAdd()
+	public void testClickOnUserAdd()
 	{
 		setRequestPathInfo("/User");
 		addRequestParameter("pageOf", "pageOfUserAdmin");
@@ -20,7 +20,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testInstitutionAdd()
+	public void testClickOnInstitutionAdd()
 	{
 		setRequestPathInfo("/Institution");
 		addRequestParameter("pageOf", "pageOfInstitution");
@@ -32,7 +32,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testDepartmentAdd()
+	public void testClickOnDepartmentAdd()
 	{
 		setRequestPathInfo("/Department");
 		addRequestParameter("pageOf", "pageOfDepartment");
@@ -44,7 +44,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testCancerResearchGroupAdd()
+	public void testClickOnCancerResearchGroupAdd()
 	{
 		setRequestPathInfo("/CancerResearchGroup");
 		addRequestParameter("pageOf", "pageOfCancerResearchGroup");
@@ -56,7 +56,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testSiteAdd()
+	public void testClickOnSiteAdd()
 	{
 		setRequestPathInfo("/Site");
 		addRequestParameter("pageOf", "pageOfSite");
@@ -67,7 +67,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testStorageTypeAdd()
+	public void testClickOnStorageTypeAdd()
 	{
 		setRequestPathInfo("/StorageType");
 		addRequestParameter("pageOf", "pageOfStorageType");
@@ -78,7 +78,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testStorageContainerAdd()
+	public void testClickOnStorageContainerAdd()
 	{
 		setRequestPathInfo("/OpenStorageContainer");
 		addRequestParameter("pageOf", "pageOfStorageContainer");
@@ -89,7 +89,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testSpecimenArrayTypeAdd()
+	public void testClickOnSpecimenArrayTypeAdd()
 	{
 		setRequestPathInfo("/SpecimenArrayType");
 		addRequestParameter("pageOf", "pageOfSpecimenArrayType");
@@ -100,7 +100,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testBiohazardAdd()
+	public void testClickOnBiohazardAdd()
 	{
 		setRequestPathInfo("/Biohazard");
 		addRequestParameter("pageOf", "pageOfBioHazard");
@@ -111,7 +111,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testCollectionProtocolAdd()
+	public void testClickOnCollectionProtocolAdd()
 	{
 		setRequestPathInfo("/OpenCollectionProtocol");
 		addRequestParameter("pageOf", "pageOfmainCP");
@@ -122,7 +122,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testDistributionProtocolAdd()
+	public void testClickOnDistributionProtocolAdd()
 	{
 		setRequestPathInfo("/DistributionProtocol");
 		addRequestParameter("pageOf", "pageOfDistributionProtocol");
@@ -133,7 +133,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testDefineAnnotationsInformationPageAdd()
+	public void testClickOnDefineAnnotationsInformationPageAdd()
 	{
 		setRequestPathInfo("/DefineAnnotationsInformationPage");
 		addRequestParameter("operation", "add");
@@ -143,7 +143,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testReportedProblemShowAdd()
+	public void testClickOnReportedProblemShow()
 	{
 		setRequestPathInfo("/ReportedProblemShow");
 		addRequestParameter("pageNum", "1");
@@ -153,7 +153,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testConflictViewAdd()
+	public void testClickOnConflictSPR()
 	{
 		setRequestPathInfo("/ConflictView");
 		addRequestParameter("pageNum", "1");
@@ -163,7 +163,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testCpBasedSearch()
+	public void testClickOnCpBasedSearch()
 	{
 		setRequestPathInfo("/CpBasedSearch");
 		actionPerform();
@@ -172,7 +172,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testParticipantAdd()
+	public void testClickOnParticipantAdd()
 	{
 		setRequestPathInfo("/Participant");
 		addRequestParameter("pageOf", "pageOfParticipant");
@@ -184,7 +184,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testSimpleQuerySpecimen()
+	public void testClickOnSpecimenEdit()
 	{
 		setRequestPathInfo("/SimpleQueryInterface");
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
@@ -195,7 +195,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testCreateSpecimenDerived()
+	public void testClickOnCreateSpecimenDerived()
 	{
 		setRequestPathInfo("/CreateSpecimen");
 		addRequestParameter("pageOf", "pageOfDeriveSpecimen");
@@ -208,7 +208,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testCreateSpecimenAliquots()
+	public void testClickOnCreateSpecimenAliquots()
 	{
 		setRequestPathInfo("/Aliquots");
 		addRequestParameter("pageOf", "pageOfAliquot");
@@ -218,7 +218,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testQuickEvents()
+	public void testClickOnEvents()
 	{
 		setRequestPathInfo("/QuickEvents");
 		addRequestParameter("operation", "add");
@@ -228,7 +228,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testMultipleSpecimen()
+	public void testClickOnMultipleSpecimen()
 	{
 		setRequestPathInfo("/MultipleSpecimenFlexInitAction");
 		addRequestParameter("pageOf", "pageOfMultipleSpWithMenu");
@@ -238,7 +238,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testSpecimenArray()
+	public void testClickOnSpecimenArrayAdd()
 	{
 		setRequestPathInfo("/SpecimenArray");
 		addRequestParameter("pageOf", "pageOfSpecimenArray");
@@ -249,7 +249,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testSimpleQueryDistribution()
+	public void testClickOnSimpleQueryDistribution()
 	{
 		setRequestPathInfo("/SimpleQueryInterface");
 		addRequestParameter("pageOf", "pageOfDistribution");
@@ -260,7 +260,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testOrderView()
+	public void testClickOnOrderView()
 	{
 		setRequestPathInfo("/RequestListView");
 		addRequestParameter("pageNum", "1");
@@ -270,7 +270,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testShippingTracking()
+	public void testClickOnShippingTracking()
 	{
 		setRequestPathInfo("/ShowDashboardAction");
 		actionPerform();
@@ -279,7 +279,7 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 	}
 
 	@Test
-	public void testBulkOperation()
+	public void testClickOnBulkOperation()
 	{
 		setRequestPathInfo("/BulkOperation");
 		addRequestParameter("pageOf", "pageOfBulkOperation");
