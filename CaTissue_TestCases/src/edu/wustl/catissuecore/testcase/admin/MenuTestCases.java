@@ -161,4 +161,131 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 
 	}
+
+	@Test
+	public void testCpBasedSearch()
+	{
+		setRequestPathInfo("/CpBasedSearch");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testParticipantAdd()
+	{
+		setRequestPathInfo("/Participant");
+		addRequestParameter("pageOf", "pageOfParticipant");
+		addRequestParameter("clearConsentSession", "true");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("pageOfParticipant");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testSimpleQuerySpecimen()
+	{
+		setRequestPathInfo("/SimpleQueryInterface");
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("aliasName", "Specimen");
+		actionPerform();
+		verifyForward("pageOfNewSpecimen");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testCreateSpecimenDerived()
+	{
+		setRequestPathInfo("/CreateSpecimen");
+		addRequestParameter("pageOf", "pageOfDeriveSpecimen");
+		addRequestParameter("virtualLocated", "true");
+		addRequestParameter("operation", "add");
+
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testCreateSpecimenAliquots()
+	{
+		setRequestPathInfo("/Aliquots");
+		addRequestParameter("pageOf", "pageOfAliquot");
+		actionPerform();
+		verifyForward("pageOfAliquot");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testQuickEvents()
+	{
+		setRequestPathInfo("/QuickEvents");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testMultipleSpecimen()
+	{
+		setRequestPathInfo("/MultipleSpecimenFlexInitAction");
+		addRequestParameter("pageOf", "pageOfMultipleSpWithMenu");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testSpecimenArray()
+	{
+		setRequestPathInfo("/SpecimenArray");
+		addRequestParameter("pageOf", "pageOfSpecimenArray");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("pageOfSpecimenArray");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testSimpleQueryDistribution()
+	{
+		setRequestPathInfo("/SimpleQueryInterface");
+		addRequestParameter("pageOf", "pageOfDistribution");
+		addRequestParameter("aliasName", "Distribution");
+		actionPerform();
+		verifyForward("pageOfDistribution");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testOrderView()
+	{
+		setRequestPathInfo("/RequestListView");
+		addRequestParameter("pageNum", "1");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testShippingTracking()
+	{
+		setRequestPathInfo("/ShowDashboardAction");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	@Test
+	public void testBulkOperation()
+	{
+		setRequestPathInfo("/BulkOperation");
+		addRequestParameter("pageOf", "pageOfBulkOperation");
+		actionPerform();
+		verifyForward("pageOfBulkOperation");
+		verifyNoActionErrors();
+
+	}
 }
