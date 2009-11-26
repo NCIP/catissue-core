@@ -252,10 +252,9 @@ public class ImportBulkOperationTemplate
 				preparedStatement = connection.prepareStatement(query);
 				preparedStatement.setString(1, operationName);
 				preparedStatement.setString(2, csvFileData);
-				preparedStatement.setString(3, " " + xmlFileData);
+				preparedStatement.setString(3, xmlFileData);
 				preparedStatement.setString(4, dropdownName);
 			}
-			
 			int rowCount = preparedStatement.executeUpdate();
 			System.out.println("Total rows in tables now : " + rowCount);
 			System.out.println("Data inserted successfully");

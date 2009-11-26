@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.actionForm;
 
+import java.io.Serializable;
+
 import org.apache.struts.upload.FormFile;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -10,7 +12,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  * @author sagar_baldwa
  *
  */
-public class BulkOperationForm extends AbstractActionForm
+public class BulkOperationForm extends AbstractActionForm implements Serializable
 {
 	/**
 	 * serialVersionUID.
