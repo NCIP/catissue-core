@@ -143,8 +143,8 @@
             name="clinicalDiagnosisSet"
             table="CATISSUE_CLINICAL_DIAGNOSIS"
             fetch="join" lazy="false" 
-            inverse="true"
-            cascade="save-update"
+            inverse="false"
+            cascade="save-update,all-delete-orphan"
             sort="unsorted"
         >
         
