@@ -108,7 +108,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Edit.
 	 */
 	@Test
-	public void testParticipantEdit()
+	public void testParticipantSearch()
 	{
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
@@ -119,7 +119,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "Participant");
 		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "Participant.FIRST_NAME.varchar");
 		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "p");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "");
 		
 		setActionForm(simpleForm) ;
 		actionPerform();
@@ -137,16 +137,15 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 			System.out.println("ParticipantTestCases.testParticipantEdit(): "+e.getMessage());
 			fail(e.getMessage());
 		}
-		
-		if(participantList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else if(participantList.size() == 1)
+		if(participantList.size() == 1)
 		{
 			verifyForwardPath("/SearchObject.do?pageOf=pageOfParticipant&operation=search&id=" + participant.getId());
 			verifyNoActionErrors();
+		}	
+		else if(participantList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
 		}
 		else
 		{
@@ -155,18 +154,32 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
 			verifyActionErrors(errorNames);
 		}
-		
-		/*Participant Search to generate ParticipantForm*/
+	}
+
+	/**
+	 * Test Participant Add with empty parameters.
+	 * Negative Test Case.
+	 */
+	@Test
+	public void testParticpantEdit()
+	{
+		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
 		setRequestPathInfo("/ParticipantSearch");
 		addRequestParameter("id", "" + participant.getId());
+		addRequestParameter("pageOf", "pageOfParticipant") ;
 		actionPerform();
 		verifyForward("pageOfParticipant");
 		verifyNoActionErrors();
-		
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfParticipant");
+		addRequestParameter("menuSelected", "12");
+		actionPerform();
+		verifyNoActionErrors();
 		/*Edit Action*/
 		ParticipantForm partForm = (ParticipantForm)getActionForm() ;
-		partForm.setFirstName("Shriparticipant_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		partForm.setLastName("Shriparticipant_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		partForm.setFirstName("first_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		partForm.setLastName("last_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		partForm.setOperation("edit") ;
 		setRequestPathInfo("/ParticipantEdit");
 		setActionForm(partForm);

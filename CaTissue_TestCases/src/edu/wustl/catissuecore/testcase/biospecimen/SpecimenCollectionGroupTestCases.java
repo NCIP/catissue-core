@@ -138,16 +138,15 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 			System.out.println("SpecimenCollectionGroupTestCases.testSpecimenCollectionGroupEdit(): "+e.getMessage());
 			fail(e.getMessage());
 		}
-		
-		if(specimenCollectionGroupList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else if(specimenCollectionGroupList.size() == 1)
+		if(specimenCollectionGroupList.size() == 1)
 		{
 			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenCollectionGroup&operation=search&id=" + specimenCollectionGroup.getId());
 			verifyNoActionErrors();
+		}
+		else if(specimenCollectionGroupList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
 		}
 		else
 		{

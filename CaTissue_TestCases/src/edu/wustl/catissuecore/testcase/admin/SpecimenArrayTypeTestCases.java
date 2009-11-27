@@ -95,16 +95,17 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 			fail(e.getMessage());
 		}
 		
-		if(arrayTypeList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else if(arrayTypeList.size() == 1)
+		if(arrayTypeList.size() == 1)
 		{
 			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenArrayType&operation=search&id=" + arrayType.getId());
 			verifyNoActionErrors();
 		}
+		else if(arrayTypeList.size() > 1)
+		{
+		    verifyForward("success");
+		    verifyNoActionErrors();
+		}
+		
 		else
 		{
 			verifyForward("failure");
