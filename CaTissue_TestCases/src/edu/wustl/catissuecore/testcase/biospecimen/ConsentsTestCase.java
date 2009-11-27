@@ -146,6 +146,7 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		collectionProtocol.setTitle(form.getTitle());
 		collectionProtocol.setShortTitle(form.getShortTitle());
 		collectionProtocol.setCollectionProtocolEventCollection(s);
+		collectionProtocol.setConsentTierCollection(form.getConsentValues().values());
 
 		User principalInvestigator = new User();
 		principalInvestigator.setId(form.getPrincipalInvestigatorId());
@@ -164,8 +165,8 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		startDate.setYear(Integer.parseInt(yyyy));
 		collectionProtocol.setStartDate(startDate);
 
-		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap", innerLoopValues);
-		TestCaseUtility.setNameObjectMap("CollectionProtocol", collectionProtocol);
+		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMapWithConsents", innerLoopValues);
+		TestCaseUtility.setNameObjectMap("CollectionProtocolWithConsents", collectionProtocol);
 	}
 
 }
