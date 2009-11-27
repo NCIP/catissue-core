@@ -3,15 +3,23 @@
  */
 package edu.wustl.catissuecore.testcase.biospecimen;
 
-import edu.wustl.bulkoperator.testcase.CaTissueSuiteBaseTest;
+import java.io.File;
+
+import javax.servlet.http.HttpSession;
+
 import edu.wustl.catissuecore.bizlogic.bulkOperations.ImportBulkOperationTemplate;
+import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+
 /**
  * @author sagar_baldwa
  *
  */
 public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 {
-	public void testAddBulkOperationTemplateForUI() throws Exception
+	/**
+	 * testAddBulkOperationTemplateForUI.
+	 */
+	public void testAddBulkOperationTemplateForUI()
 	{
 		try
 		{
@@ -35,10 +43,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 	}
 	
 	/**
-	 * 
-	 * @throws Exception
+	 * testEditBulkOperationTemplateForUI.
 	 */
-	public void testEditBulkOperationTemplateForUI() throws Exception
+	public void testEditBulkOperationTemplateForUI()
 	{
 		try
 		{
@@ -60,11 +67,16 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertFalse("Could Not Edit Bulk Operation template.", true);
 		}
 	}
-	/*public void testpopulateBulkOperationDropDown() throws Exception
+	
+	/**
+	 * testpopulateBulkOperationDropDown.
+	 */
+	public void testpopulateBulkOperationDropDown()
 	{
 		try
 		{
-			setRequestPathInfo("/BulkOperationTest");
+			setRequestPathInfo("/BulkOperation");
+			addRequestParameter("pageOf", "pageOfBulkOperation");
 			actionPerform();
 			verifyForward("pageOfBulkOperation");
 		}
@@ -74,15 +86,19 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 	
-	public void testAjaxCodeForLoadingOutputReportFileAfterBulkOperation() throws Exception
+	/**
+	 * testAjaxCodeForLoadingOutputReportFileAfterBulkOperation.
+	 */
+	public void testAjaxCodeForLoadingOutputReportFileAfterBulkOperation()
 	{
 		try
 		{
 			File file = new File("test.csv");
+			file.createNewFile();
 			HttpSession session = request.getSession();
 			session.setAttribute("resultFile", file);
 			addRequestParameter("report", "report");
-			setRequestPathInfo("/BulkOperationTest");
+			setRequestPathInfo("/BulkOperation");
 			actionPerform();
 			verifyForward(null);
 		}
@@ -90,8 +106,7 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		{
 			e.printStackTrace();
 		}
-	}*/
-	
+	}
 	/*public void testRunBulkOperationWithCorrectCSVData() throws Exception
 	{
 		try
@@ -103,19 +118,22 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setSizeThreshold(1000*1000*10);
-			factory.setRepository(new File("createAliSameCont_report.csv"));
-			FileItem fileItem = factory.createItem("file", "Content-Type", true, "E:/createAliSameCont.csv");
+			factory.setRepository(new File("tempFile.csv"));
+			String csvFilePath = System.getProperty("user.dir");
+			FileItem fileItem = factory.createItem("file", "text/csv",
+						true, csvFilePath + "/CaTissue_TestCases/createMolecularSpecimenEvent.csv");
+			//fileItem.isInMemory();
 			FormFile file = (FormFile)c.newInstance(new Object[] {fileItem});
 			c.setAccessible(false);
-
+			//file.getInputStream();
 			BulkOperationForm bulkOperationForm = new BulkOperationForm();
 			bulkOperationForm.setOperationName("addSpecimen");
-//			bulkOperationForm.setFile(file);
-			addRequestParameter("operation", "addSpecimen");
+			bulkOperationForm.setFile(file);
 			setRequestPathInfo("/FileUpload");
-			setActionForm(bulkOperationForm);
+			setActionForm(bulkOperationForm);			
+			addRequestParameter("operation", "addSpecimen");			
 			actionPerform();
-			verifyForward("failure");
+			verifyForward("success");
 			verifyNoActionErrors();
 		}
 		catch (Exception e)
