@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
+		relationShipType="main" templateName="createCellSpecimenReviewParameters"
+		isOneToManyAssociation="false" cardinality="" roleName="">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="neoplasticCellularityPercentage" csvColumnName="Neo Plastic Cellularity Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="viableCellPercentage" csvColumnName="Viable Cell Percentage" updateBasedOn="false" dataType="java.lang.Double"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String"/>				
+	</BulkOperationClass>
+</BulkOperationMetadata>

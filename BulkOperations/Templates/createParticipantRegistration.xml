@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
+		relationShipType="main" cardinality="" roleName="participant"
+		templateName="createParticipantRegistration" isOneToManyAssociation="true">
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Race" relationShipType="association"
+			templateName="createParticipantRegistration" isOneToManyAssociation="false"
+			cardinality="*" roleName="raceCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.Race"
+				relationShipType="association" templateName="createParticipantRegistration" isOneToManyAssociation="false"
+				cardinality="1" roleName="race">
+				<attributeCollection name="raceName" csvColumnName="Race" updateBasedOn="false" dataType="java.lang.String"/>		
+			</containmentAssociationCollection>
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+			relationShipType="containment" templateName="createParticipantRegistration" isOneToManyAssociation="false"
+			cardinality="*" roleName="participantMedicalIdentifierCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+				relationShipType="association" templateName="createParticipantRegistration" isOneToManyAssociation="false"
+				cardinality="1" roleName="participantMedicalIdentifier">
+				<attributeCollection name="medicalRecordNumber" csvColumnName="Medical Record Number" updateBasedOn="false" dataType="java.lang.String"/>
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Site" relationShipType="association"
+					templateName="createParticipantRegistration" isOneToManyAssociation="false"
+					cardinality="1" roleName="site">
+					<attributeCollection name="name" csvColumnName="Site Name" updateBasedOn="false" dataType="java.lang.String"/>					
+				</referenceAssociationCollection>		
+			</containmentAssociationCollection>
+		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			relationShipType="association" templateName="createParticipantRegistration" isOneToManyAssociation="false"
+			cardinality="*" roleName="collectionProtocolRegistrationCollection">
+			<containmentAssociationCollection
+				className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+				relationShipType="association" templateName="createParticipantRegistration" isOneToManyAssociation="false"
+				cardinality="1" roleName="collectionProtocolRegistration">
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.CollectionProtocol" relationShipType="association"
+					templateName="createParticipantRegistration" isOneToManyAssociation="false"
+					cardinality="1" roleName="collectionProtocol">
+					<attributeCollection name="title" csvColumnName="CP title" updateBasedOn="false" dataType="java.lang.String"/>
+				</referenceAssociationCollection>
+				<referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Participant" relationShipType="association"
+					templateName="createParticipantRegistration" isOneToManyAssociation="false"
+					cardinality="1" roleName="participant">
+				</referenceAssociationCollection>
+				<attributeCollection name="registrationDate" csvColumnName="Registration Date" updateBasedOn="false" dataType="java.util.Date"/>
+				<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false" dataType="java.lang.String"/>
+				<attributeCollection name="protocolParticipantIdentifier" csvColumnName="Participant Protocol ID" updateBasedOn="false" dataType="java.lang.String"/>
+			</containmentAssociationCollection>			
+		</containmentAssociationCollection>
+		<attributeCollection name="socialSecurityNumber" csvColumnName="Social Security Number" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="lastName" csvColumnName="Last Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="firstName" csvColumnName="First Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="middleName" csvColumnName="Middle Name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="birthDate" csvColumnName="Birth Date" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="vitalStatus" csvColumnName="Vital Status" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="deathDate" csvColumnName="Death Date" updateBasedOn="false" dataType="java.util.Date"/>
+		<attributeCollection name="gender" csvColumnName="Gender" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="sexGenotype" csvColumnName="Sex-Genotype" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="ethnicity" csvColumnName="Ethinicity" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String"/>
+	</BulkOperationClass>
+</BulkOperationMetadata>
