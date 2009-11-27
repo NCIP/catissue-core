@@ -49,12 +49,13 @@ public class FileUploadAction extends SecureAction
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		BulkOperationForm bulkOperationForm= (BulkOperationForm)form;
-		String dropdownName = bulkOperationForm.getOperationName();
-		FormFile file = bulkOperationForm.getFile();
+		String dropdownName = null;
 		List<String[]> csvDataList = null;
 		try
 		{
+			BulkOperationForm bulkOperationForm = (BulkOperationForm)form;
+			dropdownName = bulkOperationForm.getOperationName();
+			FormFile file = bulkOperationForm.getFile();
 			csvDataList = getFileData(file);
 		}
 		catch (Exception e)
@@ -84,11 +85,8 @@ public class FileUploadAction extends SecureAction
 
 					SessionDataBean sessionDataBean = this.getSessionData(request);
 					String loginName = sessionDataBean.getUserName();
-					
-					//DAO dao = AppUtility.openDAOSession(sessionDataBean);
-					File resultFile = BulkOperator.initiateBulkOperationFromUI(list.get(0), csvDataList,
-							bulkOperationMetaData, loginName);
-					//AppUtility.closeDAOSession(dao);
+					File resultFile = BulkOperator.initiateBulkOperationFromUI(list.get(0),
+							csvDataList, bulkOperationMetaData, loginName);
 					request.setAttribute("resultFile", resultFile);
 				}
 				else

@@ -10,7 +10,6 @@
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="javax.servlet.*"%>
-<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <SCRIPT>
 function onDownLoadTemplate()
@@ -71,7 +70,8 @@ function getCSVOutputReport()
 	<LINK href="css/styleSheet.css" type="text/css" rel="stylesheet">
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 </head>
-<body >
+<body>
+<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <html:form action="/FileUpload.do" method="post" enctype="multipart/form-data">
   <tr>
@@ -84,7 +84,7 @@ function getCSVOutputReport()
       <tr>
         <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
-		<c:if test="${requestScope.report != null }">
+		<c:if test="${requestScope.report != null }">		
 		<tr>
 			<td>&nbsp;
 				<a href="#" onclick="getCSVOutputReport();"><span class="black_ar">
@@ -97,8 +97,8 @@ function getCSVOutputReport()
         <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperations" /></span></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="showhide">
-		<c:if test="${requestScope.noTemplates == null }">
+        <td align="left" valign="top" class="showhide">		
+		<logic:empty name="noTemplates">
 		<table width="100%" border="0" cellpadding="3" cellspacing="0">
               <tr>
                 <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"></span></td>
@@ -141,8 +141,8 @@ function getCSVOutputReport()
 				</td>										
               </tr>
         </table>
-		</c:if>
-		<c:if test="${requestScope.noTemplates != null }">
+		</logic:empty>
+		<logic:notEmpty name = "noTemplates">
 			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">      
 				<tr height="40">
 				    <td align="left" class="black_ar">
@@ -150,7 +150,7 @@ function getCSVOutputReport()
 					</td>
 				</tr>
 			</table>
-		</c:if>
+		</logic:notEmpty>
 		</td>
       </tr>
     </table></td>
