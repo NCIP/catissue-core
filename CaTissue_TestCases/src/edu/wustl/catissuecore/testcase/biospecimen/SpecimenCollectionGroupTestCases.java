@@ -110,6 +110,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSpecimenCollectionGroupSearch()
 	{
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
 		
@@ -117,44 +118,17 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		simpleForm.setAliasName("SpecimenCollectionGroup") ;
 		simpleForm.setPageOf("pageOfSpecimenCollectionGroup");
 		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "SpecimenCollectionGroup");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "SpecimenCollectionGroup.NAME.varchar");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "SpecimenCollectionGroup.IDENTIFIER.bigint");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Equals");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", ""+scg.getId());
 		
 		setActionForm(simpleForm) ;
 		actionPerform();
 		verifyNoActionErrors();
 		
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
-		DefaultBizLogic bizLogic = new DefaultBizLogic();
-		List<SpecimenCollectionGroup> specimenCollectionGroupList = null;
-		try 
-		{
-			specimenCollectionGroupList = bizLogic.retrieve("SpecimenCollectionGroup");
-		}
-		catch (BizLogicException e) 
-		{
-			e.printStackTrace();
-			System.out.println("SpecimenCollectionGroupTestCases.testSpecimenCollectionGroupEdit(): "+e.getMessage());
-			fail(e.getMessage());
-		}
-		if(specimenCollectionGroupList.size() == 1)
-		{
-			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenCollectionGroup&operation=search&id=" + specimenCollectionGroup.getId());
-			verifyNoActionErrors();
-		}
-		else if(specimenCollectionGroupList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else
-		{
-			verifyForward("failure");
-			//verify action errors
-			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-			verifyActionErrors(errorNames);
-		}
+		verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenCollectionGroup&operation=search&id=" + specimenCollectionGroup.getId());
+		verifyNoActionErrors();
 		
    /*     Specimen Collection Group Search to generate SpecimenCollectionGroupForm
 		setRequestPathInfo("/SpecimenCollectionGroupSearch");
@@ -182,61 +156,10 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Collection Group Edit.
 	 */	
 	@Test
-    public void testEditSCGAndAnticipatorySpecimen()
+    public void testEditSCGAndGotoAnticipatorySpecimen()
 
     {
-          SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
-          scg.setIsCPBasedSpecimenEntryChecked(true);
-          setRequestPathInfo("/CPQuerySpecimenCollectionGroupEdit");
-          
-          SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm() ;
-          speCollForm.setId(scg.getId()) ;
-          speCollForm.setClinicalDiagnosis(scg.getClinicalDiagnosis()) ;
-          speCollForm.setClinicalStatus(scg.getClinicalStatus()) ;
-          speCollForm.setCollectionStatus(scg.getCollectionStatus());
-          speCollForm.setRestrictSCGCheckbox("true") ;
-          speCollForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");
-  		
-          CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
-          Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
-  		  String participantNameWithProtocolId = ""+participant.getLastName()+", "+participant.getFirstName()+"("+collectionProtocol.getId()+")";
-  		  String participantName = ""+participant.getLastName()+","+participant.getFirstName();
-  		  
-  		  speCollForm.setCollectionEventId(0L);
-  		  speCollForm.setParticipantId(participant.getId());
-  		  speCollForm.setParticipantName(participantName);
-  		  speCollForm.setParticipantNameWithProtocolId(participantNameWithProtocolId) ;
-  		
-  		  Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
-		  CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
-	 
-		  speCollForm.setCollectionProtocolEventId(event.getId()) ;
-		  speCollForm.setCollectionProtocolId(collectionProtocol.getId());
-		  
-  		  Site specimenCollectionSite = (Site) TestCaseUtility.getNameObjectMap("Site");
-  		  speCollForm.setSiteId(specimenCollectionSite.getId());
-
-		  speCollForm.setCollectionEventSpecimenId(0L);
-		  speCollForm.setCollectionEventdateOfEvent("01-28-2009");
-		  speCollForm.setCollectionEventTimeInHours("11") ;
-		  speCollForm.setCollectionEventTimeInMinutes("2") ;
-		  speCollForm.setCollectionEventUserId(1L) ;
-		  speCollForm.setCollectionEventCollectionProcedure("Use CP Defaults");
-		  speCollForm.setCollectionEventContainer("Use CP Defaults") ;
-
-		  speCollForm.setReceivedEventId(event.getId());
-		  speCollForm.setReceivedEventDateOfEvent("01-28-2009");
-		  speCollForm.setReceivedEventTimeInHours("11") ;
-		  speCollForm.setReceivedEventTimeInMinutes("2") ;
-		  speCollForm.setReceivedEventUserId(1L) ;
-		  speCollForm.setReceivedEventReceivedQuality("Acceptable");
-
-		  speCollForm.setName(scg.getName());
-		  speCollForm.setOperation("edit");
-
-		  setActionForm(speCollForm);
-          actionPerform();
-          verifyForward("success");
+         
     }
 
 }

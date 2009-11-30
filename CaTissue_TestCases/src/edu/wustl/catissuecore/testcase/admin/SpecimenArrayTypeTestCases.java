@@ -67,6 +67,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSpecimenArrayTypeSearch()
 	{
+		SpecimenArrayType arrayType = (SpecimenArrayType) TestCaseUtility.getNameObjectMap("SpecimenArrayType");
 		/*Simple Search Action*/
 		setRequestPathInfo("/SimpleSearch");
 
@@ -74,45 +75,16 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 		simpleForm.setAliasName("SpecimenArrayType") ;
 		simpleForm.setPageOf("pageOfSpecimenArrayType");
 		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "SpecimenArrayType");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "ContainerType.NAME.varchar");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "a");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "ContainerType.IDENTIFIER.bigint");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Equals");
+		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", ""+arrayType.getId());
 		
 		setActionForm(simpleForm) ;
 		actionPerform();
 
-		SpecimenArrayType arrayType = (SpecimenArrayType) TestCaseUtility.getNameObjectMap("SpecimenArrayType");
-		DefaultBizLogic bizLogic = new DefaultBizLogic();
-		List<SpecimenArrayType> arrayTypeList = null;
-		try 
-		{
-			arrayTypeList = bizLogic.retrieve("SpecimenArrayType");
-		}
-		catch (BizLogicException e) 
-		{
-			e.printStackTrace();
-			System.out.println("SpecimenArratTypeTestCases.testSpecimenArratTypeEdit(): "+e.getMessage());
-			fail(e.getMessage());
-		}
 		
-		if(arrayTypeList.size() == 1)
-		{
-			verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenArrayType&operation=search&id=" + arrayType.getId());
-			verifyNoActionErrors();
-		}
-		else if(arrayTypeList.size() > 1)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		
-		else
-		{
-			verifyForward("failure");
-			//verify action errors
-			String errorNames[] = new String[]{"simpleQuery.noRecordsFound"};
-			verifyActionErrors(errorNames);
-		}
+		verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenArrayType&operation=search&id=" + arrayType.getId());
+		verifyNoActionErrors();
 			
    
 	}

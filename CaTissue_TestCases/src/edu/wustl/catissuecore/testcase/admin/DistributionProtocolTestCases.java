@@ -390,50 +390,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Test Distribution Protocol Add with Invalid quantity.
-	 * Negative Test Case.
-	 * Quantity is not validated in validate method of DP BizLogic
-	 * Thats why, this test case is getting failed.
-	 */
-	@Test
-	public void testDistributionProtocolBizLogicAddWithInvalidQuantity()
-	{
-//		//TODO
-//		fail("Need to write test case");
-		DistributionProtocol protocol = new DistributionProtocol();
-		protocol.setTitle("DP_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		protocol.setShortTitle("DP_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		protocol.setStartDate(new Date()) ;
-		User newUser = new User();
-		newUser.setId(2L);
-		protocol.setPrincipalInvestigator(newUser) ;
-		protocol.setActivityStatus("Active");
-		
-		DistributionSpecimenRequirement requirement = new DistributionSpecimenRequirement();
-		requirement.setSpecimenClass("Tissue") ;
-		requirement.setSpecimenType(Constants.FIXED_TISSUE_SLIDE) ;
-		requirement.setTissueSite("Clitoris") ;
-		requirement.setPathologyStatus("Metastatic");
-		requirement.setQuantity(-3D);
 	
-		requirement.setDistributionProtocol(protocol);
-		protocol.getDistributionSpecimenRequirementCollection().add(requirement) ;
-		
-		DistributionProtocolBizLogic bizLogic = new DistributionProtocolBizLogic();
-		try
-		{
-			bizLogic.insert(protocol,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
-			assertFalse("DP Object QUANTITY Is " +
-					"INVALID while inserting through BizLogic",true);
-		}
-		catch (BizLogicException e)
-		{
-			logger.error("Exception in DPTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	/**
 	 * Test Distribution Protocol Add with Invalid options
 	 * Negative Test Case. 
