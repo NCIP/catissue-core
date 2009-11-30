@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
@@ -294,6 +295,61 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    TestCaseUtility.setNameObjectMap("ParentStorageContainer",storageContainer);
 	}
 
+
+
+	@Test
+	public void testAddChildContainerOnOccupiedPosition()
+	{
+		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("FreezerContainer");
+		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
+
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(5);
+		storageContainerForm.setTwoDimensionCapacity(5);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+
+		String[] holdsSpecimenClassCollection = new String[1];
+		holdsSpecimenClassCollection[0]="Tissue";
+//		holdsSpecimenClassCollection[1]="Tissue";
+//		holdsSpecimenClassCollection[2]="Molecular";
+//		holdsSpecimenClassCollection[3]="Cell";
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+
+		long parentContainerId=parentStorageContainer.getId();
+
+		storageContainerForm.setParentContainerSelected("Auto");
+		storageContainerForm.setParentContainerId(parentStorageContainer.getId());
+		storageContainerForm.setPositionDimensionOne(1);
+		storageContainerForm.setPositionDimensionTwo(1);
+		storageContainerForm.setPos1("1");
+		storageContainerForm.setPos2("1");
+		storageContainerForm.setOperation("add");
+		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
+		actionPerform();
+		System.out.println(getActualForward());
+		verifyForward("failure");
+
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "7");
+		actionPerform();
+
+		System.out.println(getActualForward());
+		verifyActionErrors(new String[]{"errors.item"});
+
+
+
+	}
+
 	@Test
 	public void testUpdateContainerParentAndPosition()
 	{
@@ -358,59 +414,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		StorageContainerForm containerForm=(StorageContainerForm) getActionForm();
 		assertNotNull(containerForm);
 		assertEquals(containerForm.getParentContainerId(), parentContainerId);
-
-	}
-
-	@Test
-	public void testAddChildContainerOnOccupiedPosition()
-	{
-		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("FreezerContainer");
-		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
-
-		StorageContainerForm storageContainerForm = new StorageContainerForm();
-		storageContainerForm.setTypeId(storageType.getId());
-		storageContainerForm.setTypeName(storageType.getName());
-		storageContainerForm.setNoOfContainers(1);
-		storageContainerForm.setOneDimensionCapacity(5);
-		storageContainerForm.setTwoDimensionCapacity(5);
-		storageContainerForm.setOneDimensionLabel("row");
-		storageContainerForm.setTwoDimensionLabel("row");
-		storageContainerForm.setDefaultTemperature("29");
-
-		String[] holdsSpecimenClassCollection = new String[1];
-		holdsSpecimenClassCollection[0]="Tissue";
-//		holdsSpecimenClassCollection[1]="Tissue";
-//		holdsSpecimenClassCollection[2]="Molecular";
-//		holdsSpecimenClassCollection[3]="Cell";
-		storageContainerForm.setSpecimenOrArrayType("Specimen");
-		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
-		storageContainerForm.setActivityStatus("Active");
-
-		long parentContainerId=parentStorageContainer.getId();
-
-		storageContainerForm.setParentContainerSelected("Auto");
-		storageContainerForm.setParentContainerId(parentStorageContainer.getId());
-		storageContainerForm.setPositionDimensionOne(1);
-		storageContainerForm.setPositionDimensionTwo(1);
-		storageContainerForm.setPos1("1");
-		storageContainerForm.setPos2("1");
-		storageContainerForm.setOperation("add");
-		setRequestPathInfo("/StorageContainerAdd");
-		setActionForm(storageContainerForm);
-		actionPerform();
-		System.out.println(getActualForward());
-		verifyForward("failure");
-
-		setRequestPathInfo(getActualForward());
-		addRequestParameter("pageOf", "pageOfStorageContainer");
-		addRequestParameter("operation", "edit");
-		addRequestParameter("menuSelected", "7");
-		actionPerform();
-
-		System.out.println(getActualForward());
-		verifyActionErrors(new String[]{"errors.item"});
-
-
 
 	}
 
@@ -631,5 +634,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		logger.info(" ::: Site List Size ::: "+ list.size());
 
 	}
+
+
 
 }
