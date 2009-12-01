@@ -23,7 +23,7 @@
 <html>
 <tiles:importAttribute />
 <head>
-<title><tiles:getAsString name="title" ignore="true" /></title>
+<title><bean:message key="app.name"/><bean:message key="app.version"/></title>
 
 <!--Jitendra -->
 <script language="JavaScript">
