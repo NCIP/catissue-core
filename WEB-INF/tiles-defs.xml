@@ -8,7 +8,7 @@
 
 	<!-- Home tab pages definitions start -->
 	<definition name=".catissuecore.mainTitlePageDef" path="/pages/Layout.jsp">
-		<put name="title" value="caTissue Suite v 1.1.p5" />
+		<!-- <put name="title" value="caTissue Suite v 1.1.p5" /> -->
 		<put name="header" value="/pages/MainHeaderLogin.jsp" />
 		<put name="applicationheader" value="/pages/ApplicationHeaderLogin.jsp" />
 		<put name="mainmenu" value="/pages/mainMenu/HomeLogo.jsp" />
@@ -17,9 +17,9 @@
 
 	<!-- Home tab pages definitions start -->
 	<definition name=".catissuecore.homePageDef" path="/pages/Layout.jsp">
-		<put name="title" value="caTissue Suite v 1.1.p5" />
+		<!-- <put name="title" value="caTissue Suite v 1.1.p5" /> -->
 		<put name="header" value="/pages/MainHeader.jsp" />
-		<put name="applicationheader" value="/pages/ApplicationHeader.jsp"/> 
+		<put name="applicationheader" value="/pages/ApplicationHeader.jsp"/>
 		<put name="mainmenu" value="/pages/mainMenu/Home.jsp" />
 		<put name="content" value="/pages/content/home/Home.jsp" />
 	</definition>
