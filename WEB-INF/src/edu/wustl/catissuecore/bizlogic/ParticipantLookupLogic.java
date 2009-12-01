@@ -235,7 +235,9 @@ public class ParticipantLookupLogic implements LookupLogic
 						final String mrn = iterator.next();
 						final String siteId = iterator.next();
 						final Site site = new Site();
+						final String siteName = iterator.next();
 						site.setId(Long.valueOf(siteId));
+						site.setName(siteName);
 						final ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 						participantMedicalIdentifier.setMedicalRecordNumber(mrn);
 						participantMedicalIdentifier.setSite(site);
