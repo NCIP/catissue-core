@@ -12,8 +12,10 @@ import edu.wustl.catissuecore.testcase.admin.SpecimenArrayTypeTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageTypeTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.BulkOperationTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.ConsentsTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.ParticipantTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenCollectionGroupTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.SpecimenEventsTestcases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenTestCases;
 import edu.wustl.catissuecore.testcase.collectionprotocol.CollectionProtocolTestCases;
 import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
@@ -33,7 +35,7 @@ public class CaTissueSuiteTestSuite
 	{
 		super();
 	}
-	
+
 
 	/**
 	 * @param args :
@@ -46,17 +48,17 @@ public class CaTissueSuiteTestSuite
 		//junit.swingui.TestRunner.run(CaTissueSuiteTestSuite.class);
 	}
 
-	
+
 	/**
 	 * @return daoSuite.
 	 */
 	public static junit.framework.Test suite()
 	{
 		TestSuite strutsSuite = new TestSuite("caTissue Junit Test Cases");
-		//daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
-		
+//		daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
+
 		strutsSuite.addTestSuite(InitializationTestCase.class);
-		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
+//		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
 		strutsSuite.addTestSuite(LoginTestCase.class);
 		strutsSuite.addTestSuite(MenuTestCases.class);
 		strutsSuite.addTestSuite(InstitutionTestCases.class);
@@ -73,6 +75,8 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(ParticipantTestCases.class);
 		strutsSuite.addTestSuite(SpecimenCollectionGroupTestCases.class);
 		strutsSuite.addTestSuite(SpecimenTestCases.class);
+		strutsSuite.addTestSuite(SpecimenEventsTestcases.class);
+		strutsSuite.addTestSuite(ConsentsTestCase.class);
 		return strutsSuite;
 	}
 
