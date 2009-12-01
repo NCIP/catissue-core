@@ -88,7 +88,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * and the list of participants retrieved from database. Based on the
 	 * criteria in the MPI matching algorithm, it returns the list of all
 	 * matching participants.
-	 * 
+	 *
 	 * @param params
 	 *            - LookupParameters
 	 * @return list - List of matching Participants.
@@ -206,7 +206,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				patientInformation = patientInfoList.get(i);
 				final DefaultLookupResult result = new DefaultLookupResult();
 				final Participant partcipantNew = new Participant();
-				partcipantNew.setId(new Long(patientInformation.getUpi()));
+				partcipantNew.setId(new Long(patientInformation.getId()));
 
 				partcipantNew.setLastName(patientInformation.getLastName());
 				partcipantNew.setFirstName(patientInformation.getFirstName());
@@ -255,7 +255,7 @@ public class ParticipantLookupLogic implements LookupLogic
 
 	/**
 	 * This function calculates the total based on values entered by user
-	 * 
+	 *
 	 * @param participant
 	 *            - participant object
 	 * @return - cutoff points
