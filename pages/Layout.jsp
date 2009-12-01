@@ -23,7 +23,7 @@
 <html>
 <tiles:importAttribute />
 <head>
-<title><bean:message key="app.name"/><bean:message key="app.version"/></title>
+<title><bean:message key="app.name"/> <bean:message key="app.version"/></title>
 
 <!--Jitendra -->
 <script language="JavaScript">
@@ -39,9 +39,9 @@
 			String tempMsg = ApplicationProperties.getValue("app.session.advanceWarning");
 			Object[] args = new Object[] {"" + advanceTime};
 			String advanceTimeoutMesg = MessageFormat.format(tempMsg,args);
-			
+
 			timeOut = -1;
-				
+
 			if(request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
 			{
 				//timeOut = request.getSession().getMaxInactiveInterval();
@@ -56,30 +56,30 @@
 		%>
 
 
-		timeOut = "<%= timeOut%>";	
+		timeOut = "<%= timeOut%>";
 		advanceTime = "<%= advanceTime%>";
 		pageLoadTime = new Date().getTime(); //timestamp in millisecond of last pageload
 		lastRefreshTime = pageLoadTime ; // last refreshtime in millisecond
 		setAdvanceSessionTimeout(timeOut);
-		
+
 		function warnBeforeSessionExpiry()
-		{	
-			//check for the last refresh time,whether page is refreshed in child frame after first load.		
+		{
+			//check for the last refresh time,whether page is refreshed in child frame after first load.
 			if(lastRefreshTime > pageLoadTime)
 			{
-				
+
 				var newTimeout = (lastRefreshTime - pageLoadTime)*0.001;
 				newTimeout = newTimeout + (advanceTime*60.0);
-				
+
 				pageLoadTime = lastRefreshTime ;
 				setAdvanceSessionTimeout(newTimeout);
-				
+
 			}
 			else
 			{
 				defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
 				var choice = confirm("<%= advanceTimeoutMesg %>");
-			
+
 				if(choice == 0) //cancel pressed, extend session
 				{
 					clearTimeout(defTimeout);
@@ -88,32 +88,32 @@
 				}
 			}
 		}
-		
-		function setAdvanceSessionTimeout(ptimeOut) 
+
+		function setAdvanceSessionTimeout(ptimeOut)
 		{
-			
+
 			if(ptimeOut > 0)
 			{
 				var time = (ptimeOut - (advanceTime*60)) * 1000;
 				warnTimeout = setTimeout('warnBeforeSessionExpiry()', time); //if session timeout, then redirect to Home page
 			}
 		}
-		
-		
+
+
 		function sendToHomePage()
-		{			
-				<% 
-				   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);			  			
-				   if(obj != null) 
+		{
+				<%
+				   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+				   if(obj != null)
 				   {
-				%>			
+				%>
 				   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>";
-				   alert(timeoutMessage);			  
-			   
+				   alert(timeoutMessage);
+
 				   window.location.href = "Logout.do";
 				<%
 				   }
-				%>		  
+				%>
 		}
 
 		function detectApplicationUsageActivity()
@@ -121,7 +121,7 @@
 			var currentTime = new Date().getTime();
 			var activationTime = currentTime - pageLoadTime;
 			var advTime = (advanceTime * 1) + 1;
-			
+
 			if(((timeOut*1000) - activationTime) <= (advTime*60*1000)) {
 				lastRefreshTime = new Date().getTime();
 				sendBlankRequest();
@@ -129,7 +129,7 @@
 				clearTimeout(defTimeout);
 				setAdvanceSessionTimeout(timeOut);
 			}
-			
+
 //			if (lastRefreshTime <= pageLoadTime)
 //			{
 //				lastRefreshTime = new Date().getTime();
@@ -137,13 +137,13 @@
 //				sendBlankRequest();
 //			}
 		}
-		
+
 		function getUmlModelLink()
 		{
 				var  frameUrl="<%=XMLPropertyHandler.getValue("umlmodel.link")%>";
 				NewWindow(frameUrl,'name');
 		}
-		
+
 		function getUserGuideLink()
 		{
 			var frameUrl = "<%=XMLPropertyHandler.getValue("userguide.link")%>";
