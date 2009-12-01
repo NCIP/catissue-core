@@ -17,12 +17,15 @@ import org.junit.Test;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
@@ -269,11 +272,25 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		birthDate.setYear(Integer.parseInt(yyyy));
 		participant.setBirthDate(birthDate);
 
-		Collection collectionProtocolRegistrationCollection = new HashSet();
+		/*Collection collectionProtocolRegistrationCollection = new HashSet();
 		collectionProtocolRegistrationCollection.add(collectionProtocol);
-		participant
-				.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
+		participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);*/
 
+		CollectionProtocolRegistration collectioProtocolRegistration = null;
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+
+		try 
+		{
+			participant = (Participant)bizLogic.retrieve(Participant.class.getName(), participant.getId());
+		
+		}
+		catch (BizLogicException e) 
+		{
+			e.printStackTrace();
+			System.out.println("ParticipantTestCases.testParticipantEdit(): "+e.getMessage());
+			fail(e.getMessage());
+		}
+		
 		TestCaseUtility.setNameObjectMap("ParticipantHavingConsents", participant);
 
 	}
@@ -416,35 +433,126 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		verifyForward("pageOfParticipant");
 		verifyNoActionErrors();
 
-		ParticipantForm partForm = (ParticipantForm) getActionForm();
 
-		/*DefaultBizLogic bizLogic = new DefaultBizLogic();
+		Collection<CollectionProtocolRegistration> cprColl = participant.getCollectionProtocolRegistrationCollection();
+		Iterator<CollectionProtocolRegistration> cprItr = cprColl.iterator();
+		CollectionProtocolRegistration collectioProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
 		
-		
-		List<Participant> participantList = null;
+		DefaultBizLogic bizLogic = new DefaultBizLogic();
+		Collection<SpecimenCollectionGroup> scgList = null;
+
 		try 
 		{
-			participant = (Participant)bizLogic.retrieve("edu.wustl.catissuecore.domain.Participant", participant.getId());
-			
+			scgList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), "collectionProtocolRegistration",  collectioProtocolRegistration.getId());
 		
 		}
 		catch (BizLogicException e) 
 		{
 			e.printStackTrace();
-			System.out.println("ParticipantTestCases.testParticipantEdit(): "+e.getMessage());
+			System.out.println("ConsentTestCase.testParticipantEdit(): "+e.getMessage());
 			fail(e.getMessage());
 		}
 		
-		setRequestPathInfo("/QuerySpecimenCollectionGroup");
-		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
-		addRequestParameter("treeRefresh", "false");
-		addRequestParameter("clickedNodeId", "SpecimenCollectionGroup_"+730907);
-		addRequestParameter("operation", "edit");
+		//Collection<SpecimenCollectionGroup> scgColl = collectioProtocolRegistration.getSpecimenCollectionGroupCollection();
+		Iterator<SpecimenCollectionGroup> scgItr = scgList.iterator();
+		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgItr.next();
+		System.out.println("scg name "+ scg.getName());
+		System.out.println("scg id "+ scg.getId());
+		SpecimenCollectionGroupForm form = new SpecimenCollectionGroupForm();
+		form.setCollectionProtocolId(collectionProtocol.getId());
+		setActionForm(form);
 		
+		setRequestPathInfo("/SearchObject");
+		addRequestParameter("id", scg.getId().toString());
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		addRequestParameter("operation", "edit");		
+		actionPerform();
+		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
+		verifyNoActionErrors();
+		System.out.println(" getActualForward() 1111111111 "+ getActualForward());
+		
+		setRequestPathInfo("/SpecimenCollectionGroupSearch");
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		actionPerform();
+		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
+		verifyNoActionErrors();
+		
+		setRequestPathInfo("/SpecimenCollectionGroup");
+		addRequestParameter("operation", "edit");	
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		addRequestParameter("menuSelected", "14");
+		addRequestParameter("showConsents", "yes");
+		actionPerform();
+		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
+		verifyNoActionErrors();
+		
+		SpecimenCollectionGroupForm scgForm = (SpecimenCollectionGroupForm)getActionForm();
+		scgForm.setCollectionStatus("Complete");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		scgForm.setName(scg.getName());
+		scgForm.setId(scg.getId()) ;
+		scgForm.setSiteId(3L);                      
+		scgForm.setOperation("edit");
+		scgForm.setClinicalDiagnosis(scg.getClinicalDiagnosis());
+		scgForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");
+		
+		/*scgForm.setConsentResponseForScgValue("ConsentBean:0_consentTierID",
+					""+scgForm.getConsentResponseForScgValue("ConsentBean:0_consentTierID"));
+		scgForm.setConsentResponseForScgValue("ConsentBean:1_consentTierID",
+				""+scgForm.getConsentResponseForScgValue("ConsentBean:1_consentTierID"));*/
+		
+		 Map consentResponseForScgValues = scgForm.getConsentResponseForScgValues();
+		 consentResponseForScgValues.put("ConsentBean:1_consentTierID",
+				 consentResponseForScgValues.get("ConsentBean:1_consentTierID").toString());
+		 consentResponseForScgValues.put("ConsentBean:0_consentTierID",
+				 consentResponseForScgValues.get("ConsentBean:0_consentTierID").toString());
+		 
+		 consentResponseForScgValues.put("ConsentBean:0_participantResponseID",
+				 consentResponseForScgValues.get("ConsentBean:0_participantResponseID").toString());
+		 consentResponseForScgValues.put("ConsentBean:1_participantResponseID",
+				 consentResponseForScgValues.get("ConsentBean:1_participantResponseID").toString());
+		 
+		 consentResponseForScgValues.put("ConsentBean:1_specimenCollectionGroupLevelResponseID",
+				 consentResponseForScgValues.get("ConsentBean:1_specimenCollectionGroupLevelResponseID").toString());
+		 consentResponseForScgValues.put("ConsentBean:0_specimenCollectionGroupLevelResponseID",
+				 consentResponseForScgValues.get("ConsentBean:0_specimenCollectionGroupLevelResponseID").toString());
+		 
+		 
+		 consentResponseForScgValues.put("ConsentBean:0_specimenCollectionGroupLevelResponse", "Yes");
+		 consentResponseForScgValues.put("ConsentBean:1_specimenCollectionGroupLevelResponse","Yes");
+		 
+		 scgForm.setConsentResponseForScgValues(consentResponseForScgValues);
+		 scgForm.setApplyEventsToSpecimens(true);
+	
+		setActionForm(scgForm);
+		setRequestPathInfo("/CPQuerySpecimenCollectionGroupEdit");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		
+		/*scgForm = (SpecimenCollectionGroupForm)getActionForm();
+		scgForm.setCollectionStatus("Complete");
+		scgForm.setSiteId(3L);
+		scgForm.setOperation("edit");
+		setActionForm(scgForm);
+		setRequestPathInfo("/QuerySpecimenCollectionGroup");
+		addRequestParameter("operation", "edit");	
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
 		actionPerform();
 		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
 		verifyNoActionErrors();*/
+		
+		
+		setRequestPathInfo("/AnticipatorySpecimenView");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		
 
-	}
+		
+  }
 
 }
