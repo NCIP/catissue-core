@@ -58,7 +58,7 @@ public class CaTissueSuiteTestSuite
 //		daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
 
 		strutsSuite.addTestSuite(InitializationTestCase.class);
-//		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
+		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
 		strutsSuite.addTestSuite(LoginTestCase.class);
 		strutsSuite.addTestSuite(MenuTestCases.class);
 		strutsSuite.addTestSuite(InstitutionTestCases.class);
