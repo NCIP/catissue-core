@@ -5,8 +5,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
@@ -15,6 +19,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -76,11 +81,12 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 	 * @param eventSpecificData - map of eventSpecificData
 	 * @return - list of events
 	 * @throws ParseException - ParseException
+	 * @throws BizLogicException 
 	 */
 
 	private List getEventDomainObjects(String operation, List specimenIds, Long userId,
 			String dateOfEvent, String timeInHours, String timeInseconds, String comments,
-			Map<String, String> eventSpecificData) throws ParseException
+			Map<String, String> eventSpecificData) throws ParseException, BizLogicException
 	{
 		List events;
 		if (operation.equals(Constants.BULK_TRANSFERS))
@@ -106,15 +112,18 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 	 * @param eventSpecificData - eventSpecificData
 	 * @return List
 	 * @throws ParseException - ParseException
+	 * @throws BizLogicException 
 	 */
 	private List getTransferEventObjects(List specimenIds, Long userId, String dateOfEvent,
 			String timeInHours, String timeInseconds, String comments,
-			Map<String, String> eventSpecificData) throws ParseException
+			Map<String, String> eventSpecificData) throws ParseException, BizLogicException
 	{
 		final List<TransferEventParameters> events = new ArrayList<TransferEventParameters>();
 		TransferEventParameters transferEventParameters = null;
+		Set<String> allocatedPositions = new HashSet<String>();
 		StorageContainer fromContainer = null;
 		StorageContainer toContainer = null;
+		String containerValue = null;
 		String specimenId = null;
 		for (int i = 0; i < specimenIds.size(); i++)
 		{
@@ -149,8 +158,24 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 			String pos2 = eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2");
 			if(pos1!=null && pos2!=null && !pos1.trim().equals( "" ) && !pos2.trim().equals( "" ))
 			{
-				transferEventParameters.setToPositionDimensionOne(Integer.valueOf(pos1));
-				transferEventParameters.setToPositionDimensionTwo(Integer.valueOf(pos2));
+				//bug 15083 start
+				/**
+				 * Added check for duplicate storage positions
+				 */
+				containerValue = StorageContainerUtil.getStorageValueKey(toContainer.getName(),
+						null, Integer.valueOf(pos1), Integer.valueOf(pos2));				
+				if (allocatedPositions.contains(containerValue))
+				{
+					throw this.getBizLogicException( null,
+							"shipment.samePositionForSpecimens", null );					
+				}
+				else
+				{
+					allocatedPositions.add( containerValue );
+					transferEventParameters.setToPositionDimensionOne(Integer.valueOf(pos1));
+					transferEventParameters.setToPositionDimensionTwo(Integer.valueOf(pos2));
+				}
+				//bug 15083 end
 			}
 			//bug 14417 end
 			transferEventParameters.setToStorageContainer(toContainer);

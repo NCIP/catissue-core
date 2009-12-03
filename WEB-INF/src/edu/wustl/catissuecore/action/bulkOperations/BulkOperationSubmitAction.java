@@ -107,7 +107,16 @@ public class BulkOperationSubmitAction extends BaseAction
 		{
 			this.logger.debug(excp.getCustomizedMsg());
 			final ActionErrors errors = new ActionErrors();
-			final ActionError error = new ActionError("errors.item", excp.getCustomizedMsg());
+			String message = "";
+			if(excp.getCustomizedMsg() == null)
+			{
+				message = excp.getMessage();
+			}
+			else
+			{
+				message = excp.getCustomizedMsg();
+			}
+			final ActionError error = new ActionError("errors.item", message);
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
 			this.logger.error(excp.getCustomizedMsg(),excp);

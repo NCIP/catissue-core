@@ -1067,7 +1067,6 @@ function mapButtonClickedOnSpecimen(frameUrl,name,storageContainerName)
 	var contName=storageContainerName+"";
    	var storageContainer = document.getElementById(contName).value;
 	frameUrl+="&storageContainerName="+storageContainer;
-	alert(frameUrl+"");
 	openPopupWindow(frameUrl,name);
 }
 

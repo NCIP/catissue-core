@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 
 /**
@@ -45,9 +47,18 @@ public class BulkTransferEventsAction extends BulkOperationAction
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCPOS2", specimenRow.get(5)
 				.toString());
 		//bug 14417
-		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS1","");
-		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS2", "");
-		eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCLABEL", "");
+		/**
+		 * org.apache.struts.action.ERROR will return ActionError if same storage positions
+		 * are added to multiple specimens.
+		 * If error occurs then destination positions should be retained.
+           bug 15083
+		 */
+		if(request.getAttribute( "org.apache.struts.action.ERROR" )== null) //bug 15083
+		{
+			eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS1","");
+			eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCPOS2", "");
+			eventParametersForm.setFieldValue("ID_" + specimenId + "_TOSCLABEL", "");
+		}
 		eventParametersForm.setSpecimenId(specimenId, specimenId);
 	}
 }

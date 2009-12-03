@@ -167,6 +167,9 @@ public abstract class BulkOperationAction extends SecureAction
 			{
 				specimenRow = (List) specimenDataList.get(i);
 				specimenId = specimenRow.get(0).toString();
+				/**
+				 * Implemented in BulkTransferEventsAction.java
+				 */
 				this.fillFormData(eventParametersForm, specimenRow, specimenId, request);
 			}
 		}

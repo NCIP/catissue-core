@@ -103,10 +103,8 @@ String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField
 
 <!-- To Container Field starts -->
 
-<%String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME); if (className==null) className="";
-
-String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID); if (collectionProtocolId==null) collectionProtocolId=""; String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId + "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+Constants.TISSUE + "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=1";		
-
+<%
+String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId;		
 String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%> 
 
 <td class="black_ar" width="30%"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" > 
