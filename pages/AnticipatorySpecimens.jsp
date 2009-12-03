@@ -178,7 +178,6 @@ function updateField(type,i,isDis,valueToSet)
 		var ctr = 0;
 		if (document.forms[0].chkAllAliquot != null) {
 			document.forms[0].chkAllAliquot.disabled = true;
-			document.forms[0].chkAllAliquot.checked = true;
 			do {
 				var elementName = aliquotType + ctr + checkedSpecimen;
 				var chkCount = document.getElementsByName(elementName).length;
@@ -186,6 +185,8 @@ function updateField(type,i,isDis,valueToSet)
 					var element = document.getElementsByName(elementName)[0];
 					if (element.disabled == false) {
 						document.forms[0].chkAllAliquot.disabled = false;
+					}else {
+						document.forms[0].chkAllAliquot.checked = true;
 					}
 					ctr++;
 				}
@@ -198,7 +199,6 @@ function updateField(type,i,isDis,valueToSet)
 			ctr = 0;
 			var derivedType = "derived[";
 			document.forms[0].chkAllDerived.disabled = true;
-			document.forms[0].chkAllDerived.checked = true;
 			do {
 				var elementName = derivedType + ctr + checkedSpecimen;
 				var chkCount = document.getElementsByName(elementName).length;
@@ -206,11 +206,13 @@ function updateField(type,i,isDis,valueToSet)
 					var element = document.getElementsByName(elementName)[0];
 					if (element.disabled == false) {
 						document.forms[0].chkAllDerived.disabled = false;
+					}else {
+						document.forms[0].chkAllDerived.checked = true;
 					}
 					ctr++;
 				}
 			} while (chkCount > 0);
-		}		
+		}	
 	}
 	function checkPrintStatusOfAllSpecimens() {
 		checkPrintStatus('specimen');
@@ -480,7 +482,7 @@ String lbl = "Apply first to all";
 						valign="middle" align="center"><logic:equal
 						name="viewSpecimenSummaryForm" property="showCheckBoxes"
 						value="true">
-						<input type="checkbox" name="chkAllSpecimen" checked="checked"
+						<input type="checkbox" name="chkAllSpecimen" 
 							onclick="ChangeCheckBoxStatus('specimen',this)" />
 					</logic:equal></td>
 					<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
@@ -570,7 +572,7 @@ String lbl = "Apply first to all";
 							align="center" valign="middle"><logic:equal
 							name="viewSpecimenSummaryForm" property="showCheckBoxes"
 							value="true">
-							<input type="checkbox" name="chkAllDerived" checked="checked"
+							<input type="checkbox" name="chkAllDerived" 
 								onclick="ChangeCheckBoxStatus('derived',this)" />
 						</logic:equal></td>
 						<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
@@ -634,7 +636,7 @@ String lbl = "Apply first to all";
 		  <tr>
 		  	<td nowrap class="tr_anti_hdrbg_blue" scope="col" width="2%" align="center" valign="middle">
 			  <logic:equal name="viewSpecimenSummaryForm" property="showCheckBoxes" value="true">
-					<input type="checkbox" name="chkAllAliquot" checked="checked" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
+					<input type="checkbox" name="chkAllAliquot" onclick="ChangeCheckBoxStatus('aliquot',this)"/>
 			 </logic:equal>
 		    </td>
 

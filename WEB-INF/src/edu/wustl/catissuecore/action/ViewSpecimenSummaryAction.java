@@ -812,7 +812,7 @@ public class ViewSpecimenSummaryAction extends Action
 				.get(eventId); // get nullpointer sometimes
 		final LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
 
-		final Iterator specItr = specimenMap.values().iterator();
+		/*final Iterator specItr = specimenMap.values().iterator();
 		while (specItr.hasNext())
 		{
 			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
@@ -820,7 +820,7 @@ public class ViewSpecimenSummaryAction extends Action
 			{
 				this.unCheckChildSpecimens(pSpecimen);
 			}
-		}
+		} */
 	}
 
 	/**

@@ -416,7 +416,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setQuantity(specimen.getInitialQuantity().toString());
 		}
 
-		specimenDataBean.setCheckedSpecimen(true);
+		specimenDataBean.setCheckedSpecimen(false);
 		specimenDataBean.setPrintSpecimen(specimenDataBean.getPrintSpecimen());// Bug
 
 		if (Constants.SPECIMEN_COLLECTED.equals(specimen.getCollectionStatus()))
