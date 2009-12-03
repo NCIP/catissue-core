@@ -58,7 +58,7 @@ Ext.onReady(function(){
 				{
 					var form = Ext.getCmp('idjs_cp');
 					form.store.proxy.conn.url = 'ComboDataAction.do?collectionProtocolId='+collectionProtocolId+'&showOption='+appli;
-					form.store.reload();
+					form.store.reload({params:{start:0, limit:15,query:''}});
 				}
  	});
    
