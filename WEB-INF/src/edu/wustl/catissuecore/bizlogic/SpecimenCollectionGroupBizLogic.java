@@ -29,6 +29,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.LazyInitializationException;
+
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -745,7 +746,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				this.logger.debug("specimenCollectionGroup.getActivityStatus() "
 						+ specimenCollectionGroup.getActivityStatus());
 				final Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
-
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory
 						.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
@@ -1455,33 +1455,33 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName,
 	 * objectIds, userId, roleId, assignToUser, assignOperation); }
 	 */
-
 	/**
-	 * check for the specimen associated with the SCG.
+	 * check for collected specimens associated with the SCG.
 	 * @param scgId : scgId
 	 * @param obj : obj
 	 * @param dao : dao
 	 * @return boolean
 	 * @throws BizLogicException : BizLogicException
 	 */
-	protected boolean isSpecimenExists(Object obj, DAO dao, Long scgId) throws BizLogicException
+	protected boolean isCollectedSpecimenExists(Object obj, DAO dao, Long scgId) throws BizLogicException
 	{
-
-		final String hql = " select" + " elements(scg.specimenCollection) " + " from "
+		boolean isCollectedSpecimenExists = false;
+		final String hql = " select" + " count(s.id) " + " from "
 				+ " edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg , "
 				+ " edu.wustl.catissuecore.domain.Specimen as s" + " where scg.id = " + scgId
 				+ " and" + " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and s.collectionStatus = '"+Constants.COLLECTION_STATUS_COLLECTED+"'";// elements(scg.specimenCollection)
 
 		final List specimenList = (List) this.executeHqlQuery(dao, hql);
-		if ((specimenList != null) && (specimenList).size() > 0)
+		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
 		{
-			return true;
+			isCollectedSpecimenExists = true;			
 		}
 		else
 		{
-			return false;
+			isCollectedSpecimenExists = false;	
 		}
+		return isCollectedSpecimenExists;
 
 	}
 
@@ -1697,8 +1697,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// Specimen Collection Group
 			if (group.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 			{
-
-				final boolean isSpecimenExist = (boolean) this.isSpecimenExists(obj, dao,
+                //bug 14350
+				final boolean isSpecimenExist = (boolean) this.isCollectedSpecimenExists(obj, dao,
 						(Long) group.getId());
 				if (isSpecimenExist)
 				{

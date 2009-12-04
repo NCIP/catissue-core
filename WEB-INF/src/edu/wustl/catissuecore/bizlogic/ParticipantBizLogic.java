@@ -661,7 +661,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @param dao : DAO object.
 	 * @param cprId - Long
 	 * @return boolean value
-	 * @throws BizLogicException
+	 * @throws BizLogicException - BizLogicException
 	 */
 	protected boolean isSpecimenExistsForRegistration(DAO dao, Long cprId) throws BizLogicException
 	{
@@ -685,38 +685,38 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		}
 
 	}
-
 	/**
-	 * @param dao - DAO object.
-	 * @param participantId - Long
-	 * @return boolean value
-	 * @throws BizLogicException : BizLogicException
+	 *  Changed for bug 14350
+	 * @param dao - DAO object
+	 * @param participantId - participant Id 
+	 * @return if collected specimens present or not
+	 * @throws BizLogicException - BizLogicException
 	 */
-	protected boolean isSpecimenExists(DAO dao, Long participantId) throws BizLogicException
+    protected boolean isCollectedSpecimenExists(DAO dao, Long participantId) throws BizLogicException
 	{
-
-		final String hql = " select" + " elements(scg.specimenCollection) " + "from"
+		 boolean isCollectedSpecimenExists = false;
+      	final String hql = "select count(s.id) " + "from"
 				+ " edu.wustl.catissuecore.domain.Participant as p"
 				+ ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
 				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg"
 				+ ", edu.wustl.catissuecore.domain.Specimen as s" + " where p.id = "
-				+ participantId + " and" + " p.id = cpr.participant.id and"
+				+ participantId + " and" + " p.id = cpr.participant.id and "
 				+ " cpr.id = scg.collectionProtocolRegistration.id and"
 				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and s.collectionStatus = '"+Constants.COLLECTION_STATUS_COLLECTED+"'";
 
 		final List specimenList = (List) this.executeHqlQuery(dao, hql);
-		if ((specimenList != null) && (specimenList).size() > 0)
+		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
 		{
-			return true;
+			isCollectedSpecimenExists = true;			
 		}
 		else
 		{
-			return false;
+			isCollectedSpecimenExists = false;	
 		}
+		return isCollectedSpecimenExists;
 
 	}
-
 	/**
 	 * @param dao : DAO object.
 	 * Overriding the parent class's method to
@@ -960,13 +960,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		//check the activity status of all the specimens associated to the participant
 		if (participant.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
 		{
-
-			final boolean isSpecimenExist = (boolean) this.isSpecimenExists(dao, (Long) participant
+            //bug 14350
+			final boolean isSpecimenExist = (boolean) this.isCollectedSpecimenExists(dao, (Long) participant
 					.getId());
 			if (isSpecimenExist)
 			{
 				throw this.getBizLogicException(null, "participant.specimen.exists", "");
-			}
+			}	
 
 		}
 		return true;
