@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import au.com.bytecode.opencsv.CSVReader;
+import edu.wustl.bulkoperator.metadata.BulkOperationClass;
+import edu.wustl.bulkoperator.metadata.BulkOperationMetaData;
 import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -44,24 +47,18 @@ public class ImportBulkOperationTemplate
 	public ImportBulkOperationTemplate(String operationName, String dropdownName,
 			String csvFilePath, String xmlFilePath) throws Exception
 	{
-		String[] args = {operationName, dropdownName, csvFilePath, xmlFilePath}; 
+		String[] args = {operationName, dropdownName, csvFilePath, xmlFilePath};
 		validate(args);
 		initiateProcess(args);
 	}
 	/**
 	 * Main method.
-	 * @param args Array of Strings. 
+	 * @param args Array of Strings.
 	 */
 	public static void main(String[] args)
 	{
 		try
 		{
-			/*String operationName = "createFluidSpecimenReviewParameters";//args[0];
-			String dropdownName = "Fluid Event";//args[1];
-			String csvFile = "E:/createFluidReviewEvent.csv";//args[2];
-			String xmlFile = "E:/bulkOperationMetaData.xml";//args[3];
-			String csvFileData = getCSVTemplateFileData(csvFile);
-			String xmlFileData = getXMLTemplateFileData(xmlFile);*/
 			validate(args);
 			initiateProcess(args);
 		}
@@ -70,20 +67,42 @@ public class ImportBulkOperationTemplate
 			System.out.println("------------------------ERROR:--------------------------------\n");
 			System.out.println("------------------------ERROR:--------------------------------\n");
 			System.out.println(e.getMessage() + "\n\n");
-			e.printStackTrace();
+			System.out.println("------------------------ERROR:--------------------------------\n");
 			System.out.println("------------------------ERROR:--------------------------------");
-			System.out.println("------------------------ERROR:--------------------------------");
+		}
+	}
+
+	/**
+	 * Validate Operation Name.
+	 * @param bulkOperationMetaData BulkOperationMetaData.
+	 * @param operationName String.
+	 * @throws BulkOperationException BulkOperationException.
+	 */
+	private static void validateOperationName(BulkOperationMetaData
+			bulkOperationMetaData, String operationName) throws BulkOperationException
+	{
+		Collection<BulkOperationClass> classList = bulkOperationMetaData.getBulkOperationClass();
+		if (classList != null)
+		{
+			Iterator<BulkOperationClass> iterator = classList.iterator();
+			if(iterator.hasNext())
+			{
+				BulkOperationClass bulkOperationClass = iterator.next();
+				if(!operationName.equals(bulkOperationClass.getTemplateName()))
+				{
+					throw new BulkOperationException("Operation Name does not match with " +
+							"the template name specified in the XML.");
+				}
+			}
 		}
 	}
 	/**
 	 * Initiate Process.
 	 * @param args Array of String.
 	 * @throws Exception Exception.
-	 * @throws BulkOperationException BulkOperationException.
-	 * @throws SQLException SQLException.
+	 * @throws Exception Exception.
 	 */
-	private static void initiateProcess(String[] args) throws Exception,
-			BulkOperationException, SQLException
+	private static void initiateProcess(String[] args) throws Exception
 	{
 		String operationName = args[0];
 		String dropdownName = args[1];
@@ -91,27 +110,25 @@ public class ImportBulkOperationTemplate
 		String xmlFile = args[3];
 		String csvFileData = getCSVTemplateFileData(csvFile);
 		String xmlFileData = getXMLTemplateFileData(xmlFile);
-		addTemplateInDatabase(operationName, dropdownName, csvFileData, xmlFileData);
+		saveTemplateInDatabase(operationName, dropdownName, csvFileData, xmlFileData);
 	}
-	
+
 	/**
 	 * Add Template In Database.
 	 * @param operationName String.
 	 * @param dropdownName String.
 	 * @param csvFileData String.
 	 * @param xmlFileData String.
-	 * @throws BulkOperationException BulkOperationException.
-	 * @throws SQLException BulkOperationException.
+	 * @throws Exception Exception.
 	 */
-	private static void addTemplateInDatabase(String operationName, String dropdownName,
-			String csvFileData, String xmlFileData) throws BulkOperationException,
-			SQLException
+	private static void saveTemplateInDatabase(String operationName, String dropdownName,
+			String csvFileData, String xmlFileData) throws Exception
 	{
 		Connection connection = null;
 		try
 		{
 			connection = DBManagerImpl.getConnection();
-			boolean flag = checkIfEditCase(connection, operationName, dropdownName);
+			boolean flag = checkAddOrEditTemplateCase(connection, operationName, dropdownName);
 			if(flag)
 			{
 				editTemplate(connection, operationName, dropdownName,
@@ -122,10 +139,6 @@ public class ImportBulkOperationTemplate
 				addTemplate(connection, operationName, dropdownName,
 						csvFileData, xmlFileData);
 			}
-		}
-		catch (Exception e)
-		{
-			throw new BulkOperationException("Error in database connection operation.");
 		}
 		finally
 		{
@@ -146,7 +159,7 @@ public class ImportBulkOperationTemplate
 	private static void editTemplate(Connection connection,
 			String operationName, String dropdownName, String csvFileData,
 			String xmlFileData) throws BulkOperationException, SQLException
-	{		
+	{
 		PreparedStatement preparedStatement = null;
 		String databaseType = null;
 		try
@@ -178,7 +191,7 @@ public class ImportBulkOperationTemplate
 				preparedStatement.setString(4, dropdownName);
 				preparedStatement.setString(5, operationName);
 				preparedStatement.setString(6, dropdownName);
-			}			
+			}
 			int rowCount = preparedStatement.executeUpdate();
 			System.out.println("Total rows in tables now : " + rowCount);
 			if(rowCount > 0)
@@ -189,7 +202,7 @@ public class ImportBulkOperationTemplate
 			{
 				System.out.println("No rows edited");
 			}
-		}	
+		}
 		catch (SQLException e)
 		{
 			throw new BulkOperationException("Error in updating the record in database.");
@@ -229,15 +242,17 @@ public class ImportBulkOperationTemplate
 					sequenceNumber = resultSet.getInt(1);
 					if(sequenceNumber > 0)
 					{
-						String query = "insert into catissue_bulk_operation (IDENTIFIER, OPERATION, " +
-						"CSV_TEMPLATE, XML_TEMPALTE, DROPDOWN_NAME ) values (?, ?, ?, ?, ?)";
-	
+						String query = "insert into catissue_bulk_operation " +
+						"(IDENTIFIER, OPERATION, CSV_TEMPLATE, XML_TEMPALTE, " +
+						"DROPDOWN_NAME ) values (?, ?, ?, ?, ?)";
+
 						preparedStatement = connection.prepareStatement(query);
 						preparedStatement.setInt(1, sequenceNumber);
 						preparedStatement.setString(2, operationName);
 						preparedStatement.setString(3, csvFileData);
 						StringReader reader = new StringReader(xmlFileData);
-						preparedStatement.setCharacterStream(4, reader, xmlFileData.length());
+						preparedStatement.setCharacterStream(4, reader,
+								xmlFileData.length());
 						preparedStatement.setString(5, dropdownName);
 					}
 				}
@@ -266,7 +281,7 @@ public class ImportBulkOperationTemplate
 		finally
 		{
 			preparedStatement.close();
-		}	
+		}
 	}
 
 	/**
@@ -277,7 +292,7 @@ public class ImportBulkOperationTemplate
 	 * @return boolean Boolean.
 	 * @throws Exception Exception.
 	 */
-	private static boolean checkIfEditCase(Connection connection,
+	private static boolean checkAddOrEditTemplateCase(Connection connection,
 			String operationName, String dropdownName) throws Exception
 	{
 		PreparedStatement preparedStatement = null;
@@ -285,20 +300,38 @@ public class ImportBulkOperationTemplate
 		boolean flag = false;
 		try
 		{
-			String query = "select * from catissue_bulk_operation where " +
-					"operation like ? or dropdown_name like ?";
+			String query = "select operation, dropdown_name from catissue_bulk_operation " +
+					"where operation like ? or dropdown_name like ?";
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, operationName);
 			preparedStatement.setString(2, dropdownName);
 			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next())
+			if(resultSet != null)
 			{
-				flag = true;
+				while(resultSet.next())
+				{
+					String operationNameFromDB = resultSet.getString("OPERATION");
+					String dropdownNameFromDB = resultSet.getString("DROPDOWN_NAME");
+					if(operationNameFromDB.equals(operationName) &
+							dropdownNameFromDB.equals(dropdownName))
+					{
+						flag = true;
+						break;
+					}
+					else if(operationNameFromDB.equals(operationName) &
+							!dropdownNameFromDB.equals(dropdownName))
+					{
+						throw new BulkOperationException("Cannot insert template as " +
+							"same Operation Name already exists in the database.");
+					}
+					else if(!operationNameFromDB.equals(operationName) &
+							dropdownNameFromDB.equals(dropdownName))
+					{
+						throw new BulkOperationException("Cannot insert template as " +
+							"same DropDown Name already exists in the database.");
+					}
+				}
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 		}
 		finally
 		{
@@ -316,7 +349,7 @@ public class ImportBulkOperationTemplate
 	 */
 	private static String getXMLTemplateFileData(String xmlFile) throws Exception
 	{
-		StringWriter xmlFormatData = new StringWriter();;
+		StringWriter xmlFormatData = new StringWriter();
 		try
 		{
 			DocumentBuilderFactory documentBuilderFactory =
@@ -349,11 +382,11 @@ public class ImportBulkOperationTemplate
 		return xmlFormatData.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * Get CSV Template File Data.
 	 * @param csvFile String.
 	 * @return String.
+	 * @throws Exception Exception.
 	 */
 	private static String getCSVTemplateFileData(String csvFile) throws Exception
 	{
@@ -397,7 +430,7 @@ public class ImportBulkOperationTemplate
 		{
 			reader.close();
 		}
-		return commaSeparatedString.toString();		
+		return commaSeparatedString.toString();
 	}
 
 	/**
@@ -407,6 +440,12 @@ public class ImportBulkOperationTemplate
 	 */
 	private static void validate(String[] args) throws Exception
 	{
+		/*String operationName = "editReceivedEventParameters";//args[0];
+		String dropdownName = "editReceivedEventParameters_1";//args[1];
+		String csvFile = "E:/editReceivedEventParameters.csv";//args[2];
+		String xmlFile = "E:/editReceivedEventParameters.xml";//args[3];
+		String csvFileData = getCSVTemplateFileData(csvFile);
+		String xmlFileData = getXMLTemplateFileData(xmlFile);*/
 		if (args.length == 0)
 		{
 			throw new Exception("Please Specify the operation name.");
@@ -417,11 +456,15 @@ public class ImportBulkOperationTemplate
 		}
 		if (args.length < 3)
 		{
-			throw new Exception("Please specify the XML template file name.");
+			throw new Exception("Please specify the CSV template file name.");
 		}
 		if (args.length < 4)
 		{
-			throw new Exception("Please specify the csv template file name.");
-		}				
+			throw new Exception("Please specify the XML template file name.");
+		}
+		BulkOperationMetaData bulkOperationMetaData =
+				BulkOperationUtility.getBulkOperationMetaDataObject(args[3]);
+		validateOperationName(bulkOperationMetaData, args[0]);
+		//saveTemplateInDatabase(operationName, dropdownName, csvFileData, xmlFileData);
 	}
 }

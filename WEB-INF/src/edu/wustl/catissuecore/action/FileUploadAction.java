@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,15 +34,20 @@ import edu.wustl.common.beans.SessionDataBean;
 
 /**
  * This class uploads the CSV file of bulk operations and returns a new CSv file
- * with the results in it. 
+ * with the results in it.
  * @author sagar_baldwa
  *
  */
 public class FileUploadAction extends SecureAction
 {
-	@Override
 	/**
 	 * Execute Secure Action.
+	 * @return ActionForward ActionForward.
+	 * @param mapping ActionMapping.
+	 * @param form ActionForm.
+	 * @param request HttpServletRequest.
+	 * @param response HttpServletResponse.
+	 * @throws Exception Exception.
 	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
@@ -115,14 +119,13 @@ public class FileUploadAction extends SecureAction
 	}
 
 	/**
-	 * Splits the input CSV file.  
+	 * Splits the input CSV file.
 	 * @param file FormFile.
 	 * @return List of Strings.
-	 * @throws FileNotFoundException FileNotFoundException.
 	 * @throws IOException IOException.
 	 */
 	private List<String[]> getFileData(FormFile file)
-			throws FileNotFoundException, IOException
+			throws IOException
 	{
 		List<String[]> csvDataList = null;
 		if(file != null)

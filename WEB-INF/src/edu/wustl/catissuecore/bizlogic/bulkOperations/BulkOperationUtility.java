@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import edu.wustl.bulkoperator.metadata.BulkOperationMetaData;
+import edu.wustl.bulkoperator.metadata.BulkOperationMetadataUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -27,11 +29,11 @@ public class BulkOperationUtility
 					Constants.CATISSUE_INTSALL_PROPERTIES_FILE);
 			props.load(propFile);
 		}
-		catch (FileNotFoundException fnfException) 
+		catch (FileNotFoundException fnfException)
 		{
 			fnfException.printStackTrace();
 		}
-		catch (IOException ioException) 
+		catch (IOException ioException)
 		{
 			ioException.printStackTrace();
 		}
@@ -45,6 +47,16 @@ public class BulkOperationUtility
 	public static String getDatabaseType()
 	{
 		Properties properties = getCatissueInstallProperties();
-		return properties.getProperty("database.type");		
+		return properties.getProperty("database.type");
+	}
+	/**
+	 * Get Bulk Operation Meta Data Object.
+	 * @param xmlFile String.
+	 * @return BulkOperationMetaData BulkOperationMetaData.
+	 */
+	public static BulkOperationMetaData getBulkOperationMetaDataObject(String xmlFile)
+	{
+		BulkOperationMetadataUtil unMarshaller = new BulkOperationMetadataUtil();
+		return unMarshaller.unmarshall(xmlFile, "./catissuecore-properties/mapping.xml");
 	}
 }
