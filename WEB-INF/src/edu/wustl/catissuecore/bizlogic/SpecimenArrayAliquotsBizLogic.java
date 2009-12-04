@@ -81,7 +81,7 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			//bug 15085
 			if(!positionsToBeAllocatedList.isEmpty())
 			{
-				Set<String> allocatedPositions = new HashSet<String>();
+				HashSet<String> allocatedPositions = new HashSet<String>();
 				for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
 				{
 					StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(

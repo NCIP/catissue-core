@@ -518,7 +518,7 @@ public final class StorageContainerUtil
 	 * @throws ApplicationException 
 	 */
 	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
-			Set<String> allocatedPositions, String spKey, String scId, DAO dao) throws ApplicationException
+			HashSet<String> allocatedPositions, String spKey, String scId, DAO dao) throws ApplicationException
 	{
 		final int specimenNumber = ((Integer) object).intValue();
 		final String specimenKey = spKey;
