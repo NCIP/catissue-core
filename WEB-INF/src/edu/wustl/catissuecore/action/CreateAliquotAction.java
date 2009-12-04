@@ -96,7 +96,7 @@ public class CreateAliquotAction extends BaseAction
 		{
 			specimenCollection = this.createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
 		}
-		catch (final BizLogicException e)
+		catch (final ApplicationException e)
 		{
 			this.logger.error(e.getMessage(), e);
 			final ActionErrors actionErrors = new ActionErrors();
@@ -113,19 +113,20 @@ public class CreateAliquotAction extends BaseAction
 		// Convert Specimen HashSet to List
 		specimenList = new LinkedList<AbstractDomainObject>();
 		specimenList.addAll(specimenCollection);
-
-		final Specimen specimen = (Specimen) specimenList.get(0);
-
-		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
-
-		if (specimen != null)
+		if(insertAliquotSpecimen)
 		{
-			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
-			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
+			final Specimen specimen = (Specimen) specimenList.get(0);
+			request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
+			if (specimen != null)
+			{
+				aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
+				aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
+			}
+			this.calculateAvailableQuantityForParent(specimenList, aliquotForm);
+			this.updateParentSpecimen(parentSpecimen,
+			Double.parseDouble(aliquotForm.getAvailableQuantity()));
+			aliquotForm.setSpecimenList(specimenList);
 		}
-		this.calculateAvailableQuantityForParent(specimenList, aliquotForm);
-		this.updateParentSpecimen(parentSpecimen, Double.parseDouble(aliquotForm.getAvailableQuantity()));
-		aliquotForm.setSpecimenList(specimenList);
 		// mapping.findforward
 		return this.getFindForward(mapping, request, aliquotForm, fromPrintAction,
 				insertAliquotSpecimen, specimenList);
@@ -214,8 +215,7 @@ public class CreateAliquotAction extends BaseAction
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace() ;
 			final ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
-					.getMessage()));
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e.getCustomizedMsg()));
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			return false;
@@ -225,8 +225,8 @@ public class CreateAliquotAction extends BaseAction
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace() ;
 			final ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
-					.getMessage()));
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e.getCustomizedMsg()
+					));
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			return false;

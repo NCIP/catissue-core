@@ -696,10 +696,7 @@ public class AliquotAction extends SecureAction
 
 						if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(pageOf))
 						{
-							if (!aliquotForm.getButtonClicked().equals("none"))
-							{
-								this.populateAliquotsStorageLocations(aliquotForm, containerMap);
-							}
+							this.populateAliquotsStorageLocations(aliquotForm, containerMap);
 						}
 					}
 				}

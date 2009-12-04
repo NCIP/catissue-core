@@ -676,6 +676,7 @@ ${aliquotBean.jsScript}
 </table>
 
 <html:hidden property="specimenID"/>
+<html:hidden property="colProtId"/>
 <html:hidden property="spCollectionGroupId"/>
 <html:hidden property="nextForwardTo" />
 <html:hidden property="forwardTo" />

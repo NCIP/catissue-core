@@ -3560,9 +3560,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @param aliquotCount - Number of aliquotes that the fetched containers 
 	 * should minimally support. A value of <b>0</b> specifies that there's
 	 * no such restriction
-	 * @param containerTypeId 
-	 * @param specimenArrayTypeId 
-	 * @param exceedingLimit 
+	 * @param containerTypeId  containerTypeId
+	 * @param specimenArrayTypeId specimenArrayTypeId
+	 * @param exceedingLimit exceedingLimit value
+	 * @param storageType Auto, Manual, Virtual
 	 * @return a list of storage containers
 	 * @throws DAOException
 	 */
@@ -3953,6 +3954,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 	 * @param exceedingMaxLimit - String object
 	 * @param selectedContainerName - String
 	 * @param sessionDataBean - SessionDataBean object
+  	 * @param storageType Auto, Manual, Virtual
 	 * @return TreeMap of allocated containers
 	 * @throws BizLogicException throws BizLogicException
 	 */
@@ -3965,12 +3967,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				sessionDataBean, type_id, null, null, storageType);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
-		/*System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
-				+ ((endTime - startTime) / 1000));*/
 		return tm;
 	}
-
-	/* temp function end */
 
 	/**
 	 * @param scId - Long.
@@ -4016,8 +4014,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic implements
 				aliquotCount, sessionData, null, null, null,null);
 		final TreeMap tm = (TreeMap) this.getAllocDetailsForContainers(containerList, dao);
 		final Long endTime = System.currentTimeMillis();
-		/*System.out.println("Total a Time Taken [getAllocatedContaienrMapForSpecimen(Syed)] = "
-				+ ((endTime - startTime) / 1000));*/
 		return tm;
 	}
 

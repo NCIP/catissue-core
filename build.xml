@@ -329,8 +329,8 @@
 				<include name="client-config.wsdd" />
 				<include name="Applet/**" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
-				<include name="caTissue_Suite_User_Manual_v11p2.doc" />
-				<include name="caTissueSuite_Technical_Guide_V11p1.doc" />
+				<include name="caTissue_Suite_User_Manual_v11p4.doc" />
+				<include name="caTissueSuite_Technical_Guide_V11p4.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
 				

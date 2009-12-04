@@ -209,22 +209,28 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			return mapping.findForward(Constants.SUCCESS);
 		}
-		catch (final Exception exception)
+		catch (final ApplicationException exception)
 		{
 			exception.printStackTrace();
 			this.logger.error(exception.getMessage(), exception);
+			String errorMsg = exception.getCustomizedMsg();
+			if(errorMsg==null)
+			{
+				errorMsg =exception.getMessage();
+			}
+			this.logger.debug(errorMsg, exception);
 			// 11July08 : Mandar : For GenericSpecimen
 			SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request, specimenSummaryForm,
 					false);
 			// Suman-For bug #8228
 			String s = "";
-			if (exception.getMessage().equals(
+			if (errorMsg.equals(
 					"Failed to update multiple specimen Stroage location already in use")
-					|| exception.getMessage().equals(
+					||errorMsg.equals(
 							"Failed to update multiple specimen"
 									+ " Either Storagecontainer is full!"
 									+ " or it cannot accomodate all the" + " specimens.")
-					|| exception.getMessage().equals(
+					|| errorMsg.equals(
 							"Failed to update multiple specimen"
 									+ " Storagecontainer information not" + " found!"))
 			{
@@ -235,7 +241,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			}
 			else
 			{
-				s = exception.getMessage();
+				s = errorMsg;
 			}
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", s));
@@ -684,7 +690,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				|| specimenVO.getSelectedContainerName().trim().length() == 0)
 		{
 			// ErrorKey errorKey = ErrorKey.getErrorKey("action.error");
-
+			if(specimenVO.getDisplayName()==null)
+			{
+				specimenVO.setDisplayName("");
+			}
 			throw AppUtility.getApplicationException(null, "spec.storage.missing", specimenVO
 					.getDisplayName());
 		}

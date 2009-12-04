@@ -464,12 +464,12 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>caTissue_Suite_User_Manual_v11p2.doc</value>
+		<value>caTissue_Suite_User_Manual_v11p4.doc</value>
 	</property>
 	
 	<property>
 		<name>technicalguide.link</name>
-		<value>caTissueSuite_Technical_Guide_V11p1.doc</value>
+		<value>caTissueSuite_Technical_Guide_V11p4.doc</value>
 	</property>
 	
 	<property>

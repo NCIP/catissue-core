@@ -1286,6 +1286,7 @@ public class AppUtility
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
 		final List list = jdbcDAO.executeQuery(sql);
+		closeJDBCSession(jdbcDAO);
 		return list;
 	}
 
