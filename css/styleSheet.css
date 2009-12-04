@@ -1778,14 +1778,14 @@ queryLink{ /* for the text links in the Search category page */
 }
 
 
-/* *********Added by Santosh for Autocomplete textboxes*************  */
+/* *********Added by Santosh for Autocomplete textboxes************* */
 div.autocomplete {
       background-color:white;
       border:1px solid #888;
       margin:0px;
       padding:0px;
       overflow:auto; 
-    }
+    } 
     div.autocomplete ul {
       list-style-type:none;
       margin:0px;
@@ -1798,6 +1798,7 @@ div.autocomplete {
       padding:2px;
 	  cursor:pointer;
 	  overflow:none;
+	  word-wrap:break-word;
     }
     
    

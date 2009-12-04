@@ -221,7 +221,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 										  initialValue="<%=new Long(form.getSiteId())%>"
 										  styleClass="black_ar"
 										  staticField="false"
-										  size="28"
+										  size="22"
 									    />
 
 

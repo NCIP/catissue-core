@@ -511,7 +511,8 @@ div.autocomplete {
       border:1px solid #888;
       margin:0px;
       padding:0px;
-      overflow:auto; 
+      word-wrap:break-word;
+      overflow:auto;
     }
     div.autocomplete ul {
       list-style-type:none;
