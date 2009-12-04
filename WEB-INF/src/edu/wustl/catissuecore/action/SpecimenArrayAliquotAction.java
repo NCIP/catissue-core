@@ -207,6 +207,32 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					final List specimenTypeList = this.setSpecimenTypes(specimenTypesCollection,
 							specimenArrayAliquotForm);
 					request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+					 String containerNameKey = "";
+					 String posDim1Key = "";
+					 String posDim2Key = "";
+					 /**
+					  * This code is added to set storage positions in case of manual mode.
+					  * bug 15085
+					  */
+					for (int iCount = 1; iCount <= Integer.parseInt( specimenArrayAliquotForm.getAliquotCount() ); iCount++)
+					{
+					   if (map.get("radio_" + iCount) != null && map.get("radio_" + iCount).equals("2"))
+					   {
+						   containerNameKey = "SpecimenArray:" + iCount + "_StorageContainer_name";
+						   posDim1Key = "SpecimenArray:" + iCount + "_positionDimensionOne";
+						   posDim2Key = "SpecimenArray:" + iCount + "_positionDimensionTwo";
+						   map.put(containerNameKey, map.get( containerNameKey + "_fromMap" ));
+						   if(!map.get( posDim1Key + "_fromMap" ).equals( "" ))
+						   {
+						     map.put(posDim1Key,map.get( posDim1Key + "_fromMap" ) );
+						   }
+						   if(!map.get( posDim2Key + "_fromMap" ).equals( "" ))
+						   {
+							  map.put(posDim2Key, map.get( posDim2Key + "_fromMap" ));	
+						   }
+						  						   
+					   }
+					}
 					specimenArrayAliquotForm.setSpecimenArrayAliquotMap(map);
 				}
 

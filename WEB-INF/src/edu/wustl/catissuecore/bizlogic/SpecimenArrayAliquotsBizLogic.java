@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -77,11 +78,16 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				StorageContainerUtil.prepareContainerMap(dao, aliquotMap, specimenKey,
 						positionsToBeAllocatedList, usedPositionsList, i, storageContainerId);
 			}
-			for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
+			//bug 15085
+			if(!positionsToBeAllocatedList.isEmpty())
 			{
-				StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(
-						positionsToBeAllocatedList.get(i), aliquotMap, usedPositionsList,
-						specimenKey, storageContainerId, dao);
+				Set<String> allocatedPositions = new HashSet<String>();
+				for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
+				{
+					StorageContainerUtil.allocatePositionToSingleContainerOrSpecimen(
+							positionsToBeAllocatedList.get(i), aliquotMap, allocatedPositions,
+							specimenKey, storageContainerId, dao);
+				}
 			}
 			for (int i = 1; i <= specimenArray.getAliquotCount(); i++)
 			{
@@ -99,8 +105,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				String barcode = (String) aliquotMap.get(barcodeKey);
 
 				final String containerId = (String) aliquotMap.get(containerIdKey);
-				final String posDim1 = (String) aliquotMap.get(posDim1Key);
-				final String posDim2 = (String) aliquotMap.get(posDim2Key);
+				final String posDim1 =  (String)aliquotMap.get(posDim1Key);
+				final String posDim2 =  (String)aliquotMap.get(posDim2Key);
 				// Create an object of Specimen Subclass
 				final SpecimenArray aliquotSpecimenArray = new SpecimenArray();
 
@@ -278,6 +284,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 

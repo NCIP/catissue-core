@@ -266,7 +266,7 @@ public final class StorageContainerUtil
              }
              else
              {
-             	throw AppUtility.getApplicationException(null,
+            	throw AppUtility.getApplicationException(null,
              			"errors.storageContainer.inUse", "StorageContainerUtil.java");
              }
 
@@ -275,6 +275,12 @@ public final class StorageContainerUtil
 				&& similarContainerMap.get(radioButonKey).equals("2"))
 		{
 			containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
+			if(containerName.trim().equals( "" ))
+			{
+				final String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw AppUtility.getApplicationException(null, "errors.invalid",
+						message + ":StorageContainerUtil.java ");
+			}
 
 			final String sourceObjectName = StorageContainer.class.getName();
 			final String[] selectColumnName = {"id"};
@@ -290,7 +296,7 @@ public final class StorageContainerUtil
 			{
 				final String message = ApplicationProperties.getValue("specimen.storageContainer");
 				throw AppUtility.getApplicationException(null, "errors.invalid",
-						"StorageContainerUtil.java :" + message);
+						message + ":StorageContainerUtil.java ");
 			}
 
 			posDim1 = (String) similarContainerMap.get(posDim1Key + "_fromMap");
@@ -512,7 +518,7 @@ public final class StorageContainerUtil
 	 * @throws ApplicationException 
 	 */
 	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
-			List usedPositionsList, String spKey, String scId, DAO dao) throws ApplicationException
+			Set<String> allocatedPositions, String spKey, String scId, DAO dao) throws ApplicationException
 	{
 		final int specimenNumber = ((Integer) object).intValue();
 		final String specimenKey = spKey;
@@ -525,12 +531,16 @@ public final class StorageContainerUtil
 		final Container container = new Container();
 		container.setId(Long.valueOf(containerID));
 		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		final Position position = scBizLogic.getFirstAvailablePositionInContainer(container, dao);
+		//bug 15085
+		final Position position = scBizLogic.getFirstAvailablePositionInContainer(container, dao,allocatedPositions);
+		String containerValue = null;
 		if (position != null)
 		{
+		  	containerValue = StorageContainerUtil.getStorageValueKey(null,containerID, position.getXPos(), position.getYPos());
+			allocatedPositions.add( containerValue );
 			aliquotMap.put(containerIdKey, containerID);
-			aliquotMap.put(posDim1Key, position.getXPos());
-			aliquotMap.put(posDim2Key, position.getYPos());
+			aliquotMap.put(posDim1Key, ""+position.getXPos());
+			aliquotMap.put(posDim2Key, ""+position.getYPos());
 			aliquotMap.remove(containerIdKey + "_fromMap");
 			aliquotMap.remove(posDim1Key + "_fromMap");
 			aliquotMap.remove(posDim2Key + "_fromMap");
