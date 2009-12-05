@@ -235,9 +235,23 @@ function changeUrl(element,str)
 				win.opener = self;
 		}
 
+		
+function selectAllClinicalDiagnosis()
+{
+	    	 	var clinicalDiag = document.getElementById('protocolCoordinatorIds');
+	    	 	if (clinicalDiag != null)
+	    		{
+	    			for (i = clinicalDiag.options.length-1; i >= 0; i--)
+	    			{
+	    				clinicalDiag.options[i].selected=true;
+	    			}
+	    		}
+ }		
+		
 //This function submits JSP page to AddNewAction with passed action
 function addNewAction(action)
 {
+    selectAllClinicalDiagnosis();
 	var action = action;
 	
 	document.forms[0].action = action;

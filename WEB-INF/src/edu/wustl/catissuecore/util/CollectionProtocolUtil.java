@@ -1172,23 +1172,26 @@ public class CollectionProtocolUtil
 	public static  void updateClinicalDiagnosis(HttpServletRequest request,
 			final CollectionProtocolBean collectionProtocolBean)
 	{
-		Collection<NameValueBean> clinicalDiagnosisBean = new LinkedHashSet<NameValueBean>();
-		Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
-	
-        Object[] clinicalDiagnosis =  collectionProtocolBean.getClinicalDiagnosis();
-        if(clinicalDiagnosis != null)
-        {
-        	for (int i=0 ;i<clinicalDiagnosis.length;i++)
-        	{
-        		NameValueBean nvb = new NameValueBean(clinicalDiagnosis[i],clinicalDiagnosis[i]) ;
+		if(collectionProtocolBean != null)
+		{
+			Collection<NameValueBean> clinicalDiagnosisBean = new LinkedHashSet<NameValueBean>();
+			Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
 
-        		nvb.getName().toLowerCase(locale);
+			Object[] clinicalDiagnosis =  collectionProtocolBean.getClinicalDiagnosis();
+			if(clinicalDiagnosis != null)
+			{
+				for (int i=0 ;i<clinicalDiagnosis.length;i++)
+				{
+					NameValueBean nvb = new NameValueBean(clinicalDiagnosis[i],clinicalDiagnosis[i]) ;
 
-        		clinicalDiagnosisBean.add(nvb);
+					nvb.getName().toLowerCase(locale);
 
-        	}
-        }
-		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBean);
+					clinicalDiagnosisBean.add(nvb);
+
+				}
+			}
+			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBean);
+		}
 	}
 	
 }

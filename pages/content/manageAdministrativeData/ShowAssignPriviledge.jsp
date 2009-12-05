@@ -58,7 +58,7 @@ function updateCPTree()
 		<html:hidden property="startDate" />
 		<html:hidden property="title" />
 		<html:hidden property="principalInvestigatorId" />
-		<html:hidden property="irbID" />
+    	<html:hidden property="irbID" />
 		<html:hidden property="descriptionURL" />
 		<html:hidden property="enrollment" />
 		<html:hidden property="endDate" />
@@ -281,6 +281,11 @@ function updateCPTree()
 				<tr>
 					<td colspan="2" align="left" class="bottomtd"></td>
 
+				</tr>
+				<tr>
+				  <td  colspan="2" width="50%" align="center" class="black_ar_new" style="display:none">
+					<html:select property="protocolCoordinatorIds" styleId="protocolCoordinatorIds" size="4" multiple="true" style="width:170"><html:options collection="selectedCoordinators" labelProperty="name" property="value"/></html:select>
+		          </td>
 				</tr>
 
 				<tr class="td_color_F7F7F7">

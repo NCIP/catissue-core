@@ -775,11 +775,12 @@ function deleteCheckedRows(operation,tableId,deleteButtonId)
 function showAssignPrivilegePage(operation)
 
 {
+    selectAllClinicalDiagnosis();
     var action="DefineEvents.do?pageOf=pageOfAssignPrivilegePage&cpOperation=AssignPrivilegePage&operation="+operation;
 
-      document.forms[0].action=action;
+    document.forms[0].action=action;
 
-      document.forms[0].submit();
+    document.forms[0].submit();
 
 }
 
@@ -1130,10 +1131,26 @@ function consentPage()
          sendRequestsWithData(url,data,cpOperation);
       }
     
+    
+    function selectAllClinicalDiagnosis()
+    	{
+    	 	var clinicalDiag = document.getElementById('protocolCoordinatorIds');
+    	 	
+    		if (clinicalDiag != null)
+    		{
+    			for (i = clinicalDiag.options.length-1; i >= 0; i--)
+    			{
+    				clinicalDiag.options[i].selected=true;
+    			}
+    		}
+	 }
+    
+    
    // Function to send request to get Privileges Summary.
    
       function getUserPrivilegeSummary(operation)
       {
+      
             var cpOperation="addPrivilege";  
             var form=document.forms[0];
       		var pageOf = form.pageOf.value; 

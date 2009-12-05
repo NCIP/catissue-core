@@ -319,6 +319,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("predefinedConsentsList", predefinedConsentsList);
 		request.setAttribute("title", title);
 		request.setAttribute("userListforJSP", Constants.USERLIST);
+		CollectionProtocolUtil.updateClinicalDiagnosis(request, collectionProtocolBean);
 		return mapping.findForward(pageOf);
 	}
 
