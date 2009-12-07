@@ -3,7 +3,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
@@ -30,12 +29,12 @@
 	}
 //      Falguni:Performance Enhancement.
 	Long specimenEntityId = null;
-	specimenEntityId = (Long)request.getAttribute("specimenEntityId");
-	
+	specimenEntityId = (Long)request.getAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+
 	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	String staticEntityName=null;
-	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
-	
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
+
 		String iframeSrc="";
 		String formAction = Constants.VIEW_SPR_ACTION;
 		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
@@ -44,23 +43,23 @@
 		{
 			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 			consentTab="'QuerySpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
-		}		
-		
-		
+		}
+
+
 %>
 <script>
 
 function showEvent()
 {
 		var id = <%=specimenIdentifier%>;
-		
+
 				<%
 				String formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
 				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
 				}%>
-				var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";		
+				var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";
 				document.forms[0].action=formName;
 				document.forms[0].submit();
 }
@@ -93,5 +92,5 @@ function showEvent()
 			</tr>
 		</table>
 		</td></tr></table>
-	
+
 </html:form>

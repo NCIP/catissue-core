@@ -15,19 +15,18 @@
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
 <%@ page import="java.util.*"%>
 
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
 
 <%
@@ -37,7 +36,7 @@
 	if(obj != null && obj instanceof ProtocolEventDetailsForm)
 	{
 		form = (ProtocolEventDetailsForm)obj;
-	}	
+	}
 	String operationType=null;
 	boolean disabled = false;
 	operationType = (String)request.getAttribute("opr");
@@ -81,7 +80,7 @@ function collectionProtocolPage()
 	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
 	document.forms[0].action = action;
 	document.forms[0].submit();
-}		
+}
 function consentPage()
 {
 	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";

@@ -14,15 +14,14 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 
-<script src="jss/ajax.js"></script>	  	
+<script src="jss/ajax.js"></script>
 <script src="jss/script.js"></script>
-<!-- Mandar 11-Aug-06 : For calendar changes --> 
+<!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendar.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/titli.js"></script>
@@ -50,9 +49,9 @@ tr#hiddenCombo
 
 		// participantId used to pass to flex method to show currenr particpant as selected
 		String participantId=(String)request.getAttribute("participantId");
-		
-		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
-		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
+
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);
 		boolean isRegisterButton = false;
 		boolean isAddNew = false;
 		boolean isSpecimenRegistration = true;
@@ -60,15 +59,15 @@ tr#hiddenCombo
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-		
+
 		String staticEntityName=null;
-		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
+		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
 		//Falguni:Performance Enhancement.
 		Long participantEntityId = null;
-		participantEntityId = (Long)request.getAttribute("participantEntityId");
-		
+		participantEntityId = (Long)request.getAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+
 		String id = request.getParameter("id");
-	
+
 		 pageView=operation;
 		if(operation.equals(Constants.EDIT))
 		{
@@ -105,15 +104,15 @@ tr#hiddenCombo
 		if(obj != null && obj instanceof ParticipantForm)
 		{
 	ParticipantForm form = (ParticipantForm)obj;
-	
+
 	map = form.getValues();
 	mapCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValues();
 	noOfRows = form.getValueCounter();
 	noOrRowsCollectionProtocolRegistration = form.getCollectionProtocolRegistrationValueCounter();
-	currentBirthDate = form.getBirthDate(); 
+	currentBirthDate = form.getBirthDate();
 	currentDeathDate = form.getDeathDate();
 		}
-		else 
+		else
 		{
 	Object obj1 = request.getAttribute("viewSurgicalPathologyReportForm");
 	if(obj1 != null && obj1 instanceof ViewSurgicalPathologyReportForm)
@@ -122,12 +121,12 @@ tr#hiddenCombo
 		participantId = String.valueOf(viewSPRForm.getParticipantIdForReport());
 	}
 		}
-	
+
 		if(noOfRows == 0)
 		{
 	noOfRows =1;
 		}
-		
+
 		if(operation.equals(Constants.ADD))
 		{
 	if(noOrRowsCollectionProtocolRegistration == 0)
@@ -147,22 +146,22 @@ tr#hiddenCombo
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}	
+		}
 	</script>
-	
+
 	<%
 			String participantIdentifier="0";
 			List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 			List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
-			
-				
+
+
 			String title = "ParticipantList";
 
 			boolean isSpecimenData = false;
 
 			int IDCount = 0;
 		%>
-	
+
 	<script language="JavaScript">
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
@@ -170,18 +169,18 @@ tr#hiddenCombo
 			var val = parseInt(document.forms[0].valueCounter.value);
 			val = val + 1;
 			document.forms[0].valueCounter.value = val;
-			
-			var r = new Array(); 
+
+			var r = new Array();
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
 			var x=document.getElementById(subdivtag).insertRow(q);
-			
+
 			// First Cell
 			var checkb=x.insertCell(0);
 			checkb.className="black_ar";
 			checkb.colSpan=1;
 			sname="";
-			
+
 			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 
@@ -207,35 +206,35 @@ tr#hiddenCombo
 				}%>
 			sname = sname + "</select>";
 			spreqtype.innerHTML="" + sname;
-		
+
 			//Second Cellvalue(ParticipantMedicalIdentifier:1_medicalRecordNumber)
 			//Third Cell
 			var spreqsubtype=x.insertCell(2);
 			spreqsubtype.className="black_ar";
 			spreqsubtype.colSpan=1;
 			sname="";
-		
+
 			name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_medicalRecordNumber)";
 			sname= "";
 			sname="<input type='text' name='" + name + "' maxlength='50' size='15' class='black_ar' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
-			
-			
-			
+
+
+
 		}
-		
-		
-		
-		
+
+
+
+
 		function getConsent(identifier,collectionProtocolId,collectionProtocolTitle,index,anchorTagKey,consentCheckStatus)
 		{
 			var collectionProtocolIdValue;
-			var select = document.getElementById(collectionProtocolId); 
+			var select = document.getElementById(collectionProtocolId);
 			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
 			var dataToSend="showConsents=yes&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
 			ajaxCall(dataToSend, collectionProtocolId, identifier, anchorTagKey, index,consentCheckStatus);
 		}
-		
+
 		function openConsentPage(collectionProtocolId,index,responseString,collectionProtocolRegIdValue){
 			//When RegId value is not available.-Add participant page.
 			if(collectionProtocolRegIdValue == "null")
@@ -248,14 +247,14 @@ tr#hiddenCombo
 			{
 				return;
 			}
-			
+
 			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
 			if(collectionProtocolIdValue=="-1")
 			{
 				alert("Please select collection protocol");
 				return;
 			}
-			
+
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue+"&collectionProtocolRegIdValue="+collectionProtocolRegIdValue;
 			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
 		}
@@ -264,24 +263,24 @@ tr#hiddenCombo
 		*/
 		function openConsentPageAjax(collectionProtocolId,index,responseString){
 
-			
+
 			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
 			{
 				return;
 			}
-			
+
 			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
 			if(collectionProtocolIdValue=="-1")
 			{
 				alert("Please select collection protocol");
 				return;
 			}
-			
+
 			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
 			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
 		}
-		
-		
+
+
 		var flag=false;
 		//Ajax Code Start
 		function ajaxCall(dataToSend, collectionProtocolId, identifier,anchorTagKey,index,consentCheckStatus)
@@ -302,9 +301,9 @@ tr#hiddenCombo
 
 		function checkForConsents(request, collectionProtocolId,  verificationKey, anchorTagKey,index,consentCheckStatus)
 		{
-			
+
 			if(request.readyState == 4)
-			{  
+			{
 				//Response is ready
 				if(request.status == 200)
 				{
@@ -333,18 +332,18 @@ tr#hiddenCombo
 					{
 						spanTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
 					}
-					
-					
+
+
 					flag=false;
 				}
 			}
 		}
-		
-		function textLimit(field) 
+
+		function textLimit(field)
 		{
-			if(field.value.length>0) 
+			if(field.value.length>0)
 				field.value = field.value.replace(/[^\d]+/g, '');
-				
+
 			/*if (element.value.length > maxlen + 1)
 				alert('your input has been truncated!');*/
 			/*if (field.value.length > maxlen)
@@ -353,11 +352,11 @@ tr#hiddenCombo
 				field.value = field.value.replace(/[^\d]+/g, '');
 			}*/
 		}
-		function intOnly(field) 
+		function intOnly(field)
 		{
-			if(field.value.length>0) 
+			if(field.value.length>0)
 			{
-				field.value = field.value.replace(/[^\d]+/g, ''); 
+				field.value = field.value.replace(/[^\d]+/g, '');
 			}
 		}
 
@@ -371,7 +370,7 @@ tr#hiddenCombo
 			}
 		}
 
-		//this function is called when participant clicks on radiao button 
+		//this function is called when participant clicks on radiao button
 		function onParticipantClick(participant_id)
 		{
 			//mandar for grid
@@ -385,13 +384,13 @@ tr#hiddenCombo
 			document.forms[0].id.value=pid;
 			document.forms[0].forwardTo.value="pageOfParticipant";
 			document.forms[0].action="ParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipant";
-			
+
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
 					document.forms[0].forwardTo.value="pageOfParticipantCPQuery";
 					document.forms[0].action="CPQueryParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipantCPQuery";
 			<%}%>
-			
+
 			document.forms[0].radioValue.value="";
 			for (var i = 0 ; i < document.forms[0].chkName.length; i++)
 			{
@@ -411,22 +410,22 @@ tr#hiddenCombo
 		//This function is called when user clicks on 'Use Selected Participant' Button
 		function UseSelectedParticipant()
 		{
-		
+
 			if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
 			{
 				alert("Please select the Participant from the list");
 			}
 			else
 			{
-			
+
 				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
 				alert(document.forms[0].action);
 				document.forms[0].submit();
 				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
 			}
-			
+
 		}
-		
+
 		function CreateNewClick()
 		{
 			document.forms[0].radioValue.value="Add";
@@ -440,7 +439,7 @@ tr#hiddenCombo
 			<%}%>
 			deselectParticipant();
 		}
-	
+
 		function LookupAgain()
 		{
 			document.forms[0].radioValue.value="Lookup";
@@ -449,21 +448,21 @@ tr#hiddenCombo
 			document.forms[0].id.value="";
 			deselectParticipant();
 		}
-		
-		
+
+
 		function onVitalStatusRadioButtonClick(element)
 		{
-		
+
 			if(element.value == "Dead")
 			{
-				document.forms[0].deathDate.disabled = false;				
+				document.forms[0].deathDate.disabled = false;
 			}
 			else
 			{
 				document.forms[0].deathDate.disabled = true;
 			}
-		}		 
-		
+		}
+
 		//View SPR Vijay pande
 		function viewSPR()
 		{
@@ -499,11 +498,11 @@ tr#hiddenCombo
 			}
 			document.forms[0].action=action;
 			document.forms[0].submit();
-		}	 
+		}
 		function showAnnotations()
 		{
-			var fwdPage="<%=pageOf%>";				
-			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations";		
+			var fwdPage="<%=pageOf%>";
+			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=participantId%>&staticEntityName=<%=staticEntityName%>&pageOf="+fwdPage+"&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
@@ -513,8 +512,8 @@ tr#hiddenCombo
 			if(!fwdPage=="pageOfParticipantCPQuery")
 				document.forms[0].target = '_top';
 		}
-		
-		
+
+
 	</script>
 </head>
 
@@ -524,7 +523,7 @@ tr#hiddenCombo
 		if(pageView.equals("add"))
 		{
 	%>
-		<%@ include file="EditParticipant.jsp" %>		
+		<%@ include file="EditParticipant.jsp" %>
 	<%
 				}
 			%>
@@ -544,7 +543,7 @@ tr#hiddenCombo
 		<tr height="100%">
 			<td class="tablepadding">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" style="height:1%">
-					<tr height="100%">				
+					<tr height="100%">
 						<td class="td_tab_bg"><img src="images/spacer.gif" vspace="0" hspace="0" alt="spacer" width="50" border="0" height="1"></td>
 				        <td valign="bottom" align="left" ><a href="#" onClick="editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" vspace="0" hspace="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
 				        <td valign="bottom" align="left"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" alt="View Surgical Pathology Report" width="216" height="22" vspace="0" hspace="0"></td>
@@ -552,7 +551,7 @@ tr#hiddenCombo
 				        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 					</tr>
 				</table>
-	
+
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" style="height:95%">
 					<tr height="100%">
 						<td>
@@ -577,7 +576,7 @@ tr#hiddenCombo
 		  <tr height="99%">
 			<td class="tablepadding">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-				<tr>				
+				<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
 		        <td valign="bottom" ><a href="#" onClick="setTarget();editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
 		        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
@@ -595,31 +594,31 @@ tr#hiddenCombo
 	  </table>
 		<%
 	}
-	%>	
-	
+	%>
+
 	  <%-- this is done at the end beacuse we want to set CpId value --%>
 	<%
-	
+
 	String refreshTree = (String)request.getAttribute("refresh");
    System.out.println("refreshTree: "+refreshTree);
 	if(refreshTree==null || refreshTree.equalsIgnoreCase("true"))
 	{
 	%>
-	
+
 	<script language="javascript">
 	//Modified for flex by Baljeet
 	//Modified by Falguni Sachde
-	//Bug:6072 In case of LHS menu selection this property will not available.	
+	//Bug:6072 In case of LHS menu selection this property will not available.
 
 	 if(top.frames["cpAndParticipantView"] != undefined)
 	 {
-	
+
 		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
-	   
+
 	 }
 	</script>
 
 	<%}
 	%>
-	
+
 	</html:form>

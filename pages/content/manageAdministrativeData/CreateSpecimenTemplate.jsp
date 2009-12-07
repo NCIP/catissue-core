@@ -6,7 +6,7 @@
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"%>
@@ -16,7 +16,6 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
@@ -49,7 +48,7 @@ if(obj != null && obj instanceof CreateSpecimenTemplateForm)
 	form = (CreateSpecimenTemplateForm)obj;
 	mapOfDeriveSpecimen = form.getDeriveSpecimenValues();
 	noOfDeriveSpecimen = form.getNoOfDeriveSpecimen();
-}	
+}
 
 
 
@@ -66,11 +65,11 @@ if(form != null)
 			{
 				unitSpecimen = Constants.UNIT_CL;
 			}
-			else 
+			else
 			{
 				unitSpecimen = Constants.UNIT_GM;
 			}
-				
+
 		}
 		if(form.getClassName().equals("Fluid"))
 		{
@@ -108,7 +107,7 @@ if(form != null)
 			{
 				return Constants.UNIT_CL;
 			}
-			else	
+			else
 				return Constants.UNIT_GM;
 		}
 		else if(specimenType.equals("Cell"))
@@ -120,7 +119,7 @@ if(form != null)
 		}
 		else
 			return " ";
-			
+
 	}
 %>
 <%
@@ -149,24 +148,24 @@ if(form != null)
 			if(listSize == subList.size()-1 )
 				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
 			else
-    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
+    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";
 		}
 %>
 		var <%=keyObj%>Array = new Array(<%=arrayData%>);
-<%	    		
+<%
 	}
 
-%>	
+%>
 
 		function typeChangeCP(element,arrayName)
-		{ 
+		{
 			var i = (element.name).lastIndexOf("_");
 			var combo = (element.name).substring(0,i);
 			var specimenTypeCombo = combo + "_specimenType)";
 			ele = document.getElementById(specimenTypeCombo);
 			//To Clear the Combo Box
 			ele.options.length = 0;
-			
+
 			//ele.options[0] = new Option('-- Select --','-1');
 			var j=0;
 			//Populating the corresponding Combo Box
@@ -197,10 +196,10 @@ if(form != null)
 	ugul[4]="<%=Constants.UNIT_MG%>";
 	ugul[5]="<%=Constants.UNIT_CN%>";
 	ugul[6]="<%=Constants.UNIT_CL%>";
-	
+
 // Changes unit on subtype list changed
-/*	
-	Function updated to adjust New Tissue Types. 	
+/*
+	Function updated to adjust New Tissue Types.
 	mandar: 25-Apr-06 : bug 1414:
 */
 	function onSubTypeChangeUnitforCP(typeList,element,unitspan)
@@ -208,12 +207,12 @@ if(form != null)
 		var classList = document.getElementById(typeList);
 		var className = classList.options[classList.selectedIndex].text;
 		var selectedOption = element.options[element.selectedIndex].text;
-	
+
 		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4 || selectedOption == subTypeData6))
 		{
 			document.getElementById(unitspan).innerHTML = ugul[5];
-		}	
-		else 
+		}
+		else
 		{
 			if(className == "Tissue")
 			{
@@ -225,9 +224,9 @@ if(form != null)
 				{
 					document.getElementById(unitspan).innerHTML = ugul[2];
 				}
-			}	
+			}
 		}
-			
+
 	}
 
 // changes unit on specimen class changed.
@@ -289,7 +288,7 @@ if(form != null)
 	{
 		document.getElementById("type").value = "";
 	}
-	
+
 </script>
 
 <head>
@@ -298,7 +297,7 @@ if(form != null)
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="JavaScript">
-	
+
 	function insRow(subdivtag)
 	{
 		var noOfDeriveSpecimen = parseInt(document.forms[0].noOfDeriveSpecimen.value);
@@ -306,12 +305,12 @@ if(form != null)
 		document.forms[0].noOfDeriveSpecimen.value = noOfDeriveSpecimen;
 		var sname = "";
 
-		var r = new Array(); 
+		var r = new Array();
 		r = document.getElementById(subdivtag).rows;
 		var q = r.length;
 		var x=document.getElementById(subdivtag).insertRow(0);
 
-				
+
 //<!------------------------------------------------------------------------------------>
 		//checkbox
 		var rowno=q+1;
@@ -326,12 +325,12 @@ if(form != null)
 		// srno
 		//var spreqno=x.insertCell(1)
 		//spreqno.className="formFieldNoBordersSimple";
-		
+
 		var srIdentifier = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_id)";
 		var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='"+rowno+"' id='" + srIdentifier + "'>";
 
 		//spreqno.innerHTML="" + rowno+"." + cell1;
-		
+
 		//type
 		var spreqtype=x.insertCell(1)
 		spreqtype.className="black_ar";
@@ -351,9 +350,9 @@ if(form != null)
 			sname = sname + "<option value='<%=specimenClassValue%>'><%=specimenClassLabel%></option>";
 		<%}%>
 		sname = sname + "</select>";
-		 
+
 		spreqtype.innerHTML="" + sname + cell1;
-		
+
 		//subtype
 		var spreqsubtype=x.insertCell(2)
 		spreqsubtype.className="black_ar";
@@ -361,21 +360,21 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenType)";
 		var functionName = "onSubTypeChangeUnitforCP('" + specimenClassName + "',this,'" + objunit + "')" ;
-		
+
 		sname= "<select name='" + objname + "' size='1' class='addRow_s' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
-		
+
 		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
 		sname = sname + "</select>"
-		
+
 		spreqsubtype.innerHTML="" + sname;
-		
+
 		//Storage Location
 		var spreqsubtype=x.insertCell(3)
 		spreqsubtype.className="black_ar";
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_storageLocation)";
-		
+
 		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 
 		<%
@@ -388,7 +387,7 @@ if(form != null)
 		<%}%>
 
 		sname = sname + "</select>"
-		
+
 		spreqsubtype.innerHTML="" + sname;
 
 		//qty
@@ -397,9 +396,9 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
-						
+
 		spreqqty.innerHTML="" + sname;
 
 		//Concentration
@@ -408,12 +407,12 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"        	
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
-						
+
 		spreqqty.innerHTML="" + sname;
-		
-		
+
+
 	}
 	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
 </script>
@@ -436,7 +435,7 @@ if(form != null)
 		</tr>
 		<html:hidden property="noOfDeriveSpecimen"/>
 			<logic:equal name="isParticipantReg" value="true">
-				<%@ include file="/pages/content/manageAdministrativeData/PersistentTemplateSpecimen.jsp" %>			
+				<%@ include file="/pages/content/manageAdministrativeData/PersistentTemplateSpecimen.jsp" %>
 			</logic:equal>
 			<logic:notEqual name="isParticipantReg" value="true">
 				<%@ include file="/pages/content/manageAdministrativeData/NonPersistentTemplateSpecimen.jsp" %>

@@ -10,11 +10,10 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page language="java" isELIgnored="false"%>
 
-<%@ include file="/pages/content/common/EventAction.jsp" %> 
+<%@ include file="/pages/content/common/EventAction.jsp" %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css"/ >
@@ -51,13 +50,13 @@ if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 	specimenIdentifier= (String)session.getAttribute(Constants.SPECIMEN_ID);
 }
 String staticEntityName=null;
-staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
+staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
 
 //------------- Mandar 04-july-06 QuickEvents
 String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
 //P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen
 String iframeSrc="blankScreenAction.do";
-//P.G. - End 
+//P.G. - End
 String formAction = Constants.SPECIMEN_ADD_ACTION;
 String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
 String consentTab="'NewSpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
@@ -66,14 +65,14 @@ if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 	specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 	consentTab = "'QuerySpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 }
-if(eventSelected != null)	
+if(eventSelected != null)
 {
 	iframeSrc = getEventAction(eventSelected, specimenIdentifier);
 	formAction = Constants.QUICKEVENTSPARAMETERS_ACTION;
 }
 //------------- Mandar 04-july-06 QuickEvents
-Long specimenEntityId = null;	
-specimenEntityId = (Long)request.getAttribute("specimenEntityId");
+Long specimenEntityId = null;
+specimenEntityId = (Long)request.getAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
 session.setAttribute("EventOrigin", "SpecimenEventParameters");
 %>
 
@@ -82,14 +81,14 @@ session.setAttribute("EventOrigin", "SpecimenEventParameters");
 	String nodeId = "Specimen_"+specimenIdentifier;
 %>
 <script language="javascript">
-refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');					
+refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');
 </script>
 <%}%>
 
 <script language="JavaScript">
 function showConsents()
 {
-	addNewAction(<%= consentTab %>)			
+	addNewAction(<%= consentTab %>)
 }
 function onParameterChange(element)
 {
@@ -126,8 +125,8 @@ function onParameterChange(element)
 	action = "TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 	else if(element.value == "Transfer")
 	{
-		action = "TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";		
-	}	
+		action = "TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
+	}
 
 	var specimenIdentifier = "<%=specimenIdentifier%>";
 	action = action + "&specimenId=" + specimenIdentifier;
@@ -159,7 +158,7 @@ else
 }
 }
 
-if ( document.getElementById && !(document.all) ) 
+if ( document.getElementById && !(document.all) )
 {
 var slope=-37;
 }
@@ -245,17 +244,17 @@ window.onresize = function() { mdResDetector(); }
 											var eventId = c2.getValue();
 
 											var url = "SearchObject.do?pageOf="+pageOf+"&operation=search&id="+eventId;
-											var frame = document.getElementById("newEventFrame"); 
-											frame.src = url; 
-											} 				
-											/* 
+											var frame = document.getElementById("newEventFrame");
+											frame.src = url;
+											}
+											/*
 											to be used when you want to specify another javascript function for row selection.
 											useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
-											useFunction = "";  Function to be used. 	
+											useFunction = "";  Function to be used.
 											*/
 											var useDefaultRowClickHandler =2;
 											var gridFor="<%=Constants.GRID_FOR_EVENTS%>";
-											var useFunction = "eventParametersGrid";	
+											var useFunction = "eventParametersGrid";
 										</script>
 										<%@ include file="/pages/content/search/GridPage.jsp" %>
 									</td>
@@ -276,7 +275,7 @@ window.onresize = function() { mdResDetector(); }
 							</table>
 						</td>
 					</tr>
-						<% } %>	
+						<% } %>
 					<tr>
 						<td align="left" width="33%" class="black_ar">
 							&nbsp;&nbsp;<bean:message key="specimenEventParameters.caption"/>

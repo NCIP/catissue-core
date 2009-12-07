@@ -5,13 +5,12 @@
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="java.util.*"%>
-<%@ page import="edu.wustl.catissuecore.bizlogic.AnnotationUtil"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page language="java" isELIgnored="false"%>
@@ -22,7 +21,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
  	String operation = (String)request.getAttribute(Constants.OPERATION);
  		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
@@ -30,11 +29,11 @@
  		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
  		String signedConsentDate = "";
  		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
- 		boolean isAddNew = false;	
+ 		boolean isAddNew = false;
  		Long scgEntityId = null;
- 		scgEntityId = (Long)request.getAttribute("scgEntityId");
+ 		scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
  		String staticEntityName=null;
- 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
+ 		staticEntityName = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
  		String participantId=null;
  		Object obj = request.getAttribute("specimenCollectionGroupForm");
  		SpecimenCollectionGroupForm form =null;
@@ -47,31 +46,31 @@
  		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
  		if (reqPath != null)
  	appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
- 	
+
  	   		if(form  != null)
  	{
  		if(id==null)
  		{
  			id=String.valueOf(form.getId());
  		}
- 	}	
+ 	}
  		String nodeId="";
  		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
  		boolean readOnlyValue=false,readOnlyForAll=false;
  	   	if(!operation.equals("add") )
  	   	{
- 	   		
- 	   		
+
+
  	if(form != null)
  	{
  		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
  		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
  		nodeId= "SpecimenCollectionGroup_"+form.getId();
- 		
+
  		   	}
- 	
+
  	   	}
- 	
+
 
 
  		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
@@ -102,7 +101,7 @@
  		}
  		String currentReceivedDate = "";
  		String currentCollectionDate = "";
- 		if (form != null) 
+ 		if (form != null)
  		{
  	currentReceivedDate = form.getReceivedEventDateOfEvent();
  	if(currentReceivedDate == null)
@@ -111,9 +110,9 @@
  	if(currentCollectionDate == null)
  			currentCollectionDate = "";
  		}
- 		
- 		String formNameForCal = "specimenCollectionGroupForm"; 
- 		
+
+ 		String formNameForCal = "specimenCollectionGroupForm";
+
  		//Patch ID: Bug#3184_32
  		//Description: Get the actual number of specimen collections
  		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
@@ -131,15 +130,15 @@
 		{
 	%>
 		<script language="javascript">
-		//Added by Falguni to refresh participant tree 
+		//Added by Falguni to refresh participant tree
 		var nodeid =  "<%=nodeId%>";
 	//	top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
-		
+
 		if(nodeid!=""&&nodeid!="1")
 		{
-	//	alert("nodeid: "+nodeid);	
-	
-		refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');	
+	//	alert("nodeid: "+nodeid);
+
+		refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');
 		}
 
 		</script>
@@ -156,17 +155,17 @@
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}	
+		}
 	</script>
 	<script language="JavaScript">
-     
+
      	function showAnnotations()
 		{
 			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=<%=pageOf%>&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
-		
+
     	function onRadioButtonClick(element)
 		{
 			if(element.value == 1)
@@ -180,34 +179,34 @@
 				document.forms[0].participantId.disabled = true;
 				document.forms[0].protocolParticipantIdentifier.disabled = false;
 
-				
+
 				//disable Medical Record number field.
 				document.forms[0].participantsMedicalIdentifierId.disabled = true;
 			}
-		} 
-		
-		 //Consent Tracking Module (Virender Mehta)		
+		}
+
+		 //Consent Tracking Module (Virender Mehta)
 		function onChangeEvent(element)
 		{
 			var getCPID=document.getElementById('collectionProtocolId');
 			var cpID=getCPID.value;
         	var getID=document.getElementById(element);
-		    var index=getID.selectedIndex;			    
+		    var index=getID.selectedIndex;
 			if(index<0)
 			{
 				alert("Please Select Valid Value");
 			}
 	        else
-			{       	
+			{
 	        	if(element=='collectionProtocolEventId')
 				{
 					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
-	        			"isOnChange=true&cpID="+cpID;        			
+	        			"isOnChange=true&cpID="+cpID;
 				}
 				else
 				{
 					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=false&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
-	        			"isOnChange=true&cpID="+cpID;        			
+	        			"isOnChange=true&cpID="+cpID;
 
 				}
 	        	changeAction(action);
@@ -216,14 +215,14 @@
 	    function onChange(element)
 		{
         	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
-        			"isOnChange=true";        			
+        			"isOnChange=true";
         	changeAction(action);
 		}
         function changeAction(action)
         {
 			document.forms[0].action = action;
 			document.forms[0].submit();
-        }		 
+        }
 		var applyToSpecimen;
 		function checkForChanges()
 		{
@@ -236,7 +235,7 @@
 			var collectionEventCollectionProcedure = document.getElementById("collectionEventCollectionProcedure").value;
 		    var collectionEventContainer = document.getElementById("collectionEventContainer").value;
 		    var collectionEventComments = document.getElementById("collectionEventComments").value;
-			
+
 			var receivedEventdateOfEvent;
 			var currentReceivedDateForm;
 			var recDate = document.getElementById("receivedEventdateOfEvent");
@@ -250,7 +249,7 @@
 			var receivedEventTimeInMinutes = document.getElementById("displayreceivedEventTimeInMinutes").value;
 			var receivedEventReceivedQuality = document.getElementById("receivedEventReceivedQuality").value;
 			var receivedEventComments = document.getElementById("receivedEventComments").value;
-			
+
 			//Values from form
 			var collectionEventdateOfEventForm = document.getElementById("collectionEventdateOfEventForm").value;
 			var collectionEventUserIdForm = document.getElementById("collectionEventUserIdForm").value;
@@ -259,21 +258,21 @@
 			var collectionEventCollectionProcedureForm = document.getElementById("collectionEventCollectionProcedureForm").value;
 			var collectionEventContainerForm = document.getElementById("collectionEventContainerForm").value;
 			var collectionEventCommentsForm = document.getElementById("collectionEventCommentsForm").value;
-			
+
 			var receivedEventUserIdForm = document.getElementById("receivedEventUserIdForm").value;
-			
+
 			var receivedEventTimeInHoursForm = document.getElementById("receivedEventTimeInHoursForm").value;
 			var receivedEventTimeInMinutesForm = document.getElementById("receivedEventTimeInMinutesForm").value;
 			var receivedEventReceivedQualityForm = document.getElementById("receivedEventReceivedQualityForm").value;
 			var receivedEventCommentsForm = document.getElementById("receivedEventCommentsForm").value;
-			
+
 			if(collectionEventUserId == "")
 			  collectionEventUserId = "0";
-			
+
 			if(receivedEventUserId == "")
 			   receivedEventUserId = "0";
-			
-			if((collectionEventdateOfEvent != collectionEventdateOfEventForm) 
+
+			if((collectionEventdateOfEvent != collectionEventdateOfEventForm)
 				|| (collectionEventUserId != collectionEventUserIdForm)
 				|| (collectionEventTimeInHours != collectionEventTimeInHoursForm)
 				|| (collectionEventTimeInMinutes != collectionEventTimeInMinutesForm)
@@ -286,29 +285,29 @@
 				|| (receivedEventReceivedQuality != receivedEventReceivedQualityForm)
 				|| (collectionEventComments != collectionEventCommentsForm)
 				|| (receivedEventComments != receivedEventCommentsForm))
-			{	
+			{
 				var appResources = "The collected and received events data that you have entered will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
 				var answer = confirm(appResources);
 				if(answer)
 				{
 				//alert("Confirm OK");
-					applyToSpecimen = 'true';	
+					applyToSpecimen = 'true';
 				}
 				else
 				{
 				//alert("Confirm CANCEL");
-					applyToSpecimen = 'false';	
+					applyToSpecimen = 'false';
 				}
 			}
 		}
 		function confirmDisableForSCG(action,formField)
-		{		
-			var temp = action+"&applyToSpecimenValue="+applyToSpecimen;			
+		{
+			var temp = action+"&applyToSpecimenValue="+applyToSpecimen;
 			if((formField != undefined) && (formField.value == "Disabled"))
 			{
 				var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 				if (go==true)
-				{	
+				{
 					if(document.forms[0].nextForwardTo.value!=null)
 					{
 					 temp = temp + "&domainObject=SCG&nextForwardTo="+document.forms[0].nextForwardTo.value;
@@ -321,23 +320,23 @@
 			{
 				document.forms[0].action = temp;
 				document.forms[0].submit();
-			}			
+			}
 		}
-			
+
 		function disablebuttons()
 		{
 			var enteredValue = document.getElementById("numberOfSpecimen").value;
 			var submitButton = document.getElementById("submitOnly");
 			var submitAndAddButton = document.getElementById("submitAndAdd");
-			
+
 			// Patch ID: Bug#4245_4
 			// Description: User is allowed to click the Add Multiple Specimen irrespective of state of restric checkbox.
 			// Patch ID: Bug#3184_34
 			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
-			
+
 			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
 			if(enteredValue > 1)
-			{			
+			{
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = true;
 				submitAndAddMultipleButton.disabled = false;
@@ -349,13 +348,13 @@
 				submitAndAddMultipleButton.disabled = false;
 			}
 			else
-			{			
+			{
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = false;
 				submitAndAddMultipleButton.disabled = false;
 			}
 		}
-		
+
 
 		function disableButtonsOnCheck(restrictCheckbox)
 		{
@@ -363,7 +362,7 @@
 			var addSpecimenButton = document.getElementById("submitAndAdd");
 			// Patch ID: Bug#3184_35
 			var submitAndAddMultipleButton = document.getElementById("submitAndAddMultiple");
-			
+
 			if(restrictCheckbox.checked)
 			{
 				submitButton.disabled = false;
@@ -376,7 +375,7 @@
 				submitButton.disabled = true;
 			}
 		}
-				
+
 		function initializeSCGForm()
 		{
 			<%if(form!=null)
@@ -394,12 +393,12 @@
 		//Description: This method sets the value of button id to the buttonType hidden variable.
 		//This method is called on the onkeydown or onmousedown of Add Specimen and Add Multiple Specimen button.
 		function setButtonType(addButton)
-		{	
+		{
 			document.getElementById("buttonType").value = addButton.id;
 		}
 
 
-	// Consent Tracking Module Virender mehta	
+	// Consent Tracking Module Virender mehta
 	function switchToTab(selectedTab)
 	{
 		//var operation = document.forms[0].operation.value;
@@ -410,15 +409,15 @@
 			displayKey="table";
 			showAlways="table";
 		}
-			
+
 		var displayTable=displayKey;
 		var tabSelected="none";
 		if(selectedTab=="specimenCollectionGroupTab")
 		{
 			tabSelected=displayKey;
 			displayTable="none";
-		}	
-	
+		}
+
 		var display=document.getElementById('collectionEvent');
 		display.style.display=tabSelected;
 
@@ -430,17 +429,17 @@
 
 		var display=document.getElementById('scgPageButtons');
 		display.style.display=tabSelected;
-				
+
 		var displayConsentTable=document.getElementById('consentTabForSCG');
 		if(displayConsentTable!=null)
 		{
-			displayConsentTable.style.display=displayTable;	
+			displayConsentTable.style.display=displayTable;
 		}
 		//var collectionTab=document.getElementById('specimenCollectionGroupTab');
 		var consentTab=document.getElementById('consentTab');
 		var SCGImg = document.getElementById('SCGImage');
 		var consetsImg = document.getElementById('consentsImage');
-		
+
 		if(selectedTab=="specimenCollectionGroupTab")
 		{
 			if('${requestScope.operation}' == "edit")
@@ -454,7 +453,7 @@
 				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 onClick=consentPage()>"
 			}
 		}
-		else		
+		else
 		{
 			if('${requestScope.operation}' == "edit")
 			{
@@ -467,16 +466,16 @@
 				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
 			}
 		}
-		
+
 	}
-	
+
 	//This function is for changing the behaviour of TABs
 	function updateTab(tab1, tab2)
 	{
 		tab1.onmouseover=null;
 		tab1.onmouseout=null;
 		tab1.className="tabMenuItemSelected";
-	
+
 		tab2.className="tabMenuItem";
 		tab2.onmouseover=function() { changeMenuStyle(this,'tabMenuItemOver'),showCursor();};
 		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
@@ -487,16 +486,16 @@
 		{
 			switchToTab("specimenCollectionGroupTab");
 		}
-	
+
 		//This function will switch page to consentPage
 		function consentPage()
-		{	
+		{
 			checkForConsents();
 		}
-		
+
 		function checkForConsents()
 		{
-			<%if(form!=null && form.getConsentTierCounter()>0)					
+			<%if(form!=null && form.getConsentTierCounter()>0)
 				{%>
 					switchToTab("consentTab");
 				<%}
@@ -515,10 +514,10 @@
 		}
 		else
 		{
-			consentPage();			
+			consentPage();
 		}
 	  }
-// Consent Tracking Module Virender mehta	
+// Consent Tracking Module Virender mehta
 
 		//View SPR Vijay pande
 		function viewSPR()
@@ -540,7 +539,7 @@
 				document.forms[0].submit();
 			}
 		}
-		
+
 
 function editSCG()
 		{
@@ -553,14 +552,14 @@ function editSCG()
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
-		
+
 		function setTarget()
 		{
 			var fwdPage="<%=pageOf%>";
 			if(!fwdPage=="pageOfSpecimenCollectionGroupCPQuery")
 				document.forms[0].target = '_top';
 		}
-		
+
 		function goToConsentPage()
 		{
 			var tempId=document.forms[0].id.value;
@@ -570,21 +569,21 @@ function editSCG()
 		}
 		function setSubmitted(forwardTo,printaction,nextforwardTo)
 		{
-				
+
 			var printFlag = document.getElementById("printCheckbox");
-			
+
 			if(printFlag.checked)
 			{
-		
+
 			  setSubmittedForPrint(forwardTo,printaction,nextforwardTo);
 			}
 			else
 			{
 			  setSubmittedFor(forwardTo,nextforwardTo);
 			}
-		
+
 		}
-       
+
  </script>
 </head>
 <!-- As it was giving javascript error on disableButtons() as the scg form is not loaded for DE -->
@@ -595,7 +594,7 @@ function editSCG()
 	<body onload="disablebuttons();initializeSCGForm();showConsents();">
 <%
 	}else{
-%> 
+%>
 	<body>
  <%
  	}
@@ -611,12 +610,12 @@ function editSCG()
 			<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 				<td valign="bottom" class="td_color_bfdcf3" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_add_scg.gif" alt="Add Specimen  Collection group"  width="222" height="22" border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>	
+				<td align="left" valign="bottom" class="td_color_bfdcf3"  id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
 			<tr>
-				<td>			
+				<td>
 					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 				</td>
 			</tr>
@@ -629,7 +628,7 @@ function editSCG()
 	<%
 		}
 	%>
-	
+
 	<%
 			if(pageView.equals("edit"))
 			{
@@ -645,21 +644,21 @@ function editSCG()
 				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
-			
+
 			<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
 			<tr>
-				<td>			
+				<td>
 					<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 				</td>
 			</tr>
 			</table><!-- Mandar 31Oct08 -->
 				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
-			
-				
+
+
 	<%
 	}
 	%>
-	
+
 <%
 	if(pageView.equals(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 	{
@@ -678,7 +677,7 @@ function editSCG()
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
-					<bean:message key="consents.consents"/>            
+					<bean:message key="consents.consents"/>
 				</td>
 				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>
 			</tr>
@@ -686,14 +685,14 @@ function editSCG()
 			<td colspan="6">
 				<table border="0" width="100%" class="whitetable_bg"  cellpadding="3" cellspacing="0">
 				<tr>
-					<td>			
+					<td>
 						<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 					</td>
 				</tr>
 				</table>
 			</td>
 			</tr>
-			
+
 
 			<tr>
 				<td class="tabField" colspan="6">
@@ -705,7 +704,7 @@ function editSCG()
 	<%
 	}
 	%>
-	
+
 
 
 	<%
