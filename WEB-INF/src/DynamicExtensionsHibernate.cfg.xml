@@ -17,7 +17,7 @@
 
 <!-- My sql settings -->
 
-        <property name="hibernate.c3p0.max_size">2</property>
+        <property name="hibernate.c3p0.max_size">4</property>
 		<property name="hibernate.c3p0.min_size">2</property>
 		<property name="hibernate.c3p0.timeout">5000</property>
 		<property name="hibernate.c3p0.max_statements">100</property>
@@ -68,11 +68,6 @@
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/Rule.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/RuleParameter.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/EntityManagerHQL.hbm.xml"/>
-
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMap.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapCondition.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/FormContext.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapRecord.hbm.xml"/>
 
         <mapping resource="edu/common/dynamicextensions/hbm/IdGenerator.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/Path.hbm.xml"/>

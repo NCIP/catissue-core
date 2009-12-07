@@ -56,7 +56,8 @@
 
 	<property file="idpInstall.properties" />
 	<var name="database.url" value="" />
-	
+	<import file="DEDeploy.xml" />
+
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
 		<antcall target="RundbUnit" />
@@ -640,7 +641,7 @@
 			<include name="mysql-connector-java-3.1.13-bin.jar"/>
 			<include name="oracleDriver.jar"/>
 			<include name="boot.jar" />
-			<include name="c3p0-0.9.0.jar" />
+			<!--<include name="c3p0-0.9.0.jar" />-->
 			<include name="catissuecore-client.jar" />
 			<include name="experiment-client.jar" />
 			<!-- include name="jboss-client.jar" /-->
@@ -875,7 +876,7 @@
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
 			<antcall target="send_mail" />
-			<delete dir="${temp.dir}" />
+			<!--<delete dir="${temp.dir}" />-->
 		</target>
 
 	<target name="de_check_prerequisite">
@@ -896,25 +897,28 @@
 
 	<!-- Modify dynamicExtensions configuration For MySQL -->
 	<target name="de_mysql_config">
-		<replace file="${temp.dir}/dynamicextensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${oracle.dialect.string}" value="${mysql.dialect.string}" />
 			<replacefilter token="${mssqlserver.dialect.string}" value="${mysql.dialect.string}" />
+			<replacefilter token="@@datasource@@" value="java:/catissuecore" />
 		</replace>
 	</target>
 
 	<!-- Modify dynamicextensions configuration For ORACLE -->
 	<target name="de_oracle_config">
-		<replace file="${temp.dir}/dynamicextensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 			<replacefilter token="${mssqlserver.dialect.string}" value="${oracle.dialect.string}" />
+			<replacefilter token="@@datasource@@" value="java:/catissuecore" />
 		</replace>
 	</target>
 
 	<!-- Modify dynamicextensions configuration For MsSQLServer -->
 	<target name="de_mssqlserver_config">
-		<replace file="${temp.dir}/dynamicextensions/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
 			<replacefilter token="${oracle.dialect.string}" value="${mssqlserver.dialect.string}" />
+			<replacefilter token="@@datasource@@" value="java:/catissuecore" />
 		</replace>
 	</target>
 
@@ -922,7 +926,9 @@
 	<target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" >
 		<echo message="Integrating DynamicExtensions app ...." />
 		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
-		<unjar src="${temp.dir}/dynamicextensions/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
+		<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
+		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernateWeb.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+
 		<!-- Inject db specific information to configuration files -->
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -944,7 +950,7 @@
 		</if>
 
 		<!-- 1) Copy DynamicExtensions.jar -> copy it to catissue/WEB-INF/Lib -->
-		<copy file="${temp.dir}/dynamicextensions/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 
 		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
@@ -957,7 +963,6 @@
 				<include name="DynamicExtensionsErrorsMessages.properties"/>
 	    		<include name="DynamicExtensionsFileFormats.properties"/>
 				<include name="DynamicExtensionsApplicationResources.properties" />
-				<include name="DynamicExtensionsHibernate.cfg.xml" />
 				<include name="uicontrols-captions.properties" />
 				<include name="displaytype-classname-mapping.properties" />
 				<include name="ControlConfigurations.xml" />
@@ -968,50 +973,67 @@
 				<include name="RuleConfigurations.xml" />
 				<include name="XMI_1.4-1.3Transformer.xsl" />
 				<exclude name="dbutil.properties" />
+				<exclude name="DynamicExtensionsHibernate.cfg.xml" />
 				<exclude name="hibernate.properties" />
 				<exclude name="log4j.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${temp.dir}/catissuecore/WEB-INF" overwrite="true">
-			<fileset dir="${temp.dir}/dynamicextensions/WEB-INF">
-				<include name="dynamicextensions-struts-config.xml" />
-				<include name="dynamicExtensions.tld" />
-			</fileset>
-		</copy>
+					<fileset dir="${temp.dir}/dynamicextensions/web/conf">
+						<include name="dynamicextensions-struts-config.xml" />
+					</fileset>
+				</copy>
+				<copy todir="${temp.dir}/catissuecore/WEB-INF" overwrite="true">
+					<fileset dir="${temp.dir}/dynamicextensions/web/taglibs">
+						<include name="dynamicExtensions.tld" />
+					</fileset>
+				</copy>
 
-		<copy todir="${temp.dir}/catissuecore/de" overwrite="true">
-			<fileset dir="${temp.dir}/dynamicextensions/de" />
-		</copy>
+				<copy todir="${temp.dir}/catissuecore/" overwrite="true">
+					<fileset dir="${temp.dir}/dynamicextensions/web">
+						<include name="dhtml/**/*" />
+						<include name="images/**/*" />
+						<include name="javascripts/**/*" />
+						<include name="stylesheets/**/*" />
+						<include name="pages/**/*" />
+						<exclude name="taglibs/**/*" />
+						<exclude name="conf/**/*" />
+					</fileset>
+				</copy>
 
 		<!-- 3) Inject de-struts-config.xml entry in catisssue -> web.xml -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<replacefilter token="/WEB-INF/${catissue.struts.config.file}" value="/WEB-INF/${catissue.struts.config.file}, /WEB-INF/dynamicextensions-struts-config.xml" />
 			<replacetoken>&lt;/web-app&gt;</replacetoken>
 			<replacevalue><![CDATA[
-			    	 	<listener>
-			    	  		<listener-class>edu.common.dynamicextensions.util.listener.DynamicExtensionsServletContextListener</listener-class>
-			    		</listener>
-			    		<servlet>
-			    			<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-			    			<servlet-class>edu.common.dynamicextensions.interfaceactions.DynamicExtensionsInterfaceAction</servlet-class>
-			    	    </servlet>
-			    	    <servlet>
-			    			<servlet-name>DownloadFileAction</servlet-name>
-			    			<servlet-class>edu.common.dynamicextensions.ui.webui.action.DownloadFileAction</servlet-class>
-			    	    </servlet>
-			    	 	<servlet-mapping>
-			    			<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
-			    			<url-pattern>/DynamicExtensionsInterfaceAction</url-pattern>
-			    		</servlet-mapping>
-			    		<servlet-mapping>
-			    			<servlet-name>DownloadFileAction</servlet-name>
-			    			<url-pattern>/DownloadFileAction</url-pattern>
-			    		</servlet-mapping>
-			    	    <taglib>
-			    	  	  <taglib-uri>/WEB-INF/dynamicExtensions.tld</taglib-uri>
-			    	  	  <taglib-location>/WEB-INF/dynamicExtensions.tld</taglib-location>
-	 					</taglib>
-						</web-app>
+				<listener>
+									<listener-class>edu.common.dynamicextensions.util.listener.DynamicExtensionsServletContextListener</listener-class>
+								</listener>
+								<servlet>
+									<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
+									<servlet-class>edu.common.dynamicextensions.interfaceactions.DynamicExtensionsInterfaceAction</servlet-class>
+								</servlet>
+								<servlet>
+									<servlet-name>DownloadFileAction</servlet-name>
+									<servlet-class>edu.common.dynamicextensions.ui.webui.action.DownloadFileAction</servlet-class>
+								</servlet>
+								<servlet-mapping>
+									<servlet-name>DynamicExtensionsInterfaceAction</servlet-name>
+									<url-pattern>/DynamicExtensionsInterfaceAction</url-pattern>
+								</servlet-mapping>
+								<servlet-mapping>
+									<servlet-name>DownloadFileAction</servlet-name>
+									<url-pattern>/DownloadFileAction</url-pattern>
+								</servlet-mapping>
+								<taglib>
+									<taglib-uri>/WEB-INF/dynamicExtensions.tld</taglib-uri>
+									<taglib-location>/WEB-INF/dynamicExtensions.tld</taglib-location>
+								</taglib>
+								<context-param>
+									<param-name>ResourceBundleParamName</param-name>
+									<param-value>resourcebundleclass</param-value>
+								</context-param>
+							</web-app>
 					]]></replacevalue>
 		</replace>
 
@@ -1173,6 +1195,10 @@
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
+		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
+		<antcall target="upgrade_de_integration_restructure_metadata"/>
+
 		<antcall target="update_metadata_for_tagged_values">
 		</antcall>
 		<antcall target="create_category">
@@ -1201,6 +1227,7 @@
 		<echo message="Initializing MySQL Database for caTissue Suite v1.1P4. Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />
 			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
 			<transaction src="${common.sql.dir}/AlterTable.sql" />
@@ -1302,79 +1329,11 @@
 	<!--Oracle Database Creation -->
 
 
-<target name="drop_and_create_sequences">
-	<echo message="Recreating the sequences..." />
-	<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-				<transaction>
-				DROP SEQUENCE DE_ATTR_REC_SEQ ;
-				DROP SEQUENCE DE_COLL_ATTR_REC_VALUES_SEQ ;
-				DROP SEQUENCE DE_FILE_ATTR_REC_VALUES_SEQ ;
-				DROP SEQUENCE DE_OBJECT_ATTR_REC_VALUES_SEQ ;
-				DROP SEQUENCE DYEXTN_ABSTRACT_METADATA_SEQ ;
-				DROP SEQUENCE DYEXTN_ASSO_DISPLAY_ATTR_SEQ ;
-				DROP SEQUENCE DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ ;
-				DROP SEQUENCE DYEXTN_CONTAINER_SEQ ;
-				DROP SEQUENCE DYEXTN_CONTROL_SEQ ;
-				DROP SEQUENCE DYEXTN_DATABASE_PROPERTIES_SEQ ;
-				DROP SEQUENCE DYEXTN_DATA_ELEMENT_SEQ ;
-				DROP SEQUENCE DYEXTN_ENTITY_MAP_CONDN_SEQ ;
-				DROP SEQUENCE DYEXTN_ENTITY_MAP_SEQ ;
-				DROP SEQUENCE DYEXTN_ENTITY_RECORD_SEQ ;
-				DROP SEQUENCE DYEXTN_FILE_EXTN_SEQ ;
-				DROP SEQUENCE DYEXTN_FORM_CONTEXT_SEQ ;
-				DROP SEQUENCE DYEXTN_PERMISSIBLEVAL_SEQ ;
-				DROP SEQUENCE DYEXTN_ROLE_SEQ ;
-				DROP SEQUENCE DYEXTN_RULE_PARAMETER_SEQ ;
-				DROP SEQUENCE DYEXTN_RULE_SEQ ;
-				DROP SEQUENCE DYEXTN_SEMANTIC_PROPERTY_SEQ ;
-				DROP SEQUENCE DYEXTN_TAGGED_VALUE_SEQ ;
-				DROP SEQUENCE DYEXTN_VALUE_DOMAIN_SEQ ;
-				DROP SEQUENCE DYEXTN_VIEW_SEQ ;
-				</transaction>
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-			</sql>
-			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-				<transaction src="${oracle.sql.dir}/query/createDESequence.SQL" />
-			</sql>
-
-</target>
-
-
-<target name="reset_sequences">
-	<echo message=" Resetting the sequences..." />
-	<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-				<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-			</sql>
-	<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
-				<transaction src="${oracle.sql.dir}/query/resetDESequence.SQL" />
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-	</sql>
-</target>
-
 	<target name="deploy_db_oracle">
 		<echo message="Initializing Oracle Database for caTissue Suite v1.1P4. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
 			<transaction src="${oracle.sql.dir}/InitDB_CreateTable.sql" />
 			<transaction src="${common.sql.dir}/initDB_Insert_Common.sql" />
 			<transaction src="${oracle.sql.dir}/AlterTable.sql" />
@@ -1427,6 +1386,7 @@
 				</fileset>
 			</classpath>
 		</sql>
+
 		<antcall target="update_metadata_for_model_changes" >
 			 <param name="isUpgrade" value="false"/>
 		</antcall>
@@ -1444,6 +1404,73 @@
 		</sql>
 	</target>
 
+	<target name="reset_sequences">
+		<echo message=" Resetting the sequences..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+					<transaction src="${oracle.sql.dir}/query/dropDESequence.SQL" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+					<transaction src="${oracle.sql.dir}/query/resetDESequence.SQL" />
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+		</sql>
+	</target>
+
+	<target name="drop_and_create_sequences">
+		<echo message="Recreating the sequences..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+					<transaction>
+					DROP SEQUENCE DE_ATTR_REC_SEQ ;
+					DROP SEQUENCE DE_COLL_ATTR_REC_VALUES_SEQ ;
+					DROP SEQUENCE DE_FILE_ATTR_REC_VALUES_SEQ ;
+					DROP SEQUENCE DE_OBJECT_ATTR_REC_VALUES_SEQ ;
+					DROP SEQUENCE DYEXTN_ABSTRACT_METADATA_SEQ ;
+					DROP SEQUENCE DYEXTN_ASSO_DISPLAY_ATTR_SEQ ;
+					DROP SEQUENCE DYEXTN_ATTRIBUTE_TYPE_INFO_SEQ ;
+					DROP SEQUENCE DYEXTN_CONTAINER_SEQ ;
+					DROP SEQUENCE DYEXTN_CONTROL_SEQ ;
+					DROP SEQUENCE DYEXTN_DATABASE_PROPERTIES_SEQ ;
+					DROP SEQUENCE DYEXTN_DATA_ELEMENT_SEQ ;
+					DROP SEQUENCE DYEXTN_ENTITY_MAP_CONDN_SEQ ;
+					DROP SEQUENCE DYEXTN_ENTITY_MAP_SEQ ;
+					DROP SEQUENCE DYEXTN_ENTITY_RECORD_SEQ ;
+					DROP SEQUENCE DYEXTN_FILE_EXTN_SEQ ;
+					DROP SEQUENCE DYEXTN_FORM_CONTEXT_SEQ ;
+					DROP SEQUENCE DYEXTN_PERMISSIBLEVAL_SEQ ;
+					DROP SEQUENCE DYEXTN_ROLE_SEQ ;
+					DROP SEQUENCE DYEXTN_RULE_PARAMETER_SEQ ;
+					DROP SEQUENCE DYEXTN_RULE_SEQ ;
+					DROP SEQUENCE DYEXTN_SEMANTIC_PROPERTY_SEQ ;
+					DROP SEQUENCE DYEXTN_TAGGED_VALUE_SEQ ;
+					DROP SEQUENCE DYEXTN_VALUE_DOMAIN_SEQ ;
+					DROP SEQUENCE DYEXTN_VIEW_SEQ ;
+					</transaction>
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+					<transaction src="${oracle.sql.dir}/query/createDESequence.SQL" />
+				</sql>
+
+	</target>
 	<target name="insertQueryMetadata">
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/CAModel.sql"/>
@@ -1479,6 +1506,7 @@
 
 	    <antcall target="drop_and_create_sequences" />
 	</target>
+
 
 	<!--Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1-->
 	<target name="upgrade_all" depends="upgrade_app, upgrade_db">
@@ -1689,26 +1717,30 @@
 			<antcall target="upgrade_app"/>
 			<antcall target="upgrade_db_from_p4_to_p5"/>
 	</target>
-	
+
 	<target name="upgrade_db_from_p4_to_p5">
 		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
-		    <if>
-				<equals arg1="mysql" arg2="${database.type}" />
+		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0"/>
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0"/>
+	    <if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_mysql_from_v1.1p4_to_v1.1p5" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_mysql_from_v1.1p4_to_v1.1p5" />
+					<antcall target="upgrade_oracle_from_v1.1p4_to_v1.1p5" />
 				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
-					<then>
-						<antcall target="upgrade_oracle_from_v1.1p4_to_v1.1p5" />
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-				</else>
-			</if>
-		</target>
-	
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		<antcall target="upgrade_de_integration_restructure_metadata"/>
+	<!--	<antcall target="upgrade_de_integration_restructure_data"/>  -->
+	</target>
+
 
 
 
@@ -1762,7 +1794,8 @@
 	<target name="upgrade_mysql_from_v1.1p4_to_v1.1p5">
 			<echo message="Upgrading MySQL Database." />
 			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
+				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" /> 
+				<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />
 				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">
@@ -1771,7 +1804,7 @@
 				</classpath>
 			</sql>
 		</target>
-	
+
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
 	<target name="upgrade_oracle_from_v1.1p2_to_v1.1p4">
 		<!-- Modifying catissue_container table by changing 'FULL' column name with 'CONT_FULL'. As 'FULL' is a keyword in some dbs. -->
@@ -1789,13 +1822,14 @@
 		</sql>
 		<antcall target="upgrade_metadata_for_constraintproperties" />
 		<antcall target="upgrade_saved_queries"></antcall>
-   </target>	
+   </target>
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
 	<target name="upgrade_oracle_from_v1.1p4_to_v1.1p5">
 		<echo message="Upgrading Oracle Database." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1803,7 +1837,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-   </target>	
+   </target>
 
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes">
@@ -1942,6 +1976,160 @@
 		<antcall target="reset_sequences" />
 	</target>
 
+	<!-- Start : DE Integration Restructure for p5 -->
+	<target name="upgrade_de_integration_restructure_metadata">
+	<if>
+		<equals arg1="mysql" arg2="${database.type}" />
+		<then>
+			<antcall target="upgrade_de_integration_restructure_metadata_mysql" />
+		</then>
+		<elseif>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_de_integration_restructure_metadata_oracle" />
+			</then>
+		</elseif>
+		<!-- mssqlserver db -->
+		<elseif>
+			<equals arg1="mssqlserver" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_de_integration_restructure_metadata_mssqlserver" />
+			</then>
+		</elseif>
+	</if>
+
+	</target>
+
+	<target name="upgrade_de_integration_restructure_metadata_mysql">
+	<echo message="Updating DE integration metadata for Query (mysql)....." />
+
+	<java classname="edu.wustl.catissuecore.querysuite.metadata.AddDEIntegrationMetadata" fork="true" maxmemory="1024M" failonerror="true">
+		<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+		<classpath refid="temp.classpath" />
+		<classpath>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+		<arg value="${database.host}"/>
+		<arg value="${database.port}"/>
+		<arg value="${database.type}"/>
+		<arg value="${database.name}"/>
+		<arg value="${database.username}"/>
+		<arg value="${database.password}"/>
+		<arg value="com.mysql.jdbc.Driver"/>
+
+		<!-- <arg value="${mysql.driver.string}"/> -->
+	</java>
+	<!-- <antcall target="reset_DE_sequences" />  -->
+	<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
+		<transaction src="${dbupgrade.sql.dir}/Common/DEIntegrationRestructure_Data.sql" />
+		<transaction>commit;</transaction>
+		<classpath>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</sql>
+	</target>
+
+	<target name="upgrade_de_integration_restructure_metadata_oracle">
+		<echo message="Updating DE integration metadata for Query (oracle)....." />
+
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddDEIntegrationMetadata" fork="true" maxmemory="1024M" failonerror="true">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${oracle.driver.string}"/>
+
+			<!-- <arg value="${mysql.driver.string}"/> -->
+		</java>
+		<antcall target="reset_DE_sequences" />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Common/DEIntegrationRestructure_Data.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+
+	<target name="upgrade_de_integration_restructure_data" depends="commondbconfig">
+
+		<echo message="Updating DE integration metadata Data(mysql)....." />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_de_integration_restructure_data_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_de_integration_restructure_data_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+
+	<target name="upgrade_de_integration_restructure_data_mysql">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="com.mysql.jdbc.Driver"/>
+
+			<!-- <arg value="${mysql.driver.string}"/> -->
+		</java>
+	</target>
+
+	<target name="upgrade_de_integration_restructure_data_oracle">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${oracle.driver.string}"/>
+
+			<!-- <arg value="${mysql.driver.string}"/> -->
+		</java>
+	</target>
+
+	<!-- End : DE Integration Restructure for p5 -->
 
 	<target name="Export_Clinical_diagnosis">
 		<if>
@@ -2413,11 +2601,12 @@ Thanking You,
 		</if>
 	</target>
 
-	<property name="filename" value="" />
-	<property name="hookentity" value="" />
-	<property name="mainContainerList" value="" />
-	<property name="condition" value="" />
-	<property name="package" value="" />
+	<property name="filename" value=" " />
+	<property name="hookentity" value=" " />
+	<property name="mainContainerList" value=" " />
+	<property name="condition" value=" " />
+	<property name="package" value=" " />
+	<property name="addQueryPaths" value=" " />
 
 	<target name="import_xmi">
 		<delete quiet="true" includeemptydirs="true">
@@ -2428,8 +2617,9 @@ Thanking You,
 
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<antcall target="replace_app_dao_prop_file"/>
+		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
 
 		<!--<echo>Configuring logger ...</echo>
 		<antcall target="configure_log4j" />-->
@@ -2474,9 +2664,10 @@ Thanking You,
 
 		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m">
 			<arg value="${filename}" />
-			<arg value="${hookentity}" />
 			<arg value="${mainContainerList}" />
 			<arg value="${package}" />
+			<arg value="${hookentity}" />
+			<arg value="${addQueryPaths}" />
 			<arg value="${condition}" />
 
 			<classpath>
@@ -2575,75 +2766,7 @@ Thanking You,
 	</target>
 
 
-<!-- XMI EXPORT-->
-	<property name="groupname" value="" />
-	<property name="version" value="" />
-	<target name="export_xmi">
-		<delete quiet="true" includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
 
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-
-		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-
-		<!--<echo>Configuring logger ...</echo>
-		<antcall target="configure_log4j" />-->
-
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-		</if>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-			<include name="*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="${token.database.password}" value="${database.password}" />
-		</replace>
-
-		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true" maxmemory="1024m">
-			<arg value="${groupname}" />
-			<arg value="${filename}" />
-			<arg value="${version}" />
-			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
-					<exclude name="commons-lang-1.0.1.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</java>
-
-		<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-	</target>
 
 	<target name="deploy_gate" depends="assertforgate">
 		<echo message="Deploying gate...." />
@@ -2751,160 +2874,9 @@ Thanking You,
 		</sql>
 	</target>
 
-	<target name="create_category">
-		<delete quiet="true" includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 
-		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
-			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
-		</replace>
-		<antcall target="replace_app_dao_prop_file"></antcall>
-		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 
-		<!--<echo>Configuring logger ...</echo>
-		<antcall target="configure_log4j" />-->
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}"/>
-				<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver"/>
-				<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
-			</then>
-		<elseif>
-			<equals arg1="oracle" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}"/>
-				<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}"/>
-				<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-				</replace>
-			</then>
-		</elseif>
-		<elseif>
-			<equals arg1="mssqlserver" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-				<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-				<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-				</replace>
-			</then>
-		</elseif>
-		</if>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-			<include name="*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="${token.database.password}" value="${database.password}"/>
-		</replace>
 
-		<java classname="edu.wustl.catissuecore.annotations.xmi.CategoryIntegration" fork="true" maxmemory="1024M">
-			<arg value="${categoryDefinitionFilePath}"/>
-				<classpath>
-					<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes"/>
-		            <fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-			          	<include name="*.jar"/>
-			           		<exclude name="uml-1.3.jar"/>
-			         </fileset>
-					<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-					</fileset>
-			    </classpath>
-		</java>
-
-		<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-	</target>
-
-	<target name="import_permissible_values">
-		<delete quiet="true" includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<unzip src="${base.dir}/dynamicextensions.zip" dest="${temp.dir}/catissuecore" overwrite="true" />
-		<unjar src="${temp.dir}/catissuecore/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-		<copy file="${temp.dir}/catissuecore/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-
-		<!--<echo>Configuring logger ...</echo>
-		<antcall target="configure_log4j" />-->
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}"/>
-				<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver"/>
-				<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}"/>
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}"/>
-					<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}"/>
-					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}"/>
-				<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-					<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-					<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-				</replace>
-				</then>
-			</elseif>
-
-		</if>
-		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-			<include name="*.cfg.xml" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
-			<replacefilter token="${token.database.password}" value="${database.password}"/>
-		</replace>
-		<antcall target="replace_app_dao_prop_file"/>
-		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">
-			<arg value="${permissibleValuesFile}"/>
-			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes"/>
-			       	<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-						<include name="*.jar"/>
-			           		<exclude name="uml-1.3.jar"/>
-			         </fileset>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-			</classpath>
-		</java>
-
-		<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>
-	</target>
 
 	<!--  ShippingTracking - start -->
 	<!-- Check user selected deploy.shippingtracking to true and shippingtracking.zip exists
@@ -3980,7 +3952,7 @@ Thanking You,
 			<arg value="${oracle.driver.string}"/>
 		</java>
 	</target>
-	
+
 	<target name="replaceQuerycfgfile">
 		<copy file="${base.dir}/DE_conf/QueryHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<if>
@@ -3992,7 +3964,7 @@ Thanking You,
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
 				</replace>
 			<var name="database.url" value="jdbc:mysql://"/>
-			</then>	
+			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
@@ -4057,20 +4029,20 @@ Thanking You,
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
-	
+
 	<property name="operationName" value="" />
 	<property name="dropdownName" value="" />
 	<property name="csvFile" value="" />
 	<property name="xmlFile" value="" />
 
-	<target name="add_bulk_operation_template">		
+	<target name="add_bulk_operation_template">
 		<echo message="unwar catissue.........." />
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		
+
 		<echo message="Starting to load Bulk Operator Template.........." />
 		<java classname="edu.wustl.catissuecore.bizlogic.bulkOperations.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
-			
+
 			<arg value="${operationName}" />
 			<arg value="${dropdownName}" />
 			<arg value="${csvFile}" />
@@ -4085,7 +4057,7 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</java>
-		
+
 		<echo message="deleting unwar catissue.........." />
 		<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}">
@@ -4093,5 +4065,5 @@ Thanking You,
 			</fileset>
 		</delete>
 	</target>
-	
+
 </project>

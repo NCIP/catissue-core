@@ -4,9 +4,9 @@
     "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-	
+
     <session-factory>
-     
+
     	<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.datasource">java:/catissuecore</property>
@@ -14,24 +14,24 @@
 		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>
-		
+
   <!--
      	<property name="show_sql">false</property>
-    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>	
+    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
     	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
         <property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 	    <property name="connection.url">jdbc:mysql://localhost:3306/suite</property>
 	    <property name="connection.username">virender</property>
-	    <property name="connection.password">virender</property>   
-	    <property name="hibernate.jdbc.batch_size">0</property>   
+	    <property name="connection.password">virender</property>
+	    <property name="hibernate.jdbc.batch_size">0</property>
   -->
     	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
 		<!--Consent Tracking Suite-->
-		
+
 		<!-- caTIES Suite-->
     	<mapping resource="edu/wustl/catissuecore/hbm/Concept.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
@@ -46,6 +46,13 @@
 		<!-- caTIES Suite-->
 
         <!-- List of all Mapping files -->
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractFormContext.hbm.xml"/>
+		<mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/ParticipantRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SpecimenRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SCGRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StudyFormContext.hbm.xml"/>
+
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
@@ -77,13 +84,13 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
-		
+
 		<mapping resource="edu/wustl/simplequery/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/simplequery/hbm/QueryTableData.hbm.xml"/>
-		
+
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
-		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
-		
+		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
+
 		<!--List of classes required for Query module-->
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
@@ -109,12 +116,12 @@
 		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
 
-		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>		
-		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>	
-		
+		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>
+
 		<!-- Shipping Tracking Merge Himanshu-->
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
 		<!-- shipping tracking merge ends -->
     </session-factory>
-    
+
 </hibernate-configuration>

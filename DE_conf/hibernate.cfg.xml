@@ -5,26 +5,26 @@
 
 
 <hibernate-configuration>
-	
+
     <session-factory>
     	<property name="show_sql">false</property>
-    	<property name="dialect">@@DIALECT@@</property>	
+    	<property name="dialect">@@DIALECT@@</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
 		<property name="connection.driver_class">@@DRIVER@@</property>
-	
+
 	 	<property name="connection.url">@@URL@@</property>
 	    <property name="connection.username">@@DATABASE_USERNAME@@</property>
-	    <property name="connection.password">@@DATABASE_PASSWORD@@</property> 
-	 
+	    <property name="connection.password">@@DATABASE_PASSWORD@@</property>
+
 	 	<property name="hibernate.jdbc.batch_size">0</property>
-    	
+
     	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
 		<!--Consent Tracking Suite-->
-		
+
 		<!-- caTIES Suite-->
     	<mapping resource="edu/wustl/catissuecore/hbm/Concept.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
@@ -39,6 +39,13 @@
 		<!-- caTIES Suite-->
 
         <!-- List of all Mapping files -->
+        <mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractFormContext.hbm.xml"/>
+		<mapping resource="edu/common/dynamicextensions/hbm/integration/AbstractRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/ParticipantRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SpecimenRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/deintegration/SCGRecordEntry.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/StudyFormContext.hbm.xml"/>
+
       	<mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
@@ -72,16 +79,16 @@
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/simplequery/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/simplequery/hbm/QueryTableData.hbm.xml"/>
-		
+
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
-		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
-		
-				
+		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
+
+
 		<!--List of classes required for Query module-->
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
-		
+
 		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml" />
@@ -101,9 +108,9 @@
 		<mapping resource="edu/wustl/common/hbm/OutputTerm.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/PersistentGraph.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Parameter.hbm.xml" />
-		
-		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>	
-		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>	
+
+		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>
     </session-factory>
-    
+
 </hibernate-configuration>
