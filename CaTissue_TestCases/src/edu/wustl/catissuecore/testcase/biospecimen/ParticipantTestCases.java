@@ -417,19 +417,18 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		partForm.setGender( participant.getGender() );
 		partForm.setId( participant.getId() );
 		partForm.setRaceTypes( new String[] {"Asian"} );
+		partForm.setOnSubmit( "/QueryManageBioSpecimen.do" );		
 		participant.setCollectionProtocolRegistrationCollection(participant.getCollectionProtocolRegistrationCollection());
 		partForm.setActivityStatus( "Disabled" );
 		partForm.setOperation("edit") ;
 		setRequestPathInfo("/ParticipantEdit");
 		setActionForm(partForm);
 		actionPerform();
-		verifyForward("failure");
-		/**
-		 * error msg will be "Unable to disable Participant : 
-		 * Before disabling it, dispose all the associated Specimens."
-		 */
-		String errormsg[] = new String[]{"errors.item"};
-		verifyActionErrors(errormsg);
+		verifyNoActionErrors();
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();		
 	}
 	/**
 	 * Test Participant with PMI
