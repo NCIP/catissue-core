@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,9 +33,6 @@ import org.hibernate.HibernateException;
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Entity;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -52,6 +48,7 @@ import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -62,8 +59,6 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
@@ -173,21 +168,33 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param annotationForm - AnnotationForm
 	 * @param containerId - container Id
 	 * @param request - HttpServletRequest object
-	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
+	 * @throws BizLogicException
+	 * @throws NumberFormatException
 	 */
 	private void getCPConditions(AnnotationForm annotationForm, String containerId,
-			HttpServletRequest request) throws DynamicExtensionsSystemException
+			HttpServletRequest request) throws NumberFormatException, BizLogicException
 	{
 		if (containerId != null)
 		{
-			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-					.getInstance();
-			final List entitymapList = this.getEntityMapsForDE( Long.valueOf( containerId ) );
-			if (entitymapList != null && !entitymapList.isEmpty())
+			AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+			//final List entitymapList = getEntityMapsForDE( Long.valueOf( containerId ) );
+			final StudyFormContext studyFormContext = bizLogic.getStudyFormContext(Long.valueOf( containerId ));
+			if (studyFormContext != null )
 			{
 				String[] whereColumnValue = null;
 				int i = 0;
-				EntityMap entityMap = new EntityMap();
+
+				Collection coll = studyFormContext.getCollectionProtocolCollection();
+				final Iterator < CollectionProtocol > cpIterator = coll.iterator();
+				while(cpIterator.hasNext())
+				{
+					final CollectionProtocol collectionProtocol = cpIterator.next();
+					Long collectionProtocolId = collectionProtocol.getId();
+					whereColumnValue[i++] = collectionProtocolId.toString();
+				}
+
+				//Commented by Deepali
+				/*EntityMap entityMap = new EntityMap();
 				entityMap = (EntityMap) entitymapList.get( 0 );
 				final Collection < FormContext > formContexts = AppUtility
 						.getFormContexts( entityMap.getId() );
@@ -212,6 +219,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 							{
 								final EntityMapCondition entityMapCondition = (EntityMapCondition) entityMapCondIterator
 										.next();
+
 								if (entityMapCondition.getTypeId().toString().equals(
 										catissueCoreCacheManager.getObjectFromCache(
 												AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID )
@@ -223,7 +231,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 							}
 						}
 					}
-				}
+				}*/
 				if (whereColumnValue == null || whereColumnValue.length == 0)
 				{
 					whereColumnValue = new String[]{Constants.ALL};
@@ -285,24 +293,28 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				deletedAssociationIdArray = deletedAssociationIds.split( "_" );
 			}
 			final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-			List < EntityMap > entityMapList = null;
+			//List < EntityMap > entityMapList = null;
+			List entityMapList = null;
 			try
 			{
-				entityMapList = defaultBizLogic.retrieve( EntityMap.class.getName(), "containerId",
-						Long.parseLong( dynExtContainerId ) );
+				/*entityMapList = defaultBizLogic.retrieve( EntityMap.class.getName(), "containerId",
+						Long.parseLong( dynExtContainerId ) );*/
 				if (entityMapList == null || entityMapList.isEmpty())
 				{//If entity map is not present then Add case
-					final EntityMap entityMap = this.getEntityMap( request, staticEntityId,
+					// Commented By Deepali
+					/*final EntityMap entityMap = getEntityMap( request, staticEntityId,
 							dynExtContainerId, staticRecordIds );
-					final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-					annotationBizLogic.insertEntityMap( entityMap );
+					final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();*/
+					// commented by pavan, as local extentions is not in use
+					//annotationBizLogic.insertEntityMap( entityMap );
 				}
 				else
 				{//if entity map is present then Edit case
 					//Getting the static entity id
 
-					final EntityMap baseLevelEntityMap = entityMapList.get( 0 );
-					staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();
+					// Commented by Deepali
+					/*final EntityMap baseLevelEntityMap = entityMapList.get( 0 );
+					staticEntityId = baseLevelEntityMap.getStaticEntityId().toString();*/
 
 					//Retrieving the container
 					try
@@ -329,7 +341,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						dynamicContainer = (Container) dao.retrieveById( Container.class.getName(),
 								Long.valueOf( dynExtContainerId ) );
 
-						final AssociationInterface association = edu.wustl.catissuecore.bizlogic.AnnotationUtil
+						final AssociationInterface association = edu.common.dynamicextensions.xmi.AnnotationUtil
 								.getAssociationForEntity( staticEntity, dynamicContainer
 										.getAbstractEntity() );
 						//	Get entitygroup that is used by caB2B for path finder purpose.
@@ -347,9 +359,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 								.getAbstractEntity(), staticEntity, association.getId(),
 								staticEntity.getId(), processedPathList );
 
-						edu.wustl.catissuecore.bizlogic.AnnotationUtil.addEntitiesToCache( false,
-								(EntityInterface) dynamicContainer.getAbstractEntity(),
-								staticEntity );
 					}
 					catch (final BizLogicException excep)
 					{
@@ -464,8 +473,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		{
 			//if (dynamicEntity.getId() != null)
 			//{
-				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery( staticEntity
-						.getId(), dynamicEntity, staticEntityId, associationId );
+			// commented by pavan as ;Local Extentions is not in use now.
+				/*edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery( staticEntity
+						.getId(), dynamicEntity, staticEntityId, associationId );*/
 			//}
 		}
 		final Collection < AssociationInterface > associationCollection = dynamicEntity
@@ -544,7 +554,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param conditions - conditions
 	 * @return EntityMap
 	 */
-	private EntityMap getEntityMap(HttpServletRequest request, String staticEntityId,
+	/*private EntityMap getEntityMap(HttpServletRequest request, String staticEntityId,
 			String dynExtContainerId, String[] conditions)
 	{
 		final AnnotationUtil util = new AnnotationUtil();
@@ -572,7 +582,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		//    entityMapObj.setEntityMapConditionCollection(entityMapConditionCollection);
 
 		return entityMapObj;
-	}
+	}*/
 
 	/**
 	 * @param request - HttpServletRequest
@@ -749,30 +759,39 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			String editDynExtEntityURL = this.getDynamicExtentionsEditURL( Long.valueOf( container
 					.getValue() ) );
 
-			final List < EntityMap > entityMapList = this.getEntityMapsForDE( Long.valueOf( container
-					.getValue() ) );
-			if (entityMapList != null)
+			/*final List < EntityMap > entityMapList = getEntityMapsForDE( Long.valueOf( container
+					.getValue() ) );*/
+			CatissueCoreCacheManager catCoreCacheMgr = CatissueCoreCacheManager.getInstance();
+			Long staticEntityId = (Long) catCoreCacheMgr
+					.getObjectFromCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+			if (staticEntityId != null)
 			{
-				final Iterator < EntityMap > entityMapIterator = entityMapList.iterator();
-				while (entityMapIterator.hasNext())
-				{
-					final EntityMap entityMapObj = entityMapIterator.next();
-					final String editDynExtCondnURL = this.getDynamicExtentionsEditCondnURL(
-							Long.valueOf( container.getValue() ), entityMapObj.getStaticEntityId() );					
+				//final Iterator < EntityMap > entityMapIterator = entityMapList.iterator();
+				//while (entityMapIterator.hasNext())
+				//{
+					//final EntityMap entityMapObj = entityMapIterator.next();
+					/*final String editDynExtCondnURL = getDynamicExtentionsEditCondnURL(
+							Long.valueOf( container.getValue() ), entityMapObj.getStaticEntityId() );
 					editDynExtEntityURL = editDynExtEntityURL + "&staticEntityId="
 							+ entityMapObj.getStaticEntityId();
-					entityXML.append( this.getXMLForEntityMap( container.getName(), entityMapObj,
+					entityXML.append( getXMLForEntityMap( container.getName(), entityMapObj,
 							entityIndex + index, editDynExtEntityURL, editDynExtCondnURL,
-							innerList, request ) );
-					index++;
-				}
+							innerList, request ) );*/
+				final String editDynExtCondnURL = getDynamicExtentionsEditCondnURL(Long
+						.valueOf(container.getValue()), staticEntityId);
+				editDynExtEntityURL = editDynExtEntityURL + "&staticEntityId=" + staticEntityId;
+				entityXML.append(getXMLForEntityMap(container.getName(), staticEntityId,
+						entityIndex + index, editDynExtEntityURL, editDynExtCondnURL, innerList,
+						request));
+				index++;
+				//}
 			}
 		}
 		return entityXML.toString();
 	}
 
 	/**
-	 * @param containercaption - containercaption
+	 * @param containercaption - containerCaption
 	 * @param entityMapObj - entityMapObj
 	 * @param rowId - rowId
 	 * @param dynExtentionsEditEntityURL - dynExtentionsEditEntityURL
@@ -783,7 +802,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
 	 * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
 	 */
-	private StringBuffer getXMLForEntityMap(String containercaption, EntityMap entityMapObj,
+	private StringBuffer getXMLForEntityMap(String containercaption, Long staticEntityId,
 			int rowId, String dynExtentionsEditEntityURL, String editDynExtCondnURL,
 			List innerList, HttpServletRequest request) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException
@@ -793,30 +812,32 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		//entityMapXML.append("<cell>0</cell>");
 		// innerList.add(rowId);
 		entityMapXML.append( AnnotationConstants.CELL_START );
-		entityMapXML.append( containercaption ); 
-		entityMapXML.append( '^' ); 
+		entityMapXML.append( containercaption );
+		entityMapXML.append( '^' );
 		entityMapXML.append( dynExtentionsEditEntityURL );
 		entityMapXML.append( AnnotationConstants.CELL_END );
-		String url = this.makeURL( containercaption, dynExtentionsEditEntityURL );
+		String url = makeURL( containercaption, dynExtentionsEditEntityURL );
 		innerList.add( url );
-		if (entityMapObj != null)
+		if (staticEntityId != null)
 		{
-			final String staticEntityName = this.getEntityName( entityMapObj.getStaticEntityId(),
+			final String staticEntityName = getEntityName( staticEntityId,
 					request );
 			entityMapXML.append( AnnotationConstants.CELL_START );
 			entityMapXML.append( staticEntityName );
 			entityMapXML.append( AnnotationConstants.CELL_END );
 			innerList.add( staticEntityName );
 			entityMapXML.append( AnnotationConstants.CELL_START );
-			entityMapXML.append( CommonUtilities.parseDateToString( entityMapObj.getCreatedDate(),
-					CommonServiceLocator.getInstance().getDatePattern() )); 
+			/*entityMapXML.append( CommonUtilities.parseDateToString( entityMapObj.getCreatedDate(),
+					CommonServiceLocator.getInstance().getDatePattern() ));*/
 			entityMapXML.append( AnnotationConstants.CELL_END );
-			innerList.add( CommonUtilities.parseDateToString( entityMapObj.getCreatedDate(),
-					CommonServiceLocator.getInstance().getDatePattern() ) );
+			/*innerList.add( CommonUtilities.parseDateToString( entityMapObj.getCreatedDate(),
+					CommonServiceLocator.getInstance().getDatePattern() ) );*/
+			innerList.add( "" );
 			entityMapXML.append( AnnotationConstants.CELL_START );
-			entityMapXML.append( entityMapObj.getCreatedBy() );
+			//entityMapXML.append( entityMapObj.getCreatedBy() );
 			entityMapXML.append( AnnotationConstants.CELL_END );
-			String name = entityMapObj.getCreatedBy();
+			//String name = entityMapObj.getCreatedBy();
+			String name = null;
 			if (name == null)
 			{
 				name = ",";
@@ -828,14 +849,15 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			}
 			else
 			{
-				innerList.add( entityMapObj.getCreatedBy() );
+				//innerList.add( entityMapObj.getCreatedBy() );
+				innerList.add( "" );
 				/* entityMapXML.append(AnnotationConstants.CELL_START + entityMapObj.getLinkStatus()
 				 + AnnotationConstants.CELL_END);*/
 			}
 		}
-		entityMapXML.append( AnnotationConstants.CELL_START ); 
+		entityMapXML.append( AnnotationConstants.CELL_START );
 		entityMapXML.append( edu.wustl.catissuecore.util.global.Constants.EDIT_CONDN );
-		entityMapXML.append( '^' ); 
+		entityMapXML.append( '^' );
 		entityMapXML.append( editDynExtCondnURL );
 		entityMapXML.append( AnnotationConstants.CELL_END );
 		url = this.makeURL( edu.wustl.catissuecore.util.global.Constants.EDIT_CONDN,
@@ -846,14 +868,14 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	}
 
 	/**
-	 * @param containercaption - containercaption
+	 * @param containercaption - containerCaption
 	 * @param dynExtentionsEditEntityURL - dynExtentionsEditEntityURL
 	 * @return String
 	 */
 	private String makeURL(String containercaption, String dynExtentionsEditEntityURL)
 	{
-		String url = "";
-		url = "<a href=" + "'" + dynExtentionsEditEntityURL + "'>" + containercaption + "</a>";
+		String url = "<a href=" + "'" + dynExtentionsEditEntityURL + "'>" + containercaption
+				+ "</a>";
 		return url;
 	}
 
@@ -861,18 +883,16 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @param dynEntityContainerId - dynEntityContainerId
 	 * @return List of EntityMap
 	 */
-	private List < EntityMap > getEntityMapsForDE(Long dynEntityContainerId)
+	/*private List < EntityMap > getEntityMapsForDE(Long dynEntityContainerId)
 	{
 		List < EntityMap > entityMapList = null;
 		if (dynEntityContainerId != null)
 		{
 			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 			entityMapList = annotationBizLogic.getListOfStaticEntities( dynEntityContainerId );
-			/*List staticEntityIdsList = annotationBizLogic.getListOfStaticEntities(dynEntityContainerId);
-			 entityMapList = getEntityMapList(staticEntityIdsList);*/
 		}
 		return entityMapList;
-	}
+	}*/
 
 	//	/**
 	//	 * @param staticEntityIdsList
@@ -1066,8 +1086,9 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				{
 					groupsXML.append( "<row id='" + groupBean.getValue() + "' >" );
 					//groupsXML.append("<cell>0</cell>");
-					groupsXML.append( AnnotationConstants.CELL_START + groupBean.getName() + AnnotationConstants.CELL_END );
-					innerList.add( groupBean.getValue() );
+					groupsXML.append(AnnotationConstants.CELL_START + groupBean.getName()
+							+ AnnotationConstants.CELL_END);
+					innerList.add(groupBean.getValue());
 					innerList.add( groupBean.getName() );
 					groupsXML.append( "</row>" );
 					dataList.add( innerList );

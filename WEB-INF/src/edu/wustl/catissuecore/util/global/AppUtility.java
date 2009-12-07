@@ -37,15 +37,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 
-
-
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
-import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Category;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.EntityMapRecord;
-import edu.common.dynamicextensions.domain.integration.FormContext;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
@@ -53,7 +46,6 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -138,7 +130,7 @@ import gov.nih.nci.security.exceptions.CSTransactionException;
 
 /**
  * AppUtility Class contain general methods used through out the application.
- * 
+ *
  * @author kapil_kaveeshwar
  */
 public class AppUtility
@@ -302,7 +294,7 @@ public class AppUtility
 	// Aniruddha : Added for enhancement - Specimen Aliquoting [Bug Id : 560]
 	/**
 	 * Returns true if qunatity is of type double else false.
-	 * 
+	 *
 	 * @param className
 	 *            Name of specimen class
 	 * @param type
@@ -339,7 +331,7 @@ public class AppUtility
 	// Aniruddha : Added for enhancement - Specimen Aliquoting
 	/**
 	 * Returns the unit of specimen quantity.
-	 * 
+	 *
 	 * @param className
 	 *            Name of specimen class
 	 * @param type
@@ -390,7 +382,7 @@ public class AppUtility
 	// Aniruddha : Added for enhancement - Specimen Aliquoting
 	/**
 	 * Returns the particular specimen object as per the specimen class.
-	 * 
+	 *
 	 * @param className
 	 *            Name of specimen class
 	 * @return the particular specimen object as per the specimen class.
@@ -696,7 +688,7 @@ public class AppUtility
 
 	/**
 	 * This method returns a list of string values for a given CDE.
-	 * 
+	 *
 	 * @param cdeName
 	 * @return
 	 */
@@ -723,7 +715,7 @@ public class AppUtility
 
 	/**
 	 * returns list of all subPVs under this PV, recursively.
-	 * 
+	 *
 	 * @param permissibleValue
 	 * @return
 	 */
@@ -748,7 +740,7 @@ public class AppUtility
 	 * Changes the format of the string compatible to New Grid Format, removing
 	 * escape characters and special characters from the string Also replaces
 	 * comma with space as comma is used as a delimiter.
-	 * 
+	 *
 	 * @param obj -
 	 *            Unformatted obj to be printed in Grid Format
 	 * @return obj - Foratted obj to print in Grid Format
@@ -777,7 +769,7 @@ public class AppUtility
 	// Consent tracking(Virender Mehta)
 	/**
 	 * Prepare Respopnse List
-	 * 
+	 *
 	 * @param opr
 	 *            If Operation = Edit then "Withdraw" is added in the List
 	 * @return listOfResponces
@@ -807,7 +799,7 @@ public class AppUtility
 	/**
 	 * Changes the format of the string compatible to New Grid Format. Also
 	 * create hyperlink for the columns that are to be shown as hyperlink.
-	 * 
+	 *
 	 * @param row
 	 *            The List representing row of that is to be shown in the Grid.
 	 * @param hyperlinkColumnMap
@@ -834,9 +826,9 @@ public class AppUtility
 			obj = toNewGridFormat(obj);
 
 			final QueryResultObjectData queryResultObjectData = hyperlinkColumnMap.get(index);
-			/** 
-			 * row contains '##' means the user is not authorized to see the page in edit mode 
-			 * thus column is not shown as hyperlink.  
+			/**
+			 * row contains '##' means the user is not authorized to see the page in edit mode
+			 * thus column is not shown as hyperlink.
 			 */
 			if (!row.contains("##"))//bug 12280
 			{
@@ -880,7 +872,7 @@ public class AppUtility
 	/**
 	 * This method creates a comma separated string of numbers representing
 	 * column width.
-	 * 
+	 *
 	 */
 	public static String getColumnWidth(List columnNames)
 	{
@@ -921,7 +913,7 @@ public class AppUtility
 
 	/**
 	 * This method set TissueList with only Leaf node.
-	 * 
+	 *
 	 * @return tissueList
 	 * @throws BizLogicException BizLogic Exception.
 	 */
@@ -948,7 +940,7 @@ public class AppUtility
 	/**
 	 * Method to check type and class compatibility of specimen as a part of
 	 * validation process.
-	 * 
+	 *
 	 * @param specimenClass
 	 *            specimen class
 	 * @param specimenType
@@ -979,7 +971,7 @@ public class AppUtility
 	/**
 	 * This method will return Permissible Value List from CDE depending on the
 	 * listType
-	 * 
+	 *
 	 * @param listType
 	 * @return
 	 */
@@ -996,7 +988,7 @@ public class AppUtility
 	/**
 	 * This method generated the toolTip for events in HTML format for the given
 	 * NewSpecimen form
-	 * 
+	 *
 	 * @param specimenForm
 	 *            for which toolTip has to generate for events
 	 * @return toolTipText in required format
@@ -1042,7 +1034,7 @@ public class AppUtility
 	/**
 	 * This method returns the user name of user of given id (format of name:
 	 * LastName,FirstName)
-	 * 
+	 *
 	 * @param userId
 	 *            user id of which user name has to return
 	 * @return userName in the given format
@@ -1115,7 +1107,7 @@ public class AppUtility
 	/**
 	 * This method returns the SpecimenCollectionGroup given a
 	 * SpecimenCollectionGroup identifier.
-	 * 
+	 *
 	 * @param specimenCollectionGroupId
 	 *            SpecimenCollectionGroup identifier.
 	 * @return SpecimenCollectionGroup
@@ -1158,14 +1150,14 @@ public class AppUtility
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		if (scgList.size() > 0)
 		{
-			scgId = Utility.toString((Long) scgList.get(0));
+			scgId = Utility.toString(scgList.get(0));
 		}
 		return scgId;
 	}
 
 	/**
 	 * Generates key for ParticipantMedicalIdentifierMap
-	 * 
+	 *
 	 * @param i
 	 *            serial number
 	 * @param keyFor
@@ -1179,7 +1171,7 @@ public class AppUtility
 
 	/**
 	 * To get the array of ids from the given DomainObject collection.
-	 * 
+	 *
 	 * @param domainObjectCollection
 	 *            The collectio of domain objects.
 	 * @return The array of ids from the given DomainObject collection.
@@ -1253,7 +1245,7 @@ public class AppUtility
 
 	/**
 	 * Executes hql Query and returns the results.
-	 * 
+	 *
 	 * @param hql
 	 *            String hql
 	 * @throws DAOException
@@ -1274,7 +1266,7 @@ public class AppUtility
 
 	/**
 	 * Executes sql Query and returns the results.
-	 * 
+	 *
 	 * @param sql
 	 *            String hql
 	 * @throws DAOException
@@ -1359,7 +1351,7 @@ public class AppUtility
 	/**
 	 * limits the title of the saved query to 125 characters to avoid horizontal
 	 * scrollbar
-	 * 
+	 *
 	 * @param title -
 	 *            title of the saved query (may be greater than 125 characters)
 	 * @return - query title upto 125 characters
@@ -1380,7 +1372,7 @@ public class AppUtility
 
 	/**
 	 * returns the entire title to display it in tooltip .
-	 * 
+	 *
 	 * @param title -
 	 *            title of the saved query
 	 * @return tooltip string
@@ -1394,7 +1386,7 @@ public class AppUtility
 
 	/**
 	 * Method to check the associated deidentified report is quarantined or not
-	 * 
+	 *
 	 * @param reportId
 	 *            id of identified report
 	 * @return boolean value for is quarantine
@@ -1422,7 +1414,7 @@ public class AppUtility
 	/**
 	 * Adds the attribute values in the list in sorted order and returns the
 	 * list containing the attribute values in proper order
-	 * 
+	 *
 	 * @param dataType -
 	 *            data type of the attribute value
 	 * @param value1 -
@@ -1493,7 +1485,7 @@ public class AppUtility
 	/**
 	 * This method returns the new Date by adding the days as specified in the
 	 * Date which user passes.
-	 * 
+	 *
 	 * @param date
 	 *            Date in which days are to be added
 	 * @param daysToBeAdded
@@ -1531,7 +1523,7 @@ public class AppUtility
 			queryWhereClause.addCondition(new EqualClause(Constants.LOGINNAME, sessionDataBean
 					.getUserName()));
 
-			final List userIDList = (List) dao.retrieve(sourceObjectName, selectColumnName,
+			final List userIDList = dao.retrieve(sourceObjectName, selectColumnName,
 					queryWhereClause);
 			if (userIDList != null && userIDList.size() > 0)
 			{
@@ -1567,7 +1559,7 @@ public class AppUtility
 	}
 
 	/**
-	 * This function will return CollectionProtocolRegistration object 
+	 * This function will return CollectionProtocolRegistration object
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return collectionProtocolRegistration
 	 */
@@ -1585,7 +1577,7 @@ public class AppUtility
 	}
 
 	/**
-	 * This function will return SpecimenCollectionGroup object 
+	 * This function will return SpecimenCollectionGroup object
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return specimenCollectionGroupObject
 	 */
@@ -2075,7 +2067,7 @@ public class AppUtility
 	}
 
 	/**
-	 * To distribute bean data in case C & F checkbox is checked 
+	 * To distribute bean data in case C & F checkbox is checked
 	 * into 2 beans - 1 for CP privileges, other for Site privileges
 	 */
 	public static Map splitBeanData(SiteUserRolePrivilegeBean siteUserRolePrivBean)
@@ -2202,7 +2194,7 @@ public class AppUtility
 		catch (final SMException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();			
+			e.printStackTrace();
 			handleSMException(e);
 		}
 		catch (final CSTransactionException e)
@@ -2301,7 +2293,7 @@ public class AppUtility
 
 	/**
 	 * @param collectionProtocol
-	 * @param session 
+	 * @param session
 	 * @return
 	 */
 	public static CollectionProtocolDTO getCoolectionProtocolDTO(
@@ -2901,185 +2893,6 @@ public class AppUtility
 		return entityIdsVsContId;
 	}
 
-	/**
-	 * This method is used to set the condition on Forms/Entities
-	 * @param formContext set the object on which condition has to be set
-	 * @param conditionObjectId set the condition
-	 * @param typeId set the typeId for entityMapCondition
-	 * @return entityMapCondition object
-	 */
-	public static EntityMapCondition getEntityMapCondition(FormContext formContext,
-			Long conditionObjectId, Long typeId)
-	{
-		final EntityMapCondition entityMapCond = new EntityMapCondition();
-		entityMapCond.setTypeId(((Long) typeId));
-		entityMapCond.setStaticRecordId((conditionObjectId));
-		entityMapCond.setFormContext(formContext);
-		return entityMapCond;
-	}
-
-	/**
-	 * This method is used edit the previously added entityMapCondition
-	 * @param entityMap to get formContext
-	 * @param conditionObjectId condition on forms
-	 * @param typeId collection protocol id
-	 * @throws DynamicExtensionsSystemException 
-	 */
-	public static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId,
-			boolean editAlreadyPresentCondition) throws DynamicExtensionsSystemException,
-			ApplicationException
-	{
-		final Collection<FormContext> formContextColl = new HashSet<FormContext>(
-				getFormContexts(entityMap.getId()));
-		if (formContextColl != null)
-		{
-			for (final FormContext formContext : formContextColl)
-			{
-				final Collection<EntityMapCondition> entityMapCondColl = getEntityMapConditions(formContext
-						.getId());
-
-				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
-				{
-					final EntityMapCondition entityMapCondition = AppUtility.getEntityMapCondition(
-							formContext, conditionObjectId, typeId);
-					entityMapCondColl.add(entityMapCondition);
-				}
-				else if (editAlreadyPresentCondition)
-				{
-					for (final EntityMapCondition entityMapCondition : entityMapCondColl)
-					{
-						entityMapCondition.setTypeId(typeId);
-						entityMapCondition.setStaticRecordId(conditionObjectId);
-						entityMapCondColl.add(entityMapCondition);
-					}
-				}
-				formContext.setEntityMapConditionCollection(entityMapCondColl);
-			}
-			entityMap.setFormContextCollection(formContextColl);
-		}
-	}
-
-	/**
-	 * This method is used edit the previously added entityMapCondition
-	 * @param entityMap to get formContext
-	 * @param conditionObjectId condition on forms
-	 * @param typeId collection protocol id
-	 * @throws DynamicExtensionsSystemException 
-	 */
-	public static void editConditions(EntityMap entityMap, Long typeId)
-			throws DynamicExtensionsSystemException, ApplicationException
-	{
-		final Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility
-				.getFormContexts(entityMap.getId()));
-		final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
-				DynamicExtensionDAO.getInstance().getAppName()).getDAO();
-		try
-		{
-			dao.openSession(null);
-			if (formContextColl != null)
-			{
-				for (final FormContext formContext : formContextColl)
-				{
-					final Collection<EntityMapCondition> entityMapCondColl = AppUtility
-							.getEntityMapConditions(formContext.getId());
-
-					if (!entityMapCondColl.isEmpty() || entityMapCondColl.size() > 0)
-					{
-						for (final EntityMapCondition entityMapCond : entityMapCondColl)
-						{
-							dao.delete(entityMapCond);
-						}
-					}
-				}
-			}
-		}
-		catch (final DAOException exception)
-		{
-			AppUtility.logger.error(exception.getMessage(),exception);
-			exception.printStackTrace();
-			throw exception;
-		}
-		finally
-		{
-			dao.commit();
-			dao.closeSession();
-		}
-	}
-
-	/**
-	 * @param entityMapId
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 * @throws BizLogicException 
-	 */
-	public static Collection<FormContext> getFormContexts(Long entityMapId)
-
-	{
-		Collection<FormContext> formContextColl = null;
-		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
-
-		try
-		{
-			formContextColl = new ArrayList(bizLogic
-					.executeQuery("from FormContext formContext where formContext.entityMap.id = "
-							+ entityMapId));
-		}
-		catch (final BizLogicException e)
-		{
-			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-		}
-
-		return formContextColl;
-	}
-
-	/**
-	 * @param formContextId
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 */
-	public static Collection<EntityMapCondition> getEntityMapConditions(Long formContextId)
-
-	{
-		Collection<EntityMapCondition> entityMapConditions = null;
-		try
-		{
-
-			final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-			bizLogic.setAppName(DynamicExtensionDAO.getInstance().getAppName());
-			entityMapConditions = new HashSet(
-					bizLogic
-							.executeQuery("from EntityMapCondition entityMapCondtion where entityMapCondtion.formContext.id = "
-									+ formContextId));
-
-		}
-		catch (final BizLogicException exp)
-		{
-			AppUtility.logger.error("Bizlogic  : exp : " + exp.getMessage(),exp);
-			exp.printStackTrace();
-		}
-		return entityMapConditions;
-	}
-
-	/**
-	 * @param formContextId
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 */
-	public static Collection<EntityMapRecord> getEntityMapRecords(Long formContextId)
-			throws DynamicExtensionsSystemException, ApplicationException
-	{
-		Collection<EntityMapRecord> entityMapRecords = null;
-		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-
-		entityMapRecords = new HashSet(
-				bizLogic
-						.executeQuery("from EntityMapRecord entityMapRecord where entityMapRecord.formContext.id = "
-								+ formContextId));
-
-		return entityMapRecords;
-	}
 
 	/**
 	 * To check the validity of the date format specified by user in the config file.
@@ -3246,7 +3059,7 @@ public class AppUtility
 	}
 
 	/**
-	 * @param sText String containing the text to be checked 
+	 * @param sText String containing the text to be checked
 	 * @return boolean isNumber -true if given String is in proper number
 	 *         format or else returns false
 	 */
@@ -3436,7 +3249,7 @@ public class AppUtility
 
 		if (treeNodeDataVector.contains(containerNode))
 		{
-			containerNode = (StorageContainerTreeNode) treeNodeDataVector.get(treeNodeDataVector
+			containerNode = treeNodeDataVector.get(treeNodeDataVector
 					.indexOf(containerNode));
 		}
 		else
@@ -3482,7 +3295,7 @@ public class AppUtility
 
 	/**
 	 * This method is defined for counting the child of the Tissue Site.
-	 * @param identifier identifier of the container node whose child count is going to be done. 
+	 * @param identifier identifier of the container node whose child count is going to be done.
 	 * @param dao JDBCDAO object for excuting the sql query.
 	 * @return child count of the container identifier
 	 */
@@ -3521,8 +3334,8 @@ public class AppUtility
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param userName
 	 * @return
 	 * @throws ApplicationException

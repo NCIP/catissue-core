@@ -11,7 +11,7 @@
         dynamic-insert="false"
 		lazy="true"
     >
-    
+
     <cache usage="read-write" />
 
         <id
@@ -61,7 +61,7 @@
             column="BIRTH_DATE"
         />
 
-    
+
 		 <property
             name="empiId"
             type="string"
@@ -93,12 +93,12 @@
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="save-update,all-delete-orphan"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -154,7 +154,7 @@
             column="VITAL_STATUS"
             length="50"
         />
-       
+
          <property
             name="metaPhoneCode"
             type="string"
@@ -167,12 +167,12 @@
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="none"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -187,12 +187,12 @@
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="none"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -203,6 +203,25 @@
                   class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
               />
         </set>
+
+		<set
+            name="participantRecordEntryCollection"
+            table="CATISSUE_PARTICIPANT_REC_NTRY"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARTICIPANT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry"
+              />
+        </set>
+
 
         <!--
             To add non XDoclet property mappings, create a file named

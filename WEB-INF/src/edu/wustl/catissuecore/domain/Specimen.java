@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -160,6 +161,8 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 * Default Apply none to allow normal flow.
 	 */
 	private String applyChangesTo = Constants.APPLY_NONE;
+
+	protected Collection<SpecimenRecordEntry> specimenRecordEntryCollection = new HashSet<SpecimenRecordEntry>();
 
 	/**
 	 * @return the consentTierStatusCollection
@@ -1398,6 +1401,17 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	public void setSpecimenRequirement(SpecimenRequirement requirementSpecimen)
 	{
 		this.specimenRequirement = requirementSpecimen;
+	}
+
+	public Collection<SpecimenRecordEntry> getSpecimenRecordEntryCollection()
+	{
+		return specimenRecordEntryCollection;
+	}
+
+	public void setSpecimenRecordEntryCollection(
+			Collection<SpecimenRecordEntry> specimenRecordEntryCollection)
+	{
+		this.specimenRecordEntryCollection = specimenRecordEntryCollection;
 	}
 
 	//bug no. 7690

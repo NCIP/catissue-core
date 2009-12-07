@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -102,6 +102,14 @@ public class AddAttribute extends BaseMetadata
 						+ ",NULL," + primaryKey + ",1)";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
+				if("1".equals(primaryKey))
+				{
+					sql = "insert into DYEXTN_ENTIY_COMPOSITE_KEY_REL " +
+							"(ENTITY_ID,ATTRIBUTE_ID,INSERTION_ORDER) " +
+							" values (" + entityId + "," + nextIdOfAbstractMetadata +  ",0)";
+					UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+				}
+
 				sql = "insert into dyextn_attribute_type_info"
 						+ " (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
 						+ nextIdAttrTypeInfo + "," + nextIdOfAbstractMetadata + ")";
@@ -178,7 +186,7 @@ public class AddAttribute extends BaseMetadata
 	 * @return Column Name
 	 */
 	private String getColumnNameOfAttribue(String attr,
-			HashMap<String, String> attributeColumnNameMap)
+			Map<String, String> attributeColumnNameMap)
 	{
 		return attributeColumnNameMap.get(attr);
 	}
@@ -189,7 +197,7 @@ public class AddAttribute extends BaseMetadata
 	 * @param attributeDatatypeMap attribute Data type Map
 	 * @return Data Type
 	 */
-	private String getDataTypeOfAttribute(String attr, HashMap<String, String> attributeDatatypeMap)
+	private String getDataTypeOfAttribute(String attr, Map<String, String> attributeDatatypeMap)
 	{
 		return attributeDatatypeMap.get(attr);
 	}
@@ -298,10 +306,10 @@ public class AddAttribute extends BaseMetadata
 	 * @param entityList entity List
 	 */
 	public AddAttribute(Connection connection,
-			HashMap<String, List<String>> entityNameAttributeNameMap,
-			HashMap<String, String> attributeColumnNameMap,
-			HashMap<String, String> attributeDatatypeMap,
-			HashMap<String, String> attributePrimarkeyMap,
+			Map<String, List<String>> entityNameAttributeNameMap,
+			Map<String, String> attributeColumnNameMap,
+			Map<String, String> attributeDatatypeMap,
+			Map<String, String> attributePrimarkeyMap,
 			List<String> entityList)
 	{
 		super();

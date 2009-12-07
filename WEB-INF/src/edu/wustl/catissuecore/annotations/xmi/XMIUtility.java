@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domain.Entity;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.domaininterface.AbstractEntityInterface;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
@@ -23,8 +22,6 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerConstantsInterfac
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.common.exception.BizLogicException;
 
 /**
  * @author preeti_lodha
@@ -60,7 +57,7 @@ public class XMIUtility
 	 * @throws DynamicExtensionsApplicationException - DynamicExtensionsApplicationException
 	 * @throws BizLogicException - BizLogicException
 	 */
-	public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup)
+	/*public static void addHookEntitiesToGroup(EntityGroupInterface entityGroup)
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException,
 			BizLogicException
 	{
@@ -121,7 +118,7 @@ public class XMIUtility
 				}
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * @param srcEntity - srcEntity

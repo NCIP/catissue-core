@@ -8,12 +8,6 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,18 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.actionForm.AnnotationForm;
-import edu.wustl.catissuecore.annotations.AnnotationUtil;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.Constants;
 
 /**
  * @author renuka_bajpai
@@ -55,10 +38,10 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	{
 		ActionForward actionfwd = null;
 
-		final AnnotationForm annotationForm = (AnnotationForm) form;
+		/*final AnnotationForm annotationForm = (AnnotationForm) form;
 
 		this.saveConditions( annotationForm, request );
-		actionfwd = mapping.findForward( Constants.SUCCESS );
+		actionfwd = mapping.findForward( Constants.SUCCESS );*/
 
 		return actionfwd;
 	}
@@ -69,7 +52,7 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	 * @throws BizLogicException : BizLogicException
 	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
 	 */
-	private void saveConditions(AnnotationForm annotationForm, HttpServletRequest request)
+	/*private void saveConditions(AnnotationForm annotationForm, HttpServletRequest request)
 			throws BizLogicException, DynamicExtensionsSystemException
 	{
 
@@ -180,5 +163,5 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 				bizLogic.updateEntityMap( entityMap );
 			}
 		}
-	}
+	}*/
 }

@@ -32,9 +32,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -300,28 +300,32 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				request.getSession().removeAttribute("CPQuery");
 			}
 		}
-		Long specimenEntityId = null;
+		Long specimenRecEntryEntityId = null;
 		try
 		{
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
 			{
-				specimenEntityId = (Long) CatissueCoreCacheManager.getInstance()
-						.getObjectFromCache("specimenEntityId");
+				specimenRecEntryEntityId = (Long) CatissueCoreCacheManager.getInstance()
+						.getObjectFromCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
 			}
 			else
 			{
-				specimenEntityId = AnnotationUtil
-						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-				CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",
-						specimenEntityId);
+				specimenRecEntryEntityId = AnnotationUtil
+						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+				CatissueCoreCacheManager.getInstance().addObjectToCache(
+						AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenRecEntryEntityId);
 			}
+
 		}
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		request.setAttribute("specimenEntityId", specimenEntityId);
+		//request.setAttribute("specimenEntityId", specimenEntityId);
+		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
+				specimenRecEntryEntityId);
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 	}
 

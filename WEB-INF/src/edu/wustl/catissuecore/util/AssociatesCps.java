@@ -4,7 +4,7 @@ package edu.wustl.catissuecore.util;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,22 +12,17 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
-import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
-import edu.common.dynamicextensions.domain.AbstractMetadata;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
-import edu.common.dynamicextensions.domain.integration.EntityMapCondition;
-import edu.common.dynamicextensions.domain.integration.FormContext;
-import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -37,6 +32,7 @@ import edu.wustl.dao.exception.DAOException;
  */
 public final class AssociatesCps
 {
+
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
@@ -96,37 +92,80 @@ public final class AssociatesCps
 		//stores mapping of cpIds and override option
 		Map<Long, String> cpIdsVsoverride = xmlParser.getCpIdVsOverride();
 
-		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
-				AbstractMetadata.class.getName(), Constants.NAME, DynamicExtensionDAO.getInstance().getAppName());
 		entityIdsVsContId = AppUtility.getAllContainers();
-		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, typeId);
-		for (Long cpId : cpIdsVsEntityIds.keySet())
+
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		HibernateDAO hibernateDao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
+				appName).getDAO();
+		hibernateDao.openSession(null);
+		//dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, hibernateDao);
+
+		Map<Long, List<Long>> mergedCpIdMap = mergeEntityAndFormIdForCP(cpIdsVsEntityIds,
+				cpIdsVsFormIds);
+
+		for (Long cpId : mergedCpIdMap.keySet())
 		{
-			associateEntitiesToCps(cpId, typeId, cpIdsVsEntityIds.get(cpId));
+			associateEntitiesToCps(cpId, mergedCpIdMap.get(cpId), cpIdsVsoverride, hibernateDao);
 		}
-		for (Long cpId : cpIdsVsFormIds.keySet())
+
+		hibernateDao.closeSession();
+		logger.info("DONE----------------------");
+	}
+
+	/**
+	 *
+	 * @param cpIdsVsEntityIds
+	 * @param cpIdsVsFormIds
+	 * @return
+	 */
+	private static Map<Long, List<Long>> mergeEntityAndFormIdForCP(
+			Map<Long, List<Long>> cpIdsVsEntityIds, Map<Long, List<Long>> cpIdsVsFormIds)
+	{
+		Iterator<Long> iterator = cpIdsVsFormIds.keySet().iterator();
+		while (iterator.hasNext())
 		{
-			associateEntitiesToCps(cpId, typeId, cpIdsVsFormIds.get(cpId));
+			Long cpId = iterator.next();
+			if (cpIdsVsEntityIds.containsKey(cpId))
+			{
+				List<Long> formIds = cpIdsVsFormIds.get(cpId);
+				List<Long> entityIds = cpIdsVsEntityIds.get(cpId);
+				entityIds.addAll(formIds);
+			}
+			else
+			{
+				cpIdsVsEntityIds.put(cpId, cpIdsVsFormIds.get(cpId));
+			}
 		}
+
+		return cpIdsVsEntityIds;
+
 	}
 
 	/**
 	 * this method dissAssociate Entities per cpId.
 	 * @param cpIdsVsoverride
-	 * @param typeId
-	 * @throws DynamicExtensionsSystemException
-	 * @throws ApplicationException Application Exception
+	 * @param cp
+	 * @param sfcSet
+	 * @param hibernateDao
+	 * @throws DAOException
 	 */
 	private static void dissAssociateEntitiesFormsPerCpId(Map<Long, String> cpIdsVsoverride,
-			Long typeId) throws DynamicExtensionsSystemException,
-			ApplicationException
+			CollectionProtocol cp, Collection<StudyFormContext> sfcSet, HibernateDAO hibernateDao)
+			throws DAOException
 	{
-		for (Long cpId : cpIdsVsoverride.keySet())
+		if (cpIdsVsoverride.keySet().contains(cp.getId())
+				&& Constants.OVERRIDE_TRUE.equalsIgnoreCase(cpIdsVsoverride.get(cp.getId())))
 		{
-			if ((cpId != null)
-					&& ((Constants.OVERRIDE_TRUE).equalsIgnoreCase(cpIdsVsoverride.get(cpId))))
+			if (!sfcSet.isEmpty())
 			{
-				disAssociateEntitiesForms(typeId, cpId);
+				for (StudyFormContext sfc : sfcSet)
+				{
+					Collection<CollectionProtocol> coll = sfc.getCollectionProtocolCollection();
+					coll.remove(cp);
+					sfc.setCollectionProtocolCollection(coll);
+					hibernateDao.update(sfc);
+				}
+				sfcSet.clear();
 			}
 		}
 	}
@@ -144,116 +183,70 @@ public final class AssociatesCps
 	}
 
 	/**
-	 * @param typeId stores type of condition
-	 * @param cpId stores collection protocol's identifier
-	 * @throws DAOException if it fails to do database operation
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException Application Exception
-	 */
-	private static void disAssociateEntitiesForms(Long typeId, long cpId)
-			throws DynamicExtensionsSystemException, ApplicationException
-	{
-		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		if (cpId != 0)
-		{
-			Collection<EntityMapCondition> entMapCondColl = entityManager
-					.getAllConditionsByStaticRecordId(cpId);
-			for (EntityMapCondition entityMapCond : entMapCondColl)
-			{
-				entityMapCond.setTypeId(typeId);
-				entityMapCond.setStaticRecordId(Long.valueOf(0));
-				annotation.update(entityMapCond);
-			}
-		}
-		else
-		{
-			for (Long containerId : entityIdsVsContId.values())
-			{
-				if (containerId != null)
-				{
-					List< EntityMap > entityMapList = defaultBizLogic.retrieve(EntityMap.class
-							.getName(), Constants.CONTAINERID, containerId);
-					if (entityMapList != null && !entityMapList.isEmpty())
-					{
-						EntityMap entityMap = entityMapList.get(0);
-						Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
-						if (formContextColl != null)
-						{
-							for (FormContext formContext : formContextColl)
-							{
-								Collection<EntityMapCondition> entityMapCondColl = AppUtility.getEntityMapConditions(formContext
-										.getId());
-								if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
-								{
-									EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
-											formContext, Long.valueOf(0), typeId);
-									entityMapCondColl.add(entityMapCond);
-								}
-								formContext.setEntityMapConditionCollection(entityMapCondColl);
-							}
-							entityMap.setFormContextCollection(formContextColl);
-						}
-						annotation.updateEntityMap(entityMap);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * @param cpId stores Id of Collection Protocol 
-	 * @param typeId stores Id of Collection Protocol object
+	 * @param cpId stores Id of Collection Protocol
 	 * @param entityIds entityIds collection
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException Application Exception
-	 * @throws DynamicExtensionsSystemException 
+	 * @param cpIdsVsoverride
+	 * @param hibernateDao
+	 * @throws DAOException
 	 */
-	private static void associateEntitiesToCps(Long cpId, Long typeId, List<Long> entityIds)
-			throws ApplicationException, DynamicExtensionsSystemException
+	private static void associateEntitiesToCps(Long cpId, List<Long> entityIds,
+			Map<Long, String> cpIdsVsoverride, HibernateDAO hibernateDao) throws DAOException
 	{
-		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+		List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class.getName(),
+				Constants.ID, cpId);
+		CollectionProtocol cp = cpList.get(0);
+		Collection<StudyFormContext> sfcSet = cp.getStudyFormContextCollection();
+
+		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, cp, sfcSet, hibernateDao);
+
 		for (Long entityId : entityIds)
 		{
 			Long containerId = getContainerId(entityId);
 			if (containerId != null)
 			{
-				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
-						Constants.CONTAINERID, containerId);
-				updateEntityMap(cpId, typeId, annotation, entityMapList);
-			}
+				List<StudyFormContext> formContextList = hibernateDao.retrieve(
+						StudyFormContext.class.getName(), Constants.CONTAINERID, containerId);
 
+				logger.info("Associating Container : " + containerId + " with CP : " + cpId);
+
+				if (formContextList != null && !formContextList.isEmpty())
+				{
+					logger.info("Got form context for container : -----" + containerId);
+					StudyFormContext studyFormContext = formContextList.get(0);
+					updateStudyFormContext(cp, studyFormContext, containerId);
+					sfcSet.add(studyFormContext);
+					hibernateDao.update(studyFormContext);
+				}
+				else
+				{
+					logger.info("Creating new form context for container : -----" + containerId);
+					StudyFormContext studyFormContext = new StudyFormContext();
+					updateStudyFormContext(cp, studyFormContext, containerId);
+					sfcSet.add(studyFormContext);
+					hibernateDao.insert(studyFormContext);
+				}
+			}
 		}
+
+		hibernateDao.commit();
+
 	}
 
 	/**
-	 * method updates EntityMap after chaking entityMapList for Null.   
-	 * @param cpId
-	 * @param typeId
-	 * @param annotation
-	 * @param entityMapList
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException Application Exception
-	 * @throws DynamicExtensionsSystemException 
+	 *
+	 * @param cp
+	 * @param studyFormContext
+	 * @param containerId
 	 */
-	private static void updateEntityMap(Long cpId, Long typeId, AnnotationBizLogic annotation,
-			List<EntityMap> entityMapList) throws ApplicationException, DynamicExtensionsSystemException
+	private static void updateStudyFormContext(CollectionProtocol cp,
+			StudyFormContext studyFormContext, Long containerId)
 	{
-		if (entityMapList != null && !entityMapList.isEmpty())
-		{
-			EntityMap entityMap = entityMapList.get(0);
-			if (cpId != 0)
-			{
-				editConditions(entityMap, cpId, typeId);
-				annotation.updateEntityMap(entityMap);
-			}
-			if (cpId == 0)
-			{
-				AppUtility.editConditions(entityMap, typeId);
-			}
-		}
+		Collection cpColl = studyFormContext.getCollectionProtocolCollection();
+		cpColl.add(cp);
+
+		studyFormContext.setCollectionProtocolCollection(cpColl);
+		studyFormContext.setHideForm(false);
+		studyFormContext.setContainerId(containerId);
 	}
 
 	/**
@@ -276,58 +269,4 @@ public final class AssociatesCps
 		return containerId;
 	}
 
-	/**
-	 * associates entity/forms to a CP
-	 * @param entityMap to get formContext
-	 * @param conditionObjectId to set particular condition
-	 * @param typeId stores the identifier value of Collection Protocol object
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException Application Exception
-	 */
-	private static void editConditions(EntityMap entityMap, Long conditionObjectId, Long typeId)
-			throws ApplicationException
-	{
-		Collection<FormContext> formContextColl = new HashSet<FormContext>(AppUtility.getFormContexts(entityMap.getId()));
-
-		if (formContextColl != null)
-		{
-			for (FormContext formContext : formContextColl)
-			{
-				Collection<EntityMapCondition> entityMapCondColl = AppUtility
-						.getEntityMapConditions(formContext.getId());
-
-				if (entityMapCondColl.isEmpty() || entityMapCondColl.size() <= 0)
-				{
-					EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
-							formContext, conditionObjectId, typeId);
-					entityMapCondColl.add(entityMapCond);
-				}
-				else
-				{
-					boolean flag = true;
-					for (EntityMapCondition entityMapCondition : entityMapCondColl)
-					{
-						if ((entityMapCondition.getStaticRecordId() == 0) && (flag == true))
-						{
-							flag = false;
-							entityMapCondition.setTypeId(typeId);
-							entityMapCondition.setStaticRecordId(conditionObjectId);
-							entityMapCondColl.add(entityMapCondition);
-							break;
-						}
-						else if ((entityMapCondition.getStaticRecordId() != 0) && (flag == true))
-						{
-							flag = false;
-							EntityMapCondition entityMapCond = AppUtility.getEntityMapCondition(
-									formContext, conditionObjectId, typeId);
-							entityMapCondColl.add(entityMapCond);
-							break;
-						}
-					}
-				}
-				formContext.setEntityMapConditionCollection(entityMapCondColl);
-			}
-			entityMap.setFormContextCollection(formContextColl);
-		}
-	}
 }

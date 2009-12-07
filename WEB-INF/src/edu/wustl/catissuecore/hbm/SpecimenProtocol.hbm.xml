@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-    
+
 <hibernate-mapping
 >
     <class
@@ -10,7 +10,7 @@
         table="CATISSUE_SPECIMEN_PROTOCOL"
 		lazy="true"
     >
-    
+
     <cache usage="read-write" />
 
         <id
@@ -22,11 +22,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
-              <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-SpecimenProtocol.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
+              <!--
+                  To add non XDoclet generator parameters, create a file named
+                  hibernate-generator-params-SpecimenProtocol.xml
+                  containing the additional parameters and place it in your merge dir.
+              -->
             </generator>
         </id>
 
@@ -34,11 +34,11 @@
             name="principalInvestigator"
             class="edu.wustl.catissuecore.domain.User"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="PRINCIPAL_INVESTIGATOR_ID" 
-            lazy="false" 
+            column="PRINCIPAL_INVESTIGATOR_ID"
+            lazy="false"
         />
 
         <property
@@ -142,12 +142,12 @@
 		<set
             name="clinicalDiagnosisSet"
             table="CATISSUE_CLINICAL_DIAGNOSIS"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="false"
             cascade="save-update,all-delete-orphan"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -160,7 +160,7 @@
             />
 
         </set>
-		
+
 
 
         <set
@@ -170,7 +170,7 @@
             inverse="false"
             cascade="none"
             sort="unsorted"
-        >      
+        >
               <key
                   column="COLLECTION_PROTOCOL_ID"
               />
@@ -183,15 +183,15 @@
         <set
             name="consentTierCollection"
             table="CATISSUE_CONSENT_TIER"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
-        
-        
+
+
 
               <key
                   column="COLL_PROTOCOL_ID"
@@ -210,7 +210,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -221,7 +221,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.DistributionProtocol"
                 column="DISTRIBUTION_PROTOCOL_ID"
-                 
+
              />
 
         </set>
@@ -229,12 +229,12 @@
         <set
             name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -245,20 +245,20 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.User"
                 column="USER_ID"
-                 
+
              />
 
         </set>
-        
+
         <set
             name="assignedProtocolUserCollection"
             table="CATISSUE_USER_CP"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="false"
             cascade="none"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -269,11 +269,11 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.User"
                 column="USER_ID"
-                 
+
              />
 
         </set>
-        
+
         <set
             name="siteCollection"
             table="CATISSUE_SITE_CP"
@@ -282,7 +282,7 @@
             cascade="none"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -293,7 +293,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.Site"
                 column="SITE_ID"
-                 
+
              />
 
         </set>
@@ -301,12 +301,12 @@
         <set
             name="collectionProtocolEventCollection"
             table="CATISSUE_COLL_PROT_EVENT"
-         
+
             inverse="true"
             cascade="save-update"
-            sort="unsorted"     fetch="join" lazy="false" 
+            sort="unsorted"     fetch="join" lazy="false"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -315,18 +315,18 @@
             </key>
 
             <one-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"   
-            />	 
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+            />
     </set>
 	<set
             name="childCollectionProtocolCollection"
             table="CATISSUE_COLLECTION_PROTOCOL"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
          >
-         
+
          <cache usage="read-write" />
 
             <key
@@ -339,7 +339,7 @@
             />
 
         </set>
-	
+
 	    <many-to-one
             name="parentCollectionProtocol"
             class="edu.wustl.catissuecore.domain.CollectionProtocol"
@@ -348,7 +348,7 @@
             insert="true"
             column="PARENT_CP_ID"
         />
-        
+
 		<property
             name="type"
             type="string"
@@ -390,8 +390,16 @@
             column="CONSENTS_WAIVED"
         />
 
+		<set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
+			 inverse="true">
+
+			<key column="COLLECTION_PROTOCOL_ID" />
+
+			<many-to-many column="STUDY_FORM_CONTEXT_ID"
+				class="edu.wustl.catissuecore.domain.StudyFormContext" />
+		</set>
         </joined-subclass>
-        
+
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"
             table="CATISSUE_DISTRIBUTION_PROTOCOL"
@@ -410,7 +418,7 @@
             fetch="join"
             lazy="false"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -432,7 +440,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -443,7 +451,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocol"
                 column="COLLECTION_PROTOCOL_ID"
-                 
+
              />
 
         </set>

@@ -144,22 +144,22 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		System
 				.setProperty("app.propertiesDir", CommonServiceLocator.getInstance()
 						.getPropDirPath());
-		
+
 		/*Class.forName(DBUtil.class.getName());
 		Variables.databaseName=HibernateMetaData.getDataBaseName();
 		QueryBizLogic.initializeQueryData();
 		setDBFunctionNamesConstants();
 		createAliasAndPageOfMap();
-		
+
 		LabelAndBarcodeGeneratorInitializer.init();
-		
-		//		Added By geeta 
+
+		//		Added By geeta
 		InitialiseVariablesForEdinburgh();
-		
-		
-		//		Added By geeta 
+
+
+		//		Added By geeta
 		InitialiseVariablesForDFCI();
-		
+
 		initCatissueCache();
 		initEntityCache();
 		Utility.initializePrivilegesMap();
@@ -205,19 +205,32 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			//Stores the list of system entities into the cache.-- Vishvesh.
 			AnnotationUtil.getSystemEntityList();
 			//Stores the ids in the cache
-			final Long participantId = edu.wustl.catissuecore.bizlogic.AnnotationUtil
+			final Long participantId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 			catissueCoreCacheManager.addObjectToCache("participantEntityId", participantId);
-			final Long scgId = edu.wustl.catissuecore.bizlogic.AnnotationUtil
+			final Long scgId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
 			catissueCoreCacheManager.addObjectToCache("scgEntityId", scgId);
-			final Long specimenEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil
+			final Long specimenEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
 			catissueCoreCacheManager.addObjectToCache("specimenEntityId", specimenEntityId);
-			final Long cpEntityId = edu.wustl.catissuecore.bizlogic.AnnotationUtil
+			final Long cpEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
 			catissueCoreCacheManager.addObjectToCache(
 					AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID, cpEntityId);
+
+			Long partRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
+					partRecEntryEntityId);
+			Long specimenRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
+					specimenRecEntryEntityId);
+			Long scgRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
+			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
+					scgRecEntryEntityId);
 
 			//Added for initializing PathFinder and EntityCache
 			final InitialContext ctx = new InitialContext();
@@ -246,7 +259,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		/*IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		
+
 		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
 		//removed participant cache
 		//ParticipantBizLogic bizlogic = (ParticipantBizLogic)factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);

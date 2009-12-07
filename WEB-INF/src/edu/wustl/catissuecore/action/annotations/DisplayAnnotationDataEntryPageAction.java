@@ -4,7 +4,6 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -71,13 +71,12 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 
 		final SessionDataBean sessionDataBean = this.getSessionData( request );
 
-		List cpIdsList = new ArrayList();
 		boolean matchingParticipantCase = false;
-		cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList( request
-				.getParameter( "staticEntityName" ), Long.valueOf( request
-				.getParameter( "entityRecordId" ) ), sessionDataBean );
-		if (cpIdsList.size() > 1
-				&& Participant.class.getName().equals( request.getParameter( "staticEntityName" ) ))
+		final String associatedStaticEntity = AnnotationUtil
+				.getAssociatedStaticEntityForRecordEntry(request.getParameter("staticEntityName"));
+		List cpIdsList = edu.wustl.query.util.global.Utility.getCPIdsList(associatedStaticEntity,
+				Long.valueOf(request.getParameter("entityRecordId")), sessionDataBean);
+		if (cpIdsList.size() > 1 && Participant.class.getName().equals(associatedStaticEntity))
 		{
 			matchingParticipantCase = true;
 		}
@@ -85,21 +84,22 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		{
 			if (cpIdsList.size() > 1)
 			{
-				cpIdsList.remove( 1 );
+				cpIdsList.remove(1);
 			}
 		}
 
-		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
-				sessionDataBean.getUserName() );
-		final StringBuffer sb = new StringBuffer();
-		boolean hasPrivilege = false;
-		sb.append( Constants.COLLECTION_PROTOCOL_CLASS_NAME ).append( '_' );
 		if (!sessionDataBean.isAdmin())
 		{
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+					sessionDataBean.getUserName() );
+			final StringBuffer stringBuffer = new StringBuffer();
+			boolean hasPrivilege = false;
+			stringBuffer.append( Constants.COLLECTION_PROTOCOL_CLASS_NAME ).append( '_' );
+
 			for (final Object cpId : cpIdsList)
 			{
-				hasPrivilege = ( ( privilegeCache.hasPrivilege( sb.toString() + cpId.toString(),
-						Permissions.REGISTRATION ) ) || ( privilegeCache.hasPrivilege( sb
+				hasPrivilege = ( ( privilegeCache.hasPrivilege( stringBuffer.toString() + cpId.toString(),
+						Permissions.REGISTRATION ) ) || ( privilegeCache.hasPrivilege( stringBuffer
 						.toString()
 						+ cpId.toString(), Permissions.SPECIMEN_PROCESSING ) ) );
 

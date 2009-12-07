@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -136,6 +135,8 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * siteCollection.
 	 */
 	protected Collection<Site> siteCollection = new HashSet<Site>();
+
+	protected Collection<StudyFormContext> studyFormContextCollection = new HashSet<StudyFormContext>();
 
 	/**
 	 * @return the unsignedConsentDocumentURL
@@ -330,6 +331,17 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * storageContainerCollection; }
 	 */
 
+
+	public Collection<StudyFormContext> getStudyFormContextCollection()
+	{
+		return studyFormContextCollection;
+	}
+
+	public void setStudyFormContextCollection(Collection<StudyFormContext> studyFormContextCollection)
+	{
+		this.studyFormContextCollection = studyFormContextCollection;
+	}
+
 	/**
 	 * This function Copies the data from an CollectionProtocolForm object to a
 	 * CollectionProtocol object.
@@ -354,7 +366,7 @@ public class CollectionProtocol extends SpecimenProtocol
 			/**For Clinical Diagnosis Subset **/
 			/*String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
 			this.setClinicalDiagnosisSet(new LinkedHashSet<String>((Arrays.asList(clinicalDiagnosisArr))));*/
-		
+
 			final String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
 			if (clinicalDiagnosisArr != null)
 			{
@@ -753,7 +765,7 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Fetch the clinical diagnosis set.
 	 * @return clinicalDiagnosisSet.
 	 */
-	public Collection<ClinicalDiagnosis> getClinicalDiagnosisSet() 
+	public Collection<ClinicalDiagnosis> getClinicalDiagnosisSet()
 	{
 		return clinicalDiagnosisSet;
 	}
@@ -766,5 +778,5 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		this.clinicalDiagnosisSet = clinicalDiagnosisSet;
 	}
-	
+
 }

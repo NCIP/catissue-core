@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.querysuite.metadata;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author pooja_deshpande
@@ -15,19 +16,19 @@ public class BaseMetadata
 	/**
 	 * specify attribute Column Name Map.
 	 */
-	HashMap<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
+	Map<String, List<String>> entityNameAttributeNameMap = new HashMap<String, List<String>>();
 	/**
 	 * specify attribute Column Name Map.
 	 */
-	HashMap<String, String> attributeColumnNameMap = new HashMap<String, String>();
+	Map<String, String> attributeColumnNameMap = new HashMap<String, String>();
 	/**
 	 * specify attribute Data type Map.
 	 */
-	HashMap<String, String> attributeDatatypeMap = new HashMap<String, String>();
+	Map<String, String> attributeDatatypeMap = new HashMap<String, String>();
 	/**
 	 * specify attribute Primary key Map.
 	 */
-	HashMap<String, String> attributePrimarkeyMap = new HashMap<String, String>();
+	Map<String, String> attributePrimarkeyMap = new HashMap<String, String>();
 	/**
 	 * specify entity List.
 	 */

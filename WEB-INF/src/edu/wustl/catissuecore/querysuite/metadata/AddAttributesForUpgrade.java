@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.util.global.Constants;
@@ -174,7 +175,7 @@ public class AddAttributesForUpgrade extends BaseMetadata
 	 * @return Column Name
 	 */
 	private String getColumnNameOfAttribue(String attr,
-			HashMap<String, String> attributeColumnNameMap)
+			Map<String, String> attributeColumnNameMap)
 	{
 		return attributeColumnNameMap.get(attr);
 	}
@@ -185,7 +186,7 @@ public class AddAttributesForUpgrade extends BaseMetadata
 	 * @param attributeDatatypeMap attribute Data type Map
 	 * @return Data Type
 	 */
-	private String getDataTypeOfAttribute(String attr, HashMap<String, String> attributeDatatypeMap)
+	private String getDataTypeOfAttribute(String attr, Map<String, String> attributeDatatypeMap)
 	{
 		return attributeDatatypeMap.get(attr);
 	}

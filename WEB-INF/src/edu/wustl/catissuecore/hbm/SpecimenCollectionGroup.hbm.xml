@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-    
+
 <hibernate-mapping
 >
     <class
@@ -10,7 +10,7 @@
         table="CATISSUE_SPECIMEN_COLL_GROUP"
 		lazy="true"
     >
-    
+
     <cache usage="read-write" />
 
         <id
@@ -22,14 +22,14 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPECIMEN_COLL_GRP_SEQ</param>
-              <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-SpecimenCollectionGroup.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
+              <!--
+                  To add non XDoclet generator parameters, create a file named
+                  hibernate-generator-params-SpecimenCollectionGroup.xml
+                  containing the additional parameters and place it in your merge dir.
+              -->
             </generator>
         </id>
-		
+
          <set
             name="consentTierStatusCollection"
             table="CATISSUE_CONSENT_TIER_STATUS"
@@ -38,7 +38,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -52,12 +52,12 @@
         <set
             name="specimenEventParametersCollection"
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -65,7 +65,7 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"  
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 
               />
         </set>
@@ -129,22 +129,22 @@
             column="DATE_OFFSET"
             length="30"
         />
-        
+
         <many-to-one
             name="specimenCollectionSite"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="SITE_ID"   lazy="false" 
+            column="SITE_ID"   lazy="false"
         />
 
         <many-to-one
             name="collectionProtocolEvent"
             class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
             cascade="none"
-             
+
             update="true"
             insert="true"
             column="COLLECTION_PROTOCOL_EVENT_ID"
@@ -156,11 +156,11 @@
             lazy="true"
             inverse="true"
             cascade="save-update"
-            
+
             order-by="LABEL asc"
-          
+
         >
-        
+
         <cache usage="read-write" />
 
               <key
@@ -178,17 +178,17 @@
             name="collectionProtocolRegistration"
             class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="COLLECTION_PROTOCOL_REG_ID" lazy="false" 
+            column="COLLECTION_PROTOCOL_REG_ID" lazy="false"
         />
-        
+
         <one-to-one
             name="deIdentifiedSurgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="save-update"
-             
+
             constrained="false"
 	     	property-ref="specimenCollectionGroup"
         />
@@ -197,10 +197,11 @@
             name="identifiedSurgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
             cascade="save-update"
-             
+
             constrained="false"
 	     	property-ref="specimenCollectionGroup"
         />
+
 
         <!--
             To add non XDoclet property mappings, create a file named

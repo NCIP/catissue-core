@@ -29,11 +29,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
-import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -483,19 +483,21 @@ public class ParticipantAction extends SecureAction
 		session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 		// Falguni:Performance Enhancement.
 		Long participantEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
 		{
 			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
-					"participantEntityId");
+					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
 		}
 		else
 		{
 			participantEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",
-					participantEntityId);
+					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+			CatissueCoreCacheManager.getInstance().addObjectToCache(
+					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, participantEntityId);
 		}
-		request.setAttribute("participantEntityId", participantEntityId);
+		request.setAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
+				participantEntityId);
 
 		this.logger.debug("pageOf :---------- " + pageOf);
 

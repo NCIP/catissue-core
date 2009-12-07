@@ -2,25 +2,24 @@
 package edu.wustl.catissuecore.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
-import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
-import edu.common.dynamicextensions.domain.AbstractMetadata;
-import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This class show/hides entities-forms mention in CSV file.
@@ -29,6 +28,7 @@ import edu.wustl.security.exception.UserNotAuthorizedException;
  */
 public final class AssociatesForms
 {
+
 	/**
 	 * logger Logger - Generic logger.
 	 */
@@ -40,14 +40,16 @@ public final class AssociatesForms
 	/*
 	 * create singleton object
 	 */
-	private static AssociatesForms associatForms= new AssociatesForms();
+	private static AssociatesForms associatForms = new AssociatesForms();
+
 	/*
 	 * private constructor
 	 */
 	private AssociatesForms()
 	{
-		
+
 	}
+
 	/*
 	 * returns single object
 	 */
@@ -55,39 +57,59 @@ public final class AssociatesForms
 	{
 		return associatForms;
 	}
-	
+
 	/**
 	 * Map for storing containers corresponding to entitiesIds
 	 */
 	private static Map<Long, Long> entityIdsVsContainersId = new HashMap<Long, Long>();
 
+	private static List<Long> entityAndFormContainerIds = new ArrayList<Long>();
+
 	/**
 	 * @param args stores command line user inputs
 	 * @throws DynamicExtensionsSystemException fails to validate
-	 * @throws DAOException if it fails to do database operation
 	 * @throws IOException if it fails to read file IO operation
-	 * @throws BizLogicException fails to get the instance of BizLogic
-	 * @throws UserNotAuthorizedException if user is not authorized to perform the operations
+	 * @throws ApplicationException
 	 */
 	public static void main(String[] args) throws DynamicExtensionsSystemException, IOException,
-	ApplicationException
+			ApplicationException
 	{
 		//Validates arguments
+		//String filePath = "E:/Program Files/Eclipse-Galileo/eclipse/workspace/pcatissue_cp_integration_branch_de_restructure/Show_Hide_Forms.csv";
 		validateCSV(args);
 		String filePath = args[0];
 		CSVFileParser csvFileParser = new CSVFileParser(filePath);
 		//get EntityGroup with Collection Protocol along with corresponding entities
 		csvFileParser.processCSV();
 
-		Long typeId = (Long) AppUtility.getObjectIdentifier(Constants.COLLECTION_PROTOCOL,
-				AbstractMetadata.class.getName(), Constants.NAME, DynamicExtensionDAO.getInstance().getAppName());
-
+		// Get all containerIDs for all entities in the entity groups
 		entityIdsVsContainersId = AppUtility.getAllContainers(csvFileParser.getEntityGroupIds());
 
-		disAssociateEntitiesAndForms(typeId);
+		// Get all container IDs which need to be associated with ALL CPs
+		entityAndFormContainerIds = getContainerIdsForMapping(csvFileParser);
 
-		associateEntitiesForms(csvFileParser.getEntityIds(),typeId);
-		associateEntitiesForms(csvFileParser.getFormIds(),typeId);
+		associateAllEntitiesForms();
+		logger.info("Associated the entities and forms with All CPs");
+	}
+
+	/**
+	 *
+	 * @param csvFileParser
+	 * @return
+	 */
+	private static List<Long> getContainerIdsForMapping(CSVFileParser csvFileParser)
+	{
+		List<Long> containerIds = new ArrayList<Long>();
+		List<Long> entityAndFormIds = new ArrayList<Long>();
+		entityAndFormIds.addAll(csvFileParser.getEntityIds());
+		entityAndFormIds.addAll(csvFileParser.getFormIds());
+
+		for (Long entityId : entityAndFormIds)
+		{
+			containerIds.add(getContainerId(entityId));
+		}
+
+		return containerIds;
 	}
 
 	/**
@@ -103,60 +125,63 @@ public final class AssociatesForms
 	}
 
 	/**
-	 * @param typeId type id of collection protocol
-	 * @throws DAOException if it fails to do database operation
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws BizLogicException
+	 * @throws DAOException
 	 */
-	private static void disAssociateEntitiesAndForms(Long typeId) throws ApplicationException, DynamicExtensionsSystemException
+	private static void associateAllEntitiesForms() throws DAOException
 	{
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
-		Long cpId = Long.valueOf(0);
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		HibernateDAO hibernateDao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
+				appName).getDAO();
+		hibernateDao.openSession(null);
+
 		for (Long containerId : entityIdsVsContainersId.values())
 		{
 			if (containerId != null)
 			{
-				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
-						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && !entityMapList.isEmpty())
+				boolean isInsert = true;
+				List<StudyFormContext> studyFormList = hibernateDao.executeQuery("from "
+						+ StudyFormContext.class.getName() + " sfc where sfc.containerId="
+						+ containerId);
+
+				StudyFormContext studyFormContext = null;
+				if (studyFormList != null && !studyFormList.isEmpty())
 				{
-					EntityMap entityMap = entityMapList.get(0);
-					AppUtility.editConditions(entityMap, cpId, typeId, true);
-					annotation.updateEntityMap(entityMap);
+					studyFormContext = studyFormList.get(0);
+					Collection<CollectionProtocol> coll = studyFormContext
+							.getCollectionProtocolCollection();
+					coll.clear();
+					updateStudyFormContext(studyFormContext, containerId);
+					hibernateDao.update(studyFormContext);
+				}
+				else
+				{
+					studyFormContext = new StudyFormContext();
+					updateStudyFormContext(studyFormContext, containerId);
+					hibernateDao.insert(studyFormContext);
 				}
 			}
 		}
+
+		hibernateDao.commit();
+		hibernateDao.closeSession();
 	}
 
 	/**
-	 * @param entityIds entityIds collection
-	 * @throws DynamicExtensionsSystemException
-	 * @throws ApplicationException Application Exception
+	 *
+	 * @param studyFormContext
+	 * @param containerId
 	 */
-	private static void associateEntitiesForms(List<Long> entityIds, Long typeId) throws DynamicExtensionsSystemException, ApplicationException
+	private static void updateStudyFormContext(StudyFormContext studyFormContext, Long containerId)
 	{
-		AnnotationBizLogic annotation = new AnnotationBizLogic();
-		annotation.setAppName(DynamicExtensionDAO.getInstance().getAppName());
-		DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-		for (Long entityId : entityIds)
+		studyFormContext.setContainerId(containerId);
+		if (!entityAndFormContainerIds.contains(containerId))
 		{
-			Long containerId = getContainerId(entityId);
-			if (containerId == null)
-			{
-				throw new DynamicExtensionsSystemException(
-				"This entity is not directly associated with the hook entity. Please enter proper entity in Show_Hide_Forms.csv file");
-			}
-			else
-			{
-				List<EntityMap> entityMapList = defaultBizLogic.retrieve(EntityMap.class.getName(),
-						Constants.CONTAINERID, containerId);
-				if (entityMapList != null && !entityMapList.isEmpty())
-				{
-					EntityMap entityMap = entityMapList.get(0);
-					AppUtility.editConditions(entityMap, typeId);
-				}
-			}
+			studyFormContext.setHideForm(true);
+		}
+		else
+		{
+			studyFormContext.setHideForm(false);
 		}
 	}
 

@@ -32,9 +32,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -805,7 +805,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// -------------------------------
 			// Falguni:Performance Enhancement.
 			Long scgEntityId = null;
-			if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
+			/*if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
 			{
 				scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 						"scgEntityId");
@@ -816,7 +816,21 @@ public class SpecimenCollectionGroupAction extends SecureAction
 						.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
 				CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId", scgEntityId);
 			}
-			request.setAttribute("scgEntityId", scgEntityId);
+			request.setAttribute("scgEntityId", scgEntityId);*/
+			if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID) != null)
+			{
+				scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
+			}
+			else
+			{
+				scgEntityId = AnnotationUtil
+						.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
+				CatissueCoreCacheManager.getInstance().addObjectToCache(
+						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
+			}
+			request.setAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
 			AppUtility.setDefaultPrinterTypeLocation(specimenCollectionGroupForm);
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch

@@ -5,9 +5,6 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
-import java.util.Iterator;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,13 +13,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domain.integration.EntityMap;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -84,68 +78,16 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		// CatissueCoreCacheManager cacheManager =
 		// CatissueCoreCacheManager.getInstance();
 		final HttpSession session = request.getSession();
-		final Long entityMapId = this.getEntityMapId( AppUtility.toLong( staticEntityId ),
+		//Commented By Deepali
+		/*final Long entityMapId = this.getEntityMapId( AppUtility.toLong( staticEntityId ),
 				AppUtility.toLong( dynEntContainerId ) );
-		session.setAttribute( AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId );
+		session.setAttribute( AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId );*/
 		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID, annotationDataEntryForm
 				.getSelectedStaticEntityId() );
 		session.setAttribute( AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,
 				annotationDataEntryForm.getSelectedStaticEntityRecordId() );
 	}
 
-	/**
-	 * @param staticEntityId : staticEntityId
-	 * @param dynamicEntityContainerId : dynamicEntityContainerId)
-	 * @return Long : Long
-	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
-	 * @throws BizLogicException : BizLogicException
-	 */
-	private Long getEntityMapId(Long staticEntityId, Long dynamicEntityContainerId)
-			throws DynamicExtensionsSystemException, BizLogicException
-	{
-		Long entityMapId = null;
-		if (staticEntityId != null)
-		{
-			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			final List < EntityMap > entityMapsForStaticEntity = annotationBizLogic
-					.getListOfDynamicEntities( staticEntityId );
-			final EntityMap entityMap = this.getEntityMapForSelectedDE( dynamicEntityContainerId,
-					entityMapsForStaticEntity );
-			if (entityMap != null)
-			{
-				entityMapId = entityMap.getId();
-			}
-		}
-		return entityMapId;
-	}
-
-	/**
-	 * @param deContainerId : deContainerId
-	 * @param entityMapsForStaticEntity : entityMapsForStaticEntity
-	 * @return EntityMap : EntityMap
-	 */
-	private EntityMap getEntityMapForSelectedDE(Long deContainerId,
-			List < EntityMap > entityMapsForStaticEntity)
-	{
-		if (( deContainerId != null ) && ( entityMapsForStaticEntity != null ))
-		{
-			EntityMap entityMap = null;
-			final Iterator < EntityMap > entityMapIter = entityMapsForStaticEntity.iterator();
-			while (entityMapIter.hasNext())
-			{
-				entityMap = entityMapIter.next();
-				if (( entityMap != null ) && ( entityMap.getContainerId() != null ))
-				{
-					if (entityMap.getContainerId().longValue() == deContainerId.longValue())
-					// If matches the specified DE container id
-					{
-						return entityMap;
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 	/**
 	 * @param request : request

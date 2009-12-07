@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -171,6 +172,8 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * isCPBasedSpecimenEntryChecked.
 	 */
 	protected boolean isCPBasedSpecimenEntryChecked = true;
+
+	protected Collection<SCGRecordEntry> scgRecordEntryCollection = new HashSet<SCGRecordEntry>();
 
 	/**
 	 * @return the isCPBasedSpecimenEntryChecked
@@ -451,6 +454,16 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport)
 	{
 		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
+	}
+
+	public Collection<SCGRecordEntry> getScgRecordEntryCollection()
+	{
+		return scgRecordEntryCollection;
+	}
+
+	public void setScgRecordEntryCollection(Collection<SCGRecordEntry> scgRecordEntryCollection)
+	{
+		this.scgRecordEntryCollection = scgRecordEntryCollection;
 	}
 
 	/* (non-Javadoc)

@@ -22,6 +22,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -140,6 +141,11 @@ public class Participant extends AbstractDomainObject
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
+
+	/**
+	 * A collection of record entry objects for a participant
+	 */
+	protected Collection<ParticipantRecordEntry> participantRecordEntryCollection = new HashSet<ParticipantRecordEntry>();
 
 	protected String metaPhoneCode;
 
@@ -583,6 +589,25 @@ public class Participant extends AbstractDomainObject
 	public void setEmpiId(String empiId)
 	{
 		this.empiId = empiId;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public Collection<ParticipantRecordEntry> getParticipantRecordEntryCollection()
+	{
+		return participantRecordEntryCollection;
+	}
+
+	/**
+	 *
+	 * @param participantRecordEntryCollection
+	 */
+	public void setParticipantRecordEntryCollection(
+			Collection<ParticipantRecordEntry> participantRecordEntryCollection)
+	{
+		this.participantRecordEntryCollection = participantRecordEntryCollection;
 	}
 
 	/**

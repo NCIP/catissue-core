@@ -220,4 +220,13 @@ public class AnnotationConstants
 	public static  final String CELL_START = "<cell>";
 	
 	public static  final String CELL_END = "</cell>";
+
+	public static final String ENTITY_NAME_PARTICIPANT_REC_ENTRY = "edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry";
+	public static final String ENTITY_NAME_SPECIMEN_REC_ENTRY = "edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry";
+	public static final String ENTITY_NAME_SCG_REC_ENTRY = "edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry";
+
+	public static final String PARTICIPANT_REC_ENTRY_ENTITY_ID = "particiapntRecordEntryEntityId";
+	public static final String SPECIMEN_REC_ENTRY_ENTITY_ID = "specimenRecordEntryEntityId";
+	public static final String SCG_REC_ENTRY_ENTITY_ID = "scgRecordEntryEntityId";
+
 	}

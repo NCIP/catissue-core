@@ -29,7 +29,7 @@
             outer-join="false"
             update="true"
             insert="true"
-            column="PARENT_SPECIMEN_ID"  
+            column="PARENT_SPECIMEN_ID"
             lazy="false"
         />
         <set
@@ -40,7 +40,7 @@
             cascade="all"
             sort="unsorted"
         >
-			 <cache usage="read-write" /> 
+			 <cache usage="read-write" />
             <key
                 column="PARENT_SPECIMEN_ID"
             >
@@ -50,7 +50,7 @@
                   class="edu.wustl.catissuecore.domain.AbstractSpecimen"
         />
 
-        </set>	
+        </set>
 	    <many-to-one
 	            name="specimenCharacteristics"
 	            class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
@@ -104,7 +104,7 @@
             column="SPECIMEN_TYPE"
             length="50"
         />
-        
+
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
@@ -124,11 +124,11 @@
             />
 
         </set>
-	     
+
      <joined-subclass name="edu.wustl.catissuecore.domain.Specimen" table="CATISSUE_SPECIMEN">
-           
+
            <key column="IDENTIFIER"/>
-           
+
            <set
             name="consentTierStatusCollection"
             table="CATISSUE_CONSENT_TIER_STATUS"
@@ -145,7 +145,7 @@
                   class="edu.wustl.catissuecore.domain.ConsentTierStatus"
               />
         </set>
-        
+
 	    <set
             name="biohazardCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
@@ -175,7 +175,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-         	
+
             <key
                 column="SPECIMEN_ID"
             >
@@ -186,7 +186,7 @@
             />
 
         </set>
-		
+
 		<one-to-one
            name="specimenPosition"
 	       class="edu.wustl.catissuecore.domain.SpecimenPosition"
@@ -195,7 +195,7 @@
 	       constrained="false"
 	       property-ref="specimen"
        />
-        
+
 		<property
             name="label"
             type="string"
@@ -247,7 +247,7 @@
             length="255"
             unique="true"
         />
-        
+
 		<property
             name="createdOn"
             type="date"
@@ -255,7 +255,7 @@
             insert="true"
             column="CREATED_ON_DATE"
         />
-		
+
 		<property
             name="availableQuantity"
             type="double"
@@ -264,7 +264,24 @@
             column="AVAILABLE_QUANTITY"
             length="50"
         />
-        
+
+		<set
+            name="specimenRecordEntryCollection"
+            table="CATISSUE_SPECIMEN_REC_NTRY"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry"
+              />
+        </set>
         <many-to-one
             name="specimenCollectionGroup"
             class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
@@ -326,7 +343,7 @@
          <key column="IDENTIFIER"/>
 	   </joined-subclass>
 	 </joined-subclass>
-	 
+
 	 <joined-subclass name="edu.wustl.catissuecore.domain.SpecimenRequirement" table="CATISSUE_CP_REQ_SPECIMEN">
 
 	 	 <key column="IDENTIFIER"/>
@@ -346,7 +363,7 @@
                   class="edu.wustl.catissuecore.domain.Specimen"
               />
         </set>
-        
+
         <property
             name="labelFormat"
             type="string"
@@ -355,8 +372,8 @@
             column="LABELFORMAT"
             length="255"
         />
-        
-        
+
+
 		<property
 	            name="storageType"
 	            type="string"
@@ -374,7 +391,7 @@
 	            insert="true"
 	            column="COLLECTION_PROTOCOL_EVENT_ID"
 	        />
-	     
+
 	   <joined-subclass
             name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"
             table="catissue_fluid_req_specimen"
@@ -397,7 +414,7 @@
 			lazy="true"
         >
      		<key column="IDENTIFIER"/>
-	   
+
 	        <property
 	            name="concentrationInMicrogramPerMicroliter"
 	            type="double"
@@ -409,14 +426,14 @@
        </joined-subclass>
 
        <joined-subclass
-            
+
             name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"
             table="catissue_tissue_req_specimen"
 			lazy="true"
         >
             <key column="IDENTIFIER"/>
 	   </joined-subclass>
-	   
+
 	</joined-subclass>
   </class>
 </hibernate-mapping>

@@ -11,9 +11,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.caties.util.ViewSPRUtil;
@@ -101,16 +101,16 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		{
 			identifier = new Long(strIdentifier);
 			viewSPR.setId(identifier);
-			this.retriveFromReportId(identifier, request, viewSPR);
+			retriveFromReportId(identifier, request, viewSPR);
 		}
 		if (reportId != null && reportId != 0
 				&& operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 		{
-			this.retrieveAndSetObject(pageOf, reportId, request, viewSPR);
+			retrieveAndSetObject(pageOf, reportId, request, viewSPR);
 		}
 		final String aliasName = "";
 		request.setAttribute(Constants.PARTICIPANTIDFORREPORT, viewSPR.getParticipantIdForReport());
-		viewSPR.setHasAccess(this.isAuthorized(this.getSessionBean(request), viewSPR
+		viewSPR.setHasAccess(isAuthorized(getSessionBean(request), viewSPR
 				.getCollectionProtocolId(), aliasName));
 		// If request is from Query to view Deidentfied report
 		if (viewSPR.getIdentifiedReportId() == null || viewSPR.getIdentifiedReportId() == "")
@@ -124,7 +124,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		request.setAttribute(Constants.FORWARD_TO, forwardTo);
 		// Falguni:Performance Enhancement.
 		Long specimenEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
+		/*if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
 		{
 			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 					"specimenEntityId");
@@ -135,11 +135,27 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",
 					specimenEntityId);
 		}
-		request.setAttribute("specimenEntityId", specimenEntityId);
+		request.setAttribute("specimenEntityId", specimenEntityId);*/
+
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+				AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID) != null)
+		{
+			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID);
+		}
+		else
+		{
+			specimenEntityId = AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+			CatissueCoreCacheManager.getInstance().addObjectToCache(
+					AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+		}
+		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID, specimenEntityId);
+
 		// Falguni:Performance Enhancement -User clicks on Report tab then
 		// annotation page on Edit participant page
 		Long participantEntityId = null;
-		if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
+		/*if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
 		{
 			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 					"participantEntityId");
@@ -151,7 +167,23 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",
 					participantEntityId);
 		}
-		request.setAttribute("participantEntityId", participantEntityId);
+		request.setAttribute("participantEntityId", participantEntityId);*/
+		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
+				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
+		{
+			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+		}
+		else
+		{
+			participantEntityId = AnnotationUtil
+					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+			CatissueCoreCacheManager.getInstance().addObjectToCache(
+					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, participantEntityId);
+		}
+		request.setAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
+				participantEntityId);
+
 		if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_NEW_SPECIMEN)
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 		{
@@ -189,12 +221,12 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 		{
 
-			final Long participantId = this.getParticipantId(reportId);
+			final Long participantId = getParticipantId(reportId);
 			final ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory
 					.getBizLogic(Participant.class.getName());
 			final List scgList = bizLogic.getSCGList(participantId);
 
-			viewSPR.setReportIdList(this.getReportIdList(scgList));
+			viewSPR.setReportIdList(getReportIdList(scgList));
 		}
 
 		if (reportId != null)
@@ -214,7 +246,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error(ex.getMessage(),ex);
+				logger.error(ex.getMessage(),ex);
 				ex.printStackTrace();
 			}
 		}
@@ -365,7 +397,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		catch (final Exception ex)
 		{
-			this.logger.error(ex.getMessage(), ex);
+			logger.error(ex.getMessage(), ex);
 			ex.printStackTrace();
 			return null;
 		}
