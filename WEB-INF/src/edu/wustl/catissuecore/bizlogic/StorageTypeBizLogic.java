@@ -292,6 +292,38 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		return holdsSpecimenClasses;
 	}
+	/**
+	 * To get the Specimen Class types that the given StorageType can hold.
+	 * @param type The reference to StorageType object.
+	 * @return The array of String representing Specimen Class types that the given StorageType can hold.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public String[] getDefaultHoldsSpecimenTypeList(StorageType type)
+	{
+		String[] holdsSpType = null;
+		final Collection<String> spTypeColl = type.getHoldsSpecimenTypeCollection();
+		if (spTypeColl != null)
+		{
+			if (spTypeColl.size() == AppUtility.getSpecimenTypes().size())
+			{
+				holdsSpType = new String[]{"-1"};
+			}
+			else
+			{
+				holdsSpType = new String[spTypeColl.size()];
+
+				final Iterator<String> it = spTypeColl.iterator();
+				int i = 0;
+				while (it.hasNext())
+				{
+					final String spType = (String) it.next();
+					holdsSpType[i] = spType;
+					i++;
+				}
+			}
+		}
+		return holdsSpType;
+	}
 
 	/**
 	 * To get the ids of the SpecimenArrayType that the given StorageType can hold.

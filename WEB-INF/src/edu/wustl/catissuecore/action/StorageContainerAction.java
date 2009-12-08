@@ -410,6 +410,8 @@ public class StorageContainerAction extends SecureAction
 		final List list2 = bizLogic.retrieve(StorageType.class.getName());
 		final List storageTypeListWithAny = AppUtility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
+		request.setAttribute(Constants.HOLDS_LIST4, AppUtility.getAllSpecimenType());
+		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, AppUtility.getSpecimenTypeMap());
 
 		if (Constants.ADD.equals(request.getAttribute(Constants.OPERATION)))
 		{
@@ -536,7 +538,13 @@ public class StorageContainerAction extends SecureAction
 						storageContainerForm
 								.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
 					}
-
+					final String[] defHoldsSpecimenTypeList = storageTypebizLogic.
+					getDefaultHoldsSpecimenTypeList(type);
+					if (defHoldsSpecimenTypeList != null)
+					{
+						storageContainerForm
+								.setHoldsSpecimenTypes(defHoldsSpecimenTypeList);
+					}
 					final long[] defHoldsSpecimenArrayTypeList = storageTypebizLogic
 							.getDefaultHoldSpecimenArrayTypeList(type);
 					if (defHoldsSpecimenArrayTypeList != null)
@@ -807,6 +815,8 @@ public class StorageContainerAction extends SecureAction
 				.getHoldsSpecimenArrTypeIds());
 		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean
 				.getHoldsSpecimenClassTypes());
+		storageContainerForm.setHoldsSpecimenTypes(storageContainerBean
+				.getHoldsSpecimenTypes());
 		storageContainerForm.setHoldsStorageTypeIds(storageContainerBean.getHoldsStorageTypeIds());
 		storageContainerForm
 				.setOneDimensionCapacity(storageContainerBean.getOneDimensionCapacity());

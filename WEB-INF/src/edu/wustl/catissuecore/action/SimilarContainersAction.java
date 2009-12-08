@@ -205,7 +205,7 @@ public class SimilarContainersAction extends SecureAction
 			// get the Specimen class and type from the cde
 			final List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
 			request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
-
+			request.setAttribute(Constants.HOLDS_LIST4, AppUtility.getAllSpecimenType());
 			// Gets the Specimen array Type List and sets it in request
 			final List list3 = dao.retrieve(SpecimenArrayType.class.getName());
 			final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list3);

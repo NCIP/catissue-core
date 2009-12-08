@@ -76,6 +76,8 @@ public class OpenStorageContainerAction extends BaseAction
 					.getHoldsSpecimenArrTypeIds());
 			storageContainerBean.setHoldsSpecimenClassTypes(storageContainerForm
 					.getHoldsSpecimenClassTypes());
+			storageContainerBean.setHoldsSpecimenTypes(storageContainerForm
+					.getHoldsSpecimenTypes());
 			storageContainerBean.setHoldsStorageTypeIds(storageContainerForm
 					.getHoldsStorageTypeIds());
 			storageContainerBean.setTypeId(storageContainerForm.getTypeId());
