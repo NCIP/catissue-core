@@ -87,6 +87,7 @@ public class StorageTypeAction extends SecureAction
 		request.setAttribute("holds_List_1", Constants.HOLDS_LIST1);
 		request.setAttribute("holds_List_2", Constants.HOLDS_LIST2);
 		request.setAttribute("holds_List_3", Constants.HOLDS_LIST3);
+		request.setAttribute("holds_List_4", Constants.HOLDS_LIST4);
 
 		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
 		int dimTwoCapacity = 0;
@@ -144,6 +145,10 @@ public class StorageTypeAction extends SecureAction
 		final List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
 		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+
+		// Gets the Specimen array Type List and sets it in request //Fluid, Tissue, Molecular, Cell
+	    
+		request.setAttribute(Constants.HOLDS_LIST4, AppUtility.getAllSpecimenType());
 
 		// Bug #4297
 		// if(operation.equals(Constants.ADD))
