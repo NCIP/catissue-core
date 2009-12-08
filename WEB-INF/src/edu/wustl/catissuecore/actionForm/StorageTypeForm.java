@@ -82,6 +82,23 @@ public class StorageTypeForm extends AbstractActionForm
 	 * List of Specimen Types that Storage Type can hold
 	 */
 	private String[] holdsSpecimenClassTypes;
+	
+	/**
+	 * List of Specimen Types that Storage Type can hold
+	 */
+	private String[] holdsSpecimenType;
+
+	
+	public String[] getHoldsSpecimenType()
+	{
+		return holdsSpecimenType;
+	}
+
+	
+	public void setHoldsSpecimenType(String[] holdsSpecimenType)
+	{
+		this.holdsSpecimenType = holdsSpecimenType;
+	}
 
 	private long[] holdsSpecimenArrTypeIds;
 
@@ -156,6 +173,32 @@ public class StorageTypeForm extends AbstractActionForm
 
 				}
 			}
+		}
+		final Collection specimenTypeCollection = storageType.getHoldsSpecimenTypeCollection();
+		if(specimenTypeCollection!=null)
+		{
+			if (specimenTypeCollection.size() == AppUtility.getSpecimenTypeMap().size())
+			{
+				this.holdsSpecimenType = new String[1];
+				this.holdsSpecimenType[0] = "-1";
+				this.specimenOrArrayType = "Specimen";
+			}
+			else
+			{
+				this.holdsSpecimenType = new String[specimenClassTypeCollection.size()];
+				int i = 0;
+
+				final Iterator it = specimenClassTypeCollection.iterator();
+				while (it.hasNext())
+				{
+					final String specimenClass = (String) it.next();
+					this.holdsSpecimenType[i] = specimenClass;
+					i++;
+					this.specimenOrArrayType = "Specimen";
+
+				}
+			}
+			
 		}
 		//      Populating the specimen array type-id array
 		final Collection specimenArrayTypeCollection = storageType

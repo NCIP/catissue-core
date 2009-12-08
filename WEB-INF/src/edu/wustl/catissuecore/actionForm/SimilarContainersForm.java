@@ -94,6 +94,11 @@ public class SimilarContainersForm extends AbstractActionForm
 	protected long[] holdsSpecimenClassTypeIds;
 
 	/**
+	 * holdSpecimenTypeIds contains Ids of Specimen Types that this container can hold
+	 */
+	protected long[] holdsSpecimenTypeIds;
+
+	/**
 	 * Tells whether this container is full or not.
 	 */
 	private String isFull = "False";
@@ -416,6 +421,24 @@ public class SimilarContainersForm extends AbstractActionForm
 	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
 	{
 		this.holdsStorageTypeIds = holdsStorageTypeIds;
+	}
+
+	/**
+	 * 
+	 * @return holdsSpecimenTypeIds
+	 */
+	public long[] getHoldsSpecimenTypeIds()
+	{
+		return holdsSpecimenTypeIds;
+	}
+	
+	/**
+	 * Setting the SpecimenType.
+	 * @param holdsSpecimenTypeIds array of Specimen Type
+	 */
+	public void setHoldsSpecimenTypeIds(long[] holdsSpecimenTypeIds)
+	{
+		this.holdsSpecimenTypeIds = holdsSpecimenTypeIds;
 	}
 
 	/**

@@ -265,7 +265,23 @@
 			
 			<element column="SPECIMEN_CLASS" type="string" length="50"/>
         </set>
+		<set
+            name="holdsSpecimenTypeCollection"
+            table="CATISSUE_STOR_CONT_SPEC_TYPE"
+            lazy="false" fetch="join"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
 
+              <key
+                  column="STORAGE_CONTAINER_ID"
+              />
+			
+			<element column="SPECIMEN_TYPE" type="string" length="50"/>
+        </set>
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_ST_CONT_ST_TYPE_REL"

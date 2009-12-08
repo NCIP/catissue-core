@@ -417,6 +417,7 @@ public class Constants
 	public static final int STORAGE_CONTAINER_FIRST_COLUMN = 1;
 	public static final String MAP_COLLECTION_PROTOCOL_LIST = "collectionProtocolList";
 	public static final String MAP_SPECIMEN_CLASS_LIST = "specimenClassList";
+	public static final String MAP_SPECIMEN_TYPE_LIST = "specimenTypeList";
 	public static final String CONTENT_OF_CONTAINNER = "contentOfContainer";
 
 	//event parameters lists
@@ -492,6 +493,7 @@ public class Constants
 	public static final String HOLDS_LIST1 = "HoldsList1";
 	public static final String HOLDS_LIST2 = "HoldsList2";
 	public static final String HOLDS_LIST3 = "HoldsList3";
+	public static final String HOLDS_LIST4 = "HoldsList4";
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";

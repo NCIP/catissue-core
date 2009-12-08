@@ -76,6 +76,27 @@ public class StorageContainer extends Container implements IActivityStatus
 	 * HashSet containing String.
 	 */
 	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+	/**
+	 * HashSet containing String.
+	 */
+	protected Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
+
+	/**
+	 * @return holdsSpecimenTypeCollection
+	 */
+	public Collection<String> getHoldsSpecimenTypeCollection()
+	{
+		return holdsSpecimenTypeCollection;
+	}
+
+	/**
+	 * Set holdsSpecimenTypeCollection.
+	 * @param holdsSpecimenTypeCollection holdsSpecimenTypeCollection
+	 */
+	public void setHoldsSpecimenTypeCollection(Collection<String> holdsSpecimenTypeCollection)
+	{
+		this.holdsSpecimenTypeCollection = holdsSpecimenTypeCollection;
+	}
 
 	/**
 	 * HashSet containing String.
@@ -157,6 +178,7 @@ public class StorageContainer extends Container implements IActivityStatus
 		this.setCollectionProtocolCollection(oldContainer.getCollectionProtocolCollection());
 		this.setHoldsStorageTypeCollection(oldContainer.getHoldsStorageTypeCollection());
 		this.setHoldsSpecimenClassCollection(oldContainer.getHoldsSpecimenClassCollection());
+		this.setHoldsSpecimenTypeCollection(oldContainer.getHoldsSpecimenTypeCollection());
 		this
 				.setHoldsSpecimenArrayTypeCollection(oldContainer
 						.getHoldsSpecimenArrayTypeCollection());
@@ -512,7 +534,7 @@ public class StorageContainer extends Container implements IActivityStatus
 			}
 		}
 
-		Logger.out.debug("isParentChanged " + this.isParentChanged);
+		logger.debug("isParentChanged " + this.isParentChanged);
 		if (!Constants.SITE.equals(form.getParentContainerSelected()))
 		{
 			if (this.locatedAtPosition == null)
@@ -590,7 +612,7 @@ public class StorageContainer extends Container implements IActivityStatus
 		{
 			for (final long element : storageTypeArr)
 			{
-				Logger.out.debug("Storage Type Id :" + element);
+				logger.debug("Storage Type Id :" + element);
 				if (element != -1)
 				{
 					final StorageType storageType = new StorageType();
@@ -609,7 +631,7 @@ public class StorageContainer extends Container implements IActivityStatus
 			{
 				for (final String element : specimenClassArr)
 				{
-					Logger.out.debug("class Id :" + element);
+					logger.debug("type Id :" + element);
 					if (element.equals("-1"))
 					{
 						this.holdsSpecimenClassCollection
@@ -619,6 +641,29 @@ public class StorageContainer extends Container implements IActivityStatus
 					else
 					{
 						this.holdsSpecimenClassCollection.add(element);
+					}
+				}
+			}
+		}
+//		holdsSpecimenTypeClassCollection.clear();
+		this.holdsSpecimenTypeCollection = new HashSet<String>();
+		if (form.getSpecimenOrArrayType().equals("Specimen"))
+		{
+			final String[] specimenClassArr = form.getHoldsSpecimenTypes();
+			if (specimenClassArr != null)
+			{
+				for (final String element : specimenClassArr)
+				{
+					logger.debug("class Id :" + element);
+					if (element.equals("-1"))
+					{
+						this.holdsSpecimenTypeCollection
+								.addAll(AppUtility.getSpecimenTypes());
+						break;
+					}
+					else
+					{
+						this.holdsSpecimenTypeCollection.add(element);
 					}
 				}
 			}

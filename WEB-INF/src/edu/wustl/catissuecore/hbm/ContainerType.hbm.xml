@@ -162,6 +162,24 @@
 			
 			<element column="SPECIMEN_CLASS" type="string" length="50"/>
         </set>
+        
+        <set
+            name="holdsSpecimenTypeCollection"
+            table="CATISSUE_STOR_TYPE_SPEC_TYPE"
+            fetch="join" lazy="false" 
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+        
+        <cache usage="read-write" />
+
+              <key
+                  column="STORAGE_TYPE_ID"
+              />
+			
+			<element column="SPECIMEN_TYPE" type="string" length="50"/>
+        </set>
 
        
 
@@ -207,7 +225,6 @@
                    
               />
         </set>
-        
 
         </joined-subclass>
 

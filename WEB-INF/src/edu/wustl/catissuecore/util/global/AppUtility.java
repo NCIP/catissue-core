@@ -21,6 +21,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -3416,5 +3417,146 @@ public class AppUtility
 		ssn = ssnA + "-" + ssnB + "-" + ssnC;
 		return ssn;
 	}
+	/**
+	 * Return  specimenTypeList
+	 * @return specimenTypeList
+	 */
+	public static List getAllSpecimenType()
+	{
+		List<String> classList = new LinkedList<String>();
+	    List<NameValueBean> specimenTypeList = new LinkedList<NameValueBean>();
+	    classList.add(Constants.FLUID);
+	    classList.add(Constants.TISSUE);
+	    classList.add(Constants.MOLECULAR);
+	    classList.add(Constants.CELL);
+	    Iterator<String> classItr = classList.iterator();
+	    while(classItr.hasNext())
+	    {
+	    	List<NameValueBean> subList = new LinkedList<NameValueBean>();
+	    	subList.addAll(AppUtility.getSpecimenTypes(classItr.next()));
+	    	subList.remove(0);
+	    	specimenTypeList.addAll(subList);
+	    }
+	    specimenTypeList.add(0,new NameValueBean(Constants.HOLDS_ANY, "-1"));
+	    return specimenTypeList;
+	}
+	/**
+	 * @return specimenClassTypeList
+	 */
+	public static List<String> getSpecimenTypes()
+	{
+		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
+				Constants.CDE_NAME_SPECIMEN_TYPE);
+		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Iterator itr = setPV.iterator();
+		final List specimenClassTypeList = new ArrayList();
+		while (itr.hasNext())
+		{
+			final Object obj = itr.next();
+			final PermissibleValue pv = (PermissibleValue) obj;
+			final String tmpStr = pv.getValue();
+			specimenClassTypeList.add(tmpStr);
+		} 
+		return specimenClassTypeList;
+	}
+	
+	/**
+	 * @param id
+	 *            Identifier of the StorageContainer related to which the
+	 *            collectionProtocol titles are to be retrieved.
+	 * @return List of collectionProtocol title.
+	 * @throws ApplicationException 
+	 */
+	public static List getSpecimenClassList(String id) throws ApplicationException
+	{
+		final String sql = " SELECT SP.SPECIMEN_CLASS CLASS FROM CATISSUE_STOR_CONT_SPEC_CLASS SP "
+				+ "WHERE SP.STORAGE_CONTAINER_ID = " + id;
+		return getResult(sql);
+	}
+	/**
+	 * @param id
+	 *            Identifier of the StorageContainer related to which the
+	 *            collectionProtocol titles are to be retrieved.
+	 * @return List of collectionProtocol title.
+	 * @throws ApplicationException 
+	 */
+	public static List getSpecimenTypeList(String id) throws ApplicationException
+	{
+		final String sql = " SELECT SP.SPECIMEN_TYPE FROM CATISSUE_STOR_CONT_SPEC_TYPE SP "
+				+ "WHERE SP.STORAGE_CONTAINER_ID = " + id;
+		return getResult(sql);
+	}
+	/**
+	 * 
+	 * @param sql SQL query.
+	 * @return List
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static List getResult(final String sql) throws ApplicationException
+	{
+		final List resultList = executeSQLQuery(sql);
+		final Iterator iterator = resultList.iterator();
+		final List returnList = new ArrayList();
+		while (iterator.hasNext())
+		{
+			final List list = (List) iterator.next();
+			for (int cnt = 0; cnt < list.size(); cnt++)
+			{
+				final String data = (String) list.get(cnt);
+				returnList.add(data);
+			}
+		}
+		if (returnList.isEmpty())
+		{
+			returnList.add(new String(Constants.NONE));
+		}
+		return returnList;
+	}
+	/**
+	 * @param id
+	 *            Identifier of the StorageContainer related to which the
+	 *            collectionProtocol titles are to be retrieved.
+	 * @return List of collectionProtocol title.
+	 * @throws ApplicationException 
+	 */
+	public static List getCollectionProtocolList(String id) throws ApplicationException
+	{
+		// Query to return titles of collection protocol related to given
+		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
+				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
+				+ id;
+		final List resultList = executeSQLQuery(sql);
+		final Iterator iterator = resultList.iterator();
+		final List returnList = new ArrayList();
+		while (iterator.hasNext())
+		{
+			final List list = (List) iterator.next();
+			final String data = (String) list.get(0);
+			returnList.add(data);
+		}
 
+		if (returnList.isEmpty())
+		{
+			returnList.add(new String(Constants.ALL));
+		}
+		return returnList;
+	}
+	
+	/**
+	 * @param siteidSet - siteidSet.
+	 * @param siteId - siteId 
+	 * @return boolean value
+	 */
+	public static boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId)
+	{
+		boolean hasPrivilege = true;
+		if (siteidSet != null)
+		{
+			if (!siteidSet.contains(siteId))
+			{
+				hasPrivilege = false;
+			}
+		}
+		return hasPrivilege;
+	}
 }

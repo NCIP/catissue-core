@@ -47,17 +47,21 @@ public class StorageType extends ContainerType
 	/**
 	 * holdsStorageTypeCollection.
 	 */
-	protected Collection holdsStorageTypeCollection = new HashSet();
+	protected Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
 
 	/**
 	 * HashSet holding SpecimenClassCollection.
 	 */
-	protected Collection holdsSpecimenClassCollection = new HashSet();
+	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+	/**
+	 * HashSet holding SpecimenClassCollection.
+	 */
+	protected Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
 
 	/**
 	 * HashSet holding SpecimenArrayTypeCollection.
 	 */
-	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
+	protected Collection<SpecimenArrayType> holdsSpecimenArrayTypeCollection = new HashSet<SpecimenArrayType>();
 
 	/**
 	 * Default Constructor.
@@ -65,7 +69,24 @@ public class StorageType extends ContainerType
 	public StorageType()
 	{
 		super();
-		// Default Constructor, required for Hibernate
+	}
+
+	/**
+	 * Returns SpecimenType Collection.
+	 * @return holdsSpecimenTypeCollection
+	 */
+	public Collection<String> getHoldsSpecimenTypeCollection()
+	{
+		return holdsSpecimenTypeCollection;
+	}
+
+	/**
+	 * Holds SpecimenType Collection.
+	 * @param holdsSpecimenTypeCollection
+	 */
+	public void setHoldsSpecimenTypeCollection(Collection<String> holdsSpecimenTypeCollection)
+	{
+		this.holdsSpecimenTypeCollection = holdsSpecimenTypeCollection;
 	}
 
 	/**
@@ -104,7 +125,7 @@ public class StorageType extends ContainerType
 	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
 	 * @hibernate.element type="string" column="SPECIMEN_CLASS" length="30"
 	 */
-	public Collection getHoldsSpecimenClassCollection()
+	public Collection<String> getHoldsSpecimenClassCollection()
 	{
 		return this.holdsSpecimenClassCollection;
 	}
@@ -112,7 +133,7 @@ public class StorageType extends ContainerType
 	/**
 	 * @param holdsSpecimenClassCollection The holdsSpecimenClassCollection to set.
 	 */
-	public void setHoldsSpecimenClassCollection(Collection holdsSpecimenClassCollection)
+	public void setHoldsSpecimenClassCollection(Collection<String> holdsSpecimenClassCollection)
 	{
 		this.holdsSpecimenClassCollection = holdsSpecimenClassCollection;
 	}
@@ -126,7 +147,7 @@ public class StorageType extends ContainerType
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType"
 	 * column="HOLDS_STORAGE_TYPE_ID"
 	 */
-	public Collection getHoldsStorageTypeCollection()
+	public Collection<StorageType> getHoldsStorageTypeCollection()
 	{
 		return this.holdsStorageTypeCollection;
 	}
@@ -134,7 +155,7 @@ public class StorageType extends ContainerType
 	/**
 	 * @param holdsStorageTypeCollection The holdsStorageTypeCollection to set.
 	 */
-	public void setHoldsStorageTypeCollection(Collection holdsStorageTypeCollection)
+	public void setHoldsStorageTypeCollection(Collection<StorageType> holdsStorageTypeCollection)
 	{
 		this.holdsStorageTypeCollection = holdsStorageTypeCollection;
 	}
@@ -148,7 +169,7 @@ public class StorageType extends ContainerType
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType"
 	 * column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
-	public Collection getHoldsSpecimenArrayTypeCollection()
+	public Collection<SpecimenArrayType> getHoldsSpecimenArrayTypeCollection()
 	{
 		return this.holdsSpecimenArrayTypeCollection;
 	}
@@ -156,7 +177,7 @@ public class StorageType extends ContainerType
 	/**
 	 * @param holdsSpecimenArrayTypeCollection The holdsSpecimenArrayTypeCollection to set.
 	 */
-	public void setHoldsSpecimenArrayTypeCollection(Collection holdsSpecimenArrayTypeCollection)
+	public void setHoldsSpecimenArrayTypeCollection(Collection<SpecimenArrayType> holdsSpecimenArrayTypeCollection)
 	{
 		this.holdsSpecimenArrayTypeCollection = holdsSpecimenArrayTypeCollection;
 	}
@@ -202,7 +223,7 @@ public class StorageType extends ContainerType
 					.getTwoDimensionCapacity()));
 
 			//holdsStorageTypeCollection.clear();
-			this.holdsStorageTypeCollection = new HashSet();
+			this.holdsStorageTypeCollection = new HashSet<StorageType>();
 			final long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
@@ -219,7 +240,7 @@ public class StorageType extends ContainerType
 			}
 
 			//holdsSpecimenClassCollection.clear();
-			this.holdsSpecimenClassCollection = new HashSet();
+			this.holdsSpecimenClassCollection = new HashSet<String>();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 			{
 				final String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
@@ -242,8 +263,31 @@ public class StorageType extends ContainerType
 					}
 				}
 			}
+			
+			//holdsSpecimenClassCollection.clear();
+			this.holdsSpecimenTypeCollection = new HashSet<String>();
+			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
+			{
+				final String[] specimenTypeArr = storageTypeForm.getHoldsSpecimenType();
+				if (specimenTypeArr != null)
+				{
+					for (final String element : specimenTypeArr)
+					{
+						logger.debug("type Id :" + element);
+						if (element.equals("-1"))
+						{
+							this.holdsSpecimenTypeCollection.addAll(AppUtility.getSpecimenTypes());
+							break;
+						}
+						else
+						{
+							this.holdsSpecimenTypeCollection.add(element);
+						}
+					}
+				}
+			}
 			//			holdsSpArrayTypeCollection.clear();
-			this.holdsSpecimenArrayTypeCollection = new HashSet();
+			this.holdsSpecimenArrayTypeCollection = new HashSet<SpecimenArrayType>();
 			this.populateHoldsSpecimenArrayTypeCollection(storageTypeForm);
 			this.activityStatus = "Active";
 		}

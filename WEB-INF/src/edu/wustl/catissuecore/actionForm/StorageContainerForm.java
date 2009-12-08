@@ -196,6 +196,21 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
 	protected String[] holdsSpecimenClassTypes;
+	/**
+	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
+	 */
+	protected String[] holdsSpecimenTypes;
+	
+	public String[] getHoldsSpecimenTypes()
+	{
+		return holdsSpecimenTypes;
+	}
+
+	
+	public void setHoldsSpecimenTypes(String[] holdsSpecimenTypes)
+	{
+		this.holdsSpecimenTypes = holdsSpecimenTypes;
+	}
 
 	/**
 	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
@@ -356,6 +371,33 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 				{
 					final String specimenClass = (String) it.next();
 					this.holdsSpecimenClassTypes[i] = specimenClass;
+					i++;
+					this.specimenOrArrayType = "Specimen";
+				}
+			}
+		}
+		
+		//Populating the specimen type type-id array
+		final Collection specimenTypeCollection = container.getHoldsSpecimenTypeCollection();
+
+		if (specimenTypeCollection != null)
+		{
+			if (specimenTypeCollection.size() == AppUtility.getAllSpecimenType().size())
+			{
+				this.holdsSpecimenTypes = new String[1];
+				this.holdsSpecimenTypes[0] = "-1";
+				this.specimenOrArrayType = "Specimen";
+			}
+			else
+			{
+				this.holdsSpecimenTypes = new String[specimenTypeCollection.size()];
+				int i = 0;
+
+				final Iterator it = specimenTypeCollection.iterator();
+				while (it.hasNext())
+				{
+					final String specimenType = (String) it.next();
+					this.holdsSpecimenTypes[i] = specimenType;
 					i++;
 					this.specimenOrArrayType = "Specimen";
 				}

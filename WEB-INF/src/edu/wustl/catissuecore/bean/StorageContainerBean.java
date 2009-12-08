@@ -468,6 +468,22 @@ public class StorageContainerBean implements Serializable
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
 	protected String[] holdsSpecimenClassTypes;
+	/**
+	 * holdSpecimenTypeIds contains Ids of Specimen Types that this container can hold
+	 */
+	protected String[] holdsSpecimenTypes;
+
+	
+	public String[] getHoldsSpecimenTypes()
+	{
+		return holdsSpecimenTypes;
+	}
+
+	
+	public void setHoldsSpecimenTypes(String[] holdsSpecimenTypes)
+	{
+		this.holdsSpecimenTypes = holdsSpecimenTypes;
+	}
 
 	/**
 	 * A map that contains distinguished fields (container name,barcode,parent location) per container.

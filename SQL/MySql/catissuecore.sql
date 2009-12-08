@@ -126,6 +126,8 @@ drop table if exists catissue_tissue_req_specimen;
 drop table if exists catissue_mol_req_specimen;
 drop table if exists catissue_molecular_specimen;
 drop table if exists catissue_catissue_bulk_operation;
+drop table if exists catissue_stor_type_spec_type;
+drop table if exists catissue_stor_cont_spec_type;
 
 SET FOREIGN_KEY_CHECKS=1;
 
@@ -1284,3 +1286,24 @@ create table catissue_bulk_operation (
 	DROPDOWN_NAME VARCHAR(100) not null,
 	PRIMARY KEY  (`IDENTIFIER`), UNIQUE KEY OPERATION (`OPERATION`), UNIQUE KEY DROPDOWN_NAME (`DROPDOWN_NAME`)
 );
+
+/**
+ * Container Type Req
+ */
+CREATE TABLE catissue_stor_type_spec_type 
+(                                                                       
+  STORAGE_TYPE_ID bigint(20) NOT NULL,                                                                          
+  SPECIMEN_TYPE varchar(50) default NULL,
+  primary key (STORAGE_TYPE_ID),                                                             
+  CONSTRAINT STORAGE_TYPE_ID_FK FOREIGN KEY (STORAGE_TYPE_ID) REFERENCES catissue_storage_type (IDENTIFIER)  
+);     
+/**
+ * Container Type Req
+ */
+CREATE TABLE catissue_stor_cont_spec_type
+(                                                                                 
+  STORAGE_CONTAINER_ID bigint(20) NOT NULL,                                                                                  
+  SPECIMEN_TYPE varchar(50) default NULL,                                                                                   
+  primary key (STORAGE_CONTAINER_ID),                                                                           
+  CONSTRAINT SPECIMEN_TYPE_ST_ID_FK FOREIGN KEY (STORAGE_CONTAINER_ID) REFERENCES catissue_storage_container (IDENTIFIER)  
+);      

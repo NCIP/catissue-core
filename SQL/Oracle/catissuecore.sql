@@ -1172,4 +1172,18 @@ create table catissue_bulk_operation
 	DROPDOWN_NAME VARCHAR(100) not null unique,
 	CONSTRAINT CATISSUE_BULK_OPERATION_SEQ PRIMARY KEY (IDENTIFIER)
 );
+
+create table CATISSUE_STOR_CONT_SPEC_TYPE
+(
+   STORAGE_CONTAINER_ID number(19,0) not null,
+   SPECIMEN_TYPE varchar(50)
+);
+alter table CATISSUE_STOR_CONT_SPEC_TYPE  add constraint FK_SPECIMEN_TYPE_ST_ID foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER;
+
+create table CATISSUE_STOR_TYPE_SPEC_TYPE
+(
+   STORAGE_TYPE_ID number(19,0) not null,
+   SPECIMEN_TYPE varchar(50)
+);
+alter table CATISSUE_STOR_TYPE_SPEC_TYPE add constraint FK_STORAGE_TYPE_ID foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE;
 commit;
