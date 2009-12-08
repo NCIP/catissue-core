@@ -10,6 +10,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.xmi.XMIConfiguration;
 import edu.common.dynamicextensions.xmi.importer.AbstractXMIImporter;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.common.exception.BizLogicException;
@@ -37,14 +38,25 @@ public class ImportXmi extends AbstractXMIImporter
 	 */
 	public static void main(String[] args)
 	{
-/*		String a[] = new String[4];
-		a[0] = "E:/WashU/Data/EAP/Category_Test/11490/11490.xmi";
-		a[1] = "E:/WashU/Data/EAP/Category_Test/11490/Main.csv";
-		a[2] = "Test";
-		a[3] = "edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry";*/
 		ImportXmi xmiImporter = new ImportXmi();
-		xmiImporter.importXMI(args);
 
+		if (args.length >= 4)
+		{
+			if (AnnotationConstants.ENTITY_NAME_PARTICIPANT.equals(args[3]))
+			{
+				args[3] = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
+			}
+			else if (AnnotationConstants.ENTITY_NAME_SPECIMEN.equals(args[3]))
+			{
+				args[3] = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
+			}
+			else if (AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP.equals(args[3]))
+			{
+				args[3] = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
+			}
+		}
+
+		xmiImporter.importXMI(args);
 	}
 
 	/**
