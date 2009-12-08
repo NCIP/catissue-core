@@ -183,6 +183,9 @@ function participantRegRow(subdivtag)
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 		if (go==true)
 		{
+			var actionForward = document.forms[0].action;
+			actionForward = actionForward + "&disableParticipant=true";
+			document.forms[0].action = actionForward;
 			document.forms[0].submit();
 		}
 	} 

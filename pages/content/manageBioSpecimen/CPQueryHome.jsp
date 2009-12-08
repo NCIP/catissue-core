@@ -2,11 +2,20 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <script language="javascript" type="text/javascript">
 if(top.frames["cpAndParticipantView"] != undefined)
-	{
+{
+
+<% String isParticipantDisable = request.getParameter( "disableParticipant" );
+if(isParticipantDisable!=null && !isParticipantDisable.trim().equals("" ) && isParticipantDisable.equals("true"))
+{%>
+	top.frames["cpAndParticipantView"].disableParticipant();
 	
-		top.frames["cpAndParticipantView"].refreshCpParticipants("");
-	   
-	 }
+<%}
+else {%>
+top.frames["cpAndParticipantView"].refreshCpParticipants("");
+<%}%>
+
+   
+ }
 </script>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0"

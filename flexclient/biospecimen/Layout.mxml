@@ -122,6 +122,7 @@
 		    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
 	 			 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
 				 ExternalInterface.addCallback("editParticipant",editParticipant);
+				 ExternalInterface.addCallback("disableParticipant",disableParticipant);
 		    }
 
     /**
@@ -333,13 +334,29 @@
 			onCpChange();
 		}
   	}
+  	
+  	  public function disableParticipant():void
+     {
+        refreshCP();
+       	Sp.inputArea.text="";
+	 	spDetailsLabel.text = "";   
+     }
+  	
 
    	/*
    		This Method is invoked on change of Collection Protocol & retrieves the associated Participants
    	*/
   	public function onCpChange():void
 	{
-		var selectedCp : NameValueBean = new NameValueBean();
+		refreshCP();
+		spDetailsLabel.text = title;
+		var url : URLRequest = new URLRequest("javascript: clearFrame()");
+		navigateToURL(url,"_self");
+	}
+	
+	public function refreshCP():void
+	{
+	    var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
 		if(cpId == "-1")
@@ -352,11 +369,7 @@
 			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name);
 		}
 
-		specimenTree.dataProvider = null;
-		spDetailsLabel.text = title;
-
-		var url : URLRequest = new URLRequest("javascript: clearFrame()");
-		navigateToURL(url,"_self");
+		specimenTree.dataProvider = null;	
 	}
 
 	/*
@@ -606,6 +619,7 @@
 
 
     }
+    
     /*
       Sachin: Fuction to be called To refresh Participant Name after edit participant
     */
