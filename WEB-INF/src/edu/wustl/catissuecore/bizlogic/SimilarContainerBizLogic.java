@@ -25,7 +25,6 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
-import edu.wustl.catissuecore.tree.TreeDataInterface;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -47,7 +46,7 @@ import edu.wustl.dao.exception.DAOException;
  * database using Hibernate.
  * @author Vaishali_Khandelwal
  */
-public class SimilarContainerBizLogic extends StorageContainerBizLogic implements TreeDataInterface
+public class SimilarContainerBizLogic extends StorageContainerBizLogic
 {
 
 	private transient final Logger logger = Logger.getCommonLogger(SimilarContainerBizLogic.class);
@@ -72,7 +71,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 		final int noOfContainers = container.getNoOfContainers().intValue();
 		final Map simMap = container.getSimilarContainerMap();
 		// --- common values for all similar containers ---
-		this.loadStorageType(dao, container);
+		new StorageTypeBizLogic().loadStorageType(dao, container);
 		this.logger.debug(simMap);
 		final int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
 		// int checkButton = 1;
@@ -117,12 +116,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					 * setAllValues() method of domainObject.
 					 */
 					ApiSearchUtil.setSiteDefault(site);
-					// End:- Change for API Search -
-
 					site.setId(new Long(siteId));
 					site.setName(siteName);
 					cont.setSite(site);
-					this.loadSite(dao, cont); // <<----
+					new SiteBizLogic().loadSite(dao, cont);
 
 				}
 				else
@@ -170,31 +167,17 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					cntPos.setPositionDimensionTwo(new Integer(posTwo));
 					cntPos.setOccupiedContainer(cont);
 					cntPos.setParentContainer(parentContainer);
-
 					cont.setLocatedAtPosition(cntPos);
-
-					// cont.setParent(parentContainer); // <<----
-
-					// chk for positions
-					// check for availability of position
-
-					/*
-					 * boolean canUse = isContainerAvailableForPositions(dao,
-					 * cont); if (!canUse) { throw new
-					 * DAOException(ApplicationProperties
-					 * .getValue("errors.storageContainer.inUse")); }
-					 */
-
 					// Have to set Site object for parentContainer
-					this.loadSite(dao, parentContainer); // 17-07-2006
-					this.loadSiteFromContainerId(dao, parentContainer);
+					SiteBizLogic siteBiz = new SiteBizLogic();
+					siteBiz.loadSite(dao, parentContainer);
+					siteBiz.loadSiteFromContainerId(dao, parentContainer);
 
 					cntPos.setPositionDimensionOne(new Integer(posOne));
 					cntPos.setPositionDimensionTwo(new Integer(posTwo));
 					cntPos.setOccupiedContainer(cont);
 					cont.setLocatedAtPosition(cntPos);
-					cont.setSite(parentContainer.getSite()); // 16-07-2006
-					// chetan
+					cont.setSite(parentContainer.getSite());
 					this.logger.debug("^^>> " + parentContainer.getSite());
 					simMap.put(parentContNameKey, parentContainer.getName());
 				}

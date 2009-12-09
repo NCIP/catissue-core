@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -44,6 +45,7 @@ import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -1351,18 +1353,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
-	/**
-	 *Added by Baljeet : To retrieve all collection Protocol list
-	 * @return
-	 */
-
-	public List getCollectionProtocolList()
-	{
-		final List cpList = new ArrayList();
-
-		return cpList;
-	}
-
+	
 	/**
 	 * this function retrieves collection protocol and all nested child objects and
 	 * populates bean objects.
@@ -1733,5 +1724,105 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	public String getReadDeniedPrivilegeName()
 	{
 		return Permissions.READ_DENIED;
+	}
+	
+	/**
+	 * @param id
+	 *            Identifier of the StorageContainer related to which the
+	 *            collectionProtocol titles are to be retrieved.
+	 * @return List of collectionProtocol title.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static List getCollectionProtocolList(String id) throws ApplicationException
+	{
+		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
+				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
+				+ id;
+		final List resultList = AppUtility.executeSQLQuery(sql);
+		final Iterator iterator = resultList.iterator();
+		final List returnList = new ArrayList();
+		while (iterator.hasNext())
+		{
+			final List list = (List) iterator.next();
+			final String data = (String) list.get(0);
+			returnList.add(data);
+		}
+		if (returnList.isEmpty())
+		{
+			returnList.add(new String(Constants.ALL));
+		}
+		return returnList;
+	}
+	/**
+	 * To check weather the Container to display can holds the given
+	 * CollectionProtocol.
+	 * @param collectionProtocolId
+	 *            The collectionProtocol Id.
+	 * @param storageContainer
+	 *            The StorageContainer reference to be displayed on the page.
+	 * @return true if the given container can hold the CollectionProtocol.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public boolean canHoldCollectionProtocol(long collectionProtocolId,
+			StorageContainer storageContainer) throws BizLogicException
+	{
+		boolean canHold = true;
+		final Collection collectionProtocols = (Collection) this.retrieveAttribute(
+				StorageContainer.class.getName(), storageContainer.getId(),
+				"elements(collectionProtocolCollection)");
+		if (!collectionProtocols.isEmpty())
+		{
+			final Iterator itr = collectionProtocols.iterator();
+			canHold = false;
+			while (itr.hasNext())
+			{
+				final CollectionProtocol cp = (CollectionProtocol) itr.next();
+				if (cp.getId().longValue() == collectionProtocolId)
+				{
+					return true;
+				}
+			}
+		}
+		return canHold;
+	}
+	/**
+	 * Gives List of NameValueBean of CP for given cpIds array.
+	 * @param cpIds - Long array of cpIds
+	 * @return NameValueBean - List of NameValueBean
+	 */
+	public List<NameValueBean> getCPNameValueList(long[] cpIds) throws BizLogicException
+	{
+		DAO dao = null;
+		final List<NameValueBean> cpNameValueList = new ArrayList<NameValueBean>();
+		try
+		{
+			dao = this.openDAOSession(null);
+			NameValueBean cpNameValueBean;
+			for (final long cpId : cpIds)
+			{
+				if (cpId != -1)
+				{
+					CollectionProtocol cp = new CollectionProtocol();
+
+					cp = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class.getName(),
+							cpId);
+
+					final String cpShortTitle = cp.getShortTitle();
+					cpNameValueBean = new NameValueBean(cpShortTitle, cpId);
+					cpNameValueList.add(cpNameValueBean);
+				}
+			}
+		}
+		catch (final DAOException e)
+		{
+			logger.error(e.getMessage(), e);
+			e.printStackTrace();
+		}
+		finally
+		{
+			this.closeDAOSession(dao);
+		}
+
+		return cpNameValueList;
 	}
 }

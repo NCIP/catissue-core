@@ -127,8 +127,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 		List<NameValueBean> siteNameValueBeanList = null;
 		final List<NameValueBean> tempSiteNameValueBeanList = new ArrayList<NameValueBean>();
-
-		siteNameValueBeanList = new StorageContainerBizLogic().getRepositorySiteList(
+		SiteBizLogic stBiz = new SiteBizLogic();
+		siteNameValueBeanList = stBiz.getRepositorySiteList(
 				sourceObjectName, siteDisplayField, valueField, activityStatusArray,
 				isToExcludeDisabled);
 

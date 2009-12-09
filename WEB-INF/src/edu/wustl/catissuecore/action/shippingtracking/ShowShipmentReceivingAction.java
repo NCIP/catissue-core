@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -33,7 +34,6 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 
 /**
@@ -124,7 +124,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 		final String valueField = "id";
 		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
 				Status.ACTIVITY_STATUS_CLOSED.toString()};
-		final List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
+		SiteBizLogic sBiz = new SiteBizLogic();
+		final List list = sBiz.getSiteList(siteDisplayField, valueField, activityStatusArray,
 				sessionDataBean.getUserId());
 		final NameValueBean nvbForSelect = (NameValueBean) list.get(0);
 		if (!"-1".equals(nvbForSelect.getValue()))

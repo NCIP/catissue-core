@@ -1,8 +1,8 @@
 
 package edu.wustl.catissuecore.printservicemodule;
 
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.MolecularSpecimen;

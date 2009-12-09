@@ -13,8 +13,10 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -25,8 +27,10 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
@@ -38,7 +42,10 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
@@ -486,4 +493,312 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 
 		return site.getCollectionProtocolCollection();
 	}
+	/**Gives the Site Object related to given container
+	 * @param containerId - Long
+	 * @return Site object
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public Site getRelatedSite(Long containerId, DAO dao) throws BizLogicException
+	{
+		Site site = null;
+		try
+		{
+			if (containerId >= 1)
+			{
+				StorageContainer storageContainer = null;
+				storageContainer = (StorageContainer) dao.retrieveById(StorageContainer.class
+						.getName(), containerId);
+
+				if (storageContainer != null)
+				{
+					site = storageContainer.getSite();
+				}
+			}
+		}
+		catch (final DAOException e)
+		{
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
+		}
+
+		return site;
+	}
+	
+	/**
+	 * @param displayNameFields - displayNameFields.
+	 * @param valueField - valueField
+	 * @param activityStatusArr - activityStatusArr
+	 * @param userId - userId
+	 * @return List of site list
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public List getSiteList(String[] displayNameFields, String valueField,
+			String[] activityStatusArr, Long userId) throws BizLogicException
+	{
+		final List siteResultList = this.getRepositorySiteList(Site.class.getName(),
+				displayNameFields, valueField, activityStatusArr, false);
+		List userList = null;
+		final Set<Long> idSet = new UserBizLogic().getRelatedSiteIds(userId);
+		userList = new ArrayList();
+		final Iterator siteListIterator = siteResultList.iterator();
+		while (siteListIterator.hasNext())
+		{
+			final NameValueBean nameValBean = (NameValueBean) siteListIterator.next();
+			final Long siteId = new Long(nameValBean.getValue());
+			if (StorageContainerUtil.hasPrivilegeonSite(idSet, siteId))
+			{
+				userList.add(nameValBean);
+			}
+		}
+		return userList;
+	}
+
+	/**
+	 * @param sourceObjectName - sourceObjectName.
+	 * @param displayNameFields - displayNameFields
+	 * @param valueField - valueField
+	 * @param activityStatusArr - activityStatusArr
+	 * @param isToExcludeDisabled - isToExcludeDisabled
+	 * @return List of objects
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public List getRepositorySiteList(String sourceObjectName, String[] displayNameFields,
+			String valueField, String[] activityStatusArr, boolean isToExcludeDisabled)
+			throws BizLogicException
+	{
+		String[] whereColumnName = null;
+		String[] whereColumnCondition = null;
+		final String joinCondition = Constants.AND_JOIN_CONDITION;
+		final String separatorBetweenFields = ", ";
+
+		whereColumnName = new String[]{"activityStatus", "type"};
+		whereColumnCondition = new String[]{"not in", "="};
+		// whereColumnCondition = new String[]{"in"};
+		final Object[] whereColumnValue = {activityStatusArr, Constants.REPOSITORY};
+
+		return this.getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
+				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields,
+				isToExcludeDisabled);
+
+	}
+	/**
+	 * @param dao - DAO object.
+	 * @param container - StorageContainer object.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	protected void loadSite(DAO dao, StorageContainer container) throws BizLogicException
+	{
+		try
+		{
+			final Site site = container.getSite();
+			if (site != null)
+			{
+				final Site siteObj = (Site) dao.retrieveById(Site.class.getName(), container
+						.getSite().getId());
+				if (siteObj != null)
+				{
+					this.checkStatus(dao, siteObj, "Site");
+					container.setSite(siteObj);
+					this.setSiteForSubContainers(container, siteObj, dao);
+				}
+			}
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+	}
+	/**
+	* @param dao - DAO object.
+	* @param container - StorageContainer object
+	* @throws BizLogicException throws BizLogicException
+	*/
+	protected void loadSiteFromContainerId(DAO dao, StorageContainer container)
+			throws BizLogicException
+	{
+		try
+		{
+			if (container != null)
+			{
+				final Long sysId = container.getId();
+				final Object object = dao.retrieveById(StorageContainer.class.getName(), sysId);
+				final StorageContainer sc = (StorageContainer) object;
+				container.setSite(sc.getSite());
+			}
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+
+	}
+	/**
+	 * @param storageContainer - StorageContainer object.
+	 * @param site Site object
+	 * @param dao DAO object
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public void setSiteForSubContainers(StorageContainer storageContainer, Site site, DAO dao)
+			throws BizLogicException
+	{
+		try
+		{
+			if (storageContainer != null && storageContainer.getId() != null)
+			{
+				final Collection children = new StorageContainerBizLogic().getChildren(dao, storageContainer
+						.getId());
+				this.logger.debug("storageContainer.getChildrenContainerCollection() "
+						+ children.size());
+				final Iterator iterator = children.iterator();
+				while (iterator.hasNext())
+				{
+					final StorageContainer container = (StorageContainer) HibernateMetaData
+							.getProxyObjectImpl(iterator.next());
+					container.setSite(site);
+					this.setSiteForSubContainers(container, site, dao);
+				}
+			}
+		}
+		catch (final ApplicationException exp)
+		{
+			this.logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+		}
+
+	}
+	
+	/**
+	 * @param dao
+	 *            Object of DAO
+	 * @param containerId
+	 *            id of container whose site is to be retrieved
+	 * @return Site object belongs to container with given id
+	 * @throws BizLogicException
+	 *             Exception occure while DB handling
+	 */
+	public Site getSite(DAO dao, Long containerId) throws BizLogicException
+	{
+		try
+		{
+			final String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = new String[]{"site"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("id", containerId));
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			if (!list.isEmpty())
+			{
+				return ((Site) list.get(0));
+			}
+			return null;
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+	}
+
+	/**
+	 * Retrieve activity status of the Site.
+	 * @param dao
+	 * @param containerId
+	 * @return String string
+	 * @throws DAOException
+	 */
+	public String getSiteId(DAO dao, Long containerId) throws BizLogicException
+	{
+		String activityStatus = null;
+		try
+		{
+			final String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = new String[]{"site.activityStatus"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("id", containerId));
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			if (!list.isEmpty())
+			{
+				activityStatus = ((String) list.get(0));
+			}
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		return activityStatus;
+	}
+
+	/**
+	 * @param dao DAO object.
+	 * @param containerId - Long.
+	 * @param errMessage - String.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public void checkClosedSite(DAO dao, Long containerId, String errMessage)
+			throws BizLogicException
+	{
+
+		final String siteActivityStatus = this.getSiteId(dao, containerId);
+		if (siteActivityStatus != null)
+		{
+			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(siteActivityStatus))
+			{
+				throw this.getBizLogicException(null, "error.object.closed", errMessage);
+			}
+		}
+	}
+	/**
+	 * Gives the Site Object related to given container whose name is given.
+	 * @param containerName - String 
+	 * @return Site - site object
+	 */
+	public Site getRelatedSiteForManual(String containerName, DAO dao) throws BizLogicException
+	{
+		Site site = null;
+		try
+		{
+			if (containerName != null && !("").equals(containerName))
+			{
+
+				StorageContainer storageContainer = null;
+				final String[] strArray = {containerName};
+				List contList = null;
+
+				if (strArray != null)
+				{
+					contList = dao.retrieve(StorageContainer.class.getName(), Constants.NAME,
+							containerName);
+				}
+				if (contList != null && !contList.isEmpty())
+				{
+					storageContainer = (StorageContainer) contList.get(0);
+				}
+
+				if (storageContainer != null)
+				{
+					site = storageContainer.getSite();
+				}
+			}
+		}
+		catch (final DAOException e)
+		{
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+
+		return site;
+	}
+	
 }

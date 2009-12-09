@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
 
 /**

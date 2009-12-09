@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.Iterator;
 
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -357,5 +358,83 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	protected String getPrivilegeKey(Object domainObject)
 	{
 		return Constants.ADD_EDIT_STORAGE_TYPE;
+	}
+	/**
+	 * @param dao - DAO object.
+	 * @param container - StorageContainer object
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	protected void loadStorageType(DAO dao, StorageContainer container) throws BizLogicException
+	{
+		try
+		{
+			final Object storageTypeObj = dao.retrieveById(StorageType.class.getName(), container
+					.getStorageType().getId());
+			if (storageTypeObj != null)
+			{
+				final StorageType type = (StorageType) storageTypeObj;
+				container.setStorageType(type);
+			}
+
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+	}
+	/**
+	 * To check weather the container to display can holds the given type of
+	 * container.
+	 * @param typeId
+	 *            ContinerType id of container
+	 * @param storageContainer
+	 *            The StorageContainer reference to be displayed on the page.
+	 * @return true if the given container can hold the type.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public boolean canHoldContainerType(int typeId, StorageContainer storageContainer)
+			throws BizLogicException
+	{
+		if (!this.isValidContaierType(typeId))
+		{
+			return false;
+		}
+
+		final boolean canHold = false;
+		final Collection containerTypeCollection = (Collection) this.retrieveAttribute(
+				StorageContainer.class.getName(), storageContainer.getId(),
+				"elements(holdsStorageTypeCollection)");
+		if (!containerTypeCollection.isEmpty())
+		{
+			final Iterator itr = containerTypeCollection.iterator();
+			while (itr.hasNext())
+			{
+				final StorageType type = (StorageType) itr.next();
+				final long storagetypeId = type.getId().longValue();
+				if (storagetypeId == Constants.ALL_STORAGE_TYPE_ID || storagetypeId == typeId)
+				{
+					return true;
+				}
+			}
+		}
+		return canHold;
+	}
+	/**
+	 * Patch ID: 4598_2 Is container type one from the container types present
+	 * in the system.
+	 * 
+	 * @param typeID
+	 *            Container type ID
+	 * @return true/ false
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	private boolean isValidContaierType(int typeID) throws BizLogicException
+	{
+		final Long longId = (Long) this.retrieveAttribute(StorageType.class.getName(), new Long(
+				typeID), "id");
+		return !(longId == null);
 	}
 }

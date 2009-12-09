@@ -13,7 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.TreeDataBizLogic;
 import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -60,8 +60,8 @@ public class ShowChildNodes extends BaseAction
 		}
 		else
 		{
-			final StorageContainerBizLogic sc = new StorageContainerBizLogic();
-			treeNodeDataVector = sc.getStorageContainers(identifier, nodeName, parentId);
+			final TreeDataBizLogic treeBizLogic = new TreeDataBizLogic();
+			treeNodeDataVector = treeBizLogic.getStorageContainers(identifier, nodeName, parentId);
 		}
 
 		response.setContentType("text/xml");

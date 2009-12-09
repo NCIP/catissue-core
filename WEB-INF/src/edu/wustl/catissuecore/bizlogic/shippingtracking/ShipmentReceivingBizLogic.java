@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
@@ -438,15 +437,6 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			}
 			if (container != null)
 			{
-				//bug 12806
-				/**
-				 * Added isAvailable check to validate specimen position.
-				 */
-				/*final boolean isAvailable = StorageContainerUtil.
-					.toString(), container.getName().toString(), specimenPosition
-					.getPositionDimensionOne().toString(), specimenPosition
-					.getPositionDimensionTwo().toString());*/
-				final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 				final JDBCDAO jdbcdao = this.openJDBCSession();
 				String containerId = "";
 				if (container.getId() != null)
@@ -467,7 +457,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				}
 				else
 				{
-					final boolean isAvailable = scBizLogic.isPositionAvailable( jdbcdao,
+					final boolean isAvailable = StorageContainerUtil.isPositionAvailable( jdbcdao,
 							containerId, container.getName(), specimenPosition
 									.getPositionDimensionOne().toString(), specimenPosition
 									.getPositionDimensionTwo().toString() );

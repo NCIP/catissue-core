@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Position;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
@@ -965,10 +966,9 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			if (xPos == null || yPos == null)
 			{
 				{
-					final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
 					if (specimenArray.getLocatedAtPosition().getParentContainer() != null)
 					{
-						final Position position = scBizLogic.getFirstAvailablePositionInContainer(
+						final Position position = StorageContainerUtil.getFirstAvailablePositionInContainer(
 								specimenArray.getLocatedAtPosition().getParentContainer(), dao);
 						if (position != null)
 						{
@@ -993,7 +993,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 						.getValue("array.positionInStorageContainer"));
 			}
 
-			// validate user
 			if (specimenArray.getCreatedBy() == null
 					|| specimenArray.getCreatedBy().getId() == null
 					|| !validator.isValidOption(String
@@ -1445,50 +1444,43 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 		{
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
-			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		return isAuthorized;
 	}
 
-	/*	*//**
-				 * @return Map
-				 * @throws BizLogicException : BizLogicException
-				 */
-	/*
-		public Map getContForDisabledSpecimenArrayFromCache() throws BizLogicException
-		{
-
-			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-					.getInstance();
-			final Map disabledconts = (TreeMap) catissueCoreCacheManager
-					.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIENARRAY);
-			return disabledconts;
-		}*/
-
 	/**
-	 * @param specimenarray : specimenarray
-	 * @param container : container
-	 * @param disabledConts : disabledConts
+	 * To check weather the Container to display can holds the given
+	 * specimenArrayTypeId.
+	 * @param specimenArrayTypeId
+	 *            The Specimen Array Type Id.
+	 * @param storageContainer
+	 *            The StorageContainer reference to be displayed on the page.
+	 * @return true if the given container can hold the specimenArrayType.
+	 * @throws BizLogicException throws BizLogicException
 	 */
-	/*
-		private void addEntriesInDisabledMap(SpecimenArray specimenarray, SpecimenArray container,
-				Map disabledConts)
+	public boolean canHoldSpecimenArrayType(int specimenArrayTypeId,
+			StorageContainer storageContainer) throws BizLogicException
+	{
+
+		boolean canHold = true;
+		final Collection specimenArrayTypes = (Collection) this.retrieveAttribute(
+				StorageContainer.class.getName(), storageContainer.getId(),
+				"elements(holdsSpecimenArrayTypeCollection)");
+		final Iterator itr = specimenArrayTypes.iterator();
+		canHold = false;
+		while (itr.hasNext())
 		{
-			final String contNameKey = "StorageContName";
-			final String contIdKey = "StorageContIdKey";
-			final String pos1Key = "pos1";
-			final String pos2Key = "pos2";
-			final Map containerDetails = new TreeMap();
-			containerDetails.put(contNameKey, container.getName());
-			containerDetails.put(contIdKey, container.getId());
-			containerDetails.put(pos1Key, specimenarray.getLocatedAtPosition()
-					.getPositionDimensionOne());
-			containerDetails.put(pos2Key, specimenarray.getLocatedAtPosition()
-					.getPositionDimensionTwo());
+			final SpecimenArrayType specimenarrayType = (SpecimenArrayType) itr.next();
+			final long arraytypeId = specimenarrayType.getId().longValue();
 
-			disabledConts.put(specimenarray.getId().toString(), containerDetails);
-
-		}*/
+			if (arraytypeId == Constants.ALL_SPECIMEN_ARRAY_TYPE_ID
+					|| arraytypeId == specimenArrayTypeId)
+			{
+				return true;
+			}
+		}
+		return canHold;
+	}
 
 }

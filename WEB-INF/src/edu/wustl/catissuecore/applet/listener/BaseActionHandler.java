@@ -6,9 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
 
-import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
-import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.common.util.logger.Logger;
 
 /**

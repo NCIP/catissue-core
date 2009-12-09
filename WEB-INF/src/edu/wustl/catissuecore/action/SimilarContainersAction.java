@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Container;
@@ -33,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.Position;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -95,14 +97,11 @@ public class SimilarContainersAction extends SecureAction
 							storagePositionListForTransferEvent);
 
 			final StorageContainerForm similarContainersForm = (StorageContainerForm) form;
-			// boolean to indicate whether the suitable containers to be shown
-			// in
-			// dropdown
-			// is exceeding the max limit.
 			final String exceedingMaxLimit = "false";
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			final SiteBizLogic siteBizLogic = new SiteBizLogic();
 			final String selectedParentContainer = similarContainersForm
 					.getParentContainerSelected();
 			if (similarContainersForm.getSpecimenOrArrayType() == null)
@@ -112,10 +111,6 @@ public class SimilarContainersAction extends SecureAction
 			this.logger.info(" Map:---------------"
 					+ similarContainersForm.getSimilarContainersMap());
 			final IBizLogic ibizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-			// request =
-			//AppUtility.setCollectionProtocolList(request,similarContainersForm
-			// .getSiteId());
 			if ("Site".equals(similarContainersForm.getParentContainerSelected()))
 			{
 				request = AppUtility.setCollectionProtocolList(request, similarContainersForm
@@ -125,7 +120,7 @@ public class SimilarContainersAction extends SecureAction
 			{
 				final long parentContId = similarContainersForm.getParentContainerId();
 
-				final Site site = bizLogic.getRelatedSite(parentContId, dao);
+				final Site site = siteBizLogic.getRelatedSite(parentContId, dao);
 				if (site != null)
 				{
 					request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
@@ -141,8 +136,7 @@ public class SimilarContainersAction extends SecureAction
 			else if ("Manual".equals(similarContainersForm.getParentContainerSelected()))
 			{
 				final String selectedContName = similarContainersForm.getSelectedContainerName();
-
-				final Site site = bizLogic.getRelatedSiteForManual(selectedContName, dao);
+				final Site site = siteBizLogic.getRelatedSiteForManual(selectedContName, dao);
 				if (site != null)
 				{
 					request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
@@ -250,7 +244,6 @@ public class SimilarContainersAction extends SecureAction
 						+ similarContainersForm.getTypeId());
 				String parentContId = request.getParameter("parentContainerId");
 				// commented for bug:8904
-				// if (similarContainersForm.getParentContainerId() == 0)
 				{
 
 					final String containerName = similarContainersForm.getSelectedContainerName();
@@ -281,7 +274,7 @@ public class SimilarContainersAction extends SecureAction
 						{
 							final Container container = new Container();
 							container.setId(similarContainersForm.getParentContainerId());
-							final Position position = bizLogic
+							final Position position = StorageContainerUtil
 									.getFirstAvailablePositionInContainer(container, dao);
 							if (position != null)
 							{

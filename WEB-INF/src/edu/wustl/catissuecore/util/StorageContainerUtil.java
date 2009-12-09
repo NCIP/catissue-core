@@ -11,22 +11,37 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.ContainerPosition;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.condition.INClause;
+import edu.wustl.dao.condition.NullClause;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 
 public final class StorageContainerUtil
@@ -98,7 +113,6 @@ public final class StorageContainerUtil
 				for (int y = 1; y < dimY; y++)
 				{
 					list.add(new NameValueBean(Integer.valueOf(y), Integer.valueOf(y)));
-
 				}
 
 				if (!list.isEmpty())
@@ -117,14 +131,269 @@ public final class StorageContainerUtil
 	public static Position getFirstAvailablePositionsInContainer(StorageContainer storageContainer,
 			HashSet<String> allocatedPositions, DAO dao) throws ApplicationException
 	{
-		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		final Position position = scBizLogic.getFirstAvailablePositionInContainer(storageContainer,
+		final Position position = getFirstAvailablePositionInContainer(storageContainer,
 				dao, allocatedPositions);
 		if (position == null)
 		{
 			throw AppUtility.getApplicationException(null, "storage.full", "");
 		}
 		return position;
+	}
+	/**
+	 * @param containerId
+	 * @param aliquotCount
+	 * @param positionDimensionOne
+	 * @param positionDimensionTwo
+	 * @param dao
+	 * @return Map
+	 */
+	public static Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
+			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
+			throws BizLogicException
+	{
+		final Map map = new TreeMap();
+		int count = 0;
+		final int dimX = positionDimensionOne + 1;
+		final int dimY = positionDimensionTwo + 1;
+
+		final boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,
+				dimX, dimY, dao);
+
+		for (int x = 1; x < availablePosistions.length; x++)
+		{
+
+			final List list = new ArrayList();
+
+			for (int y = 1; y < availablePosistions[x].length; y++)
+			{
+				if (availablePosistions[x][y])
+				{
+					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					count++;
+				}
+			}
+
+			if (!list.isEmpty())
+			{
+				final Integer xObj = new Integer(x);
+				final NameValueBean nvb = new NameValueBean(xObj, xObj);
+				map.put(nvb, list);
+			}
+		}
+		if (count < aliquotCount)
+		{
+			return new TreeMap();
+		}
+		return map;
+	}
+	/**
+	 * This function returns the first available position in a container which can be allocated.
+	 * @param container Container object
+	 * @param dao DAO object
+	 * @param allocatedPositions Set of allocatedPositions
+	 * @return Positions
+	 * @throws BizLogicException BizLogicException
+	 */
+	private static Position getFirstAvailablePositionInContainer(Container container, DAO dao,
+			HashSet<String> allocatedPositions) throws BizLogicException
+	{
+		Position position = null;
+		try
+		{
+			Integer xPos;
+			Integer yPos;
+			String containerValue = null;
+			final Capacity capacity = getContainerCapacity(container, dao);
+			final Map positionMap = getAvailablePositionMapForContainer(String
+					.valueOf(container.getId()), 0, capacity.getOneDimensionCapacity(), capacity
+					.getTwoDimensionCapacity(), dao);
+			if (positionMap != null)
+			{
+				final Iterator containerPosIterator = positionMap.keySet().iterator();
+				boolean positionAllottedFlag = false;
+				while (containerPosIterator.hasNext() && !positionAllottedFlag)
+				{
+					NameValueBean nvb = (NameValueBean) containerPosIterator.next();
+					xPos = Integer.valueOf(nvb.getValue());
+					final List yposValues = (List) positionMap.get(nvb);
+					final Iterator yposIterator = yposValues.iterator();
+
+					while (yposIterator.hasNext())
+					{
+						nvb = (NameValueBean) yposIterator.next();
+						yPos = Integer.valueOf(nvb.getValue());
+						final Long containerId = container.getId();
+
+						if (container.getName() != null)
+						{
+							containerValue = StorageContainerUtil.getStorageValueKey(container
+									.getName(), null, xPos, yPos);
+						}
+						else
+						{
+							containerValue = StorageContainerUtil.getStorageValueKey(null,
+									containerId.toString(), xPos, yPos);
+						}
+						if (!allocatedPositions.contains(containerValue))
+						{
+							positionAllottedFlag = true;
+							position = new Position();
+							position.setXPos(xPos);
+							position.setYPos(yPos);
+							break;
+						}
+					}
+				}
+			}
+		}
+		catch (final DAOException daoEx)
+		{
+			logger.error(daoEx.getMessage(),daoEx);
+			daoEx.printStackTrace();
+			throw new BizLogicException(daoEx);
+		}
+		return position;
+	}
+	/**
+	 * This functions returns a double dimensional boolean array which tells the
+	 * availablity of storage positions of particular container. True -
+	 * Available. False - Not Available.
+	 * @param containerId - The container id.
+	 * @param dimX - int
+	 * @param dimY - int
+	 * @param JDBCDAO dao  to be used for fetching data
+	 * @return Returns a double dimensional boolean array of position
+	 *         availablity.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY,
+			DAO dao) throws BizLogicException
+	{
+		final boolean[][] positions = new boolean[dimX][dimY];
+		try
+		{
+
+			for (int i = 0; i < dimX; i++)
+			{
+				for (int j = 0; j < dimY; j++)
+				{
+					positions[i][j] = true;
+				}
+			}
+			final String[] selectColumnName = new String[]{"positionDimensionOne",
+					"positionDimensionTwo"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenPosition.class
+					.getName());
+			queryWhereClause.addCondition(new EqualClause("storageContainer.id", containerId));
+			final List list = dao.retrieve(SpecimenPosition.class.getName(), selectColumnName,
+					queryWhereClause);
+			setPositions(positions, list);
+			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class
+					.getName());
+			queryWhereClause2.addCondition(new EqualClause("parentContainer.id", containerId));
+			final List list2 = dao.retrieve(ContainerPosition.class.getName(), selectColumnName,
+					queryWhereClause2);
+			setPositions(positions, list2);
+		}
+		catch (final DAOException daoEx)
+		{
+			logger.error(daoEx.getMessage(),daoEx);
+			daoEx.printStackTrace();
+
+			throw new BizLogicException(daoEx);
+		}
+		return positions;
+	}
+	/**
+	 * @param positions - boolean array of position.
+	 * @param list - list of objects
+	 */
+	private static void setPositions(boolean[][] positions, List resultSet)
+	{
+		if (resultSet != null)
+		{
+			int x, y;
+			for (int i = 0; i < resultSet.size(); i++)
+			{
+				final Object[] columnList = (Object[]) resultSet.get(i);
+				if ((columnList != null) && (columnList.length == 2))
+				{
+					x = (Integer) columnList[0];
+					y = (Integer) columnList[1];
+					positions[x][y] = false;
+				}
+			}
+		}
+	}
+	/**
+	 * This function returns the first available position in a container which can be allocated. 
+	 * If container is full, returns null
+	 * @param container : Container for which available position is to be searched
+	 * @return Position
+	 * @throws BizLogicException
+	 */
+	public static Position getFirstAvailablePositionInContainer(Container container, DAO dao)
+			throws BizLogicException
+	{
+		Position position = null;
+		try
+		{
+			Integer xPos;
+			Integer yPos;
+			final Capacity scCapacity = getContainerCapacity(container, dao);
+			final Map positionMap = getAvailablePositionMapForContainer(String
+					.valueOf(container.getId()), 0, scCapacity.getOneDimensionCapacity(),
+					scCapacity.getTwoDimensionCapacity(), dao);
+			if (positionMap != null)
+			{
+				final Iterator containerPosIterator = positionMap.keySet().iterator();
+				if (containerPosIterator.hasNext())
+				{
+					NameValueBean nvb = (NameValueBean) containerPosIterator.next();
+					xPos = Integer.valueOf(nvb.getValue());
+					final List yposValues = (List) positionMap.get(nvb);
+					final Iterator yposIterator = yposValues.iterator();
+
+					if (yposIterator.hasNext())
+					{
+						nvb = (NameValueBean) yposIterator.next();
+						yPos = Integer.valueOf(nvb.getValue());
+						position = new Position();
+						position.setXPos(xPos);
+						position.setYPos(yPos);
+					}
+				}
+			}
+		}
+		catch (final DAOException daoEx)
+		{
+			logger.error(daoEx.getMessage(),daoEx);
+			daoEx.printStackTrace();
+			throw new BizLogicException(daoEx);
+		}
+		return position;
+	}
+	
+	private static Capacity getContainerCapacity(Container container, DAO dao) throws DAOException
+	{
+		Capacity scCapacity = container.getCapacity();
+		final String dim1, dim2;
+		if (scCapacity == null)
+		{
+			scCapacity = new Capacity();
+			final String[] selectColumnName = new String[]{"capacity.oneDimensionCapacity",
+					"capacity.twoDimensionCapacity"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(StorageContainer.class
+					.getName());
+			queryWhereClause.addCondition(new EqualClause("id", container.getId()));
+			final List list = dao.retrieve(StorageContainer.class.getName(), selectColumnName,
+					queryWhereClause);
+			final Object[] returnValues = (Object[]) list.get(0);
+			scCapacity.setOneDimensionCapacity((Integer) returnValues[0]);
+			scCapacity.setTwoDimensionCapacity((Integer) returnValues[1]);
+		}
+		return scCapacity;
+
 	}
 
 	/**
@@ -156,9 +425,7 @@ public final class StorageContainerUtil
 
 			if (xPos == null || yPos == null)
 			{
-
-				final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-				final Position position = scBizLogic.getFirstAvailablePositionInContainer(
+				final Position position = getFirstAvailablePositionInContainer(
 						storageContainer, dao);
 				if (position != null)
 				{
@@ -476,24 +743,10 @@ public final class StorageContainerUtil
 	{
 		List initialValues = null;
 		final String[] startingPoints = new String[]{"-1", "-1", "-1"};
-		//String containerName = null;
 		if (specimenArrayForm.getStorageContainer() != null
 				&& !specimenArrayForm.getStorageContainer().equals("-1"))
 		{
 			startingPoints[0] = specimenArrayForm.getStorageContainer();
-			/*String[] selectColumnName = {"name"};
-			String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
-			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
-			String joinCondition = Constants.AND_JOIN_CONDITION;
-			QueryWhereClause queryWhereClause  = new QueryWhereClause(StorageContainer.class.getName());
-			queryWhereClause.addCondition(new EqualClause("id",Long.valueOf(startingPoints[0])));
-			List containerList = dao.retrieve(StorageContainer.class.getName(),
-					selectColumnName, queryWhereClause);
-			if ((containerList != null) && (!containerList.isEmpty()))
-			{
-				//containerName = (String) containerList.get(0);
-			}*/
 		}
 		if (specimenArrayForm.getPositionDimensionOne() != -1)
 		{
@@ -530,9 +783,7 @@ public final class StorageContainerUtil
 		final String containerID = (String) aliquotMap.get(containerIDKey);
 		final Container container = new Container();
 		container.setId(Long.valueOf(containerID));
-		final StorageContainerBizLogic scBizLogic = new StorageContainerBizLogic();
-		//bug 15085
-		final Position position = scBizLogic.getFirstAvailablePositionInContainer(container, dao,allocatedPositions);
+		final Position position = getFirstAvailablePositionInContainer(container, dao,allocatedPositions);
 		String containerValue = null;
 		if (position != null)
 		{
@@ -598,40 +849,9 @@ public final class StorageContainerUtil
 		}
 		return flag;
 	}
-
+	
 	/**
-	 * @param dao
-	 * @param containerId
-	 * @return
-	 * @throws DAOException
-	 * @throws ClassNotFoundException 
-	 */
-	public static Collection getChildren(DAO dao, Long containerId) throws ApplicationException
-	{
-		final String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="
-				+ containerId;
-		List childrenColl = new ArrayList();
-		childrenColl = dao.executeQuery(hql);
-		return childrenColl;
-	}
-
-	/**
-	* @param children
-	* @param dao
-	* @param containerId
-	* @throws DAOException
-	*/
-	public static void setChildren(Collection children, DAO dao, Long containerId)
-			throws ApplicationException
-	{
-		if (children != null)
-		{
-			getChildren(dao, containerId).addAll(children);
-		}
-	}
-
-	/**
-	 * Description: This method is used to create storage loaction key value.
+	 * Description: This method is used to create storage location key value.
 	 * Used while updating or inserting Specimen
 	 * @param containerName - storage container name
 	 * @param containerID - storage container id
@@ -721,5 +941,1176 @@ public final class StorageContainerUtil
 				throw new BizLogicException(e);
 			}
 		}
+	}
+	
+	/**
+	 * Checking for available position.
+	 * @param jdbcDao JDBCDAO object
+	 * @param containerId container Identifier
+	 * @param containerName container name
+	 * @param pos1 position dim 1
+	 * @param pos2 position dim 2
+	 * @return Boolean
+	 * @throws ApplicationException ApplicationException
+	 */
+	public static boolean isPositionAvailable(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws ApplicationException
+	{
+		if (!isSpecimenAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+		{
+			if (!isContainerAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Checking container.
+	 * @param jdbcDao JDBCDAO object
+	 * @param containerId container Identifier
+	 * @param containerName container name
+	 * @param pos1 position dim 1
+	 * @param pos2 position dim 2
+	 * @return Boolean
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static  boolean isContainerAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws ApplicationException
+	{
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			query.append("select id from " + ContainerPosition.class.getName()
+					+ " contPos where contPos.parentContainer.name='" + containerName + "'");
+		}
+		else
+		{
+			query.append("select id from " + ContainerPosition.class.getName()
+					+ " contPos where contPos.parentContainer.id=" + containerId);
+		}
+
+		query.append(" and contPos.positionDimensionOne=" + pos1
+				+ " and contPos.positionDimensionTwo=" + pos2);
+		final List allocatedList = AppUtility.executeSQLQuery(query.toString());
+
+		if ((allocatedList != null) && (allocatedList.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checking specimen.
+	 * @param jdbcDao JDBCDAO object
+	 * @param containerId container Identifier
+	 * @param containerName container name
+	 * @param pos1 position dim 1
+	 * @param pos2 position dim 2
+	 * @return Boolean
+	 * @throws ApplicationException 
+	 */
+	private static boolean isSpecimenAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+			String pos1, String pos2) throws ApplicationException
+	{
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			query.append("select id from " + SpecimenPosition.class.getName()
+					+ " specPos where specPos.storageContainer.name='" + containerName + "'");
+		}
+		else
+		{
+			query.append("select id from " + SpecimenPosition.class.getName()
+					+ " specPos where specPos.storageContainer.id=" + containerId);
+		}
+		query.append(" and specPos.positionDimensionOne=" + pos1
+				+ "  and specPos.positionDimensionTwo=" + pos2);
+		final List allocatedList = AppUtility.executeSQLQuery(query.toString());
+		if ((allocatedList != null) && (allocatedList.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Get count of container's free location.
+	 * @param jdbcDAO JDBCDAO object
+	 * @param containerId container identifier
+	 * @param storageContainerName StorageContainer Name
+	 * @return Long value
+	 * @throws BizLogicException
+	 */
+	public static Long getCountofFreeLocationOfContainer(JDBCDAO jdbcDAO, String containerId,
+			String storageContainerName) throws BizLogicException
+	{
+		long freeLocations = 0;
+		final StringBuilder query = new StringBuilder();
+		if ((containerId == null) || (containerId.trim().equals("")))
+		{
+			containerId = getContainerId(jdbcDAO, storageContainerName);
+		}
+		query
+				.append("select (capacity.one_dimension_capacity * capacity.two_dimension_capacity -view1.specLocations-view2.contLocns)");
+		query
+				.append(" from catissue_container  cont join catissue_capacity  capacity on cont.capacity_id=capacity.identifier,");
+		query
+				.append(" (select count(*)  specLocations from catissue_specimen_position sp where container_id = "
+						+ containerId + ") view1,");
+		query
+				.append(" (select count(*)  contLocns from catissue_container_position cp where cp.parent_container_id="
+						+ containerId + ") view2 ");
+		query.append(" where cont.identifier = " + containerId);
+		try
+		{
+			final List results = jdbcDAO.executeQuery(query.toString());
+			final Object result = getResultSetData(results, 0, 0);
+			if ((result != null) && (result instanceof String))
+			{
+				try
+				{
+					freeLocations = Long.valueOf((String) result);
+				}
+				catch (final NumberFormatException numFormatEx)
+				{
+					logger.error(numFormatEx.getMessage(),numFormatEx);
+					numFormatEx.printStackTrace();
+					freeLocations = 0;
+				}
+			}
+		}
+		catch (final DAOException e1)
+		{
+			logger.error(e1.getMessage(),e1);
+			e1.printStackTrace();
+			throw new BizLogicException(e1);
+		}
+
+		return freeLocations;
+	}
+	/**
+	 * 
+	 * @param jdbcDAO jdbcDAO Object
+	 * @param containerName Container name
+	 * @return String container Identifier
+	 * @throws BizLogicException BizLogicException
+	 */
+	private static String getContainerId(JDBCDAO jdbcDAO, String containerName) throws BizLogicException
+	{
+		final StringBuilder query = new StringBuilder();
+		query.append("select identifier from catissue_container cont ");
+		query.append("where cont.name='" + containerName + "'");
+		if (jdbcDAO != null)
+		{
+			try
+			{
+				final List results = jdbcDAO.executeQuery(query.toString());
+				final Object result = getResultSetData(results, 0, 0);
+				if ((result != null) && (result instanceof String))
+				{
+					return (String) result;
+				}
+			}
+			catch (final DAOException daoExp)
+			{
+				logger.error(daoExp.getMessage(),daoExp);
+				throw new BizLogicException(daoExp);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get getResultSetData
+	 * @param resultSet List of result
+	 * @param rowNumber integer row number
+	 * @param columnNumber integer column number
+	 * @return Object
+	 */
+	private static Object getResultSetData(List resultSet, int rowNumber, int columnNumber)
+	{
+		if ((resultSet != null) && (resultSet.size() > rowNumber))
+		{
+			final List columnList = (List) resultSet.get(rowNumber);
+			if ((columnList != null) && (columnList.size() > columnNumber))
+			{
+				return columnList.get(columnNumber);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * @param siteidSet - siteidSet.
+	 * @param siteId - siteId 
+	 * @return boolean value
+	 */
+	public static boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId)
+	{
+		boolean hasPrivilege = true;
+		if (siteidSet != null)
+		{
+			if (!siteidSet.contains(siteId))
+			{
+				hasPrivilege = false;
+			}
+		}
+		return hasPrivilege;
+	}
+	
+	
+	/**
+	 * @param storageContainer - StorageContainer object.
+	 * @param parentContainerID - StorageContainer
+	 * @param dao - DAO object.
+	 * @return boolean value.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean isUnderSubContainer(StorageContainer storageContainer, Long parentContainerID,
+			DAO dao) throws BizLogicException
+	{
+		try
+		{
+			if (storageContainer != null)
+			{
+				final Collection childrenColl = new StorageContainerBizLogic().getChildren(dao,
+						storageContainer.getId());
+				final Iterator iterator = childrenColl.iterator();
+				while (iterator.hasNext())
+				{
+					final StorageContainer container = (StorageContainer) iterator.next();
+					if (parentContainerID.longValue() == container.getId().longValue())
+					{
+						return true;
+					}
+					if (isUnderSubContainer(container, parentContainerID, dao))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		catch (final ApplicationException exp)
+		{
+			logger.error(exp.getMessage(), exp);
+			exp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
+			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
+		}
+
+		return false;
+	}
+	
+	/**
+	 * @return Long value next container number.
+	 * @throws ApplicationException 
+	 */
+	public static long getNextContainerNumber() throws ApplicationException
+	{
+		DAO dao = null;
+		try
+		{
+			final String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+			final String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+			dao = AppUtility.openDAOSession(null);
+			final List list = dao.retrieve(sourceObjectName, selectColumnName);
+
+			if (!list.isEmpty())
+			{
+				final List columnList = (List) list.get(0);
+				if (!columnList.isEmpty())
+				{
+					final String str = (String) columnList.get(0);
+					if (!str.equals(""))
+					{
+						final long no = Long.parseLong(str);
+						return no + 1;
+					}
+				}
+			}
+
+			return 1;
+		}
+		catch (final DAOException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new ApplicationException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+
+	}
+	/**
+	 * @param siteName - Site name.
+	 * @param typeName - site type.
+	 * @param operation - operation
+	 * @param Id - id.
+	 * @return String container name.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public String getContainerName(String siteName, String typeName, String operation, long Id)
+			throws ApplicationException
+	{
+		String containerName = "";
+		if (typeName != null && siteName != null && !typeName.equals("") && !siteName.equals(""))
+		{
+			// Poornima:Max length of site name is 50 and Max length of
+			// container type name is 100, in Oracle the name does not truncate
+			// and it is giving error. So these fields are truncated in case it
+			// is longer than 40.
+			// It also solves Bug 2829:System fails to create a default unique
+			// storage container name
+			String maxSiteName = siteName;
+			String maxTypeName = typeName;
+			if (siteName.length() > 40)
+			{
+				maxSiteName = siteName.substring(0, 39);
+			}
+			if (typeName.length() > 40)
+			{
+				maxTypeName = typeName.substring(0, 39);
+			}
+			if (operation.equals(Constants.ADD))
+			{
+				containerName = maxSiteName + "_" + maxTypeName + "_"
+						+ String.valueOf(getNextContainerNumber());
+			}
+			else
+			{
+				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(Id);
+			}
+		}
+		return containerName;
+	}
+
+	/**
+	 * @param parentID - parentID.
+	 * @param typeID - typeID
+	 * @param isInSite - isInSite
+	 * @return next container number
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static int getNextContainerNumber(long parentID, long typeID, boolean isInSite)
+			throws ApplicationException
+	{
+		try
+		{
+			final String sourceObjectName = "CATISSUE_STORAGE_CONTAINER";
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+
+			final String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+			queryWhereClause.addCondition(new EqualClause("STORAGE_TYPE_ID", Long.valueOf(typeID)))
+					.andOpr().addCondition(
+							new EqualClause("PARENT_CONTAINER_ID", Long.valueOf(parentID)));
+
+			if (isInSite)
+			{
+				queryWhereClause.addCondition(
+						new EqualClause("STORAGE_TYPE_ID", Long.valueOf(typeID))).andOpr()
+						.addCondition(new EqualClause("SITE_ID", Long.valueOf(parentID))).andOpr()
+						.addCondition(new NullClause("PARENT_CONTAINER_ID"));
+			}
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
+
+			final JDBCDAO jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(
+					Constants.APPLICATION_NAME).getJDBCDAO();
+
+			jdbcDAO.openSession(null);
+
+			final List list = jdbcDAO
+					.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+			jdbcDAO.closeSession();
+
+			if (!list.isEmpty())
+			{
+				final List columnList = (List) list.get(0);
+				if (!columnList.isEmpty())
+				{
+					final String str = (String) columnList.get(0);
+					logger.info("str---------------:" + str);
+					if (!str.equals(""))
+					{
+						final int no = Integer.parseInt(str);
+						return no + 1;
+					}
+				}
+			}
+
+			return 1;
+		}
+		catch (final DAOException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new ApplicationException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+	}
+
+	/**
+	 * @param dao - DAO object.
+	 * @param container - StorageContainer object.
+	 * @return boolean value.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean isContainerEmpty(DAO dao, StorageContainer container) throws BizLogicException
+	{
+		try
+		{
+			String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = {"locatedAtPosition.positionDimensionOne",
+					"locatedAtPosition.positionDimensionTwo"};
+			final String[] whereColumnName = {"locatedAtPosition.parentContainer.id"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("locatedAtPosition.parentContainer.id",
+					container.getId()));
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			if (!list.isEmpty())
+			{
+				return false;
+			}
+			else
+			{
+				sourceObjectName = Specimen.class.getName();
+				whereColumnName[0] = "specimenPosition.storageContainer.id";
+				selectColumnName[0] = "specimenPosition.positionDimensionOne";
+				selectColumnName[1] = "specimenPosition.positionDimensionTwo";
+				final QueryWhereClause queryWhereClausenew = new QueryWhereClause(sourceObjectName);
+				queryWhereClausenew.addCondition(new EqualClause(
+						"specimenPosition.storageContainer.id", container.getId()));
+				list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClausenew);
+				if (!list.isEmpty())
+				{
+					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					whereColumnName[0] = "locatedAtPosition.parentContainer.id";
+					selectColumnName[0] = "locatedAtPosition.positionDimensionOne";
+					selectColumnName[1] = "locatedAtPosition.positionDimensionTwo";
+					final QueryWhereClause queryWhereClauseinner = new QueryWhereClause(
+							sourceObjectName);
+					queryWhereClauseinner.addCondition(new EqualClause(
+							"locatedAtPosition.parentContainer.id", container.getId()));
+					list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseinner);
+
+					if (!list.isEmpty())
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		catch (final DAOException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+
+	}
+
+	/**
+	 * @param dao - DAO object.
+	 * @param parentContainer - StorageContainer object
+	 * @param children - children 
+	 * @return boolean array
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean[][] getStorageContainerFullStatus(DAO dao, StorageContainer parentContainer,
+			Collection children) throws BizLogicException
+	{
+		boolean[][] fullStatus = null;
+		final Integer oneDimensionCapacity = parentContainer.getCapacity()
+				.getOneDimensionCapacity();
+		final Integer twoDimensionCapacity = parentContainer.getCapacity()
+				.getTwoDimensionCapacity();
+		fullStatus = new boolean[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
+				.intValue() + 1];
+		if (children != null)
+		{
+			final Iterator iterator = children.iterator();
+			logger.debug("storageContainer.getChildrenContainerCollection().size(): "
+					+ children.size());
+			while (iterator.hasNext())
+			{
+				final StorageContainer childStorageContainer = (StorageContainer) iterator.next();
+				if (childStorageContainer.getLocatedAtPosition() != null)
+				{
+					final Integer positionDimensionOne = childStorageContainer
+							.getLocatedAtPosition().getPositionDimensionOne();
+					final Integer positionDimensionTwo = childStorageContainer
+							.getLocatedAtPosition().getPositionDimensionTwo();
+					logger.debug("positionDimensionOne : " + positionDimensionOne.intValue());
+					logger.debug("positionDimensionTwo : " + positionDimensionTwo.intValue());
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = true;
+				}
+			}
+		}
+		return fullStatus;
+	}
+
+	/**
+	 * @param containerId - containerId.
+	 * @return collection of container childrens
+	 * @throws BizLogicException
+	 */
+	public static Collection getContainerChildren(Long containerId) throws ApplicationException
+	{
+		DAO dao = null;
+		Collection<Container> children = null;
+		try
+		{
+			dao = AppUtility.openDAOSession(null);
+			children = new StorageContainerBizLogic().getChildren(dao, containerId);
+		}
+		catch (final ApplicationException e)
+		{
+			logger.error(e.getMessage(), e);
+			e.printStackTrace() ;
+			ErrorKey errorKey = ErrorKey.getErrorKey(e.getErrorKeyName());
+			throw new ApplicationException(errorKey, e, e.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		return children;
+	}
+
+
+	/**
+	 * @param newContainer - StorageContainer object.
+	 * @param oldContainer -  StorageContainer object
+	 * @return boolean value
+	 */
+	public static boolean checkForRestrictionsChanged(StorageContainer newContainer,
+			StorageContainer oldContainer)
+	{
+		int flag = 0;
+		final Collection cpCollNew = newContainer.getCollectionProtocolCollection();
+		final Collection cpCollOld = oldContainer.getCollectionProtocolCollection();
+
+		final Collection storTypeCollNew = newContainer.getHoldsStorageTypeCollection();
+		final Collection storTypeCollOld = oldContainer.getHoldsStorageTypeCollection();
+
+		final Collection spClassCollNew = newContainer.getHoldsSpecimenClassCollection();
+		final Collection spClassCollOld = oldContainer.getHoldsSpecimenClassCollection();
+
+		final Collection spArrayTypeCollNew = newContainer.getHoldsSpecimenArrayTypeCollection();
+		final Collection spArrayTypeCollOld = oldContainer.getHoldsSpecimenArrayTypeCollection();
+		/**
+		 * Bug 3612 - User should be able to change the restrictions if he
+		 * specifies the superset of the old restrictions if container is not
+		 * empty.
+		 */
+		Iterator itrOld = cpCollOld.iterator();
+		while (itrOld.hasNext())
+		{
+			flag = 0;
+			final CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
+			final Iterator itrNew = cpCollNew.iterator();
+			if (cpCollNew.size() == 0)
+			{
+				break;
+			}
+			while (itrNew.hasNext())
+			{
+				final CollectionProtocol cpNew = (CollectionProtocol) itrNew.next();
+				if (cpOld.getId().longValue() == cpNew.getId().longValue())
+				{
+					flag = 1;
+					break;
+				}
+			}
+			if (flag != 1)
+			{
+				return true;
+			}
+		}
+		itrOld = storTypeCollOld.iterator();
+		while (itrOld.hasNext())
+		{
+			flag = 0;
+			final StorageType storOld = (StorageType) itrOld.next();
+			final Iterator itrNew = storTypeCollNew.iterator();
+			while (itrNew.hasNext())
+			{
+				final StorageType storNew = (StorageType) itrNew.next();
+				if (storNew.getId().longValue() == storOld.getId().longValue()
+						|| storNew.getId().longValue() == 1)
+				{
+					flag = 1;
+					break;
+				}
+			}
+			if (flag != 1)
+			{
+				return true;
+			}
+
+		}
+		itrOld = spClassCollOld.iterator();
+		while (itrOld.hasNext())
+		{
+			flag = 0;
+			final String specimenOld = (String) itrOld.next();
+			final Iterator itrNew = spClassCollNew.iterator();
+			while (itrNew.hasNext())
+			{
+				final String specimenNew = (String) itrNew.next();
+				if (specimenNew.equals(specimenOld))
+				{
+					flag = 1;
+					break;
+				}
+			}
+			if (flag != 1)
+			{
+				return true;
+			}
+		}
+		itrOld = spArrayTypeCollOld.iterator();
+		while (itrOld.hasNext())
+		{
+			flag = 0;
+			final SpecimenArrayType spArrayTypeOld = (SpecimenArrayType) itrOld.next();
+
+			final Iterator itrNew = spArrayTypeCollNew.iterator();
+			while (itrNew.hasNext())
+			{
+				final SpecimenArrayType spArrayTypeNew = (SpecimenArrayType) itrNew.next();
+
+				if (spArrayTypeNew.getId().longValue() == spArrayTypeOld.getId().longValue()
+						|| spArrayTypeNew.getId().longValue() == 1)
+				{
+					flag = 1;
+					break;
+				}
+			}
+			if (flag != 1)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+	/**
+	 * this function checks weather parent of the container is valid or not
+	 * according to restriction provided for the containers.
+	 * 
+	 * @param container -
+	 *            Container
+	 * @param parent -
+	 *            Parent Container
+	 * @return boolean true indicating valid to use , false indicating not valid
+	 *         to use.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean isParentContainerValidToUSe(StorageContainer container,
+			StorageContainer parent) throws BizLogicException
+	{
+
+		final StorageType storageTypeAny = new StorageType();
+		storageTypeAny.setId(new Long("1"));
+		storageTypeAny.setName("All");
+		if (parent.getHoldsStorageTypeCollection().contains(storageTypeAny))
+		{
+			return true;
+		}
+		if (!parent.getHoldsStorageTypeCollection().contains(container.getStorageType()))
+		{
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * @param dao - DAO object.
+	 * @param container - StorageContainer object
+	 * @param sessionDataBean - SessionDataBean object
+	 * @return boolean value
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public static boolean validateContainerAccess(DAO dao, StorageContainer container,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		logger.debug("validateContainerAccess..................");
+		if (sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return true;
+		}
+		final Long userId = sessionDataBean.getUserId();
+		Site site = null;
+		Set<Long> loggedInUserSiteIdSet = null;
+		site = new SiteBizLogic().getSite(dao, container.getId());
+		loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
+		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(new Long(site.getId())))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	/**
+	 * @param parent - StorageContainer object.
+	 * @param current - StorageContainer object
+	 * @return boolean value
+	 */
+	public static boolean validatePosition(StorageContainer parent, StorageContainer current)
+	{
+		final int posOneCapacity = parent.getCapacity().getOneDimensionCapacity().intValue();
+		final int posTwoCapacity = parent.getCapacity().getTwoDimensionCapacity().intValue();
+		return validatePosition(posOneCapacity, posTwoCapacity, current);
+	}
+
+	/**
+	 * @param posOneCapacity - integer.
+	 * @param posTwoCapacity - integer
+	 * @param current - StorageContainer object
+	 * @return boolean value
+	 */
+	public static boolean validatePosition(int posOneCapacity, int posTwoCapacity,
+			StorageContainer current)
+	{
+		final int positionDimensionOne = current.getLocatedAtPosition().getPositionDimensionOne()
+				.intValue();
+		final int positionDimensionTwo = current.getLocatedAtPosition().getPositionDimensionTwo()
+				.intValue();
+		logger.debug("validatePosition C : " + positionDimensionOne + " : "
+				+ positionDimensionTwo);
+		logger.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
+		if ((positionDimensionOne > posOneCapacity) || (positionDimensionTwo > posTwoCapacity))
+		{
+			logger.debug("validatePosition false");
+			return false;
+		}
+		logger.debug("validatePosition true");
+		return true;
+	}
+	/**
+	 * This method is to validate position based on parent container id.
+	 * @param dao
+	 *            Object DAO
+	 * @param container
+	 *            current container
+	 * @return boolean value based on validation
+	 * @throws BizLogicException
+	 *             exception occure while DB handling
+	 */
+	public static boolean validatePosition(DAO dao, StorageContainer container) throws BizLogicException
+	{
+		try
+		{
+			final String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = {"id", "capacity.oneDimensionCapacity",
+					"capacity.twoDimensionCapacity"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause("id", container.getLocatedAtPosition()
+					.getParentContainer().getId()));
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			Integer pcCapacityOne = 0;
+			Integer pcCapacityTwo = 0;
+			if (!list.isEmpty())
+			{
+				final Object[] obj1 = (Object[]) list.get(0);
+				pcCapacityOne = (Integer) obj1[1];
+				pcCapacityTwo = (Integer) obj1[2];
+			}
+			final int positionDimensionOne = container.getLocatedAtPosition()
+					.getPositionDimensionOne().intValue();
+			final int positionDimensionTwo = container.getLocatedAtPosition()
+					.getPositionDimensionTwo().intValue();
+			logger.debug("validatePosition C : " + positionDimensionOne + " : "
+					+ positionDimensionTwo);
+			logger.debug("validatePosition P : " + pcCapacityOne + " : " + pcCapacityTwo);
+			if ((positionDimensionOne > pcCapacityOne) || (positionDimensionTwo > pcCapacityTwo))
+			{
+				logger.debug("validatePosition false");
+				return false;
+			}
+			logger.debug("validatePosition true");
+			return true;
+		}
+		catch (final DAOException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+	}
+
+	/**
+	 * @param dao - DAO object.
+	 * @param containerIds - Long type array of containerIds
+	 * @return boolean value based on container available for disabled
+	 */
+	public static boolean isContainerAvailableForDisabled(DAO dao, Long[] containerIds)
+	{
+		final List containerList = new ArrayList();
+		if (containerIds.length != 0)
+		{
+			try
+			{
+				String sourceObjectName = Specimen.class.getName();
+				final String[] selectColumnName = {"id"};
+				final String[] whereColumnName1 = {"specimenPosition.storageContainer.id"};
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new INClause("specimenPosition.storageContainer.id",
+						containerIds));
+				List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				if (list.size() != 0)
+				{
+					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					whereColumnName1[0] = "locatedAtPosition.parentContainer.id";
+
+					final QueryWhereClause queryWhereClauseNew = new QueryWhereClause(
+							sourceObjectName);
+					queryWhereClauseNew.addCondition(new INClause(
+							"locatedAtPosition.parentContainer.id", containerIds));
+					list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseNew);
+					if (list.size() != 0)
+					{
+						return false;
+					}
+				}
+			}
+			catch (final Exception e)
+			{
+				logger.error("Error in isContainerAvailable : " + e.getMessage(),e);
+				e.printStackTrace() ;
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+
+		return isContainerAvailableForDisabled(dao, edu.wustl.common.util.Utility
+				.toLongArray(containerList));
+	}
+	
+	/**
+	 * @param dao -DAO object.
+	 * @param current - StorageContainer object
+	 * @return boolean value  based on Container available for positions
+	 */
+	public static boolean isContainerAvailableForPositions(DAO dao, StorageContainer current)
+	{
+		try
+		{
+			String sourceObjectName = StorageContainer.class.getName();
+			final String[] selectColumnName = {"id"};
+			final String joinCondition = Constants.AND_JOIN_CONDITION;
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(
+					new EqualClause("locatedAtPosition.positionDimensionOne", current
+							.getLocatedAtPosition().getPositionDimensionOne())).andOpr()
+					.addCondition(
+							new EqualClause("locatedAtPosition.positionDimensionTwo", current
+									.getLocatedAtPosition().getPositionDimensionTwo())).andOpr()
+					.addCondition(
+							new EqualClause("locatedAtPosition.parentContainer.id", current
+									.getLocatedAtPosition().getParentContainer().getId()));
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			logger.debug("current.getParentContainer() :"
+					+ current.getLocatedAtPosition().getParentContainer());
+			if (list.size() != 0)
+			{
+				final Object obj = list.get(0);
+				logger
+						.debug("**********IN isContainerAvailable : obj::::::: --------- " + obj);
+				return false;
+			}
+			else
+			{
+				sourceObjectName = Specimen.class.getName();
+				final QueryWhereClause queryWhereClauseNew = new QueryWhereClause(sourceObjectName);
+				queryWhereClauseNew.addCondition(
+						new EqualClause("specimenPosition.positionDimensionOne", current
+								.getLocatedAtPosition().getPositionDimensionOne())).andOpr()
+						.addCondition(
+								new EqualClause("specimenPosition.positionDimensionTwo", current
+										.getLocatedAtPosition().getPositionDimensionTwo()))
+						.andOpr().addCondition(
+								new EqualClause("specimenPosition.storageContainer.id", current
+										.getLocatedAtPosition().getParentContainer().getId()));
+
+				list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseNew);
+				// check if Specimen exists with the given storageContainer
+				// information
+				if (list.size() != 0)
+				{
+					final Object obj = list.get(0);
+					logger
+							.debug("**************IN isPositionAvailable : obj::::::: --------------- "
+									+ obj);
+					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					final QueryWhereClause queryWhereClauseInner = new QueryWhereClause(
+							sourceObjectName);
+					queryWhereClauseInner.addCondition(
+							new EqualClause("locatedAtPosition.positionDimensionOne", current
+									.getLocatedAtPosition().getPositionDimensionOne())).andOpr()
+							.addCondition(
+									new EqualClause("locatedAtPosition.positionDimensionTwo",
+											current.getLocatedAtPosition()
+													.getPositionDimensionTwo())).andOpr()
+							.addCondition(
+									new EqualClause("locatedAtPosition.parentContainer.id", current
+											.getLocatedAtPosition().getParentContainer().getId()));
+
+					list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseInner);
+					if (list.size() != 0)
+					{
+						final Object obj = list.get(0);
+						logger
+								.debug("**************IN isPositionAvailable : obj::::::: --------------- "
+										+ obj);
+						return false;
+					}
+				}
+
+			}
+			return true;
+		}
+		catch (final Exception e)
+		{
+			logger.error("Error in isContainerAvailable : " + e.getMessage(),e);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * @param storageContainer - StorageContainer object.
+	 * @param posOne - String 
+	 * @param posTwo - String
+	 * @return boolean value based on position validation
+	 */
+	public static boolean validatePosition(StorageContainer storageContainer, String posOne,
+			String posTwo)
+	{
+		try
+		{
+			logger.debug("storageContainer.getCapacity().getOneDimensionCapacity() : "
+					+ storageContainer.getCapacity().getOneDimensionCapacity());
+			logger.debug("storageContainer.getCapacity().getTwoDimensionCapacity() : "
+					+ storageContainer.getCapacity().getTwoDimensionCapacity());
+			final int oneDimensionCapacity = (storageContainer.getCapacity()
+					.getOneDimensionCapacity() != null ? storageContainer.getCapacity()
+					.getOneDimensionCapacity().intValue() : -1);
+			final int twoDimensionCapacity = (storageContainer.getCapacity()
+					.getTwoDimensionCapacity() != null ? storageContainer.getCapacity()
+					.getTwoDimensionCapacity().intValue() : -1);
+			if (((oneDimensionCapacity) < Integer.parseInt(posOne))
+					|| ((twoDimensionCapacity) < Integer.parseInt(posTwo)))
+			{
+				return false;
+			}
+			return true;
+		}
+		catch (final Exception e)
+		{
+			logger.error("Error in validatePosition : " + e.getMessage(),e);
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * @param dao - DAO object.
+	 * @param storageContainer - StorageContainer object
+	 * @param posOne - String
+	 * @param posTwo - String
+	 * @param specimen - Specimen object
+	 * @return boolean value based on position available.
+	 */
+	public static boolean isPositionAvailable(DAO dao, StorageContainer storageContainer,
+			String posOne, String posTwo, Specimen specimen)
+	{
+		try
+		{
+			String sourceObjectName = Specimen.class.getName();
+			final String[] selectColumnName = {"id"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(
+					new EqualClause("specimenPosition.positionDimensionOne", Integer
+							.valueOf(posOne))).andOpr().addCondition(
+					new EqualClause("specimenPosition.positionDimensionTwo", Integer
+							.valueOf(posTwo))).andOpr().addCondition(
+					new EqualClause("specimenPosition.storageContainer.id", storageContainer
+							.getId()));
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			logger.debug("storageContainer.getId() :" + storageContainer.getId());
+			if (list.size() != 0)
+			{
+				final Object obj = list.get(0);
+				boolean isPosAvail = false;
+				if (specimen != null)
+				{
+					if ((!((specimen.getLineage()).equalsIgnoreCase("New")))
+							&& ((Long) obj).longValue() == specimen.getId().longValue())
+					{
+						isPosAvail = true;
+					}
+				}
+				logger
+						.debug("**************IN isPositionAvailable : obj::::::: --------------- "
+								+ obj);
+				return isPosAvail;
+			}
+			else
+			{
+				sourceObjectName = StorageContainer.class.getName();
+
+				final QueryWhereClause queryWhereClauseNew = new QueryWhereClause(sourceObjectName);
+				queryWhereClauseNew.addCondition(
+						new EqualClause("locatedAtPosition.positionDimensionOne", Integer
+								.valueOf(posOne))).andOpr().addCondition(
+						new EqualClause("locatedAtPosition.positionDimensionTwo", Integer
+								.valueOf(posTwo))).andOpr().addCondition(
+						new EqualClause("locatedAtPosition.parentContainer.id", storageContainer
+								.getId()));
+
+				list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseNew);
+
+				logger.debug("storageContainer.getId() :" + storageContainer.getId());
+				if (list.size() != 0)
+				{
+					final Object obj = list.get(0);
+					logger.debug("**********IN isPositionAvailable : obj::::: --------- "
+							+ obj);
+					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					final QueryWhereClause queryWhereClauseInner = new QueryWhereClause(
+							sourceObjectName);
+					queryWhereClauseInner.addCondition(
+							new EqualClause("locatedAtPosition.positionDimensionOne", Integer
+									.valueOf(posOne))).andOpr().addCondition(
+							new EqualClause("locatedAtPosition.positionDimensionTwo", Integer
+									.valueOf(posTwo))).andOpr().addCondition(
+							new EqualClause("locatedAtPosition.parentContainer.id",
+									storageContainer.getId()));
+
+					list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClauseInner);
+
+					logger.debug("storageContainer.getId() :" + storageContainer.getId());
+					if (list.size() != 0)
+					{
+						final Object obj = list.get(0);
+						logger.debug("**********IN isPositionAvailable : obj::::: --------- "
+								+ obj);
+						return false;
+					}
+				}
+			}
+
+			return true;
+
+		}
+		catch (final Exception e)
+		{
+			logger.error("Error in isPositionAvailable : " + e.getMessage(),e);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static boolean isContainerFull(String containerId, String containerName)
+		throws ApplicationException
+	{
+		final JDBCDAO jdbcDAO = AppUtility.openJDBCSession();
+		final Long freePositions = getCountofFreeLocationOfContainer(jdbcDAO, containerId,
+				containerName);
+		AppUtility.closeJDBCSession(jdbcDAO);
+		if (freePositions == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
+	}
+	
+	public static boolean canReduceDimension(DAO dao, Long storageContainerId, Integer dimOne,
+		Integer dimTwo) throws DAOException
+	{
+		if (!isSpecimenAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
+		{
+			if (!isContainerAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isContainerAssignedWithinDimensions(DAO dao, Long storageContainerId,
+		Integer dimOne, Integer dimTwo) throws DAOException
+	{
+		final StringBuilder contQuery = new StringBuilder();
+		contQuery.append("from ContainerPosition cp ");
+		contQuery.append("where cp.parentContainer.id =");
+		contQuery.append(storageContainerId);
+		contQuery.append(" and (cp.positionDimensionOne>");
+		contQuery.append(dimOne);
+		contQuery.append(" or cp.positionDimensionTwo>");
+		contQuery.append(dimOne);
+		contQuery.append(")");
+		final List contList = dao.executeQuery(contQuery.toString());
+		if ((contList != null) && (contList.size() > 0))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isSpecimenAssignedWithinDimensions(DAO dao, Long storageContainerId,
+		Integer dimOne, Integer dimTwo) throws DAOException
+	{
+		final StringBuilder specQuery = new StringBuilder();
+		specQuery.append("from SpecimenPosition sp ");
+		specQuery.append("where sp.storageContainer.id =");
+		specQuery.append(storageContainerId);
+		specQuery.append(" and (sp.positionDimensionOne>");
+		specQuery.append(dimOne);
+		specQuery.append(" or sp.positionDimensionTwo>");
+		specQuery.append(dimOne);
+		specQuery.append(")");
+		final List list = dao.executeQuery(specQuery.toString());
+		if ((list != null) && (list.size() > 0))
+		{
+			return true;
+		}
+		return false;
 	}
 }

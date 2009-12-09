@@ -1,12 +1,11 @@
 import java.io.File;
 
-import edu.wustl.common.util.logger.Logger;
-
 import titli.controller.Name;
 import titli.controller.interfaces.TitliInterface;
 import titli.model.Titli;
 import titli.model.TitliException;
 import titli.model.util.IndexUtility;
+import edu.wustl.common.util.logger.Logger;
 
 public class TitliIndexer 
 {

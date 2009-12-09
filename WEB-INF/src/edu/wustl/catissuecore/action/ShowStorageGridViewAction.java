@@ -29,13 +29,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -168,7 +173,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			storageContainerGridObject = new StorageContainerGridObject();
 			final StorageContainer storageContainer = (StorageContainer) containerObject;
 
-			this.setEnablePageAttributeIfRequired(request, storageContainer, bizLogic);
+			this.setEnablePageAttributeIfRequired(request, storageContainer);
 
 			final Site site = (Site) bizLogic.retrieveAttribute(StorageContainer.class.getName(),
 					storageContainer.getId(), "site");// container.getSite();
@@ -221,26 +226,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					.intValue() + 1];
 			childContainerName = new String[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
 					.intValue() + 1];
-			// Showing Containers in the Container map.
-			// Collection children =
-			// (Collection)bizLogic.retrieveAttribute(StorageContainer
-			// .class.getName(), storageContainer.getId(),
-			// "elements(children)");//storageContainer.getChildren();
-			final Collection children = bizLogic.getContainerChildren(storageContainer.getId());
-			// Collection<ContainerPosition> occPosColl = (Collection)
-			// bizLogic.retrieveAttribute(StorageContainer.class.getName(),
-			// storageContainer.getId(), "elements(occupiedPositions)");
-			// if(occPosColl != null)
-			// {
-			// for(ContainerPosition occPos : occPosColl)
-			// {
-			// Collection occContainers = (Collection)
-			// bizLogic.retrieveAttribute(ContainerPosition.class.getName(),
-			// occPos.getId(), "occupiedContainer");
-			// children.add(occContainers);
-			// }
-			// }
-
+			final Collection children = StorageContainerUtil.getContainerChildren(storageContainer.getId());
 			if (children != null)
 			{
 				final Iterator iterator = children.iterator();
@@ -349,7 +335,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					.getParameter(Constants.STORAGE_CONTAINER_TYPE);
 			this.logger.info("Id-----------------" + id);
 			this.logger.info("storageContainerType:" + storageContainerType);
-			final int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(id), Long
+			final int startNumber = StorageContainerUtil.getNextContainerNumber(Long.parseLong(id), Long
 					.parseLong(storageContainerType), false);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
 			request.setAttribute(Constants.START_NUMBER, new Integer(startNumber));
@@ -363,7 +349,8 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
 
 		// Mandar : 29aug06 : to set collectionprotocol titles
-		final List collectionProtocolList = bizLogic.getCollectionProtocolList(id);
+		
+		final List collectionProtocolList = CollectionProtocolBizLogic.getCollectionProtocolList(id);
 		request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
 
 		// Mandar : 29aug06 : to set specimenclass
@@ -381,16 +368,14 @@ public class ShowStorageGridViewAction extends BaseAction
 	 * restriction criteria on Container.
 	 *
 	 * @param request
-	 *            Th HttpServletRequest object reference.
+	 *            The HttpServletRequest object reference.
 	 * @param storageContainer
 	 *            The Storage container object reference.
-	 * @param bizLogic
-	 *            reference to bizLogic class.
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
 	private void setEnablePageAttributeIfRequired(HttpServletRequest request,
-			StorageContainer storageContainer, StorageContainerBizLogic bizLogic)
+			StorageContainer storageContainer)
 			throws BizLogicException
 	{
 		boolean enablePage = true;
@@ -416,10 +401,10 @@ public class ShowStorageGridViewAction extends BaseAction
 		if (enablePage && holdContainerType != null && !holdContainerType.equals(""))
 		{
 			final int typeId = Integer.parseInt(holdContainerType);
-			enablePage = bizLogic.canHoldContainerType(typeId, storageContainer);
+			StorageTypeBizLogic stBiz = new StorageTypeBizLogic();
+			enablePage = stBiz.canHoldContainerType(typeId, storageContainer);
 		}
-
-		// checking for collection Protocol.
+		CollectionProtocolBizLogic cpBiz = new CollectionProtocolBizLogic();
 		final String holdCollectionProtocol = (String) session
 				.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 		if (enablePage && holdCollectionProtocol != null)
@@ -427,7 +412,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			if (!holdCollectionProtocol.equals(""))
 			{
 				final int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
-				enablePage = bizLogic.canHoldCollectionProtocol(collectionProtocolId,
+				enablePage = cpBiz.canHoldCollectionProtocol(collectionProtocolId,
 						storageContainer);
 			}
 			else
@@ -436,14 +421,14 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 		}
 
-		// checking for sepecimen class.
+		NewSpecimenBizLogic nspBiz = new NewSpecimenBizLogic();
 		final String holdspecimenClass = (String) session
 				.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
 		if (enablePage && holdspecimenClass != null)
 		{
 			if (!holdspecimenClass.equals(""))
 			{
-				enablePage = bizLogic.canHoldSpecimenClass(holdspecimenClass, storageContainer);
+				enablePage = nspBiz.canHoldSpecimenClass(holdspecimenClass, storageContainer);
 			}
 			else
 			{
@@ -451,7 +436,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 		}
 
-		// checking for specimen array type.
+		SpecimenArrayBizLogic spArraybiz = new SpecimenArrayBizLogic();
 		final String holdspecimenArrayType = (String) session
 				.getAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 		if (enablePage && holdspecimenArrayType != null)
@@ -459,7 +444,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			if (!holdspecimenArrayType.equals(""))
 			{
 				final int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
-				enablePage = bizLogic.canHoldSpecimenArrayType(specimenArrayTypeId,
+				enablePage = spArraybiz.canHoldSpecimenArrayType(specimenArrayTypeId,
 						storageContainer);
 			}
 			else
@@ -473,27 +458,4 @@ public class ShowStorageGridViewAction extends BaseAction
 			request.setAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE, Constants.TRUE);
 		}
 	}
-
-	/**
-	 * @param fullStatus
-	 * @param childContainerIds
-	 * @param storageContainer
-	 */
-	/*
-	 * private void setStorageContainerStatus(boolean[][] fullStatus, int[][]
-	 * childContainerIds, Collection collection) { Iterator iterator =
-	 * collection.iterator(); while (iterator.hasNext()) { StorageContainer
-	 * childStorageContainer = (StorageContainer) iterator.next(); if
-	 * (childStorageContainer != null &&
-	 * childStorageContainer.getLocatedAtPosition() != null) { Integer
-	 * positionDimensionOne = childStorageContainer.getLocatedAtPosition()
-	 * .getPositionDimensionOne(); Integer positionDimensionTwo =
-	 * childStorageContainer.getLocatedAtPosition() .getPositionDimensionTwo();
-	 * fullStatus
-	 * [positionDimensionOne.intValue()][positionDimensionTwo.intValue()] =
-	 * true;
-	 * childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
-	 * .intValue()] = childStorageContainer .getId().intValue(); } } }
-	 */
-
 }

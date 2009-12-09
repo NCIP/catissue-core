@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -259,7 +260,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			AppUtility.closeDAOSession(dao);
 		}
 	}
-
+	/**
+	 * @param specimenSummaryForm specimenSummaryForm
+	 * @return List of Specimen Id's
+	 */
 	private List getSpecimenIdList(ViewSpecimenSummaryForm specimenSummaryForm)
 	{
 		final List specimenIdList = new ArrayList();
@@ -340,10 +344,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 
 			for (final GenericSpecimen spec : specimenList)
 			{
-				freeSizeofContainer = scBizLogic.getCountofFreeLocationOfContainer(jdbcDao,
+				freeSizeofContainer = StorageContainerUtil.getCountofFreeLocationOfContainer(jdbcDao,
 						spec.getContainerId(), spec.getSelectedContainerName()).intValue();
-				//freeSizeofContainer = StorageContainerUtil.getCountofFreeLocationOfContainer(conId, conName);
-
 			}
 
 			int tempContainerSize = this.checkList(specimenList, allocatedPositions,
@@ -382,7 +384,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	 */
 	public int checkList(List<GenericSpecimen> gs, List<String> allocatedPositions,
 			int containerSize, StorageContainerBizLogic scBizLogic, JDBCDAO jdbcDAO)
-			throws BizLogicException
+			throws  ApplicationException
 	{
 		for (final GenericSpecimen spec : gs)
 		{
@@ -392,7 +394,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			final String key = containerName + ":" + positionOne + "," + positionTwo;
 			if (positionOne != "" && positionTwo != "")
 			{
-				if (!(scBizLogic.isPositionAvailable(jdbcDAO, spec.getContainerId(), spec
+				if (!(StorageContainerUtil.isPositionAvailable(jdbcDAO, spec.getContainerId(), spec
 						.getSelectedContainerName(), positionOne, positionTwo))
 						|| allocatedPositions.contains(key))
 				{

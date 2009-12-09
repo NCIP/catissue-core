@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
+import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Site;
@@ -90,43 +91,24 @@ public class StorageContainerAction extends SecureAction
 			final HttpSession session = request.getSession();
 			final StorageContainerBean storageContainerBean = (StorageContainerBean) session
 					.getAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
-			// boolean to indicate whether the suitable containers to be shown
-			// in
-			// dropdown
-			// is exceeding the max limit.
 			final String exceedingMaxLimit = "false";
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
 			final String containerId = request.getParameter("containerIdentifier");
 			final String isPageFromStorageType = (String) session
 					.getAttribute("isPageFromStorageType");
-			// String
-			// isSiteChanged=(String)request.getParameter("isSiteChanged");
 			final String isContainerChanged = request.getParameter("isContainerChanged");
-
 			if (storageContainerForm.getSpecimenOrArrayType() == null)
 			{
 				storageContainerForm.setSpecimenOrArrayType("Specimen");
 			}
-			// set the menu selection
 			request.setAttribute(Constants.MENU_SELECTED, "7");
-
 			boolean isTypeChange = false;
-			// boolean isSiteOrParentContainerChange = false;
-
 			String str = request.getParameter("isOnChange");
 			str = request.getParameter("typeChange");
 			if (str != null && str.equals("true"))
 			{
 				isTypeChange = true;
-
 			}
-			/*
-			 * str = request.getParameter("isSiteOrParentContainerChange"); if
-			 * (str != null && str.equals("true")) {
-			 * isSiteOrParentContainerChange = true; }
-			 */
-
-			// Gets the value of the operation parameter.
 			final String operation = request.getParameter(Constants.OPERATION);
 			request.setAttribute(Constants.OPERATION, operation);
 			if (operation.equals(Constants.EDIT) && storageContainerBean != null
@@ -139,13 +121,7 @@ public class StorageContainerAction extends SecureAction
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			// ---- chetan 15-06-06 ----
-			// if (isSiteChanged != null && isSiteChanged.equals("true"))
-			// {
-			//setCollectionProtocolList(request,storageContainerForm.getSiteId()
-			// );
-			//
-			// }
+			final SiteBizLogic siteBizLogic = new SiteBizLogic();
 			if (isContainerChanged != null && isContainerChanged.equals("true"))
 			{
 				final List<JSONObject> jsonList = new ArrayList<JSONObject>();
@@ -153,9 +129,7 @@ public class StorageContainerAction extends SecureAction
 				if (parentEleType.equals("parentContAuto"))
 				{
 					final long contId = new Long(request.getParameter("parentContainerId"));
-					// long contId =
-					// storageContainerForm.getParentContainerId();
-					final Site site = bizLogic.getRelatedSite(contId, dao);
+					final Site site = siteBizLogic.getRelatedSite(contId, dao);
 					if (site != null)
 					{
 						final long siteId = site.getId();
@@ -165,9 +139,8 @@ public class StorageContainerAction extends SecureAction
 				else if (parentEleType.equals("parentContManual"))
 				{
 					final String contName = request.getParameter("selectedContainerName");
-					// String contName =
-					// storageContainerForm.getSelectedContainerName();
-					final Site site = bizLogic.getRelatedSiteForManual(contName, dao);
+					SiteBizLogic siteBiz = new SiteBizLogic();
+					final Site site = siteBiz.getRelatedSiteForManual(contName, dao);
 					if (site != null)
 					{
 						final long siteId = site.getId();
@@ -240,7 +213,7 @@ public class StorageContainerAction extends SecureAction
 			if (operation.equals(Constants.EDIT))
 			{
 
-				if (bizLogic.isContainerFull(storageContainerForm.getId() + "",
+				if (StorageContainerUtil.isContainerFull(storageContainerForm.getId() + "",
 						storageContainerForm.getContainerName()))
 				{
 					storageContainerForm.setIsFull("true");
@@ -362,6 +335,7 @@ public class StorageContainerAction extends SecureAction
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		final SiteBizLogic siteBizlog = new SiteBizLogic();
 		// Gets the value of the operation parameter.
 		final String operation = request.getParameter(Constants.OPERATION);
 		// Sets the operation attribute to be used in the Add/Edit Institute
@@ -382,10 +356,7 @@ public class StorageContainerAction extends SecureAction
 		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
 				Status.ACTIVITY_STATUS_CLOSED.toString()};
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
-
-		// List list = bizLogic.getSiteList(Site.class.getName(),
-		// siteDisplayField, valueField,activityStatusArray, false);
-		final List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
+		final List list = siteBizlog.getSiteList(siteDisplayField, valueField, activityStatusArray,
 				sessionDataBean.getUserId());
 		NameValueBean nvbForSelect = null;
 		if (list != null && !list.isEmpty())
@@ -426,7 +397,7 @@ public class StorageContainerAction extends SecureAction
 		else if ("Auto".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			final long parentContId = storageContainerForm.getParentContainerId();
-			final Site site = bizLogic.getRelatedSite(parentContId, dao);
+			final Site site = siteBizlog.getRelatedSite(parentContId, dao);
 			if (site != null)
 			{
 				request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
@@ -442,7 +413,7 @@ public class StorageContainerAction extends SecureAction
 		else if ("Manual".equals(storageContainerForm.getParentContainerSelected()))
 		{
 			final String containerName = storageContainerForm.getSelectedContainerName();
-			final Site site = bizLogic.getRelatedSiteForManual(containerName, dao);
+			final Site site = siteBizlog.getRelatedSiteForManual(containerName, dao);
 			if (site != null)
 			{
 				request = AppUtility.setCollectionProtocolList(request, site.getId(), dao);
