@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -368,6 +369,9 @@ public class ShowStorageGridViewAction extends BaseAction
 		// Mandar : 29aug06 : to set specimenclass
 		final List specimenClassList = bizLogic.getSpecimenClassList(id);
 		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
+
+		final List specimenTypeList = AppUtility.getSpecimenTypeList(id);
+		request.setAttribute(Constants.MAP_SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		return mapping.findForward(target);
 	}
