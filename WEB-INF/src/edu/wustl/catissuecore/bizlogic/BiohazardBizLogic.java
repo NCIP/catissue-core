@@ -34,10 +34,13 @@ public class BiohazardBizLogic extends CatissueDefaultBizLogic
 {
 
 	/**
-	 * Overriding the parent class's method to validate the enumerated attribute
+	 * Overriding the parent class's 
+	 * method to validate the enumerated attribute
 	 * values
 	 */
-	@Override
+	/**
+	 * @param 
+	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
 		final Biohazard hazard = (Biohazard) obj;
