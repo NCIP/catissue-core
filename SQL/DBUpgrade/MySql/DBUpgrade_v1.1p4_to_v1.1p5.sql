@@ -27,18 +27,16 @@ create table catissue_bulk_operation (
  */
 CREATE TABLE catissue_stor_type_spec_type 
 (                                                                       
-  STORAGE_TYPE_ID bigint(20) NOT NULL,                                                                             
-  SPECIMEN_TYPE varchar(50) default NULL,
-  primary key (STORAGE_TYPE_ID),                                                                      
-  CONSTRAINT STORAGE_TYPE_ID_FK FOREIGN KEY (STORAGE_TYPE_ID) REFERENCES catissue_storage_type (IDENTIFIER)  
-) ENGINE=InnoDB DEFAULT CHARSET=latin1     
+  STORAGE_TYPE_ID bigint(20) NOT NULL,                                                                          
+  SPECIMEN_TYPE varchar(50)
+);     
+alter table catissue_stor_type_spec_type add index STORAGE_TYPE_ID_FK (STORAGE_TYPE_ID), add constraint STORAGE_TYPE_ID_FK foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
 /**
  * Container Type Req
  */
 CREATE TABLE catissue_stor_cont_spec_type
 (                                                                                 
   STORAGE_CONTAINER_ID bigint(20) NOT NULL,                                                                                  
-  SPECIMEN_TYPE varchar(50) default NULL,                                                                                   
-   primary key (STORAGE_CONTAINER_ID),                                                                           
-   CONSTRAINT SPECIMEN_TYPE_ST_ID_FK FOREIGN KEY (STORAGE_CONTAINER_ID) REFERENCES catissue_storage_container (IDENTIFIER)  
-) ENGINE=InnoDB DEFAULT CHARSET=latin1       
+  SPECIMEN_TYPE varchar(50) 
+);      
+alter table catissue_stor_cont_spec_type add index SPECIMEN_TYPE_ST_ID_FK (STORAGE_CONTAINER_ID), add constraint SPECIMEN_TYPE_ST_ID_FK foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
