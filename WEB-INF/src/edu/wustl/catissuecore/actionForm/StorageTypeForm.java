@@ -185,14 +185,14 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 			else
 			{
-				this.holdsSpecimenType = new String[specimenClassTypeCollection.size()];
+				this.holdsSpecimenType = new String[specimenTypeCollection.size()];
 				int i = 0;
 
-				final Iterator it = specimenClassTypeCollection.iterator();
+				final Iterator it = specimenTypeCollection.iterator();
 				while (it.hasNext())
 				{
-					final String specimenClass = (String) it.next();
-					this.holdsSpecimenType[i] = specimenClass;
+					final String specimenType = (String) it.next();
+					this.holdsSpecimenType[i] = specimenType;
 					i++;
 					this.specimenOrArrayType = "Specimen";
 
