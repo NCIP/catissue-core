@@ -305,7 +305,16 @@
 
 		   }
 
-
+      public function changeSpParentName () :void
+      {
+         	spParentName.enabled = true;
+            spParentName.text = "";
+      }
+      public function changeSCGName () :void
+      {
+         	spParentName.enabled = false;            
+      }
+   		
    		
 		public function chkStorage() : void
 		{
@@ -317,7 +326,7 @@
 
 	]]>
 </mx:Script>
-	<mx:VBox backgroundColor="#E2EFFF" width="100%">
+	<mx:VBox backgroundColor="#E2EFFF" width="100%" id="MyBox">
 		<components:MyCanvas >
 			<mx:CheckBox id="isCopy" click="onClick(event)"/>
 			<mx:Label text="{specimenNo}" x="25"/>

@@ -23,12 +23,9 @@
 				linkBtn.styleName = "pageButtonStyleBlackColor";
 				
 			}
-
-
 			model.filteredCollection = paginateData.getPaginatedData(model.collection, lowLimit, highLimit);
 			model.currPage = (lowLimit / 5) ;
-			this.styleName = "pageBtnWithBlueColor";
-			
+			this.styleName = "pageBtnWithBlueColor";			
 		}
 	]]>
 </mx:Script>

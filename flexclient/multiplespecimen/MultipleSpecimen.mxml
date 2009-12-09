@@ -172,6 +172,16 @@
 			specimenColl.addItem(spData);	
 			setPagination();
 			model.filteredCollection = getFilteredCollection(model.collection,model.currPage);
+			
+			if(isSpParentName.selected)
+	   		{
+	   		   refreshParentLabel(spData);
+	   		}
+	   		else
+	   		{
+	   		  refreshSCGLabel(spData);
+	   		}
+	   		
 
 		}
 		
@@ -497,24 +507,49 @@
    			for(var i:int=0;i<specimenColl.length;i++)
    			{
    				var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
-	   			if(isSpParentName.selected)
+   				if(isSpParentName.selected)
 	   			{
 	   				spData.parentType = Constants.DERIVED_SPECIMEN;
 	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SP;
+	   				refreshParentLabel(spData);
+	   				if(A[i] != null)
+                    { 
+                       A[i].changeSpParentName();
+                    }           	
+	   				
 	   			}
 	   			else
 	   			{
 	   				spData.parentType = Constants.NEW_SPECIMEN;	
 	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SCG;
+	   				refreshSCGLabel(spData);
+	   				if(A[i] != null && mspParameter.parentName != "")
+                    { 
+                         A[i].changeSCGName(); //mspParameter.parentName=="" means specimens ar getting added through specimen - multiple
+                    }
+                     
 
 	   			}
 	   			if(A[i] != null)
 		   			A[i].specimenParentChanges(mspParameter.parentType);
 		   	//	model.filteredCollection.refresh();	
 		   		spLabelPane.specimenParentChanges(mspParameter.parentType);	
-  			}
-   			
+  			}		
 
+   		}
+   		private function refreshParentLabel(spData:SpecimenData):void
+   		{
+   			 spData.parentName = "";
+	   		 spData.isParentEnabled = true;   				 
+	   	}
+	   	
+	   	private function refreshSCGLabel(spData:SpecimenData):void
+   		{
+   		     spData.parentName = mspParameter.parentName;
+	   	     if(mspParameter.parentName != "")
+	   	     {
+	   		   spData.isParentEnabled = false;
+	   		 }    		
    		}
    		public function setPagination():void
 		{
