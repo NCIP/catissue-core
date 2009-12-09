@@ -21,8 +21,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.exolab.castor.xml.schema.Order;
-
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
