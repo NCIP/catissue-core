@@ -3,17 +3,30 @@ alter table CATISSUE_PARTICIPANT_REC_NTRY add constraint FKC6723656BC7298A9 fore
 alter table CATISSUE_SPECIMEN_REC_NTRY add constraint FKC6727856BC7298A9 foreign key (IDENTIFIER) references DYEXTN_ABSTRACT_RECORD_ENTRY (IDENTIFIER);
 alter table CATISSUE_SCG_REC_NTRY add constraint FKC6723689BC7298A9 foreign key (IDENTIFIER) references DYEXTN_ABSTRACT_RECORD_ENTRY (IDENTIFIER);
 
-insert into dyextn_abstract_form_context (form_label,container_id,hide_form)
- (select fc.study_form_label,em.container_id,1 from dyextn_form_context fc,
+delete from DYEXTN_ENTITY_MAP_CONDNS where form_context_id is null;
+
+delete from DYEXTN_ENTITY_MAP_CONDNS where identifier not in
+(select min(identifier) from DYEXTN_ENTITY_MAP_CONDNS T2
+where T2.form_context_id=DYEXTN_ENTITY_MAP_CONDNS.form_context_id);
+
+insert into dyextn_abstract_form_context (identifier,form_label,container_id,hide_form)
+ (select DYEXTN_ABSTRACT_FRM_CTXT_SEQ.NEXTVAL,fc.study_form_label,em.container_id,1 from dyextn_form_context fc,
  dyextn_entity_map em, DYEXTN_ENTITY_MAP_CONDNS cond
  where fc.entity_map_id=em.identifier and cond.form_context_id=fc.identifier
  and cond.STATIC_RECORD_ID=0);
 
-insert into dyextn_abstract_form_context (form_label,container_id,hide_form)
- (select fc.study_form_label,em.container_id,0 from dyextn_form_context fc,
+insert into dyextn_abstract_form_context (identifier,form_label,container_id,hide_form)
+ (select DYEXTN_ABSTRACT_FRM_CTXT_SEQ.NEXTVAL,fc.study_form_label,em.container_id,0 from dyextn_form_context fc,
  dyextn_entity_map em, DYEXTN_ENTITY_MAP_CONDNS cond
  where fc.entity_map_id=em.identifier and cond.form_context_id=fc.identifier
- and cond.STATIC_RECORD_ID<>0 );
+ and cond.STATIC_RECORD_ID<>0);
+
+insert into dyextn_abstract_form_context (identifier,form_label,container_id,hide_form)
+(select DYEXTN_ABSTRACT_FRM_CTXT_SEQ.NEXTVAL,fc.study_form_label,em.container_id,0 from dyextn_entity_map em,dyextn_form_context fc
+left join DYEXTN_ENTITY_MAP_CONDNS cond on cond.form_context_id=fc.identifier
+where fc.entity_map_id=em.identifier and fc.identifier not in
+(select fc1.identifier from dyextn_form_context fc1 join DYEXTN_ENTITY_MAP_CONDNS cond1 on
+cond1.form_context_id=fc1.identifier));
 
 insert into catissue_study_form_context (identifier)
 (select identifier from dyextn_abstract_form_context);

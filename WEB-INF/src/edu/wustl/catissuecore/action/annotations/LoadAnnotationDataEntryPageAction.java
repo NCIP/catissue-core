@@ -95,9 +95,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				&& ( operation.equalsIgnoreCase( AnnotationConstants.EDIT_SELECTED_ANNOTATION ) ))
 		{
 			// If operation not null -> Operation
-			String selectedFormId = null;
-
-			selectedFormId = request.getParameter( AnnotationConstants.SELECTED_ANNOTATION );
+			String selectedFormId = request.getParameter( AnnotationConstants.SELECTED_ANNOTATION );
 			staticEntityId = request.getParameter( AnnotationConstants.STATIC_ENTITY_ID );
 			staticEntityRecordId = request
 					.getParameter( AnnotationConstants.STATIC_ENTITY_RECORD_ID );
@@ -329,158 +327,6 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 	}
 
-	/**
-	 * @param request : request
-	 * @param dynExtRecordId : Dynamic Extension record Id
-	 * @param dynEntContainerId : Dynamic Extension Container Id
-	 * @throws ApplicationException : ApplicationException
-	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
-	 */
-	/*private void insertEntityMapRecord(HttpServletRequest request, String dynExtRecordId,
-			String dynEntContainerId) throws DynamicExtensionsSystemException, ApplicationException
-	{
-		final EntityMapRecord entityMapRecord = this.getEntityMapRecord( request, dynExtRecordId,
-				dynEntContainerId );
-		if (entityMapRecord != null && entityMapRecord.getId() == null)
-		{
-			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			try
-			{
-				annotationBizLogic.insertEntityRecord( entityMapRecord );
-			}
-			catch (final BizLogicException e)
-			{
-				//this.logger.debug("Got exception while creating entity map record....");
-				this.logger.error( "Got exception while creating" + " entity map record...."
-						+ e.getMessage(), e );
-			}
-		}
-		else
-		{// Edit
-			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			annotationBizLogic.updateEntityRecord( entityMapRecord );
-		}
-	}*/
-
-
-
-	/**
-	 * getEntityMapRecord.
-	 * @param request : request
-	 * @param dynExtRecordId : dynExtRecordId
-	 * @param dynEntContainerId : dynEntContainerId
-	 * @return EntityMapRecord : EntityMapRecord
-	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
-	 * @throws ApplicationException : ApplicationException
-	 */
-	/*private EntityMapRecord getEntityMapRecord(HttpServletRequest request, String dynExtRecordId,
-			String dynEntContainerId) throws DynamicExtensionsSystemException, ApplicationException
-	{
-		EntityMapRecord entityMapRecord = null;
-		final String staticEntityRecordId = (String) request.getSession().getAttribute(
-				AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID );
-		final Long entityMapId = (Long) request.getSession().getAttribute(
-				AnnotationConstants.SELECTED_ENTITY_MAP_ID );
-		if (( entityMapId != null ) && ( staticEntityRecordId != null )
-				&& ( dynExtRecordId != null ) && !( dynExtRecordId.equals( "" ) ))
-		{
-			entityMapRecord = new EntityMapRecord();
-			// entityMapRecord.setEntityMapId(entityMapId);
-			final FormContext formContext = this.getFormContext( entityMapId );
-			entityMapRecord.setFormContext( formContext );
-			entityMapRecord.setStaticEntityRecordId( AppUtility.toLong( staticEntityRecordId ) );
-			entityMapRecord.setDynamicEntityRecordId( AppUtility.toLong( dynExtRecordId ) );
-			final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
-					.getAttribute( Constants.SESSION_DATA );
-			if (sessionDataBean != null)
-			{
-				entityMapRecord.setCreatedBy( sessionDataBean.getLastName() + ","
-						+ sessionDataBean.getFirstName() );
-				entityMapRecord.setCreatedDate( new Date() );
-			}
-			entityMapRecord.setLinkStatus( AnnotationConstants.STATUS_ATTACHED );
-		}
-		else
-		{
-			if (dynEntContainerId != null && !dynEntContainerId.equals( "" ))
-			{
-				final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-				Collection < EntityMap > entityMapColl = new HashSet < EntityMap >();
-				try
-				{
-					entityMapColl = bizLogic.getEntityMapsForContainer( Long
-							.valueOf( dynEntContainerId ) );
-				}
-				catch (final NumberFormatException e)
-				{
-					this.logger.error( e.getMessage(), e );
-				}
-				catch (final BizLogicException e)
-				{
-					this.logger.error( e.getMessage(), e );
-				}
-				for (final EntityMap entityMap : entityMapColl)
-				{
-					final FormContext formContext = this.getFormContext( entityMap.getId() );
-					final Collection < EntityMapRecord > recordColl = AppUtility
-							.getEntityMapRecords( formContext.getId() );
-					for (final EntityMapRecord eMR : recordColl)
-					{
-						if (eMR.getDynamicEntityRecordId().longValue() == AppUtility.toLong(
-								dynExtRecordId ).longValue())
-						{
-							final SessionDataBean sessionDataBean = (SessionDataBean) request
-									.getSession().getAttribute( Constants.SESSION_DATA );
-							if (sessionDataBean != null)
-							{
-								eMR.setCreatedBy( sessionDataBean.getLastName() + ","
-										+ sessionDataBean.getFirstName() );
-								eMR.setCreatedDate( new Date() );
-								entityMapRecord = eMR;
-								break;
-							}
-						}
-					}
-					break;
-				}
-			}
-		}
-		return entityMapRecord;
-	}*/
-
-	/**
-	 * It gives the FormContext Object based on EntityMap.
-	 * @param entityMapId :identifier of entityMap
-	 * @return FormContext object for the particular entityMapId
-	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
-	 */
-	/*private FormContext getFormContext(Long entityMapId) throws DynamicExtensionsSystemException
-	{
-		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		final Object object = bizLogic.getEntityMap( entityMapId );
-		FormContext formContextObject = null;
-		if (object != null)
-		{
-			final EntityMap entityMap = (EntityMap) object;
-			final Collection < FormContext > formContextMetadata = AppUtility
-					.getFormContexts( entityMap.getId() );
-
-			final Iterator < FormContext > formContextIter = formContextMetadata.iterator();
-			while (formContextIter.hasNext())
-			{
-				final FormContext formContext = formContextIter.next();
-				if (( formContext.getNoOfEntries() == null || formContext.getNoOfEntries().equals(
-						"" ) )
-						&& ( formContext.getStudyFormLabel() == null || formContext
-								.getStudyFormLabel().equals( "" ) ))
-				{
-					formContextObject = formContext;
-					break;
-				}
-			}
-		}
-		return formContextObject;
-	}*/
 
 	/**
 	 * @param request : request
@@ -707,77 +553,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		{
 			dynamicEntity = new NameValueBean(containerId, this.getDEContainerName(containerId));
 		}
-		/*if (entityMapId != null)
-		{
-			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			final Object object = annotationBizLogic.getEntityMap( entityMapId );
-			if (object != null)
-			{
-				final EntityMap entityMap = (EntityMap) object;
-				if (entityMap != null)
-				{
-					dynamicEntity = new NameValueBean( entityMap.getContainerId() , this
-							.getDEContainerName( entityMap.getContainerId() ) );
-				}
-			}
-		}*/
 		return dynamicEntity;
 	}
 
-	/**
-	 * @param staticEntityId
-	 *            Identifier of static entity
-	 * @param staticEntityRecordId
-	 *            Identifier of static record
-	 * @return collection of entityMapRecords
-	 * @throws BizLogicException
-	 *             BizLogic Exception
-	 * @throws DynamicExtensionsSystemException :DynamicExtensionsSystemException
-	 */
-	/*private List < EntityMapRecord > getEntityMapRecords(Long staticEntityId,
-			Long staticEntityRecordId) throws DynamicExtensionsSystemException, BizLogicException
-	{
-		List < EntityMapRecord > entityMapRecords = null;
-		if (staticEntityId != null)
-		{
-			final List entityMapIds = this.getListOfEntityMapIdsForSE( staticEntityId );
-			final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			entityMapRecords = annotationBizLogic.getEntityMapRecordList( entityMapIds,
-					staticEntityRecordId );
-		}
-		return entityMapRecords;
-	}*/
-
-
-	/**
-	 * @param staticEntityId
-	 *            Identifier of static entity
-	 * @return collection of EntityMap for static entity
-	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
-	 * @throws BizLogicException : BizLogicException
-	 */
-	/*private List < Long > getListOfEntityMapIdsForSE(Long staticEntityId)
-			throws DynamicExtensionsSystemException, BizLogicException
-	{
-		final List < Long > entityMapIds = new ArrayList < Long >();
-		final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-		final List < EntityMap > entityMapsForStaticEntity = annotationBizLogic
-				.getListOfDynamicEntities( staticEntityId );
-		if (entityMapsForStaticEntity != null)
-		{
-			EntityMap entityMap = null;
-			final Iterator < EntityMap > iter = entityMapsForStaticEntity.iterator();
-			while (iter.hasNext())
-			{
-				entityMap = iter.next();
-				if (entityMap != null)
-				{
-					entityMapIds.add( entityMap.getId() );
-				}
-			}
-		}
-		return entityMapIds;
-	}*/
 
 	/**
 	 * @param entityId
@@ -1072,11 +850,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		final EntityManagerInterface entityManager = EntityManager.getInstance();
 		final List < Long > annotationIds = new ArrayList < Long >();
 		final StringBuffer definedAnnotationsXML = new StringBuffer();
-		definedAnnotationsXML.append( "<?xml version='1.0' encoding='UTF-8'?>" );
-		definedAnnotationsXML.append( "<rows>" );
+		definedAnnotationsXML.append( "<?xml version='1.0' encoding='UTF-8'?><rows>" );
 		final Iterator < NameValueBean > iterator = annotationsList.iterator();
 		final List dataList = new ArrayList();
-		String addURL = null;
 		NameValueBean entityBean = null;
 		//List < EntityMapRecord > entityMapRecords = null;
 		List < AbstractRecordEntry > entityMapRecords = null;
@@ -1089,10 +865,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		while (iterator.hasNext())
 		{
 			final List innerList = new ArrayList();
-			String entityGroupName = null;
-			int numRecord = 0;
 			entityBean = iterator.next();
-			List < Long > recordIds = null;
 			if (entityBean != null)
 			{
 				final String entityName = entityBean.getName();
@@ -1100,9 +873,9 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 
 				// entityGroupName =
 				// entityManager.getEntityGroupNameByEntityName(entityName);
-				entityGroupName = entityManager.getEntityGroupNameByEntityName( entityName, Long
+				String entityGroupName = entityManager.getEntityGroupNameByEntityName( entityName, Long
 						.valueOf( entityId ) );
-				addURL = "<a href='#' name='"
+				String addURL = "<a href='#' name='"
 						+ entityId
 						+ "' onClick='loadDynExtDataEntryPage(event);' style='cursor:pointer;' id='selectedAnnotation'>Add</a>";
 
@@ -1110,9 +883,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				{
 					entityGroupName = edu.wustl.catissuecore.util.global.Constants.DOUBLE_QUOTES;
 				}
-				final String entName = getFormattedStringForCapitalization( entityName );
-				recordIds = this.getRecordCountForEntity( entityId.toString(), entityMapRecords );
-				numRecord = recordIds.size();
+				final String entName = getFormattedStringForCapitalization(entityName);
+				List<Long> recordIds = this.getRecordCountForEntity(entityId.toString(),
+						entityMapRecords);
+				int numRecord = recordIds.size();
 				definedAnnotationsXML.append( "<row id='" + entityId.toString() + "' >" );
 				definedAnnotationsXML.append( AnnotationConstants.CELL_START );
 				definedAnnotationsXML.append( entityGroupName );
@@ -1201,12 +975,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		if (entityMapRecords != null)
 		{
 			final Iterator < AbstractRecordEntry > iter = entityMapRecords.iterator();
-			AbstractRecordEntry recordEntry = null;
+			//AbstractRecordEntry recordEntry = null;
 			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 
 			while (iter.hasNext())
 			{
-				recordEntry = iter.next();
+				AbstractRecordEntry recordEntry = iter.next();
 
 				if (recordEntry != null)
 				{
@@ -1252,7 +1026,6 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		final String datePattern = CommonServiceLocator.getInstance().getDatePattern();
 		//List < EntityMapRecord > entityMapRecords = null;
 		List < AbstractRecordEntry > entityMapRecords = null;
-		String editURL = null;
 		if (staticEntityId != null)
 		{
 			//entityMapRecords = this.getEntityMapRecords( staticEntityId, staticEntityRecordId );
@@ -1296,7 +1069,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 						{
 							creator = creator.replace( ",", "-" );
 						}
-						editURL = "<a href='/catissuecore/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="
+						String editURL = "<a href='/catissuecore/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="
 								+ selectedFormId
 								+ "&selectedStaticEntityId="
 								+ staticEntityId
@@ -1365,16 +1138,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		Long recEntryId = annotationBizLogic.getRecordEntryId(request,
 				dynExtRecordId, dynEntContainerId);
 
-		String staticEntityId = (String) request.getSession().getAttribute(
-				AnnotationConstants.SELECTED_STATIC_ENTITYID);
-
-		String staticEntityName = (String) request.getSession().getAttribute("staticEntityName");
-
-		String selectedStaticEntityRecordId = (String) request.getSession().getAttribute(
-				AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-
 		if(recEntryId == null)
 		{
+			String staticEntityName = (String) request.getSession().getAttribute("staticEntityName");
+			String selectedStaticEntityRecordId = (String) request.getSession().getAttribute(
+					AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
 			AbstractRecordEntry abstractRecordEntry = createRecordEntry(staticEntityName,
 					selectedStaticEntityRecordId);
 			abstractRecordEntry.setActivityStatus("Active");
@@ -1403,6 +1171,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			annotationBizLogic.insert(abstractRecordEntry);
 			AnnotationBizLogic annoBizLogic = new AnnotationBizLogic();
 			Long recordEntryId = abstractRecordEntry.getId();
+
+			String staticEntityId = (String) request.getSession().getAttribute(
+					AnnotationConstants.SELECTED_STATIC_ENTITYID);
+
 			annoBizLogic.associateRecords(Long.valueOf(dynEntContainerId), recordEntryId, Long
 					.valueOf(dynExtRecordId), Long.valueOf(staticEntityId));
 		}
