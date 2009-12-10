@@ -66,6 +66,7 @@
 								}
 							%>
 							<html:hidden property="<%=specimenList%>" />
+                            <html:hidden property="orderedString" />
 							<%=commaString%><label for="type">
 								<bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" />
 							</label>
