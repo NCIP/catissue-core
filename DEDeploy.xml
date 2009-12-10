@@ -402,6 +402,26 @@
 		</replace>
 	</target>
 
+	<target name="reset_record_entry_sequence">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+			<classpath>
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${oracle.dbupgrade.sql.dir.DE}/reset_record_entry_seq.sql" />
+			<transaction>commit;</transaction>
+		</sql>
+	</target>
 
 	<target name="reset_DE_sequences">
 		<delete dir="${de.temp.dir}" failonerror="no" />
