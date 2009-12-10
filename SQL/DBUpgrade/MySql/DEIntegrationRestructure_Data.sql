@@ -27,7 +27,7 @@ insert into dyextn_abstract_form_context (form_label,container_id,hide_form)
 left join DYEXTN_ENTITY_MAP_CONDNS cond on cond.form_context_id=fc.identifier
 where fc.entity_map_id=em.identifier and fc.identifier not in
 (select fc1.identifier from dyextn_form_context fc1 join DYEXTN_ENTITY_MAP_CONDNS cond1 on
-cond1.form_context_id=fc1.identifier ))
+cond1.form_context_id=fc1.identifier ));
 
 insert into catissue_study_form_context (identifier)
 (select identifier from dyextn_abstract_form_context);
