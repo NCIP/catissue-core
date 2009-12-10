@@ -3759,9 +3759,9 @@ Thanking You,
 			</fileset>
 		</delete>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-		<unzip src="${base.dir}/dynamicextensions.zip" dest="${temp.dir}/catissuecore" overwrite="true" />
-		<unjar src="${temp.dir}/catissuecore/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
-		<copy file="${temp.dir}/catissuecore/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		<unzip src="${base.dir}/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+		<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
+		<copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 		<copy file="${base.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 
