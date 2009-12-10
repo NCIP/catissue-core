@@ -1738,7 +1738,7 @@
 			</else>
 		</if>
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
-	<!--	<antcall target="upgrade_de_integration_restructure_data"/>  -->
+		<antcall target="upgrade_de_integration_restructure_data"/>
 	</target>
 
 
@@ -1795,7 +1795,6 @@
 			<echo message="Upgrading MySQL Database." />
 			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
-				<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />
 				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">
@@ -2001,7 +2000,7 @@
 	</target>
 
 	<target name="upgrade_de_integration_restructure_metadata_mysql">
-	<echo message="Updating DE integration metadata for Query (mysql)....." />
+	<echo message="Updating DE integration metadata (mysql)....." />
 
 	<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 		<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />
@@ -2028,12 +2027,10 @@
 		<arg value="${database.username}"/>
 		<arg value="${database.password}"/>
 		<arg value="com.mysql.jdbc.Driver"/>
-
-		<!-- <arg value="${mysql.driver.string}"/> -->
 	</java>
-	<!-- <antcall target="reset_DE_sequences" />  -->
+
 	<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
-		<transaction src="${dbupgrade.sql.dir}/Common/DEIntegrationRestructure_Data.sql" />
+		<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure_Data.sql" />
 		<transaction>commit;</transaction>
 		<classpath>
 			<fileset dir="${lib.dir}">
@@ -2044,7 +2041,7 @@
 	</target>
 
 	<target name="upgrade_de_integration_restructure_metadata_oracle">
-		<echo message="Updating DE integration metadata for Query (oracle)....." />
+		<echo message="Updating DE integration metadata (oracle)....." />
 
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddDEIntegrationMetadata" fork="true" maxmemory="1024M" failonerror="true">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2061,12 +2058,10 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
-
-			<!-- <arg value="${mysql.driver.string}"/> -->
 		</java>
 		<antcall target="reset_DE_sequences" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-			<transaction src="${dbupgrade.sql.dir}/Common/DEIntegrationRestructure_Data.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure_Data.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -2078,7 +2073,7 @@
 
 	<target name="upgrade_de_integration_restructure_data" depends="commondbconfig">
 
-		<echo message="Updating DE integration metadata Data(mysql)....." />
+		<echo message="Updating data as per restructured DE integration....." />
 
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -2113,8 +2108,6 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="com.mysql.jdbc.Driver"/>
-
-			<!-- <arg value="${mysql.driver.string}"/> -->
 		</java>
 	</target>
 
@@ -2134,9 +2127,8 @@
 			<arg value="${database.username}"/>
 			<arg value="${database.password}"/>
 			<arg value="${oracle.driver.string}"/>
-
-			<!-- <arg value="${mysql.driver.string}"/> -->
 		</java>
+		<antcall target="reset_record_entry_sequence"></antcall>
 	</target>
 
 	<!-- End : DE Integration Restructure for p5 -->
