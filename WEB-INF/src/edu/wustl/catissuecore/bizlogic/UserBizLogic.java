@@ -198,9 +198,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 				user.getPasswordCollection().add(password);
 
-				this.logger.debug("password stored in passwore table");
-
-				// user.setPassword(csmUser.getPassword());            
+				logger.debug("password stored in passwore table");
 			}
 
 			/**

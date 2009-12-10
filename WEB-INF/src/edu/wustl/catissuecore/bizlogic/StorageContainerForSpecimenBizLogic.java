@@ -1,0 +1,254 @@
+package edu.wustl.catissuecore.bizlogic;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+
+
+public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizLogic
+{
+	
+	/**
+	 * Logger object.
+	 */
+	private static final transient Logger logger = Logger.getCommonLogger(StorageContainerForContainerBizLogic.class);
+	private static final boolean IS_CP_UNIQUE = true;
+	private static final boolean IS_SPCLASS_UNIQUE = true;
+	private static final boolean IS_CP_NONUNIQUE = false;
+	private static final boolean IS_SPCLASS_NONUNQ = false;
+	/**
+	 * @param parameterList - consists of cpId, specimen class
+	 * @param sessionData - SessionDataBean object
+	 * @param jdbcDAO - JDBCDAO object
+	 * @return TreeMap of Allocated Containers
+	 * @throws BizLogicException throws BizLogicException
+	 * @throws DAOException throws DAOException
+	 */
+	public TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>> 
+			getAllocatedContainerMapForSpecimen(final List<Object> parameterList, 
+			final SessionDataBean sessionData, final DAO dao)
+			throws BizLogicException
+	{
+		try
+		{
+			parameterList.add(sessionData);
+			final String[] queries = this.getStorageContainerForSpecimenQuery(parameterList);
+			final List<?> containerList = this.getStorageContainerList(null,queries);
+			return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
+			this.getAllocDetailsForContainers(containerList, dao);
+		}
+		catch (final ApplicationException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+	}
+	
+	/**
+	 * Gets the query array for Specimen Storage Containers
+	 * @param cpId
+	 * @param spClass
+	 * @param aliquotCount
+	 * @param sessionData
+	 * @return
+	 */
+	protected String[] getStorageContainerForSpecimenQuery(final List<Object> parameterList)
+	{
+		// Containers allowing Only this CP and Specimen Class
+		final String query0 = this.createSCQuery(parameterList, IS_CP_UNIQUE, IS_SPCLASS_UNIQUE);
+		// Containers allowing Only this CP but other Specimen Classes also
+		final String query1 = this.createSCQuery(parameterList, IS_CP_UNIQUE, IS_SPCLASS_NONUNQ);
+		// Containers no CP restriction and just this Specimen Class
+		final String query2 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNIQUE);
+		// Containers allowing Other CPs also but just this Specimen Class
+		final String query3 = this.createSCQuery(parameterList, IS_CP_NONUNIQUE, IS_SPCLASS_UNIQUE);
+		// Containers allowing Others CPs also and other Specimen Classes too
+		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNIQUE, IS_SPCLASS_NONUNQ);
+		//Containers allowing any CP and other Specimen Classes too
+		final String query5 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ);
+		//Containers allowing any CP and any Specimen Class
+		final String query6 = this.createSCQuery(parameterList,	null, null);
+		return new String[]{query0, query1, query2, query3, query4, query5, query6};
+	}
+
+	/**
+	 * Forms a Query to get the Storage Container list
+	 * @param cpId - Collection Protocol Id
+	 * @param spClass - Specimen Class
+	 * @param aliquotCount - Number of aliquotes that the fetched containers 
+	 * should minimally support. A value of <b>0</b> specifies that there's
+	 * no such restriction
+	 * @param siteId - Site Id
+	 * @return query string
+	 */
+	private String createSCQuery(final List<Object> parameterList,
+			final Boolean isCPUnique, final Boolean isSPClassUnique)
+	{
+		final long cpId = (Long)parameterList.get(0);
+		final String spClass = (String)parameterList.get(1);
+		final int aliquotCount = (Integer)parameterList.get(2);
+		final SessionDataBean sessionData = (SessionDataBean)parameterList.get(3);
+		final Long userId = sessionData.getUserId();
+		final boolean isAdmin = sessionData.isAdmin();
+		final StringBuilder scQuery = new StringBuilder();
+		scQuery
+				.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*)  AVAILABLE_SLOTS ");
+		scQuery
+				.append(" FROM"
+						+ " (SELECT D.IDENTIFIER,D.NAME,F.ONE_DIMENSION_CAPACITY, F.TWO_DIMENSION_CAPACITY,(F.ONE_DIMENSION_CAPACITY * F.TWO_DIMENSION_CAPACITY)  CAPACITY");
+		scQuery
+				.append(" FROM CATISSUE_CAPACITY F JOIN CATISSUE_CONTAINER D  ON F.IDENTIFIER = D.CAPACITY_ID");
+		scQuery
+				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON D.IDENTIFIER = K.CONTAINER_ID ");
+		scQuery.append(" LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER C ON D.IDENTIFIER = C.IDENTIFIER ");
+		scQuery.append(" LEFT OUTER JOIN CATISSUE_SITE L ON C.SITE_ID = L.IDENTIFIER ");
+		if (isCPUnique != null) //DO not join on CP if there is no restriction on CP. i.e isCPUnique=null 
+		{
+			scQuery
+					.append(" LEFT OUTER JOIN CATISSUE_ST_CONT_COLL_PROT_REL A ON A.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+		}
+		if (isSPClassUnique != null) //DO not join on SP CLS if there is no restriction on SP CLS. i.e isSPClassUnique=null
+		{
+			scQuery
+					.append(" LEFT OUTER JOIN CATISSUE_STOR_CONT_SPEC_CLASS B ON B.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+		}
+		scQuery.append(" WHERE ");
+		if (isCPUnique != null)
+		{
+			scQuery.append(" A.COLLECTION_PROTOCOL_ID = ");
+			scQuery.append(cpId);
+			scQuery.append(" AND ");
+		}
+		if (isSPClassUnique != null)
+		{
+			scQuery.append("  B.SPECIMEN_CLASS = '");
+			scQuery.append(spClass);
+			scQuery.append("'");
+			scQuery.append(" AND ");
+		}
+		if (!isAdmin)
+		{
+			scQuery.append(" C.SITE_ID IN (SELECT M.SITE_ID FROM  ");
+			scQuery.append(" CATISSUE_SITE_USERS M WHERE M.USER_ID = ");
+			scQuery.append(userId);
+			scQuery.append(" ) ");
+			scQuery.append(" AND ");
+		}
+		scQuery.append("  L.ACTIVITY_STATUS = 'Active' and D.ACTIVITY_STATUS='Active' and D.CONT_FULL=0 "); //Added cont_full condition by Preeti
+		scQuery.append(") VIEW1  ");
+		scQuery.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
+		scQuery.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
+		scQuery.append(" VIEW1.TWO_DIMENSION_CAPACITY, ");
+		scQuery.append(" VIEW1.CAPACITY ");
+		if (aliquotCount > 0)
+		{
+			scQuery.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >=  ");
+			scQuery.append(aliquotCount);
+		}
+		else
+		{
+			scQuery.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) > 0  ");
+		}
+		scQuery.append(this.getStorageContainerCPQuery(isCPUnique));
+		scQuery.append(this.getStorageContainerSPClassQuery(isSPClassUnique));
+		scQuery.append(" ORDER BY VIEW1.IDENTIFIER ");
+		logger.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
+				"createSCQuery() query ", scQuery));
+		return scQuery.toString();
+	}
+
+	/**
+	 * Gets the restriction query for Containers for Collection Protocol
+	 * @param isUnique - Specifies the kind of restriction where:
+	 * <li><strong>true</strong> implies that the container should allow only one CP</li>
+	 * <li><strong>false</strong> implies that the container allows more than one CPs</li>
+	 * @return the query string
+	 */
+	private String getStorageContainerCPQuery(final Boolean isUnique)
+	{
+		String scCpQuery;
+		final String SC_CP_TABLE_NAME = "CATISSUE_ST_CONT_COLL_PROT_REL";
+		if (isUnique == null) //No restrictions on CP. Any CP condition
+		{
+			final StringBuilder scCPQuery = new StringBuilder();
+			scCPQuery.append(" AND VIEW1.IDENTIFIER NOT IN ");
+			scCPQuery.append(" ( ");
+			scCPQuery.append(" SELECT t2.STORAGE_CONTAINER_ID FROM " + SC_CP_TABLE_NAME + " t2 ");
+			scCPQuery.append(" ) ");
+			scCpQuery = scCPQuery.toString();
+		}
+		else
+		{
+			scCpQuery = this.getSCBaseRestrictionQuery(SC_CP_TABLE_NAME, isUnique);
+		}
+		return scCpQuery;
+	}
+
+	/**
+	 * Generates the base container restriction string 
+	 * This allows for selection of Containers that allow Single/Multiple CPs,
+	 * as well as Containers that allow Single/Multiple Specimen Classes
+	 * @param tableName - the table name to apply the restriction on
+	 * @param isUnique - specifies the multiplicity of the restriction
+	 * @return the base query string
+	 */
+	private String getSCBaseRestrictionQuery(final String tableName, final boolean isUnique)
+	{
+		final StringBuilder scBaseRestQuery = new StringBuilder();
+		scBaseRestQuery.append(" AND  ");
+		scBaseRestQuery.append(" (( ");
+		scBaseRestQuery.append(" SELECT COUNT(*) ");
+		scBaseRestQuery.append(" FROM ");
+		scBaseRestQuery.append(tableName);
+		scBaseRestQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER )");
+		if (isUnique)
+		{
+			scBaseRestQuery.append(" = 1 ");
+		}
+		else
+		{
+			scBaseRestQuery.append(" >1 ");
+		}
+		scBaseRestQuery.append(" ) ");
+		return scBaseRestQuery.toString();
+	}
+
+	/**
+	 * Gets the restriction query for Containers for Specimen Class
+	 * @param isUnique - Specifies the kind of restriction where:
+	 * <li><strong>true</strong> implies that the container should allow only one type of Specimen</li>
+	 * <li><strong>false</strong> implies that the container allows more than type of Specimens</li>
+	 * @return the query string
+	 */
+	private String getStorageContainerSPClassQuery(final Boolean isUnique)
+	{
+		String scCPClass;
+		final String SC_SP_TABLE_NAME = "CATISSUE_STOR_CONT_SPEC_CLASS";
+		if (isUnique == null) //No restrictions on CP. Any CP condition
+		{
+			final StringBuilder scSPQuery = new StringBuilder();
+			scSPQuery.append(" AND ");
+			scSPQuery.append(" ( ");
+			scSPQuery.append(" SELECT COUNT(*) FROM ");
+			scSPQuery.append(SC_SP_TABLE_NAME);
+			scSPQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
+			scSPQuery.append(" ) ");
+			scSPQuery.append(" =4 "); //No restriction on specimen class means it can store any of the 4 specimen classes
+			scCPClass = scSPQuery.toString();
+		}
+		else
+		{
+			scCPClass = this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_CLASS", isUnique);
+		}
+		return scCPClass;
+	}
+}

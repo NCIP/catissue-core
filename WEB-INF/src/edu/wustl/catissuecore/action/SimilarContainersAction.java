@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Site;
@@ -354,31 +355,15 @@ public class SimilarContainersAction extends SecureAction
 
 			similarContainersForm.setSiteName(siteName);
 			similarContainersForm.setSiteId(siteId);
-			// request.setAttribute("siteName", siteName);
-			// request.setAttribute("siteId", new Long(siteId));
-
-			// code to set Max(IDENTIFIER) in storage container table
-			// used for suffixing Unique numbers to auto-generated container
-			// name
-			/*
-			 * by falguni long maxId = bizLogic.getNextContainerNumber();
-			 * request.setAttribute(Constants.MAX_IDENTIFIER,
-			 * Long.toString(maxId)); request.setAttribute("ContainerNumber",
-			 * new Long(maxId).toString());
-			 */
 			if ("Auto".equals(selectedParentContainer))
 			{
 				similarContainersForm.setSelectedContainerName(null);
 			}
-			final TreeMap containerMap = bizLogic.getAllocatedContainerMapForContainer(new Long(
-					request.getParameter("typeId")).longValue(), exceedingMaxLimit,
-					similarContainersForm.getSelectedContainerName(), sessionDataBean, dao, similarContainersForm.getParentContainerSelected());
-
-			/*
-			 * Map containerMap1 =
-			 * bizLogic.getAllocatedContaienrMapForContainer(new Long(request
-			 * .getParameter("typeId")).longValue());
-			 */
+			final StorageContainerForContainerBizLogic scBiz = new StorageContainerForContainerBizLogic();
+			final TreeMap containerMap = scBiz.getAllocatedContainerMapForContainer(new Long(
+					request.getParameter("typeId")).longValue(), 
+					sessionDataBean, dao, 
+					similarContainersForm.getParentContainerSelected());
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			// request.setAttribute("siteForParentList", siteList1);

@@ -26,7 +26,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayAliquotsBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -37,7 +37,6 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
@@ -78,19 +77,13 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			dao = AppUtility.openDAOSession(sessionDataBean);
 			final SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 			pageOf = request.getParameter(Constants.PAGE_OF);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			final StorageContainerForSpArrayBizLogic bizLogic = new  StorageContainerForSpArrayBizLogic();
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
-			// Bean List for the dropdown for the storage location
 			final List<NameValueBean> storagePositionListForSpecimenArrayAliquot = AppUtility
 					.getStoragePositionTypeListForTransferEvent();
 			request.setAttribute("storagePositionListForSpecimenArrayAliquot",
 					storagePositionListForSpecimenArrayAliquot);
-			// boolean to indicate whether the suitable containers to be shown in
-			// dropdown
-			// is exceeding the max limit.
 			final String exceedingMaxLimit = "false";
 			if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 			{
@@ -109,8 +102,6 @@ public class SpecimenArrayAliquotAction extends SecureAction
 			}
 			else if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("create"))
 			{
-				// arePropertiesChanged is used to identify if any of label/barcode,
-				// aliquot count are changed
 				boolean arePropertiesChanged = false;
 				final Map tempAliquotMap = (HashMap) request.getSession().getAttribute(
 						"tempAliquotMap");
@@ -171,7 +162,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 					containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(
-							id.longValue(), 0, sessionData, exceedingMaxLimit, dao);
+							id.longValue(), sessionData, dao);
 					this.populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGE_OF,
@@ -264,7 +255,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 								.getAliquotCount());
 						final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 						containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(id
-								.longValue(), 0, sessionData, exceedingMaxLimit, dao);
+								.longValue(), sessionData, dao);
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);
 

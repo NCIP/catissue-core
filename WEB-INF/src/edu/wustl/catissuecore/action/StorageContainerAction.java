@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.StorageContainerBean;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -118,9 +119,7 @@ public class StorageContainerAction extends SecureAction
 			}
 			this.setRequestAttributes(request, storageContainerForm, dao);
 			this.setStorageType(request, storageContainerForm, session);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			final StorageContainerForContainerBizLogic bizLogic = new StorageContainerForContainerBizLogic();
 			final SiteBizLogic siteBizLogic = new SiteBizLogic();
 			if (isContainerChanged != null && isContainerChanged.equals("true"))
 			{
@@ -180,7 +179,7 @@ public class StorageContainerAction extends SecureAction
 			{
 				final long start = System.currentTimeMillis();
 				containerMap = bizLogic.getAllocatedContainerMapForContainer(storageContainerForm
-						.getTypeId(), exceedingMaxLimit, null, sessionDataBean, dao,storageContainerForm.getParentContainerSelected() );
+						.getTypeId(), sessionDataBean, dao,storageContainerForm.getParentContainerSelected() );
 				final long end = System.currentTimeMillis();
 
 				System.out.println("Time taken for getAllocatedMapForCOntainer:" + (end - start));
@@ -196,7 +195,7 @@ public class StorageContainerAction extends SecureAction
 					final Long typeId = storageType.getId();
 					final long start = System.currentTimeMillis();
 					containerMap = bizLogic.getAllocatedContainerMapForContainer(typeId,
-							exceedingMaxLimit, null, sessionDataBean, dao,storageContainerForm.getParentContainerSelected());
+					sessionDataBean, dao,storageContainerForm.getParentContainerSelected());
 					final long end = System.currentTimeMillis();
 					System.out.println("Time taken for getAllocatedMapForCOntainer:"
 							+ (end - start));
@@ -225,24 +224,12 @@ public class StorageContainerAction extends SecureAction
 				request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 				this.setParentStorageContainersForEdit(containerMap, storageContainerForm, request,
 						dao);
-
-				// request =
-				//Utility.setCollectionProtocolList(request,storageContainerForm
-				// .getSiteId());
 			}
 
 			request.setAttribute("storageContainerIdentifier", storageContainerForm.getId());
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-
-			/*
-			 * if (isSiteOrParentContainerChange) {
-			 * onSiteOrParentContChange(request, response,storageContainerForm);
-			 * return null; }
-			 */
-
 			this.setFormAttributesForAddNew(request, storageContainerForm);
-			// -- 24-Jan-06 end
 			if (isTypeChange || request.getAttribute(Constants.SUBMITTED_FOR) != null
 					|| Constants.YES.equals(isPageFromStorageType))
 			{
@@ -254,8 +241,6 @@ public class StorageContainerAction extends SecureAction
 				final long[] collectionIds = this.parentContChange(request);
 				storageContainerForm.setCollectionIds(collectionIds);
 			}
-
-			// ---------- Add new
 			final String reqPath = request.getParameter(Constants.REQ_PATH);
 
 			if (reqPath != null)

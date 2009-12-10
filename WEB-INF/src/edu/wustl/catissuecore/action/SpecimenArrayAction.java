@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -196,12 +197,7 @@ public class SpecimenArrayAction extends SecureAction
 					specimenArrayForm.setCreateSpecimenArray("yes");
 					request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,
 							this.createSpecimenArrayMap(specimenArrayForm));
-					// request.getSession().setAttribute(Constants.
-					// SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
 				}
-				// else if
-				// ((subOperation.equalsIgnoreCase("CreateSpecimenArray"))
-				// || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
 				else if (subOperation.equalsIgnoreCase("CreateSpecimenArray"))
 				{
 					specimenArrayForm.setCreateSpecimenArray("yes");
@@ -210,10 +206,9 @@ public class SpecimenArrayAction extends SecureAction
 				}
 				specimenArrayForm.setSubOperation("");
 			}
-			final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			final StorageContainerForSpArrayBizLogic storageContainerBizLogic = new StorageContainerForSpArrayBizLogic();
 			containerMap = storageContainerBizLogic.getAllocatedContainerMapForSpecimenArray(
-					specimenArrayForm.getSpecimenArrayTypeId(), 0, sessionData, exceedingMaxLimit,
+					specimenArrayForm.getSpecimenArrayTypeId(), sessionData,
 					dao);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);

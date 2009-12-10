@@ -34,7 +34,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bean.ExternalIdentifierBean;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -47,8 +47,6 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -229,7 +227,6 @@ public class CreateSpecimenAction extends SecureAction
 						}
 
 						final String[] selectColumnName = {Constants.COLUMN_NAME_SCG_ID};
-						final String[] whereColumnCondition = {"="};
 						final QueryWhereClause queryWhereClause = new QueryWhereClause(
 								Specimen.class.getName());
 						queryWhereClause.addCondition(new EqualClause(columnName, columnValue));
@@ -258,12 +255,9 @@ public class CreateSpecimenAction extends SecureAction
 									&& createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
 							{
 
-								final IFactory factory = AbstractFactoryConfig.getInstance()
-										.getBizLogicFactory();
-								final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
-										.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-								containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
-										spClass, 0, exceedingMaxLimit, sessionData, dao);
+								final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
+								containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,spClass,0),
+								sessionData, dao);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);
 								if (containerMap.isEmpty())

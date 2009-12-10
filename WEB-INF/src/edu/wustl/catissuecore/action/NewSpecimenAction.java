@@ -41,7 +41,7 @@ import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -64,7 +64,6 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -132,7 +131,6 @@ public class NewSpecimenAction extends SecureAction
 				return mapping.findForward(pageOf);
 			}
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final IBizLogic bizLogicObj = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			final NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory
 					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
@@ -589,8 +587,7 @@ public class NewSpecimenAction extends SecureAction
 				this.setDateParameters(specimenForm);
 			}
 			// ---- chetan 15-06-06 ----
-			final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+			final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
 			TreeMap containerMap = new TreeMap();
 			List initialValues = null;
 
@@ -606,14 +603,6 @@ public class NewSpecimenAction extends SecureAction
 					 * By getting instance of AbstractSpecimenGenerator abstract
 					 * class current label retrived and set.
 					 */
-					// SpecimenLabelGenerator spLblGenerator =
-					// SpecimenLabelGeneratorFactory.getInstance();
-					// Map inputMap = new HashMap();
-					// inputMap.put(Constants.SCG_NAME_KEY,
-					// specimenCollectionGroupName);
-					// String specimenLabel=
-					// spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
-					// specimenForm.setLabel(specimenLabel);
 				}
 
 				if (specimenForm.getSpecimenCollectionGroupName() != null
@@ -626,8 +615,6 @@ public class NewSpecimenAction extends SecureAction
 							.getSpecimenCollectionGroupName(), dao);
 					if (spCollGroupList != null && !spCollGroupList.isEmpty())
 					{
-						// Object []spCollGroup = (Object[]) spCollGroupList
-						// .get(0);
 						final long cpId = ((Long) spCollGroupList.get(0)).longValue();
 						final String spClass = specimenForm.getClassName();
 						this.logger.info("cpId :" + cpId + "spClass:" + spClass);
@@ -639,15 +626,8 @@ public class NewSpecimenAction extends SecureAction
 
 						if (specimenForm.getStContSelection() == 2)
 						{
-							// Logger.out.debug(
-							// "calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---"
-							// );
-
-							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
-									spClass, 0, exceedingMaxLimit, sessionData, dao);
-							// Logger.out.debug(
-							// "exceedingMaxLimit in action for Boolean:"
-							// +exceedingMaxLimit);
+							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen
+							(AppUtility.setparameterList(cpId,spClass,0), sessionData, dao);
 							this.logger
 									.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request
@@ -761,18 +741,16 @@ public class NewSpecimenAction extends SecureAction
 
 							final long cpId = ((Long) spCollGroupList.get(0)).longValue();
 							final String spClass = specimenForm.getClassName();
-							Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+							logger.info("cpId :" + cpId + "spClass:" + spClass);
 							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 							{
 								specimenForm.setVirtuallyLocated(false);
 							}
-
-							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
-									spClass, 0, exceedingMaxLimit, sessionData, dao);
-
-							Logger.out
-									.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+							
+							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.
+								setparameterList(cpId,spClass,0), sessionData, dao);
+							logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request
 									.getAttribute(Globals.ERROR_KEY);
 							if (containerMap.isEmpty())

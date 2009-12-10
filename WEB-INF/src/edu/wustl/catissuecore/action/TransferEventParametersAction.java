@@ -27,7 +27,7 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -36,8 +36,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.DAO;
@@ -72,13 +70,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);
 
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
-				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
 		TreeMap containerMap = new TreeMap();
-		// boolean to indicate whether the suitable containers to be shown in
-		// dropdown
-		// is exceeding the max limit.
 		final String exceedingMaxLimit = "false";
 		List initialValues = null;
 
@@ -120,11 +113,6 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				this.logger.debug("\t\t*******************************SpecimenID : " + identifier);
 				final Object object = dao.retrieveById(Specimen.class.getName(), new Long(
 						identifier));
-
-				// ---- chetan 15-06-06 ----
-
-				// -------------------------
-
 				if (object != null)
 				{
 
@@ -137,10 +125,6 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 						String positionTwo = null;
 						String storageContainerID = null;
 						String fromPositionData = "virtual Location";
-
-						// Ashish - 7/6/06 - Retriving Storage container for
-						// performance improvement.
-						// String sourceObjectName = Specimen.class.getName();
 						final Long id = specimen.getId();
 						final String attributeName = "specimenPosition.storageContainer";
 						final List stContainerList = dao.retrieveAttribute(Specimen.class, "id",
@@ -178,29 +162,19 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 						// POSITION 2
 						request.setAttribute(Constants.POS_TWO, positionTwo);
-
-						// storagecontainer info
 						request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
-
-						// Ashish --- 5th June 07 --- retriving cp object when
-						// lazy
-						// = true. for performance improvement
 						final Long collectionProtocolId = this.getCollectionProtocolId(specimen
 								.getId());
 						final long cpId = collectionProtocolId.longValue();
-						// long cpId = specimen.getSpecimenCollectionGroup().
-						// getCollectionProtocolRegistration()
-						// .getCollectionProtocol().getId().longValue();
-
 						final String className = specimen.getClassName();
 
 						this.logger.info("COllection Protocol Id :" + cpId);
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, className);
 						this.logger.info("Spcimen Class:" + className);
-
-						containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId,
-								className, 0, exceedingMaxLimit, sessionData, dao);
+						containerMap = scbizLogic.
+						getAllocatedContainerMapForSpecimen(
+						AppUtility.setparameterList(cpId,className,0), sessionData, dao);
 						initialValues = this.setInitialValue(request, transferEventParametersForm,
 								containerMap);
 					}

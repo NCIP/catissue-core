@@ -9,15 +9,12 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -142,15 +139,12 @@ public class SpecimenAutoStorageContainer {
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
 			String className, SessionDataBean bean, Long collectionProtocolId ,DAO dao) throws ApplicationException
 	{
-		
 			Map containerMap;
 			try {
-				IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
+				StorageContainerForSpecimenBizLogic bizLogic =
+					new StorageContainerForSpecimenBizLogic();
 				containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
-						collectionProtocolId.longValue(), className, 0, "false", bean, dao);
+						AppUtility.setparameterList(collectionProtocolId.longValue(),className,0), bean, dao);
 				populateStorageLocations(specimenDataBeanList,
 						collectionProtocolId.longValue(), containerMap, bean, className);
 

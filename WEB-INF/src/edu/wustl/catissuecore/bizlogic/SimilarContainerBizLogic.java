@@ -139,9 +139,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 					{
 
 						parentContainer = (StorageContainer) object;
-
 						cont.setSite(parentContainer.getSite());
-
 					}
 
 					final IFactory factory = AbstractFactoryConfig.getInstance()
@@ -152,11 +150,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 					storageContainerBizLogic.checkContainer(dao,
 							parentContainer.getId().toString(), posOne, posTwo, sessionDataBean,
 							false, null);
-
-					// StorageContainer parentContainer = new
-					// StorageContainer();
-					// parentContainer.setId(new Long(parentId));
-
 					ContainerPosition cntPos = cont.getLocatedAtPosition();
 					if (cntPos == null)
 					{

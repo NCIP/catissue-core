@@ -354,7 +354,7 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
 
 		// Mandar : 29aug06 : to set specimenclass
-		final List specimenClassList = bizLogic.getSpecimenClassList(id);
+		final List specimenClassList = AppUtility.getSpecimenClassList(id);
 		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
 
 		final List specimenTypeList = AppUtility.getSpecimenTypeList(id);

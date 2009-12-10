@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -39,8 +39,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -805,22 +803,8 @@ public class ViewSpecimenSummaryAction extends Action
 		{
 			return;
 		}
-
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		final CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-				.get(eventId); // get nullpointer sometimes
-		final LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
-
-		/*final Iterator specItr = specimenMap.values().iterator();
-		while (specItr.hasNext())
-		{
-			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
-			if (pSpecimen.getCheckedSpecimen() == false)
-			{
-				this.unCheckChildSpecimens(pSpecimen);
-			}
-		} */
 	}
 
 	/**
@@ -876,36 +860,6 @@ public class ViewSpecimenSummaryAction extends Action
 			summaryForm.setSpecimenPrintList(printSpecimenSet);
 		}
 
-	}
-
-	// bug 11169 end
-
-	/**
-	 * @param pSpecimen
-	 *            : pSpecimen
-	 */
-	private void unCheckChildSpecimens(GenericSpecimen pSpecimen)
-	{
-		if (pSpecimen.getAliquotSpecimenCollection() != null)
-		{
-			final Iterator aliqItr = pSpecimen.getAliquotSpecimenCollection().values().iterator();
-			while (aliqItr.hasNext())
-			{
-				final GenericSpecimen aliqSpecimen = (GenericSpecimen) aliqItr.next();
-				aliqSpecimen.setCheckedSpecimen(false);
-				this.unCheckChildSpecimens(aliqSpecimen);
-			}
-		}
-		if (pSpecimen.getDeriveSpecimenCollection() != null)
-		{
-			final Iterator derItr = pSpecimen.getDeriveSpecimenCollection().values().iterator();
-			while (derItr.hasNext())
-			{
-				final GenericSpecimen derSpecimen = (GenericSpecimen) derItr.next();
-				derSpecimen.setCheckedSpecimen(false);
-				this.unCheckChildSpecimens(derSpecimen);
-			}
-		}
 	}
 
 	private Collection getSpecimenList(LinkedHashMap specimenMap, List<GenericSpecimen> allSpcimens)
@@ -970,19 +924,12 @@ public class ViewSpecimenSummaryAction extends Action
 			final String cpid = request.getParameter("cpid");
 			// List initialValues = null;
 			TreeMap containerMap = new TreeMap();
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			final String exceedingMaxLimit = new String();
-
+			final StorageContainerForSpecimenBizLogic scbizLogic = 
+			new StorageContainerForSpecimenBizLogic();
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
-			containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(cpId, className, 0,
-					exceedingMaxLimit, sessionData, dao);
-			/*
-			 * String containerName = ((NameValueBean)
-			 * (containerMap.keySet().iterator().next())) .getName();
-			 */
+			containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,className,0),
+					sessionData, dao);
 			final StringBuffer sb = new StringBuffer();
 			if (containerMap.isEmpty())
 			{
@@ -990,8 +937,6 @@ public class ViewSpecimenSummaryAction extends Action
 			}
 			else
 			{
-				// initialValues =
-				// StorageContainerUtil.checkForInitialValues(containerMap);
 				sb.append(this.checkForFreeInitialValues(containerMap, asignedPositonSet));
 				session.setAttribute("asignedPositonSet", asignedPositonSet);
 			}

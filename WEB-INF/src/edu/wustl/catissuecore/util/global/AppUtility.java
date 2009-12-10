@@ -3559,4 +3559,19 @@ public class AppUtility
 		}
 		return hasPrivilege;
 	}
+	/**
+	 * @param cpId Collection Protocol Identifier
+	 * @param spClass Specimen Class
+	 * @param aliquotCount aliquot count
+	 * @return
+	 */
+	public static List<Object> setparameterList(long cpId, String spClass, int aliquotCount)
+	{
+		List<Object> parameterList = new LinkedList<Object>();
+		parameterList.add(cpId);
+		parameterList.add(spClass);
+		parameterList.add(aliquotCount);
+		return parameterList;
+	}
+
 }

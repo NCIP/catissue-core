@@ -38,7 +38,7 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -151,29 +151,18 @@ public class AliquotAction extends SecureAction
 					.getAttribute(Constants.SESSION_DATA);
 			dao = AppUtility.openDAOSession(sessionData);
 			final AliquotForm aliquotForm = (AliquotForm) form;
-			// boolean to indicate whether the suitable containers to be shown
-			// in dropdown
-			// is exceeding the max limit.
 			final String exceedingMaxLimit = "false";
-
-			// Getting the value pageOf parameter.
-
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
-			// Map containerMap = bizLogic.getAllocatedContainerMap();
+			final StorageContainerForSpecimenBizLogic spBiz = new StorageContainerForSpecimenBizLogic();
 			TreeMap containerMap = new TreeMap();
 			int aliquotCount = 0;
 			if (aliquotForm.isAliqoutInSameContainer())
 			{
 				aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 			}
-
-			containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm.getColProtId(),
-					aliquotForm.getClassName(), aliquotCount, exceedingMaxLimit, sessionData, dao);
-
+			List<Object> parameterList = AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),aliquotCount);
+			containerMap = spBiz.getAllocatedContainerMapForSpecimen(parameterList,
+					 sessionData, dao);
 			this.populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
 
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
@@ -280,6 +269,7 @@ public class AliquotAction extends SecureAction
 					.getAttribute(Constants.SESSION_DATA);
 			dao = AppUtility.openDAOSession(sessionData);
 			final AliquotForm aliquotForm = (AliquotForm) form;
+			final StorageContainerForSpecimenBizLogic scBiz = new StorageContainerForSpecimenBizLogic();
 			// boolean to indicate whether the suitable containers to be shown
 			// in dropdown
 			// is exceeding the max limit.
@@ -291,10 +281,6 @@ public class AliquotAction extends SecureAction
 			// Extracting the values of the operation & pageOf parameters.
 			// String operation = request.getParameter(Constants.OPERATION);
 			String pageOf = request.getParameter(Constants.PAGE_OF);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
 			AppUtility.setDefaultPrinterTypeLocation(aliquotForm);
 			/**
 			 * Following code ensures that 1. Label/Barcode, Aliquot Count,
@@ -450,7 +436,10 @@ public class AliquotAction extends SecureAction
 				 * User has changed state of checkbox from checked to unchecked
 				 * or vice versa
 				 */
-
+				List<Object> parameterList = 
+				AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),Integer
+						.parseInt(aliquotForm.getNoOfAliquots()));
+				
 				if (arePropertiesChanged == true || areContainersDifferent == true
 						|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
 				{
@@ -464,16 +453,15 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 
-						containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-								.getColProtId(), aliquotForm.getClassName(), Integer
-								.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
-								sessionData, dao);
+						containerMap = scBiz.getAllocatedContainerMapForSpecimen(parameterList,
+						sessionData, dao);
 					}
 					else
 					{
-						containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-								.getColProtId(), aliquotForm.getClassName(), 0, exceedingMaxLimit,
-								sessionData, dao);
+						containerMap = scBiz.
+						getAllocatedContainerMapForSpecimen(
+						AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+						sessionData, dao);
 					}
 					this.populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -565,16 +553,15 @@ public class AliquotAction extends SecureAction
 						TreeMap containerMap = null;
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), Integer
-									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
+							containerMap = scBiz.getAllocatedContainerMapForSpecimen(parameterList,
 									sessionData, dao);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), 0,
-									exceedingMaxLimit, sessionData, dao);
+							containerMap = scBiz.
+							getAllocatedContainerMapForSpecimen(
+							AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+							sessionData, dao);
 						}
 
 						this.populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -679,17 +666,17 @@ public class AliquotAction extends SecureAction
 						final int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
-
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), Integer
-									.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,
+							containerMap = scBiz.getAllocatedContainerMapForSpecimen(AppUtility.
+									setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),Integer
+									.parseInt(aliquotForm.getNoOfAliquots())),
 									sessionData, dao);
 						}
 						else
 						{
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(aliquotForm
-									.getColProtId(), aliquotForm.getClassName(), 0,
-									exceedingMaxLimit, sessionData, dao);
+							containerMap = scBiz.
+							getAllocatedContainerMapForSpecimen(
+							AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+							sessionData, dao);
 						}
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);
@@ -1301,7 +1288,7 @@ public class AliquotAction extends SecureAction
 
 		if (form.getCheckedButton().equals("1"))
 		{
-			if (validator.isEmpty(form.getSpecimenLabel()))
+			if (Validator.isEmpty(form.getSpecimenLabel()))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("createSpecimen.parentLabel")));

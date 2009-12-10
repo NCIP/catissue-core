@@ -95,10 +95,10 @@ public final class StorageContainerUtil
 	 * @throws DAOException
 	 */
 
-	public static Map getAvailablePositionMapForNewContainer(StorageContainer container)
+	public static Map<NameValueBean, List<NameValueBean>> getAvailablePositionMapForNewContainer(StorageContainer container)
 			throws DAOException
 	{
-		final Map map = new TreeMap();
+		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
 
 		if (!container.isFull().booleanValue())
 		{
@@ -107,24 +107,19 @@ public final class StorageContainerUtil
 
 			for (int x = 1; x < dimX; x++)
 			{
-
-				final List list = new ArrayList();
-
+				final List<NameValueBean> list = new ArrayList<NameValueBean>();
 				for (int y = 1; y < dimY; y++)
 				{
 					list.add(new NameValueBean(Integer.valueOf(y), Integer.valueOf(y)));
 				}
-
 				if (!list.isEmpty())
 				{
 					final Integer xObj = Integer.valueOf(x);
 					final NameValueBean nvb = new NameValueBean(xObj, xObj);
 					map.put(nvb, list);
-
 				}
 			}
 		}
-
 		return map;
 	}
 
@@ -147,11 +142,11 @@ public final class StorageContainerUtil
 	 * @param dao
 	 * @return Map
 	 */
-	public static Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
+	public static Map<NameValueBean, List<NameValueBean>> getAvailablePositionMapForContainer(String containerId, int aliquotCount,
 			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
 			throws BizLogicException
 	{
-		final Map map = new TreeMap();
+		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
 		int count = 0;
 		final int dimX = positionDimensionOne + 1;
 		final int dimY = positionDimensionTwo + 1;
@@ -162,7 +157,7 @@ public final class StorageContainerUtil
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
 
-			final List list = new ArrayList();
+			final List<NameValueBean> list = new ArrayList<NameValueBean>();
 
 			for (int y = 1; y < availablePosistions[x].length; y++)
 			{
@@ -182,7 +177,7 @@ public final class StorageContainerUtil
 		}
 		if (count < aliquotCount)
 		{
-			return new TreeMap();
+			return new TreeMap<NameValueBean, List<NameValueBean>>();
 		}
 		return map;
 	}

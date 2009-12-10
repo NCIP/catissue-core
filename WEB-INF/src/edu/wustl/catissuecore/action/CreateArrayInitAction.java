@@ -36,7 +36,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -154,10 +154,6 @@ public class CreateArrayInitAction extends BaseAction
 					// Set Specimen Types
 					List specimenTypeList = this.setClassAndtype(specimenArrayForm,
 							specimenArrayType, dao);
-
-					// specimens ArrayList contains the id of all specimens in
-					// the
-					// given defined array.
 					/*
 					 * List definedArrayDetailsBeanList = (ArrayList)
 					 * defineArrayMap .get(definedArrayRequestBean);
@@ -231,11 +227,11 @@ public class CreateArrayInitAction extends BaseAction
 						specimenTypeList = this.setClassAndtype(specimenArrayForm, arrayType, dao);
 					}
 
-					final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
-							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-					containerMap = storageContainerBizLogic
+					final StorageContainerForSpArrayBizLogic spizLogic
+					= new StorageContainerForSpArrayBizLogic();
+					containerMap = spizLogic
 							.getAllocatedContainerMapForSpecimenArray(specimenArrayForm
-									.getSpecimenArrayTypeId(), 0, sessionData, exceedingMaxLimit,
+									.getSpecimenArrayTypeId(), sessionData,
 									dao);
 					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
@@ -246,10 +242,8 @@ public class CreateArrayInitAction extends BaseAction
 					request.setAttribute("initValues", initialValues);
 
 					break;
-				}// End
-				// if(definedArrayRequestBean.getArrayName().equals(arrayName
-				// ))
-			}// End Outer While
+				}
+			}
 			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 			specimenArrayForm.setForwardTo("orderDetails");
 		}

@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
@@ -75,8 +75,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 			shipmentReceivingForm.setAllValues(shipment);
 		}
 		Map containerMap = new TreeMap();
-		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-		.getBizLogic(edu.wustl.catissuecore.util.global.Constants.STORAGE_CONTAINER_FORM_ID);
+		final StorageContainerForSpecimenBizLogic  bizLogic = new StorageContainerForSpecimenBizLogic();
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// Uncommented due to addition of 'auto' functionality.
         // Bug 14263 
@@ -106,12 +105,15 @@ public class ShowShipmentReceivingAction extends SecureAction
 								collectionProtocolId);
 						if(!collectionProtocolId.trim().equals( "" ))
 						{
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen( Long.valueOf( collectionProtocolId ).longValue(), specimenClass, 0, "false", sessionDataBean, dao );
+							containerMap = bizLogic.
+							getAllocatedContainerMapForSpecimen
+							(AppUtility.setparameterList(Long.valueOf(collectionProtocolId ).longValue(),specimenClass,0), 
+							sessionDataBean, dao );
 						}
 					}
-					this.setContainerStorageInformation(containerMap, bizLogic, request, shipmentReceivingForm);
+					this.setContainerStorageInformation(containerMap, request, shipmentReceivingForm);
 				}
-				this.setSpecimenStorageInformation(bizLogic, containerMap, request, shipmentReceivingForm,
+				this.setSpecimenStorageInformation(containerMap, request, shipmentReceivingForm,
 						shipment);				
 			}
 			finally 
@@ -177,7 +179,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param shipmentReceivingForm form containing all values.
 	 */
 	private void setContainerStorageInformation(Map containerMap,
-			StorageContainerBizLogic bizLogic, HttpServletRequest request,
+			HttpServletRequest request,
 			ShipmentReceivingForm shipmentReceivingForm)
 	{
 
@@ -210,14 +212,9 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param request the request to be processed.
 	 * @param shipmentReceivingForm form containing all values.
 	 */
-	private void setSpecimenStorageInformation(StorageContainerBizLogic bizLogic,
-			Map containerMap, HttpServletRequest request,
+	private void setSpecimenStorageInformation(Map containerMap, HttpServletRequest request,
 			ShipmentReceivingForm shipmentReceivingForm, Shipment shipment)
 	{
-		//		For Storage Location Allocation
-		/*final Logger logger = Logger.getCommonLogger(ShowShipmentReceivingAction.class);
-		final String requestFor = request.getParameter("requestFor");*/
-		// Removing 'auto' in shipment receiving. Bug 14263
 		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		final String exceedingMaxLimit = "";
