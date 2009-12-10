@@ -2,10 +2,11 @@ package edu.wustl.catissuecore.testcase;
 
 import org.junit.Before;
 
-import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import servletunit.HttpServletRequestSimulator;
 import servletunit.struts.MockStrutsTestCase;
+import edu.wustl.catissuecore.testcase.bizlogic.CaTissueApplicationService;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 /**
  * Base test class.
  * @author sachin_lale
@@ -13,6 +14,8 @@ import servletunit.struts.MockStrutsTestCase;
  */
 public class CaTissueSuiteBaseTest extends MockStrutsTestCase
 {
+	protected static CaTissueApplicationService appService = null;
+
 	/**
 	 * Setup method called before each test case run.
 	 * @throws Exception
@@ -33,6 +36,10 @@ public class CaTissueSuiteBaseTest extends MockStrutsTestCase
 		{
 			getSession().setAttribute(Constants.SESSION_DATA,
 					CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN);
+		}
+		if (appService == null)
+		{
+			appService = new CaTissueApplicationService(); //ApplicationServiceProvider.getApplicationService();
 		}
 	}
 
