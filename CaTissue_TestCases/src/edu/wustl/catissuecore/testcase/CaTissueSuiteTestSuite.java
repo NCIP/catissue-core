@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.testcase.bizlogic.StorageContainerRestrictionsBizT
 import edu.wustl.catissuecore.testcase.bizlogic.StorageTypeBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.UserBizTestCases;
 import edu.wustl.catissuecore.testcase.collectionprotocol.CollectionProtocolTestCases;
+import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 
 /**

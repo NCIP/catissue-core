@@ -635,21 +635,21 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 
 
 
-	@Test
-	public void testCallToGetSiteList() throws BizLogicException
-	{
-		final String[] siteDisplayField = {"name"};
-		final String valueField = "id";
-		final StorageContainerBizLogic bizLogic = new StorageContainerBizLogic();
-
-		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
-				Status.ACTIVITY_STATUS_CLOSED.toString()};
-		final List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
-				1L);
-		assertNotNull(list);
-		logger.info(" ::: Site List Size ::: "+ list.size());
-
-	}
+//	@Test
+//	public void testCallToGetSiteList() throws BizLogicException
+//	{
+//		final String[] siteDisplayField = {"name"};
+//		final String valueField = "id";
+//		final StorageContainerBizLogic bizLogic = new StorageContainerBizLogic();
+//
+//		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
+//				Status.ACTIVITY_STATUS_CLOSED.toString()};
+//		final List list = bizLogic.getSiteList(siteDisplayField, valueField, activityStatusArray,
+//				1L);
+//		assertNotNull(list);
+//		logger.info(" ::: Site List Size ::: "+ list.size());
+//
+//	}
 
 	@Test
 	public void testAddBoxWithAutoOption()
