@@ -3,7 +3,8 @@ package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +48,7 @@ public class ShowChildNodes extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final PrintWriter out = response.getWriter();
-		Vector<StorageContainerTreeNode> treeNodeDataVector = new Vector<StorageContainerTreeNode>();
+		List<StorageContainerTreeNode> treeNodeDataVector = new LinkedList<StorageContainerTreeNode>();
 		StringBuffer xmlData = new StringBuffer();
 		final HttpSession session = request.getSession();
 		final String pageOf = (String) session.getAttribute("PageForTree");
@@ -79,7 +80,7 @@ public class ShowChildNodes extends BaseAction
 	 *            node that is to be transfered to jsp.
 	 * @return xmlData
 	 */
-	private StringBuffer makeXMLData(Vector<StorageContainerTreeNode> childVector,
+	private StringBuffer makeXMLData(List<StorageContainerTreeNode> childVector,
 			StringBuffer xmlData)
 	{
 		final Iterator<StorageContainerTreeNode> childItr = childVector.iterator();

@@ -548,29 +548,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			persistentobject.setNoOfContainers(newObject.getNoOfContainers());
 			persistentobject.setParentChanged(newObject.isParentChanged());
 			persistentobject.setPositionChanged(newObject.isPositionChanged());
-			if (newObject.getLocatedAtPosition() != null)
-			{
-				ContainerPosition cntPos = persistentobject.getLocatedAtPosition();
-				if (cntPos == null)
-				{
-					cntPos = new ContainerPosition();
-					persistentobject.setLocatedAtPosition(cntPos);
-				}
-				cntPos.setPositionDimensionOne(newObject.getLocatedAtPosition()
-						.getPositionDimensionOne());
-				cntPos.setPositionDimensionTwo(newObject.getLocatedAtPosition()
-						.getPositionDimensionTwo());
-				cntPos.setParentContainer(newObject.getLocatedAtPosition().getParentContainer());
-				cntPos.setOccupiedContainer(persistentobject);
-			}
+			setContPos(persistentobject, newObject);
 			persistentobject.setSimilarContainerMap(newObject.getSimilarContainerMap());
 			persistentobject.setSite(newObject.getSite());
-			if (newObject.getSpecimenPositionCollection() != null)
-			{
-				final Collection<SpecimenPosition> specPosColl = persistentobject
-						.getSpecimenPositionCollection();
-				specPosColl.addAll(newObject.getSpecimenPositionCollection());
-			}
 			persistentobject.setStartNo(newObject.getStartNo());
 			persistentobject.setStorageType(newObject.getStorageType());
 			persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
@@ -580,6 +560,35 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+		}
+	}
+	/**
+	 * Set container position.
+	 * @param persistentobject StorageContainer object
+	 * @param newObject StorageContainer object
+	 */
+	private void setContPos(StorageContainer persistentobject, StorageContainer newObject)
+	{
+		if (newObject.getLocatedAtPosition() != null)
+		{
+			ContainerPosition cntPos = persistentobject.getLocatedAtPosition();
+			if (cntPos == null)
+			{
+				cntPos = new ContainerPosition();
+				persistentobject.setLocatedAtPosition(cntPos);
+			}
+			cntPos.setPositionDimensionOne(newObject.getLocatedAtPosition()
+					.getPositionDimensionOne());
+			cntPos.setPositionDimensionTwo(newObject.getLocatedAtPosition()
+					.getPositionDimensionTwo());
+			cntPos.setParentContainer(newObject.getLocatedAtPosition().getParentContainer());
+			cntPos.setOccupiedContainer(persistentobject);
+		}
+		if (newObject.getSpecimenPositionCollection() != null)
+		{
+			final Collection<SpecimenPosition> specPosColl = persistentobject
+					.getSpecimenPositionCollection();
+			specPosColl.addAll(newObject.getSpecimenPositionCollection());
 		}
 	}
 	/**

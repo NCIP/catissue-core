@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
-
 import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -27,22 +26,22 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 */
 	private final transient Logger logger = Logger.getCommonLogger(TreeDataBizLogic.class);
 	/**
-	 * This method will add all the node into the vector that contains any
+	 * This method will add all the node into the List that contains any
 	 * container node and add a dummy container node to show [+] sign on the UI,
 	 * so that on clicking expand sign ajax call will retrieve child container
 	 * node under the site node.
 	 * @param userId - user id
-	 * @return vector of sites with dummy container
+	 * @return List of sites with dummy container
 	 * @throws ApplicationException 
 	 */
-	public Vector<StorageContainerTreeNode> getSiteWithDummyContainer(Long userId) throws ApplicationException
+	public List<StorageContainerTreeNode> getSiteWithDummyContainer(Long userId) throws ApplicationException
 	{
 		final String sql = "SELECT site.IDENTIFIER, site.NAME,COUNT(site.NAME) FROM CATISSUE_SITE "
 				+ " site join CATISSUE_STORAGE_CONTAINER sc ON sc.site_id = site.identifier join "
 				+ "CATISSUE_CONTAINER con ON con.identifier = sc.identifier WHERE con.ACTIVITY_STATUS!='Disabled' "
 				+ "GROUP BY site.IDENTIFIER, site.NAME" + " order by upper(site.NAME)";
-		final Vector<StorageContainerTreeNode> containerNodeVector = 
-			new Vector<StorageContainerTreeNode>();
+		final List<StorageContainerTreeNode> nodeList = 
+			new LinkedList<StorageContainerTreeNode>();
 		try
 		{
 			final List resultList = AppUtility.executeSQLQuery(sql);
@@ -67,10 +66,9 @@ public class TreeDataBizLogic extends DefaultBizLogic
 							nodeIdentifier, dummyNodeName, dummyNodeName);
 					dummyContainerNode.setParentNode(siteNode);
 					siteNode.getChildNodes().add(dummyContainerNode);
-					containerNodeVector.add(siteNode);
+					nodeList.add(siteNode);
 				}
 			}
-
 		}
 		catch (final DAOException daoExp)
 		{
@@ -79,7 +77,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		return containerNodeVector;
+		return nodeList;
 	}
 	
 	/**
@@ -89,16 +87,16 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 *            Name of the site or container
 	 * @param parentId
 	 *            parent identifier of the selected node
-	 * @return containerNodeVector This vector contains all the containers
+	 * @return conNodeList This List contains all the containers
 	 * @throws ApplicationException 
 	 * @Description This method will retrieve all the containers under the
 	 *              selected node
 	 */
-	public Vector<StorageContainerTreeNode> getStorageContainers(Long identifier, String nodeName,
+	public List<StorageContainerTreeNode> getStorageContainers(Long identifier, String nodeName,
 			String parentId) throws ApplicationException
 	{
 		JDBCDAO dao = null;
-		Vector<StorageContainerTreeNode> containerNodeVector = new Vector<StorageContainerTreeNode>();
+		List<StorageContainerTreeNode> conNodeList = new LinkedList<StorageContainerTreeNode>();
 		try
 		{
 			dao = AppUtility.openJDBCSession();
@@ -128,15 +126,15 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				parentContainerId = Long.valueOf((String) rowList.get(3));
 				childCount = Long.valueOf((String) rowList.get(4));
 
-				containerNodeVector = AppUtility.getTreeNodeDataVector(containerNodeVector,
+				conNodeList = AppUtility.getTreeNodeDataVector(conNodeList,
 						nodeIdentifier, containerName, activityStatus, childCount,
 						parentContainerId, nodeName);
 			}
-			if (containerNodeVector.isEmpty())
+			if (conNodeList.isEmpty())
 			{
 				final StorageContainerTreeNode containerNode = new StorageContainerTreeNode(
 						identifier, nodeName, nodeName, activityStatus);
-				containerNodeVector.add(containerNode);
+				conNodeList.add(containerNode);
 			}
 		}
 		catch (final DAOException daoExp)
@@ -158,8 +156,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				e.printStackTrace();
 			}
 		}
-
-		return containerNodeVector;
+		return conNodeList;
 	}
 	
 	/**
@@ -167,7 +164,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 *            Identifier of the container or site node
 	 * @param parentId
 	 *            Parent identifier of the selected node
-	 * @return String sql This method with return the sql depending on the node
+	 * @return String SQL This method with return the sql depending on the node
 	 *         clicked (i.e parent Node or child node)
 	 */
 	private String createSql(Long identifier, String parentId)
@@ -207,10 +204,6 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				+ "cn.ACTIVITY_STATUS!='Disabled' AND site_id=" + identifier;
 		try
 		{
-			if (dao == null)
-			{
-				dao.openSession(null);
-			}
 			storageContainerList = dao.executeQuery(query);
 			final Iterator iterator = storageContainerList.iterator();
 			while (iterator.hasNext())
@@ -246,7 +239,6 @@ public class TreeDataBizLogic extends DefaultBizLogic
 
 			}
 			parentContainerIdsBuffer.deleteCharAt(parentContainerIdsBuffer.length() - 1);
-
 			/*
 			 * This query will return child count of parent containers.
 			 */
@@ -287,7 +279,6 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				}
 				resultList.add(strorageContainerList);
 			}
-
 		}
 		catch (final DAOException daoExp)
 		{
