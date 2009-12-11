@@ -3163,11 +3163,11 @@ public class AppUtility
 	 * @Description This method will retrieve all the Tissue Sites under the
 	 *              selected node
 	 */
-	public static Vector<StorageContainerTreeNode> getTissueSiteNodes(Long identifier,
+	public static List<StorageContainerTreeNode> getTissueSiteNodes(Long identifier,
 			String nodeName, String parentId) throws ApplicationException
 	{
 		JDBCDAO dao = null;
-		Vector<StorageContainerTreeNode> tissueSiteNodeVector = new Vector<StorageContainerTreeNode>();
+		List<StorageContainerTreeNode> tissueSiteNodeVector = new LinkedList<StorageContainerTreeNode>();
 		try
 		{
 			dao = openJDBCSession();
@@ -3229,8 +3229,8 @@ public class AppUtility
 	 * @return TreeNodeDataVector by adding the new parent and child node
 	 */
 
-	public static Vector<StorageContainerTreeNode> getTreeNodeDataVector(
-			Vector<StorageContainerTreeNode> treeNodeDataVector, Long childNodeId,
+	public static List<StorageContainerTreeNode> getTreeNodeDataVector(
+			List<StorageContainerTreeNode> treeNodeDataVector, Long childNodeId,
 			String childNodeName, String activityStatus, Long childCount, Long parentNodeId,
 			String parentNodeName)
 	{
