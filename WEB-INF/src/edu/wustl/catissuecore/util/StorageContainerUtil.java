@@ -679,7 +679,14 @@ public final class StorageContainerUtil
 				final Map xDimMap = (Map) containerMap.get(containerId[i]);
 				counter = setAliquotMap(objectKey, xDimMap, containerId, noOfAliquots, counter,
 						aliquotMap, i);
-				if (counter <= Integer.parseInt(noOfAliquots))
+				//bug 15085
+				/**
+				 * changed condition from <= to == as:
+				 * If the first container contains only 1 free position and aliquot count is 2,
+				 * then 1st specimen occupies 1st position and counter increments and becomes 2.
+				 * Which is equal to aliquot count thus the 2nd specimen didn't get any position. 
+				 */
+				if (counter == Integer.parseInt(noOfAliquots))
 				{
 					i = containerId.length;
 				}
@@ -691,13 +698,17 @@ public final class StorageContainerUtil
 			String noOfAliquots, int counter, Map aliquotMap, int i)
 	{
 		objectKey = objectKey + ":";
-
 		if (!xDimMap.isEmpty())
 		{
 			final Object[] xDim = xDimMap.keySet().toArray();
 			for (int j = 0; j < xDim.length; j++)
 			{
 				final List yDimList = (List) xDimMap.get(xDim[j]);
+				//bug 15085
+				if(!(yDimList.size()>=Integer.parseInt(noOfAliquots)))
+				{
+					continue;
+				}
 				for (int k = 0; k < yDimList.size(); k++)
 				{
 					if (counter <= Integer.parseInt(noOfAliquots))
@@ -709,8 +720,8 @@ public final class StorageContainerUtil
 						aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
 						aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
 						aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
-
-						counter++;
+                        counter++;
+                        
 					}
 					else
 					{
