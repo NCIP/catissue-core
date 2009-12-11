@@ -6,10 +6,13 @@ import java.util.Map;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -220,6 +223,35 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
 
 
+	}
+	/**
+	 * Test disabled Participant
+	 */
+	@Test
+	public void testParticicpantAndDisableCollectedSpecimens()
+	{
+		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		if(specimen.getCollectionStatus().equals( "Collected" ))
+		{
+			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
+			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
+			Participant participant = cpr.getParticipant();			
+			ParticipantForm partForm = new ParticipantForm() ;
+			partForm.setFirstName(participant.getFirstName()) ;
+			partForm.setLastName(participant.getLastName()) ;
+			partForm.setGender( participant.getGender() );
+			partForm.setId( participant.getId() );
+			partForm.setRaceTypes( new String[] {"Asian"} );
+			participant.setCollectionProtocolRegistrationCollection(participant.getCollectionProtocolRegistrationCollection());
+			partForm.setActivityStatus( "Disabled" );
+			partForm.setOperation("edit") ;
+			setRequestPathInfo("/ParticipantEdit");
+			setActionForm(partForm);
+			actionPerform();
+			verifyForward("failure");
+			String errormsg[] = new String[]{"errors.item"};
+			verifyActionErrors(errormsg);
+		}
 	}
 	/**
 	 * Test Specimen Add to my List.
