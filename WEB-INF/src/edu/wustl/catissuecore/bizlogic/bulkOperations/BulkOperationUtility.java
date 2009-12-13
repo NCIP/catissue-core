@@ -2,11 +2,16 @@ package edu.wustl.catissuecore.bizlogic.bulkOperations;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import edu.wustl.bulkoperator.metadata.BulkOperationMetaData;
 import edu.wustl.bulkoperator.metadata.BulkOperationMetadataUtil;
+import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -55,8 +60,39 @@ public class BulkOperationUtility
 	 * @return BulkOperationMetaData BulkOperationMetaData.
 	 */
 	public static BulkOperationMetaData getBulkOperationMetaDataObject(String xmlFile)
+		throws Exception
 	{
 		BulkOperationMetadataUtil unMarshaller = new BulkOperationMetadataUtil();
 		return unMarshaller.unmarshall(xmlFile, "./catissuecore-properties/mapping.xml");
+	}
+	/**
+	 * Get CSV Template Column Names.
+	 * @param csvFile String.
+	 * @return List of String[].
+	 * @throws Exception Exception.
+	 */
+	public static List<String[]> getCSVTemplateColumnNames(String csvFilePath)
+		throws Exception
+	{
+		CSVReader csvReader = null;
+ 		List<String[]> csvDataList = null;
+		try
+		{
+			csvReader = new CSVReader(new FileReader(csvFilePath));
+			csvDataList = csvReader.readAll();
+		}
+		catch (FileNotFoundException fnfExp)
+		{
+			throw new BulkOperationException("\nCSV File Not Found at the specified path.", fnfExp);
+		}
+		catch (IOException ioExp)
+		{
+			throw new BulkOperationException("\nError in reading the CSV File.", ioExp);
+		}
+		finally
+		{
+			csvReader.close();
+		}
+		return csvDataList;
 	}
 }

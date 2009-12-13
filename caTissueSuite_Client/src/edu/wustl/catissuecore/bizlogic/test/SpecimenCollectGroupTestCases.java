@@ -295,7 +295,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
-		    assertFalse("SCG contains specimen so should fail", true);
+		    assertTrue("SCG contains specimen so should fail", true);
 		    
 			
 		}
@@ -303,7 +303,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 			Logger.out.error(e.getMessage(),e);
 			System.out.println(e);
 			e.printStackTrace();
-			assertTrue("Should not throw Exception", true);
+			assertFalse("Should not throw Exception", true);
 			 
 		 }
     	

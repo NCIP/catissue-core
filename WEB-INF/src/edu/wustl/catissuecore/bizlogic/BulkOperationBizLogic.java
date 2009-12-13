@@ -153,14 +153,12 @@ public class BulkOperationBizLogic
 		throws BulkOperationException, ApplicationException
 	{
 		List<String> returnList = new ArrayList<String>();
-		JDBCDAO jdbcDao = null;
 		try
 		{
-			jdbcDao = AppUtility.openJDBCSession();
 			String query = "select operation, xml_tempalte from " +
 					"catissue_bulk_operation " +
 					"where DROPDOWN_NAME like '" + dropdownName + "'";
-			List list = jdbcDao.executeQuery(query);
+			List list = AppUtility.executeSQLQuery(query);
 			if(!list.isEmpty())
 			{
 				List innerList = (List)list.get(0);
@@ -182,8 +180,7 @@ public class BulkOperationBizLogic
 					}
 					else
 					{
-						String innerString2 = (String)innerList.get(1);
-						returnList.add(innerString2);
+						returnList.add((String)innerList.get(1));
 					}
 				}
 			}
@@ -193,10 +190,6 @@ public class BulkOperationBizLogic
 			e.printStackTrace();
 			throw new BulkOperationException("Error in retrieving operation " +
 					"name from drop down name."); 
-		}
-		finally
-		{
-			AppUtility.closeJDBCSession(jdbcDao);
 		}
 		return returnList;
 	}

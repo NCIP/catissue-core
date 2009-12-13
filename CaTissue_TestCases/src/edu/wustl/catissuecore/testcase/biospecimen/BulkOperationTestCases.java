@@ -25,11 +25,10 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		{
 			String operationName = "createMolecularSpecimenEvent";
 			String dropdownName = "Molecular Specimen Events";
-			System.out.println(System.getProperty("bulk.operation.add.csv.file"));
-			String csvFilePath = System.getProperty("bulk.operation.add.csv.file");				
-			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file");
-			ImportBulkOperationTemplate importBulkOperationTemplate =
-				new ImportBulkOperationTemplate(operationName, dropdownName,
+			System.out.println(System.getProperty("bulk.operation.add.csv.file1"));
+			String csvFilePath = System.getProperty("bulk.operation.add.csv.file1");				
+			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file1");
+			new ImportBulkOperationTemplate(operationName, dropdownName,
 						csvFilePath, xmlFilePath);
 			System.out.println("Bulk Operation template added successfully");
 			assertTrue("Bulk Operation template added successfully", true);
@@ -51,11 +50,10 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		{
 			String operationName = "createMolecularSpecimenEvent";
 			String dropdownName = "Molecular Specimen Events";
-			System.out.println(System.getProperty("bulk.operation.add.csv.file"));
-			String csvFilePath = System.getProperty("bulk.operation.add.csv.file");				
-			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file");
-			ImportBulkOperationTemplate importBulkOperationTemplate =
-				new ImportBulkOperationTemplate(operationName, dropdownName,
+			System.out.println(System.getProperty("bulk.operation.add.csv.file1"));
+			String csvFilePath = System.getProperty("bulk.operation.add.csv.file1");				
+			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file1");
+			new ImportBulkOperationTemplate(operationName, dropdownName,
 						csvFilePath, xmlFilePath);
 			System.out.println("Bulk Operation template edited successfully");
 			assertTrue("Bulk Operation template edited successfully", true);
@@ -67,7 +65,82 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertFalse("Could Not Edit Bulk Operation template.", true);
 		}
 	}
-	
+	/**
+	 * Mismatch operation name with the template specified
+	 * in the XML.
+	 */
+	public void testWithIncorrectOperationName()
+	{
+		try
+		{
+			String operationName = "createMolecularSpecimenEvent1";
+			String dropdownName = "Molecular Specimen Events";
+			System.out.println(System.getProperty("bulk.operation.add.csv.file1"));
+			String csvFilePath = System.getProperty("bulk.operation.add.csv.file1");				
+			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file1");
+			new ImportBulkOperationTemplate(operationName, dropdownName,
+						csvFilePath, xmlFilePath);
+			System.out.println("Bulk Operation template edited successfully");
+			assertFalse("Bulk Operation template edited successfully.", true);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in testWithIncorrectOperationName");
+			System.out.println("Test case successfully executed.");
+			e.printStackTrace();
+			assertTrue("Could Not Add Bulk Operation template. Operation Name mismatch.", true);
+		}
+	}
+	/**
+	 * Test Bulk Operation With Incorrect XML Attribute Names.
+	 */
+	public void testBulkOperationWithIncorrectXMLAttributeNames()
+	{
+		try
+		{
+			String operationName = "editSpecimen";
+			String dropdownName = "Edit Specimen";
+			System.out.println(System.getProperty("bulk.operation.add.csv.file2"));
+			String csvFilePath = System.getProperty("bulk.operation.add.csv.file2");				
+			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file2");
+			new ImportBulkOperationTemplate(operationName, dropdownName,
+						csvFilePath, xmlFilePath);
+			System.out.println("Bulk Operation template added successfully");
+			assertFalse("Error: Bulk Operation template added successfully.", true);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in testBulkOperationWithIncorrectXMLAttributeNames");
+			System.out.println("Test case successfully executed.");
+			e.printStackTrace();
+			assertTrue("Incorrect XML validated properly.", true);
+		}
+	}
+	/**
+	 * Test Bulk Operation With Incorrect class name specified in XML.
+	 */
+	public void testBulkOperationWithIncorrectClassName()
+	{
+		try
+		{
+			String operationName = "createDerivative";
+			String dropdownName = "Create Derivative";
+			System.out.println(System.getProperty("bulk.operation.add.xml.file3"));
+			String csvFilePath = System.getProperty("bulk.operation.add.csv.file2");				
+			String xmlFilePath = System.getProperty("bulk.operation.add.xml.file3");
+			new ImportBulkOperationTemplate(operationName, dropdownName,
+						csvFilePath, xmlFilePath);
+			System.out.println("Bulk Operation template added successfully");
+			assertFalse("Error: Bulk Operation template added successfully.", true);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in testBulkOperationWithIncorrectClassName");
+			System.out.println("Test case successfully executed.");
+			e.printStackTrace();
+			assertTrue("Incorrect classname validated properly in XML.", true);
+		}
+	}
 	/**
 	 * testpopulateBulkOperationDropDown.
 	 */

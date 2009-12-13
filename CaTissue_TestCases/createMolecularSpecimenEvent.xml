@@ -2,16 +2,16 @@
 <BulkOperationMetadata>
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
 		relationShipType="main" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="false"
-		cardinality="" roleName="">
+		cardinality="1" roleName="molecularSpecimenReviewParameters">
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="" 
+			relationShipType="association" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="false" 
 			cardinality="1" roleName="user">
 				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String"/>
 		</referenceAssociationCollection>
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.Specimen"
-			relationShipType="containment" templateName="createMolecularSpecimenEvent" isOneToManyAssociation=""
+			relationShipType="containment" templateName="createMolecularSpecimenEvent" isOneToManyAssociation="false"
 			cardinality="1" roleName="specimen">
 			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String"/>	
 		</containmentAssociationCollection>
