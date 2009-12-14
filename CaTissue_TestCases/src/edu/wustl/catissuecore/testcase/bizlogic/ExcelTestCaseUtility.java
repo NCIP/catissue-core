@@ -25,7 +25,7 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 	
-	private static String shortTitle = "test_cp_for_edit"; 
+	private static String shortTitle = "test_struts_cp_for_edit"; 
 
 	public  void createCP() throws Exception {
 		System.out
@@ -249,7 +249,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 	public  void createUser() throws Exception {
 		try {
 			User user = BaseTestCaseUtility.initUser();
-			user.setLoginName("test_user@test.com");
+			user.setLoginName("test_struts_user@test.com");
 			user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 		    user = (User) appService.createObject(user);
 			Logger.out.info("User added successfully");
@@ -264,7 +264,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 	public  void createSite() throws Exception {
 		try {
 			Site site = BaseTestCaseUtility.initSite();
-			site.setName("testSite");
+			site.setName("test_struts_Site");
 		    site = (Site) appService.createObject(site);
 			System.out.println("Site created successfully");
 		} catch (Exception e) {
