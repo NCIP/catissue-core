@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
@@ -235,7 +236,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		{
 			SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 			CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-			Participant participant = cpr.getParticipant();			
+			Participant participant = cpr.getParticipant();
 			ParticipantForm partForm = new ParticipantForm() ;
 			partForm.setFirstName(participant.getFirstName()) ;
 			partForm.setLastName(participant.getLastName()) ;
@@ -393,5 +394,74 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		verifyActionErrors(errormsg);
 
 	}	*/
+
+
+	 public void testCreateDerivativeOfSpecimen()
+	 {
+
+			Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+			NewSpecimenForm specimenForm = null;
+			//Retrieving Storage container object for edit
+			logger.info("----StorageConatiner ID : " + specimen.getId());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "search");
+			addRequestParameter("id", specimen.getId().toString());
+			setRequestPathInfo("/SearchObject") ;
+			actionPerform();
+			verifyForward("pageOfNewSpecimen");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			actionPerform();
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "edit");
+			addRequestParameter("menuSelected", "15");
+			addRequestParameter("showConsents", "yes");
+			addRequestParameter("tableId4", "disable");
+			actionPerform();
+			verifyNoActionErrors();
+			//Setting the derivative to true
+			specimenForm=(NewSpecimenForm) getActionForm();
+			specimenForm.setDerivedClicked(true);
+			specimenForm.setNumberOfSpecimens("1");
+			specimenForm.setForwardTo("createNew");
+			//specimenForm.setOperation("edit");
+			setActionForm(specimenForm);
+			setRequestPathInfo("/NewSpecimenEdit");
+			actionPerform();
+			verifyForward("createNew");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+
+			addRequestParameter("pageOf", "" );
+			addRequestParameter("operation", "add" );
+			addRequestParameter("menuSelected", "15" );
+			addRequestParameter("virtualLocated", "true" );
+
+			actionPerform();
+
+			verifyNoActionErrors();
+
+////			specimenForm=(NewSpecimenForm) getActionForm();
+//			CreateSpecimenForm form= (CreateSpecimenForm)getActionForm();
+//			setActionForm(form);
+//			setRequestPathInfo("/AddSpecimen");
+//			addRequestParameter("isQuickEvent", "true" );
+//
+//			actionPerform();
+//			verifyForward("success");
+//			verifyNoActionErrors();
+
+
+
+	 }
 
 }
