@@ -29,7 +29,7 @@
 
 	<!-- Target For Upgrading the Database From DE v 1.2.0 to DE v 1.3.0 -->
 
-	<target name="upgrade_db_from_DE_1.2.0_to_DE_1.3.0">
+	<target name="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" description="Upgrading the Database From DE v 1.2.0 to DE v 1.3.0">
 	<delete dir="${de.temp.dir}" failonerror="no" />
 	<mkdir dir="${de.temp.dir}" />
 		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
@@ -64,7 +64,7 @@
 			</if>
 		</target>
 
-	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0">
+	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" description="upgrade_db_from_DE_1.3.0_to_DE_1.4.0">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 			<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
@@ -99,37 +99,37 @@
 				</if>
 			</target>
 
-	<target name="upgrade_db_db2_from_DE_1.2.0_to_DE_1.3.0">
+	<target name="upgrade_db_db2_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db db2 from DE 1.2.0 to DE 1.3.0">
 		<antcall target="execute_file_db_db2">
 			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
-	<target name="upgrade_db_mysql_from_DE_1.2.0_to_DE_1.3.0">
+	<target name="upgrade_db_mysql_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE 1.2.0 to DE 1.3.0 for mysql">
 		<antcall target="execute_file_db_mysql">
 			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
-	<target name="upgrade_db_oracle_from_DE_1.2.0_to_DE_1.3.0">
+	<target name="upgrade_db_oracle_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE 1.2.0 to DE  1.3.0 for oracle">
 		<antcall target="execute_file_db_oracle">
 			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
-	<target name="upgrade_db_db2_from_DE_1.3.0_to_DE_1.4.0">
+	<target name="upgrade_db_db2_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db db2 from DE 1.3.0 to DE 1.4.0">
 			<antcall target="execute_file_db_db2">
 				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
 			</antcall>
 	</target>
 
-		<target name="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0">
+		<target name="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for mysql">
 			<antcall target="execute_file_db_mysql">
 				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
 			</antcall>
 		</target>
 
-		<target name="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0">
+		<target name="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for oracle">
 			<antcall target="execute_file_db_oracle">
 				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
 			</antcall>
@@ -144,7 +144,7 @@
 							</sql>
 		</target>
 
-	<target name="execute_file_db_mysql">
+	<target name="execute_file_db_mysql" description="upgrading the DB For DynamicExtensions for mysql">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${mysql.dbupgrade.sql.dir.DE}/${sql.file.name}" />
@@ -157,7 +157,7 @@
 		</sql>
 	</target>
 
-	<target name="execute_file_db_oracle">
+	<target name="execute_file_db_oracle" description="upgrading the DB For DynamicExtensions for oracle">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${oracle.dbupgrade.sql.dir.DE}/${sql.file.name}" />
@@ -170,7 +170,7 @@
 		</sql>
 	</target>
 
-	<target name="execute_file_db_db2">
+	<target name="execute_file_db_db2" description="upgrading the DB For DynamicExtensions for db2">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${db2.driver.string.DE}" url="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${db2.dbupgrade.sql.dir.DE}/${sql.file.name}" />
@@ -196,7 +196,7 @@
 	<!-- This target will prepare the environment i.e. hibernateconfig files
 		other properties file to be able to execute other java classes like import_xmi , create_category etc
 -->
-	<target name="setupClassExecutionEnvironment">
+	<target name="setupClassExecutionEnvironment" description="This target will prepare the environment i.e. hibernateconfig files other properties file to be able to execute other java classes like import_xmi , create_category etc">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 		<mkdir dir="${temp.dir.DE}" />
@@ -264,7 +264,7 @@
 	</target>
 
 	<!-- Target used to Import the Dynamic Model using Import XMI -->
-	<target name="import_xmi_DE">
+	<target name="import_xmi_DE" description="Target used to Import the Dynamic Model using Import XMI">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.xmi.importer.XMIImporter" fork="true" maxmemory="1024M">
 			<arg value="${filename}" />
@@ -291,7 +291,7 @@
 	</target>
 
 	<!-- Target used to create the Category -->
-	<target name="create_category">
+	<target name="create_category" description="arget used to create the Category">
 
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.util.CategoryCreator" fork="true" maxmemory="1024M">
@@ -313,7 +313,7 @@
 
 	<!--This target executes create_all_categories command for all the  category-forms file specified within csv file-->
 	<property name="categoryFormNames" value="" />
-	<target name="create_all_categories">
+	<target name="create_all_categories" description="This target executes create_all_categories command for all the  category-forms file specified within csv file">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.util.MultipleCategoryCreator" fork="true" maxmemory="1024M">
 			<arg value="${categoryFormNames}" />
@@ -333,7 +333,7 @@
 	</target>
 	<!--end of  target create_all_categories -->
 	<property name="permissibleValuesFile" value=" " />
-	<target name="import_permissible_values">
+	<target name="import_permissible_values" description="Import permissible values">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.util.parser.ImportPermissibleValues" fork="true" maxmemory="1024M">
 			<arg value="${permissibleValuesFile}" />
@@ -354,7 +354,7 @@
 
 	<property name="groupname" value="" />
 	<property name="version" value="" />
-	<target name="export_xmi">
+	<target name="export_xmi" description="Export XMI">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.xmi.exporter.XMIExporter" fork="true" maxmemory="1024M">
 			<arg value="${groupname}" />
@@ -375,7 +375,7 @@
 		</java>
 	</target>
 	<!-- upgrade category entity names from CP_1.1 to CP_1.2 -->
-	<target name="upgrade_category_entity_names">
+	<target name="upgrade_category_entity_names" description="upgrade category entity names from CP_1.1 to CP_1.2">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.util.UpgradeCategoryEntityName" fork="true" maxmemory="1024M">
 			<classpath>
@@ -394,7 +394,7 @@
 	<!-- upgrade category entity names ends-->
 
 
-	<target name="create_loggger_properties_file">
+	<target name="create_loggger_properties_file" description="create loggger properties file">
 		<copy file="./${de.temp.dir}/conf/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
 		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
@@ -402,7 +402,7 @@
 		</replace>
 	</target>
 
-	<target name="reset_record_entry_sequence">
+	<target name="reset_record_entry_sequence" description="reset record entry sequence">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
@@ -423,7 +423,7 @@
 		</sql>
 	</target>
 
-	<target name="reset_DE_sequences">
+	<target name="reset_DE_sequences" description="reset DE sequences">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
@@ -456,7 +456,7 @@
 		</if>
 	</target>
 
-	<target name="reset_DE_sequences_oracle">
+	<target name="reset_DE_sequences_oracle" description="reset DE sequences for oracle">
 		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction>
 								DROP SEQUENCE DE_ATTR_REC_SEQ ;
@@ -502,7 +502,7 @@
 		</sql>
 	</target>
 
-	<target name="reset_DE_sequences_mysql">
+	<target name="reset_DE_sequences_mysql" description="reset DE sequences for mysql">
 		<!--<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction>
 									DROP SEQUENCE DE_ATTR_REC_SEQ ;
@@ -547,7 +547,7 @@
 			<transaction src="${mysql.sql.dir.DE}/createDESequence.SQL" />
 		</sql>-->
 	</target>
-	<target name="reset_DE_sequences_db2">
+	<target name="reset_DE_sequences_db2" description="reset DE sequences for db2">
 		<sql driver="${db2.driver.string.DE}" url="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="#">
 			<classpath>
 				<fileset dir="${lib.dir.DE}">
