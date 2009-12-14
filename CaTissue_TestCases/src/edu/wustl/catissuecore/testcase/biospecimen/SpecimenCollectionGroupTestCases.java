@@ -106,54 +106,6 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	
 	/**
 	 * Test Specimen Collection Group Edit.
-	 */
-	@Test
-	public void testSpecimenCollectionGroupSearch()
-	{
-		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
-		/*Simple Search Action*/
-		setRequestPathInfo("/SimpleSearch");
-		
-		SimpleQueryInterfaceForm simpleForm = new SimpleQueryInterfaceForm();
-		simpleForm.setAliasName("SpecimenCollectionGroup") ;
-		simpleForm.setPageOf("pageOfSpecimenCollectionGroup");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "SpecimenCollectionGroup");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "SpecimenCollectionGroup.IDENTIFIER.bigint");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Equals");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", ""+scg.getId());
-		
-		setActionForm(simpleForm) ;
-		actionPerform();
-		verifyNoActionErrors();
-		
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
-		verifyForwardPath("/SearchObject.do?pageOf=pageOfSpecimenCollectionGroup&operation=search&id=" + specimenCollectionGroup.getId());
-		verifyNoActionErrors();
-		
-   /*     Specimen Collection Group Search to generate SpecimenCollectionGroupForm
-		setRequestPathInfo("/SpecimenCollectionGroupSearch");
-		addRequestParameter("id", "" + specimenCollectionGroup.getId());
-		actionPerform();
-		verifyForward("pageOfSpecimenCollectionGroup");
-		verifyNoActionErrors();
-
-		Edit Action
-		setRequestPathInfo("/SpecimenCollectionGroupEdit");
-		SpecimenCollectionGroupForm specGroupForm = (SpecimenCollectionGroupForm)getActionForm();
-		specGroupForm.setComment("New Comment Added For SCG") ;
-		specGroupForm.setName("Shri_cp_specimen_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		setActionForm(specGroupForm);
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-		
-		specimenCollectionGroup.setName(specGroupForm.getName());
-		specimenCollectionGroup.setComment(specGroupForm.getComment());
-		
-		TestCaseUtility.setNameObjectMap("SpecimenCollectionGroup",specimenCollectionGroup);*/
-	}
-	/**
-	 * Test Specimen Collection Group Edit.
 	 */	
 	@Test
     public void testEditSCGAndGotoAnticipatorySpecimen()
