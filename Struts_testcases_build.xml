@@ -29,6 +29,7 @@
 		<property name="log4jproperties.file.path" value="./log4j.properties"></property>
          
          <!-- struts test case related properties -->
+		<property name="cat.test.conf.dir" value="${catissue.test}/conf" />
 		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
 		<property name="cat.test.src.dir" value="${catissue.test}/src"/>
 		<property name="cat.test.lib.dir" value="${catissue.test}/lib"/>
@@ -119,24 +120,24 @@
 	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
 	            <src path="${cat.test.src.dir}"/>
 	    	  
-	    	<classpath>
-	    						
-	    						<pathelement path= "${target.dir}" /> 
-	    						<pathelement path="${cat.test.src.dir}" />
-	    						<pathelement path= "${cat.test.classes.dir}" />
-	    						
-	    						<fileset dir="${cat.test.lib.dir}">
-	    							<exclude name="catissuecore.jar"/>
-	    						    <include name="**/*.jar"/>
-	    					   	</fileset>
-	    						
-	    						<fileset dir="${lib.dir}">
-	    							<include name="**/*.jar"/>
-	    						</fileset>
-	    						
-	    					</classpath>
+	          <classpath>
+						<pathelement path= "${target.dir}" /> 
+						<pathelement path="${cat.test.src.dir}" />
+						<pathelement path= "${cat.test.classes.dir}" />
+	          			<pathelement path= "${cat.test.conf.dir}" />
+	          	
+						<fileset dir="${cat.test.lib.dir}">
+							<exclude name="catissuecore.jar"/>
+						    <include name="**/*.jar"/>
+					   	</fileset>
+						
+						<fileset dir="${lib.dir}">
+							<include name="**/*.jar"/>
+						</fileset>
+						
+					</classpath>
 
-	    					<classpath refid="cobertura.classpath" />
+					<classpath refid="cobertura.classpath" />
 	    </javac>
 	</target>
 	
@@ -145,7 +146,8 @@
 	<target name="replacecfgfiles">
 		<copy file="${base.dir}/WEB-INF/src/hibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
 	    <copy file="${base.dir}/WEB-INF/src/DynamicExtensionsHibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
-	    
+        <copy file="${catissue.test}/hibernate.properties" todir="${cat.test.conf.dir}" overwrite="true" />
+
 		<replace dir="${cat.test.classes.dir}">
 			<include name="*.cfg.xml" />		
 			<replacefilter token="org.hibernate.dialect.MySQLDialect" value="@@DIALECT@@" />
@@ -156,9 +158,19 @@
 			<then>
 				<replace dir="${cat.test.classes.dir}">
 					<include name="*.cfg.xml" />
+					<include name="*.properties" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-				</replace>
+					
+		</replace>
+				<replace dir="${cat.test.conf.dir}">
+					<include name="*.properties" />
+						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+						<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+						<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+						<replacefilter token="@@URL@@" value="${mysql.url.string}" />
+					</replace>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
@@ -166,8 +178,16 @@
 					<replace dir="${cat.test.classes.dir}">
 						<include name="*.cfg.xml" />
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />						
 					</replace>
+					<replace dir="${cat.test.conf.dir}">
+						<include name="*.properties" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+							<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+							<replacefilter token="@@URL@@" value="${oracle.url.string}" />
+						</replace>
 				</then>
 			</elseif>
 		</if>
@@ -219,6 +239,7 @@
 					<pathelement path= "${target.dir}" /> 
 					<pathelement path="${cat.test.src.dir}" />
 					<pathelement path= "${cat.test.classes.dir}" />
+					<pathelement path= "${cat.test.conf.dir}" />
 					
 					<fileset dir="${cat.test.lib.dir}">
 						<exclude name="catissuecore.jar"/>
