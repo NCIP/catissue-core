@@ -2,18 +2,18 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile">
-	<import file="build-properties.xml"/>	
-	<!--define require dir and Properties for <if> </if> tag-->	
+	<import file="build-properties.xml"/>
+	<!--define require dir and Properties for <if> </if> tag-->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	<classpath>
 	    <pathelement location="./lib/ant-contrib.jar"/>
 	  </classpath>
 	</taskdef>
-	
-	<loadfile property="dist.revision" srcFile="./.svn/entries">  
-			<filterchain>  
+
+	<loadfile property="dist.revision" srcFile="./.svn/entries">
+			<filterchain>
 				<headfilter lines="1" skip="4"/>
-			</filterchain>  
+			</filterchain>
 	</loadfile>
 
 	<!--define require dir and Properties -->
@@ -23,7 +23,7 @@
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
 	<property name="applet.dir" value="${base.dir}/Applet" />
-	<property name="dagviewapplet.dir" value="${applet.dir}/DagViewApplet" />	
+	<property name="dagviewapplet.dir" value="${applet.dir}/DagViewApplet" />
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
@@ -74,8 +74,8 @@
 		<path refid="app.classpath" />
 	</path>
 
-	
-	
+
+
 	<!-- struts test case related properties -->
 		<property name="catissue.test" value="${base.dir}/CaTissue_TestCases" />
 		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
@@ -86,14 +86,14 @@
 		<property name="cobertura.lib" value="./cobertura/lib"/>
 		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
 
-		
+
 		<path id="cobertura.classpath">
 			<fileset dir="${cobertura.lib}">
 				<include name="cobertura.jar" />
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
-	
+
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
 		<!-- Create the time stamp -->
@@ -112,7 +112,7 @@
 			<include name="**/LabelGeneratorFactory.class"/>
     		<include name="**/BarcodeGenerator.class"/>
 			<include name="**/BarcodeGeneratorFactory.class"/>
-		</fileset>		
+		</fileset>
 	</jar>
 	</target>
 
@@ -125,10 +125,10 @@
 		<!-- fileset dir="." >
 			<include name="label_barcode_gen_client.jar"/>
 		</fileset -->
-		
+
 		<fileset dir="${target.dir}" >
 			<include name="**/namegenerator/*"/>
-			
+
     		<exclude name="**/LabelGenerator.class"/>
 			<exclude name="**/LabelGeneratorFactory.class"/>
     		<exclude name="**/BarcodeGenerator.class"/>
@@ -144,7 +144,7 @@
 	    		<include name="**/LabelPrinter.class"/>
 				<include name="**/LabelPrinterFactory.class"/>
 	    		<include name="**/PropertyHandler.class"/>
-			</fileset>		
+			</fileset>
 		</jar>
 		</target>
 
@@ -152,8 +152,8 @@
 			<delete file="printservice_module.jar" />
 		<jar destfile="printservice_module.jar">
 			<fileset dir="${target.dir}" >
-				<include name="**/printservicemodule/*"/>	
-				<exclude name="**/printservicemodule/PrintServiceImplementor.properties"/>	
+				<include name="**/printservicemodule/*"/>
+				<exclude name="**/printservicemodule/PrintServiceImplementor.properties"/>
 			</fileset>
 			<!--<fileset dir="${target.dir}/edu/wustl/catissuecore/printservicemodule" >
 						<include  name="PrintServiceImplementor.properties" />
@@ -192,10 +192,10 @@
 			<fileset dir="${base.dir}" >
 				<include name="log4j.properties" />
 			</fileset>
-			
+
 		</copy>
 	</target>
-	
+
 	<!-- Create the Applet JAR Begins-->
 	<target name="build_applet_jar" depends="compile">
 		<delete>
@@ -207,12 +207,12 @@
 				<exclude name="**/org-netbeans-graph.jar" />
 				<exclude name="**/org-netbeans-graph-vmd.jar" />
 				<exclude name="**/org-openide-util.jar" />
-				<exclude name="**/DynamicExtensions.jar" />		
-				<include name="**/swingx-2006_10_08.jar" />								
-				<include name="**/struts.jar" />								
-				<include name="**/hibernate2.1.7c.jar" />								
-				<include name="**/odmg.jar"/>	
-				<exclude name="**/dagViewApplet.jar" />		
+				<exclude name="**/DynamicExtensions.jar" />
+				<include name="**/swingx-2006_10_08.jar" />
+				<include name="**/struts.jar" />
+				<include name="**/hibernate2.1.7c.jar" />
+				<include name="**/odmg.jar"/>
+				<exclude name="**/dagViewApplet.jar" />
 			</fileset>
 		</delete>
 
@@ -267,19 +267,19 @@
 	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,
 		common_build_war,build_client_jar">
 	</target>
-	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
-		Note: database type is not replaced 
+	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
+		Note: database type is not replaced
 	-->
 	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,common_build_war,build_client_jar">
 	</target>
-	
+
 	<!-- build catissuecore war file which is common to above both targets -->
 	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,PrintService_Module,create_war">
 	</target>
 
 	<target name="create_war">
 		<delete file="catissuecore.war" />
-		
+
 		<copy todir="WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}"  >
 				<include name="Default_label_barcode_gen.jar" />
@@ -290,16 +290,16 @@
 		</copy>
 	     <delete file="${base.dir}/MANIFEST.MF"/>
 	     <manifest file="${base.dir}/MANIFEST.MF">
-	     	
+
 	        <attribute name="Built-By" value="${user.name}"/>
 	     	<attribute name="Version" value="${application.name} ${application.version}"/>
 	     	<attribute name="CSM-Version" value="${csm.version}"/>
 	     	<attribute name="caCore-Version" value="${cacore.version}"/>
 	     	<attribute name="Build-on" value="${TODAY}"/>
 	     	<attribute name="SVN-URL" value="${dist.revision}" />
-	     	 				
+
 	    </manifest>
-		<replace dir="${base.dir}/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+		<replace dir="${base.dir}/WEB-INF/classes" propertyfile="caTissueInstall.properties">
 			<include name ="log4j.properties"/>
 			<replacefilter token="@@jbosshome@@" value="${jboss.server.url}"/>
 		</replace>
@@ -310,9 +310,9 @@
 			<param name="deleteFromDir" value="${temp.dir}/catissuecorecsm"/>
 		</antcall>
 
-		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" 
+		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml"
 			duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
-			
+
 			<fileset dir="${base.dir}">
 				<!--include name="Applet/**" / -->
 				<include name="css/**" />
@@ -320,7 +320,7 @@
 				<include name="jss/**" />
 				<include name="dhtml_comp/**" />
 				<include name="pages/**" />
-				<include name="flexclient/**" />				
+				<include name="flexclient/**" />
 				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
 				<include name="CDEConfig.xml" />
@@ -333,7 +333,7 @@
 				<include name="caTissueSuite_Technical_Guide_V11p4.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
-				
+
 				<exclude name="**/pages/subMenu/**" />
 				<exclude name="**/log4j.properties" />
 				<exclude name="**/WEB-INF/src*/**" />
@@ -342,7 +342,7 @@
 				<exclude name="**/WEB-INF/lib/junit*.jar" />
 				<!--<exclude name="**/WEB-INF/lib/dom4*.jar" />-->
 				<exclude name="**/*servlet.jar*" />
-				
+
 				<exclude name="**/*hibernate2.jar*" />
 				<exclude name="**/*jta.jar*" />
 				<exclude name="**/CVS*" />
@@ -366,7 +366,7 @@
 				<include name="**/images/**" />
 				<include name="**/log/**" />
 				<include name="**/*" />
-				
+
 				<exclude name="**/WEB-INF/web.xml" />
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
@@ -380,68 +380,68 @@
 			</fileset>
 		</war>
 
-	</target>	
-	
+	</target>
+
 	<target name="copydeletedjars">
 		<echo>deleting unneccesary jars from ${deleteFromDir}</echo>
-	<delete failonerror="false" >  
+	<delete failonerror="false" >
 		<fileset dir="${deleteFromDir}">
-			<include name="backport-util-concurrent-3.0.jar" /> 
+			<include name="backport-util-concurrent-3.0.jar" />
 			<include name="c3p0-0.8.4.5.jar" />
-			<include name="c3p0-0.8.5.2.jar" /> 
-			<include name="castor-1.0.2.jar" /> 
-			<include name="cglib-2.1.jar" /> 
+			<include name="c3p0-0.8.5.2.jar" />
+			<include name="castor-1.0.2.jar" />
+			<include name="cglib-2.1.jar" />
 			<include name="commons-collections-2.1.1.jar" />
-			<include name="commons-collections-3.1.jar" /> 
-			<include name="commons-discovery-0.2.jar" /> 
-			<include name="commons-fileupload.jar" /> 
-			<include name="commons-lang-2.1.jar" /> 
-			<include name="commons-logging-1.0.4.jar" /> 
-			<include name="dom4*.jar" /> 
+			<include name="commons-collections-3.1.jar" />
+			<include name="commons-discovery-0.2.jar" />
+			<include name="commons-fileupload.jar" />
+			<include name="commons-lang-2.1.jar" />
+			<include name="commons-logging-1.0.4.jar" />
+			<include name="dom4*.jar" />
 			<include name="ehcache-1.2.3.jar" />
-			<include name="freemarker.jar" /> 
-			<include name="jakarta-oro.jar" /> 
-			<include name="uml-1.3.jar" /> 
-			<include name="wsdl4j-1.5.1.jar" /> 
-			<include name="xalan-2.4.0.jar" /> 
-			<include name="p6spy.jar" /> 
-			<include name="sdkClient.jar" /> 
-			<include name="uuid-key-generator.jar" /> 
-			<include name="wsdl4j.jar" /> 
-			<include name="j2ee.jar" /> 
-			<include name="caGrid-1.0-caDSR-client.jar" /> 
-			<include name="caGrid-1.0-caDSR-common.jar" /> 
-			<include name="caGrid-1.0-caDSR-stubs.jar" /> 
-			<include name="caGrid-1.0-core.jar" /> 
-			<include name="caGrid-1.0-data-common.jar" /> 
-			<include name="caGrid-1.0-data-stubs.jar" /> 
-			<include name="caGrid-1.0-data-utils.jar" /> 
-			<include name="caGrid-1.0-fqp-client.jar" /> 
-			<include name="caGrid-1.0-fqp-common.jar" /> 
-			<include name="caGrid-1.0-fqp-stubs.jar" /> 
-			<include name="caGrid-1.0-metadata-common.jar" /> 
-			<include name="caGrid-1.0-metadata-security.jar" /> 
-			<include name="caGrid-1.0-sdkQuery.jar" /> 
-			<include name="caGrid-1.0-ServiceSecurityProvider-client.jar" /> 
-			<include name="caGrid-1.0-ServiceSecurityProvider-common.jar" /> 
+			<include name="freemarker.jar" />
+			<include name="jakarta-oro.jar" />
+			<include name="uml-1.3.jar" />
+			<include name="wsdl4j-1.5.1.jar" />
+			<include name="xalan-2.4.0.jar" />
+			<include name="p6spy.jar" />
+			<include name="sdkClient.jar" />
+			<include name="uuid-key-generator.jar" />
+			<include name="wsdl4j.jar" />
+			<include name="j2ee.jar" />
+			<include name="caGrid-1.0-caDSR-client.jar" />
+			<include name="caGrid-1.0-caDSR-common.jar" />
+			<include name="caGrid-1.0-caDSR-stubs.jar" />
+			<include name="caGrid-1.0-core.jar" />
+			<include name="caGrid-1.0-data-common.jar" />
+			<include name="caGrid-1.0-data-stubs.jar" />
+			<include name="caGrid-1.0-data-utils.jar" />
+			<include name="caGrid-1.0-fqp-client.jar" />
+			<include name="caGrid-1.0-fqp-common.jar" />
+			<include name="caGrid-1.0-fqp-stubs.jar" />
+			<include name="caGrid-1.0-metadata-common.jar" />
+			<include name="caGrid-1.0-metadata-security.jar" />
+			<include name="caGrid-1.0-sdkQuery.jar" />
+			<include name="caGrid-1.0-ServiceSecurityProvider-client.jar" />
+			<include name="caGrid-1.0-ServiceSecurityProvider-common.jar" />
 			<include name="jboss-common-jdbc-wrapper.jar"/>
 			<include name="mysql-connector-java-3.1.13-bin.jar"/>
-			<!--<include name="ojdbc14.jar"/>--> 
-			<include name="boot.jar" /> 
-			<include name="c3p0-0.9.0.jar" /> 
-			<include name="catissuecore-client.jar" /> 
-			<include name="experiment-client.jar" /> 
-			<!--<include name="jboss-client.jar" />--> 
-			<include name="junit-4.1.jar" /> 
-			<include name="mockobjects-core-0.09.jar" /> 
-			<!--include name="mysql-connector-java-5.0.8-bin.jar" / --> 
-			<include name="openide-util.jar" /> 
+			<!--<include name="ojdbc14.jar"/>-->
+			<include name="boot.jar" />
+			<include name="c3p0-0.9.0.jar" />
+			<include name="catissuecore-client.jar" />
+			<include name="experiment-client.jar" />
+			<!--<include name="jboss-client.jar" />-->
+			<include name="junit-4.1.jar" />
+			<include name="mockobjects-core-0.09.jar" />
+			<!--include name="mysql-connector-java-5.0.8-bin.jar" / -->
+			<include name="openide-util.jar" />
 			<include name="acrobat-core.jar" />
 			<!-- removed to work printwebservice -->
-			<include name="jaxrpc.jar" /> 
-			<include name="saaj.jar" /> 
-			<include name="jboss-jaxws.jar" /> 	
-		</fileset>		
+			<include name="jaxrpc.jar" />
+			<include name="saaj.jar" />
+			<include name="jboss-jaxws.jar" />
+		</fileset>
 
 	</delete>
 </target>
@@ -451,7 +451,7 @@
 		<delete dir="${temp.dir}" />
 		<delete file="${jboss.server.url}/deploy/catissuecorecsm.war" />
 	</target>
-	
+
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
 			<!--antcall target="clean" /-->
@@ -460,23 +460,23 @@
 			<!-- delete temp dir
 			<antcall target="clean_temp_dir_csmwar" /
 			-->
-		
+
 			<!--antcall target="cleanserver" /-->
 			<!-- Not required to copy csm war file -->
-		
-		
+
+
 			 <copy file="catissuecore.war" todir="${jboss.server.url}/deploy" />
 			 <copy file="dynamicExtensions.war" todir="${jboss.server.url}/deploy" />
 			 <copy file="caTissuePrintWebService.war" todir="${jboss.server.url}/deploy" />
 			 <sleep seconds="2" />
-	</target>				
-	
+	</target>
 
 
-	<!-- 
-		Generates the Hibernate mapping (HBM) files which are used in mapping 
-		the domain objects to database schema of the application. 
-		This generates the HBM files from the XDoclet tags written in the domain object classes. 
+
+	<!--
+		Generates the Hibernate mapping (HBM) files which are used in mapping
+		the domain objects to database schema of the application.
+		This generates the HBM files from the XDoclet tags written in the domain object classes.
 	-->
 	<target name="generate_hbm" description="Generates Hibernate class descriptor files.">
 		<!-- Define the hibernatedoclet task -->
@@ -517,7 +517,7 @@
 			<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml" />
 		</delete>
 	</target>
-	
+
 	<target name="createJavaDoc">
 		<javadoc destdir="${client.dir}/JavaDoc"
    			author="true"
@@ -529,7 +529,7 @@
 	  	    </fileset>
 	    </javadoc>
 	</target>
-	
+
 	<target name="create_zip" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
@@ -554,7 +554,7 @@
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="log4j.properties" todir="${zip.dir}" overwrite="true" />
-		
+
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="idpInstall.properties" todir="${zip.dir}" overwrite="true" />
@@ -564,17 +564,18 @@
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="idp_deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
 		<!--copy file="log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
     	<copy file="deploy_uk_edin.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy_barcode_generator_DFCI.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/idp" overwrite="true">
 					<fileset dir="${base.dir}/idp" />
 		</copy>
-		
+
 		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
@@ -584,7 +585,7 @@
 		<copy todir="${zip.dir}/caTissueSuite_dbunit" overwrite="true">
 					<fileset dir="${base.dir}/caTissueSuite_dbunit" />
 		</copy -->
-	
+
 		<copy file="dbunit_temp.xml" todir="${zip.dir}" overwrite="true" />
 		<copy todir="${zip.dir}/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
@@ -608,7 +609,7 @@
 		<!-- <copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
@@ -638,7 +639,7 @@
 		<copy file="JniDeID.dll" todir="${zip.dir}" overwrite="true" />
 		<copy file="gate.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploycaties.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploycaties.properties" todir="${zip.dir}" overwrite="true" />		
+		<copy file="deploycaties.properties" todir="${zip.dir}" overwrite="true" />
 		<!--- caTIES related files  end-->
 		<!-- DE conf files -->
 		<copy todir="${zip.dir}/DE_conf" overwrite="true">
@@ -646,11 +647,11 @@
 		</copy>
 		<!-- DE conf files end -->
 		<!-- Copying DEIntegration.war-->
-		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" />	
+		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" />
 		<!-- Copying CA model wars-->
 		<copy file="CA.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="pathologySpecimen.war" todir="${zip.dir}" overwrite="true" />	
-		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" />	
+		<copy file="pathologySpecimen.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" />
 		<!-- Copying private public migrator directory -->
 		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
 			<fileset dir="${base.dir}/private_public_migrator" />
@@ -663,7 +664,7 @@
 		<delete dir="${zip.dir}" />
 	</target>
 
-	
+
   <!-- =================================================================== -->
   <!-- Junit test case execution report                                    -->
   <!-- =================================================================== -->
@@ -696,14 +697,14 @@
 
 		</junit>
 	</target>
-	
+
 
 	<target name="gen_report_junit_testcases">
 		<antcall target="clean" />
 		<antcall target="compile" />
 		<antcall target="run_junit_testcases" />
 		<mkdir dir="${report.dir}/reports/junit" />
-		
+
 		<junitreport todir="${report.dir}/reports/junit">
 			<fileset dir="${target.dir}/reports/junit">
 				<include name="TEST-*.xml" />
@@ -711,12 +712,12 @@
 			<report todir="${report.dir}/reports/junit" />
 		</junitreport>
 	</target>
-	
-	
+
+
 	<!-- =================================================================== -->
 	<!-- Junit TestCases for Nightly Build  -->
 	<!-- =================================================================== -->
-	
+
 		<target name="compile_junit_TestCases">
 	        <javac destdir="${test.src.dir}" includes="**/*TestCases.java" includeAntRuntime="false" target="1.5">
 	            <src path="${src.dir}"/>
@@ -736,7 +737,7 @@
 		<junit printsummary="yes" fork="yes" haltonfailure="no">
 			<formatter type="xml" />
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
-			<classpath>				
+			<classpath>
 				<pathelement path="${base.dir}/caTissueSuite_Client/conf" />
 				<fileset dir="./caTissueSuite_Client/lib">
 				<include name="*.jar" />
@@ -748,20 +749,20 @@
 				<pathelement path="${target.dir}" />
 				<pathelement path= "${test.class.dir}" />
 			</classpath>
-			
+
 			<classpath refid="junit.classpath" />
 
 			<batchtest todir="${report.dir}/Nightly_Build_Report">
 				<fileset dir="${src.dir}">
 					<include name="**/CaTissueTestSuite.java" />
-				</fileset>				
+				</fileset>
 			</batchtest>
 		</junit>
 	</target>
-	
+
 
   <target name="runNightlyBuild" depends="runJunitTestCases">
-		
+
 		<junitreport todir="${report.dir}/Nightly_Build_Report">
 			<fileset dir="${report.dir}/Nightly_Build_Report">
 				<include name="TEST-*.xml" />
@@ -769,38 +770,38 @@
 			<report todir="${report.dir}/Nightly_Build_Report/Html_reports" />
 		</junitreport>
 	</target>
-	
+
 <!-- =================================================================== -->
 <!-- JMeter TestCases for Nightly Build  -->
 <!-- =================================================================== -->
 		<property name="Jmeter-Tests" value="${base.dir}/Jmeter-Tests"/>
 		<property name="testplan" value="CaTissueJMeterTests"/>
 		<property name="jtl" value="JTL"/>
-					
+
 		<mkdir dir="${base.dir}/${Jmeter-Tests}/${jtl}"/>
-	
-			<taskdef name="jmeter"	
+
+			<taskdef name="jmeter"
 				classpath="${lib.dir}/ant-jmeter.jar"
-			    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>				
-	
-		<target name="JMeterTests" depends="runJmeterTests,JmeterReport"/>	
-		<target name="runJmeterTests"> 
+			    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
+
+		<target name="JMeterTests" depends="runJmeterTests,JmeterReport"/>
+		<target name="runJmeterTests">
 			<delete file="${Jmeter-Tests}/Mysql_CaTissueJMeterTests.html"/>
 			<delete file="${Jmeter-Tests}/Oracle_CaTissueJMeterTests.html"/>
 			<delete file="${Jmeter-Tests}/${testplan}.html"/>
-		 	<delete file="${Jmeter-Tests}/${jtl}/${testplan}.jtl"/>	
+		 	<delete file="${Jmeter-Tests}/${jtl}/${testplan}.jtl"/>
 			<jmeter
 			    jmeterhome="${jmeter.home.dir}"
 				testplan ="${Jmeter-Tests}/${testplan}.jmx"
 			    resultlog="${Jmeter-Tests}/${jtl}/${testplan}.jtl">
-			
+
 				<!-- Force suitable defaults -->
 				<property name="jmeter.save.saveservice.output_format" value="xml"/>
 				<property name="jmeter.save.saveservice.assertion_results" value="all"/>
 				<property name="jmeter.save.saveservice.bytesx" value="true"/>
 				<property name="file_format.testlog" value="${format}"/>
 				<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
-			</jmeter>		
+			</jmeter>
 		</target>
 
 		<target name="JmeterReport">
@@ -810,9 +811,9 @@
 			    out="${Jmeter-Tests}/${testplan}.html"
 			    style="${Jmeter-Tests}/jmeter-results-detail-report_21.xsl">
 				<param name="showData" expression="${show-data}"/>
-			</xslt>   
-		</target>  
-	
+			</xslt>
+		</target>
+
 	<!--  <property name="reportgenerator.input.jmeterfile" value="D:/Nightly_Build/XmlReport/CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.junitfile" value="D:/Nightly_Build/XmlReport/TESTS-TestSuites.xml" />
 		  <property name="reportgenerator.output.file" value="D:/Nightly_Build/script/mail_setting.properties" />
@@ -821,12 +822,12 @@
 	      <property name="reportgenerator.input.junit_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_report.xml" />
 		  <property name="reportgenerator.input.junit_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_report.xml" />
 		  <property name="reportgenerator.input.junit_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_report.xml" />
-				
+
 		  <property name="reportgenerator.input.jmeter_mysql_fresh_file" value="${base.dir}/XmlReport/JMeterReports/Mysql_Fresh_CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.jmeter_mysql_upgrade_file" value="${base.dir}/XmlReport/JMeterReports/Mysql_Upgrade_CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.jmeter_oracle_fresh_file" value="${base.dir}/XmlReport/JMeterReports/Oracle_Fresh_CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.jmeter_oracle_upgrade_file" value="${base.dir}/XmlReport/JMeterReports/Oracle_Upgrade_CaTissueJMeterTests.jtl" />
-				
+
 		<target name="GenerateNightlyBuildReport" depends="compile">
 			<java classname="NightlyBuildReportGenerator" fork="true">
 			    <arg value="${reportgenerator.input.junit_mysql_fresh_file}" />
@@ -843,9 +844,9 @@
 				<classpath>
 					<pathelement location="./WEB-INF/classes"/>
 				</classpath>
-			
+
 			</java>
-						
+
 		</target>
 
   <!-- =================================================================== -->
@@ -860,7 +861,7 @@
 		<pathelement location="${base.dir}/cobertura/lib/asm-tree-2.2.1.jar" />
 		<path refid="app.classpath" />
 	</path>
-	
+
 	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
 	<target name="instrument">
 		<delete dir="./cobertura/instrumented" />
@@ -892,7 +893,7 @@
 		</copy>
 	</target>
 
-	<target name="build_war_cobertura" depends="init, compile, instrument, 
+	<target name="build_war_cobertura" depends="init, compile, instrument,
 		build_war_cobertura_post_compilation">
 	</target>
 
@@ -901,11 +902,11 @@
 	</target>
 
 	<target name="gen_report_cobertura">
-		<cobertura-report datafile="./cobertura/cobertura.ser" 
+		<cobertura-report datafile="./cobertura/cobertura.ser"
 			srcdir="${src.dir}" destdir="./cobertura/reports/coverage" format="html" />
 		<delete file="./cobertura/cobertura.ser" />
 	</target>
-	
+
  <!-- Create the Applet JAR Begins-->
 
     <target name="build_catissue_applet_jar" depends="build_catissue_applet_compile">
@@ -917,12 +918,12 @@
             </fileset>
         </delete>
         <!-- Mandar : 30Oct06 : Image Folder -->
-        <copy todir="${catissue.applet.dir}/images">	
+        <copy todir="${catissue.applet.dir}/images">
     		<fileset dir="${base.dir}/images">
 	    	    <include name="**/*"/>
     		</fileset>
     	 </copy>
-        
+
         <copy todir="${catissue.applet.dir}">
            <fileset dir="${target.dir}">
                 <include name="**/edu/wustl/catissuecore/applet/**" />
@@ -940,11 +941,11 @@
         <delete includeemptydirs="true">
 	        <fileset dir="${catissue.applet.dir}">
                 <include name="**/*" />
-                <exclude name="**/CVS*" />                                     
+                <exclude name="**/CVS*" />
 	        </fileset>
         </delete>
     </target>
-	
+
 	<!-- compilation using jdk1.3 -->
 	 <target name="build_catissue_applet_compile" depends="init">
         <javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="D:/jdk1.3/bin/javac" compiler="javac1.3">
@@ -957,29 +958,29 @@
               <fileset dir="${lib.dir}">
                   <include name="*.jar"/>
               </fileset>
-            </classpath>       
-        </javac>      
+            </classpath>
+        </javac>
     </target>
-	
+
 	<!-- unpack caCORE war into temp folder -->
-	<target name="unpack_cacore_war" depends ="clean_temp_dir_csmwar">		
+	<target name="unpack_cacore_war" depends ="clean_temp_dir_csmwar">
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
 		<delete file="${temp.dir}/catissuecorecsm/WEB-INF/lib/jboss-common-jdbc-wrapper.jar" />
 		<!--
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
-				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
 					<include name ="orm1.cfg.xml"/>
 					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
 				</replace>
 			</then>
 		</if>
-		
-		<if>	
+
+		<if>
 				<equals arg1="oracle" arg2="${database.type}"/>
 				<then>
-					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
 						<include name ="orm1.cfg.xml"/>
 						<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
 					</replace>
@@ -987,29 +988,29 @@
 		</if>
 		-->
 	</target>
-	
+
 	<target name="replace_database_type">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
-				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
 					<include name ="orm1.cfg.xml"/>
 					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
 				</replace>
 			</then>
 		</if>
-		
-		<if>	
+
+		<if>
 				<equals arg1="oracle" arg2="${database.type}"/>
 				<then>
-					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties">
 						<include name ="orm1.cfg.xml"/>
 						<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
 					</replace>
 				</then>
 		</if>
 	</target>
-	
+
 	<!-- build catissuecore client jar to content latest domain classes & put inside client lib folder-->
 	<target name="build_client_jar">
 		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
@@ -1022,12 +1023,12 @@
 				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				<include name="**/edu/wustl/catissuecore/hbm/**"/>
-				
+
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-	
+
 		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
                	<include name="commonpackage.jar"/>
@@ -1042,7 +1043,7 @@
 	            	<include name="catissuecore.jar"/>
 	        </fileset>
         </copy>
-		
+
 		<copy todir="${base.dir}/CaTissueSuite_caGrid_Service/lib" overwrite="true">
 	            <fileset dir="${lib.dir}">
 	            	<include name="commonpackage.jar"/>
@@ -1084,9 +1085,9 @@
 				<include name="securityManager.jar"/>
             </fileset>
         </copy>
-		
+
 	</target>
-	
+
 	<target name="sendMail"  description="Send mail">
 	        <mail ssl="off" user="${proxy.username}" password="${proxy.password}" mailhost="${proxy.host}" tolist="${proxy.to}" cclist="${proxy.cc}" subject="${proxy.subject}" from="${proxy.from}" >
 	            <message> "${proxy.message}"</message>
@@ -1094,7 +1095,7 @@
 				<fileset dir="${proxy.dir2}" includes="${proxy.fileName}" ></fileset>
 	        </mail>
 	 </target>
-	
+
 	<!-- Create the Applet JAR Begins-->
 		<target name="build_dagViewApplet_jar" depends="compile">
 			<delete dir="${dagviewapplet.dir}" />
@@ -1106,15 +1107,15 @@
 					<include name="**/org-netbeans-graph.jar" />
 					<include name="**/org-netbeans-graph-vmd.jar" />
 					<include name="**/org-openide-util.jar" />
-					<include name="**/DynamicExtensions.jar" />		
-					<include name="**/swingx-2006_10_08.jar" />								
-					<include name="**/struts.jar" />								
-					<include name="**/hibernate2.1.7c.jar" />								
+					<include name="**/DynamicExtensions.jar" />
+					<include name="**/swingx-2006_10_08.jar" />
+					<include name="**/struts.jar" />
+					<include name="**/hibernate2.1.7c.jar" />
 					<include name="**/odmg.jar"/>
 					<include name="**/log4j.jar"/>
 				</fileset>
 			</copy>
-			<copy todir="${dagviewapplet.dir}/images">	
+			<copy todir="${dagviewapplet.dir}/images">
 	    		<fileset dir="${base.dir}/images/dagViewImages">
 		    	    <include name="**/*"/>
 	    		</fileset>
@@ -1183,7 +1184,7 @@
 			</fileset>
 		</jar>
 	</target>
-	
+
 	<target name="build_jar_for_clinportal">
 		<mkdir dir="${base.dir}/caTissueCore_Jar/temp"/>
 		<copy  todir="${base.dir}/caTissueCore_Jar/temp">
@@ -1191,12 +1192,12 @@
 			<include name="**/edu/wustl/catissuecore/domain/**"/>
 			<include name="**/edu/wustl/catissuecore/actionForm/**"/>
 			<include name="**/edu/wustl/catissuecore/util/**"/>
-			<include name="**/edu/wustl/catissuecore/hbm/**"/>				
-			<include name="**/edu/wustl/catissuecore/action/**"/>				
-			<include name="**/edu/wustl/catissuecore/bizLogic/**"/>											
+			<include name="**/edu/wustl/catissuecore/hbm/**"/>
+			<include name="**/edu/wustl/catissuecore/action/**"/>
+			<include name="**/edu/wustl/catissuecore/bizLogic/**"/>
 		  </fileset>
 			</copy>
-		
+
 		<delete >
 			<fileset dir="${base.dir}/caTissueCore_Jar/temp">
 			    <include name="**/edu/wustl/catissuecore/action/annotations/**"/>
@@ -1207,29 +1208,29 @@
 			<fileset dir="${base.dir}/caTissueCore_Jar/temp"/>
 		</jar>
 		<delete dir="${base.dir}/caTissueCore_Jar/temp"/>
-		
+
 </target>
 
 	<property name="filename" value="" />
 	<property name="hookentity" value="" />
 	<property name="condition" value="" />
 	<property name="package" value="" />
-	
-		<target name="import_xmi">			
+
+		<target name="import_xmi">
 				<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true">
 					<arg value="${filename}"/>
 					<arg value="${hookentity}"/>
 					<arg value="${condition}"/>
 					<arg value="${package}"/>
 					<classpath>
-			            <pathelement location="${target.dir}"/> 
+			            <pathelement location="${target.dir}"/>
 		            	<fileset dir="${lib.dir}">
 		                  <include name="*.jar"/>
 		              </fileset>
-		            </classpath> 			
+		            </classpath>
 				</java>
 		</target>
-	<target name="export_xmi" depends="compile" >			
+	<target name="export_xmi" depends="compile" >
 					<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true">
 						<arg value="${groupname}"/>
 						<arg value="${filename}"/>
@@ -1239,24 +1240,24 @@
 			            	<fileset dir="${lib.dir}">
 			                  <include name="*.jar"/>
 			              </fileset>
-			            </classpath> 			
+			            </classpath>
 					</java>
 			</target>
-	
+
 	<!-- flex related targets -->
-	<taskdef resource="flexTasks.tasks" classpath="${basedir}/extra_lib/flexTasks.jar" />   
-	
+	<taskdef resource="flexTasks.tasks" classpath="${basedir}/extra_lib/flexTasks.jar" />
+
 	<target name="compile_dag_flex">
 		         <mxmlc file="${FLEX_APP_ROOT}/dag/Dag.mxml" keep-generated-actionscript="true">
 		             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
 		             <source-path path-element="${FLEX_HOME}/frameworks"/>
 		         </mxmlc>
 	     </target>
-	
+
 	<target name="compile_multiplespecimen_flex">
          <mxmlc file="${FLEX_APP_ROOT}/multiplespecimen/MultipleSpecimen.mxml" keep-generated-actionscript="false">
              <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-         	
+
              <source-path path-element="${FLEX_HOME}/frameworks"/>
          	<compiler.library-path dir="${flex.dir}" append="true">
          	     <include name="libs" />
@@ -1273,7 +1274,7 @@
 			         </mxmlc>
 		     </target>
 	<!-- flex related target finish -->
-	
+
 	<!-- shippingtracking - start -->
 	<target name="build_client_jar_for_st">
 		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
@@ -1287,41 +1288,41 @@
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				<include name="**/edu/wustl/catissuecore/hbm/**"/>
 				<include name="**/edu/wustl/catissuecore/bizlogic/**"/>
-				
+
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-	</target> 
+	</target>
 	<!-- shippingtracking - end -->
 
 	<!-- =================================================================== -->
 	<!-- Junit StrutsTestCases for Nightly Build  -->
 	<!-- =================================================================== -->
-	
-	
+
+
 	<target name="compile_struts_junit_testCases">
-		 
+
 		<echo>Compiling the test classes : </echo>
 		<delete dir="${cat.test.classes.dir}" />
-		<mkdir dir="${cat.test.classes.dir}" /> 
-		
-			
+		<mkdir dir="${cat.test.classes.dir}" />
+
+
 	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
 	            <src path="${cat.test.src.dir}"/>
 	            <classpath>
 	       		  <fileset dir="${lib.dir}">
 	        			<include name="**/*.jar"/>
 	        	  </fileset>
-	            
+
 	            	<fileset dir="${cat.test.lib.dir}">
 	                	<include name="**/*.jar"/>
 	            	</fileset>
-	           	            		
+
 	            </classpath>
-	        	
+
 	    </javac>
-		
+
 		<copy todir="${cat.test.classes.dir}">
 			    <fileset dir="${catissue.test}">
 			      	<include name="**/*.properties" />
@@ -1330,26 +1331,26 @@
 			    </fileset>
 		</copy>
 	</target>
-	
-	
+
+
 	<target name="instrument_struts_testCases" depends="compile">
 			<echo>Instrumenting the application classes : </echo>
-	
+
 			<!--
 				Remove the coverage data file.
 			-->
 				<delete file="${cat.cobertura.dir}/strutscoverage.ser"/>
-				
+
 				<delete dir="${cat.instrumented.dir}" />
-				<mkdir dir="${cat.instrumented.dir}" /> 
-				
+				<mkdir dir="${cat.instrumented.dir}" />
+
 				<!--
 					Instrument the application classes, writing the
 					instrumented classes into ${build.instrumented.dir}.
 				-->
 
 				<cobertura-instrument todir="${cat.instrumented.dir}"  datafile="${cat.cobertura.dir}/strutscoverage.ser">
-					
+
 					<classpath refid="cobertura.classpath" />
 					<classpath>
 						<fileset dir="${lib.dir}">
@@ -1369,7 +1370,7 @@
 							don't instrument the test classes.
 						-->
 						<include name="**/*.class" />
-						
+
 					</fileset>
 				</cobertura-instrument>
 		</target>
@@ -1377,58 +1378,58 @@
 	<target name="run_struts_junitTestCases" depends="compile_struts_junit_testCases">
 	        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
-			
-			
+
+
 			<junit printsummary="yes" fork="yes" forkmode="perTest" haltonfailure="yes"  maxmemory="1024m">
-				
+
 				<jvmarg value="-Xms128m"/>
-				<jvmarg value="-Xmx1024m"/>       
+				<jvmarg value="-Xmx1024m"/>
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
 				<sysproperty key="app.home" value="."/>
-	
+
 				<!--
 					Note the classpath order: instrumented classes are before the
 					original (uninstrumented) classes.  This is important.
-				-->	
-						
+				-->
+
 				<classpath location="${cat.instrumented.dir}" />
-							
+
 				<classpath>
-					
-					<pathelement path= "${target.dir}" /> 
+
+					<pathelement path= "${target.dir}" />
 					<pathelement path="${cat.test.src.dir}" />
 					<pathelement path= "${cat.test.classes.dir}" />
-					
+
 					<fileset dir="${cat.test.lib.dir}">
 						<exclude name="catissuecore.jar"/>
 					    <include name="**/*.jar"/>
 				   	</fileset>
-					
+
 					<fileset dir="${lib.dir}">
 						<include name="**/*.jar"/>
 					</fileset>
-										
-					
+
+
 					<fileset dir="${base.dir}/WEB-INF/">
 						<include name="**/*.properties"/>
 						<include name="**/*.xml" />
 						<include name="**/*.tld" />
 					</fileset>
-					
+
 				</classpath>
 
 				<classpath refid="cobertura.classpath" />
 
-				<formatter type="xml"/> 
-			
+				<formatter type="xml"/>
+
 				<batchtest fork="yes" todir="${base.dir}/Nightly_Build_Struts_Report">
 					<fileset dir="${cat.test.src.dir}">
 						<include name="**/CaTissueSuiteTestSuite.java" />
-					</fileset>				
+					</fileset>
 				</batchtest>
 			</junit>
 		</target>
-	
+
 		<target name="run_struts_nightlyBuild"  depends="run_struts_junitTestCases">
 			<echo> Generating struts nightly build reports :::</echo>
 			<junitreport todir="${base.dir}/Nightly_Build_Struts_Report">
@@ -1438,23 +1439,23 @@
 				<report todir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
 			</junitreport>
 		</target>
-	
-	
+
+
 		<target name="struts_coverage_report">
 			<echo> Generating coverage reports :</echo>
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"/>
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsHtml"/>
-			
+
 			<!--
 				Generate an XML file containing the coverage data using
 				the "srcdir" attribute.
 			-->
-				
+
 			<cobertura-report srcdir="${base.dir}/WEB-INF/src"
 				destdir="${base.dir}/Nightly_Build_Struts_Report/coveragereports/codeCoverageReportsXml"
 				datafile="${cat.cobertura.dir}/strutscoverage.ser"
 				format="xml" />
-			
+
 			<!--
 					Generate a series of HTML files containing the coverage
 					data in a user-readable form using nested source filesets.
@@ -1466,13 +1467,13 @@
 				</fileset>
 			</cobertura-report>
 		</target>
-	
+
 	<target name="struts_junit_coverage_reports">
-	
+
 		<antcall target="instrument_struts_testCases"/>
 		<antcall target="run_struts_junitTestCases"/>
 		<antcall target="struts_coverage_report"/>
-		
+
 	</target>
 
 </project>
