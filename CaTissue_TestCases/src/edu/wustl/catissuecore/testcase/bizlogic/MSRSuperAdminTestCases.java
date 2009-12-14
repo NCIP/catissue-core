@@ -19,10 +19,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddUserBySuperAdmin()
 	{
 		User user = BaseTestCaseUtility.initUser();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			user = (User)appService.createObject(user,bean);
+			user = (User)appService.createObject(user);
 		}
 		catch (Exception e)
 		{
@@ -33,10 +32,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddInstituteBySuperAdmin()
 	{
 		Institution institute = BaseTestCaseUtility.initInstitution();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			institute = (Institution)appService.createObject(institute,bean);
+			institute = (Institution)appService.createObject(institute);
 		}
 		catch (Exception e)
 		{
@@ -50,10 +48,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddDepartmentBySuperAdmin()
 	{
 		Department department = BaseTestCaseUtility.initDepartment();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			department = (Department)appService.createObject(department,bean);
+			department = (Department)appService.createObject(department);
 		}
 		catch (Exception e)
 		{
@@ -67,10 +64,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddSCBySuperAdmin()
 	{
 		StorageContainer  storageContainer = BaseTestCaseUtility.initStorageContainer();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			storageContainer = (StorageContainer)appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer)appService.createObject(storageContainer);
 		}
 		catch (Exception e)
 		{
@@ -85,10 +81,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddStorageTypeBySuperAdmin()
 	{
 		StorageType storageType = BaseTestCaseUtility.initStorageType();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			storageType = (StorageType)appService.createObject(storageType,bean);
+			storageType = (StorageType)appService.createObject(storageType);
 		}
 		catch (Exception e)
 		{
@@ -102,10 +97,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddSpecimenArrayTypeBySuperAdmin()
 	{
 		StorageType storageType = BaseTestCaseUtility.initStorageType();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			storageType = (StorageType)appService.createObject(storageType,bean);
+			storageType = (StorageType)appService.createObject(storageType);
 		}
 		catch (Exception e)
 		{
@@ -119,10 +113,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddBiohazardBySuperAdmin()
 	{
 		Biohazard biohazard = BaseTestCaseUtility.initBioHazard();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			biohazard = (Biohazard)appService.createObject(biohazard,bean);
+			biohazard = (Biohazard)appService.createObject(biohazard);
 		}
 		catch (Exception e)
 		{
@@ -136,10 +129,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddCPBySuperAdmin()
 	{
 		CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			collectionProtocol = (CollectionProtocol)appService.createObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol)appService.createObject(collectionProtocol);
 		}
 		catch (Exception e)
 		{
@@ -153,10 +145,9 @@ public class MSRSuperAdminTestCases extends MSRBaseTestCase {
 	public void testAddDPBySuperAdmin()
 	{
 		 DistributionProtocol distributionProtocol = BaseTestCaseUtility.initDistributionProtocol();
-		 SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			distributionProtocol = (DistributionProtocol)appService.createObject(distributionProtocol,bean);
+			distributionProtocol = (DistributionProtocol)appService.createObject(distributionProtocol);
 		}
 		catch (Exception e)
 		{

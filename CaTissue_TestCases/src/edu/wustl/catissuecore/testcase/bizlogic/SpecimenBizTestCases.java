@@ -44,7 +44,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			Specimen sp = new Specimen();
 			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
 			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
@@ -63,7 +62,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			//sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp + ": sp");
-			sp = (Specimen) appService.updateObject(sp,bean);
+			sp = (Specimen) appService.updateObject(sp);
 			System.out.println(sp + ": sp After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + sp, true);
 			assertEquals(sp.getIsAvailable().booleanValue(),true);
@@ -84,7 +83,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			Specimen sp = new Specimen();
 			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
 			sp.setId(sp.getId());
@@ -117,7 +115,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			}
 			sp.setConsentTierStatusCollection(consentTierStatusCollection);
 			System.out.println(sp + ": sp");
-			sp = (Specimen) appService.updateObject(sp,bean);
+			sp = (Specimen) appService.updateObject(sp);
 			System.out.println(sp + ": sp After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + sp, true);
 		}
@@ -137,14 +135,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
 			specimenObj.setSpecimenCollectionGroup(scg);
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 			TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 			Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
@@ -167,7 +164,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -175,7 +171,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 
 			assertFalse("Lable generator is active so specimen creation wiht same label" + " should fail", true);
 		}
@@ -197,7 +193,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -205,10 +200,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 			specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
 			specimenObj.setLabel(((TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class)).getLabel());
-			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj);
 
 			assertFalse("Lable generator is active so specimen creation wiht same label " + "should fail", true);
 		}
@@ -229,14 +224,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			MolecularSpecimen specimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddMolecularSpecimen(): " + scg);
 			specimenObj.setSpecimenCollectionGroup(scg);
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (MolecularSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (MolecularSpecimen) appService.createObject(specimenObj);
 			TestCaseUtility.setObjectMap(specimenObj, MolecularSpecimen.class);
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
@@ -261,13 +255,12 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CellSpecimen specimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			specimenObj.setSpecimenCollectionGroup(scg);
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (CellSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (CellSpecimen) appService.createObject(specimenObj);
 			TestCaseUtility.setObjectMap(specimenObj, CellSpecimen.class);
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
@@ -291,13 +284,12 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			FluidSpecimen specimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			specimenObj.setSpecimenCollectionGroup(scg);
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj = (FluidSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (FluidSpecimen) appService.createObject(specimenObj);
 			TestCaseUtility.setObjectMap(specimenObj, FluidSpecimen.class);
 			System.out.println("Afer Creating Tissue Specimen");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
@@ -320,14 +312,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testUpdateSpecimenWithBarcode()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		String uniqueKey = UniqueKeyGeneratorUtil.getUniqueKey();
 		MolecularSpecimen specimen = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
 		specimen.setBarcode("barcode" + uniqueKey);
 		specimen.setExternalIdentifierCollection(null);
 		try
 		{
-			specimen = (MolecularSpecimen) appService.updateObject(specimen,bean);
+			specimen = (MolecularSpecimen) appService.updateObject(specimen);
 			System.out.println(specimen + ": specimen After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + specimen, true);
 		}
@@ -346,14 +337,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testUpdateSpecimenWithCaseSensitiveBarcode()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		String uniqueKey = UniqueKeyGeneratorUtil.getUniqueKey();
 		MolecularSpecimen cellSpecimen = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
 		cellSpecimen.setBarcode("specimen with barcode" + uniqueKey);
 		cellSpecimen.setExternalIdentifierCollection(null);
 		try
 		{
-			cellSpecimen = (MolecularSpecimen) appService.updateObject(cellSpecimen,bean);
+			cellSpecimen = (MolecularSpecimen) appService.updateObject(cellSpecimen);
 			System.out.println(cellSpecimen + ": specimen After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + cellSpecimen, true);
 		}
@@ -369,7 +359,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		specimen.setExternalIdentifierCollection(null);
 		try
 		{
-			specimen = (TissueSpecimen) appService.updateObject(specimen,bean);
+			specimen = (TissueSpecimen) appService.updateObject(specimen);
 			System.out.println(specimen + ": specimen After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + specimen, true);
 		}
@@ -387,7 +377,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testSearchSpecimenWithBarcode()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		Specimen specimen = new Specimen();
 		TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 		specimen.setBarcode(cachedSpecimen.getBarcode());
@@ -415,7 +404,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testSearchTissueSpecimen()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		TissueSpecimen specimen = new TissueSpecimen();
 		TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 		specimen.setId(cachedSpecimen.getId());
@@ -447,7 +435,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testSearchSpecimen()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		Specimen specimen = new Specimen();
 		TissueSpecimen cachedSpecimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 		specimen.setId(cachedSpecimen.getId());
@@ -484,7 +471,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen ts = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 			System.out.println("Specimen from map" + ts.getLabel());
 			ts.setLabel("upadated TS" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -497,7 +483,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			externalIdentifier.setSpecimen(ts);
 			externalIdentifierCollection.add(externalIdentifier);
 			ts.setExternalIdentifierCollection(externalIdentifierCollection);
-			ts = (TissueSpecimen) appService.updateObject(ts, bean);
+			ts = (TissueSpecimen) appService.updateObject(ts);
 			Logger.out.info(" Domain Object is successfully updated ---->  :: " + ts.getLabel());
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + ts.getLabel(), true);
 		}
@@ -517,7 +503,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			MolecularSpecimen ts = (MolecularSpecimen) TestCaseUtility.getObjectMap(MolecularSpecimen.class);
 			System.out.println("Specimen from map" + ts.getLabel());
 			ts.setLabel("upadated TS" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -530,7 +515,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			externalIdentifier.setSpecimen(ts);
 			externalIdentifierCollection.add(externalIdentifier);
 			ts.setExternalIdentifierCollection(externalIdentifierCollection);
-			ts = (MolecularSpecimen) appService.updateObject(ts,bean);
+			ts = (MolecularSpecimen) appService.updateObject(ts);
 			Logger.out.info(" Domain Object is successfully updated ---->  :: " + ts.getLabel());
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + ts.getLabel(), true);
 		}
@@ -548,12 +533,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentResponseAndConsentStatusAtSCG()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		System.out.println("Inside ConsentsVerificationTestCases:");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -605,7 +589,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Befor creating Tissue Specimen");
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Spec:" + ts.getLabel());
 		}
 		catch (Exception e)
@@ -622,12 +606,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentResopnseAndConsentStatusForUpadatedCP()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		System.out.println("Inside ConsentsVerificationTestCases:");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -650,7 +633,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Spec:" + ts.getLabel());
 		}
 		catch (Exception e)
@@ -674,7 +657,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts1,bean);
+			ts = (TissueSpecimen) appService.createObject(ts1);
 			System.out.println("Spec:" + ts.getLabel());
 		}
 		catch (Exception e)
@@ -725,11 +708,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp)
 	{
 
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		Participant participant = BaseTestCaseUtility.initParticipant();
 		try
 		{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch (Exception e)
 		{
@@ -795,7 +777,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating CPR");
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch (Exception e)
 		{
@@ -817,7 +799,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating SCG");
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
 		catch (Exception e)
 		{
@@ -846,7 +828,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			c4.setStatement("consent for any research");
 			ConCollection.add(c4);
 			collectionProtocol.setConsentTierCollection(ConCollection);
-			collectionProtocol = (CollectionProtocol) appService.updateObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol) appService.updateObject(collectionProtocol);
 			System.out.println("after updation" + collectionProtocol.getTitle());
 			System.out.println("after updation" + collectionProtocol.getShortTitle());
 			assertTrue("Domain object updated successfully", true);
@@ -867,11 +849,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentsWithdrawnWithReturnOption()
 	{
 		System.out.println("Inside ConsentsVerificationTestCases:");
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -885,7 +866,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch (Exception e)
 		{
@@ -933,7 +914,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating CPR");
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch (Exception e)
 		{
@@ -952,7 +933,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 
 		}
 		catch (Exception e)
@@ -970,7 +951,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts, bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1005,7 +986,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
 		}
 		catch (Exception e)
 		{
@@ -1022,11 +1003,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentWithdrawnWithDiscardOption()
 	{
 		System.out.println("Inside ConsentsVerificationTestCases:");
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1039,7 +1019,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch (Exception e)
 		{
@@ -1086,7 +1066,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating CPR");
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch (Exception e)
 		{
@@ -1105,7 +1085,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 
 		}
 		catch (Exception e)
@@ -1123,7 +1103,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1158,7 +1138,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
 		}
 		catch (Exception e)
 		{
@@ -1175,12 +1155,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentResponseChangeWithSpecimenChange()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.setShortTitle("cp_SpecimenChange_final");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1197,7 +1176,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Befor creating Tissue Specimen");
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1213,7 +1192,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1,bean);
+			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 		}
 		catch (Exception e)
 		{
@@ -1240,7 +1219,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		ts.setExternalIdentifierCollection(externalIdentifierCollection);
 		try
 		{
-			ts = (TissueSpecimen) appService.updateObject(ts,bean);
+			ts = (TissueSpecimen) appService.updateObject(ts);
 			System.out.println("after tissuespecimen update in testVerifyConsentResponseChangeWithSpecimenChange()");
 		}
 		catch (Exception e)
@@ -1259,12 +1238,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentResponseChangeWithCPRChange()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.setShortTitle("cp_CPRChange");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1277,7 +1255,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch (Exception e)
 		{
@@ -1323,7 +1301,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating CPR");
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch (Exception e)
 		{
@@ -1342,7 +1320,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating SCG");
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
 		catch (Exception e)
 		{
@@ -1358,7 +1336,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("after tissuespecimen update in testVerifyConsentResponseChangeWithCPRChange()");
 		}
 		catch (Exception e)
@@ -1375,7 +1353,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration);
 			System.out.println("after collectionProtocolRegistration update in testVerifyConsentResponseChangeWithCPRChange()");
 
 		}
@@ -1396,12 +1374,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentResponseChangeWithSCGChangeApplyAll()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.setShortTitle("cp_SCGChangeApplyAll");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1417,7 +1394,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1433,7 +1410,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1,bean);
+			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 		}
 		catch (Exception e)
 		{
@@ -1461,7 +1438,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
 			System.out.println("after scg update in testVerifyConsentResponseChangeWithSCGChangeApplyAll()");
 		}
 		catch (Exception e)
@@ -1489,7 +1466,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		cp.setShortTitle("cp_ConflictOption");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1505,7 +1482,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1524,7 +1501,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1,bean);
+			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 		}
 		catch (Exception e)
 		{
@@ -1542,7 +1519,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			childSpecimen2 = (TissueSpecimen) appService.createObject(childSpecimen2,bean);
+			childSpecimen2 = (TissueSpecimen) appService.createObject(childSpecimen2);
 		}
 		catch (Exception e)
 		{
@@ -1570,7 +1547,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		childSpecimen2.setExternalIdentifierCollection(externalIdentifierCollection);
 		try
 		{
-			childSpecimen2 = (TissueSpecimen) appService.updateObject(childSpecimen2,bean);
+			childSpecimen2 = (TissueSpecimen) appService.updateObject(childSpecimen2);
 		}
 		catch (Exception e)
 		{
@@ -1598,7 +1575,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
 			System.out.println("after scg update in testVerifyConsentResponseChangeWithConflictOption()");
 		}
 		catch (Exception e)
@@ -1617,12 +1594,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentsWithdrawnWithDiscardOption()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.setShortTitle("cp_DiscardOption");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1634,7 +1610,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		Participant participant = BaseTestCaseUtility.initParticipant();
 		try
 		{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch (Exception e)
 		{
@@ -1678,7 +1654,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("Creating CPR");
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch (Exception e)
 		{
@@ -1697,7 +1673,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 
 		}
 		catch (Exception e)
@@ -1714,7 +1690,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1736,7 +1712,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		collectionProtocolRegistration.setParticipant(participant);
 		try
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration);
 			System.out.println("after collectionProtocolRegistration update in testVerifyConsentsWithdrawnWithDiscardOption()");
 
 		}
@@ -1756,12 +1732,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	 */
 	public void testVerifyConsentsWithdrawnWithDiscardOptionAtSCG()
 	{
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.setShortTitle("cp_DiscardOptionAtSCG");
 		try
 		{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -1779,7 +1754,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		try
 		{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch (Exception e)
 		{
@@ -1808,7 +1783,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 		try
 		{
-			scg = (SpecimenCollectionGroup) appService.updateObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
 			System.out.println("after scg update in testVerifyConsentsWithdrawnWithDiscardOptionAtSCG()");
 		}
 		catch (Exception e)
@@ -1827,7 +1802,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			
@@ -1839,7 +1813,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
 			specimenObj.setLabel(null);
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 
 			TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			childSpecimen1.setParentSpecimen(specimenObj);
@@ -1850,7 +1824,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 			try
 			{
-				childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1,bean);
+				childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 			}
 			catch (Exception e)
 			{
@@ -1866,7 +1840,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 			try
 			{
-				childSpecimen2 = (TissueSpecimen) appService.createObject(childSpecimen2,bean);
+				childSpecimen2 = (TissueSpecimen) appService.createObject(childSpecimen2);
 			}
 			catch (Exception e)
 			{
@@ -1898,7 +1872,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			
@@ -1907,13 +1880,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			
 			specimenObj.setSpecimenCollectionGroup(scg);
 			specimenObj.setCollectionStatus("Collected");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 
 			TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			childSpecimen1.setParentSpecimen(specimenObj);
 			childSpecimen1.setLineage("Aliquot");
 			childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
-			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1,bean);
+			childSpecimen1 = (TissueSpecimen) appService.createObject(childSpecimen1);
 			System.out.println("Child label is " + childSpecimen1.getLabel());
 		}
 
@@ -1932,7 +1905,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -1940,9 +1912,9 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
 			specimenObj.setCollectionStatus("Collected");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 			specimenObj.setActivityStatus("Closed");
-			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj, bean);
+			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj);
 			assertTrue("Domain Object is successfully updated. " + "Activity status updated From Active To Closed." + specimenObj.getLabel(), true);
 		}
 		catch (Exception e)
@@ -1959,7 +1931,6 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -1967,11 +1938,11 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
 			specimenObj.setCollectionStatus("Collected");
-			specimenObj = (TissueSpecimen) appService.createObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 			specimenObj.setActivityStatus("Closed");
-			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj);
 			specimenObj.setActivityStatus("Active");
-			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj,bean);
+			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj);
 			assertTrue("Domain Object is successfully updated. " + "Activity status updated From Closed To Active." + specimenObj.getLabel(), true);
 		}
 		catch (Exception e)

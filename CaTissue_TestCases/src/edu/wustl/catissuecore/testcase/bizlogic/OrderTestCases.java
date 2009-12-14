@@ -16,8 +16,7 @@ public class OrderTestCases extends CaTissueSuiteBaseTest {
 		try {
 			OrderDetails order = BaseTestCaseUtility.initOrder();			
 			System.out.println(order);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			order = (OrderDetails) appService.createObject(order,bean); 
+			order = (OrderDetails) appService.createObject(order); 
 			System.out.println("Object created successfully");
 			//OrderId = order.getId();
 			assertTrue("Object added successfully", true);
@@ -58,10 +57,9 @@ public class OrderTestCases extends CaTissueSuiteBaseTest {
 		{
 	    	OrderDetails order = BaseTestCaseUtility.initOrder();		
 	    	Logger.out.info("updating domain object------->"+order);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	order = (OrderDetails) appService.createObject(order,bean);
+	    	order = (OrderDetails) appService.createObject(order);
 	    	BaseTestCaseUtility.updateOrderDetails(order);	    	
-	    	OrderDetails updatedOrder = (OrderDetails) appService.updateObject(order,bean);
+	    	OrderDetails updatedOrder = (OrderDetails) appService.updateObject(order);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedOrder);
 	       	assertTrue("Domain object successfully updated ---->"+updatedOrder, true);
 	    } 

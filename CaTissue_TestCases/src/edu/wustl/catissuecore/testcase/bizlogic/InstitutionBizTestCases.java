@@ -17,8 +17,7 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
 		try{
 			Institution institution = BaseTestCaseUtility.initInstitution();
 			System.out.println(institution);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			institution = (Institution) appService.createObject(institution,bean); 
+			institution = (Institution) appService.createObject(institution); 
 			TestCaseUtility.setObjectMap(institution, Institution.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -35,10 +34,9 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
     	Logger.out.info("updating domain object------->"+institution);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	institution = (Institution) appService.createObject(institution,bean);
+	    	institution = (Institution) appService.createObject(institution);
 	    	BaseTestCaseUtility.updateInstitution(institution);	    	
-	    	Institution updatedInst = (Institution) appService.updateObject(institution,bean);
+	    	Institution updatedInst = (Institution) appService.updateObject(institution);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedInst);
 	       	assertTrue("Domain object successfully updated ---->"+updatedInst, true);
 	    } 
@@ -55,8 +53,7 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
 			Institution inst = BaseTestCaseUtility.initInstitution();			
 			inst.setName("");
 			System.out.println(inst);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			inst = (Institution) appService.createObject(inst, bean); 
+			inst = (Institution) appService.createObject(inst); 
 			assertFalse("Test Failed. Duplicate institution name should throw exception", true);
 		 }
 		 catch(Exception e){
@@ -70,9 +67,8 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
 			Institution inst = BaseTestCaseUtility.initInstitution();
 			Institution dupInstName = BaseTestCaseUtility.initInstitution();
 			dupInstName.setName(inst.getName());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			inst = (Institution) appService.createObject(inst,bean); 
-			dupInstName = (Institution) appService.createObject(dupInstName,bean); 
+			inst = (Institution) appService.createObject(inst); 
+			dupInstName = (Institution) appService.createObject(dupInstName); 
 			assertFalse("Test Failed. Duplicate dept name should throw exception", true);
 		}
 		 catch(Exception e){

@@ -16,8 +16,7 @@ public class DistributionTestCases extends CaTissueSuiteBaseTest{
 			specimen.setId(new Long(4));
 			Distribution distribution = BaseTestCaseUtility.initDistribution(specimen);			
 			System.out.println(distribution);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			distribution = (Distribution) appService.createObject(distribution,bean); 
+			distribution = (Distribution) appService.createObject(distribution); 
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
 		 }

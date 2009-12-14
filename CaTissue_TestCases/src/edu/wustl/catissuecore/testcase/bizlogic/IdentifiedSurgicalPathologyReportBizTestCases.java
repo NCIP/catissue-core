@@ -17,9 +17,8 @@ public class IdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSuite
 			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport= BaseTestCaseUtility.initIdentifiedSurgicalPathologyReport();			
 			System.out.println(identifiedSurgicalPathologyReport);
 			SpecimenCollectionGroup specimenCollectionGroup=identifiedSurgicalPathologyReport.getSpecimenCollectionGroup();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			specimenCollectionGroup=(SpecimenCollectionGroup)appService.updateObject(specimenCollectionGroup,bean);
-			identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport,bean);
+			specimenCollectionGroup=(SpecimenCollectionGroup)appService.updateObject(specimenCollectionGroup);
+			identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport);
 			TestCaseUtility.setObjectMap(identifiedSurgicalPathologyReport, IdentifiedSurgicalPathologyReport.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -38,9 +37,8 @@ public class IdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSuite
     	Logger.out.info("updating domain object------->"+identifiedSurgicalPathologyReport);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 	    	identifiedSurgicalPathologyReport=BaseTestCaseUtility.updateIdentifiedSurgicalPathologyReport(identifiedSurgicalPathologyReport);	
-	    	IdentifiedSurgicalPathologyReport updatedIdentifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.updateObject(identifiedSurgicalPathologyReport, bean);
+	    	IdentifiedSurgicalPathologyReport updatedIdentifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.updateObject(identifiedSurgicalPathologyReport);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedIdentifiedSurgicalPathologyReport);
 	       	assertTrue("Domain object successfully updated ---->"+updatedIdentifiedSurgicalPathologyReport, true);
 	    } 

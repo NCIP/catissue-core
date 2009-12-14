@@ -43,7 +43,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			MolecularSpecimen mSpecimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 			FluidSpecimen fSpecimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
@@ -56,7 +55,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			capacity.setOneDimensionCapacity(new Integer(2));
 			capacity.setTwoDimensionCapacity(new Integer(2));
 			storageContainer.setCapacity(capacity);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -89,15 +88,15 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 
 			System.out.println("Before Creating Specimen object");
 
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
-			mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj,bean);
-			fSpecimenObj = (FluidSpecimen) appService.createObject(fSpecimenObj,bean);
-			cSpecimenObj = (CellSpecimen) appService.createObject(cSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
+			mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj);
+			fSpecimenObj = (FluidSpecimen) appService.createObject(fSpecimenObj);
+			cSpecimenObj = (CellSpecimen) appService.createObject(cSpecimenObj);
 
 			Capacity cap = storageContainer.getCapacity();
 			cap.setOneDimensionCapacity(new Integer(1));
 			cap.setTwoDimensionCapacity(new Integer(1));
-			storageContainer = (StorageContainer) appService.updateObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.updateObject(storageContainer);
 			assertFalse("Container is already Full:" + storageContainer, true);
 		}
 		catch (Exception e)
@@ -116,14 +115,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -132,7 +130,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			TransferEventParameters spe = new TransferEventParameters();
@@ -150,7 +148,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			spe.setToPositionDimensionTwo(2);
 			spe.setToStorageContainer(storageContainer);
 			System.out.println("Before Creating TransferEvent");
-			spe = (TransferEventParameters) appService.createObject(spe,bean);
+			spe = (TransferEventParameters) appService.createObject(spe);
 			System.out.println("After Creating Specimen object");
 			assertTrue("Specimen Position Sucessfully Transfered :" + spe, true);
 
@@ -171,7 +169,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			MolecularSpecimen mSpecimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
@@ -179,7 +176,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -188,7 +185,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Tissue Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Tissue Specimen object");
 
 			SpecimenPosition pos2 = new SpecimenPosition();
@@ -198,7 +195,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			mSpecimenObj.setSpecimenPosition(pos2);
 			mSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Molecular Specimen object");
-			mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj,bean);
+			mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj);
 			System.out.println("After Creating Molecular Specimen object");
 
 			TransferEventParameters spe = new TransferEventParameters();
@@ -216,7 +213,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			spe.setToPositionDimensionTwo(2);
 			spe.setToStorageContainer(storageContainer);
 			System.out.println("Before Creating TransferEvent");
-			spe = (TransferEventParameters) appService.createObject(spe,bean);
+			spe = (TransferEventParameters) appService.createObject(spe);
 			System.out.println("After Creating Specimen object");
 			assertFalse("Container is already Full", true);
 		}
@@ -235,14 +232,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -251,7 +247,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			DisposalEventParameters disposalEvent = new DisposalEventParameters();
@@ -265,7 +261,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			disposalEvent.setComment("Dispose Event");
 			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			System.out.println("Before Creating DisposeEvent");
-			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent,bean);
+			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
 			TestCaseUtility.setObjectMap(disposalEvent, DisposalEventParameters.class);
 			if (Status.ACTIVITY_STATUS_CLOSED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			{
@@ -291,14 +287,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -308,7 +303,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			tSpecimenObj.setCollectionStatus("Collected");
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			DisposalEventParameters disposalEvent = new DisposalEventParameters();
@@ -323,9 +318,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
 			
 			System.out.println("Before Creating DisposeEvent");
-			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent,bean);
+			disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
 			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent,bean);
+			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent);
 			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			{
 				assertTrue("Disposed event sucessfully fired: Activity Status changed from Closed to Disbled:" + disposalEvent, true);
@@ -350,10 +345,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			DisposalEventParameters disposalEvent = (DisposalEventParameters) TestCaseUtility.getObjectMap(DisposalEventParameters.class);
 			disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent,bean);
+			disposalEvent = (DisposalEventParameters) appService.updateObject(disposalEvent);
 			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getActivityStatus()))
 			{
 				assertTrue("Disposed event sucessfully fired" + disposalEvent, true);
@@ -378,14 +372,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -394,7 +387,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			CellSpecimenReviewParameters cellSpecimenReviewParameters = new CellSpecimenReviewParameters();
@@ -406,7 +399,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			user.setId(1l);//admin
 			cellSpecimenReviewParameters.setUser(user);
 			cellSpecimenReviewParameters.setComment("CellSpecimenReviewEvent");
-			cellSpecimenReviewParameters = (CellSpecimenReviewParameters) appService.createObject(cellSpecimenReviewParameters,bean);
+			cellSpecimenReviewParameters = (CellSpecimenReviewParameters) appService.createObject(cellSpecimenReviewParameters);
 			TestCaseUtility.setObjectMap(cellSpecimenReviewParameters, CellSpecimenReviewParameters.class);
 			assertTrue("Cell Specimen Review Parameters event sucessfully fired" + cellSpecimenReviewParameters, true);
 		}
@@ -426,11 +419,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CellSpecimenReviewParameters csrp = (CellSpecimenReviewParameters) TestCaseUtility.getObjectMap(CellSpecimenReviewParameters.class);
 			csrp.setNeoplasticCellularityPercentage(66D);
 			csrp.setViableCellPercentage(40D);
-			csrp = (CellSpecimenReviewParameters) appService.updateObject(csrp,bean);
+			csrp = (CellSpecimenReviewParameters) appService.updateObject(csrp);
 			if (csrp.getNeoplasticCellularityPercentage() != 66D)
 			{
 				assertFalse("Cell Specimen Review Parameters event Failed:", true);
@@ -455,14 +447,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -471,7 +462,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			CheckInCheckOutEventParameter checkInCheckOutEventParameter = new CheckInCheckOutEventParameter();
@@ -482,7 +473,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			checkInCheckOutEventParameter.setUser(user);
 			checkInCheckOutEventParameter.setStorageStatus("CHECK IN");
 			checkInCheckOutEventParameter.setComment("CheckInCheckOutEventParameter");
-			checkInCheckOutEventParameter = (CheckInCheckOutEventParameter) appService.createObject(checkInCheckOutEventParameter,bean);
+			checkInCheckOutEventParameter = (CheckInCheckOutEventParameter) appService.createObject(checkInCheckOutEventParameter);
 			TestCaseUtility.setObjectMap(checkInCheckOutEventParameter, CheckInCheckOutEventParameter.class);
 			assertTrue("CheckInCheckOutEvent sucessfully fired" + checkInCheckOutEventParameter, true);
 		}
@@ -502,11 +493,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CheckInCheckOutEventParameter cico = (CheckInCheckOutEventParameter) TestCaseUtility.getObjectMap(CheckInCheckOutEventParameter.class);
 			cico.setStorageStatus("CHECK OUT");
-			cico = (CheckInCheckOutEventParameter) appService.updateObject(cico,bean);
+			cico = (CheckInCheckOutEventParameter) appService.updateObject(cico);
 			if ("CHECK OUT".equals(cico.getStorageStatus()))
 			{
 				assertTrue("Check In Check Out event sucessfully fired" + cico, true);
@@ -531,14 +520,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -547,7 +535,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			CollectionEventParameters collectionEventParameter = new CollectionEventParameters();
@@ -559,7 +547,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			collectionEventParameter.setComment("CollectionEvent");
 			collectionEventParameter.setCollectionProcedure("Lavage");
 			collectionEventParameter.setContainer("EDTA Vacutainer");
-			collectionEventParameter = (CollectionEventParameters) appService.createObject(collectionEventParameter,bean);
+			collectionEventParameter = (CollectionEventParameters) appService.createObject(collectionEventParameter);
 			TestCaseUtility.setObjectMap(collectionEventParameter, CollectionEventParameters.class);
 			assertTrue("Collection event sucessfully fired" + collectionEventParameter, true);
 		}
@@ -579,11 +567,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CollectionEventParameters collectionEventParameter = (CollectionEventParameters) TestCaseUtility
 					.getObjectMap(CollectionEventParameters.class);
 			collectionEventParameter.setCollectionProcedure("Needle Core Biopsy");
-			collectionEventParameter = (CollectionEventParameters) appService.updateObject(collectionEventParameter,bean);
+			collectionEventParameter = (CollectionEventParameters) appService.updateObject(collectionEventParameter);
 			if ("Needle Core Biopsy".equals(collectionEventParameter.getCollectionProcedure()))
 			{
 				assertTrue("Collection event sucessfully fired" + collectionEventParameter, true);
@@ -608,14 +595,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -624,7 +610,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			EmbeddedEventParameters embeddedEventParameters = new EmbeddedEventParameters();
@@ -635,7 +621,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			embeddedEventParameters.setUser(user);
 			embeddedEventParameters.setEmbeddingMedium("Plastic");
 			embeddedEventParameters.setComment("EmbeddedEventParameters");
-			embeddedEventParameters = (EmbeddedEventParameters) appService.createObject(embeddedEventParameters,bean);
+			embeddedEventParameters = (EmbeddedEventParameters) appService.createObject(embeddedEventParameters);
 			TestCaseUtility.setObjectMap(embeddedEventParameters, EmbeddedEventParameters.class);
 			assertTrue("EmbeddedEventParameters sucessfully fired" + embeddedEventParameters, true);
 		}
@@ -655,10 +641,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			EmbeddedEventParameters embeddedEventParameters = (EmbeddedEventParameters) TestCaseUtility.getObjectMap(EmbeddedEventParameters.class);
 			embeddedEventParameters.setEmbeddingMedium("Paraffin");
-			embeddedEventParameters = (EmbeddedEventParameters) appService.updateObject(embeddedEventParameters,bean);
+			embeddedEventParameters = (EmbeddedEventParameters) appService.updateObject(embeddedEventParameters);
 			if ("Paraffin".equals(embeddedEventParameters.getEmbeddingMedium()))
 			{
 				assertTrue("Embedded Event sucessfully fired" + embeddedEventParameters, true);
@@ -683,14 +668,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -699,7 +683,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			FixedEventParameters fixedEventParameters = new FixedEventParameters();
@@ -710,7 +694,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			fixedEventParameters.setUser(user);
 			fixedEventParameters.setFixationType("Methanol");
 			fixedEventParameters.setComment("CheckInCheckOutEventParameter");
-			fixedEventParameters = (FixedEventParameters) appService.createObject(fixedEventParameters,bean);
+			fixedEventParameters = (FixedEventParameters) appService.createObject(fixedEventParameters);
 			TestCaseUtility.setObjectMap(fixedEventParameters, FixedEventParameters.class);
 			assertTrue("FixedEventParameters sucessfully fired" + fixedEventParameters, true);
 		}
@@ -730,10 +714,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			FixedEventParameters fixedEventParameters = (FixedEventParameters) TestCaseUtility.getObjectMap(FixedEventParameters.class);
 			fixedEventParameters.setFixationType("RNALater");
-			fixedEventParameters = (FixedEventParameters) appService.updateObject(fixedEventParameters,bean);
+			fixedEventParameters = (FixedEventParameters) appService.updateObject(fixedEventParameters);
 			if ("RNALater".equals(fixedEventParameters.getFixationType()))
 			{
 				assertTrue("Fixed Event Parameters sucessfully fired" + fixedEventParameters, true);
@@ -758,14 +741,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -774,7 +756,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParameters = new FluidSpecimenReviewEventParameters();
@@ -787,7 +769,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			fluidSpecimenReviewEventParameters.setUser(user);
 
 			fluidSpecimenReviewEventParameters.setComment("Fluid Specimen Review Event");
-			fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) appService.createObject(fluidSpecimenReviewEventParameters,bean);
+			fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) appService.createObject(fluidSpecimenReviewEventParameters);
 			TestCaseUtility.setObjectMap(fluidSpecimenReviewEventParameters, FluidSpecimenReviewEventParameters.class);
 			assertTrue("fluidSpecimenReviewEventParameters sucessfully fired" + fluidSpecimenReviewEventParameters, true);
 		}
@@ -807,11 +789,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			FluidSpecimenReviewEventParameters fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) TestCaseUtility
 					.getObjectMap(FluidSpecimenReviewEventParameters.class);
 			fluidSpecimenReviewEventParameters.setCellCount(40D);
-			fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) appService.updateObject(fluidSpecimenReviewEventParameters,bean);
+			fluidSpecimenReviewEventParameters = (FluidSpecimenReviewEventParameters) appService.updateObject(fluidSpecimenReviewEventParameters);
 
 			FluidSpecimenReviewEventParameters fSRE = new FluidSpecimenReviewEventParameters();
 			fSRE.setId(fluidSpecimenReviewEventParameters.getId());
@@ -856,14 +837,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -872,7 +852,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			FrozenEventParameters frozenEventParameters = new FrozenEventParameters();
@@ -885,7 +865,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			frozenEventParameters.setUser(user);
 
 			frozenEventParameters.setComment("Frozen Event");
-			frozenEventParameters = (FrozenEventParameters) appService.createObject(frozenEventParameters,bean);
+			frozenEventParameters = (FrozenEventParameters) appService.createObject(frozenEventParameters);
 			TestCaseUtility.setObjectMap(frozenEventParameters, FrozenEventParameters.class);
 			assertTrue("Frozen Event Parameters sucessfully fired" + frozenEventParameters, true);
 		}
@@ -905,10 +885,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			FrozenEventParameters frozenEventParameters = (FrozenEventParameters) TestCaseUtility.getObjectMap(FrozenEventParameters.class);
 			frozenEventParameters.setMethod("Cryobath");
-			frozenEventParameters = (FrozenEventParameters) appService.updateObject(frozenEventParameters,bean);
+			frozenEventParameters = (FrozenEventParameters) appService.updateObject(frozenEventParameters);
 
 			FrozenEventParameters frozenSRE = new FrozenEventParameters();
 			frozenSRE.setId(frozenEventParameters.getId());
@@ -953,7 +932,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
@@ -961,7 +939,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -971,7 +949,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			SpunEventParameters spunEventParameters = new SpunEventParameters();
@@ -982,7 +960,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			spunEventParameters.setUser(user);
 			spunEventParameters.setComment("Spun Specimen Event");
 			spunEventParameters.setGravityForce(10D);
-			spunEventParameters = (SpunEventParameters) appService.createObject(spunEventParameters,bean);
+			spunEventParameters = (SpunEventParameters) appService.createObject(spunEventParameters);
 			TestCaseUtility.setObjectMap(spunEventParameters, SpunEventParameters.class);
 			assertTrue("spunSpecimenEventParameters sucessfully fired" + spunEventParameters, true);
 		}
@@ -1002,10 +980,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			SpunEventParameters spunEventParameters = (SpunEventParameters) TestCaseUtility.getObjectMap(SpunEventParameters.class);
 			spunEventParameters.setGravityForce(20D);
-			spunEventParameters = (SpunEventParameters) appService.updateObject(spunEventParameters,bean);
+			spunEventParameters = (SpunEventParameters) appService.updateObject(spunEventParameters);
 
 			SpunEventParameters spunEP = new SpunEventParameters();
 			spunEP.setId(spunEventParameters.getId());
@@ -1050,7 +1027,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
@@ -1058,7 +1034,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -1068,7 +1044,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			ThawEventParameters thawEventParameters = new ThawEventParameters();
@@ -1078,7 +1054,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			user.setId(1l);//admin
 			thawEventParameters.setUser(user);
 			thawEventParameters.setComment("Thaw Specimen Event");
-			thawEventParameters = (ThawEventParameters) appService.createObject(thawEventParameters,bean);
+			thawEventParameters = (ThawEventParameters) appService.createObject(thawEventParameters);
 			TestCaseUtility.setObjectMap(thawEventParameters, ThawEventParameters.class);
 			assertTrue("ThawSpecimenEventParameters sucessfully fired" + thawEventParameters, true);
 		}
@@ -1098,11 +1074,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			ThawEventParameters thawEventParameters = (ThawEventParameters) TestCaseUtility.getObjectMap(ThawEventParameters.class);
 			String comment = "update Thaw Specimen Event";
 			thawEventParameters.setComment(comment);
-			thawEventParameters = (ThawEventParameters) appService.updateObject(thawEventParameters,bean);
+			thawEventParameters = (ThawEventParameters) appService.updateObject(thawEventParameters);
 
 			ThawEventParameters thawEP = new ThawEventParameters();
 			thawEP.setId(thawEventParameters.getId());
@@ -1146,14 +1121,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -1163,7 +1137,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			TissueSpecimenReviewEventParameters tsReviewEventParameters = new TissueSpecimenReviewEventParameters();
@@ -1175,7 +1149,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tsReviewEventParameters.setComment("TissueSpecimenReview Specimen Event");
 			tsReviewEventParameters.setHistologicalQuality("Excellent- Definable Nuclear Detail");
 			tsReviewEventParameters.setNecrosisPercentage(10D);
-			tsReviewEventParameters = (TissueSpecimenReviewEventParameters) appService.createObject(tsReviewEventParameters,bean);
+			tsReviewEventParameters = (TissueSpecimenReviewEventParameters) appService.createObject(tsReviewEventParameters);
 			TestCaseUtility.setObjectMap(tsReviewEventParameters, TissueSpecimenReviewEventParameters.class);
 			assertTrue("TissueSpecimenReviewEventParameters sucessfully fired" + tsReviewEventParameters, true);
 		}
@@ -1194,11 +1168,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimenReviewEventParameters tsReviewEventParameters = (TissueSpecimenReviewEventParameters) TestCaseUtility
 					.getObjectMap(TissueSpecimenReviewEventParameters.class);
 			tsReviewEventParameters.setNecrosisPercentage(20D);
-			tsReviewEventParameters = (TissueSpecimenReviewEventParameters) appService.updateObject(tsReviewEventParameters,bean);
+			tsReviewEventParameters = (TissueSpecimenReviewEventParameters) appService.updateObject(tsReviewEventParameters);
 
 			TissueSpecimenReviewEventParameters tissueSpecimenEP = new TissueSpecimenReviewEventParameters();
 			tissueSpecimenEP.setId(tsReviewEventParameters.getId());
@@ -1242,7 +1215,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
@@ -1250,7 +1222,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -1260,7 +1232,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
@@ -1271,7 +1243,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			receivedEventParameters.setUser(user);
 			receivedEventParameters.setComment("Received Specimen Event");
 			receivedEventParameters.setReceivedQuality("Cauterized");
-			receivedEventParameters = (ReceivedEventParameters) appService.createObject(receivedEventParameters,bean);
+			receivedEventParameters = (ReceivedEventParameters) appService.createObject(receivedEventParameters);
 			TestCaseUtility.setObjectMap(receivedEventParameters, ReceivedEventParameters.class);
 			assertTrue("ReceivedEventParameters sucessfully fired" + receivedEventParameters, true);
 		}
@@ -1294,7 +1266,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) TestCaseUtility.getObjectMap(ReceivedEventParameters.class);
 			receivedEventParameters.setReceivedQuality("Acceptable");
-			receivedEventParameters = (ReceivedEventParameters) appService.updateObject(receivedEventParameters,bean);
+			receivedEventParameters = (ReceivedEventParameters) appService.updateObject(receivedEventParameters);
 
 			ReceivedEventParameters receivedEP = new ReceivedEventParameters();
 			receivedEP.setId(receivedEventParameters.getId());
@@ -1339,7 +1311,6 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 
@@ -1347,7 +1318,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -1357,7 +1328,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			ProcedureEventParameters procEventParameters = new ProcedureEventParameters();
@@ -1369,7 +1340,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			procEventParameters.setComment("Procedure Specimen Event");
 			procEventParameters.setName("ProcedureEvent");
 			procEventParameters.setUrl("http://localhost:8080/catissuecore/");
-			procEventParameters = (ProcedureEventParameters) appService.createObject(procEventParameters,bean);
+			procEventParameters = (ProcedureEventParameters) appService.createObject(procEventParameters);
 			TestCaseUtility.setObjectMap(procEventParameters, ProcedureEventParameters.class);
 			assertTrue("ProcedureEventParameters sucessfully fired" + procEventParameters, true);
 		}
@@ -1389,10 +1360,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			ProcedureEventParameters procEventParameters = (ProcedureEventParameters) TestCaseUtility.getObjectMap(ProcedureEventParameters.class);
 			procEventParameters.setName("NewProcedureEvent");
-			procEventParameters = (ProcedureEventParameters) appService.updateObject(procEventParameters,bean);
+			procEventParameters = (ProcedureEventParameters) appService.updateObject(procEventParameters);
 
 			ProcedureEventParameters procEP = new ProcedureEventParameters();
 			procEP.setId(procEventParameters.getId());
@@ -1437,14 +1407,13 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 			System.out.println("after Creating scg");
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 
 			SpecimenPosition pos1 = new SpecimenPosition();
 			pos1.setPositionDimensionOne(1);
@@ -1454,7 +1423,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			tSpecimenObj.setSpecimenPosition(pos1);
 			tSpecimenObj.setSpecimenCollectionGroup(scg);
 			System.out.println("Before Creating Specimen object");
-			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj,bean);
+			tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 			System.out.println("After Creating Specimen object");
 
 			MolecularSpecimenReviewParameters molecularSpecEventParameters = new MolecularSpecimenReviewParameters();
@@ -1466,7 +1435,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			molecularSpecEventParameters.setComment("MolecularSpecimenReview Specimen Event");
 			molecularSpecEventParameters.setLaneNumber("12");
 			molecularSpecEventParameters.setQualityIndex("1");
-			molecularSpecEventParameters = (MolecularSpecimenReviewParameters) appService.createObject(molecularSpecEventParameters,bean);
+			molecularSpecEventParameters = (MolecularSpecimenReviewParameters) appService.createObject(molecularSpecEventParameters);
 			TestCaseUtility.setObjectMap(molecularSpecEventParameters, MolecularSpecimenReviewParameters.class);
 			assertTrue("MolecularSpecimenReview sucessfully fired" + molecularSpecEventParameters, true);
 		}
@@ -1486,11 +1455,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			MolecularSpecimenReviewParameters molecularSpecEventParameters = (MolecularSpecimenReviewParameters) TestCaseUtility
 					.getObjectMap(MolecularSpecimenReviewParameters.class);
 			molecularSpecEventParameters.setLaneNumber("13");
-			molecularSpecEventParameters = (MolecularSpecimenReviewParameters) appService.updateObject(molecularSpecEventParameters,bean);
+			molecularSpecEventParameters = (MolecularSpecimenReviewParameters) appService.updateObject(molecularSpecEventParameters);
 
 			MolecularSpecimenReviewParameters molecularEP = new MolecularSpecimenReviewParameters();
 			molecularEP.setId(molecularSpecEventParameters.getId());

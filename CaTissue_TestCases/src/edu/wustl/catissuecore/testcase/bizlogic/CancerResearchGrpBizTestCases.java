@@ -18,8 +18,7 @@ public class CancerResearchGrpBizTestCases extends CaTissueSuiteBaseTest {
 		try{
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
 			System.out.println(crg);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			crg = (CancerResearchGroup) appService.createObject(crg,bean); 
+			crg = (CancerResearchGroup) appService.createObject(crg); 
 			TestCaseUtility.setObjectMap(crg,CancerResearchGroup.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -62,10 +61,9 @@ public class CancerResearchGrpBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+crg);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	crg = (CancerResearchGroup) appService.createObject(crg,bean);
+	    	crg = (CancerResearchGroup) appService.createObject(crg);
 	    	BaseTestCaseUtility.updateCancerResearchGrp(crg);	
-	    	CancerResearchGroup updatedCRG = (CancerResearchGroup) appService.updateObject(crg,bean);
+	    	CancerResearchGroup updatedCRG = (CancerResearchGroup) appService.updateObject(crg);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedCRG);
 	       	assertTrue("Domain object successfully updated ---->"+updatedCRG, true);
 	    } 
@@ -83,8 +81,7 @@ public class CancerResearchGrpBizTestCases extends CaTissueSuiteBaseTest {
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();			
 			crg.setName("");
 			System.out.println(crg);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			crg = (CancerResearchGroup) appService.createObject(crg,bean); 
+			crg = (CancerResearchGroup) appService.createObject(crg); 
 			assertFalse("Test Failed. Duplicate CRG name should throw exception", true);
 		 }
 		 catch(Exception e){
@@ -98,9 +95,8 @@ public class CancerResearchGrpBizTestCases extends CaTissueSuiteBaseTest {
 			CancerResearchGroup crg = BaseTestCaseUtility.initCancerResearchGrp();
 			CancerResearchGroup dupCRGName = BaseTestCaseUtility.initCancerResearchGrp();
 			dupCRGName.setName(crg.getName());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			crg = (CancerResearchGroup) appService.createObject(crg,bean); 
-			dupCRGName = (CancerResearchGroup) appService.createObject(dupCRGName,bean); 
+			crg = (CancerResearchGroup) appService.createObject(crg); 
+			dupCRGName = (CancerResearchGroup) appService.createObject(dupCRGName); 
 			assertFalse("Test Failed. Duplicate CRG name should throw exception", true);
 		}
 		 catch(Exception e){

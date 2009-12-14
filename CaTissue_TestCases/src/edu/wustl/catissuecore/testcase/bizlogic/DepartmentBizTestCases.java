@@ -19,8 +19,7 @@ public class DepartmentBizTestCases extends CaTissueSuiteBaseTest {
 		try{
 			Department dept = BaseTestCaseUtility.initDepartment();			
 			System.out.println(dept);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			dept = (Department) appService.createObject(dept,bean);
+			dept = (Department) appService.createObject(dept);
 			TestCaseUtility.setObjectMap(dept, Department.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -62,10 +61,9 @@ public class DepartmentBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+department);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	department = (Department) appService.createObject(department,bean);
+	    	department = (Department) appService.createObject(department);
 	    	BaseTestCaseUtility.updateDepartment(department);	    	
-	    	Department updatedDepartment = (Department) appService.updateObject(department,bean);
+	    	Department updatedDepartment = (Department) appService.updateObject(department);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedDepartment);
 	       	assertTrue("Domain object successfully updated ---->"+updatedDepartment, true);
 	    } 
@@ -82,8 +80,7 @@ public class DepartmentBizTestCases extends CaTissueSuiteBaseTest {
 			Department dept = BaseTestCaseUtility.initDepartment();			
 			dept.setName("");
 			System.out.println(dept);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			dept = (Department) appService.createObject(dept,bean); 
+			dept = (Department) appService.createObject(dept); 
 			assertFalse("Empty Department name added successfully", true);
 		 }
 		 catch(Exception e){
@@ -97,9 +94,8 @@ public class DepartmentBizTestCases extends CaTissueSuiteBaseTest {
 			Department dept = BaseTestCaseUtility.initDepartment();
 			Department dupDept = BaseTestCaseUtility.initDepartment();
 			dupDept.setName(dept.getName());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			dept = (Department) appService.createObject(dept,bean); 
-			dupDept = (Department) appService.createObject(dupDept,bean); 
+			dept = (Department) appService.createObject(dept); 
+			dupDept = (Department) appService.createObject(dupDept); 
 			assertFalse("Test Failed. Duplicate dept name should throw exception", true);
 		}
 		 catch(Exception e){

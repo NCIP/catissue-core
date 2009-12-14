@@ -20,8 +20,7 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 		try{
 			Site site= BaseTestCaseUtility.initSite();			
 			System.out.println(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			TestCaseUtility.setObjectMap(site, Site.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -62,10 +61,9 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+site);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	site = (Site) appService.createObject(site,bean);
+	    	site = (Site) appService.createObject(site);
 	    	BaseTestCaseUtility.updateSite(site);	
-	    	Site updatedSite = (Site) appService.updateObject(site,bean);
+	    	Site updatedSite = (Site) appService.updateObject(site);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedSite);
 	       	assertTrue("Domain object successfully updated ---->"+updatedSite, true);
 	    } 
@@ -82,8 +80,7 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 			//te.setId(new Long("1"));
 			site.setName("");
 			System.out.println(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			assertFalse("Empty site name should thorw Exception", true);
 		 }
 		 catch(Exception e){
@@ -99,9 +96,8 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 			Site site = BaseTestCaseUtility.initSite();	
 			Site dupSiteName = BaseTestCaseUtility.initSite();
 			dupSiteName.setName(site.getName());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site, bean); 
-			dupSiteName = (Site) appService.createObject(dupSiteName,bean); 
+			site = (Site) appService.createObject(site); 
+			dupSiteName = (Site) appService.createObject(dupSiteName); 
 			assertFalse("Test Failed. Duplicate site name should throw exception", true);
 		}
 		 catch(Exception e){
@@ -119,8 +115,7 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 			//te.setId(new Long("1"));
 			site.setType("xyz");
 			System.out.println(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site, bean); 
+			site = (Site) appService.createObject(site); 
 			assertFalse("Invalid site type should thorw Exception", true);
 		 }
 		 catch(Exception e){
@@ -137,8 +132,7 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 			//te.setId(new Long("1"));
 			site.setActivityStatus("Invalid");
 			System.out.println(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			assertFalse("Invalid site type should thorw Exception", true);
 		 }
 		 catch(Exception e){
@@ -156,8 +150,7 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 			user = BaseTestCaseUtility.initUser(); 
 			site.setCoordinator(user);
 			System.out.println(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			assertFalse("It should throw exception", true);
 		 }
 		 catch(Exception e){
@@ -170,11 +163,10 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site = BaseTestCaseUtility.initSite();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			site.setActivityStatus("Closed");
 			System.out.println(site);
-			Site updatedSite = (Site) appService.updateObject(site,bean); 
+			Site updatedSite = (Site) appService.updateObject(site); 
 			assertTrue("Site updated successfully", true);
 		 }
 		 catch(Exception e){
@@ -188,13 +180,12 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site = BaseTestCaseUtility.initSite();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean);
+			site = (Site) appService.createObject(site);
 			Address address = new Address();
 			address.setPhoneNumber("2242241111");
 			site.setAddress(address);
 			System.out.println(site);
-			Site updatedSite = (Site) appService.updateObject(site,bean);
+			Site updatedSite = (Site) appService.updateObject(site);
 			Logger.out.info("Invalid phone number entered, it should throw exception");
 			fail("Invalid phone number entered, it should throw exception");
 		}
@@ -210,13 +201,12 @@ public class SiteBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site = BaseTestCaseUtility.initSite();	
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean);
+			site = (Site) appService.createObject(site);
 			Address address = new Address();
 			address.setFaxNumber("2242241111");
 			site.setAddress(address);
 			System.out.println(site);
-			Site updatedSite = (Site) appService.updateObject(site,bean);
+			Site updatedSite = (Site) appService.updateObject(site);
 			Logger.out.info("Invalid fax number entered, it should throw exception");
 			fail("Invalid fax number entered, it should throw exception");
 		}

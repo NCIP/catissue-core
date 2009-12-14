@@ -169,9 +169,8 @@ public class AddAnticipatedSCGInParticipant extends CaTissueSuiteBaseTest {
 			System.out.println("set cpr in scg");
 			setEventParameters(specimenCollectionGroup);
 			try {
-				SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 				specimenCollectionGroup = (SpecimenCollectionGroup) appService
-						.createObject(specimenCollectionGroup,bean);
+						.createObject(specimenCollectionGroup);
 			} catch (Exception e) {
 				System.out.println("Exception in addSCGWithNameAndEvents");
 				System.err.println("Exception in addSCGWithNameAndEvents");

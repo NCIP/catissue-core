@@ -49,9 +49,8 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 	              Logger.out.debug(""+e);
 	        }
 			System.out.println("Participant"+participant);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			try{
-				participant = (Participant) appService.createObject(participant,bean);
+				participant = (Participant) appService.createObject(participant);
 			}
 			catch(Exception e){
 		       	e.printStackTrace();
@@ -104,7 +103,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 //			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		
 			try{
-				collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+				collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -126,7 +125,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			
 							
 			try{
-				scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+				scg = (SpecimenCollectionGroup) appService.createObject(scg);
 				System.out.println("SCG::"+ scg.getName());
 			}
 			catch(Exception e){
@@ -170,7 +169,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			scg.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());	
 			
 		   try{
-				identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport,bean);
+				identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -219,9 +218,8 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
               Logger.out.debug(""+e);
         }
 		System.out.println("Participant"+participant);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch(Exception e){
 	       	e.printStackTrace();
@@ -256,7 +254,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		collectionProtocolRegistration.setConsentWitness(user);
 
 		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -278,7 +276,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		
 						
 		try{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 			System.out.println("SCG::"+ scg.getName());
 		}
 		catch(Exception e){
@@ -322,7 +320,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		scg.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());	
 		
 	  try{
-			identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport,bean);
+			identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -359,7 +357,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				System.out.println("Participant"+participant);
 				SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 				try{
-					participant = (Participant) appService.createObject(participant,bean);
+					participant = (Participant) appService.createObject(participant);
 				}
 				catch(Exception e){
 			       	e.printStackTrace();
@@ -411,7 +409,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 //					
 //				collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 				try{
-					collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+					collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 				}
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
@@ -433,7 +431,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				
 								
 				try{
-					scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+					scg = (SpecimenCollectionGroup) appService.createObject(scg);
 					System.out.println("SCG::"+ scg.getName());
 				}
 				catch(Exception e){
@@ -477,7 +475,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				scg.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());	
 				
 			  try{
-					identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport,bean);
+					identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) appService.createObject(identifiedSurgicalPathologyReport);
 				}
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
@@ -520,7 +518,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			{
 				SpecimenArrayType specimenArrayType = BaseTestCaseUtility.initSpecimenSpecimenArrayType();
 				SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-				specimenArrayType = (SpecimenArrayType) appService.createObject(specimenArrayType,bean);
+				specimenArrayType = (SpecimenArrayType) appService.createObject(specimenArrayType);
 				TestCaseUtility.setObjectMap(specimenArrayType, SpecimenArrayType.class);
 			}
 			catch(Exception e){

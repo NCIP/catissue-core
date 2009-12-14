@@ -35,8 +35,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		try{
 			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
 			System.out.println(participant);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			participant = (Participant) appService.createObject(participant,bean); 
+			participant = (Participant) appService.createObject(participant); 
 			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
 			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
 			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
@@ -76,8 +75,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 				collectionProtocolEventList.add(collectionProtocolEvent);
 			}
 			collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Collection updatedCPECollection = updatedCollectionProtocol.getCollectionProtocolEventCollection();
 	    	if(updatedCPECollection.size() > cpeCollection.size())
 	    	{
@@ -126,8 +124,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		List<?> resultList1 = null;
 		Participant  participant=new Participant();
 		try {
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			resultList1=appService.getParticipantMatchingObects(participant,bean);
+			resultList1=appService.getParticipantMatchingObects(participant);
 			System.out.println("testMatchingParticipant resultList1 "+ resultList1);
 			for(int i=0;i<resultList1.size();i++)
 			{
@@ -151,10 +148,9 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+participant);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	participant = (Participant) appService.createObject(participant,bean);
+	    	participant = (Participant) appService.createObject(participant);
 	    	BaseTestCaseUtility.updateParticipant(participant);
-	    	Participant updatedParticipant = (Participant) appService.updateObject(participant,bean);
+	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant, true);
 	    } 
@@ -175,15 +171,14 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+participant);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	participant = (Participant) appService.createObject(participant,bean);
+	    	participant = (Participant) appService.createObject(participant);
 	    	BaseTestCaseUtility.updateParticipant(participant);
 			Collection collectionProtocolRegistrationCollection = new HashSet();
 			CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)participant.getCollectionProtocolRegistrationCollection().iterator().next();
 			collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
 			collectionProtocolRegistration.setBarcode("PATICIPANT"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
-	    	Participant updatedParticipant = (Participant) appService.updateObject(participant,bean);
+	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant, true);
 	    } 
@@ -205,15 +200,14 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+participant1);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	participant1 = (Participant) appService.createObject(participant1,bean);
+	    	participant1 = (Participant) appService.createObject(participant1);
 	    	BaseTestCaseUtility.updateParticipant(participant1);
 			Collection collectionProtocolRegistrationCollection = new HashSet();
 			CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)participant1.getCollectionProtocolRegistrationCollection().iterator().next();
 			collectionProtocolRegistration.setBarcode("CPR"+uniqueKey);
 			collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
 			participant1.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
-	    	Participant updatedParticipant1 = (Participant) appService.updateObject(participant1,bean);
+	    	Participant updatedParticipant1 = (Participant) appService.updateObject(participant1);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant1);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant1, true);
 	    } 
@@ -229,15 +223,14 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+participant2);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	participant2 = (Participant) appService.createObject(participant2,bean);
+	    	participant2 = (Participant) appService.createObject(participant2);
 	    	BaseTestCaseUtility.updateParticipant(participant2);
 			Collection collectionProtocolRegistrationCollection2 = new HashSet();
 			CollectionProtocolRegistration collectionProtocolRegistration2=(CollectionProtocolRegistration)participant2.getCollectionProtocolRegistrationCollection().iterator().next();
 			collectionProtocolRegistrationCollection2.add(collectionProtocolRegistration2);
 			collectionProtocolRegistration2.setBarcode("cpr"+uniqueKey);
 			participant2.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection2);
-	    	Participant updatedParticipant2 = (Participant) appService.updateObject(participant2,bean);
+	    	Participant updatedParticipant2 = (Participant) appService.updateObject(participant2);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant2);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant2, true);
 	    } 
@@ -258,8 +251,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		System.out.println(cpr.getCollectionProtocol().getId());
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 			Collection cprCollection = participant.getCollectionProtocolRegistrationCollection();
 			Iterator cprCPR = cprCollection.iterator();
 			CollectionProtocolRegistration cprObj  = null;
@@ -376,9 +368,8 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		pmi.setParticipant(participant);
 		participantMedicalIdentifierCollection.add(pmi);						
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{	
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();
@@ -433,7 +424,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		try
 		  {	
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertTrue("Participant Registration successfully created",true);
 		 }
 		 catch(Exception e)
@@ -459,7 +450,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{	
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();			 
@@ -512,7 +503,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 			try
 		  {		
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertFalse("Shouldnot create object", true);
 			
 		 }
@@ -527,9 +518,8 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		
 		Participant participant= BaseTestCaseUtility.initParticipant();	
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{	
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();			 
@@ -581,7 +571,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 			try
 		  {		
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			
 		 }
 		 catch(Exception e)
@@ -595,9 +585,8 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		
 		Participant participant= BaseTestCaseUtility.initParticipant();	
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{	
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();			 
@@ -649,7 +638,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 			try
 		  {		
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertFalse("Failed to create CPR with duplicate PPI", true);
 		 }
 		 catch(Exception e)
@@ -672,10 +661,9 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			
 			Collection participantMedicalIdentifierCollection = new HashSet();
 			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			participant=(Participant)appService.createObject(participant,bean);
+			participant=(Participant)appService.createObject(participant);
 			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-			participant=(Participant) appService.updateObject(participant,bean);
+			participant=(Participant) appService.updateObject(participant);
 			assertTrue("Participant wihtout CPR updated successfully ", true);
 		}
 		catch (Exception e) {
@@ -689,14 +677,13 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	{
 		try
 		{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			Participant participant=new Participant();
 			participant.setFirstName("fisrtname"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setActivityStatus("Active");
 			
 			participant.setParticipantMedicalIdentifierCollection(new HashSet());
-			participant=(Participant)appService.createObject(participant,bean);
+			participant=(Participant)appService.createObject(participant);
 			
 			Participant participant2=new Participant();
 			participant2.setId(participant.getId());
@@ -722,7 +709,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			pmi.setParticipant(participant2);
 			participantMedicalIdentifierCollection.add(pmi);
 			participant2.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
-			participant2=(Participant) appService.updateObject(participant2,bean);
+			participant2=(Participant) appService.updateObject(participant2);
 			
 			Participant participant3=new Participant();
 			participant3.setId(participant.getId());

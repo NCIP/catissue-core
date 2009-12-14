@@ -18,8 +18,7 @@ public class SpecimenArrayTypeBizTestCases extends CaTissueSuiteBaseTest
 		{
 			SpecimenArrayType specimenArrayType =  BaseTestCaseUtility.initSpecimenSpecimenArrayType();
 	    	Logger.out.info("Inserting domain object------->"+specimenArrayType);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	specimenArrayType =  (SpecimenArrayType) appService.createObject(specimenArrayType,bean);
+	    	specimenArrayType =  (SpecimenArrayType) appService.createObject(specimenArrayType);
 			assertTrue("Domain Object is successfully added" , true);
 			Logger.out.info(" SpecimenSpecimenArrayType is successfully added ---->    ID:: " + specimenArrayType.getId().toString());
 		}
@@ -63,8 +62,7 @@ public class SpecimenArrayTypeBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.info("updating Specimen Array Type------->"+specimenArrayType);
 			specimenArrayType.setId(new Long(3));
 			BaseTestCaseUtility.updateSpecimenSpecimenArrayType(specimenArrayType);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			SpecimenArrayType updateSpecimenSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType,bean);
+			SpecimenArrayType updateSpecimenSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType);
 			assertTrue("updateSpecimenSpecimenArrayType is successfully updated" , true);
 			Logger.out.info("updateSpecimenSpecimenArrayType successfully updated ---->"+updateSpecimenSpecimenArrayType);
 		} 

@@ -30,9 +30,8 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 	 */public void testAddUser()
 	 {
 		 try{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			User user = BaseTestCaseUtility.initUser();
-			user = (User)appService.createObject(user,bean);
+			user = (User)appService.createObject(user);
 			TestCaseUtility.setObjectMap(user, User.class);
 			Logger.out.info("User added successfully");
 			System.out.println("User added successfully");
@@ -171,7 +170,6 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 	 public void testAddScientist()
 	 {
 		try{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			User userObj = new User();
 			//userObj.setEmailAddress("scientist@admin.com");
 			userObj.setEmailAddress("scientist_"+UniqueKeyGeneratorUtil.getUniqueKey()+"@admin.com");
@@ -208,14 +206,14 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 
 		
-			userObj = (User)appService.createObject(userObj,bean);
+			userObj = (User)appService.createObject(userObj);
 			
 			userObj.setNewPassword("Test123");
 			
 			userObj.setRoleId("7");
 			userObj.setActivityStatus("Active");
 			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);	
-			userObj = (User)appService.updateObject(userObj,bean);	
+			userObj = (User)appService.updateObject(userObj);	
 		 }
 		 catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);

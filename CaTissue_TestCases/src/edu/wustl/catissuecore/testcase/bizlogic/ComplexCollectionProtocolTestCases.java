@@ -12,13 +12,12 @@ public class ComplexCollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		try
 		 {
 			CollectionProtocol collectionProtocol = ComplexCollectionProtocolUtility.initComplexCollectionProtocol();			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
 			assertTrue("Object added successfully", true);
 			
 			CollectionProtocol collectionProtocol1 = ComplexCollectionProtocolUtility.initComplexCollectionProtocol1();			
-			collectionProtocol1 = (CollectionProtocol) appService.createObject(collectionProtocol1,bean);
+			collectionProtocol1 = (CollectionProtocol) appService.createObject(collectionProtocol1);
 			TestCaseUtility.setObjectMap(collectionProtocol1, CollectionProtocol.class);
 			assertTrue("Object added successfully", true);
 		 }

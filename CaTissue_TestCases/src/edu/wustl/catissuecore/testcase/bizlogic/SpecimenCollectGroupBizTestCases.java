@@ -83,8 +83,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			System.out.println("Before Update");
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(sprObj, bean);
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(sprObj);
 			System.out.println(scg.getCollectionStatus().equals("Complete"));
 			if(scg.getCollectionStatus().equals("Complete"))
 			{
@@ -135,8 +134,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
     	cachedSCG.setBarcode("SCG"+UniqueKeyGeneratorUtil.getUniqueKey());
      	Logger.out.info(" searching domain object");
     	 try {
-    		 SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-    		 SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(cachedSCG,bean);
+    		 SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(cachedSCG);
     		 assertTrue("SCG found", true);
           } 
           catch (Exception e) {
@@ -153,15 +151,14 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		SpecimenCollectionGroup cachedSCG = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
     	cachedSCG.setBarcode("SCG"+uniqueKey);
      	Logger.out.info(" searching domain object");
-     	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
     	 try {
-    		 	cachedSCG= (SpecimenCollectionGroup)appService.updateObject(cachedSCG,bean);
+    		 	cachedSCG= (SpecimenCollectionGroup)appService.updateObject(cachedSCG);
     		 	assertTrue("SCG  updated", true);
         
     		 	SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();		    
-    		 	scg = (SpecimenCollectionGroup)appService.createObject(scg,bean);
+    		 	scg = (SpecimenCollectionGroup)appService.createObject(scg);
     		 	scg.setBarcode("scg"+uniqueKey);
-  		   	    scg = (SpecimenCollectionGroup)appService.updateObject(scg,bean);
+  		   	    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
   		 
   		}
   		 catch(Exception e){
@@ -210,9 +207,8 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
 		    duplicateSCG.setName(scg.getName());
-		    SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    scg = (SpecimenCollectionGroup)appService.createObject(scg,bean);
-		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG,bean);
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
 		    System.out.println("After Creating SCG");
 		    assertTrue("Submission doe not fail since label generator already present" , true);
 		    TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
@@ -238,11 +234,10 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		  //  TestCaseUtility.setObjectMap(scg, SpecimenCollectionGroup.class);
 		    SpecimenCollectionGroup duplicateSCG = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();
 		    duplicateSCG.setName(scg.getName());
-		    SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    scg = (SpecimenCollectionGroup)appService.createObject(scg,bean);
-		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG,bean);
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
+		    duplicateSCG = (SpecimenCollectionGroup)appService.createObject(duplicateSCG);
 		    duplicateSCG.setName(((SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class)).getName());
-		    duplicateSCG=(SpecimenCollectionGroup)appService.updateObject(duplicateSCG,bean);
+		    duplicateSCG=(SpecimenCollectionGroup)appService.updateObject(duplicateSCG);
 		    fail("Update should fails since same name already exist");
 		}
 		 catch(Exception e){
@@ -262,8 +257,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
 			//scg.setActivityStatus("Closed");
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    scg = (SpecimenCollectionGroup)appService.createObject(scg,bean);
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -271,7 +265,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Closed");
-		    scg = (SpecimenCollectionGroup)appService.updateObject(scg, bean);
+		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
 		    assertTrue("Should throw Exception", true);
 			
 		}
@@ -291,8 +285,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		try{
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)BaseTestCaseUtility.initSCG();	
 			//scg.setActivityStatus("Closed");
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    scg = (SpecimenCollectionGroup)appService.createObject(scg,bean);
+		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -300,7 +293,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
-		    scg = (SpecimenCollectionGroup)appService.updateObject(scg,bean);
+		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
 		    assertTrue("SCG contains specimen so should fail", true);
 		    
 			
@@ -348,9 +341,8 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 	public void testAddSCGWithNameAndEvents()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -362,7 +354,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		System.out.println("CP:"+cp.getTitle());
 		Participant participant = BaseTestCaseUtility.initParticipant();
 		try{
-			participant = (Participant) appService.createObject(participant, bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -410,7 +402,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		System.out.println("Creating CPR");
 		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration, bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -451,7 +443,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		//specimenCollectionGroup = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(specimenCollectionGroup);
 		try{
 			int count=0;
-			SpecimenCollectionGroup	specimenCollectionGroup1 = (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroup,bean);
+			SpecimenCollectionGroup	specimenCollectionGroup1 = (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroup);
 			
 			Iterator iter=specimenCollectionGroup1.getSpecimenEventParametersCollection().iterator();
 			while(iter.hasNext())

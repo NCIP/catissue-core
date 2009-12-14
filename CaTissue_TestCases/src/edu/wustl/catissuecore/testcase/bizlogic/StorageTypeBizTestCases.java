@@ -21,7 +21,7 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 				StorageType storagetype = BaseTestCaseUtility.initStorageType();			
 				System.out.println(storagetype);
 				
-				storagetype = (StorageType) appService.createObject(storagetype,bean);
+				storagetype = (StorageType) appService.createObject(storagetype);
 				TestCaseUtility.setObjectMap(storagetype, StorageType.class);
 				System.out.println("Object created successfully");
 				assertTrue("Object added successfully", true);
@@ -64,9 +64,9 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 		    try 
 			{
 		    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    	storagetype = (StorageType) appService.createObject(storagetype,bean);
+		    	storagetype = (StorageType) appService.createObject(storagetype);
 		    	BaseTestCaseUtility.updateStorageType(storagetype);	
-		    	StorageType updatedStorageType = (StorageType) appService.updateObject(storagetype,bean);
+		    	StorageType updatedStorageType = (StorageType) appService.updateObject(storagetype);
 		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageType);
 		       	assertTrue("Domain object successfully updated ---->"+updatedStorageType, true);
 		    } 
@@ -87,7 +87,7 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 				//te.setId(new Long("1"));
 				storagetype.setName("");
 				System.out.println(storagetype);
-				storagetype = (StorageType) appService.createObject(storagetype,bean); 
+				storagetype = (StorageType) appService.createObject(storagetype); 
 				assertFalse("Empty storagetype name should thorw Exception", true);
 			 }
 			 catch(Exception e){
@@ -104,8 +104,8 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 				StorageType storagetype = BaseTestCaseUtility.initStorageType();	
 				StorageType dupStorageTypeName = BaseTestCaseUtility.initStorageType();
 				dupStorageTypeName.setName(storagetype.getName());
-				storagetype = (StorageType) appService.createObject(storagetype,bean); 
-				dupStorageTypeName = (StorageType) appService.createObject(dupStorageTypeName,bean); 
+				storagetype = (StorageType) appService.createObject(storagetype); 
+				dupStorageTypeName = (StorageType) appService.createObject(dupStorageTypeName); 
 				assertFalse("Test Failed. Duplicate storagetype name should throw exception", true);
 			}
 			 catch(Exception e){
@@ -128,7 +128,7 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 				storagetype.setCapacity(capacity);		
 				
 				System.out.println(storagetype);
-				storagetype = (StorageType) appService.createObject(storagetype,bean); 
+				storagetype = (StorageType) appService.createObject(storagetype); 
 				assertFalse("Negative Dimension capacity should thorw Exception", true);
 			 }
 			 catch(Exception e){
@@ -146,7 +146,7 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 				storagetype.setOneDimensionLabel("");
 				storagetype.setTwoDimensionLabel("");
 				System.out.println(storagetype);
-				storagetype = (StorageType) appService.createObject(storagetype,bean); 
+				storagetype = (StorageType) appService.createObject(storagetype); 
 				assertFalse("Empty Text Label should thorw Exception", true);
 			 }
 			 catch(Exception e){

@@ -33,22 +33,21 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site= BaseTestCaseUtility.initSite();	
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			
 			site.setActivityStatus("Closed");
-			site = (Site) appService.updateObject(site,bean); 
+			site = (Site) appService.updateObject(site); 
 			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 			
 			StorageType storageType = BaseTestCaseUtility.initStorageType();
-			storageType = (StorageType) appService.createObject(storageType,bean);
+			storageType = (StorageType) appService.createObject(storageType);
 			
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			storageContainer.setStorageType(storageType);
 			storageContainer.setSite(site);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean); 			
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 			
 			
 		}catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
@@ -62,16 +61,15 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site= BaseTestCaseUtility.initSite();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			TestCaseUtility.setObjectMap(site, Site.class);
 			
 			StorageType storageType = BaseTestCaseUtility.initStorageType();
-			storageType = (StorageType) appService.createObject(storageType,bean); 
+			storageType = (StorageType) appService.createObject(storageType); 
 			TestCaseUtility.setObjectMap(storageType, StorageType.class);
 			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			System.out.println("CP:"+cp.getTitle());
 			System.out.println("CP short title:"+cp.getShortTitle());
@@ -79,13 +77,13 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
 			storageContainer.setStorageType(storageType);
 			storageContainer.setSite(site);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean); 
+			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("SC name:"+storageContainer.getName());
 			System.out.println("SC id:"+storageContainer.getId());
 			
 			storageContainer.setActivityStatus("Disabled");
-			storageContainer = (StorageContainer) appService.updateObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.updateObject(storageContainer);
 			System.out.println("SC id after disabling:"+storageContainer.getId());
 			
 			StorageContainer sc = new StorageContainer();
@@ -111,7 +109,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setIsAvailable(new Boolean("true"));
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Tissue Specimen:"+ts.getLabel());
 			assertFalse("Successfully created specimen using disabled storage Container", true);
 			
@@ -129,11 +127,10 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
         try
         {
             Site site= BaseTestCaseUtility.initSite();  
-            SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-            site = (Site) appService.createObject(site,bean);
+            site = (Site) appService.createObject(site);
             
             StorageType storageType = BaseTestCaseUtility.initStorageType();
-            storageType = (StorageType) appService.createObject(storageType,bean);
+            storageType = (StorageType) appService.createObject(storageType);
             
             
             StorageContainer parentContainer = new StorageContainer();
@@ -158,7 +155,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
             parentContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
             
             CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-            cp = (CollectionProtocol) appService.createObject(cp,bean);
+            cp = (CollectionProtocol) appService.createObject(cp);
             
             Collection collectionProtocolCollection = new HashSet();
             collectionProtocolCollection.add(cp);
@@ -166,7 +163,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
             parentContainer.setCollectionProtocolCollection(collectionProtocolCollection);
             
             SpecimenArrayType sat = BaseTestCaseUtility.initSpecimenSpecimenArrayType();
-            sat = (SpecimenArrayType) appService.createObject(sat,bean);
+            sat = (SpecimenArrayType) appService.createObject(sat);
             Collection holdsSpecimenArrayTypeCollection = new HashSet();
             holdsSpecimenArrayTypeCollection.add(sat);
            
@@ -175,7 +172,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
             parentContainer.setActivityStatus("Active");
             parentContainer.setFull(Boolean.valueOf(false));
             
-            parentContainer = (StorageContainer) appService.createObject(parentContainer,bean);
+            parentContainer = (StorageContainer) appService.createObject(parentContainer);
             System.out.println("Parent:"+parentContainer.getId());
            
            // System.out.println("Parent:"+StorageContainerUtil.getChildren(dao, containerId).getChildren().size());
@@ -201,7 +198,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
            
             subStorageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
             
-            subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer,bean);
+            subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer);
             
             System.out.println("Childcontainer:"+subStorageContainer.getId());
            
@@ -212,7 +209,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
             StorageContainer parentConatiertoUpdate = getStorageContainer(parentContainer.getId());
             
             parentConatiertoUpdate.setActivityStatus("Disabled");
-            StorageContainer updatedparentContainer = (StorageContainer) appService.updateObject(parentConatiertoUpdate,bean);
+            StorageContainer updatedparentContainer = (StorageContainer) appService.updateObject(parentConatiertoUpdate);
             
      }catch(Exception e){
 		 Logger.out.error(e.getMessage(),e);
@@ -227,25 +224,24 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{
 			Site site= BaseTestCaseUtility.initSite();	
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			TestCaseUtility.setObjectMap(site, Site.class);
 			
 			StorageType storageType = BaseTestCaseUtility.initStorageType();
-			storageType = (StorageType) appService.createObject(storageType,bean); 
+			storageType = (StorageType) appService.createObject(storageType); 
 			
 			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			
 			StorageContainer storageContainer = (StorageContainer) BaseTestCaseUtility.initStorageContainer();
 			
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			storageContainer.setStorageType(storageType);
 			
 			storageContainer.setActivityStatus("Closed");
-			storageContainer = (StorageContainer) appService.updateObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.updateObject(storageContainer);
 			
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 			
@@ -260,7 +256,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setIsAvailable(new Boolean("true"));
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			
 		}catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
@@ -275,18 +271,18 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		try{
 			Site site= BaseTestCaseUtility.initSite();	
 			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean); 
+			site = (Site) appService.createObject(site); 
 			TestCaseUtility.setObjectMap(site, Site.class);
 			
 			StorageType storageType = BaseTestCaseUtility.initStorageType();
-			storageType = (StorageType) appService.createObject(storageType,bean); 
+			storageType = (StorageType) appService.createObject(storageType); 
 			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			
 			StorageContainer storageContainer = (StorageContainer) BaseTestCaseUtility.initStorageContainer();			
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			storageContainer.setStorageType(storageType);
 								
 			SpecimenCollectionGroup scg = createSCGWithConsents(cp);
@@ -301,10 +297,10 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 			ts.setSpecimenCollectionGroup(scg);
 			ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			ts.setIsAvailable(new Boolean("true"));
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			
 			cp.setActivityStatus("Disabled");
-			cp = (CollectionProtocol) appService.updateObject(cp,bean);
+			cp = (CollectionProtocol) appService.updateObject(cp);
 			
 		}catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
@@ -318,16 +314,15 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	{
 		try{			
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 			
 			cp.setActivityStatus("Closed");
-			cp = (CollectionProtocol) appService.updateObject(cp,bean);
+			cp = (CollectionProtocol) appService.updateObject(cp);
 			
 			Participant participant = BaseTestCaseUtility.initParticipant();
 			
 			try{
-				participant = (Participant) appService.createObject(participant,bean);
+				participant = (Participant) appService.createObject(participant);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -373,7 +368,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		
 			System.out.println("Creating CPR");
 			
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			
 					
 		}catch(Exception e){
@@ -462,9 +457,8 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	public void testDisableParticipantHavingSpecimens()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{
-			cp = (CollectionProtocol) appService.createObject(cp,bean);
+			cp = (CollectionProtocol) appService.createObject(cp);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -476,7 +470,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
         Participant participant = BaseTestCaseUtility.initParticipant();
 		
 		try{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -523,7 +517,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	
 		System.out.println("Creating CPR");
 		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -536,7 +530,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
 		Site site= BaseTestCaseUtility.initSite();
 		try{
-			site = (Site) appService.createObject(site,bean);
+			site = (Site) appService.createObject(site);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -548,7 +542,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
 		System.out.println("Creating SCG");
 		try{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -563,7 +557,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setIsAvailable(new Boolean("true"));
 		try{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -574,7 +568,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		
 		try{
 			participant.setActivityStatus("Disabled");
-			participant = (Participant) appService.updateObject(participant,bean);
+			participant = (Participant) appService.updateObject(participant);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -589,9 +583,8 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp){
 		
 		Participant participant = BaseTestCaseUtility.initParticipant();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -637,7 +630,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 	
 		System.out.println("Creating CPR");
 		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -654,7 +647,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
 		System.out.println("Creating SCG");
 		try{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);

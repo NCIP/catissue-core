@@ -53,8 +53,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 		try
 		{
 			site = BaseTestCaseUtility.initSite();
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			site = (Site) appService.createObject(site,bean);
+			site = (Site) appService.createObject(site);
 		}
 		catch(Exception e)
 		{
@@ -155,9 +154,9 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             user.getSiteCollection().clear();
             user.getSiteCollection().addAll(siteList);
             SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-            user = (User)appService.createObject(user,bean);
+            user = (User)appService.createObject(user);
             user.setNewPassword(password);
-            user = (User)appService.updateObject(user,bean);
+            user = (User)appService.updateObject(user);
                 
             
         }
@@ -185,8 +184,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 			//TODO additional processing
 						
 			sc.setSite(site);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			sc = (StorageContainer) appService.createObject(sc,bean);
+			sc = (StorageContainer) appService.createObject(sc);
 		
 		
 		return sc;

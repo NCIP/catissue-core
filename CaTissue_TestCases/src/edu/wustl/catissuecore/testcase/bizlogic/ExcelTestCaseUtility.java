@@ -41,8 +41,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 					.setCollectionPointLabel("Event_" + eveNo);
 			eveNo++;
 		}
-	   SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	   collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	   collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	   System.out.println("CP created");
 	}
 
@@ -74,7 +73,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			eveNo++;
 		}
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		participant = (Participant) appService.createObject(participant, bean);
+		participant = (Participant) appService.createObject(participant);
 		System.out.println("Participant Object created successfully");
 	}
 
@@ -252,8 +251,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			User user = BaseTestCaseUtility.initUser();
 			user.setLoginName("test_user@test.com");
 			user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
-		    SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    user = (User) appService.createObject(user, bean);
+		    user = (User) appService.createObject(user);
 			Logger.out.info("User added successfully");
 			System.out.println("User added successfully");
 		} catch (Exception e) {
@@ -267,8 +265,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 		try {
 			Site site = BaseTestCaseUtility.initSite();
 			site.setName("testSite");
-		    SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		    site = (Site) appService.createObject(site, bean);
+		    site = (Site) appService.createObject(site);
 			System.out.println("Site created successfully");
 		} catch (Exception e) {
 			System.out.println("Exception while creating Site "

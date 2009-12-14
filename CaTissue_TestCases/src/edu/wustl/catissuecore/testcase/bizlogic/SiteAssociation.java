@@ -59,8 +59,7 @@ public class SiteAssociation extends CaTissueSuiteBaseTest {
 					siteCollection.add(site);
 
 					user.setSiteCollection(siteCollection);
-					SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-					appService.updateObject(user,bean);
+					appService.updateObject(user);
 					System.out.println("user updated " + user + " " + rowNo);
 					System.out.println("excel[rowNo][2]  " + excel[rowNo][2]);
 					if (excel[rowNo][2] != null && !excel[rowNo][2].equals("")) {
@@ -93,7 +92,7 @@ public class SiteAssociation extends CaTissueSuiteBaseTest {
 									collectionProtocol
 											.setSiteCollection(siteCollection);
 									CollectionProtocolBizTestCases.appService
-											.updateObject(collectionProtocol, bean);
+											.updateObject(collectionProtocol);
 									System.out.println("cp updated");
 								}
 								i++;
@@ -120,7 +119,7 @@ public class SiteAssociation extends CaTissueSuiteBaseTest {
 								collectionProtocol
 										.setSiteCollection(siteCollection);
 								CollectionProtocolBizTestCases.appService
-										.updateObject(collectionProtocol,bean);
+										.updateObject(collectionProtocol);
 								System.out.println("cp updated");
 							}
 
@@ -172,8 +171,7 @@ public class SiteAssociation extends CaTissueSuiteBaseTest {
 					Collection<Site> siteCollection = new HashSet<Site>();
 					siteCollection.add(site);
 					user.setSiteCollection(siteCollection);
-					SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-					user = (User) appService.updateObject(user,bean);
+					user = (User) appService.updateObject(user);
 					System.out.println("user updated");
 				}
 				rowNo++;

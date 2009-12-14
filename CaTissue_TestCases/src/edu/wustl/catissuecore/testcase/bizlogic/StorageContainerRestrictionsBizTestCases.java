@@ -39,15 +39,14 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 	public void testAddTissueSpecInStorageContainerCanHoldTissueSpecimen()
 	{
 		try{
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-			cp =(CollectionProtocol) appService.createObject(cp,bean);
+			cp =(CollectionProtocol) appService.createObject(cp);
 			StorageType tissueST = BaseTestCaseUtility.initTissueStorageType();
-			tissueST = (StorageType) appService.createObject(tissueST,bean);
+			tissueST = (StorageType) appService.createObject(tissueST);
 			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainerHoldsTissueSpec();	
 			storageContainer.setStorageType(tissueST);
 			System.out.println(storageContainer);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("reached");
 		//	SpecimenCollectionGroup scg = BaseTestCaseUtility.initSCG();
@@ -62,7 +61,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Tissue Specimen");
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("Tissue Specimen successfully created with Lable"+ ts.getLabel());
 			Logger.out.info("Tissue Specimen successfully created with Lable"+ ts.getLabel());
 			assertTrue("Successfully added tissue specimen in container", true);
@@ -88,7 +87,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			ts.setSpecimenPosition(spPos);
 			ts.setSpecimenCollectionGroup(scg);
 			System.out.println("Befor creating Mol Specimen");
-			ts = (MolecularSpecimen) appService.createObject(ts,bean);
+			ts = (MolecularSpecimen) appService.createObject(ts);
 			assertFalse("Successfully added mol specimen in container which can only store tissue specimens", true);
 		 }
 		 catch(Exception e){
@@ -144,10 +143,9 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		public void testAddSpecimenInStorageContainerHavingCPRestrictionPositiveTest()
 	{
 		
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 			try{
-				cp = (CollectionProtocol) appService.createObject(cp,bean);
+				cp = (CollectionProtocol) appService.createObject(cp);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -157,7 +155,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			System.out.println("CP:"+cp.getTitle());
 			StorageType ST = BaseTestCaseUtility.initStorageType();			
 			try{
-				ST = (StorageType) appService.createObject(ST,bean);
+				ST = (StorageType) appService.createObject(ST);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -172,7 +170,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			storageContainer.setStorageType(ST);
 			
 			try{
-				storageContainer = (StorageContainer) appService.createObject(storageContainer,bean);
+				storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -195,7 +193,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			ts.setLabel("CPTisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("Befor creating Tissue Specimen");
 			try{
-			ts = (TissueSpecimen) appService.createObject(ts,bean);
+			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("CPTissueSpec:"+ts.getLabel());	
 			}catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -210,10 +208,9 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 	{
 		
 			StorageContainer storageContainer =(StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 			try{
-				cp = (CollectionProtocol) appService.createObject(cp,bean);
+				cp = (CollectionProtocol) appService.createObject(cp);
 			}
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
@@ -236,7 +233,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			System.out.println("Befor creating Tissue Specimen");
 			
 			try{
-				ts = (TissueSpecimen) appService.createObject(ts,bean);
+				ts = (TissueSpecimen) appService.createObject(ts);
 				System.out.println("TissueSpec:"+ts.getLabel());
 				assertFalse("Successfully created specimen", true);
 			}
@@ -250,9 +247,8 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 	public SpecimenCollectionGroup createSCGWithConsents(CollectionProtocol cp)
 	{
 		Participant participant = BaseTestCaseUtility.initParticipant();
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try{
-			participant = (Participant) appService.createObject(participant,bean);
+			participant = (Participant) appService.createObject(participant);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -310,7 +306,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		System.out.println("Creating CPR");
 		try{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration,bean);
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -326,7 +322,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
 		System.out.println("Creating SCG");
 		try{
-			scg = (SpecimenCollectionGroup) appService.createObject(scg,bean);
+			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
@@ -358,10 +354,9 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		holdsSpecimenClassCollection.add("Molecular");
 		holdsSpecimenClassCollection.add("Cell");
 		box.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		
 		try{
-			box = (StorageType) appService.createObject(box,bean);
+			box = (StorageType) appService.createObject(box);
 		}
 		catch(Exception e){
 			assertFalse("",true);
@@ -382,7 +377,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		rack.setHoldsStorageTypeCollection(holdsBox);
 		
 		try{
-			rack = (StorageType) appService.createObject(rack,bean);
+			rack = (StorageType) appService.createObject(rack);
 		}
 		catch(Exception e){
 			assertFalse("",true);
@@ -404,7 +399,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		freezer.setHoldsStorageTypeCollection(holdsRack);
 		
 		try{
-			freezer = (StorageType) appService.createObject(freezer,bean);
+			freezer = (StorageType) appService.createObject(freezer);
 		}
 		catch(Exception e){
 			assertFalse("",true);
@@ -428,10 +423,9 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		Collection holdsRackCollection = new HashSet();
 		holdsRackCollection.add(rack);
 		freezerContainer.setHoldsStorageTypeCollection(holdsRackCollection);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		
 		try{
-			freezerContainer = (StorageContainer) appService.createObject(freezerContainer,bean);
+			freezerContainer = (StorageContainer) appService.createObject(freezerContainer);
 		}
 		catch(Exception e){
 			assertFalse("",true);
@@ -455,7 +449,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		holdsBoxCollection.add(box);
 		rackContainer.setHoldsStorageTypeCollection(holdsBoxCollection);
 		try{
-			rackContainer = (StorageContainer) appService.createObject(rackContainer,bean);
+			rackContainer = (StorageContainer) appService.createObject(rackContainer);
 		}
 		catch(Exception e){
 			assertFalse("",true);
@@ -473,7 +467,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		boxContainer.setCapacity(capacity1);
 		boxContainer.setFull(Boolean.valueOf(false));
 		try{
-			boxContainer = (StorageContainer) appService.createObject(boxContainer,bean);
+			boxContainer = (StorageContainer) appService.createObject(boxContainer);
 			assertTrue("created box SC",true);
 		}
 		catch(Exception e){

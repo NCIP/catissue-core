@@ -24,8 +24,7 @@ public class ParticipantEmpiTestCase  extends CaTissueSuiteBaseTest
                     .initParticipantWithCPR();
             empiId=UniqueKeyGeneratorUtil.getUniqueKey();
             participant.setEmpiId(empiId);   
-            SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-            participant = (Participant) appService.createObject(participant, bean);
+            participant = (Participant) appService.createObject(participant);
             System.out.println("Object created successfully:::"+participant.getLastName());
             assertTrue("Object added successfully", true);
         }

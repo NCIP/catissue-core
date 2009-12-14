@@ -15,8 +15,7 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 		try{
 			Biohazard biohazard= BaseTestCaseUtility.initBioHazard();			
 			System.out.println(biohazard);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			biohazard = (Biohazard) appService.createObject(biohazard,bean); 
+			biohazard = (Biohazard) appService.createObject(biohazard); 
 			TestCaseUtility.setObjectMap(biohazard, Biohazard.class);
 			System.out.println("Object created successfully");
 			Logger.out.info(" Domain Object added successfully");
@@ -60,10 +59,9 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
     	Logger.out.info("updating domain object------->"+biohazard);
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	biohazard = (Biohazard) appService.createObject(biohazard,bean);
+	    	biohazard = (Biohazard) appService.createObject(biohazard);
 	    	BaseTestCaseUtility.updateBiohazard(biohazard);	
-	    	Biohazard updatedBiohazard = (Biohazard) appService.updateObject(biohazard,bean);
+	    	Biohazard updatedBiohazard = (Biohazard) appService.updateObject(biohazard);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedBiohazard);
 	       	assertTrue("Domain object successfully updated ---->"+updatedBiohazard, true);
 	    } 
@@ -80,8 +78,7 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 			Biohazard biohazard =  BaseTestCaseUtility.initBioHazard();	
 			biohazard.setName("");
 			System.out.println(biohazard);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			biohazard = (Biohazard) appService.createObject(biohazard,bean);
+			biohazard = (Biohazard) appService.createObject(biohazard);
 			assertFalse("Empty biohazard name should thorw Exception", true);
 		 }
 		 catch(Exception e){
@@ -99,9 +96,8 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 			//te.setId(new Long("1"));
 			dupBiohazard.setName(biohazard.getName());
 			System.out.println(biohazard);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			biohazard = (Biohazard) appService.createObject(biohazard,bean);
-			dupBiohazard = (Biohazard) appService.createObject(dupBiohazard,bean); 
+			biohazard = (Biohazard) appService.createObject(biohazard);
+			dupBiohazard = (Biohazard) appService.createObject(dupBiohazard); 
 			assertFalse("Test Failed. Duplicate biohazard name should throw exception", true);
 		}
 		 catch(Exception e){
@@ -118,8 +114,7 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 			Biohazard biohazard =  BaseTestCaseUtility.initBioHazard();
 			biohazard.setType("Invalid");
 			System.out.println(biohazard);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			biohazard = (Biohazard) appService.createObject(biohazard,bean);
+			biohazard = (Biohazard) appService.createObject(biohazard);
 			assertFalse("Test Failed. Invalid biohazard type should throw exception", true);
 		}
 		 catch(Exception e){

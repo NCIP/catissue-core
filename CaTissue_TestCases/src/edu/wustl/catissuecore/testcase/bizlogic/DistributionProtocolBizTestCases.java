@@ -21,8 +21,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 		try{
 			DistributionProtocol distributionprotocol = BaseTestCaseUtility.initDistributionProtocol();			
 			System.out.println(distributionprotocol);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 			TestCaseUtility.setObjectMap(distributionprotocol, DistributionProtocol.class);
 			System.out.println("Object created successfully");			
 			assertTrue("Object added successfully", true);
@@ -92,8 +91,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	Logger.out.info("updating domain object------->"+distributionProtocol);
 	    	//distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	BaseTestCaseUtility.updateDistributionProtocol(distributionProtocol);	
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol,bean);
+	    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedDistributionProtocol);
 	       	assertTrue("Domain object successfully updated ---->"+updatedDistributionProtocol, true);
 	    } 
@@ -112,8 +110,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	distributionprotocol.setTitle("");
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("Domain object eith empty title ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -131,9 +128,8 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 			DistributionProtocol distributionprotocol = BaseTestCaseUtility.initDistributionProtocol();	
 			DistributionProtocol dupDistributionProtocol = BaseTestCaseUtility.initDistributionProtocol();
 			dupDistributionProtocol.setTitle(distributionprotocol.getTitle());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean); 
-			dupDistributionProtocol = (DistributionProtocol) appService.createObject(dupDistributionProtocol,bean); 
+			distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol); 
+			dupDistributionProtocol = (DistributionProtocol) appService.createObject(dupDistributionProtocol); 
 			assertFalse("Test Failed. Duplicate Distribution Protocol name should throw exception", true);
 		}
 		 catch(Exception e){
@@ -153,8 +149,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	distributionprotocol.setShortTitle("");
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("Distribution Protocol object with empty short title ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -171,12 +166,11 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    try 
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		    distributionprotocol.setStartDate(Utility.parseDate("", Utility
 						.datePattern("08/15/1975")));
 	    		    	
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with empty date ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -198,7 +192,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    		    	
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
 	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with invalid activity status ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -223,8 +217,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with invalid specimen class ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -250,8 +243,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with SpecimenClass Tissue and invalid specimen class ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -276,8 +268,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
 			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with SpecimenClass Tissue and invalid specimen class ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -301,8 +292,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	Collection distributionSpecimenRequirementCollection = new HashSet();
 	    	distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 			distributionprotocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);	    
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with invalid Pathological status ---->"+distributionprotocol);
 	       	assertFalse("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -320,10 +310,9 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol,bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	distributionprotocol.setActivityStatus("Closed");
-	 	    DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol, bean);
+	 	    DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with closed activity status ---->"+distributionprotocol);
 	       	assertTrue("DistributionProtocol should throw exception ---->"+distributionprotocol, true);
 	    } 
@@ -341,10 +330,9 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	  	{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	Logger.out.info("updating domain object------->"+distributionprotocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol, bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	distributionprotocol.setActivityStatus("Disabled");
-	    	DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol,bean);
+	    	DistributionProtocol updatedDistributionprotocol = (DistributionProtocol) appService.updateObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with closed activity status ---->"+distributionprotocol);
 	       	assertTrue("DistributionProtocol successfully updated  ---->"+distributionprotocol, true);
 	    } 
@@ -362,8 +350,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    	DistributionProtocol distributionprotocol =  BaseTestCaseUtility.initDistributionProtocol();
 	    	distributionprotocol.setDistributionSpecimenRequirementCollection(new HashSet<DistributionSpecimenRequirement>());
 	    	Logger.out.info("creating domain object------->"+distributionprotocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol, bean);
+	    	distributionprotocol = (DistributionProtocol) appService.createObject(distributionprotocol);
 	    	Logger.out.info("DistributionProtocol object with no Distribution Specimen Requirement ---->"+distributionprotocol);
 	       	assertTrue("DistributionProtocol successfully created  ---->"+distributionprotocol, true);
 	    } 

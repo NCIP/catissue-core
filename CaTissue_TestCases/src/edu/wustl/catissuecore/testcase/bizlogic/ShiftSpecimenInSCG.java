@@ -207,9 +207,8 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 				specimenCollectionGroup.setClinicalDiagnosis("Not Specified");
 				// collectionProtocolEvent.setStudyCalendarEventPoint(Double.
 				// parseDouble(studyPoint));
-				SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 				specimenCollectionGroup = (SpecimenCollectionGroup) appService
-						.createObject(specimenCollectionGroup,bean);
+						.createObject(specimenCollectionGroup);
 				System.out.println("specimenCollectionGroup created");
 			}
 			disableSpecimenInSCG(specimenCollectionGroup);
@@ -342,8 +341,7 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 		// System.out.println("before.. scg in specimen is "+
 		// specimen.getSpecimenCollectionGroup().getId());
 		specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-		Specimen newSpecimen = (Specimen) appService.updateObject(specimen,bean);
+		Specimen newSpecimen = (Specimen) appService.updateObject(specimen);
 		// System.out.println("after..  scg in specimen is "+
 		// newSpecimen.getSpecimenCollectionGroup().getId() + " label is "+
 		// newSpecimen.getLabel());
@@ -374,8 +372,7 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 		while (speItr.hasNext()) {
 			Specimen childSpec = (Specimen) speItr.next();
 			childSpec.setSpecimenCollectionGroup(specimenCollectionGroup);
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			childSpec = (Specimen) appService.updateObject(childSpec,bean);
+			childSpec = (Specimen) appService.updateObject(childSpec);
 			System.out.println("child Specimen updated");
 			updateChildSpecimne(childSpec, specimenCollectionGroup);
 		}

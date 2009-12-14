@@ -31,8 +31,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 		try
 		 {
 			CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();			
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
 			assertTrue("Object added successfully", true);
 		 }
@@ -114,7 +113,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventCollection);
 		
 		try{
-			collectionProtocol= (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+			collectionProtocol= (CollectionProtocol) appService.createObject(collectionProtocol);
 		}
 		catch(Exception e)
 		{
@@ -127,14 +126,13 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	{
 	    try 
 		{  
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 	    	Collection consentCollection = collectionProtocol.getConsentTierCollection();
 	    	Iterator<ConsentTier> itr = consentCollection.iterator();
 	    	itr.next();
 	    	itr.remove();
 	    	System.out.println(consentCollection.size() + " : Collection Size");
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
 	    } 
 	    catch (Exception e)
@@ -156,7 +154,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
 	    	//System.out.println("befor");
 	    	//System.out.println(collectionProtocol.getId()+">>>>");
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	//System.out.println("after");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
@@ -174,7 +172,6 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	{
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
 	    	Iterator itr = cpeCollection.iterator();
@@ -182,7 +179,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	collectionProtocolEventList.add(itr.next());
 	    	System.out.println(collectionProtocolEventList.size() + " : Collection Size");
 	    	collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
 	    } 
@@ -199,7 +196,6 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	{
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
 	    	Iterator itr = cpeCollection.iterator();
@@ -218,7 +214,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    		}
 	    	}
 	    	
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
 	    } 
@@ -234,14 +230,13 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	{
 	    try 
 		{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 	    	Collection cpeCollection = collectionProtocol.getCollectionProtocolEventCollection();
 	    	CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
 			BaseTestCaseUtility.setCollectionProtocolEvent(collectionProtocolEvent);
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			cpeCollection.add(collectionProtocolEvent);
-	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol,bean);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
 	    	TestCaseUtility.setObjectMap(updatedCollectionProtocol,CollectionProtocol.class);//bug 12073 and 12074
@@ -322,8 +317,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	CollectionProtocol collectionProtocol =  BaseTestCaseUtility.initCollectionProtocol();
 	    	collectionProtocol.setTitle("");
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object eith empty title ---->"+collectionProtocol);
 	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 	       	fail("Collection Protocol should throw exception");
@@ -341,9 +335,8 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 			CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();	
 			CollectionProtocol dupCollectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
 			dupCollectionProtocol.setTitle(collectionProtocol.getTitle());
-			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean); 
-			dupCollectionProtocol = (CollectionProtocol) appService.createObject(dupCollectionProtocol,bean); 
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol); 
+			dupCollectionProtocol = (CollectionProtocol) appService.createObject(dupCollectionProtocol); 
 			assertFalse("Test Failed. Duplicate Collection Protocol name should throw exception", true);
 			fail("Test Failed. Duplicate Collection Protocol name should throw exception");
 		}
@@ -363,8 +356,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	CollectionProtocol collectionProtocol =  BaseTestCaseUtility.initCollectionProtocol();
 	    	collectionProtocol.setShortTitle("");
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with empty short title ---->"+collectionProtocol);
 	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 	    	fail("Collection Protocol should throw exception");
@@ -385,8 +377,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 						.datePattern("08/15/1975")));
 	    		    	
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with empty date ---->"+collectionProtocol);
 	       	assertFalse("Collection should throw exception ---->"+collectionProtocol, true);
 	       	fail("Collection Protocol should throw exception");
@@ -406,8 +397,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	collectionProtocol.setActivityStatus("Invalid");
 	    		    	
 	    	Logger.out.info("updating domain object------->"+collectionProtocol);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid activity status ---->"+collectionProtocol);
 	       	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 	       	fail("Collection Protocol should throw exception");
@@ -439,8 +429,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
     	
 	    try 
 	  	{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	       //assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 	    	fail("Collection Protocol should throw exception");
@@ -474,8 +463,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
     	
 	    try 
 	  	{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 			fail("Collection Protocol should throw exception");
@@ -514,8 +502,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
     	
 	    try 
 	  	{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	      // 	assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true); 
 	    	fail("Collection Protocol should throw exception");
@@ -548,8 +535,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
     	
 	    try 
 	  	{
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol,bean);
+	    	collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
 	    	Logger.out.info("Collection Protocol object with invalid specimen class ---->"+collectionProtocol);
 	       	//assertFalse("Collection Protocol should throw exception ---->"+collectionProtocol, true);
 	    	fail("Collection Protocol should throw exception");

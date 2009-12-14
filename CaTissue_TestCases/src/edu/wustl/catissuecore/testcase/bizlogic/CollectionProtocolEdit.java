@@ -129,9 +129,8 @@ public class CollectionProtocolEdit extends CaTissueSuiteBaseTest implements jav
 
 					if (cPResultList.size() != 0) {
 						System.out.println("updating");
-						SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 						CollectionProtocolBizTestCases.appService
-								.updateObject(collectionProtocol,bean);//updateObject(
+								.updateObject(collectionProtocol);//updateObject(
 						// collectionProtocol
 						// );//
 					}

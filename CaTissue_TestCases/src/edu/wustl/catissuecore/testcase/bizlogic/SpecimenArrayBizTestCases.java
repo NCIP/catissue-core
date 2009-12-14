@@ -17,8 +17,7 @@ public class SpecimenArrayBizTestCases extends CaTissueSuiteBaseTest
 		{
 			SpecimenArray specimenArray =  BaseTestCaseUtility.initSpecimenArray();
 	    	Logger.out.info("Inserting domain object------->"+specimenArray);
-	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-	    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray, bean);
+	    	specimenArray =  (SpecimenArray) appService.createObject(specimenArray);
 			assertTrue("Domain Object is successfully added" , true);
 			Logger.out.info(" Specimen Collection Group is successfully added ---->    ID:: " + specimenArray.getId().toString());
 		}

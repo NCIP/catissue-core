@@ -65,10 +65,9 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		user.setRoleId("7");
 		user.getSiteCollection().clear();
 		user.getSiteCollection().add(site);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			user = (User)appService.createObject(user,bean);
+			user = (User)appService.createObject(user);
 		}
 		catch (Exception e)
 		{
@@ -90,10 +89,9 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		user.getSiteCollection().clear();
 		user.getSiteCollection().add(site2);
 		user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			user = (User)appService.createObject(user,bean);
+			user = (User)appService.createObject(user);
 		}
 		catch (Exception e)
 		{
@@ -119,11 +117,10 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		cp.getSiteCollection().clear();
 		cp.getSiteCollection().add(site);
-		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		
 		try
 		{
-			cp = (CollectionProtocol)appService.createObject(cp,bean);
+			cp = (CollectionProtocol)appService.createObject(cp);
 		}
 		catch (Exception e)
 		{
@@ -146,7 +143,7 @@ public class MSRSiteAdminTestCases extends MSRBaseTestCase
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		try
 		{
-			cp = (CollectionProtocol)appService.createObject(cp,bean);
+			cp = (CollectionProtocol)appService.createObject(cp);
 		}
 		catch (Exception e)
 		{

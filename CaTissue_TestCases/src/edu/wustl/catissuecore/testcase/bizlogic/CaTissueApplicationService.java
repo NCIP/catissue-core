@@ -1,68 +1,54 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
+import java.util.List;
+
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
+import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import gov.nih.nci.system.applicationservice.ApplicationException;
-
-import java.util.List;
 
 
 public class CaTissueApplicationService 
 {
-	
-
-	
-//	public void setUp() throws Exception {
-//		super.setUp();
-//		if (appService == null)
-//		{
-//			appService = new CaTissueApplicationService(); //ApplicationServiceProvider.getApplicationService();
-//		}
-//	}
-	
-	public Object createObject(Object obj, SessionDataBean bean ) throws Exception
+		
+	public Object createObject(Object obj) throws Exception
 	{
-		//this.setUp();
-	//	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
 		obj = new CaCoreAppServicesDelegator().delegateAdd(bean.getUserName(), obj);
 		return obj;
 	}
-
 	
-	public List getParticipantMatchingObects(Object obj, SessionDataBean bean) throws Exception
+	public List<Participant> getParticipantMatchingObects(Object obj) throws Exception
 	{
-		//this.setUp();
-		List participantList = null;
-		//SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		List<Participant> participantList = null;
+		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
 		participantList = new CaCoreAppServicesDelegator().delegateGetParticipantMatchingObects(bean.getUserName(), obj);
 		return participantList;
 	}
 
-	
-	public String getSpecimenCollectionGroupLabel(Object obj, SessionDataBean bean) throws ApplicationException
+	public String getSpecimenCollectionGroupLabel(Object obj) throws Exception
 	{
 		String label = null;
-		try{
-			//this.setUp();
-			//SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			new CaCoreAppServicesDelegator().delegateGetSpecimenCollectionGroupLabel(bean.getUserName(),obj);
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
+		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
+		new CaCoreAppServicesDelegator().delegateGetSpecimenCollectionGroupLabel(bean.getUserName(),obj);
 		return label;
 	}
 	
-	public Object updateObject(Object obj, SessionDataBean bean) throws Exception
+	public Object updateObject(Object obj) throws Exception
 	{
-		//this.setUp();
-		//SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
 		obj = new CaCoreAppServicesDelegator().delegateEdit(bean.getUserName(),obj);
 		return obj;
 	}
 
+	public List search(String hql) throws Exception
+	{ 
+		List resultList = null;
+		resultList = AppUtility.executeQuery(hql);
+		return resultList;
+	}
 
 //	@Override
 //	public List query(DetachedCriteria arg0, String arg1) throws ApplicationException
@@ -98,13 +84,7 @@ public class CaTissueApplicationService
 //		return null;
 //	}
 //
-	
-	public List search(String hql) throws Exception
-	{ 
-		List resultList = null;
-		resultList = AppUtility.executeQuery(hql);
-		return resultList;
-	}
+		
 //
 //	@Override
 //	public List search(String arg0, List arg1) throws ApplicationException
