@@ -12,14 +12,12 @@ import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.Status;
 
 
 /**
@@ -43,6 +41,64 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 //		Site s = new Site();
 //		s.setId(1L);
 //		TestCaseUtility.setNameObjectMap("Site", s);
+	}
+	//ShowFramedPageAction.java, StorageContainerTreeAction, TreeDataBizlogic.java and OpenStorageContainerAction
+	@Test
+	public void testClickOnViewMap()
+	{
+		setRequestPathInfo("/OpenStorageContainer");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		setRequestPathInfo("/ShowFramedPage");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("storageType", "-1");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("pageOfStorageContainer");
+		verifyNoActionErrors();
+		
+		setRequestPathInfo("/StorageContainerTree");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("pageOfStorageContainer");
+		verifyNoActionErrors();
+	}
+	
+	//TissueSiteTreeAction
+	@Test
+	public void testClickOnTissueSiteSelector()
+	{
+		setRequestPathInfo("/TissueSiteTree");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("propertyName", "tissueSite");
+		addRequestParameter("cdeName", "Tissue Site");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
+	//TissueSiteTreeAction, ShowChildNodes
+	@Test
+	public void testClickOnTissueSiteSelectorAndSelectNode()
+	{
+		setRequestPathInfo("/TissueSiteTree");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("propertyName", "tissueSite");
+		addRequestParameter("cdeName", "Tissue Site");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		setRequestPathInfo("/ShowChildNodes");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("nodeName", "Tissue Site");
+		addRequestParameter("containerId", "1");
+		addRequestParameter("parentId", "0");
+		actionPerform();
 	}
 	/**
 	 * Test Storage Container Add.
