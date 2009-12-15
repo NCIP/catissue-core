@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.testcase.bizlogic.UserBizTestCases;
 import edu.wustl.catissuecore.testcase.collectionprotocol.CollectionProtocolTestCases;
 import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
+import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 
 /**
  * Test suite
@@ -95,6 +96,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(ConsentsTestCase.class);
 		strutsSuite.addTestSuite(InstitutionTestCases.class);
 		strutsSuite.addTestSuite(DepartmentTestCases.class);
+		strutsSuite.addTestSuite(LogoutTestcase.class);
 		
 		strutsSuite.addTestSuite(InstitutionBizTestCases.class);
 		strutsSuite.addTestSuite(DepartmentBizTestCases.class);
