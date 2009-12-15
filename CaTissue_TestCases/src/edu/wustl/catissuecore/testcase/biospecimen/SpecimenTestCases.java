@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -18,6 +20,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
@@ -63,6 +66,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		newSpecForm.setAvailable(true);
 		newSpecForm.setAvailableQuantity("5");
 		newSpecForm.setCollectionStatus("Pending") ;
+		
 
 		Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 		CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
@@ -93,6 +97,8 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		NewSpecimenForm form= (NewSpecimenForm) getActionForm();
 		Specimen specimen = new Specimen();
 		specimen.setId(form.getId());
+		specimen.setSpecimenClass( form.getClassName() );
+		specimen.setSpecimenType( form.getType() );
 		specimen.setActivityStatus(form.getActivityStatus());
 		specimen.setAvailableQuantity(Double.parseDouble(form.getAvailableQuantity()));
 		specimen.setLabel(form.getLabel());
@@ -101,7 +107,6 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
     	specimen.setCollectionStatus(form.getCollectionStatus());
     	specimen.setPathologicalStatus(form.getPathologicalStatus());
     	specimen.setInitialQuantity(Double.parseDouble(form.getQuantity()));
-
     	SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
     	specimenCharacteristics.setTissueSide(form.getTissueSide());
     	specimenCharacteristics.setTissueSite(form.getTissueSite());
@@ -110,6 +115,44 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
+	/**
+	 * Test aliquot add 
+	 * AliquotAction + CreateAliquotAction
+	 */
+	@Test
+	public void testAliquotAdd()
+	{
+		setRequestPathInfo("/Aliquots");
+		actionPerform();
+		verifyNoActionErrors();
+		AliquotForm aliquotForm = new AliquotForm();
+		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		aliquotForm.setSpecimenLabel( parent.getLabel() );
+		aliquotForm.setClassName( parent.getSpecimenClass() );
+		aliquotForm.setType( parent.getSpecimenType() );
+		aliquotForm.setNoOfAliquots( "1" );
+		aliquotForm.setQuantityPerAliquot( "1" );
+		aliquotForm.setSpecimenID( parent.getId().toString() );
+		aliquotForm.setNextForwardTo( "" );
+		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
+		setActionForm(aliquotForm);
+		setRequestPathInfo("/CreateAliquots");
+		actionPerform();		
+		setRequestPathInfo("/AliquotAdd");
+		AliquotForm form = (AliquotForm) getActionForm();
+		form.setAvailableQuantity( "1" );
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		Map aliquotMap = form.getAliquotMap();
+		aliquotMap.put( "radio_1", "2" );
+		aliquotMap.put( "Specimen:1_quantity", "1" );
+		aliquotMap.put( "Specimen:1_StorageContainer_id", ""+storageContainer.getId() );
+		aliquotMap.put( "Specimen:1_positionDimensionOne", "2" );
+		aliquotMap.put( "Specimen:1_positionDimensionTwo", "1" );
+		setActionForm(form);
+		actionPerform();
+		verifyNoActionErrors();
+	}
+	
 	/**
 	 * Test Specimen Label and Barcode after storage position changes(when page refreshes).
 	 * Bug Id : 11480
@@ -147,8 +190,8 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
 		NewSpecimenForm specimenForm = null;
-		//Retrieving Storage container object for edit
-		logger.info("----StorageConatiner ID : " + specimen.getId());
+		//Retrieving specimen object for edit
+		logger.info("----specimen ID : " + specimen.getId());
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
 		addRequestParameter("operation", "search");
 		addRequestParameter("id", specimen.getId().toString());
