@@ -275,4 +275,36 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test Cancer Research Group Add.
+	 */
+	@Test
+	public void testCancerResearchGroupAddByPopUp()
+	{
+		
+		setRequestPathInfo("/CancerResearchGroup");
+		addRequestParameter("pageOf", "pageOfPopUpCancerResearchGroup");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("pageOfPopUpCancerResearchGroup");
+		verifyNoActionErrors();
+	
+		setRequestPathInfo("/AddCancerResearchGroup");
+		addRequestParameter("crgName", "CRG_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("operation", "add");
+		addRequestParameter("pageOf", "pageOfCancerResearchGroup");
+		addRequestParameter("menuSelected", "4");
+		actionPerform();
+		verifyNoActionErrors();
+		
+		verifyActionMessages(new String[]{"object.add.successOnly"});
+		
+		CancerResearchGroupForm form=(CancerResearchGroupForm) getActionForm();
+		CancerResearchGroup crg = new CancerResearchGroup();
+		crg.setId(form.getId());
+		crg.setName(form.getName());
+		TestCaseUtility.setNameObjectMap("CancerResearchGroup",crg);
+	}
+	
 }

@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
@@ -279,4 +281,37 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Test Department Group Add.
+	 */
+	@Test
+	public void testDepartmentAddByPopUp()
+	{
+		
+		setRequestPathInfo("/Department");
+		addRequestParameter("operation", "add");
+		addRequestParameter("submittedFor", "AddNew");
+		addRequestParameter("pageOf", "pageOfPopUpDepartment");	
+		actionPerform();
+		verifyForward("pageOfPopUpDepartment");
+		verifyNoActionErrors();
+	
+		setRequestPathInfo("/AddDepartment");
+		addRequestParameter("pageOf", "pageOfDepartment");
+		addRequestParameter("departmentName", "Dept_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("operation", "add");		
+		addRequestParameter("menuSelected", "3");
+		actionPerform();
+		verifyNoActionErrors();
+		
+		verifyActionMessages(new String[]{"object.add.successOnly"});
+		
+		DepartmentForm form=(DepartmentForm) getActionForm();
+		Department dept = new Department();
+		dept.setId(form.getId());
+		dept.setName(form.getName());
+		TestCaseUtility.setNameObjectMap("Department",dept);
+	}
+	
 }

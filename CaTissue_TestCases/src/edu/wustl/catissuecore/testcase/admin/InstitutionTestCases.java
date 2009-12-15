@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
@@ -292,4 +294,33 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		assertEquals(Constants.ADMIN_PROTECTION_ELEMENT, objectId);
 	}
 	
+	/**
+	 * Test Institution Add.
+	 */
+	@Test
+	public void testInstitutionAddByPopUp()
+	{
+		setRequestPathInfo("/Institution");
+		addRequestParameter("operation", "add");
+		addRequestParameter("pageOf", "pageOfPopUpInstitution");	
+		actionPerform();
+		verifyForward("pageOfPopUpInstitution");
+		verifyNoActionErrors();
+	
+		setRequestPathInfo("/AddInstitution");
+		addRequestParameter("pageOf", "pageOfInstitution");
+		addRequestParameter("instituteName", "Inst_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("operation", "add");		
+		actionPerform();
+		verifyNoActionErrors();
+		
+		verifyActionMessages(new String[]{"object.add.successOnly"});
+		
+		InstitutionForm form = (InstitutionForm) getActionForm();
+		Institution institution = new Institution();
+		institution.setId(form.getId());
+		institution.setName(form.getName());
+		TestCaseUtility.setNameObjectMap("Institution", institution);
+		
+	}
 }
