@@ -3720,11 +3720,6 @@ PUBLIC
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">
 		</action>
-		<action path="/TreeView"
-			type="edu.wustl.catissuecore.action.TreeViewAction">
-			<forward name="success" path=".catissuecore.queryResultsTreeViewDef" />
-		</action>
-		
 <!-- StorageContainerTreeAction added for DHTMLX tree grid view of storage container -->
 		<action path="/StorageContainerTree"
 			type="edu.wustl.catissuecore.action.StorageContainerTreeAction">
@@ -4632,13 +4627,6 @@ PUBLIC
 		<forward name="failure" path="/pages/content/manageBioSpecimen/ShowCpAndParticipantsFlex.jsp"/>
 	</action>
 
-	<action path="/showTree"
-		type="edu.wustl.catissuecore.action.ShowTreeAction"
-		name="cpSearchForm"
-		scope="request">
-		<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
-		<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
-	</action>
 	<!-- Listing events associated with specimens -->	
 	<action path="/CPQueryListSpecimenEventParameters"
 		type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
