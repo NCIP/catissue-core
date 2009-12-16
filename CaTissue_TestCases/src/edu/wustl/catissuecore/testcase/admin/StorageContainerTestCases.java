@@ -779,5 +779,94 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("parentId", "0");
 		actionPerform();
 	}
+	
+	/**
+	 * Test Storage Container Add.
+	 * StorageContainersAction
+	 * StorageContainerAddAction
+	 */
+	@Test
+	public void testAddSimilarContainer()
+	{
+		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		logger.info("----StorageTypeId : " + storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+
+		storageContainerForm.setSiteId(site.getId());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(25);
+		storageContainerForm.setTwoDimensionCapacity(25);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+		storageContainerForm.setNoOfContainers(3);
+		String[] holdsSpecimenClassCollection = new String[4];
+		holdsSpecimenClassCollection[0]="Fluid";
+		holdsSpecimenClassCollection[1]="Tissue";
+		holdsSpecimenClassCollection[2]="Molecular";
+		holdsSpecimenClassCollection[3]="Cell";
+
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+		storageContainerForm.setIsFull("False");
+		storageContainerForm.setOperation("add");
+	
+		setRequestPathInfo("/SimilarContainers");
+		setActionForm(storageContainerForm);
+		addRequestParameter("pageOf", "pageOfCreateSimilarContainers");
+		addRequestParameter("id", "0");
+		addRequestParameter("typeId", storageType.getId().toString());
+		addRequestParameter("noOfContainers", "3");
+		actionPerform();
+		//verifyForward("pageOfSimilarContainers");
+		//verifyNoActionErrors();
+		
+		setRequestPathInfo("/SimilarContainersAdd");
+		setActionForm(storageContainerForm);
+		addRequestParameter("pageOf", "pageOfCreateSimilarContainers");
+		addRequestParameter("id", "0");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
+	/**
+	 * Test Storage Container Add.
+	 * StorageContainersAction
+	 * StorageContainerAddAction
+	 */
+	@Test
+	public void testClickStorageContainerNode()
+	{
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		setRequestPathInfo("/ShowStorageGridView");
+		addRequestParameter("pageOf", "pageOfSpecimen");
+		addRequestParameter("id", storageContainer.getId().toString());
+		addRequestParameter("id", storageContainer.getId().toString());
+		addRequestParameter("activityStatus", "Active");
+		addRequestParameter("holdSpecimenClass", "Tissue");
+		addRequestParameter("holdSpecimenType", "Not Specified");
+		addRequestParameter("holdContainerType", "Rack");
+		addRequestParameter("holdCollectionProtocol", "1");
+		addRequestParameter("holdSpecimenArrayType", "Rack");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
+	@Test
+	public void testShowFramedPage()
+	{
+		setRequestPathInfo("/ShowFramedPage");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("propertyName", "tissueSite");
+		addRequestParameter("cdeName", "Tissue Site");
+		actionPerform();
+	}
 
 }
