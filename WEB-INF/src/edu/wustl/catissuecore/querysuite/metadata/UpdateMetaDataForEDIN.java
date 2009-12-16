@@ -13,7 +13,7 @@ import java.util.List;
  * class to Update Meta Data For EDIN.
  *
  */
-public class UpdateMetaDataForEDIN extends UpdateMetadata
+public class UpdateMetaDataForEDIN
 {
 
 	/**
@@ -26,6 +26,11 @@ public class UpdateMetaDataForEDIN extends UpdateMetadata
 	private static Statement stmt = null;
 
 	/**
+	 * Database specific compare operator.
+	 */
+	static String DB_SPECIFIC_COMPARE_OPERATOR;
+
+	/**
 	 * main method.
 	 * @param args arguments
 	 * @throws SQLException SQL Exception
@@ -36,8 +41,7 @@ public class UpdateMetaDataForEDIN extends UpdateMetadata
 	{
 		try
 		{
-			configureDBConnection(args);
-			connection = getConnection();
+			connection = DBConnectionUtil.getDBConnection(args);
 			connection.setAutoCommit(true);
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;

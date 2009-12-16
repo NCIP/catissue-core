@@ -55,11 +55,15 @@ public class DERestructureDataUtil
 	public static void main(String[] args) throws SQLException, ClassNotFoundException,
 			DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
-		AddDEIntegrationMetadata.configureDBConnection(args);
-		connection = AddDEIntegrationMetadata.getDBConnection();
-
-		restructureData();
-		connection.close();
+		try
+		{
+			connection = DBConnectionUtil.getDBConnection(args);
+			restructureData();
+		}
+		finally
+		{
+			connection.close();
+		}
 		logger.info("------DONE--------");
 	}
 
@@ -266,11 +270,11 @@ public class DERestructureDataUtil
 		DateFormat format = new SimpleDateFormat("MM-dd-yyyy");
 		String formattedDate = format.format(date);
 
-		if ("mysql".equals(AddDEIntegrationMetadata.DATABASE_TYPE))
+		if ("mysql".equals(DBConnectionUtil.DATABASE_TYPE))
 		{
 			formattedDate = "STR_TO_DATE('" + formattedDate + "','%m-%d-%Y')";
 		}
-		else if ("oracle".equals(AddDEIntegrationMetadata.DATABASE_TYPE))
+		else if ("oracle".equals(DBConnectionUtil.DATABASE_TYPE))
 		{
 			formattedDate = "TO_DATE('" + formattedDate + "','mm-dd-yyyy')";
 		}
