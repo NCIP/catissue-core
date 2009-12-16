@@ -86,7 +86,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			//createCP();
 			registerParticipant();
 			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/SCG.xls";
+					+ "/CaTissue_TestCases/excelFiles/SCG.xls";
 			ExcelFileReader EX_CP = new ExcelFileReader();
 			String allexcel[][] = EX_CP.setInfo(excelFilePath);
 			new ShiftSpecimenInSCG().shift(allexcel);
@@ -231,7 +231,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			setUp();
 			System.out.println("user.dir  " + System.getProperty("user.dir"));
 			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/CPExpansion.xls";
+					+ "/CaTissue_TestCases/excelFiles/CPExpansion.xls";
 			ExcelFileReader EX_CP = new ExcelFileReader();
 			String allCP[][] = EX_CP.setInfo(excelFilePath);
 
@@ -285,7 +285,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			createSite();
 			System.out.println("user.dir  " + System.getProperty("user.dir"));
 			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/UsersSiteCp.xls";
+					+ "/CaTissue_TestCases/excelFiles/UsersSiteCp.xls";
 			ExcelFileReader EX_CP = new ExcelFileReader();
 			String allexcel[][] = EX_CP.setInfo(excelFilePath);
 			new SiteAssociation().setUserSite(allexcel);
@@ -327,7 +327,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 			setUp();
 			System.out.println("user.dir  " + System.getProperty("user.dir"));
 			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/AntiScgForPart.xls";
+					+ "/CaTissue_TestCases/excelFiles/AntiScgForPart.xls";
 			ExcelFileReader EX_CP = new ExcelFileReader();
 			String allexcel[][] = EX_CP.setInfo(excelFilePath);
 			new AddAnticipatedSCGInParticipant().addSCGs(allexcel);
