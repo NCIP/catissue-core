@@ -4,33 +4,27 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.struts.action.ActionFormBeans;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
-import edu.wustl.catissuecore.bean.ConsentResponseBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
-import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -497,11 +491,6 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		scgForm.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		scgForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");
 		
-		/*scgForm.setConsentResponseForScgValue("ConsentBean:0_consentTierID",
-					""+scgForm.getConsentResponseForScgValue("ConsentBean:0_consentTierID"));
-		scgForm.setConsentResponseForScgValue("ConsentBean:1_consentTierID",
-				""+scgForm.getConsentResponseForScgValue("ConsentBean:1_consentTierID"));*/
-		
 		 Map consentResponseForScgValues = scgForm.getConsentResponseForScgValues();
 		 consentResponseForScgValues.put("ConsentBean:1_consentTierID",
 				 consentResponseForScgValues.get("ConsentBean:1_consentTierID").toString());
@@ -530,8 +519,10 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
+	    System.out.println("scg form id "+ scgForm.getId());
 		
-		
+	    TestCaseUtility.setNameObjectMap("scgForm", scgForm);
+	    
 		/*scgForm = (SpecimenCollectionGroupForm)getActionForm();
 		scgForm.setCollectionStatus("Complete");
 		scgForm.setSiteId(3L);
@@ -544,15 +535,56 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
 		verifyNoActionErrors();*/
 		
-		
 		setRequestPathInfo("/AnticipatorySpecimenView");
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
-		
-		
+ }
 
+	public void testSpecimenSummaryViewEdit()
+	{
+		SpecimenCollectionGroupForm scgForm = (SpecimenCollectionGroupForm)TestCaseUtility.getNameObjectMap("scgForm");
+		setRequestPathInfo("/AnticipatorySpecimenView");
+		setActionForm(scgForm);
+		actionPerform();
+		verifyForward("success");
 		
-  }
-
+		
+		setRequestPathInfo("/GenericSpecimenSummary");
+		addRequestParameter("forwardToValue", "success");
+		addRequestParameter("target", "anticipatory");
+		addRequestParameter("submitAction", "updateSpecimenStatus");
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		actionPerform();
+		verifyForward("anticipatory");
+		
+		/*ViewSpecimenSummaryForm viewspecimenSummaryform = (ViewSpecimenSummaryForm)getActionForm();
+		viewspecimenSummaryform.setSubmitAction("updateSpecimenStatus");
+		setRequestPathInfo("/GenericSpecimenSummary");
+		setActionForm(viewspecimenSummaryform);
+		addRequestParameter("forwardToValue", "success");
+		addRequestParameter("submitAction", "updateSpecimenStatus");
+		addRequestParameter("save", "SCGSpecimens");
+		actionPerform();
+		verifyForward("updateSpecimenStatus");*/
+		
+		ViewSpecimenSummaryForm viewspecimenSummaryform = (ViewSpecimenSummaryForm)getActionForm();
+		setRequestPathInfo("/updateSpecimenStatus");
+		setActionForm(viewspecimenSummaryform);	
+		actionPerform();
+		verifyForward("success");
+		
+		viewspecimenSummaryform = (ViewSpecimenSummaryForm)getActionForm();
+		setRequestPathInfo("/redirecttoSCG");
+		setActionForm(viewspecimenSummaryform);	
+		actionPerform();
+		verifyForward("success");
+		
+		
+		
+		
+		
+	}
+	
+	
 }
