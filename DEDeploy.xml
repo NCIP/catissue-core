@@ -218,7 +218,7 @@
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string.DE}" />
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 				</replace>
 				<replace dir="${temp.dir.DE}">
 					<include name="ApplicationDAOProperties.xml" />
