@@ -120,6 +120,10 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		/*dynExtDataEntryURL = dynExtDataEntryURL + "&"
 				+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
 				+ annotationDataEntryForm.getSelectedAnnotation();*/
+		final String operation = request.getParameter( "operation" );
+		final String selectedAnnotation = request.getParameter( "selectedAnnotation" );
+		String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY
+		+ "?" + "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
 		if (request.getParameter( "recordId" ) != null)
 		{
 			this.logger.info( "Loading details of record id [" + request.getParameter( "recordId" )
@@ -131,11 +135,13 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 			/*dynExtDataEntryURL = dynExtDataEntryURL + "&"
 					+ WebUIManagerConstants.RECORD_IDENTIFIER_PARAMETER_NAME + "="
 					+ request.getParameter("recordId");*/
+			callbackURL = callbackURL + "@deData=edit";
 		}
-		final String operation = request.getParameter( "operation" );
-		final String selectedAnnotation = request.getParameter( "selectedAnnotation" );
-		final String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY
-				+ "?" + "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
+		else
+		{
+			callbackURL = callbackURL + "@deData=add";
+		}
+
 		// append callback url
 		dynExturl.append( '&' );
 		dynExturl.append( WebUIManager.getCallbackURLParamName() );

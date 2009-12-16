@@ -14,18 +14,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -250,7 +246,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws ApplicationException
 	 */
-	public Long getRecordEntryId(HttpServletRequest request, String dynExtRecordId,
+	/*public Long getRecordEntryId(HttpServletRequest request, String dynExtRecordId,
 			String dynEntContainerId) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, ApplicationException
 	{
@@ -262,7 +258,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				dynExtRecordId);
 
 		return recordEntryId;
-	}
+	}*/
 
 
 }

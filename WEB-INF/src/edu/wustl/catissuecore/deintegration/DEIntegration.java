@@ -9,7 +9,6 @@
 package edu.wustl.catissuecore.deintegration;
 
 import java.util.Collection;
-import java.util.List;
 
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -18,8 +17,6 @@ import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.dao.exception.DAOException;
@@ -116,7 +113,7 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 	 * @throws DynamicExtensionsApplicationException
 	 * @throws ApplicationException
 	 */
-	public static Long getHookEntityRecordId(String staticEntityId, String dynEntContainerId,
+	/*public static Long getHookEntityRecordId(String staticEntityId, String dynEntContainerId,
 			String recordId) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, ApplicationException
 	{
@@ -164,5 +161,5 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 
 		return recordEntryId;
 
-	}
+	}*/
 }
