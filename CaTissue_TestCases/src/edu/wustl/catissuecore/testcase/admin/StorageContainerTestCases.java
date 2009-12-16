@@ -43,63 +43,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 //		TestCaseUtility.setNameObjectMap("Site", s);
 	}
 	//ShowFramedPageAction.java, StorageContainerTreeAction, TreeDataBizlogic.java and OpenStorageContainerAction
-	@Test
-	public void testClickOnViewMap()
-	{
-		setRequestPathInfo("/OpenStorageContainer");
-		addRequestParameter("pageOf", "pageOfStorageContainer");
-		addRequestParameter("operation", "showEditAPageAndMap");
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-		
-		setRequestPathInfo("/ShowFramedPage");
-		addRequestParameter("pageOf", "pageOfStorageContainer");
-		addRequestParameter("storageType", "-1");
-		addRequestParameter("operation", "showEditAPageAndMap");
-		actionPerform();
-		verifyForward("pageOfStorageContainer");
-		verifyNoActionErrors();
-		
-		setRequestPathInfo("/StorageContainerTree");
-		addRequestParameter("pageOf", "pageOfStorageContainer");
-		addRequestParameter("operation", "showEditAPageAndMap");
-		actionPerform();
-		verifyForward("pageOfStorageContainer");
-		verifyNoActionErrors();
-	}
-	
-	//TissueSiteTreeAction
-	@Test
-	public void testClickOnTissueSiteSelector()
-	{
-		setRequestPathInfo("/TissueSiteTree");
-		addRequestParameter("pageOf", "pageOfTissueSite");
-		addRequestParameter("propertyName", "tissueSite");
-		addRequestParameter("cdeName", "Tissue Site");
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-	}
-	
-	//TissueSiteTreeAction, ShowChildNodes
-	@Test
-	public void testClickOnTissueSiteSelectorAndSelectNode()
-	{
-		setRequestPathInfo("/TissueSiteTree");
-		addRequestParameter("pageOf", "pageOfTissueSite");
-		addRequestParameter("propertyName", "tissueSite");
-		addRequestParameter("cdeName", "Tissue Site");
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-		setRequestPathInfo("/ShowChildNodes");
-		addRequestParameter("pageOf", "pageOfTissueSite");
-		addRequestParameter("nodeName", "Tissue Site");
-		addRequestParameter("containerId", "1");
-		addRequestParameter("parentId", "0");
-		actionPerform();
-	}
 	/**
 	 * Test Storage Container Add.
 	 */
@@ -779,6 +722,62 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 
 	}
-
+	@Test
+	public void testClickOnViewMap()
+	{
+		setRequestPathInfo("/OpenStorageContainer");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		setRequestPathInfo("/ShowFramedPage");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("storageType", "-1");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("pageOfStorageContainer");
+		verifyNoActionErrors();
+		
+		setRequestPathInfo("/StorageContainerTree");
+		addRequestParameter("pageOf", "pageOfStorageContainer");
+		addRequestParameter("operation", "showEditAPageAndMap");
+		actionPerform();
+		verifyForward("pageOfStorageContainer");
+		verifyNoActionErrors();
+	}
+	
+	//TissueSiteTreeAction
+	@Test
+	public void testClickOnTissueSiteSelector()
+	{
+		setRequestPathInfo("/TissueSiteTree");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("propertyName", "tissueSite");
+		addRequestParameter("cdeName", "Tissue Site");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
+	//TissueSiteTreeAction, ShowChildNodes
+	@Test
+	public void testClickOnTissueSiteSelectorAndSelectNode()
+	{
+		setRequestPathInfo("/TissueSiteTree");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("propertyName", "tissueSite");
+		addRequestParameter("cdeName", "Tissue Site");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		setRequestPathInfo("/ShowChildNodes");
+		addRequestParameter("pageOf", "pageOfTissueSite");
+		addRequestParameter("nodeName", "Tissue Site");
+		addRequestParameter("containerId", "1");
+		addRequestParameter("parentId", "0");
+		actionPerform();
+	}
 
 }

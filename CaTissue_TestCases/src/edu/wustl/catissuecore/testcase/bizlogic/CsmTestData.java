@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;

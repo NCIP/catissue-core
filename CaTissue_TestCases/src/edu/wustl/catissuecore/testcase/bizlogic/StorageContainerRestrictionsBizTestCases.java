@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
