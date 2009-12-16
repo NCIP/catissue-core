@@ -250,8 +250,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBioHazardEdit()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("ToxicBiohazard") ;
 		addRequestParameter("id", ""+biohazard.getId());
 		addRequestParameter("pageOf", "pageOfBioHazard");
@@ -284,9 +282,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testEditBioHazardEditWithoutMandatoryParams()
 	{
-//		//TODO
-//		fail("Need to write test case");
-		
 		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("ToxicBiohazard") ;
 		addRequestParameter("id", ""+biohazard.getId());
 		addRequestParameter("pageOf", "pageOfBioHazard");
@@ -312,9 +307,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBiohazardAddWithInvalidType()
 	{
-//		//TODO
-//		fail("Need to write test case");
-		
 		BiohazardForm bioForm = new BiohazardForm();
 		bioForm.setName("BioHazard_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
 		bioForm.setType("InValidBioHazardType");
@@ -334,8 +326,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBioHazardBizLogicAddWithNullObject()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		BiohazardBizLogic bizLogic = new BiohazardBizLogic();
 		try
 		{
@@ -345,7 +335,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in BioHazardTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -356,8 +345,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBiohazardBizLogicAddWithNullName()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Biohazard biohazard = new Biohazard() ;
 		biohazard.setName(null) ;
 		biohazard.setType("Mutagen");
@@ -370,7 +357,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in BioHazardTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -381,8 +367,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBiohazardBizLogicAddWithNullType()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Biohazard biohazard = new Biohazard() ;
 		biohazard.setName("Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
 		biohazard.setType(null);
@@ -395,7 +379,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in BioHazardTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -406,8 +389,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testBiohazardBizLogicAddWithInvalidType()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Biohazard biohazard = new Biohazard() ;
 		biohazard.setName("Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
 		biohazard.setType("InValid");
@@ -420,7 +401,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in BioHazardTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

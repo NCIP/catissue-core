@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
