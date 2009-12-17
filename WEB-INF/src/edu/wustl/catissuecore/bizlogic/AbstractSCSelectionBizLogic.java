@@ -17,6 +17,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
 
 public abstract class AbstractSCSelectionBizLogic
 {
@@ -86,7 +87,9 @@ public abstract class AbstractSCSelectionBizLogic
 			{
 				logger.debug(String.format("Firing query: query%d", i));
 				logger.debug(queries[i]);
-				final List resultList = dao.executeQuery(queries[i]);
+				final List resultList = getContainerListByQuery(storageType, dao, queries[i],
+				remainingContainersNeeded); 
+				//dao.executeQuery(queries[i]);
 				if (resultList == null || resultList.size() == 0)
 				{
 					continue;
@@ -115,5 +118,27 @@ public abstract class AbstractSCSelectionBizLogic
 		logger.debug(String.format("%s:%s:%d", this.getClass().getSimpleName(),
 				"getStorageContainers() number of containers fetched", containers.size()));
 		return containers;
+	}
+	/**
+	 * @param storageType 
+	 * @param dao A dao object to be used to execute query.
+	 * @param query to be executed to get containers.
+	 * @param maxRecords maximum records to be retrieved by query.
+	 * @return containers as query result in the form of List
+	 * @throws DAOException DAO Exception 
+	 */
+	private List getContainerListByQuery(String storageType, final JDBCDAO dao,
+			final String query, int maxRecords) throws DAOException
+	{
+		final List resultList;
+		if(!"Manual".equals(storageType))
+		{
+			resultList= dao.executeQuery(query,0,maxRecords,null );
+		}
+		else
+		{
+			resultList= dao.executeQuery(query);
+		}
+		return resultList;
 	}
 }

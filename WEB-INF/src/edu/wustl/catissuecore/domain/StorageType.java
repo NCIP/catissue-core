@@ -276,7 +276,7 @@ public class StorageType extends ContainerType
 						logger.debug("type Id :" + element);
 						if (element.equals("-1"))
 						{
-							this.holdsSpecimenTypeCollection.addAll(AppUtility.getSpecimenTypes());
+							this.holdsSpecimenTypeCollection.addAll(AppUtility.getAllSpecimenTissueType());
 							break;
 						}
 						else

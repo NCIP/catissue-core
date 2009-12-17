@@ -898,7 +898,7 @@ function addNewTypeAction(action)
 							 }
 							else
 							 {
-							   	StorageMapWindow('<%=frameUrl%>','name','800','600','no');
+							   	('<%=frameUrl%>','name','800','600','no');
 							  }
 						}
 					</script>

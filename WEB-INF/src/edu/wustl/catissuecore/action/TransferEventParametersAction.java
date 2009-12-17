@@ -167,6 +167,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 								.getId());
 						final long cpId = collectionProtocolId.longValue();
 						final String className = specimen.getClassName();
+						final String typeName = specimen.getSpecimenType();
 
 						this.logger.info("COllection Protocol Id :" + cpId);
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
@@ -174,7 +175,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 						this.logger.info("Spcimen Class:" + className);
 						containerMap = scbizLogic.
 						getAllocatedContainerMapForSpecimen(
-						AppUtility.setparameterList(cpId,className,0), sessionData, dao);
+						AppUtility.setparameterList(cpId,className,0,typeName), sessionData, dao);
 						initialValues = this.setInitialValue(request, transferEventParametersForm,
 								containerMap);
 					}

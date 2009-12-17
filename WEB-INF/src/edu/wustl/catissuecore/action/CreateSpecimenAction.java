@@ -244,7 +244,7 @@ public class CreateSpecimenAction extends SecureAction
 								isSpecimenExist = false;
 							}
 							final String spClass = createForm.getClassName();
-
+							final String spType = createForm.getType();
 							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 							request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
 							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
@@ -256,7 +256,9 @@ public class CreateSpecimenAction extends SecureAction
 							{
 
 								final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
-								containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,spClass,0),
+								containerMap = scbizLogic.
+								getAllocatedContainerMapForSpecimen
+								(AppUtility.setparameterList(cpId,spClass,0,spType),
 								sessionData, dao);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);

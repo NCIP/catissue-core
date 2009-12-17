@@ -101,7 +101,7 @@ public class SpecimenAutoStorageContainer {
 	 */
 	private void setAutoStoragePositions(
 			LinkedHashMap<String, LinkedList<GenericSpecimen>> autoSpecimenMap, 
-			SessionDataBean sessionDataBean, Long collectionProtocolId)
+			SessionDataBean sessionDataBean, Long cpId)
 			throws ApplicationException 
 {
 
@@ -120,7 +120,7 @@ public class SpecimenAutoStorageContainer {
 					String key = keySetIterator.next();
 					LinkedList<GenericSpecimen> specimenList =
 						autoSpecimenMap.get(key);
-					setSpecimenStorageDetails(specimenList,key, sessionDataBean, collectionProtocolId,dao);
+					setSpecimenStorageDetails(specimenList,key,sessionDataBean, cpId,dao);
 				}
 			}
 		}
@@ -137,16 +137,19 @@ public class SpecimenAutoStorageContainer {
 	}
 	
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
-			String className, SessionDataBean bean, Long collectionProtocolId ,DAO dao) throws ApplicationException
+			String className, SessionDataBean bean, Long cpId ,DAO dao) throws ApplicationException
 	{
 			Map containerMap;
 			try {
 				StorageContainerForSpecimenBizLogic bizLogic =
 					new StorageContainerForSpecimenBizLogic();
+				GenericSpecimen specimenDataBean = 
+					(GenericSpecimen)specimenDataBeanList.get(0);
 				containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
-						AppUtility.setparameterList(collectionProtocolId.longValue(),className,0), bean, dao);
+				AppUtility.setparameterList(cpId.longValue(),className,0,
+				specimenDataBean.getType()), bean, dao);
 				populateStorageLocations(specimenDataBeanList,
-						collectionProtocolId.longValue(), containerMap, bean, className);
+						cpId.longValue(), containerMap, bean, className);
 
 			} catch (ApplicationException exception) 
 			{

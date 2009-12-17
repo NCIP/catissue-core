@@ -23,6 +23,7 @@ create table catissue_bulk_operation
 	DROPDOWN_NAME VARCHAR(100) not null unique,
 	CONSTRAINT CATISSUE_BULK_OPERATION_SEQ PRIMARY KEY (IDENTIFIER)
 );
+
 create table CATISSUE_STOR_CONT_SPEC_TYPE
 (
    STORAGE_CONTAINER_ID number(19,0) not null,
@@ -36,5 +37,25 @@ create table CATISSUE_STOR_TYPE_SPEC_TYPE
    SPECIMEN_TYPE varchar(50)
 );
 alter table CATISSUE_STOR_TYPE_SPEC_TYPE add constraint FK_STORAGE_TYPE_ID foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE;
+
+CREATE INDEX INDX_STOR_TYPE_SPEC ON catissue_stor_type_spec_type(STORAGE_TYPE_ID);
+
+CREATE INDEX INDX_STOR_CONT_SPEC ON catissue_stor_cont_spec_type (STORAGE_CONTAINER_ID);
+
+/**
+ * Populate catissue_stor_type_spec_type
+ */
+insert into catissue_stor_type_spec_type
+select STORAGE_TYPE_ID, t.typevalue from catissue_stor_type_spec_class sp,(select p.value, c.value typevalue from catissue_permissible_value p,catissue_permissible_value c
+where c.parent_identifier = p.identifier and p.value in ('Molecular','Cell','Fluid','Tissue')) t
+where t.value = sp.SPECIMEN_CLASS;
+
+/**
+ * Populate catissue_stor_cont_spec_type
+ */
+insert into catissue_stor_cont_spec_type
+select STORAGE_CONTAINER_ID, t.typevalue from catissue_stor_cont_spec_class sp,(select p.value, c.value typevalue from catissue_permissible_value p,catissue_permissible_value c
+where c.parent_identifier = p.identifier and p.value in ('Molecular','Cell','Fluid','Tissue')) t
+where t.value = sp.SPECIMEN_CLASS;
 
 commit;

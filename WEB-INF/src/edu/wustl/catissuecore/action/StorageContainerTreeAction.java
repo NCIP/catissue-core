@@ -11,7 +11,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.TreeDataBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -77,7 +76,6 @@ public class StorageContainerTreeAction extends BaseAction
 				request.setAttribute(Constants.TREE_NODE_ID, treeNodeIDToBeReloaded);
 				request.setAttribute(Constants.RELOAD, reload);
 			}
-			new StorageContainerBizLogic();
 			List dataList = new Vector();
 			if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION)
 					|| pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)

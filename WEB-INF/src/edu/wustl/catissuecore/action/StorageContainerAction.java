@@ -420,11 +420,10 @@ public class StorageContainerAction extends SecureAction
 	 *            : operation
 	 * @param request
 	 *            : request
-	 * @throws BizLogicException
-	 *             : BizLogicException
+	 * @throws ApplicationException 
 	 */
 	private void onTypeChange(StorageContainerForm storageContainerForm, String operation,
-			HttpServletRequest request) throws BizLogicException
+			HttpServletRequest request) throws ApplicationException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory

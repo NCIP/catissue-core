@@ -116,7 +116,7 @@ function updateField(type,i,isDis,valueToSet)
 				document.forms[0].submit();
 		}
 
-		function showMap(selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,cpId)
+		function showMap(selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId)
 		{
 			frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
 				"selectedContainerName=" + selectedContainerName +
@@ -124,6 +124,7 @@ function updateField(type,i,isDis,valueToSet)
 				"&pos2=" + positionDimensionTwo +
 				"&containerId=" +containerId +
 				"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
+				"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
 				"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
 			
 			var storageContainer = document.getElementById(selectedContainerName).value;
@@ -328,6 +329,8 @@ function scForSpecimen(element,spid)
 	var className = prefix+".className";
 //	var cName = document.getElementsByName(className)[0].value;
 	var cName = document.getElementById(className).value;
+	var spType = prefix+".type";
+	var type = document.getElementById(spType).value;
 	
 	//alert(prefix+" : " + cpid + " : " + cName);
 	if(element.value == "Auto")
@@ -335,8 +338,7 @@ function scForSpecimen(element,spid)
 		var responseHandlerFn = setSCLocation;
 		var bool = true;
 		var reqType = "GET";
-		var url = "GenericSpecimenSummaryForSpecimen.do?sid="+sid+"&cpid="+cpid+"&cName="+cName;
-
+		var url = "GenericSpecimenSummaryForSpecimen.do?sid="+sid+"&cpid="+cpid+"&cName="+cName+"&type="+type;
 		ajaxCall(reqType, url, bool, responseHandlerFn);
 	}
 	else

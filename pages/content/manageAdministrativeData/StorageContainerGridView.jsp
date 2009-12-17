@@ -138,6 +138,7 @@ function refresh_tree(nodeId)
 	//Mandar: 29Aug06 : For container details
 	List collectionProtocolList = (List)request.getAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST );
 	List specimenClassList = (List)request.getAttribute(Constants.MAP_SPECIMEN_CLASS_LIST );
+	List specimenTypeList = (List)request.getAttribute(Constants.MAP_SPECIMEN_TYPE_LIST );
 	
 	String specimenClass = null;
 	String collectionGroup = null;
@@ -244,6 +245,37 @@ function refresh_tree(nodeId)
 				
 %>
 								<td  width="50" class="tabletd1" ><%=data %></td>
+<%
+			}
+%>
+								</tr>
+								</table>
+							</td>
+							</tr>
+						</table>
+						</td>
+                  </tr>
+				  <tr>
+				    <td>
+						 <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
+						   <tr>
+							<td width="150">
+								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
+									<tr>
+											<td width="150" class="tabletd1">Specimen Type</td>
+									</tr>
+								</table>
+							</td>
+							 <td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
+<%	
+			for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
+			{
+				String data =(String) specimenTypeList.get(colcnt );
+				
+%>
+								<td  class="tabletd1" ><%=data %></td>
 <%
 			}
 %>

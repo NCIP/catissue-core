@@ -160,7 +160,10 @@ public class AliquotAction extends SecureAction
 			{
 				aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 			}
-			List<Object> parameterList = AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),aliquotCount);
+			final String spClass = aliquotForm.getClassName();
+			final String spType = aliquotForm.getType();
+			List<Object> parameterList = AppUtility.setparameterList(
+			aliquotForm.getColProtId(),spClass,aliquotCount,spType);
 			containerMap = spBiz.getAllocatedContainerMapForSpecimen(parameterList,
 					 sessionData, dao);
 			this.populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
@@ -269,6 +272,10 @@ public class AliquotAction extends SecureAction
 					.getAttribute(Constants.SESSION_DATA);
 			dao = AppUtility.openDAOSession(sessionData);
 			final AliquotForm aliquotForm = (AliquotForm) form;
+			final String spClass = aliquotForm.getClassName();
+			final String spType = aliquotForm.getType();
+			final String aliquotCt = aliquotForm.getNoOfAliquots();
+			final long cpId = aliquotForm.getColProtId();
 			final StorageContainerForSpecimenBizLogic scBiz = new StorageContainerForSpecimenBizLogic();
 			// boolean to indicate whether the suitable containers to be shown
 			// in dropdown
@@ -437,8 +444,8 @@ public class AliquotAction extends SecureAction
 				 * or vice versa
 				 */
 				List<Object> parameterList = 
-				AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),Integer
-						.parseInt(aliquotForm.getNoOfAliquots()));
+				AppUtility.setparameterList(cpId,spClass,Integer
+						.parseInt(aliquotCt),spType);
 				
 				if (arePropertiesChanged == true || areContainersDifferent == true
 						|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
@@ -460,7 +467,7 @@ public class AliquotAction extends SecureAction
 					{
 						containerMap = scBiz.
 						getAllocatedContainerMapForSpecimen(
-						AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+						AppUtility.setparameterList(cpId,spClass,0, spType),
 						sessionData, dao);
 					}
 					this.populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -560,7 +567,7 @@ public class AliquotAction extends SecureAction
 						{
 							containerMap = scBiz.
 							getAllocatedContainerMapForSpecimen(
-							AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+							AppUtility.setparameterList(cpId,spClass,0,spType),
 							sessionData, dao);
 						}
 
@@ -667,15 +674,15 @@ public class AliquotAction extends SecureAction
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
 							containerMap = scBiz.getAllocatedContainerMapForSpecimen(AppUtility.
-									setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),Integer
-									.parseInt(aliquotForm.getNoOfAliquots())),
+									setparameterList(cpId,spClass,Integer
+									.parseInt(aliquotCt),spType),
 									sessionData, dao);
 						}
 						else
 						{
 							containerMap = scBiz.
 							getAllocatedContainerMapForSpecimen(
-							AppUtility.setparameterList(aliquotForm.getColProtId(),aliquotForm.getClassName(),0),
+							AppUtility.setparameterList(cpId,spClass,0,spType),
 							sessionData, dao);
 						}
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,

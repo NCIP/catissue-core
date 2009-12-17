@@ -35,6 +35,8 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 
 /**
  * this class implements the action for shipment receiving view.
@@ -93,21 +95,36 @@ public class ShowShipmentReceivingAction extends SecureAction
 				request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
 				String stContSelection = request.getParameter("stContSelection");
 				request.setAttribute("stContSelection", stContSelection);
-				String specimenId = request.getParameter("specimenId");
+				final String specimenId = request.getParameter("specimenId");
+				String spClass = null;
+				String spType = null;
 				if(specimenId!=null)
 				{
-					String specimenClass = (String)shipmentBizLogic.retrieveAttribute(Specimen.class.getName(), Long.valueOf( specimenId ), "specimenClass");
+					final String sourceObjectName = Specimen.class.getName();
+					final String[] selectColumnName = {"specimenClass", "specimenType"};
+					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+					queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
+					final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+					if (list.size() != 0)
+					{
+						final Object[] valArr = (Object[]) list.get(0);
+						if (valArr != null)
+						{
+							spClass = ((String) valArr[0]);
+							spType = ((String) valArr[1]);
+						}
+					}
 					if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
 							&& requestFor != null && !requestFor.trim().equals("") && stContSelection != null)
 					{
-						String collectionProtocolId = getCPIdFromSpecimen(specimenId,dao);
+						String cpId = getCPIdFromSpecimen(specimenId,dao);
 						request.setAttribute(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
-								collectionProtocolId);
-						if(!collectionProtocolId.trim().equals( "" ))
+								cpId);
+						if(!cpId.trim().equals( "" ))
 						{
 							containerMap = bizLogic.
 							getAllocatedContainerMapForSpecimen
-							(AppUtility.setparameterList(Long.valueOf(collectionProtocolId ).longValue(),specimenClass,0), 
+							(AppUtility.setparameterList(Long.valueOf(cpId).longValue(),spClass,0,spType), 
 							sessionDataBean, dao );
 						}
 					}
@@ -338,8 +355,6 @@ public class ShowShipmentReceivingAction extends SecureAction
 		{
 			counter = StorageContainerUtil.checkForLocation(containerMap, storableCount, counter);
 		}
-		// Check whether to store more contents than available positions.
-		//if (containerMap.isEmpty() || counter<storableCount)
 		if(counter < storableCount) 
 		{
 			ActionErrors errors = getActionErrors(request);
@@ -364,21 +379,4 @@ public class ShowShipmentReceivingAction extends SecureAction
 		}
 		return errors;
 	}
-
-	/* Method returns the storage position list - without 'Auto'*/
-	/**
-	 * gets the list of storage position type.
-	 * @return list.
-	 */
-	/*private List getStoragePositionTypeList()
-	{
-		final List<NameValueBean> storagePositionTypeList = new ArrayList<NameValueBean>();
-		storagePositionTypeList.add(new NameValueBean(
-				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_VIRTUAL,
-				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE));
-		storagePositionTypeList.add(new NameValueBean(
-				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_MANUAL,
-				edu.wustl.catissuecore.util.global.Constants.STORAGE_TYPE_POSITION_MANUAL_VALUE));
-		return storagePositionTypeList;
-	}*/
 }

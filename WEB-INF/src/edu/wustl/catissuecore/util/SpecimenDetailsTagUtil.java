@@ -248,15 +248,8 @@ public final class SpecimenDetailsTagUtil
 		String refreshTree = "refreshTree(\'"+Constants.CP_AND_PARTICIPANT_VIEW+"\',\'"+Constants.CP_TREE_VIEW+"\',\'"+Constants.CP_SEARCH_CP_ID+"\',\'"+Constants.CP_SEARCH_PARTICIPANT_ID+"\',\'1\');";
 		request.setAttribute("refreshTree",refreshTree);
 		request.setAttribute("CAN_HOLD_SPECIMEN_CLASS",Constants.CAN_HOLD_SPECIMEN_CLASS);
+		request.setAttribute("CAN_HOLD_SPECIMEN_TYPE",Constants.CAN_HOLD_SPECIMEN_TYPE);
 		request.setAttribute("CAN_HOLD_COLLECTION_PROTOCOL",Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 
-		//Not in use to be deleted after verification
-//		  String containerId;
-//		  String selectedContainerName ;
-//		  String positionDimensionOne;
-//		  String positionDimensionTwo;
-//		  String specimenClassName;
-//		  String cpId;
-//		  String functionCall;
 	}	
 }

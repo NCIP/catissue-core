@@ -1603,6 +1603,7 @@ public class Constants
 
 	public static final String CAN_HOLD_CONTAINER_TYPE = "holdContainerType";
 	public static final String CAN_HOLD_SPECIMEN_CLASS = "holdSpecimenClass";
+	public static final String CAN_HOLD_SPECIMEN_TYPE = "holdSpecimenType";
 	public static final String CAN_HOLD_COLLECTION_PROTOCOL = "holdCollectionProtocol";
 	public static final String CAN_HOLD_SPECIMEN_ARRAY_TYPE = "holdSpecimenArrayType";
 	public static final String COLLECTION_PROTOCOL_ID = "collectionProtocolId";

@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -297,15 +299,18 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	 * To get the Specimen Class types that the given StorageType can hold.
 	 * @param type The reference to StorageType object.
 	 * @return The array of String representing Specimen Class types that the given StorageType can hold.
+	 * @throws ApplicationException  ApplicationException
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public String[] getDefaultHoldsSpecimenTypeList(StorageType type)
+	public String[] getDefaultHoldsSpecimenTypeList(StorageType type) throws ApplicationException
 	{
 		String[] holdsSpType = null;
 		final Collection<String> spTypeColl = type.getHoldsSpecimenTypeCollection();
+		final Collection<String> holdSpTypeColl = new HashSet<String>();
+		holdSpTypeColl.addAll(AppUtility.getAllSpecimenTissueType());
 		if (spTypeColl != null)
 		{
-			if (spTypeColl.size() == AppUtility.getSpecimenTypes().size())
+			if (spTypeColl.size() == holdSpTypeColl.size())
 			{
 				holdsSpType = new String[]{"-1"};
 			}

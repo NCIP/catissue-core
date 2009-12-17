@@ -1686,6 +1686,7 @@
 										String tdStyleClass = "customFormField";
 										String onChange = "onCustomListBoxChange(this)";
 										String className = form.getClassName();
+										String sptype = form.getType();
 										String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
 										if (collectionProtocolId==null)
 											collectionProtocolId="";
@@ -1693,6 +1694,7 @@
 											className="";
 										String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+											+ "&" + Constants.CAN_HOLD_SPECIMEN_TYPE+"="+sptype
 											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
 
 										/**

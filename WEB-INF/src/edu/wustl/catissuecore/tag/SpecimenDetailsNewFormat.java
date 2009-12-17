@@ -993,6 +993,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 		final String specimenId = this.getFormattedValue(specimen.getUniqueIdentifier());
 		final String specimenClass = this.getFormattedValue(specimen.getClassName());
+		final String specimenType = this.getFormattedValue(specimen.getType());
 		final Long collectionProtocolId = specimen.getCollectionProtocolId();
 
 		final String containerId = "containerId_" + specimenId;
@@ -1000,10 +1001,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		final String positionDimensionOne = "positionDimensionOne_" + specimenId;
 		final String positionDimensionTwo = "positionDimensionTwo_" + specimenId;
 		final String specimenClassName = (String) specimenClass;
+		final String specimenTypeName = (String) specimenType;
 		final String cpId = this.getFormattedValue(collectionProtocolId);
 		final String functionCall = "showMap('" + selectedContainerName + "','"
 				+ positionDimensionOne + "','" + positionDimensionTwo + "','" + containerId + "','"
-				+ specimenClassName + "','" + cpId + "')";
+				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
 		final int scSize = 17 + this.xtra;
 		final String sid = specimen.getUniqueIdentifier();
 		String isDisabled = "";

@@ -226,7 +226,6 @@ public class AppUtility
 
 	public static List getSpecimenTypes(String specimenClass)
 	{
-
 		final Map specimenTypeMap = getSpecimenTypeMap();
 		final List typeList = (List) specimenTypeMap.get(specimenClass);
 		return typeList;
@@ -3425,10 +3424,11 @@ public class AppUtility
 	{
 		List<String> classList = new LinkedList<String>();
 	    List<NameValueBean> specimenTypeList = new LinkedList<NameValueBean>();
-	    classList.add(Constants.FLUID);
 	    classList.add(Constants.TISSUE);
-	    classList.add(Constants.MOLECULAR);
+	    classList.add(Constants.FLUID);
 	    classList.add(Constants.CELL);
+	    classList.add(Constants.MOLECULAR);
+	    
 	    Iterator<String> classItr = classList.iterator();
 	    while(classItr.hasNext())
 	    {
@@ -3495,6 +3495,14 @@ public class AppUtility
 	private static List getResult(final String sql) throws ApplicationException
 	{
 		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
+	}
+	/**
+	 * @param resultList getListOfString
+	 * @return List resultlist
+	 */
+	private static List getListOfString(final List resultList)
+	{
 		final Iterator iterator = resultList.iterator();
 		final List returnList = new ArrayList();
 		while (iterator.hasNext())
@@ -3563,15 +3571,29 @@ public class AppUtility
 	 * @param cpId Collection Protocol Identifier
 	 * @param spClass Specimen Class
 	 * @param aliquotCount aliquot count
-	 * @return
+	 * @param spType Specimen Type
+	 * @return List<Object>
 	 */
-	public static List<Object> setparameterList(long cpId, String spClass, int aliquotCount)
+	public static List<Object> setparameterList(
+	long cpId, String spClass, int aliquotCount, String spType)
 	{
 		List<Object> parameterList = new LinkedList<Object>();
 		parameterList.add(cpId);
 		parameterList.add(spClass);
 		parameterList.add(aliquotCount);
+		parameterList.add(spType);
 		return parameterList;
+	}
+	/**
+	 * This method will return all the specimen type under specimen class.
+	 * @return List of SpecimenType
+	 * @throws ApplicationException
+	 */
+	public static List getAllSpecimenTissueType() throws ApplicationException
+	{
+		String sql = "select value from catissue_permissible_value where parent_identifier in (1,2,3,4)";
+		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
 	}
 
 }

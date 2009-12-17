@@ -917,10 +917,8 @@ public class ViewSpecimenSummaryAction extends Action
 			{
 				asignedPositonSet = new HashSet();
 			}
-			// TODO
-			// to get available position from SC for the specimen.
-			// String sid = (String) request.getParameter("sid");
 			final String className = request.getParameter("cName");
+			final String type = request.getParameter("type");
 			final String cpid = request.getParameter("cpid");
 			// List initialValues = null;
 			TreeMap containerMap = new TreeMap();
@@ -928,8 +926,9 @@ public class ViewSpecimenSummaryAction extends Action
 			new StorageContainerForSpecimenBizLogic();
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
-			containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,className,0),
-					sessionData, dao);
+			containerMap = scbizLogic.
+			getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,className,0,type),
+			sessionData, dao);
 			final StringBuffer sb = new StringBuffer();
 			if (containerMap.isEmpty())
 			{

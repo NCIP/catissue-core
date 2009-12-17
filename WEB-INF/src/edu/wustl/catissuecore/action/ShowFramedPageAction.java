@@ -80,6 +80,7 @@ public class ShowFramedPageAction extends Action
 		session.removeAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
 		session.removeAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 		session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
+		session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
 		session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
 		if (pageOf.equals(Constants.PAGE_OF_SPECIMEN) || pageOf.equals(Constants.PAGE_OF_ALIQUOT)
@@ -92,13 +93,14 @@ public class ShowFramedPageAction extends Action
 			final String collectionProtocol = request
 					.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
 			final String specimenClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+			final String specimenType = request.getParameter(Constants.CAN_HOLD_SPECIMEN_TYPE);
 			final String specimenarrayType = request
 					.getParameter(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
 			session.setAttribute(Constants.CAN_HOLD_CONTAINER_TYPE, storageType);
 			session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL, collectionProtocol);
 			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS, specimenClass);
-
+			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE, specimenType);
 			session.setAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE, specimenarrayType);
 		}
 		else if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
@@ -147,7 +149,6 @@ public class ShowFramedPageAction extends Action
 				session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL, collectionProtocol);
 			}
 		}
-		// Added By Ramya for orderingsystem module.
 		else if (pageOf.equals(Constants.PAGE_OF_SPECIMEN_TREE))
 		{
 			session = request.getSession();

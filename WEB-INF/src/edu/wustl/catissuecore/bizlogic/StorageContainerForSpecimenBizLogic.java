@@ -20,10 +20,13 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * Logger object.
 	 */
 	private static final transient Logger logger = Logger.getCommonLogger(StorageContainerForContainerBizLogic.class);
-	private static final boolean IS_CP_UNIQUE = true;
-	private static final boolean IS_SPCLASS_UNIQUE = true;
-	private static final boolean IS_CP_NONUNIQUE = false;
+	private static final boolean IS_CP_UNQ = true;
+	private static final boolean IS_SPCLASS_UNQ = true;
+	private static final boolean IS_CP_NONUNQ = false;
 	private static final boolean IS_SPCLASS_NONUNQ = false;
+	private static final boolean IS_SPTYPE_UNQ = true;
+	private static final boolean IS_SPTYPE_NONUNQ = false;
+	
 	/**
 	 * @param parameterList - consists of cpId, specimen class
 	 * @param sessionData - SessionDataBean object
@@ -63,21 +66,23 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 */
 	protected String[] getStorageContainerForSpecimenQuery(final List<Object> parameterList)
 	{
-		// Containers allowing Only this CP and Specimen Class
-		final String query0 = this.createSCQuery(parameterList, IS_CP_UNIQUE, IS_SPCLASS_UNIQUE);
-		// Containers allowing Only this CP but other Specimen Classes also
-		final String query1 = this.createSCQuery(parameterList, IS_CP_UNIQUE, IS_SPCLASS_NONUNQ);
-		// Containers no CP restriction and just this Specimen Class
-		final String query2 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNIQUE);
-		// Containers allowing Other CPs also but just this Specimen Class
-		final String query3 = this.createSCQuery(parameterList, IS_CP_NONUNIQUE, IS_SPCLASS_UNIQUE);
-		// Containers allowing Others CPs also and other Specimen Classes too
-		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNIQUE, IS_SPCLASS_NONUNQ);
-		//Containers allowing any CP and other Specimen Classes too
-		final String query5 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ);
-		//Containers allowing any CP and any Specimen Class
-		final String query6 = this.createSCQuery(parameterList,	null, null);
-		return new String[]{query0, query1, query2, query3, query4, query5, query6};
+		// Containers allowing Only this CP, Only this Specimen Class and only this Specimen Type
+		final String query0 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers allowing Only this CP but other Specimen Classes and SpecimenType also
+		final String query1 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
+		// Containers no CP restriction and just this Specimen Class and Specimen Type
+		final String query2 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers no CP restriction and just this Specimen Class and any specimen type
+		final String query3 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		// Containers allowing Other CPs also but just this Specimen Class and Specimen Type
+		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers allowing Others CPs also, other Specimen Classes and Specimen Type too
+		final String query5 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
+		//Containers allowing any CP, other Specimen Classes and Specimen Type too
+		final String query6 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
+		//Containers allowing any CP,any Specimen Class and any Specimen Type
+		final String query7 = this.createSCQuery(parameterList,	null, null, null);
+		return new String[]{query0, query1, query2, query3, query4, query5, query6,query7};
 	}
 
 	/**
@@ -91,12 +96,13 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * @return query string
 	 */
 	private String createSCQuery(final List<Object> parameterList,
-			final Boolean isCPUnique, final Boolean isSPClassUnique)
+			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique)
 	{
 		final long cpId = (Long)parameterList.get(0);
 		final String spClass = (String)parameterList.get(1);
 		final int aliquotCount = (Integer)parameterList.get(2);
-		final SessionDataBean sessionData = (SessionDataBean)parameterList.get(3);
+		final String spType = (String)parameterList.get(3);
+		final SessionDataBean sessionData = (SessionDataBean)parameterList.get(4);
 		final Long userId = sessionData.getUserId();
 		final boolean isAdmin = sessionData.isAdmin();
 		final StringBuilder scQuery = new StringBuilder();
@@ -121,6 +127,10 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			scQuery
 					.append(" LEFT OUTER JOIN CATISSUE_STOR_CONT_SPEC_CLASS B ON B.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
 		}
+		if (isSPTypeUnique != null)//DO not join on SP Type if there is no restriction on SP Type. i.e isSPTypeUnique=null
+		{
+			scQuery.append(" LEFT OUTER JOIN CATISSUE_STOR_CONT_SPEC_TYPE SPT ON SPT.STORAGE_CONTAINER_ID = C.IDENTIFIER ");
+		}
 		scQuery.append(" WHERE ");
 		if (isCPUnique != null)
 		{
@@ -132,6 +142,13 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		{
 			scQuery.append("  B.SPECIMEN_CLASS = '");
 			scQuery.append(spClass);
+			scQuery.append("'");
+			scQuery.append(" AND ");
+		}
+		if (isSPTypeUnique != null)
+		{
+			scQuery.append("  SPT.SPECIMEN_TYPE = '");
+			scQuery.append(spType);
 			scQuery.append("'");
 			scQuery.append(" AND ");
 		}
@@ -160,6 +177,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		}
 		scQuery.append(this.getStorageContainerCPQuery(isCPUnique));
 		scQuery.append(this.getStorageContainerSPClassQuery(isSPClassUnique));
+		scQuery.append(this.getStorageContainerSPTypeQuery(isSPTypeUnique));
 		scQuery.append(" ORDER BY VIEW1.IDENTIFIER ");
 		logger.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
 				"createSCQuery() query ", scQuery));
@@ -250,5 +268,34 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			scCPClass = this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_CLASS", isUnique);
 		}
 		return scCPClass;
+	}
+	/**
+	 * Gets the restriction query for Containers for Specimen Type
+	 * @param isUnique - Specifies the kind of restriction where:
+	 * <li><strong>true</strong> implies that the container should allow only one type of Specimen</li>
+	 * <li><strong>false</strong> implies that the container allows more than type of Specimens</li>
+	 * @return the query string
+	 */
+	private String getStorageContainerSPTypeQuery(Boolean isUnique)
+	{
+		final String SC_SPCLS_TABLE_NAME = "CATISSUE_STOR_CONT_SPEC_TYPE";
+		String scCPType;
+		if (isUnique == null)
+		{
+			final StringBuilder sbSPQuery = new StringBuilder();
+			sbSPQuery.append(" AND ");
+			sbSPQuery.append(" ( ");
+			sbSPQuery.append(" SELECT COUNT(*) FROM ");
+			sbSPQuery.append(SC_SPCLS_TABLE_NAME);
+			sbSPQuery.append(" AA WHERE AA.STORAGE_CONTAINER_ID = VIEW1.IDENTIFIER ");
+			sbSPQuery.append(" ) ");
+			sbSPQuery.append(" >1 ");//No restriction on specimen type means it can store any of the 46 specimen types
+			scCPType = sbSPQuery.toString();
+		}
+		else
+		{
+			scCPType = this.getSCBaseRestrictionQuery("CATISSUE_STOR_CONT_SPEC_TYPE", isUnique);
+		}
+		return scCPType;
 	}
 }

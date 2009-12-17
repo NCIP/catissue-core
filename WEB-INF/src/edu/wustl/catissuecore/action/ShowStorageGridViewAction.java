@@ -436,6 +436,20 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 		}
 
+		final String holdspType = (String) session
+				.getAttribute(Constants.CAN_HOLD_SPECIMEN_TYPE);
+		if (enablePage && holdspType != null)
+		{
+			if (!holdspType.equals(""))
+			{
+				enablePage = nspBiz.canHoldSpecimenType(holdspType, storageContainer);
+			}
+			else
+			{
+				enablePage = false;
+			}
+		}
+
 		SpecimenArrayBizLogic spArraybiz = new SpecimenArrayBizLogic();
 		final String holdspecimenArrayType = (String) session
 				.getAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);

@@ -617,6 +617,7 @@ public class NewSpecimenAction extends SecureAction
 					{
 						final long cpId = ((Long) spCollGroupList.get(0)).longValue();
 						final String spClass = specimenForm.getClassName();
+						final String spType = specimenForm.getType();
 						this.logger.info("cpId :" + cpId + "spClass:" + spClass);
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						if (virtuallyLocated != null && virtuallyLocated.equals("false"))
@@ -627,7 +628,7 @@ public class NewSpecimenAction extends SecureAction
 						if (specimenForm.getStContSelection() == 2)
 						{
 							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen
-							(AppUtility.setparameterList(cpId,spClass,0), sessionData, dao);
+							(AppUtility.setparameterList(cpId,spClass,0,spType),sessionData, dao);
 							this.logger
 									.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request
@@ -741,6 +742,7 @@ public class NewSpecimenAction extends SecureAction
 
 							final long cpId = ((Long) spCollGroupList.get(0)).longValue();
 							final String spClass = specimenForm.getClassName();
+							final String spType = specimenForm.getType();
 							logger.info("cpId :" + cpId + "spClass:" + spClass);
 							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
@@ -749,7 +751,7 @@ public class NewSpecimenAction extends SecureAction
 							}
 							
 							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.
-								setparameterList(cpId,spClass,0), sessionData, dao);
+								setparameterList(cpId,spClass,0,spType), sessionData, dao);
 							logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request
 									.getAttribute(Globals.ERROR_KEY);

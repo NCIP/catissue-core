@@ -4988,4 +4988,33 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return false;
 	}
+	
+	/**
+	 * To check wether the Continer to display can holds the given
+	 * specimenType.
+	 * @param specimenType
+	 *            The specimenType Name.
+	 * @param storageContainer
+	 *            The StorageContainer reference to be displayed on the page.
+	 * @return true if the given continer can hold the specimenType.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public boolean canHoldSpecimenType(String specimenType, StorageContainer storageContainer)
+			throws BizLogicException
+	{
+		final Collection spType = (Collection) this.retrieveAttribute(
+				StorageContainer.class.getName(), storageContainer.getId(),
+				"elements(holdsSpecimenTypeCollection)");// storageContainer.getHoldsSpecimenClassCollection();
+		final Iterator itr = spType.iterator();
+		while (itr.hasNext())
+		{
+			final String typeName = (String) itr.next();
+			if (typeName.equals(specimenType))
+			{
+				return true;
+			}
+
+		}
+		return false;
+	}
 }

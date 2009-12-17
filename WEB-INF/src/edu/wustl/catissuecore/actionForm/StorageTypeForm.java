@@ -12,6 +12,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
@@ -175,30 +177,38 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 		}
 		final Collection specimenTypeCollection = storageType.getHoldsSpecimenTypeCollection();
+		final Collection<String> holdSpTypeColl = new HashSet<String>();
 		if(specimenTypeCollection!=null)
 		{
-			if (specimenTypeCollection.size() == AppUtility.getSpecimenTypeMap().size())
+			try
 			{
-				this.holdsSpecimenType = new String[1];
-				this.holdsSpecimenType[0] = "-1";
-				this.specimenOrArrayType = "Specimen";
-			}
-			else
-			{
-				this.holdsSpecimenType = new String[specimenTypeCollection.size()];
-				int i = 0;
-
-				final Iterator it = specimenTypeCollection.iterator();
-				while (it.hasNext())
+				holdSpTypeColl.addAll(AppUtility.getAllSpecimenTissueType());
+				if (specimenTypeCollection.size() == holdSpTypeColl.size())
 				{
-					final String specimenType = (String) it.next();
-					this.holdsSpecimenType[i] = specimenType;
-					i++;
+					this.holdsSpecimenType = new String[1];
+					this.holdsSpecimenType[0] = "-1";
 					this.specimenOrArrayType = "Specimen";
+				}
+				else
+				{
+					this.holdsSpecimenType = new String[specimenTypeCollection.size()];
+					int i = 0;
 
+					final Iterator it = specimenTypeCollection.iterator();
+					while (it.hasNext())
+					{
+						final String specimenType = (String) it.next();
+						this.holdsSpecimenType[i] = specimenType;
+						i++;
+						this.specimenOrArrayType = "Specimen";
+
+					}
 				}
 			}
-			
+			catch (ApplicationException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		//      Populating the specimen array type-id array
 		final Collection specimenArrayTypeCollection = storageType
