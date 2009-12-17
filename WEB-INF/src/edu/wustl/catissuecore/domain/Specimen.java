@@ -539,11 +539,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						this.specimenCollectionGroup.id = Long.valueOf(form
 								.getSpecimenCollectionGroupId());
 					}
-
-					if (!(form.getSpecimenCollectionGroupName() == null && form
-							.getSelectedContainerName().equals("")))
+					if(form.getSpecimenCollectionGroupName()!=null && !form.getSpecimenCollectionGroupName().equals(""))
 					{
-						this.specimenCollectionGroup.name = form.getSelectedContainerName();
+						this.specimenCollectionGroup.name = form.getSpecimenCollectionGroupName();
 					}
 					/**For Migration End**/
 					this.activityStatus = form.getActivityStatus();
