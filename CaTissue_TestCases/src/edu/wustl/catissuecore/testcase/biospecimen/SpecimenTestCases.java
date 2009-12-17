@@ -115,6 +115,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
+	
 	/**
 	 * Test aliquot add 
 	 * AliquotAction + CreateAliquotAction
