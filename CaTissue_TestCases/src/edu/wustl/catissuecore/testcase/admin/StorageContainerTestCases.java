@@ -30,9 +30,9 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Add.
 	 */
-	@Test
-	public void testSetUtility()
-	{
+//	@Test
+//	public void testSetUtility()
+//	{
 //		StorageType storageType = new StorageType();
 //		storageType.setName("TissueStorageType_1257421218783");
 //		storageType.setId(6L);
@@ -41,7 +41,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 //		Site s = new Site();
 //		s.setId(1L);
 //		TestCaseUtility.setNameObjectMap("Site", s);
-	}
+//	}
 	//ShowFramedPageAction.java, StorageContainerTreeAction, TreeDataBizlogic.java and OpenStorageContainerAction
 	/**
 	 * Test Storage Container Add.
@@ -78,7 +78,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setActivityStatus("Active");
 		storageContainerForm.setIsFull("False");
 		storageContainerForm.setOperation("add");
-		//addRequestParameter("containerName","container_Janu_parent_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		setRequestPathInfo("/StorageContainerAdd");
 		setActionForm(storageContainerForm);
 		actionPerform();
@@ -599,6 +598,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		//Action form
 		storageContainerForm=(StorageContainerForm) getActionForm();
 
+
 		//modifying the container capacity
 		storageContainerForm.setNoOfContainers(3);
 		storageContainerForm.setOneDimensionCapacity(30);
@@ -606,9 +606,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setOneDimensionLabel("row");
 		storageContainerForm.setTwoDimensionLabel("row");
 		storageContainerForm.setDefaultTemperature("28");
-		addRequestParameter("holdsSpecimenClassTypes", "Cell");
-		addRequestParameter("specimenOrArrayType", "SpecimenArray");
-
 		storageContainerForm.setOperation("edit");
 		setActionForm(storageContainerForm);
 		setRequestPathInfo("/StorageContainerEdit");
