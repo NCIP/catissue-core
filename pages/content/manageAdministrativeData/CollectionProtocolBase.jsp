@@ -23,7 +23,7 @@
 		{
 			for (i = clinicalDiag.options.length-1; i >= 0; i--)
 			{
-			   
+
 				clinicalDiag.options[i].selected=true;
 			}
 		}
@@ -32,7 +32,7 @@
 	function openEventPage()
 	{
 		selectAllClinicalDiagnosis();
-		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
+		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
 		{
 		    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
@@ -58,6 +58,7 @@
 	    if(formId!=null)
 		{
 			var action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}";
+
 		}
 		else
 		{
@@ -67,27 +68,29 @@
 				var formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
 			}
 			var action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
+			formId.target = '_top';
 		}
-		formId.target = '_top';
+
 		formId.action=action;
+
         formId.submit();
 	}
 
     function submitCP()
 	{
-		
-		
+
+
        var actvity = window.frames['SpecimenRequirementView'].document.getElementById('activityStatus');
 	   if((actvity!=null) && (actvity.value != undefined) && (actvity.value == "Disabled")){
          var go = confirmDialogForDisable();
 	     if (go==true){
 	 	   saveCP();
-	     } 
+	     }
 	   }
        else{
 	    saveCP();
    }
-  	
+
   }
 </script>
 
@@ -117,9 +120,9 @@
     </table>
 
 
-		
+
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-	  
+
         <tr>
           <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
@@ -130,7 +133,7 @@
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		  </td>
         </tr>
-		
+
        		<tr>
 				<td width="20%"  valign="top">
 					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView" height="450" >
@@ -147,24 +150,24 @@
 								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" frameborder="0" width="100%" height="450" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
-							 </logic:equal>	
+							 </logic:equal>
 							 </td>
 						</tr>
-					
-		
+
+
  <tr>
 		 <td colspan="2" class="buttonbg">
-		    
-				
+
+
 						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
 							Add Events >>
 						</html:button>
 						&nbsp;|&nbsp;
-							
-					
+
+
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
-				   
+
 				   </td>
 				</tr>
 				</table>
