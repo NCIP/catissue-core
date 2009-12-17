@@ -83,12 +83,13 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-
 		HttpSession session = request.getSession();
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		final SessionDataBean sessionDataBean = (SessionDataBean) session
 				.getAttribute(Constants.SESSION_DATA);
+		String target=Constants.SUCCESS;
+		boolean flag=true;
 		try
 		{
 			this.specimenSummaryForm = (ViewSpecimenSummaryForm) form;
@@ -96,6 +97,25 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			session = request.getSession();
 			final LinkedHashSet specimenDomainCollection = this
 					.getSpecimensToSave(eventId, session);
+			//Changes for bug #15245
+			Iterator specCollItr = specimenDomainCollection.iterator();
+			while(specCollItr.hasNext())
+			{
+				Specimen specimen = (Specimen)specCollItr.next();
+				if(specimen.getParentSpecimen() == null)
+				{
+					final ActionErrors actionErrors = new ActionErrors();
+					final ActionError error = new ActionError("msg.item", "Parent specimen cannot be null");
+					actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+					this.saveErrors(request, actionErrors);
+					SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request,
+							this.specimenSummaryForm, true);
+					target=Constants.FAILURE;
+					flag=false;
+				}
+			}
+			if(flag)
+			{
 			if (ViewSpecimenSummaryForm.ADD_USER_ACTION.equals(this.specimenSummaryForm
 					.getUserAction()))
 			{
@@ -209,8 +229,8 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			{
 				return mapping.findForward(request.getParameter("pageOf"));
 			}
-
-			return mapping.findForward(Constants.SUCCESS);
+			}
+			return mapping.findForward(target);
 		}
 		catch (final Exception exception)
 		{
