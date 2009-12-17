@@ -169,6 +169,12 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
+		
+		setRequestPathInfo("/showCpAndParticipants");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
 	}
 
 	@Test
@@ -286,6 +292,17 @@ public class MenuTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("pageOfBulkOperation");
 		verifyNoActionErrors();
-
 	}
+	
+	@Test
+	public void testClickOnSummary()
+	{
+		setRequestPathInfo("/Summary");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
+	
+	
 }
