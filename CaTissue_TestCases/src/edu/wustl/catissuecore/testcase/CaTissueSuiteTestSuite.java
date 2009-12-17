@@ -7,6 +7,7 @@ import edu.wustl.catissuecore.testcase.admin.DepartmentTestCases;
 import edu.wustl.catissuecore.testcase.admin.DistributionProtocolTestCases;
 import edu.wustl.catissuecore.testcase.admin.InstitutionTestCases;
 import edu.wustl.catissuecore.testcase.admin.MenuTestCases;
+import edu.wustl.catissuecore.testcase.admin.ProblemTestCase;
 import edu.wustl.catissuecore.testcase.admin.SiteTestCases;
 import edu.wustl.catissuecore.testcase.admin.SpecimenArrayTypeTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
@@ -97,6 +98,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(ConsentsTestCase.class);
 		strutsSuite.addTestSuite(DirectDistributionTestCase.class);
 		strutsSuite.addTestSuite(LogoutTestcase.class);
+		strutsSuite.addTestSuite(ProblemTestCase.class);
 		
 		strutsSuite.addTestSuite(InstitutionBizTestCases.class);
 		strutsSuite.addTestSuite(DepartmentBizTestCases.class);
