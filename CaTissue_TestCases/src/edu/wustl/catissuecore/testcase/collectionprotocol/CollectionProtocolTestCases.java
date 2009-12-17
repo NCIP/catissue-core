@@ -185,6 +185,25 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
 	}
 	
+	@Test
+	public void testClickOnClinicalDiagnosis()
+	{
+		try {
+		setRequestPathInfo("/ClinicalDiagnosisData");
+		addRequestParameter("limit", "15");
+		addRequestParameter("query", "");
+		addRequestParameter("start", "0");
+		actionPerform();
+		String errormsg[] = new String[] {""};
+		verifyActionErrors(errormsg);
+		}catch (UnsupportedOperationException e) {
+			e.printStackTrace();
+			String errormsg[] = new String[] {""};
+			verifyActionErrors(errormsg);
+		}
+		
+	}
+	
 	/**
 	 * Test Collection Protocol Edit.
 	 */
