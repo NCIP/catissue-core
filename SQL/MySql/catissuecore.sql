@@ -66,9 +66,6 @@ drop table if exists CATISSUE_SPECI_COLL_REQ_GROUP;
 drop table if exists CATISSUE_SPECIMEN_COLL_GROUP;
 drop table if exists CATISSUE_SPECIMEN_TYPE;
 drop table if exists CATISSUE_AUDIT_EVENT_QUERY_LOG;
-drop table if exists CATISSUE_AUDIT_EVENT;
-drop table if exists CATISSUE_AUDIT_EVENT_LOG;
-drop table if exists CATISSUE_AUDIT_EVENT_DETAILS;
 drop table if exists CATISSUE_SPECIMEN_LABEL_COUNT;
 
 #--caTies
@@ -148,30 +145,8 @@ create table CATISSUE_CDE (
    LAST_UPDATED date,
    primary key (PUBLIC_ID)
 );
-create table CATISSUE_AUDIT_EVENT (
-   IDENTIFIER bigint not null auto_increment,
-   IP_ADDRESS varchar(20),
-   EVENT_TIMESTAMP datetime,
-   USER_ID bigint,
-   COMMENTS text,
-   primary key (IDENTIFIER)
-);
-create table CATISSUE_AUDIT_EVENT_LOG (
-   IDENTIFIER bigint not null auto_increment,
-   OBJECT_IDENTIFIER bigint,
-   OBJECT_NAME varchar(50),
-   EVENT_TYPE varchar(50),
-   AUDIT_EVENT_ID bigint,
-   primary key (IDENTIFIER)
-);
-create table CATISSUE_AUDIT_EVENT_DETAILS (
-   IDENTIFIER bigint not null auto_increment,
-   ELEMENT_NAME varchar(150),
-   PREVIOUS_VALUE varchar(150),
-   CURRENT_VALUE varchar(500),
-   AUDIT_EVENT_LOG_ID bigint,
-   primary key (IDENTIFIER)
-);
+
+
 create table CATISSUE_COLL_COORDINATORS (
    COLLECTION_PROTOCOL_ID bigint not null,
    USER_ID bigint not null,
@@ -768,6 +743,58 @@ create table CATISSUE_SPECIMEN_TYPE (
    SPECIMEN_TYPE varchar(50)
 );
 
+/**
+ * Audit table Sqls.
+ */
+
+
+drop table if exists catissue_audit_event;
+CREATE TABLE `catissue_audit_event` (                                                                
+                        `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                   
+                        `IP_ADDRESS` varchar(20) default NULL,                                                             
+                        `EVENT_TIMESTAMP` datetime default NULL,                                                           
+                        `USER_ID` bigint(20) default NULL,                                                                 
+                        `COMMENTS` text,                                                                                   
+                        `EVENT_TYPE` varchar(200) default NULL,                                                            
+                        PRIMARY KEY  (`IDENTIFIER`)                                                                       
+                      ) ENGINE=InnoDB ;
+
+drop table if exists catissue_audit_event_log;
+CREATE TABLE `catissue_audit_event_log` (                                                                          
+                            `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                 
+                            `AUDIT_EVENT_ID` bigint(20) default NULL,                                                                        
+                            PRIMARY KEY  (`IDENTIFIER`),                                                                                     
+                            KEY `FK8BB672DF77F0B904` (`AUDIT_EVENT_ID`),                                                                     
+                            CONSTRAINT `FK8BB672DF77F0B904` FOREIGN KEY (`AUDIT_EVENT_ID`) REFERENCES `catissue_audit_event` (`IDENTIFIER`)  
+                          ) ENGINE=InnoDB ;
+
+drop table if exists catissue_data_audit_event_log;
+CREATE TABLE `catissue_data_audit_event_log` (                                                                               
+                                 `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                           
+                                 `OBJECT_IDENTIFIER` bigint(20) default NULL,                                                                               
+                                 `OBJECT_NAME` varchar(50) default NULL,                                                                                    
+                                 `PARENT_LOG_ID` bigint(20) default NULL,                                                                                   
+                                 PRIMARY KEY  (`IDENTIFIER`),                                                                                               
+                                 KEY `FK5C07745DC62F96A411` (`IDENTIFIER`),                                                                                 
+                                 KEY `FK5C07745DC62F96A412` (`PARENT_LOG_ID`),                                                                              
+                                 CONSTRAINT `FK5C07745DC62F96A411` FOREIGN KEY (`IDENTIFIER`) REFERENCES `catissue_audit_event_log` (`IDENTIFIER`),         
+                                 CONSTRAINT `FK5C07745DC62F96A412` FOREIGN KEY (`PARENT_LOG_ID`) REFERENCES `catissue_data_audit_event_log` (`IDENTIFIER`)  
+                               ) ENGINE=InnoDB ;
+
+
+drop table if exists catissue_audit_event_details;
+CREATE TABLE `catissue_audit_event_details` (                                                                              
+                                `IDENTIFIER` bigint(20) NOT NULL auto_increment,                                                                         
+                                `ELEMENT_NAME` varchar(150) default NULL,                                                                                
+                                `PREVIOUS_VALUE` varchar(150) default NULL,                                                                              
+                                `CURRENT_VALUE` varchar(500) default NULL,                                                                               
+                                `AUDIT_EVENT_LOG_ID` bigint(20) default NULL,                                                                            
+                                PRIMARY KEY  (`IDENTIFIER`),                                                                                             
+                                KEY `FK5C07745D34FFD77F` (`AUDIT_EVENT_LOG_ID`),                                                                         
+                                CONSTRAINT `FK5C07745D34FFD77F` FOREIGN KEY (`AUDIT_EVENT_LOG_ID`) REFERENCES `catissue_audit_event_log` (`IDENTIFIER`)  
+                              ) ENGINE=InnoDB ;
+
+
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    IDENTIFIER bigint not null auto_increment,
    QUERY_DETAILS longtext,  
@@ -859,9 +886,6 @@ alter table CATISSUE_SPECIMEN_TYPE add index FKFF69C195ECE89343 (SPECIMEN_ARRAY_
 alter table CATISSUE_PERMISSIBLE_VALUE add index FK57DDCE153B5435E (PARENT_IDENTIFIER), add constraint FK57DDCE153B5435E foreign key (PARENT_IDENTIFIER) references CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER);
 alter table CATISSUE_PERMISSIBLE_VALUE add index FK57DDCE1FC56C2B1 (PUBLIC_ID), add constraint FK57DDCE1FC56C2B1 foreign key (PUBLIC_ID) references CATISSUE_CDE (PUBLIC_ID);
 alter table CATISSUE_AUDIT_EVENT add index FKACAF697A2206F20F (USER_ID), add constraint FKACAF697A2206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
-alter table CATISSUE_AUDIT_EVENT_LOG add index FK8BB672DF77F0B904 (AUDIT_EVENT_ID), add constraint FK8BB672DF77F0B904 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT (IDENTIFIER);
-alter table CATISSUE_AUDIT_EVENT_DETAILS add index FK5C07745D34FFD77F (AUDIT_EVENT_LOG_ID), add constraint FK5C07745D34FFD77F foreign key (AUDIT_EVENT_LOG_ID) references CATISSUE_AUDIT_EVENT_LOG (IDENTIFIER);
-
 					 
 #------ Consent Tracking related drop, create and add foreign key scripts.
 

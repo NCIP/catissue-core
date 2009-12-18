@@ -28,10 +28,8 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -196,17 +194,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 				this.logger.debug("cont.getCollectionProtocol().size() "
 						+ cont.getCollectionProtocolCollection().size());
 				cont.setActivityStatus("Active");
-				final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 				dao.insert(cont.getCapacity());
-				auditManager.insertAudit(dao, cont.getCapacity());
-
 				dao.insert(cont);
-				auditManager.insertAudit(dao, cont);
-
 				contList.add(cont);
 				container.setId(cont.getId());
 				simMap.put(IdKey, cont.getId().toString());
-				// simMap.put(parentContNameKey,cont.getParent().getName());
 			}
 		}
 		catch (final DAOException daoExp)
@@ -221,12 +213,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw this.getBizLogicException(e, "utility.error", "");
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -439,7 +425,6 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
-			// throw getBizLogicException(daoExp, "dao.error", "");
 		}
 		return sb.toString();
 	}

@@ -34,7 +34,6 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
@@ -82,14 +81,8 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			this.setCordinator(dao, site);
 			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			dao.insert(site.getAddress());
-			auditManager.insertAudit(dao, site.getAddress());
 			dao.insert(site);
-			auditManager.insertAudit(dao, site);
 			protectionObjects.add(site);
-
-			// SecurityManager.getInstance(this.getClass()).
-			// insertAuthorizationData(null,
-			// protectionObjects, null);
 
 			final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 
@@ -139,20 +132,13 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null, "cnnot.close.site.with.spec", "");
 
 				}
-				// else
-				// {
-				// closeContainers(dao, site);
-				// }
+			
 			}
 			// Mandar : 21Aug08 ----end
-			dao.update(site.getAddress());
-			dao.update(site);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			// Audit of update.
 			final Site oldSite = (Site) oldObj;
-			auditManager.updateAudit(dao, site.getAddress(), oldSite.getAddress());
-			auditManager.updateAudit(dao, obj, oldObj);
-
+			dao.update(site.getAddress(),oldSite.getAddress());
+			dao.update(site,siteOld);
+		
 		}
 		catch (final DAOException daoExp)
 		{
@@ -160,12 +146,6 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -204,19 +184,6 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		return result;
 	}
 
-	// private void closeContainers(DAO dao, Site site) throws BizLogicException
-	// {
-	// try
-	// {
-	// ;
-	// }
-	// catch(Exception excp)
-	// {
-	// ;
-	// }
-	// }
-
-	// This method sets the cordinator for a particular site.
 	/**
 	 * @param dao : dao
 	 * @param site : site

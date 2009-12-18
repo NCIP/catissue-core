@@ -22,12 +22,12 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -69,12 +69,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			 */
 			ApiSearchUtil.setContainerTypeDefault(type);
 			//End:-  Change for API Search 
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			dao.insert(type.getCapacity());
-			auditManager.insertAudit(dao, type.getCapacity());
-
 			dao.insert(type);
-			auditManager.insertAudit(dao, type);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -83,12 +79,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			StorageTypeBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 
 	/**
@@ -118,15 +109,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			ApiSearchUtil.setContainerTypeDefault(type);
 			//End:-  Change for API Search 
 
-			dao.update(type.getCapacity());
-			dao.update(type);
-
-			//Audit of update.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			final StorageType oldStorageType = (StorageType) oldObj;
-
-			auditManager.updateAudit(dao, type.getCapacity(), oldStorageType.getCapacity());
-			auditManager.updateAudit(dao, obj, oldObj);
+			dao.update(type.getCapacity(), ((StorageType) oldObj).getCapacity());
+			dao.update(type,oldObj);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -135,12 +119,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			StorageTypeBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+	
 	}
 
 	//Added by Ashish

@@ -26,10 +26,8 @@ import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShipmentMailFormatterUtility;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonConstants;
@@ -352,8 +350,6 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			shipmentRequest.getSpecimenCollection().clear();
 			shipmentRequest.getSpecimenCollection().addAll( specimenCollection );
 			dao.insert( shipmentRequest );
-			final AuditManager auditManager = this.getAuditManager( sessionDataBean );
-			auditManager.insertAudit( dao, shipmentRequest );
 			// Check if Saving Draft, In saving draft case, mail notification not required.
 			if (!shipmentRequest.getActivityStatus().equals( Constants.ACTIVITY_STATUS_DRAFTED ))
 			{
@@ -373,12 +369,6 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,"error occured in insertion");
 			throw this.getBizLogicException( daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues() );
-		}
-		catch (final AuditException e)
-		{
-			ShipmentRequestBizLogic.logger.error( e.getMessage(), e );
-			//e.printStackTrace();
-			throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
 		}
 	}
 
@@ -812,7 +802,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 			}
 			this.setShipmentContactPersons( dao, shipmentRequest, sessionDataBean.getUserId() );
 			this.setShipmentSites( dao, shipmentRequest );
-			dao.update( shipmentRequest );
+			dao.update( shipmentRequest,oldObj );
 			//Add mailing functionality
 			final boolean mailStatus = this.sendNotification( shipmentRequest, sessionDataBean );
 			if (!mailStatus)

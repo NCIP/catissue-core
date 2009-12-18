@@ -8,10 +8,8 @@ package edu.wustl.catissuecore.bizlogic;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -59,9 +57,6 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			// End:- Change for API Search
 
 			dao.insert(obj);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, obj);
-
 			// Send the reported problem to the administrator and the user who
 			// reported it.
 			final EmailHandler emailHandler = new EmailHandler();
@@ -73,13 +68,6 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException auditExp)
-		{
-			this.logger.error(auditExp.getMessage(), auditExp);
-			auditExp.printStackTrace();
-			throw this.getBizLogicException(auditExp, auditExp.getErrorKeyName(), auditExp
-					.getMsgValues());
 		}
 	}
 
@@ -115,18 +103,7 @@ public class ReportedProblemBizLogic extends CatissueDefaultBizLogic
 			ApiSearchUtil.setReportedProblemDefault(reportedProblem);
 			// End:- Change for API Search
 
-			dao.update(obj);
-
-			// Called audit manager to audit updates. 
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
-		}
-		catch (final AuditException auditException)
-		{
-			this.logger.error(auditException.getMessage(), auditException);
-			auditException.printStackTrace();
-			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
-					auditException.getMsgValues());
+			dao.update(obj,oldObj);
 		}
 		catch (final DAOException daoExp)
 		{

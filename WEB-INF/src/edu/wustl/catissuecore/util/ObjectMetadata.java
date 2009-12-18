@@ -5,7 +5,10 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.HibernateMetaDataFactory;
 
 /**
  * 
@@ -22,24 +25,34 @@ public class ObjectMetadata implements titli.controller.interfaces.ObjectMetadat
 	 */
 	public String getTableName(Object obj)
 	{
+		HibernateMetaData hibernateMetaData;
 		String tableName = "";
-		if(obj instanceof AbstractDomainObject)
+		try {
+			hibernateMetaData = HibernateMetaDataFactory.getHibernateMetaData
+			(CommonServiceLocator.getInstance().getAppName());
+
+
+			if(obj instanceof AbstractDomainObject)
+			{
+
+				tableName = hibernateMetaData.getTableName(obj.getClass()).toLowerCase();
+			}
+			else if(obj instanceof UserDTO)
+			{
+				UserDTO userDto = (UserDTO)obj;
+				User user = userDto.getUser();
+				tableName = hibernateMetaData.getTableName(user.getClass()).toLowerCase();
+			}
+			else if(obj instanceof CollectionProtocolDTO)
+			{
+				CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
+				CollectionProtocol collectionProtocol = CpDto.getCollectionProtocol();
+				tableName = hibernateMetaData.getTableName(collectionProtocol.getClass()).toLowerCase();
+			}
+		} catch (DAOException e)
 		{
-			tableName = HibernateMetaData.getTableName(obj.getClass()).toLowerCase();
+			e.printStackTrace();
 		}
-		else if(obj instanceof UserDTO)
-		{
-			UserDTO userDto = (UserDTO)obj;
-			User user = userDto.getUser();
-			tableName = HibernateMetaData.getTableName(user.getClass()).toLowerCase();
-		}
-		else if(obj instanceof CollectionProtocolDTO)
-		{
-			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
-			CollectionProtocol collectionProtocol = CpDto.getCollectionProtocol();
-			tableName = HibernateMetaData.getTableName(collectionProtocol.getClass()).toLowerCase();
-		}
-		
 		return tableName;
 	}
 	

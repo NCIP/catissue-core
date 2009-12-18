@@ -61,14 +61,12 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -203,8 +201,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),
 					sessionDataBean);
 			dao.insert(specimenCollectionGroup);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, specimenCollectionGroup);
 			if (specimenCollection != null && !reportLoaderFlag)
 			{
 				new NewSpecimenBizLogic().insertMultiple(specimenCollection, (DAO) dao,
@@ -217,12 +213,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final ApplicationException exp)
 		{
@@ -718,7 +708,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						.getCollectionProtocolRegistration());
 			}
 
-			dao.update(persistentSCG);
+			dao.update(persistentSCG,oldspecimenCollectionGroup);
 
 			/**
 			 * Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741
@@ -731,10 +721,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				this.updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, dao,
 						sessionDataBean);
 			}
-			// Audit.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
-
 			final SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 
 			// Disable the related specimens to this specimen group
@@ -1374,22 +1360,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	// public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[])
-	// throws
-	// DAOException
-	// {
-	// List listOfSubElement = super.disableObjects(dao,
-	// SpecimenCollectionGroup.class, "collectionProtocolRegistration",
-	// "CATISSUE_SPECIMEN_COLL_GROUP", "COLLECTION_PROTOCOL_REG_ID",
-	// collProtRegIDArr);
-	// if (!listOfSubElement.isEmpty())
-	// {
-	// NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)
-	//BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-	// bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,
-	// Utility.toLongArray(listOfSubElement));
-	// }
-	// }
+	
 	/**
 	 * @param dao : dao
 	 * @param collProtRegIDArr : collProtRegIDArr[]
@@ -1402,7 +1373,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		this.disableRelatedObjects(dao, "CATISSUE_ABS_SPECI_COLL_GROUP",
 				Constants.SYSTEM_IDENTIFIER_COLUMN_NAME, edu.wustl.common.util.Utility
 						.toLongArray(listOfSubElement));
-		this.auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
+		//this.auditDisabledObjects(dao, "CATISSUE_SPECIMEN_COLL_GROUP", listOfSubElement);
 		if (!listOfSubElement.isEmpty())
 		{
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();

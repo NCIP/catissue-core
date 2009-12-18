@@ -7,9 +7,7 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
@@ -124,18 +122,15 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 					}
 					else
 					{
-						dao.update(specimenRequirement);
+						SpecimenRequirement oldRequirementSpecimen = null;
 						if (oldReqspecimenCollection != null)
 						{
-							final SpecimenRequirement oldRequirementSpecimen = (SpecimenRequirement) this
+							oldRequirementSpecimen = (SpecimenRequirement) this
 									.getCorrespondingOldObject(oldReqspecimenCollection,
 											specimenRequirement.getId());
 
-							final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-							auditManager.updateAudit(dao, specimenRequirement,
-									oldRequirementSpecimen);
-
 						}
+						dao.update(specimenRequirement,oldRequirementSpecimen);
 					}
 				}
 			}
@@ -156,13 +151,6 @@ public class RequirementSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-
 	}
 
 	/**

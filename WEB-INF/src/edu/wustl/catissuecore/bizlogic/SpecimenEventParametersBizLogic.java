@@ -39,11 +39,9 @@ import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -273,8 +271,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			}
 			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
 			dao.insert(specimenEventParametersObject);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, specimenEventParametersObject);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -283,12 +279,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throw this
 			.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
 			daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -479,10 +469,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 			//Update registration
-			dao.update(specimenEventParameters);
-			//Audit.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
+			dao.update(specimenEventParameters,oldSpecimenEventParameters);
 		}
 		catch (final DAOException daoExption)
 		{
@@ -490,13 +477,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			daoExption.printStackTrace();
 			throw this.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption
 					.getMsgValues());
-		}
-		catch (final AuditException auditException)
-		{
-			this.logger.error(auditException.getMessage(), auditException);
-			auditException.printStackTrace();
-			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
-					auditException.getMsgValues());
 		}
 
 	}

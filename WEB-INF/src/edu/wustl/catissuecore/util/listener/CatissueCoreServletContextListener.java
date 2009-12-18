@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.CVSTagReader;
@@ -86,6 +87,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					+ CommonServiceLocator.getInstance().getAppHome());
 			//Logger.configDefaultLogger(servletContext);
 			ErrorKey.init("~");
+			AuditManager.init();
 			LoggerConfig.configureLogger(CommonServiceLocator.getInstance().getPropDirPath());
 			ApplicationProperties
 					.initBundle(servletContext.getInitParameter("resourcebundleclass"));

@@ -7,10 +7,8 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -40,16 +38,8 @@ public class TextReportContentBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			final TextContent textContent = (TextContent) obj;
 			dao.insert(textContent);
-			auditManager.insertAudit(dao, textContent);
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (final DAOException daoExp)
 		{

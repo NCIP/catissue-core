@@ -33,11 +33,9 @@ import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -195,15 +193,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 						throw this.getBizLogicException(e, "name.generator.exp", "");
 					}
 				}
-				final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 				dao.insert(cont.getCapacity());
-				auditManager.insertAudit(dao, cont.getCapacity());
 				if (cont.isFull() == null)
 				{
 					cont.setFull(false);
 				}
 				dao.insert(cont);
-				auditManager.insertAudit(dao, cont);
 				container.setId(cont.getId());
 				container.setCapacity(cont.getCapacity());
 				if (container.getLocatedAtPosition() != null
@@ -465,11 +460,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					.getSpecimenPositionCollForContainer(dao, container.getId());
 			container.setSpecimenPositionCollection(specimenPosColl);
 			this.setValuesinPersistentObject(persistentOldContainerForChange, container, dao);
-			dao.update(persistentOldContainerForChange);
-			dao.update(persistentOldContainerForChange.getCapacity());
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
-			auditManager.updateAudit(dao, container.getCapacity(), oldContainer.getCapacity());
+			dao.update(persistentOldContainerForChange,oldContainer);
+			dao.update(persistentOldContainerForChange.getCapacity(),oldContainer.getCapacity());
 			logger.debug("container.getActivityStatus() " + container.getActivityStatus());
 			if (container.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
@@ -489,7 +481,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					final ContainerPosition prevPosition = persistentOldContainerForChange
 							.getLocatedAtPosition();
 					persistentOldContainerForChange.setLocatedAtPosition(null);
-					dao.update(persistentOldContainerForChange);
+					dao.update(persistentOldContainerForChange,oldContainer);
 					if (prevPosition != null)
 					{
 						dao.delete(prevPosition);
@@ -508,12 +500,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+	
 	}
 	/**
 	 * @param persistentobject - StorageContainer persistent object.
@@ -1064,7 +1051,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				final StorageContainer container = disabledContainerList.get(i);
 				dao.update(container);
 			}
-			this.auditDisabledObjects(dao, "CATISSUE_CONTAINER", containerIdList);
+			//this.auditDisabledObjects(dao, "CATISSUE_CONTAINER", containerIdList);
 		}
 		catch (final DAOException daoExp)
 		{

@@ -54,7 +54,6 @@ import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -70,6 +69,7 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.exception.SMException;
@@ -109,8 +109,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			final OrderDetails order = (OrderDetails) obj;
 			dao.insert(order);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, order);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -118,12 +116,6 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -204,7 +196,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					.getProxyObjectImpl(oldObj);
 			final OrderDetails orderNew = this
 					.updateObject(orderImplObj, obj, dao, sessionDataBean);
-			dao.update(orderNew);
+			dao.update(orderNew,oldObj);
 			this.disposeSpecimen(orderNew, sessionDataBean, dao);
 			// Sending Email only if atleast one order item is updated.
 			if (numberItemsUpdated > 0 && orderNew.getMailNotification())

@@ -5,9 +5,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -56,19 +54,6 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			final Object object = dao.retrieveById(className, sessionDataBean.getUserId());
 			quarantineParam.setUser((User) object);
 			dao.insert(quarantineParam);
-
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, quarantineParam);
-			// Since QuarantineEventParameter is in PUBLIC_DATA_GROUP protection
-			// objects not required
-			/*
-			 * Set protectionObjects = new HashSet();
-			 * protectionObjects.add(quarantineParam); try {
-			 * SecurityManager.getInstance
-			 * (this.getClass()).insertAuthorizationData(null,
-			 * protectionObjects, null); } catch (SMException e) { throw
-			 * handleSMException(e); }
-			 */
 		}
 		catch (final DAOException daoExp)
 		{
@@ -76,12 +61,6 @@ public class QuarantineEventParameterBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 

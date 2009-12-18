@@ -6,10 +6,10 @@ import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.ISecurityManager;
@@ -58,8 +58,6 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 			reviewParam.setReviewerRole(reviewerRole);
 
 			dao.insert(reviewParam);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, reviewParam);
 
 		}
 		catch (final DAOException daoExp)
@@ -73,20 +71,6 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 		{
 			this.logger.error("Review Role not found!"+ex.getMessage(),ex);
 			ex.printStackTrace();
-		}
-		// Since PathologyReportReviewParameter is in PUBLIC_DATA_GROUP
-		// protection objects not required
-		/*
-		 * Set protectionObjects = new HashSet();
-		 * protectionObjects.add(reviewParam); try {
-		 * SecurityManager.getInstance(
-		 * this.getClass()).insertAuthorizationData(null, protectionObjects,
-		 * null); } catch (SMException e) { throw handleSMException(e); }
-		 */catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -104,10 +88,11 @@ public class PathologyReportReviewParameterBizLogic extends CatissueDefaultBizLo
 	{
 		try
 		{
+			final PathologyReportReviewParameter oldRevParam = (PathologyReportReviewParameter) oldObj;
 			final PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
 			final PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
 			oldreviewParam.setStatus(Constants.COMMENT_STATUS_REVIEWED);
-			dao.update(oldreviewParam);
+			dao.update(oldreviewParam,oldRevParam);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newreviewParam);
 		}

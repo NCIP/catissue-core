@@ -44,13 +44,11 @@ import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -128,10 +126,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			this.setPrincipalInvestigator(dao, collectionProtocol);
 			this.setCoordinatorCollection(dao, collectionProtocol);
 			dao.insert(collectionProtocol);
-
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, collectionProtocol);
-
 			this.insertCPEvents(dao, sessionDataBean, collectionProtocol);
 			this.insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol, rowIdMap);
 			final HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
@@ -474,13 +468,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	/**
 	 * @param dao DAO Object
-	 * @param obj Transient Object
-	 * @param oldObj Persistent object
+	 * @param collectionProtocol Transient Object
+	 * @param collectionProtocolOld Persistent object
 	 * @param sessionDataBean Session data
 	 * @param collectionProtocol  Transient CP Object
 	 * @param collectionProtocolOld Persistent CP Object
 	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void editCPObj(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol, CollectionProtocol collectionProtocolOld)
@@ -496,11 +489,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			}
 			this.checkCoordinatorStatus(dao, collectionProtocol, collectionProtocolOld);
 			this.checkForChangedStatus(collectionProtocol, collectionProtocolOld);
-			dao.update(collectionProtocol);
-			//Audit of Collection Protocol
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, collectionProtocol, collectionProtocolOld);
-
+			dao.update(collectionProtocol,collectionProtocolOld);
 			this.disableRelatedObjects(dao, collectionProtocol);
 			this.updatePIAndCoordinatorGroup(dao, collectionProtocol, collectionProtocolOld);
 		}
@@ -509,21 +498,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-
+	
 	/**
-	 * @param dao DAO object
-	 * @param oldConsentTierCollection old Consent tier collection 
+	 * @param dao DAO object.
+	 * @param oldConsentTierCollection old Consent tier collection
 	 * @param newConsentTierCollection New Consent tier collection
-	 * @throws BizLogicException
+	 * @throws BizLogicException BizLogicException
 	 */
 	private void checkConsents(DAO dao, Collection<ConsentTier> oldConsentTierCollection,
 			Collection<ConsentTier> newConsentTierCollection) throws BizLogicException
@@ -542,7 +525,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * 
 	 * @param dao DAO Object
 	 * @param cTier ConsentTier object
 	 * @throws BizLogicException DAO Exception
@@ -570,7 +552,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param collectionProtocol Transient CP object
 	 * @param collectionProtocolOld Old CP Object
 	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void editEvents(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol, CollectionProtocol collectionProtocolOld)
@@ -583,17 +564,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * @param dao
-	 * @param collectionProtocol
-	 * @param collectionProtocolOld
-	 * @throws BizLogicException
+	 * updatePIAndCoordinatorGroup.
+	 * @param dao dao
+	 * @param collectionProtocol collectionProtocol
+	 * @param collectionProtocolOld collectionProtocolOld
+	 * @throws BizLogicException BizLogicException
 	 */
 	private void updatePIAndCoordinatorGroup(DAO dao, CollectionProtocol collectionProtocol,
 			CollectionProtocol collectionProtocolOld) throws BizLogicException
 	{
 		try
 		{
-			final CollectionProtocolAuthorization collectionProtocolAuthorization = new CollectionProtocolAuthorization();
+			final CollectionProtocolAuthorization collectionProtocolAuthorization
+			= new CollectionProtocolAuthorization();
 			collectionProtocolAuthorization.updatePIAndCoordinatorGroup(dao, collectionProtocolOld,
 					true);
 
@@ -708,6 +691,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		try
 		{
+			System.out.println("");
 			final RequirementSpecimenBizLogic reqSpBiz = new RequirementSpecimenBizLogic();
 			final Iterator it = collectionProtocol.getCollectionProtocolEventCollection()
 					.iterator();
@@ -723,14 +707,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							collectionProtocolEvent);
 				}
 				else
-				{
-					dao.update(collectionProtocolEvent);
+				{					
 					oldCollectionProtocolEvent = (CollectionProtocolEvent) this
 							.getCorrespondingOldObject(oldCPEventCollection,
 									collectionProtocolEvent.getId());
-					final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-					auditManager.updateAudit(dao, collectionProtocolEvent,
-							oldCollectionProtocolEvent);
+					dao.update(collectionProtocolEvent,oldCollectionProtocolEvent);
+
 
 				}
 				//Audit of collectionProtocolEvent
@@ -748,11 +730,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 
 		}
-		catch (final AuditException e)
-		{
-			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 
 	/**
@@ -832,8 +810,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		try
 		{
 			dao.insert(collectionProtocolEvent);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, collectionProtocolEvent);
+			//final AuditManager auditManager = this.getAuditManager(sessionDataBean);
+			//auditManager.insertAudit(dao, collectionProtocolEvent);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -842,12 +820,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			CollectionProtocolBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
+		
 	}
 
 	//This method sets the Principal Investigator.

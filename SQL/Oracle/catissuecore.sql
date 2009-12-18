@@ -15,30 +15,6 @@ create table CATISSUE_CDE (
    LAST_UPDATED date,
    primary key (PUBLIC_ID)
 );
-create table CATISSUE_AUDIT_EVENT (
-   IDENTIFIER number(19,0) not null ,
-   IP_ADDRESS varchar(20),
-   EVENT_TIMESTAMP date,
-   USER_ID number(19,0),
-   COMMENTS varchar2(500),
-   primary key (IDENTIFIER)
-);
-create table CATISSUE_AUDIT_EVENT_LOG (
-   IDENTIFIER number(19,0) not null ,
-   OBJECT_IDENTIFIER number(19,0),
-   OBJECT_NAME varchar(50),
-   EVENT_TYPE varchar(50),
-   AUDIT_EVENT_ID number(19,0),
-   primary key (IDENTIFIER)
-);
-create table CATISSUE_AUDIT_EVENT_DETAILS (
-   IDENTIFIER number(19,0) not null ,
-   ELEMENT_NAME varchar(150),
-   PREVIOUS_VALUE varchar(150),
-   CURRENT_VALUE varchar(500),
-   AUDIT_EVENT_LOG_ID number(19,0),
-   primary key (IDENTIFIER)
-);
 create table CATISSUE_COLL_COORDINATORS (
    COLLECTION_PROTOCOL_ID number(19,0) not null,
    USER_ID number(19,0) not null,
@@ -617,6 +593,62 @@ create table CATISSUE_SPECIMEN_TYPE (
    SPECIMEN_ARRAY_TYPE_ID number(19,0) not null,
    SPECIMEN_TYPE varchar(50)
 );
+
+/**
+ * Audit Sql
+ */
+
+CREATE TABLE catissue_audit_event (                                                                
+                        IDENTIFIER number(19,0) not null ,                                                   
+                        IP_ADDRESS varchar(20),                                                            
+                        EVENT_TIMESTAMP date ,                                                           
+                        USER_ID number(19,0),                                                                 
+                        COMMENTS varchar2(500),                                                                                  
+                        EVENT_TYPE varchar(200),                                                            
+                        PRIMARY KEY  (IDENTIFIER)                                                                  
+                        
+                      ) ;
+
+
+CREATE TABLE catissue_audit_event_log (                                                                          
+                            IDENTIFIER number(19,0) not null ,                                                              
+                            AUDIT_EVENT_ID number(19,0),                                                                        
+                            PRIMARY KEY  (IDENTIFIER),                                                                                     
+                            CONSTRAINT FK8BB672DF77F0B904 FOREIGN KEY (AUDIT_EVENT_ID) REFERENCES catissue_audit_event (IDENTIFIER)  
+                          );
+
+
+CREATE TABLE catissue_data_audit_event_log (                                                                               
+                                 IDENTIFIER number(19,0) not null ,                                                                              
+                                 OBJECT_IDENTIFIER number(19,0),                                                                               
+                                 OBJECT_NAME varchar(50),                                                                                    
+                                 PARENT_LOG_ID number(19,0),                                                                                   
+                                 PRIMARY KEY  (IDENTIFIER),                                                                                               
+                                 CONSTRAINT FK5C07745DC62F96A411 FOREIGN KEY (IDENTIFIER) REFERENCES catissue_audit_event_log (IDENTIFIER),         
+                                 CONSTRAINT FK5C07745DC62F96A412 FOREIGN KEY (PARENT_LOG_ID) REFERENCES catissue_data_audit_event_log (IDENTIFIER)  
+                               ) ;
+
+
+
+CREATE TABLE catissue_audit_event_details (                                                                              
+                                IDENTIFIER number(19,0) not null ,                                                                        
+                                ELEMENT_NAME varchar(150),                                                                                
+                                PREVIOUS_VALUE varchar(150),                                                                              
+                                CURRENT_VALUE varchar(500),                                                                               
+                                AUDIT_EVENT_LOG_ID number(19,0) ,                                                                            
+                                PRIMARY KEY  (IDENTIFIER),                                                                                             
+                                CONSTRAINT FK5C07745D34FFD77F FOREIGN KEY (AUDIT_EVENT_LOG_ID) REFERENCES catissue_audit_event_log (IDENTIFIER)  
+                              ) ;
+
+CREATE sequence CATISSUE_AUDIT_EVENT_PARAM_SEQ;
+CREATE sequence CATISSUE_AUDIT_EVENT_DET_SEQ;
+CREATE sequence CATISSUE_AUDIT_EVENT_LOG_SEQ;
+CREATE sequence LOGIN_EVENT_PARAM_SEQ;
+
+
+
+
+
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    IDENTIFIER number(19,0) not null,
    QUERY_DETAILS clob,  
@@ -708,8 +740,6 @@ alter table CATISSUE_SPECIMEN_TYPE  add constraint FKFF69C195ECE89343 foreign ke
 alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE153B5435E foreign key (PARENT_IDENTIFIER) references CATISSUE_PERMISSIBLE_VALUE  ;
 alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE1FC56C2B1 foreign key (PUBLIC_ID) references CATISSUE_CDE ;
 alter table CATISSUE_AUDIT_EVENT  add constraint FKACAF697A2206F20F foreign key (USER_ID) references CATISSUE_USER  ;
-alter table CATISSUE_AUDIT_EVENT_LOG  add constraint FK8BB672DF77F0B904 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT  ;
-alter table CATISSUE_AUDIT_EVENT_DETAILS  add constraint FK5C07745D34FFD77F foreign key (AUDIT_EVENT_LOG_ID) references CATISSUE_AUDIT_EVENT_LOG  ;
 
 alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER;
 
@@ -723,16 +753,13 @@ create sequence CATISSUE_SPEC_EVENT_PARAM_SEQ;
 create sequence CATISSUE_SITE_SEQ;
 create sequence CATISSUE_ADDRESS_SEQ;
 create sequence CATISSUE_CONTAINER_TYPE_SEQ;
-create sequence CATISSUE_AUDIT_EVENT_LOG_SEQ;
 create sequence CATISSUE_INTF_COLUMN_DATA_SEQ;
 create sequence CATISSUE_DISTRIBUTED_ITEM_SEQ;
 create sequence CATISSUE_DEPARTMENT_SEQ;
 create sequence CATISSUE_QUERY_TABLE_DATA_SEQ;
-create sequence CATISSUE_AUDIT_EVENT_DET_SEQ;
 create sequence CATISSUE_EXTERNAL_ID_SEQ;
 create sequence CATISSUE_REPORTED_PROBLEM_SEQ;
 create sequence CATISSUE_SPECIMEN_CHAR_SEQ;
-create sequence CATISSUE_AUDIT_EVENT_PARAM_SEQ;
 create sequence CATISSUE_PARTICIPANT_SEQ;
 create sequence CATISSUE_STORAGE_CONTAINER_SEQ;
 create sequence CATISSUE_PART_MEDICAL_ID_SEQ;

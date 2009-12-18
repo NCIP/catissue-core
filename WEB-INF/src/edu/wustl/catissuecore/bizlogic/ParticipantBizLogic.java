@@ -47,7 +47,6 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -67,6 +66,7 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -113,8 +113,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			dao.insert(participant);
 
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, participant);
 			Collection<ParticipantMedicalIdentifier> pmiCollection = participant
 					.getParticipantMedicalIdentifierCollection();
 
@@ -140,7 +138,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 						.next();
 				pmIdentifier.setParticipant(participant);
 				dao.insert(pmIdentifier);
-				auditManager.insertAudit(dao, pmIdentifier);
 			}
 
 			//Inserting collection Protocol Registration info in the database after setting the participant associated.
@@ -159,6 +156,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				this.registerToCPR(dao, sessionDataBean, participant);
 
 			}
+
 		}
 		catch (final DAOException daoExp)
 		{
@@ -167,13 +165,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-
 	}
 
 	/**
@@ -412,10 +403,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
 			participant.setMetaPhoneCode(lNameMetaPhone);
 
-			dao.update(participant);
-			//Audit of Participant.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
+			dao.update(participant,oldParticipant);
+		
 
 			final Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant
 					.getParticipantMedicalIdentifierCollection();
@@ -457,15 +446,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				else if (pmIdentifier.getId() == null || pmIdentifier.getId().equals(""))
 				{
 					dao.insert(pmIdentifier);
-					auditManager.insertAudit(dao, pmIdentifier);
 				}
 
-				//Audit of ParticipantMedicalIdentifier.
-				final ParticipantMedicalIdentifier oldPmIdentifier = (ParticipantMedicalIdentifier) this
-						.getCorrespondingOldObject(oldParticipantMedicalIdentifierCollection,
-								pmIdentifier.getId());
-
-				auditManager.updateAudit(dao, pmIdentifier, oldPmIdentifier);
 			}
 
 			//Updating the Collection Protocol Registration of the participant
@@ -529,73 +511,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
 	}
-
-	/**
-	 * @param raceCollection - collection of race obejct.
-	 * @param dao - DAO objects
-	 * @throws DAOException throws DAOException
-	 */
-	private void deleteOldParticipantRaceColl(Collection raceCollection, DAO dao)
-			throws DAOException
-	{
-		if (raceCollection != null)
-		{
-			final Iterator itr = raceCollection.iterator();
-			while (itr.hasNext())
-			{
-				final Race race = (Race) itr.next();
-				dao.delete(race);
-			}
-		}
-	}
-
-	/**
-	 * @param raceCollection - Collection of race objects.
-	 * @param participant - Participant object.
-	 * @param sessionDataBean - SessionDataBean object
-	 * @param dao - DAO object
-	 * @throws DAOException throws DAOException
-	 * @throws UserNotAuthorizedException throws UserNotAuthorizedException
-	 */
-	private void insertNewParticipantRaceColl(Collection raceCollection, Participant participant,
-			SessionDataBean sessionDataBean, DAO dao) throws DAOException,
-			UserNotAuthorizedException
-	{
-		if (raceCollection != null)
-		{
-			final Iterator itr = raceCollection.iterator();
-			while (itr.hasNext())
-			{
-				final Race race = (Race) itr.next();
-				race.setParticipant(participant);
-				dao.insert(race);
-			}
-		}
-	}
-
-	/**
-	 * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
-	 */
-	/*
-		protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
-				boolean assignOperation) throws SMException, DAOException
-		{
-			Logger.out.debug(" privilegeName:" + privilegeName + " objectType:" + objectType + " objectIds:" + Utility.getArrayString(objectIds)
-					+ " userId:" + userId + " roleId:" + roleId + " assignToUser:" + assignToUser);
-			super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
-
-			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic) BizLogicFactory.getInstance().getBizLogic(
-					Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-			bizLogic.assignPrivilegeToRelatedObjectsForParticipant(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
-		}
-	*/
 
 	/**
 	 * This method check for duplicate collection protocol registration for given participant.

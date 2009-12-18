@@ -36,7 +36,6 @@ import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
@@ -206,17 +205,14 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			 */
 			user.setFirstTimeLogin(new Boolean(true));
 
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			// Create address and the user in catissue tables.
 			dao.insert(user.getAddress());
-			auditManager.insertAudit(dao, user.getAddress());
 
 			if (userRowIdMap != null && !userRowIdMap.isEmpty())
 			{
 				this.updateUserDetails(user, userRowIdMap);
 			}
 			dao.insert(user);
-			auditManager.insertAudit(dao, user);
 
 			final Set protectionObjects = new HashSet();
 			protectionObjects.add(user);
@@ -1003,11 +999,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 							.getObjectId());
 				}
 
-				dao.update(user.getAddress());
-
-				// Audit of user address.
-				final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-				auditManager.updateAudit(dao, user.getAddress(), oldUser.getAddress());
+				dao.update(user.getAddress(),oldUser.getAddress());
 
 			}
 
@@ -1015,7 +1007,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			{
 				user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user);
+			dao.update(user,oldUser);
 
 			//Modify the csm user.
 			SecurityManagerFactory.getSecurityManager().modifyUser(csmUser);
@@ -1025,24 +1017,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				sessionDataBean.setUserName(csmUser.getLoginName());
 			}
 
-			//Audit of user.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
-
-			/* pratha commented for bug# 7304 
-			if (Constants.ACTIVITY_STATUS_ACTIVE.equals(user.getActivityStatus()))
-			{
-				Set protectionObjects = new HashSet();
-				protectionObjects.add(user);
-				try{
-					SecurityManager.getInstance(this.getClass()).insertAuthorizationData(getAuthorizationData(user), protectionObjects, null);
-				}
-				catch (SMException e)
-				{
-						//digest exception
-				}
-				
-			}  */
 			if(!oldUser.getEmailAddress().equals(user.getEmailAddress()))
 			{
 				updateWustlKey(user);

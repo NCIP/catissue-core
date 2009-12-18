@@ -33,11 +33,9 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -101,23 +99,13 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			}
 
 			dao.insert(dist);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, dist);
-
 		}
 		catch (final DAOException e)
 		{
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace() ;
-			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-
 	}
 
 	/**
@@ -222,11 +210,8 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final Distribution distribution = (Distribution) obj;
-			dao.update(obj);
+			dao.update(obj,oldObj);
 
-			// Audit of Distribution.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
 
 			final Distribution oldDistribution = (Distribution) oldObj;
 			final Collection oldDistributedItemCollection = oldDistribution
@@ -287,20 +272,14 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 					{
 						final Object specimenObjPrev = dao.retrieveById(Specimen.class.getName(),
 								item.getSpecimen().getId());
-						auditManager.updateAudit(dao, specimenObj, specimenObjPrev);
+					
 					}
-					// if a distributed specimen is updated
-					else
-					{
-						auditManager.updateAudit(dao, specimenObj, oldItem.getSpecimen());
-					}
+					
 				}
 				item.setDistribution(distribution);
 
 				dao.update(item);
 
-				// Audit of Distributed Item.
-				auditManager.updateAudit(dao, item, oldItem);
 			}
 			// Mandar : 04-Apr-06 for updating the removed specimens start
 			this.updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection,
@@ -314,12 +293,6 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace() ;
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -725,9 +698,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				this.logger.debug("Old Object in New Collection : " + isPresentInNew);
 				if (!isPresentInNew)
 				{
-					Object specimenObj;
-
-					specimenObj = dao.retrieveById(Specimen.class.getName(), item.getSpecimen()
+					Object specimenObj = dao.retrieveById(Specimen.class.getName(), item.getSpecimen()
 							.getId());
 
 					final double quantity = item.getQuantity().doubleValue();

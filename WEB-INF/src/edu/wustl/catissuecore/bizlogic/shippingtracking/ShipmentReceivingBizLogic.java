@@ -176,7 +176,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			}
 			shipment.setActivityStatus( Constants.ACTIVITY_STATUS_RECEIVED );
 
-			dao.update( shipment );
+			dao.update( shipment,oldObj);
 
 			//	Add mailing functionality
 

@@ -78,14 +78,18 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	{
 		User user = null;
 		UserDTO userDTO = null;
+		
+		User oldUser = null;
 		if (obj instanceof UserDTO)
 		{
 			userDTO = (UserDTO) obj;
 			user = userDTO.getUser();
+			oldUser = ((UserDTO)oldObj).getUser();
 		}
 		else
 		{
 			user = (User) obj;
+			oldUser = (User) oldObj;
 		}
 		final UserBizLogic objUserBizlogic = new UserBizLogic();
 		objUserBizlogic.validate(user, dao, Constants.EDIT);
@@ -99,17 +103,12 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			// If the activity status is Active, create a csm user.
 			if (Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
 			{
-				approveUser(obj, csmUser, dao, sessionDataBean);
+				approveUser(obj,oldUser, csmUser, dao, sessionDataBean);
 			}
 			else
 			{
-				dao.update(user);
+				dao.update(user,oldUser);
 			}
-			// Audit of User Update during approving user.
-			final User oldUser = (User) oldObj;
-			final AuditManager auditManager = getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, user.getAddress(), oldUser.getAddress());
-			auditManager.updateAudit(dao, obj, oldObj);
 			emailHandler(user);
 			final EmailHandler emailHandler = new EmailHandler();
 
@@ -173,11 +172,11 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @throws PasswordEncryptionException PasswordEncryptionException
 	 * @throws BizLogicException BizLogicException
 	 */
-	private void approveUser(Object user1,
+	private void approveUser(Object user1,User oldUser,
 			gov.nih.nci.security.authorization.domainobjects.User csmUser, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException, DAOException, SMException,
 			PasswordEncryptionException
-			{
+	{
 		User user = null;
 		UserDTO userDTO = null;
 		Map<String, SiteUserRolePrivilegeBean> userRowIdMap =
@@ -220,8 +219,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		}
 		privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap),
 				protectionObjects, null, user.getObjectId());
-		dao.update(user);
-			}
+		dao.update(user,oldUser);
+	}
 
 	/**
 	 * @param csmUser CSM User

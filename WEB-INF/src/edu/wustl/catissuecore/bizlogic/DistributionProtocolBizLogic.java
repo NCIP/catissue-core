@@ -27,10 +27,8 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -71,7 +69,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	{
 		try
 		{
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			final DistributionProtocol distributionProtocol = (DistributionProtocol) obj;
 
 			this.checkStatus(dao, distributionProtocol.getPrincipalInvestigator(),
@@ -79,13 +76,12 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 
 			this.setPrincipalInvestigator(dao, distributionProtocol);
 			dao.insert(distributionProtocol);
-			auditManager.insertAudit(dao, distributionProtocol);
+			
 			for (final DistributionSpecimenRequirement distributionSpecimenRequirement : distributionProtocol
 					.getDistributionSpecimenRequirementCollection())
 			{
 				distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
 				dao.insert(distributionSpecimenRequirement);
-				auditManager.insertAudit(dao, distributionSpecimenRequirement);
 			}
 
 			// Inserting authorization data
@@ -99,14 +95,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		catch (final AuditException auditException)
-		{
-			this.logger.error(auditException.getMessage(), auditException);
-			auditException.printStackTrace();
-			throw this.getBizLogicException(auditException, auditException.getErrorKeyName(),
-					auditException.getMsgValues());
-		}
-
 	}
 
 	/**
@@ -125,7 +113,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	{
 		try
 		{
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 			final DistributionProtocol distributionProtocol = (DistributionProtocol) obj;
 			final DistributionProtocol distributionProtocolOld = (DistributionProtocol) oldObj;
 
@@ -139,10 +126,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			this.setPrincipalInvestigator(dao, distributionProtocol);
 
 			this.checkForChangedStatus(distributionProtocol, distributionProtocolOld);
-			dao.update(distributionProtocol);
-
-			// Audit of Distribution Protocol.
-			auditManager.updateAudit(dao, obj, oldObj);
+			dao.update(distributionProtocol,distributionProtocolOld);
 
 			final Collection<DistributionSpecimenRequirement> oldDistributionSpecimenRequirementCollection = distributionProtocolOld
 					.getDistributionSpecimenRequirementCollection();
@@ -153,15 +137,12 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				this.logger.debug("DistributionSpecimenRequirement Id ............... : "
 						+ distributionSpecimenRequirement.getId());
 				distributionSpecimenRequirement.setDistributionProtocol(distributionProtocol);
-				dao.update(distributionSpecimenRequirement);
 
 				final DistributionSpecimenRequirement oldDistributionSpecimenRequirement = (DistributionSpecimenRequirement) this
 						.getCorrespondingOldObject(oldDistributionSpecimenRequirementCollection,
 								distributionSpecimenRequirement.getId());
 
-				auditManager.updateAudit(dao, distributionSpecimenRequirement,
-						oldDistributionSpecimenRequirement);
-
+				dao.update(distributionSpecimenRequirement,oldDistributionSpecimenRequirement);
 			}
 
 			this.logger.debug("distributionProtocol.getActivityStatus() "
@@ -178,7 +159,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 						.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 				bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
 			}
-
 		}
 		catch (final DAOException daoExp)
 		{
@@ -186,12 +166,6 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace()	;
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 

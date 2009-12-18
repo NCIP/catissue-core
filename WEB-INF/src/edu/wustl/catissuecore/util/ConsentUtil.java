@@ -242,8 +242,6 @@ public final class ConsentUtil
 				ReturnEventParameters returnEvent = new ReturnEventParameters();
 				returnEvent.setSpecimen(specimen );
 				dao.insert(returnEvent) ;
-				AuditManager auditManager = getAuditManager(sessionDataBean);
-				auditManager.insertAudit(dao,returnEvent);
 				
 				eventCollection.add(returnEvent);
 				specimen.setSpecimenEventCollection(eventCollection);

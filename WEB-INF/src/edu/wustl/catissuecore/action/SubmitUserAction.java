@@ -37,6 +37,7 @@ import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.factory.IForwordToFactory;
 import edu.wustl.common.util.AbstractForwardToProcessor;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -45,6 +46,7 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.HibernateMetaDataFactory;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
 /**
@@ -548,17 +550,20 @@ public class SubmitUserAction extends Action
 	 *            QueryBizLogic
 	 * @param objectName
 	 *            String
+	 * @throws DAOException 
 	 */
 	private void addMessage(ActionMessages messages, AbstractDomainObject abstractDomain,
-			String addoredit, QueryBizLogic queryBizLogic, String objectName)
+			String addoredit, QueryBizLogic queryBizLogic, String objectName) throws DAOException
 	{
 		final String message = abstractDomain.getMessageLabel();
 		new Validator();
 		final boolean isEmpty = Validator.isEmpty(message);
+		HibernateMetaData hibernateMetaData = HibernateMetaDataFactory.getHibernateMetaData
+		(CommonServiceLocator.getInstance().getAppName());
 		String displayName = null;
 		try
 		{
-			displayName = queryBizLogic.getDisplayNamebyTableName(HibernateMetaData
+			displayName = queryBizLogic.getDisplayNamebyTableName(hibernateMetaData
 					.getTableName(abstractDomain.getClass()));
 		}
 		catch (final Exception excp)

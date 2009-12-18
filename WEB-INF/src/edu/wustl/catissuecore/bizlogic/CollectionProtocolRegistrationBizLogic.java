@@ -40,12 +40,10 @@ import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -59,6 +57,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -792,9 +791,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 			dao.insert(collectionProtocolRegistration);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, collectionProtocolRegistration);
-
+			
 			if (armFound == false)
 			{
 				if (reportLoaderFlag == false)
@@ -803,15 +800,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					this.chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);
 				}
 			}
-
 		}
 		catch (final DAOException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		}
-		catch (final AuditException e)
 		{
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
@@ -1122,7 +1112,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.getSpecimenCollectionGroupCollection();
 			collectionProtocolRegistration
 					.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-			this.updateConsentResponseForSCG(collectionProtocolRegistration, dao, sessionDataBean);
+			this.updateConsentResponseForSCG(collectionProtocolRegistration,oldCollectionProtocolRegistration, dao, sessionDataBean);
 			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
 					.getConsentTierResponseCollection());
 			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
@@ -1178,11 +1168,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) end
 			// Update registration
-			dao.update(persistentCPR);
-
-			// Audit.
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.updateAudit(dao, obj, oldObj);
+			dao.update(persistentCPR,oldCollectionProtocolRegistration);
 
 			// Disable all specimen Collection group under this registration.
 			this.logger.debug("collectionProtocolRegistration.getActivityStatus() "
@@ -1226,7 +1212,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 * @throws DAOException
 	 */
 	private void updateConsentResponseForSCG(
-			CollectionProtocolRegistration collectionProtocolRegistration, DAO dao,
+			CollectionProtocolRegistration collectionProtocolRegistration,
+			CollectionProtocolRegistration oldCollectionProtocolRegistration, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException, DAOException
 	{
 		/*Collection specimenCollectionGroupCollection = (Collection)
@@ -1243,6 +1230,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			specimenCollectionGroup
 					.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
 
+			SpecimenCollectionGroup oldSpecimenCollectionGroup = getOldSpecimenCollectionGroup
+			(specimenCollectionGroup.getId(),oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection());
+			
 			final Collection<Specimen> specimenCollection = specimenCollectionGroup
 					.getSpecimenCollection();
 			if (specimenCollection != null && !specimenCollection.isEmpty())
@@ -1251,15 +1241,72 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				while (itSpecimenCollection.hasNext())
 				{
 					final Specimen specimen = itSpecimenCollection.next();
+					Specimen oldSpecimen = getOldSpecimen(specimen.getId(),specimenCollectionGroup
+							.getSpecimenCollection());
 					specimen.setConsentTierStatusCollectionFromSCG(specimenCollectionGroup);
-					dao.update(specimen);
+					dao.update(specimen,oldSpecimen);
 				}
 			}
 
-			dao.update(specimenCollectionGroup);
+			dao.update(specimenCollectionGroup,oldSpecimenCollectionGroup);
 		}
 	}
 
+	/**
+	 * This method will be called and return the Old specimen collection group.
+	 * @param scgId specimen collection group Id
+	 * @param specimenCollectionGroupCollection SCG collection.
+	 * @return Specimen collection group.
+	 */
+	private SpecimenCollectionGroup getOldSpecimenCollectionGroup(Long scgId,
+			Collection<SpecimenCollectionGroup>specimenCollectionGroupCollection)
+	{
+		SpecimenCollectionGroup oldSpecimenCollectionGroup = null;
+		
+		
+		Iterator<SpecimenCollectionGroup> itr = specimenCollectionGroupCollection.iterator();
+		
+		while(itr.hasNext())
+		{
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)itr.next();
+			if(scgId.equals(specimenCollectionGroup.getId()))
+			{
+				oldSpecimenCollectionGroup = specimenCollectionGroup;
+				break;
+			}
+		}
+		return oldSpecimenCollectionGroup;
+		
+	}
+	
+	/**
+	 * This method will be called to get old specimen.
+	 * @param specimenId Specimen Id.
+	 * @param specimenCollection specimen collection.
+	 * @return Specimen.
+	 */
+	private Specimen getOldSpecimen(Long specimenId,
+			Collection<Specimen>specimenCollection)
+	{
+		Specimen oldSpecimen = null;
+		
+		
+		Iterator<Specimen> itr = specimenCollection.iterator();
+		
+		while(itr.hasNext())
+		{
+			Specimen specimen = (Specimen)itr.next();
+			if(specimenId.equals(specimen.getId()))
+			{
+				oldSpecimen = specimen;
+				break;
+			}
+		}
+		return oldSpecimen;
+		
+	}
+	
+	
 	/**
 	 * post Update.
 	 * @param dao
@@ -1382,14 +1429,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		partMedIdentifier.setMedicalRecordNumber(null);
 		partMedIdentifier.setSite(null);
 		partMedIdentifierColl.add(partMedIdentifier);
-
 		dao.insert(participant);
-		final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-		auditManager.insertAudit(dao, participant);
 
 		partMedIdentifier.setParticipant(participant);
 		dao.insert(partMedIdentifier);
-		auditManager.insertAudit(dao, partMedIdentifier);
 		return participant;
 	}
 
@@ -1981,7 +2024,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						if (cp.getSequenceNumber().intValue() > sequenceNumber.intValue())
 						{
 							CollectionProtocolRegistration cpr;
-
+							
 							cpr = this.getCPRbyCollectionProtocolIDAndParticipantID(dao,
 									cp.getId(), collectionProtocolRegistration.getParticipant()
 											.getId());
@@ -1990,16 +2033,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 							{
 								cpr.setRegistrationDate(AppUtility.getNewDateByAdditionOfDays(cpr
 										.getRegistrationDate(), offset));
-								//	Integer offsetToSet = cpr.getOffset();
-								//	if (offsetToSet != null && offsetToSet.intValue() != 0)
-								//	{
-								//		cpr.setOffset(new Integer(offset + offsetToSet.intValue()));
-								//	}
-								//	else
-								//	cpr.setOffset(new Integer(offset));
-								//	updateOffsetForEvents(dao, sessionDataBean, cpr, offset);
 								dao.update(cpr);
-
 								this.checkAndUpdateChildOffset(dao, sessionDataBean, cpr, offset);
 							}
 						}

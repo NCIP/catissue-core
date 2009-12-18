@@ -70,7 +70,6 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -154,8 +153,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			this.setParent(dao, specimen);
 			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen);
 			dao.insert(specimen);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			auditManager.insertAudit(dao, specimen);
 		}
 		catch (final ApplicationException exp)
 		{
@@ -1476,18 +1473,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			// Set Specimen Domain Object
 			this.createPersistentSpecimenObj(dao, sessionDataBean, specimen, specimenOld,
 					persistentSpecimen);
-			dao.update(persistentSpecimen);
+			dao.update(persistentSpecimen,specimenOld);
 			this.updateChildAttributes(specimen, specimenOld);
-			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-			// Audit of Specimen
-			auditManager.updateAudit(dao, persistentSpecimen, specimenOld);
-
-			// Audit of Specimen Characteristics
-			auditManager.updateAudit(dao, persistentSpecimen.getSpecimenCharacteristics(),
-					specimenOld.getSpecimenCharacteristics());
-
+			
 			// Disable functionality
 			this.disableSpecimen(dao, specimen, persistentSpecimen);
+			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -1495,12 +1486,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		finally
 		{
@@ -1584,7 +1569,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if (!Constants.ALIQUOT.equals(specimen.getLineage()))
 			{
-				dao.update(specimen.getSpecimenCharacteristics());
+				dao.update(specimen.getSpecimenCharacteristics(),specimenOld.getSpecimenCharacteristics());
 			}
 			if (!specimen.getConsentWithdrawalOption().equalsIgnoreCase(
 					Constants.WITHDRAW_RESPONSE_NOACTION))
@@ -1813,10 +1798,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						final ExternalIdentifier oldExId = (ExternalIdentifier) this
 								.getCorrespondingOldObject(oldExternalIdentifierCollection, exId
 										.getId());
-
-						final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-						auditManager.updateAudit(dao, exId, oldExId);
-
 					}
 				}
 				persistentSpecimen.setExternalIdentifierCollection(perstExIdColl);
@@ -1828,12 +1809,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-		catch (final AuditException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -4068,8 +4043,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							persistetnExt.setValue(ex.getValue());
 							dao.update(persistetnExt);
 
-							final AuditManager auditManager = this.getAuditManager(sessionDataBean);
-							auditManager.updateAudit(dao, persistetnExt, ex);
 						}
 					}
 				}
@@ -4079,12 +4052,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					e.printStackTrace();
 					throw this.getBizLogicException(e, "ext.mult.spec.nt.updated", "");
 				}
-				catch (final AuditException e)
-				{
-					this.logger.error(e.getMessage(), e);
-					e.printStackTrace();
-					throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-				}
+				
 			}
 		}
 	}

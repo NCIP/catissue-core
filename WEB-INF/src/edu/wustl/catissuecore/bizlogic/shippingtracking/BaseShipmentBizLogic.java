@@ -40,10 +40,8 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.MailUtility;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.AuditException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.Status;
@@ -76,7 +74,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final AuditManager auditManager = this.getAuditManager( sessionDataBean );
 			if (!( obj instanceof BaseShipment ))
 			{
 				BaseShipmentBizLogic.logger.debug( "Invalid object passed" );
@@ -104,7 +101,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			baseShipment.getContainerCollection().clear();
 			baseShipment.getContainerCollection().addAll( containerCollection );
 			dao.insert( baseShipment );
-			auditManager.insertAudit( dao, baseShipment );
 			final boolean mailStatus = this.sendNotification( baseShipment, sessionDataBean );
 			if (!mailStatus)
 			{
@@ -139,11 +135,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			throw new BizLogicException( daoException.getErrorKey() , daoException , daoException
 					.getMsgValues() ); //DAOException(bizLogicException.getMessage());
 		}
-		catch (final AuditException e)
-		{
-			BaseShipmentBizLogic.logger.error( e.getMessage(), e );
-			throw this.getBizLogicException( e, e.getErrorKeyName(), e.getMsgValues() );
-		}
+		
 	}
 
 	/**
@@ -535,7 +527,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean, String operation,
 			List < SpecimenPosition > specimenPositionList) throws DAOException, BizLogicException
 	{
-		final AuditManager auditManager = this.getAuditManager( sessionDataBean );
 		StorageContainer storageContainer = null;
 		Site site = null;
 		StorageType storageTypeInTransit = null;
@@ -597,8 +588,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 					{
 						dao.insert( container.getCapacity() );
 						dao.insert( container );
-						auditManager.insertAudit( dao, container.getCapacity() );
-						auditManager.insertAudit( dao, container );
 					}
 					else if (operation.trim().equals( edu.wustl.common.util.global.Constants.EDIT ))
 					{
@@ -617,8 +606,6 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 							dao.insert( container.getCapacity() );
 							dao.insert( container );
 
-							auditManager.insertAudit( dao, container.getCapacity() );
-							auditManager.insertAudit( dao, container );
 						}
 						// bug 11410 end
 						final int newOneDimCapacity = container.getCapacity()
@@ -1245,9 +1232,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 			shipment.getContainerCollection().clear();
 			shipment.getContainerCollection().addAll( containerCollection );
 			this.validateContainerInShipment( oldShipment, shipment );// bug 11410
-			dao.update( shipment );
-			//insertSinglePositionInContainerMap(specimenPositionList, containerPositionList);
-
+			dao.update( shipment,oldShipment );
 			// Add mailing functionality
 			final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
 			if (!mailStatus)
