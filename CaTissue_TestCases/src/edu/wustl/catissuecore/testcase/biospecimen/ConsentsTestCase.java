@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
@@ -580,9 +581,18 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		
+	}
+	
+	public void testConsentEditParticipantAndGotoAddSCG() {
 		
-		
-		
+		SpecimenCollectionGroupForm scgForm = (SpecimenCollectionGroupForm)TestCaseUtility.getNameObjectMap("scgForm");
+		setRequestPathInfo("/QuerySpecimenCollectionGroup");
+		addRequestParameter("isOnChange", "false");
+		addRequestParameter("operation", "add");
+		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
+		setActionForm(scgForm);		
+		actionPerform();
+		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
 		
 	}
 	
