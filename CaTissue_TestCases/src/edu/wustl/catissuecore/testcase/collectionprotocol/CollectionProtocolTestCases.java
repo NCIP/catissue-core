@@ -33,7 +33,7 @@ import edu.wustl.common.beans.SessionDataBean;
  * This class contains test cases for Collection Protocol add/edit
  * @author Himanshu Aseeja
  */
-public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest 
+public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 {
 	/**
 	 * Test Collection Protocol Add.
@@ -53,14 +53,14 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
         verifyForward("success");
         //verifyForward("/pages/Layout.jsp");
-        
+
         /*Event Details*/
         setRequestPathInfo("/DefineEvents");
         addRequestParameter("pageOf", "pageOfDefineEvents");
 		addRequestParameter("operation", "add");
 		actionPerform();
 		verifyForward("pageOfDefineEvents");
-        
+
         setRequestPathInfo("/SaveProtocolEvents");
 		addRequestParameter("pageOf", "pageOfDefineEvents");
 		addRequestParameter("studyCalendarEventPoint","20");
@@ -68,12 +68,12 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("collectionPointLabel", "ECP_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		addRequestParameter("clinicalStatus","Not Specified");
 		addRequestParameter("clinicalDiagnosis", "Not Specified");
-		
+
 		addRequestParameter("collectionEventId", "1");
 		addRequestParameter("collectionEventUserId", "1");
 		addRequestParameter("collectionUserName", "admin,admin");
 		addRequestParameter("collectionEventSpecimenId", "0");
-		
+
 		addRequestParameter("receivedEventId", "1" );
 		addRequestParameter("receivedEventUserId", "1");
 		addRequestParameter("receivedUserName", "admin,admin");
@@ -82,48 +82,48 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("operation", "add");
 		actionPerform();
 		verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
-			
+
 //		setRequestPathInfo("/ProtocolEventsDetails");
 //		addRequestParameter("activityStatus", "active");
 //		addRequestParameter("pageOf", "newEvent");
 //		addRequestParameter("forwardTo", "success");
 //		actionPerform();
 //		verifyForward("success");
-		
+
 		/*Save Protocol Events*/
 //		setRequestPathInfo("/SaveProtocolEvents");
 //		addRequestParameter("operation","add");
 //		actionPerform();
 //		verifyForward("newEvent");
-		
+
 		/*Specimen Requirements Details*/
 
 //		Map innerLoopValues = (Map) getSession().getAttribute("collectionProtocolEventMap");
 //		CollectionProtocolEventBean event = (CollectionProtocolEventBean) innerLoopValues.get("E1");
-		
-//		CollectionProtocolEventBean event = (CollectionProtocolEventBean) innerLoopValues.get("E1");		
+
+//		CollectionProtocolEventBean event = (CollectionProtocolEventBean) innerLoopValues.get("E1");
 		setRequestPathInfo("/SaveSpecimenRequirements");
 		addRequestParameter("displayName", "spreq_" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
+
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		addRequestParameter("collectionUserName", "" + bean.getLastName() + "," + bean.getFirstName());
-		
+
 		addRequestParameter("collectionEventCollectionProcedure", "");
-		
+
 		addRequestParameter("collectionEventContainer", "Not Specified");
-		
+
 		addRequestParameter("key", "E1");
 		addRequestParameter("receivedEventReceivedQuality", "Not Specified");
 		addRequestParameter("collectionEventId", "1");
 		addRequestParameter("collectionEventUserId", "1");
 		addRequestParameter("collectionUserName", "admin,admin");
 		addRequestParameter("collectionEventSpecimenId", "0");
-		
+
 		addRequestParameter("receivedEventId", "1" );
 		addRequestParameter("receivedEventUserId", "1");
 		addRequestParameter("receivedUserName", "admin,admin");
 		addRequestParameter("receivedEventSpecimenId", "admin,admin");
-		
+
 		addRequestParameter("collectionEventCollectionProcedure", "Lavage");
 		addRequestParameter("collectionEventContainer", "CPT");
 		addRequestParameter("className", "Tissue");
@@ -143,31 +143,31 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
-		
+
 		setRequestPathInfo("/SubmitCollectionProtocol");
 		addRequestParameter("operation", "add");
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
-		
+
 		Map innerLoopValues = (Map) getSession().getAttribute("collectionProtocolEventMap");
-		
+
 		Set s = innerLoopValues.keySet();
 		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) getSession().getAttribute("collectionProtocolBean");
-		CollectionProtocolForm form = (CollectionProtocolForm) getActionForm();	
-		
+		CollectionProtocolForm form = (CollectionProtocolForm) getActionForm();
+
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-	
+
 		collectionProtocol.setCollectionProtocolEventCollection(s);
     	collectionProtocol.setId(collectionProtocolBean.getIdentifier());
 		collectionProtocol.setTitle(form.getTitle());
 		collectionProtocol.setShortTitle(form.getShortTitle());
 		collectionProtocol.setCollectionProtocolEventCollection(s);
-		
+
 		User principalInvestigator = new User();
 		principalInvestigator.setId(form.getPrincipalInvestigatorId());
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
-		
+
 		Date startDate = new Date();
 		String dd = new String();
 		String mm = new String();
@@ -175,16 +175,162 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		dd = form.getStartDate().substring(0,1);
 		mm = form.getStartDate().substring(3,4);
 		yyyy = form.getStartDate().substring(6,9);
-		
+
 		startDate.setDate(Integer.parseInt(dd));
 		startDate.setMonth(Integer.parseInt(mm));
 		startDate.setYear(Integer.parseInt(yyyy));
 		collectionProtocol.setStartDate(startDate);
-		
+
 		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap",innerLoopValues);
 		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
 	}
-	
+
+	@Test
+	public void testAddAnotherCollectionProtocol()
+	{
+		/*Collection Protocol Details*/
+		CollectionProtocolForm collForm = new CollectionProtocolForm();
+		collForm.setPrincipalInvestigatorId(1L) ;
+		collForm.setTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collForm.setOperation("add") ;
+		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collForm.setStartDate("01-12-2009");
+		setRequestPathInfo("/OpenCollectionProtocol");
+		setActionForm(collForm);
+		actionPerform();
+        verifyForward("success");
+        //verifyForward("/pages/Layout.jsp");
+
+        /*Event Details*/
+        setRequestPathInfo("/DefineEvents");
+        addRequestParameter("pageOf", "pageOfDefineEvents");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("pageOfDefineEvents");
+
+        setRequestPathInfo("/SaveProtocolEvents");
+		addRequestParameter("pageOf", "pageOfDefineEvents");
+		addRequestParameter("studyCalendarEventPoint","20");
+		addRequestParameter("collectionProtocolEventkey", "-1");
+		addRequestParameter("collectionPointLabel", "ECP_" + UniqueKeyGeneratorUtil.getUniqueKey());
+		addRequestParameter("clinicalStatus","Not Specified");
+		addRequestParameter("clinicalDiagnosis", "Not Specified");
+
+		addRequestParameter("collectionEventId", "1");
+		addRequestParameter("collectionEventUserId", "1");
+		addRequestParameter("collectionUserName", "admin,admin");
+		addRequestParameter("collectionEventSpecimenId", "0");
+
+		addRequestParameter("receivedEventId", "1" );
+		addRequestParameter("receivedEventUserId", "1");
+		addRequestParameter("receivedUserName", "admin,admin");
+		addRequestParameter("receivedEventSpecimenId", "admin,admin");
+		addRequestParameter("pageOf", "specimenRequirement");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
+
+//		setRequestPathInfo("/ProtocolEventsDetails");
+//		addRequestParameter("activityStatus", "active");
+//		addRequestParameter("pageOf", "newEvent");
+//		addRequestParameter("forwardTo", "success");
+//		actionPerform();
+//		verifyForward("success");
+
+		/*Save Protocol Events*/
+//		setRequestPathInfo("/SaveProtocolEvents");
+//		addRequestParameter("operation","add");
+//		actionPerform();
+//		verifyForward("newEvent");
+
+		/*Specimen Requirements Details*/
+
+//		Map innerLoopValues = (Map) getSession().getAttribute("collectionProtocolEventMap");
+//		CollectionProtocolEventBean event = (CollectionProtocolEventBean) innerLoopValues.get("E1");
+
+//		CollectionProtocolEventBean event = (CollectionProtocolEventBean) innerLoopValues.get("E1");
+		setRequestPathInfo("/SaveSpecimenRequirements");
+		addRequestParameter("displayName", "spreq_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+		addRequestParameter("collectionUserName", "" + bean.getLastName() + "," + bean.getFirstName());
+
+		addRequestParameter("collectionEventCollectionProcedure", "");
+
+		addRequestParameter("collectionEventContainer", "Not Specified");
+
+		addRequestParameter("key", "E1");
+		addRequestParameter("receivedEventReceivedQuality", "Not Specified");
+		addRequestParameter("collectionEventId", "1");
+		addRequestParameter("collectionEventUserId", "1");
+		addRequestParameter("collectionUserName", "admin,admin");
+		addRequestParameter("collectionEventSpecimenId", "0");
+
+		addRequestParameter("receivedEventId", "1" );
+		addRequestParameter("receivedEventUserId", "1");
+		addRequestParameter("receivedUserName", "admin,admin");
+		addRequestParameter("receivedEventSpecimenId", "admin,admin");
+
+		addRequestParameter("collectionEventCollectionProcedure", "Lavage");
+		addRequestParameter("collectionEventContainer", "CPT");
+		addRequestParameter("className", "Tissue");
+		addRequestParameter("tissueSite", "Anal canal");
+		addRequestParameter("tissueSide", "Left");
+		addRequestParameter("pathologicalStatus", "Metastatic");
+		addRequestParameter("storageLocationForSpecimen","Auto");
+		addRequestParameter("type","Frozen Tissue");
+		addRequestParameter("collectionEventComments", "");
+		addRequestParameter("receivedEventReceivedQuality","Frozen");
+		addRequestParameter("receivedEventComments", "");
+		addRequestParameter("quantity", "10");
+		addRequestParameter("quantityPerAliquot", "5");
+		addRequestParameter("noOfAliquots", "2");
+		addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+
+		setRequestPathInfo("/SubmitCollectionProtocol");
+		addRequestParameter("operation", "add");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+
+		Map innerLoopValues = (Map) getSession().getAttribute("collectionProtocolEventMap");
+
+		Set s = innerLoopValues.keySet();
+		CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) getSession().getAttribute("collectionProtocolBean");
+		CollectionProtocolForm form = (CollectionProtocolForm) getActionForm();
+
+		CollectionProtocol collectionProtocol = new CollectionProtocol();
+
+		collectionProtocol.setCollectionProtocolEventCollection(s);
+    	collectionProtocol.setId(collectionProtocolBean.getIdentifier());
+		collectionProtocol.setTitle(form.getTitle());
+		collectionProtocol.setShortTitle(form.getShortTitle());
+		collectionProtocol.setCollectionProtocolEventCollection(s);
+
+		User principalInvestigator = new User();
+		principalInvestigator.setId(form.getPrincipalInvestigatorId());
+		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
+
+		Date startDate = new Date();
+		String dd = new String();
+		String mm = new String();
+		String yyyy = new String();
+		dd = form.getStartDate().substring(0,1);
+		mm = form.getStartDate().substring(3,4);
+		yyyy = form.getStartDate().substring(6,9);
+
+		startDate.setDate(Integer.parseInt(dd));
+		startDate.setMonth(Integer.parseInt(mm));
+		startDate.setYear(Integer.parseInt(yyyy));
+		collectionProtocol.setStartDate(startDate);
+
+		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap2",innerLoopValues);
+		TestCaseUtility.setNameObjectMap("CollectionProtocol2",collectionProtocol);
+	}
 	@Test
 	public void testClickOnClinicalDiagnosis()
 	{
@@ -201,9 +347,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 			String errormsg[] = new String[] {""};
 			verifyActionErrors(errormsg);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Test Collection Protocol Edit.
 	 */
@@ -222,14 +368,14 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 //		actionPerform();
 //		verifyForward("success");
 //
-//	
+//
 //        /*Collection Protocol search action to generate CollectionProtocolForm*/
 //		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
 //		setRequestPathInfo("/CollectionProtocolSearch");
 //		addRequestParameter("id", "" + collectionProtocol.getId());
 //     	actionPerform();
 //		verifyForward("pageOfCollectionProtocol");
-//      
+//
 //		/*Edit Action*/
 //		collectionProtocol.setTitle("cp1_" + UniqueKeyGeneratorUtil.getUniqueKey());
 //		collectionProtocol.setShortTitle("cp1_" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -239,8 +385,8 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 //		addRequestParameter("operation", "edit");
 //		actionPerform();
 //		verifyForward("success");
-//			
+//
 //		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
-//		
+//
 //     }
 }

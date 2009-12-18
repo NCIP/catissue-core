@@ -1360,7 +1360,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	
+
 	/**
 	 * @param dao : dao
 	 * @param collProtRegIDArr : collProtRegIDArr[]
@@ -1446,11 +1446,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final List specimenList = (List) this.executeHqlQuery(dao, hql);
 		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
 		{
-			isCollectedSpecimenExists = true;			
+			isCollectedSpecimenExists = true;
 		}
 		else
 		{
-			isCollectedSpecimenExists = false;	
+			isCollectedSpecimenExists = false;
 		}
 		return isCollectedSpecimenExists;
 
@@ -1708,6 +1708,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				throw this.getBizLogicException(null, "error.specimenCollectionGroup.noevents", "");
 			}
+			//validation added for bug #15237
+			validateCpEvent(dao, group);
 
 			return true;
 
@@ -1723,6 +1725,37 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		* catch (ApplicationException e){ logger.debug(e.getMessage(), e);
 		* throw getBizLogicException(null, e.getErrorKeyName(), ""); }
 		*/
+	}
+
+	/**
+	 * Validate cp event.
+	 *
+	 * @param dao the dao
+	 * @param group the group
+	 *
+	 * @throws DAOException the DAO exception
+	 * @throws BizLogicException the biz logic exception
+	 */
+	private void validateCpEvent(DAO dao, final SpecimenCollectionGroup group) throws DAOException,
+			BizLogicException
+	{
+		long cpId=group.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		final String sourceObjectName1 = CollectionProtocolEvent.class.getName();
+		final String[] selectColumnName1 = {};
+		//"select elements(collectionProtocolEventCollection) from colle where "
+		final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
+		queryWhereClause1.addCondition(new EqualClause("id", group.getCollectionProtocolEvent().getId()));
+		final List list = dao
+				.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
+		CollectionProtocolEvent eventObj=(CollectionProtocolEvent)(list.get(0));
+		long actualCpId=eventObj.getCollectionProtocol().getId();
+		if(actualCpId != 0 && cpId != 0 && actualCpId != cpId)
+		{
+			String message = ApplicationProperties
+			.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+			throw this.getBizLogicException(null, "errors.item.invalid",
+					message);
+		}
 	}
 
 	/**
@@ -2801,7 +2834,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * This method is used to retrieve SCG using ID or name. 
+	 * This method is used to retrieve SCG using ID or name.
 	 * @param queryWhereClause - where clause
 	 * @param dao - dao
 	 * @return List of result
@@ -2864,7 +2897,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 							absScg.setConsentTierStatusCollection(absScg.getConsentTierStatusCollection());
 						}
 					}
-					catch(LazyInitializationException e)	
+					catch(LazyInitializationException e)
 					{
 						this.logger.error(e.getMessage(),e) ;
 						e.printStackTrace() ;
