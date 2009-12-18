@@ -1788,7 +1788,6 @@
 			</sql>
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row" keepformat="yes" >
 				<transaction src="${dbupgrade.sql.dir}/Oracle/auditUpgrade_v1.1p4_to_v1.1p5.sql" />
-				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">
 						<include name="*.jar" />
