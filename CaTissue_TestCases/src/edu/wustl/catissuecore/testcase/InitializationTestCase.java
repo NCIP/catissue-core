@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.testcase.util.DataSourceFinder;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
+import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -28,7 +29,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This class contains test case for application initialization same as 
+ * This class contains test case for application initialization same as
  * jboss startup.
  * @author sachin_lale
  *
@@ -44,13 +45,13 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	 */
 	private DataSource getDataSource()
 	{
-		
+
 		DataSourceFinder.setAllValues();
 		DataSource dataSource = null;
-		
+
 		if(DataSourceFinder.databaseType.equals("mysql"))
 		{
-			MysqlDataSource mysqlDataSource  = new MysqlDataSource();	
+			MysqlDataSource mysqlDataSource  = new MysqlDataSource();
 		    mysqlDataSource  = new MysqlDataSource();
 		    mysqlDataSource.setDatabaseName(DataSourceFinder.databaseName);
 		    mysqlDataSource.setServerName(DataSourceFinder.databaseHost);
@@ -62,15 +63,15 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 		else if(DataSourceFinder.databaseType.equals("oracle"))
 		{
 			OracleDataSource oracleDataSource = null;
-			try 
+			try
 			{
 				oracleDataSource= new OracleDataSource();
-			} 
-			catch (Exception e) 
+			}
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-	
+
 			oracleDataSource.setDatabaseName(DataSourceFinder.databaseName);
 			oracleDataSource.setServerName(DataSourceFinder.databaseHost);
 			oracleDataSource.setPortNumber(DataSourceFinder.port);
@@ -180,6 +181,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 					Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 					CommonServiceLocator.getInstance().setAppHome(System.getProperty("user.dir"));
 					ErrorKey.init("~");
+					AuditManager.init();
 					init.initCatissueParams();
 				}
 			}
