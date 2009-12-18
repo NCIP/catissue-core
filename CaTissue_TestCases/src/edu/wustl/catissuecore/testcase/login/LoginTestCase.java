@@ -1,12 +1,8 @@
 package edu.wustl.catissuecore.testcase.login;
-import org.apache.struts.action.ActionErrors;
 import org.junit.Test;
 
-import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
-import edu.wustl.common.audit.LoginAuditManager;
-import edu.wustl.common.beans.LoginDetails;
 import edu.wustl.common.beans.SessionDataBean;
 /**
 *
