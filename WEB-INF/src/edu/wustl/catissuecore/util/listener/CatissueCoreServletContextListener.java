@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.exception.ParseException;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -64,39 +65,36 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
  * */
 public class CatissueCoreServletContextListener implements ServletContextListener
 {
-
-	private static Logger logger = Logger.getCommonLogger(CatissueCoreServletContextListener.class);
-
+	/**
+	 * CatissueCoreServletContextListener Logger.
+	 */
+	private static final Logger logger = Logger.getCommonLogger(CatissueCoreServletContextListener.class);
 	/**
 	 * DATASOURCE_JNDI_NAME.
 	 */
-	String CATISSUE_DATASOURCE_JNDI_NAME = "java:/catissuecore";
-	String DE_DATASOURCE_JNDI_NAME = "java:/dynamicextensions";
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	private static final String JNDI_NAME = "java:/catissuecore";
+	/**
+	 * This method is called during server startup, It is used when want some initliazation before
+	 * server start.
+	 * @param sce ServletContextEvent
 	 */
-	public void contextInitialized(ServletContextEvent sce)
+	public void contextInitialized(final ServletContextEvent sce)
 	{
 		try
 		{
 			logger.info("Initializing catissue application");
 			final ServletContext servletContext = sce.getServletContext();
 			CommonServiceLocator.getInstance().setAppHome(sce.getServletContext().getRealPath(""));
-			System.out.println(":::::::::::::Application home ::::::::::::"
+			logger.info(":::::::::::::Application home ::::::::::::"
 					+ CommonServiceLocator.getInstance().getAppHome());
-			//Logger.configDefaultLogger(servletContext);
 			ErrorKey.init("~");
 			AuditManager.init();
 			LoggerConfig.configureLogger(CommonServiceLocator.getInstance().getPropDirPath());
 			ApplicationProperties
 					.initBundle(servletContext.getInitParameter("resourcebundleclass"));
 			this.setGlobalVariable();
-			logger = Logger.getCommonLogger(CatissueCoreServletContextListener.class);
 			this.initCatissueParams();
-			//logApplnInfo();
-			//initCDEManager();
-			//initCDEManager();
+			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			logger.info("Initialization complete");
 		}
@@ -105,76 +103,42 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			CatissueCoreServletContextListener.logger.error("Application failed to initialize"
 					+e.getMessage(),e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
-
 		}
 		QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
 	}
 
 	/**
-	 * @throws Exception
-	 * @throws ClassNotFoundException
-	 * @throws DAOException
+	 * Initialize caTissue default properties.
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @throws DAOException DAOException
+	 * @throws ParseException ParseException
 	 */
-	public void initCatissueParams() throws Exception, ClassNotFoundException, DAOException
+	public void initCatissueParams() throws ClassNotFoundException, DAOException, ParseException
 	{
 		edu.wustl.query.util.global.Utility.setReadDeniedAndEntitySqlMap();
 		this.addDefaultProtectionGroupsToMap();
-
-		//Class.forName(DBUtil.class.getName());
-		//	Variables.databaseName=HibernateMetaData.getDataBaseName();
 		final QueryBizLogic bLogic = new QueryBizLogic();
 		bLogic.initializeQueryData();
-		//setDBFunctionNamesConstants();
 		this.createAliasAndPageOfMap();
-
 		LabelAndBarcodeGeneratorInitializer.init();
-		//			Added By geeta 
-		this.InitialiseVariablesForEdinburgh();
-
-		//			Added By geeta 
-		this.InitialiseVariablesForDFCI();
+		this.initialiseVariablesForEdinburgh();
+		this.initialiseVariablesForDFCI();
 		this.initialiseVariableForAppInfo();
-		this.initCatissueCache();
 		this.initEntityCache();
 		Utility.initializePrivilegesMap();
 		this.initTitliIndex();
 		this.initCDEManager();
-		//added to set printer related information
 		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "PrintServiceImplementor.properties";
 		Variables.setPrinterInfo(absolutePath);
 		System
 				.setProperty("app.propertiesDir", CommonServiceLocator.getInstance()
 						.getPropDirPath());
-
-		/*Class.forName(DBUtil.class.getName());
-		Variables.databaseName=HibernateMetaData.getDataBaseName();
-		QueryBizLogic.initializeQueryData();
-		setDBFunctionNamesConstants();
-		createAliasAndPageOfMap();
-
-		LabelAndBarcodeGeneratorInitializer.init();
-
-		//		Added By geeta
-		InitialiseVariablesForEdinburgh();
-
-
-		//		Added By geeta
-		InitialiseVariablesForDFCI();
-
-		initCatissueCache();
-		initEntityCache();
-		Utility.initializePrivilegesMap();
-		initTitliIndex();
-		initCDEManager();
-		//added to set printer related information
-		String absolutePath=Variables.propertiesDirPath +File.separator+"PrintServiceImplementor.properties";
-		Variables.setPrinterInfo(absolutePath);*/
-
 	}
 
 	/**
-	 * @throws Exception
+	 * Set Global variable.
+	 * @throws Exception Exception
 	 */
 	private void setGlobalVariable() throws Exception
 	{
@@ -187,7 +151,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 *
+	 * Initialize Titli.
 	 */
 	private void initTitliIndex()
 	{
@@ -196,96 +160,57 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 *
+	 * Initialize Entity cache.
 	 */
 	private void initEntityCache()
 	{
 		try
 		{
-			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+			final CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
 					.getInstance();
-			//Stores the list of system entities into the cache.-- Vishvesh.
 			AnnotationUtil.getSystemEntityList();
-			//Stores the ids in the cache
 			final Long participantId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-			catissueCoreCacheManager.addObjectToCache("participantEntityId", participantId);
+			cacheManager.addObjectToCache("participantEntityId", participantId);
 			final Long scgId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-			catissueCoreCacheManager.addObjectToCache("scgEntityId", scgId);
+			cacheManager.addObjectToCache("scgEntityId", scgId);
 			final Long specimenEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-			catissueCoreCacheManager.addObjectToCache("specimenEntityId", specimenEntityId);
+			cacheManager.addObjectToCache("specimenEntityId", specimenEntityId);
 			final Long cpEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL);
-			catissueCoreCacheManager.addObjectToCache(
+			cacheManager.addObjectToCache(
 					AnnotationConstants.COLLECTION_PROTOCOL_ENTITY_ID, cpEntityId);
 
-			Long partRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+			final Long entityId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
-			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-					partRecEntryEntityId);
-			Long specimenRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+			cacheManager.addObjectToCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
+					entityId);
+			final Long spRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
-			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
-					specimenRecEntryEntityId);
-			Long scgRecEntryEntityId = edu.common.dynamicextensions.xmi.AnnotationUtil
+			cacheManager.addObjectToCache(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
+					spRecEtyId);
+			final Long scgRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-			catissueCoreCacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
-					scgRecEntryEntityId);
-
-			//Added for initializing PathFinder and EntityCache
+			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
+					scgRecEtyId);
 			final InitialContext ctx = new InitialContext();
-			final DataSource ds = (DataSource) ctx.lookup(this.CATISSUE_DATASOURCE_JNDI_NAME);
-			final Connection conn = ds.getConnection();
+			final DataSource dataSource = (DataSource) ctx.lookup(JNDI_NAME);
+			final Connection conn = dataSource.getConnection();
 			PathFinder.getInstance(conn);
-
+			conn.close();
 			logger.debug("Entity Cache is initialised");
-
 		}
 		catch (final Exception e)
 		{
 			CatissueCoreServletContextListener.logger.error("Exception occured while initialising " +
 					"entity cache"+e.getMessage(),e);
-			e.printStackTrace();
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 	}
-
 	/**
-	 * @throws DAOException
-	 * @throws Exception
-	 * @throws ClassNotFoundException
-	 */
-	public void initCatissueCache() throws DAOException, Exception, ClassNotFoundException
-	{
-		/*IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)factory.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
-		Map storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
-		//removed participant cache
-		//ParticipantBizLogic bizlogic = (ParticipantBizLogic)factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		//Map participantMap = bizlogic.getAllParticipants();
-
-		 //CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-		//List participantRegInfoList = cBizLogic.getAllParticipantRegistrationInfo();
-		try
-		{
-			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			//catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
-			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_STORAGE_CONTAINERS,(TreeMap)storageContainersMap);
-			//catissueCoreCacheManager.addObjectToCache(Constants.LIST_OF_REGISTRATION_INFO,(Vector)participantRegInfoList);
-		}
-		catch (CacheException e)
-		{
-			System.out.println("exception  "+ e.getMessage());
-			logger.debug("Exception occured while creating instance of CatissueCoreCacheManager");
-			e.printStackTrace();
-		}*/
-	}
-
-	/**
-	 *
+	 * Initialize CDE Manager.
 	 */
 	private void initCDEManager()
 	{
@@ -303,7 +228,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 *
+	 * Application Information.
 	 */
 	private void logApplnInfo()
 	{
@@ -312,7 +237,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final StringBuffer fileName = new StringBuffer();
 		fileName.append(appHome).append(File.separator).append(
 				ApplicationProperties.getValue("application.version.file"));
-
 		final CVSTagReader cvsTagReader = new CVSTagReader();
 		final String cvsTag = cvsTagReader.readTag(fileName.toString());
 		Variables.applicationCvsTag = cvsTag;
@@ -321,38 +245,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		logger.info("Name: " + CommonServiceLocator.getInstance().getAppName());
 		logger.info("CVS TAG: " + Variables.applicationCvsTag);
 		logger.info("Path: " + appHome);
-		// logger.info("Database Name: "+Variables.databaseName);
 		logger.info("========================================================");
 	}
 
 	/**
-	 *
-	 */
-	/*private void setDBFunctionNamesConstants()
-	{
-		if(Variables.databaseName.equals(Constants.ORACLE_DATABASE))
-		{
-			//set string/function for oracle
-			Variables.datePattern = "mm-dd-yyyy";
-			Variables.timePattern = "hh-mi-ss";
-			CommonServiceLocator.getInstance().getDatePattern()Function="TO_CHAR";
-			Variables.timeFormatFunction="TO_CHAR";
-			Variables.dateTostrFunction = "TO_CHAR";
-			Variables.strTodateFunction = "TO_DATE";
-		}
-		else
-		{
-			Variables.datePattern = "%m-%d-%Y";
-			Variables.timePattern = "%H:%i:%s";
-			CommonServiceLocator.getInstance().getDatePattern()Function="DATE_FORMAT";
-			Variables.timeFormatFunction="TIME_FORMAT";
-			Variables.dateTostrFunction = "TO_CHAR";
-			Variables.strTodateFunction = "STR_TO_DATE";
-		}
-	}*/
-
-	/**
-	 * @param protectionGroupsForObjectTypes
+	 * Add Default Protection Groups.
 	 */
 	private void addDefaultProtectionGroupsToMap()
 	{
@@ -398,7 +295,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 
 	/**
 	 * TO create map of Alias verses corresponding PAGE_OF values.
-	 * This is required in Simple Query Edit feature, It contains mapping of alias name for the query tables & the corresponding PAGE_OF values.
+	 * This is required in Simple Query Edit feature,
+	 * It contains mapping of alias name for the query tables &
+	 * the corresponding PAGE_OF values.
 	 * Patch ID: SimpleSearchEdit_9
 	 */
 	private void createAliasAndPageOfMap()
@@ -435,12 +334,13 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		logger.debug("Initialization of aliasAndPageOf Map completed...");
 	}
 
-	/** (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	/**
+	 * Context destroyed.
+	 * Shutting down catch manager
+	 * @param sce ServletContextEvent
 	 */
-	public void contextDestroyed(ServletContextEvent sce)
+	public void contextDestroyed(final ServletContextEvent sce)
 	{
-		//  shutting down the cacheManager
 		try
 		{
 			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
@@ -452,19 +352,17 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			CatissueCoreServletContextListener.logger.error("Exception occured while shutting " +
 					"instance of CatissueCoreCacheManager"
 					+e.getMessage(),e);
-			e.printStackTrace();
 		}
 	}
-
-	public void InitialiseVariablesForEdinburgh()
+	/**
+	 * Initialize variables required for Edinburg requirement.
+	 */
+	private void initialiseVariablesForEdinburgh()
 	{
-
-		//String isStateRequired=XMLPropertyHandler.getValue(Constants.IS_STATE_REQUIRED);
 		if (Constants.FALSE.equals(XMLPropertyHandler.getValue(Constants.IS_STATE_REQUIRED)))
 		{
 			Variables.isStateRequired = false;
 		}
-
 		if (Constants.TRUE.equals(XMLPropertyHandler.getValue(Constants.IS_CP_TITLE_CHANGE)))
 		{
 			Variables.isCPTitleChange = true;
@@ -486,8 +384,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Variables.isEthnicityRemove = true;
 		}
 	}
-
-	public void InitialiseVariablesForDFCI()
+	/**
+	 * Initialize variables required for DFCI requirement.
+	 */
+	private void initialiseVariablesForDFCI()
 	{
 		if (Constants.FALSE.equals(XMLPropertyHandler.getValue(Constants.IS_LAST_NAME_NULL)))
 		{
@@ -496,9 +396,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	}
 
 	/**
-	 * app info initialize
+	 * Application info initialize.
 	 */
-	public void initialiseVariableForAppInfo()
+	private void initialiseVariableForAppInfo()
 	{
 		if (XMLPropertyHandler.getValue(Constants.APP_ADDITIONAL_INFO) != null)
 		{
