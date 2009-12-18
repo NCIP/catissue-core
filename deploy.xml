@@ -377,30 +377,6 @@
 			<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}" />
 		</replace>
 
-		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
-		<!-- Configuring CSM hibernate property File-->
-		<!--
-		<replace dir="${temp.dir}/catissuecore/WEB-INF" propertyfile="caTissueInstall.properties">
-			<include name="classes/hibernate.properties"/>
-			<include name="conf/hibernate.properties"/>
-			<replacefilter
-				token="hibernate.dialect org.hibernate.dialect.MySQLDialect"
-			  	value="hibernate.dialect ${mysql.dialect.h3.string}"/>
-			<replacefilter
-				token="hibernate.connection.driver_class com.mysql.jdbc.Driver"
-			  	value="hibernate.connection.driver_class ${mysql.driver.string}"/>
-
-			<replacefilter
-				token="hibernate.connection.url jdbc:mysql://ps0154:3306/catissuecore_mysql"
-			  	value="hibernate.connection.url jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
-			<replacefilter
-				token="hibernate.connection.username catissue_core"
-			  	value="hibernate.connection.username ${database.username}"/>
-			<replacefilter
-				token="hibernate.connection.password catissue_core"
-			  	value="hibernate.connection.password ${database.password}"/>
-		</replace>
-		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}" />
 		</replace>
@@ -450,30 +426,6 @@
 			<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}" />
 		</replace>
 
-		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
-		<!-- Configuring CSM hibernate property File-->
-		<!--
-		<replace dir="${temp.dir}/catissuecore/WEB-INF" propertyfile="caTissueInstall.properties">
-			<include name="classes/hibernate.properties"/>
-			<include name="conf/hibernate.properties"/>
-			<replacefilter
-				token="hibernate.dialect org.hibernate.dialect.MySQLDialect"
-			  	value="hibernate.dialect ${oracle.dialect.h3.string}"/>
-			<replacefilter
-				token="hibernate.connection.driver_class com.mysql.jdbc.Driver"
-			  	value="hibernate.connection.driver_class ${oracle.driver.string}"/>
-
-			<replacefilter
-				token="hibernate.connection.url jdbc:mysql://ps0154:3306/catissuecore_mysql"
-			  	value="hibernate.connection.url jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
-			<replacefilter
-				token="hibernate.connection.username catissue_core"
-			  	value="hibernate.connection.username ${database.username}"/>
-			<replacefilter
-				token="hibernate.connection.password catissue_core"
-			  	value="hibernate.connection.password ${database.password}"/>
-		</replace>
-		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}" />
 		</replace>
@@ -536,15 +488,6 @@
 		<delete file="${temp.dir}/dynamicExtensions.jar" />
 
 
-		<!-- delete file="${base.dir}/MANIFEST.MF"/>
-
-		<manifest file="${base.dir}/MANIFEST.MF">
-	        <attribute name="Built-By" value="${user.name}"/>
-	     	<attribute name="Version" value="${application.name} ${application.version}"/>
-	     	<attribute name="CSM-Version" value="${csm.version}"/>
-	     	<attribute name="caCore-Version" value="${cacore.version}"/>
-	     	<attribute name="Build-on" value="${TODAY}"/>
-	    </manifest -->
 		<jar destfile="${temp.dir}/dynamicExtensions.jar" basedir="${temp.dir}/dynamicExtensionsjar" />
 
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
@@ -573,11 +516,7 @@
 		</war>
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
-		<!-- commenting this target for DE war
-		<antcall target="copydeletedjars">
-			<param name="delPath" value="${temp.dir}/dynamicExtensions/WEB-INF/lib"/>
-		</antcall>
-		-->
+		
 
 		<war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
 					<fileset dir="${temp.dir}/caTissuePrintWebService">
@@ -585,13 +524,6 @@
 					</fileset>
 		</war>
 
-		<!-- change because using one war only -->
-		<!--
-		<delete file="${temp.dir}/catissuecorecsm.war"/>
-		<war destfile="${temp.dir}/catissuecorecsm.war" webxml="${csm.dir}/WEB-INF/web.xml">
-			<fileset dir="${csm.dir}"/>
-		</war>
-		-->
 	</target>
 
 
@@ -1825,7 +1757,8 @@
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - Oracle -->
 	<target name="upgrade_oracle_from_v1.1p4_to_v1.1p5" description=" Upgrading Oracle Database. Upgrading from Suite1.1 p4 to p5 - Oracle">
-		<echo message="Upgrading Oracle Database." />
+		<echo message="Upgrading Oracle Database p4 to p5." />
+		<antcall target="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5" />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
@@ -1838,6 +1771,34 @@
 		</sql>
    </target>
 
+	
+   <target name="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5">
+			<echo message="Upgrade audit changes.">
+			</echo>
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}"  rdbms="oracle">
+				<transaction>
+						ALTER TABLE CATISSUE_AUDIT_EVENT ADD EVENT_TYPE VARCHAR(20) ;
+				</transaction>
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row" keepformat="yes" >
+				<transaction src="${dbupgrade.sql.dir}/Oracle/auditUpgrade_v1.1p4_to_v1.1p5.sql" />
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+			
+	</target>	
+	
+	
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes" description="DE Metadata Upgradation">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
