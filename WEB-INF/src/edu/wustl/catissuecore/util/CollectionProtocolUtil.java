@@ -18,12 +18,16 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
@@ -35,6 +39,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
 import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -46,6 +51,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -1192,6 +1198,56 @@ public class CollectionProtocolUtil
 			}
 			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBean);
 		}
-	}
 	
+	}
+
+	/**
+	 * returns the errors.
+	 * @param request gives the error key.
+	 * @return errors.
+	 */
+	public static ActionErrors getActionErrors(HttpServletRequest request)
+	{
+		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		if (errors == null)
+		{
+			errors = new ActionErrors();
+		}
+		return errors;
+	}
+
+	/**
+     * This method will return collectionProtocolId.
+     * @param specimenId - specimen id
+     * @param dao - DAO obj
+     * @return collectionProtocolId - collectionProtocolId
+     * @throws BizLogicException - BizLogicException
+     */
+    public static String getCPIdFromSpecimen(String specimenId,DAO dao) throws BizLogicException
+    {
+    	String collectionProtocolId = "";
+		if (specimenId != null && !specimenId.trim().equals(""))
+		{
+			final Specimen specimen = new Specimen();
+			specimen.setId(Long.parseLong(specimenId));
+			try
+			{
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
+				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
+				collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
+				if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
+				{
+					collectionProtocolId = collectionProtocolId.split("_")[1];
+				}
+			}
+			catch (final ApplicationException appEx)
+			{
+				collectionProtocolId = "";
+				throw new BizLogicException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
+			}
+		}
+		return collectionProtocolId;
+    }
+
 }

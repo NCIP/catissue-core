@@ -16,27 +16,23 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.QueryWhereClause;
-import edu.wustl.dao.condition.EqualClause;
 
 /**
  * this class implements the action for shipment receiving view.
@@ -64,6 +60,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 			shipmentId = Long.parseLong(request
 					.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER));
 		}
+
 		final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) form;
 		Shipment shipment = null;
 		// Get the Shipment details.
@@ -80,11 +77,11 @@ public class ShowShipmentReceivingAction extends SecureAction
 		final StorageContainerForSpecimenBizLogic  bizLogic = new StorageContainerForSpecimenBizLogic();
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// Uncommented due to addition of 'auto' functionality.
-        // Bug 14263 
+        // Bug 14263
 		if(sessionDataBean!=null)
 		{
 			DAO dao = null;
-			try 
+			try
 			{
 				dao = AppUtility.openDAOSession(sessionDataBean);
 				String operation = request.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
@@ -95,45 +92,63 @@ public class ShowShipmentReceivingAction extends SecureAction
 				request.setAttribute(edu.wustl.catissuecore.util.global.Constants.OPERATION, operation);
 				String stContSelection = request.getParameter("stContSelection");
 				request.setAttribute("stContSelection", stContSelection);
-				final String specimenId = request.getParameter("specimenId");
+				String specimenId = null;
 				String spClass = null;
 				String spType = null;
-				if(specimenId!=null)
+				List<Specimen> specimenList=shipmentReceivingForm.getSpecimenCollection();
+				Map map = shipmentReceivingForm.getSpecimenDetailsMap();
+				int specimenCounter=0;
+				for (Specimen specimen : specimenList)
 				{
-					final String sourceObjectName = Specimen.class.getName();
-					final String[] selectColumnName = {"specimenClass", "specimenType"};
-					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-					queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
-					final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-					if (list.size() != 0)
+					specimenCounter++;
+					specimenId=specimen.getId().toString();
+
+					if(specimenId!=null)
 					{
-						final Object[] valArr = (Object[]) list.get(0);
-						if (valArr != null)
+						spClass = specimen.getSpecimenClass();
+						spType = specimen.getSpecimenType();
+						if(spType == null)
 						{
-							spClass = ((String) valArr[0]);
-							spType = ((String) valArr[1]);
+							spType = (String)shipmentBizLogic.retrieveAttribute(Specimen.class.getName(), Long.valueOf( specimenId ), "specimenType");
 						}
-					}
-					if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
-							&& requestFor != null && !requestFor.trim().equals("") && stContSelection != null)
-					{
-						String cpId = getCPIdFromSpecimen(specimenId,dao);
-						request.setAttribute(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
-								cpId);
-						if(!cpId.trim().equals( "" ))
+						if (operation.equals(edu.wustl.catissuecore.util.global.Constants.ADD)
+								&& requestFor != null && !requestFor.trim().equals("") )
 						{
-							containerMap = bizLogic.
-							getAllocatedContainerMapForSpecimen
-							(AppUtility.setparameterList(Long.valueOf(cpId).longValue(),spClass,0,spType), 
-							sessionDataBean, dao );
+
+							String cpId = CollectionProtocolUtil.getCPIdFromSpecimen(specimenId,dao);
+							request.setAttribute(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID+"_"+specimenCounter,
+									cpId);
+
+							if(!cpId.trim().equals( "" ))
+							{
+								/**
+								 * If some error occurs then initial values should be retained on the page
+								 * thus added initial values in map.
+								 */
+								if(request.getAttribute( "org.apache.struts.action.ERROR" )!= null) 
+								{
+									List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(cpId).longValue(),spClass,0,spType);
+									containerMap = bizLogic.getAllocatedContainerMapForSpecimen( parameterList,sessionDataBean, dao );
+									String containerId = map.get( "containerId_"+specimenId ).toString();
+									String pos1 = map.get( "pos1_"+specimenId ).toString();
+									String pos2 = map.get( "pos2_"+specimenId ).toString();
+									final String initailValuesKey = "Specimen:" + specimenCounter
+									+ "_initialValues";
+									String[] initialValues = new String[3];
+									initialValues[0] = containerId;
+									initialValues[1] = pos1;
+									initialValues[2] = pos2;
+									map.put(initailValuesKey, initialValues);								
+								}
+							}
 						}
+						this.setContainerStorageInformation(containerMap, request, shipmentReceivingForm);
 					}
-					this.setContainerStorageInformation(containerMap, request, shipmentReceivingForm);
+					this.setSpecimenStorageInformation(containerMap, request, shipmentReceivingForm);
 				}
-				this.setSpecimenStorageInformation(containerMap, request, shipmentReceivingForm,
-						shipment);				
+				shipmentReceivingForm.setSpecimenDetailsMap(map);
 			}
-			finally 
+			finally
 			{
 				dao.closeSession();
 			}
@@ -155,40 +170,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.SITELIST, list);
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
-    /**
-     * This method will return collectionProtocolId. 
-     * @param specimenId - specimen id
-     * @param dao - DAO obj
-     * @return collectionProtocolId - collectionProtocolId
-     * @throws BizLogicException - BizLogicException
-     */
-    private String getCPIdFromSpecimen(String specimenId,DAO dao) throws BizLogicException
-    {
-    	String collectionProtocolId = "";
-		if (specimenId != null && !specimenId.trim().equals(""))
-		{
-			final Specimen specimen = new Specimen();
-			specimen.setId(Long.parseLong(specimenId));
-			try
-			{
-				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-				.getBizLogic(edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_FORM_ID);
-				collectionProtocolId = newSpecimenBizLogic.getObjectId(dao, specimen);
-				if (collectionProtocolId != null && !collectionProtocolId.trim().equals(""))
-				{
-					collectionProtocolId = collectionProtocolId.split("_")[1];
-				}
-			}
-			catch (final ApplicationException appEx)
-			{
-				collectionProtocolId = "";
-				throw new BizLogicException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
-			}			
-		}
-		return collectionProtocolId;
-    }
-	/**
+   /**
 	 * sets the storage container information.
 	 * @param containerMap the treemap.
 	 * @param bizLogic object of StorageContainerBizLogic class.
@@ -211,10 +193,11 @@ public class ShowShipmentReceivingAction extends SecureAction
 		{
 			containerCount = shipmentReceivingForm.getContainerCollection().size();
 		}
-		this.checkForSufficientAvailablePositions(request, containerMap, containerCount,
-				ApplicationProperties.getValue("shipment.contentsContainers"));
-
-		this.populateContainerStorageLocations(shipmentReceivingForm, containerMap);
+		if(request.getAttribute( "org.apache.struts.action.ERROR" )== null) 
+		{
+			this.checkForSufficientAvailablePositions(request, containerMap, containerCount,
+					ApplicationProperties.getValue("shipment.contentsContainers"));			
+		}
 		if (containerId != null && !containerId.trim().equals(""))
 		{
 			request.setAttribute("containerObjectId", containerId);
@@ -229,115 +212,20 @@ public class ShowShipmentReceivingAction extends SecureAction
 	 * @param request the request to be processed.
 	 * @param shipmentReceivingForm form containing all values.
 	 */
-	private void setSpecimenStorageInformation(Map containerMap, HttpServletRequest request,
-			ShipmentReceivingForm shipmentReceivingForm, Shipment shipment)
+	private void setSpecimenStorageInformation(
+			Map containerMap, HttpServletRequest request,
+			ShipmentReceivingForm shipmentReceivingForm)
 	{
 		List<NameValueBean> storagePositionList =  AppUtility.getStoragePositionTypeList();
 		request.setAttribute("storageList", storagePositionList);
 		final String exceedingMaxLimit = "";
-		final List initialValues = null;
-		this.populateSpecimenStorageLocations(shipmentReceivingForm, containerMap);
-				request.setAttribute("initValues", initialValues);
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.EXCEEDS_MAX_LIMIT,
 				exceedingMaxLimit);
 		request.setAttribute(edu.wustl.catissuecore.util.global.Constants.AVAILABLE_CONTAINER_MAP,
 				containerMap);
-	}
-	/**
-	 * This function populates the availability map with available storage locations.
-	 * @param form object of AliquotForm.
-	 * @param containerMap Map containing data for container
-	 */
-	private void populateSpecimenStorageLocations(ShipmentReceivingForm form, Map containerMap)
-	{
-		final Map map = form.getSpecimenDetailsMap();
-		final String keyName = "Specimen:";
-		int number = 0;
-		if (form.getSpecimenCollection() != null)
-		{
-			number = form.getSpecimenCollection().size();
-		}
 
-		this.populateStorageLocations(containerMap, map, keyName, number);
-		form.setSpecimenDetailsMap(map);
 	}
-
-	/**
-	 * @param containerMap Map containing data for container
-	 * @param map Map
-	 * @param keyName key Name Specimen or Container
-	 * @param number Collection size.
-	 */
-	private void populateStorageLocations(Map containerMap, Map map, String keyName, int number)
-	{
-		if (!containerMap.isEmpty())
-		{
-			int counter = 1;
-			final Object[] containerId = containerMap.keySet().toArray();
-			for (int i = 0; i < containerId.length; i++)
-			{
-				final Map xDimMap = (Map) containerMap.get(containerId[i]);
-				if (!xDimMap.isEmpty())
-				{
-					final Object[] xDim = xDimMap.keySet().toArray();
-					for (int countJ = 0; countJ < xDim.length; countJ++)
-					{
-						final List yDimList = (List) xDimMap.get(xDim[countJ]);
-						for (int countK = 0; countK < yDimList.size(); countK++)
-						{
-							if (counter <= number)
-							{
-								final String initailValuesKey = keyName + counter
-										+ "_initialValues";
-								final String[] initialValues = new String[3];
-								initialValues[0] = ((NameValueBean) containerId[i]).getValue();
-								initialValues[1] = ((NameValueBean) xDim[countJ]).getValue();
-								initialValues[2] = ((NameValueBean) yDimList.get(countK)).getValue();
-								map.put(initailValuesKey, initialValues);
-								counter++;
-							}
-							else
-							{
-								countJ = xDim.length;
-								i = containerId.length;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int commonCounter = 0; commonCounter < number; commonCounter++)
-			{
-				final String initailValueKey = keyName + (commonCounter + 1) + "_initialValues";
-				final String[] initialValues = new String[3];
-				initialValues[0] = "";
-				initialValues[1] = "";
-				initialValues[2] = "";
-				map.put(initailValueKey, initialValues);
-			}
-		}
-	}
-
-	/**
-	 * This function populates the availability map with available storage locations.
-	 * @param form object of AliquotForm
-	 * @param containerMap Map containing data for container
-	 */
-	private void populateContainerStorageLocations(ShipmentReceivingForm form, Map containerMap)
-	{
-		final Map map = form.getContainerDetailsMap();
-		final String keyName = "Container:";
-		int number = 0;
-		if (form.getContainerCollection() != null)
-		{
-			number = form.getContainerCollection().size();
-		}
-		this.populateStorageLocations(containerMap, map, keyName, number);
-		form.setContainerDetailsMap(map);
-	}
+	
 
 	/**
 	 * This method checks whether there are sufficient storage locations are available or not.
@@ -362,10 +250,10 @@ public class ShowShipmentReceivingAction extends SecureAction
 				"errors.locations.notSufficient.shipmentReceive",objectName));
 			saveErrors(request, errors);
 		}
-		
+
 	}
 
-	/**
+/**
 	 * returns the errors.
 	 * @param request gives the error key.
 	 * @return errors.
@@ -379,4 +267,5 @@ public class ShowShipmentReceivingAction extends SecureAction
 		}
 		return errors;
 	}
+	
 }

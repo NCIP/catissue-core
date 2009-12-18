@@ -998,7 +998,7 @@ public final class StorageContainerUtil
 
 		query.append(" and contPos.positionDimensionOne=" + pos1
 				+ " and contPos.positionDimensionTwo=" + pos2);
-		final List allocatedList = AppUtility.executeSQLQuery(query.toString());
+		final List allocatedList = AppUtility.executeQuery(query.toString());
 
 		if ((allocatedList != null) && (allocatedList.size() > 0))
 		{
@@ -1033,7 +1033,7 @@ public final class StorageContainerUtil
 		}
 		query.append(" and specPos.positionDimensionOne=" + pos1
 				+ "  and specPos.positionDimensionTwo=" + pos2);
-		final List allocatedList = AppUtility.executeSQLQuery(query.toString());
+		final List allocatedList = AppUtility.executeQuery(query.toString());
 		if ((allocatedList != null) && (allocatedList.size() > 0))
 		{
 			return true;
