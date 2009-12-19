@@ -65,6 +65,40 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 	}
 
 	/**
+	 * Negative test case to update the activity status of specimen from disabled to active.
+	 */
+	public void testUpdateDisabledSpecimenToActive()
+	{
+		try
+		{
+			Specimen sp = new Specimen();
+			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
+			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
+			List spCollection = appService.getObjects(sp);
+			sp = (Specimen) spCollection.get(0);
+			System.out.println("Get Object Sp");
+			sp.setCollectionStatus("Collected");
+			sp.setActivityStatus(Constants.DISABLED);
+			//sp.setIsAvailable(true);
+			sp.setExternalIdentifierCollection(null);
+			System.out.println(sp + ": sp");
+			sp = (Specimen) appService.updateObject(sp);
+			System.out.println(sp + ": sp After Update");
+
+			sp.setActivityStatus(Constants.ACTIVITY_STATUS_VALUES[1]);
+			sp = (Specimen) appService.updateObject(sp);
+			assertFalse("Domain Object updated", true);
+		}
+		catch (Exception e)
+		{
+			Logger.out.error("testUpdateCollectionStatusOfSpecimen" + e.getMessage(), e);
+			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():" + e.getMessage());
+			e.printStackTrace();
+			assertTrue("Failed to update Domain Object's  activity status from disabled to active", true);
+		}
+	}
+
+	/**
 	 * Test Update Specimen With Consents.
 	 */
 	public void testUpdateSpecimenWithConsents()
@@ -728,7 +762,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		consentTierCollection = cp.getConsentTierCollection();
 
 		//			Iterator ConsentierItr = consentTierCollection.iterator();
-		//			
+		//
 		//			ConsentTier c1= (ConsentTier) ConsentierItr.next();
 		//			ConsentTierResponse r1 = new ConsentTierResponse();
 		//			r1.setResponse("Yes");
@@ -774,7 +808,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		//Site site = new Site();
 		//site.setId(new Long(1));
-		
+
 		scg.setSpecimenCollectionSite(site);
 		scg.setName("New SCG" + UniqueKeyGeneratorUtil.getUniqueKey());
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
@@ -1215,7 +1249,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 	/**
 	 * Create CPR with all consent responses as Yes
 	 * Change CPR response to No
-	 * All SCG and Specimens have same consent status as CPR. 
+	 * All SCG and Specimens have same consent status as CPR.
 	 */
 	public void testVerifyConsentResponseChangeWithCPRChange()
 	{
@@ -1784,7 +1818,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		{
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			
+
 			//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 			//scg.setId(new Long(36));
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -1854,10 +1888,10 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		{
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			
+
 			//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 			//scg.setId(new Long(36));
-			
+
 			specimenObj.setSpecimenCollectionGroup(scg);
 			specimenObj.setCollectionStatus("Collected");
 			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
@@ -1931,7 +1965,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to update activity status from closed to active of specimen", true);
 		}
 	}
-	
+
 	 public void testEditSiteUserCPAssociation() {
 		Logger.out.info("updating domain object site ------->");
 		try {

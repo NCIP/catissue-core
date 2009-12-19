@@ -1475,7 +1475,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					persistentSpecimen);
 			dao.update(persistentSpecimen,specimenOld);
 			this.updateChildAttributes(specimen, specimenOld);
-			
+
 			// Disable functionality
 			this.disableSpecimen(dao, specimen, persistentSpecimen);
 			final AuditManager auditManager = this.getAuditManager(sessionDataBean);
@@ -1905,7 +1905,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void setSpecimenEventParameterUserIdentifier(Specimen specimen,
 			DAO dao) throws BizLogicException
-	{	
+	{
 		Collection<SpecimenEventParameters> specimenEventCollection =
 			specimen.getSpecimenEventCollection();
 		for(SpecimenEventParameters parameters : specimenEventCollection)
@@ -2684,7 +2684,42 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		// new method call added.
 
+		validateSpecimenStatus(specimen, dao);
+
 		return true;
+	}
+
+	/**
+	 * @param specimen
+	 * @param dao
+	 * @throws BizLogicException
+	 */
+	private void validateSpecimenStatus(Specimen specimen, DAO dao) throws BizLogicException
+	{
+		final String sourceObjectName1 = Specimen.class.getName();
+		final String[] selectColumnName1 = {"activityStatus"};
+		final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
+		try
+		{
+			queryWhereClause1.addCondition(new EqualClause("id", specimen.getId()));
+			final List list = dao
+			.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
+
+			if(list.size()>0)
+			{
+				String previousStatus=list.get(0).toString();
+				if(previousStatus !=null && previousStatus.equals(Constants.ACTIVITY_STATUS_VALUES[3]))
+				{
+					throw this.getBizLogicException(null, "errors.item", "errors.disabled.specimen");
+				}
+			}
+
+		}
+		catch (DAOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -4052,7 +4087,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					e.printStackTrace();
 					throw this.getBizLogicException(e, "ext.mult.spec.nt.updated", "");
 				}
-				
+
 			}
 		}
 	}
@@ -4602,7 +4637,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						{
 							//bug 13288
 							/**
-							 * To edit specimen of lineage derivative/aliquot, if the parent specimen is located at site 
+							 * To edit specimen of lineage derivative/aliquot, if the parent specimen is located at site
 							 * at which the user does not have association privileges.
 							 */
 							if (specimen.getLabel() != null
@@ -4956,7 +4991,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return false;
 	}
-	
+
 	/**
 	 * To check wether the Continer to display can holds the given
 	 * specimenType.
