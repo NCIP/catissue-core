@@ -3991,27 +3991,29 @@ Thanking You,
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
-
+	
+	<property name="bulk.bin.dir" value="${basedir}/BulkOperations/bin" />
+	<target name="unjar_bulk">
+		<delete dir="${bulk.bin.dir}" />
+		<mkdir dir="${bulk.bin.dir}" />
+		<unjar src="./caTissueSuite_Client/lib/bulkoperator.jar" dest="${bulk.bin.dir}/" />
+	</target>
+	
 	<property name="operationName" value="" />
 	<property name="dropdownName" value="" />
 	<property name="csvFile" value="" />
 	<property name="xmlFile" value="" />
 
-	<target name="add_bulk_operation_template" description="this will add the bulk operation template">
-		<echo message="unwar catissue.........." />
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
-
+	<target name="add_bulk_operation_template" depends="unjar_bulk" description="this will add the bulk operation template">
 		<echo message="Starting to load Bulk Operator Template.........." />
-		<java classname="edu.wustl.catissuecore.bizlogic.bulkOperations.ImportBulkOperationTemplate"
+		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
-
 			<arg value="${operationName}" />
 			<arg value="${dropdownName}" />
 			<arg value="${csvFile}" />
 			<arg value="${xmlFile}" />
 			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+				<fileset dir="./caTissueSuite_Client/lib/">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
@@ -4019,13 +4021,5 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</java>
-
-		<echo message="deleting unwar catissue.........." />
-		<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}">
-				<include name="**/*" />
-			</fileset>
-		</delete>
 	</target>
-
 </project>

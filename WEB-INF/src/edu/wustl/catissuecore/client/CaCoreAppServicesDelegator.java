@@ -110,7 +110,7 @@ public class CaCoreAppServicesDelegator
 		Boolean authenticated = Boolean.valueOf(false);
 		if (validUser != null)
 		{
-			password = PasswordManager.encode(password);
+			password = PasswordManager.encrypt(password);
 			final boolean loginOK = SecurityManagerFactory.getSecurityManager().login(userName,
 					password);
 			authenticated = new Boolean(loginOK);

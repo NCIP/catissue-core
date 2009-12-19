@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.common.jobmanager.JobDetails"
+        table="JOB_DETAILS"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+            </generator>
+        </id>
+
+        <property
+            name="status"
+            type="string"
+            update="true"
+            insert="true"
+            column="JOB_STATUS"
+            length="255"
+        />
+
+        <property
+            name="logFile"
+            type="java.sql.Blob"
+            update="true"
+            insert="true"
+            column="LOG_FILE"
+        />
+
+        <property
+            name="startTime"
+            type="timestamp"
+            update="true"
+            insert="true"
+            column="START_TIME"
+        />
+
+        <property
+            name="jobStartedBy"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+            column="JOB_STARTED_BY"
+        />
+
+        <property
+            name="jobName"
+            type="string"
+            update="true"
+            insert="true"
+            column="JOB_NAME"
+        />
+
+        <property
+            name="timeTaken"
+            type="long"
+            update="true"
+            insert="true"
+            column="TIME_TAKEN"
+        />
+
+        <property
+            name="failedRecordsCount"
+            type="long"
+            update="true"
+            insert="true"
+            column="FAILED_RECORDS_COUNT"
+        />
+
+        <property
+            name="totalRecordsCount"
+            type="long"
+            update="true"
+            insert="true"
+            column="TOTAL_RECORDS_COUNT"
+        />
+
+        <property
+            name="currentRecordsProcessed"
+            type="long"
+            update="true"
+            insert="true"
+            column="CURRENT_RECORDS_PROCESSED"
+        />
+        
+        <property
+            name="logFileName"
+            type="string"
+            update="true"
+            insert="true"
+            column="LOG_FILE_NAME"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-File.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+    </class>
+
+</hibernate-mapping>

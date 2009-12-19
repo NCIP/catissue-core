@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import edu.wustl.catissuecore.bizlogic.BulkOperationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This action class receives and forwards all the bulk operations
@@ -31,58 +33,62 @@ import edu.wustl.common.beans.NameValueBean;
  */
 public class BulkOperationAction extends SecureAction
 {
+
+	/**
+	 * logger.
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(BulkOperationAction.class);
+
 	@Override
 	/**
 	 * Execute Secure Action.
 	 */
-	protected ActionForward executeSecureAction(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String mappingForward = null;
 		try
 		{
-			if(request.getParameter("report") != null)
+			if (request.getParameter("report") != null)
 			{
 				HttpSession session = request.getSession();
-				File resultFile = (File)session.getAttribute("resultFile");
+				File resultFile = (File) session.getAttribute("resultFile");
 				createResponse(response, resultFile);
 			}
-			BulkOperationForm bulkOperationForm = (BulkOperationForm)form;
+			BulkOperationForm bulkOperationForm = (BulkOperationForm) form;
 			BulkOperationBizLogic bulkOperationBizLogic = new BulkOperationBizLogic();
-			List<NameValueBean> bulkOperationList =
-						bulkOperationBizLogic.getTemplateNameDropDownList();
-			if(bulkOperationList != null && !bulkOperationList.isEmpty())
+			List<NameValueBean> bulkOperationList = bulkOperationBizLogic
+					.getTemplateNameDropDownList();
+			if (bulkOperationList != null && !bulkOperationList.isEmpty())
 			{
 				NameValueBean nameValueBean = bulkOperationList.get(0);
 				String initialDropdownValue = nameValueBean.getValue();
-				
+
 				request.setAttribute(Constants.BULK_OPEARTION_LIST, bulkOperationList);
 				request.setAttribute("dropdownName", initialDropdownValue);
-				File file = (File)request.getAttribute("resultFile");
-				String dropdownNameFromUI = (String)request.getParameter("dropdownName");
+				File file = (File) request.getAttribute("resultFile");
+				String dropdownNameFromUI = (String) request.getParameter("dropdownName");
 				String dropdownName = bulkOperationForm.getOperationName();
-				
-				if((dropdownName != null && !"".equals(dropdownName)) ||
-						(dropdownNameFromUI != null && !"".equals(dropdownNameFromUI)))
+
+				if ((dropdownName != null && !"".equals(dropdownName))
+						|| (dropdownNameFromUI != null && !"".equals(dropdownNameFromUI)))
 				{
-					if(file != null)
+					if (file != null)
 					{
 						request.setAttribute("resultFile", file);
 						ActionMessages messages = new ActionMessages();
-						messages.add(ActionMessages.GLOBAL_MESSAGE,
-								new ActionMessage("bulk.success.message"));
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+								"bulk.success.message"));
 						saveMessages(request, messages);
-						
+
 						HttpSession session = request.getSession();
 						session.setAttribute("resultFile", file);
 						request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
 						request.setAttribute(Constants.SUCCESS, Constants.SUCCESS);
 						request.setAttribute("report", "report");
 						mappingForward = Constants.PAGE_OF_BULK_OPERATION;
-						//createResponse(response, file);
 					}
-					else if(request.getParameter(Constants.PAGE_OF) == null && file == null
+					else if (request.getParameter(Constants.PAGE_OF) == null && file == null
 							&& (dropdownNameFromUI == null && !"".equals(dropdownNameFromUI)))
 					{
 						request.setAttribute("dropdownName", bulkOperationForm.getOperationName());
@@ -94,9 +100,9 @@ public class BulkOperationAction extends SecureAction
 						createResponse(response, csvFile);
 					}
 				}
-				else if(request.getParameter(Constants.PAGE_OF) != null)
+				else if (request.getParameter(Constants.PAGE_OF) != null)
 				{
-					mappingForward = request.getParameter(Constants.PAGE_OF); 
+					mappingForward = request.getParameter(Constants.PAGE_OF);
 				}
 			}
 			else
@@ -105,9 +111,9 @@ public class BulkOperationAction extends SecureAction
 				mappingForward = Constants.PAGE_OF_BULK_OPERATION;
 			}
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 		}
 		return mapping.findForward(mappingForward);
 	}
@@ -119,15 +125,14 @@ public class BulkOperationAction extends SecureAction
 	 * @throws BulkOperationException BulkOperationException.
 	 */
 	private void createResponse(HttpServletResponse response, File file)
-		throws BulkOperationException
+			throws BulkOperationException
 	{
 		try
 		{
 			response.setContentType("Content-Type");
 			response.setHeader("Pragma", "public");
 			response.setHeader("Cache-Control", "max-age=0");
-			response.setHeader("Content-Disposition",
-					"attachment;filename=\"" + file.getName()
+			response.setHeader("Content-Disposition", "attachment;filename=\"" + file.getName()
 					+ "\";");
 			final OutputStream outStream = response.getOutputStream();
 			InputStream inputStream = new FileInputStream(file);
@@ -141,7 +146,6 @@ public class BulkOperationAction extends SecureAction
 				count = inputStream.read(buf);
 			}
 			response.setContentLength((int) length);
-
 			inputStream = new FileInputStream(file);
 			count = inputStream.read(buf);
 			while (count > -1)
@@ -156,5 +160,5 @@ public class BulkOperationAction extends SecureAction
 		{
 			throw new BulkOperationException(exception);
 		}
-	}	
+	}
 }

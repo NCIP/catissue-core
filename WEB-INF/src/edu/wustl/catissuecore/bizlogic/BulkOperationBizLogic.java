@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 
 /**
@@ -32,6 +33,10 @@ import edu.wustl.dao.JDBCDAO;
  */
 public class BulkOperationBizLogic
 {
+	/**
+	 * Logger added for Specimen class.
+	 */
+	private transient final Logger logger = Logger.getCommonLogger(BulkOperationBizLogic.class);
 	/**
 	 * Get Template Name from DropDown List.
 	 * @return List of NameValueBean.
@@ -59,9 +64,9 @@ public class BulkOperationBizLogic
 				}
 			}
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 			throw new BulkOperationException("Error in retrieving data from" +
 					"database for populating dropdown values."); 
 		}
@@ -97,9 +102,9 @@ public class BulkOperationBizLogic
 				csvFile = writeCSVFile(commaSeparatedString, dropdownName);
 			}
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 		}
 		finally
 		{
@@ -129,11 +134,10 @@ public class BulkOperationBizLogic
 			String[] stringArray = commaSeparatedString.split(",");
 			writer.writeNext(stringArray);
 		}
-		catch (IOException e)
+		catch (IOException exp)
 		{
-			e.printStackTrace();
-			throw new BulkOperationException(
-				"\nError in writing the CSV Template File.");
+			logger.error(exp.getMessage(), exp);
+			throw new BulkOperationException("\nError in writing the CSV Template File.");
 		}
 		finally
 		{
@@ -185,9 +189,9 @@ public class BulkOperationBizLogic
 				}
 			}
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 			throw new BulkOperationException("Error in retrieving operation " +
 					"name from drop down name."); 
 		}
@@ -208,18 +212,16 @@ public class BulkOperationBizLogic
 		{
 			InputSource inputSource = new InputSource(new StringReader(xmlString));
 			String mappingFilePath = CommonServiceLocator.getInstance().getPropDirPath()
-			+ File.separator + "mapping.xml";
+					+ File.separator + "mapping.xml";
 			Mapping mapping = new Mapping();
 			mapping.loadMapping(mappingFilePath);
-
 			Unmarshaller un = new Unmarshaller(BulkOperationMetaData.class);
 			un.setMapping(mapping);
-
 			bulkOperationMetaData = (BulkOperationMetaData) un.unmarshal(inputSource);
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 			throw new BulkOperationException("bulk.error.loading.bulk.metadata.xml.file");
 		}
 		return bulkOperationMetaData;

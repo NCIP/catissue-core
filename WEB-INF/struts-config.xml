@@ -1489,6 +1489,27 @@ PUBLIC
 		   name="bulkOperationForm" validate="false" scope="request">
 		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
 	   </action>
+	   
+	   <!--To show the dashboard-->
+		<action path="/JobDashboard" type="edu.wustl.catissuecore.action.ShowJobDashboardAction"
+		   name="bulkOperationForm" validate="false" scope="request">
+		   <forward name="success" path="/pages/content/manageBioSpecimen/bulkOperations/JobGridDashboard.jsp" />
+	   </action>
+	   
+	   
+	   <action path="/JobGridAjax" type="edu.wustl.catissuecore.action.JobGridAjaxAction"
+		   name="" validate="false" scope="request">
+	   </action>
+
+		<!--For downloading the log file-->
+		<action path="/DocumentDownload"
+			type="edu.wustl.catissuecore.action.DownloadJobReportFileAction"
+			validate="false"
+			input="/pages/blank.jsp"
+			scope="request">
+			<forward name="success" path="/pages/blank.jsp" />
+			<forward name="failure" path="/pages/blank.jsp" />
+		</action>
 
 		<action path="/UpdatePassword"
 			type="edu.wustl.common.action.CommonAddEditAction"

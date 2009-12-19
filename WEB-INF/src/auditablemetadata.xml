@@ -920,4 +920,22 @@
 		<attribute name="distributedBy" dataType="User" />
 		<attribute name="timestamp" dataType="Date" />
 	</AuditableClass>
+	
+	<AuditableClass className="edu.wustl.common.jobmanager.JobDetails"
+	  relationShipType="main" roleName="" isAuditable="false">
+	
+		<attribute name="id" dataType="Long" />	
+		<attribute name="status" dataType="String" />
+		<attribute name="logFile" dataType="java.sql.Blob" />
+		<attribute name="logFileName" dataType="String" />
+		<attribute name="startTime" dataType="timestamp" />
+		<attribute name="jobStartedBy" dataType="Long" />
+		<attribute name="jobName" dataType="String" />
+		<attribute name="timeTaken" dataType="Long" />
+		<attribute name="failedRecordsCount" dataType="Long" />
+		<attribute name="totalRecordsCount" dataType="Long" />
+		<attribute name="currentRecordsProcessed" dataType="Long" />
+		
+	</AuditableClass>
+	
 </AuditableMetaData>

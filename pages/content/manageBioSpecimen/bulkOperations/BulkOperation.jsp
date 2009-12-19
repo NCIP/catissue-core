@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -10,7 +11,9 @@
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="javax.servlet.*"%>
-<script src="jss/script.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
+
 <SCRIPT>
 function onDownLoadTemplate()
 {
@@ -45,6 +48,14 @@ function onUploadClick()
 		}
 		else
 		{
+			/*window.frames[0].document.getElementById('operationName').value=document.getElementById('operationName').value;
+			alert(window.frames[0].document.getElementById('file').value);
+			window.frames[0].document.getElementById('file').value=document.getElementById('file').value;
+			alert(window.frames[0].document.getElementById('operationName').value);
+			alert(window.frames[0].document.getElementById('file').value);
+			//alert(document.frames("bulkOperationDashoard").document.forms[0].elements("operationName").value);
+
+			//top.parent.frames['bulkOperationDashoard'].location=document.forms[0].action;*/
 			document.forms[0].submit();
 		}
 	}
@@ -65,6 +76,12 @@ function getCSVOutputReport()
 	%>
 }
 
+function showBulkOperationDashboard()
+{
+	document.forms[0].action="ShowBulkOperationDashboard.do";
+	document.forms[0].submit();
+}
+
 </SCRIPT>
 <head>
 	<LINK href="css/styleSheet.css" type="text/css" rel="stylesheet">
@@ -72,34 +89,36 @@ function getCSVOutputReport()
 </head>
 <body>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
-  <html:form action="/FileUpload.do" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable contentLayout">
+
   <tr>
-    <td class="tablepadding"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <td class="tablepadding" height="100%" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">      
+      <table width="100%" height="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       <tr>
-        <td align="left"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+        <td align="left" height="1%"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
-		<c:if test="${requestScope.report != null }">		
+		<!--<c:if test="${requestScope.report != null }">
 		<tr>
-			<td>&nbsp;
+			<td >&nbsp;
 				<a href="#" onclick="getCSVOutputReport();"><span class="black_ar">
 					<bean:message key="bulk.view.report" /></span>
 				</a>
 			</td>
 		</tr>
-		</c:if>
-      <tr>
-        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperations" /></span></td>
+		</c:if>-->
+      <tr height="2%">
+        <td align="left" height="2%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperations" /></span></td>
       </tr>
-      <tr>
-        <td align="left" valign="top" class="showhide">		
+      <tr height="30%">
+        <td align="left" valign="top" class="showhide">
+
 		<logic:empty name="noTemplates">
 		<table width="100%" border="0" cellpadding="3" cellspacing="0">
+		<html:form action="/FileUpload.do" method="post" enctype="multipart/form-data">
               <tr>
                 <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"></span></td>
                 <td width="20%" align="left" class="black_ar"><b><bean:message key="bulk.download.template" /></b></td>
@@ -138,12 +157,13 @@ function getCSVOutputReport()
 						<html:button styleClass="blue_ar_b" onclick="onUploadClick()" accesskey="enter" property="">
 								<bean:message key="bulk.button.upload" />
 						</html:button>
-				</td>										
+				</td>
               </tr>
+              </html:form>
         </table>
 		</logic:empty>
 		<logic:notEmpty name = "noTemplates">
-			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">      
+			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 				<tr height="40">
 				    <td align="left" class="black_ar">
 						<b><bean:message key="bulk.no.templates.loaded.message" /></b>
@@ -151,11 +171,26 @@ function getCSVOutputReport()
 				</tr>
 			</table>
 		</logic:notEmpty>
+
 		</td>
+      </tr>
+      <tr height="*">
+      <td height="*" valign="top">
+	  <table width="100%" valign="top" border="2" cellpadding="3" cellspacing="0" class="whitetable_bg">
+		  <tr>
+		   <td width="100%" align="center" class="black_ar">
+
+			<iframe id="bulkOperationDashoard" height="100%"name="bulkOperationDashoard" src="JobDashboard.do" scrolling="auto" frameborder="0" style="width:100%;height:100%;" marginheight='0' marginwidth='0'>
+													Your Browser doesn't support IFrames.
+				</iframe>
+		   </td>
+		  </tr>
+	  </table>
+	  </td>
       </tr>
     </table></td>
   </tr>
-  </html:form>
+
 </table>
 </body>
 </html>

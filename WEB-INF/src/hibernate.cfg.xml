@@ -124,6 +124,10 @@
 		<!-- Shipping Tracking Merge Himanshu-->
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
 		<!-- shipping tracking merge ends -->
+		
+		<!-- bulk Operations-->
+		<mapping resource="edu/wustl/catissuecore/hbm/JobDetails.hbm.xml"/>
+		edu.wustl.common.jobmanager
     </session-factory>
 
 </hibernate-configuration>
