@@ -176,7 +176,7 @@ function showBulkOperationDashboard()
       </tr>
       <tr height="*">
       <td height="*" valign="top">
-	  <table width="100%" valign="top" border="2" cellpadding="3" cellspacing="0" class="whitetable_bg">
+	  <table width="100%" valign="top" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 		  <tr>
 		   <td width="100%" align="center" class="black_ar">
 
