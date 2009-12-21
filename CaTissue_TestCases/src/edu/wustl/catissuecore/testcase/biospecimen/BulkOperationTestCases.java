@@ -3,11 +3,6 @@
  */
 package edu.wustl.catissuecore.testcase.biospecimen;
 
-import java.io.File;
-
-import javax.servlet.http.HttpSession;
-
-import edu.wustl.catissuecore.bizlogic.bulkOperations.ImportBulkOperationTemplate;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 
 /**
@@ -19,7 +14,7 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * testAddBulkOperationTemplateForUI.
 	 */
-	public void testAddBulkOperationTemplateForUI()
+	/*public void testAddBulkOperationTemplateForUI()
 	{
 		try
 		{
@@ -41,9 +36,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		}		
 	}
 	
-	/**
+	*//**
 	 * testEditBulkOperationTemplateForUI.
-	 */
+	 *//*
 	public void testEditBulkOperationTemplateForUI()
 	{
 		try
@@ -65,10 +60,10 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertFalse("Could Not Edit Bulk Operation template.", true);
 		}
 	}
-	/**
+	*//**
 	 * Mismatch operation name with the template specified
 	 * in the XML.
-	 */
+	 *//*
 	public void testWithIncorrectOperationName()
 	{
 		try
@@ -91,9 +86,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertTrue("Could Not Add Bulk Operation template. Operation Name mismatch.", true);
 		}
 	}
-	/**
+	*//**
 	 * Test Bulk Operation With Incorrect XML Attribute Names.
-	 */
+	 *//*
 	public void testBulkOperationWithIncorrectXMLAttributeNames()
 	{
 		try
@@ -116,9 +111,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertTrue("Incorrect XML validated properly.", true);
 		}
 	}
-	/**
+	*//**
 	 * Test Bulk Operation With Incorrect class name specified in XML.
-	 */
+	 *//*
 	public void testBulkOperationWithIncorrectClassName()
 	{
 		try
@@ -141,9 +136,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 			assertTrue("Incorrect classname validated properly in XML.", true);
 		}
 	}
-	/**
+	*//**
 	 * testpopulateBulkOperationDropDown.
-	 */
+	 *//*
 	public void testpopulateBulkOperationDropDown()
 	{
 		try
@@ -159,9 +154,9 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 	
-	/**
+	*//**
 	 * testAjaxCodeForLoadingOutputReportFileAfterBulkOperation.
-	 */
+	 *//*
 	public void testAjaxCodeForLoadingOutputReportFileAfterBulkOperation()
 	{
 		try
@@ -179,7 +174,7 @@ public class BulkOperationTestCases extends CaTissueSuiteBaseTest
 		{
 			e.printStackTrace();
 		}
-	}
+	}*/
 	/*public void testRunBulkOperationWithCorrectCSVData() throws Exception
 	{
 		try
