@@ -593,8 +593,28 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		setActionForm(scgForm);		
 		actionPerform();
 		verifyForward("pageOfSpecimenCollectionGroupCPQuery");
-		
 	}
 	
+	public void testConsentAddSCGAndGotoSpecimen() {
+			
+		SpecimenCollectionGroupForm scgForm = (SpecimenCollectionGroupForm)TestCaseUtility.getNameObjectMap("scgForm");
+		setRequestPathInfo("/CPQueryNewSpecimen");
+		NewSpecimenForm specimenForm = new NewSpecimenForm();
+		specimenForm.setSpecimenCollectionGroupId((new Long(scgForm.getId())).toString());
+		specimenForm.setForwardTo("createNewSpecimen");
+		setActionForm(specimenForm);
+		addRequestParameter("pageOf", "pageOfNewSpecimenCPQuery");
+		addRequestParameter("operation", "add");
+		addRequestParameter("virtualLocated","true");
+		
+		HashMap hashMap = new HashMap();
+		hashMap.put("specimenCollectionGroupName", scgForm.getName());
+		hashMap.put("specimenCollectionGroupId", Long.valueOf(scgForm.getId()).toString());
+		
+		request.setAttribute("forwardToHashMap",hashMap);
+		actionPerform();
+		verifyForward("pageOfNewSpecimenCPQuery");
+			
+		}
 	
 }
