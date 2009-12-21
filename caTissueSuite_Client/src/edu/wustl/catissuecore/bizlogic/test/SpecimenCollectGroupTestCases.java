@@ -70,7 +70,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 			consentTierStatusCollection.add(consentStatus);
 		}
 		sprObj.setConsentTierStatusCollection(consentTierStatusCollection);
-		sprObj.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
+		sprObj.getCollectionProtocolRegistration().getCollectionProtocol();
 		sprObj.getCollectionProtocolRegistration().setParticipant(participant);
 		Collection collectionProtocolEventList = new LinkedHashSet();
 		
@@ -263,7 +263,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
+		    scg.getCollectionProtocolRegistration().getCollectionProtocol();
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Closed");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
@@ -291,20 +291,17 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
+		    scg.getCollectionProtocolRegistration().getCollectionProtocol();
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
 		    assertTrue("SCG contains specimen so should fail", true);
-		    
-			
 		}
 		 catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			System.out.println(e);
 			e.printStackTrace();
 			assertFalse("Should not throw Exception", true);
-			 
 		 }
     	
 	} 

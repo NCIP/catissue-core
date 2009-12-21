@@ -997,7 +997,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
 		scg.setConsentWithdrawalOption("Return");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(collectionProtocolRegistration.getId());
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
+				collectionProtocolRegistration.getCollectionProtocol().getId());
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
 		try
 		{
@@ -1149,7 +1150,8 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
 		scg.setConsentWithdrawalOption("Discard");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(collectionProtocolRegistration.getId());
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
+				collectionProtocolRegistration.getCollectionProtocol().getId());
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
 		try
 		{
@@ -1448,8 +1450,10 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
 		scg.setApplyChangesTo("ApplyAll");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(scg.getCollectionProtocolRegistration().getId());
-		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
+				scg.getCollectionProtocolRegistration().getCollectionProtocol().getId());
+		scg.getCollectionProtocolRegistration().setParticipant(
+				scg.getCollectionProtocolRegistration().getParticipant());
 
 		try
 		{
@@ -1585,8 +1589,10 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
 		scg.setApplyChangesTo("Apply");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(scg.getCollectionProtocolRegistration().getId());
-		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
+				scg.getCollectionProtocolRegistration().getCollectionProtocol().getId());
+		scg.getCollectionProtocolRegistration().setParticipant(
+				scg.getCollectionProtocolRegistration().getParticipant());
 		try
 		{
 			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
@@ -1793,8 +1799,10 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
 		scg.setConsentWithdrawalOption("Discard");
-		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(scg.getCollectionProtocolRegistration().getId());
-		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
+		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
+				scg.getCollectionProtocolRegistration().getCollectionProtocol().getId());
+		scg.getCollectionProtocolRegistration().setParticipant(
+				scg.getCollectionProtocolRegistration().getParticipant());
 		try
 		{
 			scg = (SpecimenCollectionGroup) appService.updateObject(scg);
