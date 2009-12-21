@@ -49,6 +49,8 @@
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventDetails.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEventLog.hbm.xml"/>
+	  	<mapping resource="edu/wustl/common/hbm/AbstractAuditEventLog.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/LoginEvent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Biohazard.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Capacity.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CancerResearchGroup.hbm.xml"/>
