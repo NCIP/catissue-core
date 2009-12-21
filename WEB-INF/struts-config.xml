@@ -5666,6 +5666,7 @@ PUBLIC
 	   
 	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>
 	   <action path="/ClinicalDiagnosisData" type="edu.wustl.catissuecore.action.ClinicalDiagnosisDataAction" scope="request"/>					
+	   <action path="/StorageContainerAjaxAction" type="edu.wustl.catissuecore.action.StorageContainerAjaxAction" scope="request"/>
 
 	</action-mappings>
 	
