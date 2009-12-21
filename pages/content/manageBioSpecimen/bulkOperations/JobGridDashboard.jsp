@@ -48,7 +48,7 @@
 		{	
 			var jobId=mygrid.cells(i,0).getValue();
 			var status=mygrid.cells(i,3).getValue();
-			if(status!="Completed"&&status!="Error")
+			if(status!="Completed"&&status!="Failed")
 			{
 				statusUpdateAjaxCall(jobId,i);
 			}
@@ -87,7 +87,7 @@
 			var index = jsonResponse.resultObject.index;
 			var StatusObject=mygrid.cells(index,3);
 			var statusValue=StatusObject.getValue();
-			if(jobStatus=="Completed"||jobStatus=="Error")
+			if(jobStatus=="Completed"||jobStatus=="Failed")
 			{
 				mygrid.cells(index,3).setCValue(jobStatus);
 			}
@@ -96,7 +96,7 @@
 			mygrid.cells(index,5).setCValue(processedRecords);
 			mygrid.cells(index,6).setCValue(failedRecords);
 			mygrid.cells(index,7).setCValue(timeTaken);
-			if(jobStatus!="Completed"&&jobStatus!="Error")
+			if(jobStatus!="Completed"&&jobStatus!="Failed")
 			{
 				statusUpdateAjaxCall(jobId,index);
 			}
