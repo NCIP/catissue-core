@@ -20,6 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
+                <param name="sequence">JOB_DETAILS_SEQ</param>
             </generator>
         </id>
 
