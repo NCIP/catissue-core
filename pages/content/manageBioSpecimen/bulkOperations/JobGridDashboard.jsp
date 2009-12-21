@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <head>
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -119,7 +120,7 @@
         <td align="left" class="toptd"></td>
       </tr>
       <tr>
-        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;Bulk Operation Jobs</span></td>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperation.jobs" /></span></td>
       </tr>
 		<tr>
 		<td class="black_ar">
