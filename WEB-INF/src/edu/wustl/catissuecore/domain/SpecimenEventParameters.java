@@ -282,4 +282,11 @@ public abstract class SpecimenEventParameters extends AbstractDomainObject
 	{
 		return "specimen with label '" + this.getSpecimen().getLabel() + "'";
 	}
+	
+	/**
+	* Do the round off for the required attributes (if any)
+	*/
+	public void doRoundOff()
+	{
+	}
 }

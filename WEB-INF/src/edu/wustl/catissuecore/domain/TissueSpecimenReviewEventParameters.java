@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -253,6 +254,24 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null,
 					"TissueSpecimenReviewEventParameters.java :");
+		}
+	}
+	/**
+	 * Do the round off for the required attributes (if any)
+	 */
+	@Override
+	public void doRoundOff() {
+		if (neoplasticCellularityPercentage != null) {
+			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 2);
+		}
+		if (necrosisPercentage != null) {
+			necrosisPercentage = AppUtility.RoundOff(necrosisPercentage, 2);
+		}
+		if (lymphocyticPercentage != null) {
+			lymphocyticPercentage = AppUtility.RoundOff(lymphocyticPercentage, 2);
+		}
+		if (totalCellularityPercentage != null) {
+			totalCellularityPercentage = AppUtility.RoundOff(totalCellularityPercentage, 2);
 		}
 	}
 }

@@ -270,6 +270,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 			}
 			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
+			specimenEventParametersObject.doRoundOff();
 			dao.insert(specimenEventParametersObject);
 		}
 		catch (final DAOException daoExp)
@@ -468,6 +469,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					dao.delete(prevPosition);
 				}
 			}
+			specimenEventParameters.doRoundOff();
 			//Update registration
 			dao.update(specimenEventParameters,oldSpecimenEventParameters);
 		}
@@ -732,10 +734,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					}
 					else
 					{
-						//bug 15083
 						final String message = ApplicationProperties
-								.getValue("transfereventparameters.storageContainer.name");
-						throw this.getBizLogicException(null, "errors.invalid", message+": " + specimen.getLabel());						
+								.getValue("transfereventparameters.toposition");
+						throw this.getBizLogicException(null, "errors.invalid", message
+								+ " for specimen: " + specimen.getLabel());
 					}
 
 					Integer xPos = parameter.getToPositionDimensionOne();

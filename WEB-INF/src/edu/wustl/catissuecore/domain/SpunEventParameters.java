@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -140,6 +141,16 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "SpunEventParameters.java :");
+		}
+	}
+	
+	/**
+	 * Do the round off for the required attributes (if any)
+	 */
+	@Override
+	public void doRoundOff() {
+		if (gravityForce != null) {
+			gravityForce = AppUtility.RoundOff(gravityForce, 2);
 		}
 	}
 }

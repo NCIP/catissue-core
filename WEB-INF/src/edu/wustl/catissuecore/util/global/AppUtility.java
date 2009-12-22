@@ -3595,5 +3595,35 @@ public class AppUtility
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
+	/**
+	 * @param valueToBeRoundOff
+	 * @param precision
+	 * @return
+	 */
+	public static double RoundOff(double valueToBeRoundOff, int precision)
+	 {
+		//Round-off function which will do actual round-off. It will auto-consider exponential values.
+		double p = Math.pow(10,precision);
+		valueToBeRoundOff = valueToBeRoundOff * p;
+	  	double tmp = Math.round(valueToBeRoundOff);
+	  	return tmp/p;
+	  }
+	
+	/**
+	 * @param valueToBeRoundOff
+	 * @param precision
+	 * @return
+	 */
+	 public static double truncate(double valueToBeTruncateOff, int precision)
+	 {
+		// If valueToBeRoundOff is exponantial value then it wull not truncate it
+	    String val = new Double(valueToBeTruncateOff).toString();
+		if(val.contains("E") || val.contains("e")) {
+			return valueToBeTruncateOff;
+		}
+		double p = Math.pow(10,precision);
+		int newInt = (int) (valueToBeTruncateOff * p);
+	  	return newInt/p;
+	  }
 
 }

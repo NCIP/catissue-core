@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -292,6 +293,22 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null,
 					"MolecularSpecimenReviewParameters.java :");
+		}
+	}
+	
+	/**
+	 * Do the round off for the required attributes (if any)
+	 */
+	@Override
+	public void doRoundOff() {
+		if (absorbanceAt260 != null) {
+			absorbanceAt260 = AppUtility.RoundOff(absorbanceAt260, 2);
+		}
+		if (absorbanceAt280 != null) {
+			absorbanceAt280 = AppUtility.RoundOff(absorbanceAt280, 2);
+		}
+		if (ratio28STo18S != null) {
+			ratio28STo18S = AppUtility.RoundOff(ratio28STo18S, 2);
 		}
 	}
 }

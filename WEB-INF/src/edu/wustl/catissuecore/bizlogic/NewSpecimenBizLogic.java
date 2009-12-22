@@ -152,6 +152,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			final Specimen specimen = (Specimen) obj;
 			this.setParent(dao, specimen);
 			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen);
+			specimen.doRoundOff();
 			dao.insert(specimen);
 		}
 		catch (final ApplicationException exp)
@@ -1455,6 +1456,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			final Specimen specimenOld = (Specimen) HibernateMetaData.getProxyObjectImpl(oldObj);
 			ApiSearchUtil.setSpecimenDefault(specimen);
 			this.validateSpecimen(dao, specimen, specimenOld);
+			specimen.doRoundOff();
 			this.updateSpecimenData(dao, sessionDataBean, specimen, specimenOld);
 			final Specimen persistentSpecimen = (Specimen) dao.retrieveById(Specimen.class
 					.getName(), specimenOld.getId());

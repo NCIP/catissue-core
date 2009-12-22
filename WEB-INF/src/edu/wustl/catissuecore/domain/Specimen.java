@@ -40,6 +40,8 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.AppUtility;
+
 
 /**
  * A single unit of tissue, body fluid, or derivative biological macromolecule
@@ -1498,5 +1500,17 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			}
 		}
 		this.setSpecimenEventCollection(specimenEventCollection);
+	}
+	
+	/**
+	 * Do the round off for the required attributes (if any)
+	 */
+	public void doRoundOff() {
+		if (initialQuantity != null) {
+			initialQuantity = AppUtility.truncate(initialQuantity, 2);
+		}
+		if (availableQuantity != null) {
+			availableQuantity = AppUtility.truncate(availableQuantity, 2);
+		}
 	}
 }
