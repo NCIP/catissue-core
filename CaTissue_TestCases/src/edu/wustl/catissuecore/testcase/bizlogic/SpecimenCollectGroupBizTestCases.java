@@ -71,7 +71,6 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			consentTierStatusCollection.add(consentStatus);
 		}
 		sprObj.setConsentTierStatusCollection(consentTierStatusCollection);
-		sprObj.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		sprObj.getCollectionProtocolRegistration().setParticipant(participant);
 		Collection collectionProtocolEventList = new LinkedHashSet();
 		
@@ -263,7 +262,6 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Closed");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
@@ -291,7 +289,6 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		    scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
