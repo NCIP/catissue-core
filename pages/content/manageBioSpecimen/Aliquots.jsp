@@ -16,9 +16,10 @@
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page language="java" isELIgnored="false" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <% AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");%>
 <head>
+<script src="jss/ajax.js"></script>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -30,6 +31,9 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
 <script language="JavaScript" >
+
+
+
 		//Set last refresh time
 		if(window.parent!=null)
 		{
@@ -37,7 +41,7 @@
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}	
+		}
 </script>
 
 <logic:notEmpty name="CPQuery">
@@ -55,10 +59,10 @@
 		<logic:notEmpty name="CPQuery">
 			document.forms[0].action = '${requestScope.action1}';
 		</logic:notEmpty>
-			
+
 		document.forms[0].submit();
 	}
-	
+
 	function onRadioButtonClick(element)
 	{
 		if(element.value == 1)
@@ -72,7 +76,7 @@
 			document.forms[0].specimenLabel.disabled = true;
 		}
 	}
-	
+
 	function onCreate()
 	{
 		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
@@ -83,23 +87,23 @@
 			document.forms[0].action = '${requestScope.action2}';
 			document.forms[0].forwardTo.value= "CPQueryPrintAliquot";
 		</logic:notEmpty>
-			
+
 		<logic:empty name="CPQuery">
 
 			<logic:notEqual name="aliquotForm" property="forwardTo" value="orderDetails" >
 				document.forms[0].forwardTo.value= "printAliquot";
 			</logic:notEqual>
-			
+
 			<logic:equal name="aliquotForm" property="forwardTo" value="orderDetails" >
 				document.forms[0].forwardTo.value= "orderDetails";
 			</logic:equal>
-			
+
 		</logic:empty>
 		document.forms[0].nextForwardTo.value = "success";
 		document.forms[0].submit();
 	}
-	
-	function onCheckboxClicked() 
+
+	function onCheckboxClicked()
 	{
 		var checkbox = document.getElementById("aliquotchk");
 		if(checkbox.checked)
@@ -107,21 +111,21 @@
 			var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
 			document.forms[0].submittedFor.value = "ForwardTo";
 			document.forms[0].action = action + "?pageOf=" + '${requestScope.PAGEOF_CREATE_ALIQUOT}' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
-			
+
 			<logic:notEmpty name="CPQuery">
 				document.forms[0].action = '${requestScope.action3}';
 			</logic:notEmpty>
 			document.forms[0].submit();
 		}
 	}
-	
+
 	function setVirtuallyLocated(element)
 	{
 		var elementId = element.id;
 		var index = elementId.indexOf("_");
 		var len = elementId.length;
 		var substr = elementId.substring(index+1,len);
-		
+
 		var customListBox1 = "customListBox_"+substr+"_0";
 		var customListBox2 = "customListBox_"+substr+"_1";
 		var customListBox3 = "customListBox_"+substr+"_2";
@@ -143,11 +147,11 @@
 			pos1.disabled = false;
 			pos2.disabled = false;
 			document.forms[0].mapButton[substr-1].disabled = false;
-		} 
+		}
 	}
-	
+
 	function onStorageRadioClickInAliquot(element)
-	{		
+	{
 		 //Get the element identifier
 	var elementId = element.id;
 
@@ -156,7 +160,7 @@
 
 	//Get the position of last occurrence of underscore
 	var lastIndex = elementId.lastIndexOf(")");
-  
+
 	//Retrieve the row number on which the list box is placed
 	var rowNo = elementId.substring(firstIndex+1,lastIndex);
 		var index1 =  element.name.lastIndexOf('_');
@@ -171,10 +175,10 @@
 		var mapButton="mapButton_" + i ;
 		var stContainerNameFromMap = document.getElementById(st1);
 		var pos1FromMap = document.getElementById(pos1);
-		var pos2FromMap = document.getElementById(pos2);    		    		
+		var pos2FromMap = document.getElementById(pos2);
 		var stContainerNameFromDropdown = document.getElementById(st2);
 		var pos1FromDropdown = document.getElementById(pos11);
-		var pos2FromDropdown = document.getElementById(pos12);    		    		
+		var pos2FromDropdown = document.getElementById(pos12);
 		var containerMapButton =  document.getElementById(mapButton);
 
 
@@ -195,25 +199,25 @@
 			autoDiv.style.display = 'none';
 			manualDiv.style.display = 'block';
 		}
-	}		
-	
+	}
+
 	function mapButtonClickedInAliquot(frameUrl,count)
 	{
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		NewWindow(frameUrl,'name','800','600','no');
     }
-    
+
     function onAddToCart()
-	 {	
+	 {
 		var action = '${requestScope.CREATE_ALIQUOT_ACTION}';
-	
+
 		document.forms[0].forwardTo.value    ="addSpecimenToCart";
 		document.forms[0].action ='${requestScope.action2}';
 		document.forms[0].nextForwardTo.value = "success";
 		document.forms[0].submit();
 	}
-	
+
 	function checkForStoragePosition()
 	{
 		<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
@@ -304,38 +308,38 @@
 				  <table border="0" cellspacing="0" cellpadding="0" width="55%" >
                   <tr class="groupElements">
                     <td valign="middle" nowrap>
-				 
+
 					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 						&nbsp;
 					</html:radio>
 					<span class="black_ar">
 					Label&nbsp;&nbsp;&nbsp;
-					
+
 					<logic:equal name="aliquotForm" property="checkedButton" value="1">
 						<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" property="specimenLabel" disabled="false" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 					</logic:equal>
-		
+
 					<logic:equal name="aliquotForm" property="checkedButton" value="2">
 						<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="specimenLabel" property="specimenLabel" disabled="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 					</logic:equal>
 					</span>
 				</td>
-		 
+
                   <td align="left" valign="middle" nowrap="nowrap" >
 					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 					&nbsp;
 					</html:radio>
 					<span class="black_ar">
-					
+
 						<bean:message key="specimen.barcode"/>
-					
+
 					</span>
 					&nbsp;
 					<span class="black_ar">
 				<logic:equal name="aliquotForm" property="checkedButton" value="1">
 					<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode" property="barcode" disabled="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:equal>
-		
+
 				<logic:equal name="aliquotForm" property="checkedButton" value="2">
 					<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="barcode" property="barcode" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 				</logic:equal>
@@ -344,7 +348,7 @@
                 </tr>
 				</table></td></tr>
 				<tr>
-				
+
                   <td align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
 				  </td>
 				  <td valign="middle" class="black_ar" nowrap>
@@ -354,11 +358,11 @@
 
 				  <table border="0" cellspacing="0" cellpadding="0" >
                   <tr>
-                    
+
 				<td align="left" width="15%">
 					<html:text styleClass="black_ar"  maxlength="50"  size="10" styleId="noOfAliquots" property="noOfAliquots" style="text-align:right"/></td>
 				<td width="20%">&nbsp;</td>
-				<td class="black_ar" width="25%" noWrap>	
+				<td class="black_ar" width="25%" noWrap>
 					<bean:message key="aliquots.qtyPerAliquot"/>
 				</td>
 				<td width="5%">&nbsp;</td>
@@ -368,12 +372,12 @@
 				</tr>
 				</table>
 				</td>
-				
+
 			</tr>
 			</table></td>
         </tr>
 		<tr>
-	
+
 	<td align="left" class="buttonbg" >
 		<html:button styleClass="blue_ar_b" property="submitPage" onclick="onSubmit()" accesskey="Enter">
 			<bean:message key='${requestScope.buttonKey}'/>
@@ -480,15 +484,15 @@
 		&nbsp; ${requestScope.unit}
 	</td>
 	</tr>
-	<tr>			
+	<tr>
 	<td class="black_ar" >
 	  <label for="createdDate">
 		<bean:message key="specimen.createdDate"/>
-	  </label>								
+	  </label>
 	 </td>
 	<td class="black_ar" colspan="3" >
 	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-		<tr>				
+		<tr>
 			<td class="black_ar" >
 				<ncombo:DateTimeComponent name="createdDate"
 		  			id="createdDate"
@@ -514,12 +518,12 @@
                 <td width="2%" align="left" class="black_ar_b" ><bean:message key="reportedProblem.serialNumber" /></td>
 		<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
 				<td width="12%" align="left" nowrap="nowrap" class="black_ar_b" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="specimen.label"/></td>
-		</logic:equal>  
+		</logic:equal>
 		<logic:equal name="isSpecimenBarcodeGeneratorAvl" value="false">
 		<td  width="12%" class="black_ar_b" >
 			<bean:message key="specimen.barcode"/>
 		</td>
-	</logic:equal> 
+	</logic:equal>
                 <td width="12%" align="left" nowrap="nowrap" class="black_ar_b" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="itemrecord.quantity"/>&nbsp;
 				</td>
 
@@ -531,7 +535,7 @@
 	<span align="right" class="black_ar_b" >
 	<!--<bean:message key="requestdetails.tooltip.updateAllRequestStatus"/>-->
 	</span>&nbsp;
-	
+
 				</td>
               </tr>
 	${requestScope.JSForOutermostDataTable}
@@ -564,18 +568,18 @@ ${aliquotBean.jsScript}
 											onmouseout="hideTip(this.id)" onchange="onStorageRadioClickInAliquot(this)">
 											<html:options collection="storageList"
 														labelProperty="name" property="value" />
-			</html:select> 
-			
+			</html:select>
+
 		</td>
 		<td width="80%" >
 			<div Style="display:block" id="auto_${counter+1}" >
-									<ncombo:nlevelcombo dataMap="${requestScope.dataMap}" 
-										attributeNames="${aliquotBean.attrNames}" 
-										initialValues="${aliquotBean.initValues}"  
-										styleClass = "black_new" 
-										tdStyleClass = "black_new" 
-										labelNames="${requestScope.labelNames}" 
-										rowNumber="${aliquotBean.rowNumber}" 
+									<ncombo:nlevelcombo dataMap="${requestScope.dataMap}"
+										attributeNames="${aliquotBean.attrNames}"
+										initialValues="${aliquotBean.initValues}"
+										styleClass = "black_new"
+										tdStyleClass = "black_new"
+										labelNames="${requestScope.labelNames}"
+										rowNumber="${aliquotBean.rowNumber}"
 										onChange = "${aliquotBean.onChange}"
 										formLabelStyle="nComboGroup"
 										disabled = "false"
@@ -630,13 +634,13 @@ ${aliquotBean.jsScript}
 				<bean:message key="aliquots.disposeParentSpecimen" />
 			</html:checkbox>
 		 </td>
-		</tr>	
+		</tr>
         <tr>
 		<td colspan="3" align="left" class="dividerline">
 			<span class="black_ar">
 		</td>
 		</tr>
-		
+
 		<tr>
           <td valign="center" align="left">
 		  <table border="0"><tr><td nowrap>
@@ -652,9 +656,9 @@ ${aliquotBean.jsScript}
 			 				   </td>
         					  	</td>
 		               </tr></table>
-								
+
 			 				  </td>
-		   				</tr>	
+		   				</tr>
 			<!--  End : Displaying   printer type and location -->
 <tr>
           <td class="toptd"></td>
@@ -664,7 +668,7 @@ ${aliquotBean.jsScript}
 			<html:button styleClass="blue_ar_b" property="submitButton" onclick="onCreate()">
 			<bean:message key="buttons.submit"/>
 		</html:button>
-		
+
 		<html:button styleClass="blue_ar_c"	property="submitPage" onclick="onAddToCart()"  styleId="addToCart">
 				<bean:message key="buttons.addToCart"/>
 		</html:button>
@@ -692,38 +696,38 @@ function applyFirstToAll(object)
 			//alert(document.getElementById("container_1_0").value);
 			var position=document.getElementById("container_1_0").value;
 				var fields = document.getElementById("value(radio_1)");
-				
+
 				if(fields.value == 2)
-			{	
+			{
 					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
 						var autoDiv = document.getElementById("auto_${counter+1}");
 						var manualDiv = document.getElementById("manual_${counter+1}");
 						document.getElementById("value(radio_${counter+1})").value=2;
 						manualDiv.style.display='none';
 						autoDiv.style.display = 'block';
-					</logic:iterate>			
+					</logic:iterate>
 			}
 					if(fields.value == 1)
-			{	
+			{
 					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
 						var autoDiv = document.getElementById("auto_${counter+1}");
 						var manualDiv = document.getElementById("manual_${counter+1}");
 						document.getElementById("value(radio_${counter+1})").value=1;
 						manualDiv.style.display='none';
 						autoDiv.style.display = 'none';
-					</logic:iterate>			
+					</logic:iterate>
 			}
 					if(fields.value == 3)
-			{	
+			{
 					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
 						var autoDiv = document.getElementById("auto_${counter+1}");
 						var manualDiv = document.getElementById("manual_${counter+1}");
 						document.getElementById("value(radio_${counter+1})").value=3;
-						
+
 						manualDiv.style.display='block';
 						autoDiv.style.display = 'none';
 						document.getElementById("container_${counter+1}_0").value=position;
-					</logic:iterate>			
+					</logic:iterate>
 			}
 
 

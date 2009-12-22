@@ -13,6 +13,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bean.AliquotBean;
@@ -69,7 +73,7 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * AliquotAction initializes all the fields of the page, Aliquots.jsp.
- * 
+ *
  * @author aniruddha_phadnis
  */
 public class AliquotAction extends SecureAction
@@ -81,7 +85,7 @@ public class AliquotAction extends SecureAction
 		 				Logger.getCommonLogger(AliquotAction.class);
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * 
+	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -128,7 +132,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * Overrides the execute method of Action class.
-	 * 
+	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -166,7 +170,13 @@ public class AliquotAction extends SecureAction
 			aliquotForm.getColProtId(),spClass,aliquotCount,spType);
 			containerMap = spBiz.getAllocatedContainerMapForSpecimen(parameterList,
 					 sessionData, dao);
-			this.populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
+			this.populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request,response,mapping);
+
+			String requestType=request.getParameter("requestType");
+			if(requestType!= null && "ajax".equals(requestType))
+			{
+				return null;
+			}
 
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
@@ -194,17 +204,19 @@ public class AliquotAction extends SecureAction
 	 *            object of TreeMap for container data
 	 * @param request
 	 *            object of HttpServletRequest
+	 * @param response
+	 * @param mapping
 	 */
 	private void populateStorageLocationsOnContainerChange(AliquotForm aliquotForm,
-			TreeMap containerMap, HttpServletRequest request)
+			TreeMap containerMap, HttpServletRequest request, HttpServletResponse response, ActionMapping mapping)
 	{
 		final Map aliquotMap = aliquotForm.getAliquotMap();
-		final String aliquotCount = aliquotForm.getNoOfAliquots();
+		final String aliquotCount = request.getParameter("noOfAliquots");//aliquotForm.getNoOfAliquots();
 		int counter = Integer.parseInt(request.getParameter("rowNo"));
 		final String containerKey = "Specimen:" + counter + "_StorageContainer_id";
-		final String containerName = (String) aliquotMap.get(containerKey);
+		final String containerName = request.getParameter("containerName");//(String) aliquotMap.get(containerKey);
 		boolean flag = true;
-		if (containerName.equals("-1"))
+		if (containerName!=null&&containerName.equals("-1"))
 		{
 			return;
 		}
@@ -231,25 +243,72 @@ public class AliquotAction extends SecureAction
 				}
 			}
 		}
-		aliquotForm.setAliquotMap(aliquotMap);
-		if (counter < Integer.parseInt(aliquotCount))
+//		aliquotMap.get("Specimen:4_StorageContainer_id");
+		String requestType=request.getParameter("requestType");
+		if(requestType!= null && "ajax".equals(requestType))
 		{
-			ActionErrors errors = this.getActionErrors(request);
+			writeResponse(request, response, aliquotMap);
 
-			if (errors == null)
-			{
-				errors = new ActionErrors();
-			}
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"errors.locations.notSufficientForAliquotDropdown"));
-			this.saveErrors(request, errors);
 		}
+//		aliquotForm.setAliquotMap(aliquotMap);
+//		if (counter < Integer.parseInt(aliquotCount))
+//		{
+//			ActionErrors errors = this.getActionErrors(request);
+//
+//			if (errors == null)
+//			{
+//				errors = new ActionErrors();
+//			}
+//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//					"errors.locations.notSufficientForAliquotDropdown"));
+//			this.saveErrors(request, errors);
+//		}
+
 
 	}
 
 	/**
+	 * This method will be called when the container name get changed and write the response.
+	 * @param request HttpServletRequest instance
+	 * @param response HttpServletResponse instance
+	 * @param aliquotMap map
+	 */
+	private void writeResponse(HttpServletRequest request, HttpServletResponse response,
+			final Map aliquotMap)
+	{
+		JSONObject resultObject = new JSONObject();
+		try
+		{
+			String mapString=aliquotMap.toString();
+			//int lastIndex=mapString.indexOf("}");
+			//String subString=mapString.substring(1, lastIndex);
+
+			resultObject.append("containerMap", mapString);
+
+			resultObject.append("rowNo", request.getParameter("rowNo"));
+		response.setContentType("text/html");
+		response.setHeader("Cache-Control", "no-cache");
+		Writer writer = response.getWriter();
+
+		writer.write(new JSONObject().put("resultObject", resultObject).toString());
+
+		}
+		catch (JSONException e)
+		{
+			this.logger.error(e.getMessage(),e);
+			//throw AppUtility.getApplicationException(e.getMessage(),e);
+		}
+		catch (IOException e)
+		{
+			this.logger.error(e.getMessage(),e);
+			//throw AppUtility.getApplicationException(e, e.getErrorKeyName(),
+					//e.getMsgValues());
+		}
+	}
+
+	/**
 	 * Overrides the execute method of Action class.
-	 * 
+	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -443,10 +502,10 @@ public class AliquotAction extends SecureAction
 				 * User has changed state of checkbox from checked to unchecked
 				 * or vice versa
 				 */
-				List<Object> parameterList = 
+				List<Object> parameterList =
 				AppUtility.setparameterList(cpId,spClass,Integer
 						.parseInt(aliquotCt),spType);
-				
+
 				if (arePropertiesChanged == true || areContainersDifferent == true
 						|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
 				{
@@ -723,7 +782,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method checks whether the specimen with given label exists or not.
-	 * 
+	 *
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param form
@@ -879,7 +938,7 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method checks whether there are sufficient storage locations are
 	 * available or not.
-	 * 
+	 *
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param containerMap
@@ -924,7 +983,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method populates parent specimen's data in formbean.
-	 * 
+	 *
 	 * @param form
 	 *            : form
 	 * @param specimen
@@ -997,7 +1056,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method returns the available quantity as per the specimen type.
-	 * 
+	 *
 	 * @param specimen
 	 *            object of Specimen
 	 * @return String containing value for availableQuantity
@@ -1025,7 +1084,7 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method distributes the available quantity among the aliquots. On
 	 * successful distribution the function return true else false.
-	 * 
+	 *
 	 * @param form
 	 *            object of AliquotForm
 	 * @param isDouble
@@ -1166,7 +1225,7 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This function populates the availability map with available storage
 	 * locations.
-	 * 
+	 *
 	 * @param form
 	 *            object of AliquotForm
 	 * @param containerMap
@@ -1222,7 +1281,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This function checks the quantity per aliquot is valid or not.
-	 * 
+	 *
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param form
@@ -1279,7 +1338,7 @@ public class AliquotAction extends SecureAction
 
 	/**
 	 * This method validates the formbean.
-	 * 
+	 *
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @param form
@@ -1326,7 +1385,7 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
-	 * 
+	 *
 	 * @param request
 	 *            object of HttpServletRequest
 	 * @return ActionErrors
