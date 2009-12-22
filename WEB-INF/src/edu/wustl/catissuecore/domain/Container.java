@@ -226,7 +226,7 @@ public class Container extends AbstractDomainObject implements Serializable, IAc
 	 * @return Returns the full.
 	 * @hibernate.property name="isFull" type="boolean" column="CONT_FULL"
 	 */
-	public Boolean isFull()
+	public Boolean getFull()
 	{
 		return this.full;
 	}

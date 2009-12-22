@@ -3,8 +3,8 @@ package edu.wustl.catissuecore.client;
 
 import edu.wustl.bulkoperator.BulkOperator;
 import edu.wustl.bulkoperator.DataList;
-import edu.wustl.common.jobmanager.Job;
-import edu.wustl.common.jobmanager.JobStatusListener;
+import edu.wustl.bulkoperator.jobmanager.Job;
+import edu.wustl.bulkoperator.jobmanager.JobStatusListener;
 
 public class BulkOperatorJob extends Job
 {

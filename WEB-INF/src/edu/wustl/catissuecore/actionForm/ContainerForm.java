@@ -100,9 +100,9 @@ public class ContainerForm extends AbstractActionForm
 			this.setId(container.getId().longValue());
 			this.barcode = container.getBarcode();
 			this.activityStatus = container.getActivityStatus();
-			if (container.isFull() != null)
+			if (container.getFull() != null)
 			{
-				this.isFull = String.valueOf(container.isFull().booleanValue());
+				this.isFull = String.valueOf(container.getFull().booleanValue());
 			}
 			if (container != null && container.getLocatedAtPosition() != null)
 			{

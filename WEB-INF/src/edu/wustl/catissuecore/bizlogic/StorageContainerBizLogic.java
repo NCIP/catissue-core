@@ -194,7 +194,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 				dao.insert(cont.getCapacity());
-				if (cont.isFull() == null)
+				if (cont.getFull() == null)
 				{
 					cont.setFull(false);
 				}
@@ -524,7 +524,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			persistentobject.setCollectionProtocolCollection(newObject
 					.getCollectionProtocolCollection());
 			persistentobject.setComment(newObject.getComment());
-			persistentobject.setFull(newObject.isFull());
+			persistentobject.setFull(newObject.getFull());
 			persistentobject.setHoldsSpecimenArrayTypeCollection(newObject
 					.getHoldsSpecimenArrayTypeCollection());
 			persistentobject.setHoldsSpecimenClassCollection(newObject
@@ -869,7 +869,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				{
 					throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
 				}
-				if (container.isFull().booleanValue())
+				if (container.getFull().booleanValue())
 				{
 					throw this.getBizLogicException(null,
 							"storageContainer.isContainerFull.errMsg", "");

@@ -121,7 +121,8 @@ public class ShowJobDashboardAction extends SecureAction
 			dao = AppUtility.openJDBCSession();
 			List<ArrayList> msgBoardItemsList = (List) dao.executeQuery("Select IDENTIFIER, " +
 				"JOB_NAME, START_TIME, JOB_STATUS, TOTAL_RECORDS_COUNT, CURRENT_RECORDS_PROCESSED, " +
-				"FAILED_RECORDS_COUNT, TIME_TAKEN from JOB_DETAILS where JOB_STARTED_BY = " + userId);
+				"FAILED_RECORDS_COUNT, TIME_TAKEN from JOB_DETAILS where JOB_STARTED_BY = " + userId
+				+ " ORDER BY IDENTIFIER DESC ");
 			int rowCount = 0;
 			if (msgBoardItemsList != null)
 			{

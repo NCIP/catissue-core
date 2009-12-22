@@ -165,7 +165,7 @@ public class StorageContainer extends Container implements IActivityStatus
 					.getPositionDimensionTwo());
 			this.locatedAtPosition.occupiedContainer = this;
 		}
-		this.setFull(oldContainer.isFull());
+		this.setFull(oldContainer.getFull());
 		//if ((this.locatedAtPosition != null) && (this.locatedAtPosition.
 		//parentContainer != null) && (this.locatedAtPosition.parentContainer.getChildren() != null))
 		//{

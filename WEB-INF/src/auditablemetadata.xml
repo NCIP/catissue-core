@@ -921,7 +921,7 @@
 		<attribute name="timestamp" dataType="Date" />
 	</AuditableClass>
 	
-	<AuditableClass className="edu.wustl.common.jobmanager.JobDetails"
+	<AuditableClass className="edu.wustl.bulkoperator.jobmanager.JobDetails"
 	  relationShipType="main" roleName="" isAuditable="false">
 	
 		<attribute name="id" dataType="Long" />	

@@ -100,7 +100,7 @@ public final class StorageContainerUtil
 	{
 		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
 
-		if (!container.isFull().booleanValue())
+		if (!container.getFull().booleanValue())
 		{
 			final int dimX = container.getCapacity().getOneDimensionCapacity().intValue() + 1;
 			final int dimY = container.getCapacity().getTwoDimensionCapacity().intValue() + 1;

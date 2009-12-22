@@ -6,7 +6,7 @@
 
 <hibernate-mapping>
     <class
-        name="edu.wustl.common.jobmanager.JobDetails"
+        name="edu.wustl.bulkoperator.jobmanager.JobDetails"
         table="JOB_DETAILS"
         dynamic-update="false"
         dynamic-insert="false"

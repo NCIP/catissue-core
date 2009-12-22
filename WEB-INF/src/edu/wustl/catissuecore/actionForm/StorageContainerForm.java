@@ -253,7 +253,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.setId(container.getId().longValue());
 		this.setActivityStatus(CommonUtilities.toString(container.getActivityStatus()));
 		this.containerName = container.getName();
-		this.isFull = AppUtility.initCap(CommonUtilities.toString(container.isFull()));
+		this.isFull = AppUtility.initCap(CommonUtilities.toString(container.getFull()));
 		logger.debug("isFULL />/>/> " + this.isFull);
 
 		this.typeId = container.getStorageType().getId().longValue();
