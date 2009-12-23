@@ -97,7 +97,7 @@ function showBulkOperationDashboard()
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-      <table width="100%" height="90%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      <table width="100%" height="94%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       <tr>
         <td align="left" height="1%"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>

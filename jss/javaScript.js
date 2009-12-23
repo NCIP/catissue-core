@@ -26,11 +26,11 @@ function deleteSpecimenArray(action,onSubmitAction)
 		document.forms[0].onSubmit.value = onSubmitAction;
 		document.forms[0].action = action;
 		document.forms[0].submit();
-	}	
+	}
 }
 /* for deleting or disabling the Storage Container objects*/
 function deleteStorageContainer(action,onSubmitAction)
-{	
+{
 	var go = confirmDialogForDisable();
 	 if (go==true)
 	 {
@@ -53,7 +53,7 @@ function replaceSpeChar(div,d1,searchChar)
 	for(c=0;c<starpos;c++)
 	{
 		adstr = y.replace(searchChar,insno);
-		starpos = y.indexOf(searchChar); 
+		starpos = y.indexOf(searchChar);
 		y = adstr;
 	}
 	addDiv(div,adstr);
@@ -65,17 +65,17 @@ function addDiv(div,adstr)
 {
 	var x = div.innerHTML;
 	div.innerHTML = div.innerHTML +adstr;
-	
+
 }
 
 
 function confirmDisable(action,formField)
-{	
+{
 	if((formField != undefined) && (formField.value == "Disabled"))
 	{
 		var go = confirmDialogForDisable();
 		if (go==true)
-		{	
+		{
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
@@ -84,9 +84,9 @@ function confirmDisable(action,formField)
 	{
 		document.forms[0].action = action;
 		document.forms[0].submit();
-	}			
+	}
 }
-	
+
 
 function enableButton(formButton,countElement,checkName)
 {
@@ -94,22 +94,22 @@ function enableButton(formButton,countElement,checkName)
 	var counts = countElement.value;
 	if(counts == undefined){
 		var cnt = document.getElementById(countElement);
-		
+
 	/** number of rows present(counts) when countElement is again element    **/
 	counts = cnt.value;
 	}
 	/** checking whether checkbox is checked or not **/
 	var status = false;
-	
+
 	for(var i=1;i <= counts;i++)
 	{
-		
+
 		/** creating checkbox name**/
 		var itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
 	        if (chk.checked == true)
 	        {
-				
+
 	        	status = true;
 	        	break;
 	        }
@@ -124,22 +124,22 @@ function enableButton(formButton,countElement,checkName)
 // Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
 function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pageOf)
 {
-	var r = new Array(); 
-	
+	var r = new Array();
+
 	/** element of tbody    **/
 	var element = document.getElementById(subdivtag);
-	
+
 	/** number of rows present    **/
 	var counts = countElement.value;
 	if(counts == undefined){
 		var cnt = document.getElementById(countElement);
-		
+
 		/** number of rows present(counts) when countElement is again element    **/
 		counts = cnt.value;
 	}
 	/** number if rows deleted**/
 	var delCounts = 0;
-	
+
 	/** checking whether checkbox is checked or not **/
 	var status = false;
 	for(i=1;i <= counts;i++)
@@ -147,12 +147,12 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 		/** creating checkbox name**/
 		itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
-		
-		
+
+
 		if(chk.checked==true){
 			var pNode = null;
 			var k = 0;
-			
+
 			/** condition for checking whether outerTable's delete is clicked or not **/
 			if(isOuterTable) {
 				tableId = "table_" + i;
@@ -163,30 +163,30 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 				pNode = element.parentNode;
 				pNode.deleteRow(k);
 				// md 21 mar end
-				
+
 				/** removing table from tbody tag(div)   **/
 				// 21 mar commented by md: element.removeChild(table);
-	
+
 			}
 			else {
 				/** getting table ref from tbody    **/
 				pNode = element.parentNode;
-				
+
 				/** curent row of table ref **/
 				var currentRow = chk.parentNode.parentNode;
 				k = currentRow.rowIndex;
-				
+
 				/** deleting row from table **/
 				pNode.deleteRow(k);
 			}
-			
+
 			delCounts++;
 			status = true;
-			
+
 		}
 	}
-	
-	
+
+
 	if(countElement.value == undefined){
 		/** setting number of rows present in form   **/
 		cnt.value = counts - delCounts;
@@ -194,8 +194,8 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 	else
 		/** setting number of rows present in form   **/
 		countElement.value = (countElement.value - delCounts);
-	
-	// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1 
+
+	// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
 	// Description: if page of pageOfNewSpecimen then no need to call action
 	if(pageOf=='pageOfNewSpecimen')
 	{
@@ -206,17 +206,17 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
-		
-		
+
+
 }
-		
+
 	//Mandar: 24-Apr-06 for tooltip
 		// -------
 	var timeInterval=100;
 	var interval;
 	var objID="";
 
-		function showStatus(sMsg) 
+		function showStatus(sMsg)
 		{
 		    window.status = sMsg ;
 		}
@@ -235,8 +235,8 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 		function hideTip(objId)
 		{
 			var obj = document.getElementById(objId);
-			
-			
+
+
 			var browser=navigator.appName;
 			if(browser=="Microsoft Internet Explorer")
 			{
@@ -247,7 +247,7 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 			    obj.title = "";
 			}
 			interval = window.clearInterval(interval);
-		}	
+		}
 
 		function setTip()
 		{
@@ -267,8 +267,8 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 						tip="";
 					else
 						tip = obj.options[obj.selectedIndex].text;
-						
-					
+
+
 
 					var browser=navigator.appName;
 					if(browser=="Microsoft Internet Explorer")
@@ -277,7 +277,7 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 					}
 					else
 					{
-					   
+
 						obj.title = tip;
 					}
 				}
@@ -299,9 +299,9 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 			}
 		}
 
-	
+
 	// -------
-	
+
 		function moveToNext(element,value,nextID )
 		{
 		if (value.length==element.maxLength)
@@ -309,7 +309,7 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 				document.getElementById(nextID).focus();
 			}
 		}
-		
+
 function rearrangeIdsForDistribution() {
        		var addMore =	document.getElementById("addMore");
 			var tableRows = addMore.rows
@@ -321,15 +321,15 @@ function rearrangeIdsForDistribution() {
 			    var childNodeCollection = row.cells;
 
 				for(var j=0;j<childNodeCollection.length;j++) {
-					   
+
 					   if( childNodeCollection[j].firstChild.nodeType == "3" )
 						    continue;
 
 						var idName = childNodeCollection[j].firstChild.id;
- 
+
 						if(idName == null || idName == "" ) {
                               idName =  childNodeCollection[j].firstChild.name;
-						} 
+						}
 
                         var newId = getNewId(idName,i+1);
 						childNodeCollection[j].firstChild.name =  newId;
@@ -339,7 +339,7 @@ function rearrangeIdsForDistribution() {
 		}
 
 function getNewId(oldId,newRowNo) {
-	
+
 	if( oldId == "undefined" || oldId == null || oldId == ""  ) {
 	 return oldId;
 	}
@@ -369,13 +369,13 @@ function disableDistributeOptions() {
 	  var distributionForm1 =  document.forms[0];
 	   if (  parseInt(document.forms[0].counter.value) == 0)
 	   {
-		         
+
 	   			  distributionForm1.distributionBasedOn[0].disabled=false
 				  distributionForm1.distributionBasedOn[1].disabled=false;
 				  distributionForm1.distributionType[0].disabled = false;
 				  distributionForm1.distributionType[1].disabled = false;
 				  return;
-	   } 
+	   }
 
 	 	if (distributionForm1.distributionBasedOn[0].checked == true)
 		 {
@@ -405,21 +405,21 @@ function checkDistributionBasedOn() {
 		 	 alert("Please select 'Distribution Based On'");
 		 	 return false;
         }
-        
+
         return true;
 }
 
 function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterTable) {
-	var r = new Array(); 
-	
+	var r = new Array();
+
 	/** element of tbody    **/
 	var element = document.getElementById(subdivtag);
-	
+
 	/** number of rows present    **/
 	var counts = countElement.value;
 	if(counts == undefined){
 		var cnt = document.getElementById(countElement);
-		
+
 		/** number of rows present(counts) when countElement is again element    **/
 		counts = cnt.value;
 	}
@@ -433,12 +433,12 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 	{
 		itemCheck = checkName+i;
 		var chk = document.getElementById(itemCheck);
-		
-		
+
+
 		if(chk.checked==true){
 			var pNode = null;
 			var k = 0;
-			
+
 			/** condition for checking whether outerTable's delete is clicked or not **/
 			if(isOuterTable) {
 				tableId = "table_" + i;
@@ -449,30 +449,30 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 				pNode = element.parentNode;
 				pNode.deleteRow(k);
 				// md 21 mar end
-				
+
 				/** removing table from tbody tag(div)   **/
 				// 21 mar commented by md: element.removeChild(table);
-	
+
 			}
 			else {
 				/** getting table ref from tbody    **/
 				pNode = element.parentNode;
-				
+
 				/** curent row of table ref **/
 				var currentRow = chk.parentNode.parentNode;
 				k = currentRow.rowIndex;
-				
+
 				/** deleting row from table **/
 				pNode.deleteRow(k);
 			}
-			
+
 			delCounts++;
 			status = true;
-			
+
 		}
 	}
-	
-	
+
+
 	if(countElement.value == undefined){
 		/** setting number of rows present in form   **/
 		cnt.value = counts - delCounts;
@@ -480,7 +480,7 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 	else
 		/** setting number of rows present in form   **/
 		countElement.value = (countElement.value - delCounts);
-	
+
 	return status;
 }
 
@@ -501,7 +501,7 @@ function showBioHazardDialog(operation,key) {
         NewWindow(url,'name','810','320','yes');
 }
 function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,derivedSpecimenClass,derivedParentSpecimenLabel,derivedParentSpecimenBarcode,derivedSpecimenType) {
-        
+
 	 if(derivedSpecimenCollectionGroup==null || derivedSpecimenCollectionGroup=="null" || derivedSpecimenCollectionGroup==""||derivedSpecimenCollectionGroup=="-- Select --")
        {
             alert("You have to give Specimen Group Name or valid Parent Specimen before creating derived Specimen");
@@ -515,12 +515,12 @@ function showEventsDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showEventsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
         NewWindow(url,'name','810','320','yes');
 }
-function submitComments() 
+function submitComments()
 {
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitComments";
   form.submit();
-}	   
+}
 
 /* Function to show TissueSiteTreeApplet */
 function showTreeMap(column)
@@ -540,7 +540,7 @@ function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
 * Patch ID: Entered_Events_Need_To_Be_Visible_18
 * See also: 1-5
 * Description: Since the signature of the method is changed empty string is passed to finction setButtonCaption
-*/ 
+*/
 function setCaptionInMapFromJS(specimenMapKey) {
   parent.window.opener.document.applets[0].setButtonCaption(specimenMapKey,"");
 }
@@ -556,13 +556,13 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
 }
 
 function getSpecimenSubmitResult(target) {
-//	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;  
+//	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;
 	  document.forms[0].action = "MultipleSpecimenStorageLocation.do";
 	  if(window.parent.frames.length > 0)
       {
 		document.forms[0].action = "CPQueryMultipleSpecimenStorageLocation.do?pageOf=pageOfMultipleSpecimenCPQuery";
 	  }
-	  document.forms[0].submit(); 
+	  document.forms[0].submit();
 }
 
 function showSpecimenErrorMessages(errorMsg) {
@@ -570,19 +570,19 @@ function showSpecimenErrorMessages(errorMsg) {
      errorDiv.innerHTML = "<LI><font color=red>" +  errorMsg + "</font></LI>";
 }
 
-function submitExternalIdentifiers() 
+function submitExternalIdentifiers()
 {
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitExternalIdentifiers";
   form.submit();
-}	
-//used to show error messages while copy paste.   
+}
+//used to show error messages while copy paste.
 function showErrorMessage(errorMessage)
 {
 	alert(errorMessage);
 }
 
-function submitBioHazards() 
+function submitBioHazards()
 {
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitBioHazards";
@@ -601,7 +601,7 @@ function submitBioHazards()
 
 //Bug 11446 E
 
-function submitEvents() 
+function submitEvents()
 {
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitEvents&operation=addMultipleSpecimen";
@@ -649,7 +649,7 @@ function submitEvents()
 			}
     	}
 /* --- Start Specimen Array javascript functions ---*/
-function changeArrayType() 
+function changeArrayType()
 {
 
 		var form = document.forms[0];
@@ -661,27 +661,27 @@ function changeArrayType()
 		}
 
 //		var confirmArrayChange = confirm("Your entered contents will be lost !! do you really want to continue?");
-		
-//		if (confirmArrayChange == true) 
+
+//		if (confirmArrayChange == true)
 //		{
 			var form = document.forms[0];
 			//form.operation.value="CreateSpecimenArray";
 			form.subOperation.value="ChangeArraytype";
 			form.action = "SpecimenArray.do?menuSelected=20";
 			form.submit();
-//		}	
+//		}
 }
 
-function doStoreTableData() 
+function doStoreTableData()
 {
 		var applet = document.applets[0];
-		if (applet != null) 
+		if (applet != null)
 		{
 			applet.updateSessionData();
 		}
 }
 
-function doUploadSpecimenArray() 
+function doUploadSpecimenArray()
 {
 		doStoreTableData();
 		var form = document.forms[0];
@@ -697,7 +697,7 @@ function createSpecimenArrayClicked()
 			alert("Please select Valid Specimen Array Type !!");
 			return;
 		}
-		
+
 		//form.operation.value="CreateSpecimenArray";
 		form.subOperation.value="CreateSpecimenArray";
 		form.action = "SpecimenArray.do?menuSelected=20";
@@ -712,9 +712,9 @@ function doClickEnterSpecimenBy()
 		{
 			return;
 		}
-		
+
 		var applet = document.applets[0];
-		if (applet != null) 
+		if (applet != null)
 		{
 			var form = document.forms[0];
 			var enterSpecimenBy = form.enterSpecimenBy[0].value;
@@ -739,8 +739,8 @@ function doClickEnterSpecimenBy()
 
 
 function onRadioButtonGroupClick(element)
-    	{		
-		
+    	{
+
     		//alert("inside method of radio button click");
 			if(element.value == 1)
 			{
@@ -752,9 +752,9 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
-				
+
 				//document.forms[0].virtuallyLocated.value = true;
-				
+
 			}
 			else if(element.value == 2)
 			{
@@ -766,9 +766,9 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = false;
 				document.forms[0].customListBox_1_1.disabled = false;
 				document.forms[0].customListBox_1_2.disabled = false;
-				
+
 				//document.forms[0].virtuallyLocated.value = false;
-				
+
 				onCollOrClassChange();
 
 			}
@@ -782,32 +782,32 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
-				
+
 				//document.forms[0].virtuallyLocated.value = ;
 				onCollOrClassChange();
 			}
     	}
-		
-		
+
+
 		function onRadioButtonGroupClickForTransfer(element)
-    	{		
+    	{
     		//alert("inside method of radio button click");
-			
+
 			if(element.value == 1)
-			{			
+			{
 				document.forms[0].selectedContainerName.disabled = true;
 				document.forms[0].pos1.disabled = true;
 				document.forms[0].pos2.disabled = true;
 				document.forms[0].containerMap.disabled = true;
-				
+
 				document.forms[0].customListBox_1_0.disabled = false;
 				document.forms[0].customListBox_1_1.disabled = false;
-				document.forms[0].customListBox_1_2.disabled = false;				
+				document.forms[0].customListBox_1_2.disabled = false;
 				//document.forms[0].virtuallyLocated.value = false;
-				
+
 			}
 			else if (element.value == 2)
-			{				
+			{
 				document.forms[0].selectedContainerName.disabled = false;
 				document.forms[0].pos1.disabled = false;
 				document.forms[0].pos2.disabled = false;
@@ -815,14 +815,14 @@ function onRadioButtonGroupClick(element)
 
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
-				document.forms[0].customListBox_1_2.disabled = true;				
-				//document.forms[0].virtuallyLocated.value = ;				
+				document.forms[0].customListBox_1_2.disabled = true;
+				//document.forms[0].virtuallyLocated.value = ;
 			}
     	}
-		
-		
+
+
 		function onRadioButtonGroupClickForDerived(element)
-    	{		
+    	{
     		//alert("inside method of radio button click");
 			if(element.value == 1)
 			{
@@ -834,9 +834,9 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
-				
+
 				//document.forms[0].virtuallyLocated.value = true;
-				
+
 			}
 			else if(element.value == 2)
 			{
@@ -848,10 +848,10 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = false;
 				document.forms[0].customListBox_1_1.disabled = false;
 				document.forms[0].customListBox_1_2.disabled = false;
-				
+
 				isLabelBarcodeOrClassChange();
 				//document.forms[0].virtuallyLocated.value = false;
-		
+
 			}
 			else
 			{
@@ -863,14 +863,14 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
-				
-				isLabelBarcodeOrClassChange();				
+
+				isLabelBarcodeOrClassChange();
 				//document.forms[0].virtuallyLocated.value = ;
-				
+
 			}
     	}
-		
-		
+
+
 		function onRadioButtonGroupClickForArray(element)
     	{
     		//alert("inside method of radio button click");
@@ -878,9 +878,9 @@ function onRadioButtonGroupClick(element)
 			{
 				document.forms[0].selectedContainerName.disabled = true;
 				document.forms[0].pos1.disabled = true;
-				document.forms[0].pos2.disabled = true;				
+				document.forms[0].pos2.disabled = true;
 				document.forms[0].containerMap.disabled = true;
-				
+
 				document.forms[0].customListBox_1_0.disabled = false;
 				document.forms[0].customListBox_1_1.disabled = false;
 				document.forms[0].customListBox_1_2.disabled = false;
@@ -891,13 +891,13 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].pos1.disabled = false;
 				document.forms[0].pos2.disabled = false;
 				document.forms[0].containerMap.disabled = false;
-				
+
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
 			}
     	}
-    	
+
     	//This function gets called whenever a specimen/ scg gets added in system.
     	function refreshTree(cpAndParticipantsFrame, treeFrame,cpSearchCpId,cpSearchParticipantId,nodeId)
     	{
@@ -905,12 +905,12 @@ function onRadioButtonGroupClick(element)
     		//var cpId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("cpId").value;
 			//var participantId = window.parent.frames[cpAndParticipantsFrame].document.getElementById("participantId").value;
 			//window.parent.frames[treeFrame].location="showTree.do?"+cpSearchCpId+"="+cpId+"&"+cpSearchParticipantId+"="+participantId+"&nodeId="+nodeId;
-   		
-   		     //Changes made related to flex ....By Baljeet 
-   		    
-   		     top.frames["cpAndParticipantView"].pageInit(nodeId); 
+
+   		     //Changes made related to flex ....By Baljeet
+
+   		     top.frames["cpAndParticipantView"].pageInit(nodeId);
     	}
-		
+
 		function trim(inputString) {
 		   // Removes leading and trailing spaces from the passed string. Also removes
 		   // consecutive spaces and replaces it with one space. If something besides
@@ -932,21 +932,21 @@ function onRadioButtonGroupClick(element)
 		   }
 		   return retValue; // Return the trimmed string back to the user
 		} // Ends the "trim" function
-		
-// This function is required to trim the spaces introduced by user	
+
+// This function is required to trim the spaces introduced by user
 function trimByAutoTag(object) {
    	object.value = trim(object.value);
 }
 
-// This function is required to trim the spaces introduced by user	
+// This function is required to trim the spaces introduced by user
 function trimByAutoTagAndSetIdInForm(object) {
- 
+
 	object.value = trim(object.value);
 	var valuesList = window["valuesInListOf" + object.id];
 	var idsList = window["idsInListOf" + object.id];
 	var index = valuesList.indexOf(object.value);
     var idObject = document.getElementById(object.id.substr(7,object.id.length));  // 7 for "display"
-	
+
 	//  Type is changing on client side, hence will not be in the list
 	if(idObject.id == "type")
 	{
@@ -956,7 +956,7 @@ function trimByAutoTagAndSetIdInForm(object) {
 	{
 	  idObject.value = idsList[index];
 	}
-	
+
 	// alert(idObject.id + idObject.value);
 
 }
@@ -964,15 +964,15 @@ function trimByAutoTagAndSetIdInForm(object) {
 // /** Name : Vijay_Pande
 // * Reviewer : Santosh_Chandak
 // * Bug ID: Improve_Space_Usability_On_Specimen_Page
-// * Patch ID: Improve_Space_Usability_On_Specimen_Page_1 
+// * Patch ID: Improve_Space_Usability_On_Specimen_Page_1
 // * See also: 1-5
-// * Description: To improve space usability on specimen page, the table which are rarely used are kept invisible by default. 
+// * Description: To improve space usability on specimen page, the table which are rarely used are kept invisible by default.
 // * Following script is used to toggle between the show and hide the table. (Collected/recieved Events, External identifiers, And Biohazard table)
 // */
-// This function collapse or expand the table  
+// This function collapse or expand the table
 function switchStyle(image,dispVar, object, buttonId)
 {
-	imageObj = document.getElementById(image);	
+	imageObj = document.getElementById(image);
 	if(document.getElementById(dispVar).value== 'hide') //Clicked on + image
 	{
 		show(object,dispVar);
@@ -980,9 +980,9 @@ function switchStyle(image,dispVar, object, buttonId)
 //		/** Name : Vijay_Pande
 //		 * Reviewer : Sachin_Lale
 //		 * Bug ID: 4169
-//		 * Patch ID: 4169_1 
+//		 * Patch ID: 4169_1
 //		 * See also: -
-//		 * Description: There was a java sript error while clicking on image to expand/colapse collected/recieved event table. 
+//		 * Description: There was a java sript error while clicking on image to expand/colapse collected/recieved event table.
 //		 * Error was because of the collection/recieved event table do not contain 'AddMore' button.
 //		 * Following check is added to check whether buttonId is provided or not.
 //		 */
@@ -991,21 +991,21 @@ function switchStyle(image,dispVar, object, buttonId)
 	}
 	else  							   //Clicked on - image
 	{
-		hide(object,dispVar);				
+		hide(object,dispVar);
 		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
 		if(document.getElementById(buttonId))
 		{	document.getElementById(buttonId).disabled=true;  }
 //		/**  -- patch ends here -- */
 	}
 }
-// This function is to show object on UI 
+// This function is to show object on UI
 function show(obj,dispVar)
 {
 	switchObj=document.getElementById(obj);
 	switchObj.style.display = 'block';
 	document.getElementById(dispVar).value='show';
 }
-// This function is to hide object from UI 
+// This function is to hide object from UI
 function hide(obj,dispVar)
 {
 	switchObj=document.getElementById(obj);
@@ -1018,17 +1018,17 @@ function newSpecimenInit()
 	switchStyle('imageEI','eiDispType','externalIdentifiers','addExId');
 	switchStyle('imageBH','bhDispType','biohazards','addBiohazard');
 	if(document.getElementById('crDispType')!=null)
-	{	
+	{
 		if(document.getElementById('crDispType').value=="hide")
 		{
 			hide('collRecTable','crDispType');
-			imageObj = document.getElementById('imageCR');	
+			imageObj = document.getElementById('imageCR');
 			imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
 		}
 		else
-		{		
+		{
 			show('collRecTable','crDispType');
-			imageObj = document.getElementById('imageCR');	
+			imageObj = document.getElementById('imageCR');
 			imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
 		}
 	}
@@ -1072,7 +1072,7 @@ function mapButtonClickedOnSpecimen(frameUrl,name,storageContainerName)
 
 // Patch ID: Bug#4129_4
 // Description: Function to verify the validity of number of specimen value.
-//  check for valid numeric strings	
+//  check for valid numeric strings
 function isNumeric(strString)
 {
 	var strValidChars = "0123456789.-";
@@ -1080,7 +1080,7 @@ function isNumeric(strString)
 	var blnResult = true;
 
 	if (strString.length == 0) return false;
-		
+
 	//  test strString consists of valid characters listed above
 	for (i = 0; i < strString.length && blnResult == true; i++)
 	{
@@ -1107,13 +1107,13 @@ function initializeGridForSelectedEntities(groupsXML)
 	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro,link");
 	gridForEntities.setColSorting("str,str,str,date,str,str,str");
 
-   
+
 	gridForEntities.init();
-	
+
 	gridForEntities.loadXMLString(groupsXML);
 	if(gridForEntities.getRowsNum()>0)
 	{
-		gridForEntities.selectRow(0,true,false);	
+		gridForEntities.selectRow(0,true,false);
 	}
 }
 
@@ -1132,7 +1132,7 @@ function initializeGridForEntities()
 }
 
 function groupChangedResponse(entitiesXML)
-{	
+{
 	gridForEntities.clearAll(false);
 	var entities	= entitiesXML.split("@");
 	for(var row=0;row<entities.length-1;row=row+1)
@@ -1149,7 +1149,7 @@ function groupSelected(groupid)
 	//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
 	request.onreadystatechange = handlerFunction;
 	//send data to ActionServlet
-	
+
 	//Open connection to servlet
 	request.open("POST","DefineAnnotations.do",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -1186,31 +1186,31 @@ function displayAnnotationsPage()
 }
 
 function loadDynamicExtDataEntryPage()
-{	
-	    var selectBox = document.getElementById('selectedAnnotation');	
+{
+	    var selectBox = document.getElementById('selectedAnnotation');
 		if(selectBox.selectedIndex != "-1")
-		{	 
+		{
 			document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
 			document.forms[0].submit();
 		}
 }
 
 function loadDynExtDataEntryPage(event)
-{	
-	// for IE 
+{
+	// for IE
 	if(document.all) {
 		document.forms[0].selectedAnnotation.value=event.srcElement.name;
 	}
 	else { //mozilla
 		document.forms[0].selectedAnnotation.value=event.target.name;
 	}
-	
+
 	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
 	document.forms[0].submit();
 }
 
 function doOnRowSelected(rowID){
- 	document.forms[0].selectedAnnotation.value=rowID;	
+ 	document.forms[0].selectedAnnotation.value=rowID;
 }
 
 function editAnnotation(rowID){
@@ -1231,7 +1231,7 @@ function editAnnotation(rowID){
 }
 
 function editSelectedAnnotation(parameter)
-{	
+{
 	var formId=null;
 	var staticEntityId=null;
 	var staticEntityRecordId=null;
@@ -1252,11 +1252,11 @@ function editSelectedAnnotation(parameter)
 			staticEntityRecordId=str[1];
 		}
 	}
-		
+
 	var action="LoadAnnotationDataEntryPage.do?operation=editSelectedAnnotation&selectedFormId="+formId+"&staticEntityId="+staticEntityId+"&staticEntityRecordId="+staticEntityRecordId;
 	document.forms[0].action=action;
 	document.forms[0].submit();
-	
+
 }
 
 function initializeTabs(tabIds, tabNames, tabPageRefs)
@@ -1266,8 +1266,8 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 		var noOfTabs = tabIds.length;
 		for(var i=0;i<noOfTabs;i++)
 		{
-			tabbar.addTab(tabIds[i],tabNames[i],"");		
-			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);			
+			tabbar.addTab(tabIds[i],tabNames[i],"");
+			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);
 		}
 	}
 	tabbar.setTabActive(tabIds[0]);
@@ -1276,21 +1276,21 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 function submitForm()
 {
 
-		var form =  document.getElementById('annotationForm');	
-	    var selectBox = document.getElementById('optionSelect');	
-	    var destination = selectBox.options[selectBox.selectedIndex].value;			
+		var form =  document.getElementById('annotationForm');
+	    var selectBox = document.getElementById('optionSelect');
+	    var destination = selectBox.options[selectBox.selectedIndex].value;
 		form.action="/catissuecore/BuildDynamicEntity.do";
 		form.submit();
-	
+
 }
 
 function viewAnnotations(specimenEntityId,ID,consentTierCounter,staticEntityName,pageOf)
 	{
-		
+
 		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf="+pageOf+"&operation=viewAnnotations&consentTierCounter="+consentTierCounter+"&staticEntityName="+staticEntityName;
 		document.forms[0].action=action;
 		document.forms[0].submit();
-	}	   
+	}
 
 
 // DE script end
@@ -1334,62 +1334,62 @@ function dateChange(newoffset,originaloffset,originalRegistrationDate)
 var window_Viewport = {
     getWinWidth: function () {
         this.width = 0;
-        if (window.innerWidth) 
+        if (window.innerWidth)
             this.width = window.innerWidth - 18;
-        else if (document.documentElement && document.documentElement.clientWidth) 
+        else if (document.documentElement && document.documentElement.clientWidth)
             this.width = document.documentElement.clientWidth;
-        else if (document.body && document.body.clientWidth) 
+        else if (document.body && document.body.clientWidth)
             this.width = document.body.clientWidth;
         return this.width;
     },
-  
+
     getWinHeight: function () {
         this.height = 0;
-        if (window.innerHeight) 
+        if (window.innerHeight)
             this.height = window.innerHeight - 18;
-        else if (document.documentElement && document.documentElement.clientHeight) 
+        else if (document.documentElement && document.documentElement.clientHeight)
             this.height = document.documentElement.clientHeight;
-        else if (document.body && document.body.clientHeight) 
+        else if (document.body && document.body.clientHeight)
             this.height = document.body.clientHeight;
         return this.height;
     },
-  
+
     getScrollX: function () {
         this.scrollX = 0;
-        if (typeof window.pageXOffset == "number") 
+        if (typeof window.pageXOffset == "number")
             this.scrollX = window.pageXOffset;
         else if (document.documentElement && document.documentElement.scrollLeft)
             this.scrollX = document.documentElement.scrollLeft;
-        else if (document.body && document.body.scrollLeft) 
-            this.scrollX = document.body.scrollLeft; 
-        else if (window.scrollX) 
+        else if (document.body && document.body.scrollLeft)
+            this.scrollX = document.body.scrollLeft;
+        else if (window.scrollX)
             this.scrollX = window.scrollX;
         return this.scrollX;
     },
-    
+
     getScrollY: function () {
-        this.scrollY = 0;    
-        if (typeof window.pageYOffset == "number") 
+        this.scrollY = 0;
+        if (typeof window.pageYOffset == "number")
             this.scrollY = window.pageYOffset;
         else if (document.documentElement && document.documentElement.scrollTop)
             this.scrollY = document.documentElement.scrollTop;
-        else if (document.body && document.body.scrollTop) 
-            this.scrollY = document.body.scrollTop; 
-        else if (window.scrollY) 
+        else if (document.body && document.body.scrollTop)
+            this.scrollY = document.body.scrollTop;
+        else if (window.scrollY)
             this.scrollY = window.scrollY;
         return this.scrollY;
     },
-    
+
     getAll: function () {
         this.getWinWidth(); this.getWinHeight();
         this.getScrollX();  this.getScrollY();
     }
-  
+
 }
 /////////////////////////
 /////////////////////////
 
-function adjFrmHt(frameId, h ,slope) 
+function adjFrmHt(frameId, h ,slope)
 {
 	if ( document.getElementById && !(document.all) ) {
 	var frameObj = document.getElementById(frameId);
@@ -1438,4 +1438,22 @@ function setDivWidth()
 	{
 		document.getElementById('treeboxbox_tree').style.width=window_Viewport.width;
 	}
+}
+
+
+function isHyperLink(str)
+{
+	 var reg = new RegExp("^<[aA][ ].*</[aA]>$");
+	 return reg.test(str);
+}
+// TO get the Lable of the Hyperlink for the given hyperlink string, returns same string if its not hyperlink.
+function getHyperlinkLable(link)
+{
+	if (isHyperLink(link)==true)
+	{
+		var index = link.indexOf('>');
+		var lastIndex = link.lastIndexOf('</');
+		link = link.substring(index+1, lastIndex);
+	}
+	return link;
 }

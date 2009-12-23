@@ -113,6 +113,12 @@
 {
 	background-color:#FFFFFF;
 }
+.grid_on_hover
+{
+	background-color:#bfdcf3;
+  font-size:20px;
+  cursor: pointer;
+}
 </style>
 </head>
 	<table width="100%" border="0" cellpadding="3" cellspacing="0" >
@@ -129,13 +135,13 @@
 			mygrid = new dhtmlXGridObject('gridbox');
 				mygrid.setImagePath("dhtml_comp/imgs/");
 				mygrid.init();
-				mygrid.setStyle("font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color: #000000;background-color: #E2E2E2; border-left-width: 1px;border-left-color: #CCCCCC; border-top-width: 1px;border-top-color: #CCCCCC;border-bottom-color: #CCCCCC; border-bottom-width: 1px; border-right-width: 1px;border-right-color: #E2E2E2; text-align:left;padding-left:10px;padding-top:1px;padding-bottom:1px;align:left;height:100%;word-wrap:break-word;");
+				mygrid.setStyle("font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color: #000000;background-color: #E2E2E2; border-left-width: 1px;border-left-color: #CCCCCC; border-top-width: 1px;border-top-color: #CCCCCC;border-bottom-color: #CCCCCC; border-bottom-width: 1px; border-right-width: 1px;border-right-color: #E2E2E2; text-align:left;padding-left:10px;padding-top:1px;padding-bottom:1px;align:left;height:100%;");
 
 				mygrid.setEditable("FALSE");
 				mygrid.enableAlterCss("uneven","even");
-				mygrid.enableRowsHover(true,'grid_hover');
+				mygrid.enableRowsHover(true,'grid_on_hover');
 				mygrid.enableAutoHeigth(true);
-				mygrid.objBox.style.height="340";
+				mygrid.objBox.style.height="100%";
 				mygrid.loadXMLString(xmlString);
 				mygrid.enableResizing(xmlString);
 				//mygrid.setOnRowSelectHandler(funcName);
