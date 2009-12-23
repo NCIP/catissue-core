@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 
 
 public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
@@ -57,8 +58,8 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("pageOfCellSpecimenReviewParameters");
 		CellSpecimenReviewParametersForm cellForm= (CellSpecimenReviewParametersForm) getActionForm();
-		cellForm.setNeoplasticCellularityPercentage("10");
-		cellForm.setViableCellPercentage( "10" );
+		cellForm.setNeoplasticCellularityPercentage("1.9999");
+		cellForm.setViableCellPercentage( "1.9999" );
 		addRequestParameter("specimenId",specimen.getId().toString());
 		cellForm.setSpecimenId( specimen.getId() );
 		cellForm.setForwardTo( "success" );
@@ -66,6 +67,18 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/CellSpecimenReviewParametersAdd");
 		actionPerform();
 		verifyForward("success");
+		
+		setRequestPathInfo("/CellSpecimenReviewParametersSearch");
+		addRequestParameter("pageOf", "pageOfCellSpecimenReviewParameters");		
+		addRequestParameter("operation", "edit");
+		request.setAttribute(Constants.SPECIMEN_ID,specimen.getId().toString());
+		actionPerform();
+		verifyForward("pageOfCellSpecimenReviewParameters");
+		
+		cellForm= (CellSpecimenReviewParametersForm) getActionForm();
+		assertEquals("2.0", cellForm.getNeoplasticCellularityPercentage());
+		assertEquals("2.0", cellForm.getViableCellPercentage());
+		
 		CellSpecimenReviewParameters cellSpecimenReviewParametersObject = new CellSpecimenReviewParameters();
 		cellSpecimenReviewParametersObject.setId( cellForm.getId() );
 		cellSpecimenReviewParametersObject.setNeoplasticCellularityPercentage( Double.valueOf( cellForm.getNeoplasticCellularityPercentage() ));
@@ -219,13 +232,24 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfFluidSpecimenReviewParameters");
 		FluidSpecimenReviewEventParametersForm fluidForm = (FluidSpecimenReviewEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		fluidForm.setCellCount( "10" );
+		fluidForm.setCellCount( "1.9999" );
 		fluidForm.setForwardTo( "success" );
 		fluidForm.setSpecimenId( specimen.getId() );
 		setActionForm(form);
 		setRequestPathInfo("/FluidSpecimenReviewEventParametersAdd");
 		actionPerform();
 		verifyForward("success");
+		
+		setRequestPathInfo("/FluidSpecimenReviewEventParametersSearch");
+		addRequestParameter("pageOf", "pageOfFluidSpecimenReviewParameters");		
+		addRequestParameter("operation", "edit");
+		request.setAttribute(Constants.SPECIMEN_ID,specimen.getId().toString());
+		actionPerform();
+		verifyForward("pageOfFluidSpecimenReviewParameters");
+		
+		fluidForm = (FluidSpecimenReviewEventParametersForm) getActionForm();
+		assertEquals("2.0", fluidForm.getCellCount());
+		
 		FluidSpecimenReviewEventParameters fluidSpecimenReviewEventObject = new FluidSpecimenReviewEventParameters();
 		fluidSpecimenReviewEventObject.setId( fluidForm.getId() );
 		fluidSpecimenReviewEventObject.setCellCount( Double.valueOf( fluidForm.getCellCount() ) );
@@ -285,14 +309,26 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		molecularForm.setQualityIndex( "1" );
 		molecularForm.setGelNumber( "2" );
 		molecularForm.setLaneNumber( "3" );
-		molecularForm.setAbsorbanceAt260( "120" );
-		molecularForm.setAbsorbanceAt280( "120" );
-		molecularForm.setRatio28STo18S( "20" );
+		molecularForm.setAbsorbanceAt260( "1.9999" );
+		molecularForm.setAbsorbanceAt280( "1.9999" );
+		molecularForm.setRatio28STo18S( "1" );
 		molecularForm.setForwardTo( "success" );
 		setActionForm(form);
 		setRequestPathInfo("/MolecularSpecimenReviewParametersAdd");
 		actionPerform();
 		verifyForward("success");
+		
+		setRequestPathInfo("/MolecularSpecimenReviewParametersSearch");
+		addRequestParameter("pageOf", "pageOfMolecularSpecimenReviewParameters");		
+		addRequestParameter("operation", "edit");
+		request.setAttribute(Constants.SPECIMEN_ID,specimen.getId().toString());
+		actionPerform();
+		verifyForward("pageOfMolecularSpecimenReviewParameters");
+		
+		molecularForm = (MolecularSpecimenReviewParametersForm) getActionForm();
+	   assertEquals("2.0", molecularForm.getAbsorbanceAt260());
+	   assertEquals("2.0", molecularForm.getAbsorbanceAt280());
+		
 		MolecularSpecimenReviewParameters molecularSpecimenReviewEventObject = new MolecularSpecimenReviewParameters();
 		molecularSpecimenReviewEventObject.setId( molecularForm.getId() );
 		molecularSpecimenReviewEventObject.setGelImageURL( molecularForm.getGelImageURL() );
@@ -357,7 +393,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfSpunEventParameters");
 		SpunEventParametersForm spunForm = (SpunEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		spunForm.setGravityForce( "20" );
+		spunForm.setGravityForce( "1.9999" );
 		spunForm.setDurationInMinutes( "30" );
 		spunForm.setForwardTo( "success" );
 		spunForm.setSpecimenId( specimen.getId() );
@@ -365,7 +401,17 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/SpunEventParametersAdd");
 		actionPerform();
 		verifyForward("success");
-		SpunEventParameters spunObject = new SpunEventParameters();
+		SpunEventParameters spunObject = new SpunEventParameters();		
+		
+		setRequestPathInfo("/SpunEventParametersSearch");
+		addRequestParameter("pageOf", "pageOfSpunEventParameters");		
+		addRequestParameter("operation", "edit");
+		request.setAttribute(Constants.SPECIMEN_ID,specimen.getId().toString());
+		actionPerform();
+		verifyForward("pageOfSpunEventParameters");
+		spunForm = (SpunEventParametersForm)getActionForm();
+		assertEquals("2.0", spunForm.getGravityForce());
+		
 		spunObject.setId( spunForm.getId() );
 		spunObject.setGravityForce( Double.valueOf( spunForm.getGravityForce() ) );
 		spunObject.setDurationInMinutes( Integer.valueOf( spunForm.getDurationInMinutes() ) );
@@ -420,10 +466,10 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfTissueSpecimenReviewParameters");
 		TissueSpecimenReviewEventParametersForm tissueForm = (TissueSpecimenReviewEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		tissueForm.setNeoplasticCellularityPercentage( "10" );
-		tissueForm.setNecrosisPercentage( "5" );
-		tissueForm.setLymphocyticPercentage( "5" );
-		tissueForm.setTotalCellularityPercentage( "50" );
+		tissueForm.setNeoplasticCellularityPercentage( "1.99999" );
+		tissueForm.setNecrosisPercentage( "1.99999" );
+		tissueForm.setLymphocyticPercentage( "1.99999" );
+		tissueForm.setTotalCellularityPercentage( "1.99999" );
 		tissueForm.setHistologicalQuality( "Good- Definable Cellular Detail" );
 		tissueForm.setForwardTo( "success" );
 		tissueForm.setSpecimenId( specimen.getId() );
@@ -431,6 +477,20 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/TissueSpecimenReviewEventParametersAdd");
 		actionPerform();
 		verifyForward("success");
+		
+		setRequestPathInfo("/TissueSpecimenReviewEventParametersSearch");
+		addRequestParameter("pageOf", "pageOfTissueSpecimenReviewParameters");		
+		addRequestParameter("operation", "edit");
+		request.setAttribute(Constants.SPECIMEN_ID,specimen.getId().toString());
+		actionPerform();
+		verifyForward("pageOfTissueSpecimenReviewParameters");
+		
+		tissueForm = (TissueSpecimenReviewEventParametersForm) getActionForm();
+		assertEquals("2.0", tissueForm.getNeoplasticCellularityPercentage());
+		assertEquals("2.0", tissueForm.getNecrosisPercentage());
+		assertEquals("2.0", tissueForm.getTotalCellularityPercentage());
+		assertEquals("2.0", tissueForm.getLymphocyticPercentage());
+		
 		TissueSpecimenReviewEventParameters tissueEventObject = new TissueSpecimenReviewEventParameters();
 		tissueEventObject.setId( tissueForm.getId() );
 		tissueEventObject.setNeoplasticCellularityPercentage( Double.valueOf( tissueForm.getNeoplasticCellularityPercentage() ) );
@@ -517,4 +577,5 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		specimen.setSpecimenEventCollection( specimenEventCollection );	
 		
 	}
+	
 }
