@@ -576,8 +576,8 @@
 			<!--<include name="c3p0-0.9.0.jar" />-->
 			<include name="catissuecore-client.jar" />
 			<include name="experiment-client.jar" />
-			<!-- include name="jboss-client.jar" /-->
-			<include name="junit-4.1.jar" />
+			<!-- include name="jboss-client.jar" /
+			<include name="junit-4.1.jar" />-->
 			<include name="mockobjects-core-0.09.jar" />
 			<include name="mysql-connector-java-5.0.8-bin.jar" />
 			<include name="ojdbc14.jar" />
