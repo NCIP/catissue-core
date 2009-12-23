@@ -24,19 +24,20 @@ public class CaTissueAppServiceImpl extends MigrationAppService
 	{
 		try
 		{
-			if(isAuthenticationRequired && password!=null)
+			if (isAuthenticationRequired && password != null)
 			{
-				if(!appService.delegateLogin(userName, password))
+				if (!appService.delegateLogin(userName, password))
 				{
-					throw new BulkOperationException("Could not login with given username/password.Please check the credentials");
+					throw new BulkOperationException(
+							"Could not login with given username/password.Please check the credentials");
 				}
 			}
 			this.userName = userName;
-			
+
 		}
-		catch(Exception appExp)
+		catch (Exception appExp)
 		{
-			throw new BulkOperationException(appExp.getMessage(),appExp);
+			throw new BulkOperationException(appExp.getMessage(), appExp);
 		}
 	}
 
@@ -53,55 +54,51 @@ public class CaTissueAppServiceImpl extends MigrationAppService
 	}
 
 	@Override
-	protected Object insertObject(Object domainObject) throws BulkOperationException
+	protected Object insertObject(Object domainObject) throws Exception
 	{
 		try
 		{
 			Object returnedObject = appService.delegateAdd(userName, domainObject);
 			return returnedObject;
 		}
-		catch(Exception appExp)
+		catch (Exception appExp)
 		{
-			//appExp.printStackTrace();
-			throw new BulkOperationException(appExp.getMessage(), appExp);	
+			throw new Exception(appExp.getMessage(), appExp);
 		}
 	}
 
 	@Override
-	protected Object searchObject(Object str) throws BulkOperationException
+	protected Object searchObject(Object str) throws Exception
 	{
 		Object returnedObject = null;
 		try
 		{
-			String hql = (String)str;
+			String hql = (String) str;
 			List result = AppUtility.executeQuery(hql);
-			
-			if(!result.isEmpty())
+
+			if (!result.isEmpty())
 			{
 				returnedObject = result.get(0);
 			}
 		}
-		catch(Exception appExp)
+		catch (Exception appExp)
 		{
-			//appExp.printStackTrace();
-			throw new BulkOperationException(appExp.getMessage(), appExp);	
+			throw new Exception(appExp.getMessage(), appExp);
 		}
 		return returnedObject;
 	}
 
 	@Override
-	protected Object updateObject(Object domainObject) throws BulkOperationException
+	protected Object updateObject(Object domainObject) throws Exception
 	{
 		try
 		{
 			Object returnedObject = appService.delegateEdit(userName, domainObject);
 			return returnedObject;
 		}
-		catch(Exception appExp)
+		catch (Exception appExp)
 		{
-			//appExp.printStackTrace();
-			throw new BulkOperationException(appExp.getMessage(), appExp);	
+			throw new Exception(appExp.getMessage(), appExp);
 		}
 	}
-
 }
