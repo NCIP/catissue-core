@@ -89,15 +89,15 @@ function showBulkOperationDashboard()
 </head>
 <body>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable contentLayout">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 
-  <tr>
+  <tr height="100%">
     <td class="tablepadding" height="100%" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-      <table width="100%" height="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      <table width="100%" height="90%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
       <tr>
         <td align="left" height="1%"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
@@ -176,9 +176,16 @@ function showBulkOperationDashboard()
       </tr>
       <tr height="*">
       <td height="*" valign="top">
-	  <table width="100%" valign="top" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-		  <tr>
-		   <td width="100%" align="center" class="black_ar">
+	  <table width="100%" valign="top" border="0" height="100%" cellpadding="3" cellspacing="0" class="whitetable_bg">
+	  <tr>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperation.jobs" /></span></td>
+      </tr>
+		<tr>
+		<td class="black_ar">
+		</td>
+	</tr>
+		  <tr height="100%">
+		   <td width="100%" height="100%" align="center" class="black_ar">
 
 			<iframe id="bulkOperationDashoard" height="100%"name="bulkOperationDashoard" src="JobDashboard.do" scrolling="auto" frameborder="0" style="width:100%;height:100%;" marginheight='0' marginwidth='0'>
 													Your Browser doesn't support IFrames.

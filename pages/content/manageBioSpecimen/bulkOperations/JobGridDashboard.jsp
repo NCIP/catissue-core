@@ -28,7 +28,7 @@
 		var url = "DocumentDownload.do?id="+searchId;
 		window.location.href = url;
 	}
-	
+
 	function showAttachment(id) {
 		if (id == null || id == 'undefined' || id == "")
 		{
@@ -46,7 +46,7 @@
 	{
 		var noOfRows=mygrid.getRowsNum();
 		for(var i=1;i<=noOfRows;i++)
-		{	
+		{
 			var jobId=mygrid.cells(i,0).getValue();
 			var status=mygrid.cells(i,3).getValue();
 			if(status!="Completed"&&status!="Failed")
@@ -55,7 +55,7 @@
 			}
 		}
 	}
-	
+
 	function statusUpdateAjaxCall(jobId, index)
 	{
 		var url="JobGridAjax.do?index="+index+"&jobId="+jobId;
@@ -71,7 +71,7 @@
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 		request.send("");
 	}
-	
+
 	function responseHandler(response)
 	{
 		var jsonResponse = eval('('+ response+')');
@@ -115,17 +115,9 @@
 }
 </style>
 </head>
-	<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-    <tr>
-        <td align="left" class="toptd"></td>
-      </tr>
-      <tr>
-        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperation.jobs" /></span></td>
-      </tr>
-		<tr>
-		<td class="black_ar">
-		</td>
-	</tr>
+	<table width="100%" border="0" cellpadding="3" cellspacing="0" >
+
+
 
 		<tr height="100%">
 		<td width="100%" height="100%">
@@ -138,7 +130,7 @@
 				mygrid.setImagePath("dhtml_comp/imgs/");
 				mygrid.init();
 				mygrid.setStyle("font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color: #000000;background-color: #E2E2E2; border-left-width: 1px;border-left-color: #CCCCCC; border-top-width: 1px;border-top-color: #CCCCCC;border-bottom-color: #CCCCCC; border-bottom-width: 1px; border-right-width: 1px;border-right-color: #E2E2E2; text-align:left;padding-left:10px;padding-top:1px;padding-bottom:1px;align:left;height:100%;word-wrap:break-word;");
-		
+
 				mygrid.setEditable("FALSE");
 				mygrid.enableAlterCss("uneven","even");
 				mygrid.enableRowsHover(true,'grid_hover');
@@ -147,12 +139,12 @@
 				mygrid.loadXMLString(xmlString);
 				mygrid.enableResizing(xmlString);
 				//mygrid.setOnRowSelectHandler(funcName);
-		
+
 				for(var row=0;row<mygrid.getRowsNum();row++)
 				{
 					mygrid.setRowTextStyle(row+1,"font-family: Arial, Helvetica, sans-serif;font-size: 12px;padding-left:10px;color: #000000;border-left-width: 1px;border-left-color: #CCCCCC;  border-bottom-color: #CCCCCC; border-bottom-color: #CCCCCC; border-right-width: 1px;border-right-color: #FFFFFF; Cursor: pointer;word-wrap:break-word;");
 				}
-		
+
 				//mygrid.setSizes();
 				function getIDColumns()
 				{
@@ -160,8 +152,8 @@
 					hiddenColumnNumbers[0]=${requestScope.identifierFieldIndex};
 					return hiddenColumnNumbers;
 				}
-		
-		
+
+
 				//:To hide ID columns
 				/*var hideCols = getIDColumns();
 				for(i=0;i<hideCols.length;i++)
@@ -173,13 +165,13 @@
 			// Bug Fixed : - 12548  and 12552  ( added by amit_doshi @ 24 July 2009)
 			mygrid.objBox.style.overflowX = "hidden";
 		    mygrid.objBox.style.overflowY = "hidden";
-		
-		
-		
+
+
+
 		</script>
 					</td>
 			</tr>
-		
+
 		</table>
 		</td>
 		</tr>
