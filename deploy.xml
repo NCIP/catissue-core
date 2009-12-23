@@ -55,7 +55,7 @@
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
 
 	<property file="idpInstall.properties" />
-	<var name="database.url" value="" />
+	<var name="databaseurl" value="" />
 	<import file="DEDeploy.xml" />
 
 	<!--import file="dbunitbuild.xml"/>
@@ -1169,7 +1169,6 @@
 			<transaction src="${common.sql.dir}/indexes.sql" />
 			<transaction src="${mysql.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mysql.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${mysql.sql.dir}/query/query_schema_script.sql" />
 			<transaction src="${mysql.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<!-- <transaction src="${mysql.sql.dir}/query/csm.sql" /> -->
 			<transaction src="${dbupgrade.sql.dir}/MySql/CAModel.sql"/>
@@ -1180,12 +1179,24 @@
 				</fileset>
 			</classpath>
 		</sql>
+
+		<antcall target="unzip_aq_installable" />
+		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+			<property name="database.type" value="${database.type}" />
+			<property name="database.driver" value="com.mysql.jdbc.Driver" />
+			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="lib.dir" value="${lib.dir}" />
+		</ant>
+
 		<antcall  target="Export_Clinical_diagnosis_mysql"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
 		<antcall target="insert_entity_group_metadata_mysql" />
 		<antcall target="upgrade_db_demodel_mysql" />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+		<sql driver="${mysql.driver.string}"
+		url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
 			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MySql/Upgrade_DE_Schema.sql" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -1276,7 +1287,7 @@
 			<transaction src="${oracle.sql.dir}/dynamicextension.sql" />
 			<transaction src="${oracle.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${oracle.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />
+		<!--	<transaction src="${oracle.sql.dir}/query/query_schema_script.sql" />  -->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
@@ -1284,6 +1295,17 @@
 				</fileset>
 			</classpath>
 		</sql>
+
+		<antcall target="unzip_aq_installable" />
+		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+			<property name="database.type" value="${database.type}" />
+			<property name="database.driver" value="${oracle.driver.string}" />
+			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="rdbms" value="oracle" />
+			<property name="lib.dir" value="${lib.dir}" />
+		</ant>
 
 		<antcall target="insertQueryMetadata" />
 
@@ -1771,7 +1793,7 @@
 		</sql>
    </target>
 
-	
+
    <target name="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5">
 			<echo message="Upgrade audit changes.">
 			</echo>
@@ -1794,10 +1816,10 @@
 					</fileset>
 				</classpath>
 			</sql>
-			
-	</target>	
-	
-	
+
+	</target>
+
+
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes" description="DE Metadata Upgradation">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
@@ -3129,7 +3151,7 @@ Thanking You,
 			<transaction src="${mssqlserver.sql.dir}/Common/indexes.sql" />
 			<transaction src="${mssqlserver.sql.dir}/dynamicextension.sql" />
 			<transaction src="${mssqlserver.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />
+		<!--	<transaction src="${mssqlserver.sql.dir}/query/query_schema_script.sql" />  -->
 			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
 			<transaction src="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql" />
@@ -3147,6 +3169,16 @@ Thanking You,
 		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
 			<replacefilter token="${database.schemaname}" value="@@schema@@" />
 		</replace>
+
+		<antcall target="unzip_aq_installable" />
+		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
+			<property name="database.type" value="${database.type}" />
+			<property name="database.driver" value="${oracle.driver.string}" />
+			<property name="database.url" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="lib.dir" value="${lib.dir}" />
+		</ant>
 
 		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
 		<antcall target="CAModel_import_data" />
@@ -3925,7 +3957,7 @@ Thanking You,
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
 					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
 				</replace>
-			<var name="database.url" value="jdbc:mysql://"/>
+			<var name="databaseurl" value="jdbc:mysql://"/>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
@@ -3935,17 +3967,17 @@ Thanking You,
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 					</replace>
-					<var name="database.url" value="jdbc:oracle:thin:@" />
+					<var name="databaseurl" value="jdbc:oracle:thin:@" />
 				</then>
 			</elseif>
 			</if>
-			<echo message="Database url is  ${database.url}......" />
+			<echo message="Database url is  ${databaseurl}......" />
 			<if>
 				<equals arg1="true" arg2="${idp.enabled}" />
 			<then>
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 				<include name="*.cfg.xml" />
-					<replacefilter token="@@URL@@" value="${database.url}${csm.database.host}:${csm.database.port}:${csm.database.name}" />
+					<replacefilter token="@@URL@@" value="${databaseurl}${csm.database.host}:${csm.database.port}:${csm.database.name}" />
 					<replacefilter token="@@DATABASE_USERNAME@@" value="${csm.database.username}" />
 					<replacefilter token="@@DATABASE_PASSWORD@@" value="${csm.database.password}" />
 			</replace>
@@ -3991,14 +4023,14 @@ Thanking You,
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
-	
+
 	<property name="bulk.bin.dir" value="${basedir}/BulkOperations/bin" />
 	<target name="unjar_bulk">
 		<delete dir="${bulk.bin.dir}" />
 		<mkdir dir="${bulk.bin.dir}" />
 		<unjar src="./caTissueSuite_Client/lib/bulkoperator.jar" dest="${bulk.bin.dir}/" />
 	</target>
-	
+
 	<property name="operationName" value="" />
 	<property name="dropdownName" value="" />
 	<property name="csvFile" value="" />
