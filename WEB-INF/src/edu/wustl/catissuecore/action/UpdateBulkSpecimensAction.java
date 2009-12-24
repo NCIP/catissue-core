@@ -42,6 +42,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
@@ -102,10 +103,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			while(specCollItr.hasNext())
 			{
 				Specimen specimen = (Specimen)specCollItr.next();
-				if(specimen.getParentSpecimen() == null)
+				if(Constants.DERIVED_SPECIMEN.equals(specimen.getLineage())&& specimen.getParentSpecimen() == null)
 				{
 					final ActionErrors actionErrors = new ActionErrors();
-					final ActionError error = new ActionError("msg.item", "Parent specimen cannot be null");
+					final ActionError error = new ActionError("msg.item", ApplicationProperties.getValue("parent.specimen.null"));
 					actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 					this.saveErrors(request, actionErrors);
 					SpecimenDetailsTagUtil.setAnticipatorySpecimenDetails(request,
