@@ -11,11 +11,8 @@
 	<property name="base.dir" value="." />
 	<property name="de.temp.dir" value="${base.dir}/detemp" />
 	<property name="temp.dir.DE" value="${de.temp.dir}/temp" />
-
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
-	<property name="cacaore.deployables" value="./cacore_deployable" />
-
 	<property name="cacoresdk.dir" value="${tempcacore.dir}/caCoreSDK" />
 	<property name="cacore.dir" value="${tempcacore.dir}/temp_caCORESDK" />
 	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/server/caCORESDK.zip" />
@@ -479,6 +476,7 @@
 			<arg value="${groupname}" />
 			<arg value="${relative.filename}" />
 			<arg value="${version}" />
+			<arg value="${hook_entity}" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
@@ -780,7 +778,7 @@
 	<!-- =================================
           target:export.xmi.and.generate.cacore
          ================================= -->
-    <target name="export.xmi.and.generate.cacore" depends="" description="Export XMI and generate caCore" >
+    <target name="export.xmi.and.generate.cacore" depends="" description="Export XMI and generate caCore">
     	<mkdir dir="${dezip.dir}" />
 		<mkdir dir="${dejar.dir}" />
 
@@ -807,14 +805,50 @@
     	<property name="version.number" value="1.1" />
 
     	<echo message="Entity Group Name : ${entitygroupname}" />
+    	<available file="${cacore.deployable.dir}/${entitygroupname}/" property="cacore.present" />
     	<if>
-    		<equals arg1="${entitygroupname}" arg2="Annotations" />
+    		<equals arg1="${cacore.deployable.dir}/${entitygroupname}" arg2="true"/>
     		<then>
     			<echo message=" " />
     			<echo message="-----------------------------------------" />
+				<echo message="caCore for ${entitygroupname} already generated" />
     			<echo message="Skipping caCore generation for ${entitygroupname}" />
     			<echo message="-----------------------------------------" />
     			<echo message=" " />
+
+    			<unzip src="${de.zip.location}/dynamicextensions.zip" dest="${dezip.dir}" overwrite="true" />
+
+    			<property name="ORM1CfgFile" value="${cacore.deployable.dir}/${entitygroupname}/orm1.cfg.xml"/>
+    			<property name="DEWebCfgFile" value="${dezip.dir}/conf/DynamicExtensionsHibernateWeb.cfg.xml" />
+
+    			<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
+    				<arg value="${DEWebCfgFile}" />
+    				<arg value="${ORM1CfgFile}" />
+    				<classpath>
+    					<pathelement location="${temp.dir.DE}" />
+    					<fileset dir="${lib.dir.DE}">
+    						<include name="*.jar" />
+    						<exclude name="uml-1.3.jar" />
+    					</fileset>
+    					<fileset dir="${extra.lib.dir.DE}">
+    						<include name="jboss-j2ee.jar" />
+    						<include name="jta.jar" />
+    					</fileset>
+    				</classpath>
+    			</java>
+
+    			<copy todir="${entityGroup.jar.location}/" file="${cacore.deployable.dir}/${entitygroupname}/${entitygroupname}.jar" overwrite="true" />
+
+    			<echo message=" "/>
+    			<echo message="-----------------------------------------"/>
+    			<echo message=" Now creating dynamicExtensions.zip file "/>
+				<echo message="-----------------------------------------"/>
+				<echo message=" "/>
+
+				<!-- Create dynamicextensions.zip file. -->
+				<zip destfile="${dezip.dir}/dynamicextensions.zip" basedir="${dezip.dir}" />
+
+				<copy todir="${base.dir}/" file="${dezip.dir}/dynamicextensions.zip" overwrite="true"/>
 
     			<delete>
 					<fileset dir="${export.dir}/">
@@ -823,91 +857,31 @@
 					</fileset>
 				</delete>
 
+
     			<delete>
 					<fileset dir="${dezip.dir}">
 						<include name="**/*"/>
 					</fileset>
 				</delete>
+
     		</then>
     		<else>
-    			<available file="${cacore.deployable.dir}/${entitygroupname}/" property="cacore.present" />
-    			<if>
-    				<equals arg1="${cacore.present}" arg2="true"/>
-    				<then>
-		    			<echo message=" " />
-		    			<echo message="-----------------------------------------" />
-						<echo message="caCore for ${entitygroupname} already generated" />
-		    			<echo message="Skipping caCore generation for ${entitygroupname}" />
-		    			<echo message="-----------------------------------------" />
-		    			<echo message=" " />
+    			<echo message=" " />
+    			<echo message="-----------------------------------------" />
+    			<echo message="caCore for ${entitygroupname} not generated" />
+    			<echo message="Generating caCore for ${entitygroupname}" />
+    			<echo message="-----------------------------------------" />
+    			<echo message=" " />
 
-		    			<unzip src="${de.zip.location}/dynamicextensions.zip" dest="${dezip.dir}" overwrite="true" />
+    			<antcall target="export_xmi">
+    				<param name="setup.method.required" value="False" />
+					<param name="groupname" value="${entitygroupname}"/>
+    				<param name="relative.filename" value="${xmi.filename}"/>
+					<param name="version" value="${version.number}"/>
+    			</antcall>
 
-		    			<property name="ORM1CfgFile" value="${cacore.deployable.dir}/${entitygroupname}/orm1.cfg.xml"/>
-		    			<property name="DEWebCfgFile" value="${dezip.dir}/conf/DynamicExtensionsHibernateWeb.cfg.xml" />
-
-		    			<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
-		    				<arg value="${DEWebCfgFile}" />
-		    				<arg value="${ORM1CfgFile}" />
-		    				<classpath>
-		    					<pathelement location="${temp.dir.DE}" />
-		    					<fileset dir="${lib.dir.DE}">
-		    						<include name="*.jar" />
-		    						<exclude name="uml-1.3.jar" />
-		    					</fileset>
-		    					<fileset dir="${extra.lib.dir.DE}">
-		    						<include name="jboss-j2ee.jar" />
-		    						<include name="jta.jar" />
-		    					</fileset>
-		    				</classpath>
-		    			</java>
-
-		    			<copy todir="${entityGroup.jar.location}/" file="${cacore.deployable.dir}/${entitygroupname}/${entitygroupname}.jar" overwrite="true" />
-
-		    			<echo message=" "/>
-		    			<echo message="-----------------------------------------"/>
-		    			<echo message=" Now creating dynamicExtensions.zip file "/>
-						<echo message="-----------------------------------------"/>
-						<echo message=" "/>
-
-						<!-- Create dynamicextensions.zip file. -->
-						<zip destfile="${dezip.dir}/dynamicextensions.zip" basedir="${dezip.dir}" />
-
-						<copy todir="${base.dir}/" file="${dezip.dir}/dynamicextensions.zip" overwrite="true"/>
-
-		    			<delete>
-							<fileset dir="${export.dir}/">
-								<include name="**/*.txt"/>
-								<include name="**/Package.properties" />
-							</fileset>
-						</delete>
-
-
-		    			<delete>
-							<fileset dir="${dezip.dir}">
-								<include name="**/*"/>
-							</fileset>
-						</delete>
-    				</then>
-		    		<else>
-		    			<echo message=" " />
-		    			<echo message="-----------------------------------------" />
-		    			<echo message="caCore for ${entitygroupname} not generated" />
-		    			<echo message="Generating caCore for ${entitygroupname}" />
-		    			<echo message="-----------------------------------------" />
-		    			<echo message=" " />
-
-		    			<antcall target="export_xmi">
-		    				<param name="setup.method.required" value="False" />
-							<param name="groupname" value="${entitygroupname}"/>
-		    				<param name="relative.filename" value="${xmi.filename}"/>
-							<param name="version" value="${version.number}"/>
-		    			</antcall>
-
-		    			<antcall target="generate.cacore" />
-		    		</else>
-	    		</if>
-        	</else>
+    			<antcall target="generate.cacore" />
+    		</else>
     	</if>
     </target>
 
