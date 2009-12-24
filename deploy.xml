@@ -2672,6 +2672,27 @@ Thanking You,
 				<include name="**/*" />
 			</fileset>
 		</delete>
+
+		<if><equals arg1="yes" arg2="${generateCacore}" />
+			<then>
+				<delete dir="${tempcacore.dir}" />
+				<mkdir dir="${tempcacore.dir}" />
+				<delete dir="${export.dir}" />
+				<mkdir dir="${export.dir}" />
+				<ant antfile="DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
+				<ant antfile="DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
+					<property name="xmi.name" value="${filename}"/>
+					<property name="de.zip.location" value="${basedir}/" />
+					<property name="entityGroup.jar.location" value="${temp.dir}/clinportal/WEB-INF/lib" />
+					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+				</ant>
+
+				<antcall target="de_integrate_app"/>
+				<antcall target="build.clinportal.war" />
+				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/clinportal.war" overwrite="true" />
+				<delete file="${base.dir}/log4j.properties" />
+			</then>
+		</if>
 	</target>
 
 
