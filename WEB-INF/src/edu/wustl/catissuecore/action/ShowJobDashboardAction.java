@@ -30,19 +30,19 @@ public class ShowJobDashboardAction extends SecureAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(ShowJobDashboardAction.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(ShowJobDashboardAction.class);
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeSecureAction(final ActionMapping mapping, final ActionForm form,
+			final HttpServletRequest request, final HttpServletResponse response) throws Exception
 	{
-		String gridXml = getGridXML(request);
+		final String gridXml = getGridXML(request);
 		List columnsToDisplay = new ArrayList();
-		SessionDataBean sessionDataBean = this.getSessionData(request);
-		long userId = sessionDataBean.getUserId();
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
+		final long userId = sessionDataBean.getUserId();
 		columnsToDisplay = getColumnsToDisplay();
 		getDashboardDataXML(userId);
 		request.setAttribute(getXmlHeaderName(), gridXml);
@@ -60,7 +60,7 @@ public class ShowJobDashboardAction extends SecureAction
 	 * @throws CiderSystemException CiderSystemException instance
 	 * @throws ApplicationException the application exception
 	 */
-	public String getGridXML(HttpServletRequest request) throws ApplicationException
+	public String getGridXML(final HttpServletRequest request) throws ApplicationException
 	{
 		StringBuffer gridXML = new StringBuffer(500);
 		gridXML.append(GridUtil.getXMLStringDocType());
@@ -80,11 +80,11 @@ public class ShowJobDashboardAction extends SecureAction
 	 * @throws CiderSystemException CiderSystemException instance
 	 * @throws ApplicationException the application exception
 	 */
-	public StringBuffer getContentXML(HttpServletRequest request) throws ApplicationException
+	public StringBuffer getContentXML(final HttpServletRequest request) throws ApplicationException
 	{
 		StringBuffer contentXML = new StringBuffer(500);
-		StringBuffer headerXML = getHeaderXML(request);
-		StringBuffer rowXML = getRowXML(request);
+		final StringBuffer headerXML = getHeaderXML(request);
+		final StringBuffer rowXML = getRowXML(request);
 		contentXML.append(headerXML);
 		contentXML.append(rowXML);
 		return contentXML;
@@ -110,7 +110,7 @@ public class ShowJobDashboardAction extends SecureAction
 	 * @throws CiderSystemException instance of CiderSystemException
 	 * @throws ApplicationException the application exception
 	 */
-	public StringBuffer getRowXML(HttpServletRequest request) throws ApplicationException
+	public StringBuffer getRowXML(final HttpServletRequest request) throws ApplicationException
 	{
 		StringBuffer rowXML = new StringBuffer();
 		JDBCDAO dao = null;
@@ -139,7 +139,7 @@ public class ShowJobDashboardAction extends SecureAction
 		}
 		catch (Exception exp)
 		{
-			logger.error(exp.getMessage(), exp);
+			LOGGER.error(exp.getMessage(), exp);
 		}
 		finally
 		{
@@ -156,7 +156,7 @@ public class ShowJobDashboardAction extends SecureAction
 	 */
 	private void addMsgBoardItemToRowXml(StringBuffer rowXML, List msgBoardItem)
 	{
-		String id = msgBoardItem.get(0).toString();
+		String jobId = msgBoardItem.get(0).toString();
 
 		for (int i = 0; i < msgBoardItem.size(); i++)
 		{
@@ -170,7 +170,7 @@ public class ShowJobDashboardAction extends SecureAction
 				rowXML.append(GridUtil.getCellXML(object.toString()));
 			}
 		}
-		rowXML.append(GridUtil.getCellXML("<a href='javascript:showAttachment(" + id + ")'>Download</a>"));
+		rowXML.append(GridUtil.getCellXML("<a href='javascript:showAttachment(" + jobId + ")'>Download</a>"));
 	}
 
 	/**
