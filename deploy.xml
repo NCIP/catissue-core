@@ -516,7 +516,7 @@
 		</war>
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
-		
+
 
 		<war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
 					<fileset dir="${temp.dir}/caTissuePrintWebService">
@@ -1959,26 +1959,27 @@
 
 	<!-- Start : DE Integration Restructure for p5 -->
 	<target name="upgrade_de_integration_restructure_metadata" description="Start : DE Integration Restructure for p5 ">
-	<if>
-		<equals arg1="mysql" arg2="${database.type}" />
-		<then>
-			<antcall target="upgrade_de_integration_restructure_metadata_mysql" />
-		</then>
-		<elseif>
-			<equals arg1="oracle" arg2="${database.type}" />
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="upgrade_de_integration_restructure_metadata_oracle" />
+				<antcall target="upgrade_de_integration_restructure_metadata_mysql" />
 			</then>
-		</elseif>
-		<!-- mssqlserver db -->
-		<elseif>
-			<equals arg1="mssqlserver" arg2="${database.type}" />
-			<then>
-				<antcall target="upgrade_de_integration_restructure_metadata_mssqlserver" />
-			</then>
-		</elseif>
-	</if>
-
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_de_integration_restructure_metadata_oracle" />
+				</then>
+			</elseif>
+			<!-- mssqlserver db -->
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_de_integration_restructure_metadata_mssqlserver" />
+				</then>
+			</elseif>
+		</if>
+		<delete dir="${temp.dir}" />
 	</target>
 
 	<target name="upgrade_de_integration_restructure_metadata_mysql" description="Updating DE integration metadata (mysql).....">
