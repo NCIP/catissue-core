@@ -5,11 +5,24 @@
 	then imported in the deploy.xml of the host application to able to call the DE specific tasks in the host
 	application.
 -->
-<project name="DynamicExtensionsInstallation">
+<project name="DynamicExtensionsInstallation" >
 
 	<property file="DynamicExtensionsInstall.properties" />
-	<property name="de.temp.dir" value="./detemp" />
+	<property name="base.dir" value="." />
+	<property name="de.temp.dir" value="${base.dir}/detemp" />
 	<property name="temp.dir.DE" value="${de.temp.dir}/temp" />
+
+	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
+	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
+	<property name="cacaore.deployables" value="./cacore_deployable" />
+
+	<property name="cacoresdk.dir" value="${tempcacore.dir}/caCoreSDK" />
+	<property name="cacore.dir" value="${tempcacore.dir}/temp_caCORESDK" />
+	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/server/caCORESDK.zip" />
+	<property name="dezip.dir" value="${tempcacore.dir}/temp_DE_zip" />
+	<property name="dejar.dir" value="${tempcacore.dir}/temp_DE_jar" />
+	<property name="entity.jar.location" value="${tempcacore.dir}/entity_jar" />
+
 	<property name="oracle.driver.string.DE" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string.DE" value="com.mysql.jdbc.Driver" />
 	<property name="db2.driver.string.DE" value="com.ibm.db2.jcc.DB2Driver" />
@@ -29,125 +42,183 @@
 
 	<!-- Target For Upgrading the Database From DE v 1.2.0 to DE v 1.3.0 -->
 
-	<target name="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" description="Upgrading the Database From DE v 1.2.0 to DE v 1.3.0">
-	<delete dir="${de.temp.dir}" failonerror="no" />
-	<mkdir dir="${de.temp.dir}" />
-		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
-		</unzip>
-			<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-				<classpath>
-					<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
-				</classpath>
-			</taskdef>
-			<if>
-				<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
-				<then>
-					<antcall target="upgrade_db_mysql_from_DE_1.2.0_to_DE_1.3.0" />
 
-				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
-					<then>
-						<antcall target="upgrade_db_oracle_from_DE_1.2.0_to_DE_1.3.0" />
-					</then>
-				</elseif>
-				<elseif>
-					<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
-					<then>
-						<antcall target="upgrade_db_db2_from_DE_1.2.0_to_DE_1.3.0" />
-
-					</then>
-				</elseif>
-				<else>
-					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-				</else>
-			</if>
-		</target>
-
-	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" description="upgrade_db_from_DE_1.3.0_to_DE_1.4.0">
+	<target name="deploy_db_DE">
+		<echo message="Initializing Database for DynamicExtentions Application..." />
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-			<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
-			</unzip>
-				<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-					<classpath>
-						<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
-					</classpath>
-				</taskdef>
-				<if>
-					<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
-					<then>
-						<antcall target="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0" />
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
 
-					</then>
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
-						<then>
-							<antcall target="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0" />
-						</then>
-					</elseif>
-					<elseif>
-						<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
-						<then>
-							<antcall target="upgrade_db_db2_from_DE_1.3.0_to_DE_1.4.0" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<antcall target="deploy_db_mysql_DE" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="deploy_db_oracle_DE" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="deploy_db_db2_DE" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
 
-						</then>
-					</elseif>
-					<else>
-						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-					</else>
-				</if>
-			</target>
+	</target>
+	<target name="deploy_db_db2_DE">
+
+		<antcall target="execute_file_db_db2">
+			<param name="sql.file.name" value="${db2.sql.dir.DE}/dynamicextension.sql" />
+		</antcall>
+	</target>
+
+	<target name="deploy_db_mysql_DE">
+
+		<antcall target="execute_file_db_mysql">
+			<param name="sql.file.name" value="${mysql.sql.dir.DE}/dynamicextension.sql" />
+		</antcall>
+
+	</target>
+
+	<target name="deploy_db_oracle_DE">
+		<antcall target="execute_file_db_oracle">
+			<param name="sql.file.name" value="${oracle.sql.dir.DE}/dynamicextension.sql" />
+		</antcall>
+
+	</target>
+
+	<target name="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE v 1.2.0 to DE v 1.3.0">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<antcall target="upgrade_db_mysql_from_DE_1.2.0_to_DE_1.3.0" />
+
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_oracle_from_DE_1.2.0_to_DE_1.3.0" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_db2_from_DE_1.2.0_to_DE_1.3.0" />
+
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+
+	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE v1.3.0 to v1.4.0">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<antcall target="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0" />
+
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_db2_from_DE_1.3.0_to_DE_1.4.0" />
+
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
 
 	<target name="upgrade_db_db2_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db db2 from DE 1.2.0 to DE 1.3.0">
 		<antcall target="execute_file_db_db2">
-			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
+			<param name="sql.file.name" value="${db2.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
 	<target name="upgrade_db_mysql_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE 1.2.0 to DE 1.3.0 for mysql">
 		<antcall target="execute_file_db_mysql">
-			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
+			<param name="sql.file.name" value="${mysql.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
 	<target name="upgrade_db_oracle_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE 1.2.0 to DE  1.3.0 for oracle">
 		<antcall target="execute_file_db_oracle">
-			<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
+			<param name="sql.file.name" value="${oracle.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.2.0_to_DE_1.3.0.sql" />
 		</antcall>
 	</target>
 
 	<target name="upgrade_db_db2_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db db2 from DE 1.3.0 to DE 1.4.0">
-			<antcall target="execute_file_db_db2">
-				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
-			</antcall>
+		<antcall target="execute_file_db_db2">
+			<param name="sql.file.name" value="${db2.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
+		</antcall>
 	</target>
 
-		<target name="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for mysql">
-			<antcall target="execute_file_db_mysql">
-				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
-			</antcall>
-		</target>
+	<target name="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for mysql">
+		<antcall target="execute_file_db_mysql">
+			<param name="sql.file.name" value="${mysql.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
+		</antcall>
+	</target>
 
-		<target name="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for oracle">
-			<antcall target="execute_file_db_oracle">
-				<param name="sql.file.name" value="Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
-			</antcall>
-			<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
-				<transaction src="${oracle.dbupgrade.sql.dir.DE}/upgrade_DE_integration_sequences_1.3.0_to_1.4.0.sql" />
-				<transaction>commit</transaction>
+	<target name="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE 1.3.0 to DE 1.4.0 for oracle">
+		<antcall target="execute_file_db_oracle">
+			<param name="sql.file.name" value="${oracle.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.3.0_to_DE_1.4.0.sql" />
+		</antcall>
+		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+			<transaction src="${oracle.dbupgrade.sql.dir.DE}/upgrade_DE_integration_sequences_1.3.0_to_1.4.0.sql" />
+			<transaction>commit</transaction>
 			<classpath>
-					<fileset dir="${lib.dir.DE}">
-										<include name="*.jar" />
-									</fileset>
-								</classpath>
-							</sql>
-		</target>
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
 
-	<target name="execute_file_db_mysql" description="upgrading the DB For DynamicExtensions for mysql">
+	<target name="execute_file_db_mysql" description="execute the DynamicExtensions sql script for mysql">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${mysql.dbupgrade.sql.dir.DE}/${sql.file.name}" />
+			<transaction src="${sql.file.name}" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir.DE}">
@@ -157,10 +228,10 @@
 		</sql>
 	</target>
 
-	<target name="execute_file_db_oracle" description="upgrading the DB For DynamicExtensions for oracle">
+	<target name="execute_file_db_oracle" description="execute the DynamicExtensions sql script for oracle">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
-			<transaction src="${oracle.dbupgrade.sql.dir.DE}/${sql.file.name}" />
+			<transaction src="${sql.file.name}" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir.DE}">
@@ -170,10 +241,10 @@
 		</sql>
 	</target>
 
-	<target name="execute_file_db_db2" description="upgrading the DB For DynamicExtensions for db2">
+	<target name="execute_file_db_db2" description="execute the DynamicExtensions sql script for db2">
 		<echo message="upgrading the DB For DynamicExtensions" />
 		<sql driver="${db2.driver.string.DE}" url="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${db2.dbupgrade.sql.dir.DE}/${sql.file.name}" />
+			<transaction src="${sql.file.name}" />
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir.DE}">
@@ -185,13 +256,13 @@
 
 
 
-	<property name="filename" value=" " />
+	<!--property name="filename" value=" " />
 	<property name="mainContainerList" value=" " />
 	<property name="package" value=" " />
 	<property name="addQueryPaths" value=" " />
 	<property name="condition" value=" " />
 	<property name="categoryDefinitionFilePath" value=" " />
-	<property name="hookentity" value=" " />
+	<property name="hookentity" value=" " /-->
 
 	<!-- This target will prepare the environment i.e. hibernateconfig files
 		other properties file to be able to execute other java classes like import_xmi , create_category etc
@@ -284,27 +355,61 @@
 					<include name="jboss-j2ee.jar" />
 					<include name="jta.jar" />
 				</fileset>
-
 			</classpath>
 		</java>
-
 	</target>
 
-	<!-- Target used to create the Category -->
-	<target name="create_category" description="arget used to create the Category">
+	<!-- - - - - - - - - - - - - - - - - -
+          target: import.xmi.for.testcases
+         - - - - - - - - - - - - - - - - - -->
+    <target name="import.xmi.for.testcases" description="Target used to Import the Dynamic Model for test cases">
+    	<java classname="edu.common.dynamicextensions.xmi.importer.XMIImporter" fork="true" maxmemory="1024M">
+    		<arg value="${filename}" />
+    		<arg value="${mainContainerList}" />
+    		<arg value="${package}" />
+    		<arg value="${hookentity}" />
+    		<arg value="${addQueryPaths}" />
+    		<arg value="${condition}" />
 
-		<antcall target="setupClassExecutionEnvironment" />
-		<java classname="edu.common.dynamicextensions.util.CategoryCreator" fork="true" maxmemory="1024M">
-			<arg value="${categoryDefinitionFilePath}" />
+    		<classpath>
+    			<pathelement location="${base.dir}/classes/" />
+    			<fileset dir="${base.dir}/../lib/server">
+    				<include name="*.jar" />
+    				<exclude name="uml-1.3.jar" />
+    			</fileset>
+    			<fileset dir="${base.dir}/../lib/extra">
+    				<include name="jboss-j2ee.jar" />
+    				<include name="jta.jar" />
+    			</fileset>
+    		</classpath>
+    	</java>
+    </target>
+
+
+	<!-- Target used to create the Category -->
+	<property name="categoryFormNamesFile" value=" " />
+	<property name="isPersistMetadataOnly" value=" " />
+	<property name="categoryFileDir" value=" " />
+	<target name="create_category" description="Target used to create the Category">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="categoryCreator.zip" dest="${de.temp.dir}" overwrite="true"/>
+		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+			<mkdir dir="./log" />
+			<replace file="./log4j.properties">
+				<replacefilter token="@@jbosshome@@" value="." />
+			</replace>
+		<echo message="Creating Categories" />
+		<java classname="edu.common.dynamicextensions.category.CategoryCreator" fork="true" maxmemory="1024M">
+			<arg value="${categoryFileDir}" />
+			<arg value="${Application.url}" />
+			<arg value="${categoryFormNamesFile}" />
+			<arg value="${isPersistMetadataOnly}" />
+
 			<classpath>
-				<pathelement location="${temp.dir.DE}" />
-				<fileset dir="${lib.dir.DE}">
+				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
 					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -312,8 +417,8 @@
 	</target>
 
 	<!--This target executes create_all_categories command for all the  category-forms file specified within csv file-->
-	<property name="categoryFormNames" value="" />
-	<target name="create_all_categories" description="This target executes create_all_categories command for all the  category-forms file specified within csv file">
+
+	<!--<target name="create_all_categories">
 		<antcall target="setupClassExecutionEnvironment" />
 		<java classname="edu.common.dynamicextensions.util.MultipleCategoryCreator" fork="true" maxmemory="1024M">
 			<arg value="${categoryFormNames}" />
@@ -330,7 +435,7 @@
 			</classpath>
 		</java>
 
-	</target>
+	</target>-->
 	<!--end of  target create_all_categories -->
 	<property name="permissibleValuesFile" value=" " />
 	<target name="import_permissible_values" description="Import permissible values">
@@ -354,13 +459,26 @@
 
 	<property name="groupname" value="" />
 	<property name="version" value="" />
+
 	<target name="export_xmi" description="Export XMI">
-		<antcall target="setupClassExecutionEnvironment" />
+		<if>
+			<equals arg1="False" arg2="${setup.method.required}"/>
+			<then>
+				<echo message=" " />
+				<echo message="-------------------------------------------------------" />
+				<echo message="setupClassExecutionEnvironment method already been called" />
+				<echo message="Hence skipping setupClassExecutionEnvironment" />
+				<echo message="-------------------------------------------------------" />
+				<echo message=" " />
+			</then>
+			<else>
+				<antcall target="setupClassExecutionEnvironment" />
+			</else>
+		</if>
 		<java classname="edu.common.dynamicextensions.xmi.exporter.XMIExporter" fork="true" maxmemory="1024M">
 			<arg value="${groupname}" />
-			<arg value="${filename}" />
+			<arg value="${relative.filename}" />
 			<arg value="${version}" />
-			<arg value="${hookentity}" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
@@ -374,6 +492,30 @@
 			</classpath>
 		</java>
 	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+          target: export.xmi.for.testcases
+         - - - - - - - - - - - - - - - - - -->
+    <target name="export.xmi.for.testcases" description="Export XMI for test cases">
+		<java classname="edu.common.dynamicextensions.xmi.exporter.XMIExporter" fork="true" maxmemory="1024M">
+			<arg value="${groupname}" />
+			<arg value="${relative.filename}" />
+			<arg value="${version}" />
+			<arg value="${hookentity}" />
+			<classpath>
+				<pathelement location="${base.dir}/classes/" />
+				<fileset dir="${base.dir}/../lib/server">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${base.dir}/../lib/extra">
+					<include name="jboss-j2ee.jar" />
+					<include name="jta.jar" />
+				</fileset>
+			</classpath>
+		</java>
+    </target>
+
 	<!-- upgrade category entity names from CP_1.1 to CP_1.2 -->
 	<target name="upgrade_category_entity_names" description="upgrade category entity names from CP_1.1 to CP_1.2">
 		<antcall target="setupClassExecutionEnvironment" />
@@ -558,5 +700,398 @@
 		</sql>
 	</target>
 
+
+	<!-- =================================
+          target: import.xmi.to.generate.cacore
+         ================================= -->
+    <target name="import.xmi.to.generate.cacore" depends="" description="Import XMI for caCore generation">
+    	<antcall target="import.xmi.for.testcases">
+			<param name="filename" value="${xmi.name}"/>
+			<param name="mainContainerList" value="${mainContainerList}" />
+			<param name="package" value="${package.name}" />
+			<param name="hookentity" value="${hookentity}" />
+			<param name="addQueryPaths" value="${addQueryPaths}" />
+		</antcall>
+
+    	<delete dir="${tempcacore.dir}" />
+    	<mkdir dir="${tempcacore.dir}" />
+
+    	<delete dir="${export.dir}" />
+    	<mkdir dir="${export.dir}" />
+
+    	<java failonerror="true" classname="edu.wustl.metadata.util.PackageName" fork="yes" >
+       		<arg value="${export.dir}/"/>
+       		<arg value="${xmi.name}"/>
+    		<classpath>
+    			<pathelement location="${base.dir}/classes/" />
+    			<fileset dir="${base.dir}/../lib/server">
+    				<include name="*.jar" />
+    				<exclude name="uml-1.3.jar" />
+    			</fileset>
+    			<fileset dir="${base.dir}/../lib/extra">
+    				<include name="jboss-j2ee.jar" />
+    				<include name="jta.jar" />
+    			</fileset>
+    		</classpath>
+    	</java>
+
+    	<property file="${export.dir}/Package.properties" />
+
+    	<property name="entitygroupname" value="${entity.name}" />
+    	<property name="xmi.filename" value="${export.dir}/${entity.name}.xmi" />
+    	<property name="version.number" value="1.1" />
+
+    	<antcall target="export.xmi.for.testcases">
+    		<param name="groupname" value="${entitygroupname}"/>
+    	    <param name="relative.filename" value="${xmi.filename}"/>
+    		<param name="version" value="${version.number}"/>
+    	    <param name="hookentity" value="${hookentity}" />
+    	</antcall>
+
+    	<antcall target="generate.cacore" />
+
+    </target>
+
+	<!-- =================================
+          target: generate.cacore.for.imported.xmis
+         ================================= -->
+    <target name="generate.cacore.for.imported.xmis" depends="setupClassExecutionEnvironment" description="Generate caCore for imported XMIs">
+
+		<java failonerror="true" classname="edu.wustl.metadata.util.EntityGroupName" fork="yes" maxmemory="1024m">
+			<arg value="${base.dir}/temp_deaudit_related_files/temp_exported_xmi/"/>
+			<classpath>
+				<pathelement location="${temp.dir.DE}" />
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${extra.lib.dir.DE}">
+					<include name="jboss-j2ee.jar" />
+					<include name="jta.jar" />
+				</fileset>
+			</classpath>
+		</java>
+
+		<property file="${tempcacore.dir}/temp_exported_xmi/EntityGroup.properties" />
+		<foreach list="${entity.group.name}" param="xmi.name"  target="export.xmi.and.generate.cacore" />
+
+    </target>
+
+	<!-- =================================
+          target:export.xmi.and.generate.cacore
+         ================================= -->
+    <target name="export.xmi.and.generate.cacore" depends="" description="Export XMI and generate caCore" >
+    	<mkdir dir="${dezip.dir}" />
+		<mkdir dir="${dejar.dir}" />
+
+    	<java failonerror="true" classname="edu.wustl.metadata.util.PackageName" fork="yes" maxmemory="1024m">
+    		<arg value="${export.dir}/"/>
+    		<arg value="${xmi.name}"/>
+			<classpath>
+				<pathelement location="${temp.dir.DE}" />
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${extra.lib.dir.DE}">
+					<include name="jboss-j2ee.jar" />
+					<include name="jta.jar" />
+				</fileset>
+			</classpath>
+		</java>
+
+    	<property file="${export.dir}/Package.properties" />
+
+    	<property name="entitygroupname" value="${entity.name}" />
+    	<property name="xmi.filename" value="${export.dir}/${entity.name}.xmi" />
+    	<property name="version.number" value="1.1" />
+
+    	<echo message="Entity Group Name : ${entitygroupname}" />
+    	<if>
+    		<equals arg1="${entitygroupname}" arg2="Annotations" />
+    		<then>
+    			<echo message=" " />
+    			<echo message="-----------------------------------------" />
+    			<echo message="Skipping caCore generation for ${entitygroupname}" />
+    			<echo message="-----------------------------------------" />
+    			<echo message=" " />
+
+    			<delete>
+					<fileset dir="${export.dir}/">
+						<include name="**/*.txt"/>
+						<include name="**/Package.properties" />
+					</fileset>
+				</delete>
+
+    			<delete>
+					<fileset dir="${dezip.dir}">
+						<include name="**/*"/>
+					</fileset>
+				</delete>
+    		</then>
+    		<else>
+    			<available file="${cacore.deployable.dir}/${entitygroupname}/" property="cacore.present" />
+    			<if>
+    				<equals arg1="${cacore.present}" arg2="true"/>
+    				<then>
+		    			<echo message=" " />
+		    			<echo message="-----------------------------------------" />
+						<echo message="caCore for ${entitygroupname} already generated" />
+		    			<echo message="Skipping caCore generation for ${entitygroupname}" />
+		    			<echo message="-----------------------------------------" />
+		    			<echo message=" " />
+
+		    			<unzip src="${de.zip.location}/dynamicextensions.zip" dest="${dezip.dir}" overwrite="true" />
+
+		    			<property name="ORM1CfgFile" value="${cacore.deployable.dir}/${entitygroupname}/orm1.cfg.xml"/>
+		    			<property name="DEWebCfgFile" value="${dezip.dir}/conf/DynamicExtensionsHibernateWeb.cfg.xml" />
+
+		    			<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
+		    				<arg value="${DEWebCfgFile}" />
+		    				<arg value="${ORM1CfgFile}" />
+		    				<classpath>
+		    					<pathelement location="${temp.dir.DE}" />
+		    					<fileset dir="${lib.dir.DE}">
+		    						<include name="*.jar" />
+		    						<exclude name="uml-1.3.jar" />
+		    					</fileset>
+		    					<fileset dir="${extra.lib.dir.DE}">
+		    						<include name="jboss-j2ee.jar" />
+		    						<include name="jta.jar" />
+		    					</fileset>
+		    				</classpath>
+		    			</java>
+
+		    			<copy todir="${entityGroup.jar.location}/" file="${cacore.deployable.dir}/${entitygroupname}/${entitygroupname}.jar" overwrite="true" />
+
+		    			<echo message=" "/>
+		    			<echo message="-----------------------------------------"/>
+		    			<echo message=" Now creating dynamicExtensions.zip file "/>
+						<echo message="-----------------------------------------"/>
+						<echo message=" "/>
+
+						<!-- Create dynamicextensions.zip file. -->
+						<zip destfile="${dezip.dir}/dynamicextensions.zip" basedir="${dezip.dir}" />
+
+						<copy todir="${base.dir}/" file="${dezip.dir}/dynamicextensions.zip" overwrite="true"/>
+
+		    			<delete>
+							<fileset dir="${export.dir}/">
+								<include name="**/*.txt"/>
+								<include name="**/Package.properties" />
+							</fileset>
+						</delete>
+
+
+		    			<delete>
+							<fileset dir="${dezip.dir}">
+								<include name="**/*"/>
+							</fileset>
+						</delete>
+    				</then>
+		    		<else>
+		    			<echo message=" " />
+		    			<echo message="-----------------------------------------" />
+		    			<echo message="caCore for ${entitygroupname} not generated" />
+		    			<echo message="Generating caCore for ${entitygroupname}" />
+		    			<echo message="-----------------------------------------" />
+		    			<echo message=" " />
+
+		    			<antcall target="export_xmi">
+		    				<param name="setup.method.required" value="False" />
+							<param name="groupname" value="${entitygroupname}"/>
+		    				<param name="relative.filename" value="${xmi.filename}"/>
+							<param name="version" value="${version.number}"/>
+		    			</antcall>
+
+		    			<antcall target="generate.cacore" />
+		    		</else>
+	    		</if>
+        	</else>
+    	</if>
+    </target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+          target: generate.cacore
+         - - - - - - - - - - - - - - - - - -->
+    <target name="generate.cacore" description="Generate caCore">
+    	<echo message=" "/>
+		<echo message="-------------------------"/>
+		<echo message=" Now creating caCORE war "/>
+		<echo message="-------------------------"/>
+		<echo message=" "/>
+
+		<antcall target="unzip_caCORESDKzip">
+			<param name="entity.group.name" value="${entitygroupname}"/>
+			<param name="entity.package.name" value="${cacore.package.name}"/>
+		</antcall>
+
+    	<ant antfile="build.xml" dir="${cacoresdk.dir}" target="build-system" />
+
+    	<delete dir="${cacore.dir}" />
+    	<mkdir dir="${cacore.dir}" />
+    	<unwar dest="${cacore.dir}" src="${cacoresdk.dir}/output/${entitygroupname}/package/${entitygroupname}.war" overwrite="true"/>
+
+    	<if>
+    		<equals arg1="True" arg2="${testcases}" />
+    		<then>
+    			<delete dir="${entity.jar.location}" />
+    			<copy todir="${entity.jar.location}/${de.package.name}" overwrite="true">
+    				<fileset dir="${cacore.dir}/WEB-INF/classes/${de.package.name}">
+    					<include name="**/*" />
+    				</fileset>
+    			</copy>
+
+    			<property name="classesDEHibernateCfgFile" value="${base.dir}/classes/DynamicExtensionsHibernate.cfg.xml" />
+    			<property name="srcDEHibernateCfgFile" value="${base.dir}/../src/conf/DynamicExtensionsHibernate.cfg.xml" />
+    			<property name="caCOREHibernateCfgFile" value="${cacore.dir}/WEB-INF/classes/orm1.cfg.xml"/>
+
+
+    			<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
+    				<arg value="${classesDEHibernateCfgFile}" />
+    				<arg value="${caCOREHibernateCfgFile}" />
+    			    <classpath>
+    			    	<pathelement location="${base.dir}/classes/" />
+    			    	<fileset dir="${base.dir}/../lib/server">
+    			    		<include name="*.jar" />
+    			    		<exclude name="uml-1.3.jar" />
+    			    	</fileset>
+    			    	<fileset dir="${base.dir}/../lib/extra">
+    			    		<include name="jboss-j2ee.jar" />
+    			    		<include name="jta.jar" />
+    			    	</fileset>
+    			   	</classpath>
+    			</java>
+
+    			<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
+    				<arg value="${srcDEHibernateCfgFile}" />
+    				<arg value="${caCOREHibernateCfgFile}" />
+    			    <classpath>
+    			    	<pathelement location="${base.dir}/classes/" />
+    			    	<fileset dir="${base.dir}/../lib/server">
+    			    		<include name="*.jar" />
+    			    		<exclude name="uml-1.3.jar" />
+    			    	</fileset>
+    			    	<fileset dir="${base.dir}/../lib/extra">
+    			    		<include name="jboss-j2ee.jar" />
+    			    		<include name="jta.jar" />
+    			    	</fileset>
+    			   	</classpath>
+    			</java>
+
+    			<jar destfile="${entity.jar.location}/${entitygroupname}.jar" basedir="${entity.jar.location}"/>
+    			<copy todir="${base.dir}/../lib/server/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
+
+    		</then>
+    		<else>
+    			<unzip src="${de.zip.location}/dynamicextensions.zip" dest="${dezip.dir}" overwrite="true" />
+
+    			<delete dir="${entity.jar.location}" />
+    	    	<copy todir="${entity.jar.location}/${de.package.name}" overwrite="true">
+    	    		<fileset dir="${cacore.dir}/WEB-INF/classes/${de.package.name}">
+    	    			<include name="**/*" />
+    	    		</fileset>
+    	    	</copy>
+
+    	    	<property name="caCOREHibernateCfgFile" value="${cacore.dir}/WEB-INF/classes/orm1.cfg.xml"/>
+    	    	<property name="DEHibernateWebCfgFile" value="${dezip.dir}/conf/DynamicExtensionsHibernateWeb.cfg.xml" />
+
+    			<mkdir dir="${cacore.deployable.dir}/${entitygroupname}"/>
+    			<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${caCOREHibernateCfgFile}"/>
+
+    	    	<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
+    	    		<arg value="${DEHibernateWebCfgFile}" />
+    	    		<arg value="${caCOREHibernateCfgFile}" />
+    				<classpath>
+    					<pathelement location="${temp.dir.DE}" />
+    					<fileset dir="${lib.dir.DE}">
+    						<include name="*.jar" />
+    						<exclude name="uml-1.3.jar" />
+    					</fileset>
+    					<fileset dir="${extra.lib.dir.DE}">
+    						<include name="jboss-j2ee.jar" />
+    						<include name="jta.jar" />
+    					</fileset>
+    				</classpath>
+    			</java>
+
+    			<antcall target="build_artifacts" />
+    		</else>
+    	</if>
+
+		<delete>
+			<fileset dir="${export.dir}/">
+				<include name="**/*.txt"/>
+				<include name="**/Package.properties" />
+			</fileset>
+		</delete>
+    </target>
+
+	<target name="unzip_caCORESDKzip" description="unzip caCore SDK zip">
+		<delete dir="${cacoresdk.dir}"/>
+		<mkdir dir="${cacoresdk.dir}"/>
+
+		<if>
+			<equals arg1="True" arg2="${testcases}"/>
+			<then>
+				<unzip src="${base.dir}/../lib/server/caCORESDK.zip" dest="${cacoresdk.dir}" overwrite="true" />
+			</then>
+			<else>
+				<unzip src="${caCORESDK.zip.location}" dest="${cacoresdk.dir}" overwrite="true" />
+			</else>
+		</if>
+
+		<copy todir="${cacoresdk.dir}/models/xmi" overwrite="true">
+			<fileset dir="${export.dir}">
+				<include name="*.xmi" />
+			</fileset>
+		</copy>
+
+		<replace dir="${cacoresdk.dir}/conf">
+			<include name="deploy.properties" />
+			<replacefilter token="@@ENTITYNAME@@" value="${entity.group.name}.xmi" />
+			<replacefilter token="@@FIXED_ENTITYNAME@@" value="fixed_${entity.group.name}.xmi" />
+			<replacefilter token="@@PACKAGE_NAME@@" value="${entity.package.name}" />
+			<replacefilter token="@@APPLICATION_NAME@@" value="${entity.group.name}" />
+		</replace>
+
+	</target>
+
+	<target name="build_artifacts" description="build artifacts">
+		<echo message=" "/>
+		<echo message="-----------------------------------------"/>
+		<echo message=" Now creating ${entitygroupname}.jar file "/>
+		<echo message="-----------------------------------------"/>
+		<echo message=" "/>
+
+		<!-- Create ${entitygroupname}.jar file. -->
+		<jar destfile="${entity.jar.location}/${entitygroupname}.jar" basedir="${entity.jar.location}"/>
+
+		<copy todir="${entityGroup.jar.location}/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
+		<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
+
+		<echo message=" "/>
+		<echo message="-----------------------------------------"/>
+		<echo message=" Now creating dynamicExtensions.zip file "/>
+		<echo message="-----------------------------------------"/>
+		<echo message=" "/>
+
+		<!-- Create dynamicextensions.zip file. -->
+		<zip destfile="${dezip.dir}/dynamicextensions.zip" basedir="${dezip.dir}" />
+
+		<copy todir="${base.dir}/" file="${dezip.dir}/dynamicextensions.zip" overwrite="true"/>
+
+		<delete>
+			<fileset dir="${cacore.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
+
+		<delete>
+			<fileset dir="${dezip.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
+	</target>
 
 </project>
