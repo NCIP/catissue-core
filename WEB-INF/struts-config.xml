@@ -1145,6 +1145,7 @@ PUBLIC
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 			<forward name="WashU" path="/SignUp.do?userFrom=WashU&amp;pageOf=pageOfSignUp&amp;operation=add" />
+			<forward name="SCG" path="/GotoSCG.do" />
 		</action>
 
 		<action path="/WustlConnect"
@@ -5667,6 +5668,27 @@ PUBLIC
 	   <action path="/ComboDataAction" type="edu.wustl.catissuecore.action.ComboDataAction" scope="request"/>
 	   <action path="/ClinicalDiagnosisData" type="edu.wustl.catissuecore.action.ClinicalDiagnosisDataAction" scope="request"/>					
 	   <action path="/StorageContainerAjaxAction" type="edu.wustl.catissuecore.action.StorageContainerAjaxAction" scope="request"/>
+
+	   <action path="/GotoSCG" type="edu.wustl.catissuecore.action.SCGAction"
+		    validate="false"
+		    scope="request">
+		   		<forward name="add" path="/SpecimenCollectionGroup.do?pageOf=pageOfSpecimenCollectionGroup&amp;operation=add" />
+		   		<forward name="edit" path="/SimpleSearchEdit.do?aliasName=SpecimenCollectionGroup&amp;pageOf=pageOfSpecimenCollectionGroup" />
+		   		<forward name="cpBasedView" path="/CpBasedSearch.do?menuSelected=22"/>
+		</action>
+
+		<action path="/UrlFeature"
+			type="edu.wustl.catissuecore.action.UrlFeatureAction"
+			name="loginForm"
+			validate="false"
+			scope="request">
+			<forward name="login" path="/Login.do?pageOf=SCG" />
+		</action>
+
+
+	   <action path="/AjaxAction" type="edu.wustl.catissuecore.action.CaTissueAjaxAction"
+			scope="request" parameter="method">
+		</action>
 
 	</action-mappings>
 	
