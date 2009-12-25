@@ -599,5 +599,28 @@
 		<name>empi.DBSchema</name>
 		<value>@@empiDBSchema@@</value>
 	</property>
+
+<!--ClinPortal-caTissue Integration-->	
+	<property>
+		<name>clinportal.integrationEnabled</name>
+		<value>@@integrationEnabled@@</value>
+	</property>
+
+	<property>
+		<name>clinportal.keyStorePath</name>
+		<value>@@ClinPortalKeyStorePath@@</value>
+	</property>
+
+
+	<property>
+		<name>clinportal.url</name>
+		<value>@@ClinPortalURL@@</value>
+	</property>
+
+	<property>
+		<name>ClinPortalServiceURL</name>
+		<value>@@ClinPortalURL@@/http/remoteService</value>
+	</property>
+
 	
 </properties>
