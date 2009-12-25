@@ -1,0 +1,1 @@
+edu.wustl.catissuecore.domain.Specimen,edu.wustl.catissuecore.domain.SpecimenCollectionGroup,edu.wustl.catissuecore.domain.CollectionProtocolRegistration,edu.wustl.catissuecore.domain.CollectionProtocol

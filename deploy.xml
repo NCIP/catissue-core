@@ -4076,4 +4076,18 @@ Thanking You,
 			</classpath>
 		</java>
 	</target>
+
+	<target name="insertPaths">
+			<antcall target="unzip_aq_installable" />
+			<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+			<antcall target="replacecfgfiles"/>
+			<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="insertPaths">
+				<property name="parent.base.dir" value="${base.dir}" />
+				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore" />
+				<property name="war.dir" value="catissuecore" />
+				<property name="lib.dir" value="${basedir}/lib" />
+				<property name="property.file" value="${basedir}/caTissueInstall.properties" />
+			</ant>
+			<delete dir="${temp.dir}" />
+		</target>
 </project>
