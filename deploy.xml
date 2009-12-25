@@ -1473,7 +1473,7 @@
 	</target>
  	-->
 
-	<target name="upgrade_app" depends="deploy_app" description="upgrade_app">
+	<target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
 	</target>
 <!--
 	<target name="upgrade_db">
@@ -1794,7 +1794,7 @@
    </target>
 
 
-   <target name="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5">
+   <target name="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5" description="this target ugrades the audit feature from v1.1.P4 to v1.1.P5" >
 			<echo message="Upgrade audit changes.">
 			</echo>
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}"  rdbms="oracle">
@@ -4047,7 +4047,7 @@ Thanking You,
 	</path>
 
 	<property name="bulk.bin.dir" value="${basedir}/BulkOperations/bin" />
-	<target name="unjar_bulk">
+	<target name="unjar_bulk" description="this target unjars the bulkoperator jar file.">
 		<delete dir="${bulk.bin.dir}" />
 		<mkdir dir="${bulk.bin.dir}" />
 		<unjar src="./caTissueSuite_Client/lib/bulkoperator.jar" dest="${bulk.bin.dir}/" />
@@ -4058,7 +4058,7 @@ Thanking You,
 	<property name="csvFile" value="" />
 	<property name="xmlFile" value="" />
 
-	<target name="add_bulk_operation_template" depends="unjar_bulk" description="this will add the bulk operation template">
+	<target name="add_bulk_operation_template" depends="unjar_bulk" description="this target adds the bulk operation XML and CSV template in the database.">
 		<echo message="Starting to load Bulk Operator Template.........." />
 		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
