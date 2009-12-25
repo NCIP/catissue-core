@@ -14,7 +14,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
 /**
- * 
+ *
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright: (c) Washington University, School of Medicine 2005</p>
@@ -26,7 +26,7 @@ public class LoginForm extends AbstractActionForm
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2179334257607237377L;
 
@@ -120,8 +120,8 @@ public class LoginForm extends AbstractActionForm
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
-		this.loginName = null;
-		this.password = null;
+		//this.loginName = null;
+		//this.password = null;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class LoginForm extends AbstractActionForm
 
 	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
-	 * @param abstractDomain An AbstractDomain Object 
+	 * @param abstractDomain An AbstractDomain Object
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{

@@ -404,7 +404,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			participant.setMetaPhoneCode(lNameMetaPhone);
 
 			dao.update(participant,oldParticipant);
-		
+
 
 			final Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant
 					.getParticipantMedicalIdentifierCollection();
@@ -604,7 +604,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 *  Changed for bug 14350
 	 * @param dao - DAO object
-	 * @param participantId - participant Id 
+	 * @param participantId - participant Id
 	 * @return if collected specimens present or not
 	 * @throws BizLogicException - BizLogicException
 	 */
@@ -624,11 +624,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		final List specimenList = (List) this.executeHqlQuery(dao, hql);
 		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
 		{
-			isCollectedSpecimenExists = true;			
+			isCollectedSpecimenExists = true;
 		}
 		else
 		{
-			isCollectedSpecimenExists = false;	
+			isCollectedSpecimenExists = false;
 		}
 		return isCollectedSpecimenExists;
 
@@ -712,7 +712,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		final Collection participantMedicalCollection = participant
 				.getParticipantMedicalIdentifierCollection();
 		//Created a new PMI collection for bulk operation functionality.
-		Collection newPMICollection = new LinkedHashSet(); 
+		Collection newPMICollection = new LinkedHashSet();
 		if (participantMedicalCollection != null && !participantMedicalCollection.isEmpty())
 		{
 			final Iterator itr = participantMedicalCollection.iterator();
@@ -882,7 +882,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			if (isSpecimenExist)
 			{
 				throw this.getBizLogicException(null, "participant.specimen.exists", "");
-			}	
+			}
 
 		}
 		return true;
@@ -900,7 +900,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		try
-		{	
+		{
 			if(collectionProtocolRegistrationIdentifier.getCollectionProtocol().getId() == null
 					&& collectionProtocolRegistrationIdentifier.getCollectionProtocol().getTitle() != null)
 			{
@@ -1540,12 +1540,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * logic: check whether this participant object is having
 	 * @param participant :participant.
 	 * @param cpid : cpid
 	 * @param sessionDataBean :sessionDataBean
 	 * @throws ApplicationException : ApplicationException
 	 */
-	public void registerParticipant(Object object, Long cpid, String userName)
+	public Long registerParticipant(Object object, Long cpid, String userName)
 			throws ApplicationException
 	{
 		final Participant participant = (Participant) object;
@@ -1553,21 +1554,22 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			String operation = Constants.ADD;
 			List resultList = new ArrayList<Long>();
-			if (participant.getEmpiId() != null)
+			if (participant.getId() != null)
 			{
-				final String[] selectColumnName = {"id"};
+
 				QueryWhereClause queryWhereClause = new QueryWhereClause(Participant.class
 						.getName());
-				queryWhereClause.addCondition(new EqualClause("empiId", participant.getEmpiId()));
+			    final String[] selectColumnName = {"protocolParticipantIdentifier"};
+				/*queryWhereClause.addCondition(new EqualClause("empiId", participant.getEmpiId()));
 				resultList = this.retrieve(Participant.class.getName(), selectColumnName,
-						queryWhereClause);
-				if (resultList != null && !resultList.isEmpty())
+						queryWhereClause);*/
+			//	if (resultList != null && !resultList.isEmpty())
 				{
-					participant.setId(Long.valueOf(resultList.get(0).toString()));
+				//	participant.setId(Long.valueOf(resultList.get(0).toString()));
 					queryWhereClause = new QueryWhereClause(CollectionProtocolRegistration.class
 							.getName());
 					queryWhereClause.addCondition(
-							new EqualClause("participant.id", resultList.get(0))).andOpr();
+							new EqualClause("participant.id", participant.getId())).andOpr();
 					queryWhereClause.addCondition(new EqualClause("collectionProtocol.id", cpid));
 					resultList = new ArrayList<Long>();
 					resultList = this.retrieve(CollectionProtocolRegistration.class.getName(),
@@ -1587,6 +1589,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			daoEx.printStackTrace();
 			throw new BizLogicException(daoEx);
 		}
+		return participant.getId();
 
 	}
 
@@ -1670,5 +1673,4 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 	}
-
 }

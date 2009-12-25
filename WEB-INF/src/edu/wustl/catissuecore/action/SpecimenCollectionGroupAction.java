@@ -53,8 +53,11 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.ClinPortalAPIService;
+import edu.wustl.catissuecore.util.ClinPortalCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -67,6 +70,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -113,7 +117,6 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
 			dao = AppUtility.openDAOSession(sessionData);
-			System.out.println();
 			// changes made by Baljeet
 			final String treeRefresh = request.getParameter("refresh");
 			request.setAttribute("refresh", treeRefresh);
@@ -171,16 +174,16 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			String selectedParticipantOrPPIdentifierId = null;
 			// Radio button for Protocol Participant Identifier or Participant
 			String radioButtonSelectedForType = null;
-			String selectedCollectionProtocolId = String.valueOf(specimenCollectionGroupForm
+			String selectedCPId = String.valueOf(specimenCollectionGroupForm
 					.getCollectionProtocolId());
-			if (selectedCollectionProtocolId
+			if (selectedCPId
 					.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
 			{
 				final Map forwardToHashMap = (Map) request
 						.getAttribute(Constants.FORWARD_TO_HASHMAP);
 				if (forwardToHashMap != null)
 				{
-					selectedCollectionProtocolId = forwardToHashMap.get(
+					selectedCPId = forwardToHashMap.get(
 							Constants.COLLECTION_PROTOCOL_ID).toString();
 					selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 							Constants.PARTICIPANT_ID).toString();
@@ -217,14 +220,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			{
 				// Get CollectionprotocolRegistration Object
 				collectionProtocolRegistration = this.getcollectionProtocolRegistrationObj(
-						selectedParticipantOrPPIdentifierId, selectedCollectionProtocolId,
+						selectedParticipantOrPPIdentifierId, selectedCPId,
 						radioButtonSelectedForType, dao);
 			}
 			else if (specimenCollectionGroupForm.getId() != 0)
 			{
 				// Get CollectionprotocolRegistration Object
-				final SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
-						.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+//				final SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
+//						.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 				final List cpRegnList = dao.retrieveAttribute(SpecimenCollectionGroup.class, "id",
 						specimenCollectionGroupForm.getId(), "collectionProtocolRegistration");
 				if ((cpRegnList != null) && (cpRegnList.size() > 0))
@@ -266,7 +269,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// Set witnessName,ConsentDate and SignedConsentURL
 			// Resolved Lazy
 			// ----collectionProtocolRegistration.getConsentTierResponseCollection()
-			System.out.println();
+
 			final List consentTierResponseList = (List) dao.retrieveAttribute(
 					CollectionProtocolRegistration.class, "id", collectionProtocolRegistration
 							.getId(), "elements(consentTierResponseCollection)");
@@ -865,6 +868,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 
 			session.removeAttribute("asignedPositonSet");
+		    final String isClinPortalServiceEnabled = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_ENABLED);
+		    if(isClinPortalServiceEnabled.equals(Constants.TRUE))
+		    {
+		        formClinportalURL(request,specimenCollectionGroupForm,sessionData.getUserName());
+		    }
+
 		}
 		finally
 		{
@@ -873,7 +882,83 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		return mapping.findForward(pageOf);
 	}
 
-	/**
+	 /**
+     * 1: get scgId != null => get catissue pid,cp id ,cpe id
+     * 2: get clinportal pid, cs id ,cse id
+     * 3: if scgid == null =>
+     */
+    private void formClinportalURL(final HttpServletRequest request,
+            final SpecimenCollectionGroupForm specimenCollectionGroupForm,
+            final String loginName) throws BizLogicException
+    {
+        final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+        .getAttribute(Constants.SESSION_DATA);
+        final StringBuilder url = new StringBuilder();
+        try
+        {
+            final Long scgID = specimenCollectionGroupForm.getId();
+            final ClinPortalAPIService clinPortalAPIService = new ClinPortalAPIService();
+
+            String clinportalUrl = XMLPropertyHandler
+                    .getValue(ClinPortalIntegrationConstants.CLINPORTAL_URL);
+            final Map<String, Long> map = clinPortalAPIService.getClinPortalURLIds(sessionData.getUserName(),
+                    specimenCollectionGroupForm.getCollectionProtocolId(),
+                    specimenCollectionGroupForm.getParticipantId(),
+                    specimenCollectionGroupForm.getCollectionProtocolEventId());
+            clinportalUrl = ClinPortalIntegrationConstants
+                    .CLINPORTAL_URL_CONTEXT(clinportalUrl);
+            url.append(clinportalUrl);
+            String visitId =(String) request.getAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
+            if(visitId==null)
+            {
+                /**
+                 * get corresponding visit id to scgId if present
+                 * else get near to visit Id of scgIdf
+                 */
+                visitId=map.get(ClinPortalIntegrationConstants.EVENTENTRYID).toString();
+            }
+            if (visitId != null && scgID != null && !visitId.equals("0") && scgID >0)
+            {
+                clinPortalAPIService.associateVisitAndScg(sessionData.getUserName(),visitId, String
+                        .valueOf(scgID));
+                url.append(ClinPortalIntegrationConstants.EVENTENTRYID).append(
+                        ClinPortalIntegrationConstants.EQUALS).append(
+                        String.valueOf(visitId));
+            }
+            else
+            {
+                /*
+                 * get  CS id from CP id , get CSE id from CPE id, get PId and user login name
+                 */
+                final Long csId = map
+                        .get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
+                final Long cseId = map.get(ClinPortalIntegrationConstants.EVENT_ID);
+                final Long pId = map
+                        .get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
+
+                url.append(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID)
+                        .append(Constants.EQUALS).append(pId);
+                url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(
+                        ClinPortalIntegrationConstants.CLINICAL_STUDY_ID,
+                        String.valueOf(csId)));
+                url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(
+                        ClinPortalIntegrationConstants.EVENT_ID, String
+                                .valueOf(cseId)));
+
+            }
+            url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(ClinPortalIntegrationConstants.LOGINNAME, loginName));
+            url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter("&method", ClinPortalIntegrationConstants.LOGIN));
+        }
+        catch (Exception e)
+        {
+            logger.out.error(e.getMessage());
+        }
+        request.setAttribute(ClinPortalIntegrationConstants.CALLBACK_URL, url
+                .toString());
+
+    }
+
+    /**
 	 * @param specimenCollectionGroupForm : specimenCollectionGroupForm
 	 * @param bizLogic : bizLogic
 	 * @throws BizLogicException : BizLogicException

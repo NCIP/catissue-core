@@ -93,11 +93,13 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.TextConstants;
@@ -122,6 +124,7 @@ import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeUtility;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
+import edu.wustl.wustlkey.util.global.WUSTLKeyUtility;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -3456,16 +3459,16 @@ public class AppUtility
 			final PermissibleValue pv = (PermissibleValue) obj;
 			final String tmpStr = pv.getValue();
 			specimenClassTypeList.add(tmpStr);
-		} 
+		}
 		return specimenClassTypeList;
 	}
-	
+
 	/**
 	 * @param id
 	 *            Identifier of the StorageContainer related to which the
 	 *            collectionProtocol titles are to be retrieved.
 	 * @return List of collectionProtocol title.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static List getSpecimenClassList(String id) throws ApplicationException
 	{
@@ -3478,7 +3481,7 @@ public class AppUtility
 	 *            Identifier of the StorageContainer related to which the
 	 *            collectionProtocol titles are to be retrieved.
 	 * @return List of collectionProtocol title.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static List getSpecimenTypeList(String id) throws ApplicationException
 	{
@@ -3487,7 +3490,7 @@ public class AppUtility
 		return getResult(sql);
 	}
 	/**
-	 * 
+	 *
 	 * @param sql SQL query.
 	 * @return List
 	 * @throws ApplicationException ApplicationException
@@ -3525,7 +3528,7 @@ public class AppUtility
 	 *            Identifier of the StorageContainer related to which the
 	 *            collectionProtocol titles are to be retrieved.
 	 * @return List of collectionProtocol title.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static List getCollectionProtocolList(String id) throws ApplicationException
 	{
@@ -3549,10 +3552,10 @@ public class AppUtility
 		}
 		return returnList;
 	}
-	
+
 	/**
 	 * @param siteidSet - siteidSet.
-	 * @param siteId - siteId 
+	 * @param siteId - siteId
 	 * @return boolean value
 	 */
 	public static boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId)
@@ -3626,4 +3629,66 @@ public class AppUtility
 	  	return newInt/p;
 	  }
 
+
+
+    /**
+     *
+     * @param url
+     * @param target
+     * @return
+     */
+    public static String getSubParameterValue(String url,String target)
+    {
+        String value="";
+        String arr[]=url.split(ClinPortalIntegrationConstants.DELIMETER);
+
+        for (String string : arr)
+        {
+            if(string.contains(target))
+            {
+                String []values=string.split(ClinPortalIntegrationConstants.EQUALS);
+                value=values[1];
+            }
+        }
+        return value;
+    }
+
+       /**
+     * returns password from csm db on loginname
+     * @param loginName
+     * @throws BizLogicException
+     */
+    public static String getPassord(String loginName) throws BizLogicException
+    {
+        String password="";
+        try
+        {
+            if (loginName != null)
+            {
+                String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE LOGIN_NAME='"
+                        + loginName + "' ";
+                List result=WUSTLKeyUtility.executeQueryUsingDataSource(queryStr, false,
+                        edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
+                if(!result.isEmpty())
+                {
+                   result=(List)result.get(0);
+                   password=result.get(0).toString();
+                   password= PasswordManager.decrypt(password);
+                }
+            }
+        }
+        catch (ApplicationException e)
+        {
+            logger.debug(e.getMessage(), e);
+            throw new BizLogicException(ErrorKey
+                    .getErrorKey("biz.update.error"), e,
+                    "Error in database operation");
+        }
+        catch (PasswordEncryptionException e)
+        {
+            logger.debug(e.getMessage(), e);
+            throw new BizLogicException(null, null, e.getMessage());
+        }
+        return password;
+    }
 }
