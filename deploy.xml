@@ -1133,7 +1133,7 @@
 
 		<antcall target="update_metadata_for_tagged_values">
 		</antcall>
-		<antcall target="create_category">
+	<!--	<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
 		</antcall>
 		<antcall target="create_category">
@@ -1151,7 +1151,7 @@
 		<antcall target="show_hide_forms">
 		</antcall>
 		<antcall target="show_hide_forms_based_on_CPs">
-		</antcall>
+		</antcall>  -->
 	</target>
 
 	<!--MySQL Database Creation -->
