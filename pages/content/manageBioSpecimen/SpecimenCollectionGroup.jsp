@@ -10,6 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
@@ -18,6 +19,7 @@
 
 
 <script src="jss/script.js" type="text/javascript"></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
@@ -29,7 +31,10 @@
  		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
  		String signedConsentDate = "";
  		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+
+ 		String clinportalUrl =(String) request.getAttribute(ClinPortalIntegrationConstants.CALLBACK_URL);
  		boolean isAddNew = false;
+
  		Long scgEntityId = null;
  		scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
  		String staticEntityName=null;
@@ -158,6 +163,30 @@
 		}
 	</script>
 	<script language="JavaScript">
+
+
+	function makeClinPortalUrl()
+	{
+		var scgId=document.getElementById("id").value;
+		var url='<%=clinportalUrl%>'+"&scgId="+scgId;
+		logout();
+		window.top.location=url;
+	}
+
+	function logout()
+	{
+		var request = newXMLHTTPReq();
+		request.onreadystatechange = getReadyStateHandler(request,"",true);
+		//send data to ActionServlet
+		//Open connection to servlet
+		request.open("POST","AjaxAction.do?method=logout",true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		var dataToSend = "";
+		request.send(dataToSend);
+	}
+
+
+
 
      	function showAnnotations()
 		{

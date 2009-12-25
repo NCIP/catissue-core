@@ -120,7 +120,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="participantName"/>
 						<html:hidden property="collectionProtocolName"/>
 						<html:hidden property="protocolParticipantIdentifier"/>
-						<html:hidden property="id"/>
+						<html:hidden property="id" styleId="id"/>
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 						<html:hidden property="withdrawlButtonStatus"/>
