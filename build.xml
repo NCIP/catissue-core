@@ -102,6 +102,7 @@
 		<mkdir dir="${target.dir}" />
 		<!-- Create the temp directory for caCORE CSM war file-->
 		<mkdir dir="${temp.dir}"/>
+		<antcall target="check.java.version"></antcall>
 	</target>
 	<target name="Label_BarCode_Generator_Client">
 		<delete file="label_barcode_gen_client.jar" />
@@ -1296,4 +1297,19 @@
 		</jar>
 	</target>
 	<!-- shippingtracking - end -->
+
+	<target name="check.java.version"
+	            description="checks if the version of java is the correct one">
+	<echo>${java.version}</echo>
+	      <if>
+	      		<contains string="${java.version}" substring="${java.required.version}"/>
+	            <!--equals arg1="${java.version}" arg2="1.5"/>-->
+	            <then>
+
+	            </then>
+	            <else>
+	                <fail message="Wrong Java version! [${java.version}] Required version: ${java.required.version}"/>
+	            </else>
+	        </if>
+	    </target>
 </project>
