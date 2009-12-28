@@ -786,7 +786,7 @@ drop table if exists catissue_audit_event_details;
 CREATE TABLE `catissue_audit_event_details` (
                                 `IDENTIFIER` bigint(20) NOT NULL auto_increment,
                                 `ELEMENT_NAME` varchar(150) default NULL,
-                                `PREVIOUS_VALUE` varchar(150) default NULL,
+                                `PREVIOUS_VALUE` varchar(4000) default NULL,
                                 `CURRENT_VALUE` varchar(4000) default NULL,
                                 `AUDIT_EVENT_LOG_ID` bigint(20) default NULL,
                                 PRIMARY KEY  (`IDENTIFIER`),

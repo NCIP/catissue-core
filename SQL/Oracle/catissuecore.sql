@@ -32,7 +32,7 @@ create table CATISSUE_COLLECTION_PROTOCOL (
    CONSENTS_WAIVED number(1,0),
    CP_TYPE varchar(50) default NULL,
    PARENT_CP_ID number(19,0) default NULL,
-   SEQUENCE_NUMBER integer,	
+   SEQUENCE_NUMBER integer,
    STUDY_CALENDAR_EVENT_POINT DOUBLE PRECISION default NULL,
    primary key (IDENTIFIER)
 );
@@ -410,7 +410,7 @@ create table CATISSUE_COLL_PROT_REG (
    CONSENT_DOC_URL varchar2(500),
    CONSENT_WITNESS number(19,0),
    BARCODE varchar(255) unique,
-   DATE_OFFSET integer,	
+   DATE_OFFSET integer,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
@@ -476,15 +476,15 @@ create table CATISSUE_COLL_PROT_EVENT (
 
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(255) unique, 
-   BARCODE varchar(255) unique, 
+   NAME varchar(255) unique,
+   BARCODE varchar(255) unique,
    COMMENTS varchar2(2000),
    ENCOUNTER_TIMESTAMP date,
    COLLECTION_PROTOCOL_REG_ID number(19,0),
    SURGICAL_PATHOLOGY_NUMBER varchar(50),
    COLLECTION_PROTOCOL_EVENT_ID number(19,0),
    COLLECTION_STATUS varchar2(50),
-   DATE_OFFSET integer, 	
+   DATE_OFFSET integer,
    primary key (IDENTIFIER),
    CONSTRAINT fkDebaf1677e07c4ac FOREIGN KEY( Collection_Protocol_reg_Id ) REFERENCES CATISSUE_COLL_PROT_REG( IdentIfier ),
    CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier )
@@ -492,101 +492,101 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
 
 
 CREATE TABLE CATISSUE_ABSTRACT_SPECIMEN
-(                                                                                                                 
-      IDENTIFIER NUMBER(19,0) NOT NULL,    
-	  SPECIMEN_CLASS varchar(50) NOT NULL,         
-      SPECIMEN_TYPE varchar(50),                                                                                                                
-      LINEAGE varchar(50),                                                                                                              
-      PATHOLOGICAL_STATUS varchar(50),                                                                                                  
-      PARENT_SPECIMEN_ID number(19,0),                                                                                                    
-      SPECIMEN_CHARACTERISTICS_ID number(19,0),                                                                                      
-      INITIAL_QUANTITY double precision,                                                                                                        
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK1674810456906F39 FOREIGN KEY (SPECIMEN_CHARACTERISTICS_ID) REFERENCES catissue_specimen_char                 
-); 
+(
+      IDENTIFIER NUMBER(19,0) NOT NULL,
+	  SPECIMEN_CLASS varchar(50) NOT NULL,
+      SPECIMEN_TYPE varchar(50),
+      LINEAGE varchar(50),
+      PATHOLOGICAL_STATUS varchar(50),
+      PARENT_SPECIMEN_ID number(19,0),
+      SPECIMEN_CHARACTERISTICS_ID number(19,0),
+      INITIAL_QUANTITY double precision,
+      PRIMARY KEY  (IDENTIFIER),
+      CONSTRAINT FK1674810456906F39 FOREIGN KEY (SPECIMEN_CHARACTERISTICS_ID) REFERENCES catissue_specimen_char
+);
 
 CREATE TABLE CATISSUE_CP_REQ_SPECIMEN
- (                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,         
-     STORAGE_TYPE varchar(255) NOT NULL,      
+ (
+     IDENTIFIER NUMBER(19,0) NOT NULL,
+     STORAGE_TYPE varchar(255) NOT NULL,
 	 COLLECTION_PROTOCOL_EVENT_ID number(19,0),
 	 LABELFORMAT varchar(255) default NULL,
-     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+     PRIMARY KEY  (IDENTIFIER),
      CONSTRAINT FK111110456906F39 FOREIGN KEY (COLLECTION_PROTOCOL_EVENT_ID) REFERENCES catissue_coll_prot_event,
 	 CONSTRAINT FK_PARENT_CP_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_ABSTRACT_SPECIMEN
- ); 
- 
- 
+ );
+
+
  CREATE TABLE CATISSUE_MOL_REQ_SPECIMEN
- (                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,   
+ (
+     IDENTIFIER NUMBER(19,0) NOT NULL,
 	 CONCENTRATION double precision,
-     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-     CONSTRAINT FK_MOL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN                
+     PRIMARY KEY  (IDENTIFIER),
+     CONSTRAINT FK_MOL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
  );
 CREATE TABLE CATISSUE_FLUID_REQ_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,       
-     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL,
+     PRIMARY KEY  (IDENTIFIER),
      CONSTRAINT FK_FLUID_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
 );
 CREATE TABLE CATISSUE_CELL_REQ_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL,
+      PRIMARY KEY  (IDENTIFIER),
       CONSTRAINT FK_CELL_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
-                
+
 );
 CREATE TABLE CATISSUE_TISSUE_REQ_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK_TISSUE_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN               
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL,
+      PRIMARY KEY  (IDENTIFIER),
+      CONSTRAINT FK_TISSUE_REQ_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_CP_REQ_SPECIMEN
 );
 
 CREATE TABLE CATISSUE_SPECIMEN
-(                                                                                                                 
+(
      IDENTIFIER NUMBER(19,0) NOT NULL,
-     LABEL varchar(255) unique,                                                                                                               
-     AVAILABLE number(1,0),                                                                                                         
+     LABEL varchar(255) unique,
+     AVAILABLE number(1,0),
      BARCODE varchar(255) unique,
      COMMENTS varchar2(500),
-     ACTIVITY_STATUS varchar(50),                                                                                              
-     SPECIMEN_COLLECTION_GROUP_ID number(19,0),     
-     REQ_SPECIMEN_ID number(19,0),     
-     AVAILABLE_QUANTITY double precision,                                                                                                        
-     CREATED_ON_DATE date ,                                                                                                             
-     COLLECTION_STATUS varchar(50),                                                                                                    
-     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+     ACTIVITY_STATUS varchar(50),
+     SPECIMEN_COLLECTION_GROUP_ID number(19,0),
+     REQ_SPECIMEN_ID number(19,0),
+     AVAILABLE_QUANTITY double precision,
+     CREATED_ON_DATE date ,
+     COLLECTION_STATUS varchar(50),
+     PRIMARY KEY  (IDENTIFIER),
      CONSTRAINT FK1674810433BF33C5 FOREIGN KEY (SPECIMEN_COLLECTION_GROUP_ID) REFERENCES catissue_specimen_coll_group,
      CONSTRAINT FK_REQ_SPECIMEN_ID FOREIGN KEY (REQ_SPECIMEN_ID) REFERENCES CATISSUE_CP_REQ_SPECIMEN,
  	 CONSTRAINT FK_PARENT_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_ABSTRACT_SPECIMEN
-   ); 
-   
+   );
+
    CREATE TABLE CATISSUE_MOLECULAR_SPECIMEN
-   (                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL,  
-     CONCENTRATION double precision,    
-     PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-     CONSTRAINT FK_MOLECULAR_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN             
+   (
+     IDENTIFIER NUMBER(19,0) NOT NULL,
+     CONCENTRATION double precision,
+     PRIMARY KEY  (IDENTIFIER),
+     CONSTRAINT FK_MOLECULAR_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
    );
 
 CREATE TABLE CATISSUE_FLUID_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL ,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
-      CONSTRAINT FK_FLUID_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN                
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL ,
+      PRIMARY KEY  (IDENTIFIER),
+      CONSTRAINT FK_FLUID_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 CREATE TABLE CATISSUE_CELL_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL ,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL ,
+      PRIMARY KEY  (IDENTIFIER),
       CONSTRAINT FK_CELL_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 CREATE TABLE CATISSUE_TISSUE_SPECIMEN
-(                                                                                                                 
-     IDENTIFIER NUMBER(19,0) NOT NULL ,       
-      PRIMARY KEY  (IDENTIFIER),                                                                                                                     
+(
+     IDENTIFIER NUMBER(19,0) NOT NULL ,
+      PRIMARY KEY  (IDENTIFIER),
       CONSTRAINT FK_TISSUE_SPECIMEN FOREIGN KEY (IDENTIFIER) REFERENCES CATISSUE_SPECIMEN
 );
 create table CATISSUE_SPECIMEN_TYPE (
@@ -598,46 +598,46 @@ create table CATISSUE_SPECIMEN_TYPE (
  * Audit Sql
  */
 
-CREATE TABLE catissue_audit_event (                                                                
-                        IDENTIFIER number(19,0) not null ,                                                   
-                        IP_ADDRESS varchar(20),                                                            
-                        EVENT_TIMESTAMP date ,                                                           
-                        USER_ID number(19,0),                                                                 
-                        COMMENTS varchar2(500),                                                                                  
-                        EVENT_TYPE varchar(200),                                                            
-                        PRIMARY KEY  (IDENTIFIER)                                                                  
-                        
+CREATE TABLE catissue_audit_event (
+                        IDENTIFIER number(19,0) not null ,
+                        IP_ADDRESS varchar(20),
+                        EVENT_TIMESTAMP date ,
+                        USER_ID number(19,0),
+                        COMMENTS varchar2(500),
+                        EVENT_TYPE varchar(200),
+                        PRIMARY KEY  (IDENTIFIER)
+
                       ) ;
 
 
-CREATE TABLE catissue_audit_event_log (                                                                          
-                            IDENTIFIER number(19,0) not null ,                                                              
-                            AUDIT_EVENT_ID number(19,0),                                                                        
-                            PRIMARY KEY  (IDENTIFIER),                                                                                     
-                            CONSTRAINT FK8BB672DF77F0B904 FOREIGN KEY (AUDIT_EVENT_ID) REFERENCES catissue_audit_event (IDENTIFIER)  
+CREATE TABLE catissue_audit_event_log (
+                            IDENTIFIER number(19,0) not null ,
+                            AUDIT_EVENT_ID number(19,0),
+                            PRIMARY KEY  (IDENTIFIER),
+                            CONSTRAINT FK8BB672DF77F0B904 FOREIGN KEY (AUDIT_EVENT_ID) REFERENCES catissue_audit_event (IDENTIFIER)
                           );
 
 
-CREATE TABLE catissue_data_audit_event_log (                                                                               
-                                 IDENTIFIER number(19,0) not null ,                                                                              
-                                 OBJECT_IDENTIFIER number(19,0),                                                                               
-                                 OBJECT_NAME varchar(50),                                                                                    
-                                 PARENT_LOG_ID number(19,0),                                                                                   
-                                 PRIMARY KEY  (IDENTIFIER),                                                                                               
-                                 CONSTRAINT FK5C07745DC62F96A411 FOREIGN KEY (IDENTIFIER) REFERENCES catissue_audit_event_log (IDENTIFIER),         
-                                 CONSTRAINT FK5C07745DC62F96A412 FOREIGN KEY (PARENT_LOG_ID) REFERENCES catissue_data_audit_event_log (IDENTIFIER)  
+CREATE TABLE catissue_data_audit_event_log (
+                                 IDENTIFIER number(19,0) not null ,
+                                 OBJECT_IDENTIFIER number(19,0),
+                                 OBJECT_NAME varchar(50),
+                                 PARENT_LOG_ID number(19,0),
+                                 PRIMARY KEY  (IDENTIFIER),
+                                 CONSTRAINT FK5C07745DC62F96A411 FOREIGN KEY (IDENTIFIER) REFERENCES catissue_audit_event_log (IDENTIFIER),
+                                 CONSTRAINT FK5C07745DC62F96A412 FOREIGN KEY (PARENT_LOG_ID) REFERENCES catissue_data_audit_event_log (IDENTIFIER)
                                ) ;
 
 
 
-CREATE TABLE catissue_audit_event_details (                                                                              
-                                IDENTIFIER number(19,0) not null ,                                                                        
-                                ELEMENT_NAME varchar(150),                                                                                
-                                PREVIOUS_VALUE varchar(150),                                                                              
-                                CURRENT_VALUE varchar(4000),                                                                               
-                                AUDIT_EVENT_LOG_ID number(19,0) ,                                                                            
-                                PRIMARY KEY  (IDENTIFIER),                                                                                             
-                                CONSTRAINT FK5C07745D34FFD77F FOREIGN KEY (AUDIT_EVENT_LOG_ID) REFERENCES catissue_audit_event_log (IDENTIFIER)  
+CREATE TABLE catissue_audit_event_details (
+                                IDENTIFIER number(19,0) not null ,
+                                ELEMENT_NAME varchar(150),
+                                PREVIOUS_VALUE varchar(4000),
+                                CURRENT_VALUE varchar(4000),
+                                AUDIT_EVENT_LOG_ID number(19,0) ,
+                                PRIMARY KEY  (IDENTIFIER),
+                                CONSTRAINT FK5C07745D34FFD77F FOREIGN KEY (AUDIT_EVENT_LOG_ID) REFERENCES catissue_audit_event_log (IDENTIFIER)
                               ) ;
 
 CREATE sequence CATISSUE_AUDIT_EVENT_PARAM_SEQ;
@@ -651,7 +651,7 @@ CREATE sequence LOGIN_EVENT_PARAM_SEQ;
 
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    IDENTIFIER number(19,0) not null,
-   QUERY_DETAILS clob,  
+   QUERY_DETAILS clob,
    AUDIT_EVENT_ID number(19,0),
    primary key (IDENTIFIER)
 );
@@ -896,7 +896,7 @@ create table CATISSUE_ORDER (
 
 /* extra for catissue_distribution */
  alter table catissue_distribution add ORDER_ID number(19,0);
- alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID number(19,0);    
+ alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID number(19,0);
 /* extra finished */
 
 alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5F69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
@@ -1168,7 +1168,7 @@ ALTER TABLE CATISSUE_PARTICIPANT ADD LNAME_METAPHONE varchar2(50);
 
 /** MSR changes : End **/
 
-/**  Bug 13225 -  Clinical Diagnosis subset at CP definition level 
+/**  Bug 13225 -  Clinical Diagnosis subset at CP definition level
  */
 create table CATISSUE_CLINICAL_DIAGNOSIS (
    IDENTIFIER number(19,0) not null ,
@@ -1180,7 +1180,7 @@ create table CATISSUE_CLINICAL_DIAGNOSIS (
 create sequence CATISSUE_CLINICAL_DIAG_SEQ;
 
 /*Query audit changes.*/
-alter table catissue_audit_event_query_log ADD QUERY_ID number(20) default NULL; 
+alter table catissue_audit_event_query_log ADD QUERY_ID number(20) default NULL;
 alter table catissue_audit_event_query_log add TEMP_TABLE_NAME varchar(150) default null;
 alter table catissue_audit_event_query_log add IF_TEMP_TABLE_DELETED number(1) default 0;
 alter table catissue_audit_event_query_log add ROOT_ENTITY_NAME varchar(150) default null;
@@ -1191,7 +1191,7 @@ commit;
 /*Bulk Operations from UI.*/
 CREATE SEQUENCE CATISSUE_BULK_OPERATION_SEQ;
 CREATE SEQUENCE JOB_DETAILS_SEQ;
-create table catissue_bulk_operation 
+create table catissue_bulk_operation
 (
 	IDENTIFIER number(19,0) not null,
 	OPERATION VARCHAR(255) not null unique,
@@ -1212,7 +1212,7 @@ CREATE TABLE JOB_DETAILS (
   START_TIME date default NULL,
   CURRENT_RECORDS_PROCESSED NUMBER(20) default NULL,
   LOG_FILE_NAME varchar(50) default NULL,
-  PRIMARY KEY  (IDENTIFIER) 
+  PRIMARY KEY  (IDENTIFIER)
 );
 
 create table CATISSUE_STOR_CONT_SPEC_TYPE
