@@ -1476,6 +1476,21 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 
+
+		<action path="/BulkLogin" type="edu.wustl.catissuecore.action.LoginAction"
+		   name="loginForm"
+		   validate="false"
+		   scope="request">
+		   <forward name="pageOfNonWashU" path="/BulkHandler.do?fromAction=login"/>
+		   <forward name="failure" path="/BulkHandler.do?fromAction=login"/>
+	    </action>
+		
+		<action path="/BulkHandler" type="edu.wustl.catissuecore.action.bulkOperations.BulkHandler"
+			name=""
+		    scope="request">
+		    <forward name="success" path="/FileUpload.do?pageOf=bulkHandler"/>
+		</action>
+		
 		<action path="/BulkOperation" type="edu.wustl.catissuecore.action.BulkOperationAction"
 		   name="bulkOperationForm" validate="false" scope="request">
 		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
@@ -1484,6 +1499,7 @@ PUBLIC
 		<action path="/FileUpload" type="edu.wustl.catissuecore.action.FileUploadAction"
 			name="bulkOperationForm" scope="request" validate="true">
 		     <forward name="success" path="/BulkOperation.do"/>
+		     <forward name="bulkHandler" path="/BulkHandler.do?fromAction=fileUpload"/>
 		</action>
 
 	   	<action path="/DownloadCSV" type="edu.wustl.catissuecore.action.BulkOperationAction"

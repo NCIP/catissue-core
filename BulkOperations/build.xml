@@ -46,4 +46,20 @@
 			<classpath refid="cp"/>
 		</java>
 	</target>
+	
+	<target name="run_bulk_client_api" depends="unjar">
+			<echo message="Bulk Client API started....................." />
+			<java classname="BulkOperationCommand" fork="true" maxmemory="1024m">
+				<arg value="${jbossHome}" />
+				<arg value="${loginName}" />
+				<arg value="${password}" />
+				<arg value="${operation}" />
+				<arg value="${csvFileName}" />
+				<classpath>
+					<pathelement location="${bin.dir}"/>
+				</classpath>
+				<classpath refid="cp"/>
+			</java>
+		</target>
+	
 </project>

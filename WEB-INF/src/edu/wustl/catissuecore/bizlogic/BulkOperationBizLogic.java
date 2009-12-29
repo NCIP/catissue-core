@@ -17,10 +17,13 @@ import org.exolab.castor.xml.Unmarshaller;
 import org.xml.sax.InputSource;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import edu.wustl.bulkoperator.dao.DAO;
+import edu.wustl.bulkoperator.jobmanager.JobDetails;
 import edu.wustl.bulkoperator.metadata.BulkOperationMetaData;
 import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
@@ -31,7 +34,7 @@ import edu.wustl.dao.JDBCDAO;
  * @author sagar_baldwa
  *
  */
-public class BulkOperationBizLogic
+public class BulkOperationBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Logger added for Specimen class.
@@ -225,5 +228,17 @@ public class BulkOperationBizLogic
 			throw new BulkOperationException("bulk.error.loading.bulk.metadata.xml.file");
 		}
 		return bulkOperationMetaData;
+	}
+	/**
+	 * Get Operation Name And XML.
+	 * @param jobId String.
+	 * @return JobDetails JobDetails.
+	 * @throws BulkOperationException BulkOperationException.
+	 * @throws ApplicationException ApplicationException.
+	 */
+	public JobDetails getJobDetails(String jobId)
+		throws BulkOperationException, ApplicationException
+	{
+		return (JobDetails)retrieve(JobDetails.class.getName(), Long.valueOf(jobId));
 	}
 }

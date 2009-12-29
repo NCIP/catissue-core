@@ -22,10 +22,27 @@ public class BulkOperationForm extends AbstractActionForm implements Serializabl
 	 * operationName.
 	 */
 	private String operationName = "";
+	
 	/**
 	 * file.
 	 */
-	private FormFile file;
+	private FormFile csvFile;
+	
+	private FormFile xmlTemplateFile;
+	/**
+	 * @return the xmlTemplateFile
+	 */
+	public FormFile getXmlTemplateFile() 
+	{
+		return xmlTemplateFile;
+	}
+	/**
+	 * @param xmlTemplateFile the xmlTemplateFile to set
+	 */
+	public void setXmlTemplateFile(FormFile xmlTemplateFile) 
+	{
+		this.xmlTemplateFile = xmlTemplateFile;
+	}
 	/**
 	 * Get Operation Name.
 	 * @return String operationName.
@@ -46,17 +63,17 @@ public class BulkOperationForm extends AbstractActionForm implements Serializabl
 	 * Get File.
 	 * @return FormFile file.
 	 */
-	public FormFile getFile()
+	public FormFile getCsvFile()
 	{
-		return file;
+		return csvFile;
 	}
 	/**
 	 * Set File.
 	 * @param file FormFile.
 	 */
-	public void setFile(FormFile file)
+	public void setCsvFile(FormFile file)
 	{
-		this.file = file;
+		this.csvFile = file;
 	}
 	@Override
 	public int getFormId()

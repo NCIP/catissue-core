@@ -2,7 +2,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -16,7 +18,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 import org.xml.sax.InputSource;
 
 import edu.wustl.bulkoperator.BulkOperator;
@@ -35,6 +36,8 @@ import edu.wustl.catissuecore.client.BulkOperatorJob;
 import edu.wustl.catissuecore.client.CaTissueAppServiceImpl;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -66,38 +69,57 @@ public class FileUploadAction extends SecureAction
 	{
 
 		BulkOperationForm bulkOperationForm = (BulkOperationForm) form;
-		String operationName = bulkOperationForm.getOperationName();
+		String dropDownName = bulkOperationForm.getOperationName();
+		String operationName = null;
+		String forward = Constants.SUCCESS;
 		try
 		{
 			BulkOperationBizLogic bulkOperationBizLogic = new BulkOperationBizLogic();
-			List<String> list = null;
-			try
+			InputStream csvFileInputStream = bulkOperationForm.getCsvFile().getInputStream();
+			InputSource xmlTemplateInputSource= null;
+			
+			if(bulkOperationForm.getXmlTemplateFile()==null)
 			{
-				list = bulkOperationBizLogic.getOperationNameAndXml(operationName);
-			}
-			catch (Exception exp)
-			{
-				throw new BulkOperationException("bulk.error.database.operation."
-						+ "reading.operation.name.xml.template");
-			}
-			if (!list.isEmpty())
-			{
-				Properties properties = new Properties();
-				FormFile file = bulkOperationForm.getFile();
-				properties.put("inputStream", file.getInputStream());
-				DataList dataList = DataReader.getNewDataReaderInstance(properties).readData();
-				if (dataList != null)
+				try
 				{
-					readCsvAndStartBulkOperation(request, list.get(0), list, dataList);
+					List<String> list = bulkOperationBizLogic.getOperationNameAndXml(dropDownName);
+					if (list.isEmpty())
+					{
+						throw new BulkOperationException("bulk.error.incorrect.operation.name");
+					}
+					operationName = list.get(0);
+					xmlTemplateInputSource = new InputSource(new StringReader(list.get(1)));
 				}
-				else
+				catch (Exception exp)
 				{
-					throw new BulkOperationException("bulk.error.reading.csv.file");
+					throw new BulkOperationException("bulk.error.database.operation."
+							+ "reading.operation.name.xml.template");
 				}
 			}
 			else
 			{
-				throw new BulkOperationException("bulk.error.incorrect.operation.name");
+				forward = request.getParameter(Constants.PAGE_OF);
+				operationName = bulkOperationForm.getOperationName();
+			
+				String s = new String(bulkOperationForm.getXmlTemplateFile().getFileData());
+				
+				xmlTemplateInputSource= new InputSource(new StringReader(s));
+				
+			}
+			Properties properties = new Properties();
+			properties.put("inputStream", csvFileInputStream);
+			DataList dataList = DataReader.getNewDataReaderInstance(properties).readData();
+			if (dataList != null)
+			{
+				BulkOperator bulkOperator = readCsvAndgetBulkOperator(operationName, xmlTemplateInputSource, dataList);
+				validateBulkOperation(operationName,dataList,bulkOperator);
+				SessionDataBean sessionDataBean = this.getSessionData(request);
+				Long jobId = startBulkOperation(operationName, dataList, sessionDataBean.getUserName(), sessionDataBean.getUserId(), bulkOperator);
+				request.setAttribute("jobId", jobId.toString());
+			}
+			else
+			{
+				throw new BulkOperationException("bulk.error.reading.csv.file");
 			}
 		}
 		catch (Exception exp)
@@ -111,7 +133,7 @@ public class FileUploadAction extends SecureAction
 			this.saveErrors(request, errors);
 			logger.error(exp.getMessage(), exp);
 		}
-		return mapping.findForward(Constants.SUCCESS);
+		return mapping.findForward(forward);
 	}
 
 	/**
@@ -122,28 +144,38 @@ public class FileUploadAction extends SecureAction
 	 * @throws BulkOperationException
 	 * @throws Exception
 	 */
-	private void readCsvAndStartBulkOperation(HttpServletRequest request, String operationName,
-			List<String> list, DataList dataList) throws BulkOperationException, Exception
+	private BulkOperator readCsvAndgetBulkOperator(String operationName,
+			InputSource templateInputSource, DataList dataList) throws BulkOperationException, Exception
 	{
-		InputSource templateInputSource = new InputSource(new StringReader(list.get(1)));
-
 		String mappingFilePath = CommonServiceLocator.getInstance().getPropDirPath()
 				+ File.separator + "mapping.xml";
 		InputSource mappingFileInputSource = new InputSource(mappingFilePath);
-
-		String loginName = this.getSessionData(request).getUserName();
-		long userId = this.getSessionData(request).getUserId();
-
 		BulkOperator bulkOperator = new BulkOperator(templateInputSource, mappingFileInputSource);
+		return bulkOperator;
+	}
+	
+	private void validateBulkOperation(String operationName,DataList dataList, BulkOperator bulkOperator) 
+	throws Exception, BulkOperationException
+	{
 		BulkOperationMetaData metaData = bulkOperator.getMetadata();
-		if (metaData != null && !metaData.getBulkOperationClass().isEmpty())
-		{
-			validateAndStartBulkOperation(operationName, list, dataList, loginName, userId,
-					bulkOperator, metaData);
-		}
-		else
+		if (metaData == null && metaData.getBulkOperationClass().isEmpty())
 		{
 			throw new BulkOperationException("bulk.error.bulk.metadata.xml.file");
+		}
+		BulkOperationClass bulkOperationClass = metaData.getBulkOperationClass().iterator().next();
+		TemplateValidator templateValidator = new TemplateValidator();
+		Set<String> errorList = templateValidator.validateXmlAndCsv(bulkOperationClass,
+				operationName, dataList);
+		if (!errorList.isEmpty())
+		{
+			StringBuffer strBuffer = new StringBuffer();
+			Iterator<String> errorIterator = errorList.iterator();
+			while(errorIterator.hasNext())
+			{
+				strBuffer.append(errorIterator.next());
+			}
+			ErrorKey errorkey = ErrorKey.getErrorKey("bulk.operation.errors");
+			throw new BulkOperationException(errorkey,null,strBuffer.toString());
 		}
 	}
 
@@ -158,25 +190,18 @@ public class FileUploadAction extends SecureAction
 	 * @throws Exception
 	 * @throws BulkOperationException
 	 */
-	private void validateAndStartBulkOperation(String operationName, List<String> list,
-			DataList dataList, String loginName, long userId, BulkOperator bulkOperator,
-			BulkOperationMetaData metaData) throws Exception, BulkOperationException
+	private Long startBulkOperation(String operationName, DataList dataList, 
+			String loginName, long userId, BulkOperator bulkOperator) throws Exception, BulkOperationException
 	{
-		BulkOperationClass bulkOperationClass = metaData.getBulkOperationClass().iterator().next();
-		TemplateValidator templateValidator = new TemplateValidator();
-		Set<String> errorList = templateValidator.validateXmlAndCsv(bulkOperationClass,
-				operationName, dataList);
-		if (errorList.isEmpty())
+		JobStatusListener jobStatusListner = new DefaultJobStatusListner();
+		BulkOperatorJob bulkOperatorJob = new BulkOperatorJob(operationName, loginName, null,
+				String.valueOf(userId), bulkOperator, dataList, CaTissueAppServiceImpl.class
+						.getName(), jobStatusListner);
+		JobManager.getInstance().addJob(bulkOperatorJob);
+		while(bulkOperatorJob.getJobData() == null)
 		{
-			JobStatusListener jobStatusListner = new DefaultJobStatusListner();
-			BulkOperatorJob bulkOperatorJob = new BulkOperatorJob(list.get(0), loginName, null,
-					String.valueOf(userId), bulkOperator, dataList, CaTissueAppServiceImpl.class
-							.getName(), jobStatusListner);
-			JobManager.getInstance().addJob(bulkOperatorJob);
+			logger.debug("Job not started yet !!!");
 		}
-		else
-		{
-			throw new BulkOperationException("bulk.error.csv.column.name.change");
-		}
+		return bulkOperatorJob.getJobData().getJobID();
 	}
 }

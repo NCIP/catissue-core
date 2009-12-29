@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Site"
+		relationShipType="main" templateName="editSite"
+		parentRoleName="" cardinality="1" roleName="site" maxNoOfRecords="1">
+
+		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long"/>
+		<attributeCollection name="name" csvColumnName="name" updateBasedOn="false" dataType="java.lang.String"/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" 
+		dataType="java.lang.String"/>
+
+	</BulkOperationClass>
+</BulkOperationMetadata>
