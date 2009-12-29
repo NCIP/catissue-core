@@ -55,6 +55,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 	try
 	{
 		Participant participant = new Participant();
+		participant.setId(new Long(1));
 		List parList = appService.search(Participant.class.getName(), participant);
 		System.out.println("Size : "+parList.size());
 		for(int i=0;i<parList.size();i++)
@@ -114,6 +115,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
   {
 	  try{
 			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
+			pmi.setId(new Long(1));
 			List pmiList = appService.search(ParticipantMedicalIdentifier.class.getName(), pmi);
 			for(int i=0;i<pmiList.size();i++)
 			{
@@ -142,6 +144,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 		try
 		{
 			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+			cpr.setId(new Long(1));
 			List cprList = appService.search(CollectionProtocolRegistration.class.getName(), cpr);
 			System.out.println("Size : "+cprList.size());
 			for(int i=0;i<cprList.size();i++)
@@ -173,6 +176,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 	  {
 		try{
 			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			scg.setId(new Long(1));
 			List scgList = appService.search(SpecimenCollectionGroup.class.getName(), scg);
 			System.out.println("Size : "+scgList.size());
 			for(int i=0;i<scgList.size();i++)
@@ -221,6 +225,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				TissueSpecimen tissueSp = new TissueSpecimen();
+				tissueSp.setId(new Long(1));
 				List<TissueSpecimen> spCollection = appService.search(TissueSpecimen.class, tissueSp);
 				Iterator<TissueSpecimen> itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -277,6 +282,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				MolecularSpecimen moleSp = new MolecularSpecimen();
+				moleSp.setId(new Long(1));
 				List<MolecularSpecimen> spCollection = appService.search(MolecularSpecimen.class, moleSp);
 				Iterator<MolecularSpecimen> itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -331,6 +337,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				CellSpecimen cellSp = new CellSpecimen();
+				cellSp.setId(new Long(1));
 				List<CellSpecimen> spCollection = appService.search(CellSpecimen.class, cellSp);
 				Iterator<CellSpecimen> itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -385,6 +392,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				FluidSpecimen fluidSp = new FluidSpecimen();
+				fluidSp.setId(new Long(1));
 				List<FluidSpecimen> spCollection = appService.search(FluidSpecimen.class, fluidSp);
 				Iterator<FluidSpecimen> itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -441,6 +449,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				SpecimenArrayContent sac = new SpecimenArrayContent();
+				sac.setId(new Long(1));
 				List sacCollection = appService.search(SpecimenArrayContent.class,sac);
 				System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
 				Iterator itr = sacCollection.iterator();
@@ -472,6 +481,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				ReceivedEventParameters recEvParam = new ReceivedEventParameters();
+				recEvParam.setId(new Long(1));
 				List recColl = appService.search(ReceivedEventParameters.class, recEvParam);
 				Iterator itr = recColl.iterator();
 				while(itr.hasNext())
@@ -500,6 +510,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				CollectionEventParameters colEvParam = new CollectionEventParameters();
+				colEvParam.setId(new Long(1));
 				List collEveColl = appService.search(CollectionEventParameters.class, colEvParam);
 				Iterator itr = collEveColl.iterator();
 				while(itr.hasNext())
@@ -528,6 +539,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				MolecularSpecimenReviewParameters molSpRev = new MolecularSpecimenReviewParameters();
+				molSpRev.setId(new Long(1));
 				List recColl = appService.search(MolecularSpecimenReviewParameters.class, molSpRev);
 				Iterator itr = recColl.iterator();
 				while(itr.hasNext())
@@ -557,6 +569,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				DeidentifiedSurgicalPathologyReport spr = new DeidentifiedSurgicalPathologyReport();
+				spr.setId(new Long(1));
 				List spCollection = appService.search(DeidentifiedSurgicalPathologyReport.class, spr);
 				Iterator itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -589,6 +602,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			try
 			{
 				IdentifiedSurgicalPathologyReport spr = new IdentifiedSurgicalPathologyReport();
+				spr.setId(new Long(1));
 				List spCollection = appService.search(IdentifiedSurgicalPathologyReport.class, spr);
 				Iterator itr = spCollection.iterator();
 				while(itr.hasNext())

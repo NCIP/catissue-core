@@ -79,7 +79,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 		hql.append("GridQuery:select ");
 		hql.append(caTissueModelProp.get(targetClassName));
 		
-		hql.append(" from "+targetClassName+" xxTargetAliasxx");
+		hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 		List parList = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 		System.out.println("Size : "+parList.size());
 		for(int i=0;i<parList.size();i++)
@@ -140,7 +140,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 		  	String targetClassName = ParticipantMedicalIdentifier.class.getName(); 
 			hql.append("GridQuery:select ");
 			hql.append(caTissueModelProp.get(targetClassName));
-			hql.append(" from "+targetClassName+" xxTargetAliasxx");
+			hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 
 			List pmiList = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 			for(int i=0;i<pmiList.size();i++)
@@ -172,7 +172,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 		  	String targetClassName = CollectionProtocolRegistration.class.getName(); 
 			hql.append("GridQuery:select ");
 			hql.append(caTissueModelProp.get(targetClassName));
-			hql.append(" from "+targetClassName+" xxTargetAliasxx");
+			hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 
 			List cprList = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 			System.out.println("Size : "+cprList.size());
@@ -205,7 +205,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 		  	String targetClassName = SpecimenCollectionGroup.class.getName(); 
 			hql.append("GridQuery:select ");
 			hql.append(caTissueModelProp.get(targetClassName));
-			hql.append(" from "+targetClassName+" xxTargetAliasxx");
+			hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 
 			List scgList = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 			System.out.println("Size : "+scgList.size());
@@ -259,7 +259,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = TissueSpecimen.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List<Specimen> spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				validateSpecimenData(targetClassName,spCollection);
 			 }
@@ -283,7 +283,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = MolecularSpecimen.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List<MolecularSpecimen> spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				validateSpecimenData(targetClassName,spCollection);
 			 }
@@ -307,7 +307,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = CellSpecimen.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List<CellSpecimen> spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				validateSpecimenData(targetClassName,spCollection);
 			 }
@@ -331,7 +331,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = FluidSpecimen.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List<FluidSpecimen> spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				validateSpecimenData(targetClassName,spCollection);
 			 }
@@ -357,7 +357,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = SpecimenArrayContent.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List sacCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
 				Iterator itr = sacCollection.iterator();
@@ -391,7 +391,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = ReceivedEventParameters.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List recColl = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				Iterator itr = recColl.iterator();
 				while(itr.hasNext())
@@ -422,7 +422,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = CollectionEventParameters.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List collEveColl = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				Iterator itr = collEveColl.iterator();
 				while(itr.hasNext())
@@ -453,7 +453,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = MolecularSpecimenReviewParameters.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List recColl = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				Iterator itr = recColl.iterator();
 				while(itr.hasNext())
@@ -485,7 +485,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				Iterator itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -517,7 +517,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
 				hql.append("GridQuery:select ");
 				hql.append(caTissueModelProp.get(targetClassName));
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				List spCollection = appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				Iterator itr = spCollection.iterator();
 				while(itr.hasNext())
@@ -549,7 +549,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				StringBuffer hql = new StringBuffer();
 			  	String targetClassName = TissueSpecimen.class.getName(); 
 				hql.append("GridQuery:select count(*)");
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				appService.query(new HQLCriteria(hql.toString()), targetClassName);
 				
 			 }
@@ -587,7 +587,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				StringBuffer hql = new StringBuffer();
 			  	String targetClassName = MolecularSpecimen.class.getName(); 
 				hql.append("select id,label");
-				hql.append(" from "+targetClassName+" xxTargetAliasxx");
+				hql.append(" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id=1");
 				appService.query(new HQLCriteria(hql.toString()), targetClassName);
 			 }
 			 catch(Exception e)
