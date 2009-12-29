@@ -14,8 +14,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.common.dynamicextensions.entitymanager.EntityManager;
-import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
@@ -88,7 +86,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * @param recordIdList : recordIdList.
 	 * @throws BizLogicException : BizLogicException.
 	 */
-	public void deleteAnnotationRecords(Long containerId, List<Long> recordIdList)
+	/*public void deleteAnnotationRecords(Long containerId, List<Long> recordIdList)
 			throws BizLogicException
 	{
 		final EntityManagerInterface entityManagerInterface = EntityManager.getInstance();
@@ -100,7 +98,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		{
 			AnnotationBizLogic.logger.error(e.getMessage(), e);
 		}
-	}
+	}*/
 
 	/**
 	 * Deletes an object from the database.
