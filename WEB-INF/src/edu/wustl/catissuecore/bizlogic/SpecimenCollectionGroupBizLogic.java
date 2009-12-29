@@ -1556,14 +1556,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 
+
 			// Mandatory Field : Study Calendar event point
-			if (group.getCollectionProtocolEvent() == null
-					|| group.getCollectionProtocolEvent().getId() == null)
-			{
-				message = ApplicationProperties
-						.getValue("specimenCollectionGroup.studyCalendarEventPoint");
-				throw this.getBizLogicException(null, "errors.item.required", message);
-			}
+			validateCpEvent(dao, group);
+
 
 			// Mandatory Field : clinical Diagnosis
 			if (validator.isEmpty(group.getClinicalDiagnosis()))
@@ -1709,7 +1705,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "error.specimenCollectionGroup.noevents", "");
 			}
 			//validation added for bug #15237
-			validateCpEvent(dao, group);
+//			validateCpEvent(dao, group);
 
 			return true;
 
@@ -1739,23 +1735,125 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private void validateCpEvent(DAO dao, final SpecimenCollectionGroup group) throws DAOException,
 			BizLogicException
 	{
-		long cpId=group.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		long cpId=0;
+		long cpEventId=0;
+		String cpEventLabel=group.getCollectionProtocolEvent().getCollectionPointLabel();
+		cpId = getCPId(dao, group, cpId);
+
+		if(group.getCollectionProtocolEvent().getId() !=null)
+		{
+			cpEventId= group.getCollectionProtocolEvent().getId();
+		}
+
+		String equalCondition="";
+		Object equalValue=null;
+
+		if(cpEventId >= 1)
+		{
+			equalCondition="id";
+			equalValue=cpEventId;
+
+			checkCPEvent(dao, cpId, equalCondition, equalValue,group);
+		}
+		else if(!Validator.isEmpty(cpEventLabel))
+		{
+			equalCondition="collectionPointLabel";
+			equalValue=cpEventLabel;
+			checkCPEvent(dao, cpId, equalCondition, equalValue,group);
+
+		}
+		else
+		{
+			if (group.getCollectionProtocolEvent() == null
+					|| group.getCollectionProtocolEvent().getId() == null)
+			{
+				String message = ApplicationProperties
+						.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+				throw this.getBizLogicException(null, "errors.item.required", message);
+			}
+		}
+
+	}
+
+	/**
+	 * @param dao
+	 * @param group
+	 * @param cpId
+	 * @return
+	 * @throws DAOException
+	 */
+	private long getCPId(DAO dao, final SpecimenCollectionGroup group, long cpId)
+			throws DAOException
+	{
+		if(group.getCollectionProtocolRegistration().getId()!=0)
+		{
+			final String sourceObjectName = CollectionProtocolRegistration.class.getName();
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			final String[] selectColumnName = {"collectionProtocol.id"};
+
+			final CollectionProtocolRegistration cpr = group
+			.getCollectionProtocolRegistration();
+			final CollectionProtocol cp = cpr.getCollectionProtocol();
+
+			queryWhereClause.addCondition(new EqualClause("id", group.getCollectionProtocolRegistration().getId()));
+			final List list = dao
+					.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+
+
+			if(list.size()>0)
+			{
+				 cpId=Long.valueOf(list.get(0).toString());
+			}
+		}
+		else if(group.getCollectionProtocolRegistration().getCollectionProtocol()!=null)
+		{
+			cpId=group.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		}
+		return cpId;
+	}
+
+	/**
+	 * @param dao
+	 * @param cpId
+	 * @param equalCondition
+	 * @param equalValue
+	 * @param x
+	 * @throws DAOException
+	 * @throws BizLogicException
+	 */
+	private void checkCPEvent(DAO dao, long cpId, String equalCondition, Object equalValue, SpecimenCollectionGroup group)
+			throws DAOException, BizLogicException
+	{
 		final String sourceObjectName1 = CollectionProtocolEvent.class.getName();
-		final String[] selectColumnName1 = {};
-		//"select elements(collectionProtocolEventCollection) from colle where "
 		final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
-		queryWhereClause1.addCondition(new EqualClause("id", group.getCollectionProtocolEvent().getId()));
+		final String[] selectColumnName1 = {};
+
+		queryWhereClause1.addCondition(new EqualClause(equalCondition, equalValue));
+		queryWhereClause1.andOpr();
+		queryWhereClause1.addCondition(new EqualClause("collectionProtocol.id", cpId));
 		final List list = dao
 				.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
-		CollectionProtocolEvent eventObj=(CollectionProtocolEvent)(list.get(0));
-		long actualCpId=eventObj.getCollectionProtocol().getId();
-		if(actualCpId != 0 && cpId != 0 && actualCpId != cpId)
+		if(list.size()>0)
+		{
+			CollectionProtocolEvent eventObj=(CollectionProtocolEvent)(list.get(0));
+			long actualCpId=eventObj.getCollectionProtocol().getId();
+			if(actualCpId != 0 && cpId != 0 && actualCpId != cpId)
+			{
+				String message = ApplicationProperties
+				.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+				throw this.getBizLogicException(null, "errors.item.invalid",
+						message);
+			}
+			group.getCollectionProtocolEvent().setId(eventObj.getId());
+		}
+		else
 		{
 			String message = ApplicationProperties
 			.getValue("specimenCollectionGroup.studyCalendarEventPoint");
 			throw this.getBizLogicException(null, "errors.item.invalid",
 					message);
 		}
+
 	}
 
 	/**
