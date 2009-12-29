@@ -178,7 +178,7 @@ function showBulkOperationDashboard()
       <td height="*" valign="top">
 	  <table width="100%" valign="top" border="0" height="100%" cellpadding="3" cellspacing="0" class="whitetable_bg">
 	  <tr>
-        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperation.jobs" /></span></td>
+        <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="bulk.bulkoperation.dashboard" /></span></td>
       </tr>
 		<tr>
 		<td class="black_ar">
