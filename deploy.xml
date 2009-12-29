@@ -58,6 +58,10 @@
 	<var name="databaseurl" value="" />
 	<import file="DEDeploy.xml" />
 
+	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
+	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
+	<property name="cacaore.deployables" value="./cacore_deployable" />
+
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
 		<antcall target="RundbUnit" />
@@ -678,8 +682,8 @@
 
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
-		<antcall target="deploy_app" />
 		<antcall target="deploy_db" />
+		<antcall target="deploy_app" />
 		<antcall target="server_security" />
 
 		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
@@ -807,6 +811,7 @@
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
 			<antcall target="app_configuration"/>
+			<!-- <antcall target="generate.cacore.for.xmi" />  -->
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
@@ -829,6 +834,48 @@
 			</else>
 		</if>
 	</target>
+
+
+	<!-- =================================
+          target: generate.cacore.for.xmi
+         ================================= -->
+	<target name="generate.cacore.for.xmi" depends="" description="description">
+
+		<delete dir="${tempcacore.dir}" />
+		<mkdir dir="${tempcacore.dir}" />
+
+		<delete dir="${export.dir}" />
+		<mkdir dir="${export.dir}" />
+
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" />
+		<mkdir dir="${cacaore.deployables}" />
+
+		<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
+			 <property name="hook.entity.value" value="none" />
+			<property name="de.zip.location" value="${basedir}/" />
+			<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
+			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+		</ant>
+
+		<antcall target="build.catissuecore.war" />
+
+		<delete file="${base.dir}/log4j.properties" />
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+          target: build.catissuecore.war
+     - - - - - - - - - - - - - - - - - -->
+    <target name="build.catissuecore.war">
+    	<echo message=" "/>
+  		<echo message="----------------------------------"/>
+   		<echo message=" Now creating catissuecore.war file "/>
+   		<echo message="----------------------------------"/>
+   		<echo message=" "/>
+
+   		<!-- Create clinportal.war file. -->
+   		<antcall target="build_war"/>
+    	<copy todir="${base.dir}/" file="${temp.dir}/catissuecore.war" overwrite="true" />
+    </target>
 
 	<!-- Modify dynamicExtensions configuration For MySQL -->
 	<target name="de_mysql_config" description="Modify dynamicExtensions configuration For MySQL">
@@ -1131,7 +1178,8 @@
 		<antcall target="st_deploy_db" />
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
-		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />
+		<antcall target="upgrade_db_from_DE_1.3.1_to_DE_1.4.0" />
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 
 		<antcall target="update_metadata_for_tagged_values">
@@ -1681,7 +1729,8 @@
 	<target name="upgrade_db_from_p4_to_p5" description="Target for Database Upgrade from caTissue p4 to p5">
 		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0"/>
-		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0"/>
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />
+		<antcall target="upgrade_db_from_DE_1.3.1_to_DE_1.4.0"/>
 	    <if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2673,11 +2722,11 @@ Thanking You,
 			</classpath>
 		</java>
 
-		<delete includeemptydirs="true">
+	<!--	<delete includeemptydirs="true">
 			<fileset dir="${temp.dir}/catissuecore">
 				<include name="**/*" />
 			</fileset>
-		</delete>
+		</delete>  -->
 
 		<if><equals arg1="yes" arg2="${generateCacore}" />
 			<then>
@@ -2688,14 +2737,15 @@ Thanking You,
 				<ant antfile="DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
 				<ant antfile="DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
 					<property name="xmi.name" value="${filename}"/>
+					<property name="hook.entity.value" value="none" />
 					<property name="de.zip.location" value="${basedir}/" />
-					<property name="entityGroup.jar.location" value="${temp.dir}/clinportal/WEB-INF/lib" />
+					<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
 				</ant>
 
 				<antcall target="de_integrate_app"/>
-				<antcall target="build.clinportal.war" />
-				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/clinportal.war" overwrite="true" />
+				<antcall target="build.catissuecore.war" />
+				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/catissuecore.war" overwrite="true" />
 				<delete file="${base.dir}/log4j.properties" />
 			</then>
 		</if>
