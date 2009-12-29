@@ -86,7 +86,7 @@ public class JobGridAjaxAction extends SecureAction
 			{
 				if (dao != null)
 				{
-					dao.closeSession();
+					AppUtility.closeJDBCSession(dao);
 				}
 			}
 			catch (final DAOException daoExp)
