@@ -403,6 +403,10 @@ public class BizLogicFactory implements IFactory
 		{
 			bizLogic = new ShipmentRequestBizLogic();
 		}
+		else if(className.equals("edu.wustl.catissuecore.domain.Aliquot"))
+		{
+			bizLogic = new AliquotBizLogic();
+		}
 		else
 		{
 			bizLogic = new DefaultBizLogic();

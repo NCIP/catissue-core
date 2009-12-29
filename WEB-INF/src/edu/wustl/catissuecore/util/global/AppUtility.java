@@ -117,7 +117,6 @@ import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -254,6 +253,28 @@ public class AppUtility
 		}
 
 		return null;
+	}
+	
+	public static Specimen getSpecimenObjectOnClassName(String specimenClassName)
+	{
+		Specimen specimen = null;
+		if (Constants.CELL.equalsIgnoreCase(specimenClassName))
+		{
+			specimen = new CellSpecimen();
+		}
+		else if (Constants.MOLECULAR.equalsIgnoreCase(specimenClassName))
+		{
+			specimen = new MolecularSpecimen();
+		}
+		else if (Constants.FLUID.equalsIgnoreCase(specimenClassName))
+		{
+			specimen = new FluidSpecimen();
+		}
+		else if (Constants.TISSUE.equalsIgnoreCase(specimenClassName))
+		{
+			specimen = new TissueSpecimen();
+		}
+		return specimen;
 	}
 
 	public static int getEventParametersFormId(SpecimenEventParameters eventParameter)

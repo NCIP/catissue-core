@@ -5,9 +5,14 @@ import edu.wustl.bulkoperator.BulkOperator;
 import edu.wustl.bulkoperator.DataList;
 import edu.wustl.bulkoperator.jobmanager.Job;
 import edu.wustl.bulkoperator.jobmanager.JobStatusListener;
+import edu.wustl.common.util.logger.Logger;
 
 public class BulkOperatorJob extends Job
 {
+	/**
+	 * logger instance of the class.
+	 */
+	private final static Logger logger = Logger.getCommonLogger(BulkOperatorJob.class);
 	private BulkOperator bulkOperator = null;
 	private String loginName = null;
 	private String password = null;
@@ -34,9 +39,9 @@ public class BulkOperatorJob extends Job
 			bulkOperator.startProcess(getJobName(), this.loginName, this.password, getJobStartedBy(),
 					this.dataList, this.className, this.getJobData());
 		}
-		catch (Exception e)
+		catch (Exception exp)
 		{
-			e.printStackTrace();
+			logger.error(exp.getMessage(), exp);
 		}
 	}
 }
