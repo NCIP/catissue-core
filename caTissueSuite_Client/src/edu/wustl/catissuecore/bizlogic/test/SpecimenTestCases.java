@@ -63,6 +63,28 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to create Domain Object", true);
 		}
 	}
+	
+	public void testUpdateSpecimenWithAvailableQtyGreaterThanInitialQty()
+	{
+		try
+		{
+			Specimen sp = new Specimen();
+			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
+			sp.setInitialQuantity(100.0);
+			sp.setAvailableQuantity(100000.0);
+			sp.setIsAvailable(true);
+			sp.setCollectionStatus("Collected");
+			sp = (Specimen) appService.updateObject(sp);
+			assertFalse("Specimen Object updated with  available quantity greater than initial Quantity.", true);
+		}
+		catch (Exception exp)
+		{
+			Logger.out.error("testUpdateSpecimenWithAvailableQtyGreaterThanInitialQty" + exp.getMessage(), exp);
+			System.out.println("SpecimenTestCases.testUpdateSpecimenWithAvailableQtyGreaterThanInitialQty():" + exp.getMessage());
+			exp.printStackTrace();
+			assertTrue("Failed to update Specimen Object with  available quantity greater than initial Quantity.", true);
+		}
+	}
 
 	/**
 	 * Negative test case to update the activity status of specimen from disabled to active.

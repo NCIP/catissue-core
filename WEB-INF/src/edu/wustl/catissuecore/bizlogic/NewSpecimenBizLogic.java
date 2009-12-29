@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -3174,6 +3175,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				final String quantityString = ApplicationProperties
 						.getValue("specimen.availableQuantity");
 				throw this.getBizLogicException(null, "errors.item.required", quantityString);
+			}
+			if (1 == new BigDecimal(String.valueOf(specimen.getAvailableQuantity()))
+							.compareTo(new BigDecimal(String.valueOf(specimen.getInitialQuantity()))))
+			{
+				final String quantityString = ApplicationProperties
+					.getValue("specimen.availableQuantity");
+				throw this.getBizLogicException(null, "errors.availablequantity", quantityString);
 			}
 			/**
 			 * This method gives first valid storage position to a specimen if
