@@ -190,7 +190,7 @@ public class ShowJobDashboardAction extends SecureAction
 		headerXML.append(GridUtil.HEAD_START_TAG);
 		headerXML.append(GridUtil.getColumnXML("5", GridUtil.CELL_TYPE_READ_ONLY, "Id",
 				GridUtil.ALIGN_LEFT, GridUtil.CELL_SORT_INT));
-		headerXML.append(GridUtil.getColumnXML("20", GridUtil.CELL_TYPE_READ_ONLY, "Bulk operation Name",
+		headerXML.append(GridUtil.getColumnXML("20", GridUtil.CELL_TYPE_READ_ONLY, "Bulk Operation Name",
 				GridUtil.ALIGN_LEFT, GridUtil.CELL_SORT_STR));
 		headerXML.append(GridUtil.getColumnXML("10", GridUtil.CELL_TYPE_READ_ONLY, "Start Time",
 				GridUtil.ALIGN_LEFT, GridUtil.CELL_SORT_STR));
