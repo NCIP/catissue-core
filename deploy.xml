@@ -1612,7 +1612,12 @@
 	<!-- Removing unnecessary PE -->
 
 	<target name="upgrade_db" description="Upgrading Database v1.1 to v1.1p5">
-		<echo message="Upgrading Database v1.1 to v1.1p5" />
+		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
+		<antcall target="upgrade_db_from_p4_to_p5"/>
+	</target>
+
+	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
+	<echo message="Upgrading Database v1.1 to v1.1p4" />
 	   <if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -1632,13 +1637,11 @@
 			<param name="isUpgrade" value="true"/>
 			<param name="buildVersion" value="1.1_to_p2"/>
 		</antcall>
-	<antcall target="upgrade_db_from_p2_to_p4"/>
-	<antcall target="upgrade_db_from_p4_to_p5"/>
+		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissue p2 to p4 -->
 	<target name="upgrade_all_from_p2_to_p4" description="Target for Application and Database Upgrade from caTissue p2 to p4">
-
 		<antcall target="upgrade_app"/>
 		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
