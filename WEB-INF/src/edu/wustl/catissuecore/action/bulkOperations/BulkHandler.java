@@ -135,9 +135,9 @@ public class BulkHandler extends Action
 				String jobId = request.getParameter("jobId");
 				if(!Validator.isEmpty(jobId))
 				{
-						JobDetails details = new BulkOperationBizLogic().getJobDetails(jobId);
-						jobMessage = getJobMessage(request, response,fromAction.JOBDETAILS);
-						jobMessage.setJobData(details);
+					   JobDetails details = new BulkOperationBizLogic().getJobDetails(jobId);
+					   jobMessage = getJobMessage(request, response,fromAction.JOBDETAILS);
+					   jobMessage.setJobData(details);
 				}
 			}
 			else
@@ -226,9 +226,10 @@ public class BulkHandler extends Action
 		OutputStream ost = response.getOutputStream();
 		ObjectOutputStream os = new ObjectOutputStream(ost);
 
-		if(jobMessage.getJobData() != null)
+		JobDetails jobDetails = jobMessage.getJobData();
+		if(jobDetails != null && jobDetails.getLogFile() != null )
 		{
-			Blob blob = (jobMessage.getJobData()).getLogFile();
+			Blob blob = jobDetails.getLogFile();
 			InputStream inputStream = blob.getBinaryStream();
 			int count = 0;
 
