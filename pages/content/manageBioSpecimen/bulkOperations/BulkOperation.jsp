@@ -150,7 +150,7 @@ function showBulkOperationDashboard()
                 <td align="left" class="black_ar"><b><bean:message key="bulk.upload.file" /></b>
 				</td>
                 <td align="left" valign="middle" width="20%">
-					<input id="file" type="file" name="file" value="Browse">
+					<input id="file" type="file" name="csvFile" value="Browse">
 					</input>
 				</td>
 				<td align="left" valign="left" colspan="2">
