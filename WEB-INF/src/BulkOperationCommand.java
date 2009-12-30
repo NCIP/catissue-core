@@ -198,35 +198,35 @@ public class BulkOperationCommand
 	/**
 	 * Bulk Operation Name.
 	 */
-	public static final String BULK_OPERATION_NAME = "Bulk Operation Name ";
+	public static final String BULK_OPERATION_NAME = "Bulk Operation Name :";
 	/**
 	 * Start Time.
 	 */
-	public static final String START_TIME = "Start Time ";
+	public static final String START_TIME = "Start Time :";
 	/**
 	 * Status.
 	 */
-	public static final String STATUS = "Status ";
+	public static final String STATUS = "Status :";
 	/**
 	 * Total Records.
 	 */
-	public static final String TOTAL_RECORDS = "Total Records ";
+	public static final String TOTAL_RECORDS = "Total Records :";
 	/**
 	 * Processed Records.
 	 */
-	public static final String PROCESSED_RECORDS = "Processed Records ";
+	public static final String PROCESSED_RECORDS = "Processed Records :";
 	/**
 	 * Failed Records.
 	 */
-	public static final String FAILED_RECORDS = "Failed Records ";
+	public static final String FAILED_RECORDS = "Failed Records :";
 	/**
 	 * Time taken(sec).
 	 */
-	public static final String TIME_TAKEN = "Time taken(sec) ";
+	public static final String TIME_TAKEN = "Time taken(sec) :";
 	/**
 	 * Report.
 	 */
-	public static final String REPORT = "Report ";
+	public static final String REPORT = "Report :";
 	/**
 	 * New line.
 	 */
