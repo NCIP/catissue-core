@@ -127,7 +127,6 @@
 		
 		<!-- bulk Operations-->
 		<mapping resource="edu/wustl/catissuecore/hbm/JobDetails.hbm.xml"/>
-		edu.wustl.common.jobmanager
     </session-factory>
 
 </hibernate-configuration>
