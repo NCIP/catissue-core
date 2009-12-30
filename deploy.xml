@@ -488,15 +488,16 @@
 	<target name="build_war" description="Buid New WAR File">
 		<echo message="Creating New Web Application Archieve File..." />
 		<delete file="${temp.dir}/catissuecore.war" />
-		<delete file="${temp.dir}/caTissuePrintWebService.war" />
+	<!--	<delete file="${temp.dir}/caTissuePrintWebService.war" />  -->
 		<delete file="${temp.dir}/dynamicExtensions.jar" />
 
-
+<!--
 		<jar destfile="${temp.dir}/dynamicExtensions.jar" basedir="${temp.dir}/dynamicExtensionsjar" />
 
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
 		<copy file="${temp.dir}/dynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
+-->
 
 		<antcall target="copydeletedjars">
 			<param name="delPath" value="${temp.dir}/catissuecore/WEB-INF/lib"/>
@@ -522,11 +523,11 @@
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/dynamicExtensions/WEB-INF/classes" overwrite="true" />
 
 
-		<war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
+		<!-- <war destfile="${temp.dir}/caTissuePrintWebService.war" webxml="${temp.dir}/caTissuePrintWebService/WEB-INF/web.xml">
 					<fileset dir="${temp.dir}/caTissuePrintWebService">
 						<include name="**/**/**.*" />
 					</fileset>
-		</war>
+		</war>  -->
 
 	</target>
 
@@ -933,6 +934,8 @@
 
 		<!-- 1) Copy DynamicExtensions.jar -> copy it to catissue/WEB-INF/Lib -->
 		<copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/Applet" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/Applet" overwrite="true" />
 
 		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
@@ -2743,6 +2746,7 @@ Thanking You,
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
 				</ant>
 
+				<antcall target="integrate_advanced_query"/>
 				<antcall target="de_integrate_app"/>
 				<antcall target="build.catissuecore.war" />
 				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/catissuecore.war" overwrite="true" />
