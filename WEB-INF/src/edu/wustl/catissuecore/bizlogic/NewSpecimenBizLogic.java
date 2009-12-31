@@ -62,6 +62,7 @@ import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.Position;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -2685,45 +2686,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			this.validateDerivedSpecimens(specimen, dao, operation);
 		}
-		// new method call added.
+		// new check added for bug #15185.
+		if (!specimen.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[1])
+				&&!specimen.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])
+				&& !specimen.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
+		{
 
-		validateSpecimenStatus(specimen, dao);
+			throw this.getBizLogicException(null, "errors.item.selected", ApplicationProperties.getValue("disposaleventparameters.activityStatus"));
+		}
+		SpecimenUtil.validateSpecimenStatus(specimen, dao);
 
 		return true;
 	}
 
-	/**
-	 * @param specimen
-	 * @param dao
-	 * @throws BizLogicException
-	 */
-	private void validateSpecimenStatus(Specimen specimen, DAO dao) throws BizLogicException
-	{
-		final String sourceObjectName1 = Specimen.class.getName();
-		final String[] selectColumnName1 = {"activityStatus"};
-		final QueryWhereClause queryWhereClause1 = new QueryWhereClause(sourceObjectName1);
-		try
-		{
-			queryWhereClause1.addCondition(new EqualClause("id", specimen.getId()));
-			final List list = dao
-			.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
-
-			if(list.size()>0)
-			{
-				String previousStatus=list.get(0).toString();
-				if(previousStatus !=null && previousStatus.equals(Constants.ACTIVITY_STATUS_VALUES[3]))
-				{
-					throw this.getBizLogicException(null, "errors.item", "errors.disabled.specimen");
-				}
-			}
-
-		}
-		catch (DAOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * validate Derived Specimens

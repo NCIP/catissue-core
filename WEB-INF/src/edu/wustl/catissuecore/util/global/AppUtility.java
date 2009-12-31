@@ -59,6 +59,7 @@ import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -310,6 +311,10 @@ public class AppUtility
 		else if (eventParameter instanceof TransferEventParameters)
 		{
 			return Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID;
+		}
+		else if (eventParameter instanceof DisposalEventParameters)
+		{
+			return Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID;
 		}
 
 		return -1;

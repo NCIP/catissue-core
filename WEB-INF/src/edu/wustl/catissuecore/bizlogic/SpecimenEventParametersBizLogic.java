@@ -2,7 +2,7 @@
  * Created on Jul 29, 2005
  *<p>SpecimenEventParametersBizLogic Class</p>
  * This class contains the Biz Logic for all EventParameters Classes.
- * This will be the class which will be used for datatransactions of the EventParameters. 
+ * This will be the class which will be used for datatransactions of the EventParameters.
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.Position;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -793,6 +794,19 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					//validateTransferEventParameters(eventParameter);
 				}
 				break;
+				//Case added for disposal event for bug #15185
+			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
+				DisposalEventParameters disposalEventParameters=(DisposalEventParameters)eventParameter;
+
+				if (!disposalEventParameters.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])
+						&& !disposalEventParameters.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
+				{
+
+					throw this.getBizLogicException(null, "errors.item.selected", ApplicationProperties.getValue("disposaleventparameters.activityStatus"));
+				}
+				final Specimen specimenObj = this.getSpecimenObject(dao, disposalEventParameters);
+				SpecimenUtil.validateSpecimenStatus(specimenObj,dao);
+				break;
 		}
 		return true;
 	}
@@ -832,7 +846,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @return Specimen obejct
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	private Specimen getSpecimenObject(DAO dao, TransferEventParameters parameter)
+	private Specimen getSpecimenObject(DAO dao, SpecimenEventParameters parameter)
 			throws BizLogicException
 	{
 		try
