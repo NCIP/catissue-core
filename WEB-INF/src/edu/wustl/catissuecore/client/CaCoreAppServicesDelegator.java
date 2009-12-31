@@ -734,6 +734,7 @@ public class CaCoreAppServicesDelegator
 		if (Variables.sessionDataMap.containsKey(userName))
 		{
 			sessionDataBean = Variables.sessionDataMap.get(userName);
+			sessionDataBean.setIpAddress("caCore IP issue");
 		}
 		else
 		{
@@ -749,6 +750,7 @@ public class CaCoreAppServicesDelegator
 			}
 
 			sessionDataBean.setUserId(user.getId());
+			sessionDataBean.setIpAddress("caCore IP issue");
 			Variables.sessionDataMap.put(userName, sessionDataBean);
 		}
 
