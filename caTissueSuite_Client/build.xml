@@ -11,7 +11,7 @@
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
 	<property name="test.src.dir" value="${base.dir}/src" />
-	<property name="test.class.dir" value="${base.dir}/classes/edu/wustl/catissuecore/bizlogic/test" />
+	<property name="test.class.dir" value="${base.dir}/classes/edu/wustl/catissuecore/api/test" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="." />
 	<property name="project.src" value="../WEB-INF/classes/"/>
