@@ -2,10 +2,10 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<%@ taglib uri="/WEB-INF/dynamicExtensions.tld" prefix="dynamicExtensions" %>
-
+<%@ taglib uri="/WEB-INF/multiSelectUsingCombo.tld" prefix="mCombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
+<%@ page import="java.util.List"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -17,19 +17,30 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script src="jss/calendarComponent.js" language="JavaScript" type="text/javascript"></script>
+
+
+<script>var imgsrc="catissuecore/images/de/";</script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/combos.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript" src="/jss/multiselectUsingCombo.js"></script>
+
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 
-<script>var imgsrc="/de/images/";</script>
-<script language="JavaScript" type="text/javascript" src="de/jss/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/scr.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/combobox.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/ext-all.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/combos.js"></script>
-<script language="JavaScript" type="text/javascript" src="de/jss/ajax.js"></script>
 
 
 <%
@@ -37,93 +48,9 @@
 %>
 
 
-<script>Ext.onReady(function(){var myUrl= 'ClinicalDiagnosisData.do?';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
-
- 
-
 <script>
-
-Ext.onReady(function(){
-
-      var myUrl= 'ClinicalDiagnosisData.do?';
-
-      var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),
-
-      reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
-
-      var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'principalInvestigatorId',displayField:'excerpt',valueField: 'id',typeAhead: 'true',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',lazyInit:'true',triggerAction: 'all',minChars : 3,emptyText:'<%=selectText%>',selectOnFocus:'true',applyTo: 'txtprincipalInvestigatorId' });
-
-      var firsttimePI="true"; 
-
-      combo.on("expand", function() {
-
-            if(Ext.isIE || Ext.isIE7)
-
-            {
-
-                  combo.list.setStyle("width", "250");
-
-                  combo.innerList.setStyle("width", "250");
-
-            }
-
-            else
-
-            {
-
-                  combo.list.setStyle("width", "auto");
-
-                  combo.innerList.setStyle("width", "auto");
-
-            }           
-
-            },          {single: true}); 
-
-            ds.on('load',function(){
-
-                  if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase()))
-
-                  {combo.typeAheadDelay=50;
-
-                  } 
-
-                  else
-
-                  {combo.typeAheadDelay=60000}
-
-                  });
-
-            <%    /*if (opr.equals(Constants.EDIT) ||  (showErrMsg  && piId!=0) || (deloperation && piId!=0) )
-
-                  {*/
-
- 
-
-            %>    
-
-                  ds.load({params:{start:0, limit:9999,query:''}});
-
-            ds.on('load',function(){
-
-                        
-
-                               if(firsttimePI == "true")
-
-                              { combo.setValue('',false); firsttimePI="false";}
-
-            });
-
-            <%
-
-                  //}
-
-            %>                                  
-
-                  });
-
+Ext.onReady(function(){var myUrl= 'ClinicalDiagnosisData.do?';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 </script>
-
-
 
 <script>
 
@@ -280,7 +207,16 @@ function updateCPTree()
 					   	  </td>
 					   	  
 						  <td align="left" class="black_ar"> 
-					    	 <dynamicExtensions:multiSelectUsingCombo/>
+					    	 <mCombo:multiSelectUsingCombo
+								identifier="coord"
+								size="20"  
+								styleClass="black_ar_new"
+								addNewActionStyleClass="black_ar_new"  
+								addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')" 
+								removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')"
+								selectIdentifier="protocolCoordinatorIds"
+								collection="<%=(List)request.getAttribute("selectedCoordinators")%>"
+								numRows="4" />
 					   	  </td>
 						
 						</tr>

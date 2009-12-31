@@ -1196,7 +1196,9 @@ public class CollectionProtocolUtil
 
 				}
 			}
-			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBean);
+			Collection<NameValueBean> clinicalDiagnosisBeans = new ArrayList<NameValueBean>();
+			clinicalDiagnosisBeans.addAll(clinicalDiagnosisBean);
+			request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosisBeans);
 		}
 	
 	}
