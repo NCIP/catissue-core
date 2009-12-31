@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
@@ -728,7 +729,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
-		
+
 		setRequestPathInfo("/ShowFramedPage");
 		addRequestParameter("pageOf", "pageOfStorageContainer");
 		addRequestParameter("storageType", "-1");
@@ -736,7 +737,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("pageOfStorageContainer");
 		verifyNoActionErrors();
-		
+
 		setRequestPathInfo("/StorageContainerTree");
 		addRequestParameter("pageOf", "pageOfStorageContainer");
 		addRequestParameter("operation", "showEditAPageAndMap");
@@ -744,7 +745,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("pageOfStorageContainer");
 		verifyNoActionErrors();
 	}
-	
+
 	//TissueSiteTreeAction
 	@Test
 	public void testClickOnTissueSiteSelector()
@@ -757,7 +758,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();
 	}
-	
+
 	//TissueSiteTreeAction, ShowChildNodes
 	@Test
 	public void testClickOnTissueSiteSelectorAndSelectNode()
@@ -776,7 +777,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("parentId", "0");
 		actionPerform();
 	}
-	
+
 	/**
 	 * Test Storage Container Add.
 	 * StorageContainersAction
@@ -812,7 +813,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setActivityStatus("Active");
 		storageContainerForm.setIsFull("False");
 		storageContainerForm.setOperation("add");
-	
+
 		setRequestPathInfo("/SimilarContainers");
 		setActionForm(storageContainerForm);
 		addRequestParameter("pageOf", "pageOfCreateSimilarContainers");
@@ -822,7 +823,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		//verifyForward("pageOfSimilarContainers");
 		//verifyNoActionErrors();
-		
+
 		setRequestPathInfo("/SimilarContainersAdd");
 		setActionForm(storageContainerForm);
 		addRequestParameter("pageOf", "pageOfCreateSimilarContainers");
@@ -831,7 +832,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();
 	}
-	
+
 	/**
 	 * Test Storage Container Add.
 	 * StorageContainersAction
@@ -855,7 +856,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();
 	}
-	
+
 	@Test
 	public void testShowFramedPage()
 	{
@@ -864,6 +865,68 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("propertyName", "tissueSite");
 		addRequestParameter("cdeName", "Tissue Site");
 		actionPerform();
+	}
+
+	@Test
+	public void testStorageContainerAddForSpecimenArrayType()
+	{
+		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("SpecimenArrayStorageType");
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		logger.info("----StorageTypeId : " + storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+
+		storageContainerForm.setSiteId(site.getId());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(25);
+		storageContainerForm.setTwoDimensionCapacity(25);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+		/*addRequestParameter("holdsSpecimenClassTypes", "Cell");
+		addRequestParameter("specimenOrArrayType", "SpecimenArray");*/
+
+//		String[] holdsSpecimenClassCollection = new String[4];
+//		holdsSpecimenClassCollection[0]="Fluid";
+//		holdsSpecimenClassCollection[1]="Tissue";
+//		holdsSpecimenClassCollection[2]="Molecular";
+//		holdsSpecimenClassCollection[3]="Cell";
+
+		SpecimenArrayType arrayType=(SpecimenArrayType)TestCaseUtility.getObjectMap().get("SpecimenTissueArrayType");
+		long[] arrayIds={arrayType.getId()};
+//			storageTypeForm.setHoldsSpecimenArrTypeIds(arrayIds);
+		storageContainerForm.setHoldsSpecimenArrTypeIds(arrayIds);
+
+		storageContainerForm.setSpecimenOrArrayType("SpecimenArray");
+//		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		storageContainerForm.setActivityStatus("Active");
+		storageContainerForm.setIsFull("False");
+		storageContainerForm.setOperation("add");
+		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+
+		StorageContainerForm form=(StorageContainerForm) getActionForm();
+		StorageContainer storageContainer = new StorageContainer();
+
+//		storageContainer.setSite(site);
+	    Capacity capacity = new Capacity();
+	    capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
+	    capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
+	    storageContainer.setCapacity(capacity);
+
+	    storageContainer.setId(form.getId());
+	    logger.info("----StorageContainerId : " + storageContainer.getId());
+	    //Collection<String> holdsSpecimenClassCollection1 = new HashSet<String>();
+	   // String[] specimenClassTypes = form.getHoldsSpecimenClassTypes();
+	   /// holdsSpecimenClassCollection1.add(specimenClassTypes[0]);
+	   // storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection1);
+
+	    TestCaseUtility.setNameObjectMap("SpecimenarrayStorageContainer",storageContainer);
 	}
 
 }

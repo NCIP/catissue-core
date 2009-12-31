@@ -66,7 +66,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		newSpecForm.setAvailable(true);
 		newSpecForm.setAvailableQuantity("5");
 		newSpecForm.setCollectionStatus("Pending") ;
-		
+
 
 		Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 		CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
@@ -115,9 +115,9 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
-	
+
 	/**
-	 * Test aliquot add 
+	 * Test aliquot add
 	 * AliquotAction + CreateAliquotAction
 	 */
 	@Test
@@ -138,7 +138,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
 		setActionForm(aliquotForm);
 		setRequestPathInfo("/CreateAliquots");
-		actionPerform();		
+		actionPerform();
 		setRequestPathInfo("/AliquotAdd");
 		AliquotForm form = (AliquotForm) getActionForm();
 		form.setAvailableQuantity( "1" );
@@ -153,7 +153,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		//verifyNoActionErrors();
 	}
-	
+
 	/**
 	 * Test Specimen Label and Barcode after storage position changes(when page refreshes).
 	 * Bug Id : 11480
@@ -494,18 +494,156 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
 			verifyNoActionErrors();
 
-////			specimenForm=(NewSpecimenForm) getActionForm();
-//			CreateSpecimenForm form= (CreateSpecimenForm)getActionForm();
-//			setActionForm(form);
-//			setRequestPathInfo("/AddSpecimen");
-//			addRequestParameter("isQuickEvent", "true" );
-//
-//			actionPerform();
+//			specimenForm=(NewSpecimenForm) getActionForm();
+			CreateSpecimenForm form= (CreateSpecimenForm)getActionForm();
+			setActionForm(form);
+			setRequestPathInfo("/AddSpecimen");
+			addRequestParameter("isQuickEvent", "true" );
+
+			actionPerform();
 //			verifyForward("success");
-//			verifyNoActionErrors();
+			verifyNoActionErrors();
 
 
 
 	 }
+
+	 /**
+		 * Test Specimen Add.
+		 */
+		@Test
+		public void testTissueSpecimenAdd()
+		{
+			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
+			setRequestPathInfo("/NewSpecimenAdd");
+			newSpecForm.setLabel("label_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			newSpecForm.setBarcode("barcode_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			newSpecForm.setSpecimenCollectionGroupId(""+specimenCollectionGroup.getId()) ;
+			newSpecForm.setSpecimenCollectionGroupName(specimenCollectionGroup.getName()) ;
+
+			newSpecForm.setParentPresent(false);
+			newSpecForm.setTissueSide("Not Specified") ;
+			newSpecForm.setTissueSite("Not Specified");
+			newSpecForm.setPathologicalStatus("Not Specified");
+
+			Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+			newSpecForm.setBiohazardName(biohazard.getName());
+			newSpecForm.setBiohazardType(biohazard.getType());
+
+			newSpecForm.setClassName("Tissue");
+			newSpecForm.setType("Fixed Tissue");
+			newSpecForm.setQuantity("10") ;
+			newSpecForm.setAvailable(true);
+			newSpecForm.setAvailableQuantity("5");
+			newSpecForm.setCollectionStatus("Collected") ;
+
+
+			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
+			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
+
+			newSpecForm.setCollectionEventId(event.getId()) ;
+
+			newSpecForm.setCollectionEventSpecimenId(0L);
+			newSpecForm.setCollectionEventdateOfEvent("01-28-2009");
+			newSpecForm.setCollectionEventTimeInHours("11") ;
+			newSpecForm.setCollectionEventTimeInMinutes("2") ;
+			newSpecForm.setCollectionEventUserId(1L) ;
+			newSpecForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+			newSpecForm.setCollectionEventContainer("Use CP Defaults") ;
+
+			newSpecForm.setReceivedEventId(event.getId());
+			newSpecForm.setReceivedEventDateOfEvent("01-28-2009");
+			newSpecForm.setReceivedEventTimeInHours("11") ;
+			newSpecForm.setReceivedEventTimeInMinutes("2") ;
+			newSpecForm.setReceivedEventUserId(1L) ;
+			newSpecForm.setReceivedEventReceivedQuality("Acceptable");
+
+			newSpecForm.setOperation("add");
+			newSpecForm.setPageOf("pageOfNewSpecimen");
+			setActionForm(newSpecForm);
+			actionPerform();
+			verifyForward("success");
+
+			newSpecForm=(NewSpecimenForm)getActionForm();
+			//Retrieving specimen object for edit
+			logger.info("----specimen ID : " + newSpecForm.getId());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "search");
+			addRequestParameter("id", ""+newSpecForm.getId());
+			setRequestPathInfo("/SearchObject") ;
+			actionPerform();
+			verifyForward("pageOfNewSpecimen");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			actionPerform();
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "edit");
+			addRequestParameter("menuSelected", "15");
+			addRequestParameter("showConsents", "yes");
+			addRequestParameter("tableId4", "disable");
+			actionPerform();
+			verifyNoActionErrors();
+
+			newSpecForm=(NewSpecimenForm) getActionForm();
+			String newLabel="label_" + UniqueKeyGeneratorUtil.getUniqueKey();
+			String newBarcode="barcode_" + UniqueKeyGeneratorUtil.getUniqueKey();
+			newSpecForm.setBarcode(newBarcode);
+			newSpecForm.setLabel(newLabel);
+			newSpecForm.setAvailableQuantity("20");
+			newSpecForm.setQuantity("20");
+			newSpecForm.setCollectionStatus("Collected") ;
+
+			newSpecForm.setOperation("edit");
+			setActionForm(newSpecForm);
+			setRequestPathInfo("/NewSpecimenEdit");
+			actionPerform();
+			verifyForward("success");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			actionPerform();
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			actionPerform();
+			verifyNoActionErrors();
+
+			verifyActionMessages(new String[]{"object.edit.successOnly"});
+			logger.info("#############Specimen Updated Successfully##########");
+
+			NewSpecimenForm form= (NewSpecimenForm) getActionForm();
+			Specimen specimen = new Specimen();
+			specimen.setId(form.getId());
+			specimen.setSpecimenClass( form.getClassName() );
+			specimen.setSpecimenType( form.getType() );
+			specimen.setActivityStatus(form.getActivityStatus());
+			specimen.setAvailableQuantity(Double.parseDouble(form.getAvailableQuantity()));
+			specimen.setLabel(form.getLabel());
+			specimen.setBarcode(form.getBarcode());
+	    	specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+	    	specimen.setCollectionStatus(form.getCollectionStatus());
+	    	specimen.setPathologicalStatus(form.getPathologicalStatus());
+	    	specimen.setInitialQuantity(Double.parseDouble(form.getQuantity()));
+	    	SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	    	specimenCharacteristics.setTissueSide(form.getTissueSide());
+	    	specimenCharacteristics.setTissueSite(form.getTissueSite());
+
+	    	specimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+	    	TestCaseUtility.setNameObjectMap("TissueSpecimen",specimen);
+	   	}
 
 }
