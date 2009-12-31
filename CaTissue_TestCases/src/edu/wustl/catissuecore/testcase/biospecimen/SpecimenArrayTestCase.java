@@ -508,4 +508,109 @@ public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 		assertEquals(SpecimenArrayForm.class.getName(),getActionForm().getClass().getName());
 
 	}
+
+	@Test
+	public void testSpecimenArrayEdit()
+	{
+		SpecimenArray specimenArray=(SpecimenArray)TestCaseUtility.getObjectMap().get("SpecimenArrayObject");
+
+		//Retrieving specimenArray object for edit
+		logger.info("----specimenArray ID : " + specimenArray.getId());
+		addRequestParameter("pageOf", "pageOfSpecimenArray");
+		addRequestParameter("operation", "search");
+		addRequestParameter("id", specimenArray.getId().toString());
+		setRequestPathInfo("/SearchObject") ;
+		actionPerform();
+		verifyForward("pageOfSpecimenArray");
+		verifyNoActionErrors();
+
+		setRequestPathInfo("/SpecimenArraySearch");
+
+		actionPerform();
+		verifyNoActionErrors();
+
+		setRequestPathInfo(getActualForward());
+
+		addRequestParameter("pageOf", "pageOfSpecimenArray");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "20");
+		actionPerform();
+		verifyNoActionErrors();
+
+		//getting the populated SpecimenArrayForm
+		SpecimenArrayForm arrayForm=(SpecimenArrayForm)getActionForm();
+
+		StorageContainer container=(StorageContainer)TestCaseUtility.getObjectMap().get("SpecimenarrayStorageContainer");
+
+		//Submitting the SpecimenArrayAdd request
+
+		arrayForm.setPositionDimensionOne(1);
+		arrayForm.setPositionDimensionTwo(1);
+		//arrayForm.setContainerId(container.getId().toString());
+		arrayForm.setStorageContainer(container.getId().toString());
+
+
+		arrayForm.setName("newArray_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		arrayForm.setOperation("edit");
+
+		arrayForm.setCreateSpecimenArray("yes");
+		arrayForm.setForwardTo("success");
+		arrayForm.setActivityStatus("Active");
+		arrayForm.setIsBarcodeEditable("true");
+		arrayForm.setEnterSpecimenBy("Label");
+		arrayForm.setIsDefinedArray("");
+
+		Specimen specimen=(Specimen)TestCaseUtility.getObjectMap().get("TissueSpecimen");
+
+
+		Map arrayContentMap = new java.util.HashMap();//		};();//(Map) getSession().getAttribute(				Constants.SPECIMEN_ARRAY_CONTENT_KEY);
+		arrayContentMap.put("SpecimenArrayContent:0_Specimen_label", specimen.getLabel());
+		arrayContentMap.put("SpecimenArrayContent:0_positionDimensionOne", "1");
+		arrayContentMap.put("SpecimenArrayContent:0_Specimen_barcode", "");
+		arrayContentMap.put("SpecimenArrayContent:0_positionDimensionTwo","1");
+
+		getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,arrayContentMap);
+
+		setRequestPathInfo("/SpecimenArrayEdit");
+		setActionForm(arrayForm);
+
+		actionPerform();
+		verifyNoActionErrors();
+
+		logger.info("######################################"+getActualForward());
+		setRequestPathInfo(getActualForward());
+
+		addRequestParameter("pageOf", "pageOfSpecimenArray");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "20");
+
+		actionPerform();
+		verifyNoActionErrors();
+
+		logger.info("######################################"+getActualForward());
+
+		verifyActionMessages(new String[]{"object.edit.successOnly"});
+		logger.info("#############specimenArray Updated Successfully##########");
+
+		arrayForm=(SpecimenArrayForm)getActionForm();
+
+		SpecimenArray specimenArray1=new SpecimenArray();
+		specimenArray1.setId(arrayForm.getId());
+
+		try
+		{
+			specimenArray1.setAllValues(arrayForm);
+		}
+		catch (AssignDataException e)
+		{
+			logger.debug(e.getMessage(),e);
+			fail("failed to assign values to Specimen Array");
+		}
+
+		TestCaseUtility.setNameObjectMap("SpecimenArrayObject",specimenArray1);
+
+
+	}
+
+
 }
