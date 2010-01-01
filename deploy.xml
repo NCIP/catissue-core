@@ -642,12 +642,6 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="copy_bulk_operation_mapping_file">
-			<property name="parent.base.dir" value="${basedir}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-			<property name="war.dir" value="catissuecore"/>
-			<property name="jboss.server.url" value="${jboss.server.url}" />
-		</ant>
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="catissuecore.war" />
@@ -682,6 +676,12 @@
 		        <include name="jboss-common-client.jar" />
 		   </fileset>
 		</copy>
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="copy_bulk_operation_mapping_file">
+			<property name="parent.base.dir" value="${basedir}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="war.dir" value="catissuecore"/>
+			<property name="jboss.server.url" value="${jboss.server.url}" />
+		</ant>
 	</target>
 	<target name="deploy_ca_model_war" description="deploy the ca_model_war">
 		<antcall target="CopyCAModelWars"/>
@@ -1283,6 +1283,17 @@
 				</fileset>
 			</classpath>
 		</sql>
+		
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${mysql.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+		</ant>
 
 		<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
@@ -1399,6 +1410,18 @@
 				</fileset>
 			</classpath>
 		</sql>
+		
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${oracle.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="rdbms" value="oracle" />
+		</ant>
 
 		<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
@@ -1854,17 +1877,29 @@
 
 	<!-- Upgrading from Suite1.1 p4 to p5 - MySQL -->
 	<target name="upgrade_mysql_from_v1.1p4_to_v1.1p5" description="Upgrading from Suite1.1 p4 to p5 - MySQL">
-			<echo message="Upgrading MySQL Database." />
-			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
-				<transaction>commit;</transaction>
-				<classpath>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</classpath>
-			</sql>
-		</target>
+		<echo message="Upgrading MySQL Database." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1p4_to_v1.1p5.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${mysql.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+		</ant>
+		
+	</target>
 
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
 	<target name="upgrade_oracle_from_v1.1p2_to_v1.1p4" description="Upgrading from Suite1.1 p2 to p4 - Oracle">
@@ -1899,6 +1934,17 @@
 				</fileset>
 			</classpath>
 		</sql>
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${oracle.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="rdbms" value="oracle" />
+		</ant>
    </target>
 
 
